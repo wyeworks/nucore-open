@@ -1,6 +1,8 @@
-# NUcore Open
+# Corum (NUcore - UMass)
 
-Open source version of Northwestern University Core Facility Management Software
+University of Massachusetts Amherst fork of NUCore Core Facility Management Software.
+
+Forked from https://github.com/tablexi/nucore-open
 
 ## Quickstart
 
@@ -19,13 +21,13 @@ Welcome to NUcore! This guide will help you get a development environment up and
 1. Download the project code from Github
 
     ```
-    git clone git@github.com:tablexi/nucore-open.git nucore
+    git clone git@github.com:tablexi/nucore-umass.git nucore-umass
     ```
 
 2. Install dependencies
 
     ```
-    cd nucore
+    cd nucore-umass
     bundle install
     ```
 

@@ -9,8 +9,8 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: nucore_open_development
+  database: nucore_umass_development
 
 test:
   <<: *defaults
-  database: nucore_open_test
+  database: nucore_umass_test
