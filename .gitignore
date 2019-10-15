@@ -38,3 +38,4 @@ spec/examples.txt
 .tags
 .tags1
 erd.*
+/ssh
