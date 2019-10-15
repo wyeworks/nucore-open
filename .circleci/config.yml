@@ -48,7 +48,15 @@ jobs:
                               --format documentation \
                               $(circleci tests glob \
                               "spec/**/*_spec.rb" \
-                              "vendor/engines/**/spec/**/*_spec.rb" \
+                              "vendor/engines/bulk_email/spec/**/*_spec.rb" \
+                              "vendor/engines/c2po/spec/**/*_spec.rb" \
+                              "vendor/engines/dataprobe/spec/**/*_spec.rb" \
+                              "vendor/engines/saml_authentication/spec/**/*_spec.rb" \
+                              "vendor/engines/projects/spec/**/*_spec.rb" \
+                              "vendor/engines/sanger_sequencing/spec/**/*_spec.rb" \
+                              "vendor/engines/secure_rooms/spec/**/*_spec.rb" \
+                              "vendor/engines/split_accounts/spec/**/*_spec.rb" \
+                              "vendor/engines/umass_corum/spec/**/*_spec.rb" \
                               | circleci tests split --split-by=timings)
 
       - run:
