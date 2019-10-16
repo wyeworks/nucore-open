@@ -2,3 +2,6 @@
 - yum:
     name: '{{ dependencies }}'
     state: latest
+- yum:
+    name: '{{ additional_libraries }}'
+    state: latest

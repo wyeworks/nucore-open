@@ -4,6 +4,7 @@ dependencies:
   - automake
   - bison
   - 'gcc-c++'
+  - git
   - glibc-headers
   - glibc-devel
   - libffi-devel
@@ -15,3 +16,5 @@ dependencies:
   - readline-devel
   - sqlite-devel
   - zlib-devel
+
+additional_libraries: []
