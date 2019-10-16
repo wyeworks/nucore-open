@@ -14,6 +14,16 @@ We need this library: `ansible-galaxy install rvm.ruby`
   * Forward Host port 2222 to Guest port 22 (this will allow SSH access)
   * Forward Host port 8888 to Guest port 80 (this will allow HTTP access)
 
+You'll need to manually copy your public key for root access the very first time. Once
+you run the playbooks all of the keys under `authorized_keys` will have access.
+
+```
+scp -P 2222 public_keys/<yourname>.pub root@localhost:/root/<yourname>.pub
+ssh -p 2222 root@localhost # Uses username/password login
+mkdir -p ~/.ssh
+cat <yourname>.pub > ~/.ssh/authorized_keys
+```
+
 ```
 # Run everything against the VM
 ansible-playbook -i local.yml nucore_rails_app.yml
