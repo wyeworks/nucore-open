@@ -1,5 +1,9 @@
 # Configuring Via Ansible
 
+## Setup
+
+We need this library: `ansible-galaxy install rvm.ruby`
+
 ## Development
 
 * Download [Fedora](https://getfedora.org/en/server/download/)
@@ -11,9 +15,6 @@
   * Forward Host port 8888 to Guest port 80 (this will allow HTTP access)
 
 ```
-# Add authorized keys to both root and nucore user
-ansible-playbook -i local.yml authorized_keys.yml
-
-# Enable nginx
-ansible-playbook -i local.yml nginx.yml
+# Run everything against the VM
+ansible-playbook -i local.yml nucore_rails_app.yml
 ```

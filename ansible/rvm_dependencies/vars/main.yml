@@ -1,0 +1,17 @@
+---
+dependencies:
+  - autoconf
+  - automake
+  - bison
+  - 'gcc-c++'
+  - glibc-headers
+  - glibc-devel
+  - libffi-devel
+  - libtool
+  - libyaml-devel
+  - make
+  - openssl-devel
+  - patch
+  - readline-devel
+  - sqlite-devel
+  - zlib-devel
