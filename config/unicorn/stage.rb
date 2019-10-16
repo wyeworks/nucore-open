@@ -1,10 +1,12 @@
 # frozen_string_literal: true
+# app_name = "nucore.stage.tablexi.com"
+app_name = "localhost"
 
 worker_processes 2
-listen "/tmp/unicorn-nucore.stage.tablexi.com.socket", backlog: 64
+listen "/tmp/unicorn-#{app_name}.socket", backlog: 64
 preload_app true
 
-app_path = "/home/nucore/nucore.stage.tablexi.com"
+app_path = "/home/nucore/#{app_name}"
 working_directory "#{app_path}/current"
 pid               "#{app_path}/shared/tmp/pids/unicorn.pid"
 
