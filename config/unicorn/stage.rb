@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 worker_processes 2
-listen "/tmp/unicorn-nucore.stage.tablexi.com.socket", backlog: 64
 preload_app true
 
 app_path = "/home/nucore/nucore.stage.tablexi.com"
 working_directory "#{app_path}/current"
 pid               "#{app_path}/shared/tmp/pids/unicorn.pid"
+
+listen "#{app_path}/shared/tmp/sockets/unicorn.socket", backlog: 64
 
 stderr_path "log/unicorn.stderr.log"
 stdout_path "log/unicorn.stdout.log"
