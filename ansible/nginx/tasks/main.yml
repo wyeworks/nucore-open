@@ -1,16 +1,45 @@
 ---
-- name: ensure nginx is at the latest version
-  yum:
-    name: nginx
-    state: latest
-  notify:
-    - Start nginx
+# - name: ensure nginx is at the latest version
+#   yum:
+#     name: nginx
+#     state: latest
+#   notify:
+#     - Start nginx
 
-- firewalld:
-    service: https
-    permanent: yes
-    state: enabled
-- firewalld:
-    service: http
-    permanent: yes
-    state: enabled
+# - firewalld:
+#     service: https
+#     permanent: yes
+#     state: enabled
+# - firewalld:
+#     service: http
+#     permanent: yes
+#     state: enabled
+
+- file:
+    path: /etc/nginx/sites-available
+    state: directory
+- file:
+    path: /etc/nginx/sites-enabled
+    state: directory
+
+- name: Use our nginx.conf file
+  template:
+    dest: /etc/nginx/nginx.conf
+    src: default_nginx.conf
+  notify: Reload nginx
+
+- name: Generate sites-available
+  template:
+    dest: /etc/nginx/sites-available/{{ item.host }}
+    src: "rails_http.j2"
+  with_items: "{{ apps }}"
+  notify: Reload nginx
+
+- name: Link sites enabled to sites-enabled
+  file:
+    dest: /etc/nginx/sites-enabled/{{ item.host }}
+    src: /etc/nginx/sites-available/{{ item.host }}
+    state: link
+  notify: Reload nginx
+  with_items: "{{ apps }}"
+  when: apps is defined

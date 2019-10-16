@@ -1,11 +1,14 @@
 ---
 - hosts: all
   roles:
-    - role: authorized_keys
-      authorized_keys: ['public_keys/jhanggi.pub']
-    - role: rvm_dependencies
+    # - role: authorized_keys
+    #   authorized_keys: ['public_keys/jhanggi.pub']
     - role: nginx
-    - role: rvm.ruby
-      tags: ruby
-      rvm1_rubies: ['ruby-2.5.5']
-      rvm1_user: 'nucore'
+      apps:
+        - host: localhost
+          user: nucore
+    # - role: rvm_dependencies
+    # - role: rvm.ruby
+    #   tags: ruby
+    #   rvm1_rubies: ['ruby-2.5.5']
+    #   rvm1_user: 'nucore'
