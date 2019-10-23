@@ -10,4 +10,14 @@ Example of this to include here:
   $headerColor: white;
 */
 
+$headerBackgroundColor: $maroon;
+$headerBackgroundColorHighlight: darken($headerBackgroundColor, 2%);
+$headerColor: $white;
+$navbarActiveBorderColor: $black;
+$usernavColor: $white;
+$usernavColorHover: $maroon;
+$usernavDividerColor: transparentize($usernavColor, 0.9);
+$sidebarActiveBackgroundColor: $maroon;
+$sidebarActiveBackgroundColorHighlight: lighten($sidebarActiveBackgroundColor, 3%);
+
 @import "umass_corum/application";

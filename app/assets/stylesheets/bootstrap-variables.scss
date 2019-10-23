@@ -1,1 +1,12 @@
 /* Fork specific bootstrap overrides go here. This is included before bootstrap. */
+$maroon: #881c1c;
+$black: #000000;
+$white: #ffffff;
+// Jason: Please name this color. They only list the hex value and my colorblindness prevents me from knowing what it is.
+$accent: #94795d;
+
+$btnPrimaryBackground: lighten($maroon, 5%);
+$btnPrimaryBackgroundHighlight: $maroon;
+
+$btnSuccessBackgroundHighlight: darken($accent, 10%);
+$btnSuccessBackground: $accent;
