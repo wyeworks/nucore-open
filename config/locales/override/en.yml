@@ -1,12 +1,13 @@
 # Put any locale overrides specific to your fork in this file
 en:
-  # app_name: NUcore
-  # institution_name: Northwestern
+  app_name: CORUM
+  institution_name: University of Massachusetts
 
-  # shared:
-  #   footer:
-  #     copyright_html: "&copy; Copyright 2011%{to_date} Northwestern University"
-  #     logo_alt: "Northwestern University Logo"
+  shared:
+    footer:
+      copyright_html: "&copy; Copyright 2011&ndash;%{to_date} University of Massachusetts"
+      logo_alt: "UMass Amherst Logo"
+      logo_file: "logo-horizontal.svg"
 
   testing: # DO NOT DELETE: these are used to verify proper file loading in the specs
     locale_loading: This is here to verify the file is loaded in the specs

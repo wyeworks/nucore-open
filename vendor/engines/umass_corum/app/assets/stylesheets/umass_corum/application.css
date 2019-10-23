@@ -13,3 +13,7 @@
  *= require_tree .
  *= require_self
  */
+
+.footer__logo img {
+  height: 2rem;
+}
