@@ -2,7 +2,11 @@
 
 ## Setup
 
-We need this library: `ansible-galaxy install rvm.ruby`
+Install dependencies.
+
+```
+ansible-galaxy install -r requirements.yml
+```
 
 ## Development
 

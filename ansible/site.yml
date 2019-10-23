@@ -1,14 +1,16 @@
 ---
 - hosts: all
   roles:
-    - role: authorized_keys
-      authorized_keys: ['public_keys/jhanggi.pub']
+    - role: common/authorized_keys
+      authorized_keys:
+        - 'public_keys/jhanggi.pub'
     - role: app_server/nginx
       apps:
         - host: nucore.stage.tablexi.com
           alias: localhost:8888 localhost
           user: nucore
     - role: app_server/rvm_dependencies
+      additional_libraries: ["mysql-devel"]
     - role: rvm.ruby
       tags: ruby
       rvm1_rubies: ['ruby-2.5.5']
