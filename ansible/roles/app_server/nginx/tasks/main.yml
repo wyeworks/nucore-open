@@ -32,8 +32,9 @@
   template:
     dest: /etc/nginx/sites-available/{{ item.host }}
     src: "rails_http.j2"
-  with_items: "{{ apps }}"
+  with_items: "{{ nginx_apps }}"
   notify: Reload nginx
+  when: nginx_apps is defined
 
 - name: Link sites enabled to sites-enabled
   file:
@@ -41,5 +42,5 @@
     src: /etc/nginx/sites-available/{{ item.host }}
     state: link
   notify: Reload nginx
-  with_items: "{{ apps }}"
-  when: apps is defined
+  with_items: "{{ nginx_apps }}"
+  when: nginx_apps is defined
