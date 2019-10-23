@@ -26,5 +26,9 @@ cat <yourname>.pub > ~/.ssh/authorized_keys
 
 ```
 # Run everything against the VM
-ansible-playbook -i local.yml nucore_rails_app.yml
+ansible-playbook -i development site.yml
 ```
+
+TODO:
+
+- [ ] Add `export RAILS_ENV=stage` to `.bashrc` programatically

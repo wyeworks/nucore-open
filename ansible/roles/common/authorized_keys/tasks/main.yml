@@ -1,0 +1,13 @@
+---
+# - name: Add root authorized keys
+#   authorized_key:
+#     user: root
+#     state: present
+#     key: '{{ item }}'
+#   with_file: '{{ authorized_keys }}'
+- name: Set up nucore authorized keys
+  authorized_key:
+    user: nucore
+    state: present
+    key: '{{ item }}'
+  with_file: '{{ authorized_keys }}'

@@ -2,17 +2,7 @@
 
 server {
   listen 80;
-  server_name {{ item.host }};
-
-  access_log /var/log/nginx/{{ item.host }}.access.log;
-  error_log /var/log/nginx/{{ item.host }}.error.log;
-
-  return 301 https://$server_name$request_uri;
-}
-
-server {
-  listen 443 http2;
-  server_name {{ item.host }};
+  server_name {{ item.host }} {{ item.alias }};
 
   access_log /var/log/nginx/{{ item.host }}.access.log;
   error_log /var/log/nginx/{{ item.host }}.error.log;
@@ -22,13 +12,6 @@ server {
 
   client_max_body_size 10M;
   proxy_read_timeout 300s;
-
-  ssl on;
-  ssl_certificate /etc/nginx/ssl/{{ item.host }}.ssl.public.crt;
-  ssl_certificate_key /etc/nginx/ssl/{{ item.host }}.ssl.private.key;
-  ssl_ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS;
-  ssl_prefer_server_ciphers on;
-  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
 
   location @app {
     proxy_pass http://unix:/home/{{ item.user }}/{{ item.host }}/shared/tmp/sockets/unicorn.socket;

@@ -23,7 +23,7 @@
     state: directory
 
 - name: Use our nginx.conf file
-  template:
+  copy:
     dest: /etc/nginx/nginx.conf
     src: default_nginx.conf
   notify: Reload nginx
