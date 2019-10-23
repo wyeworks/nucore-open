@@ -17,3 +17,9 @@
 .footer__logo img {
   height: 2rem;
 }
+
+.footer__container .span12 {
+  display: flex;
+  align-items: first baseline;
+  justify-content: space-between;
+}
