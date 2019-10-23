@@ -1,5 +1,9 @@
 # UmassCorum
-Short description and motivation.
+This engine is for custom configuration of UMass's implementation.
+
+What it does:
+
+* UMass Branding
 
 ## Usage
 How to use my plugin.
