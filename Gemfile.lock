@@ -26,13 +26,6 @@ PATH
       momentjs-rails
 
 PATH
-  remote: vendor/engines/ldap_authentication
-  specs:
-    ldap_authentication (0.0.1)
-      devise_ldap_authenticatable (>= 0.8.6)
-      rails (>= 4.2)
-
-PATH
   remote: vendor/engines/projects
   specs:
     projects (0.0.1)
@@ -59,6 +52,11 @@ PATH
   remote: vendor/engines/split_accounts
   specs:
     split_accounts (0.0.1)
+
+PATH
+  remote: vendor/engines/umass_corum
+  specs:
+    umass_corum (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -227,9 +225,6 @@ GEM
       warden (~> 1.2.3)
     devise-encryptable (0.2.0)
       devise (>= 2.1.0)
-    devise_ldap_authenticatable (0.8.6)
-      devise (>= 3.4.1)
-      net-ldap (>= 0.16.0)
     devise_saml_authenticatable (1.4.1)
       devise (> 2.0.0)
       ruby-saml (~> 1.7)
@@ -380,7 +375,6 @@ GEM
       coffee-rails (>= 3.2.1)
       jquery-rails
       rails (>= 3.2.0)
-    net-ldap (0.16.1)
     net-scp (2.0.0)
       net-ssh (>= 2.6.5, < 6.0.0)
     net-ssh (5.2.0)
@@ -669,7 +663,6 @@ DEPENDENCIES
   ice_cube
   jquery-rails
   jquery-ui-rails
-  ldap_authentication!
   letter_opener
   mysql2
   nested_form_fields
@@ -714,6 +707,7 @@ DEPENDENCIES
   text_helpers
   therubyracer
   uglifier (= 4.1.18)
+  umass_corum!
   unicorn
   vuejs-rails (~> 1.0.26)
   web-console

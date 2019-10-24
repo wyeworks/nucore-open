@@ -16,4 +16,5 @@ Rails.application.config.assets.precompile += [
   "print.css",
   "*.js",
   "jquery.qtip.css",
+  "*.svg",
 ]
