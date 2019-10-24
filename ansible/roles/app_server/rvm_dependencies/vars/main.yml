@@ -3,6 +3,7 @@ dependencies:
   - autoconf
   - automake
   - bison
+  - bzip2
   - 'gcc-c++'
   - git
   - glibc-headers
