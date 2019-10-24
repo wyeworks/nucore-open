@@ -1,23 +1,29 @@
-- name: Make sure we have a 'wheel' group
+- name: Make sure we have a 'ials' group
   group:
-    name: wheel
+    name: ials
     state: present
   become: yes
 
-- name: Allow 'wheel' group to have passwordless sudo
-  lineinfile:
-    dest: /etc/sudoers
+- name: Make sure we have a 'umass' group
+  group:
+    name: umass
     state: present
-    regexp: '^%wheel'
-    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
-    validate: visudo -cf %s
+  become: yes
+
+- name: ials group should be able to password-less sudo
+  copy:
+    src: ials_sudoers
+    dest: /etc/sudoers.d/ials
+    owner: root
+    group: root
+    mode: '644'
   become: yes
 
 - name: Create users
   user:
     name: '{{ item.name }}'
     state: present
-    groups: '{{ item.groups | default([]) }}'
+    groups: "{{ item.groups|default([]) + ['umass'] }}"
   with_items:
     - '{{ users }}'
   become: yes

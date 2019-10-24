@@ -2,10 +2,13 @@
 users:
   - name: jhanggi
     authorized_keys: ['jhanggi.pub']
-    groups: ['wheel']
+    groups: ['ials']
   - name: vandrijevikj
     authorized_keys: ['vandrijevikj.ed25519.pub']
-    groups: ['wheel']
+    groups: ['ials']
+  - name: marnautovic
+    authorized_keys: ['marnautovic.pub']
+    groups: ['ials']
   - name: nucore
     authorized_keys:
       - jhanggi.pub

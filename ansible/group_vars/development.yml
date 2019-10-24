@@ -1,3 +1,4 @@
 nginx_apps:
-  - host: ials-core-web-dev-01.it.umass.edu
+  - host: corum-dev.umass.edu
+    alias: ials-core-web-dev-01.it.umass.edu
     user: nucore
