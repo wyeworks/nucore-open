@@ -10,3 +10,4 @@ users:
     authorized_keys:
       - jhanggi.pub
       - vandrijevikj.ed25519.pub
+      - marnautovic.pub

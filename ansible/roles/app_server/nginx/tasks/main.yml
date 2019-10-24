@@ -1,19 +1,22 @@
 ---
-# - name: ensure nginx is at the latest version
-#   yum:
-#     name: nginx
-#     state: latest
-#   notify:
-#     - Start nginx
+- name: ensure nginx is at the latest version
+  yum:
+    name: nginx
+    state: latest
+  notify:
+    - Start nginx
+  become: yes
 
-# - firewalld:
-#     service: https
-#     permanent: yes
-#     state: enabled
-# - firewalld:
-#     service: http
-#     permanent: yes
-#     state: enabled
+- firewalld:
+    service: https
+    permanent: yes
+    state: enabled
+  become: yes
+- firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+  become: yes
 
 - file:
     path: /etc/nginx/sites-available

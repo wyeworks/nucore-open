@@ -2,7 +2,7 @@
 
 server {
   listen 80;
-  server_name {{ item.host }} {{ item.alias }};
+  server_name {{ item.host }} {{ item.alias | default('') }};
 
   access_log /var/log/nginx/{{ item.host }}.access.log;
   error_log /var/log/nginx/{{ item.host }}.error.log;
