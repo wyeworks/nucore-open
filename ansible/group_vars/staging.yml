@@ -1,3 +1,4 @@
 nginx_apps:
-  - host: ials-core-web-test-01.it.umass.edu
+  - host: corum-test.umass.edu
+    alias: ials-core-web-test-01.it.umass.edu
     user: nucore

@@ -9,3 +9,7 @@
       name: nginx
       state: reloaded
   become: yes
+- name: Enable nginx
+  systemd:
+      name: nginx
+      state: enabled

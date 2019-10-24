@@ -5,6 +5,7 @@
     state: latest
   notify:
     - Start nginx
+    - Enable nginx
   become: yes
 
 - firewalld:
