@@ -13,7 +13,7 @@ ansible-galaxy install -r requirements.yml
 * Download [Fedora](https://getfedora.org/en/server/download/)
 * Download [VirtualBox](https://www.virtualbox.org/)
 * Install Fedora as a new VM within VirtualBox
-* During the installer, set a root password (can be whatever you want) and a `nucore` user
+* During installation, create a user for yourself as an administrator (the rest of these instructions will assume the name `developer` for ease of copy/paste, but feel free to change it)
 * Turn on port forwarding in VB (Device > Network Settings > Advance > Port Forwarding)
   * Forward Host port 2222 to Guest port 22 (this will allow SSH access)
   * Forward Host port 8888 to Guest port 80 (this will allow HTTP access)
@@ -22,15 +22,19 @@ You'll need to manually copy your public key for root access the very first time
 you run the playbooks all of the keys under `authorized_keys` will have access.
 
 ```
-scp -P 2222 public_keys/<yourname>.pub root@localhost:/root/<yourname>.pub
-ssh -p 2222 root@localhost # Uses username/password login
+scp -P 2222 public_keys/<yourname>.pub developer@localhost:/home/developer/developer.pub
+ssh -p 2222 developer@localhost # Uses username/password login
 mkdir -p ~/.ssh
-cat <yourname>.pub > ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+cat developer.pub > ~/.ssh/authorized_keys
 ```
+
+You also need to allow password-less sudo. `sudo vi /etc/sudoers`. Find and uncomment this line: `# %wheel        ALL=(ALL)       NOPASSWD: ALL`
+
 
 ```
 # Run everything against the VM
-ansible-playbook -i development site.yml
+ansible-playbook -i local site.yml
 ```
 
 TODO:

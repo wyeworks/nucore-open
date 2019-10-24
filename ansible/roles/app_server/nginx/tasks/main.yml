@@ -18,15 +18,18 @@
 - file:
     path: /etc/nginx/sites-available
     state: directory
+  become: yes
 - file:
     path: /etc/nginx/sites-enabled
     state: directory
+  become: yes
 
 - name: Use our nginx.conf file
   copy:
     dest: /etc/nginx/nginx.conf
     src: default_nginx.conf
   notify: Reload nginx
+  become: yes
 
 - name: Generate sites-available
   template:
@@ -35,6 +38,7 @@
   with_items: "{{ nginx_apps }}"
   notify: Reload nginx
   when: nginx_apps is defined
+  become: yes
 
 - name: Link sites enabled to sites-enabled
   file:
@@ -44,3 +48,4 @@
   notify: Reload nginx
   with_items: "{{ nginx_apps }}"
   when: nginx_apps is defined
+  become: yes

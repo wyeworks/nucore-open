@@ -1,0 +1,5 @@
+local:
+  hosts:
+    localhost:
+      ansible_port: 2222
+      ansible_user: developer
