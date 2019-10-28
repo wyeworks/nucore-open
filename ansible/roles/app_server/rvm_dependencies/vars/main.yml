@@ -17,6 +17,7 @@ dependencies:
   - openssl-devel
   - patch
   - readline-devel
+  - ruby
   - sqlite-devel
   - zlib-devel
 
