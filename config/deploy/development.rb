@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# TODO: change to master
 set :branch, ENV["CIRCLE_SHA1"] || ENV["REVISION"] || ENV["BRANCH_NAME"] || "ansible"
 set :rails_env, "stage"
 

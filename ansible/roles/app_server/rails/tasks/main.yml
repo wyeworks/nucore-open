@@ -1,0 +1,7 @@
+- name: Add RAILS_ENV to .bash_profile
+  lineinfile:
+    path: /home/{{ item.user }}/.bash_profile
+    regexp: '^export RAILS_ENV='
+    line: export RAILS_ENV={{ item.rails_env }}
+  with_items: "{{ nginx_apps }}"
+  become: yes

@@ -6,6 +6,6 @@ Nucore::Application.configure do
 
   config.action_mailer.delivery_method = :sendmail # :smtp
   Rails.application.routes.default_url_options =
-    config.action_mailer.default_url_options = { host: "corum-dev.umass.edu", protocol: "http" }
+    config.action_mailer.default_url_options = { host: "corum-test.umass.edu", protocol: "http" }
 
 end

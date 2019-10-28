@@ -8,6 +8,18 @@ Install dependencies.
 ansible-galaxy install -r requirements.yml
 ```
 
+## Deployment
+
+```
+ansible-playbook -i <ENVIRONMENT> site.yml
+```
+
+Environments:
+* `development` (this is UMass's development environment, not to be confused with Rails's env)
+* `staging` (what UMass calls "test")
+* `production`
+* `local` (see Development below)
+
 ## Development
 
 * Download [Fedora](https://getfedora.org/en/server/download/)
@@ -36,7 +48,3 @@ You also need to allow password-less sudo. `sudo vi /etc/sudoers`. Find and unco
 # Run everything against the VM
 ansible-playbook -i local site.yml
 ```
-
-TODO:
-
-- [ ] Add `export RAILS_ENV=stage` to `.bashrc` programatically
