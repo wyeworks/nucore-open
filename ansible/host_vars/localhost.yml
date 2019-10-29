@@ -1,4 +1,0 @@
-nginx_apps:
-  - host: nucore.stage.tablexi.com
-    alias: localhost:8888 localhost
-    user: nucore

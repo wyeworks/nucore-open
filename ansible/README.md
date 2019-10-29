@@ -1,5 +1,7 @@
 # Configuring Via Ansible
 
+_Note: all commands in this document assume you are in the `ansible` directory_
+
 ## Setup
 
 Install dependencies.
@@ -18,33 +20,25 @@ Environments:
 * `development` (this is UMass's development environment, not to be confused with Rails's env)
 * `staging` (what UMass calls "test")
 * `production`
-* `local` (see Development below)
 
 ## Development
 
-* Download [Fedora](https://getfedora.org/en/server/download/)
+You can use [Vagrant](https://www.vagrantup.com/) for developing your Ansible playbook.
+
 * Download [VirtualBox](https://www.virtualbox.org/)
-* Install Fedora as a new VM within VirtualBox
-* During installation, create a user for yourself as an administrator (the rest of these instructions will assume the name `developer` for ease of copy/paste, but feel free to change it)
-* Turn on port forwarding in VB (Device > Network Settings > Advance > Port Forwarding)
-  * Forward Host port 2222 to Guest port 22 (this will allow SSH access)
-  * Forward Host port 8888 to Guest port 80 (this will allow HTTP access)
+* Install Vagrant: `brew cask install vagrant`
+* Bring up the VM and provision it: `vagrant up`
+* Make your changes
+* `vagrant provision` will re-run the playbook
+* You can start over with a fresh VM with `vagrant destroy`
 
-You'll need to manually copy your public key for root access the very first time. Once
-you run the playbooks all of the keys under `authorized_keys` will have access.
+SSH: `ssh -p 2222 localhost`
 
-```
-scp -P 2222 public_keys/<yourname>.pub developer@localhost:/home/developer/developer.pub
-ssh -p 2222 developer@localhost # Uses username/password login
-mkdir -p ~/.ssh
-chmod 700 ~/.ssh
-cat developer.pub > ~/.ssh/authorized_keys
-```
-
-You also need to allow password-less sudo. `sudo vi /etc/sudoers`. Find and uncomment this line: `# %wheel        ALL=(ALL)       NOPASSWD: ALL`
-
+You might want to add this to your `~/.ssh/config` file to avoid dealing with host
+changed errors as you spin up and down VMs.
 
 ```
-# Run everything against the VM
-ansible-playbook -i local site.yml
+Host localhost
+  StrictHostKeyChecking no
+  UserKnownHostsFile=/dev/null
 ```

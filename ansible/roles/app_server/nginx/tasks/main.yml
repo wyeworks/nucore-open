@@ -44,14 +44,14 @@
   when: nginx_apps is defined
   become: yes
 
-- name: Generate https sites-available
-  template:
-    dest: /etc/nginx/sites-available/{{ item.host }}
-    src: "rails_https.j2"
-  with_items: "{{ nginx_apps }}"
-  notify: Reload nginx
-  when: nginx_apps is defined
-  become: yes
+# - name: Generate https sites-available
+#   template:
+#     dest: /etc/nginx/sites-available/{{ item.host }}
+#     src: "rails_https.j2"
+#   with_items: "{{ nginx_apps }}"
+#   notify: Reload nginx
+#   when: nginx_apps is defined
+#   become: yes
 
 - name: Link http sites-available to sites-enabled
   file:
