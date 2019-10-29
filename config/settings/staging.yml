@@ -2,5 +2,5 @@ email:
   from: "nucore-noreply@nucore.stage.tablexi.com"
   fake:
     enabled: true
-    to: ["jason@tablexi.com", "meara@tablexi.com"]
+    to: ["mak@tablexi.com"]
     whitelist: []
