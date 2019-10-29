@@ -1,0 +1,19 @@
+- include_role:
+    name: nickhammond.logrotate
+    apply:
+      become: true
+  vars:
+    logrotate_scripts:
+      - name: nginx
+        path: /var/log/nginx/*.log
+        options:
+          - daily
+          - missingok
+          - compress
+          - delaycompress
+          - notifempty
+          - sharedscripts
+          - rotate 30
+          - create 644 nginx root
+        scripts:
+          postrotate: "[ ! -f /var/run/nginx.pid ] || kill -USR1 `cat /var/run/nginx.pid`"
