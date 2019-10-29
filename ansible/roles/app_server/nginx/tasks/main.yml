@@ -8,16 +8,7 @@
     - Enable nginx
   become: yes
 
-- firewalld:
-    service: https
-    permanent: yes
-    state: enabled
-  become: yes
-- firewalld:
-    service: http
-    permanent: yes
-    state: enabled
-  become: yes
+- import_tasks: firewalld.yml
 
 - file:
     path: /etc/nginx/sites-available

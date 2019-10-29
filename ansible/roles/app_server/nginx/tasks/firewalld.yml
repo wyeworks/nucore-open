@@ -1,0 +1,10 @@
+- firewalld:
+    service: https
+    permanent: yes
+    state: enabled
+  become: yes
+- firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+  become: yes
