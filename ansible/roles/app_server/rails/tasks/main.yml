@@ -5,3 +5,6 @@
     line: export RAILS_ENV={{ item.rails_env }}
   with_items: "{{ nginx_apps }}"
   become: yes
+  when: nginx_apps is defined
+
+- import_tasks: rvm.yml

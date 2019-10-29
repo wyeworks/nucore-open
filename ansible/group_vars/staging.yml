@@ -3,3 +3,4 @@ nginx_apps:
     alias: ials-core-web-test-01.it.umass.edu
     user: nucore
     rails_env: staging
+    ruby_versions: ["2.5.5"]
