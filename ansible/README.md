@@ -42,3 +42,13 @@ Host localhost
   StrictHostKeyChecking no
   UserKnownHostsFile=/dev/null
 ```
+
+## SSL Certificates
+
+```
+sudo mkdir /etc/nginx/ssl
+sudo mv corum.umass.edu.* /etc/nginx/ssl
+sudo chmod 600 /etc/nginx/ssl/corum.umass.edu.*
+sudo chown root /etc/nginx/ssl/corum.umass.edu.*
+sudo chgrp root /etc/nginx/ssl/corum.umass.edu.*
+```

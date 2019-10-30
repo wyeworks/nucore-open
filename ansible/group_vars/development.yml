@@ -4,3 +4,4 @@ nginx_apps:
     user: nucore
     rails_env: staging
     ruby_versions: ["2.5.5"]
+    ssl_file: corum.umass.edu

@@ -29,20 +29,11 @@
 - name: Generate http sites-available
   template:
     dest: /etc/nginx/sites-available/{{ item.host }}
-    src: "rails_http.j2"
+    src: "rails_{{ (item.ssl | default(true)) | ternary('https', 'http') }}.j2"
   with_items: "{{ nginx_apps }}"
   notify: Reload nginx
   when: nginx_apps is defined
   become: yes
-
-# - name: Generate https sites-available
-#   template:
-#     dest: /etc/nginx/sites-available/{{ item.host }}
-#     src: "rails_https.j2"
-#   with_items: "{{ nginx_apps }}"
-#   notify: Reload nginx
-#   when: nginx_apps is defined
-#   become: yes
 
 - name: Link http sites-available to sites-enabled
   file:
@@ -53,14 +44,3 @@
   with_items: "{{ nginx_apps }}"
   when: nginx_apps is defined
   become: yes
-
-# TODO: Once we have certificates
-# - name: Link http sites-available to sites-enabled
-#   file:
-#     dest: /etc/nginx/sites-enabled/{{ item.host }}
-#     src: /etc/nginx/sites-available/{{ item.host }}
-#     state: link
-#   notify: Reload nginx
-#   with_items: "{{ nginx_apps }}"
-#   when: nginx_apps is defined
-#   become: yes

@@ -7,7 +7,7 @@ server {
   access_log /var/log/nginx/{{ item.host }}.access.log;
   error_log /var/log/nginx/{{ item.host }}.error.log;
 
-  return 301 https://$server_name$request_uri;
+  return 301 https://$host$request_uri;
 }
 
 server {
@@ -24,8 +24,8 @@ server {
   proxy_read_timeout 300s;
 
   ssl on;
-  ssl_certificate /etc/nginx/ssl/{{ item.host }}.ssl.public.crt;
-  ssl_certificate_key /etc/nginx/ssl/{{ item.host }}.ssl.private.key;
+  ssl_certificate /etc/nginx/ssl/{{ item.ssl_file | default(item.host) }}.pem;
+  ssl_certificate_key /etc/nginx/ssl/{{ item.ssl_file | default(item.host) }}.key;
   ssl_ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS;
   ssl_prefer_server_ciphers on;
   ssl_protocols TLSv1 TLSv1.1 TLSv1.2;

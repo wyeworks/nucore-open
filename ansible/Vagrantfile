@@ -28,6 +28,7 @@ Vagrant.configure(2) do |config|
           "user" => "nucore",
           "rails_env" => "staging",
           "ruby_versions" => ["2.5.5"],
+          "ssl" => false,
         }
       ]
     }
