@@ -10,7 +10,7 @@ app_path = File.expand_path('../../../..', __dir__)
 working_directory "#{app_path}/current"
 pid               "#{app_path}/shared/tmp/pids/unicorn.pid"
 
-listen "#{app_path}/shared/tmp/sockets/unicorn.socket", backlog: 64
+listen 3000
 
 stderr_path "log/unicorn.stderr.log"
 stdout_path "log/unicorn.stdout.log"
