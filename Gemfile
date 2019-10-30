@@ -121,8 +121,7 @@ group :test do
   gem "single_test"
 end
 
-group :stage, :production do
-  gem "exception_notification"
+group :staging, :production do
   gem "eye-patch", require: false
   gem "oj"
   gem "rollbar"
