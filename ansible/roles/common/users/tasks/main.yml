@@ -23,9 +23,18 @@
   user:
     name: '{{ item.name }}'
     state: present
-    groups: "{{ item.groups|default([]) + ['umass'] }}"
+    groups: "{{ (item.groups | default([])) + ['umass'] }}"
   with_items:
     - '{{ users }}'
+  become: yes
+
+- name: Add group permission to users' home directory
+  file:
+    mode: '750'
+    path: /home/{{ user.name }}
+  with_items: "{{ users }}"
+  loop_control:
+    loop_var: user
   become: yes
 
 - name: Add authorized keys

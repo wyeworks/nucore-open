@@ -44,3 +44,11 @@
   with_items: "{{ nginx_apps }}"
   when: nginx_apps is defined
   become: yes
+
+- name: Add nginx to app user's group
+  user:
+    name: nginx
+    groups: "{{ item.user }}"
+    append: true
+  with_items: "{{ nginx_apps }}"
+  become: yes
