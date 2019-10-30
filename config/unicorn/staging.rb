@@ -3,7 +3,10 @@
 worker_processes 2
 preload_app true
 
-app_path = "/home/nucore/nucore.stage.tablexi.com"
+# The full path without `..`s will expand to
+# `/home/nucore/corum-ENV.umass.edu/releases/2019XXXXXXXX/config/unicorn`, so the
+# result should be `/home/nucore/corum-ENV.umass.edu`
+app_path = File.expand_path('../../../..', __dir__)
 working_directory "#{app_path}/current"
 pid               "#{app_path}/shared/tmp/pids/unicorn.pid"
 
