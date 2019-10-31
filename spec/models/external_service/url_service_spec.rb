@@ -73,6 +73,18 @@ RSpec.describe UrlService do
         )
       end
     end
+
+    context "for a Form.IO form" do
+      before { url_service.location = "https://nucore-development-12ea0e74.form.io/labitsupport" }
+
+      it "returns a URL for a new formio submission" do
+        expect(uri.to_s).to start_with("/formio/submission/new")
+      end
+
+      it "includes the location as a formio_url parameter" do
+        expect(query_hash).to include("formio_url" => url_service.location)
+      end
+    end
   end
 
   describe "edit_url" do
@@ -111,6 +123,18 @@ RSpec.describe UrlService do
         expect(query_hash).to include(
           "receiver_id" => order_detail.id.to_s,
         )
+      end
+    end
+  end
+
+  describe "#new_url" do
+    context "when the location contains invalid space characters" do
+      before do
+        url_service.location = " \thttps://nucore-staging.northwestern.edu/acgt/submissions/new"
+      end
+
+      it "does not raise an error" do
+        expect(url_service.new_url(order_detail)).to be_a(String)
       end
     end
   end

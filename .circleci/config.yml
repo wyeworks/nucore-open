@@ -1,4 +1,5 @@
 version: 2
+
 jobs:
   build:
     parallelism: 4
@@ -75,11 +76,15 @@ jobs:
          path: coverage/.resultset.json
          prefix: coverage
 
-      - run: bundle exec report_coverage
-
       - deploy:
           name: Stage deploy of master branch
           command: |
               if [ "${CIRCLE_BRANCH}" == "master" ]; then
                 bundle exec cap staging deploy
               fi
+
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build

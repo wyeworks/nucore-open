@@ -1,7 +1,7 @@
-<% app_root = "/home/nucore/nucore.stage.tablexi.com/current" %>
+<% app_root = File.expand_path("..", __dir__) %>
 <% rails_env = ENV["RAILS_ENV"] %>
 ---
-name: <%= @app_name.underscore.camelize %> (<%%= rails_env %>)
+name: NUcore (<%= rails_env %>)
 
 config:
   logger: <%= app_root %>/log/eye.log

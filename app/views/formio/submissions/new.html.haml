@@ -1,0 +1,13 @@
+:javascript
+  window.onload = function() {
+    Formio
+      .createForm(document.getElementById('formio'), '#{@formio_url}')
+      .then(function(form) {
+        form.submission = { data: #{raw @prefill_data.to_json} };
+
+        form.on('submitDone', function(submission) {
+          var surveyUrl = encodeURIComponent('#{@formio_url}/submission/' + submission._id);
+          window.location = '#{raw @redirect_url}&survey_url=' + surveyUrl + '&survey_edit_url=' + surveyUrl;
+        });
+      });
+  };
