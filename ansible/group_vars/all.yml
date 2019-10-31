@@ -1,0 +1,16 @@
+---
+users:
+  - name: jhanggi
+    authorized_keys: ['jhanggi.pub']
+    groups: ['ials']
+  - name: vandrijevikj
+    authorized_keys: ['vandrijevikj.ed25519.pub']
+    groups: ['ials']
+  - name: marnautovic
+    authorized_keys: ['marnautovic.pub']
+    groups: ['ials']
+  - name: nucore
+    authorized_keys:
+      - jhanggi.pub
+      - vandrijevikj.ed25519.pub
+      - marnautovic.pub

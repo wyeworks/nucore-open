@@ -1,0 +1,4 @@
+# Default values for nginx
+---
+alias: ""
+rails_port: 3000

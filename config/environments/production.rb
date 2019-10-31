@@ -94,13 +94,6 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.middleware.use ExceptionNotification::Rack,
-                        ignore_exceptions: ["ActionController::UnknownHttpMethod", "ActionController::UnknownFormat"] + ExceptionNotifier.ignored_exceptions,
-                        email: {
-                          sender_address: Settings.email.exceptions.sender,
-                          exception_recipients: Settings.email.exceptions.recipients,
-                        }
-
 end
 
 # What's this for?

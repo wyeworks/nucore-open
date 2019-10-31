@@ -1,0 +1,48 @@
+- name: Make sure we have a 'ials' group
+  group:
+    name: ials
+    state: present
+  become: yes
+
+- name: Make sure we have a 'umass' group
+  group:
+    name: umass
+    state: present
+  become: yes
+
+- name: ials group should be able to password-less sudo
+  copy:
+    src: ials_sudoers
+    dest: /etc/sudoers.d/ials
+    owner: root
+    group: root
+    mode: '644'
+  become: yes
+
+- name: Create users
+  user:
+    name: '{{ item.name }}'
+    state: present
+    groups: "{{ (item.groups | default([])) + ['umass'] }}"
+  with_items:
+    - '{{ users }}'
+  become: yes
+
+- name: Add group permission to users' home directory
+  file:
+    mode: '750'
+    path: /home/{{ user.name }}
+  with_items: "{{ users }}"
+  loop_control:
+    loop_var: user
+  become: yes
+
+- name: Add authorized keys
+  authorized_key:
+    user: '{{ item.0.name }}'
+    state: present
+    key: "{{ lookup('file', 'public_keys/' + item.1) }}"
+  with_subelements:
+    - '{{ users }}'
+    - authorized_keys
+  become: yes

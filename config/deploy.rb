@@ -5,7 +5,7 @@ lock "~> 3.11.0"
 set :application, "nucore"
 set :eye_config, "config/eye.yml.erb"
 set :eye_env, -> { { rails_env: fetch(:rails_env) } }
-set :repo_url, "git@github.com:tablexi/nucore-open.git"
+set :repo_url, "git@github.com:tablexi/nucore-umass.git"
 set :rollbar_env, Proc.new { fetch :rails_env }
 set :rollbar_role, Proc.new { :app }
 set :rollbar_token, ENV["ROLLBAR_ACCESS_TOKEN"]

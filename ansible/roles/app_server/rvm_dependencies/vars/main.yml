@@ -1,0 +1,24 @@
+---
+dependencies:
+  - autoconf
+  - automake
+  - bison
+  - bzip2
+  - 'gcc-c++'
+  - git
+  - glibc-headers
+  - glibc-devel
+  - libffi-devel
+  - libtool
+  - libyaml-devel
+  - make
+  - mysql
+  - mysql-devel
+  - openssl-devel
+  - patch
+  - readline-devel
+  - ruby
+  - sqlite-devel
+  - zlib-devel
+
+additional_libraries: []

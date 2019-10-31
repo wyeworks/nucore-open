@@ -4,6 +4,21 @@ University of Massachusetts Amherst fork of NUCore Core Facility Management Soft
 
 Forked from https://github.com/tablexi/nucore-open
 
+## UMass Environments
+
+| Domain               | Server                             | Deployment             | RAILS_ENV  |
+| -------------------- | ---------------------------------- | -----------------------| ---------- |
+| corum.umass.edu      | ials-core-web-prod-01.it.umass.edu | cap production deploy  | production |
+| corum.umass.edu      | ials-core-web-prod-02.it.umass.edu | cap production deploy  | production |
+| corum-test.umass.edu | ials-core-web-test-01.it.umass.edu | cap staging deploy     | staging    |
+| corum-dev.umass.edu  | ials-core-web-dev-01.it.umass.edu  | cap dev deploy | staging    |
+
+Notes:
+* _UMass requested a "development" environment, which we will be treating as a staging
+environment, but will likely have more experimental data._
+* _They called what we would call staging "test"_
+* We're using "staging" as the `RAILS_ENV` to avoid confusion with Rails's environments
+
 ## Quickstart
 
 Welcome to NUcore! This guide will help you get a development environment up and running.
