@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-# run coverage when on CI
-if ENV["CI"]
-  require "simplecov"
-  SimpleCov.start "rails" do
-    add_filter "/spec/"
-  end
-end
-
 require "active_support/testing/time_helpers"
 require "./spec/support/time_travel_helpers"
 

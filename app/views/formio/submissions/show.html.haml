@@ -1,0 +1,6 @@
+:javascript
+  window.onload = function() {
+    Formio.createForm(document.getElementById('formio'), '#{@formio_url}', {
+      readOnly: true,
+    });
+  };

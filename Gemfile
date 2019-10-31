@@ -60,6 +60,7 @@ gem "prawn-table"
 ## other
 gem "delayed_job_active_record"
 gem "fog-aws"
+gem "health_check"
 gem "rake"
 gem "spreadsheet"
 gem "daemons"
@@ -89,7 +90,7 @@ group :development do
   gem "haml_lint", require: false
   gem "letter_opener"
   gem "rails-erd"
-  gem "rubocop", "0.58", require: false # needs to be updated in sync with available codeclimate channels
+  gem "rubocop", "0.58", require: false
   gem "rubocop-rspec"
   gem "web-console"
 end
@@ -112,7 +113,6 @@ group :test do
   gem "capybara"
   gem "capybara-email"
   gem "ci_reporter_rspec"
-  gem "codeclimate_circle_ci_coverage"
   gem "poltergeist"
   gem "rails-controller-testing"
   gem "rspec-collection_matchers"
