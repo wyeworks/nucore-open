@@ -14,3 +14,7 @@
       name: nginx
       enabled: true
   become: yes
+- name: Restart firewalld
+  systemd:
+      name: firewalld
+      state: reloaded

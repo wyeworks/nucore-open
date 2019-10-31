@@ -11,7 +11,7 @@ server {
 }
 
 server {
-  listen 443 http2;
+  listen 443 ssl http2;
   server_name {{ item.host }};
 
   access_log /var/log/nginx/{{ item.host }}.access.log;
@@ -23,7 +23,6 @@ server {
   client_max_body_size 10M;
   proxy_read_timeout 300s;
 
-  ssl on;
   ssl_certificate /etc/nginx/ssl/{{ item.ssl_file | default(item.host) }}.pem;
   ssl_certificate_key /etc/nginx/ssl/{{ item.ssl_file | default(item.host) }}.key;
   ssl_ciphers ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS;
