@@ -64,7 +64,8 @@ Rails.application.configure do
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method       = :smtp
   Rails.application.routes.default_url_options =
-    config.action_mailer.default_url_options   = { host: "nucore.example.com", protocol: "https" }
+    config.action_mailer.default_url_options   = { host: ENV.fetch("RAILS_HOST"), protocol: "https" }
+
   config.action_mailer.smtp_settings = {
     address: "mail.example.com",
     port: 25,
