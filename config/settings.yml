@@ -35,14 +35,9 @@ validator:
     helper: 'spec/validator_helper' # relative to Rails.root
 
 email:
-  from: 'noreply@example.com'
+  from: 'noreply@umass.edu'
   fake:
     enabled: false
-    to:
-    whitelist:
-  exceptions:
-    sender: 'noreply@example.com'
-    recipients: [ 'warn@example.com', 'error@example.com' ]
 
 support_email: ~
 

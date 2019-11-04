@@ -67,9 +67,9 @@ Rails.application.configure do
     config.action_mailer.default_url_options   = { host: ENV.fetch("RAILS_HOST"), protocol: "https" }
 
   config.action_mailer.smtp_settings = {
-    address: "mail.example.com",
+    address: "mailhub.oit.umass.edu",
     port: 25,
-    domain: "example.com",
+    domain: "umass.edu",
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
