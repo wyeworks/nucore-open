@@ -2,5 +2,3 @@
 # the development environment. Changing it to true will allow you to log in
 # as any user without checking for a valid password.
 ignore_passwords: false
-saml:
-  certificate_file: ~ # So we don't need a certificate in dev
