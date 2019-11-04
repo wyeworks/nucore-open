@@ -7,4 +7,13 @@
   become: yes
   when: nginx_apps is defined
 
+- name: Add RAILS_HOST to .bash_profile
+  lineinfile:
+    path: /home/{{ item.user }}/.bash_profile
+    regexp: '^export RAILS_HOST='
+    line: export RAILS_HOST={{ item.host }}
+  with_items: "{{ nginx_apps }}"
+  become: yes
+  when: nginx_apps is defined
+
 - import_tasks: rvm.yml
