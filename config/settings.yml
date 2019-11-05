@@ -131,6 +131,8 @@ saml:
   # certificate_file: saml-certificate.p12 # Do not check in to version control.
   # driver: # Optional. Useful to override inferred SAML settings if need be.
   #   "idp_sso_target_url": "https://websso.example.com/idp/profile/SAML2/Redirect/SSO"
+  metadata_parse_options: # Optional. See RubySaml::IdpMetadataParser
+    sso_binding: ["urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"]
   attribute_map:
     eduPersonPrincipalName: email
     uid: user_name
