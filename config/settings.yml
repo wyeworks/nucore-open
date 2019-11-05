@@ -132,10 +132,10 @@ saml:
   # driver: # Optional. Useful to override inferred SAML settings if need be.
   #   "idp_sso_target_url": "https://websso.example.com/idp/profile/SAML2/Redirect/SSO"
   attribute_map:
-    "PersonImmutableID": "username"
-    "User.email": "email"
-    "User.FirstName": "first_name"
-    "User.LastName": "last_name"
+    eduPersonPrincipalName: email
+    uid: user_name
+    givenName: first_name
+    surname: last_name
  # user_updater_class_name: SamlAuthentication::UserUpdater
 
 price_policy_note_options: ~
