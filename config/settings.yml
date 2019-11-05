@@ -138,7 +138,8 @@ saml:
     "urn:oid:0.9.2342.19200300.100.1.1": username
     "urn:oid:2.5.4.42": first_name
     "urn:oid:2.5.4.4": last_name
- # user_updater_class_name: SamlAuthentication::UserUpdater
+  user_updating:
+    skip_attributes: email
 
 price_policy_note_options: ~
 order_detail_price_change_reason_options: ~

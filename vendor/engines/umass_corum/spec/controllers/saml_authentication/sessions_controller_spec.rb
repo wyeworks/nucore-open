@@ -47,6 +47,11 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
         expect(controller.current_user.first_name).to eq("Jason")
         expect(controller.current_user.last_name).to eq("Hanggi")
       end
+
+      it "does not update the email address" do
+        post :create, params: { SAMLResponse: saml_response }
+        expect(user.reload.email).to eq("jason@tablexi.com")
+      end
     end
   end
 end

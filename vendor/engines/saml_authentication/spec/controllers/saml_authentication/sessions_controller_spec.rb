@@ -43,6 +43,15 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
       allow(Devise).to receive(:allowed_clock_drift_in_seconds).and_return(1000.years)
     end
 
+    around :each do |example|
+      original_value = Devise.saml_update_resource_hook
+      Devise.saml_update_resource_hook = SamlAuthentication::UserUpdater.new
+
+      example.run
+
+      Devise.saml_update_resource_hook = original_value
+    end
+
     describe "the user does not exist already" do
       around :each do |example|
         original_value = Devise.saml_create_user
@@ -139,15 +148,6 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
 
     describe "the user already exists" do
       let!(:user) { create(:user, username: "sst123", email: "something@old.com") }
-
-      around :each do |example|
-        original_value = Devise.saml_update_resource_hook
-        Devise.saml_update_resource_hook = SamlAuthentication::UserUpdater.new
-
-        example.run
-
-        Devise.saml_update_resource_hook = original_value
-      end
 
       it "does not create a new user" do
         expect { post :create, params: { SAMLResponse: saml_response } }.not_to change(User, :count)

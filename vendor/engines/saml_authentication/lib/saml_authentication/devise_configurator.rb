@@ -14,7 +14,7 @@ module SamlAuthentication
         config.saml_create_user = saml_create_user?
         config.saml_update_user = true
         config.saml_resource_locator = SamlAuthentication::UserLocator.new
-        config.saml_update_resource_hook = saml_updater
+        config.saml_update_resource_hook = SamlAuthentication::UserUpdater.new(**Settings.saml.user_updating)
         config.saml_sign_out_success_url = Rails.application.routes.url_helpers.root_url
         config.idp_entity_id_reader = SamlAuthentication::IdpEntityIdReader
 
@@ -34,10 +34,6 @@ module SamlAuthentication
     end
 
     private
-
-    def saml_updater
-      Settings.saml.user_updater_class_name.presence.try(:constantize).try(:new) || SamlAuthentication::UserUpdater.new
-    end
 
     def saml_create_user?
       if Settings.saml.create_user.nil?
