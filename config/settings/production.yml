@@ -1,0 +1,2 @@
+saml:
+  certificate_file: config/saml-certificate.p12
