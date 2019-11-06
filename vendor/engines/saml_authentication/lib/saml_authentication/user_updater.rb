@@ -1,20 +1,21 @@
 # frozen_string_literal: true
 
+require "saml_authentication/saml_attributes"
+
 module SamlAuthentication
 
   class UserUpdater
 
+    def initialize(skip_attributes: [], **_args)
+      @skip_attributes = Array(skip_attributes)
+    end
+
     def call(user, saml_response, _auth_value)
-      saml_response.attributes.resource_keys.each do |key|
-        user.send "#{key}=", saml_response.attribute_value_by_resource_key(key)
-      end
-
-      # Once they've signed in with SSO, we don't want to allow them to log in
-      # with their password anymore.
-      user.encrypted_password = nil
-      user.password_salt = nil
-
-      user.save!
+      attributes = SamlAttributes.new(saml_response).except(*@skip_attributes).merge(
+        encrypted_password: nil,
+        password_salt: nil,
+      )
+      user.update!(attributes)
     end
 
   end
