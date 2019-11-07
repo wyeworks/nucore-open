@@ -16,6 +16,11 @@ module SamlAuthentication
       end.with_indifferent_access
     end
 
+    # Useful for debugging to see all the raw values we received
+    def to_raw_h
+      @saml_response.raw_response.attributes.to_h
+    end
+
   end
 
 end
