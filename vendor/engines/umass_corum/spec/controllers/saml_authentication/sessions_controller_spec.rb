@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe SamlAuthentication::SessionsController, type: :controller do
-
   before do
     # This prevents any Authentication errors like mismatched hosts or signatures since
     # the fixture was a response captured during development.
