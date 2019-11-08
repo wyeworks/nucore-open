@@ -76,13 +76,6 @@ jobs:
          path: coverage/.resultset.json
          prefix: coverage
 
-      - deploy:
-          name: Stage deploy of master branch
-          command: |
-              if [ "${CIRCLE_BRANCH}" == "master" ]; then
-                bundle exec cap staging deploy
-              fi
-
 workflows:
   version: 2
   build:
