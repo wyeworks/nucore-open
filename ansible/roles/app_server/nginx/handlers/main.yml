@@ -18,3 +18,4 @@
   systemd:
       name: firewalld
       state: reloaded
+  become: yes
