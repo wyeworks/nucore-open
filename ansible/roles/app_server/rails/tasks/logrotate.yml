@@ -1,7 +1,3 @@
-# - name: Build list
-#   with_items: "{{ nginx_apps }}"
-#   register: all_logrotate_scripts
-
 - include_role:
     name: nickhammond.logrotate
     apply:
@@ -12,7 +8,7 @@
   vars:
     logrotate_scripts:
       - name: rails-{{ app.host }}-logs
-        path: /home/{{ app.user }}/shared/log/*.log
+        path: /home/{{ app.user }}/{{ app.host }}/shared/log/*.log
         options:
           - missingok
           - compress
@@ -23,3 +19,4 @@
           - daily
           - rotate {{ (app.rails_env == "production") | ternary(30, 7) }}
           - create 666 {{ app.user }} {{ app.group | default(app.user) }}
+          - su {{ app.user }} {{ app.group | default(app.user) }}
