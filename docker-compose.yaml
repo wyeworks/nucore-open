@@ -20,6 +20,7 @@ services:
     stdin_open: true
   db:
     image: mysql:5.7.22
+    image: mariadb:10.2.11
     environment:
       - MYSQL_ROOT_PASSWORD=root
     ports:
