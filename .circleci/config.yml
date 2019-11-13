@@ -8,7 +8,7 @@ jobs:
         environment:
           - RAILS_ENV: "test"
           - MYSQL_USER: root
-      - image: circleci/mysql:5.7.22-ram
+      - image: circleci/mariadb:10.2.11
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_ROOT_PASSWORD: ''
