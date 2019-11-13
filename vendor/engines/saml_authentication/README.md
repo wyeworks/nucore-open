@@ -4,6 +4,14 @@ NUcore uses [Devise](https://github.com/plataformatec/devise) for authentication
 and uses the [`saml_authenticatable`](https://github.com/apokalipto/devise_saml_authenticatable)
 module for SAML integration.
 
+## General steps for setting up
+
+1. Get the URL of the IdP's metadata
+1. Enable this gem, generate a certificate, and update the settings as described in "Enabling SAML Authentication"
+1. Deploy the application
+1. Import the app's (SP) metadata into the IdP (at `https://yourhost.edu/users/saml/auth`)
+1. Debug
+
 ## Enabling SAML Authentication
 
 Add the following line to your `Gemfile` if it is not already present:
@@ -17,6 +25,7 @@ as necessary to connect with your Identity Provider (IdP).
 
 ```yaml
 saml:
+  login_enabled: true
   idp_metadata: "https://websso.example.com/idp/metadata"
   certificate_file: path/to/file.p12
   driver:
@@ -28,8 +37,9 @@ saml:
     "User.LastName": "last_name"
 ```
 
-* `idp_metadata`: The URL for your IdP's metadata. This should be provided to you by the IdP.
-* `certificate_file` (Optional): A `.p12` certificate file for signing your requests.
+* During the initial phase of development, you might want to set `login_enabled` to false so the metadata is exposed, but the big "Single Sign On" button is not yet available.
+* `idp_metadata`: The URL for your IdP's metadata. This should be provided to you by the IdP. This URL is fetched at application startup.
+* `certificate_file` (Optional, but highly recommended): A `.p12` certificate file for signing your requests.
   _Do not check this in to version control_. See below for instructions on creating
   a certificate.
 * `attribute_map`: A mapping from the IdP's attributes to the NUcore's `users` table
@@ -52,11 +62,9 @@ When a user logs in one of three things will happen (in this order):
    password will be cleared, and they will no longer be able to log in via
    username/password. They will always need to log in via SSO in the future.
 3. If the user's username or email does not match an existing a user, a new `User`
-   will be created. They will not be able to do much at this point because they
+   will be created (and `create_user` is turned on). They will not be able to do much at this point because they
    will have no payment sources. A facility staff/director/administrator will need
    to set that up for them.
-
-_TODO: Determine recommended process for proactive user creation by facility staff_
 
 ## Testing and Development
 
@@ -135,10 +143,10 @@ Example:
 On a Linux-based system, generate a self-signed certificate.
 
 ```
-openssl x509 -text -noout -in cert.pem
-# You will be asked for Country Name, State, Organization and others.
-# When asked for a password, leave it blank.
-openssl pkcs12 -inkey key.pem -in cert.pem -export -out nucore-cert.p12
-rm cert.pem
-rm key.pem
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -nodes
+# Enter country name, common name, etc.
+openssl pkcs12 -inkey key.pem -in cert.pem -export -out saml-certificate.p12
+# Leave passphrase blank
+chmod 640 saml-certificate.p12
+rm *.pem
 ```

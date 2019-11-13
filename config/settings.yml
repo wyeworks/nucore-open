@@ -6,6 +6,8 @@ price_group:
     external: 'External Rate'
     cancer_center: 'Cancer Center Rate'
 
+time_zone: "Central Time (US & Canada)"
+
 accounts:
   # Most frequently used account by NU
   product_default: 75340
@@ -74,7 +76,7 @@ feature:
   global_billing_administrator: true
   global_billing_administrator_users_tab: true
   create_users: true
-  netids: true
+  lookup_netids: true
   limit_short_description: true
   manage_payment_sources_with_users: true
   order_assignment_notifications: true

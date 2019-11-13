@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
+require "ldap_authentication/user_lookup"
+
 module LdapAuthentication
 
   module UsersControllerExtension
 
     def service_username_lookup(username)
-      entry = UserEntry.find(username)
-      entry.to_user if entry
+      LdapAuthentication::UserLookup.new.call(username)
     end
 
   end

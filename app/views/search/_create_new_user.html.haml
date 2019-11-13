@@ -1,7 +1,7 @@
 - if params[:create_link] == "true" && SettingsHelper.feature_on?(:create_users)
   %p
     = t(".prompt")
-    - if SettingsHelper.feature_on?(:netids)
+    - if SettingsHelper.feature_on?(:lookup_netids)
       = link_to t(".link"), new_facility_user_path(@facility)
     - else
       = link_to t(".link"), new_external_facility_users_path(@facility)

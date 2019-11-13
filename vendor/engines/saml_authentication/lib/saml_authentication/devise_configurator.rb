@@ -9,6 +9,7 @@ module SamlAuthentication
   class DeviseConfigurator
 
     def configure!
+      OneLogin::RubySaml::Logging.logger.info "Configuring SAML..."
       Devise.setup do |config|
         config.saml_default_user_key = :username
         config.saml_create_user = saml_create_user?
@@ -29,6 +30,7 @@ module SamlAuthentication
 
           configure_security(settings)
         end
+        OneLogin::RubySaml::Logging.logger.info "SAML configuration done"
       end
     end
 

@@ -112,7 +112,6 @@ end
 group :test do
   gem "capybara"
   gem "capybara-email"
-  gem "ci_reporter_rspec"
   gem "poltergeist"
   gem "rails-controller-testing"
   gem "rspec-collection_matchers"

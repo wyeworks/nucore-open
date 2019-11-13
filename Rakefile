@@ -7,5 +7,3 @@ require File.expand_path("../config/application", __FILE__)
 require "rake"
 
 Nucore::Application.load_tasks
-
-require "ci/reporter/rake/rspec" if Rails.env.test?

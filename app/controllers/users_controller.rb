@@ -48,6 +48,7 @@ class UsersController < ApplicationController
 
   # GET /facilities/:facility_id/users/new
   def new
+    redirect_to action: :new_external if SettingsHelper.feature_off?(:lookup_netids)
   end
 
   # GET /facilities/:facility_id/users/new_external
@@ -140,7 +141,7 @@ class UsersController < ApplicationController
   helper_method :training_requested_for?
 
   def create_params
-    params.require(:user).permit(:email, :first_name, :last_name, :username)
+    params.require(:user).permit(*user_form_class.permitted_params)
   end
 
   def edit_user_params
@@ -152,8 +153,9 @@ class UsersController < ApplicationController
   end
 
   def create_external
-    @user = User.new(create_params)
+    @user = User.new
     @user_form = user_form_class.new(@user)
+    @user_form.assign_attributes(create_params)
 
     authorize! :create, @user_form.user
 

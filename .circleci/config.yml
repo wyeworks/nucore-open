@@ -72,10 +72,6 @@ jobs:
       - store_test_results:
           path: /tmp/test-results
 
-      - store_artifacts:
-         path: coverage/.resultset.json
-         prefix: coverage
-
 workflows:
   version: 2
   build:

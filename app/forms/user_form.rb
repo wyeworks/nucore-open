@@ -12,6 +12,10 @@ class UserForm < SimpleDelegator
     self
   end
 
+  def self.permitted_params
+    [:email, :first_name, :last_name, :username]
+  end
+
   def user
     __getobj__
   end

@@ -18,4 +18,12 @@ class EngineManager
     loaded_engines.map(&:name).include?(class_name)
   end
 
+  # Allow the engine's views to take precedence over the application's views
+  def self.allow_view_overrides!(engine_name)
+    paths = ActionController::Base.view_paths.to_a
+    index = paths.find_index { |p| p.to_s.include?(engine_name) }
+    paths.unshift paths.delete_at(index)
+    ActionController::Base.view_paths = paths
+  end
+
 end
