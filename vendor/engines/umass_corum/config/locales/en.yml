@@ -1,0 +1,7 @@
+en:
+  activemodel:
+    attributes:
+      umass_corum/user_form:
+        username: Username/NetID
+        netid: NetID
+        no_netid: This user does not have a NetID
