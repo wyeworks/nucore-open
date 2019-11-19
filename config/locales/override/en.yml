@@ -3,6 +3,12 @@ en:
   app_name: CORUM
   institution_name: University of Massachusetts
 
+  views:
+    saml_authentication:
+      sessions:
+        new:
+          sso_button: Sign in with NetID
+
   shared:
     footer:
       copyright_html: "&copy; Copyright 2011&ndash;%{to_date} University of Massachusetts"
