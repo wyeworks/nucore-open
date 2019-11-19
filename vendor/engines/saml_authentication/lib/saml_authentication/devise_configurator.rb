@@ -53,7 +53,7 @@ module SamlAuthentication
         if Settings.saml.idp_metadata.start_with?("https://")
           idp_metadata_parser.parse_remote(Settings.saml.idp_metadata, true, options)
         else
-          idp_metadata_parser.parse(File.open(File.expand_path(Settings.saml.idp_metadata)), options)
+          idp_metadata_parser.parse(File.open(Rails.root.join(Settings.saml.idp_metadata)), options)
         end
       end
     end
