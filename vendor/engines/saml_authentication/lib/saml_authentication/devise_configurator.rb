@@ -60,7 +60,7 @@ module SamlAuthentication
 
     def configure_security(settings)
       if Settings.saml.certificate_file
-        pkcs12 = OpenSSL::PKCS12.new(File.read(File.expand_path(Settings.saml.certificate_file)))
+        pkcs12 = OpenSSL::PKCS12.new(File.read(Rails.root.join(Settings.saml.certificate_file)))
         settings.certificate = pkcs12.certificate.to_s
         settings.private_key = pkcs12.key.to_s
       end
