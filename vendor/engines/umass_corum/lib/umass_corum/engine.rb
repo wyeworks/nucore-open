@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module UmassCorum
 
   class Engine < ::Rails::Engine
@@ -10,4 +12,5 @@ module UmassCorum
     end
 
   end
+
 end

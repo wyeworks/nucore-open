@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "Branding" do
-
   it "should have a logo and copyright information" do
     visit root_path
 
@@ -10,5 +11,4 @@ RSpec.describe "Branding" do
     expect(page).to have_css("a[href='/']")
     expect(page).to have_content(/CORUM/)
   end
-
 end
