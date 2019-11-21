@@ -18,6 +18,7 @@ dependencies:
   - patch
   - readline-devel
   - ruby
+  - ruby-devel
   - sqlite-devel
   - zlib-devel
 

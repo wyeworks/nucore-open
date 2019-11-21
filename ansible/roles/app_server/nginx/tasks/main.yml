@@ -9,12 +9,15 @@
   become: yes
 
 - import_tasks: firewalld.yml
+- import_tasks: selinux.yml
 
-- file:
+- name: Ensure nginx sites-available directory is available
+  file:
     path: /etc/nginx/sites-available
     state: directory
   become: yes
-- file:
+- name: Ensure nginx sites-enabled directory is available
+  file:
     path: /etc/nginx/sites-enabled
     state: directory
   become: yes
