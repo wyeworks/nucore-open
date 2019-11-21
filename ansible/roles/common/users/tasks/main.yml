@@ -41,7 +41,7 @@
   authorized_key:
     user: '{{ item.0.name }}'
     state: present
-    key: "{{ lookup('file', 'public_keys/' + item.1) }}"
+    key: "{{ item.1 }}"
   with_subelements:
     - '{{ users }}'
     - authorized_keys
