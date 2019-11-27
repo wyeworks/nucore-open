@@ -26,6 +26,8 @@
     groups: "{{ (item.groups | default([])) + ['umass'] }}"
   with_items:
     - '{{ users }}'
+  loop_control:
+    label: "{{ item.name }}: groups {{ item.groups | default([])}}"
   become: yes
 
 - name: Add group permission to users' home directory
