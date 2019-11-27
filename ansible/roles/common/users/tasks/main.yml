@@ -26,6 +26,8 @@
     groups: "{{ (item.groups | default([])) + ['umass'] }}"
   with_items:
     - '{{ users }}'
+  loop_control:
+    label: "{{ item.name }}: groups {{ item.groups | default([])}}"
   become: yes
 
 - name: Add group permission to users' home directory
@@ -41,7 +43,7 @@
   authorized_key:
     user: '{{ item.0.name }}'
     state: present
-    key: "{{ lookup('file', 'public_keys/' + item.1) }}"
+    key: "{{ item.1 }}"
   with_subelements:
     - '{{ users }}'
     - authorized_keys

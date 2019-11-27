@@ -1,16 +1,16 @@
 ---
 users:
   - name: jhanggi
-    authorized_keys: ['jhanggi.pub']
+    authorized_keys: ['https://github.com/jhanggi.keys']
     groups: ['ials']
   - name: vandrijevikj
-    authorized_keys: ['vandrijevikj.ed25519.pub']
+    authorized_keys: ['https://github.com/vandrijevik.keys']
     groups: ['ials']
   - name: marnautovic
-    authorized_keys: ['marnautovic.pub']
+    authorized_keys: ['https://github.com/arnamak.keys']
     groups: ['ials']
   - name: nucore
     authorized_keys:
-      - jhanggi.pub
-      - vandrijevikj.ed25519.pub
-      - marnautovic.pub
+      - https://github.com/jhanggi.keys
+      - https://github.com/vandrijevik.keys
+      - https://github.com/arnamak.keys
