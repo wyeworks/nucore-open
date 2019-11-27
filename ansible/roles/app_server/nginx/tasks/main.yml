@@ -55,3 +55,5 @@
     append: true
   with_items: "{{ nginx_apps }}"
   become: yes
+
+- import_tasks: logrotate.yml
