@@ -225,7 +225,6 @@ RSpec.describe FileUploadsController do
                                user: @director,
                                created_by: @director.id,
                                account: @account,
-                               ordered_at: Time.zone.now,
                               )
     @price_group = FactoryBot.create(:price_group, facility: @authable)
     @price_policy = FactoryBot.create(:item_price_policy, product: @product, price_group: @price_group)

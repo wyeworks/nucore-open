@@ -64,10 +64,10 @@ RSpec.describe Reports::GeneralReportsController do
       @order_detail_ordered_today_unfulfilled = place_product_order(@user, @authable, @item, @account)
 
       @order_detail_ordered_yesterday_unfulfilled = place_product_order(@user, @authable, @item, @account)
-      @order_detail_ordered_yesterday_unfulfilled.order.update_attributes(ordered_at: 1.day.ago)
+      @order_detail_ordered_yesterday_unfulfilled.update_attributes!(ordered_at: 1.day.ago)
 
       @order_detail_ordered_yesterday_fulfilled_today_unreconciled = place_and_complete_item_order(@user, @authable, @account)
-      @order_detail_ordered_yesterday_fulfilled_today_unreconciled.order.update_attributes(ordered_at: 1.day.ago)
+      @order_detail_ordered_yesterday_fulfilled_today_unreconciled.update_attributes!(ordered_at: 1.day.ago)
 
       @order_detail_ordered_today_fulfilled_today_unreconciled = place_and_complete_item_order(@user, @authable, @account)
 
@@ -75,15 +75,13 @@ RSpec.describe Reports::GeneralReportsController do
       @order_detail_ordered_today_fulfilled_next_month_unreconciled.update_attributes(fulfilled_at: 1.month.from_now)
 
       @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_today = place_and_complete_item_order(@user, @authable, @account)
-      @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_today.order.update_attributes(ordered_at: 1.day.ago)
-      @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_today.update_attributes(fulfilled_at: 1.day.ago)
+      @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_today.update_attributes!(ordered_at: 1.day.ago, fulfilled_at: 1.day.ago)
       @journal_today = FactoryBot.create(:journal, facility: @authable, created_by: @admin.id, journal_date: Time.zone.now)
       @journal_today.create_journal_rows!([@order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_today])
       @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_today.change_status!(OrderStatus.reconciled)
 
       @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_yesterday = place_and_complete_item_order(@user, @authable, @account)
-      @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_yesterday.order.update_attributes(ordered_at: 1.day.ago)
-      @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_yesterday.update_attributes(fulfilled_at: 1.day.ago)
+      @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_yesterday.update_attributes(ordered_at: 1.day.ago, fulfilled_at: 1.day.ago)
       @journal_yesterday = FactoryBot.create(:journal, facility: @authable, created_by: @admin.id, journal_date: 1.day.ago)
       @journal_yesterday.create_journal_rows!([@order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_yesterday])
       @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_yesterday.change_status!(OrderStatus.reconciled)

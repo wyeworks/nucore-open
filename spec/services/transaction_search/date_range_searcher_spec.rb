@@ -12,8 +12,8 @@ RSpec.describe TransactionSearch::DateRangeSearcher do
 
   describe "ordered_at" do
     before do
-      orders[0].update!(ordered_at: 2.days.ago)
-      orders[1].update!(ordered_at: 1.day.ago)
+      order_details[0].update!(ordered_at: 2.days.ago)
+      order_details[1].update!(ordered_at: 1.day.ago)
     end
 
     it "finds only the right ones when starting a day ago" do

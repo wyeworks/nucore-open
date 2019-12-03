@@ -1,5 +1,7 @@
 %div
   %table.table.table-striped.table-tight
+    - if local_assigns[:caption]
+      %caption= local_assigns[:caption]
     %thead
       %tr
         %th= SangerSequencing::Sample.human_attribute_name(:customer_sample_id)
@@ -11,8 +13,3 @@
         %tr
           %td= sample.customer_sample_id
           %td= sample.id
-          - if submission.has_results_files?
-            %td
-              %ul.unstyled
-                - sample.results_files.each do |file|
-                  %li= link_to file.name, facility_sample_result_path(file)

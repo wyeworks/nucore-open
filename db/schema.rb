@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190815101750) do
+ActiveRecord::Schema.define(version: 20191114122118) do
 
   create_table "account_facility_joins", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "facility_id", null: false
@@ -303,6 +303,7 @@ ActiveRecord::Schema.define(version: 20190815101750) do
     t.string   "canceled_reason"
     t.string   "price_change_reason"
     t.integer  "price_changed_by_user_id"
+    t.datetime "ordered_at"
     t.index ["account_id"], name: "fk_od_accounts", using: :btree
     t.index ["assigned_user_id"], name: "index_order_details_on_assigned_user_id", using: :btree
     t.index ["bundle_product_id"], name: "fk_bundle_prod_id", using: :btree
@@ -355,7 +356,6 @@ ActiveRecord::Schema.define(version: 20190815101750) do
     t.integer  "created_by",                     null: false
     t.datetime "created_at",                     null: false
     t.datetime "updated_at",                     null: false
-    t.datetime "ordered_at"
     t.integer  "facility_id"
     t.string   "state",               limit: 50
     t.integer  "merge_with_order_id"

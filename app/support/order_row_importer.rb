@@ -112,6 +112,7 @@ class OrderRowImporter
 
   def backdate_order_details_to_complete!
     @order_details.each do |order_detail|
+      order_detail.ordered_at = order_date
       order_detail.backdate_to_complete!(fulfillment_date)
     end
   end

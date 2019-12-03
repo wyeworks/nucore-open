@@ -17,7 +17,7 @@ class FacilityUserReservationsController < ApplicationController
   def index
     @order_details = user_order_details
                      .purchased
-                     .by_ordered_at
+                     .order(ordered_at: :desc)
                      .paginate(page: params[:page])
   end
 

@@ -45,7 +45,7 @@ end
 def place_product_order(ordered_by, facility, product, account = nil, purchased = true)
   @price_group = FactoryBot.create(:price_group, facility: facility)
 
-  o_attrs = { created_by: ordered_by.id, facility: facility, ordered_at: Time.zone.now }
+  o_attrs = { created_by: ordered_by.id, facility: facility }
   o_attrs[:account_id] = account.id if account
   o_attrs[:state] = "purchased" if purchased
   @order = ordered_by.orders.create(FactoryBot.attributes_for(:order, o_attrs))
@@ -56,6 +56,7 @@ def place_product_order(ordered_by, facility, product, account = nil, purchased 
   @item_pp.reload.restrict_purchase = false
   od_attrs = { product_id: product.id }
   od_attrs[:account_id] = account.id if account
+  od_attrs[:ordered_at] = Time.current if purchased
   od_attrs[:created_by] = @order.created_by
   @order_detail = @order.order_details.create(FactoryBot.attributes_for(:order_detail).update(od_attrs))
 
@@ -112,8 +113,8 @@ end
 #   Other parameters for the reservation; will override the defaults defined below
 #
 # and_return the reservation
-def place_reservation_for_instrument(ordered_by, instrument, account, reserve_start, extra_reservation_attrs = nil)
-  order_detail = place_product_order(ordered_by, instrument.facility, instrument, account, false)
+def place_reservation_for_instrument(ordered_by, instrument, account, reserve_start, extra_reservation_attrs = nil, purchased: false)
+  order_detail = place_product_order(ordered_by, instrument.facility, instrument, account, purchased)
 
   instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule)) if instrument.schedule_rules.empty?
   res_attrs = {
@@ -202,7 +203,7 @@ def setup_reservation(facility, account, user)
   # create price policy with default window of 1 day
   @instrument.instrument_price_policies.create(FactoryBot.attributes_for(:instrument_price_policy).update(price_group_id: @price_group.id))
   # create order, order detail
-  @order = user.orders.create(FactoryBot.attributes_for(:order, created_by: user.id, account: account, ordered_at: Time.zone.now))
+  @order = user.orders.create(FactoryBot.attributes_for(:order, created_by: user.id, account: account))
   @order.add(@instrument, 1)
   @order_detail = @order.order_details.first
 end

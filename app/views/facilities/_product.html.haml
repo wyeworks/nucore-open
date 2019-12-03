@@ -2,8 +2,8 @@
   - if local_assigns[:f]
     = f.fields_for :order_details do |builder|
       - if session_user.can_override_restrictions?(product) || product.can_be_used_by?(acting_user)
-        = builder.text_field :quantity, value: 0, class: "product_quantity", index: nil
-        = builder.hidden_field :product_id, value: product.id, index: nil
+        = builder.text_field :quantity, value: 0, class: "product_quantity", index: nil, aria: { label: text("quantity", product: product) }, id: "order_order_details_#{product.id}_quantity"
+        = builder.hidden_field :product_id, value: product.id, index: nil, id: "order_order_details_#{product.id}_product_id"
   = public_calendar_link(product)
   = link_to product.name + (product.is_hidden? ? ' (hidden)' : ''), facility_product_path(product.facility, product)
   - if acting_user.present? && !product.can_be_used_by?(acting_user)

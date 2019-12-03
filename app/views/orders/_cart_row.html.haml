@@ -27,6 +27,7 @@
             as: :order_detail_quantity,
             disabled: order_detail.quantity_locked_by_survey?,
             input_html: { name: "quantity#{order_detail.id}",
+            aria: { label: "#{order_detail.product} #{OrderDetail.human_attribute_name(:quantity)}" },
             id: "quantity#{order_detail.id}",
             class: "cart__quantityField" },
             label: false

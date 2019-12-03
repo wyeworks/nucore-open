@@ -152,9 +152,9 @@ RSpec.describe Order do
       it "should start off with an empty order status" do
         @order.order_details.all? { |od| expect(od.order_status).to be_nil }
       end
-      it "should set the ordered_at" do
+      it "should set the ordered_at of all the details" do
         expect(@order.purchase!).to be true
-        expect(@order.ordered_at).not_to be_nil
+        expect(@order.order_details).to all(be_ordered_at)
       end
       it "should add to facility.orders collection" do
         expect(@order.purchase!).to be true
@@ -471,14 +471,20 @@ RSpec.describe Order do
   end
 
   describe "#in_cart?" do
-    context "when ordered_at is set" do
-      subject(:order) { build(:order, ordered_at: Time.zone.now) }
+    context "when it is purchased" do
+      subject(:order) { build(:order, state: :purchased) }
 
       it { expect(order).not_to be_in_cart }
     end
 
-    context "when ordered_at is not set" do
-      subject(:order) { build(:order, ordered_at: nil) }
+    context "when it is new" do
+      subject(:order) { build(:order, state: :new) }
+
+      it { expect(order).to be_in_cart }
+    end
+
+    context "when it is validated" do
+      subject(:order) { build(:order, state: :validated) }
 
       it { expect(order).to be_in_cart }
     end

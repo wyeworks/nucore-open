@@ -28,7 +28,7 @@ RSpec.describe UsersController do
 
       @lapsed_user = FactoryBot.create(:user, first_name: "Lapsed")
       @old_order_detail = place_and_complete_item_order(@lapsed_user, @authable)
-      @old_order_detail.order.update_attributes(ordered_at: 400.days.ago)
+      @old_order_detail.update_attributes!(ordered_at: 400.days.ago)
     end
 
     it_should_allow_operators_only :success, "include the right users" do

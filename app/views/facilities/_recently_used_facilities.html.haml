@@ -1,5 +1,6 @@
 - if @recently_used_facilities.present?
-  %h4.facility_listing.js--facility_listing.recent= text("title")
-  - @recently_used_facilities.each do |facility|
-    .facility_listing.js--facility_listing.recent
-      %h4.header-tight= link_to facility, facility_path(facility)
+  %h3.facility_listing.js--facility_listing.recent= text("title")
+  %ul.unstyled
+    - @recently_used_facilities.each do |facility|
+      %li.facility_listing.js--facility_listing.recent
+        = link_to facility, facility_path(facility)

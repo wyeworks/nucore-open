@@ -425,7 +425,6 @@ RSpec.describe OrderDetail do
                user: user,
                created_by: user.id,
                account: account,
-               ordered_at: Time.zone.now,
               )
       end
 
@@ -1218,10 +1217,10 @@ RSpec.describe OrderDetail do
       ignore_order_detail_account_validations
       @user = create(:user)
       @od_yesterday = place_product_order(@user, @facility, @item, @account)
-      @od_yesterday.order.update_attributes(ordered_at: (Time.zone.now - 1.day))
+      @od_yesterday.update_attributes!(ordered_at: 1.day.ago)
 
       @od_tomorrow = place_product_order(@user, @facility, @item, @account)
-      @od_tomorrow.order.update_attributes(ordered_at: (Time.zone.now + 1.day))
+      @od_tomorrow.update_attributes!(ordered_at: 1.day.from_now)
 
       @od_today = place_product_order(@user, @facility, @item, @account)
 
@@ -1232,10 +1231,10 @@ RSpec.describe OrderDetail do
                            min_reserve_mins: 60,
                            max_reserve_mins: 60)
 
-      # all reservations get placed in today
-      @reservation_yesterday = place_reservation_for_instrument(@user, @instrument, @account, Time.zone.now - 1.day)
-      @reservation_tomorrow = place_reservation_for_instrument(@user, @instrument, @account, Time.zone.now + 1.day)
-      @reservation_today = place_reservation_for_instrument(@user, @instrument, @account, Time.zone.now)
+      # all reservations get purchased today
+      @reservation_yesterday = place_reservation_for_instrument(@user, @instrument, @account, Time.zone.now - 1.day, purchased: true)
+      @reservation_tomorrow = place_reservation_for_instrument(@user, @instrument, @account, Time.zone.now + 1.day, purchased: true)
+      @reservation_today = place_reservation_for_instrument(@user, @instrument, @account, Time.zone.now, purchased: true)
     end
 
     it "should only return the reservations and the orders from today and tomorrow" do

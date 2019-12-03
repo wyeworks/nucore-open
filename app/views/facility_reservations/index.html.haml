@@ -39,7 +39,7 @@
               %td.centered= link_to od.id, manage_order_detail_path(od), class: "manage-order-detail"
               %td= order.user.full_name
               %td{colspan: 2}
-                = format_usa_datetime(order.ordered_at)
+                = format_usa_datetime(od.ordered_at)
               %td{colspan: 2}
                 - if res.admin_editable?
                   = link_to res, edit_facility_order_order_detail_reservation_path(current_facility, order, od, res)

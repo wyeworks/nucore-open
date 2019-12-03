@@ -16,7 +16,7 @@
   = f.input :facility, label: Facility.model_name.human
 
   = f.input :account, :input_html => { :value => @accounts.join(', ') }
-  = f.input :ordered_at
+  = f.input :initial_ordered_at
   = f.input :user
   = f.input :created_by_user
 

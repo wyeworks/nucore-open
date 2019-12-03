@@ -34,7 +34,7 @@
               %td.centered= link_to od.order_id, facility_order_path(current_facility, od.order)
               %td.centered= link_to od.id, manage_order_detail_path(od), class: "manage-order-detail"
               %td= od.order.user.full_name
-              %td= format_usa_datetime(od.order.ordered_at)
+              %td= format_usa_datetime(od.ordered_at)
               %td.centered= OrderDetailPresenter.new(od).wrapped_quantity
               = render partial: "shared/order_detail_cell", locals: { od: od }
               %td= od.assigned_user

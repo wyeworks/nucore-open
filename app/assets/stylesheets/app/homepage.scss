@@ -1,0 +1,34 @@
+li.facility_listing {
+  &.recent {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+
+  .facility_listing__header {
+    font-size: 1rem;
+    font-weight: bold;
+    line-height: 1.5rem;
+  }
+}
+
+.product_list {
+  ul {
+    @extend .unstyled;
+  }
+  input {
+    width: 2em;
+    padding: 0 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  a.fa-calendar {
+    text-decoration: none;
+    color: $textColor;
+    &.available {
+      color: $successText;
+    }
+    &.in-use {
+      color: $errorText;
+    }
+  }
+}

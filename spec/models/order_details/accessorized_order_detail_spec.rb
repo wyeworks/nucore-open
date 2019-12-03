@@ -6,7 +6,7 @@ RSpec.describe OrderDetail do
   let(:instrument) { FactoryBot.create(:setup_instrument, :timer) }
   let(:facility) { instrument.facility }
   let(:reservation) { FactoryBot.create(:completed_reservation, product: instrument) }
-  let(:order_detail) { reservation.order_detail.tap { |od| od.update(note: "original") } }
+  let(:order_detail) { reservation.order_detail.tap { |od| od.update(note: "original", ordered_at: 1.day.ago) } }
   let(:accessorizer) { Accessories::Accessorizer.new(order_detail) }
 
   before :each do
@@ -44,6 +44,10 @@ RSpec.describe OrderDetail do
       order_detail.update_attributes(account: new_account)
       expect(accessory_order_detail.reload.account).to eq new_account
     end
+
+    it "takes the ordered_at of the original order" do
+      expect(accessory_order_detail.ordered_at).to eq(order_detail.ordered_at)
+    end
   end
 
   context "quantity based accessory" do
@@ -74,9 +78,9 @@ RSpec.describe OrderDetail do
       expect(accessory_order_detail.quantity).to eq(reservation.actual_duration_mins)
     end
 
-    skip "defaults to 1 if less than a minute" do
-      reservation.update_attributes(actual_end_at: reservation.actual_start_at + 30.seconds)
-      expect(reservation.actual_duration_mins).to eq(0)
+    it "defaults to 1 if less than a minute" do
+      reservation.update_attributes(actual_end_at: reservation.actual_start_at + 29.seconds)
+      expect(reservation.actual_duration_mins).to eq(1)
       expect(accessory_order_detail.reload.quantity).to eq(1)
     end
 
@@ -114,9 +118,9 @@ RSpec.describe OrderDetail do
       expect(accessory_order_detail.quantity).to eq(reservation.actual_duration_mins)
     end
 
-    skip "defaults to 1 if less than a minute" do
-      reservation.update_attributes(actual_end_at: reservation.actual_start_at + 30.seconds)
-      expect(reservation.actual_duration_mins).to eq(0)
+    it "defaults to 1 if less than a minute" do
+      reservation.update_attributes(actual_end_at: reservation.actual_start_at + 29.seconds)
+      expect(reservation.actual_duration_mins).to eq(1)
       expect(accessory_order_detail.reload.quantity).to eq(1)
     end
 

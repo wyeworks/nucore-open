@@ -14,7 +14,7 @@ class Facility < ApplicationRecord
   has_many :non_instrument_products, -> { where.not(type: "Instrument").alphabetized }, class_name: "Product", inverse_of: :facility
   has_many :order_details, through: :products
   has_many :order_imports, dependent: :destroy
-  has_many :orders, -> { where.not(ordered_at: nil) }
+  has_many :orders, -> { purchased }
   has_many :products
   has_many :schedules
   has_many :services, inverse_of: :facility

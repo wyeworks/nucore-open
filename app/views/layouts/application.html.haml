@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-%html
+%html{lang: "en"}
   %head
     = render "/shared/head"
   %body{ class: SettingsHelper.feature_on?(:use_manage) && manage_mode? ? "manage-mode" : "" }
@@ -11,7 +11,7 @@
     %nav
       = render "/shared/nav"
     = render "/shared/breadcrumb", breadcrumb: yield(:breadcrumb)
-    #content
+    #content{ role: "main" }
       .container
         .row
           .span12

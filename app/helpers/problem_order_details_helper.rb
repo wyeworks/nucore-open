@@ -15,7 +15,7 @@ module ProblemOrderDetailsHelper
       if show_reservation_start_at
         order_detail.reservation.actual_start_at
       else
-        order_detail.order.ordered_at
+        order_detail.ordered_at
       end
 
     format_usa_datetime(date)

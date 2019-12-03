@@ -18,7 +18,7 @@ class FacilityAccountOrdersController < ApplicationController
       .order_details
       .for_facility(current_facility)
       .purchased
-      .order("orders.ordered_at DESC")
+      .order(ordered_at: :desc)
       .paginate(page: params[:page])
   end
 

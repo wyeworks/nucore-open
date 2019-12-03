@@ -50,7 +50,7 @@ output = CSV.generate do |csv|
 
     row = [od.facility,
            od.to_s,
-           format_usa_datetime(order.ordered_at),
+           format_usa_datetime(od.ordered_at),
            format_usa_datetime(od.fulfilled_at)]
 
            # Who placed the order

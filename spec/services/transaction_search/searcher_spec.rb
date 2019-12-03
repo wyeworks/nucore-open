@@ -13,7 +13,7 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
     let(:scope) { OrderDetail.all.joins(:order) }
     before do
       order_detail.to_complete!
-      order.update(ordered_at: 3.days.ago)
+      order_detail.update(ordered_at: 3.days.ago)
     end
 
     it "can find the order detail with empty params" do
