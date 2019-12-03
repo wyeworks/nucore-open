@@ -85,7 +85,7 @@ li.nav-spacer {
 
 .footer__copyright {
   font-size: 85%;
-  color: #919191;
+  color: #595959; // maximum lightness for WCAG AAA compliance (accessibility).
   text-align: right;
   float: right;
 }
@@ -137,32 +137,6 @@ li.nav-spacer {
 
 .alert p:last-child {
   margin-bottom: 0;
-}
-
-/*
-  Product List
-*/
-
-.product_list {
-  ul {
-    @extend .unstyled;
-  }
-  input {
-    width: 2em;
-    padding: 0 3px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
-  a.fa-calendar {
-    text-decoration: none;
-    color: $textColor;
-    &.available {
-      color: $successText;
-    }
-    &.in-use {
-      color: $errorText;
-    }
-  }
 }
 
 /*

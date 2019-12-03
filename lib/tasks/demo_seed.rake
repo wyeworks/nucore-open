@@ -536,6 +536,7 @@ namespace :demo do
             bundle_product_id: product.id,
             group_id: group_id,
             order_status_id: bp.product.initial_order_status.id,
+            ordered_at: ordered_at,
           )
           od.account = account
           od.save!
@@ -552,6 +553,7 @@ namespace :demo do
           quantity: product.is_a?(Item) ? (rand(3) + 1) : 1,
           created_at: (ordered_at - (60 * rand(60) + 1)),
           order_status_id: product.initial_order_status.id,
+          ordered_at: ordered_at,
         )
 
         # create a reservation
@@ -581,7 +583,6 @@ namespace :demo do
       o.state = "validated"
       o.save(validate: false)
       o.purchase!
-      o.update_attributes!(ordered_at: ordered_at)
     end
     o.validate_order! if args[:validate]
     o

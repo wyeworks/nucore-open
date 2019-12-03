@@ -1,7 +1,7 @@
 /* Bootstrap overrides go here. This is included after bootstrap. */
 $navCollapseBackgroundColor: #f7f7f7;
 $navbarLinkColorActive: #e6e6e6;
-$navCollapseColor: #777;
+$navCollapseColor: #545454; // maximim lightness for WCAG AAA compliance (accessibility).
 $navbarActiveBorderColor: #aaa;
 
 /* 979px - 980px is where nav-collapse gets triggered */

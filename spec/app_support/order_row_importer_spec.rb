@@ -59,7 +59,7 @@ RSpec.describe OrderRowImporter do
         before { subject.import }
 
         it "has the expected ordered_at" do
-          expect(order.ordered_at).to eq parse_usa_date(order_date)
+          expect(order.order_details.map(&:ordered_at)).to all(eq parse_usa_date(order_date))
         end
 
         it "has the expected creator" do

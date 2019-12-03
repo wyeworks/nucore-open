@@ -31,7 +31,6 @@ RSpec.describe FacilityReservationsController do
                                user: @director,
                                created_by: @director.id,
                                account: @account,
-                               ordered_at: Time.zone.now,
                                state: "purchased",
                               )
 
@@ -264,7 +263,6 @@ RSpec.describe FacilityReservationsController do
                                     user: @director,
                                     created_by: @director.id,
                                     account: @account,
-                                    ordered_at: nil,
                                     state: "new",
                                    )
         # make sure the reservations are happening today

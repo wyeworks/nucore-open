@@ -13,7 +13,8 @@ en:
       facilities_list:
         all: All !Facilities!
         none: "No !facilities_downcase! are available at this time."
-
+      product:
+        quantity: "%{product} Quantity"
       azlist:
         all_short: All
         recently_used_short: Recent

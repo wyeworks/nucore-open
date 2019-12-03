@@ -40,7 +40,8 @@
               = render "shared/message_summary"
               %li= link_to t('pages.logout'), sign_out_user_path
               - if responsive? && !acting_as? && current_user
-                = form_tag global_search_path, class: "navbar-search pull-right hidden-with-nav" do
-                  = text_field_tag :search, nil, placeholder: t("global_search.search"), class: "search-query span2"
+                %li
+                  = form_tag global_search_path, class: "navbar-search pull-right hidden-with-nav" do
+                    = text_field_tag :search, nil, placeholder: t("global_search.search"), class: "search-query span2", aria: { label: t("global_search.search") }
 
 

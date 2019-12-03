@@ -1,9 +1,10 @@
 - if @facilities.any?
-  %h4.facility_listing.js--facility_listing.all_header= text(".all")
-  - @azlist.map.with_index do |(letter, matched_facilities), index|
-    - matched_facilities.each do |facility|
-      .facility_listing.js--facility_listing{ class: az_classname_for_facility(index, letter) }
-        %h4.header-tight= link_to facility, facility_path(facility)
-        %p= facility.short_description
+  %h2.facility_listing.js--facility_listing.all_header= text(".all")
+  %ul.unstyled
+    - @azlist.map.with_index do |(letter, matched_facilities), index|
+      - matched_facilities.each do |facility|
+        %li.facility_listing.js--facility_listing{ class: az_classname_for_facility(index, letter) }
+          .facility_listing.facility_listing__header= link_to facility, facility_path(facility)
+          %p= facility.short_description
 - else
   .alert.alert-info= text("none")

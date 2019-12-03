@@ -15,13 +15,13 @@ RSpec.describe ReservationsHelper do
         subject(:reservation) { create(:setup_reservation, :yesterday) }
 
         context "and the reservation is in a cart" do
-          before { reservation.order.ordered_at = nil }
+          before { reservation.order.state = :new }
 
           it { expect(end_time_editing_disabled?(reservation)).to be false }
         end
 
         context "and the reservation has been ordered" do
-          before { reservation.order.ordered_at = Time.zone.now }
+          before { reservation.order.state = :purchased }
 
           it { expect(end_time_editing_disabled?(reservation)).to be true }
         end
@@ -51,13 +51,13 @@ RSpec.describe ReservationsHelper do
         subject(:reservation) { create(:setup_reservation, :yesterday) }
 
         context "and the reservation is in a cart" do
-          before { reservation.order.ordered_at = false }
+          before { reservation.order.state = :new }
 
           it { expect(start_time_editing_disabled?(reservation)).to be false }
         end
 
         context "and the reservation has been ordered" do
-          before { reservation.order.ordered_at = Time.zone.now }
+          before { reservation.order.state = :purchased }
 
           it { expect(start_time_editing_disabled?(reservation)).to be true }
         end

@@ -57,5 +57,7 @@ RSpec.describe "Placing an item order" do
     expect(page).to have_content(/Ordered For\n#{user.full_name}/i)
     expect(page).to have_css(".currency .estimated_cost", count: 0)
     expect(page).to have_css(".currency .actual_cost", count: 2) # Cost and Total
+
+    expect(page).to have_content("Ordered Date\n#{I18n.l(2.days.ago.to_date, format: :usa)}")
   end
 end

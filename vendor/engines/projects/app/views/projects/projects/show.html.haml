@@ -9,7 +9,7 @@
 
   - @date_range_field = :ordered_at
   = render "shared/transactions/table",
-    order_details: @project.order_details.by_ordered_at.paginate(page: params[:page])
+    order_details: @order_details
 
 = link_to t(".edit"),
   edit_facility_project_path(@project.facility, @project),

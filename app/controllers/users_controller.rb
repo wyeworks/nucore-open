@@ -84,7 +84,7 @@ class UsersController < ApplicationController
                           .item_and_service_orders
                           .for_facility(current_facility)
                           .purchased
-                          .order("orders.ordered_at DESC")
+                          .order(ordered_at: :desc)
                           .paginate(page: params[:page])
   end
 

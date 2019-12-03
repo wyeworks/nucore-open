@@ -76,7 +76,6 @@ class OrderImport < ApplicationRecord
       account: row_importer.account,
       user: row_importer.user,
       created_by_user: creator,
-      ordered_at: row_importer.order_date,
       order_import_id: id,
     )
   end

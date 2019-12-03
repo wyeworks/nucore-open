@@ -293,7 +293,7 @@ en:
       order:
         user: Ordered For
         created_by_user: Ordered By
-        ordered_at: Ordered Date
+        initial_ordered_at: Ordered Date
         account: Payment Source
       order_detail:
         account: Payment Source

@@ -17,11 +17,11 @@ module SangerSequencing
 
     accepts_nested_attributes_for :samples, allow_destroy: true
 
-    delegate :order_id, :user, :order_status, :note, :product, to: :order_detail
-    delegate :purchased?, :ordered_at, to: :order
+    delegate :order_id, :user, :order_status, :note, :product, :ordered_at, to: :order_detail
+    delegate :purchased?, to: :order
     alias purchased_at ordered_at
 
-    scope :purchased, -> { joins(:order).merge(Order.purchased.order(ordered_at: :desc)) }
+    scope :purchased, -> { joins(order_detail: :order).merge(Order.purchased).merge(OrderDetail.order(ordered_at: :desc)) }
     scope :for_facility, ->(facility) { where(orders: { facility_id: facility.id }) }
 
     BATCHABLE_STATES = %w(new inprocess complete).freeze

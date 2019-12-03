@@ -27,7 +27,7 @@ class OrderPurchaser
       return
     end
 
-    order.ordered_at = backdate_to if backdate_to
+    order.order_details_ordered_at = backdate_to if backdate_to
 
     validate_order!
     return unless do_additional_validations
@@ -69,7 +69,7 @@ class OrderPurchaser
   end
 
   def can_backdate_order_details?
-    order.ordered_at <= Time.zone.now
+    order.initial_ordered_at <= Time.zone.now
   end
 
   def backdate_order_details!(update_by, order_status)
@@ -77,7 +77,7 @@ class OrderPurchaser
       next if od.reservation # reservations should always have order_status dictated by their dates
 
       if order_status.root == OrderStatus.complete
-        od.backdate_to_complete!(order.ordered_at)
+        od.backdate_to_complete!(od.ordered_at)
       else
         od.update_order_status!(update_by, order_status, admin: true)
       end

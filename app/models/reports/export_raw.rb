@@ -43,7 +43,7 @@ module Reports
       hash = {
         facility: :facility,
         order: :to_s,
-        ordered_at: ->(od) { od.order.ordered_at },
+        ordered_at: :ordered_at,
         fulfilled_at: ->(od) { od.fulfilled_at },
         order_status: ->(od) { od.order_status.name },
         order_state: :state,

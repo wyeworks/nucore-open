@@ -12,7 +12,7 @@ RSpec.describe OrdersController do
 
   class DummyNotifier
 
-    def deliver
+    def deliver_later
     end
 
   end
@@ -510,7 +510,7 @@ RSpec.describe OrdersController do
     context "backdating" do
       before :each do
         @order_detail = place_product_order(@staff, @authable, @item, @account, false)
-        @order.update_attribute(:ordered_at, nil)
+        @order_detail.update_attribute(:ordered_at, nil)
         @params.merge!(id: @order.id)
       end
 
@@ -543,14 +543,14 @@ RSpec.describe OrdersController do
         @params[:order_date] = format_usa_date(1.day.ago)
         @params[:order_time] = { hour: "10", minute: "12", ampm: "AM" }
         do_request
-        expect(assigns[:order].reload.ordered_at).to match_date 1.day.ago.change(hour: 10, min: 12)
+        expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date 1.day.ago.change(hour: 10, min: 12))
       end
 
       it "sets ordered_at to now if not acting_as" do
         maybe_grant_always_sign_in :director
         @params[:order_date] = format_usa_date(1.day.ago)
         do_request
-        expect(assigns[:order].reload.ordered_at).to match_date Time.zone.now
+        expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date Time.current)
       end
 
       it "does not set ordered_at when quantities change" do
@@ -566,7 +566,7 @@ RSpec.describe OrdersController do
         do_request
 
         expect(@order.reload.state).not_to eq("purchased")
-        expect(@order.ordered_at).to be_blank
+        expect(@order.order_details.map(&:ordered_at)).to all(be_blank)
       end
 
       context "setting status of order details" do

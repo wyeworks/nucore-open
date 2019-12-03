@@ -34,7 +34,7 @@ RSpec.describe SecureRooms::AccessHandlers::OrderHandler, type: :service do
         it { is_expected.to be_purchased }
 
         it "sets ordered_at" do
-          expect(order.ordered_at).to be_present
+          expect(order.order_details.map(&:ordered_at)).to all(be_present)
         end
 
         it "stores the associations from the Occupancy" do

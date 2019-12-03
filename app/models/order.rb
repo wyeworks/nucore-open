@@ -23,15 +23,11 @@ class Order < ApplicationRecord
   end
 
   def self.carts
-    where(ordered_at: nil, merge_with_order_id: nil)
+    where.not(state: :purchased).where(merge_with_order_id: nil)
   end
 
   def self.for_facility(facility)
     facility.cross_facility? ? all : where(facility_id: facility.id)
-  end
-
-  def self.recent
-    where("orders.ordered_at > ?", Time.zone.now - 1.year)
   end
 
   attr_accessor :being_purchased_by_admin
@@ -41,7 +37,7 @@ class Order < ApplicationRecord
   aasm column: :state do
     state :new, initial: true
     state :validated
-    state :purchased, before_enter: :set_ordered_at
+    state :purchased, before_enter: :set_order_details_ordered_at
 
     event :invalidate do
       transitions to: :new, from: [:new, :validated]
@@ -77,7 +73,7 @@ class Order < ApplicationRecord
   end
 
   def in_cart?
-    !ordered_at?
+    !purchased?
   end
 
   def move_order_details_to_default_status
@@ -111,8 +107,8 @@ class Order < ApplicationRecord
     save
   end
 
-  def set_ordered_at
-    self.ordered_at ||= Time.zone.now
+  def set_order_details_ordered_at
+    self.order_details_ordered_at = Time.current
   end
   #####
   # END acts_as_state_machine
@@ -123,6 +119,14 @@ class Order < ApplicationRecord
 
     ods.each(&:assign_estimated_price!)
     ods
+  end
+
+  def order_details_ordered_at=(datetime)
+    order_details.each { |od| od.ordered_at ||= datetime }
+  end
+
+  def initial_ordered_at
+    order_details.map(&:ordered_at).min
   end
 
   ## TODO: this doesn't pass errors up to the caller.. does it need to?

@@ -2,7 +2,7 @@
   #{@greeting}
 ==
 
-#{Order.human_attribute_name(:ordered_at)}: #{l(@order.ordered_at, format: :receipt)}
+#{Order.human_attribute_name(:ordered_at)}: #{l(@order.initial_ordered_at, format: :receipt)}
 #{Facility.model_name.human}: #{@order.facility}
 #{OrderDetail.human_attribute_name(:ordered_by)}: #{@order.created_by_user.full_name}
 #{Account.model_name.human}: #{@order.account}

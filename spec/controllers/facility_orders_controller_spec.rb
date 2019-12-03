@@ -508,7 +508,7 @@ RSpec.describe FacilityOrdersController do
       expect(merge_order.account_id).to eq(original_order.account_id)
       expect(merge_order.user_id).to eq(original_order.user_id)
       expect(merge_order.created_by).to eq(@director.id)
-      expect(merge_order.ordered_at).to be_blank
+      expect(merge_order.order_details).to be { |od| od.ordered_at.blank? }
       expect(merge_order.order_details.size).to eq(detail_count)
       expect(MergeNotification.count).to eq(detail_count)
       assert_update_success merge_order, product

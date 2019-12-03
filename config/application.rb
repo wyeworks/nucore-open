@@ -40,6 +40,9 @@ module Nucore
 
     config.active_record.observers = :order_detail_observer
 
+    # Override the default ("#{Rails.root}/**/spec/mailers/previews") to also load
+    # previews from within our engines.
+    config.action_mailer.preview_path = "#{Rails.root}/**/spec/mailers/previews"
   end
 
 end

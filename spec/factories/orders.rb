@@ -6,8 +6,13 @@ FactoryBot.define do
   end
 
   trait :purchased do
-    ordered_at { 1.week.ago }
+    transient do
+      ordered_at { 1.week.ago }
+    end
     state { "purchased" }
+    after(:create) do |order, evaluator|
+      order.order_details.update_all(ordered_at: evaluator.ordered_at)
+    end
   end
 
   # Must define product or facility
@@ -15,6 +20,7 @@ FactoryBot.define do
     transient do
       product { nil }
       quantity { 1 }
+      ordered_at { Time.current }
     end
     facility { product.facility }
     association :account, factory: :setup_account
@@ -29,10 +35,16 @@ FactoryBot.define do
     end
 
     factory :purchased_order do
-      after(:create) do |order|
+      transient do
+        ordered_at { Time.current }
+      end
+
+      after(:create) do |order, evaluator|
         allow(order).to receive(:cart_valid?).and_return(true) # so we don't have to worry about defining price groups, etc
+        order.order_details_ordered_at = evaluator.ordered_at
         order.validate_order!
         order.purchase!
+        order.order_details.update_all(ordered_at: evaluator.ordered_at)
       end
     end
 

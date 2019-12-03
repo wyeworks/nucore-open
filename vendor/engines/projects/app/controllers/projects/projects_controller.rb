@@ -36,6 +36,7 @@ module Projects
     end
 
     def show
+      @order_details = @project.order_details.order(ordered_at: :desc).paginate(page: params[:page])
     end
 
     def update

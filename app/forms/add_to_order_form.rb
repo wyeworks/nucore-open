@@ -78,7 +78,8 @@ class AddToOrderForm
   def add_to_order!
     OrderDetail.transaction do
       merge_order.add(product, quantity, params).each do |order_detail|
-        order_detail.manual_fulfilled_at = fulfilled_at
+        backdate(order_detail)
+
         order_detail.set_default_status!
         order_detail.change_status!(order_status) if order_status.present?
 
@@ -118,6 +119,16 @@ class AddToOrderForm
                    else
                      original_order
                    end
+  end
+
+  def backdate(order_detail)
+    # `fulfilled_at` is a string and might get misinterpretted as DD/MM instead of MM/DD.
+    # `manual_fulfilled_at` already handles the proper string parsing so we can use
+    # it instead of duplicating the parsing effort.
+    order_detail.manual_fulfilled_at = fulfilled_at
+    if order_detail.valid_for_purchase?
+      order_detail.ordered_at = order_detail.manual_fulfilled_at_time || Time.current
+    end
   end
 
 end

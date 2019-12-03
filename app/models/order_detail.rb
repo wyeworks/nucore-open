@@ -74,7 +74,7 @@ class OrderDetail < ApplicationRecord
   has_many   :vestal_versions, as: :versioned
 
   delegate :edit_url, to: :external_service_receiver, allow_nil: true
-  delegate :in_cart?, :facility, :ordered_at, :user, to: :order
+  delegate :in_cart?, :facility, :user, to: :order
   delegate :invoice_number, to: :statement, prefix: true
   delegate :journal_date, to: :journal, allow_nil: true
   delegate :ordered_on_behalf_of?, to: :order
@@ -109,7 +109,7 @@ class OrderDetail < ApplicationRecord
   validates_presence_of :dispute_resolved_at, :dispute_resolved_reason, if: proc { dispute_resolved_reason.present? || dispute_resolved_at.present? }
   # only do this validation if it hasn't been ordered yet. Update errors caused by notification sending
   # were being triggered on orders where the orderer had been removed from the account.
-  validate :account_usable_by_order_owner?, if: ->(o) { o.account_id_changed? || o.order.nil? || o.order.ordered_at.nil? }
+  validate :account_usable_by_order_owner?, if: ->(order_detail) { order_detail.account_id_changed? || order_detail.order.nil? || order_detail.ordered_at.blank? }
   validates_length_of :note, maximum: 1000, allow_blank: true, allow_nil: true
   validate :valid_manual_fulfilled_at
   validates :price_change_reason, presence: true, length: { minimum: 10, allow_blank: true }, if: :pricing_note_required?
@@ -126,7 +126,6 @@ class OrderDetail < ApplicationRecord
   ## TODO validate order status is global or a member of the product's facility
   ## TODO validate which fields can be edited for which states
 
-  scope :by_ordered_at, -> { joins(:order).order("orders.ordered_at DESC") }
   scope :batch_updatable, -> { where(dispute_at: nil, state: %w(new inprocess)) }
   scope :new_or_inprocess, -> { purchased.where(state: %w(new inprocess)) }
   scope :non_canceled, -> { where.not(state: "canceled") }
@@ -142,6 +141,8 @@ class OrderDetail < ApplicationRecord
       all
     end
   end
+
+  scope :recent, -> { where("ordered_at > ?", 1.year.ago) }
 
   def self.in_dispute
     where("dispute_at IS NOT NULL")
@@ -257,6 +258,7 @@ class OrderDetail < ApplicationRecord
   scope :reservations, -> { for_product_type("Instrument") }
 
   scope :purchased, -> { joins(:order).merge(Order.purchased) }
+  scope :ordered_at, -> { where.not(ordered_at: nil) }
 
   scope :with_reservation, -> { purchased.joins(:reservation).order("reservations.reserve_start_at DESC") }
   scope :with_upcoming_reservation, lambda {
@@ -279,13 +281,6 @@ class OrderDetail < ApplicationRecord
   }
   scope :for_order_statuses, ->(statuses) { where("order_details.order_status_id in (?)", statuses) unless statuses.nil? || statuses.empty? }
   scope :joins_assigned_users, -> { joins("LEFT OUTER JOIN users assigned_users ON assigned_users.id = order_details.assigned_user_id") }
-
-  scope :in_date_range, lambda { |start_date, end_date|
-    search = all
-    search = search.where("orders.ordered_at > ?", start_date.beginning_of_day) if start_date
-    search = search.where("orders.ordered_at < ?", end_date.end_of_day) if end_date
-    search
-  }
 
   scope :fulfilled_in_date_range, lambda { |start_date, end_date|
     action_in_date_range :fulfilled_at, start_date, end_date
@@ -336,15 +331,15 @@ class OrderDetail < ApplicationRecord
     start_date = start_date.beginning_of_day if start_date
     end_date = end_date.end_of_day if end_date
 
-    query = joins(:order).joins("LEFT JOIN reservations ON reservations.order_detail_id = order_details.id")
+    query = joins("LEFT JOIN reservations ON reservations.order_detail_id = order_details.id")
     # If there is a reservation, query on the reservation time, if there's not a reservation (i.e. the left join ends up with a null reservation)
     # use the ordered at time
     if start_date && end_date
-      sql = "(reservations.id IS NULL AND orders.ordered_at > :start AND orders.ordered_at < :end) OR (reservations.id IS NOT NULL AND reservations.reserve_start_at > :start AND reservations.reserve_start_at < :end)"
+      sql = "(reservations.id IS NULL AND order_details.ordered_at > :start AND order_details.ordered_at < :end) OR (reservations.id IS NOT NULL AND reservations.reserve_start_at > :start AND reservations.reserve_start_at < :end)"
     elsif start_date
-      sql = "(reservations.id IS NULL AND orders.ordered_at > :start) OR (reservations.id IS NOT NULL AND reservations.reserve_start_at > :start)"
+      sql = "(reservations.id IS NULL AND order_details.ordered_at > :start) OR (reservations.id IS NOT NULL AND reservations.reserve_start_at > :start)"
     elsif end_date
-      sql = "(reservations.id IS NULL AND orders.ordered_at < :end) OR (reservations.id IS NOT NULL AND reservations.reserve_start_at < :end)"
+      sql = "(reservations.id IS NULL AND order_details.ordered_at < :end) OR (reservations.id IS NOT NULL AND reservations.reserve_start_at < :end)"
     end
 
     query.where(sql, start: start_date, end: end_date)
@@ -838,6 +833,10 @@ class OrderDetail < ApplicationRecord
   # to when it shouldn't be. It should be a USA formatted date string.
   def manual_fulfilled_at=(string)
     @manual_fulfilled_at = ValidFulfilledAtDate.new(string)
+  end
+
+  def manual_fulfilled_at_time
+    @manual_fulfilled_at&.to_time
   end
 
   def valid_manual_fulfilled_at

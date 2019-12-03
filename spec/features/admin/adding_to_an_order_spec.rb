@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "Adding to an existing order" do
   let(:facility) { product.facility }
-  let(:order) { create(:purchased_order, product: product) }
+  let(:order) { create(:purchased_order, product: product, ordered_at: 1.week.ago) }
   let(:user) { create(:user, :staff, facility: facility) }
   let!(:other_account) { create(:nufs_account, :with_account_owner, owner: order.user, description: "Other Account") }
 
@@ -31,9 +31,13 @@ RSpec.describe "Adding to an existing order" do
         expect(order.reload.order_details.count).to eq(2)
         expect(order.order_details.last.note).to eq("My Note")
       end
+
+      it "sets the ordered_at to now" do
+        expect(order.order_details.order(:id).last.ordered_at).to be_within(1.second).of(Time.current)
+      end
     end
 
-    describe "adding it as Complete" do
+    describe "adding it as Complete with a backdate" do
       let(:fulfilled_at_string) { I18n.l(1.day.ago.to_date, format: :usa) }
 
       before do
@@ -44,20 +48,22 @@ RSpec.describe "Adding to an existing order" do
 
       it "has a new order detail with the right status and fulfilled_at" do
         expect(order.reload.order_details.count).to eq(2)
-        expect(order.order_details.last).to be_complete
-        expect(I18n.l(order.order_details.last.fulfilled_at.to_date, format: :usa)).to eq(fulfilled_at_string)
+        new_order_detail = order.order_details.order(:id).last
+        expect(new_order_detail).to be_complete
+        expect(I18n.l(new_order_detail.fulfilled_at.to_date, format: :usa)).to eq(fulfilled_at_string)
+        expect(I18n.l(new_order_detail.ordered_at.to_date, format: :usa)).to eq(fulfilled_at_string)
       end
     end
 
     describe "adding it to another account" do
       describe "while the original account is still active" do
         before do
-          select other_account, from: "Payment Source"
+          select other_account.to_s, from: "Payment Source"
           click_button "Add To Order"
         end
 
         it "creates the order detail with the new account" do
-          click_link(order.reload.order_details.last)
+          click_link(order.reload.order_details.last.to_s)
           expect(page).to have_select("Payment Source", selected: other_account.to_s)
         end
       end
@@ -92,16 +98,31 @@ RSpec.describe "Adding to an existing order" do
       click_button "Add To Order"
     end
 
+    it "does not have an ordered_at yet" do
+      expect(order.reload.order_details.count).to be(1)
+      expect(OrderDetail.order(:id).last.ordered_at).to be_blank
+    end
+
     it "requires a file to be uploaded before adding to the order" do
       expect(page).to have_content("The following order details need your attention.")
+    end
 
-      click_link "Upload Order Form"
-      attach_file "stored_file[file]", Rails.root.join("spec", "files", "template1.txt")
-      click_button "Upload"
+    describe "after uploading the file" do
+      before do
+        click_link "Upload Order Form"
+        attach_file "stored_file[file]", Rails.root.join("spec", "files", "template1.txt")
+        click_button "Upload"
+      end
 
-      expect(order.reload.order_details.count).to be(2)
-      expect(order.order_details.last).to be_complete
-      expect(I18n.l(order.order_details.last.fulfilled_at.to_date, format: :usa)).to eq(fulfilled_at_string)
+      it "sets the expected attributes", :aggregate_failures do
+        expect(order.reload.order_details.count).to be(2)
+
+        new_order_detail = order.order_details.order(:id).last
+
+        expect(new_order_detail).to be_complete
+        expect(I18n.l(new_order_detail.fulfilled_at.to_date, format: :usa)).to eq(fulfilled_at_string)
+        expect(I18n.l(new_order_detail.ordered_at.to_date, format: :usa)).to eq(fulfilled_at_string)
+      end
     end
   end
 

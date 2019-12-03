@@ -21,7 +21,7 @@
           = link_to t(".link.change_account"), [:edit, @order, @order_detail], class: "normal-weight" if order_editable?
         .controls= @order_detail.account
 
-      = f.input :ordered_at
+      = f.input :ordered_at, input_html: { value: @order_detail.ordered_at }
       = f.input :user
       = f.input :created_by_user
 
