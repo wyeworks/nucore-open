@@ -135,7 +135,7 @@ RSpec.describe FacilityAccountsController, :enable_split_accounts do
       before { get :new, params: { facility_id: facility.url_name, owner_user_id: user.id, account_type: "SplitAccounts::SplitAccount" } }
 
       it "falls back to the default account type" do
-        expect(assigns(:account)).to be_a(NufsAccount)
+        expect(assigns(:account)).to be_a(Account.config.account_types.first.constantize)
       end
     end
   end

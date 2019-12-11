@@ -14,18 +14,18 @@
 
       %tbody
         - @merge_orders.each do |order|
-          - order.order_details.each do |detail|
+          - order.order_details.each do |order_detail|
             %tr
-              %td.centered= link_to "Remove", facility_order_order_detail_path(current_facility, order, detail), method: :delete
+              %td.centered= link_to "Remove", facility_order_order_detail_path(current_facility, order, order_detail), method: :delete
               %td
-                = render partial: "orders/#{detail.product.class.name.downcase}_desc", locals: { order_detail: detail }
+                = render partial: "orders/#{order_detail.product.class.name.underscore}_desc", locals: { order_detail: order_detail }
               %td.centered
-                = detail.quantity
-              - if detail.cost_estimated?
-                %td.currency= show_estimated_cost(detail)
+                = QuantityPresenter.new(order_detail.product, order_detail.quantity)
+              - if order_detail.cost_estimated?
+                %td.currency= show_estimated_cost(order_detail)
                 - if @order.has_subsidies?
-                  %td.currency= show_estimated_subsidy(detail)
-                %td.currency= show_estimated_total(detail)
+                  %td.currency= show_estimated_subsidy(order_detail)
+                %td.currency= show_estimated_total(order_detail)
               - else
                 %td.currency Unassigned
                 - if @order.has_subsidies?

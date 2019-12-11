@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-%html
+%html{lang: "en"}
   %head
     = render :partial => '/shared/head'
   %body{ class: SettingsHelper.feature_on?(:use_manage) && manage_mode? ? "manage-mode" : "" }
@@ -7,7 +7,7 @@
       = render :partial => '/shared/header'
     %nav
       = render :partial => '/shared/nav'
-    #content
+    #content{role: "main"}
       .container
         .row
           .span12
