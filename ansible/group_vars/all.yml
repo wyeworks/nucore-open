@@ -9,7 +9,7 @@ users:
   - name: marnautovic
     authorized_keys: ['https://github.com/arnamak.keys']
     groups: ['ials']
-  - name: nucore
+  - name: corum
     authorized_keys:
       - https://github.com/jhanggi.keys
       - https://github.com/vandrijevik.keys
