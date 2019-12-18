@@ -1,6 +1,6 @@
 nginx_apps:
   - host: corum-test.umass.edu
     alias: ials-core-web-test-01.it.umass.edu
-    user: nucore
+    user: corum
     rails_env: staging
     ruby_versions: ["2.5.5"]
