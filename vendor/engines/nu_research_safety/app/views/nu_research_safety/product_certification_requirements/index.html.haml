@@ -1,0 +1,35 @@
+= content_for :h1 do
+  = current_facility
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_product", sidenav_tab: @product.class.name.downcase.pluralize
+
+= content_for :tabnav do
+  = render "admin/shared/tabnav_product", secondary_tab: "certification_reqs"
+
+%h2= @product
+
+%p= text(".description")
+
+- if can? :create, NuResearchSafety::ProductCertificationRequirement
+  - if @available_certificates.count > 0
+    = simple_form_for @product_certification_requirement, url: facility_product_product_certification_requirements_path(current_facility, @product, @product_certification_requirement), defaults: { required: false } do |f|
+      %ul.inline
+        %li= f.association :nu_safety_certificate, collection: @available_certificates, include_blank: false, label: NuResearchSafety::ProductCertificationRequirement.model_name.human
+        %li= f.submit text("add"), class: ["btn", "btn-primary", "btn-inline"]
+
+
+- if @product_certification_requirements.any?
+  %table.table.table-striped.table-hover
+    %thead
+      %tr
+        %th.actions
+        %th= NuResearchSafety::Certificate.model_name.human
+    %tbody
+      - @product_certification_requirements.each do |cert_req|
+        - certificate = cert_req.certificate
+        %tr
+          %td.centered= link_to text("remove"), facility_product_product_certification_requirement_path(current_facility, @product, cert_req), method: :delete if can? :destroy, cert_req
+          %td= cert_req.certificate.name
+- else
+  %p.notice= text("none")

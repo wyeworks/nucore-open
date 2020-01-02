@@ -532,6 +532,10 @@ RSpec.describe OrderDetail do
             it do
               expect(order_detail.problem_description_key).to eq(:missing_actuals)
             end
+
+            it "has both keys" do
+              expect(order_detail.problem_description_keys).to eq([:missing_actuals, :missing_price_policy])
+            end
           end
 
           describe "when it has actuals" do

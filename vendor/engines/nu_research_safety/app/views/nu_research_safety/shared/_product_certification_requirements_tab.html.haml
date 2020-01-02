@@ -1,0 +1,2 @@
+- unless @product.is_a?(Bundle)
+  = tab NuResearchSafety::ProductCertificationRequirement.model_name.human.pluralize, facility_product_product_certification_requirements_path(current_facility, @product), secondary_tab == "certification_reqs"

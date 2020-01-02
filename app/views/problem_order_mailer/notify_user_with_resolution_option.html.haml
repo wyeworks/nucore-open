@@ -1,0 +1,7 @@
+= html("body",
+  user: @user,
+  facility: @order_detail.facility.name,
+  product: @order_detail.product.name,
+  order_detail: @order_detail,
+  order_detail_link: edit_problem_reservation_url(@order_detail.reservation),
+  fulfillment_date: l(@order_detail.fulfilled_at.to_date, format: :usa))

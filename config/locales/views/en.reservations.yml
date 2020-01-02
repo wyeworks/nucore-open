@@ -10,5 +10,6 @@ en:
         actions: Actions
         reservation: "Reservation (Edit/Extend)"
         short_reservation: "Reservation"
+        fix_reservation: Fix Usage
       reservation_fields:
         duration_hint: Enter "total minutes" or "hours:minutes"

@@ -152,7 +152,7 @@ RSpec.describe Reservations::DateSupport do
           .to eq(Time.zone.local(2015, 4, 17, 9, 0, 0))
       end
 
-      it "updates reserve start at" do
+      it "updates reserve end at" do
         expect(reservation.reserve_end_at)
           .to eq(Time.zone.local(2015, 4, 17, 10, 0, 0))
       end

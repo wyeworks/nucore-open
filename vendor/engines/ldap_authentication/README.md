@@ -43,18 +43,35 @@ be the value of the `base: key`.
 
 ### Using Docker
 
-```
-docker run --name ldap-service --hostname ldap-service -p 389:389 -p 636:636 --detach osixia/openldap
+The easiest thing to do is add an LDAP server in `docker-compose`.
+
+First, add `LDAP_HOST=ldap` to the main app's `environment`. Then, add the LDAP container.
+
+```yaml
+  ldap:
+    image: osixia/openldap
+    command: "--copy-service"
+    ports:
+      - "389:389"
+    volumes:
+      - "ldap-data:/var/lib/ldap"
+      # Loads some default users into the database
+      - "./vendor/engines/ldap_authentication/spec/fixtures:/container/service/slapd/assets/config/bootstrap/ldif/custom"
+  # Optional administrative website
+  ldap-admin:
+    image: osixia/phpldapadmin
+    ports:
+      - "8081:80"
+    depends_on:
+      - ldap
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=ldap
+      - PHPLDAPADMIN_HTTPS=false
 ```
 
-Optionally, you can run an administrative site.
-
-```
-docker run --name phpldapadmin-service --hostname phpldapadmin-service --link ldap-service:ldap-host --env PHPLDAPADMIN_LDAP_HOSTS=ldap-host --detach -p 8081:443 osixia/phpldapadmin
-```
+You'll also need to add `lda-data` to your volumes list.
 
 * Go to: https://localhost:8081
-* Note: the https certificate is invalid, so you will need to manually proceed in the browser.
 * Login DN: cn=admin,dc=example,dc=org
 * Password: admin
 

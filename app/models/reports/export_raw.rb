@@ -105,7 +105,10 @@ module Reports
         price_change_reason: :price_change_reason,
         price_changed_by_user: ->(od) { od.price_changed_by_user&.full_name(suspended_label: false) },
         assigned_staff: ->(od) { od.assigned_user&.full_name(suspended_label: false) },
-        billable_minutes: ->(od) { od.time_data.try(:billable_minutes) }
+        billable_minutes: ->(od) { od.time_data.try(:billable_minutes) },
+        problem_resolved_at: :problem_resolved_at,
+        problem_description_key_was: :problem_description_key_was,
+        problem_resolved_by: :problem_resolved_by,
       }
       if SettingsHelper.has_review_period?
         hash

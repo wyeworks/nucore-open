@@ -1,0 +1,14 @@
+en:
+  controllers:
+    problem_reservations:
+      update:
+        success: Your reservation has been updated
+  views:
+    problem_reservations:
+      edit:
+        instructions: "!app_name! is missing details about your reservation. Please update your actual usage times below."
+        accessories: You will be able to add accessories for this reservation after fixing these details.
+        reservation: Reserved From
+        no_edit: You cannot edit this order
+      resolved:
+        already_resolved: This reservation has already been fixed
