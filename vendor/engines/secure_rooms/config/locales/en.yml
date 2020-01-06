@@ -7,6 +7,7 @@ en:
       egress: "Exiting SecureRoom"
       operator: "User is an operator of this room"
       archived: "Product is archived"
+      insufficient_research_safety: Insufficient Research Safety Certifications
       not_on_access_list: "User is not on the access list"
       no_schedule: "No schedule rules configured"
       outside_schedule: "Outside of schedule rules"

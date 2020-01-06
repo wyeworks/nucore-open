@@ -1,0 +1,6 @@
+= simple_form_for(research_safety_certificate) do |f|
+  = f.input :name
+
+  = f.button :submit, class: ["btn", "btn-primary"]
+
+  = link_to text("shared.cancel"), research_safety_certificates_path

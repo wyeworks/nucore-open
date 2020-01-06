@@ -1710,6 +1710,12 @@ RSpec.describe OrderDetail do
           expect { Order.find(order.id) }.to raise_error ActiveRecord::RecordNotFound
         end
 
+        it "merges the order if it's a timed service" do
+          timed_service = FactoryBot.create(:timed_service, facility: facility)
+          @order_detail.update!(product: timed_service)
+          expect { Order.find(order.id) }.to raise_error ActiveRecord::RecordNotFound
+        end
+
         it "should not affect non merge orders" do
           assert @order_detail.save
           expect(@order_detail.reload.order).to eq(@merge_to_order)

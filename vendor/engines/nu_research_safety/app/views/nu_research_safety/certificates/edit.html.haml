@@ -1,9 +1,0 @@
-= content_for :h1 do
-  = text("pages.global_settings")
-
-= content_for :sidebar do
-  = render "admin/shared/sidenav_global", sidenav_tab: "certificates"
-
-%h2= text("admin.shared.edit", model: NuResearchSafety::Certificate.model_name.human)
-
-= render "form", form_url: certificate_path(@certificate), certificate: @certificate

@@ -17,6 +17,8 @@ class Product < ApplicationRecord
   has_many :accessories, through: :product_accessories, class_name: "Product"
   has_many :price_policies
   has_many :training_requests, dependent: :destroy
+  has_many :product_research_safety_certification_requirements
+  has_many :research_safety_certificates, through: :product_research_safety_certification_requirements
 
   email_list_attribute :training_request_contacts
 

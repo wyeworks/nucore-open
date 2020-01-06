@@ -23,4 +23,7 @@
       facility_user_access_list_path(current_facility, @user),
       secondary_tab == "access_list"
 
+  - if ResearchSafetyCertificate.any?
+    = tab text("views.user_research_safety_certifications.tab"), facility_user_user_research_safety_certifications_path(current_facility, @user), secondary_tab == "user_certificates"
+
   = render_view_hook "after", secondary_tab: secondary_tab

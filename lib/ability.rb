@@ -356,6 +356,8 @@ class Ability
     can :index, [BundleProduct, PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ScheduleRule, ServicePricePolicy, ProductAccessory, ProductAccessGroup]
     can [:instrument_status, :instrument_statuses, :switch], Instrument
     can :edit, [PriceGroupProduct]
+
+    can [:index, :create, :destroy], ProductResearchSafetyCertificationRequirement
   end
 
 

@@ -66,6 +66,7 @@ Nucore::Application.routes.draw do
       resources :training_requests, only: [:new, :create] if SettingsHelper.feature_on?(:training_requests)
 
       resource :product_notification, only: [:show, :edit, :update], path: "notifications", as: "notifications"
+      resources :product_research_safety_certification_requirements, only: [:index, :create, :destroy], path: "certification_requirements"
     end
 
     get "instrument_statuses", to: "instruments#instrument_statuses", as: "instrument_statuses"
@@ -161,6 +162,7 @@ Nucore::Application.routes.draw do
       post "access_list/approvals", to: "users#access_list_approvals"
 
       resource :accounts, controller: "user_accounts", only: [:show, :edit, :update]
+      resources :user_research_safety_certifications, only: [:index]
     end
 
     if SettingsHelper.feature_on? :recharge_accounts
@@ -305,6 +307,7 @@ Nucore::Application.routes.draw do
     get "search", on: :collection
   end
   resources :log_events, only: :index
+  resources :research_safety_certificates, except: :show
 
   # order process
   get "/orders/cart", to: "orders#cart", as: "cart"

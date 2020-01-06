@@ -25,5 +25,8 @@
   - if @product.respond_to?(:reservations)
     = tab "Accessories", facility_product_product_accessories_path(current_facility, @product), (secondary_tab == "accessories")
   = tab "Notifications", facility_product_notifications_path(current_facility, @product), (secondary_tab == "notifications")
+  - unless @product.is_a?(Bundle)
+    - if ResearchSafetyCertificate.any?
+      = tab ProductResearchSafetyCertificationRequirement.model_name.human.pluralize, facility_product_product_research_safety_certification_requirements_path(current_facility, @product), secondary_tab == "certification_reqs"
 
   = render_view_hook "additional_tabs", secondary_tab: secondary_tab

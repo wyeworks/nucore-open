@@ -1,0 +1,17 @@
+en:
+  views:
+    product_research_safety_certification_requirements:
+      index:
+        description: Here you may define one or more safety certifications that are required for use of this product.
+        add: Add Certification Requirement
+        none: No certification requirements currently defined for this product
+        remove: Remove
+
+  controllers:
+    product_research_safety_certification_requirements:
+      create:
+        notice: "Certification requirement %{certificate_name} added"
+        error: "Certification requirement %{certificate_name} could not be added"
+      destroy:
+        notice: "Certification requirement %{certificate_name} removed"
+        error: "Certification requirement %{certificate_name} could not be removed"

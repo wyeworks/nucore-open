@@ -10,13 +10,8 @@ class OrderDetailObserver < ActiveRecord::Observer
 
   def before_save(order_detail)
     order = order_detail.order
-    product = order_detail.product
 
-    # Is the order 100% ready to be merged?
-    if order.to_be_merged? && (product.is_a?(Item) ||
-                              (product.is_a?(Service) && order_detail.valid_service_meta?) ||
-                              (product.is_a?(Instrument) && order_detail.valid_reservation?))
-
+    if order.to_be_merged? && ready_for_merge?(order_detail)
       # move this detail to the original order and backdate its ordered_at if
       # it was ordered in the past.
       order_detail.order_id = order.merge_order.id
@@ -35,6 +30,20 @@ class OrderDetailObserver < ActiveRecord::Observer
 
       # clean up detail-less merge orders
       merge_order.destroy if merge_order.to_be_merged? && merge_order.order_details.blank?
+    end
+  end
+
+  private
+
+  # Is the order 100% ready to be merged?
+  def ready_for_merge?(order_detail)
+    case order_detail.product
+    when Service
+      order_detail.valid_service_meta?
+    when Instrument
+      order_detail.valid_reservation?
+    else
+      true
     end
   end
 
