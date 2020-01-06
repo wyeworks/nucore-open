@@ -172,24 +172,28 @@ module Reservations::DateSupport
   end
 
   def assign_reserve_from_params(params)
-    # need to be reset to nil so the individual pieces will
-    # take precedence
-    self.reserve_start_at = nil
-    self.reserve_end_at   = nil
     reserve_attrs = params.slice(:reserve_start_date, :reserve_start_hour, :reserve_start_min, :reserve_start_meridian,
                                  :duration_mins,
                                  :reserve_start_at, :reserve_end_at)
+    # need to be reset to nil so the individual pieces will
+    # take precedence, but only reset them if we're going to overwrite them
+
+    self.reserve_start_at = nil if reserve_attrs.keys.any? { |k| k.to_s.start_with?("reserve_start") }
+    self.reserve_end_at   = nil if reserve_attrs.keys.any? { |k| k.to_s.start_with?("reserve_end") } || reserve_attrs.key?(:duration_mins)
+
     assign_attributes reserve_attrs
   end
 
   def assign_actuals_from_params(params)
-    self.actual_start_at = nil
-    self.actual_end_at   = nil
     reserve_attrs = params.slice(:actual_start_date, :actual_start_hour, :actual_start_min, :actual_start_meridian,
                                  :actual_end_date, :actual_end_hour, :actual_end_min, :actual_end_meridian,
                                  :actual_start_at, :actual_end_at, :actual_duration_mins)
 
+
     reserve_attrs.reject! { |_key, value| value.blank? }
+
+    self.actual_start_at = nil if reserve_attrs.keys.any? { |k| k.to_s.start_with?("actual_start") }
+    self.actual_end_at = nil if reserve_attrs.keys.any? { |k| k.to_s.start_with?("actual_end") } || reserve_attrs.key?(:actual_duration_mins)
 
     assign_attributes reserve_attrs
   end
@@ -204,7 +208,7 @@ module Reservations::DateSupport
 
   # set reserve_end_at based on duration_mins
   def set_reserve_end_at
-    return if reserve_end_at.present? || reserve_start_at.blank?
+    return if reserve_end_at.present? || reserve_start_at.blank? || @duration_mins.nil?
 
     self.reserve_end_at = reserve_start_at + @duration_mins.to_i.minutes
   end

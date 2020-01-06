@@ -33,6 +33,8 @@ class ReservationUserActionPresenter
 
     actions << cancel_link if can_cancel?
 
+    actions << fix_problem_link if can_fix_problem?
+
     actions.compact
   end
 
@@ -96,6 +98,14 @@ class ReservationUserActionPresenter
 
   def report_an_issue_link
     link_to(I18n.t("views.instrument_issues.new.title"), new_facility_instrument_issue_path(facility, product))
+  end
+
+  def fix_problem_link
+    link_to(I18n.t("views.reservations.my_table.fix_reservation"), edit_problem_reservation_path(reservation))
+  end
+
+  def can_fix_problem?
+    OrderDetails::ProblemResolutionPolicy.new(order_detail).user_can_resolve?
   end
 
 end

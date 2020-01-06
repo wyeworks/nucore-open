@@ -200,6 +200,12 @@ en:
       product_accessory:
         one: Accessory
         other: Accessories
+      research_safety_certificate:
+        one: Certificate
+        other: Certificates
+      product_research_safety_certification_requirement:
+        one: Certification Requirement
+        other: Certification Requirements
       service:
         one: Service
         other: Services

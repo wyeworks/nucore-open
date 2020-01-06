@@ -1,0 +1,10 @@
+dn: uid=cgreen,dc=example,dc=org
+uid: cgreen
+cn: Chico Green
+gn: Chico
+sn: Green
+mail: cgreen@example.org
+userPassword: secret
+objectClass: person
+objectClass: organizationalPerson
+objectClass: inetOrgPerson

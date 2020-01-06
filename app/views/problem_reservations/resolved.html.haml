@@ -1,0 +1,6 @@
+= content_for :h1 do
+  = @order_detail.facility
+
+%h2= @order_detail.product
+
+%p.alert.alert-danger= text("already_resolved")

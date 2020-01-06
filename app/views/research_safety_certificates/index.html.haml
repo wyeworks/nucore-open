@@ -1,0 +1,26 @@
+= content_for :h1 do
+  = text("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "certificates"
+
+%h2= text("title")
+= link_to text("admin.shared.add", model: ResearchSafetyCertificate.model_name.human), new_research_safety_certificate_path, class: "btn-add" #
+
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th
+      %th= ResearchSafetyCertificate.model_name.human
+  %tbody
+    - @certificates.each do |certificate|
+      %tr
+        %td
+          = link_to(text("views.research_safety_certificates.index.remove.label"),
+            research_safety_certificate_path(certificate),
+            data: { confirm: text("views.research_safety_certificates.index.remove.confirm", name:  certificate.name) },
+            method: :delete)
+        %td
+          = certificate.name
+          %span.indented
+            (#{link_to(text("admin.shared.edit", model: ResearchSafetyCertificate.model_name.human), edit_research_safety_certificate_path(certificate))})

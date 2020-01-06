@@ -6,8 +6,8 @@
 #   'base' => Base Distinguished Name (Base DN)
 #
 development:
-  host: localhost
-  port: 389
+  host: <%= ENV.fetch("LDAP_HOST", "localhost") %>
+  port: <%= ENV.fetch("LDAP_PORT", 389) %>
   base: dc=example,dc=org
   attribute: uid
   admin_user: "cn=admin,dc=example,dc=org"

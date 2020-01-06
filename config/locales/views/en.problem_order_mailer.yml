@@ -4,13 +4,27 @@ en:
       notify_user:
         subject: "!app_name! Problem Order Alert: %{facility}"
         body: |
-          Dear %{user},
+          Hello %{user},
 
           !app_name! is missing information regarding your recent use of the %{product}
           at the %{facility} on %{fulfillment_date}. Please [contact the facility](mailto:%{facility_email})
           to let them know your reservation's actual start time and total duration,
           or your entry and exit times through the facility's secure door, referencing
           the following !app_name! Order Number:
+
+          [#%{order_detail}](%{order_detail_link})
+
+          Thank you,
+
+          %{facility}
+      notify_user_with_resolution_option:
+        body: |
+          Hello %{user},
+
+          !app_name! is missing log off information from your recent use of the %{product}
+          at the %{facility} on %{fulfillment_date}. Please click on the link below
+          to enter the End Time or Actual Duration for your instrument reservation
+          and to add any applicable accessories:
 
           [#%{order_detail}](%{order_detail_link})
 

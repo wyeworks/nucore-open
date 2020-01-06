@@ -1,0 +1,9 @@
+<%= text("body",
+  user: @user,
+  facility: @order_detail.facility.name,
+  product: @order_detail.product.name,
+  order_detail: @order_detail,
+  order_detail_link: order_order_detail_url(@order_detail.order, @order_detail),
+  fulfillment_date: l(@order_detail.fulfilled_at.to_date, format: :usa),
+  smart: false)
+%>

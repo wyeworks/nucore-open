@@ -10,13 +10,13 @@
             - if f.object.actual_start_at?
               .started-at= "Started: #{l(f.object.actual_start_at, format: :usa)}"
           .span4
-            = time_select f, :reserve_start, { minute_step: @instrument.reserve_interval }, disabled: start_disabled
+            = time_select f, :reserve_start, { minute_step: f.object.product.reserve_interval }, disabled: start_disabled
         = label_tag :reservation_reserve_end_date, "Reserve End", class: "string optional control-label"
         .row
           .span3
             = text_field_tag "reservation[reserve_end_date]", f.object.reserve_end_date, class: "datepicker string optional span3"
           .span4
-            = time_select f, :reserve_end, { minute_step: @instrument.reserve_interval }
+            = time_select f, :reserve_end, { minute_step: f.object.product.reserve_interval }
 
       .span5
         = f.input :duration_mins, hint: text(".duration_hint"), input_html: { value: f.object.duration_mins || default_duration, class: "timeinput", disabled: end_time_editing_disabled?(f.object) }

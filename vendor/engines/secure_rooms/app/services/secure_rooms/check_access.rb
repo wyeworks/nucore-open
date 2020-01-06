@@ -11,6 +11,7 @@ module SecureRooms
       AccessRules::RequiresApprovalRule,
       AccessRules::EgressRule,
       AccessRules::ScheduleRule,
+      AccessRules::RequiresResearchSafetyCertificationsRule,
       AccessRules::AccountSelectionRule,
       AccessRules::DenyAllRule,
     ].freeze

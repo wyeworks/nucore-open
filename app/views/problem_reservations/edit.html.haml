@@ -1,0 +1,37 @@
+= content_for :h1 do
+  = @order_detail.facility
+
+%h2= @order_detail.product
+
+%p.alert.alert-danger
+  = text("instructions")
+  = text("accessories") if @order_detail.accessories?
+
+= simple_form_for([:problem, @reservation]) do |f|
+  = f.error_messages
+
+  .well.js--problemReservationForm
+    .container
+      .row
+        .span12= f.input :reserve_to_s, as: :readonly, label: text("reservation")
+      .row
+        .span7
+          = f.label :actual_start_date
+          .row
+            .span3
+              = f.input :actual_start_date, label: false, disabled: true
+            .span4
+              = time_select f, :actual_start, { minute_step: 1 }, disabled: true
+          = f.label :actual_end_date
+          .row
+            .span3
+              = f.input :actual_end_date, input_html: { class: "datepicker__data", data: { min_date: f.object.actual_start_at&.iso8601 } }, label: false
+            .span4
+              = time_select f, :actual_end, { minute_step: 1 }
+
+        .span5
+          = f.input :actual_duration_mins, hint: text("views.reservations.reservation_fields.duration_hint"), input_html: { class: "timeinput", autofocus: true }
+
+  %ul.inline
+    %li= f.submit t("shared.save"), class: 'btn'
+    %li= link_to t("shared.cancel"), reservations_path

@@ -2,3 +2,8 @@ en:
   validators:
     all_details_on_order_validator:
       note_presence_validator: Some products require a note
+    order_research_safety_certification_validator:
+      missing: "Missing Certificates: %{certificates}"
+      missing_html: |
+        Missing Certificates: %{certificates}. Please contact your Research Safety
+        program to complete your training.

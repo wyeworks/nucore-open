@@ -293,7 +293,7 @@ RSpec.describe Reservations::DurationChangeValidations do
 
       it "does not trigger the errors on the end date" do
         reservation.assign_times_from_params(reserve_end_at: "10/0/2018")
-        expect(reservation.reserve_start_at).to be_blank
+        expect(reservation.reserve_end_at).to be_blank
         expect(validator).to be_valid
       end
     end

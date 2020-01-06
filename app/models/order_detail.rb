@@ -57,6 +57,7 @@ class OrderDetail < ApplicationRecord
   belongs_to :account
   belongs_to :bundle, foreign_key: "bundle_product_id"
   belongs_to :canceled_by_user, foreign_key: :canceled_by, class_name: "User"
+  belongs_to :problem_resolved_by, class_name: "User"
   has_one    :reservation, inverse_of: :order_detail
   # for some reason, dependent: :delete on reservation isn't working with paranoia, hitting foreign key constraints
   before_destroy { reservation.try(:really_destroy!) }
@@ -80,7 +81,6 @@ class OrderDetail < ApplicationRecord
   delegate :ordered_on_behalf_of?, to: :order
   delegate :price_group, to: :price_policy, allow_nil: true
   delegate :reference, to: :journal, prefix: true, allow_nil: true
-  delegate :requires_but_missing_actuals?, to: :reservation, allow_nil: true
 
   def estimated_price_group
     estimated_price_policy.try(:price_group)
@@ -860,12 +860,20 @@ class OrderDetail < ApplicationRecord
   end
 
   def problem_description_key
-    return unless complete?
+    Array(problem_description_keys).first
+  end
+
+  def problem_description_keys
+    return [] unless complete?
 
     time_data_problem_key = time_data.problem_description_key
     price_policy_problem_key = :missing_price_policy if price_policy.blank?
 
-    time_data_problem_key || price_policy_problem_key
+    [time_data_problem_key, price_policy_problem_key].compact
+  end
+
+  def requires_but_missing_actuals?
+    Array(problem_description_keys).include?(:missing_actuals)
   end
 
   def price_change_reason_option

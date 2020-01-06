@@ -532,6 +532,10 @@ RSpec.describe OrderDetail do
             it do
               expect(order_detail.problem_description_key).to eq(:missing_actuals)
             end
+
+            it "has both keys" do
+              expect(order_detail.problem_description_keys).to eq([:missing_actuals, :missing_price_policy])
+            end
           end
 
           describe "when it has actuals" do
@@ -1703,6 +1707,12 @@ RSpec.describe OrderDetail do
         it "should update order_id and delete merge order" do
           assert @order_detail.save
           expect(@order_detail.reload.order).to eq(@merge_to_order)
+          expect { Order.find(order.id) }.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it "merges the order if it's a timed service" do
+          timed_service = FactoryBot.create(:timed_service, facility: facility)
+          @order_detail.update!(product: timed_service)
           expect { Order.find(order.id) }.to raise_error ActiveRecord::RecordNotFound
         end
 

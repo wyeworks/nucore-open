@@ -88,3 +88,5 @@ $ ->
   $('body').on 'click', '.has_accessories', (evt) ->
     evt.preventDefault()
     picker = new AccessoryPickerDialog($(this))
+
+  new AccessoryPicker($('.not-in-modal #accessory-form'))

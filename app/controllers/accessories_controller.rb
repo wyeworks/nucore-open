@@ -8,12 +8,15 @@ class AccessoriesController < ApplicationController
   before_action :authorize_order_detail
   before_action :load_product
 
+  customer_tab :all
+  layout -> { modal? ? false : "application" }
+  before_action { @active_tab = "reservations" }
+
   def new
     accessorizer = Accessories::Accessorizer.new(@order_detail)
     # If being done by a facility admin, only show the accessories that haven't already been
     # added. To update accessories already added, they should use the normal order view.
     @order_details = core_manager_context? ? accessorizer.unpurchased_accessory_order_details : accessorizer.accessory_order_details
-    render layout: false if request.xhr?
   end
 
   def create
@@ -24,7 +27,7 @@ class AccessoriesController < ApplicationController
       flash[:notice] = t("controllers.accessories.create.success", accessories: helpers.pluralize(update_data.persisted_count, "accessory"))
       respond_success
     else
-      render :new, status: 406, layout: !request.xhr?
+      render :new, status: 406
     end
   end
 
@@ -47,7 +50,7 @@ class AccessoriesController < ApplicationController
   end
 
   def respond_success
-    if request.xhr?
+    if modal?
       head :ok
     else
       redirect_to core_manager_context? ? [current_facility, @order] : reservations_path
@@ -69,5 +72,10 @@ class AccessoriesController < ApplicationController
   def helpers
     ActionController::Base.helpers
   end
+
+  def modal?
+    request.xhr?
+  end
+  helper_method :modal?
 
 end

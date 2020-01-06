@@ -178,6 +178,20 @@ RSpec.describe InstrumentPricePolicyCalculations do
       end
     end
 
+    context "when the price policy is not available for purchase (and blank usage rates)" do
+      before do
+        policy.assign_attributes(
+          can_purchase: false,
+          usage_rate: nil,
+          usage_subsidy: nil
+        )
+      end
+
+      it "returns blank" do
+        expect(policy.calculate_cost_and_subsidy(reservation)).to be_nil
+      end
+    end
+
     context "when configured to charge for usage" do
       before :each do
         policy.charge_for = InstrumentPricePolicy::CHARGE_FOR[:usage]

@@ -1,7 +1,6 @@
 .well
   = render "shared/account_fields", f: f, account_class: FacilityAccount, readonly: local_assigns[:readonly]
-  = f.label :revenue_account, class: "require"
-  = f.text_field :revenue_account, maxLength: 5, size: 10, readonly: local_assigns[:readonly]
+  = f.input :revenue_account, readonly: local_assigns[:readonly], required: true, input_html: { maxlength: Settings.accounts.revenue_account_default.to_s.length, size: 10 }
 
   = f.label :is_active do
     = f.check_box :is_active

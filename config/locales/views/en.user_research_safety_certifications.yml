@@ -1,0 +1,6 @@
+en:
+  views:
+    user_research_safety_certifications:
+      tab: "Certifications"
+      index:
+        title: "%{name} Research Safety Certifications"

@@ -144,3 +144,20 @@ $ ->
         ]
         "duration": "reservation[duration_mins]"
       reserveInterval)
+  $(".js--problemReservationForm").each (i, elem) ->
+    new ReservationTimeFieldAdjustor(
+      $(elem),
+      "start": [
+        "reservation[actual_start_date]",
+        "reservation[actual_start_hour]",
+        "reservation[actual_start_min]",
+        "reservation[actual_start_meridian]"
+      ]
+      "end": [
+        "reservation[actual_end_date]",
+        "reservation[actual_end_hour]",
+        "reservation[actual_end_min]",
+        "reservation[actual_end_meridian]"
+      ]
+      "duration": "reservation[actual_duration_mins]"
+    )
