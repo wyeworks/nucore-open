@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe do
@@ -100,7 +102,7 @@ RSpec.describe do
 
         expect(user.reload).to have_attributes(
           username: "new321",
-          email: "abc123@umass.edu"
+          email: "abc123@umass.edu",
         )
       end
 
@@ -112,7 +114,7 @@ RSpec.describe do
 
         expect(user.reload).to have_attributes(
           username: "abc123",
-          email: "new321@umass.edu"
+          email: "new321@umass.edu",
         )
       end
     end

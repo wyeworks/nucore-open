@@ -767,6 +767,27 @@ ActiveRecord::Schema.define(version: 20191219162724) do
     t.index ["user_id"], name: "index_training_requests_on_user_id", using: :btree
   end
 
+  create_table "umass_corum_api_speed_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "speed_type",        null: false
+    t.boolean  "active",            null: false
+    t.integer  "version"
+    t.string   "clazz"
+    t.string   "dept_desc"
+    t.string   "dept_id"
+    t.string   "fund_code"
+    t.string   "fund_desc"
+    t.string   "manager_hr_emplid"
+    t.string   "program_code"
+    t.string   "project_desc"
+    t.string   "project_id"
+    t.datetime "date_added"
+    t.datetime "date_removed"
+    t.string   "error_desc"
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["speed_type"], name: "index_umass_corum_api_speed_types_on_speed_type", unique: true, using: :btree
+  end
+
   create_table "user_preferences", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "user_id"
     t.string   "name",       null: false

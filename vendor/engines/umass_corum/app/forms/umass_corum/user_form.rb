@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module UmassCorum
+
   class UmassCorum::UserForm < ::UserForm
 
     include ActiveModel::Validations::Callbacks

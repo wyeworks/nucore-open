@@ -1,4 +1,16 @@
 en:
+  activerecord:
+    models:
+      umass_corum/speed_type_account:
+        one: SpeedType
+        other: SpeedTypes
+    errors:
+      models:
+        umass_corum/speed_type_account:
+          attributes:
+            account_number:
+              invalid: must be a six digit number
+
   activemodel:
     attributes:
       umass_corum/user_form:

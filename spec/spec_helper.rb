@@ -115,4 +115,7 @@ RSpec.configure do |config|
   #
   # https://relishapp.com/rspec/rspec-core/v/3-0/docs/configuration/global-namespace-dsl
   config.expose_dsl_globally = false
+
+  require "webmock/rspec"
+  WebMock.disable_net_connect!(allow_localhost: true)
 end

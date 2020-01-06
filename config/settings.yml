@@ -31,7 +31,7 @@ statement_pdf:
   font_name: Roboto
 
 validator:
-  class_name: ValidatorDefault
+  class_name: UmassCorum::SpeedTypeValidator
   test:
     factory: # relative to Rails.root
     helper: 'spec/validator_helper' # relative to Rails.root

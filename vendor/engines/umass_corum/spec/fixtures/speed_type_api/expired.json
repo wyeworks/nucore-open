@@ -1,0 +1,18 @@
+{
+  "status": "200",
+  "speed_type": "150862",
+  "version": 0,
+  "active": false,
+  "class": " ",
+  "date_added": "2017-05-23T13:24:05-0400",
+  "date_removed": "2018-11-15T05:30:03-0500",
+  "dept_desc": "Vet/Animal Science",
+  "dept_id": "A010400000",
+  "fund_code": "11000",
+  "fund_desc": "State Maintenance",
+  "manager_hr_emplid": "10038224",
+  "program_code": "B03",
+  "project_desc": "National Multiple Sclerosis So",
+  "project_id": "S17110000000118",
+  "error_desc": "Speed_type has expired"
+}
