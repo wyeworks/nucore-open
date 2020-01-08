@@ -6,6 +6,12 @@ en:
         other: SpeedTypes
     errors:
       models:
+        facility_account:
+          attributes:
+            revenue_account:
+              invalid: must be a six digit number starting with 6
+            account_number:
+              invalid: must be a six digit number
         umass_corum/speed_type_account:
           attributes:
             account_number:

@@ -9,9 +9,9 @@ price_group:
 time_zone: "Eastern Time (US & Canada)"
 
 accounts:
-  # Most frequently used account by NU
-  product_default: 75340
-  revenue_account_default: 50617
+  # Most frequently used account by UMass
+  product_default: 753080
+  revenue_account_default: 699900
 
 financial:
   # in the format MM-DD

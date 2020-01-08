@@ -14,6 +14,7 @@ module UmassCorum
       Account.config.journal_account_types.unshift(UmassCorum::SpeedTypeAccount.name)
       Account.config.journal_account_types.uniq!
       Account.config.creation_disabled_types << "NufsAccount"
+      FacilityFacilityAccountsController.form_class = UmassCorum::FacilityAccountForm
     end
 
     # Include migrations in main rails app
