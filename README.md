@@ -211,3 +211,5 @@ There are valuable resources in the NUcore's doc directory.
 * Need to use a 3rd party service with your NUcore? [**See HOWTO_external_services.txt**](doc/HOWTO_external_services.md)
 
 * Need to asynchronously monitor some aspect of NUcore? [**See HOWTO_daemons.txt**](doc/HOWTO_daemons.txt)
+
+* Want to integrate with Form.io? [**See form.io_tips_and_tricks**](vendor/engines/form.io_tips_and_tricks.docx)

@@ -39,11 +39,8 @@ class Product < ApplicationRecord
     validates(
       :account,
       presence: true,
-      numericality: {
-        only_integer: true,
-        greater_than_or_equal_to: 0,
-        less_than_or_equal_to: 99_999,
-      },
+      numericality: { only_integer: true },
+      length: { minimum: 1, maximum: Settings.accounts.product_default.to_s.length },
       if: :requires_account?,
     )
   end

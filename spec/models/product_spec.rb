@@ -153,6 +153,32 @@ RSpec.describe Product do
       end
     end
 
+    context "expense accounts", feature_setting: { expense_accounts: true } do
+      it "allows the default expense account" do
+        product = build(:product, account: Settings.accounts.product_default)
+        product.valid?
+        expect(product.errors).not_to include(:account)
+      end
+
+      it "does not allow something longer than the default expense account" do
+        product = build(:product, account: "0#{Settings.accounts.product_default}")
+        expect(product).to be_invalid
+        expect(product.errors).to be_added(:account, :too_long, count: Settings.accounts.product_default.to_s.length)
+      end
+
+      it "does allows a short value" do
+        product = build(:product, account: "123")
+        product.valid?
+        expect(product.errors).not_to include(:account)
+      end
+
+      it "does not allow a non-numeric" do
+        product = build(:product, account: "aaaa")
+        expect(product).to be_invalid
+        expect(product.errors).to be_added(:account, :not_a_number)
+      end
+    end
+
     context "email", feature_setting: { expense_accounts: false } do
       before :each do
         @facility = FactoryBot.create(:facility, email: "facility@example.com")
