@@ -5,3 +5,7 @@ en:
         account:
           not_open: "The %{model} is not open for the required account"
           missing_owner: Must have an account owner
+  account:
+    statuses:
+      active: Active
+      suspended: Suspended

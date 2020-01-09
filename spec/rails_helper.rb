@@ -99,6 +99,13 @@ RSpec.configure do |config|
     ActiveJob::Base.queue_adapter = old_value
   end
 
+  # Poltergeist specs need to be able to talk to localhost
+  config.around(:each, :js) do |example|
+    WebMock.disable_net_connect!(allow_localhost: true)
+    example.call
+    WebMock.disable_net_connect!(allow_localhost: false)
+  end
+
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this
   # config option.

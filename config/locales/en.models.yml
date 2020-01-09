@@ -142,9 +142,6 @@ en:
         one: Payment Source
         other: Payment Sources
         owner: Owner
-        statuses:
-          active: Active
-          suspended: Suspended
       account_user:
         one: Account User
         other: Account Users
