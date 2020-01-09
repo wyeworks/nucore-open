@@ -14,7 +14,7 @@
         %td.centered
           = link_to order_detail,
             current_facility ? order_detail.show_order_path : order_detail.show_order_detail_path
-        %td= order_detail.ordered_at
+        %td= format_usa_datetime(order_detail.ordered_at)
         %td.centered= order_detail.wrapped_quantity
         %td.order-note.order-note--wide
           %ul.unstyled

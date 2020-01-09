@@ -150,9 +150,9 @@ class Account < ApplicationRecord
 
   def display_status
     if suspended?
-      I18n.t("activerecord.models.account.statuses.suspended")
+      I18n.t("account.statuses.suspended")
     else
-      I18n.t("activerecord.models.account.statuses.active")
+      I18n.t("account.statuses.active")
     end
   end
 
