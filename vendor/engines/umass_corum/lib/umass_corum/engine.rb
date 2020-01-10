@@ -15,6 +15,7 @@ module UmassCorum
       Account.config.journal_account_types.uniq!
       Account.config.creation_disabled_types << "NufsAccount"
       FacilityFacilityAccountsController.form_class = UmassCorum::FacilityAccountForm
+      ResearchSafetyCertificationLookup.adapter_class = UmassCorum::OwlApiAdapter
     end
 
     # Include migrations in main rails app

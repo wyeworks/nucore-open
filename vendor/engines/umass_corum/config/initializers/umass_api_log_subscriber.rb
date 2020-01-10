@@ -8,6 +8,10 @@ module UmassCorum
       render(event, "Speed type GET from API: #{event.payload[:speed_type]}")
     end
 
+    def get_owl_certifications(event)
+      render(event, "Queryied OWL API: #{event.payload[:emplid]}")
+    end
+
     private
 
     def render(event, string, display_color: GREEN)
