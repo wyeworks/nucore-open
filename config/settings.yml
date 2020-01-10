@@ -122,8 +122,8 @@ split_accounts:
 # be sure to check there for configuration
 paperclip:
   storage: filesystem
-  url: ":rails_relative_url_root/:attachment/:id_partition/:style/:safe_filename"
-  path: ":rails_root/public/:attachment/:id_partition/:style/:safe_filename"
+  url: ":rails_relative_url_root/uploads/:attachment/:id_partition/:style/:safe_filename"
+  path: ":rails_root/public/uploads/:attachment/:id_partition/:style/:safe_filename"
 
 saml:
   create_user: false
