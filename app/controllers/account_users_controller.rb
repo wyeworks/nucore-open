@@ -43,11 +43,9 @@ class AccountUsersController < ApplicationController
   # DELETE /accounts/:account_id/account_users/:id
   def destroy
     ## TODO add security
-    @account_user = @account.account_users.find(params[:id])
-    @account_user.deleted_at = Time.zone.now
-    @account_user.deleted_by = session_user.id
 
-    if @account_user.save
+    @account_user.deleted_by = session_user.id
+    if @account_user.destroy
       LogEvent.log(@account_user, :delete, current_user)
       flash[:notice] = text("destroy.success")
     else

@@ -166,12 +166,6 @@ RSpec.describe Product do
         expect(product.errors).to be_added(:account, :too_long, count: Settings.accounts.product_default.to_s.length)
       end
 
-      it "does allows a short value" do
-        product = build(:product, account: "123")
-        product.valid?
-        expect(product.errors).not_to include(:account)
-      end
-
       it "does not allow a non-numeric" do
         product = build(:product, account: "aaaa")
         expect(product).to be_invalid

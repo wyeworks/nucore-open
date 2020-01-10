@@ -8,9 +8,12 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
 
   before(:all) { create_users }
 
+  let(:account) { create_nufs_account_with_owner }
+  let(:facility) { FactoryBot.create(:facility) }
+
   before(:each) do
-    @authable = FactoryBot.create(:facility)
-    @account = create_nufs_account_with_owner
+    @authable = facility
+    @account = account
   end
 
   context "user_search" do
@@ -198,38 +201,58 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
   end
 
   context "destroy" do
-
-    before(:each) do
-      @method = :delete
-      @action = :destroy
-      @account_user = FactoryBot.create(:account_user, user: @purchaser,
-                                                       account: @account,
-                                                       user_role: AccountUser::ACCOUNT_PURCHASER,
-                                                       created_by: @admin.id)
-      @params = { facility_id: @authable.url_name, account_id: @account.id, id: @account_user.id }
+    def do_request
+      delete :destroy, params: { facility_id: facility.url_name, account_id: account.id, id: account_user.id }
     end
 
-    it_should_require_login
+    let(:staff) { FactoryBot.create(:user, :staff, facility: facility) }
+    let(:director) { FactoryBot.create(:user, :facility_director, facility: facility) }
+    let(:purchaser) { create(:user) }
 
-    it_should_deny :staff
-
-    it_should_allow_all facility_managers do |user|
-      expect(assigns(:account)).to eq(@account)
-      expect(assigns(:account_user)).to eq(@account_user)
-      expect(assigns(:account_user).deleted_at).not_to be_nil
-      expect(assigns(:account_user).deleted_by).to eq(user.id)
-      is_expected.to set_flash
-      assert_redirected_to facility_account_members_path(@authable, @account)
+    let(:account_user) do
+      FactoryBot.create(
+        :account_user, user_role: AccountUser::ACCOUNT_PURCHASER,
+                       account: account, user: purchaser,
+                       created_by: account.owner_user.id)
     end
 
-    describe "adding to an account that does not pass validation" do
-      before do
-        allow_any_instance_of(ValidatorFactory.validator_class)
-          .to receive(:account_is_open!).and_raise(ValidatorError)
+    it "does not allow the staff" do
+      sign_in staff
+      do_request
+      expect(response).to be_forbidden
+      expect(account_user.reload).to be_present
+    end
+
+    describe "as the facility director" do
+      before { sign_in director }
+
+      it "sets the deleted fields" do
+        expect { do_request }.to change { account_user.reload.deleted_at }.to be_present
+        expect(account_user.deleted_by).to eq(director.id)
       end
 
-      it_should_allow(:director) do
-        expect(@account_user.reload.deleted_at).to be_present
+      it "adds the log event" do
+        expect { do_request }.to change(account_user.log_events, :count).by(1)
+        expect(account_user.log_events.last).to have_attributes(
+        loggable: assigns(:account_user), event_type: "delete",
+        user_id: director.id)
+      end
+
+      it "sets the flash and redirects" do
+        do_request
+        is_expected.to set_flash
+        assert_redirected_to(facility_account_members_path(facility, account))
+      end
+
+      describe "even if an account does not pass validation" do
+        before do
+          allow_any_instance_of(ValidatorFactory.validator_class)
+            .to receive(:account_is_open!).and_raise(ValidatorError)
+        end
+
+        it "still deletes it" do
+          expect { do_request }.to change { account_user.reload.deleted_at }.to be_present
+        end
       end
     end
 

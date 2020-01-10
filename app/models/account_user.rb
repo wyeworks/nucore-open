@@ -2,6 +2,9 @@
 
 class AccountUser < ApplicationRecord
 
+  # Don't exclude them by default. Instead, make sure we're using the `active` scope
+  acts_as_paranoid without_default_scope: true
+
   belongs_to :user, required: true
   belongs_to :account, inverse_of: :account_users, required: true
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
@@ -25,28 +28,17 @@ class AccountUser < ApplicationRecord
     [ACCOUNT_OWNER, ACCOUNT_ADMINISTRATOR]
   end
 
+  scope :active, -> { where(deleted_at: nil) }
+  scope :owners, -> { where(user_role: ACCOUNT_OWNER) }
+  scope :purchasers, -> { where(user_role: ACCOUNT_PURCHASER) }
+  scope :business_administrators, -> { where(user_role: ACCOUNT_ADMINISTRATOR) }
+
   def self.administrators
     User.where(id: where(user_role: admin_user_roles).select(:user_id))
   end
 
   def self.user_roles
     admin_user_roles + read_only_user_roles
-  end
-
-  def self.owners
-    where(user_role: ACCOUNT_OWNER)
-  end
-
-  def self.business_administrators
-    where(user_role: ACCOUNT_ADMINISTRATOR)
-  end
-
-  def self.purchasers
-    where(user_role: ACCOUNT_PURCHASER)
-  end
-
-  def self.active
-    where(deleted_at: nil)
   end
 
   #
@@ -98,6 +90,12 @@ class AccountUser < ApplicationRecord
 
   def validate_account_has_owner
     errors.add(:base, :account_missing_owner) if account&.missing_owner?
+  end
+
+  # Will assign the attribute during `destroy` if it is set. Without this, no additional
+  # attributes are set.
+  def paranoia_destroy_attributes
+    super.merge(deleted_by: deleted_by)
   end
 
 end

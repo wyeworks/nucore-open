@@ -13,6 +13,7 @@ class OrderDetails::ParamUpdater
         :note,
         :price_change_reason,
         :editing_time_data,
+        :reconciled_note,
         reservation: [
           :reserve_start_date,
           :reserve_start_hour,

@@ -14,10 +14,13 @@ RSpec.describe "Managing an order detail" do
 
   before do
     login_as director
-    visit manage_facility_order_order_detail_path(facility, order, order_detail)
   end
 
   describe "editing an order detail with a reservation" do
+    before do
+      visit manage_facility_order_order_detail_path(facility, order, order_detail)
+    end
+
     it "can change the note" do
       fill_in "Note", with: "hello"
       click_button "Save"
@@ -36,6 +39,9 @@ RSpec.describe "Managing an order detail" do
   end
 
   describe "canceling order details" do
+    before do
+      visit manage_facility_order_order_detail_path(facility, order, order_detail)
+    end
     context "canceling an item" do
       let(:item) { create(:setup_item, facility: facility) }
       let(:order) { create(:purchased_order, product: item) }
@@ -73,6 +79,39 @@ RSpec.describe "Managing an order detail" do
         expect(page).to have_content("Complete")
         expect(page).to have_css("tfoot .currency", text: "$5.00", count: 2)
       end
+    end
+  end
+
+  describe "reconciling an order" do
+    let(:item) { create(:setup_item, facility: facility) }
+    let(:order) { create(:complete_order, product: item) }
+    let(:order_detail) { order.order_details.first }
+
+    before do
+      order_detail.update!(reviewed_at: 1.day.ago)
+      visit manage_facility_order_order_detail_path(facility, order, order_detail)
+    end
+
+    it "can reconcile the order", :js do
+      select "Reconciled", from: "Status"
+      fill_in "Reconciliation Note", with: "adding a note"
+      click_button "Save"
+
+      expect(order_detail.reload).to be_reconciled
+      expect(order_detail.reconciled_note).to eq("adding a note")
+    end
+  end
+
+  describe "a reconciled orderd" do
+    before do
+      order_detail.update!(state: :reconciled, order_status: OrderStatus.reconciled, reconciled_at: 1.day.ago, reconciled_note: "I was reconciled")
+      visit manage_facility_order_order_detail_path(facility, order, order_detail)
+    end
+
+    it "cannot do anything", :js do
+      save_and_open_screenshot
+      expect(page).to have_field("Reconciliation Note", with: "I was reconciled", disabled: true)
+      expect(page).not_to have_button("Save")
     end
   end
 end

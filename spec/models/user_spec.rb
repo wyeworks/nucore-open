@@ -9,7 +9,7 @@ RSpec.describe User do
   let(:price_group) { create(:price_group, facility: facility) }
   let(:price_policy) { create(:item_price_policy, product: item, price_group: price_group) }
 
-  it { is_expected.to accept_nested_attributes_for(:accounts) }
+  it { is_expected.to accept_nested_attributes_for(:account_users) }
 
   it "validates uniquess of username" do
     # we need at least 1 user to test validations

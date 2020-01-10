@@ -56,7 +56,8 @@
     .row
       .span5
         = f.input :note, input_html: { class: "note", rows: 3 }
-        = render "reconcile_note", f: f
+        - if @order_detail.can_reconcile? || @order_detail.reconciled?
+          = f.input :reconciled_note, input_html: { class: "note" }
 
       .span4
         - if @order_detail.actual_cost?

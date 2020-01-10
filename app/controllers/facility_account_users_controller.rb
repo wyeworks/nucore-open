@@ -49,12 +49,12 @@ class FacilityAccountUsersController < ApplicationController
 
   # DELETE /facilities/:facility_id/accounts/:account_id/account_users/:id
   def destroy
-    @account      = Account.find(params[:account_id])
+    @account = Account.find(params[:account_id])
     @account_user = @account.account_users.find(params[:id])
-    @account_user.deleted_at = Time.zone.now
+
     @account_user.deleted_by = session_user.id
 
-    if @account_user.save
+    if @account_user.destroy
       LogEvent.log(@account_user, :delete, current_user)
       flash[:notice] = text("destroy.success")
     else

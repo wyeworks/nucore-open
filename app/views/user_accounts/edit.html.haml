@@ -19,14 +19,14 @@
         %th= Account.model_name.human
         %th.centered= Facility.model_name.human
     %tbody
-      = f.fields_for :accounts do |af|
+      = f.fields_for :account_users do |af|
         %tr
           %td.centered.table-user-accounts__remove
-            - if af.object.owner_user == @user
+            - if af.object.owner?
               = af.check_box :_destroy, disabled: true, title: t('.not_allowed')
             - else
               = af.check_box :_destroy, class: "toggle"
-          %td= payment_source_link_or_text(af.object)
-          %td= af.object.per_facility? ? af.object.facilities.join(", ") : content_tag(:i, t("shared.all"))
+          %td= payment_source_link_or_text(af.object.account)
+          %td= af.object.account.per_facility? ? af.object.account.facilities.join(", ") : content_tag(:i, t("shared.all"))
 
   = f.submit t(".update"), class: "btn btn-primary"
