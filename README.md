@@ -4,6 +4,8 @@ University of Massachusetts Amherst fork of NUCore Core Facility Management Soft
 
 Forked from https://github.com/tablexi/nucore-open
 
+[UMass Specific Integrations](vendor/engines/umass_corum/README.md)
+
 ## UMass Environments
 
 | Domain               | Server                             | Deployment             | RAILS_ENV  |
@@ -18,6 +20,8 @@ Notes:
 environment, but will likely have more experimental data._
 * _They called what we would call staging "test"_
 * We're using "staging" as the `RAILS_ENV` to avoid confusion with Rails's environments
+
+See [`ansible`](ansible/README.md) for our configuration-as-code for the servers.
 
 ## Quickstart
 

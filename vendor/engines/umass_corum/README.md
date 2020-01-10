@@ -1,32 +1,41 @@
 # UmassCorum
+
 This engine is for custom configuration of UMass's implementation.
 
 What it does:
 
 * UMass Branding
+* Speed Type Validation
+* Connect to OWL Research Safety API for Research Safety
 
-## Usage
-How to use my plugin.
+## Speed Type Validation
 
-## Installation
-Add this line to your application's Gemfile:
+UMass uses the concept of a "SpeedType" which is a shorthand for a full chartstring, which can
+be thought of as account numbers within the financial system.
 
-```ruby
-gem 'umass_corum'
-```
+A chartstring at UMass includes a few components:
 
-And then execute:
-```bash
-$ bundle
-```
+  * Fund
+  * Department
+  * Program
+  * Class
+  * Project/Grant
 
-Or install it yourself as:
-```bash
-$ gem install umass_corum
-```
+In order to add a SpeedType into Corum, we want to first validate that is is an
+actual SpeedType in the financial system and that it is currently active.
 
-## Contributing
-Contribution directions go here.
+When a user wishes to add a SpeedType, we perform these steps:
 
-## License
-The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+  1. Basic format validation: is it 6 numbers long?
+  1. Make a query against the SpeedType API (provided by the school)
+  1. If the SpeedType is invalid or inactive, provide an error to the user
+  1. If the SpeedType is valid, store the response in the `api_speed_types` table
+  1. Create the NUcore/Corum `Account` or `FacilityAccount` record
+
+There is a nightly job managed by UMass's IT team that does the following:
+
+  1. Downloads the list of active speed types from the President’s office
+  1. Updates any existing records in `api_speed_types` that have changed
+  1. Marks any speed types which have become inactive with `active = 0` and `date_removed`,
+     as well as `error_desc`
+  1. Inserts new speed types
