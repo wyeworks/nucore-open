@@ -14,5 +14,12 @@ set :linked_files, fetch(:linked_files, []).concat(
   %w(config/database.yml config/secrets.yml config/eye.yml.erb config/saml-certificate.p12),
 )
 set :linked_dirs, fetch(:linked_dirs, []).concat(
-  %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/files public/uploads),
+  %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/files),
 )
+
+# This symlinks public/uploads to shared/uploads, which is an NFS mount
+after "deploy:updated", :symlink_uploads do
+  on roles :app do
+    execute "ln -nfs #{shared_path}/uploads #{release_path}/public/uploads"
+  end
+end

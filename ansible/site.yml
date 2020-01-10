@@ -6,3 +6,4 @@
     - role: app_server/nginx
     - role: app_server/rvm_dependencies
     - role: app_server/rails
+    - role: umass/nfs_mount
