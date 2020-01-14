@@ -28,7 +28,10 @@
   = f.simple_fields_for :relay, @product.relay || @product.build_relay do |rf|
     = rf.input :type, collection: options_for_relay, include_blank: false
     = rf.input :ip
-    = rf.input :port
+    = rf.input :ip_port,
+      hint: text("instruments.instrument_fields.relay.instruct.ip_port")
+    = rf.input :outlet,
+      hint: text("instruments.instrument_fields.relay.instruct.outlet")
     = rf.input :username
     = rf.input :password, as: :string
     = rf.input :auto_logout do

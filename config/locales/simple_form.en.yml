@@ -13,7 +13,8 @@ en:
     labels:
       relay:
         ip: "IP Address"
-        port: "Device Port"
+        ip_port: "IP Port"
+        outlet: "Device Outlet"
         username: "Username"
         password: "Password"
     hints:

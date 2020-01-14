@@ -118,7 +118,7 @@ namespace :demo do
 
     RelaySynaccessRevB.find_or_create_by!(instrument_id: instrument.id) do |relay_instrument|
       relay_instrument.ip = "192.168.10.135"
-      relay_instrument.port = "1"
+      relay_instrument.outlet = "1"
       relay_instrument.username = "admin"
       relay_instrument.password = "admin"
     end

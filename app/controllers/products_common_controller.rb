@@ -109,7 +109,7 @@ class ProductsCommonController < ApplicationController
                                                       :min_reserve_mins, :max_reserve_mins, :min_cancel_hours,
                                                       :auto_cancel_mins, :lock_window, :cutoff_hours,
                                                       :problems_resolvable_by_user,
-                                                      relay_attributes: [:ip, :port, :username, :password, :type,
+                                                      relay_attributes: [:ip, :ip_port, :outlet, :username, :password, :type,
                                                                          :auto_logout, :auto_logout_minutes, :id])
   end
 

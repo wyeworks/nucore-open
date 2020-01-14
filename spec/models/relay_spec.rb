@@ -18,22 +18,22 @@ RSpec.describe Relay do
     end
 
     describe "validating uniqueness" do
-      it "does not allow two different instruments to have the same IP/port" do
+      it "does not allow two different instruments to have the same IP/outlet" do
         instrument2 = create :instrument,
                              facility: @facility,
                              facility_account: @facility_account,
                              no_relay: true
-        relay2 = build :relay_syna, instrument: instrument2, port: @relay.port
+        relay2 = build :relay_syna, instrument: instrument2, outlet: @relay.outlet
         expect(relay2).to_not be_valid
       end
 
-      it "allows two shared schedule instruments to include the same IP/port" do
+      it "allows two shared schedule instruments to include the same IP/outlet" do
         instrument2 = create :instrument,
                              facility: @facility,
                              facility_account: @facility_account,
                              no_relay: true,
                              schedule: @instrument.schedule
-        relay2 = build :relay_syna, instrument: instrument2, port: @relay.port
+        relay2 = build :relay_syna, instrument: instrument2, outlet: @relay.outlet
         expect(relay2).to be_valid
       end
 

@@ -9,7 +9,9 @@
     = f.simple_fields_for @product.relay, :defaults => { :default_value => 'N/A'} do |r|
       = r.input :type, :input_html => { :value => @product.relay.class.presence || 'N/A' }
       = r.input :ip
-      = r.input :port
+      = r.input :ip_port,
+        label: text("instruments.instrument_fields.relay.label.ip_port")
+      = r.input :outlet
       = r.input :username
       = r.input :password
       = r.input :auto_logout

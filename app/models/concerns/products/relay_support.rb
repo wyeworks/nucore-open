@@ -27,7 +27,7 @@ module Products::RelaySupport
   end
 
   def has_real_relay?
-    relay && !relay.is_a?(RelayDummy) && relay.ip && relay.port
+    relay && !relay.is_a?(RelayDummy) && relay.ip? && relay.outlet?
   end
 
   private ###################################

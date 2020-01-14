@@ -1072,6 +1072,10 @@ en:
           relay: "Power Relay Information"
           auto_logout_1: "Automatically power off the relay"
           auto_logout_2: "minutes after the reservation is scheduled to end"
+          ip_port: "IP Port"
+        instruct:
+          ip_port: "Leave blank unless your device is on a non-standard port"
+          outlet: "e.g. 1 or 2"
       reservation:
         instruct:
           reserve_interval: "The minutes of an hour on which a reservation is allowed to begin (e.g. if 5 reservations can be scheduled every 5 minutes)"

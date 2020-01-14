@@ -275,7 +275,7 @@ RSpec.describe InstrumentsController do
         @params[:instrument].merge!(control_mechanism: "relay",
                                     relay_attributes: {
                                       ip: "192.168.1.2",
-                                      port: 1234,
+                                      outlet: 12,
                                       username: "username",
                                       password: "password",
                                       type: RelaySynaccessRevA.name,
@@ -289,7 +289,7 @@ RSpec.describe InstrumentsController do
           relay = assigns(:product).relay
           expect(relay).to be_is_a Relay
           expect(relay.ip).to eq(@params[:instrument][:relay_attributes][:ip])
-          expect(relay.port).to eq(@params[:instrument][:relay_attributes][:port])
+          expect(relay.outlet).to eq(@params[:instrument][:relay_attributes][:outlet])
           expect(relay.username).to eq(@params[:instrument][:relay_attributes][:username])
           expect(relay.password).to eq(@params[:instrument][:relay_attributes][:password])
           expect(relay.type).to eq(@params[:instrument][:relay_attributes][:type])
@@ -304,7 +304,7 @@ RSpec.describe InstrumentsController do
         before :each do
           sign_in @admin
           @params[:instrument][:relay_attributes][:ip] = old_relay.ip
-          @params[:instrument][:relay_attributes][:port] = old_relay.port
+          @params[:instrument][:relay_attributes][:outlet] = old_relay.outlet
         end
 
         context "and the relay is taken by a different instrument" do
@@ -410,7 +410,7 @@ RSpec.describe InstrumentsController do
       before :each do
         RelaySynaccessRevA.create!(
           ip: "192.168.1.2",
-          port: 1234,
+          outlet: 12,
           username: "username",
           password: "password",
           type: RelaySynaccessRevA.name,
@@ -429,7 +429,7 @@ RSpec.describe InstrumentsController do
         @params[:instrument].merge!(control_mechanism: "relay",
                                     relay_attributes: {
                                       ip: "192.168.1.2",
-                                      port: 1234,
+                                      outlet: 12,
                                       username: "username",
                                       password: "password",
                                       type: RelaySynaccessRevA.name,
@@ -442,7 +442,7 @@ RSpec.describe InstrumentsController do
           relay = assigns(:product).relay
           expect(relay).to be_is_a Relay
           expect(relay.ip).to eq(@params[:instrument][:relay_attributes][:ip])
-          expect(relay.port).to eq(@params[:instrument][:relay_attributes][:port])
+          expect(relay.outlet).to eq(@params[:instrument][:relay_attributes][:outlet])
           expect(relay.username).to eq(@params[:instrument][:relay_attributes][:username])
           expect(relay.password).to eq(@params[:instrument][:relay_attributes][:password])
           expect(relay.type).to eq(@params[:instrument][:relay_attributes][:type])
@@ -462,7 +462,7 @@ RSpec.describe InstrumentsController do
           relay = assigns(:product).relay
           expect(relay).to be_is_a Relay
           expect(relay.ip).to be_nil
-          expect(relay.port).to be_nil
+          expect(relay.outlet).to be_nil
           expect(relay.username).to be_nil
           expect(relay.password).to be_nil
           expect(relay.type).to eq(RelayDummy.name)
