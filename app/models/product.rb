@@ -11,8 +11,8 @@ class Product < ApplicationRecord
   has_many :product_users
   has_many :order_details
   has_many :stored_files
-  has_many :price_groups, through: :price_group_products
   has_many :price_group_products
+  has_many :price_groups, through: :price_group_products
   has_many :product_accessories, -> { where(deleted_at: nil) }, dependent: :destroy
   has_many :accessories, through: :product_accessories, class_name: "Product"
   has_many :price_policies
@@ -44,9 +44,8 @@ class Product < ApplicationRecord
       if: :requires_account?,
     )
   end
-  if SettingsHelper.feature_on? :recharge_accounts
-    validates :facility_account_id, presence: true, if: :requires_account?
-  end
+
+  validates :facility_account_id, presence: true, if: :requires_account?
 
   # Use lambda so we can dynamically enable/disable in specs
   validate if: -> { SettingsHelper.feature_on?(:product_specific_contacts) } do
@@ -54,7 +53,7 @@ class Product < ApplicationRecord
   end
 
   scope :active, -> { where(is_archived: false, is_hidden: false) }
-  scope :alphabetized, -> { order("lower(products.name)") }
+  scope :alphabetized, -> { order(Arel.sql("LOWER(products.name)")) }
   scope :archived, -> { where(is_archived: true) }
   scope :not_archived, -> { where(is_archived: false) }
   scope :mergeable_into_order, -> { not_archived.where(type: mergeable_types) }
@@ -67,12 +66,12 @@ class Product < ApplicationRecord
   end
 
   def self.mergeable_types
-    @mergeable_types ||= [Instrument, Item, Service, TimedService, Bundle]
+    @mergeable_types ||= ["Instrument", "Item", "Service", "TimedService", "Bundle"]
   end
 
   # Products that can be used as accessories
   def self.accessorizable
-    where(type: [Item, Service, TimedService])
+    where(type: ["Item", "Service", "TimedService"])
   end
 
   def self.exclude(products)

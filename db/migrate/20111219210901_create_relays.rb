@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateRelays < ActiveRecord::Migration
+class CreateRelays < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :relays do |t|

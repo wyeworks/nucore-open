@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveLegacyInstrumentPricePolicyColumns < ActiveRecord::Migration
+class RemoveLegacyInstrumentPricePolicyColumns < ActiveRecord::Migration[4.2]
 
   COLUMNS = {
     usage_mins: [:integer, after: :usage_rate],

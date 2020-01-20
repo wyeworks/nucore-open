@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateProductCertificationRequirements < ActiveRecord::Migration
+class CreateProductCertificationRequirements < ActiveRecord::Migration[4.2]
 
   def change
     create_table :nu_product_cert_requirements do |t|

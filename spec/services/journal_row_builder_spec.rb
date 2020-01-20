@@ -30,18 +30,6 @@ RSpec.describe JournalRowBuilder, type: :service do
       expect(builder.product_recharges).to eq({})
     end
 
-    context "when recharge_accounts enabled", feature_setting: { recharge_accounts: true } do
-      it "assigns recharge_enabled" do
-        expect(builder.recharge_enabled).to eq(true)
-      end
-    end
-
-    context "when recharge_accounts disabled", feature_setting: { recharge_accounts: false } do
-      it "assigns recharge_enabled" do
-        expect(builder.recharge_enabled).to eq(false)
-      end
-    end
-
   end
 
   describe "#build" do
@@ -64,28 +52,12 @@ RSpec.describe JournalRowBuilder, type: :service do
       order_details.each(&:to_complete!)
     end
 
-    context "when recharge_accounts enabled", feature_setting: { recharge_accounts: true } do
-
-      it "builds two journal_rows for each order_detail" do
-        expect(builder.build.journal_rows.size).to eq(order_details.size * 2)
-      end
-
-      it "builds a product_recharge for each order_detail" do
-        expect(builder.build.product_recharges.size).to eq(order_details.size)
-      end
-
+    it "builds two journal_rows for each order_detail" do
+      expect(builder.build.journal_rows.size).to eq(order_details.size * 2)
     end
 
-    context "when recharge_accounts disabled", feature_setting: { recharge_accounts: false } do
-
-      it "builds a journal_row for each order_detail" do
-        expect(builder.build.journal_rows.size).to eq(order_details.size)
-      end
-
-      it "does not have product_recharges" do
-        expect(builder.build.product_recharges).to be_empty
-      end
-
+    it "builds a product_recharge for each order_detail" do
+      expect(builder.build.product_recharges.size).to eq(order_details.size)
     end
 
   end

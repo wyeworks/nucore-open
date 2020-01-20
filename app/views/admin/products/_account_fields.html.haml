@@ -1,14 +1,13 @@
-- if SettingsHelper.feature_on? :recharge_accounts
-  -# Use `label_text` to add * marking the field as required because
-  -# `include_blank: false` gets ignored if you use `required: true`
-  = f.input :facility_account_id,
-    label: FacilityAccount.model_name.human,
-    label_text: -> (label, _required, _) { "* #{label}" },
-    include_blank: false,
-    collection: current_facility.facility_accounts.active,
-    hint: text("hints.deposit_account")
+-# Use `label_text` to add * marking the field as required because
+-# `include_blank: false` gets ignored if you use `required: true`
+= f.input :facility_account_id,
+  label: FacilityAccount.model_name.human,
+  label_text: -> (label, _required, _) { "* #{label}" },
+  include_blank: false,
+  collection: current_facility.facility_accounts.active,
+  hint: text("hints.deposit_account")
 
-  %p= link_to text("deposit_account.add"), :facility_facility_accounts
+%p= link_to text("deposit_account.add"), :facility_facility_accounts
 
 - if SettingsHelper.feature_on? :expense_accounts
   = f.input :account, hint: text("hints.account"), required: true

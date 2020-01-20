@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlterProductsAddAutoCancelMins < ActiveRecord::Migration
+class AlterProductsAddAutoCancelMins < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :products, :auto_cancel_mins, :integer

@@ -49,7 +49,7 @@ RSpec.describe FacilityJournalsController do
     it_should_deny_all [:staff, :senior_staff]
 
     it_should_allow_managers_only do
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(assigns(:pending_journals)).to eq([@pending_journal])
     end
   end
@@ -376,13 +376,13 @@ RSpec.describe FacilityJournalsController do
     it_should_deny_all [:staff, :senior_staff]
 
     it_should_allow_managers_only do
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "sets appropriate values" do
       sign_in @admin
       do_request
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(assigns(:order_details)).to contain_all([@order_detail1, @order_detail3, problem_order_detail])
       expect(assigns(:order_detail_action)).to eq(:create)
     end

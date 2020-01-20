@@ -5,7 +5,10 @@ class Api::OrderDetailsController < ApplicationController
   respond_to :json
   rescue_from ActiveRecord::RecordNotFound, with: :order_detail_not_found
 
-  http_basic_authenticate_with name: Rails.application.secrets.api["basic_auth_name"], password: Rails.application.secrets.api["basic_auth_password"]
+  http_basic_authenticate_with(
+    name: Rails.application.secrets.api[:basic_auth_name],
+    password: Rails.application.secrets.api[:basic_auth_password]
+  )
 
   # Qualtrics requires that we use a query parameter rather than being part of
   # the URL.

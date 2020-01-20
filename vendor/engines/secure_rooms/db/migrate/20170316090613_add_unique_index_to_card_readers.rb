@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddUniqueIndexToCardReaders < ActiveRecord::Migration
+class AddUniqueIndexToCardReaders < ActiveRecord::Migration[4.2]
 
   def change
     add_index(

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateSangerSequencingSubmissions < ActiveRecord::Migration
+class CreateSangerSequencingSubmissions < ActiveRecord::Migration[4.2]
 
   def up
     create_table :sanger_sequencing_submissions do |t|

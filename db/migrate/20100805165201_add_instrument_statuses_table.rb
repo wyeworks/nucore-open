@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddInstrumentStatusesTable < ActiveRecord::Migration
+class AddInstrumentStatusesTable < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :instrument_statuses do |t|

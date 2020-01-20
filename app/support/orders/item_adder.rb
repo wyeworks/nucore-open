@@ -17,17 +17,17 @@ class Orders::ItemAdder
 
     return [] if quantity <= 0
 
-    ods = if product.is_a? Bundle
+    ods = case product
+          when Bundle
             add_bundles(product, quantity, attributes)
-          elsif product.is_a? Service
+          when Service
             add_services(product, quantity, attributes)
-          elsif product.is_a? TimedService
+          when TimedService
             add_timed_services(product, quantity, duration, attributes)
-          elsif product.respond_to?(:reservations) && quantity > 1
-            # products which have reservations (instruments) should each get their own order_detail
+          when Instrument
             add_instruments(product, quantity, attributes)
           else
-            [create_order_detail({ product_id: product.id, quantity: quantity }.merge(attributes))]
+            [create_order_detail({ product: product, quantity: quantity }.merge(attributes))]
           end
     ods || []
   end
@@ -44,18 +44,22 @@ class Orders::ItemAdder
     end
   end
 
+  # If the service has a survey or order form, a quantity of more than one will
+    # result in
   def add_instruments(product, quantity, attributes)
     Array.new(quantity) do
-      create_order_detail({ product_id: product.id, quantity: 1 }.merge(attributes))
+      create_order_detail({ product: product, quantity: 1 }.merge(attributes))
     end
   end
 
   def add_timed_services(product, quantity, duration, attributes)
     Array.new(quantity) do
-      create_order_detail({ product_id: product.id, quantity: duration || DEFAULT_TIMED_SERVICES_DURATION }.merge(attributes))
+      create_order_detail({ product: product, quantity: duration || DEFAULT_TIMED_SERVICES_DURATION }.merge(attributes))
     end
   end
 
+  # If the service has a survey or order form, we create one row for each quantity since
+  # each one will require a separate upload form.
   def add_services(product, quantity, attributes)
     separate = (product.active_template? || product.active_survey?)
     # can't add single order_detail for service when it requires a template or a survey.
@@ -65,7 +69,7 @@ class Orders::ItemAdder
     individual_quantity = separate ? 1 : quantity
 
     Array.new(repeat) do
-      create_order_detail({ product_id: product.id, quantity: individual_quantity }.merge(attributes))
+      create_order_detail({ product: product, quantity: individual_quantity }.merge(attributes))
     end
   end
 
@@ -75,15 +79,23 @@ class Orders::ItemAdder
 
   def create_bundle_order_detail(product, attributes = {})
     group_id = @order.max_group_id + 1
-    product.bundle_products.collect do |bp|
-      create_order_detail(
-        {
-          product_id: bp.product.id,
-          quantity: bp.quantity,
-          bundle_product_id: product.id,
-          group_id: group_id,
-        }.merge(attributes),
-      )
+    product.bundle_products.flat_map do |bundle_product|
+      # When inside a bundle, we want each reservation to end up on its own order detail,
+      # while all other types will result in a single line item. This is true even
+      # for services which have an order form/survey.
+      case bundle_product.product
+      when Instrument
+        add_instruments(bundle_product.product, bundle_product.quantity, { bundle: product, group_id: group_id }.merge(attributes))
+      else
+        create_order_detail(
+          {
+            product: bundle_product.product,
+            quantity: bundle_product.quantity,
+            bundle: product,
+            group_id: group_id,
+          }.merge(attributes),
+        )
+      end
     end
   end
 

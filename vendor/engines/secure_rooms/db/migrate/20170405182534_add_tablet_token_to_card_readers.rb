@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddTabletTokenToCardReaders < ActiveRecord::Migration
+class AddTabletTokenToCardReaders < ActiveRecord::Migration[4.2]
 
   class SecureRooms::CardReader < ApplicationRecord
   end

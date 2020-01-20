@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddCardNumberToSecureRoomsEvents < ActiveRecord::Migration
+class AddCardNumberToSecureRoomsEvents < ActiveRecord::Migration[4.2]
 
   def up
     add_column :secure_rooms_events, :card_number, :string

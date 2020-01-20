@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MigrateAndDropAccountTransactions < ActiveRecord::Migration
+class MigrateAndDropAccountTransactions < ActiveRecord::Migration[4.2]
 
   def self.up
     OrderDetail.reset_column_information

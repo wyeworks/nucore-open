@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddServiceSurveysPreviewCode < ActiveRecord::Migration
+class AddServiceSurveysPreviewCode < ActiveRecord::Migration[4.2]
 
   def self.up
     change_table :service_surveys do |t|

@@ -12,7 +12,7 @@ RSpec.describe ProblemReservationsController do
 
     it "is a success" do
       get :edit, params: { id: problem_reservation }
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     describe "when the product is not resolvable" do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddColumnRestrictPurchaseToPricePolicies < ActiveRecord::Migration
+class AddColumnRestrictPurchaseToPricePolicies < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :price_policies, :restrict_purchase, :boolean, null: true

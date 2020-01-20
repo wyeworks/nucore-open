@@ -12,7 +12,7 @@ module Reports
     module ClassMethods
 
       def transformers
-        @@transformers ||= []
+        @transformers ||= []
       end
 
     end

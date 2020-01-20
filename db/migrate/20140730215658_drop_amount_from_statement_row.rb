@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DropAmountFromStatementRow < ActiveRecord::Migration
+class DropAmountFromStatementRow < ActiveRecord::Migration[4.2]
 
   def up
     remove_column :statement_rows, :amount

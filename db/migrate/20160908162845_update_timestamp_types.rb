@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # No effect on MySQL, but important for oracle so times are returned with zones.
-class UpdateTimestampTypes < ActiveRecord::Migration
+class UpdateTimestampTypes < ActiveRecord::Migration[4.2]
 
   def up
     change_column :users, :deactivated_at, :datetime

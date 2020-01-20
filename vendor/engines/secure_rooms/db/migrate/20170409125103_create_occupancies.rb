@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateOccupancies < ActiveRecord::Migration
+class CreateOccupancies < ActiveRecord::Migration[4.2]
 
   def change
     create_table :secure_rooms_occupancies do |t|

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveFacilityFromOrder < ActiveRecord::Migration
+class RemoveFacilityFromOrder < ActiveRecord::Migration[4.2]
 
   def self.up
     change_table :orders do |t|

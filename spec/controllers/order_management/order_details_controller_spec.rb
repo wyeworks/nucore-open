@@ -74,7 +74,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
         end
 
         it "is success" do
-          expect(response).to be_success
+          expect(response).to be_successful
         end
 
         it "has new as a status" do
@@ -980,7 +980,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
         end
 
         it "is successful" do
-          expect(response).to be_success
+          expect(response).to be_successful
         end
 
         it "returns a new estimated price" do
@@ -1021,7 +1021,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
           end
 
           it "is successful" do
-            expect(response).to be_success
+            expect(response).to be_successful
           end
 
           it "returns a new actual price" do
@@ -1062,7 +1062,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
           end
 
           it "is successful" do
-            expect(response).to be_success
+            expect(response).to be_successful
           end
 
           it "does not return an estimated price" do

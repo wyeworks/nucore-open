@@ -302,20 +302,23 @@ RSpec.describe ScheduleRule do
       assert @rule2.valid?
 
       # find past tuesday, and build calendar objects
-      @tuesday = Time.current.beginning_of_week(:sunday).to_date + 2
-      @wednesday = @tuesday + 1
+      @tuesday = Time.current.beginning_of_week(:sunday) + 2.days
+      @wednesday = @tuesday + 1.day
 
       # times should be tue 9 pm - 12 am
       @calendar1 = @rule1.as_calendar_objects
-      @calendar1.each_with_index do |hash, _i|
+      @calendar1.each do |hash|
         expect(Time.zone.parse(hash["start"])).to eq(@tuesday + 21.hours)
         expect(Time.zone.parse(hash["end"])).to eq(@tuesday + 24.hours)
       end
 
-      # times should be tue 12 am - 9 am
+      # times should be wed 12 am - 9 am
       @calendar2 = @rule2.as_calendar_objects
-      @calendar2.each_with_index do |hash, _i|
-        expect(Time.zone.parse(hash["start"])).to eq(@wednesday + 0.hours)
+
+      @calendar2.each do |hash|
+        # .in_time_zone will convert the Date @wedensday to midnight in the Application's timezone
+        # + 9.hours will also convert to
+        expect(Time.zone.parse(hash["start"])).to eq(@wednesday)
         expect(Time.zone.parse(hash["end"])).to eq(@wednesday + 9.hours)
       end
     end

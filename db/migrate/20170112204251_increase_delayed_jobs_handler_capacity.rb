@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class IncreaseDelayedJobsHandlerCapacity < ActiveRecord::Migration
+class IncreaseDelayedJobsHandlerCapacity < ActiveRecord::Migration[4.2]
 
   def up
     if NUCore::Database.mysql?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AdjustOrder < ActiveRecord::Migration
+class AdjustOrder < ActiveRecord::Migration[4.2]
 
   def self.up
     change_table :orders do |t|

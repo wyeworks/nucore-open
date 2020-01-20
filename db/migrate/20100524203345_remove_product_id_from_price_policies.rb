@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveProductIdFromPricePolicies < ActiveRecord::Migration
+class RemoveProductIdFromPricePolicies < ActiveRecord::Migration[4.2]
 
   def self.up
     remove_column :price_policies, :product_id

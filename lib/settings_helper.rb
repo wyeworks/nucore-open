@@ -35,6 +35,7 @@ module SettingsHelper
   #   If you want to check setting 'feature.password_update' then this parameter
   # .  would be :password_update. Will raise an error if the setting does not exist.
   def self.feature_on?(feature)
+    raise "Deprecated feature" if feature.to_s == "recharge_accounts"
     !!Settings.feature.to_h.fetch(feature)
   end
 

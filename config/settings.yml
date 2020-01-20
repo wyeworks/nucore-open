@@ -81,7 +81,6 @@ feature:
   manage_payment_sources_with_users: true
   order_assignment_notifications: true
   password_update: true
-  recharge_accounts: true
   expense_accounts: true
   edit_accounts: true
   suspend_accounts: true

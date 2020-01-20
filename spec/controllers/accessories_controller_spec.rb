@@ -39,7 +39,7 @@ RSpec.describe AccessoriesController do
       end
 
       it "has access" do
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

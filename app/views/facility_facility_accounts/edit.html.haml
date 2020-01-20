@@ -9,7 +9,7 @@
 
 %h2= text("admin.shared.edit", model: FacilityAccount.model_name.human)
 %p= text(".main")
-= simple_form_for @facility_account, url: facility_facility_account_path(@facility_account) do |f|
+= simple_form_for @facility_account, url: facility_facility_account_path(current_facility, @facility_account) do |f|
   = f.error_messages
   = render "facility_account_fields", f: f, readonly: true
   %ul.inline

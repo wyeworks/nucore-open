@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlterPricePoliciesRestrictExpireDate < ActiveRecord::Migration
+class AlterPricePoliciesRestrictExpireDate < ActiveRecord::Migration[4.2]
 
   def self.up
     change_column(:price_policies, :expire_date, :datetime, null: false)

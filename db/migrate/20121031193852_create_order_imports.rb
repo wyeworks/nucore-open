@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateOrderImports < ActiveRecord::Migration
+class CreateOrderImports < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :order_imports do |t|

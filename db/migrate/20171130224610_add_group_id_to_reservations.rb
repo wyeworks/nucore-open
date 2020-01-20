@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddGroupIdToReservations < ActiveRecord::Migration
+class AddGroupIdToReservations < ActiveRecord::Migration[4.2]
   def change
     add_column :reservations, :group_id, :string
 

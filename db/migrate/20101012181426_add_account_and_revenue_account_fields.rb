@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddAccountAndRevenueAccountFields < ActiveRecord::Migration
+class AddAccountAndRevenueAccountFields < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :products, :account, :integer, null: true

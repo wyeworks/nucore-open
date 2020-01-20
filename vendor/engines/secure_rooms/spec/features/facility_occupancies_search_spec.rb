@@ -28,7 +28,7 @@ RSpec.describe "Facility Orders Search" do
       login_as director
       visit facility_occupancies_path(facility)
 
-      select secure_room, from: "Products"
+      select secure_room.to_s, from: "Products"
       click_button "Filter"
       expect(page).to have_css(".order-detail-description", text: secure_room.name, count: 1)
       expect(page).not_to have_css(".order-detail-description", text: secure_room2.name)
@@ -40,7 +40,7 @@ RSpec.describe "Facility Orders Search" do
       login_as director
       visit show_problems_facility_occupancies_path(facility)
 
-      select secure_room, from: "Products"
+      select secure_room.to_s, from: "Products"
       click_button "Filter"
       expect(page).to have_css("td", text: secure_room.name, count: 1)
       expect(page).not_to have_css("td", text: secure_room2.name)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MoveCanPurchaseIntoPricePolicy < ActiveRecord::Migration
+class MoveCanPurchaseIntoPricePolicy < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :price_policies, :can_purchase, :boolean, after: :price_group_id, default: false, null: false

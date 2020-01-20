@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChangeScheduleRuleToBelongToProduct < ActiveRecord::Migration
+class ChangeScheduleRuleToBelongToProduct < ActiveRecord::Migration[4.2]
 
   def up
     # MySQL 5.6+ will rename the foreign key with the column, but Mariadb 5.5

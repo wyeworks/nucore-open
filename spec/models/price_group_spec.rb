@@ -72,6 +72,7 @@ RSpec.describe PriceGroup do
         expect(@price_group).to be_can_delete
         @price_group.destroy
         expect(@price_group).to be_destroyed
+        expect(PricePolicy.find_by(id: @price_policy.id)).to be_blank # It destroys the associated price policy
       end
 
       it "should not be deletable if there are orders on a policy" do

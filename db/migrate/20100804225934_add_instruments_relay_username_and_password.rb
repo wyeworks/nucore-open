@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddInstrumentsRelayUsernameAndPassword < ActiveRecord::Migration
+class AddInstrumentsRelayUsernameAndPassword < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :products, :relay_username, :string, null: true, limit: 50

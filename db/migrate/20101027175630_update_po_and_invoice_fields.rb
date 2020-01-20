@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpdatePoAndInvoiceFields < ActiveRecord::Migration
+class UpdatePoAndInvoiceFields < ActiveRecord::Migration[4.2]
 
   def self.up
     # add PO remit-to

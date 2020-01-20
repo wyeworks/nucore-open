@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddBudgetedChartString < ActiveRecord::Migration
+class AddBudgetedChartString < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :budgeted_chart_strings do |t|

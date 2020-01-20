@@ -5,14 +5,17 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
-gem "rails", "5.0.7.2"
+gem "rails", "5.2.3"
+gem "sprockets", "< 4" # Temporarily lock as we upgrade
 gem "config"
+gem "bootsnap", require: false
 
 ## database
 gem "mysql2"
 # To use Oracle, remove the mysql2 gem above and uncomment these lines
-# gem "ruby-oci8"
 # gem "activerecord-oracle_enhanced-adapter"
+# gem "ruby-oci8" # only for CRuby users
+
 
 ## auth
 gem "cancancan"

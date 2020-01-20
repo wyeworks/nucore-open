@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateAlarmEvents < ActiveRecord::Migration
+class CreateAlarmEvents < ActiveRecord::Migration[4.2]
 
   def change
     create_table :secure_rooms_alarm_events do |t|

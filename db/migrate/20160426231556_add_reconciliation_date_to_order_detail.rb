@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddReconciliationDateToOrderDetail < ActiveRecord::Migration
+class AddReconciliationDateToOrderDetail < ActiveRecord::Migration[4.2]
 
   def up
     add_column :order_details, :reconciled_at, :datetime

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddCancelAuditToReservation < ActiveRecord::Migration
+class AddCancelAuditToReservation < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :reservations, :canceled_at,     :datetime,             null: true

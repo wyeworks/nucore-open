@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateCardReaders < ActiveRecord::Migration
+class CreateCardReaders < ActiveRecord::Migration[4.2]
 
   def change
     create_table :secure_rooms_card_readers do |t|

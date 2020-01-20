@@ -1,5 +1,7 @@
 - if flash[:errors]
-  %p.error= flash[:errors]
+  %p.alert.alert-error= flash[:errors]
 
 - else
+  .pull-right
+    = link_to text("reports.export_as_csv"), format: :csv, search_term: params[:search_term]
   = render "account_table"

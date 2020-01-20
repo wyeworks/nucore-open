@@ -15,9 +15,8 @@
   = f.input :description, input_html: { class: "wysiwyg" }
 
   - unless @product.is_a?(Bundle)
-    - if SettingsHelper.feature_on? :recharge_accounts
-      = f.input :facility_account,
-        input_html: { value: @product.facility_account.account_number + (@product.facility_account.is_active? ? "" : " (inactive)") }
+    = f.input :facility_account,
+      input_html: { value: @product.facility_account.account_number + (@product.facility_account.is_active? ? "" : " (inactive)") }
 
     = f.input :initial_order_status
     = f.input :requires_approval

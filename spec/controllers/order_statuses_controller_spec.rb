@@ -47,7 +47,7 @@ RSpec.describe OrderStatusesController do
         do_request
       end
       it "should be a success" do
-        expect(response).to be_success
+        expect(response).to be_successful
       end
       it "should have all statuses" do
         expect(assigns[:order_statuses]).to contain_all [@root_status, @root_status2, @order_status, @order_status2]

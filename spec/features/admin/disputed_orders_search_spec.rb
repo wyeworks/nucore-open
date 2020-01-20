@@ -25,7 +25,7 @@ RSpec.describe "Disputed Orders Search" do
     select accounts.first.account_list_item, from: "Payment Sources"
     click_button "Filter"
 
-    expect(page).to have_link(order_details.first.id, href: manage_facility_order_order_detail_path(facility, orders.first, order_details.first))
-    expect(page).not_to have_link(order_details.second.id, href: manage_facility_order_order_detail_path(facility, orders.second, order_details.second))
+    expect(page).to have_link(order_details.first.id.to_s, href: manage_facility_order_order_detail_path(facility, orders.first, order_details.first))
+    expect(page).not_to have_link(order_details.second.id.to_s, href: manage_facility_order_order_detail_path(facility, orders.second, order_details.second))
   end
 end

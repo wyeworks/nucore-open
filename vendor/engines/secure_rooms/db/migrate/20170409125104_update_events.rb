@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpdateEvents < ActiveRecord::Migration
+class UpdateEvents < ActiveRecord::Migration[4.2]
 
   def change
     change_column :secure_rooms_events, :card_reader_id, :integer, null: false

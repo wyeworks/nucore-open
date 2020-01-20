@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateEvents < ActiveRecord::Migration
+class CreateEvents < ActiveRecord::Migration[4.2]
 
   def change
     create_table :secure_rooms_events do |t|

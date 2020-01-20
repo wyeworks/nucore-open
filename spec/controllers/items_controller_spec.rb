@@ -33,7 +33,7 @@ RSpec.describe ItemsController do
 
     it_should_allow_operators_only do |_user|
       expect(assigns(:products)).to eq([@item])
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response).to render_template("admin/products/index")
     end
   end
@@ -46,7 +46,7 @@ RSpec.describe ItemsController do
 
     it_should_allow_operators_only do |_user|
       expect(assigns[:product]).to eq(@item)
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response).to render_template("manage")
     end
   end

@@ -32,7 +32,7 @@ RSpec.describe FileUploadsController do
     end
 
     it_should_allow_operators_only do
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 

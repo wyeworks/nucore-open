@@ -133,7 +133,7 @@ RSpec.describe UsersController do
 
           it_should_allow_operators_only do
             expect(assigns(:user)).to be_nil
-            expect(response).to be_success
+            expect(response).to be_successful
           end
         end
 

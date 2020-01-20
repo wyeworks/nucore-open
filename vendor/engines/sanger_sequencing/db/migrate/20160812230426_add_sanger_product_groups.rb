@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddSangerProductGroups < ActiveRecord::Migration
+class AddSangerProductGroups < ActiveRecord::Migration[4.2]
 
   def change
     # sanger_sequencing_product_groups is too long of a table name for Oracle

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddJournalsTable < ActiveRecord::Migration
+class AddJournalsTable < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :journals do |t|

@@ -18,7 +18,7 @@ RSpec.describe OrderDetailStoredFilesController do
 
       it "has access" do
         get :order_file, params: params
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -29,7 +29,7 @@ RSpec.describe OrderDetailStoredFilesController do
 
       it "has access" do
         get :order_file, params: { order_id: merge_order.id, order_detail_id: merge_order.order_details.first.id }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end

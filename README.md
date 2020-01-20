@@ -44,6 +44,10 @@ To do this:
 
 If you seeded the demo data, you can log in with admin@example.com/password
 
+#### Email
+
+We use [mailcatcher](https://mailcatcher.me/) as an SMTP server and web client. Visit <http://localhost:1080>.
+
 #### Useful Commands
 
 * **Rails Console:** `docker-compose exec app bundle exec rails c`

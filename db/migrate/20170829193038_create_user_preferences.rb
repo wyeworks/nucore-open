@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateUserPreferences < ActiveRecord::Migration
+class CreateUserPreferences < ActiveRecord::Migration[4.2]
   def change
     create_table :user_preferences do |t|
       t.references :user, foreign_key: true

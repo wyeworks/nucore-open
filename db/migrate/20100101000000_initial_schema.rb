@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class InitialSchema < ActiveRecord::Migration
+class InitialSchema < ActiveRecord::Migration[4.2]
 
   def self.up
     # This migration is handling the fact that the initial commits on nucore

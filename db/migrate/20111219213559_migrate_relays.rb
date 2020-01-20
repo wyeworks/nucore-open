@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MigrateRelays < ActiveRecord::Migration
+class MigrateRelays < ActiveRecord::Migration[4.2]
 
   def self.up
     Relay.reset_column_information

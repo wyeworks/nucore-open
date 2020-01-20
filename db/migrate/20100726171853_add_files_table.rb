@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddFilesTable < ActiveRecord::Migration
+class AddFilesTable < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :files do |t|

@@ -21,7 +21,7 @@ RSpec.shared_examples_for "A product supporting ProductAccessGroupsController" d
     end
 
     it "succeeds and renders" do
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response).to render_template(:index)
     end
 
@@ -38,7 +38,7 @@ RSpec.shared_examples_for "A product supporting ProductAccessGroupsController" d
     end
 
     it "succeeds and renders" do
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response).to render_template(:new)
     end
 

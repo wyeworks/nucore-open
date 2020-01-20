@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChangePricePolicies < ActiveRecord::Migration
+class ChangePricePolicies < ActiveRecord::Migration[4.2]
 
   def self.up
     change_table :price_policies do |t|

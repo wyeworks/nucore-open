@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlterPricePolicies < ActiveRecord::Migration
+class AlterPricePolicies < ActiveRecord::Migration[4.2]
 
   def self.up
     remove_column(:price_policies, :reservation_window)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddProductAccessGroups < ActiveRecord::Migration
+class AddProductAccessGroups < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :product_access_groups do |t|

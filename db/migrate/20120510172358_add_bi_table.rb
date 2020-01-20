@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddBiTable < ActiveRecord::Migration
+class AddBiTable < ActiveRecord::Migration[4.2]
 
   def self.up
     if NUCore::Database.oracle?

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ReservationsChangeFromInstrumentToProduct < ActiveRecord::Migration
+class ReservationsChangeFromInstrumentToProduct < ActiveRecord::Migration[4.2]
 
   def self.up
     # remove_foreign_key :reservations, name: "reservations_instrument_id_fk"

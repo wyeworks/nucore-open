@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlterProductsRemoveRelays < ActiveRecord::Migration
+class AlterProductsRemoveRelays < ActiveRecord::Migration[4.2]
 
   def self.up
     remove_column(:products, :relay_ip)

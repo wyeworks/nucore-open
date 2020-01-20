@@ -37,9 +37,9 @@ module NUCore
 
     def self.sample(scope, count = 1)
       if NUCore::Database.oracle?
-        scope.order("DBMS_RANDOM.VALUE").limit(count)
+        scope.order(Arel.sql("DBMS_RANDOM.VALUE")).limit(count)
       else
-        scope.order("RAND()").limit(count)
+        scope.order(Arel.sql("RAND()")).limit(count)
       end
     end
 
@@ -119,11 +119,13 @@ module NUCore
         # MySQL by default will sort with nulls coming before anything with a value.
         # Oracle by defaults puts the nulls at the end in ASC mode
         def order_by_asc_nulls_first(field)
-          NUCore::Database.oracle? ? order("#{sanitize_sql(field)} ASC NULLS FIRST") : order(field)
+          order_by = NUCore::Database.oracle? ? "#{field} ASC NULLS FIRST" : field.to_s
+           order(Arel.sql(sanitize_sql_for_order(order_by)))
         end
 
         def order_by_desc_nulls_first(field)
-          NUCore::Database.oracle? ? order("#{sanitize_sql(field)} DESC NULLS FIRST") : order("#{sanitize_sql(field)} DESC")
+          order_by = NUCore::Database.oracle? ? "#{field} DESC NULLS FIRST" : "#{field} DESC"
+          order(Arel.sql(sanitize_sql_for_order(order_by)))
         end
 
       end

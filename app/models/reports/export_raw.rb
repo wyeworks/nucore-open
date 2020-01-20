@@ -107,7 +107,7 @@ module Reports
         assigned_staff: ->(od) { od.assigned_user&.full_name(suspended_label: false) },
         billable_minutes: ->(od) { od.time_data.try(:billable_minutes) },
         problem_resolved_at: :problem_resolved_at,
-        problem_description_key_was: :problem_description_key_was,
+        problem_description: ->(od) { I18n.t("order_details.notices.#{od.problem_description_key_was}.badge") if od.problem_description_key_was? },
         problem_resolved_by: :problem_resolved_by,
       }
       if SettingsHelper.has_review_period?

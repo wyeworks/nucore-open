@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpdateProductTableForBundles < ActiveRecord::Migration
+class UpdateProductTableForBundles < ActiveRecord::Migration[4.2]
 
   def self.up
     change_column :products, :initial_order_status_id, :integer, null: true

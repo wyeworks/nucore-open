@@ -5,7 +5,7 @@ module OrderDetails
   class DisputeResolvedNotifier < SimpleDelegator
 
     def notify
-      if dispute_resolved_at_previously_changed? && dispute_resolved_at_previously_was.blank?
+      if saved_change_to_dispute_resolved_at? && dispute_resolved_at_before_last_save.blank?
 
         users_to_notify.each do |user|
           OrderDetailDisputeMailer.dispute_resolved(order_detail: __getobj__, user: user).deliver_later
@@ -17,10 +17,6 @@ module OrderDetails
 
     def users_to_notify
       ([dispute_by] + account.administrators).compact.uniq
-    end
-
-    def dispute_resolved_at_previously_was
-      previous_changes[:dispute_resolved_at].first
     end
 
   end

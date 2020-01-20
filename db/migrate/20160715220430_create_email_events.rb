@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateEmailEvents < ActiveRecord::Migration
+class CreateEmailEvents < ActiveRecord::Migration[4.2]
 
   def change
     create_table :email_events do |t|

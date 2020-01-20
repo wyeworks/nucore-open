@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddUniqueIndicies < ActiveRecord::Migration
+class AddUniqueIndicies < ActiveRecord::Migration[4.2]
 
   def self.up
     remove_index(:response_sets, name: "response_sets_ac_idx")

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateLogEvents < ActiveRecord::Migration
+class CreateLogEvents < ActiveRecord::Migration[4.2]
   def change
     create_table :log_events do |t|
       t.references :loggable, polymorphic: true

@@ -9,7 +9,7 @@ class FacilityAccountsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_acting_as
   before_action :init_current_facility
-  before_action :init_account
+  before_action :init_account, except: :search_results
   before_action :build_account, only: [:new, :create]
 
   authorize_resource :account
@@ -85,42 +85,23 @@ class FacilityAccountsController < ApplicationController
   end
 
   # GET/POST /facilities/:facility_id/accounts/search_results
-  # TODO: use a service object here
   def search_results
-    owner_where_clause = <<-end_of_where
-      (
-        LOWER(users.first_name) LIKE :term
-        OR LOWER(users.last_name) LIKE :term
-        OR LOWER(users.username) LIKE :term
-        OR LOWER(CONCAT(users.first_name, users.last_name)) LIKE :term
-      )
-      AND account_users.user_role = :acceptable_role
-      AND account_users.deleted_at IS NULL
-    end_of_where
+    searcher = AccountSearcher.new(Account.for_facility(current_facility), params[:search_term])
+    if searcher.valid?
+      @accounts = searcher.results
 
-    term = generate_multipart_like_search_term(params[:search_term])
-    if params[:search_term].length >= 3
-
-      # retrieve accounts matched on user for this facility
-      @accounts = Account.joins(account_users: :user).for_facility(current_facility).where(
-        owner_where_clause,
-        term: term,
-        acceptable_role: "Owner",
-      ).order("users.last_name, users.first_name")
-
-      # retrieve accounts matched on account_number for this facility
-      @accounts += Account.for_facility(current_facility).where(
-        "LOWER(account_number) LIKE ?", term)
-                          .order("type, account_number",
-                                )
-
-      # only show an account once.
-      @accounts = @accounts.uniq.paginate(page: params[:page]) # hash options and defaults - :page (1), :per_page (30), :total_entries (arr.length)
+      respond_to do |format|
+        format.html do
+          @accounts = @accounts.paginate(page: params[:page])
+          render layout: false
+        end
+        format.csv do
+          render csv: Reports::AccountSearchCsv.new(@accounts), filename: "#{current_facility}_account_search_results.csv"
+        end
+      end
     else
       flash.now[:errors] = "Search terms must be 3 or more characters."
-    end
-    respond_to do |format|
-      format.html { render layout: false }
+      render layout: false
     end
   end
 

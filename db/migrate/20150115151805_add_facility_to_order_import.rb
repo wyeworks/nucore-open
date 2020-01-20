@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddFacilityToOrderImport < ActiveRecord::Migration
+class AddFacilityToOrderImport < ActiveRecord::Migration[4.2]
 
   def up
     add_column :order_imports, :facility_id, :integer, after: :id

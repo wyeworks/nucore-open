@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OptionalRequiredNotesField < ActiveRecord::Migration
+class OptionalRequiredNotesField < ActiveRecord::Migration[4.2]
 
   class Product < ActiveRecord::Base
   end

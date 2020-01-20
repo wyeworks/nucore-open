@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddFacilitiesJournalMaskColumn < ActiveRecord::Migration
+class AddFacilitiesJournalMaskColumn < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :facilities, :journal_mask, :string, limit: 50, null: true # TODO: why? , :after =>

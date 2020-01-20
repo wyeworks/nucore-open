@@ -13,6 +13,11 @@ module Nucore
 
   class Application < Rails::Application
 
+    config.load_defaults 5.0
+    # It appears cancancan and/or delayed_job_active_record do some monkey patching of AR incorrectly,
+    # so setting this in an initializer doesn't work. https://stackoverflow.com/a/39153224
+    config.active_record.belongs_to_required_by_default = false
+
     # Rails 5 disables autoloading in production by default.
     # https://blog.bigbinary.com/2016/08/29/rails-5-disables-autoloading-after-booting-the-app-in-production.html
     config.enable_dependency_loading = true

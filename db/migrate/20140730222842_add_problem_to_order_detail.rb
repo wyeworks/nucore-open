@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddProblemToOrderDetail < ActiveRecord::Migration
+class AddProblemToOrderDetail < ActiveRecord::Migration[4.2]
 
   def change
     add_column :order_details, :problem, :boolean, null: false, default: false

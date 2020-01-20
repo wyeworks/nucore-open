@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChangeJournalRowsValuesToStrings < ActiveRecord::Migration
+class ChangeJournalRowsValuesToStrings < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :journal_rows, :fund_string,     :string, limit: 3, null: true, after: :fund

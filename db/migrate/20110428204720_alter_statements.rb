@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlterStatements < ActiveRecord::Migration
+class AlterStatements < ActiveRecord::Migration[4.2]
 
   def self.up
     change_table :statements do |t|

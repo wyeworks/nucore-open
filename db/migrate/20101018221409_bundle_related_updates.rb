@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class BundleRelatedUpdates < ActiveRecord::Migration
+class BundleRelatedUpdates < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :order_details, :bundle_order_detail_id, :integer, null: true

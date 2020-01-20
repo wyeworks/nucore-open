@@ -34,7 +34,7 @@ RSpec.describe SangerSequencing::SampleResultFileSaver do
 
     it "does not save" do
       expect(saver.save).to be(false)
-      expect(saver.errors).to be_added(:sample, :blank, id: 0)
+      expect(saver.errors).to be_added(:sample, :blank, id: "0")
     end
   end
 

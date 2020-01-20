@@ -126,7 +126,7 @@ RSpec.describe OrderImport, :time_travel do
                              opts[:username] || "guest",
                              opts[:account_number]     || account.account_number,
                              opts[:product_name]       || "Example Item",
-                             opts[:quantity]           || 1,
+                             opts[:quantity]           || "1",
                              opts[:order_date]         || nucore_format_date(default_order_date),
                              opts[:fullfillment_date]  || nucore_format_date(default_fulfilled_date),
                              opts[:note]               || "Test Note",

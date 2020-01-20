@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddSubaffiliatesEnabledFlagToAffiliates < ActiveRecord::Migration
+class AddSubaffiliatesEnabledFlagToAffiliates < ActiveRecord::Migration[4.2]
 
   def up
     add_column :affiliates, :subaffiliates_enabled, :boolean, default: false, null: false

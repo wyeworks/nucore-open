@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class MakeExternalServiceResponseDataTextField < ActiveRecord::Migration
+class MakeExternalServiceResponseDataTextField < ActiveRecord::Migration[4.2]
 
   def up
     add_column :external_service_receivers, :response_data_text, :text

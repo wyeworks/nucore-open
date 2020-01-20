@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OrderDetailsAddAndRemoveFields < ActiveRecord::Migration
+class OrderDetailsAddAndRemoveFields < ActiveRecord::Migration[4.2]
 
   def self.up
     # Oracle will drop the foreign key as part of the remove_column

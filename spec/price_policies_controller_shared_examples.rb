@@ -62,14 +62,14 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
           expect(@price_policy.destroy).to eq(@price_policy)
           do_request
           expect(response.code).to eq("200")
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:start_date]).not_to be_nil
           expect(assigns[:start_date]).to match_date Date.today
         end
 
         it "sets the date to tomorrow if there are active policies" do
           do_request
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns[:start_date]).not_to be_nil
           expect(assigns[:start_date]).to match_date(Date.today + 1.day)
         end

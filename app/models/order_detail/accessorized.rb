@@ -19,7 +19,7 @@ module OrderDetail::Accessorized
 
     # Puts parent orders first, followed by their children. Children are ordered by id
     def ordered_by_parents
-      order("COALESCE(order_details.parent_order_detail_id, order_details.id)")
+      order(Arel.sql("COALESCE(order_details.parent_order_detail_id, order_details.id)"))
         .order_by_asc_nulls_first(:parent_order_detail_id)
         .order(:id)
     end

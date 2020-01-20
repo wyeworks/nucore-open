@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddShowDetailsToInstruments < ActiveRecord::Migration
+class AddShowDetailsToInstruments < ActiveRecord::Migration[4.2]
 
   def self.up
     change_table :products do |t|

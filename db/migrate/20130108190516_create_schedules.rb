@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateSchedules < ActiveRecord::Migration
+class CreateSchedules < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :schedules do |t|

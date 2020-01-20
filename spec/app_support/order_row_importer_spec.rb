@@ -35,6 +35,7 @@ RSpec.describe OrderRowImporter do
       "Order Date" => order_date,
       "Fulfillment Date" => fulfillment_date,
       "Note" => notes,
+      "Order" => order_number,
     }
     CSV::Row.new(ref.keys, ref.values)
   end
@@ -46,6 +47,7 @@ RSpec.describe OrderRowImporter do
   let(:order_date) { "column5" }
   let(:fulfillment_date) { "column6" }
   let(:notes) { "column7" }
+  let(:order_number) { "" }
 
   describe "#import" do
     shared_examples_for "an order was created" do
@@ -398,6 +400,56 @@ RSpec.describe OrderRowImporter do
         it_behaves_like "it has an error message", "Note is too long"
       end
     end
+
+    context "when adding to an existing order" do
+      include_context "valid row values" do
+        let(:order_number) { existing_order.id.to_s }
+      end
+
+      context "happy path" do
+        let!(:existing_order) { create(:purchased_order, product: service, user: user, account: account) }
+
+        it "adds to the existing order" do
+          expect { subject.import }.to change(OrderDetail, :count).by(1).and change(Order, :count).by(0)
+          expect(OrderDetail.last.order).to eq(existing_order)
+        end
+      end
+
+      context "when the order is not found" do
+        let(:order_number) { "0" }
+
+        it_behaves_like "an order was not created"
+        it_behaves_like "it has an error message", "The order could not be found"
+      end
+
+      context "when the order is not purchased" do
+        let!(:existing_order) { create(:setup_order, product: service, user: user, account: account) }
+
+        it_behaves_like "an order was not created"
+        it_behaves_like "it has an error message", "The order has not been purchased"
+      end
+
+      context "when the order is part of a different facility" do
+        let!(:existing_order) { create(:purchased_order, product: other_facility_product, user: user, account: account) }
+        let(:other_facility) { create(:setup_facility) }
+        let(:other_facility_product) { create(:setup_item, facility: other_facility) }
+
+        it_behaves_like "an order was not created"
+        it_behaves_like "it has an error message", "The order belongs to another facility"
+      end
+
+      context "when the user is wrong" do
+        let!(:existing_order) { create(:purchased_order, product: service, account: account, user: other_user) }
+        let(:other_user) do
+          create(:user, username: "otheruser") do |other_user|
+            other_user.account_users << AccountUser.new(account: account, user_role: AccountUser::ACCOUNT_PURCHASER, created_by: 0)
+          end
+        end
+
+        it_behaves_like "an order was not created"
+        it_behaves_like "it has an error message", "The user does not match the existing order's"
+      end
+    end
   end
 
   context "order key construction" do
@@ -439,6 +491,7 @@ RSpec.describe OrderRowImporter do
           "Order Date",
           "Fulfillment Date",
           "Note",
+          "Order",
           "Errors",
         ],
       )

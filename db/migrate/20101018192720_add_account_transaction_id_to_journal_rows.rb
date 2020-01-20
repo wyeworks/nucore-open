@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddAccountTransactionIdToJournalRows < ActiveRecord::Migration
+class AddAccountTransactionIdToJournalRows < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :journal_rows, :account_transaction_id, :integer, null: true

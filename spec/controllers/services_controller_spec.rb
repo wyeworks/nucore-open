@@ -32,7 +32,7 @@ RSpec.describe ServicesController do
 
     it_should_allow_operators_only do
       expect(assigns(:products)).to eq([@service])
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response).to render_template("admin/products/index")
     end
   end
@@ -129,7 +129,7 @@ RSpec.describe ServicesController do
     end
 
     it_should_allow_operators_only do
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response).to render_template("manage")
     end
   end

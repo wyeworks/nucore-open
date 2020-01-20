@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class UpdateVarcharFields < ActiveRecord::Migration
+class UpdateVarcharFields < ActiveRecord::Migration[4.2]
 
   def self.up
     change_column :facilities, :url_name,      :string, limit: 50,  null: false
