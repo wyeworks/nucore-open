@@ -103,6 +103,7 @@ group :development, :test do
   gem "factory_bot_rails", "< 5"
   gem "guard-rspec", require: false
   gem "guard-teaspoon", require: false
+  gem "parallel_tests"
   gem "pry-rails"
   gem "pry-byebug"
   gem "rspec-rails"

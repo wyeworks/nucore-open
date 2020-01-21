@@ -405,6 +405,8 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.19.1)
+    parallel_tests (2.30.1)
+      parallel
     paranoia (2.4.2)
       activerecord (>= 4.0, < 6.1)
     parser (2.7.0.2)
@@ -673,6 +675,7 @@ DEPENDENCIES
   oj
   paper_trail
   paperclip
+  parallel_tests
   paranoia
   poltergeist
   prawn
