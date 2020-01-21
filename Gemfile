@@ -100,7 +100,7 @@ end
 
 group :development, :test do
   gem "awesome_print"
-  gem "factory_bot_rails"
+  gem "factory_bot_rails", "< 5"
   gem "guard-rspec", require: false
   gem "guard-teaspoon", require: false
   gem "pry-rails"

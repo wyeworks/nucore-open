@@ -659,7 +659,7 @@ DEPENDENCIES
   dynamic_form
   ed25519 (>= 1.2, < 2.0)
   eye-patch
-  factory_bot_rails
+  factory_bot_rails (< 5)
   fine_uploader!
   fog-aws
   font-awesome-rails
