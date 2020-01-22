@@ -2,7 +2,7 @@
 
 This engine is for custom configuration of UMass's implementation.
 
-What it does:
+## What it does
 
 * UMass Branding
 * Speed Type Validation
@@ -39,3 +39,21 @@ There is a nightly job managed by UMass's IT team that does the following:
   1. Marks any speed types which have become inactive with `active = 0` and `date_removed`,
      as well as `error_desc`
   1. Inserts new speed types
+
+## SSL Certificates
+
+The SSL certificate we've installed is valid for the following hostnames. There are additional names not currently in use if we need to add additional servers later.
+
+```
+corum.umass.edu
+corum-test.umass.edu
+corum-dev.umass.edu
+ials-core-web-prod-01.it.umass.edu
+ials-core-web-prod-02.it.umass.edu
+ials-core-web-prod-03.it.umass.edu
+ials-core-web-prod-04.it.umass.edu
+ials-core-web-test-01.it.umass.edu
+ials-core-web-test-02.it.umass.edu
+ials-core-web-dev-01.it.umass.edu
+ials-core-web-dev-02.it.umass.edu
+```
