@@ -1,0 +1,6 @@
+en:
+  views:
+    account_search_result_mailer:
+      search_result:
+        subject: Account Search Results
+        body: Your export is ready. Please see the attached file.

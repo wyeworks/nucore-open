@@ -4,6 +4,7 @@ class FacilityAccountsController < ApplicationController
 
   include AccountSuspendActions
   include SearchHelper
+  include CsvEmailAction
 
   admin_tab     :all
   before_action :authenticate_user!
@@ -86,7 +87,7 @@ class FacilityAccountsController < ApplicationController
 
   # GET/POST /facilities/:facility_id/accounts/search_results
   def search_results
-    searcher = AccountSearcher.new(Account.for_facility(current_facility), params[:search_term])
+    searcher = AccountSearcher.new(params[:search_term], scope: Account.for_facility(current_facility))
     if searcher.valid?
       @accounts = searcher.results
 
@@ -96,7 +97,9 @@ class FacilityAccountsController < ApplicationController
           render layout: false
         end
         format.csv do
-          render csv: Reports::AccountSearchCsv.new(@accounts), filename: "#{current_facility}_account_search_results.csv"
+          send_csv_email_and_respond do |email|
+            AccountSearchResultMailer.search_result(email, params[:search_term], SerializableFacility.new(current_facility)).deliver_later
+          end
         end
       end
     else

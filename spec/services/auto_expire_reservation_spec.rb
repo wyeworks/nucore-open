@@ -7,7 +7,7 @@ RSpec.describe AutoExpireReservation, :time_travel do
 
   let(:action) { described_class.new }
   let(:order_detail) { reservation.order_detail }
-  let(:instrument) { create(:setup_instrument, min_reserve_mins: 1, relay: create(:relay_syna)) }
+  let(:instrument) { create(:setup_instrument, :timer, min_reserve_mins: 1, problems_resolvable_by_user: true) }
 
   describe "#perform" do
     context "a started reservation" do
@@ -39,8 +39,9 @@ RSpec.describe AutoExpireReservation, :time_travel do
         expect { action.perform }.to change { order_detail.reload.fulfilled_at }.to(reservation.reserve_end_at)
       end
 
-      it "triggers an email" do
+      it "triggers an email with a link to fix it themselves" do
         expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("click on the link below")
       end
     end
 
@@ -173,6 +174,11 @@ RSpec.describe AutoExpireReservation, :time_travel do
 
       it "sets the reservation fulfilled at time" do
         expect { action.perform }.to change { order_detail.reload.fulfilled_at }.to(reservation.reserve_end_at)
+      end
+
+      it "triggers a notification asking them to contact the facility" do
+        expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("let them know")
       end
     end
 

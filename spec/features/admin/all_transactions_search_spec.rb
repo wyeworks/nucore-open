@@ -22,7 +22,7 @@ RSpec.describe "All Transactions Search" do
 
     select accounts.first.account_list_item, from: "Payment Sources"
     click_button "Filter"
-    expect(page).to have_link(order_detail.id, href: manage_facility_order_order_detail_path(facility, orders.first, orders.first.order_details.first))
-    expect(page).not_to have_link(orders.second.order_details.first.id)
+    expect(page).to have_link(order_detail.id.to_s, href: manage_facility_order_order_detail_path(facility, orders.first, orders.first.order_details.first))
+    expect(page).not_to have_link(orders.second.order_details.first.id.to_s)
   end
 end

@@ -52,14 +52,18 @@ RSpec.describe "Fixing a problem reservation" do
   end
 
   describe "is both missing actuals and missing price policy" do
-    let(:reservation) { create(:purchased_reservation, product: instrument) }
+    let(:reservation) { create(:purchased_reservation, :yesterday, product: instrument) }
+
     before do
-      reservation.update(actual_start_at: reservation.reserve_start_at)
+      instrument.price_policies.destroy_all
+      reservation.update!(actual_start_at: reservation.reserve_start_at)
       MoveToProblemQueue.move!(reservation.order_detail, force: true)
     end
 
     it "can view the page" do
       expect(reservation.order_detail).to be_problem
+      expect(reservation.order_detail.problem_description_keys).to include(:missing_price_policy)
+      expect(reservation.order_detail.problem_description_keys).to include(:missing_actuals)
       visit edit_problem_reservation_path(reservation)
       expect(page).to have_field("Actual Duration")
     end

@@ -6,9 +6,9 @@ class AccountSearcher
 
   include SearchHelper
 
-  def initialize(original_scope, query)
-    @original_scope = original_scope
+  def initialize(query, scope: Account.all)
     @query = query
+    @scope = scope
   end
 
   def valid?
@@ -16,33 +16,41 @@ class AccountSearcher
   end
 
   def results
-    owner_where_clause = <<-end_of_where
-      (
-        LOWER(users.first_name) LIKE :term
-        OR LOWER(users.last_name) LIKE :term
-        OR LOWER(users.username) LIKE :term
-        OR LOWER(CONCAT(users.first_name, users.last_name)) LIKE :term
-      )
-      AND account_users.user_role = :acceptable_role
-      AND account_users.deleted_at IS NULL
-    end_of_where
+    matches_owner
+      .or(matches_field(:account_number, :description, :ar_number))
+      .order(:type, :account_number)
+  end
 
-    term = generate_multipart_like_search_term(@query)
+  private
 
-    # retrieve accounts matched on user for this facility
-    results = @original_scope.joins(account_users: :user).where(
-      owner_where_clause,
-      term: term,
-      acceptable_role: "Owner",
-    ).order("users.last_name, users.first_name")
+  def matches_owner
+    where_clause = <<~SQL
+      LOWER(users.first_name) LIKE :term
+      OR LOWER(users.last_name) LIKE :term
+      OR LOWER(users.username) LIKE :term
+      OR LOWER(CONCAT(users.first_name, users.last_name)) LIKE :term
+    SQL
 
-    # retrieve accounts matched on account_number for this facility
-    results += @original_scope.where(
-      "LOWER(account_number) LIKE ?", term)
-                        .order("type, account_number",
-                              )
+    base_scope.where(
+      where_clause,
+      term: like_term,
+    )
+  end
 
-    results.uniq
+  def matches_field(*fields)
+    fields.map do |field|
+      # All scopes must have equivalent structures for ActiveRecord's OR to work
+      base_scope.where(Account.arel_table[field].lower.matches(like_term))
+    end.inject(&:or)
+  end
+
+  # The @query, stripped of surrounding whitespace and wrapped in "%"
+  def like_term
+    generate_multipart_like_search_term(@query)
+  end
+
+  def base_scope
+    @scope.joins(account_users: :user).merge(AccountUser.owners)
   end
 
 end

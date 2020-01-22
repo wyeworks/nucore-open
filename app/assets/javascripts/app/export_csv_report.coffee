@@ -1,8 +1,10 @@
-class AccountTransactionReport
-  constructor: (@$element) ->
+# Requires a data-attribute `form` which is a selector for the search form to submit
+# The form requires an email and a format field (hidden).
+class ExportCsvReport
+  constructor: (@selector) ->
 
   init: ->
-    @$element.click @exportAllClicked
+    $(document).on "click", @selector, @exportAllClicked
 
   exportAllClicked: (event) ->
     event.preventDefault()
@@ -32,4 +34,4 @@ class AccountTransactionReport
       $emailField.prop('disabled', true)
 
 $ ->
-  new AccountTransactionReport($('.js--exportSearchResults')).init()
+  new ExportCsvReport('.js--exportSearchResults').init()

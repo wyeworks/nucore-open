@@ -39,7 +39,7 @@ module Reports
     end
 
     def show_facilities(account)
-      account.facilities.any? ? account.facilities.join(", ") : I18n.t("shared.all")
+      account.facilities.present? ? account.facilities.join(", ") : I18n.t("shared.all")
     end
   end
 

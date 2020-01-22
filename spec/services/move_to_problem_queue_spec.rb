@@ -28,11 +28,25 @@ RSpec.describe MoveToProblemQueue do
     describe "an order failing because it is missing actuals" do
       before { expect(order_detail).to receive(:requires_but_missing_actuals?).and_return(true) }
 
-      it "triggers the notify with resolution email" do
-        expect(ProblemOrderMailer).to receive(:notify_user_with_resolution_option).with(order_detail).and_return(mailer)
+      describe "when it has a start at" do
+        before { reservation.actual_start_at = 1.day.ago }
 
-        described_class.move!(order_detail)
+        it "triggers the notify with resolution email" do
+          expect(ProblemOrderMailer).to receive(:notify_user_with_resolution_option).with(order_detail).and_return(mailer)
+
+          described_class.move!(order_detail)
+        end
       end
+
+      describe "when it is missing start at" do
+        before { reservation.actual_start_at = nil }
+        it "triggers the notify with resolution email" do
+          expect(ProblemOrderMailer).to receive(:notify_user).with(order_detail).and_return(mailer)
+
+          described_class.move!(order_detail)
+        end
+      end
+
     end
   end
 

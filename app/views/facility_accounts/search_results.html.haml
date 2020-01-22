@@ -3,5 +3,5 @@
 
 - else
   .pull-right
-    = link_to text("reports.export_as_csv"), format: :csv, search_term: params[:search_term]
+    = link_to text('reports.export_as_csv'), url_for(format: :csv), class: 'js--exportSearchResults pull-right', data: { form: '.search_form' }
   = render "account_table"
