@@ -1,8 +1,19 @@
 email:
-  from: "nucore-noreply@nucore.stage.tablexi.com"
   fake:
     enabled: true
-    to: ["mak@tablexi.com", "jason@tablexi.com", "john.newfry@tablexi.com"]
-    whitelist: ["avinard@umass.edu", "andrew.scott@umass.edu", "stephen.battisti@umass.edu", "stevens@umass.edu"]
+    to:
+      - mak@tablexi.com
+      - jason@tablexi.com
+      - stevens@umass.edu
+    whitelist:
+      - aburnsid@umass.edu # Amy Burnside - Flow Cytometry Director
+      - asburnside@comcast.net # Amy's personal account for testing
+      - aeribbe@umass.edu # Alex Ribbe - Electron Microscopy Director
+      - andrew.scott@umass.edu
+      - arshpatel@umass.edu # Arsh - Amy's intern/student
+      - avinard@umass.edu # Andrew Vinard
+      - charlene.coleman@umass.edu # Billing
+      - stephen.battisti@umass.edu # IT
+      - stevens@umass.edu # Bob Stevens
 saml:
   certificate_file: config/saml-certificate.p12
