@@ -15,7 +15,7 @@ accounts:
 
 financial:
   # in the format MM-DD
-  fiscal_year_begins: 09-01
+  fiscal_year_begins: 07-01
   journal_format:
     xls: true
     csv: true
