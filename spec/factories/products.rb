@@ -126,13 +126,17 @@ FactoryBot.define do
   end
 
   factory :setup_instrument, class: Instrument, parent: :setup_product do
+    transient do
+      charge_for { "reservation" }
+    end
+
     reserve_interval { 1 }
 
     schedule { create :schedule, facility: facility }
 
-    after(:create) do |product|
+    after(:create) do |product, evaluator|
       create :schedule_rule, product: product
-      create :instrument_price_policy, price_group: product.facility.price_groups.last, usage_rate: 1, product: product
+      create :instrument_price_policy, price_group: product.facility.price_groups.last, usage_rate: 1, product: product, charge_for: evaluator.charge_for
       product.reload
     end
 
