@@ -32,7 +32,7 @@ def do_request(params = nil)
   if @method == :xhr
     get @action, params: params, xhr: true
   else
-    method(@method).call(@action, params: params)
+    method(@method).call(@action, params: params.to_h)
   end
 end
 

@@ -1,13 +1,20 @@
 defaults: &defaults
   adapter: oracle_enhanced
-  database: (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORCLCDB.localdomain)))
+  database: //localhost:1521/ORCLCDB.localdomain
+  # Alternative format:
+  # database: (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORCLCDB.localdomain)))
   encoding: utf8
   password: password
+  # This value must be less than the Oracle parameter of `open_cursors`. The default in
+  # the adapter is 1000. The docker image we use has a default of 300. At NU, stage
+  # has 300 and production has 500.
+  # https://github.com/rsim/oracle-enhanced/#upgrade-rails-50-or-older-version-to-rails-51
+  statement_limit: 250
 
 development:
   <<: *defaults
-  username: "c##nucore_open_development"
+  username: "c##nucore_nu_development"
 
 test:
   <<: *defaults
-  username: "c##nucore_open_test"
+  username: "c##nucore_nu_test"

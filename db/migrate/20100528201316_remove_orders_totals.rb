@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveOrdersTotals < ActiveRecord::Migration
+class RemoveOrdersTotals < ActiveRecord::Migration[4.2]
 
   def self.up
     remove_column :orders, :total_cost

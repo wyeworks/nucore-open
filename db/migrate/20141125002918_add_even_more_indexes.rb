@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddEvenMoreIndexes < ActiveRecord::Migration
+class AddEvenMoreIndexes < ActiveRecord::Migration[4.2]
 
   def change
     add_index :orders, :user_id

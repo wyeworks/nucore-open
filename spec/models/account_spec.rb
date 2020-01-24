@@ -310,7 +310,8 @@ RSpec.describe Account do
 
       context "bundles" do
         before :each do
-          @item2 = @facility.items.create(FactoryBot.attributes_for(:item, account: 78_960, facility_account_id: @facility_account.id))
+          account_number = Settings.accounts.product_default
+          @item2 = @facility.items.create(FactoryBot.attributes_for(:item, account: account_number, facility_account_id: @facility_account.id))
           @bundle = @facility.bundles.create(FactoryBot.attributes_for(:bundle, facility_account_id: @facility_account.id))
           [@item, @item2].each do |item|
             price_policy = item.item_price_policies.create(FactoryBot.attributes_for(:item_price_policy, price_group: @price_group))

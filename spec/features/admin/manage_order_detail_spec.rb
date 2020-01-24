@@ -109,7 +109,6 @@ RSpec.describe "Managing an order detail" do
     end
 
     it "cannot do anything", :js do
-      save_and_open_screenshot
       expect(page).to have_field("Reconciliation Note", with: "I was reconciled", disabled: true)
       expect(page).not_to have_button("Save")
     end

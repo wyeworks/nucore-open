@@ -18,7 +18,7 @@
           %tr
             %td= @errors[a.id] ? radio_button("", "account_id", a.id, disabled: "disabled") : radio_button("", "account_id", a.id)
             %td
-              %label.normal-weight{for: "_account_id_#{a.id}"}= a
+              %label.normal-weight{for: "account_id_#{a.id}"}= a
               - if @errors[a.id]
                 %p.warning= @errors[a.id]
             %td= "#{a.owner_user}"

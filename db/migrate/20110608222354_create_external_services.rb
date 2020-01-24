@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateExternalServices < ActiveRecord::Migration
+class CreateExternalServices < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :external_services do |t|

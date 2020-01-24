@@ -12,6 +12,7 @@ module OrderDetails
       [
         order_detail.problem?,
         order_detail.requires_but_missing_actuals?,
+        order_detail.time_data&.actual_start_at.present?,
         order_detail.product.problems_resolvable_by_user?,
       ].all?
     end

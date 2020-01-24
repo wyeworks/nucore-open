@@ -105,7 +105,7 @@ RSpec.describe Reports::GeneralReportsController do
 
       it "should search" do
         do_request
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "should search search unfulfilled" do
@@ -246,7 +246,7 @@ RSpec.describe Reports::GeneralReportsController do
   end
 
   def assert_report_init(_label)
-    expect(response).to be_success
+    expect(response).to be_successful
     expect(assigns(:total_quantity)).to be_kind_of(Integer)
 
     rows = assigns(:rows)

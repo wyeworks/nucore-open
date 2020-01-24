@@ -66,7 +66,7 @@ RSpec.describe "Viewing Occupancies" do
 
         expect(current_path).to eq(show_problems_facility_occupancies_path(facility))
         # TODO: Update specs after page is updated
-        expect(page).to have_link(problem_occupancy.order_detail.id)
+        expect(page).to have_link(problem_occupancy.order_detail.id.to_s)
         expect(page).to have_content(problem_occupancy.user.full_name)
         expect(page).to have_content(problem_occupancy.secure_room.name)
         expect(page).to have_content("Missing Exit")
@@ -102,7 +102,7 @@ RSpec.describe "Viewing Occupancies" do
 
         expect(order_detail.reload).not_to be_problem
         expect(current_path).to eq(show_problems_facility_occupancies_path(facility))
-        expect(page).not_to have_link(occupancy.order_detail.id)
+        expect(page).not_to have_link(occupancy.order_detail.id.to_s)
       end
     end
   end

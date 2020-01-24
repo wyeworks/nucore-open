@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlterJournalRowsRemoveNu < ActiveRecord::Migration
+class AlterJournalRowsRemoveNu < ActiveRecord::Migration[4.2]
 
   def self.up
     if NUCore::Database.oracle?

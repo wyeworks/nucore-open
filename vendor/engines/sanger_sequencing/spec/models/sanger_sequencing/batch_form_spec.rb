@@ -67,7 +67,7 @@ RSpec.describe SangerSequencing::BatchForm do
 
       it "is not valid" do
         expect(form).to be_invalid
-        expect(form.errors).to be_added(:submission_ids, :submission_part_of_other_batch, id: submission.id)
+        expect(form.errors).to be_added(:submission_ids, :submission_part_of_other_batch, id: submission.id.to_s)
       end
     end
 
@@ -105,7 +105,7 @@ RSpec.describe SangerSequencing::BatchForm do
 
         it "is invalid" do
           expect(form).to be_invalid
-          expect(form.errors).to be_added(:submission_ids, :invalid_facility, id: purchased_submission2.id)
+          expect(form.errors).to be_added(:submission_ids, :invalid_facility, id: purchased_submission2.id.to_s)
         end
       end
     end

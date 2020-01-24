@@ -16,8 +16,24 @@ services:
       - MYSQL_HOST=db
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root
+      - SMTP_HOST=mailcatcher
     tty: true
     stdin_open: true
+  delayed_job:
+    build: .
+    command: bundle exec rake jobs:work
+    depends_on:
+      - app
+    volumes:
+      - .:/app
+      - gem_cache:/gems
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - SMTP_HOST=mailcatcher
+    stdin_open: true
+    tty: true
   db:
     image: mariadb:10.2.11
     environment:
@@ -28,7 +44,16 @@ services:
       - db-data:/var/lib/mysql
     logging:
       driver: none
-
+  mailcatcher:
+    build: .
+    command: bash -c "gem install mailcatcher && mailcatcher --ip 0.0.0.0 --no-quit -f"
+    ports:
+      - "1080:1080"
+    volumes:
+      - .:/app
+      - gem_cache:/gems
+    tty: true
+    stdin_open: true
 volumes:
   db-data:
     driver: local

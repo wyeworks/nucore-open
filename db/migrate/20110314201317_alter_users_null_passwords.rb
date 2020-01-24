@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlterUsersNullPasswords < ActiveRecord::Migration
+class AlterUsersNullPasswords < ActiveRecord::Migration[4.2]
 
   def self.up
     change_column(:users, :encrypted_password, :string, null: true, default: nil)

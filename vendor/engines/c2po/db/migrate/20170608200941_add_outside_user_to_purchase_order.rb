@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddOutsideUserToPurchaseOrder < ActiveRecord::Migration
+class AddOutsideUserToPurchaseOrder < ActiveRecord::Migration[4.2]
 
   def change
     change_table :accounts do |t|

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddForeignKeys < ActiveRecord::Migration
+class AddForeignKeys < ActiveRecord::Migration[4.2]
 
   def change
     add_index :notifications, [:subject_id, :subject_type]

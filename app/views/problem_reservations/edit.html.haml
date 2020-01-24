@@ -25,7 +25,7 @@
           = f.label :actual_end_date
           .row
             .span3
-              = f.input :actual_end_date, input_html: { class: "datepicker__data", data: { min_date: f.object.actual_start_at&.iso8601 } }, label: false
+              = f.input :actual_end_date, input_html: { class: "datepicker__data", data: { min_date: f.object.actual_start_at&.beginning_of_day&.iso8601 } }, label: false
             .span4
               = time_select f, :actual_end, { minute_step: 1 }
 

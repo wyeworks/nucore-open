@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ConvertExternalServiceReceiverData < ActiveRecord::Migration
+class ConvertExternalServiceReceiverData < ActiveRecord::Migration[4.2]
 
   def up
     ExternalServiceReceiver.find_each do |receiver|

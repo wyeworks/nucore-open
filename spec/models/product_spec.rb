@@ -169,7 +169,7 @@ RSpec.describe Product do
       it "does not allow a non-numeric" do
         product = build(:product, account: "aaaa")
         expect(product).to be_invalid
-        expect(product.errors).to be_added(:account, :not_a_number)
+        expect(product.errors).to be_added(:account, :not_a_number, value: "aaaa")
       end
     end
 

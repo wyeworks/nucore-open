@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateTrainingRequests < ActiveRecord::Migration
+class CreateTrainingRequests < ActiveRecord::Migration[4.2]
 
   def change
     create_table :training_requests do |t|

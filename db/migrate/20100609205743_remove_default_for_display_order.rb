@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveDefaultForDisplayOrder < ActiveRecord::Migration
+class RemoveDefaultForDisplayOrder < ActiveRecord::Migration[4.2]
 
   def self.up
     remove_column :price_groups, :display_order

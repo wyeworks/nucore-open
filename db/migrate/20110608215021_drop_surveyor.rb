@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DropSurveyor < ActiveRecord::Migration
+class DropSurveyor < ActiveRecord::Migration[4.2]
 
   def self.up
     drop_table :answers

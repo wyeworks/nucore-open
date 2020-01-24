@@ -20,7 +20,7 @@ class OrderDetailObserver < ActiveRecord::Observer
   end
 
   def after_save(order_detail)
-    changes = order_detail.changes
+    changes = order_detail.saved_changes
     # check to see if #before_save switch order ids on us
     if changes.key?("order_id") && changes["order_id"][0].present?
       merge_order = Order.find changes["order_id"][0].to_i

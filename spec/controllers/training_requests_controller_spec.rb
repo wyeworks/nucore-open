@@ -28,7 +28,7 @@ RSpec.describe TrainingRequestsController, feature_setting: { training_requests:
 
       it "gives access" do
         do_request
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "has the product" do

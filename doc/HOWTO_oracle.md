@@ -87,7 +87,7 @@ Your output should show something like this:
 Connected to:
 Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
 
-SQL> 
+SQL>
 ```
 
 ## Setting up the Database
@@ -114,11 +114,7 @@ SQL>
 1. Start a bash shell in the `oracle` container:
 
     ```
-    docker exec \
-      --interactive \
-      --tty \
-      oracle \
-      bash
+    docker exec -it oracle bash
     ```
 
 1. Run the following command to ensure that the file you copied is available in the `DATA_PUMP_LOCATION` configured on the server:
@@ -136,5 +132,6 @@ impdp \
   system/Oradoc_db1 \
   DIRECTORY=DATA_PUMP_DIR \
   DUMPFILE=expdp_schema_COR1PRD_201810021913.dmp \
-  REMAP_SCHEMA=bc_nucore:nucore_open_development
+  REMAP_SCHEMA="bc_nucore:c##nucore_open_development"
+  REMAP_TABLESPACE="bc_nucore:USERS"
 ```

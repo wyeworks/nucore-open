@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateCertificates < ActiveRecord::Migration
+class CreateCertificates < ActiveRecord::Migration[4.2]
 
   def change
     create_table :nu_safety_certificates do |t|

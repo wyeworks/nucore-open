@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateValidationConditions < ActiveRecord::Migration
+class CreateValidationConditions < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :validation_conditions do |t|

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddAcceptsMultiAddToFacilities < ActiveRecord::Migration
+class AddAcceptsMultiAddToFacilities < ActiveRecord::Migration[4.2]
 
   def self.up
     change_table :facilities do |t|

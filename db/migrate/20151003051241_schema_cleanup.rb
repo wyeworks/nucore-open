@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SchemaCleanup < ActiveRecord::Migration
+class SchemaCleanup < ActiveRecord::Migration[4.2]
 
   def up
     change_column :affiliates, :created_at, :datetime, null: false

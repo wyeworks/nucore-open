@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChangeVestalVersions < ActiveRecord::Migration
+class ChangeVestalVersions < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :versions, :reason_for_update, :string

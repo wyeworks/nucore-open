@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CleanDuplicateReservations < ActiveRecord::Migration
+class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
 
   class Reservation < ActiveRecord::Base
   end

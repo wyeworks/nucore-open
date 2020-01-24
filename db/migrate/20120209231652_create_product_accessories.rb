@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateProductAccessories < ActiveRecord::Migration
+class CreateProductAccessories < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :product_accessories do |t|

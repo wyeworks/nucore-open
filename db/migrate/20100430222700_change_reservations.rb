@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChangeReservations < ActiveRecord::Migration
+class ChangeReservations < ActiveRecord::Migration[4.2]
 
   def self.up
     change_table :reservations do |t|

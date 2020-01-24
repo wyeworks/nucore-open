@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddOrderDetailToOccupancy < ActiveRecord::Migration
+class AddOrderDetailToOccupancy < ActiveRecord::Migration[4.2]
 
   def change
     add_column :secure_rooms_occupancies, :order_detail_id, :integer

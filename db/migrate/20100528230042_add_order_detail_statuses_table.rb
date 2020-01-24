@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddOrderDetailStatusesTable < ActiveRecord::Migration
+class AddOrderDetailStatusesTable < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :order_detail_statuses do |t|

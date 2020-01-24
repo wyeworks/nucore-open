@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RebuildFilesTable < ActiveRecord::Migration
+class RebuildFilesTable < ActiveRecord::Migration[4.2]
 
   def self.up
     drop_table :files

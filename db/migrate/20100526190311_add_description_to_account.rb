@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddDescriptionToAccount < ActiveRecord::Migration
+class AddDescriptionToAccount < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :accounts, :description, :string, limit: 200, null: true

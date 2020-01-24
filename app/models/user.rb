@@ -8,16 +8,16 @@ class User < ApplicationRecord
   # ldap_authenticatable is included via a to_prepare hook if ldap is enabled
   devise :database_authenticatable, :encryptable, :trackable, :recoverable
 
-  has_many :accounts, through: :account_users
   has_many :account_users, -> { where(deleted_at: nil) }
+  has_many :accounts, through: :account_users
   has_many :orders
   has_many :order_details, through: :orders
   has_many :reservations, through: :order_details
   has_many :price_group_members, class_name: "UserPriceGroupMember", dependent: :destroy
   has_many :price_groups, -> { SettingsHelper.feature_on?(:user_based_price_groups) ? distinct : none }, through: :price_group_members
   has_many :product_users
-  has_many :notifications
   has_many :products, through: :product_users
+  has_many :notifications
   has_many :assigned_order_details, class_name: "OrderDetail", foreign_key: "assigned_user_id"
   has_many :user_roles, -> { extending UserRole::AssociationExtension }, dependent: :destroy
   has_many :facilities, through: :user_roles
@@ -51,7 +51,7 @@ class User < ApplicationRecord
 
   scope :with_global_roles, -> { where(id: UserRole.global.select("distinct user_id")) }
   scope :with_recent_orders, ->(facility) { distinct.joins(:order_details).merge(OrderDetail.recent.for_facility(facility)) }
-  scope :sort_last_first, -> { order("LOWER(users.last_name), LOWER(users.first_name)") }
+  scope :sort_last_first, -> { order(Arel.sql("LOWER(users.last_name), LOWER(users.first_name)")) }
 
   # finds all user role mappings for a this user in a facility
   def facility_user_roles(facility)

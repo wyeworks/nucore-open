@@ -9,8 +9,8 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  database: nucore_umass_development
+  database: nucore_open_development<%= ENV['TEST_ENV_NUMBER'] %>
 
 test:
   <<: *defaults
-  database: nucore_umass_test
+  database: nucore_open_test<%= ENV['TEST_ENV_NUMBER'] %>

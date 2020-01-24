@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddIndexesToOrderDetails < ActiveRecord::Migration
+class AddIndexesToOrderDetails < ActiveRecord::Migration[4.2]
 
   def change
     add_index :order_details, :assigned_user_id

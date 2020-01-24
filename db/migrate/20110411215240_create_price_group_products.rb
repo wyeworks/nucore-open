@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreatePriceGroupProducts < ActiveRecord::Migration
+class CreatePriceGroupProducts < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :price_group_products do |t|

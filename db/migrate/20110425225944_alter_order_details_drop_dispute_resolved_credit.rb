@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlterOrderDetailsDropDisputeResolvedCredit < ActiveRecord::Migration
+class AlterOrderDetailsDropDisputeResolvedCredit < ActiveRecord::Migration[4.2]
 
   def self.up
     details = OrderDetail.where("dispute_resolved_credit IS NOT NULL")

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddTypeToReservations < ActiveRecord::Migration
+class AddTypeToReservations < ActiveRecord::Migration[4.2]
 
   class Reservation < ActiveRecord::Base
   end

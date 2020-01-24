@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RenameFilesTable < ActiveRecord::Migration
+class RenameFilesTable < ActiveRecord::Migration[4.2]
 
   def self.up
     rename_table :files, :file_uploads

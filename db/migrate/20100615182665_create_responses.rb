@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateResponses < ActiveRecord::Migration
+class CreateResponses < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :responses do |t|

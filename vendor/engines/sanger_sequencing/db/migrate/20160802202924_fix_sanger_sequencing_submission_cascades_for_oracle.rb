@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FixSangerSequencingSubmissionCascadesForOracle < ActiveRecord::Migration
+class FixSangerSequencingSubmissionCascadesForOracle < ActiveRecord::Migration[4.2]
 
   def change
     # Oracle does not support on_update so we need to remove and re-add it to keep

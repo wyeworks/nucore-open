@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DropJournalRowsReference < ActiveRecord::Migration
+class DropJournalRowsReference < ActiveRecord::Migration[4.2]
 
   def up
     remove_column :journal_rows, :reference

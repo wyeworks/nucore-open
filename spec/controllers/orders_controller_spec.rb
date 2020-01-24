@@ -1058,7 +1058,7 @@ RSpec.describe OrdersController do
       end
 
       it_should_allow :staff, "to show links for making a reservation for instruments" do
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -1096,7 +1096,7 @@ RSpec.describe OrdersController do
       it "is not validated if there is no reservation" do
         maybe_grant_always_sign_in :director
         do_request
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns[:order]).not_to be_validated
         expect(assigns[:order]).to eq(@order)
         expect(assigns[:order].order_details.first.validate_for_purchase).to eq("Please make a reservation")

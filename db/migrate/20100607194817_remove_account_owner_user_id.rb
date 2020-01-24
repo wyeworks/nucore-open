@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveAccountOwnerUserId < ActiveRecord::Migration
+class RemoveAccountOwnerUserId < ActiveRecord::Migration[4.2]
 
   def self.up
     accounts = Account.all

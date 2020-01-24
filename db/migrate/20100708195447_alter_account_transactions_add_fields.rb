@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AlterAccountTransactionsAddFields < ActiveRecord::Migration
+class AlterAccountTransactionsAddFields < ActiveRecord::Migration[4.2]
 
   def self.up
     execute "DELETE FROM account_transactions"

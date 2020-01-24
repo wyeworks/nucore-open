@@ -25,7 +25,7 @@ class MostRecentlyUsedSearcher
   private
 
   def recent_order_details
-    user.order_details.ordered_at.order("MAX(ordered_at) DESC")
+    user.order_details.ordered_at.order(Arel.sql("MAX(ordered_at) DESC"))
   end
 
 end

@@ -2,8 +2,8 @@
 
 class Bundle < Product
 
-  has_many :products, through: :bundle_products
   has_many :bundle_products, foreign_key: :bundle_product_id
+  has_many :products, through: :bundle_products
 
   cattr_accessor(:bundleable_product_types) { ["Instrument", "Item", "Service", "TimedService"] }
 

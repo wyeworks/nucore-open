@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddIndexToResponseSets < ActiveRecord::Migration
+class AddIndexToResponseSets < ActiveRecord::Migration[4.2]
 
   def self.up
     add_index(:response_sets, :access_code, name: "response_sets_ac_idx")

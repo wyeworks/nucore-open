@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RenameOrderDetailStatusesUpdatedFieldsToCreated < ActiveRecord::Migration
+class RenameOrderDetailStatusesUpdatedFieldsToCreated < ActiveRecord::Migration[4.2]
 
   def self.up
     rename_column :order_detail_statuses, :updated_by, :created_by

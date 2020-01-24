@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateAffiliates < ActiveRecord::Migration
+class CreateAffiliates < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :affiliates do |t|

@@ -16,7 +16,7 @@ class FacilityAccountsReconciliationController < ApplicationController
   def index
     order_details = unreconciled_details
                     .joins(:account)
-                    .where(accounts: { type: account_class })
+                    .where(accounts: { type: account_class.to_s })
                     .includes(:order, :product, :statement)
 
     @search_form = TransactionSearch::SearchForm.new(params[:search])

@@ -12,7 +12,7 @@ RSpec.shared_examples_for "a purchasable product" do
     end
 
     it "responds with a success" do
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "renders the show page" do

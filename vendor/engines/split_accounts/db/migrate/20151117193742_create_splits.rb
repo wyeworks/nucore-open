@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateSplits < ActiveRecord::Migration
+class CreateSplits < ActiveRecord::Migration[4.2]
 
   def up
     create_table :splits do |t|

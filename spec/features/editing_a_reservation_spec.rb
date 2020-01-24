@@ -2,6 +2,7 @@
 
 require "rails_helper"
 
+# TODO: Capybara deprecation
 RSpec.describe "Editing your own reservation" do
 
   include DateHelper
@@ -27,7 +28,7 @@ RSpec.describe "Editing your own reservation" do
 
     it "allows me to move and shorten the reservation" do
       visit reservations_path
-      click_link reservation
+      click_link reservation.to_s
 
       fill_in "Reserve Start", with: format_usa_date(reservation.reserve_start_at + 1.hour)
       fill_in "Reserve End", with: format_usa_date(reservation.reserve_end_at + 1.hour)
@@ -39,7 +40,7 @@ RSpec.describe "Editing your own reservation" do
 
     it "allows me to move the reservation into the lock window" do
       visit reservations_path
-      click_link reservation
+      click_link reservation.to_s
 
       fill_in "Reserve Start", with: format_usa_date(reservation.reserve_start_at - 1.day)
       fill_in "Reserve End", with: format_usa_date(reservation.reserve_end_at - 1.day)
@@ -55,7 +56,7 @@ RSpec.describe "Editing your own reservation" do
 
     it "prevents me from changing the start date, allows me to extend the reservation, but not shorten it" do
       visit reservations_path
-      click_link reservation
+      click_link reservation.to_s
 
       expect(page).to have_field("Reserve Start", disabled: true)
       fill_in "Duration", with: "90"
@@ -64,7 +65,7 @@ RSpec.describe "Editing your own reservation" do
       expect(page).to have_content("My Reservations")
       expect(reservation.reload.duration_mins).to eq(90)
 
-      click_link reservation
+      click_link reservation.to_s
       fill_in "Duration", with: "75"
       click_button "Save"
 
@@ -77,7 +78,7 @@ RSpec.describe "Editing your own reservation" do
 
     it "prevents me from changing the start date, allows me to extend the reservation, but not shorten it" do
       visit reservations_path
-      click_link reservation
+      click_link reservation.to_s
 
       expect(page).to have_field("Reserve Start", disabled: true)
       fill_in "Duration", with: "90"
@@ -86,7 +87,7 @@ RSpec.describe "Editing your own reservation" do
       expect(page).to have_content("My Reservations")
       expect(reservation.reload.duration_mins).to eq(90)
 
-      click_link reservation
+      click_link reservation.to_s
       fill_in "Duration", with: "75"
       click_button "Save"
 

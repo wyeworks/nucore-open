@@ -19,7 +19,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
 
     it "sets the product and renders" do
       expect(assigns(:product)).to eq(product)
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response).to render_template("schedule_rules/index")
     end
   end
@@ -32,7 +32,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
 
     it "sets the product and renders" do
       expect(assigns(:product)).to eq(product)
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response).to render_template("schedule_rules/new")
     end
 

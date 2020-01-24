@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateFacilityAccounts < ActiveRecord::Migration
+class CreateFacilityAccounts < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :facility_accounts do |t|

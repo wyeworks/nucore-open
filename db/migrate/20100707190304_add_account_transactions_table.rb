@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddAccountTransactionsTable < ActiveRecord::Migration
+class AddAccountTransactionsTable < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table   :account_transactions do |t|

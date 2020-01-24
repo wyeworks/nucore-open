@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveReferenceFromAccountTransactions < ActiveRecord::Migration
+class RemoveReferenceFromAccountTransactions < ActiveRecord::Migration[4.2]
 
   def self.up
     remove_column :account_transactions, :reference

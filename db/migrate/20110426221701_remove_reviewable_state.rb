@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveReviewableState < ActiveRecord::Migration
+class RemoveReviewableState < ActiveRecord::Migration[4.2]
 
   def self.up
     reviewable = OrderStatus.find_by(name: "Reviewable")

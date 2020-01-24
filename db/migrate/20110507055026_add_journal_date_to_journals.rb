@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddJournalDateToJournals < ActiveRecord::Migration
+class AddJournalDateToJournals < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :journals, :journal_date, :datetime, null: true

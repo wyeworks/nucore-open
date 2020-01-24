@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChangeNoteLimitForOrderDetails < ActiveRecord::Migration
+class ChangeNoteLimitForOrderDetails < ActiveRecord::Migration[4.2]
 
   def up
     add_column :order_details, :temp_note, :text

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddSubsidies < ActiveRecord::Migration
+class AddSubsidies < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :price_policies, :usage_subsidy, :decimal, precision: 9, scale: 2

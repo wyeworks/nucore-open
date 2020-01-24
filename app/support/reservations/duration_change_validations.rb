@@ -10,8 +10,8 @@ class Reservations::DurationChangeValidations
   include ActiveModel::Validations::Callbacks
 
   attr_reader :reservation
-  validate :start_time_not_changed, unless: "reservation.in_cart?"
-  validate :duration_not_shortened, unless: "reservation.in_cart?"
+  validate :start_time_not_changed, unless: -> { reservation.in_cart? }
+  validate :duration_not_shortened, unless: -> { reservation.in_cart? }
 
   after_validation :copy_errors!
 

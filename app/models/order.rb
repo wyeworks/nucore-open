@@ -12,7 +12,7 @@ class Order < ApplicationRecord
 
   validates_presence_of :user_id, :created_by
 
-  after_save :update_order_detail_accounts, if: :account_id_changed?
+  after_save :update_order_detail_accounts, if: :saved_change_to_account_id?
 
   scope :for_user, ->(user) { where(user_id: user.id, state: "purchased").where.not(ordered_at: nil) }
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddFacilityAccountToAccountTransactions < ActiveRecord::Migration
+class AddFacilityAccountToAccountTransactions < ActiveRecord::Migration[4.2]
 
   def self.up
     change_table :account_transactions do |t|

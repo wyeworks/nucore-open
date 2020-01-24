@@ -26,7 +26,7 @@ RSpec.describe GlobalUserRolesController do
       context "as a global administrator" do
         let(:user) { create(:user, :administrator) }
 
-        it { expect(response).to be_success }
+        it { expect(response).to be_successful }
       end
     end
   end

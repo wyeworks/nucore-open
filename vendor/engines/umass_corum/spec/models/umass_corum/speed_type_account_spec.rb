@@ -19,19 +19,19 @@ RSpec.describe UmassCorum::SpeedTypeAccount do
     it "is invalid if it is blank" do
       account.account_number = "...."
       expect(account).to be_invalid
-      expect(account.errors).to be_added(:account_number, :invalid)
+      expect(account.errors[:account_number]).to include("must be a six digit number")
     end
 
     it "is invalid if it is not the right length" do
       account.account_number = "123"
       expect(account).to be_invalid
-      expect(account.errors).to be_added(:account_number, :invalid)
+      expect(account.errors[:account_number]).to include("must be a six digit number")
     end
 
     it "is invalid if there is a leter in it" do
       account.account_number = "A23456"
       expect(account).to be_invalid
-      expect(account.errors).to be_added(:account_number, :invalid)
+      expect(account.errors[:account_number]).to include("must be a six digit number")
     end
   end
 

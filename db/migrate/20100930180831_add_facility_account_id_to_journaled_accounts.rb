@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddFacilityAccountIdToJournaledAccounts < ActiveRecord::Migration
+class AddFacilityAccountIdToJournaledAccounts < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :journaled_accounts, :facility_account_id, :integer, null: false

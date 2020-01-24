@@ -28,7 +28,6 @@ class JournalRowBuilder
     @journal_rows = []
     @journaled_facility_ids = Set.new
     @product_recharges = {}
-    @recharge_enabled = SettingsHelper.feature_on?(:recharge_accounts)
   end
 
   # Builds journal rows based the order details coming back from the Transformer
@@ -155,11 +154,9 @@ class JournalRowBuilder
   # If recharge_enabled, then sum up the product_recharges by product so each
   # product recharge can later be added as an additional journal_row.
   def update_product_recharges(order_detail)
-    if recharge_enabled
-      product_id = order_detail.product_id
-      product_recharges[product_id] ||= 0
-      product_recharges[product_id] += order_detail.total
-    end
+    product_id = order_detail.product_id
+    product_recharges[product_id] ||= 0
+    product_recharges[product_id] += order_detail.total
   end
 
   # When you’re creating a journal, for a single order detail you’ll have one

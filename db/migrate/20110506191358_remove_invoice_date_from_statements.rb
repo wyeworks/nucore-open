@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveInvoiceDateFromStatements < ActiveRecord::Migration
+class RemoveInvoiceDateFromStatements < ActiveRecord::Migration[4.2]
 
   def self.up
     statements = Statement.all

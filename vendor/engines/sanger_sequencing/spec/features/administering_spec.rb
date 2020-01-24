@@ -31,7 +31,7 @@ RSpec.describe "Sanger Sequencing Administration" do
       describe "clicking through to show" do
         before do
           purchased_submission.samples.create(customer_sample_id: "TESTING 123")
-          click_link purchased_submission.id
+          click_link purchased_submission.id.to_s
         end
 
         it "has the sample on the page" do

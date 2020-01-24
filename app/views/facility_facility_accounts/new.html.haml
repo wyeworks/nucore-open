@@ -8,7 +8,7 @@
   = javascript_include_tag "accounts.js"
 
 %h2= text("admin.shared.add", model: FacilityAccount.model_name.human)
-= simple_form_for @facility_account, url: facility_facility_accounts_path do |f|
+= simple_form_for @facility_account, url: facility_facility_accounts_path(current_facility) do |f|
   = f.error_messages
   = render "facility_account_fields", f: f
   %ul.inline

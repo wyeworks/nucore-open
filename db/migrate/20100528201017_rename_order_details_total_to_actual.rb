@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RenameOrderDetailsTotalToActual < ActiveRecord::Migration
+class RenameOrderDetailsTotalToActual < ActiveRecord::Migration[4.2]
 
   def self.up
     rename_column :order_details, :total_cost, :actual_cost

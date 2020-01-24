@@ -293,7 +293,7 @@ RSpec.describe OrderDetailsController do
 
         it "has access to the edit page" do
           perform_edit
-          expect(response).to be_success
+          expect(response).to be_successful
         end
 
         it "can update the account" do

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddAccountUsersTable < ActiveRecord::Migration
+class AddAccountUsersTable < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :account_users do |t|

@@ -61,4 +61,82 @@ RSpec.describe "Placing an item order" do
       expect(page).to have_content "Order Receipt"
     end
   end
+
+  describe "adding a bundle" do
+    let(:bundle) { FactoryBot.create(:bundle, facility: facility) }
+
+    def add_to_cart
+      visit facility_bundle_path(facility.url_name, bundle.url_name)
+      click_link "Add to cart"
+      choose account.to_s
+      click_button "Continue"
+    end
+
+    describe "that has multiple items" do
+      let!(:product2) { FactoryBot.create(:setup_item, facility: facility) }
+
+      before do
+        FactoryBot.create(:item_price_policy, price_group: PriceGroup.base, product: product2)
+        bundle.bundle_products.create!(product: product, quantity: 2)
+        bundle.bundle_products.create!(product: product2, quantity: 3)
+      end
+
+      it "adds both items to the cart and can purchase them" do
+        add_to_cart
+        expect(page).to have_content(product.name)
+        expect(page).to have_content(product2.name)
+        expect(page).to have_link("Remove").once # Only has one "remove" link
+
+        click_button "Purchase"
+        expect(page).to have_content "Order Receipt"
+      end
+    end
+
+    describe "that has a service with an order form" do
+      let(:service) { FactoryBot.create(:setup_service, :with_order_form) }
+      before do
+        FactoryBot.create(:service_price_policy, price_group: PriceGroup.base, product: service)
+        bundle.bundle_products.create!(product: service, quantity: 2)
+      end
+
+      it "adds the item as a single line item" do
+        add_to_cart
+        expect(page).to have_content(service.name).once
+      end
+    end
+
+    describe "that has a timed service" do
+      let(:timed_service) { FactoryBot.create(:setup_timed_service) }
+      before do
+        FactoryBot.create(:timed_service_price_policy, price_group: PriceGroup.base, product: timed_service)
+        bundle.bundle_products.create!(product: timed_service, quantity: 90)
+      end
+
+      it "adds the item as a single line item" do
+        add_to_cart
+        expect(page).to have_content(timed_service.name).once
+        expect(page).to have_content("1:30")
+      end
+    end
+
+    describe "that has a multiple of instruments" do
+      let!(:instrument) { FactoryBot.create(:setup_instrument, facility: facility) }
+      let!(:price_policy) do
+        FactoryBot.create(:instrument_price_policy,
+                          price_group: PriceGroup.base, product: instrument)
+      end
+
+      before do
+        bundle.bundle_products.create!(product: instrument, quantity: 2)
+      end
+
+      it "adds two rows to the cart" do
+        add_to_cart
+        expect(page).to have_content(instrument.name).twice
+        expect(page).to have_link("Remove").once # Only has one "remove" link
+        expect(page).not_to have_button("Purchase")
+        expect(page).to have_link("Make a Reservation").twice
+      end
+    end
+  end
 end

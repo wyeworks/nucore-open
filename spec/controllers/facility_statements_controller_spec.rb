@@ -100,7 +100,7 @@ if Account.config.statements_enabled?
       end
 
       it_should_allow_managers_only do
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it_should_deny_all [:staff, :senior_staff]
@@ -109,7 +109,7 @@ if Account.config.statements_enabled?
         it "should return the right order details without start date" do
           grant_and_sign_in(@user)
           do_request
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns(:facility)).to eq(@authable)
           expect(assigns(:order_detail_action)).to eq(:create)
           expect(assigns(:order_details)).to contain_all [@order_detail1, @order_detail3]
@@ -120,7 +120,7 @@ if Account.config.statements_enabled?
         it "should return the right order details with start date" do
           grant_and_sign_in(@user)
           do_request
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(assigns(:facility)).to eq(@authable)
           expect(assigns(:order_detail_action)).to eq(:create)
           expect(assigns(:order_details)).to contain_all [@order_detail1, @order_detail3]

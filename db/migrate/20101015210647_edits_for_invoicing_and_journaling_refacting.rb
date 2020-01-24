@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class EditsForInvoicingAndJournalingRefacting < ActiveRecord::Migration
+class EditsForInvoicingAndJournalingRefacting < ActiveRecord::Migration[4.2]
 
   def self.up
     # update the account_transaction table

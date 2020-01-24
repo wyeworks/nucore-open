@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChangeOrderDetailStatus < ActiveRecord::Migration
+class ChangeOrderDetailStatus < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :order_details, :order_status_id, :integer, null: true

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateStatementRows < ActiveRecord::Migration
+class CreateStatementRows < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table :statement_rows do |t|

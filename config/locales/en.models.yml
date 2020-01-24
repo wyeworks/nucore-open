@@ -166,6 +166,9 @@ en:
       item:
         one: Item
         other: Items
+      journal:
+        one: Journal
+        other: Journals
       journal_cutoff_date:
         one: Journal Cutoff Date
         other: Journal Cutoff Dates

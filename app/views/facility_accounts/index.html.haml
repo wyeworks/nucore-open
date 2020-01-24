@@ -5,8 +5,10 @@
 
 %h2= t(".head")
 
-= form_tag search_results_facility_accounts_path, id: "ajax_form", method: :get do
+= form_tag search_results_facility_accounts_path, id: "ajax_form", class: "search_form", method: :get do
   = label_tag :search_term, t(".label.search_term")
+  = hidden_field_tag :email, current_user.email, disabled: true
+  = hidden_field_tag :format, params[:format], disabled: true
   %br
   = text_field_tag :search_term, nil, size: 30, class: "search-query"
   = submit_tag t(".search"), class: "btn"

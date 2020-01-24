@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddInDisputeToAccountTransactions < ActiveRecord::Migration
+class AddInDisputeToAccountTransactions < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :account_transactions, :is_in_dispute, :boolean, null: true

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddAttachmentsFileToFileUpload < ActiveRecord::Migration
+class AddAttachmentsFileToFileUpload < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :file_uploads, :file_file_name, :string

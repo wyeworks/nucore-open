@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateUsers < ActiveRecord::Migration
+class CreateUsers < ActiveRecord::Migration[4.2]
 
   def self.up
     create_table(:users) do |t|

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddPriceGroupDisplayOrder < ActiveRecord::Migration
+class AddPriceGroupDisplayOrder < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :price_groups, :display_order, :integer, precision: 38, scale: 0, default: 3, null: false

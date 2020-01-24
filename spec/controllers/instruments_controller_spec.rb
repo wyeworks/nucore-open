@@ -44,7 +44,7 @@ RSpec.describe InstrumentsController do
 
     it "should not require login" do
       do_request
-      expect(response).to be_success
+      expect(response).to be_successful
     end
 
     it "should set the instrument" do

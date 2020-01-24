@@ -924,6 +924,7 @@ en:
       not_found: We cannot find %{email} in our records.
 
   reports:
+    export_as_csv: "!reports.account_transactions.export!"
     fields:
       between: between
       instrument_reports:

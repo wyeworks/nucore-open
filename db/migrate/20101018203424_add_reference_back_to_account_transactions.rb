@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddReferenceBackToAccountTransactions < ActiveRecord::Migration
+class AddReferenceBackToAccountTransactions < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :account_transactions, :reference, :string, limit: 50, null: true

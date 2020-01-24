@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddStatementFields < ActiveRecord::Migration
+class AddStatementFields < ActiveRecord::Migration[4.2]
 
   def self.up
     add_column :statements, :account_id,  :integer,  null: false

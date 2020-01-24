@@ -179,6 +179,24 @@ RSpec.describe Reports::ExportRaw do
       )
     end
 
+    describe "with a problem resolution" do
+      before do
+        order_detail.update!(
+          problem_resolved_at: 1.day.ago,
+          problem_description_key_was: :missing_actuals,
+          problem_resolved_by: user,
+        )
+      end
+
+      it "has the right fields" do
+        expect(report).to have_column_values(
+          "Problem Resolved At" => 1.day.ago.to_s,
+          "Problem Description" => "Missing Actuals",
+          "Problem Resolved By" => user.to_s,
+        )
+      end
+    end
+
     context "in a cross facility context" do
       let(:report_args) do
         {
