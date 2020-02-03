@@ -4,61 +4,69 @@ module Dataprobe
 
   class Ipio
 
+    CONNECT_TIMEOUT = 5
+    READ_TIMEOUT = 5
+    WRITE_TIMEOUT = 5
+
     attr_reader :ip, :port
     attr_accessor :username, :password
 
     def initialize(host, options = {})
       @ip = host
-      @port = options[:port] || 9100
+      @port = 9100
       @username = (options[:username].presence || "user").ljust(21, "\x00")
       @password = (options[:password].presence || "user").ljust(21, "\x00")
     end
 
     def toggle(outlet, status)
-      mode = status ? 1 : 0
-      socket = hello_socket
-      write_control_cmd socket, mode, outlet
-      raise Dataprobe::Error.new("Error while toggling outlet #{outlet}") unless socket.recv(1) == "\x00"
-      status
-    ensure
-      socket.close
+      with_connection do |socket, message_number|
+        mode = status ? 1 : 0
+        write(socket, "#{authentication_prefix}\x01\x00#{message_number}#{hex_s outlet}#{hex_s mode}")
+        raise Dataprobe::Error.new("Error while toggling outlet #{outlet}") unless read(socket, 1) == "\x00"
+        status
+      end
     end
 
     def status(outlet)
-      socket = hello_socket
-      write_status_cmd socket
-      reply = socket.recv 100
-      stats = reply.unpack "C*"
-      stats[outlet - 1] == 1
-    ensure
-      socket.close
-    end
-
-    def hex_s(int)
-      [int].pack "C"
+      with_connection do |socket, message_number|
+        write(socket, "#{authentication_prefix}\x04\x00#{message_number}")
+        statuses = read(socket, 100).unpack("C*")
+        statuses[outlet - 1] == 1
+      end
     end
 
     private
 
-    def hello_socket
-      socket = TCPSocket.new ip, port
-      socket.write "hello-000\x00"
-      socket
+    def with_connection(&block)
+      socket = Socket.tcp(ip, port, connect_timeout: CONNECT_TIMEOUT)
+      write(socket, "hello-000\x00")
+      sequence_number = read(socket, 2).unpack("s<")
+      sequence_number[0] += 1
+      block.call(socket, sequence_number.pack("s<"))
+    ensure
+      socket.close
     end
 
-    def update_sequence(socket)
-      reply = socket.recv 2
-      seq = reply.unpack "s<"         #  Turn the two bytes received into an integer
-      seq[0] += 1                     #  add 1 to it and turn it back to two bytes
-      seq.pack "s<"
+    def write(socket, string)
+      socket.write_nonblock(string)
+    rescue IO::WaitWritable
+      IO.select(nil, [socket], nil, WRITE_TIMEOUT)
+      retry
     end
 
-    def write_control_cmd(socket, mode, outlet)
-      socket.write "\x03#{username}#{password}\x01\x00#{update_sequence socket}#{hex_s outlet}#{hex_s mode}"
+    def read(socket, bytes)
+      socket.read_nonblock(bytes)
+    rescue IO::WaitReadable
+      IO.select([socket], nil, nil, READ_TIMEOUT)
+      retry
     end
 
-    def write_status_cmd(socket)
-      socket.write "\x03#{username}#{password}\x04\x00#{update_sequence socket}"
+    def authentication_prefix
+      "\x03#{username}#{password}"
+    end
+
+    def hex_s(int)
+      [int].pack "C"
     end
 
   end

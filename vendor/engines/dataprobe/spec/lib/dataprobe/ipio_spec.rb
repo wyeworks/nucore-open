@@ -4,87 +4,105 @@ require "rails_helper"
 
 RSpec.describe Dataprobe::Ipio do
   let(:ip) { "192.168.10.15" }
-  let(:fake_socket) { double "TCPSocket", recv: nil, write: nil, close: nil }
-  subject(:relay) { described_class.new ip }
+  let(:fake_socket) { double "TCPSocket", read_nonblock: nil, write_nonblock: nil, close: nil }
+  let(:message_number) { 17 }
 
-  before(:each) { allow(TCPSocket).to receive(:new).and_return fake_socket }
+  subject(:relay) { described_class.new(ip) }
 
-  it "initializes with the proper host and defaults" do
-    expect(relay.ip).to eq ip
-    expect(relay.port).to eq 9100
-    expect(relay.username).to match /\Auser/
-    expect(relay.password).to match /\Auser/
+  before(:each) do
+    allow(Socket).to receive(:tcp).and_return(fake_socket)
+    allow(fake_socket).to receive(:read_nonblock).with(2).and_return([message_number].pack("s<"))
   end
 
-  it "initializes with the proper host and overrides" do
-    opts = {
-      port: 2323,
-      username: "frankie",
-      password: "fingers",
-    }
+  describe ".new" do
+    it "sets ip from its first argument" do
+      expect(described_class.new(ip).ip).to eq ip
+    end
 
-    relay = described_class.new ip, opts
-    expect(relay.ip).to eq ip
-    expect(relay.port).to eq opts[:port]
-    expect(relay.username).to match /\A#{opts[:username]}/
-    expect(relay.password).to match /\A#{opts[:password]}/
+    it "sets port to 9100" do
+      expect(described_class.new(ip).port).to eq 9100
+    end
+
+    it "sets username from the passed-in options and encodes it" do
+      expect(described_class.new(ip, username: "alice").username).to eq "alice".ljust(21, "\x00")
+    end
+
+    it "defaults username to 'user'" do
+      expect(described_class.new(ip).username).to eq "user".ljust(21, "\x00")
+    end
+
+    it "sets password from the passed-in options and encodes it" do
+      expect(described_class.new(ip, password: "abc123").password).to eq "abc123".ljust(21, "\x00")
+    end
+
+    it "defaults password to 'user'" do
+      expect(described_class.new(ip).password).to eq "user".ljust(21, "\x00")
+    end
   end
 
-  it "turns the relay on" do
-    should_toggle
-    state = relay.toggle 4, true
-    expect(state).to eq(true)
+  describe "#toggle" do
+    before(:each) do
+      allow(fake_socket).to receive(:read_nonblock).with(1).and_return("\x00")
+    end
+
+    it "opens a TCP connection to the appropriate host and port with a 5-second connection timeout" do
+      expect(Socket).to receive(:tcp).with(ip, 9100, connect_timeout: 5)
+      relay.toggle(1, true)
+    end
+
+    it "performs a handshake" do
+      expect(fake_socket).to receive(:write_nonblock).with("hello-000\x00")
+      relay.toggle(1, true)
+    end
+
+    it "sends a message with the next message number to set the outlet’s status" do
+      authentication = ["\x03", "user".ljust(21, "\x00"), "user".ljust(21, "\x00")].join
+      toggle_message = ["\x01\x00", [message_number + 1].pack("s<"), [4].pack("C"), [1].pack("C")].join
+      expect(fake_socket).to receive(:write_nonblock).with("#{authentication}#{toggle_message}")
+      relay.toggle(4, true)
+    end
+
+    it "raises an error if it reads an unexpected response after sending the message" do
+      allow(fake_socket).to receive(:read_nonblock).with(1).and_return("unexpected")
+      expect { relay.toggle(4, false) }.to raise_error(Dataprobe::Error)
+    end
+
+    it "returns its second argument" do
+      expect(relay.toggle(4, false)).to be false
+    end
   end
 
-  it "turns the relay off" do
-    should_toggle "\x00"
-    state = relay.toggle 4, false
-    expect(state).to eq(false)
-  end
+  describe "#status" do
+    before(:each) do
+      allow(fake_socket).to receive(:read_nonblock).with(100).and_return(([1]*100).pack("C*"))
+    end
 
-  it "raises an error if an unexpected response was given by the socket" do
-    should_toggle "\x00", "\x01"
-    expect { relay.toggle 4, false }.to raise_error(Dataprobe::Error)
-  end
+    it "opens a TCP connection to the appropriate host and port with a 5-second connection timeout" do
+      expect(Socket).to receive(:tcp).with(ip, 9100, connect_timeout: 5)
+      relay.status(2)
+    end
 
-  it "indicates that the relay is on" do
-    should_give_status :on
-  end
+    it "performs a handshake" do
+      expect(fake_socket).to receive(:write_nonblock).with("hello-000\x00")
+      relay.status(2)
+    end
 
-  it "indicates that the relay is off" do
-    should_give_status :off
-  end
+    it "sends a message with the next message number to check the relay’s status" do
+      authentication = ["\x03", "user".ljust(21, "\x00"), "user".ljust(21, "\x00")].join
+      status_message = ["\x04\x00", [message_number + 1].pack("s<")].join
+      expect(fake_socket).to receive(:write_nonblock).with("#{authentication}#{status_message}")
+      relay.status(2)
+    end
 
-  def should_write_hello
-    expect(fake_socket).to receive(:write).with "hello-000\x00"
-  end
+    it "reads 100 bytes as a response" do
+      expect(fake_socket).to receive(:read_nonblock).with(100)
+      relay.status(2)
+    end
 
-  def should_update_sequence
-    fake_sequence = [double("Integer")]
-    fake_reply = double "String", unpack: fake_sequence
-    expect(fake_socket).to receive(:recv).with(2).and_return fake_reply
-    expect(fake_reply).to receive(:unpack).with "s<"
-    expect(fake_sequence[0]).to receive(:+).with 1
-    expect(fake_sequence).to receive(:pack).with("s<").and_return "\x01"
-  end
-
-  def should_toggle(state_code = "\x01", socket_reply = "\x00")
-    should_write_hello
-    should_update_sequence
-    expect(fake_socket).to receive(:write).with "\x03#{relay.username}#{relay.password}\x01\x00\x01\x04#{state_code}"
-    expect(fake_socket).to receive(:recv).with(1).and_return socket_reply
-    expect(fake_socket).to receive :close
-  end
-
-  def should_give_status(state)
-    bool = (state.to_s =~ /\Aon\Z/i).present?
-    should_write_hello
-    should_update_sequence
-    expect(fake_socket).to receive(:write).with "\x03#{relay.username}#{relay.password}\x04\x00\x01"
-    fake_reply = double "String", unpack: []
-    expect(fake_socket).to receive(:recv).with(100).and_return fake_reply
-    expect(fake_reply).to receive(:unpack).with("C*").and_return bool ? [1] : [0]
-    expect(fake_socket).to receive :close
-    expect(relay.status 1).to eq bool
+    it "returns whether the status of the appropriate outlet (which is 1-indexed) is 1" do
+      statuses = [1, 0]*50
+      allow(fake_socket).to receive(:read_nonblock).with(100).and_return(statuses.pack("C*"))
+      expect(relay.status(2)).to be false
+    end
   end
 end

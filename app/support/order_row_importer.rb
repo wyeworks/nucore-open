@@ -27,7 +27,7 @@ class OrderRowImporter
     :fulfillment_date,
   ].map { |k| HEADERS[k] }
 
-  cattr_accessor(:importable_product_types) { [Item, Service] }
+  cattr_accessor(:importable_product_types) { [Item, Service, TimedService] }
 
   attr_accessor :order_import, :order
   delegate :id, to: :order, prefix: true
@@ -108,8 +108,16 @@ class OrderRowImporter
     ActiveRecord::Base.transaction do
       begin
         @order = field(:order_number).present? ? existing_order : @order_import.fetch_or_create_order!(self)
-        @order_details = order.add(product, field(:quantity), note: field(:notes))
-        purchase_order!(order) unless order.purchased?
+        # The order adding feature has some quirky behavior because of the "order form"
+        # feature: if you add multiple of a timed service, it creates multiple line items
+        # in your cart. Also, in the "add to order" feature, there is a separate `duration`
+        # field. To account for this idiosyncrasy, we need to handle it as a special case.
+        if product.quantity_as_time?
+          @order_details = order.add(product, 1, duration: field(:quantity), note: field(:notes))
+        else
+          @order_details = order.add(product, field(:quantity), note: field(:notes))
+        end
+        purchase_order! unless order.purchased?
         backdate_order_details_to_complete!
       rescue ActiveRecord::RecordInvalid => e
         add_error(e.message)
@@ -118,7 +126,7 @@ class OrderRowImporter
     end
   end
 
-  def purchase_order!(order)
+  def purchase_order!
     if order.validate_order!
       add_error("Couldn't purchase order") unless order.purchase_without_default_status!
     else
@@ -152,23 +160,14 @@ class OrderRowImporter
     !errors?
   end
 
-  def has_valid_fields?
-    validate_fields
-    !errors?
-  end
-
-  def validate_account
-    return if user.blank? || product.blank?
-    if account.present?
-      add_error(account.validate_against_product(product, user))
-    else
-      add_error("Can't find account")
-    end
-  end
-
   def validate_headers
     missing_headers = REQUIRED_HEADERS - @row.headers
     add_error("Missing headers: #{missing_headers.join(' | ')}") if missing_headers.present?
+  end
+
+  def has_valid_fields?
+    validate_fields
+    !errors?
   end
 
   def validate_fields
@@ -192,11 +191,35 @@ class OrderRowImporter
     end
   end
 
+  def validate_user
+    add_error("Invalid username or email") if user.blank?
+  end
+
   def validate_product
     if product.blank?
       add_error("Couldn't find product by name '#{field(:product_name)}'")
     else
       validate_product_is_importable
+    end
+  end
+
+  def validate_product_is_importable
+    unless product.class.in?(importable_product_types)
+      add_error("import of #{product.class.model_name.human} orders not allowed at this time")
+    end
+
+    if product.is_a?(Service)
+      add_error("Service requires survey") if product.active_survey?
+      add_error("Service requires template") if product.active_template?
+    end
+  end
+
+  def validate_account
+    return if user.blank? || product.blank?
+    if account.present?
+      add_error(account.validate_against_product(product, user))
+    else
+      add_error("Can't find account")
     end
   end
 
@@ -213,21 +236,6 @@ class OrderRowImporter
     elsif existing_order.user != user
       add_error("The user does not match the existing order's")
     end
-  end
-
-  def validate_product_is_importable
-    unless product.class.in?(importable_product_types)
-      add_error("import of #{product.class.model_name.human} orders not allowed at this time")
-    end
-
-    if product.is_a?(Service)
-      add_error("Service requires survey") if product.active_survey?
-      add_error("Service requires template") if product.active_template?
-    end
-  end
-
-  def validate_user
-    add_error("Invalid username or email") if user.blank?
   end
 
 end

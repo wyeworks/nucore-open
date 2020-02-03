@@ -17,7 +17,7 @@ RSpec.describe OrderRowImporter do
     let(:username) { user.username }
     let(:chart_string) { account.account_number }
     let(:product_name) { service.name }
-    let(:quantity) { 1 }
+    let(:quantity) { "1" }
     let(:order_date) { "1/1/2015" }
     let(:fulfillment_date) { "1/2/2015" }
 
@@ -254,6 +254,41 @@ RSpec.describe OrderRowImporter do
 
         it_behaves_like "an order was not created"
         it_behaves_like "it has an error message", "Service requires template"
+      end
+    end
+
+    context "when the product is a timed service" do
+      let(:chart_string) { account.account_number }
+      let(:product) { create(:setup_timed_service, facility: facility) }
+      let(:username) { user.username }
+
+      describe "happy path" do
+        include_context "valid row values" do
+          let(:product_name) { product.name }
+          let(:quantity) { "90" }
+        end
+
+        it_behaves_like "an order was created"
+
+        it "parses the quantity" do
+          subject.import
+          expect(OrderDetail.last.quantity).to eq(90)
+        end
+
+        it "has no errors" do
+          subject.import
+          expect(subject.errors).to be_empty
+        end
+      end
+
+      describe "hh:mm format" do
+        include_context "valid row values" do
+          let(:product_name) { product.name }
+          let(:quantity) { "1:30" }
+        end
+
+        it_behaves_like "an order was not created"
+        it_behaves_like "it has an error message", "Quantity is not a valid number"
       end
     end
 

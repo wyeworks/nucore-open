@@ -9,19 +9,14 @@ class ProblemReservationsController < ApplicationController
   before_action :prevent_double_update, only: :update
   before_action { @active_tab = "reservations" }
 
+  delegate :editable?, :resolved?, to: :problem_reservation_resolver
+
   def edit
     render :resolved if !editable? && resolved?
   end
 
   def update
-    @order_detail.assign_attributes(
-      problem_description_key_was: @order_detail.problem_description_key,
-      problem_resolved_at: Time.current,
-      problem_resolved_by: current_user,
-    )
-    @reservation.assign_times_from_params(update_params)
-
-    if @reservation.save
+    if problem_reservation_resolver.resolve(update_params.merge(current_user: current_user))
       if @order_detail.accessories?
         redirect_to new_order_order_detail_accessory_path(@order_detail.order, @order_detail), notice: text("update.success")
       else
@@ -44,12 +39,8 @@ class ProblemReservationsController < ApplicationController
     )
   end
 
-  def editable?
-    OrderDetails::ProblemResolutionPolicy.new(@order_detail).user_can_resolve?
-  end
-
-  def resolved?
-    OrderDetails::ProblemResolutionPolicy.new(@order_detail).user_did_resolve?
+  def problem_reservation_resolver
+    @problem_reservation_resolver ||= ProblemReservationResolver.new(@reservation)
   end
 
   def load_and_authorize_reservation
