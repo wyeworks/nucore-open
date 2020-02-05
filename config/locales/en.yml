@@ -888,6 +888,8 @@ en:
       count: "%{count} Results Files"
       upload: Upload Results
       none: No results have been uploaded yet.
+      download_all: Download all as zip...
+      done: Done
     product_survey:
       intro: "You may provide an Online Order Form and/or an Order File Template.  If provided, the user must complete one before placing an order."
       order_form:

@@ -1,20 +1,25 @@
 .modal-header
   = modal_close_button
-  %h3= t('file_uploads.sample_result.title')
+  %h3= t("file_uploads.sample_result.title")
 
 .modal-body
 
-  - if @files.any?
-    %ul= render :partial => 'result_file', :collection => @files
+  - if @files.present?
+    %ul= render partial: "result_file", collection: @files
   - else
-    %p= t('file_uploads.sample_result.none')
+    %p= t("file_uploads.sample_result.none")
 
-  %h4= t('file_uploads.sample_result.upload')
+  %h4= t("file_uploads.sample_result.upload")
   #js-fineUploader{ data: { authenticity_token: form_authenticity_token } }
   = render "shared/fine_uploader_template"
 
 .modal-footer
-  = modal_cancel_button :text => 'Done'
+  - if @files.present?
+    .pull-left
+      = link_to order_order_detail_sample_results_zip_path(@order_detail.order, @order_detail, format: :zip) do
+        %i.fa.fa-arrow-circle-o-down
+        = t("file_uploads.sample_result.download_all")
+  = modal_cancel_button text: t("file_uploads.sample_result.done")
 
 :javascript
   $("#js-fineUploader").fineUploader({

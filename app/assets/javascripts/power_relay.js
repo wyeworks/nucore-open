@@ -1,3 +1,4 @@
+// Used on the instrument manage page
 $(function() {
   var power_relay_section = $('#power-relay')
     , instrument_control_mechanism = $('#instrument_control_mechanism');

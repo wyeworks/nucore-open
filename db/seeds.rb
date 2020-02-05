@@ -9,10 +9,11 @@
 #   Major.create(:name => 'Daley', :city => cities.first)
 
 OrderStatus.create(name: "New")
-OrderStatus.create(name: "In Process")
-OrderStatus.create(name: "Canceled")
-OrderStatus.create(name: "Complete")
-OrderStatus.create(name: "Reconciled")
+OrderStatus.find_or_create_by(name: "New")
+OrderStatus.find_or_create_by(name: "In Process")
+OrderStatus.find_or_create_by(name: "Canceled")
+OrderStatus.find_or_create_by(name: "Complete")
+OrderStatus.find_or_create_by(name: "Reconciled")
 
 Affiliate.OTHER
 
@@ -21,11 +22,11 @@ Affiliate.OTHER
 PriceGroup.reset_column_information
 
 [
-  PriceGroup.new(name: Settings.price_group.name.base, is_internal: true, admin_editable: false),
-  PriceGroup.new(name: Settings.price_group.name.cancer_center, is_internal: true, admin_editable: true),
-  PriceGroup.new(name: Settings.price_group.name.external, is_internal: false, admin_editable: false),
+  PriceGroup.create_with(is_internal: true, admin_editable: false).find_or_initialize_by(name: Settings.price_group.name.base),
+  PriceGroup.create_with(is_internal: true, admin_editable: true).find_or_initialize_by(name: Settings.price_group.name.cancer_center),
+  PriceGroup.create_with(is_internal: false, admin_editable: false).find_or_initialize_by(name: Settings.price_group.name.external),
 ].each_with_index do |price_group, index|
-  next if price_group.name.blank?
+  next if price_group.name.blank? || price_group.persisted?
   price_group.display_order = index + 1
   price_group.save(validate: false)
 end
