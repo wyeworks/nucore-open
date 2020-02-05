@@ -40,6 +40,18 @@ There is a nightly job managed by UMass's IT team that does the following:
      as well as `error_desc`
   1. Inserts new speed types
 
+## Price Groups
+
+  * Internal (UMass affiliated)
+    * Anyone at UMass Amherst
+  * Other academic (UMass Affiliated)
+    * This would be for the other UMass Campuses & 4 colleges (Amherst, Holyoke, Hampshire, and Smith) who get treated as
+    internal customers for pricing, but likely won’t have speedtypes we can charge against
+  * Other academic (Non-UMass Affiliated)
+      * Any academic institutions beyond those I mentioned who would be receiving a surcharge
+  * External
+    * All non academic external users
+
 ## SSL Certificates
 
 The SSL certificate we've installed is valid for the following hostnames. There are additional names not currently in use if we need to add additional servers later.
