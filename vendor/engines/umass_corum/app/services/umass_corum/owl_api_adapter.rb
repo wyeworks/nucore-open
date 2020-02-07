@@ -17,7 +17,7 @@ module UmassCorum
 
     # Note: If you are not on the UMass VPN, both servers are inaccessible due to firewalling
     def self.host
-       Rails.env.production? ? "owl.umass.edu" : "owlstage.umass.edu"
+      Rails.env.production? ? "owl.umass.edu" : "owlstage.umass.edu"
     end
 
     def self.fetch(netid)
@@ -41,6 +41,9 @@ module UmassCorum
     end
 
     def certified?(certificate)
+      # Email users would never exist in the external system. They must be netid
+      return false if @user.email_user?
+
       completed_certificate_ids.include?(certificate.name)
     end
 

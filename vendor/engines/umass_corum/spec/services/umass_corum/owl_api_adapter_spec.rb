@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe UmassCorum::OwlApiAdapter do
-  let(:user) { instance_double(User, username: "anetid") }
+  let(:user) { build(:user, username: "anetid") }
   subject(:adapter) { described_class.new(user) }
 
   describe "with a successful response" do
@@ -66,6 +66,30 @@ RSpec.describe UmassCorum::OwlApiAdapter do
 
     it "raises an error" do
       expect { adapter.certified?(anything) }.to raise_error(Timeout::Error)
+    end
+  end
+
+  describe "the user is not found" do
+    let(:response) { File.expand_path("../../fixtures/owl/user_not_found.json", __dir__) }
+    before do
+      stub_request(:get, "https://owlstage.umass.edu/owlj/servlet/OwlPreLogin")
+        .with(query: hash_including({"ID" => "anetid"}))
+        .to_return(
+          body: File.new(response),
+          status: 200,
+        )
+    end
+
+    it "raises an error" do
+      expect { adapter.certified?(anything) }.to raise_error(/No such user/)
+    end
+  end
+
+  describe "with an external a.k.a. email user" do
+    let(:user) { build(:user, :external) }
+
+    it "doesn't even bother trying to connect" do
+      expect(adapter).not_to be_certified(anything)
     end
   end
 
