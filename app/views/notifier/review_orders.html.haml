@@ -1,7 +1,9 @@
-= html "body_html_intro", accounts: @accounts, facility: @facility, login_url: in_review_transactions_url
+= html "body", accounts: @accounts, facility: @facility
 
-- @accounts.each do |account|
-  = "#{account.account_list_item}, #{account.owner.user.full_name}"
-  %br
+- @accounts_grouped_by_owner.each do |owner, accounts|
+  %strong= html("owner_header", owner: owner)
+  %ul
+    - accounts.each do |account|
+      %li= account.to_s(with_facility: false)
 
-= html "body_html_outro", accounts: @accounts, facility: @facility, login_url: in_review_transactions_url
+= html "outro", login_url: in_review_transactions_url

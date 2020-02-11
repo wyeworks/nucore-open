@@ -6,7 +6,7 @@ class AddToOrderForm
   include TextHelpers::Translation
 
   attr_reader :original_order, :current_facility
-  attr_accessor :quantity, :product_id, :order_status_id, :note, :duration, :created_by, :fulfilled_at, :account_id
+  attr_accessor :quantity, :product_id, :order_status_id, :note, :duration, :created_by, :fulfilled_at, :account_id, :reference_id
   attr_accessor :error_message
 
   validates :account_id, presence: true
@@ -14,6 +14,7 @@ class AddToOrderForm
   validates :product_id, presence: true
   validates :order_status_id, presence: true
   validates :quantity, numericality: { greater_than: 0, only_integer: true }
+  validates :reference_id, length: { minimum: 0, maximum: 30 }, allow_blank: true
 
   def initialize(original_order)
     @original_order = original_order
@@ -97,6 +98,7 @@ class AddToOrderForm
       duration: duration,
       created_by: created_by.id,
       account: account,
+      reference_id: reference_id,
     }
   end
 

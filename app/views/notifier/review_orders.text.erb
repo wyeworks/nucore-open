@@ -1,9 +1,11 @@
-<%= text "body_text_intro", facility: @facility, smart: false, login_url: in_review_transactions_url %>
+<%= text("body", facility: @facility) %>
 
-<% @accounts.each do |account| %>
-  <%= "#{account.account_list_item}, #{account.owner.user.full_name}" %>
+<% @accounts_grouped_by_owner.each do |owner, accounts| %>
+<%= text("owner_header", owner: owner) %>
+<% accounts.each do |account| %>
+  - <%= account.to_s(with_facility: false) %>
 <% end %>
 
-<%= text "body_text_outro", login_url: in_review_transactions_url, smart: false %>
+<% end %>
+<%= text("outro", login_url: in_review_transactions_url) %>
 
-<%= in_review_transactions_url %>

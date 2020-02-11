@@ -71,6 +71,10 @@
         = render "assigned_user", f: f
       .span1= render "facility_orders/order_file_icon", od: @order_detail
 
+    .row
+      .span5
+        = f.input :reference_id
+
     - if @order_detail.dispute_at
       .row= render "dispute", f: f
 

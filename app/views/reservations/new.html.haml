@@ -33,12 +33,17 @@
 
   - if acting_as?
     .row
+      .span4
+        = f.input :reference_id
+    .row
       - if @order.order_details.size == 1
         .span6.send-notification
           = label_tag :send_notification, class: "checkbox" do
             = hidden_field_tag :send_notification, 0
             = check_box_tag :send_notification, 1, params[:send_notification] == "1"
             = t(".notify")
+
+
 
   - if @instrument.offline?
     %p.alert.alert-danger= text("instruments.offline.notice")

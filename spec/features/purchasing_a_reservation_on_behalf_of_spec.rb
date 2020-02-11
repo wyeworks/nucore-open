@@ -33,12 +33,17 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
       click_link instrument.name
       select user.accounts.first.description, from: "Payment Source"
       fill_in "Note", with: "A note"
+      fill_in "Reference ID", with: "Ref123"
       click_button "Create"
     end
 
     it "returns to My Reservations" do
       expect(page).to have_content "Order Receipt"
+    end
+
+    it "has optional attributes set" do
       expect(Reservation.last.note).to eq("A note")
+      expect(Reservation.last.reference_id).to eq("Ref123")
     end
   end
 

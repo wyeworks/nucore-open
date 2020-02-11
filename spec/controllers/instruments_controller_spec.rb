@@ -543,32 +543,14 @@ RSpec.describe InstrumentsController do
 
     end
 
-    context "instrument statuses" do
+    context "instrument_statuses" do
       before :each do
-        # So it doesn't try to actually connect
-        allow(SettingsHelper).to receive(:relays_enabled_for_admin?).and_return(true)
-        allow_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_return(false)
-
         @method = :get
         @action = :instrument_statuses
         @instrument_with_relay = FactoryBot.create(:instrument,
                                                    facility: facility,
                                                    no_relay: true)
         FactoryBot.create(:relay_syna, instrument: @instrument_with_relay)
-
-        @instrument_with_dummy_relay = FactoryBot.create(:instrument,
-                                                         facility: facility,
-                                                         no_relay: true)
-        FactoryBot.create(:relay_dummy, instrument: @instrument_with_dummy_relay)
-
-        @instrument_with_dummy_relay.instrument_statuses.create(is_on: true)
-        @instrument_with_bad_relay = FactoryBot.create(:instrument,
-                                                       facility: facility,
-                                                       no_relay: true)
-
-        FactoryBot.create(:relay_synb, instrument: @instrument_with_bad_relay)
-        allow_any_instance_of(RelaySynaccessRevB).to receive(:query_status).and_raise(StandardError.new("Error!"))
-        @instrument_with_bad_relay.relay.update_attribute(:ip, "")
       end
 
       it_should_allow_operators_only {}
@@ -578,45 +560,15 @@ RSpec.describe InstrumentsController do
           maybe_grant_always_sign_in :director
           do_request
           @json_output = JSON.parse(response.body, symbolize_names: true)
-          @instrument_ids = @json_output.map { |hash| hash[:instrument_status][:instrument_id] }
         end
 
-        it "should not return instruments without relays" do
-          expect(assigns[:instrument_statuses].map(&:instrument)).not_to be_include @instrument
-          expect(@instrument_ids).not_to be_include instrument.id
-        end
-        it "should include instruments with real relays" do
-          expect(assigns[:instrument_statuses].map(&:instrument)).to be_include @instrument_with_relay
-          expect(@instrument_ids).to be_include @instrument_with_relay.id
-        end
-        it "should include instruments with dummy relays" do
-          expect(assigns[:instrument_statuses].map(&:instrument)).to be_include @instrument_with_dummy_relay
-          expect(@instrument_ids).to be_include @instrument_with_dummy_relay.id
-        end
-
-        it "should return an error if the relay is missing a host" do
-          expect(assigns[:instrument_statuses].last.instrument).to eq(@instrument_with_bad_relay)
-          expect(assigns[:instrument_statuses].last.error_message).not_to be_nil
-        end
-
-        it "should return true for a relay thats switched on" do
-          expect(assigns[:instrument_statuses][1].instrument).to eq(@instrument_with_dummy_relay)
-          expect(assigns[:instrument_statuses][1].is_on).to be true
-          expect(@json_output[1][:instrument_status][:instrument_id]).to eq(@instrument_with_dummy_relay.id)
-          expect(@json_output[1][:instrument_status][:is_on]).to be true
-        end
-        it "should return false for a relay thats not turned on" do
-          expect(assigns[:instrument_statuses].first.instrument).to eq(@instrument_with_relay)
-          expect(assigns[:instrument_statuses].first.is_on).to be false
-          expect(@json_output[0][:instrument_status][:is_on]).to be false
-          expect(@json_output[0][:instrument_status][:instrument_id]).to eq(@instrument_with_relay.id)
-        end
-
-        it "should create a new false instrument status if theres nothing" do
-          expect(@instrument_with_relay.reload.instrument_statuses.size).to eq(1)
-        end
-        it "should not create a second true instrument status" do
-          expect(@instrument_with_dummy_relay.reload.instrument_statuses.size).to eq(1)
+        it "renders the expected attributes" do
+          expect(@json_output.first).to match(
+            instrument_status: a_hash_including(
+              instrument_id: @instrument_with_relay.id,
+              name: @instrument_with_relay.name,
+            )
+          )
         end
       end
 

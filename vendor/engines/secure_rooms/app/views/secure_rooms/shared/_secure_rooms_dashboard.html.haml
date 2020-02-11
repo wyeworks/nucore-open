@@ -1,10 +1,11 @@
 %label= text(:time_label)
 .refreshed_at= format_usa_datetime(Time.current)
-- current_occupancies = room.occupancies.current
+- per_column = 10
+- current_occupancies = room.occupancies.current.includes(:user).limit(per_column * 2)
 .row
-  .span4= render "secure_rooms/shared/dashboard_column", occupancies: current_occupancies.limit(10), header: text(:current), timestamp: :entry_at
-  - second_column_occupancies = current_occupancies.offset(10)
+  .span4= render "secure_rooms/shared/dashboard_column", occupancies: current_occupancies.first(per_column), header: text(:current), timestamp: :entry_at
+  - second_column_occupancies = current_occupancies.drop(per_column)
   .span4
-    = render "secure_rooms/shared/dashboard_column", occupancies: second_column_occupancies, header: text(:current_continued), timestamp: :entry_at if second_column_occupancies.any?
+    = render "secure_rooms/shared/dashboard_column", occupancies: second_column_occupancies, header: text(:current_continued), timestamp: :entry_at if second_column_occupancies.present?
 
-  .span4= render "secure_rooms/shared/dashboard_column", occupancies: room.occupancies.recent, header: text(:recent), timestamp: :exit_at
+  .span4= render "secure_rooms/shared/dashboard_column", occupancies: room.occupancies.recent.includes(:user), header: text(:recent), timestamp: :exit_at

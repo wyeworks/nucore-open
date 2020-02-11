@@ -256,6 +256,24 @@ RSpec.describe FacilityOrdersController do
           end
         end
 
+        context "when setting a reference id" do
+          context "of an appropriate length" do
+            before { @params[:add_to_order_form][:reference_id] = "Ref123" }
+
+            it_should_allow :director, "to set the reference id" do
+              expect(order_detail.reference_id).to eq("Ref123")
+            end
+          end
+
+          context "that is too long" do
+            before { @params[:add_to_order_form][:reference_id] = "a" * 31 }
+            it_should_allow :director, "to set the reference id" do
+              expect(order_detail).to be_blank
+              expect(flash[:error]).to include("Reference ID is too long")
+            end
+          end
+        end
+
         context "when specifying an account" do
           let(:other_account) { create(:nufs_account, :with_account_owner, owner: order.user) }
           before { @params[:add_to_order_form][:account_id] = other_account.id }

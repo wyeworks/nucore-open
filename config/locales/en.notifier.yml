@@ -34,10 +34,17 @@ en:
 
       review_orders:
         subject: "!app_name! Orders For Review: %{abbreviation}"
-        body_text_intro: "New transactions from %{facility} have been posted to the following payment sources:"
-        body_html_intro: "New transactions from %{facility} have been posted to the following payment sources:"
-        body_text_outro: "Please log in to !app_name! and review these charges."
-        body_html_outro: "Please log in to [!app_name!](%{login_url}) and review these charges."
+        body: |
+          New transactions have moved into the billing workflow. The default review
+          period is seven days, after which the charges will be invoiced/journaled.
+
+          **Facility**: %{facility}
+
+          **Payment source(s) and Owner**:
+        owner_header: "Owner: %{owner}"
+
+        outro: Please log in to [!app_name!](%{login_url}) and review these charges.
+
       statement:
         subject: "!app_name! Statement"
         body: |

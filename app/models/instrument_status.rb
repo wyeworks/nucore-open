@@ -2,22 +2,19 @@
 
 class InstrumentStatus < ApplicationRecord
 
-  belongs_to :instrument
+  belongs_to :instrument, inverse_of: :instrument_statuses
 
   validates_numericality_of :instrument_id
+  alias_attribute :on, :is_on
 
   attr_accessor :error_message
-
-  def status_string
-    return error_message if error_message
-    is_on? ? "On" : "Off"
-  end
 
   def as_json(_options = {})
     {
       instrument_status: {
-        created_at: created_at,
+        name: instrument.name,
         instrument_id: instrument.id,
+        type: instrument.relay&.type,
         is_on: is_on?,
         error_message: @error_message,
       },

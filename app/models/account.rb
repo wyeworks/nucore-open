@@ -247,7 +247,7 @@ class Account < ApplicationRecord
 
   delegate :to_s, to: :account_number, prefix: true
 
-  def to_s(with_owner = false, flag_suspended = true)
+  def to_s(with_owner = false, flag_suspended = true, with_facility: false)
     desc = "#{description} / #{account_number_to_s}"
     desc += " / #{owner_user_name}" if with_owner && owner_user.present?
     desc += " (#{display_status.upcase})" if flag_suspended && suspended?

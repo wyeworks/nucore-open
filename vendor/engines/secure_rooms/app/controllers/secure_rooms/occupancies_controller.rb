@@ -19,7 +19,7 @@ module SecureRooms
     private
 
     def load_secure_room
-      @secure_room = SecureRoom.includes(:occupancies).find_by(dashboard_token: params[:secure_room_id])
+      @secure_room = SecureRoom.find_by!(dashboard_token: params[:secure_room_id])
     end
 
   end

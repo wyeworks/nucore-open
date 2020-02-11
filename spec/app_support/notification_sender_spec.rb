@@ -39,8 +39,8 @@ RSpec.describe NotificationSender, :aggregate_failures do
           account_owners.each do |user|
             expect(Notifier)
               .to receive(:review_orders)
-              .with(user_id: user.id,
-                    account_ids: match_array(AccountUser.where(user_id: user.id).pluck(:account_id)),
+              .with(user: user,
+                    accounts: match_array(AccountUser.where(user_id: user.id).map(&:account)),
                     facility: facility)
               .once
               .and_return(delivery)

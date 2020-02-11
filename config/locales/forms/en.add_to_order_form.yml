@@ -11,3 +11,4 @@ en:
       add_to_order_form:
         account: Payment Source
         account_id: Payment Source
+        reference_id: Reference ID

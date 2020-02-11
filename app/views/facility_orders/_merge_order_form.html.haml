@@ -31,9 +31,12 @@
            complete_target: "#add_to_order_form_order_status_id" },
         class: "datepicker__data string optional js--showOnCompleteStatus"
 
-      = f.input :note, as: :text, input_html: { class: "wide", maxlength: 1000 }
-
-      %br
+      .container
+        .row
+          .span8
+            = f.input :note, as: :text, input_html: { class: "wide", maxlength: 1000 }
+          .span4
+            = f.input :reference_id
 
       = submit_tag text("admin.shared.add_to", model: @order.class),
         class: "btn btn-primary",

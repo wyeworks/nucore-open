@@ -332,6 +332,7 @@ en:
         quantity: Quantity
         reconciled_note: Reconciliation Note
         reconciled_at: Reconciliation Date
+        reference_id: Reference ID
         reviewed_at: Review Closes
         reviewed_at_past: Review Closed
         status: Status
@@ -378,6 +379,7 @@ en:
         canceled_at: Canceled At
         type: Type
         reserve_range: Reserved For
+        reference_id: Reference ID
       statement:
         id: "Invoice #"
         created_by: Sent By

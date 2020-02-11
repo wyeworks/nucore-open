@@ -14,6 +14,7 @@ class OrderDetails::ParamUpdater
         :price_change_reason,
         :editing_time_data,
         :reconciled_note,
+        :reference_id,
         reservation: [
           :reserve_start_date,
           :reserve_start_hour,

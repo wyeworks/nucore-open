@@ -33,6 +33,10 @@ class Relay < ApplicationRecord
     CONTROL_MECHANISMS[:manual]
   end
 
+  def networked_relay?
+    control_mechanism == CONTROL_MECHANISMS[:relay]
+  end
+
   private
 
   def toggle(_status)

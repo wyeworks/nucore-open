@@ -58,30 +58,7 @@ class InstrumentsController < ProductsCommonController
   end
 
   def instrument_statuses
-    @instrument_statuses = []
-    current_facility.instruments.order(:id).includes(:relay).each do |instrument|
-      # skip instruments with no relay
-      next unless instrument.relay
-
-      # skip instruments with dummy relay
-      # next if instrument.relay.is_a? RelayDummy
-
-      begin
-        # Always return true/on if the relay feature is disabled
-        status = SettingsHelper.relays_enabled_for_admin? ? instrument.relay.get_status : true
-        instrument_status = instrument.current_instrument_status
-        # if the status hasn't changed, don't create a new status
-        @instrument_statuses << if instrument_status && status == instrument_status.is_on?
-                                  instrument_status
-                                else
-                                  # || false will ensure that the value of is_on is not nil (causes a DB error)
-                                  instrument.instrument_statuses.create!(is_on: status || NUCore::Database.boolean(false))
-                                end
-      rescue => e
-        logger.error e.message
-        @instrument_statuses << InstrumentStatus.new(instrument: instrument, error_message: e.message)
-      end
-    end
+    @instrument_statuses = InstrumentStatusFetcher.new(current_facility).statuses
     render json: @instrument_statuses
   end
 

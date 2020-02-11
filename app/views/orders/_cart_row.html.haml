@@ -17,6 +17,12 @@
           id: "note#{order_detail.id}",
           name: "note#{order_detail.id}" }
 
+      - if acting_as?
+        = odf.input :reference_id ,
+          input_html: { id: "reference_id#{order_detail.id}",
+          name: "reference_id#{order_detail.id}",
+          maxlength: 30 }
+
       - if order_detail.product.is_a?(Instrument)
         %td
       - elsif order_detail.bundle

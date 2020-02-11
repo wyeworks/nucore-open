@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_13_131617) do
+ActiveRecord::Schema.define(version: 2020_01_30_153146) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -327,6 +327,7 @@ ActiveRecord::Schema.define(version: 2020_01_13_131617) do
     t.string "problem_description_key_was"
     t.timestamp "problem_resolved_at"
     t.integer "problem_resolved_by_id"
+    t.string "reference_id"
     t.index ["account_id"], name: "fk_od_accounts"
     t.index ["assigned_user_id"], name: "index_order_details_on_assigned_user_id"
     t.index ["bundle_product_id"], name: "fk_bundle_prod_id"

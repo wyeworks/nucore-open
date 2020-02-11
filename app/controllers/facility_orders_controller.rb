@@ -81,7 +81,7 @@ class FacilityOrdersController < ApplicationController
   private
 
   def add_to_order_params
-    params.require(:add_to_order_form).permit(:quantity, :product_id, :order_status_id, :note, :fulfilled_at, :duration, :account_id)
+    params.require(:add_to_order_form).permit(:quantity, :product_id, :order_status_id, :note, :fulfilled_at, :duration, :account_id, :reference_id)
   end
 
   def batch_updater

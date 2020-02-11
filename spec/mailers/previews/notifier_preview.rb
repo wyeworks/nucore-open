@@ -4,9 +4,9 @@ class NotifierPreview < ActionMailer::Preview
 
   def review_orders
     Notifier.review_orders(
-      account_ids: Account.limit(3).pluck(:id),
+      accounts: ::NUCore::Database.sample(Account, 3),
       facility: Facility.first,
-      user_id: User.first.id,
+      user: User.first,
     )
   end
 

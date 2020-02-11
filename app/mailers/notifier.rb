@@ -34,10 +34,11 @@ class Notifier < ActionMailer::Base
     send_nucore_mail args[:user].email, text("views.notifier.account_update.subject")
   end
 
-  def review_orders(user_id:, account_ids:, facility: Facility.cross_facility)
-    @user = User.find(user_id)
-    @accounts = Account.find(account_ids)
+  def review_orders(user:, accounts:, facility: Facility.cross_facility)
+    @user = user
+    @accounts = accounts
     @facility = facility
+    @accounts_grouped_by_owner = accounts.group_by(&:owner_user)
     send_nucore_mail @user.email, text("views.notifier.review_orders.subject", abbreviation: @facility.abbreviation)
   end
 

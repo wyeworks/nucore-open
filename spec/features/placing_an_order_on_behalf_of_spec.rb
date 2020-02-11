@@ -60,4 +60,16 @@ RSpec.describe "Placing an item order" do
 
     expect(page).to have_content("Ordered Date\n#{I18n.l(2.days.ago.to_date, format: :usa)}")
   end
+
+  it "can set a reference ID" do
+    visit facility_path(facility)
+    click_link product.name
+    click_link "Add to cart"
+    choose account.to_s
+    click_button "Continue"
+
+    fill_in "Reference ID", with: "Ref123"
+    click_button "Purchase"
+    expect(OrderDetail.last.reference_id).to eq("Ref123")
+  end
 end

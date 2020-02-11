@@ -744,6 +744,14 @@ RSpec.describe OrderManagement::OrderDetailsController do
           end
         end
 
+        describe "when adding a reference id" do
+          it "updates the reference_id" do
+            @params[:order_detail] = { reference_id: "Ref 123" }
+            do_request
+            expect(order_detail.reload.reference_id).to eq("Ref 123")
+          end
+        end
+
         describe "assigning to a user" do
           let(:staff_user) { FactoryBot.create(:user, :staff, facility: facility) }
 
