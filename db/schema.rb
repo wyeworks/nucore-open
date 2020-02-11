@@ -200,6 +200,7 @@ ActiveRecord::Schema.define(version: 2020_01_30_153146) do
     t.boolean "is_on", null: false
     t.datetime "created_at", null: false
     t.index ["instrument_id", "created_at"], name: "index_instrument_statuses_on_instrument_id_and_created_at"
+    t.index ["instrument_id"], name: "fk_int_stats_product"
   end
 
   create_table "journal_cutoff_dates", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -238,8 +239,8 @@ ActiveRecord::Schema.define(version: 2020_01_30_153146) do
   end
 
   create_table "log_events", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "loggable_type"
     t.integer "loggable_id"
+    t.string "loggable_type"
     t.string "event_type"
     t.integer "user_id"
     t.datetime "created_at", null: false
@@ -323,10 +324,10 @@ ActiveRecord::Schema.define(version: 2020_01_30_153146) do
     t.string "canceled_reason"
     t.string "price_change_reason"
     t.integer "price_changed_by_user_id"
-    t.datetime "ordered_at"
     t.string "problem_description_key_was"
-    t.timestamp "problem_resolved_at"
+    t.datetime "problem_resolved_at"
     t.integer "problem_resolved_by_id"
+    t.datetime "ordered_at"
     t.string "reference_id"
     t.index ["account_id"], name: "fk_od_accounts"
     t.index ["assigned_user_id"], name: "index_order_details_on_assigned_user_id"
@@ -768,7 +769,7 @@ ActiveRecord::Schema.define(version: 2020_01_30_153146) do
     t.index ["user_id"], name: "index_training_requests_on_user_id"
   end
 
-  create_table "umass_corum_api_speed_types", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  create_table "umass_corum_api_speed_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "speed_type", null: false
     t.boolean "active", null: false
     t.integer "version"
@@ -846,10 +847,10 @@ ActiveRecord::Schema.define(version: 2020_01_30_153146) do
   end
 
   create_table "vestal_versions", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.string "versioned_type"
     t.integer "versioned_id"
-    t.string "user_type"
+    t.string "versioned_type"
     t.integer "user_id"
+    t.string "user_type"
     t.string "user_name"
     t.text "modifications"
     t.integer "version_number"
