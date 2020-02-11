@@ -27,7 +27,7 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
       end
 
       it "renders" do
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
