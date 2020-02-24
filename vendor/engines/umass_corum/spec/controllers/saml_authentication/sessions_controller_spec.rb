@@ -51,6 +51,11 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
         post :create, params: { SAMLResponse: saml_response }
         expect(user.reload.email).to eq("jason@tablexi.com")
       end
+
+      it "updates the emplid" do
+        post :create, params: { SAMLResponse: saml_response }
+        expect(user.reload.umass_emplid).to eq("32564503")
+      end
     end
   end
 end
