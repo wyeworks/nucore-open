@@ -7,7 +7,7 @@ RSpec.describe NotificationSender, :aggregate_failures do
 
   let(:accounts) do
     account_owners.map do |user|
-      FactoryBot.create_list(:setup_account, 2, owner: user, facility_id: facility.id)
+      FactoryBot.create_list(:setup_account, 2, owner: user)
     end.flatten
   end
   let(:account_ids) { accounts.map(&:id) }

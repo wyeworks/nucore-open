@@ -1200,6 +1200,19 @@ RSpec.describe OrderDetail do
         expect(OrderDetail.non_canceled).to_not include(order_detail)
       end
     end
+
+    describe "all_movable" do
+      let(:product) { Product.last }
+      let!(:unpurchased_order_detail) { create(:setup_order, product: product).order_details.first }
+      let!(:new_order_detail) { create(:purchased_order, product: product).order_details.first }
+      let!(:completed_order_detail) { create(:complete_order, product: product).order_details.first }
+      let!(:journaled_order)  { create(:complete_order, product: product).order_details.first }
+      before { journaled_order.update!(journal: create(:journal)) }
+
+      it "includes everything but the unpurchased and journaled" do
+        expect(described_class.all_movable).to contain_exactly(new_order_detail, completed_order_detail)
+      end
+    end
   end
 
   context "ordered_on_behalf_of?" do

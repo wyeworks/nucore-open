@@ -20,11 +20,11 @@ RSpec.describe PurchaseOrderAccount do
   end
 
   it "includes the facility in the description" do
-    expect(account.to_s).to include account.facility.name
+    expect(account.to_s).to include facility.name
   end
 
   it "has the facility association" do
-    expect(account.facility).to eq facility
+    expect(account.facilities).to eq([facility])
   end
 
   it "rolls the facilities up in the description of there are more than one" do
@@ -32,5 +32,4 @@ RSpec.describe PurchaseOrderAccount do
     account.facilities << facility2
     expect(account.to_s).to include "2 #{Facility.model_name.human.pluralize}"
   end
-
 end

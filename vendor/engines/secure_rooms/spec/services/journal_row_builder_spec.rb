@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe JournalRowBuilder, type: :service do
+RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :service do
   let(:builder) { described_class.new(journal, order.order_details) }
 
   describe "#build" do

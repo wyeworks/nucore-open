@@ -8,11 +8,13 @@ jobs:
         environment:
           - RAILS_ENV: "test"
           - MYSQL_USER: root
+          - SELENIUM_DRIVER_URL: http://localhost:4444/wd/hub
       - image: circleci/mariadb:10.2.11
         environment:
           MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
           MYSQL_ROOT_PASSWORD: ''
           MYSQL_ROOT_HOST: "%"
+      - image: selenium/standalone-chrome:latest
 
     steps:
       - checkout

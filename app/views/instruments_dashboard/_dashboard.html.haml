@@ -1,0 +1,20 @@
+%label= text(:time_label)
+.refreshed_at= format_usa_datetime(Time.current)
+%table.table.table-striped
+  %thead
+    %tr
+      %th= Instrument.model_name.human
+      %th= User.model_name.human
+      %th= Reservation.human_attribute_name(:reserve_start_date)
+      %th= Reservation.human_attribute_name(:reserve_end_date)
+  %tbody
+    - reservations.each do |reservation|
+      %tr{class: "instrument_dashboard_#{reservation.class.name.underscore}"}
+        %td
+          = reservation.product
+          = warning_if_instrument_is_offline_or_partially_available(reservation.product)
+        %td
+          = reservation.user || text(reservation.class.name.underscore, default: reservation.class.model_name.human)
+          = text("active") if reservation.started?
+        %td= format_usa_datetime(reservation.reserve_start_at)
+        %td= format_usa_datetime(reservation.reserve_end_at)

@@ -106,7 +106,7 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    airbrussh (1.3.4)
+    airbrussh (1.4.0)
       sshkit (>= 1.6.1, != 1.7.0)
     arel (9.0.0)
     ast (2.4.0)
@@ -126,7 +126,7 @@ GEM
       uniform_notifier (~> 1.11)
     byebug (11.1.1)
     cancancan (2.3.0)
-    capistrano (3.11.2)
+    capistrano (3.12.0)
       airbrussh (>= 1.0.0)
       i18n
       rake (>= 10.0.0)
@@ -171,6 +171,7 @@ GEM
       timers (>= 4.1.1)
     celluloid-supervision (0.20.6)
       timers (>= 4.1.1)
+    childprocess (3.0.0)
     choice (0.2.0)
     chosen-rails (1.8.7)
       coffee-rails (>= 3.2)
@@ -183,7 +184,6 @@ GEM
       orm_adapter (~> 0.5.0)
       terrapin
     climate_control (0.2.0)
-    cliver (0.3.2)
     clockpunch (0.1.12)
       coffee-script
       railties (>= 3.1)
@@ -200,7 +200,7 @@ GEM
       coffee-script
       execjs
       json
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     config (2.2.1)
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
@@ -389,7 +389,7 @@ GEM
       net-ssh (>= 2.6.5, < 6.0.0)
     net-ssh (5.2.0)
     nio4r (2.5.2)
-    nokogiri (1.10.7)
+    nokogiri (1.10.8)
       mini_portile2 (~> 2.4.0)
     notiffany (0.1.1)
       nenv (~> 0.1)
@@ -414,10 +414,6 @@ GEM
     parser (2.7.0.2)
       ast (~> 2.4.0)
     pdf-core (0.7.0)
-    poltergeist (1.18.1)
-      capybara (>= 2.1, < 4)
-      cliver (~> 0.3.1)
-      websocket-driver (>= 0.2.0)
     powerpack (0.1.2)
     prawn (2.2.2)
       pdf-core (~> 0.7.0)
@@ -487,7 +483,7 @@ GEM
     responders (3.0.0)
       actionpack (>= 5.0)
       railties (>= 5.0)
-    rollbar (2.23.2)
+    rollbar (2.24.0)
     rspec (3.8.0)
       rspec-core (~> 3.8.0)
       rspec-expectations (~> 3.8.0)
@@ -550,8 +546,11 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    selenium-webdriver (3.142.7)
+      childprocess (>= 0.5, < 4.0)
+      rubyzip (>= 1.2.2)
     shellany (0.0.1)
-    shoulda-matchers (4.2.0)
+    shoulda-matchers (4.3.0)
       activesupport (>= 4.2.0)
     simple_form (5.0.2)
       actionpack (>= 5.0)
@@ -610,7 +609,7 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webmock (3.8.1)
+    webmock (3.8.2)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -681,7 +680,6 @@ DEPENDENCIES
   paperclip
   parallel_tests
   paranoia
-  poltergeist
   prawn
   prawn-table
   prawn_rails
@@ -705,6 +703,7 @@ DEPENDENCIES
   sanger_sequencing!
   sass-rails
   secure_rooms!
+  selenium-webdriver
   shoulda-matchers
   simple_form
   single_test

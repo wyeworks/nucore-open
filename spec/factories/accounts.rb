@@ -7,6 +7,14 @@ FactoryBot.define do
     description { "Account description" }
     expires_at { 50.years.from_now }
     created_by { 0 }
+
+    transient do
+      facility { nil }
+    end
+
+    after(:build) do |account, evaluator|
+      account.facilities << evaluator.facility if evaluator.facility
+    end
   end
 
   trait :with_account_owner do

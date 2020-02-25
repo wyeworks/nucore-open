@@ -19,6 +19,8 @@ class Product < ApplicationRecord
   has_many :training_requests, dependent: :destroy
   has_many :product_research_safety_certification_requirements
   has_many :research_safety_certificates, through: :product_research_safety_certification_requirements
+  has_one :product_display_group_product
+  has_one :product_display_group, through: :product_display_group_product
 
   email_list_attribute :training_request_contacts
 
@@ -60,19 +62,19 @@ class Product < ApplicationRecord
   scope :in_active_facility, -> { joins(:facility).where(facilities: { is_active: true }) }
   scope :of_type, ->(type) { where(type: type) }
   scope :with_schedule, -> { where.not(schedule_id: nil) }
+  scope :without_display_group, -> {
+    left_outer_joins(:product_display_group_product).where(product_display_group_products: { id: nil })
+  }
 
-  def self.types
-    @types ||= [Instrument, Item, Service, TimedService, Bundle]
-  end
-
-  def self.mergeable_types
-    @mergeable_types ||= ["Instrument", "Item", "Service", "TimedService", "Bundle"]
-  end
+  # All product types
+  cattr_accessor(:types) { [Instrument, Item, Service, TimedService, Bundle] }
+  # Those that can be added to an order by an administrator
+  cattr_accessor(:mergeable_types) { ["Instrument", "Item", "Service", "TimedService", "Bundle"] }
+  # Those that can be ordered via the NUcore homepage
+  cattr_accessor(:orderable_types) { ["Instrument", "Item", "Service", "TimedService", "Bundle"] }
 
   # Products that can be used as accessories
-  def self.accessorizable
-    where(type: ["Item", "Service", "TimedService"])
-  end
+  scope :accessorizable, -> { where(type: ["Item", "Service", "TimedService"]) }
 
   def self.exclude(products)
     where.not(id: products)

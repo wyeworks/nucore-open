@@ -1,17 +1,17 @@
-<!DOCTYPE html>
-%html{lang: "en"}
+!!!
+%html{ lang: "en" }
   %head
     %meta{ "http-equiv" => "content-type", "content" => "text/html; charset=UTF-8" }
-    :plain
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-      <link rel="stylesheet" href="https://unpkg.com/formiojs@3.28.0/dist/formio.full.min.css">
-      <style>
-        #formio {
-          margin: 2em auto;
-          max-width: 960px;
-        }
-      </style>
-      <script src="https://unpkg.com/formiojs@3.28.0/dist/formio.full.min.js"></script>
+    = render_view_hook "head"
+    = stylesheet_link_tag "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    = stylesheet_link_tag "https://unpkg.com/formiojs@3.28.0/dist/formio.full.min.css"
+    = javascript_include_tag "https://unpkg.com/formiojs@3.28.0/dist/formio.full.min.js"
+    :css
+      #formio {
+        margin: 2em auto;
+        max-width: 960px;
+      }
+
   %body
     / Prevent dragged files from being opened, so that Form.IO’s file component can accept drag & drop
     #formio{ "ondragover" => "event.preventDefault();" }

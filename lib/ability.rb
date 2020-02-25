@@ -299,6 +299,7 @@ class Ability
     ]
 
     can :read, Notification
+    can :read, ProductDisplayGroup
 
     can [
       :administer,
@@ -382,6 +383,7 @@ class Ability
       StoredFile,
       TrainingRequest,
       OfflineReservation,
+      ProductDisplayGroup,
     ]
 
     can :manage, User if controller.is_a?(FacilityUsersController)

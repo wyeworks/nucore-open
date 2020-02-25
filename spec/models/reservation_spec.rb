@@ -99,6 +99,69 @@ RSpec.describe Reservation do
     end
   end
 
+  describe ".current_in_use", :time_travel do
+    let(:nine_am) { Time.zone.parse("2020-02-01T09:00") }
+    let(:ten_am) { Time.zone.parse("2020-02-01T10:00") }
+    subject(:reservations) { described_class.current_in_use }
+
+    describe "a regular user reservation" do
+      let!(:reservation) { create(:purchased_reservation, reserve_start_at: nine_am, reserve_end_at: ten_am) }
+
+      describe "before reservation" do
+        let(:now) { nine_am - 5.minutes }
+        it { is_expected.not_to include(reservation) }
+      end
+
+      describe "in reservation" do
+        let(:now) { nine_am + 5.minutes }
+        it { is_expected.to include(reservation) }
+      end
+
+      describe "after reservation" do
+        let(:now) { ten_am + 1.minute }
+        it { is_expected.not_to include(reservation) }
+      end
+
+      describe "started in grace period" do
+        let(:now) { nine_am - 3.minutes }
+        before { reservation.update!(actual_start_at: now) }
+        it { is_expected.to include(reservation) }
+      end
+
+      describe "ended early" do
+        let(:now) { ten_am - 10.minutes }
+        before { reservation.update!(actual_start_at: nine_am, actual_end_at: ten_am - 20.minutes) }
+        it { is_expected.not_to include(reservation) }
+      end
+
+      describe "forgot to logout" do
+        let(:now) { ten_am + 1.minute }
+        before { reservation.update!(actual_start_at: nine_am) }
+        it { is_expected.not_to include(reservation) }
+      end
+    end
+
+    describe "inside a cart reservation" do
+      let!(:reservation) { create(:setup_reservation, reserve_start_at: nine_am, reserve_end_at: ten_am) }
+      let(:now) { nine_am + 5.minutes }
+      it { is_expected.not_to include(reservation) }
+    end
+
+    describe "admin reservation" do
+      let(:instrument) { create(:setup_instrument) }
+      let!(:reservation) { create(:admin_reservation, product: instrument, reserve_start_at: nine_am, reserve_end_at: ten_am) }
+      let(:now) { nine_am + 5.minutes }
+      it { is_expected.to include(reservation) }
+    end
+
+    describe "offline_reservation" do
+      let(:instrument) { create(:setup_instrument) }
+      let!(:reservation) { create(:offline_reservation, product: instrument, reserve_start_at: nine_am, reserve_end_at: nil) }
+      let(:now) { nine_am + 5.minutes }
+      it { is_expected.to include(reservation) }
+    end
+  end
+
   describe "#admin_editable?" do
     context "when the reservation has been persisted" do
       context "and has been canceled" do

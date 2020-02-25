@@ -1,0 +1,8 @@
+= content_for :h1 do
+  = current_facility
+
+= content_for :tabnav do
+  = render partial: "admin/shared/tabnav_reservation", locals: { secondary_tab: "dashboard" }
+
+%p= link_to text("link_to_public"), public_dashboard_facility_instruments_path(current_facility, token: current_facility.dashboard_token) if current_facility.dashboard_enabled?
+= render partial: "dashboard", locals: { reservations: @reservations }

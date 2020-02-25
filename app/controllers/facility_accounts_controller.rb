@@ -15,19 +15,8 @@ class FacilityAccountsController < ApplicationController
 
   authorize_resource :account
 
-  before_action :check_billing_access, only: [:accounts_receivable]
-
   layout "two_column"
-
-  def initialize
-    @active_tab =
-      if SettingsHelper.feature_on?(:manage_payment_sources_with_users)
-        "admin_users"
-      else
-        "admin_billing"
-      end
-    super
-  end
+  before_action { @active_tab = "admin_users" }
 
   # GET /facilties/:facility_id/accounts
   def index
@@ -110,16 +99,6 @@ class FacilityAccountsController < ApplicationController
 
   # GET /facilities/:facility_id/accounts/:account_id/members
   def members
-  end
-
-  # GET /facilities/:facility_id/accounts_receivable
-  def accounts_receivable
-    @account_balances = {}
-    order_details = OrderDetail.for_facility(current_facility).complete
-    order_details.each do |od|
-      @account_balances[od.account_id] = @account_balances[od.account_id].to_f + od.total.to_f
-    end
-    @accounts = Account.where_ids_in(@account_balances.keys)
   end
 
   # GET /facilities/:facility_id/accounts/:account_id/statements

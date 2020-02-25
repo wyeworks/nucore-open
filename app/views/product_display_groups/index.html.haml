@@ -1,0 +1,33 @@
+= content_for :h1 do
+  = current_facility
+= content_for :sidebar do
+  = render "admin/shared/sidenav_product", sidenav_tab: "product_display_groups"
+
+%h2= ProductDisplayGroup.model_name.human(count: :many)
+
+.container
+  - if can?(:create, ProductDisplayGroup)
+    .row
+      .span12
+        %p
+          = link_to text("admin.shared.add", model: ProductDisplayGroup.model_name.human), new_facility_product_display_group_path, class: "btn btn-add"
+          = link_to text("reorder"), edit_facility_product_display_group_positions_path, class: "btn btn-primary" if @product_display_groups.length > 1
+
+  .row
+    .span5
+      - @product_display_groups.each do |product_display_group|
+        .well
+          %legend
+            = product_display_group
+            - if can?(:update, product_display_group)
+              .pull-right= link_to "Edit", edit_facility_product_display_group_path(current_facility, product_display_group), class: "btn"
+          %ul.js--dropTargetElement
+            - product_display_group.products.each do |product|
+              %li= product
+    .span4
+      .well
+        %legend= ProductDisplayGroup.human_attribute_name(:ungrouped_product_ids)
+        %ul
+          - @ungrouped_products.alphabetized.each do |product|
+            %li= product
+

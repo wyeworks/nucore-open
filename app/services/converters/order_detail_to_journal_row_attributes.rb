@@ -18,8 +18,8 @@ module Converters
         account: order_detail.product.account,
         amount: total,
         description: order_detail.long_description,
-        order_detail_id: order_detail.id,
-        journal_id: journal.try(:id),
+        order_detail: order_detail,
+        journal: journal,
       }
     end
 

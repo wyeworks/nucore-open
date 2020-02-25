@@ -38,8 +38,6 @@ en:
         account_facility_joins_form:
           missing_current_facility: can't remove the current facility
 
-
-
   activerecord:
     errors:
       # The values :model, :attribute and :value are always available for interpolation
@@ -96,6 +94,11 @@ en:
           attributes:
             price_change_reason:
               blank: is required
+        product_display_group_product:
+          attributes:
+            product_id:
+              taken: "%{product} is already in a group"
+
         reservation:
           cannot_be_completed_in_future: You cannot complete a future reservation.
           duration_not_interval: "The duration of the reservation must be a multiple of %{reserve_interval}"
@@ -200,6 +203,9 @@ en:
       product_accessory:
         one: Accessory
         other: Accessories
+      product_display_group:
+        one: Product Group
+        other: Product Groups
       research_safety_certificate:
         one: Certificate
         other: Certificates
@@ -226,6 +232,8 @@ en:
         other: User Preferences
     # Model Attributes
     attributes:
+      account_user:
+        user_role: Role
       affiliate:
         subaffiliates_enabled: Allows subaffiliates
       schedule_rule:
@@ -277,6 +285,9 @@ en:
         issue_report_recipients: Alternate Issue Report Recipients
       product_accessory:
         scaling_type: Scaling Type
+      product_display_group:
+        product_ids: Products
+        ungrouped_product_ids: Ungrouped
       instrument:
         min_reserve_mins: Minimum Reservation Minutes
         max_reserve_mins: Maximum Reservation Minutes

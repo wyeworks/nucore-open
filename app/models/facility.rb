@@ -23,6 +23,8 @@ class Facility < ApplicationRecord
   has_many :training_requests, through: :products
   has_many :user_roles, dependent: :destroy
   has_many :users, -> { distinct }, through: :user_roles
+  has_many :reservations, through: :instruments
+  has_many :product_display_groups
 
   validates_presence_of :name, :short_description, :abbreviation
   validate_url_name :url_name
@@ -123,6 +125,19 @@ class Facility < ApplicationRecord
     .active
     .includes(instruments_association => [:alert, :current_offline_reservations, :relay, :schedule_rules])
     .order(:name)
+  end
+
+  def dashboard_enabled
+    dashboard_token.present?
+  end
+  alias dashboard_enabled? dashboard_enabled
+
+  def dashboard_enabled=(value)
+    if ActiveModel::Type::Boolean.new.cast(value)
+      self.dashboard_token ||= SecureRandom.uuid
+    else
+      self.dashboard_token = nil
+    end
   end
 
   private

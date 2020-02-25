@@ -39,11 +39,11 @@ RSpec.describe Converters::OrderDetailToJournalRowAttributes, type: :service do
       end
 
       it "sets order_detail_id" do
-        expect(returned[:order_detail_id]).to eq(order_detail.id)
+        expect(returned[:order_detail]).to eq(order_detail)
       end
 
       it "sets journal_id" do
-        expect(returned[:journal_id]).to eq(journal.id)
+        expect(returned[:journal]).to eq(journal)
       end
     end
   end

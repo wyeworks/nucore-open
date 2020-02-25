@@ -1,5 +1,2 @@
 = content_for :sidebar do
-  - if SettingsHelper.feature_on?(:manage_payment_sources_with_users)
-    = render "admin/shared/sidenav_users", sidenav_tab: "accounts"
-  - else
-    = render "admin/shared/sidenav_billing", sidenav_tab: "accounts"
+  = render "admin/shared/sidenav_users", sidenav_tab: "accounts"

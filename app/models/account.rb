@@ -19,21 +19,6 @@ class Account < ApplicationRecord
   has_many :account_facility_joins
   has_many :facilities, -> { merge(Facility.active) }, through: :account_facility_joins
 
-  # Temporary methods
-  def facility
-    facilities.first
-  end
-
-  def facility_id=(facility_id)
-    self[:facility_id] = facility_id
-    self.account_facility_joins = [AccountFacilityJoin.new(facility_id: facility_id, account: self)] if facility_id
-  end
-
-  def facility=(facility)
-    self.facility_id = facility&.id
-  end
-  # Temporary methods
-
   has_many :account_users, -> { where(deleted_at: nil) }, inverse_of: :account
   has_many :deleted_account_users, -> { where.not(deleted_at: nil) }, class_name: "AccountUser"
 

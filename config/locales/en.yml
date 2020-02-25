@@ -114,6 +114,9 @@ en:
     unassigned: Unassigned
     activate: Activate
     suspend: Suspend
+    reorder:
+      move_up: Move Up
+      move_down: Move Down
     footer:
       copyright_html: "&copy; Copyright 2010&ndash;%{to_date} Northwestern University"
       logo_alt: "Northwestern Logo"
@@ -162,10 +165,6 @@ en:
       label:
         search_term: "Search by payment source number or payment source owner's name, NetID, or username"
       search: Search
-    accounts_receivable:
-      head: Accounts Receivable
-      show_with_balance: Show %{model} with a balance
-      show_all: Show all %{model}
     new_account_user_search:
       head: "Add Payment Source"
       instruct: "To add a payment source, first search for the user you would like to create the payment source for."
@@ -822,8 +821,7 @@ en:
       no_orders: There are no disputed orders for this !facility_downcase!
 
     show:
-      daily_view: 'daily view'
-      timed_services_note: "Please Note: Quantities below are individual orders, not minutes per order."
+      daily_view: 'Daily View'
 
     movable_transactions:
       head: "Move Transactions"

@@ -1,9 +1,0 @@
-- if products.present?
-  .product_list{ class: @columns }
-    %h3= product_list_title products, local_assigns[:title_extra]
-
-    - if products.first.is_a?(TimedService)
-      %p= t("facilities.show.timed_services_note")
-
-    %ul
-      = render partial: "product", collection: products, locals: { f: local_assigns[:f] }

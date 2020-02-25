@@ -21,7 +21,7 @@ class PurchaseOrderAccount < Account
       I18n.t(
         "purchase_order_account.shared_facility_description",
         count: facilities.length,
-        facilities: Facility.model_name.human(count: facilities.length)
+        facilities: Facility.model_name.human(count: facilities.length),
       )
     else
       facilities.first.name

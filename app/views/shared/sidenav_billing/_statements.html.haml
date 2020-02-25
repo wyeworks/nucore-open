@@ -1,5 +1,0 @@
-- if Account.config.statements_enabled?
-  %li.divider
-  %li.nav-header= Statement.model_name.human.pluralize
-  = tab t_create_models(Statement), new_facility_statement_path(current_facility), (sidenav_tab == 'statements')
-  = tab text("head"), facility_statements_path(current_facility), (sidenav_tab == "statement_history")

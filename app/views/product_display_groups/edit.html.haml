@@ -1,0 +1,5 @@
+%h2
+  = text("admin.shared.edit", model: ProductDisplayGroup.model_name.human)
+  .pull-right= link_to text("shared.delete"), facility_product_display_group_path, method: :delete, class: "btn btn-danger"
+
+= render "form"

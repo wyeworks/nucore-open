@@ -30,3 +30,4 @@
           %td= af.object.account.per_facility? ? af.object.account.facilities.join(", ") : content_tag(:i, t("shared.all"))
 
   = f.submit t(".update"), class: "btn btn-primary"
+  = link_to text("shared.cancel"), facility_user_accounts_path

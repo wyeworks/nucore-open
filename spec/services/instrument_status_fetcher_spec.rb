@@ -44,10 +44,19 @@ RSpec.describe InstrumentStatusFetcher do
   end
 
   describe "caching" do
-    it "only fetches once" do
-      allow_any_instance_of(Instrument).to receive(:relay).and_return relay
-      expect(relay).to receive(:query_status).once
-      statuses
+    describe "with a second identical relay" do
+      let!(:relay2) {create(:relay_syna, relay.attributes.except("id").merge(instrument: instrument_with_relay2)) }
+      let(:instrument_with_relay2) { create(:instrument, no_relay: true, facility: facility, schedule: instrument_with_relay.schedule) }
+
+      it "only fetches once" do
+        allow_any_instance_of(Instrument).to receive(:relay).and_return relay
+        expect(relay).to receive(:query_status).once
+        statuses
+      end
+
+      it "returns two instrument_ids" do
+        expect(statuses.map(&:instrument)).to contain_exactly(instrument_with_relay, instrument_with_relay2)
+      end
     end
   end
 end

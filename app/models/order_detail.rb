@@ -168,8 +168,10 @@ class OrderDetail < ApplicationRecord
   }
 
   def self.all_movable
-    where(journal_id: nil)
-      .where.not(state: ["ordered", "reconciled"])
+    ordered_at
+      .unreconciled
+      .where(journal_id: nil)
+
   end
 
   scope :in_review, lambda {

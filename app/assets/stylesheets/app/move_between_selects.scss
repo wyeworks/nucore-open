@@ -1,0 +1,23 @@
+.moveBetweenSelects {
+  select {
+    height: 20rem;
+    width: 80%;
+  }
+
+  &__btn:first-child {
+    margin-top: 1.5rem;
+  }
+
+  .multiSelectReorder__buttons {
+    margin-top: 7rem;
+  }
+
+  .moveBetweenSelects__btn {
+    width: 75%;
+  }
+
+  .moveBetweenSelects__buttons {
+    text-align: center;
+    margin-left: 0;
+  }
+}

@@ -16,13 +16,14 @@
   = form_for Order.new, url: add_order_path(acting_user.cart(session_user)), html: {method: :put, class:['product_list_container', @columns]} do |f|
     .button_row
       = f.submit class: ['btn', 'btn-primary']
-    = render partial: 'product_list', locals: { products: @instruments, f: f, title_extra: daily_view_link }
-    - ["Service", "TimedService", "Item", "Bundle"].each do |type|
-      = render partial: 'product_list', locals: { products: @non_instrument_products_by_type.fetch(type, []), f: f }
+    - if SettingsHelper.feature_on?(:daily_view) && current_facility.instruments.active.any?
+      %h3= link_to t("facilities.show.daily_view"), facility_public_timeline_path(current_facility)
+    = render partial: "product_display_group", collection: @product_display_groups, locals: { classes: @columns, f: f }
     .button_row
       = f.submit class: ['btn', 'btn-primary']
 - else
-  .product_list_container{class: @columns}
-    = render partial: 'product_list', locals: { products: @instruments, title_extra: daily_view_link }
-    - ["Service", "TimedService", "Item", "Bundle"].each do |type|
-      = render partial: 'product_list', locals: { products: @non_instrument_products_by_type.fetch(type, []) }
+  .product_list_container{ class: @columns }
+    - if SettingsHelper.feature_on?(:daily_view) && current_facility.instruments.active.any?
+      %h3= link_to t("facilities.show.daily_view"), facility_public_timeline_path(current_facility)
+    = render partial: "product_display_group", collection: @product_display_groups, locals: { classes: @columns }
+

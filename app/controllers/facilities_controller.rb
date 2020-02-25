@@ -15,7 +15,6 @@ class FacilitiesController < ApplicationController
   load_and_authorize_resource find_by: :url_name
   skip_load_and_authorize_resource only: [:index, :show]
 
-  include FacilitiesHelper
   include AZHelper
   include OrderDetailsCsvExport
 
@@ -47,16 +46,14 @@ class FacilitiesController < ApplicationController
     @columns = "columns" if SettingsHelper.feature_on?(:product_list_columns)
     @active_tab = SettingsHelper.feature_on?(:use_manage) ? "use" : "home"
 
-    instruments_scope = current_facility.instruments.includes(:alert, :current_offline_reservations)
-
+    @product_scope = Product.alphabetized
     if acting_as? || session_user.try(:operator_of?, current_facility)
-      @instruments = instruments_scope.not_archived.alphabetized
-      @non_instrument_products_by_type = current_facility.non_instrument_products.not_archived.group_by(&:type)
+      @product_scope = @product_scope.not_archived
     else
-      @instruments = instruments_scope.active.alphabetized
-      @non_instrument_products_by_type = current_facility.non_instrument_products.active.group_by(&:type)
-      @non_instrument_products_by_type["Bundle"].try(:select!, &:products_active?)
+      @product_scope = @product_scope.active # Active also excludes hidden
     end
+    @product_display_groups = current_facility.product_display_groups
+    @product_display_groups = @product_display_groups.to_a + ProductDisplayGroup.fake_groups_by_type(current_facility.products.without_display_group)
 
     render layout: "application"
   end
@@ -203,24 +200,24 @@ class FacilitiesController < ApplicationController
     params.require(:facility).permit(*self.class.permitted_facility_params)
   end
 
-  def self.permitted_facility_params
-    @@permitted_facility_params ||=
-      %i(
-        abbreviation
-        accepts_multi_add
-        address
-        banner_notice
-        description
-        email
-        fax_number
-        is_active
-        name
-        order_notification_recipient
-        phone_number
-        short_description
-        show_instrument_availability
-        url_name
-      )
+  cattr_accessor(:permitted_facility_params) do
+    %i(
+      abbreviation
+      accepts_multi_add
+      address
+      banner_notice
+      description
+      email
+      fax_number
+      is_active
+      name
+      order_notification_recipient
+      phone_number
+      short_description
+      show_instrument_availability
+      url_name
+      dashboard_enabled
+    )
   end
 
   def ensure_order_details_selected

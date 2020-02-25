@@ -15,6 +15,7 @@ en:
         none: "No !facilities_downcase! are available at this time."
       product:
         quantity: "%{product} Quantity"
+        line_items: Enter the number of individual orders, not the quantity for a single order
       azlist:
         all_short: All
         recently_used_short: Recent

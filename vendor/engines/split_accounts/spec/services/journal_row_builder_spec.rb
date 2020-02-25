@@ -3,7 +3,7 @@
 require "rails_helper"
 require_relative "../split_accounts_spec_helper"
 
-RSpec.describe JournalRowBuilder, :enable_split_accounts, type: :service do
+RSpec.describe JournalRowBuilder, :enable_split_accounts, :default_journal_row_converters, type: :service do
   let(:builder) do
     described_class.new(journal, order_details)
   end

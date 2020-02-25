@@ -1,0 +1,37 @@
+= content_for :tabnav do
+  = render partial: "admin/shared/tabnav_users", locals: { secondary_tab: "accounts" }
+= content_for :sidebar do
+  = render partial: "admin/shared/sidenav_users", locals: { sidenav_tab: "users" }
+
+= content_for :h1 do
+  = current_facility
+
+%h1= @clone_to_user.full_name
+
+= form_with url: facility_user_clone_account_memberships_path(user_to_clone_id: @clone_from_user) do |f|
+  - if @account_users.present?
+    %h2= text("header", name: @clone_from_user.full_name)
+    %p= text("instructions")
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th= select_all_link
+          %th= Account.model_name.human
+          %th= AccountUser.human_attribute_name(:user_role)
+          %th= Facility.model_name.human
+      %tbody
+        - @account_users.each do |account_user|
+          - already_has_access = @clone_to_user.accounts.include?(account_user.account)
+          - title = text("already_has_access") if already_has_access
+          %tr
+            %td= f.check_box "account_user_ids[]", { class: "toggle", id: "accountId#{account_user.account_id}", disabled: already_has_access, title: title }, account_user.id
+            %td= link_to account_user.account, facility_account_path(current_facility, account_user.account)
+            %td= account_user.user_role
+            %td= account_user.account.per_facility? ? account_user.account.facilities.join(", ") : content_tag(:i, t("shared.all"))
+
+    = f.submit "Clone", class: "btn btn-success js--requireValueForSubmit"
+    = link_to text("shared.cancel"), facility_user_accounts_path
+
+  - else
+    %p.alert.alert-info= text("none", name: @clone_from_user.full_name)
+    = link_to text("shared.cancel"), facility_user_accounts_path
