@@ -4,6 +4,7 @@ class Product < ApplicationRecord
 
   include TextHelpers::Translation
   include EmailListAttribute
+  include FullTextSearch::Model
 
   belongs_to :facility
   belongs_to :initial_order_status, class_name: "OrderStatus"

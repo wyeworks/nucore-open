@@ -2,11 +2,11 @@
 
 class OrderDetail < ApplicationRecord
 
-  include NUCore::Database::SortHelper
+  include Nucore::Database::SortHelper
   include TranslationHelper
   include NotificationSubject
   include OrderDetail::Accessorized
-  include NUCore::Database::WhereIdsIn
+  include Nucore::Database::WhereIdsIn
 
   has_paper_trail
 

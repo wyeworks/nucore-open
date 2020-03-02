@@ -7,7 +7,7 @@ module Journals
     attr_reader :key
 
     def self.find(key)
-      all.find { |format| format.key == key }
+      all.find { |format| format.key.to_s == key.to_s }
     end
 
     def self.all

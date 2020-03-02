@@ -100,11 +100,6 @@ en:
         success: The order has been updated
         error: There was a problem updating the order
 
-    order_management:
-      order_details:
-        remove_from_journal:
-          notice: "The order has been removed from its journal"
-
     price_groups:
       create:
         notice: "Price Group was successfully created"

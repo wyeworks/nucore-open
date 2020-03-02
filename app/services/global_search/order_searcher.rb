@@ -4,7 +4,7 @@ module GlobalSearch
 
   class OrderSearcher < Base
 
-    include NUCore::Database::CaseSensitivityHelper
+    include Nucore::Database::CaseSensitivityHelper
 
     def template
       "order_details"

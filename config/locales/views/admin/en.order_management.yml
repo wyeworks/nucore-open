@@ -1,0 +1,9 @@
+en:
+  controllers:
+    order_management/order_details:
+      update:
+        success: The order was successfully updated.
+        success_with_auto_scaled: "!controllers.order_management/order_details.update.success! Auto-scaled accessories have been updated as well."
+        error: Error while updating order
+      remove_from_journal:
+        notice: The order has been removed from its journal

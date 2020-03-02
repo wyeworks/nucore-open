@@ -554,6 +554,7 @@ ActiveRecord::Schema.define(version: 2020_02_24_215210) do
     t.index ["facility_account_id"], name: "fk_facility_accounts"
     t.index ["facility_id"], name: "fk_rails_0c9fa1afbe"
     t.index ["initial_order_status_id"], name: "index_products_on_initial_order_status_id"
+    t.index ["name", "description"], name: "index_products_on_name_and_description", type: :fulltext
     t.index ["schedule_id"], name: "i_instruments_schedule_id"
     t.index ["type", "is_archived", "schedule_id"], name: "index_products_on_type_and_is_archived_and_schedule_id"
     t.index ["url_name"], name: "index_products_on_url_name"

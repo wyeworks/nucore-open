@@ -377,6 +377,22 @@ RSpec.describe OrderManagement::OrderDetailsController do
           end
         end
 
+        describe "when there are auto-scaled accessories" do
+          let!(:accessory) { create(:time_based_accessory, parent: instrument, facility: facility, scaling_type: "auto") }
+
+          before do
+            allow_any_instance_of(OrderDetail).to receive(:updated_children).and_return([build_stubbed(:order_detail)])
+            @params[:order_detail] = {
+              reservation: { actual_duration_mins: 45 },
+            }
+          end
+
+          it "sets the flash" do
+            do_request
+            expect(flash[:notice]).to include "Auto-scaled accessories"
+          end
+        end
+
         context "across fiscal year/price policy expiration lines" do
           let(:first_price_policy) { order_detail.product.price_policies.first }
           let(:reservation) { FactoryBot.create(:completed_reservation, product: instrument) }

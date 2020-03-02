@@ -49,7 +49,7 @@ RSpec.describe AccountMembershipCloner, type: :service do
   end
 
   describe "when invoked to clone an owned account" do
-    let(:account_users_to_clone) { AccountUser.where(user: original_user, user_role: "owner") }
+    let(:account_users_to_clone) { AccountUser.where(user: original_user, user_role: "Owner") }
 
     it "assigns the cloned user the accepted alternate role" do
       account_users = cloner.perform

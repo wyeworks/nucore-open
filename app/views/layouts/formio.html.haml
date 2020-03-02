@@ -3,8 +3,8 @@
   %head
     %meta{ "http-equiv" => "content-type", "content" => "text/html; charset=UTF-8" }
     = render_view_hook "head"
-    = stylesheet_link_tag "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-    = stylesheet_link_tag "https://unpkg.com/formiojs@3.28.0/dist/formio.full.min.css"
+    = stylesheet_link_tag "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", media: "all"
+    = stylesheet_link_tag "https://unpkg.com/formiojs@3.28.0/dist/formio.full.min.css", media: "all"
     = javascript_include_tag "https://unpkg.com/formiojs@3.28.0/dist/formio.full.min.js"
     :css
       #formio {

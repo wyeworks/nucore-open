@@ -13,7 +13,7 @@ class Account < ApplicationRecord
   include Overridable
   include Accounts::AccountNumberSectionable
   include DateHelper
-  include NUCore::Database::WhereIdsIn
+  include Nucore::Database::WhereIdsIn
 
   # belongs_to :facility, required: false
   has_many :account_facility_joins
