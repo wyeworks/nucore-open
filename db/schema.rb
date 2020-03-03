@@ -215,6 +215,18 @@ ActiveRecord::Schema.define(version: 2020_02_24_215210) do
     t.decimal "amount", precision: 9, scale: 2, null: false
     t.string "description", limit: 512
     t.integer "account_id"
+    t.string "business_unit", default: "UMAMH", null: false
+    t.string "speed_type"
+    t.string "fund"
+    t.string "dept_id"
+    t.string "program"
+    t.string "clazz"
+    t.string "project"
+    t.string "trans_ref"
+    t.string "name_reference"
+    t.datetime "trans_date"
+    t.string "doc_ref"
+    t.string "ref_2"
     t.index ["account_id"], name: "index_journal_rows_on_account_id"
     t.index ["journal_id"], name: "index_journal_rows_on_journal_id"
     t.index ["order_detail_id"], name: "index_journal_rows_on_order_detail_id"

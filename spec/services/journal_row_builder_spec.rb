@@ -111,7 +111,6 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
         ])
       end
     end
-
   end
 
   describe "#valid?" do

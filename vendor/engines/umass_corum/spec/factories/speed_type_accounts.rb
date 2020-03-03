@@ -10,5 +10,11 @@ FactoryBot.define do
   factory :speed_type_account, parent: :account, class: UmassCorum::SpeedTypeAccount do
     type { "UmassCorum::SpeedTypeAccount" }
     account_number { generate(:speed_type_account_number) }
+
+    trait :with_api_speed_type do
+      after(:build) do |account, _evaluator|
+        create(:api_speed_type, speed_type: account.account_number)
+      end
+    end
   end
 end

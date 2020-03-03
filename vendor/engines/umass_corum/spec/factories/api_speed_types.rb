@@ -10,7 +10,7 @@ FactoryBot.define do
     active { true }
     version { 0 }
     clazz { " " }
-    dept_desc { "Vet/Animal Science" }
+    dept_desc { "Vet/Animal Science-User,Owner" }
     dept_id { "A010400000" }
     fund_code { "11000" }
     fund_desc { "State  aintenance" }
@@ -19,6 +19,14 @@ FactoryBot.define do
     project_desc { "National Multiple Sclerosis So" }
     project_id { "S17110000000118" }
     date_added { 1.year.ago }
+
+    # Recharge speed types do not have project/grant info attached to them
+    trait :recharge do
+      project_id { nil }
+      project_desc { nil }
+      program_code { "D06" }
+      dept_desc { "IALS M2M" }
+    end
 
     trait :expired do
       active { false }

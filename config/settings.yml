@@ -17,17 +17,20 @@ financial:
   # in the format MM-DD
   fiscal_year_begins: 07-01
   journal_format:
-    # Note that xml and xls have custom responders so they don't need a class_name
-    - key: xml
-    - key: xls
+    # Note that xml and xls have custom responders
+    # - key: xml
+    # - key: xls
     - key: csv
-      class_name: Journals::DefaultJournalCsv
-      # mime_type: csv # This is optional if it matches the key
+      class_name: UmassCorum::Journals::JournalCsv
+      mime_type: csv
+    - key: prn
+      class_name: UmassCorum::Journals::JournalPrn
+      mime_type: text # This is optional if it matches the key
   default_journal_cutoff_time: "16:45"
 
 converters:
-  product_to_journal_rows: Converters::ProductToJournalRowAttributes
-  order_detail_to_journal_rows: Converters::OrderDetailToJournalRowAttributes
+  product_to_journal_rows: UmassCorum::Journals::ProductToJournalRowAttributes
+  order_detail_to_journal_rows: UmassCorum::Journals::OrderDetailToJournalRowAttributes
 
 statement_pdf:
   class_name: ExampleStatementPdf

@@ -7,7 +7,7 @@ FactoryBot.modify do
     account_number { generate(:speed_type_account_number) }
 
     before(:create) do |facility_account|
-      create(:api_speed_type, speed_type: facility_account.account_number)
+      create(:api_speed_type, speed_type: facility_account.account_number) unless UmassCorum::ApiSpeedType.find_by(speed_type: facility_account.account_number)
     end
   end
 end

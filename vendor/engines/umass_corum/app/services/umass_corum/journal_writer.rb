@@ -15,6 +15,10 @@ module UmassCorum
       @row_data << row
     end
 
+    def concat(other)
+      @row_data.concat(other)
+    end
+
     def rows
       @rows ||= @row_data.lazy.map do |row|
         format_row(row, JournalDefinition::BODY)
@@ -22,7 +26,7 @@ module UmassCorum
     end
 
     def to_s
-      ([header] + rows.to_a).join("\n ")
+      ([header_row] + rows.to_a).join("\n ")
     end
 
     private
