@@ -207,18 +207,6 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
 
   end
 
-  context "accounts_receivable" do
-
-    before :each do
-      @method = :get
-      @action = :accounts_receivable
-      @params = { facility_id: @authable.url_name }
-    end
-
-    it_should_allow_managers_only
-    it_should_deny_all [:staff, :senior_staff]
-  end
-
   context "search_results" do
     it "requires login" do
       get :search_results, params: { facility_id: facility.url_name }

@@ -2,11 +2,11 @@
 
 class OrderDetail < ApplicationRecord
 
-  include NUCore::Database::SortHelper
+  include Nucore::Database::SortHelper
   include TranslationHelper
   include NotificationSubject
   include OrderDetail::Accessorized
-  include NUCore::Database::WhereIdsIn
+  include Nucore::Database::WhereIdsIn
 
   has_paper_trail
 
@@ -168,8 +168,10 @@ class OrderDetail < ApplicationRecord
   }
 
   def self.all_movable
-    where(journal_id: nil)
-      .where.not(state: ["ordered", "reconciled"])
+    ordered_at
+      .unreconciled
+      .where(journal_id: nil)
+
   end
 
   scope :in_review, lambda {

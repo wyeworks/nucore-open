@@ -58,17 +58,6 @@ $(document).ready(function() {
     });
   });
 
-  $('.js--select_all').click(function(e) {
-    var check = this.innerHTML == $(this).data("select-all");
-    $('.js--select_all').each(function() {
-      this.innerHTML = check ? $(this).data("select-none") : $(this).data("select-all");
-    });
-    $('.toggle:checkbox').each(function() {
-      this.checked = check;
-    });
-    return false;
-  });
-
   $('#filter_toggle').click(function(){
      $('#filter_container').toggle('fast');
    });

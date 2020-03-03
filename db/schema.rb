@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_19_172647) do
+ActiveRecord::Schema.define(version: 2020_02_24_215210) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -48,13 +48,11 @@ ActiveRecord::Schema.define(version: 2020_02_19_172647) do
     t.integer "updated_by"
     t.datetime "suspended_at"
     t.text "remittance_information"
-    t.integer "facility_id"
     t.integer "affiliate_id"
     t.string "affiliate_other"
     t.string "outside_contact_info"
     t.string "ar_number"
     t.index ["affiliate_id"], name: "index_accounts_on_affiliate_id"
-    t.index ["facility_id"], name: "fk_account_facility_id"
   end
 
   create_table "affiliates", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -171,6 +169,7 @@ ActiveRecord::Schema.define(version: 2020_02_19_172647) do
     t.string "order_notification_recipient"
     t.boolean "sanger_sequencing_enabled", default: false, null: false
     t.text "banner_notice"
+    t.string "dashboard_token"
     t.index ["abbreviation"], name: "index_facilities_on_abbreviation", unique: true
     t.index ["is_active", "name"], name: "index_facilities_on_is_active_and_name"
     t.index ["name"], name: "index_facilities_on_name", unique: true
@@ -485,6 +484,26 @@ ActiveRecord::Schema.define(version: 2020_02_19_172647) do
     t.index ["product_id"], name: "index_product_accessories_on_product_id"
   end
 
+  create_table "product_display_group_products", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.bigint "product_display_group_id", null: false
+    t.integer "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "position"
+    t.index ["product_display_group_id", "position"], name: "i_product_display_group_pos"
+    t.index ["product_display_group_id"], name: "index_product_display_group_products_on_product_display_group_id"
+    t.index ["product_id"], name: "index_product_display_group_products_on_product_id"
+  end
+
+  create_table "product_display_groups", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.integer "facility_id"
+    t.string "name", null: false
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["facility_id"], name: "index_product_display_groups_on_facility_id"
+  end
+
   create_table "product_users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "product_id", null: false
     t.integer "user_id", null: false
@@ -535,6 +554,7 @@ ActiveRecord::Schema.define(version: 2020_02_19_172647) do
     t.index ["facility_account_id"], name: "fk_facility_accounts"
     t.index ["facility_id"], name: "fk_rails_0c9fa1afbe"
     t.index ["initial_order_status_id"], name: "index_products_on_initial_order_status_id"
+    t.index ["name", "description"], name: "index_products_on_name_and_description", type: :fulltext
     t.index ["schedule_id"], name: "i_instruments_schedule_id"
     t.index ["type", "is_archived", "schedule_id"], name: "index_products_on_type_and_is_archived_and_schedule_id"
     t.index ["url_name"], name: "index_products_on_url_name"
@@ -874,7 +894,6 @@ ActiveRecord::Schema.define(version: 2020_02_19_172647) do
   add_foreign_key "account_facility_joins", "facilities"
   add_foreign_key "account_users", "accounts", name: "fk_accounts"
   add_foreign_key "account_users", "users"
-  add_foreign_key "accounts", "facilities", name: "fk_account_facility_id"
   add_foreign_key "bulk_email_jobs", "facilities"
   add_foreign_key "bulk_email_jobs", "users"
   add_foreign_key "bundle_products", "products", column: "bundle_product_id", name: "fk_bundle_prod_prod"
@@ -918,6 +937,9 @@ ActiveRecord::Schema.define(version: 2020_02_19_172647) do
   add_foreign_key "price_groups", "facilities"
   add_foreign_key "price_policies", "price_groups"
   add_foreign_key "price_policies", "users", column: "created_by_id"
+  add_foreign_key "product_display_group_products", "product_display_groups"
+  add_foreign_key "product_display_group_products", "products"
+  add_foreign_key "product_display_groups", "facilities"
   add_foreign_key "product_users", "products", name: "fk_products"
   add_foreign_key "product_users", "users"
   add_foreign_key "products", "facilities"

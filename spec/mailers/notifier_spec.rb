@@ -36,7 +36,7 @@ RSpec.describe Notifier do
 
   describe ".review_orders" do
     let(:accounts) do
-      FactoryBot.create_list(:setup_account, 2, owner: user, facility_id: facility.id)
+      FactoryBot.create_list(:setup_account, 2, owner: user, facility: facility)
     end
     let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
     let(:email_text) { email.text_part.to_s }

@@ -89,6 +89,15 @@ class Reservation < ApplicationRecord
 
   scope :ongoing, -> { not_ended.where("actual_start_at <= ?", Time.current) }
 
+  scope :current_in_use, lambda {
+    not_canceled
+      .joins_order
+      .ends_in_the_future
+      .not_ended
+      .where("reserve_start_at <= ? OR actual_start_at IS NOT NULL", Time.current)
+      .where(orders: { state: [nil, :purchased] })
+  }
+
   def self.today
     for_date(Time.current)
   end

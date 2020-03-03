@@ -1,4 +1,4 @@
-- %i(xls xml csv).each do |format|
-  - if Settings.financial.journal_format.public_send(format)
-    %p= link_to t(".#{format}.#{label_size}"), facility_journal_path(facility, journal, format: format)
+- Journals::JournalFormat.all.each do |format|
+  %p= link_to t(".#{format.key}.#{label_size}", default: format.key.to_s.upcase), facility_journal_path(facility, journal, format: format.key)
+
 = render_view_hook "other_formats", journal: journal

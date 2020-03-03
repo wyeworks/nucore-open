@@ -32,9 +32,7 @@
 - else
   %p= t(".instruct.reconcile")
 
-- if @order_details.empty?
-  %p.notice= t(".notice")
-- else
+- if @journal.order_details.present?
   = form_tag facility_journal_reconcile_path(current_facility, @journal), method: :post do
     - journal_is_submittable = @journal.submittable?
     %table.table.table-striped.table-hover
@@ -52,7 +50,7 @@
           %th= t(".th.total")
           %th= t(".th.reconciled")
       %tbody
-        - @order_details.each do |order_detail|
+        - @journal.order_details.each do |order_detail|
           - disable = order_detail.reconciled? || @journal.open?
           %tr
             - if journal_is_submittable
@@ -70,4 +68,5 @@
           %tr.borderless
             %td{colspan: 3}
             %td.currency{colspan: 3}= submit_tag t(".submit"), class: "btn btn-primary"
-
+- else
+  %p.notice= t(".notice")

@@ -19,10 +19,10 @@ RSpec.describe NufsAccount do
       assert_equal "123-1234567", @account.account_number
     end
 
-    it "should not have a facility" do
+    it "should not have any facilities" do
       facility = FactoryBot.create(:facility)
       account = NufsAccount.create(@options)
-      expect(account.facility).to be_nil
+      expect(account.facilities).to be_empty
     end
 
     it "should not be limited to a single facility" do

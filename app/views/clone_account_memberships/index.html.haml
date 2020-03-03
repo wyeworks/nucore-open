@@ -1,0 +1,21 @@
+= content_for :tabnav do
+  = render partial: "admin/shared/tabnav_users", locals: {secondary_tab: "accounts"}
+= content_for :sidebar do
+  = render partial: "admin/shared/sidenav_users", locals: { sidenav_tab: "users" }
+
+= content_for :h1 do
+  = current_facility
+
+%header
+  %h1= @user.full_name
+  %h2= text("header")
+
+%p= text("instructions")
+
+= form_tag url_for(action: :search), id: "ajax_form", method: :get do
+  = label_tag :search_term, text("search_term")
+  = text_field_tag :search_term, nil, size: 30, class: "search-query"
+  = submit_tag text("shared.search"), class: "btn"
+  = hidden_field_tag :user_id, @user.id
+%br
+#result

@@ -18,6 +18,6 @@ RSpec.describe CreditCardAccount do
   end
 
   it "has the facility association" do
-    expect(account.facility).to eq facility
+    expect(account.facilities).to eq([facility])
   end
 end

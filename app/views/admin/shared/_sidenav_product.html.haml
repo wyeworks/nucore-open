@@ -4,6 +4,10 @@
       [current_facility, product_type],
       sidenav_tab == product_type.model_name.plural
 
+  %li.divider
+  = tab ProductDisplayGroup.model_name.human(count: :many), facility_product_display_groups_path, sidenav_tab == "product_display_groups"
+
   - if SettingsHelper.feature_on?(:training_requests) && current_ability.can?(:index, TrainingRequest)
     %li.divider
     = tab "#{TrainingRequest.model_name.human.pluralize} (#{current_facility.training_requests.count})", facility_training_requests_path(current_facility), sidenav_tab == TrainingRequest.model_name.plural
+

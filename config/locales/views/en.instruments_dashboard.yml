@@ -1,0 +1,9 @@
+en:
+  views:
+    instruments_dashboard:
+      dashboard:
+        time_label: Data Taken At
+        offline_reservation: Instrument is Offline
+        admin_reservation: Administrative Hold
+        active: "(Active)"
+        link_to_public: Link to Public Dashboard

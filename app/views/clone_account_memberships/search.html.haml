@@ -1,0 +1,17 @@
+- if @users.present?
+  %table.table.table-striped.table-hover
+    %thead
+      %tr
+        %th
+        %th= User.human_attribute_name(:name)
+        %th= User.human_attribute_name(:username)
+        %th= User.human_attribute_name(:email)
+    - @users.each do |user|
+      %tbody
+        %tr
+          %td= link_to text("clone"), new_facility_user_clone_account_membership_path(user_to_clone_id: user.id)
+          %td= user.full_name
+          %td= user.username
+          %td= user.email
+- else
+  %p.alert.alert-danger= text("none")

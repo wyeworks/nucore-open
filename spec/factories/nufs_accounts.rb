@@ -12,6 +12,14 @@ end
 
 FactoryBot.modify do
   factory :nufs_account do
+    transient do
+      facility { nil }
+    end
+
+    after(:build) do |account, evaluator|
+      account.facilities << evaluator.facility if evaluator.facility
+    end
+
     trait :with_order do
       with_account_owner
 

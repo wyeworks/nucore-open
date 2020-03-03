@@ -3,7 +3,7 @@
 class User < ApplicationRecord
 
   include ::Users::Roles
-  include NUCore::Database::WhereIdsIn
+  include Nucore::Database::WhereIdsIn
 
   # ldap_authenticatable is included via a to_prepare hook if ldap is enabled
   devise :database_authenticatable, :encryptable, :trackable, :recoverable

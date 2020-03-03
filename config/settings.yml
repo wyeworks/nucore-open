@@ -17,9 +17,12 @@ financial:
   # in the format MM-DD
   fiscal_year_begins: 07-01
   journal_format:
-    xls: true
-    csv: true
-    xml: true
+    # Note that xml and xls have custom responders so they don't need a class_name
+    - key: xml
+    - key: xls
+    - key: csv
+      class_name: Journals::DefaultJournalCsv
+      # mime_type: csv # This is optional if it matches the key
   default_journal_cutoff_time: "16:45"
 
 converters:
@@ -78,7 +81,6 @@ feature:
   create_users: true
   lookup_netids: false
   limit_short_description: true
-  manage_payment_sources_with_users: true
   order_assignment_notifications: true
   password_update: true
   expense_accounts: true

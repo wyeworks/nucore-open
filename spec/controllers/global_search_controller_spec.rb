@@ -45,6 +45,9 @@ RSpec.describe GlobalSearchController do
   let(:product_results) { assigns[:searchers].find { |s| s.template == "products" }.results }
 
   describe "index" do
+    before do
+      allow(FullTextSearch::Model).to receive(:full_text_searcher).and_return(FullTextSearch::LikeSearcher)
+    end
 
     context "when not signed in" do
       it "can search with the product searcher", :aggregate_failures do

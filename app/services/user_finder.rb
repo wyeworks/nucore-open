@@ -14,7 +14,7 @@ class UserFinder
     "email",
   ]
 
-  def self.search(search_term, limit)
+  def self.search(search_term, limit = nil)
     if search_term.present?
       new(search_term, limit).result
     else
@@ -22,7 +22,7 @@ class UserFinder
     end
   end
 
-  def initialize(search_term, limit)
+  def initialize(search_term, limit = nil)
     @search_term = generate_multipart_like_search_term(search_term)
     @limit = limit
   end

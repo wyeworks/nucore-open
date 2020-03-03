@@ -4,5 +4,5 @@
 
   = render_view_hook "after_facility_users", sidenav_tab: sidenav_tab
 
-  - if SettingsHelper.feature_on?(:manage_payment_sources_with_users) && current_ability.can?(:read, Account)
+  - if current_ability.can?(:read, Account)
     = tab t("activerecord.models.account", count: 2), facility_accounts_path, (sidenav_tab == "accounts")

@@ -199,14 +199,22 @@ RSpec.describe FacilitiesController do
     describe "daily view link" do
       let!(:instrument) { create(:instrument, facility: facility, facility_account: facility_account) }
 
-      it "includes link to daily view", feature_setting: { daily_view: true, reload_routes: true } do
-        do_request
-        expect(response.body).to include("daily view")
+      describe "with the feature on", feature_setting: { daily_view: true, reload_routes: true } do
+        it "includes link to daily view" do
+          do_request
+          expect(response.body).to include("Daily View")
+        end
+
+        it "does not include the link if all the instruments are hidden" do
+          instrument.update!(hidden: true)
+          do_request
+          expect(response.body).not_to include("Daily View")
+        end
       end
 
       it "does not include a link to the daily view when disabled", feature_setting: { daily_view: false, reload_routes: true } do
         do_request
-        expect(response.body).not_to include("daily view")
+        expect(response.body).not_to include("Daily View")
       end
     end
 

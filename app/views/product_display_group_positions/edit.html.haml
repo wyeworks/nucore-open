@@ -1,0 +1,20 @@
+= content_for :h1 do
+  = current_facility
+= content_for :sidebar do
+  = render "admin/shared/sidenav_product", sidenav_tab: "product_display_groups"
+
+%h2= text("reorder")
+= simple_form_for :product_display_group_positions, url: facility_product_display_group_positions_path, method: :patch do |f|
+  .container
+    .row.moveBetweenSelects
+      .span4
+        = f.input :product_display_group_ids, collection: @product_display_groups, input_html: { multiple: true, class: "tall pull-left js--selectAllOnSubmit" }, label: text("label")
+        .multiSelectReorder__buttons
+          = link_to "#", class: "btn js--multiSelectReorder__moveUp", data: { target: "#product_display_group_positions_product_display_group_ids" }, title: text("shared.reorder.move_up") do
+            = content_tag :i, "", class: "fa fa-arrow-up"
+          = link_to "#", class: "btn js--multiSelectReorder__moveDown ", data: { target: "#product_display_group_positions_product_display_group_ids" }, title: text("shared.reorder.move_down") do
+            = content_tag :i, "", class: "fa fa-arrow-down"
+    .row
+      .span12
+        = f.submit text("submit"), class: "btn btn-primary"
+        = link_to text("shared.cancel"), facility_product_display_groups_path

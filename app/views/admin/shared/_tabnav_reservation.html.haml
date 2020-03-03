@@ -1,5 +1,6 @@
 %ul.nav.nav-tabs
-  = tab "Daily View", timeline_facility_reservations_path(current_facility), tab_active?(:timeline)
-  = display_tab "New / In Process", facility_reservations_path, action: :index
+  = tab text("daily_view"), timeline_facility_reservations_path(current_facility), tab_active?(:timeline)
+  = tab text("dashboard"), dashboard_facility_instruments_path(current_facility)
+  = display_tab text("new_in_process"), facility_reservations_path, action: :index
   - if current_ability.can?(:show_problems, Reservation)
-    = display_tab "Problem Reservations", show_problems_facility_reservations_path, action: :show_problems
+    = display_tab text("problem_reservations"), show_problems_facility_reservations_path, action: :show_problems

@@ -127,4 +127,44 @@ RSpec.describe Facility do
         .to match_array(my_order_statuses + OrderStatus.where(facility_id: nil))
     end
   end
+
+  describe "#dashboard_enabled/token" do
+    it "starts off with no token" do
+      facility = described_class.new
+      expect(facility.dashboard_token).to be_blank
+    end
+
+    it "starts off not enabled" do
+      facility = described_class.new
+      expect(facility).not_to be_dashboard_enabled
+    end
+
+    it "sets the token when you tell it to be enabled" do
+      facility = described_class.new(dashboard_enabled: "1")
+      expect(facility.dashboard_token).to be_present
+    end
+
+    it "enables the dashboard after setting it" do
+      facility = described_class.new(dashboard_enabled: "1")
+      expect(facility).to be_dashboard_enabled
+    end
+
+    it "unsets it if it gets a 'false' string" do
+      facility = described_class.new(dashboard_enabled: "0")
+      expect(facility).not_to be_dashboard_enabled
+    end
+
+    it "does not change the token if you set it to true several times" do
+      facility = described_class.new(dashboard_enabled: "1")
+      expect { facility.dashboard_enabled = "1" }.not_to change(facility, :dashboard_token)
+    end
+
+    it "resets the token if you turn it off and back on" do
+      facility = described_class.new(dashboard_enabled: "1")
+      expect do
+        facility.dashboard_enabled = "0"
+        facility.dashboard_enabled = "1"
+      end.to change(facility, :dashboard_token)
+    end
+  end
 end

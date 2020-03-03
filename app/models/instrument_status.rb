@@ -14,6 +14,7 @@ class InstrumentStatus < ApplicationRecord
       instrument_status: {
         name: instrument.name,
         instrument_id: instrument.id,
+        schedule_id: instrument.schedule_id,
         type: instrument.relay&.type,
         is_on: is_on?,
         error_message: @error_message,

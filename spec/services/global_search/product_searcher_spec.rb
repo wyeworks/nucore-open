@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe GlobalSearch::ProductSearcher do
+  # This spec should be database-agnostic
+  before { allow(FullTextSearch::Model).to receive(:full_text_searcher).and_return(FullTextSearch::LikeSearcher) }
 
   subject(:results) { searcher.results }
 

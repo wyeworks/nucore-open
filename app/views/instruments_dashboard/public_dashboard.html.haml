@@ -1,0 +1,6 @@
+= content_for :head_content do
+  = javascript_include_tag "dashboard_refresh"
+
+%h1= current_facility.name
+.js--dashboardRefresh{ data: { refresh_interval: 1.minute } }
+  = render partial: "dashboard", locals: { reservations: @reservations }

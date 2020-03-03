@@ -71,7 +71,7 @@
           %td= link_to "Download", account_statement_path(order_detail.account, order_detail.statement_id, format: :pdf) if order_detail.statement
   - unless order_details.respond_to? :total_pages
     %tfoot
-      %th.total{colspan: colspan_for_total, scope: "row"}= t(".total")
-      %td.currency= number_to_currency(order_details.sum(&:actual_or_estimated_total))
-      %td{colspan: local_assigns[:show_statements] ? 2 : 1}
+      %th.total{ colspan: colspan_for_total, scope: "row" }= t(".total")
+      %td.currency= number_to_currency(order_details.map(&:actual_or_estimated_total).compact.sum)
+      %td{ colspan: local_assigns[:show_statements] ? 2 : 1 }
 = will_paginate(order_details) if order_details.respond_to? :total_pages

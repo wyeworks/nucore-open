@@ -1,16 +1,6 @@
-%h1= @secure_room.name
-#secure-rooms-dashboard{ data: { url: @refresh_url } }
-  = render "secure_rooms/shared/secure_rooms_dashboard", room: @secure_room
+= content_for :head_content do
+  = javascript_include_tag "dashboard_refresh"
 
-:javascript
-  $(document).ready(function() {
-    window.setInterval(function() {
-      $.ajax({
-        url: $("#secure-rooms-dashboard").data("url"),
-        headers: { accept: "text/html" },
-        success: function(response) {
-          $("#secure-rooms-dashboard").html(response);
-        },
-      });
-    }, 5000);
-  });
+%h1= @secure_room.name
+.js--dashboardRefresh{ data: { url: @refresh_url } }
+  = render "secure_rooms/shared/secure_rooms_dashboard", room: @secure_room

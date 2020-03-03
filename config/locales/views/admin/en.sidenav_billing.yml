@@ -1,0 +1,15 @@
+en:
+  views:
+    admin:
+      shared:
+        sidenav_billing:
+          transactions_header: Transactions
+          all_transactions: All Transactions
+          move_transactions: "!facilities.movable_transactions.head!"
+          disputed_orders: "!facilities.disputed_orders.head!"
+          send_notifications: "!facility_notifications.index.head!"
+          orders_in_review: "!facility_notifications.in_review.head!"
+          internal_billing: Internal Billing
+          external_billing: External Billing
+          statement_history: "!views.facility_statements.index.head!"
+          reconcile: "!facility_accounts_reconciliation.index.head!"

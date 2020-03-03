@@ -1,0 +1,22 @@
+en:
+  order_row_importer:
+    headers:
+      user: Netid / Email
+      order_number: Order
+      notes: Note
+    errors:
+      purchase_fail: Couldn't purchase order
+      validate_fail: Couldn't validate order
+      invalid_date: "Invalid %{field}: Please use MM/DD/YYYY format"
+      cannot_be_in_future: "Invalid %{field}: Cannot be in the future"
+      missing_headers: "Missing headers: %{headers}"
+      invalid_user: Invalid username or email
+      product_not_found: Couldn't find product by name '%{product}'
+      invalid_product_type: Import of %{type} orders not allowed at this time
+      requires_survey: "%{type} requires survey"
+      requires_template: "%{type} requires template"
+      account_not_found: Can't find account
+      order_not_found: The order could not be found
+      order_not_purchased: The order has not been purchased
+      order_in_other_facility: The order belongs to another facility
+      order_user_mismatch: The user does not match the existing order's

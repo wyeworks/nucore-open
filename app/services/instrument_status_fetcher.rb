@@ -23,7 +23,8 @@ class InstrumentStatusFetcher
     return InstrumentStatus.new(on: true, instrument: instrument) unless SettingsHelper.relays_enabled_for_admin?
 
     key = instrument.relay.status_cache_key
-    return status_cache[key] if status_cache.key?(key)
+    # If it exists in the cache, we can use that value, but we need to update the instrument
+    return status_cache[key].dup.tap { |status| status.instrument = instrument } if status_cache.key?(key)
 
     begin
       status_cache[key] = InstrumentStatus.new(on: instrument.relay.get_status, instrument: instrument)

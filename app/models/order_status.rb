@@ -19,6 +19,7 @@ class OrderStatus < ApplicationRecord
 
   scope :for_facility, ->(facility) { where(facility_id: [nil, facility.id]).order(:lft) }
 
+  # This one is different because `new` is a reserved keyword
   def self.new_status
     find_by(name: "New")
   end

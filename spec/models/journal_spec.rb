@@ -221,7 +221,7 @@ RSpec.describe Journal do
       @facilityb = FactoryBot.create(:facility, abbreviation: "B")
       @facilityc = FactoryBot.create(:facility, abbreviation: "C")
       @facilityd = FactoryBot.create(:facility, abbreviation: "D")
-      @account = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @admin), facility_id: @facilitya.id)
+      @account = FactoryBot.create(:nufs_account, :with_account_owner, owner: @admin, facility: @facilitya)
 
       # little helper to create the calls which the controller performs
       def create_pending_journal_for(*facilities_list)

@@ -1,7 +1,7 @@
 #!/bin/sh
 
-cp --no-clobber config/database.yml.mysql.template config/database.yml
-cp --no-clobber config/secrets.yml.template config/secrets.yml
+cp -n config/database.yml.mysql.template config/database.yml
+cp -n config/secrets.yml.template config/secrets.yml
 
 docker-compose run app bundle install
 docker-compose run app bundle exec rake secret

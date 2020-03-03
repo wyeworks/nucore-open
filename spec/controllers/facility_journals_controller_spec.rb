@@ -21,7 +21,7 @@ RSpec.describe FacilityJournalsController do
     # make sure order detail 2 is not reviewed (it is if a zero day review period)
     @order_detail2.update_attributes(reviewed_at: nil)
 
-    @account2 = create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: user), facility_id: facility.id)
+    @account2 = create(:nufs_account, :with_account_owner, owner: user)
     @authable_account2 = FactoryBot.create(:facility_account, facility: facility)
     @order_detail3 = place_and_complete_item_order(user, facility, @account2, true)
 
@@ -34,7 +34,7 @@ RSpec.describe FacilityJournalsController do
 
   before(:each) do
     @authable = create(:facility)
-    @account = create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @admin), facility_id: facility.id)
+    @account = create(:nufs_account, :with_account_owner, owner: @admin)
     @journal = create(:journal, facility: facility, created_by: @admin.id, journal_date: 2.days.ago.change(usec: 0))
   end
 
@@ -71,7 +71,7 @@ RSpec.describe FacilityJournalsController do
         ignore_account_validations
         create_order_details
         @creation_errors = @journal.create_journal_rows!([@order_detail1, @order_detail3])
-        @journal.create_spreadsheet if Settings.financial.journal_format.xls
+        @journal.create_spreadsheet if Journals::JournalFormat.exists?(:xls)
       end
 
       it "is set up properly" do
@@ -362,7 +362,7 @@ RSpec.describe FacilityJournalsController do
   describe "#new" do
     let(:expiry_date) { Time.zone.now - 1.year }
     let(:user) { FactoryBot.create(:user) }
-    let(:expired_payment_source) { create(:nufs_account, expires_at: expiry_date, account_users_attributes: account_users_attributes_hash(user: user), facility_id: facility.id) }
+    let(:expired_payment_source) { create(:nufs_account, :with_account_owner, owner: user, expires_at: expiry_date) }
     let!(:problem_order_detail) { place_and_complete_item_order(user, facility, expired_payment_source, true) }
 
     before :each do

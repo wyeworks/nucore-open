@@ -1,0 +1,22 @@
+en:
+  controllers:
+    clone_account_memberships:
+      success: Successfully cloned account memberships and roles.
+      error: "An error was encountered while cloning the account \"%{account}\": %{message}."
+  views:
+    clone_account_memberships:
+      index:
+        search_term: "Search by name, NetID, or username"
+        header: "Clone Payment Source Memberships"
+        instructions: |
+          You may clone payment source access from another user to this user. Search below to
+          find the user you wish to clone from.
+      search:
+        none: No results found
+        clone: "!views.clone_account_memberships.index.header!"
+      new:
+        header: "Clone from %{name}"
+        none: "%{name} does not have any payment source memberships. Please try a different user."
+        back: Back
+        already_has_access: User already has access to this payment source
+        instructions: Note that if the source user is the Owner of the account, the cloned permission will be Business Administrator.

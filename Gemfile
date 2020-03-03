@@ -118,10 +118,10 @@ end
 group :test do
   gem "capybara"
   gem "capybara-email"
-  gem "poltergeist"
   gem "rails-controller-testing"
   gem "rspec-collection_matchers"
   gem "rspec_junit_formatter"
+  gem "selenium-webdriver"
   gem "shoulda-matchers"
   gem "single_test"
   gem "webmock"
