@@ -423,7 +423,7 @@ namespace :demo do
                                               created_by: user_director.id,
                                               affiliate_id: other_affiliate.id,
                                               affiliate_other: "Some Affiliate",
-                                              facility_id: facility.id,
+                                              facilities: [facility],
                                               account_users_attributes: account_users_attributes)
       end
 
@@ -434,7 +434,7 @@ namespace :demo do
                                                  description: "Paul PI's Purchase Order",
                                                  expires_at: Time.zone.now + 1.year,
                                                  created_by: user_director.id,
-                                                 facility_id: facility.id,
+                                                 facilities: [facility],
                                                  affiliate_id: other_affiliate.id,
                                                  affiliate_other: "Some Affiliate",
                                                  remittance_information: "Billing Dept\nEdward External\n1702 E Research Dr\nAuburn, AL 36830",

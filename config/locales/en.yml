@@ -274,7 +274,6 @@ en:
         closed: Closed Journals
       notice:
         no_pending: "There is no pending journal at this time"
-        no_editable: There is a pending journal, but you don't have the rights to manage it
         no_journals: No journals have been closed yet
         journaled: "There are no orders to be journaled at this time"
         close: "You may not generate a new journal until the pending journal is closed."
@@ -520,6 +519,9 @@ en:
       hidden: "No"
       optional: Optional
       required: Required
+    tags:
+      archived: (Inactive)
+      hidden: (Hidden)
 
   admin_reservations:
     categories:

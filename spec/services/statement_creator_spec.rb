@@ -38,6 +38,8 @@ RSpec.describe StatementCreator do
         expect(Statement.all.length).to eq(1)
         expect(order_detail_1.reload.statement).not_to be_nil
         expect(order_detail_2.reload.statement).not_to be_nil
+        log_event = LogEvent.find_by(loggable: order_detail_1.statement, event_type: :create)
+        expect(log_event).to be_present
       end
     end
 

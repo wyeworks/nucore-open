@@ -8,8 +8,10 @@ RSpec.describe FacilityUsersController do
 
   before(:all) { create_users }
 
+  let(:facility) { FactoryBot.create(:facility) }
+
   before(:each) do
-    @authable = FactoryBot.create(:facility)
+    @authable = facility
     @params = { facility_id: @authable.url_name }
   end
 
@@ -45,6 +47,15 @@ RSpec.describe FacilityUsersController do
       assert_redirected_to facility_facility_users_url
     end
 
+    it "logs events" do
+      director = create(:user, :facility_director, facility: facility)
+      sign_in director
+
+      delete :destroy, params: { facility_id: facility.url_name, id: @staff.id }
+      user_role = UserRole.deleted.find_by(user: @staff, facility: facility)
+      expect(LogEvent).to be_exists(loggable: user_role, event_type: :delete, user: director)
+    end
+
   end
 
   context "search" do
@@ -73,6 +84,26 @@ RSpec.describe FacilityUsersController do
       expect(assigns(:user_role).user).to eq(@staff)
       expect(assigns(:user_role).facility).to eq(@authable)
       assert_redirected_to facility_facility_users_url
+    end
+
+    describe "as a director" do
+      let(:director) { create(:user, :facility_director, facility: facility) }
+      before { sign_in director }
+
+      it "logs an event" do
+        post :map_user, params: @params
+
+        user_role = UserRole.find_by(user: @staff, facility: facility)
+        expect(LogEvent).to be_exists(loggable: user_role, event_type: :create, user: director)
+      end
+
+      it "does not log an event if it's a duplicate role" do
+        create(:user_role, :facility_staff, user: @staff, facility: facility)
+
+        expect do
+          post :map_user, params: @params
+        end.not_to change(LogEvent, :count)
+      end
     end
 
   end

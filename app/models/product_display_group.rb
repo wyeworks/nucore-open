@@ -27,7 +27,7 @@ class ProductDisplayGroup < ApplicationRecord
   end
 
   def set_default_positions
-    self.position = facility.product_display_groups.maximum(:position).to_i + 1
+    self.position ||= facility.product_display_groups.maximum(:position).to_i + 1
   end
 
   def associated_errors

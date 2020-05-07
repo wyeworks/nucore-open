@@ -26,7 +26,7 @@ class Service < Product
     stored_files.template.count > 0
   end
 
-  def mergeable?
+  def requires_merge?
     active_survey? || active_template?
   end
 

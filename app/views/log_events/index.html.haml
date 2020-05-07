@@ -50,7 +50,7 @@
     - @log_events.each do |log_event|
       %tr
         %td= format_usa_datetime(log_event.event_time)
-        %td= text(log_event.locale_tag)
+        %td= text(log_event.locale_tag, log_event.metadata.symbolize_keys)
         %td= log_event.loggable_to_s
         %td= log_event.user.try(:to_s)
 

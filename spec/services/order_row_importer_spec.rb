@@ -209,7 +209,7 @@ RSpec.describe OrderRowImporter do
         it_behaves_like "an invalid order_date"
       end
 
-      context "is in he future" do
+      context "is in the future" do
         let(:order_date) { I18n.l(1.day.from_now.to_date, format: :usa) }
 
         it_behaves_like "an invalid order_date"

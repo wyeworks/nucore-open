@@ -25,7 +25,9 @@ class FacilityUsersController < ApplicationController
   # remove the user's facility-role mapping
   def destroy
     @user = User.find(params[:id])
-    @user.facility_user_roles(current_facility).each(&:destroy)
+    destroyed = @user.facility_user_roles(current_facility).destroy_all
+    destroyed.each { |user_role| LogEvent.log(user_role, :delete, current_user) }
+
     redirect_to facility_facility_users_url
   end
 
@@ -39,8 +41,10 @@ class FacilityUsersController < ApplicationController
     if request.post?
       begin
         @user_role = UserRole.grant(@user, params[:user_role][:role], current_facility)
+        LogEvent.log(@user_role, :create, current_user)
         redirect_to facility_facility_users_url
-      rescue ActiveRecord::RecordInvalid
+      rescue ActiveRecord::RecordInvalid => e
+        flash.now[:alert] = e.message
         render action: "map_user"
       end
     end

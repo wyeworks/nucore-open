@@ -23,11 +23,11 @@
               .pull-right= link_to "Edit", edit_facility_product_display_group_path(current_facility, product_display_group), class: "btn"
           %ul.js--dropTargetElement
             - product_display_group.products.each do |product|
-              %li= product
+              %li= ProductPresenter.new(product)
     .span4
       .well
         %legend= ProductDisplayGroup.human_attribute_name(:ungrouped_product_ids)
         %ul
           - @ungrouped_products.alphabetized.each do |product|
-            %li= product
+            %li= ProductPresenter.new(product)
 

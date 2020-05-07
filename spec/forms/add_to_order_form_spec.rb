@@ -31,11 +31,15 @@ RSpec.describe AddToOrderForm do
 
     describe "when there were multiple items in the original cart" do
       let(:second_order_detail) do
-        create(:order_detail, order: order, ordered_at: order.order_details.first.ordered_at, product: product)
+        create(:order_detail, :purchased, order: order, ordered_at: order.order_details.first.ordered_at, product: product)
       end
       before do
         order.reload
         second_order_detail.backdate_to_complete!(10.minutes.ago)
+      end
+
+      it "has no previously ordered" do
+        expect(form.previously_added_order_detail).to be_blank
       end
 
       it "has an order status of New" do
@@ -50,14 +54,27 @@ RSpec.describe AddToOrderForm do
     describe "when the order has something else added to it already" do
       let(:other_account) { create(:nufs_account, :with_account_owner, owner: order.user, description: "Other Account") }
       let(:other_product) { create(:setup_item, facility: product.facility) }
-      let(:second_order_detail) do
-        create(:order_detail, order: order, account: other_account, product: product, note: "somenote", ordered_at: 1.day.ago)
+      let!(:second_order_detail) do
+        create(:order_detail, :purchased, order: order, account: other_account, product: product, note: "somenote", ordered_at: 1.day.ago, created_at: 5.minutes.from_now)
+      end
+      # Oracle can have out of sequence IDs due to its caching of allocated values in the sequence.
+      let!(:out_of_order_order_detail) do
+        create(:order_detail, :purchased, order: order, product: product, created_at: 1.minute.from_now)
       end
 
       before { order.reload }
 
+      it "has the right ordering - i.e. the test is set up correctly" do
+        expect(order.order_details.order(:created_at)).to match([anything, out_of_order_order_detail, second_order_detail])
+        expect(order.order_details.order(:id)).to match([anything, second_order_detail, out_of_order_order_detail])
+      end
+
+      it "gets the right order detail" do
+        expect(form.previously_added_order_detail).to eq(second_order_detail)
+      end
+
       describe "and it is still New" do
-        it "has a status of complete" do
+        it "has a status of new" do
           expect(form.order_status_id).to eq(OrderStatus.new_status.id)
         end
 

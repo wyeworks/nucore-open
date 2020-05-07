@@ -38,4 +38,19 @@ RSpec.describe ProductDisplayGroup do
     expect(group.associated_errors.flat_map(&:full_messages)).to include("Product #{product.name} is already in a group")
   end
 
+  describe "position" do
+    it "sets an incrementing default position on create" do
+      group1 = create(:product_display_group, facility: facility)
+      expect(group1.position).to eq(1)
+
+      group2 = create(:product_display_group, facility: facility)
+      expect(group2.position).to eq(2)
+    end
+
+    it "does not overwrite the position if you explicitly set it" do
+      group = create(:product_display_group, position: 39, facility: facility)
+      expect(group.position).to eq(39)
+    end
+  end
+
 end

@@ -6,7 +6,7 @@ FactoryBot.define do
     first_name { "User" }
     password { "password" }
     password_confirmation { "password" }
-    sequence(:last_name, &:to_s)
+    sequence(:last_name) { |n| "Last#{n}" }
     sequence(:email) { |n| "user#{n}@example.com" }
 
     trait :suspended do

@@ -2,6 +2,8 @@
 
 class UserRole < ApplicationRecord
 
+  acts_as_paranoid
+
   belongs_to :user
   belongs_to :facility
 
@@ -96,6 +98,15 @@ class UserRole < ApplicationRecord
   # both underscored ("global_billing_administrator") and title cased ("Facility Staff).
   def in?(roles)
     role.in? Array(roles).map(&:to_s).map(&:titleize)
+  end
+
+  def to_log_s
+    [
+      user,
+      "-",
+      facility_id ? facility.abbreviation : "Global",
+      role,
+    ].join(" ")
   end
 
 end

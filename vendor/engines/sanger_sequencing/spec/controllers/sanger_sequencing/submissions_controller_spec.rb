@@ -18,7 +18,7 @@ RSpec.describe SangerSequencing::SubmissionsController do
       before { sign_in user }
       it "has access" do
         get :edit, params: { id: submission.id }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

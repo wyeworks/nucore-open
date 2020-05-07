@@ -216,6 +216,26 @@ RSpec.describe FacilitiesController do
         do_request
         expect(response.body).not_to include("Daily View")
       end
+
+      describe "product_display_groups" do
+        let!(:product1) { create(:item, facility: facility) }
+        let!(:product2) { create(:item, facility: facility) }
+        let!(:not_in_group) { create(:item, facility: facility) }
+        let!(:product_display_group1) { create(:product_display_group, position: 2, name: "Second", products: [product1], facility: facility) }
+        let!(:product_display_group2) { create(:product_display_group, position: 1, name: "First", products: [product2], facility: facility) }
+
+        it "returns the product groups in the right order" do
+          do_request
+          expect(assigns(:product_display_groups).first).to eq(product_display_group2)
+          expect(assigns(:product_display_groups).second).to eq(product_display_group1)
+        end
+
+        it "includes an unpersisted group which includes the last item" do
+          do_request
+          items_group = assigns(:product_display_groups).to_a.find { |p| p.name == "Items" }
+          expect(items_group.products).to include(not_in_group)
+        end
+      end
     end
 
     context "when requesting the 'all' facility (cross-facility)" do

@@ -20,6 +20,10 @@ class TimedServicePricePolicy < PricePolicy
     calculate_for_time(duration)
   end
 
+  def charge_for
+    "minutes"
+  end
+
   private
 
   def calculate_for_time(duration)

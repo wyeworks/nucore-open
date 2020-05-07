@@ -43,9 +43,14 @@ class GlobalUserRolesController < GlobalSettingsController
 
   def assign_global_roles!
     @user.transaction do
-      @user.user_roles.global.destroy_all
-      params[:roles].each do |role_name|
-        UserRole.create!(user: @user, role: role_name)
+      user_roles_to_destroy = @user.user_roles.global.where.not(role: params[:roles])
+      user_roles_to_destroy.each { |user_role| LogEvent.log(user_role, :delete, current_user) }
+      user_roles_to_destroy.destroy_all
+
+      roles_to_add = params[:roles] - @user.user_roles.global.pluck(:role)
+      roles_to_add.each do |role_name|
+        user_role = UserRole.create!(user: @user, role: role_name)
+        LogEvent.log(user_role, :create, current_user)
       end
     end
   end
@@ -54,7 +59,8 @@ class GlobalUserRolesController < GlobalSettingsController
     case
     when @user == current_user
       flash[:error] = translate("self_not_allowed", action: "remove")
-    when @user.user_roles.global.destroy_all
+    when destroyed = @user.user_roles.global.destroy_all
+      destroyed.each { |user_role| LogEvent.log(user_role, :delete, current_user) }
       flash[:notice] = translate("destroy.success", user: @user.username)
     else
       flash[:error] = translate("destroy.failure", user: @user.username)

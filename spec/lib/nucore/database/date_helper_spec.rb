@@ -2,10 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe NUCore::Database::DateHelper do
+RSpec.describe Nucore::Database::DateHelper do
   class DateHelperClass
 
-    include NUCore::Database::DateHelper
+    include Nucore::Database::DateHelper
 
   end
 

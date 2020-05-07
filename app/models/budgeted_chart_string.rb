@@ -2,7 +2,7 @@
 
 class BudgetedChartString < ApplicationRecord
 
-  include NUCore::Database::DateHelper
+  include Nucore::Database::DateHelper
 
   validates_presence_of :fund, :dept, :starts_at, :expires_at
   validates_length_of   :fund, is: 3

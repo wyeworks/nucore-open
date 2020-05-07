@@ -24,7 +24,7 @@ class FacilityJournalsController < ApplicationController
 
   # GET /facilities/journals
   def index
-    set_pending_journals
+    set_pending_journals if @journals.current_page == 1
   end
 
   # GET /facilities/journals/new
@@ -98,6 +98,7 @@ class FacilityJournalsController < ApplicationController
     if @journal.errors.blank? && @journal.save
       @journal.create_spreadsheet if Journals::JournalFormat.exists?(:xls)
       flash[:notice] = I18n.t("controllers.facility_journals.create.notice")
+      LogEvent.log(@journal, :create, session_user)
       redirect_to facility_journals_path(current_facility)
     else
       flash_error_messages

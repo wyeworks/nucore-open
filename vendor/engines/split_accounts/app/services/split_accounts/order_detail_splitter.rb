@@ -84,6 +84,7 @@ module SplitAccounts
       # N+1s because the "fake" order detail will not think it needs to hit the DB.
       copy_associations(split_order_detail)
 
+      split_order_detail.readonly! # Don't accidentally try to write something to the database
       split_order_detail
     end
 

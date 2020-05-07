@@ -136,4 +136,26 @@ RSpec.describe UserRole do
       it { is_expected.to be_in([:administrator, "Facility Manager"]) }
     end
   end
+
+  describe "soft deletion" do
+    describe "facility roles" do
+      let!(:user_role) { create(:user_role, :facility_staff) }
+      let(:user) { user_role.user }
+      let(:facility) { user_role.facility }
+
+      it "soft deletes" do
+        expect(user.operator_of?(facility)).to be_truthy
+        user_role.destroy
+        expect { UserRole.find(user_role.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "makes the user no longer an operator" do
+        expect { user_role.destroy }.to change { user.reload.operator_of?(facility) }.to be_falsey
+      end
+
+      it "sets deleted_at" do
+        expect { user_role.destroy }.to change(user_role, :deleted_at).to be_present
+      end
+    end
+  end
 end

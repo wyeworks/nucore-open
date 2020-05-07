@@ -8,12 +8,16 @@
         %th= t(".th.account")
         %th= t(".th.owner")
         %th= Account.human_attribute_name(:expires_at)
+        - if current_facility.cross_facility?
+          %th= Facility.model_name.human
     %tbody
       - @accounts.each do |account|
         %tr
           %td= payment_source_link_or_text(account)
           %td= account.owner_user.full_name if account.owner_user
           %td= human_date(account.expires_at)
+          - if current_facility.cross_facility?
+            %td= account.per_facility? ? account.facilities.alphabetized.join(", ") : html("all", inline: true)
 
   - if params[:search_term].present?
     = will_paginate(@accounts, class: "ajax_links",

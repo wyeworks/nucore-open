@@ -46,6 +46,9 @@ class FacilityNotificationsController < ApplicationController
 
     if sender.perform
       flash[:notice] = send_notification_success_message(sender)
+      sender.order_details.each do |order_detail|
+        LogEvent.log(order_detail, :notify, current_user)
+      end
     else
       flash[:error] = I18n.t("controllers.facility_notifications.errors_html", errors: sender.errors.join("<br/>")).html_safe
     end
@@ -80,6 +83,7 @@ class FacilityNotificationsController < ApplicationController
           od = OrderDetail.for_facility(current_facility).readonly(false).find(order_detail_id)
           od.reviewed_at = Time.zone.now
           od.save!
+          LogEvent.log(od, :review, current_user)
           @order_details_updated << od
         rescue => e
           logger.error(e.message)

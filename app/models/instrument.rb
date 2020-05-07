@@ -38,7 +38,8 @@ class Instrument < Product
   # Callbacks
   # --------
 
-  after_create :set_default_pricing
+  # Triggered by Product
+  # after_create :create_default_price_group_products
 
   # Scopes
   # --------
@@ -64,13 +65,16 @@ class Instrument < Product
     days = price_group_products.collect(&:reservation_window).max.to_i
   end
 
-  def mergeable?
+  def requires_merge?
     true
   end
 
-  def set_default_pricing
-    PriceGroup.globals.find_each do |pg|
-      PriceGroupProduct.create!(product: self, price_group: pg, reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW)
+  def create_default_price_group_products
+    PriceGroup.globals.find_each do |price_group|
+      price_group_products.create!(
+        price_group: price_group,
+        reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW
+      )
     end
   end
 

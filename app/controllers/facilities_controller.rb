@@ -52,7 +52,8 @@ class FacilitiesController < ApplicationController
     else
       @product_scope = @product_scope.active # Active also excludes hidden
     end
-    @product_display_groups = current_facility.product_display_groups
+
+    @product_display_groups = current_facility.product_display_groups.sorted
     @product_display_groups = @product_display_groups.to_a + ProductDisplayGroup.fake_groups_by_type(current_facility.products.without_display_group)
 
     render layout: "application"

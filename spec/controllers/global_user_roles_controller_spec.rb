@@ -104,6 +104,10 @@ RSpec.describe GlobalUserRolesController do
         expect(flash[:error]).to include("may not change global roles")
         expect(administrator).to be_administrator
       end
+
+      it "does not create new UserRoles" do
+        expect(user.user_roles.with_deleted).to be_one
+      end
     end
 
     context "when the user has no existing global roles" do
@@ -112,6 +116,11 @@ RSpec.describe GlobalUserRolesController do
       it "grants the role" do
         expect(flash[:notice]).to include("succeeded")
         expect(user).to be_administrator
+      end
+
+      it "creates an event log" do
+        role = UserRole.find_by(user: user, role: UserRole::ADMINISTRATOR)
+        expect(LogEvent).to be_exists(loggable: role, event_type: :create, user: administrator)
       end
     end
 
@@ -122,6 +131,15 @@ RSpec.describe GlobalUserRolesController do
         expect(flash[:notice]).to include("succeeded")
         expect(user).not_to be_account_manager
         expect(user).to be_administrator
+      end
+
+      it "creates log events" do
+        new_role = UserRole.find_by(user: user, role: UserRole::ADMINISTRATOR)
+        expect(LogEvent).to be_exists(loggable: new_role, event_type: :create, user: administrator)
+
+        old_role = UserRole.with_deleted.find_by(user: user, role: UserRole::ACCOUNT_MANAGER)
+        expect(old_role).to be_present
+        expect(LogEvent).to be_exists(loggable: old_role, event_type: :delete, user: administrator)
       end
 
       context "and no roles are specified in params" do

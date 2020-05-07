@@ -246,6 +246,12 @@ RSpec.describe FacilityJournalsController do
         it "creates a new journal" do
           expect { do_request }.to change(Journal, :count).by(1)
         end
+        it "logs the new journal's creation" do
+          do_request
+          last_journal = Journal.last
+          log_event = LogEvent.find_by(loggable: last_journal, event_type: :create)
+          expect(log_event).to be_present
+        end
       end
 
       context "when the journal_date is blank" do
