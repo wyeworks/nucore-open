@@ -98,4 +98,8 @@ class AccountUser < ApplicationRecord
     super.merge(deleted_by: deleted_by)
   end
 
+  def to_log_s
+    "#{account} / #{user}"
+  end
+
 end

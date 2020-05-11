@@ -81,6 +81,14 @@ RSpec.describe FacilityNotificationsController do
           @params.merge!(order_detail_ids: [@order_detail1.id, @order_detail2.id, @order_detail3.id])
         end
 
+        it "logs every order detail" do
+          do_request
+          log_event1 = LogEvent.find_by(loggable: @order_detail1, event_type: :notify)
+          log_event2 = LogEvent.find_by(loggable: @order_detail2, event_type: :notify)
+          log_event3 = LogEvent.find_by(loggable: @order_detail3, event_type: :notify)
+          expect([log_event1, log_event2, log_event3]).to be_present
+        end
+
         it_should_allow_managers_only :redirect do
           expect(assigns(:errors)).to be_empty
           expect([@order_detail1, @order_detail2, @order_detail3]).to be_all { |od| od.reload.reviewed_at? }
@@ -195,6 +203,14 @@ RSpec.describe FacilityNotificationsController do
         expect(assigns(:order_details_updated)).to eq([@order_detail1, @order_detail3])
         expect(@order_detail1.reload.reviewed_at.to_i).to eq(Time.zone.now.to_i)
         expect(@order_detail3.reload.reviewed_at.to_i).to eq(Time.zone.now.to_i)
+      end
+
+      it "logs the order when it gets review" do
+        @params[:order_detail_ids] = [@order_detail1.id, @order_detail3.id]
+        do_request
+        log_event = LogEvent.find_by(loggable: @order_detail1, event_type: :review)
+        log_event = LogEvent.find_by(loggable: @order_detail3, event_type: :review)
+        expect(log_event).to be_present
       end
 
       it "displays an error for no orders" do

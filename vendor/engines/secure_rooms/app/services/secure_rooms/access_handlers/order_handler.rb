@@ -38,7 +38,7 @@ module SecureRooms
 
       def complete_order
         if occupancy.orphaned_at?
-          MoveToProblemQueue.move!(order_detail)
+          MoveToProblemQueue.move!(order_detail, cause: :orphaned)
         else
           order_detail.complete!
         end

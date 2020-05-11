@@ -17,7 +17,7 @@ RSpec.describe ProblemReservationResolver do
   end
   subject(:resolver) { described_class.new(problem_reservation) }
 
-  before { MoveToProblemQueue.move!(problem_reservation.order_detail) }
+  before { MoveToProblemQueue.move!(problem_reservation.order_detail, cause: :reservation_started) }
 
   describe "resolve" do
     it "sets the problem resolution attributes" do

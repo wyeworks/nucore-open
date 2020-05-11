@@ -62,7 +62,7 @@ class OrderDetailsController < ApplicationController
         @order_detail.dispute_by = current_user
         @order_detail.save!
         flash[:notice] = text("dispute.success")
-
+        LogEvent.log(@order_detail, :dispute, current_user)
         redirect_to in_review_transactions_path
       rescue => e # TODO: be more specific about what Exceptions to rescue
         flash.now[:error] = text("dispute.error")

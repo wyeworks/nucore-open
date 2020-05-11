@@ -136,6 +136,7 @@ if Account.config.statements_enabled?
         @params.merge!(order_detail_ids: [@order_detail1.id, @order_detail3.id])
       end
 
+
       it_should_allow_managers_only :redirect do
         expect(response).to be_redirect
       end

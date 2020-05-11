@@ -39,11 +39,17 @@ class Account < ApplicationRecord
   has_many :log_events, as: :loggable
 
   scope :active, -> { where("expires_at > ?", Time.current).where(suspended_at: nil) }
+
   scope :administered_by, lambda { |user|
     for_user(user).where("account_users.user_role" => AccountUser.admin_user_roles)
   }
+
   scope :global, -> { where(type: config.global_account_types) }
   scope :per_facility, -> { where(type: config.facility_account_types) }
+
+  scope :with_orders_for_facility, lambda { |facility|
+    where(id: OrderDetail.for_facility(facility).select(:account_id).distinct)
+  }
 
   validates_presence_of :account_number, :description, :expires_at, :created_by, :type
   validates_length_of :description, maximum: 50
@@ -103,10 +109,6 @@ class Account < ApplicationRecord
 
   def self.for_order_detail(order_detail)
     for_user(order_detail.user).for_facility(order_detail.facility)
-  end
-
-  def self.with_orders_for_facility(facility)
-    where(id: ids_with_orders(facility))
   end
 
   def type_string
@@ -265,14 +267,6 @@ class Account < ApplicationRecord
 
   def missing_owner?
     account_users.none? { |au| au.active? && au.owner? }
-  end
-
-  private
-
-  def self.ids_with_orders(facility)
-    relation = joins(order_details: :order)
-    relation = relation.where("orders.facility_id = ?", facility) if facility.single_facility?
-    relation.select("distinct order_details.account_id")
   end
 
 end

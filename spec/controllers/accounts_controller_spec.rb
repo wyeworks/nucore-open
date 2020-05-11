@@ -106,6 +106,14 @@ RSpec.describe AccountsController do
         expect(@account.reload).to be_suspended
         assert_redirected_to account_path(@account)
       end
+
+      it "logs the account when it gets suspended" do
+        admin = create(:user, :administrator)
+        sign_in admin
+        do_request
+        log_event = LogEvent.find_by(loggable: @account, event_type: :suspended, user: admin)
+        expect(log_event).to be_present
+      end
     end
 
     context "unsuspend" do
@@ -124,6 +132,14 @@ RSpec.describe AccountsController do
         is_expected.to set_flash
         expect(assigns(:account)).not_to be_suspended
         assert_redirected_to account_path(@account)
+      end
+
+      it "logs the account when it gets unsuspended" do
+        admin = create(:user, :administrator)
+        sign_in admin
+        do_request
+        log_event = LogEvent.find_by(loggable: @account, event_type: :unsuspended, user: admin)
+        expect(log_event).to be_present
       end
     end
   end

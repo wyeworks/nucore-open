@@ -11,7 +11,7 @@
         -# Include both so the page still works without JS. The JS will clear anything in
         -# the excluded list from this. Uniq is to prevent duplicates in the case of validation
         -# errors and a product might be in both places.
-        = f.input :product_ids, collection: (@product_display_group.products + @ungrouped_products).uniq, input_html: { multiple: true, class: "tall js--included pull-left" }
+        = f.input :product_ids, collection: (@product_display_group.products + @ungrouped_products).uniq, input_html: { multiple: true, class: "tall js--included pull-left" }, label_method: ->(product) { ProductPresenter.new(product) }
         .multiSelectReorder__buttons
           = link_to "#", class: "btn js--multiSelectReorder__moveUp", data: { target: "#product_display_group_product_ids" }, title: text("shared.reorder.move_up") do
             = content_tag :i, "", class: "fa fa-arrow-up"
@@ -27,5 +27,5 @@
       .span4
         = simple_fields_for :ungrouped do |u|
           -# In the case of validation errors, ensure this collection does not include those added in the previous POST/PATCH
-          = u.input :product_ids, collection: @ungrouped_products - @product_display_group.products, input_html: { multiple: true, class: "tall js--excluded" }, required: false, label: ProductDisplayGroup.human_attribute_name(:ungrouped_product_ids)
+          = u.input :product_ids, collection: @ungrouped_products - @product_display_group.products, input_html: { multiple: true, class: "tall js--excluded" }, required: false, label: ProductDisplayGroup.human_attribute_name(:ungrouped_product_ids), label_method: ->(product) { ProductPresenter.new(product) }
   = f.submit class: "btn btn-primary"

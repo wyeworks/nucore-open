@@ -13,7 +13,7 @@
   = f.input :banner_notice if SettingsHelper.feature_on?(:facility_banner_notice)
   = f.input :accepts_multi_add, label: text("views.facilities.facility_fields.labels.accepts_multi_add")
   = f.input :show_instrument_availability, label: text("views.facilities.facility_fields.labels.show_instrument_availability")
-  = f.input :dashboard_enabled
+  = f.input :dashboard_enabled, label: text("views.facilities.facility_fields.labels.dashboard_enabled")
   = render_view_hook("before_is_active", f: f)
   = f.input :is_active
   = f.input :address, value_method: proc { |value| value.present? ? simple_format(value) : '<p>None Entered</p>'.html_safe }

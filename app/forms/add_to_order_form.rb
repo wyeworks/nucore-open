@@ -66,6 +66,24 @@ class AddToOrderForm
     AvailableAccountsFinder.new(original_order.user, current_facility)
   end
 
+  # We're using the ordered_at of the order details to determine if additional OrderDetails
+  # have been added to the order. We find the most recently added order that does not
+  # match the original order's ordered_at and use that for our basis for defaults.
+  # There is an edge case: 1) Upload an order via bulk upload. 2) Add on to that order
+  # here. 3) Upload again via bulk upload matching the ordered_at of the original.
+  # In that situation, we will return the results of #2.
+  def previously_added_order_detail
+    return @previously_added_order_detail if defined?(@previously_added_order_detail)
+
+    # We are ordering by created_at rather than ID because it is possible in Oracle
+    # for the IDs to be assigned out of insert order due to the way it caches sequence values.
+    # https://stackoverflow.com/questions/4866959/oracle-rac-and-sequences
+    order_details = @original_order.order_details.order(:created_at)
+    original_order_detail = order_details.first
+
+    @previously_added_order_detail = order_details.reverse.find { |od| od.ordered_at != original_order_detail.ordered_at }
+  end
+
   protected
 
   def translation_scope
@@ -111,20 +129,6 @@ class AddToOrderForm
     previously_added_order_detail.present?
   end
 
-  # We're using the ordered_at of the order details to determine if additional OrderDetails
-  # have been added to the order. We find the most recently added order that does not
-  # match the original order's ordered_at and use that for our basis for defaults.
-  # There is an edge case: 1) Upload an order via bulk upload. 2) Add on to that order
-  # here. 3) Upload again via bulk upload matching the ordered_at of the original.
-  # In that situation, we will return the results of #2.
-  def previously_added_order_detail
-    return @previously_added_order_detail if defined?(@previously_added_order_detail)
-
-    order_details = @original_order.order_details.order(:id)
-    original_order_detail = order_details.first
-    @previously_added_order_detail = order_details.reverse.find { |od| od.ordered_at != original_order_detail.ordered_at }
-  end
-
   def params
     {
       note: note.presence,
@@ -143,7 +147,7 @@ class AddToOrderForm
     return @merge_order if defined?(@merge_order)
 
     products = product.is_a?(Bundle) ? product.products : [product]
-    @merge_order = if products.any?(&:mergeable?)
+    @merge_order = if products.any?(&:requires_merge?)
                      Order.create!(
                        merge_with_order_id: original_order.id,
                        facility_id: original_order.facility_id,
@@ -161,7 +165,10 @@ class AddToOrderForm
     # `manual_fulfilled_at` already handles the proper string parsing so we can use
     # it instead of duplicating the parsing effort.
     order_detail.manual_fulfilled_at = fulfilled_at
-    if order_detail.valid_for_purchase?
+    # If we are a merge order (i.e. requires more action like uploading an order form),
+    # we do not want to set the ordered_at just yet. It will be set after the issues have
+    # been resolved.
+    if merge_order == original_order
       order_detail.ordered_at = order_detail.manual_fulfilled_at_time || Time.current
     end
   end

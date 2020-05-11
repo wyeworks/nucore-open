@@ -86,6 +86,11 @@ module SecureRooms
       end
     end
 
+    def force_dirty!
+      # This doesn't have to be entry_at -- it just needs to be something
+      entry_at_will_change!
+    end
+
     private
 
     def range

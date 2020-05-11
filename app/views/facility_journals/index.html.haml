@@ -4,46 +4,41 @@
 = content_for :sidebar do
   = render partial: 'admin/shared/sidenav_billing', locals: { sidenav_tab: 'journals' }
 
-- if current_facility.has_pending_journals?
+- if @pending_journals.present?
   %h2= t(".head.pending")
+  %div= t(".instructions_html")
 
-  - if @pending_journals.present?
-    %div= t(".instructions_html")
-
-    - @pending_journals.each do |pending_journal|
-      - facility_abbreviations = pending_journal.facility_abbreviations
-      = simple_form_for([current_facility, pending_journal]) do |f|
-        = f.error_messages
-        %table.table.table-striped.table-hover
-          %thead
-            %tr
-              %th= t(".th.download")
-              %th= t(".th.journaled_at")
-              - if cross_facility?
-                %th= Facility.model_name.human
-              %th= f.label :reference
-              %th= f.label :description
-              %th= f.label :journal_status, required: true
-              %th= f.label :amount
-          %tbody
-            %tr
-              %td
-                %ul.unstyled
-                  = render "downloads", facility: current_facility, journal: pending_journal, label_size: :short
-              %td= format_usa_datetime(pending_journal.created_at)
-              - if cross_facility?
-                %td= facility_abbreviations.join("<br>").html_safe
-              %td= f.input :reference, label: false, input_html: { class: 'input-medium' }
-              %td= f.input :description, label: false, input_html: { class: 'input-medium' }
-              %td
-                = select_tag :journal_status, options_for_select([[' ', nil], ['Succeeded, no errors', 'succeeded'], ['Succeeded, with errors', 'succeeded_errors'], ['Failed', 'failed']], params[:journal_status]), class: 'input-medium'
-                = submit_tag t(".journal.close"),
-                  data: { confirm: t(".journal.confirm") },
-                  class: ["btn", "btn-primary"]
-              %td= number_to_currency(pending_journal.amount)
-
-  - else    # there's pending journals, but user can't edit
-    %p.notice= t(".notice.no_editable")
+  - @pending_journals.each do |pending_journal|
+    - facility_abbreviations = pending_journal.facility_abbreviations
+    = simple_form_for([current_facility, pending_journal]) do |f|
+      = f.error_messages
+      %table.table.table-striped.table-hover
+        %thead
+          %tr
+            %th= t(".th.download")
+            %th= t(".th.journaled_at")
+            - if cross_facility?
+              %th= Facility.model_name.human
+            %th= f.label :reference
+            %th= f.label :description
+            %th= f.label :journal_status, required: true
+            %th= f.label :amount
+        %tbody
+          %tr
+            %td
+              %ul.unstyled
+                = render "downloads", facility: current_facility, journal: pending_journal, label_size: :short
+            %td= format_usa_datetime(pending_journal.created_at)
+            - if cross_facility?
+              %td= facility_abbreviations.join("<br>").html_safe
+            %td= f.input :reference, label: false, input_html: { class: 'input-medium' }
+            %td= f.input :description, label: false, input_html: { class: 'input-medium' }
+            %td
+              = select_tag :journal_status, options_for_select([[' ', nil], ['Succeeded, no errors', 'succeeded'], ['Succeeded, with errors', 'succeeded_errors'], ['Failed', 'failed']], params[:journal_status]), class: 'input-medium'
+              = submit_tag t(".journal.close"),
+                data: { confirm: t(".journal.confirm") },
+                class: ["btn", "btn-primary"]
+            %td= number_to_currency(pending_journal.amount)
 
 %h2= t(".head.closed")
 - if @journals.blank?

@@ -3,7 +3,7 @@
 class JournalRow < ApplicationRecord
 
   belongs_to :journal
-  belongs_to :order_detail
+  belongs_to :order_detail, autosave: false
 
   validates_presence_of :journal_id, :amount
   # Note this is NOT a belongs_to :account. This is an expense account field.

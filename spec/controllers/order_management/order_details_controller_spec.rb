@@ -596,6 +596,30 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
                   expect(order_detail.reload.price_changed_by_user).to eq @admin
                 end
+
+                it "log the price change" do
+                  @params[:order_detail] = {
+                    actual_cost: "10",
+                    actual_subsidy: order_detail.actual_subsidy,
+                    price_change_reason: "this is a reason",
+                  }
+                  do_request
+
+                  log_event = LogEvent.find_by(loggable: order_detail, event_type: :price_change)
+                  expect(log_event).to be_present
+                end
+
+                it "doesn't log the price change when there is an error" do
+                  @params[:order_detail] = {
+                    actual_cost: "-10",
+                    actual_subsidy: order_detail.actual_subsidy,
+                    price_change_reason: "this is a reason",
+                  }
+                  do_request
+
+                  log_event = LogEvent.find_by(loggable: order_detail, event_type: :price_change)
+                  expect(log_event).not_to be_present
+                end
               end
 
               context "when changing subsidy manually" do

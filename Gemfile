@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
-gem "rails", "5.2.3"
+gem "rails", "5.2.4.2"
 gem "sprockets", "< 4" # Temporarily lock as we upgrade
 gem "config"
 gem "bootsnap", require: false
@@ -13,7 +13,9 @@ gem "bootsnap", require: false
 ## database
 gem "mysql2"
 # To use Oracle, remove the mysql2 gem above and uncomment these lines
-# gem "activerecord-oracle_enhanced-adapter"
+# There are fixes for fulltext indexing in the 6.0 master of the gem, but we need
+# to backport them to support 5.2.
+# gem "activerecord-oracle_enhanced-adapter", git: "https://github.com/jhanggi/oracle-enhanced", branch: "release52"
 # gem "ruby-oci8" # only for CRuby users
 
 

@@ -49,8 +49,12 @@ class Statement < ApplicationRecord
   end
 
   def self.find_by_invoice_number(query)
-    return nil unless /\A(?<account_id>\d+)-(?<id>\d+)\z/ =~ query
-    find_by(id: id, account_id: account_id)
+    where_invoice_number(query)&.first
+  end
+
+  def self.where_invoice_number(query)
+    return none unless /\A(?<account_id>\d+)-(?<id>\d+)\z/ =~ query
+    where(id: id, account_id: account_id)
   end
 
   def invoice_date
@@ -76,6 +80,10 @@ class Statement < ApplicationRecord
 
   def rows_for_order_detail(order_detail)
     statement_rows.where(order_detail_id: order_detail.id)
+  end
+
+  def to_log_s
+    "Statement: #{invoice_number}"
   end
 
 end

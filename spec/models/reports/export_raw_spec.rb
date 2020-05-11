@@ -135,7 +135,7 @@ RSpec.describe Reports::ExportRaw do
         "Difference Cost" => "$139.99",
         "Difference Subsidy" => "$29.99",
         "Difference Total" => "$110.00",
-        "Charge For" => "Usage",
+        "Charge For" => "Minutes",
         "Assigned Staff" => user.full_name,
         "Bundle" => "",
       )

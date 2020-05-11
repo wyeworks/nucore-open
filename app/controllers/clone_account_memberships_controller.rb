@@ -15,7 +15,7 @@ class CloneAccountMembershipsController < ApplicationController
   end
 
   def search
-    @users, _count = UserFinder.search(params[:search_term])
+    @users = UserFinder.search(params[:search_term])
 
     render :search
   end

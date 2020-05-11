@@ -11,7 +11,7 @@
     - results.take(20).each do |product|
       %tr
         %td.table-product-results__name
-          = link_to product.name + (product.is_hidden? ? ' (hidden)' : ''), facility_product_path(product.facility, product)
+          = link_to ProductPresenter.new(product), facility_product_path(product.facility, product)
         %td.table-product-results__type
           = product.model_name.human
         %td.table-product-results__facility

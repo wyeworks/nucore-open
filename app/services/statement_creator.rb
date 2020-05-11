@@ -18,7 +18,6 @@ class StatementCreator
       setup_statement_from_details
       raise ActiveRecord::Rollback if errors.any?
     end
-
     errors.none?
   end
 
@@ -61,6 +60,7 @@ class StatementCreator
     @account_statements = {}
     to_statement.each do |account, order_details|
       statement = Statement.create!(facility: order_details.first.facility, account_id: account.id, created_by: session_user.id)
+      LogEvent.log(statement, :create, session_user)
       order_details.each do |od|
         StatementRow.create!(statement_id: statement.id, order_detail_id: od.id)
         od.statement_id = statement.id

@@ -4,7 +4,14 @@ class LogEventSearcher
 
   ALLOWED_EVENTS = ["account.create", "account.update",
                     "account_user.create", "account_user.delete",
-                    "user.create"].freeze
+                    "user.create", "user.suspended", "user.unsuspended",
+                    "account.suspended", "account.unsuspended",
+                    "journal.create","statement.create",
+                    "user_role.create", "user_role.delete",
+                    "order_detail.dispute", "order_detail.resolve",
+                    "order_detail.notify", "order_detail.review",
+                    "order_detail.problem_queue", "order_detail.price_change",
+                    ].freeze
 
   def self.beginning_of_time
     10.years.ago
@@ -39,30 +46,35 @@ class LogEventSearcher
     LogEvent.where(event_time: (dates.min.beginning_of_day..dates.max.end_of_day))
   end
 
-  # When this gets updated to Rails 5, you can use ActiveRecord#or directly
-  # Also, the event name comes in as <loggable_type>.<event_type>
+  # The event name comes in as <loggable_type>.<event_type>
   def filter_event
-    where_strings = events.flatten.map do |event|
+    events.flatten.map do |event|
       loggable_type, event_type = event.split(".")
-      "(loggable_type = '#{loggable_type.camelize}' AND event_type = '#{event_type}')"
-    end
-    LogEvent.where(where_strings.join(" OR "))
+      LogEvent.where(loggable_type: loggable_type.camelize, event_type: event_type)
+    end.inject(&:or)
   end
 
-  # Some of these queryies become easier to write in Rails 5 when
-  #  you can use ActiveRecord#or directly
   def filter_query
-    account_ids = Account.where("account_number LIKE ?", "%#{query}%").pluck(:id)
-    user_ids = UserFinder.search(query, nil)[0].map(&:id)
-    account_user_ids = AccountUser.where(account_id: account_ids).pluck(:id) +
-                       AccountUser.where(user_id: user_ids).pluck(:id)
-    account_logs = LogEvent.where(
-      loggable_type: "Account", loggable_id: account_ids).pluck(:id)
-    user_logs =  LogEvent.where(
-      loggable_type: "User", loggable_id: user_ids).pluck(:id)
-    account_user_logs = LogEvent.where(
-      loggable_type: "AccountUser", loggable_id: account_user_ids).pluck(:id)
-    LogEvent.where(id: account_logs + user_logs + account_user_logs)
+    accounts = Account.where(Account.arel_table[:account_number].lower.matches("%#{query.downcase}%"))
+    users = UserFinder.search(query).unscope(:order)
+    account_users = AccountUser.where(account_id: accounts).or(AccountUser.where(user_id: users))
+    journals = Journal.where(id: query)
+    statements = Statement.where_invoice_number(query).unscope(:order)
+    facilities = Facility.name_query(query)
+    user_roles = UserRole.with_deleted.where(user_id: users).or(UserRole.with_deleted.where(facility_id: facilities))
+    order_details = OrderDetail.where_order_number(query)
+
+    [
+      accounts,
+      users,
+      account_users,
+      journals,
+      statements,
+      user_roles,
+      order_details,
+    ].compact.map do |filter|
+      LogEvent.where(loggable_type: filter.model.name, loggable_id: filter)
+    end.inject(&:or)
   end
 
 end

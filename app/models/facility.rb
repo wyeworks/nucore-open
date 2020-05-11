@@ -44,6 +44,8 @@ class Facility < ApplicationRecord
 
   scope :active, -> { where(is_active: true) }
   scope :alphabetized, -> { order(:name) }
+  # Finds exact name case-insensitive
+  scope :name_query, ->(name) { where(arel_table[:name].lower.eq(name.downcase)) if name.present? }
 
   cattr_accessor(:facility_account_validators) { [] }
 

@@ -4,7 +4,7 @@ RSpec.describe ProblemReservationsController do
   let(:facility) { create(:setup_facility) }
   let(:instrument) { create(:setup_instrument, :timer, :always_available, facility: facility, problems_resolvable_by_user: true) }
   let(:problem_reservation) { create(:purchased_reservation, product: instrument, reserve_start_at: 2.hours.ago, reserve_end_at: 1.hour.ago, actual_start_at: 1.hour.ago, actual_end_at: nil) }
-  before { MoveToProblemQueue.move!(problem_reservation.order_detail, force: true) }
+  before { MoveToProblemQueue.move!(problem_reservation.order_detail, force: true, cause: :reservation_started) }
 
   # Happy path is tested in features/fixing_a_problem_reservation_spec
   describe "as the user" do

@@ -25,7 +25,7 @@ module SecureRooms
     def orphan_occupancy(occupancy)
       occupancy.mark_orphaned!
       SecureRooms::AccessHandlers::OrderHandler.process(occupancy)
-      MoveToProblemQueue.move!(occupancy.order_detail) if occupancy.order_detail
+      MoveToProblemQueue.move!(occupancy.order_detail, cause: :auto_orphan) if occupancy.order_detail
     rescue => e
       ActiveSupport::Notifications.instrument("background_error",
                                               exception: e, information: "Failed orphan occupancy #{occupancy.id}")

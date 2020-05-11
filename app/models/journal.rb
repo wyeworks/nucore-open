@@ -168,6 +168,10 @@ class Journal < ApplicationRecord
     is_successful?
   end
 
+  def to_log_s
+    "Journal ##{id}"
+  end
+
   delegate :to_s, to: :id
 
   private

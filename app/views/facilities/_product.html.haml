@@ -9,7 +9,7 @@
         = builder.hidden_field :product_id, value: product.id, index: nil, id: "order_order_details_#{product.id}_product_id"
     = tooltip_icon "fa fa-question-circle-o text__alert", text("line_items") if !product.is_a?(Instrument) && Orders::ItemAdder.multiline?(product)
   = public_calendar_link(product)
-  = link_to product.name + (product.is_hidden? ? ' (hidden)' : ''), facility_product_path(product.facility, product)
+  = link_to ProductPresenter.new(product), facility_product_path(product.facility, product)
   - if acting_user.present? && !product.can_be_used_by?(acting_user)
     %i.fa.fa-lock
     = " (#{product.class.human_attribute_name(:requires_approval_show)})"

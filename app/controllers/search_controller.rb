@@ -13,7 +13,7 @@ class SearchController < ApplicationController
     @account = Account.find(params[:account_id]) if params[:account_id].present?
     @product = Product.find(params[:product_id]) if params[:product_id].present?
     @search_type = valid_search_types.find { |t| t == params[:search_type] }
-    @users, @count = UserFinder.search(params[:search_term], @limit)
+    @users, @count = UserFinder.search_with_count(params[:search_term], @limit)
 
     render layout: false
   end

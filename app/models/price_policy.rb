@@ -2,7 +2,7 @@
 
 class PricePolicy < ApplicationRecord
 
-  include NUCore::Database::DateHelper
+  include Nucore::Database::DateHelper
 
   belongs_to :price_group
   belongs_to :product

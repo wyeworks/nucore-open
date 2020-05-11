@@ -18,7 +18,7 @@ RSpec.describe FacilityOrdersController do
     before { get :index, params: { facility_id: facility } }
 
     it "does not include the occupancies" do
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(assigns(:order_details)).to eq([])
     end
   end

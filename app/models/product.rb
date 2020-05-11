@@ -23,6 +23,8 @@ class Product < ApplicationRecord
   has_one :product_display_group_product
   has_one :product_display_group, through: :product_display_group_product
 
+  after_create :create_default_price_group_products
+
   email_list_attribute :training_request_contacts
 
   # Allow us to use `product.hidden?`
@@ -67,12 +69,22 @@ class Product < ApplicationRecord
     left_outer_joins(:product_display_group_product).where(product_display_group_products: { id: nil })
   }
 
-  # All product types
-  cattr_accessor(:types) { [Instrument, Item, Service, TimedService, Bundle] }
+  # All product types. This cannot be a cattr_accessor because the block is evaluated
+  # at definition time (not lazily as I expected) and this causes a circular dependency
+  # in some schools.
+  def self.types
+    @types ||= [Instrument, Item, Service, TimedService, Bundle]
+  end
+
   # Those that can be added to an order by an administrator
-  cattr_accessor(:mergeable_types) { ["Instrument", "Item", "Service", "TimedService", "Bundle"] }
+  def self.mergeable_types
+    @mergeable_types ||= ["Instrument", "Item", "Service", "TimedService", "Bundle"]
+  end
+
   # Those that can be ordered via the NUcore homepage
-  cattr_accessor(:orderable_types) { ["Instrument", "Item", "Service", "TimedService", "Bundle"] }
+  def self.orderable_types
+    @orderable_types ||= ["Instrument", "Item", "Service", "TimedService", "Bundle"]
+  end
 
   # Products that can be used as accessories
   scope :accessorizable, -> { where(type: ["Item", "Service", "TimedService"]) }
@@ -102,9 +114,6 @@ class Product < ApplicationRecord
   def self.group_by_type
     order(:type, :name).group_by { |product| product.class.model_name.human }
   end
-
-  ## AR Hooks
-  after_create :set_default_pricing
 
   def initial_order_status
     self[:initial_order_status_id] ? OrderStatus.find(self[:initial_order_status_id]) : OrderStatus.default_order_status
@@ -174,9 +183,9 @@ class Product < ApplicationRecord
     to_s + (is_archived? ? " (inactive)" : "")
   end
 
-  def set_default_pricing
-    PriceGroup.globals.find_each do |pg|
-      PriceGroupProduct.create!(product: self, price_group: pg)
+  def create_default_price_group_products
+    PriceGroup.globals.find_each do |price_group|
+      price_group_products.create!(price_group: price_group)
     end
   end
 
@@ -267,7 +276,7 @@ class Product < ApplicationRecord
     !hidden?
   end
 
-  def mergeable?
+  def requires_merge?
     false
   end
 

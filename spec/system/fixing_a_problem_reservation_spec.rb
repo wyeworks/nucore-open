@@ -21,7 +21,7 @@ RSpec.describe "Fixing a problem reservation" do
         actual_end_at: nil
       )
     end
-    before { MoveToProblemQueue.move!(reservation.order_detail) }
+    before { MoveToProblemQueue.move!(reservation.order_detail, cause: :reservation_started) }
 
     it "can edit the reservation" do
       visit reservations_path(status: :all)
@@ -63,7 +63,7 @@ RSpec.describe "Fixing a problem reservation" do
     before do
       instrument.price_policies.destroy_all
       reservation.update!(actual_start_at: reservation.reserve_start_at)
-      MoveToProblemQueue.move!(reservation.order_detail, force: true)
+      MoveToProblemQueue.move!(reservation.order_detail, force: true, cause: :reservation_started)
     end
 
     it "can view the page" do

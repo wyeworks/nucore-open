@@ -6,6 +6,7 @@ RSpec.describe OrderDetails::DisputeResolvedNotifier do
   let(:item) { create(:setup_item) }
   let(:order) { create(:complete_order, product: item) }
   let(:order_detail) { create(:order_detail, :disputed, order: order, product: item, account: order.account) }
+  let(:user) { create(:user) }
   subject(:notifier) { described_class.new(order_detail) }
 
   def resolve_dispute_and_notify
@@ -17,8 +18,10 @@ RSpec.describe OrderDetails::DisputeResolvedNotifier do
     expect { notifier.notify }.not_to change(ActionMailer::Base, :deliveries)
   end
 
-  it "triggers an email if the resolved at moves from blank to present" do
+  it "triggers an email and log the order detail if the resolved at moves from blank to present" do
     expect { resolve_dispute_and_notify }.to change(ActionMailer::Base, :deliveries)
+    log_event = LogEvent.find_by(loggable: order_detail, event_type: :resolve)
+     expect(log_event).to be_present
   end
 
   it "does not trigger an email if the resolve changes" do

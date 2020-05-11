@@ -19,9 +19,13 @@ RSpec.describe "User suspension", feature_setting: { create_users: true, reload_
       expect(page).to have_content("Del User (SUSPENDED)")
       expect(page).to have_content("Suspension Note\nUser was naughty")
 
+      expect(LogEvent.find_by(loggable: user, event_type: :suspended, user: admin)).to be_present
+
       click_link "Activate"
       expect(page).not_to have_content("(SUSPENDED)")
       expect(page).not_to have_content("naughty")
+
+      expect(LogEvent.find_by(loggable: user, event_type: :unsuspended, user: admin)).to be_present
     end
   end
 

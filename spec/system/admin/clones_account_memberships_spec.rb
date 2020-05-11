@@ -2,7 +2,6 @@ require "rails_helper"
 
 RSpec.describe "Cloning account membership" do
   let(:facility) { create(:facility) }
-
   let(:original_user) { create(:user) }
   let(:new_user) { create(:user) }
   let!(:owned_account) { create(:account, :with_account_owner, owner: original_user) }
@@ -31,7 +30,7 @@ RSpec.describe "Cloning account membership" do
       visit facility_user_accounts_path("all", new_user)
 
       click_link "Clone Payment Source Membership"
-      fill_in "search_term", with: original_user.name
+      fill_in "search_term", with: original_user.email
       click_button "Search"
 
       click_link "Clone Payment Source Memberships"

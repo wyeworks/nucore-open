@@ -11,12 +11,14 @@ class UserSuspensionController < ApplicationController
   def create
     @user.suspended_at ||= Time.current
     @user.update!(suspension_params)
+    LogEvent.log(@user, :suspended, current_user)
     redirect_to facility_user_path(current_facility, @user), notice: text("create.success")
   end
 
   # DELETE /facilities/facility_id/users/:id/suspension
   def destroy
     @user.update!(suspended_at: nil, suspension_note: nil)
+    LogEvent.log(@user, :unsuspended, current_user)
     redirect_to facility_user_path(current_facility, @user), notice: text("destroy.success")
   end
 

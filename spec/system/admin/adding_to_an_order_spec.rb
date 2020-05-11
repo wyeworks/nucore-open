@@ -82,6 +82,18 @@ RSpec.describe "Adding to an existing order" do
         end
       end
     end
+
+    describe "and it does not have pricing set up yet" do
+      let(:product) { super().tap { |p| p.price_policies.destroy_all } }
+
+      it "gets purchased with an ordered_at" do
+        click_button "Add To Order"
+        expect(order.reload.order_details.count).to eq(2)
+        new_order_detail = order.order_details.order(:id).last
+
+        expect(new_order_detail.ordered_at).to be_present
+      end
+    end
   end
 
   describe "adding a backdated service with an order form" do

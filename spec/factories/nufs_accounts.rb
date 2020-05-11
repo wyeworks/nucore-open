@@ -19,32 +19,6 @@ FactoryBot.modify do
     after(:build) do |account, evaluator|
       account.facilities << evaluator.facility if evaluator.facility
     end
-
-    trait :with_order do
-      with_account_owner
-
-      transient do
-        product { nil }
-      end
-
-      account_users_attributes { [FactoryBot.attributes_for(:account_user, user: owner)] }
-
-      after(:create) do |account, evaluator|
-        order = FactoryBot.create(
-          :order,
-          user: evaluator.owner,
-          created_by: evaluator.owner.id,
-          facility: evaluator.product.facility,
-        )
-
-        FactoryBot.create(
-          :order_detail,
-          product: evaluator.product,
-          order: order,
-          account: account,
-        )
-      end
-    end
   end
 end
 

@@ -33,7 +33,7 @@ RSpec.describe SecureRoomsApi::EventsController do
       describe "response" do
         subject { response }
 
-        it { is_expected.to be_success }
+        it { is_expected.to be_successful }
       end
 
       describe "new alarm_event" do

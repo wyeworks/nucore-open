@@ -16,6 +16,9 @@ module TimeData
       true
     end
 
+    def force_dirty!
+    end
+
   end
 
 end

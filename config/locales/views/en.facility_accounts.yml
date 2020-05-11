@@ -1,6 +1,8 @@
 en:
   views:
     facility_accounts:
+      account_table:
+        all: "!views.accounts.index.all!"
       show_statement:
         no_transactions: No transactions exist for this period.
         transaction_date: Transaction Date

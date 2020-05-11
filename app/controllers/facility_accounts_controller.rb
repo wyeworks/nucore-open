@@ -21,7 +21,6 @@ class FacilityAccountsController < ApplicationController
   # GET /facilties/:facility_id/accounts
   def index
     accounts = Account.with_orders_for_facility(current_facility)
-    accounts = accounts.where(facility_id: nil) if current_facility.cross_facility?
 
     @accounts = accounts.paginate(page: params[:page])
   end
