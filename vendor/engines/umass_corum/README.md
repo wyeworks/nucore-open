@@ -52,6 +52,18 @@ There is a nightly job managed by UMass's IT team that does the following:
   * External
     * All non academic external users
 
+## Users
+
+Most users in Corum should log in with their UMass NetID. This is handled through
+SAML using our [saml_authentication](../saml_authentication/README.md) engine as the Service
+Provider (SP) and the school-managed Shibboleth Identity Provider (IdP).
+
+Only users external to UMass who do not have a NetID should be given a username and password. Users must first be created in Corum before they are able to log in (even if they have a NetID).
+
+We update users' attributes like email address and first/last name as part of the SAML
+login process. There is also a nightly job managed by UMass IT that updates the users'
+attributes.
+
 ## SSL Certificates
 
 The SSL certificate we've installed is valid for the following hostnames. There are additional names not currently in use if we need to add additional servers later.
