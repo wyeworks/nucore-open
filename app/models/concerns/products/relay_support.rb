@@ -64,8 +64,13 @@ module Products::RelaySupport
   # causes too much trouble. Just get rid of the old relay and
   # setup from scratch.
   def destroy_and_init_relay
+    # This instance variable is only present when using the instrument edit form.
+    # We're adding this check to avoid any autosave or association validations
+    # from triggering this callback.
+    return unless @control_mechanism
+
     attrs = relay.try(:attributes) || {}
-    relay.try :destroy
+    relay&.destroy
 
     case control_mechanism
     when Relay::CONTROL_MECHANISMS[:timer]

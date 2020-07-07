@@ -8,7 +8,7 @@ class TabbableReports
     @init_export_all_handler()
 
   export_all_link: ->
-    $("#export-all")
+    $(".js--exportRaw")
 
   update_parameters: ->
     @update_href $(@current_tab())
@@ -97,7 +97,7 @@ class TabbableReports
     @export_all_link().attr("href", @export_all_link().data("original-url") + @build_query_string())
 
   init_export_all_handler: ->
-    @$emailToAddressField = $('#email_to_address')
+    @$emailToAddressField = $('.js--exportRawEmailField')
     @export_all_link()
       .attr("data-remote", true)
       .data("original-url", @export_all_link().attr("href"))
@@ -107,7 +107,7 @@ class TabbableReports
     event.preventDefault()
 
     new_to = prompt(
-      'Have the report emailed to this address:'
+      'Have the report emailed to this address:',
       @$emailToAddressField.val()
     )
 

@@ -134,7 +134,7 @@ RSpec.describe EndReservationOnly, :time_travel do
         end_at = 1.minute.ago
 
         create(:purchased_reservation,
-               product: create(:setup_instrument, min_reserve_mins: 1, relay: create(:relay_syna)),
+               product: create(:setup_instrument, min_reserve_mins: 1, relay: build(:relay_syna)),
                reserve_start_at: start_at,
                reserve_end_at: end_at)
       end

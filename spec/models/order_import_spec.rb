@@ -15,6 +15,7 @@ RSpec.describe OrderImport, :time_travel do
     "Order Date",
     "Fulfillment Date",
     "Note",
+    "Reference ID",
   ].freeze
 
   def nucore_format_date(date)
@@ -130,6 +131,7 @@ RSpec.describe OrderImport, :time_travel do
                              opts[:order_date]         || nucore_format_date(default_order_date),
                              opts[:fullfillment_date]  || nucore_format_date(default_fulfilled_date),
                              opts[:note]               || "Test Note",
+                             opts[:reference_id]       || "123-45678",
                            ])
         csv << row
       end

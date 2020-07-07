@@ -69,10 +69,10 @@ class PriceGroupsController < ApplicationController
   # POST /price_groups
   def create
     @price_group = PriceGroup.new(price_group_params.merge(facility: current_facility))
-
     if @price_group.save
       flash[:notice] = I18n.t("controllers.price_groups.create.notice")
       redirect_to [current_facility, @price_group]
+      LogEvent.log(@price_group, :create, current_user)
     else
       render action: "new"
     end
@@ -94,6 +94,7 @@ class PriceGroupsController < ApplicationController
 
     begin
       if @price_group.destroy
+        LogEvent.log(@price_group, :delete, current_user)
         flash[:notice] = I18n.t("controllers.price_groups.destroy.notice")
       else
         flash[:error] = I18n.t("controllers.price_groups.destroy.error")

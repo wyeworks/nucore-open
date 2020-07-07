@@ -2,6 +2,11 @@ en:
   views:
     log_events:
       index:
+        dropdown_titles:
+          order_detail:
+            problem_queue: Order added to problem queue
+          user:
+            default_price_group_changed: User price group changed
         account:
           create: Payment Source created
           update: Payment Source updated
@@ -20,7 +25,20 @@ en:
           notify: Billing notified
           review: Order reviewed
           problem_queue: Order added to problem queue %{cause}
-          price_change: Order's price was manually change
+          price_change: Order's price was manually changed
+          resolve_from_problem_queue: Problem order resolved
+        product_user:
+          create: User added to access list
+          delete: User removed from access list
+        price_group_member:
+          create: User added to price group
+          delete: User removed from price group
+        facility:
+          activate: Turned on all relays
+          deactivate: Turned off all relays
+        price_group:
+          create: Price Group created
+          delete: Price Group deleted
         end_date: End Date
         event_filter: Event
         event_placeholder: Filter on one or more events
@@ -34,6 +52,7 @@ en:
           create: User added
           suspended: User suspended
           unsuspended: User unsuspended
+          default_price_group_changed: User price group changed to %{price_group_rate}
         user_role:
           create: Role added
           delete: Role removed

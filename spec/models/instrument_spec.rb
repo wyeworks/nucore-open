@@ -255,6 +255,13 @@ RSpec.describe Instrument do
           expect(@instrument.reload.control_mechanism).to eq("timer")
         end
       end
+
+      context "just running a validation" do
+        it "does not affect the relay" do
+          expect(@instrument).to be_valid
+          expect(@instrument.reload.relay).to be_present
+        end
+      end
     end
 
     context "existing type: manual 'Reservation Only'" do

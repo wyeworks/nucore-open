@@ -14,7 +14,6 @@
 
   - if @users.any?
     = render "search/results_table",
-      order_for: current_facility.try(:single_facility?),
       users: @users
 
     = will_paginate(@users)

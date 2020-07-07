@@ -158,6 +158,14 @@ RSpec.describe "Adding to an existing order" do
       expect(order.reload.order_details.count).to be(2)
       expect(order.order_details.last.product).to eq(instrument)
     end
+
+    it "brings you back to the facility order path on 'Cancel'" do
+      click_link "Make a Reservation"
+      click_link "Cancel"
+
+      expect(current_path).to eq(facility_order_path(facility, order))
+      expect(page).to have_link("Make a Reservation")
+    end
   end
 
   describe "adding a timed service" do

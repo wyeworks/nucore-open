@@ -77,6 +77,27 @@ RSpec.describe UsersController do
       expect(user.username).to eq("user234")
       expect(response).to redirect_to facility_user_path(facility, user)
     end
+
+    context "the price group changes", feature_setting: { user_based_price_groups: true } do
+      before(:each) do
+        @params[:user][:internal] = true
+      end
+      it_should_allow(:admin, "to update the user information and it should log the user") do
+        log_event = LogEvent.find_by(loggable: user, event_type: :default_price_group_changed)
+        expect(log_event).to be_present
+        expect(log_event.metadata).to eq("price_group_rate" => PriceGroup.base.name)
+      end
+    end
+
+    context "the price group does not change", feature_setting: { user_based_price_groups: true } do
+      before(:each) do
+        @params[:user][:internal] = false
+      end
+      it_should_allow(:admin, "to update the user information and it shouldn't log the user") do
+        log_event = LogEvent.find_by(loggable: user, event_type: :default_price_group_changed)
+        expect(log_event).not_to be_present
+      end
+    end
   end
 
   describe "GET #access_list" do

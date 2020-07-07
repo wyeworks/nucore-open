@@ -43,8 +43,9 @@ RSpec.describe OfflineReservationsController do
 
       it "logs the problem reservation" do
         post :create, params: params
-        log_event = LogEvent.find_by(loggable: reservation.order_detail, event_type: :problem_queue, metadata: {"cause"=>"new_offline_reservation"})
+        log_event = LogEvent.find_by(loggable: reservation.order_detail, event_type: :problem_queue)
         expect(log_event).to be_present
+        expect(log_event.metadata).to eq("cause"=>"new_offline_reservation")
       end
 
       it "triggers an email" do

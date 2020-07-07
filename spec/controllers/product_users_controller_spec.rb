@@ -37,6 +37,21 @@ RSpec.describe ProductUsersController do
 
   end
 
+  describe "create" do
+    it "creates and logs a new product user" do
+      sign_in staff
+      expect {
+        post :new, params: {
+          facility_id: facility.url_name,
+          instrument_id: instrument.url_name,
+          user: user,
+        }
+      }.to change(ProductUser, :count).by(1)
+      log_event = LogEvent.find_by(loggable: ProductUser.reorder(:id).last, event_type: :create)
+      expect(log_event).to be_present
+    end
+  end
+
   describe "update_restrictions" do
     let(:level) { create(:product_access_group, product: instrument) }
     let(:level2) { create(:product_access_group, product: instrument) }
@@ -76,6 +91,18 @@ RSpec.describe ProductUsersController do
         }
       end.to change(ProductUser, :count).by(-1)
       expect(flash[:notice]).to be_present
+    end
+
+    it "logs the user product" do
+      expect do
+        delete :destroy, params: {
+          facility_id: facility.url_name,
+          instrument_id: instrument.url_name,
+          id: user,
+        }
+        log_event = LogEvent.find_by(loggable: user_product, event_type: :delete)
+        expect(log_event).to be_present
+      end
     end
 
     it "does not error if the association is not found" do

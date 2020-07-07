@@ -32,6 +32,8 @@
   = f.input :phone_number
   = f.input :fax_number
   = f.input :email
+  - if SettingsHelper.feature_on?(:facility_payment_urls)
+    = f.input :payment_url
 
 .well
   %p= text(".order_notification")

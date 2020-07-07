@@ -83,6 +83,8 @@ Rails.application.routes.draw do
       get :dashboard, to: "instruments_dashboard#dashboard", on: :collection
       get :public_dashboard, to: "instruments_dashboard#public_dashboard", on: :collection
 
+      resources :single_reservations, only: [:new, :create]
+
       collection do
         get "list", to: "instruments#public_list"
       end

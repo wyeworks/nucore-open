@@ -38,6 +38,19 @@ RSpec.describe ProductDisplayGroup do
     expect(group.associated_errors.flat_map(&:full_messages)).to include("Product #{product.name} is already in a group")
   end
 
+  it "does not care about the validity of the product" do
+    product = create(:item, :without_validation, facility: facility)
+    group = build(:product_display_group, facility: facility, products: [product])
+    expect(group).to be_valid
+  end
+
+  it "does not affect the relay of an instrument" do
+    facility = create(:setup_facility)
+    instrument = create(:setup_instrument, facility: facility, relay: build(:relay))
+    group = create(:product_display_group, facility: facility, products: [instrument])
+    expect(instrument.reload.relay).to be_present
+  end
+
   describe "position" do
     it "sets an incrementing default position on create" do
       group1 = create(:product_display_group, facility: facility)

@@ -48,7 +48,7 @@ class OrderDetail < ApplicationRecord
   belongs_to :price_policy
   belongs_to :statement, inverse_of: :order_details
   belongs_to :journal
-  belongs_to :order, inverse_of: :order_details
+  belongs_to :order, inverse_of: :order_details, required: true
   belongs_to :assigned_user, class_name: "User", foreign_key: "assigned_user_id"
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
   belongs_to :dispute_by, class_name: "User"
@@ -72,7 +72,7 @@ class OrderDetail < ApplicationRecord
   # allow access to the vestal data.
   # once that data is no longer needed, this line and the
   # associated class can be removed
-  has_many   :vestal_versions, as: :versioned
+  has_many :vestal_versions, as: :versioned
 
   delegate :edit_url, to: :external_service_receiver, allow_nil: true
   delegate :in_cart?, :facility, :user, to: :order
@@ -100,7 +100,7 @@ class OrderDetail < ApplicationRecord
     journal_date || statement_date
   end
 
-  validates_presence_of :product_id, :order_id, :created_by
+  validates_presence_of :product_id, :created_by
   validates_numericality_of :quantity, only_integer: true, greater_than_or_equal_to: 1
   validates_numericality_of :actual_cost, greater_than_or_equal_to: 0, if: ->(o) { o.actual_cost_changed? && !o.actual_cost.nil? }
   validates_numericality_of :actual_subsidy, greater_than_or_equal_to: 0, if: ->(o) { o.actual_subsidy_changed? && !o.actual_cost.nil? }
@@ -432,6 +432,11 @@ class OrderDetail < ApplicationRecord
 
   def set_default_status!
     change_status! product.initial_order_status
+  end
+
+  def valid_as_user?(user)
+    @being_purchased_by_admin = user.operator_of?(product.facility)
+    valid?
   end
 
   def save_as_user(user)
@@ -899,6 +904,10 @@ class OrderDetail < ApplicationRecord
     "Order ##{order_number}"
   end
 
+  def resolve_dispute?
+    ActiveModel::Type::Boolean.new.cast(resolve_dispute)
+  end
+
   private
 
   # Is there enough information to move an associated order to complete/problem?
@@ -946,7 +955,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def mark_dispute_resolved
-    if resolve_dispute == true || resolve_dispute == "1"
+    if resolve_dispute?
       self.dispute_resolved_at = Time.zone.now
       self.reviewed_at         = Time.zone.now
     else

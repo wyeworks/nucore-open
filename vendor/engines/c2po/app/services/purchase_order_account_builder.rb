@@ -4,6 +4,9 @@
 # Dynamically called via the `AccountBuilder.for()` factory.
 class PurchaseOrderAccountBuilder < AccountBuilder
 
+  # Needs to be overridable by engines
+  cattr_accessor(:permitted_account_params) { [] }
+
   protected
 
   # Override strong_params for `build` account.
@@ -17,7 +20,7 @@ class PurchaseOrderAccountBuilder < AccountBuilder
       :formatted_expires_at,
       :outside_contact_info,
       :ar_number,
-    ]
+    ] + permitted_account_params
   end
 
   # Override strong_params for `update` account.
@@ -31,7 +34,7 @@ class PurchaseOrderAccountBuilder < AccountBuilder
       :formatted_expires_at,
       :outside_contact_info,
       :ar_number,
-    ]
+    ] + permitted_account_params
   end
 
   # Hooks into superclass's `build` method.

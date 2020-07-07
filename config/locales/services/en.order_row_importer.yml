@@ -4,6 +4,7 @@ en:
       user: Netid / Email
       order_number: Order
       notes: Note
+      reference_id: Reference ID
     errors:
       purchase_fail: Couldn't purchase order
       validate_fail: Couldn't validate order

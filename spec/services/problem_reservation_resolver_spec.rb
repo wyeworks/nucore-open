@@ -20,7 +20,7 @@ RSpec.describe ProblemReservationResolver do
   before { MoveToProblemQueue.move!(problem_reservation.order_detail, cause: :reservation_started) }
 
   describe "resolve" do
-    it "sets the problem resolution attributes" do
+    it "sets the problem resolution attributes and log the resolution" do
       resolver.resolve(actual_end_at: 15.minutes.ago, current_user: user)
 
       expect(problem_reservation.order_detail.reload).to have_attributes(
@@ -28,6 +28,8 @@ RSpec.describe ProblemReservationResolver do
         problem_resolved_at: be_present,
         problem_resolved_by: user,
       )
+      log_event = LogEvent.find_by(loggable: problem_reservation.order_detail, event_type: :resolve_from_problem_queue, user: user)
+      expect(log_event).to be_present
     end
 
     it "moves the fulfilled_at to the actual_end_at" do

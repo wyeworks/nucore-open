@@ -19,6 +19,8 @@ RSpec.describe RelaysActivationsController do
     it "activates all real relays for the facility’s instruments" do
       expect(relay).to receive(:activate)
       post :create, params: { facility_id: instrument.facility.url_name }
+      log_event = LogEvent.find_by(loggable: instrument.facility , event_type: :activate)
+      expect(log_event).to be_present
     end
 
     it "redirects back to the instruments page" do
@@ -42,6 +44,8 @@ RSpec.describe RelaysActivationsController do
     it "deactivates all real relays for the facility’s instruments" do
       expect(relay).to receive(:deactivate)
       delete :destroy, params: { facility_id: instrument.facility.url_name }
+      log_event = LogEvent.find_by(loggable: instrument.facility , event_type: :deactivate)
+      expect(log_event).to be_present
     end
 
     it "redirects back to the instruments page" do

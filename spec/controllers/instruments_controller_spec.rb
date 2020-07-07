@@ -108,12 +108,7 @@ RSpec.describe InstrumentsController do
 
         it "succeeds" do
           expect(flash).to be_empty
-          assert_redirected_to(
-            add_order_path(
-              Order.all.last,
-              order: { order_details: [product_id: instrument.id, quantity: 1] },
-            ),
-          )
+          assert_redirected_to new_facility_instrument_single_reservation_path(facility, instrument)
         end
       end
     end

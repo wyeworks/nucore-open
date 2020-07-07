@@ -22,6 +22,7 @@ class ProblemReservationResolver
     # The changes we made above won't trigger an automatic repricing, so we need to
     # do it manually.
     order_detail.assign_price_policy
+    LogEvent.log(order_detail, :resolve_from_problem_queue, params[:current_user])
     reservation.save
   end
 

@@ -30,7 +30,7 @@ class FacilityStatementsController < ApplicationController
     respond_to do |format|
       format.html { @statements = @statements.paginate(page: params[:page]) }
       format.csv do
-        send_csv_email_and_respond do |email|
+        yield_email_and_respond_for_report do |email|
           StatementSearchResultMailer.search_result(email, search_params.to_h).deliver_later
         end
       end

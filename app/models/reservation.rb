@@ -206,6 +206,16 @@ class Reservation < ApplicationRecord
     self.actual_end_at   ||= reserve_end_at
   end
 
+  def valid_as_user?(user)
+    if user.operator_of?(product.facility)
+      self.reserved_by_admin = true
+      valid?
+    else
+      self.reserved_by_admin = false
+      valid?(context: :user_purchase)
+    end
+  end
+
   def save_as_user(user)
     if user.operator_of?(product.facility)
       self.reserved_by_admin = true

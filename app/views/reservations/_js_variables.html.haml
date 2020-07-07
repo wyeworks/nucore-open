@@ -1,9 +1,9 @@
 :javascript
   var events_path     = "#{facility_instrument_reservations_path(@instrument.facility, @instrument, format: 'js', with_details: @instrument.show_details?)}";
-  var minDate         = "#{@min_date}";
-  var maxDate         = "#{@max_date}";
-  var maxDaysFromNow  = #{@max_window};
-  var minDaysFromNow  = #{@max_days_ago};
+  var minDate         = "#{@reservation_window&.min_date}";
+  var maxDate         = "#{@reservation_window&.max_date}";
+  var maxDaysFromNow  = #{@reservation_window&.max_window};
+  var minDaysFromNow  = #{@reservation_window&.max_days_ago};
   var minTime         = #{@instrument.first_available_hour};
   var maxTime         = #{@instrument.last_available_hour+1};
   var isBundle        = #{@order_detail.bundled? || @order.order_details.count > 1};

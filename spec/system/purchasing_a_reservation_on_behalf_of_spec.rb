@@ -72,6 +72,22 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
     end
   end
 
+  describe "when the user is not authorized" do
+    before do
+      instrument.update!(requires_approval: true)
+    end
+
+    it "can purchase" do
+      click_link instrument.name
+      expect(page).to have_content("The user you are ordering for is not on the authorized list for this instrument.")
+      select user.accounts.first.description, from: "Payment Source"
+
+      click_button "Create"
+
+      expect(page).to have_content("Order Receipt")
+    end
+  end
+
   describe "creating multiple reservations" do
     it "can create reservations in the future" do
       fill_in "order[order_details][][quantity]", with: "2"

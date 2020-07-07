@@ -118,8 +118,13 @@ class UsersController < ApplicationController
 
   # PUT /facilities/:facility_id/users/:id
   def update
+    previous_price_groups = @user.price_groups.to_a
     @user_form = user_form_class.new(@user)
     if @user_form.update_attributes(edit_user_params) && @user.update_price_group(price_group_params)
+      if previous_price_groups != @user.price_groups.reload.to_a
+        new_price_groups = @user.price_groups.to_a - previous_price_groups
+        LogEvent.log(@user, :default_price_group_changed, current_user, metadata: { price_group_rate: new_price_groups.first.name })
+      end
       flash[:notice] = text("update.success")
       redirect_to facility_user_path(current_facility, @user)
     else
@@ -191,6 +196,12 @@ class UsersController < ApplicationController
     if update_approvals.grants_changed?
       flash[:notice] = I18n.t "controllers.users.access_list.approval_update.notice",
                               granted: update_approvals.granted, revoked: update_approvals.revoked
+      update_approvals.granted_product_users.each do |product_user|
+        LogEvent.log(product_user, :create, current_user)
+      end
+      update_approvals.revoked_product_users.each do |product_user|
+        LogEvent.log(product_user, :delete, current_user)
+      end
     end
     if update_approvals.access_groups_changed?
       add_flash(:notice,

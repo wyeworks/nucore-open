@@ -58,7 +58,16 @@ RSpec.describe PriceGroup do
     it "should be deletable if no price policies" do
       expect(@price_group).to be_can_delete
       @price_group.destroy
-      expect(@price_group).to be_destroyed
+      expect { PriceGroup.find(@price_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(PriceGroup.with_deleted.find(@price_group.id)).to be_present
+    end
+
+    it "should be able to delete a price group with price group members" do
+      user = create(:user)
+      user_price_group_member = create(:user_price_group_member, price_group: @price_group, user: user)
+      @price_group.destroy
+      expect { PriceGroup.find(@price_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(PriceGroup.with_deleted.find(@price_group.id)).to be_present
     end
 
     context "with price policy" do
@@ -71,7 +80,8 @@ RSpec.describe PriceGroup do
       it "should be deletable if no orders on policy" do
         expect(@price_group).to be_can_delete
         @price_group.destroy
-        expect(@price_group).to be_destroyed
+        expect { PriceGroup.find(@price_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
+        expect(PriceGroup.with_deleted.find(@price_group.id)).to be_present
         expect(PricePolicy.find_by(id: @price_policy.id)).to be_blank # It destroys the associated price policy
       end
 

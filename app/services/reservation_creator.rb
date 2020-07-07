@@ -25,10 +25,12 @@ class ReservationCreator
         # merge state can change after call to #save! due to OrderDetailObserver#before_save
         to_be_merged = @order_detail.order.to_be_merged?
 
-        save_reservation_and_order_detail(session_user)
+        raise ActiveRecord::RecordInvalid, @order_detail unless reservation_and_order_valid?(session_user)
 
         validator = OrderPurchaseValidator.new(@order_detail)
         raise ActiveRecord::RecordInvalid, @order_detail if validator.invalid?
+
+        save_reservation_and_order_detail(session_user)
 
         if to_be_merged
           # The purchase_order_path or cart_path will handle the backdating, but we need
@@ -51,7 +53,7 @@ class ReservationCreator
   end
 
   def reservation
-    return @reservation if @reservation
+    return @reservation if defined?(@reservation)
     @reservation = @order_detail.build_reservation
     @reservation.assign_attributes(reservation_create_params)
     @reservation.assign_times_from_params(reservation_create_params)
@@ -68,18 +70,26 @@ class ReservationCreator
   end
 
   def update_order_account
-    if params[:order_account].present?
-      account = Account.find(params[:order_account].to_i)
-      if account != @order.account
-        @order.invalidate
-        @order.update_attributes!(account: account)
-      end
+    return if params[:order_account].blank?
+
+    account = Account.find(params[:order_account].to_i)
+    # If the account has changed, we need to re-do validations on the order. We're
+    # only saving the changes if the reservation is part of a cart. Otherwise, we
+    # just modify the object in-memory for redisplay.
+    if account != @order.account
+      @order.invalidate if @order.persisted?
+      @order.account = account
+      @order.save! if @order.persisted?
     end
   end
 
   def backdate_reservation_if_necessary(session_user)
     facility_ability = Ability.new(session_user, @order.facility, self)
     @order_detail.backdate_to_complete!(@reservation.reserve_end_at) if facility_ability.can?(:order_in_past, @order) && @reservation.reserve_end_at < Time.zone.now
+  end
+
+  def reservation_and_order_valid?(session_user)
+    reservation.valid_as_user?(session_user) && order_detail.valid_as_user?(session_user)
   end
 
   def save_reservation_and_order_detail(session_user)

@@ -1,3 +1,3 @@
-Netid / Email,Chart String,Product Name,Quantity,Order Date,Fulfillment Date,Note
-guest,111-2222222-33333333-01,Example Item,1,11/23/2012,11/24/2012
-guest,111-2222222-33333333-01,BS Item,1,11/23/2012,11/24/2012
+Netid / Email,Chart String,Product Name,Quantity,Order Date,Fulfillment Date,Note,Reference ID
+guest,111-2222222-33333333-01,Example Item,1,11/23/2012,11/24/2012,
+guest,111-2222222-33333333-01,BS Item,1,11/23/2012,11/24/2012,

@@ -2,6 +2,8 @@
 
 class ProductUser < ApplicationRecord
 
+  acts_as_paranoid
+
   belongs_to :user
   belongs_to :product
   belongs_to :product_access_group
@@ -12,4 +14,7 @@ class ProductUser < ApplicationRecord
 
   before_create ->(product_user) { product_user.approved_at = Time.zone.now }
 
+  def to_log_s
+    "#{user} / #{product}"
+  end
 end

@@ -12,8 +12,7 @@ module OrderDetails
     end
 
     def notify
-      if saved_change_to_dispute_resolved_at? && dispute_resolved_at_before_last_save.blank?
-
+      if resolve_dispute?
         users_to_notify.each do |user|
           OrderDetailDisputeMailer.dispute_resolved(order_detail: __getobj__, user: user).deliver_later
         end

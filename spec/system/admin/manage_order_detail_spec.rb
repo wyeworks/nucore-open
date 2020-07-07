@@ -82,6 +82,47 @@ RSpec.describe "Managing an order detail" do
     end
   end
 
+  describe "resolving a dispute", :js do
+    describe "a simple order detail" do
+      let(:item) { create(:setup_item, facility: facility) }
+      let(:order) { create(:complete_order, product: item) }
+      let(:order_detail) do
+        order.order_details.first.tap do |od|
+          od.update!(reviewed_at: 5.days.ago, dispute_at: 3.days.ago, dispute_reason: "asdsfa")
+        end
+      end
+
+      it "can resolve the order detail" do
+        visit manage_facility_order_order_detail_path(facility, order_detail.order, order_detail)
+        fill_in "Resolution Notes", with: "a resolution"
+        click_button "Resolve Dispute"
+
+        expect(order_detail.reload.dispute_resolved_at).to be_present
+        expect(LogEvent).to be_exist(loggable: order_detail, event_type: :resolve)
+      end
+    end
+
+    describe "and it has an accessory" do
+      let(:product) { FactoryBot.create(:instrument_with_accessory, facility: facility) }
+      let(:reservation) { FactoryBot.create(:completed_reservation, product: product) }
+      let(:order_detail) do
+        reservation.order_detail.tap do |od|
+          od.update!(reviewed_at: 5.days.ago, dispute_at: 3.days.ago, dispute_reason: "asdsfa")
+        end
+      end
+      let(:accessorizer) { Accessories::Accessorizer.new(reservation.order_detail) }
+
+      it "can resolve the order detail" do
+        visit manage_facility_order_order_detail_path(facility, order_detail.order, order_detail)
+        fill_in "Resolution Notes", with: "a resolution"
+        click_button "Resolve Dispute"
+
+        expect(order_detail.reload.dispute_resolved_at).to be_present
+        expect(LogEvent).to be_exist(loggable: order_detail, event_type: :resolve)
+      end
+    end
+  end
+
   describe "reconciling an order" do
     let(:item) { create(:setup_item, facility: facility) }
     let(:order) { create(:complete_order, product: item) }

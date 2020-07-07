@@ -116,6 +116,13 @@ RSpec.describe "Purchasing a reservation" do
 
   end
 
+  it "clicking 'cancel' returns you to the facility page" do
+    click_link instrument.name
+    click_link "Cancel"
+
+    expect(current_path).to eq(facility_path(facility))
+  end
+
   describe "ordering on an order form" do
     before do
       fill_in "order[order_details][][quantity]", with: "2"
@@ -149,6 +156,17 @@ RSpec.describe "Purchasing a reservation" do
       fill_in "Duration", with: "90"
       click_button "Create"
       expect(page).to have_content("Reserve start at must be in the future")
+    end
+
+    it "clicking cancel returns you to the cart as it was" do
+      expect(page).to have_selector("h1", text: "Cart")
+      cart_path = current_path # should be the cart_path
+      click_link "Make a Reservation", match: :first
+      click_link "Cancel"
+
+      expect(current_path).to eq(cart_path)
+      expect(page).to have_selector("h1", text: "Cart")
+      expect(page).to have_link("Make a Reservation", count: 2)
     end
   end
 end
