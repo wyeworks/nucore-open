@@ -20,6 +20,8 @@
   = f.input :phone_number, default_value: "None Entered"
   = f.input :fax_number, default_value: "None Entered"
   = f.input :email, default_value: "None Entered"
+  - if SettingsHelper.feature_on?(:facility_payment_urls)
+    = f.input :payment_url
   = f.input :journal_mask
   = f.input :order_notification_recipient, default_value: "None Entered"
 

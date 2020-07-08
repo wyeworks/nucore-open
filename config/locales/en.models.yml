@@ -256,6 +256,7 @@ en:
       facility:
         banner_notice: Banner Notice
         fax_number: Fax Number
+        payment_url: Payment URL
         is_active: Is Active?
         journal_mask: CoreID
         phone_number: Phone Number

@@ -6,7 +6,7 @@
 
 %h2= text("pages.event_log")
 
-= form_tag(log_events_path, method: :get) do
+= form_tag(log_events_path, method: :get, class: "search_form") do
 
   .row
     .span3
@@ -20,9 +20,8 @@
   .row
     .span3
       = label_tag(text(:event_filter))
-      - option_list = LogEventSearcher::ALLOWED_EVENTS.map { |event| [text(event), event] }
       = select_tag(:events,
-        options_for_select(option_list, params[:events]),
+        options_for_select(log_events_options, params[:events]),
         multiple: true,
         class: "js--chosen",
         data: { placeholder: text(:event_placeholder) })
@@ -34,10 +33,13 @@
   .row
     .span3
       = submit_tag(text(:filter), class: "btn")
+      = hidden_field_tag :email, current_user.email, disabled: true
+      = hidden_field_tag :format, params[:format], disabled: true
 
 
 = will_paginate(@log_events)
 
+= link_to t("reports.account_transactions.export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
 %table.table.table-striped.table-hover
   %thead
     %tr

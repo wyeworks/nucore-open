@@ -8,4 +8,7 @@ ActiveSupport::Notifications.subscribe("background_error") do |_name, _start, _f
   end
   Rails.logger.error exception
   Rails.logger.error exception.backtrace.try(:join, "\n")
+  if defined?(Rollbar)
+    Rollbar.error(exception)
+  end
 end

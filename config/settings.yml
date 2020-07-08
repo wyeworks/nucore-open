@@ -115,6 +115,7 @@ feature:
   multi_facility_accounts: true
   facility_directors_can_manage_price_groups: true
   account_reference_field: false
+  facility_payment_urls: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts

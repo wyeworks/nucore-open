@@ -1,7 +1,7 @@
 = content_for :head_content do
   = render "shared/headers/calendar"
   = javascript_include_tag "reservations.js"
-  = render "js_variables"
+  = render "reservations/js_variables"
 
 = content_for :breadcrumb do
   %ul.breadcrumb
@@ -25,11 +25,10 @@
   %p.alert.alert-warning= text("instruments.schedule.instrument_alert_is_active", note: @instrument.alert.note)
 
 = render "products_common/description", product: @instrument
-
-= simple_form_for [@order, @order_detail, @reservation], html: { class: "js--reservationForm js--reservationUpdateCreateAndStart" } do |f|
+= simple_form_for [@order, @order_detail, @reservation], html: { class: "js--reservationForm js--reservationUpdateCreateAndStart" }, url: @submit_action do |f|
   = f.error_messages
-  = render "account_field", f: f unless @order_detail.bundled?
-  = render "reservation_fields", f: f
+  = render "reservations/account_field", f: f unless @order_detail.bundled?
+  = render "reservations/reservation_fields", f: f
 
   - if acting_as?
     .row
@@ -55,16 +54,13 @@
         id: "reservation_submit",
         data: { disable_with: t("shared.create") }
 
-    - url_after_action = facility_path(@instrument.facility)
     %li
       - if @order.to_be_merged?
         = link_to t("shared.cancel"), facility_order_path(@instrument.facility, @order.merge_order)
-      - elsif @order_detail.bundled?
-        = link_to t("shared.cancel"), url_after_action
+      - elsif @order.persisted?
+        = link_to t("shared.cancel"), cart_path
       - else
-        = link_to t("shared.cancel"),
-          remove_order_path(@order, @order_detail, redirect_to: url_after_action),
-          method: :put
+        = link_to t("shared.cancel"), facility_path(@instrument.facility)
 
 #overlay
   #spinner

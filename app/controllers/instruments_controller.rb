@@ -23,12 +23,10 @@ class InstrumentsController < ProductsCommonController
   # GET /facilities/:facility_id/instruments/:instrument_id
   def show
     instrument_for_cart = InstrumentForCart.new(@product)
+    # TODO: Remove this instance variable-not used anywhere but tests
     @add_to_cart = instrument_for_cart.purchasable_by?(acting_user, session_user)
     if @add_to_cart
-      redirect_to add_order_path(
-        acting_user.cart(session_user),
-        order: { order_details: [{ product_id: @product.id, quantity: 1 }] },
-      )
+      redirect_to new_facility_instrument_single_reservation_path(current_facility, @product)
     elsif instrument_for_cart.error_path
       redirect_to instrument_for_cart.error_path, notice: instrument_for_cart.error_message
     else

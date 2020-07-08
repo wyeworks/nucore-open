@@ -156,8 +156,8 @@ RSpec.describe AutoLogout, :time_travel do
   end
 
   describe "two reservations with unique instruments sharing a calendar" do
-    let!(:shared_instrument_1) { create(:setup_instrument, min_reserve_mins: 1, relay: create(:relay_syna, auto_logout: true)) }
-    let!(:shared_instrument_2) { create(:setup_instrument, min_reserve_mins: 1, schedule: shared_instrument_1.schedule, relay: create(:relay_syna, auto_logout: true)) }
+    let!(:shared_instrument_1) { create(:setup_instrument, min_reserve_mins: 1, relay: build(:relay_syna, auto_logout: true)) }
+    let!(:shared_instrument_2) { create(:setup_instrument, min_reserve_mins: 1, schedule: shared_instrument_1.schedule, relay: build(:relay_syna, auto_logout: true)) }
     let!(:reservation_done) { create(:purchased_reservation, :yesterday, product: shared_instrument_1, actual_start_at: 1.day.ago) }
     let!(:reservation_running) { create(:purchased_reservation, product: shared_instrument_2, reserve_start_at: 30.minutes.ago, reserve_end_at: 30.minutes.from_now, actual_start_at: 30.minutes.ago) }
 

@@ -18,11 +18,11 @@ module Reports
     end
 
     def date_start
-      @date_start.in_time_zone
+      @date_start&.in_time_zone
     end
 
     def date_end
-      @date_end.in_time_zone
+      @date_end&.in_time_zone
     end
 
     def has_attachment?
@@ -50,7 +50,7 @@ module Reports
     end
 
     def formatted_compact_date_range
-      "#{date_start.strftime('%Y%m%d')}-#{date_end.strftime('%Y%m%d')}"
+      [date_start, date_end].compact.map { |d| d.strftime('%Y%m%d') }.join("-")
     end
 
     def column_headers

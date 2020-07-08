@@ -32,7 +32,8 @@
               %td.approval-column.approval-checkbox
                 = check_box_tag "approved_products[]",
                   product.id,
-                  product.can_be_used_by?(@user)
+                  product.can_be_used_by?(@user),
+                  aria: {label: product.name}
               %td.product-column
                 - if training_requested_for?(product)
                   %span.label.label-important

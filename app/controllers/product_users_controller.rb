@@ -42,6 +42,7 @@ class ProductUsersController < ApplicationController
     return unless params[:user]
     product_user = ProductUserCreator.create(user: User.find(params[:user]), product: @product, approver: session_user)
     if product_user.persisted?
+      LogEvent.log(product_user, :create, session_user)
       flash[:notice] = text("new.success", model: downcase_product_type)
     else
       flash[:error] = product_user.errors.full_messages.to_sentence
@@ -60,7 +61,8 @@ class ProductUsersController < ApplicationController
       # Show success even if it doesn't exist because it is likely to be a
       # multi-tab issue
       flash[:notice] = text("destroy.success", model: downcase_product_type)
-    elsif product_user.destroy && product_user.destroyed?
+    elsif product_user.destroy
+      LogEvent.log(product_user, :delete, session_user)
       flash[:notice] = text("destroy.success", model: downcase_product_type)
     else
       flash[:error]  = text("destroy.failure", model: downcase_product_type)

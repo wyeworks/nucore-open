@@ -218,6 +218,7 @@ class FacilitiesController < ApplicationController
       show_instrument_availability
       url_name
       dashboard_enabled
+      payment_url
     )
   end
 

@@ -33,6 +33,7 @@ RSpec.configure do |config|
 
   Capybara.server = :webrick
   require "capybara/email/rspec"
+  Capybara.enable_aria_label = true
 
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include FactoryBot::Syntax::Methods

@@ -85,7 +85,7 @@ class FacilityAccountsController < ApplicationController
           render layout: false
         end
         format.csv do
-          send_csv_email_and_respond do |email|
+          yield_email_and_respond_for_report do |email|
             AccountSearchResultMailer.search_result(email, params[:search_term], SerializableFacility.new(current_facility)).deliver_later
           end
         end

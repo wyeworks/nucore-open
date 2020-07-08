@@ -683,25 +683,40 @@ RSpec.describe ReservationsController do
       expect(assigns[:order_detail]).to eq(@order_detail)
       expect(assigns[:instrument]).to eq(@instrument)
       expect(assigns(:reservation)).to be_kind_of Reservation
-      expect(assigns(:max_window)).to be_kind_of Integer
-
-      expect(assigns[:max_date]).to eq((Time.zone.now + assigns[:max_window].days).strftime("%Y%m%d"))
     end
 
     # Managers should be able to go far out into the future
     it_should_allow_all facility_operators do
-      expect(assigns[:max_window]).to eq(365)
-      expect(assigns[:max_days_ago]).to eq(-365)
-      expect(assigns[:min_date]).to eq((Time.zone.now + assigns[:max_days_ago].days).strftime("%Y%m%d"))
-      expect(assigns[:max_date]).to eq((Time.zone.now + 365.days).strftime("%Y%m%d"))
+      expect(assigns[:reservation_window].max_window).to eq(365)
+      expect(assigns[:reservation_window].max_days_ago).to eq(-365)
+      expect(assigns[:reservation_window].min_date).to eq((Time.zone.now - 365.days).strftime("%Y%m%d"))
+      expect(assigns[:reservation_window].max_date).to eq((Time.zone.now + 365.days).strftime("%Y%m%d"))
     end
 
     # guests should only be able to go the default reservation window into the future
-    it_should_allow_all [:guest] do
-      expect(assigns[:max_window]).to eq(PriceGroupProduct::DEFAULT_RESERVATION_WINDOW)
-      expect(assigns[:max_days_ago]).to eq(0)
-      expect(assigns[:max_date]).to eq((Time.zone.now + PriceGroupProduct::DEFAULT_RESERVATION_WINDOW.days).strftime("%Y%m%d"))
-      expect(assigns[:min_date]).to eq(Time.zone.now.strftime("%Y%m%d"))
+    context "with a guest user" do
+      describe "without user based price groups", feature_setting: { user_based_price_groups: false } do
+        it "sets the reservation window correctly" do
+          sign_in @guest
+          do_request
+          expect(assigns[:reservation_window].max_window).to eq(PriceGroupProduct::DEFAULT_RESERVATION_WINDOW)
+          expect(assigns[:reservation_window].max_days_ago).to eq(0)
+          expect(assigns[:reservation_window].max_date).to eq((Time.zone.now + PriceGroupProduct::DEFAULT_RESERVATION_WINDOW.days).strftime("%Y%m%d"))
+          expect(assigns[:reservation_window].min_date).to eq(Time.zone.now.strftime("%Y%m%d"))
+        end
+      end
+
+      describe "with user based price groups", feature_setting: { user_based_price_groups: true } do
+        it "sets the reservation window correctly" do
+          @guest.create_default_price_group!
+          sign_in @guest
+          do_request
+          expect(assigns[:reservation_window].max_window).to eq(PriceGroupProduct::DEFAULT_RESERVATION_WINDOW)
+          expect(assigns[:reservation_window].max_days_ago).to eq(0)
+          expect(assigns[:reservation_window].max_date).to eq((Time.zone.now + PriceGroupProduct::DEFAULT_RESERVATION_WINDOW.days).strftime("%Y%m%d"))
+          expect(assigns[:reservation_window].min_date).to eq(Time.zone.now.strftime("%Y%m%d"))
+        end
+      end
     end
 
     it_behaves_like "it can handle having its order_detail removed"
@@ -831,7 +846,7 @@ RSpec.describe ReservationsController do
         pgp2 = FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 7)
         pgp3 = FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 21)
         do_request
-        expect(assigns(:max_window)).to eq(7)
+        expect(assigns(:reservation_window).max_window).to eq(7)
       end
     end
 

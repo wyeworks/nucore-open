@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe ReservationInstrumentSwitcher do
-  let(:instrument) { FactoryBot.create(:setup_instrument, relay: create(:relay_syna)) }
+  let(:instrument) { FactoryBot.create(:setup_instrument, relay: build(:relay_syna)) }
   let(:reservation) { FactoryBot.create(:purchased_reservation, product: instrument) }
   let(:action) { described_class.new(reservation) }
 

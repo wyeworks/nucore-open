@@ -19,16 +19,16 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
     describe "happy path" do
       let(:body) do
         <<~CSV
-          Netid / Email,Chart String,Product Name,Quantity,Order Date,Fulfillment Date,Note,Order
-          sst123@example.com,#{account.account_number},Example Item,1,02/15/2020,02/15/2020,Add to 1,#{order.id}
-          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,Add to 2,#{order.id}
-          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,Add to other,#{order2.id}
-          sst123@example.com,#{account.account_number},Example Item,1,02/15/2020,02/15/2020,New 1,
-          SST123@EXAMPLE.COM,#{account.account_number},Example Item,1,02/15/2020,02/15/2020,New 1-2 - Miscased,
-          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,New 2 - Different Account,
-          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,New 2-2,
-          sst123@example.com,#{account2.account_number},Example Item,1,02/01/2020,02/15/2020,New 3 - Different Order Date,
-          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/16/2020,New 2-3 - Different fulfilled,
+          Netid / Email,Chart String,Product Name,Quantity,Order Date,Fulfillment Date,Note,Order,Reference ID
+          sst123@example.com,#{account.account_number},Example Item,1,02/15/2020,02/15/2020,Add to 1,#{order.id},123456789
+          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,Add to 2,#{order.id},123456000
+          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,Add to other,#{order2.id},abc123
+          sst123@example.com,#{account.account_number},Example Item,1,02/15/2020,02/15/2020,New 1,,
+          SST123@EXAMPLE.COM,#{account.account_number},Example Item,1,02/15/2020,02/15/2020,New 1-2 - Miscased,,
+          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,New 2 - Different Account,,
+          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,New 2-2,,1234
+          sst123@example.com,#{account2.account_number},Example Item,1,02/01/2020,02/15/2020,New 3 - Different Order Date,,
+          sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/16/2020,New 2-3 - Different fulfilled,,
         CSV
       end
 
@@ -40,8 +40,8 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
         order_import.process_upload!
         expect(order.reload.order_details).to match([
           anything, # this is the original detail
-          having_attributes(account: account, note: "Add to 1"),
-          having_attributes(account: account2, note: "Add to 2"),
+          having_attributes(account: account, note: "Add to 1", reference_id: "123456789"),
+          having_attributes(account: account2, note: "Add to 2", reference_id: "123456000"),
         ])
       end
 

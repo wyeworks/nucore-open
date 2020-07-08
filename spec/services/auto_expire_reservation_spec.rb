@@ -32,8 +32,9 @@ RSpec.describe AutoExpireReservation, :time_travel do
 
       it "logs the problem reservation" do
         action.perform
-        log_event = LogEvent.find_by(loggable: reservation.order_detail, event_type: :problem_queue, metadata: {"cause"=>"auto_expire"})
+        log_event = LogEvent.find_by(loggable: reservation.order_detail, event_type: :problem_queue)
         expect(log_event).to be_present
+        expect(log_event.metadata).to eq("cause"=>"auto_expire")
       end
 
       it "does not assign pricing" do

@@ -18,8 +18,8 @@
       - if can?(:export_all, Reports::ReportsController)
         = link_to t("reports.export.raw"),
           export_csv_report_path,
-          id: "export-all"
-        = hidden_field_tag :email_to_address, current_user.email
+          class: "js--exportRaw"
+        = hidden_field_tag :email, current_user.email, class: "js--exportRawEmailField"
 
   %div#tabs
     = render "report_tabs"

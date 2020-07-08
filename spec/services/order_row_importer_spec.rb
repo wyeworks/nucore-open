@@ -20,6 +20,7 @@ RSpec.describe OrderRowImporter do
     let(:quantity) { "1" }
     let(:order_date) { "1/1/2015" }
     let(:fulfillment_date) { "1/2/2015" }
+    let(:reference_id) { "123456" }
 
     before(:each) do
       allow_any_instance_of(Product).to receive(:can_purchase?).and_return(true)
@@ -36,6 +37,7 @@ RSpec.describe OrderRowImporter do
       "Fulfillment Date" => fulfillment_date,
       "Note" => notes,
       "Order" => order_number,
+      "Reference ID" => reference_id,
     }
     CSV::Row.new(ref.keys, ref.values)
   end
@@ -48,6 +50,7 @@ RSpec.describe OrderRowImporter do
   let(:fulfillment_date) { "column6" }
   let(:notes) { "column7" }
   let(:order_number) { "" }
+  let(:reference_id) { "column9" }
 
   describe "#import" do
     shared_examples_for "an order was created" do
@@ -99,6 +102,37 @@ RSpec.describe OrderRowImporter do
       it "has no errors" do
         subject.import
         expect(subject.errors).to be_empty
+      end
+    end
+
+    context "when the reference_id field is missing" do
+      include_context "valid row values"
+      let(:reference_id) { "" }
+
+      it_behaves_like "an order was created"
+      it "has no errors" do
+        subject.import
+        expect(subject.errors).to be_empty
+      end
+
+      it "parses the reference_id" do
+        subject.import
+        expect(OrderDetail.last.reference_id).to be_blank
+      end
+    end
+
+    context "when the reference_id field is present" do
+      include_context "valid row values"
+
+      it_behaves_like "an order was created"
+      it "has no errors" do
+        subject.import
+        expect(subject.errors).to be_empty
+      end
+
+      it "parses the reference_id" do
+        subject.import
+        expect(OrderDetail.last.reference_id).to eq "123456"
       end
     end
 
@@ -553,6 +587,7 @@ RSpec.describe OrderRowImporter do
           "Fulfillment Date",
           "Note",
           "Order",
+          "Reference ID",
           "Errors",
         ],
       )

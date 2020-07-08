@@ -53,7 +53,7 @@ RSpec.describe StatementPresenter do
     end
 
     context "when the statement's creator does not exist" do
-      before { creator.destroy }
+      before { statement.created_by = nil }
 
       it "returns 'Unknown'" do
         expect(subject.sent_by).to eq("Unknown")
