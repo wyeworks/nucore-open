@@ -33,7 +33,7 @@ converters:
   order_detail_to_journal_rows: UmassCorum::Journals::OrderDetailToJournalRowAttributes
 
 statement_pdf:
-  class_name: ExampleStatementPdf
+  class_name: UmassCorum::StatementPdf
   font_name: Roboto
 
 validator:
@@ -115,7 +115,7 @@ feature:
   multi_facility_accounts: true
   facility_directors_can_manage_price_groups: true
   account_reference_field: false
-  facility_payment_urls: false
+  facility_payment_urls: true
 
 split_accounts:
   # Roles are allowed to create Split Accounts
