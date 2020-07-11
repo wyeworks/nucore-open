@@ -13,7 +13,7 @@ FactoryBot.define do
     dept_desc { "Vet/Animal Science-User,Owner" }
     dept_id { "A010400000" }
     fund_code { "11000" }
-    fund_desc { "State  aintenance" }
+    fund_desc { "State Maintenance" }
     manager_hr_emplid { "10038224" }
     program_code { "B03" }
     project_desc { "National Multiple Sclerosis So" }

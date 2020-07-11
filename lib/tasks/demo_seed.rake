@@ -344,26 +344,28 @@ namespace :demo do
       account_users_attributes: account_users_attributes,
     }
 
-    nufsaccount = NufsAccount.find_by(account_number: "111-2222222-33333333-01")
+    api_speed_type = UmassCorum::ApiSpeedType.find_by(speed_type: "123456") || FactoryBot.create(:api_speed_type, speed_type: "123456")
+    nufsaccount = NufsAccount.find_by(account_number: api_speed_type.speed_type)
 
     unless nufsaccount
       nufsaccount = NufsAccount.create!(
         nufs_account_attributes.merge(
-          account_number: "111-2222222-33333333-01",
-          description: "Paul PI's Chart String",
+          account_number: api_speed_type.speed_type,
+          description: "Paul PI's Speed Type",
         ),
       )
       nufsaccount.set_expires_at
     end
 
     # create a second nufsaccount for split accounts
-    nufsaccount2 = NufsAccount.find_by(account_number: "123-1234567-12345678-01")
+    api_speed_type2 = UmassCorum::ApiSpeedType.find_by(speed_type: "654321") || FactoryBot.create(:api_speed_type, speed_type: "654321")
+    nufsaccount2 = NufsAccount.find_by(account_number: api_speed_type2.speed_type)
 
     unless nufsaccount2
       nufsaccount2 = NufsAccount.create!(
         nufs_account_attributes.merge(
-          account_number: "123-1234567-12345678-01",
-          description: "Paul PI's Other Chart String",
+          account_number: api_speed_type2.speed_type,
+          description: "Paul PI's Other Speed Type",
         ),
       )
       nufsaccount2.set_expires_at
