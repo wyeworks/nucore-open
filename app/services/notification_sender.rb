@@ -2,36 +2,31 @@
 
 class NotificationSender
 
-  attr_reader :errors, :current_facility, :account_ids_to_notify
+  attr_reader :errors, :current_facility
 
-  def initialize(current_facility, order_detail_ids)
+  def initialize(current_facility, params)
     @current_facility = current_facility
-    @order_detail_ids = order_detail_ids
+    @order_detail_ids = params[:order_detail_ids]
+    @notify_zero_dollar_orders = ActiveModel::Type::Boolean.new.cast(params[:notify_zero_dollar_orders])
   end
 
-  def init_account_ids_to_notify
-    @account_ids_to_notify =
-      if SettingsHelper.has_review_period?
-        order_details.distinct.pluck(:account_id)
-      else
-        []
-      end
+  def account_ids_to_notify
+    to_notify = order_details
+    to_notify = to_notify.none unless SettingsHelper.has_review_period?
+    to_notify = to_notify.where("actual_cost > 0") unless @notify_zero_dollar_orders
+    @account_ids_to_notify ||= to_notify.distinct.pluck(:account_id)
   end
 
   def perform
-    init_account_ids_to_notify
     @errors = []
+    find_missing_order_details
+    return if @errors.any?
 
     OrderDetail.transaction do
-      find_missing_order_details
-
-      raise ActiveRecord::Rollback if @errors.any?
-
+      account_ids_to_notify # needs to be memoized before order_details get reviewed
       mark_order_details_as_reviewed
       notify_accounts
     end
-
-    @errors.none?
   end
 
   def accounts_notified_size

@@ -63,6 +63,22 @@ RSpec.describe AccountBuilder, type: :service do
       it "returns subclassed builder" do
         expect(described_class.for("Existing")).to eq(ExistingBuilder)
       end
+
+      it "can find it by underscored name" do
+        expect(described_class.for("existing")).to eq(ExistingBuilder)
+      end
+    end
+
+    context "when the builder is namespaced" do
+      before do
+        module TestNamespace
+          ExistingBuilder = Class.new(AccountBuilder)
+        end
+      end
+
+      it "returns the builder" do
+        expect(described_class.for("TestNamespace::Existing")).to eq(TestNamespace::ExistingBuilder)
+      end
     end
 
     context "when subclassed account builder missing" do

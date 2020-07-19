@@ -10,7 +10,20 @@
   = render "shared/transactions/top", tab: "notifications"
 
 - if @order_details.any?
-  = render "shared/transactions/table", order_details: @order_details
+  #table_billing
+    = form_tag facility_send_notifications_path, method: :post, class: "form-horizontal" do
+      .row.table-actions
+        .span1.select_all_none= select_all_link
+        .span4.offset7
+          .pull-right
+            = label_tag :notify_zero_dollar_orders, class: "checkbox input-inline" do
+              = check_box_tag :notify_zero_dollar_orders
+              = text("send_zero_dollar_notifications", scope: "admin.transaction_search.actions")
+            .submit.inline-block
+              = submit_tag text("send_notifications", scope: "admin.transaction_search.actions"), class: ["btn", "btn-primary"]
+      .row
+        .span12= render "shared/transactions/table_inside", order_details: @order_details
+
   = render "shared/reconcile_footnote"
 - else
   %p.alert.alert-info= text("facility_notifications.index.no_orders")

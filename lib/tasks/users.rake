@@ -18,12 +18,11 @@ namespace :users do
       Users::ConvertExternalToInternalUser.new(args[:email], args[:netid], **options).convert!
     end
 
-    # Dry run: rake users:convert:external_to_internal[netid123]
-    # Commit: rake users:convert:external_to_internal[netid123,true]
+    # Dry run: rake users:convert:internal_to_external[netid123]
+    # Commit: rake users:convert:internal_to_external[netid123,true]
     desc "Convert an internal user to external"
     task :internal_to_external, [:netid, :commit] => :environment do |_t, args|
       options = { dryrun: !args[:commit], logger: Logger.new(STDOUT) }
-      puts "args: #{args}"
       Users::ConvertInternalToExternalUser.new(args[:netid], **options).convert!
     end
   end

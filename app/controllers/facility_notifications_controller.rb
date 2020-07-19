@@ -34,7 +34,7 @@ class FacilityNotificationsController < ApplicationController
     @order_detail_action = :send_notifications
   end
 
-  # GET /facilities/notifications/send
+  # POST /facilities/notifications/send
   def send_notifications
     if params[:order_detail_ids].nil? || params[:order_detail_ids].empty?
       flash[:error] = I18n.t "controllers.facility_notifications.no_selection"
@@ -42,7 +42,7 @@ class FacilityNotificationsController < ApplicationController
       return
     end
 
-    sender = NotificationSender.new(current_facility, params[:order_detail_ids])
+    sender = NotificationSender.new(current_facility, params)
 
     if sender.perform
       flash[:notice] = send_notification_success_message(sender)

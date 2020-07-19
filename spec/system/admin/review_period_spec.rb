@@ -15,6 +15,7 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
 
   before do
     order_details.each { |od| od.update(note: "OD ##{od.order_number}") }
+    order_details.second.update(actual_cost: 0)
   end
 
   it "can do a basic search" do
@@ -37,26 +38,58 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
     expect(page).not_to have_content("OD ##{order_details.second.order_number}")
   end
 
-  it "can send notifications" do
-    login_as director
-    visit facility_notifications_path(facility)
+  context "when 'Send $0 Notifications?' checkbox is unchecked" do
+    it "only sends notifications for orders > $0" do
+      login_as director
+      visit facility_notifications_path(facility)
 
-    find("input[value='#{order_details.first.id}']").click
-    find("input[value='#{order_details.second.id}']").click
+      find("input[value='#{order_details.first.id}']").click
+      find("input[value='#{order_details.second.id}']").click
 
-    click_button "Send Notifications"
+      click_button "Send Notifications"
 
-    within(".notice") do
-      expect(page).to have_content(accounts.first.account_list_item)
-      expect(page).to have_content(accounts.second.account_list_item)
+      expect(ActionMailer::Base.deliveries.count).to eq 1
+
+      within(".notice") do
+        expect(page).to have_content(accounts.first.account_list_item)
+        # Only one notification is sent, the second order detail is $0
+        expect(page).not_to have_content(accounts.second.account_list_item)
+      end
+      expect(page).to have_content("No notifications are currently pending")
+
+      click_link "Orders In Review"
+
+      # Both orders are now in review
+      expect(page).to have_content("OD ##{order_details.first.order_number}")
+      expect(page).to have_content("OD ##{order_details.second.order_number}")
     end
-    expect(page).to have_content("No notifications are currently pending")
+  end
 
-    click_link "Orders In Review"
+  context "when 'Send $0 Notifications?' checkbox is checked" do
+    it "sends notifications for all orders" do
+      login_as director
+      visit facility_notifications_path(facility)
 
-    # Has both orders
-    expect(page).to have_content("OD ##{order_details.first.order_number}")
-    expect(page).to have_content("OD ##{order_details.second.order_number}")
+      find("input[value='#{order_details.first.id}']").click
+      find("input[value='#{order_details.second.id}']").click
+
+      check "Send $0 Notifications?"
+      click_button "Send Notifications"
+
+      expect(ActionMailer::Base.deliveries.count).to eq 2
+
+      within(".notice") do
+        expect(page).to have_content(accounts.first.account_list_item)
+        expect(page).to have_content(accounts.second.account_list_item)
+      end
+      expect(page).to have_content("No notifications are currently pending")
+
+      click_link "Orders In Review"
+
+      # Both orders are now in review
+      expect(page).to have_content("OD ##{order_details.first.order_number}")
+      expect(page).to have_content("OD ##{order_details.second.order_number}")
+    end
   end
 
   it "shows a total cost at the bottom of the table" do
@@ -64,8 +97,8 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
     visit facility_notifications_path(facility)
 
     within(".old-table tfoot") do
-      expect(page).to have_selector("th", text: "Total")
-      expect(page).to have_selector("td", text: "$2.0")
+      expect(page).to have_selector("th", text: "Total", exact: true)
+      expect(page).to have_selector("td", text: "$1.00", exact: true)
     end
   end
 

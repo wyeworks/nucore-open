@@ -25,8 +25,8 @@ module Formio
     # NUcore’s SurveysController expects a referer param, which contains the page
     # to which NUcore should redirect after it processes a form submission. However,
     # the success_url that we get from UrlService does not include this param. Instead,
-    # we get it as a separate pram, so we construct the full redirect_url here to
-    # avoid changing having to change code for unrelated integrations
+    # we get it as a separate param, so we construct the full redirect_url here to
+    # avoid changing code for unrelated integrations
     def redirect_url
       referer_url = URI(params[:referer])
       URI(params[:success_url]).tap do |success_url|
