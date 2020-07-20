@@ -4,7 +4,6 @@ price_group:
   name:
     base: 'Base Rate'
     external: 'External Rate'
-    cancer_center: 'Cancer Center Rate'
 
 time_zone: "Eastern Time (US & Canada)"
 
