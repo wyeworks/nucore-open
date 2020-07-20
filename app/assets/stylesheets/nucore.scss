@@ -355,6 +355,10 @@ select.tall {
   }
 }
 
+.inline-block {
+  display: inline-block;
+}
+
 /* Bootstrap adds an element with this class when you expand a dropdown and your
  * browser supports the ontouchstart event. It's a workaround for mobile Safari's
  * click handlers, but takes over the whole screen and prevents clicks to the

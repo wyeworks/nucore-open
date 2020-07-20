@@ -680,7 +680,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def order_number
-    "#{order_id}-#{id}"
+    "#{order.merge_with_order_id || order_id}-#{id}"
   end
   alias to_s order_number
 

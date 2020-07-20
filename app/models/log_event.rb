@@ -19,9 +19,13 @@ class LogEvent < ApplicationRecord
       start_date: start_date, end_date: end_date, events: events, query: query).search
   end
 
-# The reason that we are doing this is because in some case we can't add a default value to a text column 
+# The reason that we are doing this is because in some case we can't add a default value to a text column
   def metadata
     self[:metadata] || {}
+  end
+
+  def facility
+    loggable.facility if loggable.respond_to?(:facility)
   end
 
   def locale_tag

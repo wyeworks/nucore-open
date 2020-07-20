@@ -40,5 +40,5 @@ Facility.find_by(url_name: "facility-name").update_attributes(sanger_sequencing_
   SangerSequencing::ProductGroup.create(product: product, group: "fragment")
   ```
 
-A product can only be part of a single group. If it isnot part of a group,
-it fall back to a "default" group, which is the standard Sanger Sequencing.
+A product can only be part of a single group. If it is not part of a group,
+it falls back to a "default" group, which is the standard Sanger Sequencing.

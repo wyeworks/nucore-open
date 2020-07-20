@@ -52,9 +52,7 @@ class FacilityAccountsController < ApplicationController
 
   # PUT /facilities/:facility_id/accounts/:id
   def update
-    account_type = Account.config.account_type_to_param(@account.class)
-
-    @account = AccountBuilder.for(account_type).new(
+    @account = AccountBuilder.for(@account.class).new(
       account: @account,
       current_user: current_user,
       owner_user: @owner_user,

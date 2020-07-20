@@ -9,6 +9,7 @@ en:
       actions:
         reassign_chart_strings: Reassign Chart Strings
         send_notifications: Send Notifications
+        send_zero_dollar_notifications: Send $0 Notifications?
         mark_as_reviewed: Mark as Reviewed
         create: Create
         history: Transaction History

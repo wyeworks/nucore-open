@@ -19,7 +19,7 @@ class NextAvailableReservationFinder
   private
 
   def default_reservation
-    Reservation.new(instrument: @product,
+    Reservation.new(product: @product,
                     reserve_start_at: Time.current,
                     reserve_end_at: default_reservation_mins.minutes.from_now)
   end

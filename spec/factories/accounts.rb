@@ -26,6 +26,9 @@ FactoryBot.define do
     # to be valid in rails. And foreign key constraints require that each
     # account_user has an account inserted before the account_user is inserted.
     callback(:after_build) do |account, evaluator|
+      # Some subclass factories might already include this trait, so we don't want
+      # to accidentally have two owners.
+      account.account_users = account.account_users.reject(&:owner?)
       account.account_users << build(:account_user, user: evaluator.owner)
     end
   end

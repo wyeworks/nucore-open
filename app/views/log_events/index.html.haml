@@ -46,6 +46,7 @@
       %th= text("event_time")
       %th= text("event")
       %th= text("object")
+      %th= Facility.model_name.human
       %th= text("user_label")
 
   %tbody
@@ -54,6 +55,7 @@
         %td= format_usa_datetime(log_event.event_time)
         %td= text(log_event.locale_tag, log_event.metadata.symbolize_keys)
         %td= log_event.loggable_to_s
+        %td= log_event.facility
         %td= log_event.user.try(:to_s)
 
 = will_paginate(@log_events)

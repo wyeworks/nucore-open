@@ -1961,4 +1961,23 @@ RSpec.describe OrderDetail do
       end
     end
   end
+
+  describe "#order_number" do
+
+    it "includes the merge_with_order_id when present" do
+      merge_to_order = @order.dup
+      merge_to_order.save
+      @order.update_attribute :merge_with_order_id, merge_to_order.id
+      @order_detail.reload
+
+      expect(@order_detail.order.merge_with_order_id).to be_present
+      expect(@order_detail.order_number).to eq "#{merge_to_order.id}-#{@order_detail.id}"
+    end
+
+    it "includes the order_id when no merge_with_order_id exists" do
+      expect(@order_detail.order.merge_with_order_id).to be_blank
+      expect(@order_detail.order_number).to eq "#{@order_detail.order.id}-#{@order_detail.id}"
+    end
+
+  end
 end

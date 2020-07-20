@@ -24,6 +24,7 @@ RSpec.describe SplitAccounts::OrderDetailSplitter, type: :service do
                                    estimated_cost: BigDecimal("29.99"),
                                    estimated_subsidy: BigDecimal("39.99"),
                                    account: split_account,
+                                   order: order,
                                    note: "this is a note")
     end
 
