@@ -23,3 +23,9 @@ en:
         username: Username/NetID
         netid: NetID
         no_netid: This user does not have a NetID
+
+  views:
+    users:
+      request_login:
+        request_login_link: |
+          [Request an account](https://www.umass.edu/ials/core-facility-user-authorization-form)
