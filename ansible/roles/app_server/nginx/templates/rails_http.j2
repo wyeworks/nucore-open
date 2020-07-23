@@ -10,7 +10,7 @@ server {
   root /home/{{ item.user }}/{{ item.host }}/current/public;
   try_files $uri/index.html $uri.html $uri @app;
 
-  client_max_body_size 10M;
+  client_max_body_size {{ item.client_max_body_size | default(client_max_body_size) }};
   proxy_read_timeout 300s;
 
   location @app {

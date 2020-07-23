@@ -4,9 +4,9 @@
     state: present
   become: yes
 
-- name: Make sure we have a 'umass' group
+- name: Make sure we have a 'corum' group
   group:
-    name: umass
+    name: corum
     state: present
   become: yes
 
@@ -23,7 +23,7 @@
   user:
     name: '{{ item.name }}'
     state: present
-    groups: "{{ (item.groups | default([])) + ['umass'] }}"
+    groups: "{{ (item.groups | default([])) + ['corum'] }}"
   with_items:
     - '{{ users }}'
   loop_control:
