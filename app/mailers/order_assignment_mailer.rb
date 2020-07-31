@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OrderAssignmentMailer < BaseMailer
+class OrderAssignmentMailer < ApplicationMailer
 
   def notify_assigned_user(order_details)
     @order_details = Array(order_details)

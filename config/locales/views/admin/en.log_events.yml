@@ -31,8 +31,8 @@ en:
           create: User added to access list
           delete: User removed from access list
         price_group_member:
-          create: User added to price group
-          delete: User removed from price group
+          create: "%{member_type} added to price group"
+          delete: "%{member_type} removed from price group"
         facility:
           activate: Turned on all relays
           deactivate: Turned off all relays

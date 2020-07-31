@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AccountSearchResultMailer < BaseMailer
+class AccountSearchResultMailer < ApplicationMailer
 
   def search_result(to_email, search_term, facility)
     accounts = AccountSearcher.new(search_term, scope: Account.for_facility(facility)).results

@@ -31,4 +31,15 @@ namespace :cleanup do
       puts "Price group with id: #{pg.id}, name: #{cc_name} has been destroyed."
     end
   end
+
+  namespace :log_events do
+    desc "update metadata for PriceGroupMembers"
+    task metadata: :environment do
+      events = LogEvent.where(loggable_type: "PriceGroupMember").where(metadata: nil)
+      puts "Updating #{events.size} LogEvents..."
+      events.find_each do |event|
+        event.update(metadata: { member_type: event.loggable.member_type })
+      end
+    end
+  end
 end

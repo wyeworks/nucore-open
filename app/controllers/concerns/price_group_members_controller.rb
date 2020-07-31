@@ -28,7 +28,7 @@ module PriceGroupMembersController
     raise NUCore::PermissionDenied unless @price_group.can_manage_price_group_members?
 
     if price_group_member.save
-      LogEvent.log(price_group_member, :create, current_user)
+      LogEvent.log(price_group_member, :create, current_user, metadata: { member_type: price_group_member.member_type })
       set_flash(:notice, :create, create_flash_arguments)
     else
       set_flash(:error, :create, create_flash_arguments)
@@ -40,7 +40,7 @@ module PriceGroupMembersController
     raise NUCore::PermissionDenied unless @price_group.can_manage_price_group_members?
 
     if destroy_price_group_member!
-      LogEvent.log(price_group_member, :delete, current_user)
+      LogEvent.log(price_group_member, :delete, current_user, metadata: { member_type: price_group_member.member_type })
       set_flash(:notice, :destroy)
     else
       set_flash(:error, :destroy)

@@ -26,6 +26,11 @@ FactoryBot.define do
       username { email }
     end
 
+    trait :netid do
+      password { nil }
+      password_confirmation { nil }
+    end
+
     trait :account_manager do
       after(:create) do |user, _|
         UserRole.create!(user: user, role: UserRole::ACCOUNT_MANAGER)

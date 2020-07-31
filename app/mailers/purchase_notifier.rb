@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-class PurchaseNotifier < ActionMailer::Base
+class PurchaseNotifier < ApplicationMailer
 
   include DateHelper
   add_template_helper ApplicationHelper
-  add_template_helper TranslationHelper
   add_template_helper OrdersHelper
   add_template_helper ViewHookHelper
 

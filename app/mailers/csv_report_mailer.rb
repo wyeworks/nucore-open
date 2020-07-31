@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CsvReportMailer < BaseMailer
+class CsvReportMailer < ApplicationMailer
 
   def csv_report_email(to_address, report)
     attachments[report.filename] = report.to_csv if report.has_attachment?

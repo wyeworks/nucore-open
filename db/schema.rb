@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_02_212036) do
+ActiveRecord::Schema.define(version: 2020_07_23_191759) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -596,7 +596,7 @@ ActiveRecord::Schema.define(version: 2020_07_02_212036) do
 
   create_table "relays", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "instrument_id"
-    t.string "ip", limit: 15
+    t.string "ip"
     t.integer "outlet"
     t.string "username", limit: 50
     t.string "password", limit: 50

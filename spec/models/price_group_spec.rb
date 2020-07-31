@@ -43,6 +43,20 @@ RSpec.describe PriceGroup do
 
   end
 
+  describe "to_log_s" do
+    it "should be loggable with account price groups" do
+      account = create(:setup_account)
+      account_price_group_member = create(:account_price_group_member, price_group: @price_group, account: account)
+      expect(account_price_group_member.to_log_s).to include(account.to_s)
+    end
+
+    it "should be loggable with user price groups" do
+      user = create(:user)
+      account_price_group_member = create(:user_price_group_member, price_group: @price_group, user: user)
+      expect(account_price_group_member.to_log_s).to include(user.to_s)
+    end
+  end
+
   describe "can_delete?" do
     it "should not be deletable if global" do
       @global_price_group = FactoryBot.build(:price_group, facility: nil)
@@ -65,6 +79,14 @@ RSpec.describe PriceGroup do
     it "should be able to delete a price group with price group members" do
       user = create(:user)
       user_price_group_member = create(:user_price_group_member, price_group: @price_group, user: user)
+      @price_group.destroy
+      expect { PriceGroup.find(@price_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
+      expect(PriceGroup.with_deleted.find(@price_group.id)).to be_present
+    end
+
+    it "should be able to delete a price group with price group accounts" do
+      account = create(:setup_account)
+      account_price_group_member = create(:account_price_group_member, price_group: @price_group, account: account)
       @price_group.destroy
       expect { PriceGroup.find(@price_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect(PriceGroup.with_deleted.find(@price_group.id)).to be_present

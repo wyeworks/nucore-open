@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class TrainingRequestMailer < BaseMailer
+class TrainingRequestMailer < ApplicationMailer
 
   def notify_facility_staff(user, product)
     @user = user
