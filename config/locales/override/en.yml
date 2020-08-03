@@ -8,6 +8,28 @@ en:
       sessions:
         new:
           sso_button: Sign in with NetID
+    notifier:
+      new_user:
+        intro: |
+          Hello %{first_name},
+
+          A CORUM login account has been created for you.
+        only_username: |
+          You may log in at <https://corum.umass.edu/>. Please be sure to click the
+          "Sign in with NetID" button and use your NETID and password. To make reservations,
+          you must have a SpeedType associated with your account. If you need to add a SpeedType
+          please [fill out this form](https://www.umass.edu/ials/core-facility-user-authorization-form).
+        username_and_password: |
+          You may log in at <https://corum.umass.edu/> using your username and password.
+
+          Username: %{username}<br/>
+          Password: %{password}
+        outro: |
+          If you have questions, please feel free to contact your core facility manager or email <it@umass.edu> with "CORUM" as part of the subject line.
+
+          Thank you
+
+          UMass Core Facilities Team
 
   shared:
     footer:
