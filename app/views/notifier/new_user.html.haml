@@ -1,8 +1,8 @@
-= html("intro_html", first_name: @user.first_name, last_name: @user.last_name, login_url: new_user_session_url)
+= html("intro", first_name: @user.first_name, last_name: @user.last_name, login_url: new_user_session_url)
 
 - if @password
-  = html("username_and_password_html", username: @user.username, password: @password, login_url: new_user_session_url)
+  = html("username_and_password", username: @user.username, password: @password, login_url: new_user_session_url)
 - else
-  = html("only_username_html", username: @user.username, login_url: new_user_session_url)
+  = html("only_username", username: @user.username, login_url: new_user_session_url)
 
-= html("outro_html")
+= html("outro")

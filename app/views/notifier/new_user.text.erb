@@ -1,10 +1,10 @@
-<%= text("intro_text", first_name: @user.first_name, last_name: @user.last_name, login_url: new_user_session_url) %>
+<%= text("intro", first_name: @user.first_name, last_name: @user.last_name, login_url: new_user_session_url) %>
 
 <% # non-standard indentation below is to prevent indents appearing in the text formatting of this email %>
 <% if @password %>
-<%= text("username_and_password_text", username: @user.username, password: @password, login_url: new_user_session_url) %>
+<%= strip_br text("username_and_password", username: @user.username, password: @password, login_url: new_user_session_url) %>
 <% else %>
-<%= text("only_username_text", username: @user.username, login_url: new_user_session_url) %>
+<%= strip_br text("only_username", username: @user.username, login_url: new_user_session_url) %>
 <% end %>
 
-<%= text("outro_text") %>
+<%= text("outro") %>

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ProblemOrderMailer < BaseMailer
+class ProblemOrderMailer < ApplicationMailer
 
   def notify_user(order_detail)
     @order_detail = order_detail

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class InstrumentIssueMailer < BaseMailer
+class InstrumentIssueMailer < ApplicationMailer
 
   def create(product:, user:, message:, recipients:)
     @product = product

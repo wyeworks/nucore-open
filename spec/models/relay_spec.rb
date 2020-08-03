@@ -37,6 +37,11 @@ RSpec.describe Relay do
         expect(relay2).to be_valid
       end
 
+      it "allows FQDN for IP/host" do
+        @relay.ip = "gatekeeper.cns.umass.edu"
+        expect(@relay).to be_valid
+      end
+
     end
 
     it "should alias host to ip" do

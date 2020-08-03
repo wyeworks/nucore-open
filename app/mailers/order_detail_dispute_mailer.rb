@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OrderDetailDisputeMailer < BaseMailer
+class OrderDetailDisputeMailer < ApplicationMailer
 
   add_template_helper DateHelper
 

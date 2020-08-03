@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CancellationMailer < BaseMailer
+class CancellationMailer < ApplicationMailer
 
   def notify_facility(order_detail)
     @order_detail = order_detail

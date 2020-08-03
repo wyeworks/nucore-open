@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ResultsFileNotifierMailer < BaseMailer
+class ResultsFileNotifierMailer < ApplicationMailer
 
   def file_uploaded(file)
     @order_detail = file.order_detail

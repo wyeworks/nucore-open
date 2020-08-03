@@ -1,4 +1,4 @@
-<%= text("body",
+<%= strip_br text("body",
   user: @user,
   facility: @order_detail.facility.name,
   order_detail: @order_detail,
@@ -6,5 +6,5 @@
   dispute_resolved_at: format_usa_date(@order_detail.dispute_resolved_at),
   dispute_resolved_reason: @order_detail.dispute_resolved_reason,
   facility_email: @order_detail.facility.email,
-  ).gsub("<br>", "")
+  )
 %>

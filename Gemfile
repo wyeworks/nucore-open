@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
-gem "rails", "5.2.4.2"
+gem "rails", "5.2.4.3"
 gem "sprockets", "< 4" # Temporarily lock as we upgrade
 gem "config"
 gem "bootsnap", require: false
@@ -104,15 +104,11 @@ group :development, :test do
   # FactoryBot 5.X has some breaking changes we haven't sorted out
   # https://github.com/tablexi/nucore-open/pull/1865
   gem "factory_bot_rails", "< 5"
-  gem "guard-rspec", require: false
-  gem "guard-teaspoon", require: false
   gem "parallel_tests"
   gem "pry-rails"
   gem "pry-byebug"
   gem "rspec-rails"
   gem "rspec-activejob"
-  gem "spring"
-  gem "spring-commands-rspec"
   gem "teaspoon-jasmine"
 end
 

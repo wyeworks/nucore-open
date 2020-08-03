@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OfflineCancellationMailer < BaseMailer
+class OfflineCancellationMailer < ApplicationMailer
 
   include OfflineReservationArguments
 
