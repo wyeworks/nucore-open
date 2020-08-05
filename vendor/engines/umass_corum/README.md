@@ -32,13 +32,16 @@ When a user wishes to add a SpeedType, we perform these steps:
   1. If the SpeedType is valid, store the response in the `api_speed_types` table
   1. Create the NUcore/Corum `Account` or `FacilityAccount` record
 
-There is a nightly job managed by UMass's IT team that does the following:
+There is a job managed by UMass's IT team that runs daily at 7:30am ET.  It does the following:
 
   1. Downloads the list of active speed types from the President’s office
   1. Updates any existing records in `api_speed_types` that have changed
   1. Marks any speed types which have become inactive with `active = 0` and `date_removed`,
      as well as `error_desc`
   1. Inserts new speed types
+
+There is a `SpeedTypeSynchronizer` job that runs daily at 8:45 ET.  It does the following:
+  1. Updates the SpeedTypeAccounts `expires_at` dates to match the ApiSpeedType `date_removed`
 
 ## Price Groups
 

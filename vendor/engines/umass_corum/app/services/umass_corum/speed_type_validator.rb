@@ -39,7 +39,7 @@ module UmassCorum
     # [_return_]
     #   the latest expiration date for a payment source
     def latest_expiration
-      (Time.zone.now + 50.years).end_of_day
+      speed_type.default_nil_exp_date
     end
   end
 
