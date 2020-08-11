@@ -27,7 +27,7 @@ module UmassCorum
     def self.run!(logger: Rails.logger)
       total_updated = 0
       UmassCorum::SpeedTypeAccount.all.find_each do |speed_type_account|
-        updater = new(speed_type_account, logger)
+        updater = new(speed_type_account, logger: logger)
         total_updated += 1 if updater.run
       end
       logger.info("#{total_updated} SpeedTypeAccounts have been updated.")
