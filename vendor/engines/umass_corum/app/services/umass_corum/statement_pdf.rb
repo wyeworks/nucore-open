@@ -14,6 +14,14 @@ module UmassCorum
       "umass_corum.statement_pdf"
     end
 
+    # Mark all the input as html_safe so that text_helpers doesn't escape quotes or
+    # other special characters. And don't smartify it because rails will turn a quote
+    # into a curly quote entity which Prawn then displays as is (&rquo;).
+    def text(key, options = {})
+      html_safe_options = options.transform_values { |k| k.respond_to?(:html_safe) ? k.html_safe : k }
+      super(key, html_safe_options.with_defaults(smart: false))
+    end
+
     attr_reader :pdf, :statement
     delegate :facility, to: :statement
 

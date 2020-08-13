@@ -10,7 +10,7 @@ en:
       remit_box: |
         Please make checks payable to
 
-        The University of Massachusetts Amhurst
+        The University of Massachusetts Amherst
         %{address}
       po_number_header: "PO #"
       terms_header: Terms
