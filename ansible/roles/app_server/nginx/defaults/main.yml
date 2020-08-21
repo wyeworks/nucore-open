@@ -2,4 +2,4 @@
 ---
 alias: ""
 rails_port: 3000
-client_max_body_size: 100MB
+client_max_body_size: 100M

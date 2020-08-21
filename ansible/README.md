@@ -32,7 +32,7 @@ You can use [Vagrant](https://www.vagrantup.com/) for developing your Ansible pl
 * `vagrant provision` will re-run the playbook
 * You can start over with a fresh VM with `vagrant destroy`
 
-SSH: `ssh -p 2222 localhost`
+SSH into the VM: `ssh -p 2222 localhost`
 
 You might want to add this to your `~/.ssh/config` file to avoid dealing with host
 changed errors as you spin up and down VMs.
@@ -42,6 +42,9 @@ Host localhost
   StrictHostKeyChecking no
   UserKnownHostsFile=/dev/null
 ```
+
+You'll need to set up your database.yml, secrets.yml, and eye.yml.erb, but you
+can now `cap ansible deploy` to try actually deploying the app to the VM.
 
 ## SSL Certificates
 
