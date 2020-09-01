@@ -15,7 +15,7 @@ module UmassCorum
           headers: headers
         )
 
-        @journal.journal_rows.find_each do |journal_row|
+        @journal.journal_rows.each do |journal_row|
           writer << hash_for(journal_row)
         end
 
@@ -31,7 +31,7 @@ module UmassCorum
           batch_date: @journal.journal_date,
           batch_desc: @journal.facility.name,
           batch_trans_count: @journal.journal_rows.size,
-          batch_trans_amount: @journal.amount,
+          batch_trans_amount: total_journal_amount,
           batch_originator: @journal.created_by_user.username.upcase,
           batch_business_unit: "UMAMH",
         }
@@ -55,6 +55,12 @@ module UmassCorum
           program_code: journal_row.program,
           project_id: journal_row.project,
         }
+      end
+
+      # The total they want is the total of both debits and credits, and since they
+      # match up, the total should always be double the amount we would probably expect.
+      def total_journal_amount
+        @journal.journal_rows.map(&:amount).map(&:abs).sum
       end
     end
 
