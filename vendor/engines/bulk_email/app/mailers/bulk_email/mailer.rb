@@ -14,11 +14,9 @@ module BulkEmail
     end
 
     def sender
-      if @facility.try(:single_facility?)
-        "#{@facility.name} <#{default_params[:from]}>"
-      else
-        default_params[:from]
-      end
+      address = Mail::Address.new(default_params[:from])
+      address.display_name = @facility.name if @facility.try(:single_facility?)
+      address
     end
 
   end

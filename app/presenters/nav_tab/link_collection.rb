@@ -121,7 +121,7 @@ class NavTab::LinkCollection
   end
 
   def admin_facility
-    if ability.can?(:edit, facility)
+    if single_facility? && ability.can?(:edit, facility)
       NavTab::Link.new(tab: :admin_facility, url: manage_facility_path(facility))
     end
   end

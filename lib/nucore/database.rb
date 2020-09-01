@@ -59,10 +59,3 @@ module Nucore
   end
 
 end
-
-# All of the Database and other sub-modules used to be in this file. Now, in order
-# to deal with Rails autoloading, they need to be in `Nucore`. However, there are
-# many legacy uses of the `NUCore` capitalization. Until we go through and clean them
-# up, provide an alias.
-# TODO: Replace usage of old capitalization
-NUCore::Database = Nucore::Database

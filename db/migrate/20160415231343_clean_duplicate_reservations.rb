@@ -15,7 +15,7 @@ class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
     order_details_with_multiple_reservations.each do |order_detail_id|
       Reservation.where(order_detail_id: order_detail_id).last.destroy
     end
-    if NUCore::Database.oracle?
+    if Nucore::Database.oracle?
       begin
         remove_index :reservations, :order_detail_id
       rescue
@@ -27,7 +27,7 @@ class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
 
   def down
     remove_index :reservations, name: "res_od_uniq_fk"
-    if NUCore::Database.oracle?
+    if Nucore::Database.oracle?
       add_index :reservations, :order_detail_id, name: "i_reservations_order_detail_id", tablespace: "bc_nucore"
     end
   end

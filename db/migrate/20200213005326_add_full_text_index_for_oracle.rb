@@ -1,7 +1,7 @@
 class AddFullTextIndexForOracle < ActiveRecord::Migration[5.2]
 
   def change
-    if NUCore::Database.oracle?
+    if Nucore::Database.oracle?
       reversible do |dir|
         dir.up do
           add_context_index :products, :name, sync: "ON COMMIT"

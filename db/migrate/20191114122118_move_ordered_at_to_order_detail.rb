@@ -6,7 +6,7 @@ class MoveOrderedAtToOrderDetail < ActiveRecord::Migration[5.0]
       t.datetime :ordered_at
     end
 
-    execute NUCore::Database.oracle? ? oracle_up : mysql_up
+    execute Nucore::Database.oracle? ? oracle_up : mysql_up
 
     change_table :orders do |t|
       t.remove :ordered_at

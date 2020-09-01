@@ -3,7 +3,7 @@
 class AddBiTable < ActiveRecord::Migration[4.2]
 
   def self.up
-    if NUCore::Database.oracle?
+    if Nucore::Database.oracle?
       create_table :bi_netids do |t|
         t.string :netid, null: false
         t.references :facility, null: false

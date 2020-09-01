@@ -14,3 +14,7 @@ development:
 test:
   <<: *defaults
   database: nucore_open_test<%= ENV['TEST_ENV_NUMBER'] %>
+
+production:
+  <<: *defaults
+  database: <%= ENV.fetch("MYSQL_DATABASE", "") %>

@@ -5,7 +5,7 @@
 class FixOracleTimestamps < ActiveRecord::Migration[5.0]
 
   def change
-    return unless NUCore::Database.oracle?
+    return unless Nucore::Database.oracle?
 
     reversible do |dir|
       dir.up { change_all_columns_types(:date, :datetime) }

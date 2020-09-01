@@ -1,7 +1,7 @@
-<% if GOOGLE_ANALYTICS_KEY %>
+<% if Settings.google_analytics_key.present? %>
 <script type="text/javascript">
   var _gaq = _gaq || [];
-  _gaq.push(['_setAccount', '<%= GOOGLE_ANALYTICS_KEY %>']);
+  _gaq.push(['_setAccount', '<%= Settings.google_analytics_key %>']);
   _gaq.push(['_trackPageview']);
 (function() {
     var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;

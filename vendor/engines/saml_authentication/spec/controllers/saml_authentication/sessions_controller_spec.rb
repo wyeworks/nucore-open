@@ -33,7 +33,7 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
 
     before do
       request.env["devise.mapping"] = Devise.mappings[:user]
-      allow(User).to receive(:attribute_map).and_return(attribute_map)
+      allow_any_instance_of(SamlAuthentication::AttributeMapResolver).to receive(:attribute_map).and_return(attribute_map)
       # Our response fixure is old, so don't worry about it
       allow(Devise).to receive(:allowed_clock_drift_in_seconds).and_return(1000.years)
     end

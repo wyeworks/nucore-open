@@ -26,6 +26,12 @@ See [`ansible`](ansible/README.md) for our configuration-as-code for the servers
 
 [Additional information on UMass specific features](vendor/engines/umass_corum/README.md)
 
+## Note for Forks
+
+As you pull in new features/bug fixes from open, please keep up with the [CHANGELOG](CHANGELOG.md)
+to see changes that may break your fork and optional/required rake tasks you may want
+to run.
+
 ## Quickstart
 
 Welcome to NUcore! This guide will help you get a development environment up and running.

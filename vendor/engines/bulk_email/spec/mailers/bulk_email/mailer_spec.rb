@@ -25,28 +25,33 @@ RSpec.describe BulkEmail::Mailer do
     context "with a single facility sender" do
       let(:facility) { FactoryBot.build_stubbed(:facility) }
       let(:args) { { body: body, subject: custom_subject, recipient: recipient, facility: facility } }
-      let(:sender_string) { "From: #{facility.name} <#{Settings.email.from}>" }
 
       it "includes the facility name as the sender" do
-        expect(email.to_s).to include(sender_string)
+        expect(email.to_s).to include("From: #{facility.name} <#{Settings.email.from}>")
+      end
+    end
+
+    context "with a single facility sender with a comma in the name" do
+      let(:facility) { FactoryBot.build_stubbed(:facility, name: "Testing, Testing, and More Testing") }
+      let(:args) { { body: body, subject: custom_subject, recipient: recipient, facility: facility } }
+
+      it "includes the facility name as the sender" do
+        expect(email.to_s).to include("From: \"Testing, Testing, and More Testing\" <#{Settings.email.from}>")
       end
     end
 
     context "with cross-facility sender" do
       let(:facility) { Facility.cross_facility }
       let(:args) { { body: body, subject: custom_subject, recipient: recipient, facility: facility } }
-      let(:sender_string) { "From: #{Settings.email.from}" }
 
       it "does not include a facility name" do
-        expect(email.to_s).to include(sender_string)
+        expect(email.to_s).to include("From: #{Settings.email.from}")
       end
     end
 
     context "with a nil facility" do
-      let(:sender_string) { "From: #{Settings.email.from}" }
-
       it "does not include a facility name" do
-        expect(email.to_s).to include(sender_string)
+        expect(email.to_s).to include("From: #{Settings.email.from}")
       end
     end
 
