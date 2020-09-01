@@ -30,6 +30,10 @@ en:
 
           [UMass Core Facilities](http://www.umass.edu/ials/core-facilities) Team
 
+    devise:
+      sessions:
+        new:
+          title: UMass Login
   shared:
     footer:
       copyright_html: "&copy; Copyright 2011&ndash;%{to_date} University of Massachusetts"

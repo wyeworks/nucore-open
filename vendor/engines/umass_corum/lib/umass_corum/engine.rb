@@ -16,7 +16,8 @@ module UmassCorum
       Account.config.creation_disabled_types << "NufsAccount"
       FacilityFacilityAccountsController.form_class = UmassCorum::FacilityAccountForm
       ResearchSafetyCertificationLookup.adapter_class = UmassCorum::OwlApiAdapter
-      ViewHook.add_hook("devise.sessions.new", "login_screen_announcement", "users/request_login")
+      ViewHook.add_hook("devise.sessions.new", "login_screen_announcement", "umass_corum/sessions/request_login")
+      ViewHook.add_hook("devise.sessions.new", "login_form", "umass_corum/sessions/login_form")
     end
 
     # Include migrations in main rails app
