@@ -21,10 +21,14 @@ RSpec.describe do
 
         expect(page).to have_content("You just created a new user Testing Testerson (ttesterson)")
 
-        expect(User.last).to have_attributes(
+        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("A CORUM login account has been created for you")
+          .and include("use your NetID and password")
+
+        expect(User.find_by!(username: "ttesterson")).to have_attributes(
           username: "ttesterson",
           email: "email@example.org",
           email_user?: false,
+          encrypted_password: be_blank,
         )
       end
 
@@ -67,10 +71,14 @@ RSpec.describe do
 
         expect(page).to have_content("You just created a new user Testing Testerson (email@example.org)")
 
-        expect(User.last).to have_attributes(
+        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("A CORUM login account has been created for you")
+          .and include("using your username and password")
+
+        expect(User.find_by!(username: "email@example.org")).to have_attributes(
           username: "email@example.org",
           email: "email@example.org",
           email_user?: true,
+          encrypted_password: be_present,
         )
       end
 

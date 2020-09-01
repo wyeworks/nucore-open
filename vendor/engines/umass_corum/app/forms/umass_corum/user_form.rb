@@ -35,8 +35,9 @@ module UmassCorum
 
     private
 
-    def generate_new_password
-      nil
+    def set_password
+      # Only set the password if we're an external user
+      super if @no_netid
     end
 
   end
