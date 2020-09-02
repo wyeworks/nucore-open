@@ -3,6 +3,7 @@
 require "saml_authentication/user_locator"
 require "saml_authentication/user_updater"
 require "saml_authentication/idp_entity_id_reader"
+require "saml_authentication/attribute_map_resolver"
 
 module SamlAuthentication
 
@@ -11,6 +12,7 @@ module SamlAuthentication
     def configure!
       OneLogin::RubySaml::Logging.logger.info "Configuring SAML..."
       Devise.setup do |config|
+        config.saml_attribute_map_resolver = SamlAuthentication::AttributeMapResolver
         config.saml_default_user_key = :username
         config.saml_create_user = saml_create_user?
         config.saml_update_user = true
@@ -60,9 +62,13 @@ module SamlAuthentication
 
     def configure_security(settings)
       if Settings.saml.certificate_file
-        pkcs12 = OpenSSL::PKCS12.new(File.read(Rails.root.join(Settings.saml.certificate_file)))
-        settings.certificate = pkcs12.certificate.to_s
-        settings.private_key = pkcs12.key.to_s
+        if File.exist?(Rails.root.join(Settings.saml.certificate_file))
+          pkcs12 = OpenSSL::PKCS12.new(File.read(Rails.root.join(Settings.saml.certificate_file)))
+          settings.certificate = pkcs12.certificate.to_s
+          settings.private_key = pkcs12.key.to_s
+        else
+          warn "SAML certificate file #{Settings.saml.certificate_file} does not exist!"
+        end
       end
 
       settings.security[:authn_requests_signed] = true

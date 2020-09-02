@@ -12,6 +12,7 @@ class StatementPdf
     right_margin: 50,
     top_margin: 50,
     bottom_margin: 75,
+    page_size: "LETTER", # "A4" is now the default size in prawn-rails
   }.freeze
 
   def initialize(statement, download: false)

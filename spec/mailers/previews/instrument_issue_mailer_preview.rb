@@ -3,7 +3,7 @@
 class InstrumentIssueMailerPreview < ActionMailer::Preview
 
   def create
-    reservation = NUCore::Database.random(Reservation.user)
+    reservation = Nucore::Database.random(Reservation.user)
     InstrumentIssueMailer.create(
       product: reservation.product,
       user: reservation.user,

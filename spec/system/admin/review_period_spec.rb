@@ -97,8 +97,8 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
     visit facility_notifications_path(facility)
 
     within(".old-table tfoot") do
-      expect(page).to have_selector("th", text: "Total", exact: true)
-      expect(page).to have_selector("td", text: "$1.00", exact: true)
+      expect(page).to have_selector("th", text: "Total", exact_text: true)
+      expect(page).to have_selector("td", text: "$1.00", exact_text: true)
     end
   end
 

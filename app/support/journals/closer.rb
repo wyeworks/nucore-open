@@ -30,7 +30,7 @@ class Journals::Closer
 
   def mark_as_failed
     # Oracle is sometimes not converting false to null
-    false_value = NUCore::Database.boolean(false)
+    false_value = Nucore::Database.boolean(false)
     if journal.update_attributes(params.merge(is_successful: false_value))
       # remove all the orders from the journal
       # Do not use the Journal#order_details relation because it goes through journal_rows

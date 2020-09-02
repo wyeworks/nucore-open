@@ -15,6 +15,7 @@ module Reports
         event_time: :created_at,
         event: ->(log_event) { text(log_event.locale_tag, log_event.metadata.symbolize_keys) },
         object: ->(log_event) { log_event.loggable_to_s },
+        facility: ->(log_event) { log_event.facility },
         user: :user,
       }
     end

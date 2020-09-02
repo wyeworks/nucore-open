@@ -16,7 +16,7 @@ module SamlAuthentication
       if params[:action] == "idp_sign_out" && params[:SAMLResponse]
         OneLogin::RubySaml::Logoutresponse.new(
           params[:SAMLResponse],
-          settings: Devise.saml_config,
+          Devise.saml_config,
           allowed_clock_drift: Devise.allowed_clock_drift_in_seconds,
         ).issuer
       else

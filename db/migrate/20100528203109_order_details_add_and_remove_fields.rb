@@ -4,11 +4,11 @@ class OrderDetailsAddAndRemoveFields < ActiveRecord::Migration[4.2]
 
   def self.up
     # Oracle will drop the foreign key as part of the remove_column
-    remove_foreign_key :order_details, :order_statuses if NUCore::Database.mysql?
+    remove_foreign_key :order_details, :order_statuses if Nucore::Database.mysql?
     remove_column :order_details, :order_status_id
     remove_column :order_details, :unit_cost
     remove_column :order_details, :unit_subsidy
-    remove_foreign_key :order_details, :reservations if NUCore::Database.mysql?
+    remove_foreign_key :order_details, :reservations if Nucore::Database.mysql?
     remove_column :order_details, :reservation_id
 
     add_column :order_details, :estimated_cost,    :decimal, precision: 10, scale: 2, null: true

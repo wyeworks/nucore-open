@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-if NUCore::Database.oracle?
+if Nucore::Database.oracle?
 
   def timestamp_pattern(field, operator, time)
     timestamp = time.utc.strftime("%Y-%m-%d\\s%H:%M:%S")

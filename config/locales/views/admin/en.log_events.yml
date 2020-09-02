@@ -7,6 +7,9 @@ en:
             problem_queue: Order added to problem queue
           user:
             default_price_group_changed: User price group changed
+          price_group_member:
+            create: "User or account added to price group"
+            delete: "User or account removed from price group"
         account:
           create: Payment Source created
           update: Payment Source updated

@@ -2,7 +2,6 @@
 
 require "devise_saml_authenticatable"
 require "saml_authentication/routes"
-require "saml_authentication/model"
 require "saml_authentication/devise_configurator"
 require "saml_authentication/saml_authenticatable_with_custom_error"
 

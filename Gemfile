@@ -9,6 +9,7 @@ gem "rails", "5.2.4.3"
 gem "sprockets", "< 4" # Temporarily lock as we upgrade
 gem "config"
 gem "bootsnap", require: false
+gem "puma"
 
 ## database
 gem "mysql2"
@@ -38,12 +39,17 @@ gem "paranoia"
 gem "sass-rails"
 gem "coffee-rails"
 gem "uglifier", "= 4.1.18" # 4.1.19 has an issue https://github.com/mishoo/UglifyJS2/issues/3245
-gem "mini_racer"
+# TO DO: consider using nodejs instead of mini_racer
+# libv8 8+ does not like to compile on our boxes. It's easier to lock down
+# libv8 and mini_racer for now than to try to get them upgraded on the server.
+gem "mini_racer", "< 0.3"
+gem "libv8", "< 8"
 gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
 gem "haml"
 gem "will_paginate"
 gem "dynamic_form"
-gem "ckeditor"
+# 5.0 has breaking changes based which need to be addressed before we can upgrade
+gem "ckeditor", "< 5"
 gem "jquery-rails"
 gem "jquery-ui-rails"
 gem "vuejs-rails", "~> 1.0.26" # 2.0 introduces breaking changes
@@ -57,10 +63,8 @@ gem "fine_uploader", path: "vendor/engines/fine_uploader"
 gem "fullcalendar", path: "vendor/engines/fullcalendar"
 gem "rubyzip"
 
-## controllers
-gem "prawn"
-gem "prawn_rails"
-gem "prawn-table"
+## PDF generation
+gem "prawn-rails"
 
 ## other
 gem "delayed_job_active_record"

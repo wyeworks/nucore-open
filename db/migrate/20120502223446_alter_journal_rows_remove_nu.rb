@@ -3,7 +3,7 @@
 class AlterJournalRowsRemoveNu < ActiveRecord::Migration[4.2]
 
   def self.up
-    if NUCore::Database.oracle?
+    if Nucore::Database.oracle?
       puts <<-WARN
         >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
         You're running Oracle. Doing so usually requires NU columns on journal_rows. This migration removes those
