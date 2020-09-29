@@ -2,8 +2,7 @@ email:
   fake:
     enabled: true
     to:
-      - mak@tablexi.com
-      - jason@tablexi.com
+      - nucore@tablexi.com
       - stevens@umass.edu
     whitelist:
       - aburnsid@umass.edu # Amy Burnside - Flow Cytometry Director
