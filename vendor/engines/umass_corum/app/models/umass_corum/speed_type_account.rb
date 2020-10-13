@@ -6,12 +6,12 @@ module UmassCorum
 
     validates :account_number, presence: true, format: /\d{6}/, uniqueness: true
 
-    before_validation { self.expires_at ||= default_nil_exp_date }
+    before_validation { self.expires_at ||= self.class.default_nil_exp_date }
 
     # A value is required for expires_at but the expiration date
     # for active SpeedTypes is not always known.
     # This practically means "never".
-    def default_nil_exp_date
+    def self.default_nil_exp_date
       100.years.from_now.end_of_day
     end
 

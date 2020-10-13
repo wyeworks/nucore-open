@@ -63,7 +63,7 @@ module UmassCorum
 
     # SpeedTypeAccount#expires_at is required, use the default if date_removed is nil
     def new_exp_date
-      api_speed_type.date_removed || speed_type_account.default_nil_exp_date
+      api_speed_type.date_removed || speed_type_account.class.default_nil_exp_date
     end
 
   end
