@@ -135,7 +135,7 @@ module UmassCorum
     def draw_order_details_table
       data = [order_detail_headers] +
         order_detail_rows +
-        [[{ content: pay_by_text, colspan: 5 }, { content: text("total", total: number_to_currency(total_due)), colspan: 2 }]]
+        [[{ content: pay_by_card, colspan: 5, inline_format: true }, { content: text("total", total: number_to_currency(total_due)), colspan: 2 }]]
 
       description_width = grid(4)
       other_width = grid((12 - 4).to_f / 6)
@@ -165,7 +165,7 @@ module UmassCorum
           text("footer_headers.email"),
           text("footer_headers.website"),
         ],
-        [facility.phone_number, facility.fax_number, facility.email, text("contact_email")]
+        [facility.phone_number, facility.fax_number, facility.email, { content: html("contact_url", inline: true), inline_format: true }]
       ]
       pdf.table(
         data,
@@ -201,8 +201,8 @@ module UmassCorum
       end
     end
 
-    def pay_by_text
-      text("pay_by_card", url: facility.payment_url) if facility.payment_url.present?
+    def pay_by_card
+      html("pay_by_card", url: facility.payment_url, inline: true) if facility.payment_url.present?
     end
 
     def order_details

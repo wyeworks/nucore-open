@@ -25,12 +25,11 @@ en:
         amount: Amount
       pay_by_card: |
         You can pay by credit card:
-        %{url}
+        <%{url}>
       total: "Total: %{total}"
       footer_headers:
         phone: "Phone #"
         fax: "Fax #"
         email: Email
         website: Website
-      contact_email: "http://www.umass.edu/ials/core-facilities"
-
+      contact_url: <http://www.umass.edu/ials/core-facilities>
