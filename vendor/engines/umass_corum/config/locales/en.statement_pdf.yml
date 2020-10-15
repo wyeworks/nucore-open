@@ -14,6 +14,7 @@ en:
         %{address}
       po_number_header: "PO #"
       terms_header: Terms
+      terms_text: Payments due net 30
       order_detail_headers:
         quantity: Quantity
         date: Date

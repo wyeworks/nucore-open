@@ -118,9 +118,10 @@ module UmassCorum
     end
 
     def draw_po_and_terms
+      po_number = @account.type == "PurchaseOrderAccount" ? @account.account_number : "\n"
       data = [
         [text("po_number_header"), text("terms_header")],
-        ["\n", "\n"],
+        [po_number, text("terms_text")],
       ]
       pdf.table(
         data,
