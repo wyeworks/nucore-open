@@ -21,5 +21,5 @@
   = f.number_field :discount_percent, size: 4
   = "%"
 
-- if @product.respond_to?(:product_access_groups) && @product.product_access_groups.any?
+- if @product.has_product_access_groups?
   = f.association :product_access_groups, as: :check_boxes, collection: @product.product_access_groups, wrapper_html: { class: "inline-checkbox-list" }

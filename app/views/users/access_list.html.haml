@@ -40,7 +40,7 @@
                     = text("users.access_list.training_requested")
                 = link_to product, [product.facility, product, :users]
               %td.scheduling-group-column
-                - if product.has_access_list?
+                - if product.has_product_access_groups?
                   = scheduling_group_select(product, @user)
 
     = submit_tag text("users.access_list.update_approvals.submit"),

@@ -24,6 +24,11 @@ module Nucore
           order(Arel.sql(sanitize_sql_for_order(order_by)))
         end
 
+        def order_by_asc_nulls_last(field)
+          order_by = Nucore::Database.oracle? ? field.to_s : "#{field} IS NULL, #{field} ASC"
+          order(Arel.sql(sanitize_sql_for_order(order_by)))
+        end
+
       end
 
     end

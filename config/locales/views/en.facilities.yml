@@ -5,7 +5,7 @@ en:
         welcome: |
           Welcome to !app_name!, the centralized ordering system for shared !facilities_downcase!.
           Please select the shared !facility_downcase! below to view and purchase services
-          and products offered by the !facility_downcase!
+          and products offered by the !facility_downcase!.
       recently_used_facilities:
         title: Recently Used !Facilities!
       recently_used_products:

@@ -11,7 +11,40 @@ Follow these instructions to set up the Oracle database to run in Docker, but th
 1. Go to https://store.docker.com/images/oracle-database-enterprise-edition and click the button **Proceed to Checkout**. Complete and submit the form in order to get access to the free container that Oracle provides.
 1. In your terminal, make sure that you are logged in with your Docker Hub credentials by running `docker login`.
 
+### Run an Oracle service using docker-compose
+
+You can run Oracle via docker-compose service.  Here is an example of how you might set it up:
+
+```yaml
+# docker-compose.yaml
+services:
+  db:
+    image: store/oracle/database-enterprise:12.2.0.1
+    ports:
+      - "1521:1521"
+    volumes:
+      - db-data:/ORCL
+    logging:
+      driver: none
+    stdin_open: true
+    tty: true
+```
+
+To start the `db` service, run:
+
+```
+docker-compose up db
+```
+
+To stop the `db` service run:
+
+```
+docker-compose down
+```
+
 ### Start an Oracle container
+
+Alternately, you can run Oracle in a stand-alone docker container:
 
 ```
 # Run the Oracle image as a container named oracle, storing data

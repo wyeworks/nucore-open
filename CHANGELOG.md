@@ -4,6 +4,42 @@ Because we use squash and merge, you should be able to see the changes by lookin
 at the [commit log](https://github.com/tablexi/nucore-open/commits/master). However, we have begun keeping track of breaking changes
 or optional rake tasks.
 
+### Uploaded file storage path change ([#2365](https://github.com/tablexi/nucore-open/pull/2365))
+
+We want to move everything into `public/system`, which is the more modern standard.
+
+In addition, with the previous default in settings.yml, files were not stored according to their
+class, so objects of different types with the same IDs could share the same folder, so
+we also want to add the class name to the path.
+
+```yaml
+# Old setting
+paperclip:
+  storage: filesystem
+  url: ":rails_relative_url_root/:attachment/:id_partition/:style/:safe_filename"
+  path: ":rails_root/public/:attachment/:id_partition/:style/:safe_filename"
+
+# New setting
+paperclip:
+  storage: filesystem
+  url: ":rails_relative_url_root/system/:class/:attachment/:id_partition/:style/:safe_filename"
+  path: ":rails_root/public/system/:class/:attachment/:id_partition/:style/:safe_filename"
+```
+
+_If your old setting for `path` was something different, you'll need to change it
+in `lib/tasks/paperclip-nucore.rake`_
+
+* Take a backup of `public/files`
+
+* Move the files to the new location
+
+  ```
+  bundle exec rake paperclip:migrate_path
+  ```
+
+* Restart the server so it points at the new location
+
+
 ### Welcome email refactoring/cleanup ([#2362](https://github.com/tablexi/nucore-open/pull/2362))
 
 The locales for the new user (welcome) email have been simplified. If you have customized

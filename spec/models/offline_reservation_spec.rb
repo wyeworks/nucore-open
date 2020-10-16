@@ -50,9 +50,8 @@ RSpec.describe OfflineReservation do
       let(:reserve_end_at) { reserve_start_at + 1.month }
 
       it "renders as a range with an ending" do
-        pending "TODO: Reservation#range_to_s is not handling this correctly"
         expect(subject.to_s)
-          .to eq "Fri, 07/01/2016 12:00 PM - Fri, 08/01/2016 01:00 PM"
+          .to eq "Fri, 07/01/2016 12:00 PM - Mon, 08/01/2016 12:00 PM"
       end
     end
   end

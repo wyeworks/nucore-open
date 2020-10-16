@@ -24,8 +24,9 @@ class InstrumentsDashboardController < ApplicationController
   def init_reservations
     @reservations = current_facility.reservations
       .current_in_use
-      .merge(Product.alphabetized)
       .includes(:product, order: :user)
+      .joins(instrument: :schedule)
+      .merge(Schedule.positioned)
   end
 
   def authenticate_token

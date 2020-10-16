@@ -8,7 +8,7 @@
 
 - if f.object.new_record?
   = f.association :schedule,
-    collection: current_facility.schedules.active,
+    collection: current_facility.schedules.active.order(:name),
     include_blank: text("instruments.instrument_fields.schedule.unshared")
 - else
   = f.input :schedule, as: :readonly, value_method: :display_name, hint: false

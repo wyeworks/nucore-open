@@ -16,6 +16,7 @@ class Reservation < ApplicationRecord
   # Associations
   #####
   belongs_to :product
+  belongs_to :instrument, foreign_key: :product_id
   belongs_to :order_detail, inverse_of: :reservation
   belongs_to :created_by, class_name: "User"
   has_one :order, through: :order_detail

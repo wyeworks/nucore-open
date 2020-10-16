@@ -300,6 +300,7 @@ class Ability
 
     can :read, Notification
     can :read, ProductDisplayGroup
+    can :read, Schedule
 
     can [
       :administer,
@@ -378,6 +379,7 @@ class Ability
       ProductAccessGroup,
       ProductAccessory,
       Reports::ReportsController,
+      Schedule,
       ScheduleRule,
       Statement,
       StoredFile,

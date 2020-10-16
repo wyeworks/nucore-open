@@ -32,7 +32,7 @@ class TimeRange
   end
 
   def end_string
-    if start_at && end_at && start_at.day == end_at.day
+    if start_at && end_at && start_at.to_date == end_at.to_date
       localize(end_at, format: :timeonly)
     else
       localize(end_at)

@@ -239,11 +239,12 @@ class OrdersController < ApplicationController
       @order.assign_attributes(order_params)
 
       if OrderDetailUpdater.new(@order, order_update_params).update
-        # Must show instead of render to maintain "more options" state when
+        # Must render instead of redirect to maintain "more options" state when
         # ordering on behalf of
+        flash.now[:notice] = "Cart has been updated"
       else
         logger.debug "errors #{@order.errors.full_messages}"
-        flash[:error] = @order.errors.full_messages.join("<br/>").html_safe
+        flash.now[:error] = @order.errors.full_messages.join("<br/>").html_safe
       end
       render :show
     end

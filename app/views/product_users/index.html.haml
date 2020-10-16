@@ -19,7 +19,7 @@
 - elsif @product_users.empty?
   %p.notice= text("none")
 - else
-  - if @product.respond_to?(:product_access_groups) && @product.product_access_groups.any?
+  - if @product.has_product_access_groups?
     = form_for @product, url: [current_facility, @product, :update_restrictions], method: :put do |f|
       = render "table", f: f
       = f.submit text("update", plural_label: ProductAccessGroup.model_name.human.pluralize),

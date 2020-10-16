@@ -501,7 +501,7 @@ RSpec.describe Product do
       end
     end
 
-    context "#has_access_list?" do
+    context "#has_product_access_groups?" do
       context "when its type supports access groups" do
         context "when it has an access group" do
           before :each do
@@ -509,13 +509,13 @@ RSpec.describe Product do
           end
 
           it "has an access list" do
-            expect(product.has_access_list?).to be true
+            expect(product.has_product_access_groups?).to be true
           end
         end
 
         context "when it has no access groups" do
           it "does not have an access list" do
-            expect(product.has_access_list?).to be false
+            expect(product.has_product_access_groups?).to be false
           end
         end
       end
@@ -524,7 +524,7 @@ RSpec.describe Product do
         let(:generic_item) { build(:setup_item) }
 
         it "does not have an access list" do
-          expect(generic_item.has_access_list?).to be false
+          expect(generic_item.has_product_access_groups?).to be false
         end
       end
     end

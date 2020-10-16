@@ -1,6 +1,5 @@
 defaults: &defaults
   adapter: oracle_enhanced
-  database: //localhost:1521/ORCLCDB.localdomain
   database: //<%= ENV.fetch("ORACLE_HOST", "localhost") %>:<%= ENV.fetch("ORACLE_PORT", 1521) %>/<%= ENV.fetch("ORACLE_SERVICE_NAME", "ORCLCDB.localdomain") %>
   # Alternative format:
   # database: (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORCLCDB.localdomain)))
@@ -19,6 +18,10 @@ development:
 test:
   <<: *defaults
   username: "c##nucore_nu_test"
+
+staging:
+  <<: *defaults
+  database: <%= ENV.fetch("ORACLE_USERNAME", "") %>
 
 production:
   <<: *defaults

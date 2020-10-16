@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
-gem "rails", "5.2.4.3"
+gem "rails", "5.2.4.4"
 gem "sprockets", "< 4" # Temporarily lock as we upgrade
 gem "config"
 gem "bootsnap", require: false
@@ -68,12 +68,14 @@ gem "prawn-rails"
 
 ## other
 gem "delayed_job_active_record"
-gem "fog-aws"
 gem "health_check"
 gem "rake"
 gem "spreadsheet"
 gem "daemons"
 gem "ice_cube"
+
+# Optional: File uploads to S3
+# gem "aws-sdk-s3"
 
 ## custom
 gem "bulk_email", path: "vendor/engines/bulk_email"

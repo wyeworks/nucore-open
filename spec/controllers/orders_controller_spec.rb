@@ -1010,8 +1010,7 @@ RSpec.describe OrdersController do
         @params["quantity#{@order_detail.id}"] = "1.5"
         maybe_grant_always_sign_in :guest
         do_request
-        is_expected.to set_flash.to(/quantity/i)
-        is_expected.to set_flash.to(/integer/i)
+        is_expected.to set_flash.now[:error].to("Quantity must be an integer")
         is_expected.to render_template :show
       end
     end

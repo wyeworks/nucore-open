@@ -15,6 +15,9 @@ done | sort -n |
 while read LINE; do
   pr=$(echo $LINE | cut -d' ' -f1)
   desc=$(echo $LINE | cut -d' ' -f2-)
-  echo '*' https://github.com/tablexi/nucore-open/pull/$pr
-  echo $desc
+  if [[ ${#pr} -gt 3 ]]; then
+    echo "* $desc (https://github.com/tablexi/nucore-open/pull/$pr)"
+  else
+    echo "* $desc (#$pr)"
+  fi
 done

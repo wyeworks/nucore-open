@@ -93,6 +93,7 @@ It makes a few assumptions:
 3. Configure your databases
 
     ```
+    # For oracle, use config/database.yml.oracle.template
     cp config/database.yml.mysql.template config/database.yml
     ```
 
@@ -126,21 +127,18 @@ _Known issue: if you run `db:setup` or all three in one rake command, the next t
 7. Configure your file storage
 
     By default, files are stored on the local filesystem. If you wish to use
-    Amazon's S3 instead, create a local settings override file such as
-    `config/settings/development.local.yml` or `config/settings/production.local.yml`
-    and include the following, substituting your AWS settings:
-
+    Amazon's S3 instead, enable S3 in your environment by updateing the local settings override file such as
+    `config/settings/development.local.yml` or `config/settings/production.local.yml`.
+    Uncomment the section under `paperclip`:
     ```
     paperclip:
-      storage: fog
-      fog_credentials:
-        provider: AWS
-        aws_access_key_id: YOUR_S3_KEY_GOES_HERE
-        aws_secret_access_key: YOUR_S3_SECRET_KEY_GOES_HERE
-      fog_directory: YOUR_S3_BUCKET_NAME_GOES_HERE
-      fog_public: false
-      path: ":class/:attachment/:id_partition/:style/:safe_filename"
+      aws_access_key_id: <%= ENV.fetch("AWS_ACCESS_KEY", "Your-Key-Here") %>
+      aws_secret_access_key: <ENV.fetch("AWS_SECRET_ACCESS_KEY", "Your-Key-Here") %>
+      ...
     ```
+    Then add your credentials to the ENV or `secrets.yml`.
+
+    See [`migrating_to_s3.md`](./doc/migrating_to_s3.md) for more info.
 
 8. Start your server
 
