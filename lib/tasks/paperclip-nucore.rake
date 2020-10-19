@@ -24,7 +24,7 @@ namespace :paperclip do
     task journals: :environment do
       class OldJournal < ApplicationRecord
         self.table_name = "journals"
-        has_attached_file :file, PaperclipSettings.config.merge(path: ":rails_root/public/:attachment/:id_partition/:style/:safe_filename")
+        has_attached_file :file, PaperclipSettings.config.merge(path: ":rails_root/public/uploads/:attachment/:id_partition/:style/:safe_filename")
       end
 
       OldJournal.find_each do |old_record|
@@ -35,7 +35,7 @@ namespace :paperclip do
     task stored_files: :environment do
       class OldStoredFiles < ApplicationRecord
         self.table_name = "stored_files"
-        has_attached_file :file, PaperclipSettings.config.merge(path: ":rails_root/public/:attachment/:id_partition/:style/:safe_filename")
+        has_attached_file :file, PaperclipSettings.config.merge(path: ":rails_root/public/uploads/:attachment/:id_partition/:style/:safe_filename")
       end
       OldStoredFiles.find_each do |old_record|
         move_record(StoredFile, old_record)

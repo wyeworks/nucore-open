@@ -128,8 +128,8 @@ split_accounts:
 # file (this file is gitignored).
 paperclip:
   storage: filesystem
-  url: ":rails_relative_url_root/system/:class/:attachment/:id_partition/:style/:safe_filename"
-  path: ":rails_root/public/system/:class/:attachment/:id_partition/:style/:safe_filename"
+  url: ":rails_relative_url_root/uploads/:class/:attachment/:id_partition/:style/:safe_filename"
+  path: ":rails_root/public/uploads/:class/:attachment/:id_partition/:style/:safe_filename"
 
 saml:
   create_user: false
