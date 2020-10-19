@@ -4,6 +4,14 @@ en:
   institution_name: University of Massachusetts
 
   views:
+    facilities:
+      index:
+        welcome: |
+          Welcome to !app_name!, the centralized ordering system for shared !facilities_downcase!.
+          Please select the shared !facility_downcase! below to view and purchase services
+          and products offered by the !facility_downcase!.
+          <br/>
+          For help using this system, please refer to the CORUM user guides at <https://www.umass.edu/ials/corum>.
     saml_authentication:
       sessions:
         new:
