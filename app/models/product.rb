@@ -258,7 +258,7 @@ class Product < ApplicationRecord
     product_accessories.where(accessory_id: id).first
   end
 
-  def has_access_list?
+  def has_product_access_groups?
     respond_to?(:product_access_groups) && product_access_groups.any?
   end
 

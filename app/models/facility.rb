@@ -126,6 +126,7 @@ class Facility < ApplicationRecord
     schedules
     .active
     .includes(instruments_association => [:alert, :current_offline_reservations, :relay, :schedule_rules])
+    .order_by_asc_nulls_last(:position)
     .order(:name)
   end
 

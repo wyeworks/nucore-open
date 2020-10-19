@@ -1,0 +1,15 @@
+en:
+  controllers:
+    instrument_schedule_positions:
+      success: The Instruments have been reordered
+
+  views:
+    instrument_schedule_positions:
+      edit:
+        title: Instrument Display Order
+        label: Instrument Schedules
+        reorder: Reorder Instrument Schedules
+        submit: Update Ordering
+      show:
+        title: Instrument Display Order
+        hint: Instruments will be displayed in this order on the admin & public Daily View and the Instrument Dashboard.

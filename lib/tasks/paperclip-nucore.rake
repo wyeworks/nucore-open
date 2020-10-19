@@ -1,58 +1,45 @@
 # frozen_string_literal: true
 
 namespace :paperclip do
-  def paperclip_allow_task?
-    if Settings.paperclip.storage == "fog"
-      true
-    else
-      puts "Cannot move files to S3 unless paperclip storage is set to 'fog'."
-      puts "See the section on configuring file storage in the README."
-      false
-    end
-  rescue NoMethodError
-    puts "It doesn't look like paperclip is configured."
-    puts "See the section on configuring file storage in the README."
-    false
+  def move_record(new_class, old_record)
+    new_record = new_class.find(old_record.id)
+    new_record.file = old_record.file
+    # Journals have some validations on update that would fail here
+    new_record.save!(validate: false)
+    old_record.file.destroy
+  rescue Errno::ENOENT => e
+    puts "ERROR: #{e}"
   end
 
-  def push_to_s3(item, filename)
-    id_partition = ("%09d" % item.id).scan(/\d{3}/).join("/")
-    local_filepath = "#{Rails.root}/public/files/#{id_partition}/original/#{filename}"
+  # How to use:
+  # Change the path in `OldJournal` and `OldStoredFile` below to the old path format (what's currently in
+  # settings.yml or the environment's settings). Note: if you have :class in there, you'll
+  # need to replace that with `journals` or `stored_files`.
+  # Update the `paperclip.path` in settings.yml to your new destination
+  # Run this script `bundle exec rake paperclip:migrate_path:all`
+  namespace :migrate_path do
+    desc "Migrate paperclip path format"
+    task all: [:journals, :stored_files]
 
-    print "Processing #{local_filepath}"
+    task journals: :environment do
+      class OldJournal < ApplicationRecord
+        self.table_name = "journals"
+        has_attached_file :file, PaperclipSettings.config.merge(path: ":rails_root/public/:attachment/:id_partition/:style/:safe_filename")
+      end
 
-    File.open(local_filepath) do |filehandle|
-      item.file.assign(filehandle)
-      if item.file.save
-        puts "; stored to #{item.file.url}"
-      else
-        puts "; S3 store failed!"
+      OldJournal.find_each do |old_record|
+        move_record(Journal, old_record)
       end
     end
-  rescue Errno::ENOENT => e
-    puts ": Skipping! File does not exist."
-  end
 
-  desc "Move files from local to S3"
-  task move_to_s3: :environment do
-    next unless paperclip_allow_task?
-
-    journals = Journal.where("file_file_name IS NOT NULL")
-    stored_files = StoredFile.where("file_file_name IS NOT NULL")
-
-    file_index = 0
-    file_count = journals.count + stored_files.count
-
-    journals.each do |journal|
-      file_index += 1
-      puts "File #{file_index} of #{file_count}"
-      push_to_s3(journal, journal.file_file_name)
-    end
-
-    stored_files.each do |stored_file|
-      file_index += 1
-      puts "File #{file_index} of #{file_count}"
-      push_to_s3(stored_file, stored_file.file_file_name.tr("#", "-"))
+    task stored_files: :environment do
+      class OldStoredFiles < ApplicationRecord
+        self.table_name = "stored_files"
+        has_attached_file :file, PaperclipSettings.config.merge(path: ":rails_root/public/:attachment/:id_partition/:style/:safe_filename")
+      end
+      OldStoredFiles.find_each do |old_record|
+        move_record(StoredFile, old_record)
+      end
     end
   end
 

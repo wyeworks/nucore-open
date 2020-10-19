@@ -40,6 +40,43 @@ RSpec.describe "Placing an item order" do
     expect(page).to have_content "$33.25"
   end
 
+  describe "trying to purchase after updating the quantity" do
+    before do
+      click_link product.name
+      click_link "Add to cart"
+      choose account.to_s
+      click_button "Continue"
+      fill_in "Note", with: "A note"
+      fill_in "Reference ID", with: "Ref123"
+      fill_in "Quantity", with: "45"
+      click_button "Purchase"
+    end
+
+    it "returns to the cart, and the fields are properly updated" do
+      expect(page).to have_content "Quantities have changed."
+      expect(page).to have_field("Note", with: "A note")
+      expect(page).to have_field("Reference ID", with: "Ref123")
+      expect(page).to have_field("Quantity", with: "45")
+    end
+  end
+
+  describe "trying to purchase after updating just the note/ref id fields" do
+    before do
+      click_link product.name
+      click_link "Add to cart"
+      choose account.to_s
+      click_button "Continue"
+      fill_in "Note", with: "A note"
+      fill_in "Reference ID", with: "Ref123"
+      click_button "Purchase"
+    end
+
+    it "purchases" do
+      expect(page).to have_content("Order Receipt")
+      expect(page).to have_content("Note: A note")
+    end
+  end
+
   it "can backdate an order", :js do # js needed for More options expansion
     visit facility_path(facility)
     click_link product.name

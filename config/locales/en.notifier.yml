@@ -18,19 +18,19 @@ en:
           Password: %{password}
         outro: ""
       order_detail_status_changed:
-        subject:
         body: |
           Hello %{user},
 
-          The %{facility} has updated the status of your order for %{product} (NUcore order %{order_detail}) to **%{new_status}**.
+          The %{facility} has updated the status of your order for %{product} (!app_name! order %{order_detail}) to **%{new_status}**.
 
-          To view all your NUcore orders, please visit: <%{link}>
+          To view all your !app_name! orders, please visit: <%{link}>
 
           If you have any questions, please contact us at <%{facility_mailto}>.
 
           Sincerely,
 
           %{facility}
+        subject: "[!app_name! %{facility}] Order Status Changed To: %{status}"
 
       review_orders:
         subject: "!app_name! Orders For Review: %{abbreviation}"

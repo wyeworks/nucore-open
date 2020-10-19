@@ -1,7 +1,7 @@
 - if SettingsHelper.feature_on?(:equipment_list)
   = render "shared/nav/equipment_list_nav"
 
-.alert.alert-info= text(".welcome")
+.alert.alert-info= html("welcome")
 
 - if azlist_on?
   .az_list_container

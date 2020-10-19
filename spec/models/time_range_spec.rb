@@ -53,6 +53,21 @@ RSpec.describe TimeRange do
       it { is_expected.to eq("Wed, 04/26/2017 2:00 PM - Thu, 04/27/2017 4:00 PM") }
     end
 
+    describe "when the day of the month is the same" do
+      let(:start_at) { Time.zone.local(2017, 4, 26, 14, 0, 15) }
+      let(:end_at) { Time.zone.local(2017, 5, 26, 14, 0, 15) }
+      it { is_expected.to eq("Wed, 04/26/2017 2:00 PM - Fri, 05/26/2017 2:00 PM") }
+    end
+
+    describe "when it spans midnight in UTC" do
+      around do |example|
+        Time.use_zone("Central Time (US & Canada)") { example.call }
+      end
+      let(:start_at) { Time.zone.local(2017, 4, 26, 19, 0) }
+      let(:end_at) { Time.zone.local(2017, 4, 26, 22, 0) }
+      it { is_expected.to eq("Wed, 04/26/2017 7:00 PM - 10:00 PM") }
+    end
+
     describe "when missing the start time" do
       let(:start_at) { nil }
       let(:end_at) { Time.zone.local(2017, 4, 26, 14, 0, 15) }

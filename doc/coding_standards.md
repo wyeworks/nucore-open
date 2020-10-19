@@ -100,11 +100,11 @@ To insert a partial into this hook, within your engine's `to_prepare` block, add
 
 ```ruby
 config.to_prepare do
-  Viewhook.add_hook "partial_name", "useful_identifier", "your_engine/partial"
+  ViewHook.add_hook("partial_name", "useful_identifier", "your_engine/partial")
 end
 ```
 
-`partial_name` - The name of the partial where `render_view_hook` lives. It should use dots, and will be the same as the locale scope for the view. E.g. `reservations.account_field`
+`partial_name` - The name of the partial where `render_view_hook` lives. It should use dots, and will be the same as the locale scope for the view. E.g. if you call `render_view_hook` in `reservations/_account_field.html.haml`, the `partial_name` will be `reservations.account_field`
 
 `your_engine/partial` - The name of the partial you wish to include, located within your engine.
 

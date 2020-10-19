@@ -6,6 +6,7 @@
 
   %li.divider
   = tab ProductDisplayGroup.model_name.human(count: :many), facility_product_display_groups_path, sidenav_tab == "product_display_groups"
+  = tab text("views.instrument_schedule_positions.show.title"), facility_instrument_schedule_position_path, sidenav_tab == "instrument_display_order"
 
   - if SettingsHelper.feature_on?(:training_requests) && current_ability.can?(:index, TrainingRequest)
     %li.divider

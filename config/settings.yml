@@ -122,12 +122,14 @@ split_accounts:
     - administrator
     # - account_manager
 
-# This may be overridden in secrets.yml if your fork is using S3, so
-# be sure to check there for configuration
+# To use S3 or another Paperclip backend, you can override the configuration in the
+# appropriate environment, e.g. config/settings/production.yml.
+# If you wish to use it for development, add it to a `config/settings/development.local.yml`
+# file (this file is gitignored).
 paperclip:
   storage: filesystem
-  url: ":rails_relative_url_root/uploads/:attachment/:id_partition/:style/:safe_filename"
-  path: ":rails_root/public/uploads/:attachment/:id_partition/:style/:safe_filename"
+  url: ":rails_relative_url_root/system/:class/:attachment/:id_partition/:style/:safe_filename"
+  path: ":rails_root/public/system/:class/:attachment/:id_partition/:style/:safe_filename"
 
 saml:
   create_user: false

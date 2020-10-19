@@ -31,7 +31,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
 
   let(:product) { create_item }
   let(:product2) { create_item }
-  let(:product3) { create_item }
+  let(:product3) { FactoryBot.create(:setup_item, facility: facility, is_archived: true) }
 
   let(:account) { FactoryBot.create(:setup_account, owner: owner) }
   let(:price_group) { FactoryBot.create(:price_group, facility: facility) }
@@ -228,8 +228,8 @@ RSpec.describe BulkEmail::RecipientSearcher do
       end
 
       context "when selecting no specific product" do
-        it "returns users who are customers of all products" do
-          expect(users).to contain_exactly(purchaser, purchaser2, purchaser3)
+        it "returns users who are customers of all active products" do
+          expect(users).to contain_exactly(purchaser, purchaser2)
         end
       end
 
@@ -306,8 +306,8 @@ RSpec.describe BulkEmail::RecipientSearcher do
       let(:user) { owner }
     end
 
-    it "finds owners if no other limits" do
-      expect(users).to contain_exactly(owner, owner2, owner3)
+    it "finds owners with at least one active product ordered if no other limits" do
+      expect(users).to contain_exactly(owner, owner2)
     end
 
     it "finds owners with limited order details" do
@@ -336,9 +336,9 @@ RSpec.describe BulkEmail::RecipientSearcher do
       let(:user) { owner }
     end
 
-    it "finds owners and purchaser if no other limits" do
+    it "finds owners and purchaser of active products if no other limits" do
       expect(users)
-        .to contain_exactly(owner, owner2, owner3, purchaser, purchaser2, purchaser3)
+        .to contain_exactly(owner, owner2, purchaser, purchaser2)
     end
 
     it "finds owners and purchasers with limited order details" do
@@ -352,16 +352,20 @@ RSpec.describe BulkEmail::RecipientSearcher do
     let(:user) { authorized_users.first }
     let(:user2) { authorized_users.second }
     let(:user3) { authorized_users.third }
+    let(:user4) { FactoryBot.create(:user) }
 
     before :each do
       product.update_attributes(requires_approval: true)
       product2.update_attributes(requires_approval: true)
+      product3.update_attributes(requires_approval: false)
       # Users 1 and 2 have access to product1
       # Users 2 and 3 have access to product2
+      # User 4 has access to product3, which is inactive and requires no approval
       ProductUser.create(product: product, user: user, approved_by: owner.id, approved_at: Time.current)
       ProductUser.create(product: product, user: user2, approved_by: owner.id, approved_at: Time.current)
       ProductUser.create(product: product2, user: user2, approved_by: owner.id, approved_at: Time.current)
       ProductUser.create(product: product2, user: user3, approved_by: owner.id, approved_at: Time.current)
+      ProductUser.create(product: product3, user: user4, approved_by: owner.id, approved_at: Time.current)
       params[:bulk_email].merge!(user_types: [:authorized_users])
     end
 
@@ -370,7 +374,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
     context "when specifying no specific instrument" do
       before { params[:products] = [] }
 
-      it "returns all authorized users for any instrument" do
+      it "returns all authorized users for any active instrument with an access list" do
         expect(users).to match_array(authorized_users)
       end
     end

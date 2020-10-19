@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_23_191759) do
+ActiveRecord::Schema.define(version: 2020_09_04_185502) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -692,6 +692,7 @@ ActiveRecord::Schema.define(version: 2020_07_23_191759) do
     t.integer "facility_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "position"
     t.index ["facility_id"], name: "i_schedules_facility_id"
   end
 

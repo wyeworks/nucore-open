@@ -19,12 +19,7 @@ Paperclip.options[:content_type_mappings] = {
 class PaperclipSettings
 
   def self.config
-    secrets = Hash(Rails.application.secrets.paperclip).symbolize_keys
-    Settings.paperclip.to_hash.merge(secrets)
-  end
-
-  def self.fog?
-    config[:storage] == "fog"
+    Settings.paperclip.to_hash
   end
 
 end

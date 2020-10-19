@@ -11,6 +11,7 @@ oracle/
 public/plugin_assets/
 public/files/
 public/assets/
+public/system/
 spec/models/nucs/
 spec/controllers/nucs/
 vendor/bundle
@@ -40,3 +41,5 @@ spec/examples.txt
 .tags1
 erd.*
 /ssh
+
+*.p12

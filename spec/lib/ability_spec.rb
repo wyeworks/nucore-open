@@ -127,6 +127,7 @@ RSpec.describe Ability do
     end
 
     it { is_expected.to be_allowed_to(:read, Notification) }
+    it { is_expected.to be_allowed_to(:manage, Schedule) }
 
     describe StoredFile do
       describe "#download" do
@@ -251,6 +252,7 @@ RSpec.describe Ability do
     it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
     it { is_expected.to be_allowed_to(:manage, Account) }
     it { is_expected.to be_allowed_to(:read, Notification) }
+    it { is_expected.to be_allowed_to(:manage, Schedule) }
     it { is_expected.to be_allowed_to(:manage, TrainingRequest) }
     it { is_expected.to be_allowed_to(:show_problems, Reservation) }
     it { is_expected.to be_allowed_to(:batch_update, Order) }
@@ -292,6 +294,7 @@ RSpec.describe Ability do
     it { is_expected.to be_allowed_to(:manage, Account) }
     it { is_expected.to be_allowed_to(:manage, TrainingRequest) }
     it { is_expected.to be_allowed_to(:read, Notification) }
+    it { is_expected.to be_allowed_to(:manage, Schedule) }
     it { is_expected.to be_allowed_to(:show_problems, Reservation) }
     it { is_expected.to be_allowed_to(:batch_update, Order) }
     it_is_allowed_to([:batch_update, :cancel, :index], Reservation)
@@ -396,6 +399,7 @@ RSpec.describe Ability do
     it { is_expected.to be_allowed_to(:batch_update, Order) }
     it_is_allowed_to([:batch_update, :cancel, :index], Reservation)
     it { is_expected.to be_allowed_to(:read, Notification) }
+    it { is_expected.to be_allowed_to(:read, Schedule) }
     it { is_expected.to be_allowed_to(:administer, User) }
     it { is_expected.to be_allowed_to(:read, UserPriceGroupMember) }
     it { is_expected.not_to be_allowed_to(:manage, PriceGroup) }

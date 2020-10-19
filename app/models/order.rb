@@ -8,7 +8,7 @@ class Order < ApplicationRecord
   belongs_to :account
   belongs_to :facility
   belongs_to :order_import
-  has_many   :order_details, dependent: :destroy
+  has_many   :order_details, inverse_of: :order, dependent: :destroy
 
   validates_presence_of :user_id, :created_by
 
@@ -131,8 +131,9 @@ class Order < ApplicationRecord
 
   ## TODO: this doesn't pass errors up to the caller.. does it need to?
   def update_details(order_detail_updates)
-    order_details = self.order_details.find(order_detail_updates.keys)
-    order_details.each do |order_detail|
+    order_details_to_update = order_detail_updates.keys.map(&:to_i)
+    selected_order_details = self.order_details.select { |od| od.id.in?(order_details_to_update) }
+    selected_order_details.each do |order_detail|
       updates = order_detail_updates[order_detail.id]
       # reset quantity (if present)
       quantity = updates[:quantity].present? ? updates[:quantity].to_i : order_detail.quantity
