@@ -1,6 +1,9 @@
 en:
   activerecord:
     models:
+      umass_corum/voucher_split_account:
+        one: Voucher Split Account
+        other: Voucher Split Accounts
       umass_corum/speed_type_account:
         one: SpeedType
         other: SpeedTypes
@@ -23,6 +26,11 @@ en:
         username: Username/NetID
         netid: NetID
         no_netid: This user does not have a NetID
+
+  simple_form:
+    labels:
+      voucher_split_account:
+        mivp_percent: MIVP Percent
 
   views:
     umass_corum:

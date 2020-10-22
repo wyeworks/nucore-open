@@ -9,6 +9,8 @@ module UmassCorum
     config.to_prepare do
       UsersController.user_form_class = UmassCorum::UserForm
       EngineManager.allow_view_overrides!("umass_corum")
+      Account.config.account_types << "UmassCorum::VoucherSplitAccount"
+      Account.config.statement_account_types << "UmassCorum::VoucherSplitAccount"
       Account.config.account_types.unshift(UmassCorum::SpeedTypeAccount.name)
       Account.config.account_types.uniq!
       Account.config.journal_account_types.unshift(UmassCorum::SpeedTypeAccount.name)

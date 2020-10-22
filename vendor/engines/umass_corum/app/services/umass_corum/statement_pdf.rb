@@ -45,6 +45,7 @@ module UmassCorum
       draw_bill_to_and_remit
       draw_po_and_terms
       draw_order_details_table
+      draw_totals
       draw_footer
     end
 
@@ -133,26 +134,37 @@ module UmassCorum
     end
 
     def draw_order_details_table
-      data = [order_detail_headers] +
-        order_detail_rows +
-        [[{ content: pay_by_card, colspan: 5, inline_format: true }, { content: text("total", total: number_to_currency(total_due)), colspan: 2 }]]
+      table_data = [order_detail_headers + order_detail_rows] + table_style_options
+      pdf.table(*table_data) do
+        column([0, 5, 6]).style(align: :right)
+        row(-1).style(borders: [:bottom, :left, :right])
+        row(0).style(borders: [:top, :bottom, :left, :right], align: :center)
+      end
+    end
 
+    def draw_totals
+      table_data = if @account.respond_to?(:mivp_percent)
+        [voucher_rows] + table_style_options
+      else
+        [actual_total_row] + table_style_options
+      end
+      pdf.table(*table_data) do
+        column([5,6]).style(align: :right)
+        row(-1).style(borders: [:bottom, :left, :right])
+        column(0).style(align: :center, font_style: :bold)
+        row(-1).column(-2).style(size: 14, font_style: :bold)
+      end
+    end
+
+    def table_style_options
       description_width = grid(4)
       other_width = grid((12 - 4).to_f / 6)
-      pdf.table(
-        data,
+      [
         width: pdf.bounds.width,
         cell_style: CELL_STYLE.merge(borders: [:left, :right]),
         header: true,
         column_widths: [other_width, other_width, other_width, description_width, other_width, other_width, other_width],
-      ) do
-        column([0, 5, 6]).style(align: :right)
-        row(0).style(borders: [:top, :bottom, :left, :right], align: :center)
-        row(-2).style(borders: [:bottom, :left, :right])
-        row(-1).style(borders: [:bottom, :left, :right])
-        row(-1).column(0).style(align: :center, font_style: :bold)
-        row(-1).column(-2).style(size: 14, font_style: :bold)
-      end
+      ]
     end
 
     def draw_footer
@@ -177,13 +189,15 @@ module UmassCorum
 
     def order_detail_headers
       [
-        text("order_detail_headers.quantity"),
-        text("order_detail_headers.date"),
-        text("order_detail_headers.order_number"),
-        text("order_detail_headers.description"),
-        text("order_detail_headers.unit_of_measure"),
-        text("order_detail_headers.rate"),
-        text("order_detail_headers.amount"),
+        [
+          text("order_detail_headers.quantity"),
+          text("order_detail_headers.date"),
+          text("order_detail_headers.order_number"),
+          text("order_detail_headers.description"),
+          text("order_detail_headers.unit_of_measure"),
+          text("order_detail_headers.rate"),
+          text("order_detail_headers.amount"),
+        ]
       ]
     end
 
@@ -193,7 +207,7 @@ module UmassCorum
           order_detail_quantity(order_detail),
           format_usa_date(order_detail.ordered_at),
           order_detail.to_s,
-          [order_detail.product, normalize_whitespace(order_detail.note)].map(&:presence).compact.join("\n"),
+          description_for(order_detail),
           order_detail.product.quantity_as_time? ? "hr" : "",
           number_to_currency(order_detail.actual_cost / order_detail.quantity),
           number_to_currency(order_detail.actual_total),
@@ -201,8 +215,48 @@ module UmassCorum
       end
     end
 
+    def description_for(order_detail)
+      [order_detail.product, normalize_whitespace(order_detail.note)].map(&:presence).compact.join("\n")
+    end
+
+    def actual_total_row
+      [[{ content: pay_by_card, colspan: 5, inline_format: true }, { content: actual_total_text, colspan: 2 }]]
+    end
+
+    def voucher_rows
+      total_due_text = text("total_due", total: number_to_currency(total_due))
+      [[{ content: "\n", colspan: 5 }, { content: actual_total_text, colspan: 2 }]] +
+      [[{ content: pay_by_card, colspan: 5, inline_format: true }, { content: mivp_percent_label, colspan: 2 }]] +
+      [[{ content: "\n", colspan: 5 }, { content: total_due_text, colspan: 2 }]]
+    end
+
     def pay_by_card
       html("pay_by_card", url: facility.payment_url, inline: true) if facility.payment_url.present?
+    end
+
+    def actual_total_text
+      text("acutal_total", total: number_to_currency(actual_total_amount))
+    end
+
+    def mivp_percent_label
+      percent = number_to_percentage(@account.mivp_split.percent, strip_insignificant_zeros: true)
+      text("mivp_total", percent: percent, total: number_to_currency(mivp_total_amount))
+    end
+
+    def actual_total_amount
+      order_details.map(&:actual_total).sum
+    end
+
+    def mivp_total_amount
+      virtual_order_details.select { |od| od.account.type == "UmassCorum::VoucherAccount"}.map(&:actual_total).sum
+    end
+
+    def total_due
+      actual_total_amount - mivp_total_amount
+    end
+
+    def virtual_order_details
+      @virtual_order_details ||= Array(OrderDetailListTransformerFactory.instance(order_details).perform)
     end
 
     def order_details
@@ -210,10 +264,6 @@ module UmassCorum
         .order_details
         .includes(:product, order: :user)
         .order(fulfilled_at: :desc)
-    end
-
-    def total_due
-      order_details.map(&:actual_total).sum
     end
 
     # Run a series of procs that will all draw to the same row. At the end, move

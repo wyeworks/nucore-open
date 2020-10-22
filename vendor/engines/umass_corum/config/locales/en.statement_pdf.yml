@@ -26,7 +26,9 @@ en:
       pay_by_card: |
         You can pay by credit card:
         <%{url}>
-      total: "Total: %{total}"
+      acutal_total: "Total: %{total}"
+      mivp_total: "%{percent} MIVP Voucher: -%{total}"
+      total_due: "Total Due: %{total}"
       footer_headers:
         phone: "Phone #"
         fax: "Fax #"
