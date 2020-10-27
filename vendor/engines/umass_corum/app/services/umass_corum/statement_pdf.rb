@@ -43,7 +43,7 @@ module UmassCorum
 
       draw_header
       draw_bill_to_and_remit
-      draw_po_and_terms
+      draw_payment_desc_and_terms
       draw_order_details_table
       draw_totals
       draw_footer
@@ -118,11 +118,10 @@ module UmassCorum
       )
     end
 
-    def draw_po_and_terms
-      po_number = @account.type == "PurchaseOrderAccount" ? @account.account_number : "\n"
+    def draw_payment_desc_and_terms
       data = [
-        [text("po_number_header"), text("terms_header")],
-        [po_number, text("terms_text")],
+        [payment_type_header, text("terms_header")],
+        [payment_description, text("terms_text")],
       ]
       pdf.table(
         data,
@@ -131,6 +130,26 @@ module UmassCorum
         position: :right,
         width: grid(4),
       )
+    end
+
+    def payment_description
+      if @account.type == "PurchaseOrderAccount"
+        @account.account_number
+      elsif @account.type == "CreditCardAccount"
+        @account.description
+      elsif @account.respond_to?(:primary_payment_info)
+        @account.primary_payment_info
+      else
+        "\n"
+      end
+    end
+
+    def payment_type_header
+      if @account.type == "CreditCardAccount" || @account.try(:cc_split?)
+        text("cc_description_header")
+      else
+        text("po_number_header")
+      end
     end
 
     def draw_order_details_table

@@ -12,6 +12,8 @@ module UmassCorum
 
     attr_accessor :primary_subaccount_id, :mivp_percent
 
+    delegate :remittance_information, to: :primary_subaccount
+
     def self.available_accounts_options(current_facility)
       Account.per_facility.for_facility(current_facility).excluding_split_accounts.active
     end
@@ -24,6 +26,28 @@ module UmassCorum
       # see VoucherSplitAccountBuilder#setup_default_splits
       splits.find_by(apply_remainder: true)
     end
+
+    def primary_split
+      # see VoucherSplitAccountBuilder#setup_default_splits
+      splits.find_by(apply_remainder: false)
+    end
+
+    def primary_subaccount
+      primary_split.subaccount
+    end
+
+    def primary_payment_info
+      if primary_subaccount.type == "PurchaseOrderAccount"
+        primary_subaccount.account_number
+      else
+        primary_subaccount.description
+      end
+    end
+
+    def cc_split?
+      primary_subaccount.type == "CreditCardAccount"
+    end
+
 
   end
 

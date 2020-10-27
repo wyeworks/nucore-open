@@ -13,6 +13,7 @@ en:
         The University of Massachusetts Amherst
         %{address}
       po_number_header: "PO #"
+      cc_description_header: "Credit Card Description"
       terms_header: Terms
       terms_text: Payments due net 30
       order_detail_headers:
