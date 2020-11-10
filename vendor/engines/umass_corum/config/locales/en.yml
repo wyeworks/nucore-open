@@ -31,6 +31,9 @@ en:
     labels:
       voucher_split_account:
         mivp_percent: MIVP Percent
+    hints:
+      voucher_split_account:
+        description: The description for Voucher Split Accounts should include the Voucher number.
 
   views:
     umass_corum:
