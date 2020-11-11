@@ -4,13 +4,17 @@ module LdapAuthentication
 
   class UserEntry
 
+    attr_reader :ldap_entry
+
+    CONVERTABLE_ATTRIBUTES = [:username, :first_name, :last_name, :email].freeze
+
     # Returns an Array of `LdapAuthentication::UserEntry`s
     def self.search(uid)
       return [] unless uid
 
       ldap_entries = nil
       ActiveSupport::Notifications.instrument "search.ldap_authentication" do |payload|
-        ldap_entries = with_retry { admin_ldap.search(filter: Net::LDAP::Filter.eq(LdapAuthentication.attribute_field, uid)) }
+        ldap_entries = with_retry { admin_ldap.search(filter: Net::LDAP::Filter.eq(LdapAuthentication.username_attribute, uid)) }
         payload[:uid] = uid
         payload[:results] = ldap_entries
       end
@@ -33,23 +37,34 @@ module LdapAuthentication
     end
 
     def username
-      @ldap_entry.public_send(LdapAuthentication.attribute_field).last
+      ldap_entry.public_send(LdapAuthentication.username_attribute).last
     end
 
     def first_name
-      @ldap_entry.givenname.first
+      ldap_entry.givenname.first
     end
 
     def last_name
-      @ldap_entry.sn.first
+      ldap_entry.sn.first
     end
 
     def email
-      @ldap_entry.mail.first
+      ldap_entry.mail.first
     end
 
     def to_user
-      UserConverter.new(self).to_user
+      ::User.new(attributes)
+    end
+
+    def attributes
+      (CONVERTABLE_ATTRIBUTES + additional_attributes).each_with_object({}) do |field, output|
+        field_value = self.public_send(field).presence
+        output[field] = field_value if field_value
+      end
+    end
+
+    def additional_attributes
+      LdapAuthentication.additional_user_attributes.map(&:to_sym)
     end
 
     def self.with_retry(max_attempts = 3)

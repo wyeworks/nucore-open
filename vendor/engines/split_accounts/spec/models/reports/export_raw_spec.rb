@@ -56,6 +56,7 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
         "Calculated Subsidy" => ["$0.50", "$0.50"],
         "Account" => subaccounts.map(&:account_number),
         "Split Percent" => ["50%", "50%"],
+        "Parent Account" => [account.description_to_s, account.description_to_s],
       )
     end
   end

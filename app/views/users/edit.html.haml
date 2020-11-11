@@ -19,6 +19,7 @@
     = f.input :last_name, readonly: !@user_form.admin_editable?
     = f.input :email, readonly: !@user_form.admin_editable?
     = f.input :username, readonly: !@user_form.username_editable?
+    = render_view_hook("custom_fields", f: f)
     - if current_user.administrator? && SettingsHelper.feature_on?(:user_based_price_groups)
       = f.input :internal?, label: text(".internal"), as: :select, default: false
     = f.button :submit, text("shared.update"), class: ["btn", "btn-primary"]

@@ -50,7 +50,7 @@ class StatementPdf
 
   def options
     if download?
-      DEFAULT_OPTIONS.merge(filename: filename, force_download: true)
+      DEFAULT_OPTIONS.merge(filename: filename, disposition: "attachment")
     else
       DEFAULT_OPTIONS.dup
     end

@@ -16,6 +16,7 @@
     = f.input :last_name
     = f.input :email
     = f.input :username, readonly: !@user_form.username_editable?
+    = render_view_hook("custom_fields", f: f)
     = f.button :submit, text("shared.create"), class: ["btn", "btn-primary"]
     &nbsp;
     = link_to text("shared.cancel"), facility_users_path

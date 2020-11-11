@@ -22,7 +22,7 @@ class Api::OrderDetail
 
   def account_to_hash
     if account.present?
-      { id: account.id, owner: user_to_hash(account.owner.user) }
+      { id: account.id, owner: user_to_hash(account.owner_user) }
     end
   end
 
