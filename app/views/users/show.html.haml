@@ -13,6 +13,7 @@
   = f.input :full_name
   = f.input :username
   = f.input :email
+  = render_view_hook("custom_fields", f: f)
   = f.input :last_sign_in_at, default_value: "none"
   = f.input :internal?, label: text("views.users.edit.internal") if SettingsHelper.feature_on?(:user_based_price_groups)
   = f.input :suspended_at if f.object.suspended?

@@ -4,6 +4,18 @@ Because we use squash and merge, you should be able to see the changes by lookin
 at the [commit log](https://github.com/tablexi/nucore-open/commits/master). However, we have begun keeping track of breaking changes
 or optional rake tasks.
 
+### Rename username attribute key in `ldap.yml.template` ([#2440](https://github.com/tablexi/nucore-open/pull/2440))
+
+If you are using the [LDAP Authenitcation engine](vendor/engines/ldap_authentication/README.md) and have set a value for the `attribute` key in `ldap.yml`, you will need to rename the key to `username_attribute`.
+
+```yaml
+# Old setting
+attribute: uid
+
+# New setting
+username_attribute: uid
+```
+
 ### Uploaded file storage path change ([#2365](https://github.com/tablexi/nucore-open/pull/2365))
 
 We want to move everything into `public/system`, which is the more modern standard.

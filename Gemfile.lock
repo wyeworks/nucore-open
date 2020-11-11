@@ -348,7 +348,7 @@ GEM
     nokogiri (1.10.10)
       mini_portile2 (~> 2.4.0)
     numerizer (0.1.1)
-    oj (3.10.14)
+    oj (3.10.15)
     orm_adapter (0.5.0)
     paper_trail (11.0.0)
       activerecord (>= 5.2)
@@ -434,7 +434,7 @@ GEM
     responders (3.0.1)
       actionpack (>= 5.0)
       railties (>= 5.0)
-    rollbar (3.0.0)
+    rollbar (3.0.1)
     rspec-activejob (0.6.1)
       activejob (>= 4.2)
       rspec-mocks

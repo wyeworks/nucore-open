@@ -9,7 +9,7 @@ module LdapAuthentication
       # Something has gone horribly wrong if the user is not found here.
       raise "User #{username} not found in LDAP after authentication." unless entry
 
-      update_attributes!(UserConverter.new(entry).attributes)
+      update_attributes!(entry.attributes)
     rescue ActiveRecord::RecordInvalid => e
       # If the record is invalid (e.g. a duplicate email address), trigger an email
       # notification, but let the user through. Their information will not be updated.

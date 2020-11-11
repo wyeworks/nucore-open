@@ -3,9 +3,16 @@
 require "rails_helper"
 
 RSpec.describe LdapAuthentication::UserUpdater do
-  let(:user_entry) do
-    double("UserEntry", username: "abc123", first_name: "First", last_name: "Last", email: "primary@example.org")
+  let(:net_ldap_entry) do
+    double(
+      "Fake::Net::LDAP::Entry",
+      givenname: ["First"],
+      sn: ["Last"],
+      uid: ["uname"],
+      mail: ["primary@example.org", "secondary@example.org"],
+    )
   end
+  let(:user_entry) { LdapAuthentication::UserEntry.new(net_ldap_entry) }
 
   before do
     allow(LdapAuthentication::UserEntry).to receive(:find).with("abc123").and_return(user_entry)
@@ -20,6 +27,27 @@ RSpec.describe LdapAuthentication::UserUpdater do
     expect(user.first_name).to eq("First")
     expect(user.last_name).to eq("Last")
     expect(user.email).to eq("primary@example.org")
+  end
+
+  context "when an attrubute is missing" do
+    let!(:user) { create(:user, username: "abc123", email: "primary@example.org") }
+    let(:net_ldap_entry) do
+      double(
+        "Fake::Net::LDAP::Entry",
+        givenname: ["First"],
+        sn: ["Last"],
+        uid: ["uname"],
+        mail: [],
+      )
+    end
+
+    it "updates attrubutes that are present in the response" do
+      expect { described_class.new(user).update_from_ldap }.to change { user.first_name }
+    end
+
+    it "does not update attrubute that are not present in the response" do
+      expect { described_class.new(user).update_from_ldap }.not_to change { user.email }
+    end
   end
 
   it "raises an error if the user is not found" do

@@ -12,7 +12,7 @@ RSpec.describe Reports::GeneralReportsController do
   run_report_tests([
                      { report_by: :product, index: 0, report_on_label: "Product", report_on: proc { |od| od.product.name } },
                      { report_by: :account, index: 1, report_on_label: "Account", report_on: proc { |od| od.account } },
-                     { report_by: :account_owner, index: 2, report_on_label: "Account Owner", report_on: proc { |od| owner = od.account.owner.user; "#{owner.last_name}, #{owner.first_name} (#{owner.username})" } },
+                     { report_by: :account_owner, index: 2, report_on_label: "Account Owner", report_on: proc { |od| owner = od.account.owner_user; "#{owner.last_name}, #{owner.first_name} (#{owner.username})" } },
                      { report_by: :purchaser, index: 3, report_on_label: "Purchaser", report_on: proc { |od| usr = od.order.user; "#{usr.last_name}, #{usr.first_name} (#{usr.username})" } },
                      { report_by: :price_group, index: 4, report_on_label: "Price Group", report_on: proc { |od| od.price_policy ? od.price_policy.price_group.name : "Unassigned" } },
                    ])

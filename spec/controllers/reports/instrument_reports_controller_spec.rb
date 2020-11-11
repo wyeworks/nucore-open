@@ -10,7 +10,7 @@ RSpec.describe Reports::InstrumentReportsController do
   run_report_tests([
                      { report_by: :instrument, index: 0, report_on_label: nil, report_on: proc { |res| [res.product.url_name] } },
                      { report_by: :account, index: 1, report_on_label: "Account", report_on: proc { |res| [res.product.url_name, res.order_detail.account.to_s] } },
-                     { report_by: :account_owner, index: 2, report_on_label: "Account Owner", report_on: proc { |res| owner = res.order_detail.account.owner.user; [res.product.url_name, "#{owner.full_name} (#{owner.username})"] } },
+                     { report_by: :account_owner, index: 2, report_on_label: "Account Owner", report_on: proc { |res| owner = res.order_detail.account.owner_user; [res.product.url_name, "#{owner.full_name} (#{owner.username})"] } },
                      { report_by: :purchaser, index: 3, report_on_label: "Purchaser", report_on: proc { |res| usr = res.order_detail.order.user; [res.product.url_name, "#{usr.full_name} (#{usr.username})"] } },
                    ])
 

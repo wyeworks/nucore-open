@@ -19,8 +19,8 @@ module SplitAccounts
 
     # Hooks into superclass's `build` method.
     def after_build
-      set_expires_at
       setup_default_splits if account.splits.none?
+      set_expires_at
     end
 
     private

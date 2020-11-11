@@ -24,8 +24,8 @@ FactoryBot.define do
     end
     facility { product.facility }
     association :account, factory: :setup_account
-    user { account.owner.user }
-    created_by { account.owner.user.id }
+    user { account.owner_user }
+    created_by { account.owner_user.id }
 
     after(:create) do |order, evaluator|
       # build().save will allow an already existing relation without raising an error

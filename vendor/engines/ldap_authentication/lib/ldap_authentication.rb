@@ -2,7 +2,6 @@
 
 require "devise_ldap_authenticatable"
 require "ldap_authentication/user_entry"
-require "ldap_authentication/user_converter"
 require "ldap_authentication/null_connection"
 require "ldap_authentication/engine"
 
@@ -32,8 +31,12 @@ module LdapAuthentication
     @admin_connection ||= Devise::LDAP::Connection.admin
   end
 
-  def self.attribute_field
-    config.fetch("attribute", "uid")
+  def self.username_attribute
+    config.fetch("username_attribute", "uid")
+  end
+
+  def self.additional_user_attributes
+    config.fetch("additional_user_attributes", [])
   end
 
   def self.load_config_from_file

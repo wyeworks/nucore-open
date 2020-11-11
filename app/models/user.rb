@@ -45,7 +45,7 @@ class User < ApplicationRecord
 
   cattr_accessor(:default_price_group_finder) { ::Users::DefaultPriceGroupSelector.new }
 
-  scope :authenticated_externally, -> { where(encrypted_password: nil, password_salt: nil) }
+  scope :authenticated_by_netid, -> { where(encrypted_password: nil, password_salt: nil) }
   scope :active, -> { unexpired.where(suspended_at: nil) }
   scope :unexpired, -> { where(expired_at: nil) }
 
