@@ -50,7 +50,21 @@ module UmassCorum
     private
 
     def completed_certificate_ids
-      response["certifications"].map { |certification_data| certification_data["id"] }
+      response["certifications"].map { |certification_data| initial_certificate_id_for(certification_data["id"]) }.uniq
+    end
+
+    # Replace refresher certificate codes with initial certificate codes
+    def initial_certificate_id_for(certificate_id)
+      case certificate_id
+      when "BIOSFTYLAB"
+        "BIOSAFE"
+      when "LABRSAFE"
+        "LABSAFE"
+      when "RADSFTRFSH"
+        "RADSAFE"
+      else
+        certificate_id
+      end
     end
 
     def response
