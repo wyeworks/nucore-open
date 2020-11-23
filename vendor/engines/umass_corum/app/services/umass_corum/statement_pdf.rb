@@ -227,7 +227,7 @@ module UmassCorum
           format_usa_date(order_detail.ordered_at),
           order_detail.to_s,
           description_for(order_detail),
-          order_detail.product.quantity_as_time? ? "hr" : "",
+          order_detail.product.quantity_as_time? ? "min" : "",
           number_to_currency(order_detail.actual_cost / order_detail.quantity),
           number_to_currency(order_detail.actual_total),
         ]
