@@ -4,16 +4,17 @@
 = content_for :tabnav do
   = render partial: "admin/shared/tabnav_order"
 
-#bulk-import
-  %h2= text(".h2")
-  = html("instructions")
-  = simple_form_for [:facility, @order_import], html: { multipart: true } do |f|
-    .well.well-small#bulk-import-fields
-      .pull-right
-        = link_to text("download_link"), "#{root_path}templates/bulk_import_template.csv", id: "bulk-import-template"
-      = f.file_field :upload_file
-      = f.input :fail_on_error, inline_label: text("fail_on_error"), label: false
-      = f.input :send_receipts, inline_label: text("send_receipts"), label: false
+  #bulk-import
+    %h2= text(".h2")
+    = html("instructions", importable_products: OrderRowImporter.importable_products, optional_fields: OrderRowImporter.optional_fields)
+    = simple_form_for [:facility, @order_import], html: { multipart: true } do |f|
+      .well.well-small#bulk-import-fields
+        .pull-right
+          = link_to text("download_link"), "#{root_path}templates/bulk_import_template.csv", id: "bulk-import-template"
+        = f.file_field :upload_file
+        = html("upload_file_hint")
+        = f.input :fail_on_error, inline_label: text("fail_on_error"), label: false, hint: html("fail_on_error_hint")
+        = f.input :send_receipts, inline_label: text("send_receipts"), label: false, hint: text("send_receipts_hint")
       %label
         = text("send_report_to")
         = text_field_tag :report_recipient, @current_user.email

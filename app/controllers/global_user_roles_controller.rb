@@ -4,8 +4,20 @@ class GlobalUserRolesController < GlobalSettingsController
 
   before_action :load_user, only: [:destroy, :edit, :update]
 
+  include CsvEmailAction
+
   def index
-    @users = User.with_global_roles
+    report = Reports::GlobalUserRolesReport.new(users: User.with_global_roles)
+
+    respond_to do |format|
+      format.html do
+        @users = report.users.paginate(per_page: 50, page: params[:page])
+      end
+
+      format.csv do
+        queue_csv_report_email(report)
+      end
+    end
   end
 
   def destroy

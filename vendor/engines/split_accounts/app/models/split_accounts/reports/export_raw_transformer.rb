@@ -12,7 +12,7 @@ module SplitAccounts
 
       def transform(original_hash)
         transformed_hash = insert_into_hash_after(original_hash, :actual_total, split_percent: method(:split_percent))
-        insert_into_hash_after(transformed_hash, :account_description, parent_account: method(:parent_account))
+        insert_into_hash_after(transformed_hash, :reference_id, parent_account: method(:parent_account))
       end
 
       private

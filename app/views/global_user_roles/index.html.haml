@@ -12,6 +12,12 @@
 - if @users.empty?
   %p.notice= t(".no_users")
 - else
+  = link_to t(".export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
+  = form_tag(global_user_roles_path, method: :get, class: "search_form") do
+    .row
+      .span3
+        = hidden_field_tag :email, current_user.email, disabled: true
+        = hidden_field_tag :format, params[:format], disabled: true
   %table.table.table-striped.table-hover
     %thead
       %tr
@@ -20,6 +26,7 @@
         %th= t(".th.username")
         %th= t(".th.email")
         %th= t(".th.roles")
+        = render_view_hook("additional_user_attribute_headers")
     %tbody
       - UserPresenter.wrap(@users).each do |user|
         %tr
@@ -37,3 +44,4 @@
               = link_to user.username, edit_global_user_role_path(user.id)
           %td= user.email
           %td= user.global_role_list
+          = render_view_hook("additional_user_attributes", user: user)
