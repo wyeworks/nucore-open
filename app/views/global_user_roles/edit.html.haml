@@ -19,6 +19,8 @@
     = label_tag :email, nil, class: "require"
     = text_field_tag :email, user.email, disabled: true
 
+    = render_view_hook("additional_user_attributes_form", user: user)
+
     -# Chosen attempts to disable autocomplete, but Chrome still does.
     -# This hidden field tells Chrome to really disable autocomplete:
     %input.hidden{type: "text", id: "PreventChromeAutocomplete", name: "PreventChromeAutocomplete"}

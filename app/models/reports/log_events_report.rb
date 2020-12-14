@@ -1,4 +1,7 @@
+## frozen_string_literal: true
+
 module Reports
+
   class LogEventsReport
 
     include Reports::CsvExporter
@@ -48,4 +51,5 @@ module Reports
     end
 
   end
+
 end

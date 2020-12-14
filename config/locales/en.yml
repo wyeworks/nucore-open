@@ -409,6 +409,7 @@ en:
       grant_roles: Grant Roles
       remove_roles: Remove Roles
       remove_roles_confirm: Are you sure?
+      export: Export as CSV
       th:
         email: Email
         name: Name

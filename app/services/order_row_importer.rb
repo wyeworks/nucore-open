@@ -50,6 +50,14 @@ class OrderRowImporter
     HEADERS.to_a.join(",")
   end
 
+  def self.optional_fields
+    (HEADERS.to_a - REQUIRED_HEADERS.to_a - [header(:errors)]).to_sentence
+  end
+
+  def self.importable_products
+    importable_product_types.map { |type| type.name.titleize }.to_sentence
+  end
+
   def initialize(row, order_import)
     @row = row
     @order_import = order_import
