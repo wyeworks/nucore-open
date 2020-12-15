@@ -99,8 +99,24 @@ RSpec.describe UmassCorum::OwlApiAdapter do
         )
     end
 
+    it "doesn't raise an error, and doesn't certify anything" do
+      expect(adapter).not_to be_certified(anything)
+    end
+  end
+
+  describe "the user is found but the response includes an error" do
+    let(:response) { File.expand_path("../../fixtures/owl/error.json", __dir__) }
+    before do
+      stub_request(:get, "https://owlstage.umass.edu/owlj/servlet/OwlPreLogin")
+        .with(query: hash_including({"ID" => "anetid"}))
+        .to_return(
+          body: File.new(response),
+          status: 200,
+        )
+    end
+
     it "raises an error" do
-      expect { adapter.certified?(anything) }.to raise_error(/No such user/)
+      expect { adapter.certified?(anything) }.to raise_error(/Something went wrong/)
     end
   end
 

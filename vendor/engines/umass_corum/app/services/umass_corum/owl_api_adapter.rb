@@ -5,13 +5,14 @@ module UmassCorum
   class OwlApiAdapter
 
     TIMEOUT = 3
+    NO_USER_ERROR = "No such user exists"
 
     def self.params
       {
         Server: Rails.env.production? ? "owl-ehs" : "owl-ehsstaging",
         UserType: "Student",
         fxn: "trcompleted",
-        Mode: "IALSCorum", # If you need to test in development and avoid IP violations, use "IALSDummy"
+        Mode: Rails.env.development? ? "IALSDummy" : "IALSCorum", # Avoid IP violations in development
       }
     end
 
@@ -41,10 +42,14 @@ module UmassCorum
     end
 
     def certified?(certificate)
-      # Email users would never exist in the external system. They must be netid
-      return false if @user.email_user?
+      # Email users would never exist in the external system. They must have a valid netid.
+      return false if @user.email_user? || user_not_found?
 
       completed_certificate_ids.include?(certificate.name)
+    end
+
+    def user_not_found?
+      response.dig("error", "message") == NO_USER_ERROR
     end
 
     private
@@ -71,7 +76,8 @@ module UmassCorum
       return @response if @response
 
       @response = JSON.parse(self.class.fetch(@user.username))
-      raise @response["error"].fetch("message") if @response["error"]
+      error_message = @response.dig("error", "message")
+      raise error_message if @response["error"] && error_message != NO_USER_ERROR
 
       @response
     end
