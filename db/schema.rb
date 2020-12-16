@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_04_185502) do
+ActiveRecord::Schema.define(version: 2020_12_15_220832) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -877,6 +877,7 @@ ActiveRecord::Schema.define(version: 2020_09_04_185502) do
     t.datetime "expired_at"
     t.string "expired_note"
     t.string "umass_emplid"
+    t.string "phone_number"
     t.index ["card_number"], name: "index_users_on_card_number"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"

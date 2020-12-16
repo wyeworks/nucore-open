@@ -11,6 +11,7 @@
     = f.input :first_name
     = f.input :last_name
     = f.input :email
+    = f.input :phone_number
     = f.input :username, label: @user_form.class.human_attribute_name(:netid), wrapper_html: { class: "js--umass-username" }
     = f.input :no_netid, as: :boolean, label: false, inline_label: true, input_html: { class: "js--umass-username-toggle" }
     = f.button :submit, text("shared.create"), class: ["btn", "btn-primary"]

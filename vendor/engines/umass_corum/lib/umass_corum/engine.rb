@@ -20,6 +20,8 @@ module UmassCorum
       ResearchSafetyCertificationLookup.adapter_class = UmassCorum::OwlApiAdapter
       ViewHook.add_hook("devise.sessions.new", "login_screen_announcement", "umass_corum/sessions/request_login")
       ViewHook.add_hook("devise.sessions.new", "login_form", "umass_corum/sessions/login_form")
+      ViewHook.add_hook("users.edit", "custom_fields", "umass_corum/users/custom_fields")
+      ViewHook.add_hook("users.show", "custom_fields", "umass_corum/users/custom_fields")
     end
 
     # Include migrations in main rails app
