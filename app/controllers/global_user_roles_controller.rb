@@ -7,11 +7,11 @@ class GlobalUserRolesController < GlobalSettingsController
   include CsvEmailAction
 
   def index
-    report = Reports::GlobalUserRolesReport.new(users: User.with_global_roles)
+    report = Reports::GlobalUserRolesReport.new(users: User.with_global_roles.sort_last_first)
 
     respond_to do |format|
       format.html do
-        @users = report.users.paginate(per_page: 50, page: params[:page])
+        @users = report.users
       end
 
       format.csv do

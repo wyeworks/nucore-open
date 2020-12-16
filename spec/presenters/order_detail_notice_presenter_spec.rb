@@ -81,6 +81,66 @@ RSpec.describe OrderDetailNoticePresenter do
     end
   end
 
+  describe "badges_to_text" do
+    it "shows nothing for a blank order detail" do
+      expect(presenter.badges_to_text).to be_blank
+    end
+
+    it "shows nothing for a canceled order detail" do
+      allow(order_detail).to receive(:in_review?).and_return(true)
+      allow(order_detail).to receive(:canceled?).and_return(true)
+      expect(presenter.badges_to_text).to be_blank
+    end
+
+    it "shows in review if the order is in review" do
+      allow(order_detail).to receive(:in_review?).and_return(true)
+      expect(presenter.badges_to_text).to eq("In Review")
+    end
+
+    it "shows in dispute" do
+      allow(order_detail).to receive(:in_dispute?).and_return(true)
+      expect(presenter.badges_to_text).to eq("In Dispute")
+    end
+
+    it "shows can reconcile" do
+      allow(order_detail).to receive(:can_reconcile_journaled?).and_return(true)
+      expect(presenter.badges_to_text).to eq("Can Reconcile")
+    end
+
+    it "shows ready for journal if setting is on", feature_setting: { ready_for_journal_notice: true } do
+      allow(order_detail).to receive(:ready_for_journal?).and_return(true)
+      expect(presenter.badges_to_text).to eq("Ready for Journal")
+    end
+
+    it "does not show ready for journal if setting is off", feature_setting: { ready_for_journal_notice: false } do
+      allow(order_detail).to receive(:ready_for_journal?).and_return(true)
+      expect(presenter.badges_to_text).not_to eq("Ready for Journal")
+    end
+
+    it "shows in open journal" do
+      allow(order_detail).to receive(:in_open_journal?).and_return(true)
+      expect(presenter.badges_to_text).to eq("Open Journal")
+    end
+
+    it "shows an important badge for a problem order" do
+      allow(order_detail).to receive_messages(problem?: true, problem_description_key: :missing_price_policy)
+      expect(presenter.badges_to_text).to eq("Missing Price Policy")
+    end
+
+    it "can have multiple badges" do
+      # These examples are technically mutually exclusive, but this validates the
+      # presenter can handle it.
+      allow(order_detail).to receive_messages(
+        problem?: true,
+        problem_description_key: :missing_price_policy,
+        in_review?: true,
+        in_dispute?: true,
+      )
+
+      expect(presenter.badges_to_text).to eq("In Review+In Dispute+Missing Price Policy")
+    end
+  end
+
   describe "alerts_to_html" do
     matcher :have_alert do |expected_text|
       match do |string|

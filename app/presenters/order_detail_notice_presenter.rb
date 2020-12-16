@@ -39,6 +39,12 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
     safe_join(filtered.map(&:badge_to_html))
   end
 
+  def badges_to_text(only: [:status, :warning])
+    filtered = notices.select { |notice| Array(only).include?(notice.severity) }
+
+    filtered.map(&:badge_text).join("+")
+  end
+
   def alerts_to_html
     blocks = [
       build_alert(warnings, "error"),

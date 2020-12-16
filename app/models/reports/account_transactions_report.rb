@@ -69,6 +69,7 @@ class Reports::AccountTransactionsReport
       Account.human_attribute_name(:expires_at),
       OrderDetail.human_attribute_name(:order_status),
       OrderDetail.human_attribute_name(:note),
+      text(".order_detail_notices"),
     ]
   end
 
@@ -98,10 +99,15 @@ class Reports::AccountTransactionsReport
       format_usa_date(order_detail.account.expires_at),
       order_detail.order_status,
       order_detail.note,
+      notices_for(order_detail),
     ]
   end
 
   private
+
+  def notices_for(order_detail)
+    OrderDetailNoticePresenter.new(order_detail).badges_to_text
+  end
 
   def order_detail_duration(order_detail)
     if order_detail.problem?
