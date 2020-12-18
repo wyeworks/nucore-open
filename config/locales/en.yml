@@ -949,6 +949,7 @@ en:
       export: Export as CSV
       subject: "!app_name! Transaction Export"
       body: Your export is ready. Please see the attached file.
+      order_detail_notices: Notices
 
   users:
     new_user:
