@@ -221,21 +221,7 @@ module UmassCorum
     end
 
     def order_detail_rows
-      order_details.map do |order_detail|
-        [
-          order_detail_quantity(order_detail),
-          format_usa_date(order_detail.ordered_at),
-          order_detail.to_s,
-          description_for(order_detail),
-          order_detail.product.quantity_as_time? ? "min" : "",
-          number_to_currency(order_detail.actual_cost / order_detail.quantity),
-          number_to_currency(order_detail.actual_total),
-        ]
-      end
-    end
-
-    def description_for(order_detail)
-      [order_detail.product, normalize_whitespace(order_detail.note)].map(&:presence).compact.join("\n")
+      order_details.map { |order_detail| UmassCorum::OrderDetailStatementRowPresenter.new(order_detail).to_row }
     end
 
     def actual_total_row
@@ -302,15 +288,6 @@ module UmassCorum
     # Use a 12-column grid. To get half the page, you can use grid(6). For a quarter, grid(3).
     def grid(columns)
       pdf.bounds.width * columns / 12
-    end
-
-    def order_detail_quantity(order_detail)
-      if order_detail.time_data.present? && order_detail.time_data.respond_to?(:billable_minutes)
-        minutes = order_detail.time_data.billable_minutes
-        QuantityPresenter.new(order_detail.product, minutes).to_s if minutes
-      else
-        QuantityPresenter.new(order_detail.product, order_detail.quantity).to_s
-      end
     end
   end
 
