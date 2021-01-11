@@ -110,6 +110,7 @@ module Reports
         problem_description: ->(od) { I18n.t("order_details.notices.#{od.problem_description_key_was}.badge") if od.problem_description_key_was? },
         problem_resolved_by: :problem_resolved_by,
         reference_id: :reference_id,
+        notices: ->(od) { OrderDetailNoticePresenter.new(od).badges_to_text },
       }
       if SettingsHelper.has_review_period?
         hash

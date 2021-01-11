@@ -42,7 +42,7 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   def badges_to_text(only: [:status, :warning])
     filtered = notices.select { |notice| Array(only).include?(notice.severity) }
 
-    filtered.map(&:badge_text).join("+")
+    filtered.map(&:badge_text).join("+").presence
   end
 
   def alerts_to_html
