@@ -83,13 +83,13 @@ RSpec.describe OrderDetailNoticePresenter do
 
   describe "badges_to_text" do
     it "shows nothing for a blank order detail" do
-      expect(presenter.badges_to_text).to be_blank
+      expect(presenter.badges_to_text).to be_nil
     end
 
     it "shows nothing for a canceled order detail" do
       allow(order_detail).to receive(:in_review?).and_return(true)
       allow(order_detail).to receive(:canceled?).and_return(true)
-      expect(presenter.badges_to_text).to be_blank
+      expect(presenter.badges_to_text).to be_nil
     end
 
     it "shows in review if the order is in review" do

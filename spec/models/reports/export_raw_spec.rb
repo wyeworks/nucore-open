@@ -66,6 +66,7 @@ RSpec.describe Reports::ExportRaw do
         "Charge For" => "Quantity",
         "Assigned Staff" => user.full_name,
         "Bundle" => "",
+        "Notices" => "",
       )
     end
 
@@ -138,6 +139,7 @@ RSpec.describe Reports::ExportRaw do
         "Charge For" => "Minutes",
         "Assigned Staff" => user.full_name,
         "Bundle" => "",
+        "Notices" => "",
       )
     end
   end
@@ -176,6 +178,7 @@ RSpec.describe Reports::ExportRaw do
         "Actual Minutes" => "65",
         "Quantity" => "1",
         "Charge For" => "Reservation",
+        "Notices" => "",
       )
     end
 
@@ -194,6 +197,14 @@ RSpec.describe Reports::ExportRaw do
           "Problem Description" => "Missing Actuals",
           "Problem Resolved By" => user.to_s,
         )
+      end
+    end
+
+    describe "in review" do
+      before { order_detail.update!(reviewed_at: 5.days.from_now) }
+
+      it "includes the correct notice" do
+        expect(report).to have_column_values("Notices" => "In Review")
       end
     end
 
