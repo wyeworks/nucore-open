@@ -10,6 +10,7 @@ module UmassCorum
   # fees depending on the size of the company.
   class VoucherSplitAccount < SplitAccounts::SplitAccount
 
+    include ReconcilableAccount
     attr_accessor :primary_subaccount_id, :mivp_percent
 
     delegate :remittance_information, to: :primary_subaccount
