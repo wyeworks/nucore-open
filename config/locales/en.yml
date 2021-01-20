@@ -353,7 +353,6 @@ en:
       instructions: |
         The orders listed below are still in review by the customer.  The time the review window will close is listed.
         You may manually mark an order as reviewed, allowing you to create a statement for or journal the order immediately.
-      submit: "Mark As Reviewed"
     index:
       head: "Send Notifications"
       no_orders: "No notifications are currently pending"

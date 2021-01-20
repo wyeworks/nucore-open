@@ -374,7 +374,10 @@ Rails.application.routes.draw do
   end
 
   resources :transactions, only: [:index] do
-    get :in_review, on: :collection
+    collection do
+      get :in_review
+      post :mark_as_reviewed
+    end
   end
 
   # reservations

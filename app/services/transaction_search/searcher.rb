@@ -5,7 +5,7 @@ module TransactionSearch
   class Searcher
 
     # Do not modify this array directly. Use `TransactionSearch.register` instead.
-    # There is some additional setup that needs to happen (adding an atr_accessor
+    # There is some additional setup that needs to happen (adding an attr_accessor
     # to SearchForm) that `register` handles.
     cattr_accessor(:default_searchers) do
       [
