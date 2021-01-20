@@ -15,6 +15,7 @@
 - if @recently_reviewed.any?
   .grid_12
     - @order_detail_link = nil
+    - @order_detail_action = nil
     - @extra_date_column_header = :reviewed_at_past
 
     %h2= text("transactions.recently_reviewed")

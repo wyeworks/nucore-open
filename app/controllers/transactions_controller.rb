@@ -56,11 +56,36 @@ class TransactionsController < ApplicationController
     @order_details = @search.order_details
 
     @extra_date_column = :reviewed_at
+    @order_detail_action = :mark_as_reviewed
     @order_detail_link = {
       text: text("shared.dispute"),
       display?: proc { |order_detail| order_detail.can_dispute? },
       proc: proc { |order_detail| order_order_detail_path(order_detail.order, order_detail) },
     }
+  end
+
+  def mark_as_reviewed
+    if params[:order_detail_ids].nil? || params[:order_detail_ids].empty?
+      flash[:error] = I18n.t "controllers.facility_notifications.no_selection"
+    else
+      @errors = []
+      @order_details_updated = []
+      params[:order_detail_ids].each do |order_detail_id|
+        begin
+          od = OrderDetail.readonly(false).find(order_detail_id)
+          od.reviewed_at = Time.zone.now
+          od.save!
+          LogEvent.log(od, :review, current_user)
+          @order_details_updated << od
+        rescue => e
+          logger.error(e.message)
+          @errors << order_detail_id
+        end
+      end
+      flash[:notice] = I18n.t("controllers.facility_notifications.mark_as_reviewed.success") if @order_details_updated.any?
+      flash[:error] = I18n.t("controllers.facility_notifications.mark_as_reviewed.errors", errors: @errors.join(", ")) if @errors.any?
+    end
+    redirect_to action: :in_review
   end
 
 end
