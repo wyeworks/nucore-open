@@ -37,7 +37,7 @@
               %td.centered= check_box_tag("order_detail_ids[]", od.id, false, {class: "toggle", id: nil })
               %td.centered= link_to od.order_id, facility_order_path(current_facility, order)
               %td.centered= link_to od.id, manage_order_detail_path(od), class: "manage-order-detail"
-              %td= order.user.full_name
+              %td= mail_to(order.user.email, order.user.full_name)
               %td{colspan: 2}
                 = format_usa_datetime(od.ordered_at)
               %td{colspan: 2}
