@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true } do
+RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true, bypass_kiosk_auth: false } do
   let(:facility) { create(:setup_facility, kiosk_enabled: true) }
   let(:account) { create(:setup_account) }
   let!(:account_user) { FactoryBot.create(:account_user, :purchaser, account: account, user: user) }
@@ -142,7 +142,7 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true 
     end
   end
 
-  context "with an LDAP authenticated user", :ldap, feature_setting: { uses_ldap_authentication: true } do
+  context "with an LDAP authenticated user", :ldap, feature_setting: { kiosk_view: true, bypass_kiosk_auth: false, uses_ldap_authentication: true } do
     let(:user) { create(:user, :netid, :purchaser, account: account, email: "internal@example.org", username: "netid") }
 
     before(:each) do
@@ -164,6 +164,79 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true 
     before { login_as(user) }
 
     it_behaves_like "kiosk_actions", "Logout", "password"
+  end
+
+  context "with an SSO authenticated user", feature_setting: { kiosk_view: true, bypass_kiosk_auth: true } do
+    let(:user) { create(:user, :netid, :purchaser, account: account, email: "internal@example.org", username: "netid") }
+
+    context "with an active reservation that hasn't been started" do
+      let!(:reservation) { create(:purchased_reservation, reserve_start_at: 15.minutes.ago, product: instrument, user: user) }
+
+      it "can start reservations (no password field)" do
+        visit facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("Login")
+        click_link "Begin Reservation"
+        expect(page).not_to have_content("Password")
+        click_button "Begin Reservation"
+
+        expect(page.current_path).to eq facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("End Reservation")
+        expect(page).to have_content("Login")
+      end
+    end
+
+    context "with an active reservation that is running" do
+      let!(:reservation) { create(:purchased_reservation, reserve_start_at: 15.minutes.ago, actual_start_at: 10.minutes.ago, product: instrument, user: user) }
+
+      it "can end reservations  (no password field)" do
+        visit facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("Login")
+        expect(page).not_to have_content("Add Accessories")
+        click_link "End Reservation"
+        expect(page).not_to have_content("Password")
+        click_button "End Reservation"
+
+        expect(page).not_to have_content("End Reservation")
+        expect(page).not_to have_content("Begin Reservation")
+        expect(page.current_path).to eq facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("Login")
+      end
+    end
+
+    context "with an active reservation (with accessories) that is running" do
+      let!(:reservation) { create(:purchased_reservation, reserve_start_at: 15.minutes.ago, actual_start_at: 10.minutes.ago, product: instrument, user: user, order_detail: order_detail) }
+      let!(:accessory) { create(:accessory, parent: instrument) }
+
+      it "can add accessories (no password field)" do
+        visit facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("Login")
+        click_link "Add Accessories"
+        check accessory.name
+        fill_in "kiosk_accessories_#{accessory.id}_quantity", with: "3"
+        expect(page).not_to have_content("Password")
+        click_button "Save Changes"
+
+        expect(page).to have_content("1 accessory added")
+        expect(page).to have_content("End Reservation")
+        expect(page.current_path).to eq facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("Login")
+      end
+
+      it "can add accessories when ending reservations  (no password field)" do
+        visit facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("Login")
+        click_link "End Reservation"
+        check accessory.name
+        fill_in "kiosk_accessories_#{accessory.id}_quantity", with: "3"
+        expect(page).not_to have_content("Password")
+        click_button "Save Changes"
+
+        expect(page).not_to have_content("End Reservation")
+        expect(page).not_to have_content("Begin Reservation")
+        expect(page.current_path).to eq facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("Login")
+      end
+    end
   end
 
   context "with a facility that has disabled the kiosk view" do
