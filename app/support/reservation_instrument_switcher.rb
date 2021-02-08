@@ -62,7 +62,7 @@ class ReservationInstrumentSwitcher
   end
 
   def relay_error_msg
-    "An error was encountered while attempted to toggle the instrument. Please try again."
+    "An error was encountered while attempting to toggle the instrument. Please try again."
   end
 
 end

@@ -25,5 +25,25 @@ RSpec.describe SecureRooms::Occupancy do
 
       it { is_expected.to eq :missing_exit }
     end
+
+    context "0 min actual duration" do
+      before do
+        now = Time.current
+        occupancy.entry_at = now
+        occupancy.exit_at = now
+      end
+
+      context "with an entry event" do
+        before { occupancy.entry_event = SecureRooms::Event.new }
+
+        it { is_expected.to eq :missing_exit }
+      end
+
+      context "with an exit event" do
+        before { occupancy.exit_event = SecureRooms::Event.new }
+
+        it { is_expected.to eq :missing_entry }
+      end
+    end
   end
 end

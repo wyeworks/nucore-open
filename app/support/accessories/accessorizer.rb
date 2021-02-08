@@ -52,6 +52,14 @@ class Accessories::Accessorizer
     od
   end
 
+  def build_order_details_from(params)
+    order_details = accessory_order_details.collect do |od|
+      detail_params = params[od.product_id.to_s]
+      od.assign_attributes(detail_params.permit(:enabled, :quantity)) if detail_params
+      od
+    end
+  end
+
   private
 
   def update_attributes_of(order_details, params)

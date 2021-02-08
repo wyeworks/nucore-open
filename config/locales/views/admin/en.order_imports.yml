@@ -8,20 +8,21 @@ en:
         send_receipts: "Send receipts"
         send_report_to: "Send results to"
         download_link: "Download import template"
+        download_link_here: "here"
         submit: Import
         instructions: |
-          <p>Bulk imports are done by uploading a CSV formatted file (from Excel, save as “CSV (Comma delimited)”). The available fields are defined in the import template, downloadable below.</p>
+          <p>Bulk Import orders use a CSV-formatted file.  Click %{link} to download the template.</p>
           <p>All fields are required except for %{optional_fields}.</p>
-          <p>Only %{importable_products} products can be imported.</p>
-          <p>Rows that include an existing Order Number will be added to that order.</p>
-          <p>Any rows without an Order Number will be added to a new order,
-          along with any other rows with the same NetID/Email, Chart String, and Order Date.</p>
+          <p>Only %{importable_products} product types can be imported.</p>
+          <p>Rows containing an existing Order Number will be added to that order.</p>
+          <p>Rows without an Order Number will be added as new order(s).</p>
+          <p>Rows sharing the same NetID/Email, Chart String, and Order Date will be added to a single new order.</p>
         upload_file_hint: |
-          <p>Click the "Choose File" button to select the completed CSV file to upload, then click the "Import" button to add the orders to your !facility_downcase!.</p>
+          <p>Click “Browse…” to select a bulk import file. Next, select error-handling and receipt options (below), then click “Import” to upload the orders.</p>
         fail_on_error_hint:
-          <p>When checked, an import error will halt the import process entirely, allowing you to correct the file and try again.</p>
-          <p>Un-check to import valid entries and return any failed entries in a CSV file for you to correct and upload later.</p>
+          <p>When checked, an error on any row will halt the import process, allowing you to correct the file and try again.</p>
+          <p>Un-check to import valid entries and return any failed entries in a CSV file for review.</p>
         send_receipts_hint:
-          <p>Check this box to send receipts. By default receipts are NOT sent to customers for bulk imported orders. </p>
+          <p>Check this box to send receipts. By default receipts are NOT sent to customers for bulk imported orders.</p>
         history:
           head: Import History

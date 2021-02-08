@@ -38,6 +38,13 @@ class ReservationUserActionPresenter
     actions.compact
   end
 
+  def kiosk_user_actions
+    actions = []
+    actions << kiosk_accessories_link if accessories?
+    actions << kiosk_switch_actions if can_switch_instrument?
+    actions.compact
+  end
+
   def view_edit_link
     link_to reservation, view_edit_path
   end
@@ -66,6 +73,10 @@ class ReservationUserActionPresenter
     link_to I18n.t("product_accessories.pick_accessories.title"), reservation_pick_accessories_path(reservation), class: "has_accessories persistent"
   end
 
+  def kiosk_accessories_link
+    link_to I18n.t("product_accessories.pick_accessories.title"), kiosk_reservation_pick_accessories_path(reservation), class: "has_accessories persistent"
+  end
+
   def view_edit_path
     if can_customer_edit?
       edit_order_order_detail_reservation_path(order, order_detail, reservation)
@@ -86,6 +97,26 @@ class ReservationUserActionPresenter
                 order, order_detail, reservation,
                 switch: "off", reservation_ended: "on"),
               class: end_reservation_class(reservation),
+              data: { refresh_on_cancel: true }
+    end
+  end
+
+  def kiosk_switch_actions
+    kiosk_path = facility_kiosk_reservations_path(reservation.facility)
+    if can_switch_instrument_on?
+      link_to I18n.t("reservations.switch.start"),
+              order_order_detail_reservation_kiosk_begin_path(order, order_detail, reservation),
+              class: "has_accessories",
+              data: { refresh_on_cancel: true }
+    elsif can_switch_instrument_off? && order_detail.accessories?
+      link_to I18n.t("reservations.switch.end"),
+              kiosk_reservation_pick_accessories_path(reservation, "off"),
+              class: end_reservation_class(reservation),
+              data: { refresh_on_cancel: true }
+    elsif can_switch_instrument_off?
+      link_to I18n.t("reservations.switch.end"),
+              order_order_detail_reservation_kiosk_stop_path(order, order_detail, reservation),
+              class: "has_accessories",
               data: { refresh_on_cancel: true }
     end
   end

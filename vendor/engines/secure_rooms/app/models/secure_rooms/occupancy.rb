@@ -83,6 +83,8 @@ module SecureRooms
         :missing_entry
       elsif exit_at.blank?
         :missing_exit
+      elsif exit_at <= entry_at
+        entry_event.present? ? :missing_exit : :missing_entry
       end
     end
 

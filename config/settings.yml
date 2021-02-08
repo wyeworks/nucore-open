@@ -115,6 +115,9 @@ feature:
   facility_directors_can_manage_price_groups: true
   account_reference_field: false
   facility_payment_urls: true
+  uses_ldap_authentication: false
+  kiosk_view: true
+  bypass_kiosk_auth: true
 
 split_accounts:
   # Roles are allowed to create Split Accounts

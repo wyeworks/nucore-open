@@ -19,6 +19,9 @@
       as: :boolean, label: false, inline_label: text(".labels.show_instrument_availability"), hint: text(".hints.show_instrument_availability")
   %p
     = f.input :dashboard_enabled, as: :boolean, label: false, inline_label: text("labels.dashboard_enabled")
+  - if SettingsHelper.feature_on?(:kiosk_view)
+    %p
+      = f.input :kiosk_enabled, as: :boolean, label: false, inline_label: text("labels.kiosk_enabled")
 
 = render_view_hook("before_is_active", f: f)
 

@@ -1,0 +1,34 @@
+en:
+  views:
+    kiosk_reservations:
+      index:
+        title: "Kiosk View: %{facility}"
+      reservations_table:
+        name: Name
+        reservation: Reservation
+        actions: Actions
+        none: No active reservations found for today
+      begin:
+        title: Begin Reservation (%{user})
+        confirm: Sign in to Confirm
+        submit: Begin Reservation
+        cancel: Cancel
+      stop:
+        title: End Reservation (%{user})
+        confirm: Sign in to Confirm
+        submit: End Reservation
+        cancel: Cancel
+      error:
+        title: "Reservation (%{user})"
+
+  controllers:
+    kiosk_reservations:
+      switch_instrument:
+        prior_is_still_running: Cannot "Begin Reservation" when a previously scheduled reservation is ongoing.
+      order_detail_removed: |
+        The instrument order has been removed from your cart.
+        Please add it again to make a reservation.
+      authentication:
+        error: Invalid password.
+      switch:
+        error: Something went wrong, please try again.

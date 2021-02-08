@@ -381,6 +381,8 @@ en:
   facility_reservations:
     index:
       no_new_or_inprocess_reservations: There are no "New" or "In Process" reservations.
+    timeline:
+      kiosk_view: Launch Kiosk View
     disputed:
       no_disputed_reservations: There are no disputed reservations
     show_problems:
@@ -573,7 +575,7 @@ en:
       confirm: Would you like to move your reservation?
       error: There was an error retrieving earliest possible move date.
     notices:
-      can_switch_off: Do not forget to click the "End Reservation" link when you finished your %{reservation} reservation.
+      can_switch_off: Do not forget to click the "End Reservation" link when you finish your %{reservation} reservation.
       can_switch_on: You may click the "Begin Reservation" link when you are ready to begin your %{reservation} reservation.
       upcoming: You have an upcoming reservation for %{reservation}.
     account_field:

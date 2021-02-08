@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "Managing an order detail" do
 
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { FactoryBot.create(:setup_instrument, facility: facility, control_mechanism: "timer") }
+  let(:instrument) { create(:setup_instrument, facility: facility, control_mechanism: "timer") }
   let(:reservation) { create(:purchased_reservation, product: instrument) }
   let(:order_detail) { reservation.order_detail }
   let(:order) { reservation.order }
@@ -35,6 +35,40 @@ RSpec.describe "Managing an order detail" do
 
       expect(order_detail.reservation.reload.reserve_end_at).to eq(new_end_at)
       expect(page).to have_content("successfully updated")
+    end
+  end
+
+  describe "editing a problem order detail with a reservation" do
+    let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility: facility) }
+    let!(:reservation) do
+      create(
+        :purchased_reservation,
+        product: instrument,
+        reserve_start_at: 2.hours.ago,
+        reserve_end_at: 1.hour.ago,
+        actual_start_at: 1.hour.ago,
+        actual_end_at: nil
+      )
+    end
+
+    before do
+      MoveToProblemQueue.move!(reservation.order_detail, cause: :reservation_started)
+    end
+
+    it "canont enter 0 minutes for actual duration" do
+      # Confirm the reservation is listed as a problem
+      visit show_problems_facility_reservations_path(facility)
+      expect(page).to have_content(reservation.order_detail.id)
+
+      # Enter 0 min and get an error
+      click_link "Update"
+      fill_in "Actual Duration", with: "0"
+      click_button "Save"
+      expect(page).to have_content("Actual duration must be at least 1 minute")
+
+      # Confirm the reservation is still listed as a problem
+      visit show_problems_facility_reservations_path(facility)
+      expect(page).to have_content(reservation.order_detail.id)
     end
   end
 

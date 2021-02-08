@@ -1434,9 +1434,15 @@ RSpec.describe Reservation do
       expect(reservation).not_to be_has_actuals
     end
 
+    it "should not have actuals if the start and end are the same" do
+      reservation.actual_start_at = Time.zone.now
+      reservation.actual_end_at = reservation.actual_start_at
+      expect(reservation).not_to be_has_actuals
+    end
+
     it "should have actuals" do
       reservation.actual_start_at = Time.zone.now
-      reservation.actual_end_at = Time.zone.now
+      reservation.actual_end_at = Time.zone.now + 1.minute
       expect(reservation).to be_has_actuals
     end
   end

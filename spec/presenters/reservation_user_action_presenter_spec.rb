@@ -201,4 +201,78 @@ RSpec.describe ReservationUserActionPresenter do
       end
     end
   end
+
+  context "#kiosk_user_actions" do
+    before :each do
+      allow(order_detail).to receive(:reservation).and_return reservation
+    end
+    subject(:text) { presenter.kiosk_user_actions.join }
+
+    describe "switching (kiosk page)" do
+      let(:encoded_link) { CGI.escapeHTML(link) }
+
+      context "can switch on" do
+        let(:link) do
+          order_order_detail_reservation_kiosk_begin_path(
+            order,
+            order_detail,
+            reservation,
+          )
+        end
+
+        before :each do
+          allow(reservation)
+            .to receive(:can_switch_instrument_on?)
+            .and_return true
+        end
+
+        it "includes the switch on event" do
+          expect(text).to include encoded_link
+        end
+      end
+
+      context "can switch off" do
+        let(:link) do
+          order_order_detail_reservation_kiosk_stop_path(
+            order,
+            order_detail,
+            reservation,
+          )
+        end
+
+        before :each do
+          allow(reservation)
+            .to receive(:can_switch_instrument_off?)
+            .and_return true
+        end
+
+        it "includes the switch off event" do
+          expect(text).to include encoded_link
+        end
+      end
+
+      context "can switch off with accessories" do
+        let(:link) do
+          new_order_order_detail_kiosk_accessory_path(
+            order,
+            order_detail,
+            switch: "off",
+          )
+        end
+
+        before :each do
+          allow(reservation)
+            .to receive(:can_switch_instrument_off?)
+            .and_return true
+          allow(order_detail)
+            .to receive(:accessories?)
+            .and_return true
+        end
+
+        it "includes the switch off event" do
+          expect(text).to include encoded_link
+        end
+      end
+    end
+  end
 end
