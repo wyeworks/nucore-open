@@ -218,6 +218,9 @@ Rails.application.routes.draw do
       get "error_report", to: "order_imports#error_report", on: :member
     end
 
+    resources :kiosk_reservations, only: :index do
+    end
+
     resources :reservations, controller: "facility_reservations", only: :index do
       collection do
         post "assign_price_policies_to_problem_orders"
@@ -358,9 +361,13 @@ Rails.application.routes.draw do
         get "/move",               to: "reservations#earliest_move_possible"
         post "/move",              to: "reservations#move",              as: "move_reservation"
         get "/switch_instrument",  to: "reservations#switch_instrument", as: "switch_instrument"
+        get "/kiosk_switch_instrument",  to: "kiosk_reservations#switch_instrument", as: "kiosk_switch_instrument"
+        get "begin", to: "kiosk_reservations#begin", as: "kiosk_begin"
+        get "stop", to: "kiosk_reservations#stop", as: "kiosk_stop"
       end
 
       resources :accessories, only: [:new, :create]
+      resources :kiosk_accessories, only: [:new, :create]
     end
   end
 

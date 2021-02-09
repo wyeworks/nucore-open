@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_15_220832) do
+ActiveRecord::Schema.define(version: 2021_01_29_224222) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -171,6 +171,7 @@ ActiveRecord::Schema.define(version: 2020_12_15_220832) do
     t.text "banner_notice"
     t.string "dashboard_token"
     t.string "payment_url"
+    t.boolean "kiosk_enabled"
     t.index ["abbreviation"], name: "index_facilities_on_abbreviation", unique: true
     t.index ["is_active", "name"], name: "index_facilities_on_is_active_and_name"
     t.index ["name"], name: "index_facilities_on_name", unique: true
@@ -892,6 +893,7 @@ ActiveRecord::Schema.define(version: 2020_12_15_220832) do
     t.string "whodunnit"
     t.text "object", limit: 4294967295
     t.datetime "created_at"
+    t.text "object_changes"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 

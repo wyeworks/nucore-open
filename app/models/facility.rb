@@ -143,6 +143,10 @@ class Facility < ApplicationRecord
     end
   end
 
+  def display_kiosk_link?
+    SettingsHelper.feature_on?(:kiosk_view) && instruments.active.any? && kiosk_enabled
+  end
+
   private
 
   def set_journal_mask

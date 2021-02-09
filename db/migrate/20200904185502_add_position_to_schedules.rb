@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPositionToSchedules < ActiveRecord::Migration[5.2]
   def change
     change_table :schedules do |t|

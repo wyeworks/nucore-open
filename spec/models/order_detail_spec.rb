@@ -539,7 +539,7 @@ RSpec.describe OrderDetail do
           end
 
           describe "when it has actuals" do
-            before { order_detail.reservation.update_attributes(actual_start_at: Time.current, actual_end_at: Time.current) }
+            before { order_detail.reservation.update_attributes(actual_start_at: Time.current, actual_end_at: Time.current + 1.minute) }
             it do
               expect(order_detail.problem_description_key).to eq(:missing_price_policy)
             end

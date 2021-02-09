@@ -32,6 +32,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
     if updater.update_attributes(params[:order_detail] || empty_params)
       flash[:notice] = text("update.success")
+      flash[:alert] = text("update.success_with_missing_actuals", order: @order_detail) if @order_detail.requires_but_missing_actuals?
       if @order_detail.updated_children.any?
         flash[:notice] = text("update.success_with_auto_scaled")
         flash[:updated_order_details] = @order_detail.updated_children.map(&:id)

@@ -11,7 +11,7 @@ If neither works login is denied.
 ## Enabling LDAP Authentication On NUcore
 
 Start by making sure the `gem "ldap_authentication", path: "vendor/engines/ldap_authentication"`
-line is present in your Gemfile.
+line is present in your Gemfile.  Then set `uses_ldap_authentication: true` in `config/settings.yml`.
 
 NUcore will activate LDAP authentication if a configuration file exists.
 The example config file provided with NUcore is enough to get started:
@@ -196,4 +196,4 @@ bundle exec rails console
 
 Try logging in to NUcore with username `cgreen` and password `secret`.
 You should login successfully, and you should see activity in the LDAP server's
-the standard output.
+standard output.

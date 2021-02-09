@@ -8,6 +8,9 @@
 = content_for :tabnav do
   = render partial: "admin/shared/tabnav_reservation", locals: { secondary_tab: "daily" }
 
+- if current_facility.display_kiosk_link?
+  %h3= link_to t(".kiosk_view"), facility_kiosk_reservations_path(current_facility, sign_out: "true")
+
 .timeline_header
   = modelless_form_for url: timeline_facility_reservations_path(current_facility), method: :get, id: "timeline_date_search" do |f|
     #reservation_date_container

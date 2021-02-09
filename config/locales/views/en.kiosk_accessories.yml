@@ -1,0 +1,21 @@
+en:
+  views:
+    kiosk_accessories:
+      new:
+        title: "Add Accessories (%{user})"
+        end_title: "End Reservation (%{user})"
+        accessories: Select Accessories
+        confirm: Sign in to Confirm
+        submit: Save Changes
+        cancel: Discard Changes
+
+  controllers:
+    kiosk_accessories:
+      switch_instrument:
+        prior_is_still_running: Cannot "Begin Reservation" when a previously scheduled reservation is ongoing.
+      create:
+        success: "%{accessories} added."
+        switch_off: "The instrument has been deactivated successfully.  %{accessories} added."
+        error: Something went wrong, please try again.
+      authentication:
+        error: Invalid password.

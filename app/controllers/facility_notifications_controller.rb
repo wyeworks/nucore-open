@@ -22,7 +22,7 @@ class FacilityNotificationsController < ApplicationController
     raise ActionController::RoutingError.new("Notifications disabled with a zero-day review period") unless SettingsHelper.has_review_period?
   end
 
-  # GET /facilities/notifications
+  # GET /facilities/:facility_id/notifications
   def index
     order_details = OrderDetail.need_notification.for_facility(current_facility)
 
@@ -34,7 +34,7 @@ class FacilityNotificationsController < ApplicationController
     @order_detail_action = :send_notifications
   end
 
-  # POST /facilities/notifications/send
+  # POST /facilities/:facility_id/notifications/send
   def send_notifications
     if params[:order_detail_ids].nil? || params[:order_detail_ids].empty?
       flash[:error] = I18n.t "controllers.facility_notifications.no_selection"
@@ -58,7 +58,7 @@ class FacilityNotificationsController < ApplicationController
     redirect_to action: :index
   end
 
-  # GET /facilities/notifications/in_review
+  # GET /facilities/:facility_id/in_review
   def in_review
     order_details = OrderDetail.in_review.for_facility(current_facility)
 
@@ -71,7 +71,7 @@ class FacilityNotificationsController < ApplicationController
     @extra_date_column = :reviewed_at
   end
 
-  # GET /facilities/notifications/in_review/mark
+  # GET /facilities/:facility_id/in_review/mark
   def mark_as_reviewed
     if params[:order_detail_ids].nil? || params[:order_detail_ids].empty?
       flash[:error] = I18n.t "controllers.facility_notifications.no_selection"

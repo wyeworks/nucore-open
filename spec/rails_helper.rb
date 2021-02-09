@@ -51,6 +51,14 @@ RSpec.configure do |config|
     Nucore::Application.reload_routes! if example.metadata[:feature_setting][:reload_routes]
   end
 
+  config.around(:each, :ldap) do |example|
+    User.define_method(:valid_ldap_authentication?) { |password| password == "netidpassword" }
+
+    example.call
+
+    User.remove_method(:valid_ldap_authentication?)
+  end
+
   config.around(:each, :billing_review_period) do |example|
     original_review_period = Settings.billing.review_period
     Settings.billing.review_period = example.metadata[:billing_review_period]

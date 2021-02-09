@@ -5,6 +5,7 @@ require "date"
 class Reservation < ApplicationRecord
 
   acts_as_paranoid # soft deletes
+  has_paper_trail
 
   include DateHelper
   include Reservations::DateSupport
@@ -320,7 +321,7 @@ class Reservation < ApplicationRecord
   end
 
   def has_actuals?
-    actual_start_at.present? && actual_end_at.present?
+    actual_start_at.present? && actual_end_at.present? && actual_end_at > actual_start_at
   end
 
   def started?
@@ -378,9 +379,8 @@ class Reservation < ApplicationRecord
     self.billable_minutes = calculated_billable_minutes
   end
 
-  # FIXME: Temporary override to include reconciled orders, so we can backfill them
   def calculated_billable_minutes
-    if (order_detail&.complete? || order_detail&.reconciled?) && order_detail&.canceled_at.blank? && price_policy.present?
+    if order_detail&.complete? && order_detail&.canceled_at.blank? && price_policy.present?
       case price_policy.charge_for
       when InstrumentPricePolicy::CHARGE_FOR.fetch(:reservation)
         TimeRange.new(reserve_start_at, reserve_end_at).duration_mins

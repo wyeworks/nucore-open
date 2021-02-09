@@ -11,6 +11,7 @@ class ReservationsController < ApplicationController
 
   include TranslationHelper
   include FacilityReservationsHelper
+  include ReservationSwitch
   helper TimelineHelper
 
   def initialize
@@ -235,24 +236,9 @@ class ReservationsController < ApplicationController
   def switch_instrument
     authorize! :start_stop, @reservation
 
-    raise ActiveRecord::RecordNotFound unless params[:switch] && (params[:switch] == "on" || params[:switch] == "off")
+    raise ActiveRecord::RecordNotFound unless switch_value_present?
 
-    begin
-      case
-      when params[:switch] == "on"
-        switch_instrument_on!
-      when params[:switch] == "off"
-        switch_instrument_off!
-      end
-    rescue AASM::InvalidTransition => e
-      flash[:error] = if e.failures.include?(:time_data_completeable?)
-                        text("switch_instrument.prior_is_still_running")
-                      else
-                        e.message
-                      end
-    rescue => e
-      flash[:error] = e.message
-    end
+    switch_instrument!(params[:switch])
 
     if params[:switch] == "off" && @order_detail.accessories?
       redirect_to new_order_order_detail_accessory_path(@order, @order_detail)
@@ -293,20 +279,6 @@ class ReservationsController < ApplicationController
       reserve_start_min: @reservation.reserve_start_min,
       reserve_start_meridian: @reservation.reserve_start_meridian,
     }
-  end
-
-  def switch_instrument_off!
-    unless @reservation.other_reservation_using_relay?
-      ReservationInstrumentSwitcher.new(@reservation).switch_off!
-      flash[:notice] = "The instrument has been deactivated successfully"
-    end
-    session[:reservation_auto_logout] = true if params[:reservation_ended].present?
-  end
-
-  def switch_instrument_on!
-    ReservationInstrumentSwitcher.new(@reservation).switch_on!
-    flash[:notice] = "The instrument has been activated successfully"
-    session[:reservation_auto_logout] = true if params[:reservation_started].present?
   end
 
   def load_basic_resources

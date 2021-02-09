@@ -12,7 +12,7 @@ class Ability
   #   A model +user+ is authorized against
   # [_controller_]
   #   The controller whose authorization request is being handled. Used to provide
-  #   a context for the sticky situation that is multiple controllers managing one
+  #   a context for the sticky situation that is multiple controllers managing
   #   one model each with their own authorization rules.
   def initialize(user, resource, controller = nil)
     return unless user
