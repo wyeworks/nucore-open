@@ -6,6 +6,7 @@ class FacilityStatementsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_acting_as
   before_action { @facility = current_facility }
+  before_action :enable_sorting, only: [:new]
 
   load_and_authorize_resource class: Statement
 
@@ -14,6 +15,7 @@ class FacilityStatementsController < ApplicationController
   }
 
   include CsvEmailAction
+  include SortableBillingTable
 
   def initialize
     @active_tab = "admin_billing"
@@ -50,7 +52,7 @@ class FacilityStatementsController < ApplicationController
     @search_form = TransactionSearch::SearchForm.new(params[:search], defaults: defaults)
     @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details
+    @order_details = @search.order_details.reorder(sort_clause)
   end
 
   # POST /facilities/:facility_id/statements

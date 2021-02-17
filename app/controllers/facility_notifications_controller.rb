@@ -10,8 +10,11 @@ class FacilityNotificationsController < ApplicationController
   before_action :check_billing_access
 
   before_action :check_review_period
+  before_action :enable_sorting, only: [:index, :in_review]
 
   layout "two_column_head"
+
+  include SortableBillingTable
 
   def initialize
     @active_tab = "admin_billing"
@@ -29,7 +32,7 @@ class FacilityNotificationsController < ApplicationController
     @search_form = TransactionSearch::SearchForm.new(params[:search])
     @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details
+    @order_details = @search.order_details.reorder(sort_clause)
 
     @order_detail_action = :send_notifications
   end
@@ -65,10 +68,12 @@ class FacilityNotificationsController < ApplicationController
     @search_form = TransactionSearch::SearchForm.new(params[:search])
     @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details.reorder(:reviewed_at)
 
     @order_detail_action = :mark_as_reviewed
     @extra_date_column = :reviewed_at
+
+    params[:dir] = "asc" if params[:dir].nil? # default to "asc"
+    @order_details = @search.order_details.reorder(sort_clause)
   end
 
   # GET /facilities/:facility_id/in_review/mark

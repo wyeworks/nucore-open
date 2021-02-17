@@ -5,12 +5,16 @@ RSpec.describe "Instrument Schedule Display Order" do
   let!(:instrument) { create(:instrument, name: "First", facility: facility) }
   let!(:instrument2) { create(:instrument, name: "Second", facility: facility) }
   let!(:instrument3) { create(:instrument, name: "Third", facility: facility, schedule: instrument2.schedule, is_hidden: true) }
-  let!(:instrument4) { create(:instrument, name: "New (no position)", facility: facility) }
+  let!(:instrument_z) { create(:instrument, name: "ZZZ New Instrument (no position)", facility: facility) }
+  let!(:instrument_a) { create(:instrument, name: "AAA New Instrument (no position)", facility: facility) }
+  let!(:instrument_c) { create(:instrument, name: "CCC New Instrument (no position)", facility: facility) }
 
   let!(:reservation) { create :reservation, :running, product: instrument }
   let!(:reservation2) { create :reservation, :running, product: instrument2 }
   let!(:reservation3) { create :reservation, :running, product: instrument3 }
-  let!(:reservation4) { create :reservation, :running, product: instrument4 }
+  let!(:reservation4) { create :reservation, :running, product: instrument_z }
+  let!(:reservation5) { create :reservation, :running, product: instrument_c }
+  let!(:reservation6) { create :reservation, :running, product: instrument_a }
 
   before do
     instrument.schedule.update(position: 0)
@@ -24,33 +28,33 @@ RSpec.describe "Instrument Schedule Display Order" do
     it "can reorder the schedules", :js do
       # check starting display order
       visit dashboard_facility_instruments_path(facility)
-      expect(["First", "Second", "New (no position"]).to appear_in_order
+      expect(["First", "Second", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       visit timeline_facility_reservations_path(facility)
-      expect(["First", "Second", "Third", "New (no position"]).to appear_in_order
+      expect(["First", "Second", "Third", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       visit facility_public_timeline_path(facility)
-      expect(["First", "Second", "New (no position"]).to appear_in_order
+      expect(["First", "Second", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       # change the display order
       visit facility_instrument_schedule_position_path(facility)
       click_link "Instrument Display Order"
       click_link "Edit"
-      expect(["First", "Shared schedule: Second Schedule", "New (no position"]).to appear_in_order
+      expect(["First", "Shared schedule: Second Schedule", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
       select "Second Schedule", from: "Instrument Schedules"
       find("[title='Move Up']").click
       click_button "Update Ordering"
-      expect(["Second", "Third", "First", "New (no position"]).to appear_in_order
+      expect(["Second", "Third", "First", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       # check the new display order
       visit timeline_facility_reservations_path(facility)
-      expect(["Second", "Third", "First", "New (no position"]).to appear_in_order
+      expect(["Second", "Third", "First", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       visit facility_public_timeline_path(facility)
-      expect(["Second", "First", "New (no position"]).to appear_in_order
+      expect(["Second", "First", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       visit dashboard_facility_instruments_path(facility)
-      expect(["Second", "First", "New (no position"]).to appear_in_order
+      expect(["Second", "First", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
     end
   end
 
@@ -60,7 +64,7 @@ RSpec.describe "Instrument Schedule Display Order" do
     it "can view the show page, but not edit the display order" do
       visit facility_instrument_schedule_position_path(facility)
       click_link "Instrument Display Order"
-      expect(["First", "Shared schedule: Second Schedule", "New (no position"]).to appear_in_order
+      expect(["First", "Shared schedule: Second Schedule", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
       expect(page).not_to have_link("Edit")
     end
 

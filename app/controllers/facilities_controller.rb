@@ -11,12 +11,14 @@ class FacilitiesController < ApplicationController
   before_action :load_order_details, only: [:confirm_transactions, :move_transactions, :reassign_chart_strings]
   before_action :set_admin_billing_tab, only: [:confirm_transactions, :disputed_orders, :movable_transactions, :transactions]
   before_action :store_fullpath_in_session, only: [:index, :show]
+  before_action :enable_sorting, only: [:disputed_orders, :movable_transactions, :transactions]
 
   load_and_authorize_resource find_by: :url_name
   skip_load_and_authorize_resource only: [:index, :show]
 
   include AZHelper
   include OrderDetailsCsvExport
+  include SortableBillingTable
 
   layout lambda {
     action_name.in?(%w(disputed_orders movable_transactions transactions)) ? "two_column_head" : "two_column"
@@ -134,7 +136,7 @@ class FacilitiesController < ApplicationController
 
     @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details
+    @order_details = @search.order_details.joins(order: :user).reorder(sort_clause)
 
     respond_to do |format|
       format.html { @order_details = @order_details.paginate(page: params[:page]) }
@@ -149,7 +151,9 @@ class FacilitiesController < ApplicationController
     @search_form = TransactionSearch::SearchForm.new(params[:search])
     @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details.reorder(:dispute_at).paginate(page: params[:page])
+    @extra_date_column = :dispute_at
+    params[:dir] = "asc" if params[:dir].nil? # default to "asc"
+    @order_details = @search.order_details.reorder(sort_clause).paginate(page: params[:page])
   end
 
   # GET /facilities/:facility_id/movable_transactions
@@ -161,7 +165,7 @@ class FacilitiesController < ApplicationController
       include_facilities: current_facility.cross_facility?,
     )
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details.paginate(page: params[:page], per_page: 100)
+    @order_details = @search.order_details.reorder(sort_clause).paginate(page: params[:page], per_page: 100)
 
     @order_detail_action = :reassign_chart_strings
   end
@@ -269,4 +273,5 @@ class FacilitiesController < ApplicationController
     SettingsHelper.feature_on?(:azlist)
   end
   helper_method :azlist_on?
+
 end

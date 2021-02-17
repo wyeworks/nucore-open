@@ -5,12 +5,14 @@ class FacilityJournalsController < ApplicationController
   include DateHelper
   include CSVHelper
   include OrderDetailsCsvExport
+  include SortableBillingTable
 
   admin_tab     :all
   before_action :authenticate_user!
   before_action :check_acting_as
   before_action :check_billing_access
   before_action :init_journals, except: :create
+  before_action :enable_sorting, only: [:new]
 
   layout lambda {
     action_name.in?(%w(new)) ? "two_column_head" : "two_column"
@@ -35,7 +37,7 @@ class FacilityJournalsController < ApplicationController
     @search_form = TransactionSearch::SearchForm.new(params[:search])
     @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details
+    @order_details = @search.order_details.reorder(sort_clause)
 
     set_earliest_journal_date
 
