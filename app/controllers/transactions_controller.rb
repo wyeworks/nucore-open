@@ -5,8 +5,10 @@ class TransactionsController < ApplicationController
   customer_tab :all
   before_action :authenticate_user!
   before_action :check_acting_as
+  before_action :enable_sorting, only: [:index, :in_review]
 
   include OrderDetailsCsvExport
+  include SortableBillingTable
 
   def initialize
     @active_tab = "accounts"
@@ -32,7 +34,7 @@ class TransactionsController < ApplicationController
                                               TransactionSearch::AccountOwnerSearcher,
                                               TransactionSearch::OrderedForSearcher).search(order_details, @search_form)
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details
+    @order_details = @search.order_details.reorder(sort_clause)
 
     respond_to do |format|
       format.html { @order_details = @order_details.paginate(page: params[:page]) }
@@ -53,7 +55,8 @@ class TransactionsController < ApplicationController
                                               TransactionSearch::AccountOwnerSearcher,
                                               TransactionSearch::OrderedForSearcher).search(order_details, @search_form)
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details
+    params[:sort] = "date_range_field" if params[:sort].nil? # set default sort column
+    @order_details = @search.order_details.reorder(sort_clause)
 
     @extra_date_column = :reviewed_at
     @order_detail_action = :mark_as_reviewed

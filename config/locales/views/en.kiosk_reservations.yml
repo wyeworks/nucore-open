@@ -2,7 +2,7 @@ en:
   views:
     kiosk_reservations:
       index:
-        title: "Kiosk View: %{facility}"
+        title: "Upcoming Reservations: %{facility}"
       reservations_table:
         name: Name
         reservation: Reservation

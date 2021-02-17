@@ -1,0 +1,16 @@
+%th.nowrap= sortable "order_number", Order.model_name.human
+%th.nowrap= sortable "order_detail_number", OrderDetail.model_name.human
+%th.nowrap= sortable "date_range_field", OrderDetail.human_attribute_name(@date_range_field)
+- if @extra_date_column
+  %th.nowrap= sortable @extra_date_column.to_s, OrderDetail.human_attribute_name(@extra_date_column_header || @extra_date_column)
+- if current_facility.blank? || cross_facility?
+  %th= Facility.model_name.human
+%th.order-note= OrderDetail.human_attribute_name("description")
+%th.nowrap= sortable "ordered_for", OrderDetail.human_attribute_name("user")
+- unless @account
+  %th= sortable "payment_source", Account.model_name.human
+  %th= Account.human_attribute_name("owner")
+%th.currency= OrderDetail.human_attribute_name("cost")
+%th= sortable "order_status", OrderDetail.human_attribute_name("order_status")
+- if local_assigns[:show_statements]
+  %th= Statement.model_name.human

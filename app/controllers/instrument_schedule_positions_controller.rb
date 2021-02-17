@@ -42,8 +42,7 @@ class InstrumentSchedulePositionsController < ApplicationController
 
   def load_schedules
     @schedules = Schedule
-                 .order_by_asc_nulls_last(:position)
-                 .order(:name)
+                 .positioned
                  .joins(facility: :instruments)
                  .merge(
                     Instrument
