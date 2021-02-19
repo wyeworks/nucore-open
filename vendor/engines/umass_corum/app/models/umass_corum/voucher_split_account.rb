@@ -8,9 +8,11 @@ module UmassCorum
   # The Mass Innovation Voucher Program (MIVP) is for external customers
   # These are essentially mini-grants that cover 50% or 75% of the usage
   # fees depending on the size of the company.
+  #
+  # Behaves like a ReconcilableAccount with a customized reconciliation flow
+  # See vendor/engines/umass_corum/config/routes.rb and voucher_splits_reconciliation_controller.rb
   class VoucherSplitAccount < SplitAccounts::SplitAccount
 
-    include ReconcilableAccount
     attr_accessor :primary_subaccount_id, :mivp_percent
 
     delegate :remittance_information, to: :primary_subaccount

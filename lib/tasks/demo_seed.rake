@@ -15,6 +15,7 @@ namespace :demo do
     canceled   = OrderStatus.find_or_create_by!(name: "Canceled")
     complete   = OrderStatus.find_or_create_by!(name: "Complete")
     reconciled = OrderStatus.find_or_create_by!(name: "Reconciled")
+    mivp = OrderStatus.find_or_create_by!(name: "MIVP Pending")
 
     facility = Facility.find_or_create_by!(url_name: "example") do |example_facility|
       example_facility.name = "Example Facility"

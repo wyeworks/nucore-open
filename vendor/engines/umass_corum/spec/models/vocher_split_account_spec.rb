@@ -9,8 +9,4 @@ RSpec.describe UmassCorum::VoucherSplitAccount do
     expect(UmassCorum::VoucherSplitAccount.count).to eq 4
     expect(UmassCorum::VoucherAccount.count).to eq 1
   end
-
-  it "is reconcilable" do
-    expect(described_class < ReconcilableAccount).to eq true
-  end
 end

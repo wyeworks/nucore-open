@@ -27,3 +27,4 @@
       - route_name = Account.config.account_type_to_route(account_type)
       = tab text("reconcile", model: account_type.constantize.model_name.human(count: 2)),
         [route_name, FacilityAccount], (sidenav_tab == route_name)
+  = render_view_hook("custom_reconcilable_account_types", sidenav_tab: sidenav_tab)

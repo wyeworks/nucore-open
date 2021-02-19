@@ -7,11 +7,11 @@
       %th{ scope: "col" }= Account.model_name.human
       %th{ scope: "col" }= Order.model_name.human
       %th{ scope: "col" }= Statement.human_attribute_name(:total_cost)
-      %th{ scope: "col" }= Statement.human_attribute_name(:reconcile_note)
+      %th{ scope: "col" }
   %tbody
-    - @unreconciled_details.each do |order_detail|
+    - order_details.each do |order_detail|
       %tr
-        %td.centered= check_box_tag "order_detail[#{order_detail.id}][reconciled]", "1", false, class: "toggle"
+        %td.centered= check_box_tag "order_detail[#{order_detail.id}][mivp_pending]", "1", false, class: "toggle"
         %th{ scope: "row" }= "##{order_detail.statement_invoice_number}"
         %td
           = order_detail.account
@@ -27,4 +27,4 @@
               .order-detail-extra.order-detail-note= order_detail.note
 
         %td= show_actual_total(order_detail)
-        %td= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]"
+        %td= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]", nil, disabled: true

@@ -1,0 +1,5 @@
+- if current_facility.single_facility?
+  %li.divider
+  %li.nav-header= "Voucher Billing"
+  = tab(text("mivp_pending"), voucher_splits_mivp_pending_path, (sidenav_tab == "mivp_pending"))
+  = tab(text("reconcile_mivp"), voucher_splits_path, (sidenav_tab == "umass_corum_voucher_splits"))

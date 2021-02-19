@@ -1,0 +1,21 @@
+= javascript_include_tag "transaction_history"
+
+= content_for :h1 do
+  = current_facility
+
+= content_for :sidebar do
+  = render :partial => "admin/shared/sidenav_billing", locals: { sidenav_tab: "mivp_pending" }
+
+%h2= t(".head", model: account_class.model_name.human(count: 2))
+
+= render "shared/transactions/search"
+
+- if @unreconciled_details.present?
+  = form_tag(update_umass_corum_voucher_splits_facility_accounts_path, method: :post) do
+    = render "voucher_splits_reconciliation/action_row"
+    = render "voucher_splits_reconciliation/table", order_details: @unreconciled_details
+    = render "voucher_splits_reconciliation/action_row"
+
+  %p= will_paginate(@unreconciled_details)
+- else
+  %p.notice= t(".none")

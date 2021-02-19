@@ -22,6 +22,7 @@ module UmassCorum
       ViewHook.add_hook("devise.sessions.new", "login_form", "umass_corum/sessions/login_form")
       ViewHook.add_hook("users.edit", "custom_fields", "umass_corum/users/custom_fields")
       ViewHook.add_hook("users.show", "custom_fields", "umass_corum/users/custom_fields")
+      ViewHook.add_hook("admin.shared.sidenav_billing", "custom_reconcilable_account_types", "facility_accounts/mivp_sidenav")
     end
 
     # Include migrations in main rails app

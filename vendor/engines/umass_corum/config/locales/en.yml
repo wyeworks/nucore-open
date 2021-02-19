@@ -36,6 +36,10 @@ en:
         description: The description for Voucher Split Accounts should include the Voucher number.
 
   views:
+    facility_accounts:
+      mivp_sidenav:
+        mivp_pending: Mark MIVP Pending
+        reconcile_mivp: Reconcile Voucher Split Accounts
     umass_corum:
       sessions:
         request_login:
@@ -45,3 +49,20 @@ en:
           submit: Sign in
           username_signin: Sign in with Username/Password
           username_warning: Only sign in with Username/Password if you do not have a NetID
+
+  voucher_splits_reconciliation:
+    index:
+      head: Reconcile %{model}
+      none: There are no Voucher Split Accounts with MIVP Pending orders to be reconciled at this time
+      owner: "Owner: %{owner}"
+      balance: "Balance: %{balance}"
+    pending:
+      head: Mark MIVP Pending
+      none: There are no statemented orders ready to be marked MIVP Pending at this time
+      owner: "Owner: %{owner}"
+      balance: "Balance: %{balance}"
+    table:
+      table_caption: Statemented Orders
+    action_row:
+      mivp_pending:
+        submit: Mark Orders 'MIVP Pending'
