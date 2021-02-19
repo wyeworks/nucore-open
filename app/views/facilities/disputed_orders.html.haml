@@ -9,4 +9,7 @@
 = content_for :top_block do
   = render "shared/transactions/top", tab: "disputed_orders"
 
-= render "shared/transactions/table", order_details: @order_details if @order_details.present?
+- if @order_details.present?
+  .grid_12= render "shared/transactions/table", order_details: @order_details
+- else
+  %p.notice= text("facilities.disputed_orders.no_transactions")

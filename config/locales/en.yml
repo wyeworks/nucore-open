@@ -823,6 +823,7 @@ en:
     disputed_orders:
       head: Disputed Orders
       no_orders: There are no disputed orders for this !facility_downcase!
+      no_transactions: There are no disputed transactions matching the search parameters.
 
     show:
       daily_view: 'Daily View'

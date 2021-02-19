@@ -48,6 +48,7 @@ class FacilityJournalsController < ApplicationController
 
     @valid_order_details, @invalid_order_details = ValidatorFactory.partition_valid_order_details(@order_details.unexpired_account)
     @invalid_order_details += @order_details.expired_account
+    @invalid_order_details = @invalid_order_details.sort_by(&:fulfilled_at)
 
     respond_to do |format|
       format.csv do
