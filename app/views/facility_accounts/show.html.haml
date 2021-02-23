@@ -20,9 +20,7 @@
   - if @account.suspended?
     = f.input :suspended_at, date_only: true
 
-  -# TODO: use render_view_hook instead
-  - if lookup_context.exists? "facility_accounts/#{@account.class.name.underscore}/show", [], true
-    = render "facility_accounts/#{@account.class.name.underscore}/show", f: f
+  = render_view_hook("additional_account_fields", f: f, account: @account)
 
   - if @account.affiliate
     = f.input :affiliate, input_html: { value: @account.affiliate_to_s }

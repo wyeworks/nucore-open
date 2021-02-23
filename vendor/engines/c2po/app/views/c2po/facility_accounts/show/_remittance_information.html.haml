@@ -1,2 +1,2 @@
-- if @account.is_a?(CreditCardAccount) || @account.is_a?(PurchaseOrderAccount)
+- if account.is_a?(CreditCardAccount) || account.is_a?(PurchaseOrderAccount)
   = f.input :remittance_information, value_method: Proc.new { |value| value.present? ? simple_format(value) : "None Entered" }
