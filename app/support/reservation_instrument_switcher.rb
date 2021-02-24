@@ -9,22 +9,23 @@ class ReservationInstrumentSwitcher
   end
 
   def switch_on!
-    raise relay_error_msg unless reservation.can_switch_instrument_on?
+    raise relay_error_msg("on", "can't switch") unless reservation.can_switch_instrument_on?
+
     if switch_relay_on
       @reservation.start_reservation!
     else
-      raise relay_error_msg
+      raise relay_error_msg("on", "relay status")
     end
     instrument.instrument_statuses.create(is_on: true)
   end
 
   def switch_off!
-    raise relay_error_msg unless reservation.can_switch_instrument_off?
+    raise relay_error_msg("off", "can't switch") unless reservation.can_switch_instrument_off?
 
     if switch_relay_off == false
       @reservation.end_reservation!
     else
-      raise relay_error_msg
+      raise relay_error_msg("off", "relay status")
     end
     instrument.instrument_statuses.create(is_on: false)
   end
@@ -61,7 +62,8 @@ class ReservationInstrumentSwitcher
     instrument.relay
   end
 
-  def relay_error_msg
+  def relay_error_msg(switch, reason)
+    Rollbar.error("Failed to switch #{switch} reservation #{@reservation.id}, relay status: #{relay.get_status}, reason: #{reason}") if defined?(Rollbar)
     "An error was encountered while attempting to toggle the instrument. Please try again."
   end
 

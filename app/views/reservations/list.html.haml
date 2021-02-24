@@ -1,3 +1,8 @@
+= content_for :head_content do
+  = javascript_include_tag "page_refresh"
+
+.js--pageRefresh{ data: { refresh_interval: 1.hour } }
+
 = content_for :h1 do
   = t_my(Reservation)
 

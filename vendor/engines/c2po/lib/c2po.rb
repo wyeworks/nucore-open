@@ -27,6 +27,7 @@ module C2po
       # Register view hooks
       ViewHook.add_hook "facilities.manage", "before_is_active", "c2po/facilities/manage"
       ViewHook.add_hook "facilities.facility_fields", "before_is_active", "c2po/facilities/facility_fields"
+      ViewHook.add_hook "facility_accounts.show", "additional_account_fields", "c2po/facility_accounts/show/additional_account_fields"
       ViewHook.add_hook "facility_accounts.show", "after_end_of_form", "c2po/facility_accounts/show/remittance_information"
     end
 

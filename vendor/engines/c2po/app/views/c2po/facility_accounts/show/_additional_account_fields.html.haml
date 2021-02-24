@@ -1,0 +1,5 @@
+- if account.is_a?(CreditCardAccount)
+  = f.input :name_on_card
+- elsif account.is_a?(PurchaseOrderAccount)
+  = f.input :outside_contact_info
+  = f.input :ar_number
