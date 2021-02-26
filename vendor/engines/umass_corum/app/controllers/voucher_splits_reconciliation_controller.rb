@@ -3,6 +3,7 @@
 class VoucherSplitsReconciliationController < ApplicationController
 
   include DateHelper
+  helper UmassCorum::VoucherSplitHelper
 
   admin_tab :all
   layout "two_column"

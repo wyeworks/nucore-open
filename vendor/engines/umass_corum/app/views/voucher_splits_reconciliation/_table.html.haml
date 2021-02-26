@@ -6,8 +6,9 @@
       %th{ scope: "col" }= Statement.human_attribute_name(:invoice_number)
       %th{ scope: "col" }= Account.model_name.human
       %th{ scope: "col" }= Order.model_name.human
+      %th{ scope: "col" }= t(".primary")
+      %th{ scope: "col" }= t(".mivp")
       %th{ scope: "col" }= Statement.human_attribute_name(:total_cost)
-      %th{ scope: "col" }
   %tbody
     - order_details.each do |order_detail|
       %tr
@@ -26,5 +27,6 @@
             - if order_detail.note.present?
               .order-detail-extra.order-detail-note= order_detail.note
 
+        %td= primary_total(order_detail)
+        %td= mivp_total(order_detail)
         %td= show_actual_total(order_detail)
-        %td= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]", nil, disabled: true

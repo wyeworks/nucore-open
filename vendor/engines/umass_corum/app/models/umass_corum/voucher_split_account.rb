@@ -51,7 +51,6 @@ module UmassCorum
       primary_subaccount.type == "CreditCardAccount"
     end
 
-
   end
 
 end

@@ -54,15 +54,13 @@ en:
     index:
       head: Reconcile %{model}
       none: There are no Voucher Split Accounts with MIVP Pending orders to be reconciled at this time
-      owner: "Owner: %{owner}"
-      balance: "Balance: %{balance}"
     pending:
       head: Mark MIVP Pending
       none: There are no statemented orders ready to be marked MIVP Pending at this time
-      owner: "Owner: %{owner}"
-      balance: "Balance: %{balance}"
     table:
       table_caption: Statemented Orders
+      mivp: MIVP
+      primary: Primary
     action_row:
       mivp_pending:
         submit: Mark Orders 'MIVP Pending'

@@ -27,8 +27,11 @@ module ApplicationHelper
     link_to fa_icon(sorting_class, text: title, right: true), url_for(sort: column, dir: direction, search: request.query_parameters[:search])
   end
 
-  #
-  # currency display helpers
+  # currency display helpers,
+  # listing defined methods here for easy reference:
+  # show_actual_total, show_estimated_total
+  # show_actual_cost, show_estimated_cost
+  # show_actual_subsidy, show_estimated_subsidy
   [:total, :cost, :subsidy].each do |type|
     define_method("show_actual_#{type}") { |order_detail| show_currency(order_detail, "actual_#{type}") }
     define_method("show_estimated_#{type}") { |order_detail| show_currency(order_detail, "estimated_#{type}") }
