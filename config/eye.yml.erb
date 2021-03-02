@@ -1,7 +1,8 @@
 <% app_root = File.expand_path("..", __dir__) %>
 <% rails_env = ENV["RAILS_ENV"] %>
+<% is_first_host = rails_env != "production" || ENV["HOSTNAME"] == "ials-core-web-prod-01.it.umass.edu" %>
 ---
-name: NUcore (<%= rails_env %>)
+name: CORUM (<%= rails_env %>)
 
 config:
   logger: <%= app_root %>/log/eye.log
@@ -19,14 +20,13 @@ triggers:
 notifications:
   - name: crash
     type: mail
-    level: info
-    contact: eye@nucore.example.com
+    level: error
+    contact: nucore@tablexi.opsgenie.net
     config:
-      from_mail: noreply@example.com
-      host: smtp.example.com
+      from_mail: it-corum-dev@umass.edu
+      host: mailhub.oit.umass.edu
       port: 25
-      # domain: ~
-
+      domain: umass.edu
 
 processes:
   - name: unicorn
@@ -46,13 +46,13 @@ processes:
             config:
               times: 3
               every: 20 seconds
-              below: 512 megabytes # Change this per installation based on box size
+              below: 512 megabytes
       user_commands:
         rotate: "kill -USR1 {PID}"
       notify:
         crash: error
 
-  # only run on 1 instance
+<% if is_first_host %>
   - name: auto_cancel
     config:
       start_command: bundle exec ruby lib/daemons/auto_cancel.rb start -- --no-monitor
@@ -63,6 +63,13 @@ processes:
       smart_pid: true
       notify:
         crash: error
+    checks:
+      - name: memory
+        config:
+          times: 3
+          every: 20 seconds
+          below: 256 megabytes
+<% end %>
 
   - name: delayed_job
     config:
@@ -79,4 +86,4 @@ processes:
         config:
           times: 3
           every: 20 seconds
-          below: 1 gigabyte # Change this per installation based on box size
+          below: 1 gigabyte

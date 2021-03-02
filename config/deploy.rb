@@ -11,7 +11,7 @@ set :rollbar_role, Proc.new { :app }
 set :rollbar_token, ENV["ROLLBAR_ACCESS_TOKEN"]
 
 set :linked_files, fetch(:linked_files, []).concat(
-  %w(config/database.yml config/secrets.yml config/eye.yml.erb config/saml-certificate.p12),
+  %w(config/database.yml config/secrets.yml config/saml-certificate.p12),
 )
 set :linked_dirs, fetch(:linked_dirs, []).concat(
   %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/files),
