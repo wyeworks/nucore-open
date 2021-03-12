@@ -1,6 +1,5 @@
 <% app_root = File.expand_path("..", __dir__) %>
 <% rails_env = ENV["RAILS_ENV"] %>
-<% is_first_host = rails_env != "production" || ENV["HOSTNAME"] == "ials-core-web-prod-01.it.umass.edu" %>
 ---
 name: CORUM (<%= rails_env %>)
 
@@ -52,7 +51,8 @@ processes:
       notify:
         crash: error
 
-<% if is_first_host %>
+  # This should only run on 1 instance.
+  # See run_auto_cancel in secrets.yml
   - name: auto_cancel
     config:
       start_command: bundle exec ruby lib/daemons/auto_cancel.rb start -- --no-monitor
@@ -69,7 +69,6 @@ processes:
           times: 3
           every: 20 seconds
           below: 256 megabytes
-<% end %>
 
   - name: delayed_job
     config:
