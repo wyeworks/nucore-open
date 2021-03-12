@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-worker_processes 8
+worker_processes 4
 preload_app true
 
 # The full path without `..`s will expand to
