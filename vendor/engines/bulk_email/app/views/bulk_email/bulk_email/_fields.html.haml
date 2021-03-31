@@ -14,7 +14,7 @@
     .span4.full-width
       - if @search_options[:facilities].present?
         = f.input :facilities, as: :transaction_chosen_old
-      = f.input :products, as: :transaction_chosen_old, data_method: :product_options
+      = f.input :products, as: :transaction_chosen_old, data_method: :product_options, hint: t("bulk_email.search_hint")
 
   .row
     %h4.span8= t("bulk_email.dates.label")

@@ -4,6 +4,10 @@ Because we use squash and merge, you should be able to see the changes by lookin
 at the [commit log](https://github.com/tablexi/nucore-open/commits/master). However, we have begun keeping track of breaking changes
 or optional rake tasks.
 
+### Configure `auto_cancel` process via `secrets.yml` ([#2544](https://github.com/tablexi/nucore-open/pull/2544))
+
+The `auto_cancel` process should only run on one server per environment.  If you have multiple servers running in production, set`run_auto_cancel: false` in `secrets.yml` on all but one production server.
+
 ### Rename username attribute key in `ldap.yml.template` ([#2440](https://github.com/tablexi/nucore-open/pull/2440))
 
 If you are using the [LDAP Authenitcation engine](vendor/engines/ldap_authentication/README.md) and have set a value for the `attribute` key in `ldap.yml`, you will need to rename the key to `username_attribute`.

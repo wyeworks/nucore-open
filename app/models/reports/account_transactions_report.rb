@@ -11,6 +11,7 @@ class Reports::AccountTransactionsReport
   def initialize(order_details, options = {})
     @order_details = order_details
     @date_range_field = options[:date_range_field] || "fulfilled_at"
+    @label_key_prefix = options[:label_key_prefix] || :actual
   end
 
   def to_csv
@@ -60,9 +61,9 @@ class Reports::AccountTransactionsReport
       Reservation.human_attribute_name(:actual_end_at),
       OrderDetail.human_attribute_name(:quantity),
       OrderDetail.human_attribute_name(:user),
-      OrderDetail.human_attribute_name(:cost),
-      OrderDetail.human_attribute_name(:subsidy),
-      OrderDetail.human_attribute_name(:total),
+      OrderDetail.human_attribute_name("#{@label_key_prefix}_cost"),
+      OrderDetail.human_attribute_name("#{@label_key_prefix}_subsidy"),
+      OrderDetail.human_attribute_name("#{@label_key_prefix}_total"),
       "#{Account.model_name.human} #{Account.human_attribute_name(:description)}",
       Account.model_name.human,
       Account.human_attribute_name(:owner),

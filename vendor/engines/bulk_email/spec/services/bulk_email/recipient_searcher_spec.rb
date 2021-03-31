@@ -29,8 +29,8 @@ RSpec.describe BulkEmail::RecipientSearcher do
 
   let(:facility) { FactoryBot.create(:setup_facility) }
 
-  let(:product) { create_item }
-  let(:product2) { create_item }
+  let(:product) { FactoryBot.create(:setup_item, facility: facility) }
+  let(:product2) { FactoryBot.create(:setup_item, facility: facility, is_hidden: true) }
   let(:product3) { FactoryBot.create(:setup_item, facility: facility, is_archived: true) }
 
   let(:account) { FactoryBot.create(:setup_account, owner: owner) }
@@ -45,10 +45,6 @@ RSpec.describe BulkEmail::RecipientSearcher do
   end
 
   before { ignore_order_detail_account_validations }
-
-  def create_item
-    FactoryBot.create(:setup_item, facility: facility)
-  end
 
   def place_order(purchaser:, product:, account:)
     FactoryBot.create(:setup_order,

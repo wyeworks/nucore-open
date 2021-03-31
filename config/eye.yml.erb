@@ -31,11 +31,11 @@ processes:
   - name: unicorn
     config:
       pid_file: tmp/pids/unicorn.pid
-      start_command: bundle exec unicorn -E deployment -Dc config/unicorn/<%= rails_env %>.rb
+      start_command: unicorn -E deployment -Dc config/unicorn/<%= rails_env %>.rb
       restart_command: "kill -USR2 {PID}"
       start_timeout: 15 seconds
       restart_timeout: 15 seconds
-      restart_grace: 15 seconds
+      restart_grace: 5 seconds
       stdout: log/unicorn.stdout.log
       stderr: log/unicorn.stderr.log
       monitor_children:
@@ -48,15 +48,13 @@ processes:
               below: 512 megabytes
       user_commands:
         rotate: "kill -USR1 {PID}"
-      notify:
-        crash: error
 
   # This should only run on 1 instance.
   # See run_auto_cancel in secrets.yml
   - name: auto_cancel
     config:
-      start_command: bundle exec ruby lib/daemons/auto_cancel.rb start -- --no-monitor
-      stop_command: bundle exec ruby lib/daemons/auto_cancel.rb stop
+      start_command: ruby lib/daemons/auto_cancel.rb start -- --no-monitor
+      stop_command: ruby lib/daemons/auto_cancel.rb stop
       stdall: log/auto_cancel.log
       pid_file: tmp/pids/auto_cancel.pid
       daemon: true
@@ -76,7 +74,7 @@ processes:
       stop_command: ./script/delayed_job stop
       stdall: log/delayed_job.log
       pid_file: tmp/pids/delayed_job.pid
-      start_timeout: 40 seconds
+      start_timeout: 60 seconds
       stop_timeout: 40 seconds
       notify:
         crash: error

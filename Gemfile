@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
-gem "rails", "5.2.4.4"
+gem "rails", "5.2.5"
 gem "sprockets", "< 4" # Temporarily lock as we upgrade
 gem "config"
 gem "bootsnap", require: false
@@ -116,6 +116,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rspec-activejob"
   gem "teaspoon-jasmine"
+  gem "phantomjs"
 end
 
 group :test do

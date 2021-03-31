@@ -13,6 +13,8 @@ module NewInprocessController
                                               TransactionSearch::OrderStatusSearcher,
                                               TransactionSearch::DateRangeSearcher).search(order_details, @search_form)
     @order_details = @search.order_details.includes(:order_status).joins_assigned_users.reorder(sort_clause)
+    @date_range_field = @search_form.date_params[:field]
+    @label_key_prefix = :estimated
 
     respond_to do |format|
       format.html { @order_details = @order_details.paginate(page: params[:page]) }

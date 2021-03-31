@@ -49,7 +49,9 @@ services:
     logging:
       driver: none
   mailcatcher:
-    build: .
+    build:
+      context: .
+      target: develop
     command: bash -c "gem install mailcatcher && mailcatcher --ip 0.0.0.0 --no-quit -f"
     ports:
       - "1080:1080"

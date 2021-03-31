@@ -21,7 +21,9 @@ class Notifier < ActionMailer::Base
     @user = args[:user]
     @account = args[:account]
     @created_by = args[:created_by]
-    send_nucore_mail @account.owner_user.email, text("views.notifier.user_update.subject")
+    @role = AccountUserPresenter.localized_role(args[:role])
+    send_to = args[:send_to]
+    send_nucore_mail send_to, text("views.notifier.user_update.subject", user: @user)
   end
 
   # Any changes to the financial accounts will alert the PI(s), admin(s)

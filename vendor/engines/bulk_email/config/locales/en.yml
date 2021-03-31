@@ -38,6 +38,7 @@ en:
     recipients: Recipients
     send_mail: Send Mail
     sending: Sending...
+    search_hint: Inactive users and products are excluded from search results.
 
     product_unavailable_reason_statements:
       other: |

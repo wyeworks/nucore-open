@@ -134,6 +134,7 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
       context "changing a user's role" do
         context "from business admin to purchaser" do
           before :each do
+            Notifier.deliveries.clear
             @business_admin = FactoryBot.create(:user)
             FactoryBot.create(:account_user, account: @account, user: @business_admin, user_role: AccountUser::ACCOUNT_ADMINISTRATOR)
             @params.merge!(
@@ -153,6 +154,35 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
 
             is_expected.to set_flash
             assert_redirected_to facility_account_members_path(@authable, @account)
+          end
+
+          it "should send an email to owner" do
+            expect(Notifier.deliveries.count).to eq(1)
+            expect(Notifier.deliveries.first.to).to eq([@account.owner_user.email])
+          end
+        end
+
+        context "when adding a new business admin" do
+          let(:existing_business_admin) { FactoryBot.create(:user) }
+          let!(:business_admin_role) do
+            FactoryBot.create(:account_user, account: @account, user: existing_business_admin, user_role: AccountUser::ACCOUNT_ADMINISTRATOR)
+          end
+
+          before :each do
+            Notifier.deliveries.clear
+            new_business_admin = FactoryBot.create(:user)
+            @params.merge!(
+              account_id: @account.id,
+              user_id: new_business_admin.id,
+              account_user: { user_role: AccountUser::ACCOUNT_PURCHASER },
+            )
+            do_request
+          end
+
+          it "should send an email to existing business admin" do
+            expect(Notifier.deliveries.count).to eq(2)
+            expect(Notifier.deliveries.first.to).to eq([@account.owner_user.email])
+            expect(Notifier.deliveries.last.to).to eq([existing_business_admin.email])
           end
         end
 

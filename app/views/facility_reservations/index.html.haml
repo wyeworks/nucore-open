@@ -27,6 +27,7 @@
             %th.nowrap.order-note= sortable "product_name", OrderDetail.human_attribute_name(:product)
             %th.nowrap= sortable "assigned_to", OrderDetail.human_attribute_name(:assigned_user)
             %th.nowrap= sortable "status"
+            - # OrderDetail.human_attribute_name(:actual_cost) returns "Price".  Despite the :actual_ prefix, these order details are new/in process, so most will have estimated costs, but could be actual or unassigned.
             %th.currency= OrderDetail.human_attribute_name(:actual_cost)
         %tbody
           - @order_details.each do |od|

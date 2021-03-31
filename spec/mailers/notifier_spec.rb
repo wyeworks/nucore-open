@@ -59,4 +59,37 @@ RSpec.describe Notifier do
       end
     end
   end
+
+  describe ".user_update" do
+    let(:account) do
+      FactoryBot.create(:setup_account, owner: user, facility: facility)
+    end
+    let(:email_html) do
+      email.html_part.to_s
+           .gsub(/&nbsp;/, " ") # Markdown changes some whitespace to &nbsp;
+           .gsub(/&ldquo;/, "\"").gsub(/&rdquo;/, "\"") # Translate quotes
+    end
+    let(:email_text) { email.text_part.to_s }
+    let(:admin_user) { FactoryBot.create(:user) }
+
+    before(:each) do
+      Notifier.user_update(user: user,
+                           created_by: admin_user,
+                           role: AccountUser::ACCOUNT_PURCHASER,
+                           send_to: "john@example.com",
+                           account: account).deliver_now
+    end
+
+    it "generates a user_update notification", :aggregate_failures do
+      expect(email.to).to eq ["john@example.com"]
+      expect(email.subject).to include("#{user} has been added to your #{I18n.t('app_name')} Payment Source")
+
+      [email_html, email_text].each do |email_content|
+        expect(email_content)
+          .to include(
+            "#{user} has been added to the #{I18n.t('app_name')} Payment Source \"#{account}\" as Purchaser by administrator #{admin_user}",
+          )
+      end
+    end
+  end
 end

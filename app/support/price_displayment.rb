@@ -36,24 +36,24 @@ module PriceDisplayment
   end
 
   def wrapped_cost
-    content_tag :span, display_cost, class: "#{display_cost_class}_cost"
+    content_tag :span, display_cost, class: display_cost_class
   end
 
   def wrapped_subsidy
-    content_tag :span, display_subsidy, class: "#{display_cost_class}_cost"
+    content_tag :span, display_subsidy, class: display_cost_class
   end
 
   def wrapped_total
-    content_tag :span, display_total, class: "#{display_cost_class}_cost"
+    content_tag :span, display_total, class: display_cost_class
   end
 
   def display_cost_class
     if actual_cost
-      "actual"
+      "actual_cost"
     elsif estimated_cost
-      "estimated"
+      "estimated_cost"
     else
-      "unassigned"
+      "unassigned_cost"
     end
   end
 

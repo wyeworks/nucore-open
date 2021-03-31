@@ -39,7 +39,16 @@ class FacilityAccountUsersController < ApplicationController
     if @account_user.persisted?
       flash[:notice] = text("create.success", user: @user.full_name, account_type: @account.type_string)
       LogEvent.log(@account_user, :create, current_user)
-      Notifier.user_update(account: @account, user: @user, created_by: session_user).deliver_later
+
+      [@account.owner_user.email, @account.business_admin_users.map(&:email)].flatten.compact.each do |email|
+        Notifier.user_update(
+          account: @account,
+          user: @user,
+          created_by: session_user,
+          role: create_params[:user_role],
+          send_to: email,
+        ).deliver_later
+      end
       redirect_to facility_account_members_path(current_facility, @account)
     else
       flash.now[:error] = text("create.error", user: @user.full_name, account_type: @account.type_string)
