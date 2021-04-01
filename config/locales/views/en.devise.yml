@@ -1,4 +1,7 @@
 en:
+  devise:
+    failure:
+      locked: "You've been locked out due to too many failed attempts, please check your email for instructions for how to unlock your account."
   views:
     devise:
       sessions:

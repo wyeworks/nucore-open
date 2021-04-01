@@ -215,8 +215,6 @@ en:
       head: Reconcile %{model}
       none: There are no %{model} with completed orders to be reconciled at this time
       instructions: "Please review the following orders. Check those that are paid, record any notes, and click 'Reconcile Orders'."
-      owner: "Owner: %{owner}"
-      balance: "Balance: %{balance}"
     table:
       table_caption: Reconcilable Orders
 

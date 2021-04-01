@@ -6,7 +6,7 @@ class User < ApplicationRecord
   include Nucore::Database::WhereIdsIn
 
   # ldap_authenticatable is included via a to_prepare hook if ldap is enabled
-  devise :database_authenticatable, :encryptable, :trackable, :recoverable
+  devise :database_authenticatable, :encryptable, :trackable, :recoverable, :lockable
 
   has_many :account_users, -> { where(deleted_at: nil) }
   has_many :accounts, through: :account_users
@@ -197,4 +197,8 @@ class User < ApplicationRecord
     price_group_members.find_or_create_by!(price_group: default_price_group)
   end
 
+  def lock_access!(opts = { })
+    super
+    LogEvent.log(self, :access_locked, self, metadata: {cause: "Too many login attempts"})
+  end
 end

@@ -71,7 +71,7 @@ class OrderDetails::ParamUpdater
     @order_detail.transaction do
       assign_price_changed_by_user
       if @order_detail.reservation.present?
-        @order_detail.reservation.save_as_user(@editing_user) || log_and_rollback
+        @order_detail.reservation.save_as_user(@editing_user) || raise(ActiveRecord::Rollback)
       end
       if order_status_id && order_status_id.to_i != @order_detail.order_status_id
         change_order_status(order_status_id, @options[:cancel_fee]) || raise(ActiveRecord::Rollback)
@@ -91,13 +91,6 @@ class OrderDetails::ParamUpdater
   end
 
   private
-
-  def log_and_rollback
-    # TODO: Determine why reservations are failing to save at this point, then remove logging.
-    Rollbar.error("Failed save for reservation #{@order_detail.reservation.id}: #{@order_detail.reservation.errors.full_messages}") if defined?(Rollbar)
-    # If the reservation save fails, the order detail should stay in the problem queue.
-    raise(ActiveRecord::Rollback)
-  end
 
   def assign_price_changed_by_user
     if @order_detail.actual_costs_match_calculated?

@@ -52,6 +52,7 @@ en:
         query: Query
         start_date: Start Date
         user:
+          access_locked: User access locked due to too many login attempts
           create: User added
           suspended: User suspended
           unsuspended: User unsuspended

@@ -72,11 +72,11 @@ en:
 
           %{facility}
       user_update:
-        subject: "!app_name! User Updated"
+        subject: "%{user} has been added to your !app_name! Payment Source"
         body: |
-          The following user %{user} has been added to your payment source %{account} by administrator %{created_by}.
-          If this is incorrect you may log in to !app_name! at %{login_url} and remove this user or contact the administrator named above.
+          %{user} has been added to the !app_name! Payment Source "%{account}" as %{role} by administrator %{created_by}.
+          If this is incorrect, please log in to !app_name! at %{login_url} and remove this user or contact the administrator named above.
         body_html: |
-          The following user %{user} has been added to your payment source "%{account}" by administrator %{created_by}.
+          %{user} has been added to the !app_name! Payment Source "%{account}" as %{role} by administrator %{created_by}.
 
-          If this is incorrect you may [log in to !app_name!](%{login_url}) and remove this user or contact the administrator named above.
+          If this is incorrect, please [log in to !app_name!](%{login_url}) and remove this user or contact the administrator named above.

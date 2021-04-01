@@ -65,18 +65,19 @@ Devise.setup do |config|
 
   # ==> Configuration for :lockable
   # Number of authentication tries before locking an account.
-  # config.maximum_attempts = 20
+  config.lock_strategy = :failed_attempts
+  config.maximum_attempts = 5
 
   # Defines which strategy will be used to unlock an account.
   # :email = Sends an unlock link to the user email
   # :time  = Reanables login after a certain ammount of time (see :unlock_in below)
   # :both  = enables both strategies
-  # config.unlock_strategy = :both
-
-  config.reset_password_within = 1.day
+  config.unlock_strategy = :email
 
   # Time interval to unlock the account if :time is enabled as unlock_strategy.
-  # config.unlock_in = 1.hour
+  # config.unlock_in = 5.minutes
+
+  config.reset_password_within = 1.day
 
   # ==> Navigation configuration
   # Lists the formats that should be treated as navigational. Formats like

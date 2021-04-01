@@ -2,6 +2,16 @@
 
 class NotifierPreview < ActionMailer::Preview
 
+  def user_update
+    Notifier.user_update(
+      account: Account.first,
+      created_by: User.last,
+      user: User.first,
+      role: AccountUser::ACCOUNT_PURCHASER,
+      send_to: "bob@example.com",
+    )
+  end
+
   def review_orders
     Notifier.review_orders(
       accounts: ::Nucore::Database.sample(Account, 3),

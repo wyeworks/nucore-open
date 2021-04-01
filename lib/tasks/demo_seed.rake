@@ -82,7 +82,7 @@ namespace :demo do
 
     item = Item.find_or_create_by!(url_name: "example-item") do |example_item|
       example_item.facility_id = facility.id
-      example_item.account = "75340"
+      example_item.account = Settings.accounts.product_default
       example_item.name = "Example Item"
       example_item.description = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>"
       example_item.requires_approval = false
@@ -94,7 +94,7 @@ namespace :demo do
 
     service = Service.find_or_create_by!(url_name: "example-service") do |example_service|
       example_service.facility_id = facility.id
-      example_service.account = "75340"
+      example_service.account = Settings.accounts.product_default
       example_service.name = "Example Service"
       example_service.description = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>"
       example_service.requires_approval = false
@@ -106,7 +106,7 @@ namespace :demo do
 
     instrument = Instrument.find_or_create_by!(url_name: "example-instrument") do |example_instrument|
       example_instrument.facility_id = facility.id
-      example_instrument.account = "75340"
+      example_instrument.account = Settings.accounts.product_default
       example_instrument.name = "Example Instrument"
       example_instrument.description = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>"
       example_instrument.initial_order_status_id = new_status.id
@@ -128,7 +128,7 @@ namespace :demo do
 
     unless bundle
       bundle = Bundle.create!(facility_id: facility.id,
-                              account: "75340",
+                              account:  Settings.accounts.product_default,
                               name: "Example Bundle",
                               url_name: "example-bundle",
                               description: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>",
