@@ -187,6 +187,17 @@ RSpec.describe FacilityReservationsController do
       end
 
     end
+
+    context "export" do
+      before :each do
+        @params.merge!(format: :csv)
+      end
+
+      it "renders a csv download" do
+        do_request
+        expect(response.headers["Content-Type"]).to match %r{\Atext/csv\b}
+      end
+    end
   end
 
   context "#new" do
