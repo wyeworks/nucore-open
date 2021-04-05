@@ -139,8 +139,7 @@ saml:
   login_enabled: true
   # We've been seeing certificate expiration errors, so we're temporarily using a
   # locally stored version of the metadata.
-  # idp_metadata: "https://webauth.umass.edu/idp/shibboleth"
-  idp_metadata: vendor/engines/umass_corum/config/saml_metadata.xml
+  idp_metadata: "https://webauth.umass.edu/idp/shibboleth"
   # Overridden in staging/production
   # certificate_file: saml-certificate.p12 # Do not check in to version control.
   driver:
