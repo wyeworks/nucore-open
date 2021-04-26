@@ -27,14 +27,14 @@ class StatementCreator
 
   def send_statement_emails
     if SettingsHelper.feature_on?(:send_statement_emails)
-      account_statements.each do |account, statement|
-        account.notify_users.each { |u| Notifier.statement(user: u, facility: statement.facility, account: account, statement: statement).deliver_later }
+      account_statements.each do |_account, statement|
+        statement.send_emails
       end
     end
   end
 
   def account_list
-    account_statements.map { |a, _s| a.account_list_item }
+    account_statements.map { |account, _statement| account.account_list_item }
   end
 
   def formatted_account_list

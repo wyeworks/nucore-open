@@ -302,7 +302,9 @@ Rails.application.routes.draw do
     post "movable_transactions/confirm", to: "facilities#confirm_transactions"
     post "movable_transactions/move", to: "facilities#move_transactions"
 
-    resources :statements, controller: "facility_statements", only: [:index, :new, :show, :create]
+    resources :statements, controller: "facility_statements", only: [:index, :new, :show, :create] do
+      post "resend_emails", on: :member
+    end
 
     get "general_reports/raw", to: "reports/export_raw_reports#export_all", as: "export_raw_reports"
     get "general_reports/:report_by", to: "reports/general_reports#index", as: "general_reports"

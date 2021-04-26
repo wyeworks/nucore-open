@@ -80,7 +80,7 @@ en:
       models:
         user:
           password_not_updatable: You cannot change this user's password
-          password_too_short: must be at least 6 characters long
+          password_too_short: must be at least 10 characters long
           invalid_token: The token is either invalid or has expired.
         product:
           attributes:

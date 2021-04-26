@@ -153,17 +153,17 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
   end
 
   context "with a locally authenticated user" do
-    let(:user) { create(:user, :external, :purchaser, password: "password", account: account) }
+    let(:user) { create(:user, :external, :purchaser, account: account) }
 
-    it_behaves_like "kiosk_actions", "Login", "password"
+    it_behaves_like "kiosk_actions", "Login", "P@ssw0rd!!"
   end
 
   context "with a locally authenticated user who is signed in" do
-    let(:user) { create(:user, :external, :purchaser, password: "password", account: account) }
+    let(:user) { create(:user, :external, :purchaser, account: account) }
 
     before { login_as(user) }
 
-    it_behaves_like "kiosk_actions", "Logout", "password"
+    it_behaves_like "kiosk_actions", "Logout", "P@ssw0rd!!"
   end
 
   context "with an SSO authenticated user", feature_setting: { kiosk_view: true, bypass_kiosk_auth: true } do
@@ -240,7 +240,7 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
   end
 
   context "with a facility that has disabled the kiosk view" do
-    let(:user) { create(:user, :external, :purchaser, password: "password", account: account) }
+    let(:user) { create(:user, :external, :purchaser, account: account) }
     let(:facility) { create(:setup_facility, kiosk_enabled: false) }
     let!(:reservation) { create(:purchased_reservation, reserve_start_at: 15.minutes.ago, product: instrument, user: user) }
 

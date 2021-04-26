@@ -620,6 +620,7 @@ en:
     reconciled:
       "true": Reconciled
       "false": Unreconciled
+    resend: Resend
 
   orders:
     add_account:
@@ -918,10 +919,17 @@ en:
         created_at: Date Uploaded
         created_by: Uploaded by
 
+  password:
+    edit:
+      head: Change Password
+      new_password: New password
+      new_password_hint: Your new password must be at least 10 characters long and contain at least one uppercase letter, lowercase letter, number, and symbol.
   user_password:
     edit:
       head: Change Password
       success: Your password has been updated
+      new_password: New Password
+      new_password_hint: Your new password must be at least 10 characters long and contain at least one uppercase letter, lowercase letter, number, and symbol.
     reset:
       head: Reset Password
       instructions_html: Please enter your email address below.

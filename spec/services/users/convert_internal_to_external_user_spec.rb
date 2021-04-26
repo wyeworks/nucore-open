@@ -16,7 +16,7 @@ RSpec.describe Users::ConvertInternalToExternalUser do
   end
 
   describe "the user is already external" do
-    let(:user) { create(:user, username: "ext123@example.org", email: "ext123@example.org") }
+    let(:user) { create(:user, :external, username: "ext123@example.org", email: "ext123@example.org") }
 
     it "errors" do
       expect { converter.convert! }.to raise_error(/already an external/)

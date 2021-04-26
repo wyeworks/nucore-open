@@ -4,6 +4,13 @@ require "rails_helper"
 
 RSpec.describe "Accessing invalid formats" do
 
+  it "handles invalid utf8 query parameters" do
+    visit "/users/sign_in?utf8=%E2%9C%93&user[username]=&user[password]=&commit=Sign+in&authenticity_token=f%e5u6%ac%5d%df%c8S%fc%9c7%b3%ff%26A%c3y%85%a3"
+
+    expect(page.current_path).to eq("/users/sign_in")
+    expect(page.text).to include("Login")
+  end
+
   it "renders a 404 for a missing page in pdf" do
     visit "/#{I18n.t('facilities_downcase')}/examp.pdf"
 

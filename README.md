@@ -57,7 +57,7 @@ To do this:
 1. Run `docker-compose up`
 1. Open http://localhost:3000
 
-If you seeded the demo data, you can log in with admin@example.com/password
+If you seeded the demo data, you can log in with admin@example.com/P@ssw0rd!!
 
 #### Email
 
@@ -156,7 +156,7 @@ _Known issue: if you run `db:setup` or all three in one rake command, the next t
 
     Visit http://localhost:3000
 
-    `demo:seed` creates several users with various permissions. All users have the default password of `password`
+    `demo:seed` creates several users with various permissions. All users have the default password of `"P@ssw0rd!!"`
 
     | Email/username     | Role |
     | ------------------ | ---- |
