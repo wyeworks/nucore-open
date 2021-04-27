@@ -4,7 +4,9 @@
 = simple_form_for :user, :url => edit_current_password_path do |f|
   .form-inputs
     = f.input :current_password
-    = f.input :password
+    %hr
+    %h2= t("user_password.edit.new_password")
+    = f.input :password, label: t("user_password.edit.new_password"), hint: t("user_password.edit.new_password_hint")
     = f.input :password_confirmation
   .form-actions
     = f.button :submit, t("user_password.edit.head")

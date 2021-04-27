@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "Passwords", :aggregate_failures, feature_setting: { password_update: true, reload_routes: true } do
-  let(:external_user) { FactoryBot.create(:user, :external, password: "originalpassword") }
-  let(:internal_user) { FactoryBot.create(:user, password: "originalpassword") }
+  let(:external_user) { FactoryBot.create(:user, :external, password: "CurrentP@5sw0rd!!", password_confirmation: "CurrentP@5sw0rd!!") }
+  let(:internal_user) { FactoryBot.create(:user) }
 
   describe "Changing" do
     describe "as an external user" do
@@ -16,23 +16,23 @@ RSpec.describe "Passwords", :aggregate_failures, feature_setting: { password_upd
 
       describe "correct password" do
         before do
-          fill_in "Current password", with: "originalpassword"
-          fill_in "user[password]", with: "newpassword"
-          fill_in "user[password_confirmation]", with: "newpassword"
+          fill_in "Current password", with: "CurrentP@5sw0rd!!"
+          fill_in "user[password]", with: "NewP@5sw0rd!!"
+          fill_in "user[password_confirmation]", with: "NewP@5sw0rd!!"
           click_button "Change Password"
         end
 
         it "changes the password" do
           expect(page).to have_content "Your password has been updated"
-          expect(external_user.reload).to be_valid_password("newpassword")
+          expect(external_user.reload).to be_valid_password("NewP@5sw0rd!!")
         end
       end
 
       describe "incorrect password" do
         before do
           fill_in "Current password", with: "random"
-          fill_in "user[password]", with: "newpassword"
-          fill_in "user[password_confirmation]", with: "newpassword"
+          fill_in "user[password]", with: "NewP@5sw0rd!!"
+          fill_in "user[password_confirmation]", with: "NewP@5sw0rd!!"
           click_button "Change Password"
         end
 
@@ -76,12 +76,12 @@ RSpec.describe "Passwords", :aggregate_failures, feature_setting: { password_upd
       it "gets an email and can reset the password" do
         open_email(external_user.email)
         current_email.click_link "Change my password"
-        fill_in "New password", with: "newpassword"
-        fill_in "Confirm your new password", with: "newpassword"
-        click_button "Change my password"
+        fill_in "New password", with: "NewP@5sw0rd!!"
+        fill_in "Confirm your new password", with: "NewP@5sw0rd!!"
+        click_button "Change Password"
 
         expect(page).to have_content "Your password has been changed successfully"
-        expect(external_user.reload).to be_valid_password("newpassword")
+        expect(external_user.reload).to be_valid_password("NewP@5sw0rd!!")
         expect(page).to have_content external_user.email
       end
     end

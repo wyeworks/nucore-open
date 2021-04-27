@@ -104,7 +104,7 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
         Devise.saml_create_user = original_value
       end
 
-      let!(:user) { create(:user, email: "sst123@example.com", username: "sst123@example.com") }
+      let!(:user) { create(:user, :external, email: "sst123@example.com", username: "sst123@example.com") }
 
       it "does not create a new user" do
         expect { post :create, params: { SAMLResponse: saml_response } }.not_to change(User, :count)
@@ -141,8 +141,8 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
       end
     end
 
-    describe "the user already exists" do
-      let!(:user) { create(:user, username: "sst123", email: "something@old.com") }
+    describe "the netid user already exists" do
+      let!(:user) { create(:user, :netid, username: "sst123", email: "something@old.com", password: "iEX1STalready!", password_confirmation: "iEX1STalready!") }
 
       it "does not create a new user" do
         expect { post :create, params: { SAMLResponse: saml_response } }.not_to change(User, :count)

@@ -4,10 +4,10 @@ RSpec.describe Users::AuthChecker do
 
   describe "#authenticated?" do
     context "with an external user", feature_setting: { bypass_kiosk_auth: false } do
-      let(:user) { create(:user, email: "external@example.org", username: "external@example.org", password: "something") }
+      let(:user) { create(:user, :external, email: "external@example.org", username: "external@example.org") }
 
       context "with the correct password" do
-        let(:auth_user) { described_class.new(user, "something") }
+        let(:auth_user) { described_class.new(user, "P@ssw0rd!!") }
 
         it "returns true" do
           expect(auth_user.authenticated?).to eq true
@@ -15,7 +15,7 @@ RSpec.describe Users::AuthChecker do
       end
 
       context "with the wrong password" do
-        let(:auth_user) { described_class.new(user, "wrong") }
+        let(:auth_user) { described_class.new(user, "WRONGP@ssw0rd!!") }
 
         it "returns false" do
           expect(auth_user.authenticated?).to eq false
@@ -68,7 +68,7 @@ RSpec.describe Users::AuthChecker do
     end
 
     context "with kiosk auth bypass", feature_setting: { bypass_kiosk_auth: true } do
-      let(:user) { create(:user, email: "external@example.org", username: "external@example.org", password: "something") }
+      let(:user) { create(:user, :external, email: "external@example.org", username: "external@example.org") }
 
       context "with the correct password" do
         let(:auth_user) { described_class.new(user, "netidpassword") }

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe User do
-  subject(:user) { create(:user) }
+  subject(:user) { create(:user, :netid) }
   let(:facility) { create(:setup_facility) }
   let(:item) { create(:item, facility: facility) }
   let(:price_group) { create(:price_group, facility: facility) }
@@ -11,7 +11,7 @@ RSpec.describe User do
 
   it { is_expected.to accept_nested_attributes_for(:account_users) }
 
-  it "validates uniquess of username" do
+  it "validates uniqueness of username" do
     # we need at least 1 user to test validations
     is_expected.to validate_uniqueness_of(:username).case_insensitive
   end
@@ -77,15 +77,12 @@ RSpec.describe User do
     end
   end
 
-  it { is_expected.to be_authenticated_locally }
+  it { is_expected.not_to be_authenticated_locally }
 
-  it "can not be locally authenticated" do
-    user.encrypted_password = nil
+  it "can be locally authenticated as a netid user (email != username)" do
+    user.password = "Passw0rd!!"
     assert user.save
-    expect(user).not_to be_authenticated_locally
-    user.password_salt = nil
-    assert user.save
-    expect(user).not_to be_authenticated_locally
+    expect(user).to be_authenticated_locally
   end
 
   it "aliases username to login" do

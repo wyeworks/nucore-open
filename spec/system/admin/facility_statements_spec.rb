@@ -95,4 +95,17 @@ RSpec.describe "Facility Statement Admin" do
       expect { click_link "Export as CSV" }.to change(ActionMailer::Base.deliveries, :count)
     end
   end
+
+  describe "resending statement emails" do
+    let!(:statement) { create(:statement, created_at: 3.days.ago, order_details: [order_details.first], account: order_details.first.account, facility: facility) }
+
+    before do
+      login_as director
+      visit facility_statements_path(facility)
+    end
+
+    it "resends the statement email" do
+      expect { click_link "Resend" }.to change(ActionMailer::Base.deliveries, :count)
+    end
+  end
 end

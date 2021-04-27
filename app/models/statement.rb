@@ -86,4 +86,15 @@ class Statement < ApplicationRecord
     "Statement: #{invoice_number}"
   end
 
+  def send_emails
+    account.notify_users.each do |user|
+        Notifier.statement(
+          user: user,
+          facility: facility,
+          account: account,
+          statement: self
+        ).deliver_later
+    end
+  end
+
 end

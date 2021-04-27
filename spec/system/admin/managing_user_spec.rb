@@ -8,8 +8,8 @@ RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { 
 
   describe "edit" do
     describe "as a facility admin" do
-      let(:admin) { FactoryBot.create(:user, :administrator) }
-      let(:user) { FactoryBot.create(:user, username: "user123") }
+      let(:admin) { FactoryBot.create(:user, :netid, :administrator) }
+      let(:user) { FactoryBot.create(:user, :netid, username: "user123") }
 
       before do
         login_as admin
@@ -35,7 +35,33 @@ RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { 
 
         expect(page).to have_content("Internal Pricing\nYes")
       end
+    end
 
+    describe "editing an external (email-based) user" do
+      let(:admin) { FactoryBot.create(:user, :netid, :administrator) }
+      let(:user) { FactoryBot.create(:user, :external, last_name: "Skywalker") }
+
+      describe "#edit" do
+        before do
+          login_as admin
+          visit facility_user_path(facility, user)
+        end
+
+        it "allows editing" do
+          expect(page).to have_content("Skywalker")
+          expect(page).not_to have_content("Vader")
+
+          click_link "Edit"
+
+          fill_in "Last name", with: "Vader"
+
+          click_button "Update"
+
+          expect(page).not_to have_content("Edit User")
+          expect(page).to have_content("Vader")
+          expect(page).not_to have_content("Skywalker")
+        end
+      end
     end
 
     describe "as an account admin" do
