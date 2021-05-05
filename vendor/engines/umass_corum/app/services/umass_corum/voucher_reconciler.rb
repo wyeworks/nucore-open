@@ -45,6 +45,7 @@ module UmassCorum
 
     def mivp_pending(order_detail, params)
       order_detail.change_status!(VoucherOrderStatus.mivp)
+      order_detail.update(reconciled_note: params[:reconciled_note])
       @count += 1
     rescue => e
       @error_fields = { order_detail.id => order_detail.errors.collect { |field, _error| field } }

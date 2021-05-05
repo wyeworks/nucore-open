@@ -37,6 +37,9 @@ RSpec.describe "Voucher Account Reconciliation" do
 
       expect(page).to have_content(order_number)
       expect(page).to have_content(other_order_number)
+      expect(page).to have_content("Reconciliation Note")
+      expect(page).to have_content("Primary")
+      expect(page).to have_content("MIVP")
 
       select accounts.first.account_list_item, from: "Payment Sources"
       click_button "Filter"
