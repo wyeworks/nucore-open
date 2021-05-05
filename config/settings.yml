@@ -145,8 +145,8 @@ saml:
   driver:
     name_identifier_format: urn:oasis:names:tc:SAML:2.0:nameid-format:transient
     idp_slo_target_url: https://webauth.umass.edu/Logout
-  metadata_parse_options: # Optional. See RubySaml::IdpMetadataParser
-    sso_binding: ["urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"]
+  metadata_parse_options: # Optional, but setting the sso_binding option is highly recommended. See RubySaml::IdpMetadataParser for valid options.
+    sso_binding: ["urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"] #  Otherwise the binding will default to the first one specified in the IdP by default, which can cause problems if the IdP metadata changes.
   attribute_map:
     # There is a nicer "FriendlyName" attribute in the SAML response, but the ruby-saml gem
     # only reads the "Name" attribute, which we receive as these weird urn:oids.
