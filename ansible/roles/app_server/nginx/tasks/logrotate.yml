@@ -7,12 +7,14 @@
       - name: nginx
         path: /var/log/nginx/*.log
         options:
-          - daily
           - missingok
           - compress
           - delaycompress
           - notifempty
           - sharedscripts
+          - dateext
+          - daily
+          - copytruncate
           - rotate 30
           - create 644 nginx root
         scripts:

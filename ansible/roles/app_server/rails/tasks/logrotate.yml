@@ -17,6 +17,7 @@
           - sharedscripts
           - dateext
           - daily
+          - copytruncate
           - rotate {{ (app.rails_env == "production") | ternary(30, 7) }}
           - create 666 {{ app.user }} {{ app.group | default(app.user) }}
           - su {{ app.user }} {{ app.group | default(app.user) }}
