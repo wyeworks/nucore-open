@@ -35,6 +35,8 @@ saml:
     "User.email": "email"
     "User.FirstName": "first_name"
     "User.LastName": "last_name"
+  metadata_parse_options:
+    sso_binding: ["urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"]
 ```
 
 * During the initial phase of development, you might want to set `login_enabled` to false so the metadata is exposed, but the big "Single Sign On" button is not yet available.
