@@ -31,10 +31,10 @@
               .order-detail-extra.order-detail-note= order_detail.note
 
         - if next_order_status == "mivp_pending"
-          %td= primary_total(order_detail)
-          %td.bold= mivp_total(order_detail)
-        - else
           %td.bold= primary_total(order_detail)
           %td= mivp_total(order_detail)
+        - else
+          %td= primary_total(order_detail)
+          %td.bold= mivp_total(order_detail)
         %td= show_actual_total(order_detail)
         %td= text_area_tag "order_detail[#{order_detail.id}][reconciled_note]", order_detail.reconciled_note
