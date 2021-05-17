@@ -3,6 +3,7 @@
     %tr
       %th
       %th= User.human_attribute_name(:name)
+      %th= ProductUser.human_attribute_name(:date_added)
       %th= User.human_attribute_name(:username)
       %th= User.human_attribute_name(:email)
       - if local_assigns[:f]
@@ -20,6 +21,7 @@
         %td
           = link_to user.last_first_name, [current_facility, user]
 
+        %td= month_day_year(product_user.approved_at)
         %td= user.username
         %td= user.email
         - if local_assigns[:f]

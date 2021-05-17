@@ -150,6 +150,20 @@ RSpec.describe User do
     end
   end
 
+  describe "#approval_dates_by_product" do
+    context "when the user is on the access list for a product" do
+      let(:product) { create(:instrument_requiring_approval) }
+
+      before { create(:product_user, product: product, user: user) }
+
+      it { expect(user.approval_dates_by_product).to have_key(product.id) }
+    end
+
+    context "when the user is not on any access lists for products" do
+      it { expect(user.approval_dates_by_product).to eq({}) }
+    end
+  end
+
   describe "#cart" do
     let(:order) { user.orders.create(attributes_for(:order, created_by: user.id, facility: facility)) }
 

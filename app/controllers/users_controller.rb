@@ -100,6 +100,7 @@ class UsersController < ApplicationController
     @facility = current_facility
     @products_by_type = Product.for_facility(@facility).requiring_approval_by_type
     @training_requested_product_ids = @user.training_requests.pluck(:product_id)
+    @user_approved_at_for_product_id = @user.approval_dates_by_product
   end
 
   # POST /facilities/:facility_id/users/:user_id/access_list/approvals
