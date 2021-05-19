@@ -49,6 +49,10 @@ module DateHelper
     date.strftime("%B %e, %Y")
   end
 
+  def month_day_year(date)
+    date.strftime("%m/%d/%Y")
+  end
+
   def human_time(dt)
     return nil if dt.nil?
     begin

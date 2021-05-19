@@ -24,21 +24,26 @@
           %tr
             %th.approval-column= Product.human_attribute_name(:can_be_used_by?)
             %th.product-column= Product.model_name.human
+            %th.product-column= ProductUser.human_attribute_name(:date_added)
             %th.scheduling-group-column= ProductAccessGroup.model_name.human
 
         %tbody
           - products.each do |product|
+            - access_granted_at = @user_approved_at_for_product_id[product.id]
             %tr.js--access-list-row
               %td.approval-column.approval-checkbox
                 = check_box_tag "approved_products[]",
                   product.id,
-                  product.can_be_used_by?(@user),
+                  access_granted_at.present?,
                   aria: {label: product.name}
               %td.product-column
                 - if training_requested_for?(product)
                   %span.label.label-important
                     = text("users.access_list.training_requested")
                 = link_to product, [product.facility, product, :users]
+              %td.product-column
+                - if access_granted_at.present?
+                  = month_day_year(access_granted_at)
               %td.scheduling-group-column
                 - if product.has_product_access_groups?
                   = scheduling_group_select(product, @user)

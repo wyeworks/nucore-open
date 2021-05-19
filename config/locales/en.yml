@@ -927,7 +927,7 @@ en:
   user_password:
     edit:
       head: Change Password
-      success: Your password has been updated
+      success: Your password has been updated.  Please log in again to continue.
       new_password: New Password
       new_password_hint: Your new password must be at least 10 characters long and contain at least one uppercase letter, lowercase letter, number, and symbol.
     reset:

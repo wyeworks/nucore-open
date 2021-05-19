@@ -14,7 +14,7 @@ RSpec.describe "Passwords", :aggregate_failures, feature_setting: { password_upd
         click_link "Change Password"
       end
 
-      describe "correct password" do
+      describe "correct current password" do
         before do
           fill_in "Current password", with: "CurrentP@5sw0rd!!"
           fill_in "user[password]", with: "NewP@5sw0rd!!"
@@ -28,7 +28,7 @@ RSpec.describe "Passwords", :aggregate_failures, feature_setting: { password_upd
         end
       end
 
-      describe "incorrect password" do
+      describe "incorrect current password" do
         before do
           fill_in "Current password", with: "random"
           fill_in "user[password]", with: "NewP@5sw0rd!!"
@@ -38,6 +38,21 @@ RSpec.describe "Passwords", :aggregate_failures, feature_setting: { password_upd
 
         it "has an error" do
           expect(page).to have_content "Current password is incorrect"
+        end
+      end
+
+      describe "correct current password, incorrect new password" do
+        before do
+          fill_in "Current password", with: "CurrentP@5sw0rd!!"
+          fill_in "user[password]", with: "currentpassword"
+          fill_in "user[password_confirmation]", with: "currentpassword"
+          click_button "Change Password"
+        end
+
+        it "has an error" do
+          expect(page).to have_content "Password must contain at least one digit"
+          expect(page).to have_content "Password must contain at least one punctuation mark or symbol"
+          expect(page).to have_content "Password must contain at least one upper-case letter"
         end
       end
     end

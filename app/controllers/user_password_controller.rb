@@ -17,6 +17,7 @@ class UserPasswordController < ApplicationController
     if request.post? && @user.update_password_confirm_current(params[:user])
       @user.clean_up_passwords
       flash[:notice] = I18n.t("user_password.edit.success")
+      redirect_to new_user_session_path
     end
   end
 
