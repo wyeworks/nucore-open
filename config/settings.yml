@@ -42,7 +42,7 @@ validator:
     helper: 'spec/validator_helper' # relative to Rails.root
 
 email:
-  from: 'it-corum-dev@umass.edu'
+  from: "corum@umass.edu"
   fake:
     enabled: false
 
