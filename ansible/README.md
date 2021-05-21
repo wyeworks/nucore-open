@@ -58,6 +58,10 @@ This workflow has the benefit of being able to quickly undo your changes if some
     ```
     ansible-playbook -i <ENVIRONMENT> --check --diff site.yml -u <NETID>
     ```
+1. To run only particular roles from the playbook, specify one or more of the tags defined in `site.yml`:
+    ```
+    ansible-playbook -i <ENVIRONMENT> site.yml --tags "nginx"
+    ```
 1. You may need to specify `no_proxy='*'` to work around a python bug on Mac OS:
     ```
     `no_proxy='*' ansible-playbook -i <ENVIRONMENT> --check --diff site.yml -u <NETID>
