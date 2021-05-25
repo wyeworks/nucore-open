@@ -34,7 +34,7 @@ class StatementSearchResultMailer < CsvReportMailer
       [
         Statement.human_attribute_name(:invoice_number),
         Statement.human_attribute_name(:created_at),
-        Statement.human_attribute_name(:sent_to),
+        Statement.human_attribute_name(:account_admins),
         Account.model_name.human,
         Facility.model_name.human,
         "# of #{Order.model_name.human.pluralize}",

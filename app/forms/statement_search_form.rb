@@ -5,13 +5,13 @@ class StatementSearchForm
   include DateHelper
   include ActiveModel::Model
 
-  attr_accessor :accounts, :current_facility, :facilities, :sent_to, :status, :date_range_start, :date_range_end
+  attr_accessor :accounts, :current_facility, :facilities, :account_admins, :status, :date_range_start, :date_range_end
 
   def available_accounts
     Account.where(id: all_statements.select(:account_id)).order(:account_number, :description)
   end
 
-  def available_sent_to
+  def available_account_admins
     # Oracle throws an error if there is an ORDER in a subquery
     User.where(id: available_accounts.unscope(:order).joins(:notify_users).select("account_users.user_id")).order(:last_name, :first_name)
   end
@@ -32,7 +32,7 @@ class StatementSearchForm
     results = all_statements
               .for_facilities(facilities) # ANDs with the current facility so
               .for_accounts(accounts)
-              .for_sent_to(sent_to)
+              .for_account_admins(account_admins)
               .created_between(parse_usa_date(date_range_start)&.beginning_of_day, parse_usa_date(date_range_end)&.end_of_day)
     add_reconciled_status_filter(results)
   end

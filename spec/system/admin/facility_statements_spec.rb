@@ -62,14 +62,14 @@ RSpec.describe "Facility Statement Admin" do
       expect(page).to have_content(statement1.invoice_number)
       expect(page).to have_content(statement2.invoice_number)
 
-      select statement1.account.owner_user.full_name, from: "Sent To"
+      select statement1.account.owner_user.full_name, from: "Account Admins"
       click_button "Filter"
 
       expect(page).to have_content(statement1.invoice_number)
       expect(page).not_to have_content(statement2.invoice_number)
 
-      unselect statement1.account.owner_user.full_name, from: "Sent To"
-      select statement2.account.owner_user.full_name, from: "Sent To"
+      unselect statement1.account.owner_user.full_name, from: "Account Admins"
+      select statement2.account.owner_user.full_name, from: "Account Admins"
       click_button "Filter"
 
       expect(page).not_to have_content(statement1.invoice_number)

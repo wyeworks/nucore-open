@@ -15,8 +15,8 @@ class Statement < ApplicationRecord
   default_scope -> { order(created_at: :desc) }
 
   scope :for_accounts, ->(accounts) { where(account_id: accounts) if accounts.present? }
-  scope :for_sent_to, lambda { |sent_to|
-    where(account: Account.joins(:notify_users).where(account_users: { user_id: sent_to })) if sent_to.present?
+  scope :for_account_admins, lambda { |account_admins|
+    where(account: Account.joins(:notify_users).where(account_users: { user_id: account_admins })) if account_admins.present?
   }
 
   scope :created_between, lambda { |start_at, end_at|

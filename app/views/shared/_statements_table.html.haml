@@ -6,7 +6,7 @@
       %tr
         %th= Statement.human_attribute_name(:invoice_number)
         %th= Statement.human_attribute_name(:created_at)
-        %th= Statement.human_attribute_name(:sent_to)
+        %th= Statement.human_attribute_name(:account_admins)
         - unless @account
           %th= Account.model_name.human
         - if current_facility&.cross_facility?

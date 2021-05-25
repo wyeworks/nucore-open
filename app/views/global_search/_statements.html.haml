@@ -7,7 +7,7 @@
       %th= Statement.human_attribute_name(:created_at)
       %th= Facility.model_name.human
       %th= Account.model_name.human
-      %th= Statement.human_attribute_name(:sent_to)
+      %th= Statement.human_attribute_name(:account_admins)
       %th= "# of #{Order.model_name.human.pluralize}"
       %th= Statement.human_attribute_name(:total_cost)
       %th= Statement.human_attribute_name(:status)

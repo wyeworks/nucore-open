@@ -40,7 +40,7 @@ class FacilityStatementsController < ApplicationController
   end
 
   def permitted_search_params
-    (params[:statement_search_form] || empty_params).permit(:date_range_start, :date_range_end, :status, accounts: [], sent_to: [], facilities: [])
+    (params[:statement_search_form] || empty_params).permit(:date_range_start, :date_range_end, :status, accounts: [], account_admins: [], facilities: [])
   end
 
   # GET /facilities/:facility_id/statements/new

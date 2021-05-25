@@ -397,7 +397,7 @@ en:
         created_by: Sent By
         created_at: Created At
         invoice_number: "Invoice #"
-        sent_to: Sent To
+        account_admins: Account Admins
         total_cost: Total
       account:
         account_number: Account Number
