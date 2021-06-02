@@ -15,7 +15,7 @@ module UmassCorum
           headers: headers
         )
 
-        @journal.journal_rows.each do |journal_row|
+        rows_to_export.each do |journal_row|
           writer << hash_for(journal_row)
         end
 
@@ -24,13 +24,17 @@ module UmassCorum
 
       private
 
+      def rows_to_export
+        @journal.journal_rows.where.not(amount: 0)
+      end
+
       def headers
         {
           trans_code: "$$$",
-          um_batch_id: @journal.journal_rows.first.ref_2,
+          um_batch_id: rows_to_export.first&.ref_2,
           batch_date: @journal.journal_date,
           batch_desc: @journal.facility.name,
-          batch_trans_count: @journal.journal_rows.size,
+          batch_trans_count: rows_to_export.size,
           batch_trans_amount: total_journal_amount,
           batch_originator: @journal.created_by_user.username.upcase,
           batch_business_unit: "UMAMH",
@@ -60,7 +64,7 @@ module UmassCorum
       # The total they want is the total of both debits and credits, and since they
       # match up, the total should always be double the amount we would probably expect.
       def total_journal_amount
-        @journal.journal_rows.map(&:amount).map(&:abs).sum
+        rows_to_export.map(&:amount).map(&:abs).sum
       end
     end
 

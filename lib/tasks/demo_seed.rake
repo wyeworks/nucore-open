@@ -72,8 +72,9 @@ namespace :demo do
       order += 1
     end
 
+    recharge_api_speed_type = UmassCorum::ApiSpeedType.find_by(speed_type: "123123") || FactoryBot.create(:api_speed_type, speed_type: "123123") # UMass Speed Types are 6 digits
     fa = FacilityAccount.find_or_initialize_by(facility_id: facility.id) do |facility_account|
-      facility_account.account_number = "123-1234567-12345678"
+      facility_account.account_number = recharge_api_speed_type.speed_type
       facility_account.revenue_account = "50617"
       facility_account.is_active = true
       facility_account.created_by = 1

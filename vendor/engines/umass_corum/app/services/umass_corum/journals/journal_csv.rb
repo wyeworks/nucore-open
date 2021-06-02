@@ -11,7 +11,7 @@ module UmassCorum
       end
 
       def report_data_query
-        @journal.journal_rows
+        @journal.journal_rows.where.not(amount: 0)
       end
 
       def render
