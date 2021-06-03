@@ -1,0 +1,9 @@
+:javascript
+  $(document).ready(function() {
+    var checkbox = $(".js--username-toggle");
+    var usernameField = $(".user_username");
+
+    checkbox.change(function(evt) {
+      usernameField.toggle(!evt.target.checked)
+    }).trigger("change");
+  });

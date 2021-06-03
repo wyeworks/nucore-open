@@ -49,6 +49,14 @@ class UserForm < SimpleDelegator
     false
   end
 
+  def username_input_options
+    { readonly: true }
+  end
+
+  def form_head
+    "form_head"
+  end
+
   private
 
   def set_password

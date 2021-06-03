@@ -33,6 +33,17 @@ module UmassCorum
       !user.email_user?
     end
 
+    def username_input_options
+      {
+        label: self.class.human_attribute_name(:netid),
+        wrapper_html: { class: "js--username" }
+      }
+    end
+
+    def form_head
+      "umass_corum/users/form_head"
+    end
+
     private
 
     def set_password

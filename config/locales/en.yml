@@ -975,8 +975,8 @@ en:
         submit: "Update Access List"
 
     new_external:
-      head: "Add External User"
-      main: "You may use this to grant !app_name! access to external users. The email address and username must match."
+      head: "Add User"
+      main: "You may use this to grant !app_name! access to users."
     new:
       js:
         id: "NetID"

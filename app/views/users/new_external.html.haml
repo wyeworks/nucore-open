@@ -1,5 +1,5 @@
 = content_for :head_content do
-  = render "form_head" if !@user_form.username_editable?
+  = render @user_form.form_head
 
 = content_for :h1 do
   = current_facility
@@ -15,7 +15,8 @@
     = f.input :first_name
     = f.input :last_name
     = f.input :email
-    = f.input :username, readonly: !@user_form.username_editable?
+    = f.input :phone_number
+    = f.input :username, @user_form.username_input_options
     = render_view_hook("custom_fields", f: f)
     = f.button :submit, text("shared.create"), class: ["btn", "btn-primary"]
     &nbsp;
