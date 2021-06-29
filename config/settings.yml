@@ -118,6 +118,7 @@ feature:
   uses_ldap_authentication: false
   kiosk_view: true
   bypass_kiosk_auth: true
+  als_number_generator: true
 
 split_accounts:
   # Roles are allowed to create Split Accounts

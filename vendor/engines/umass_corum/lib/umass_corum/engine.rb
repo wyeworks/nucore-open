@@ -4,6 +4,8 @@ module UmassCorum
 
   class Engine < ::Rails::Engine
 
+    config.autoload_paths << File.join(File.dirname(__FILE__), "../../lib")
+
     isolate_namespace UmassCorum
 
     config.to_prepare do
@@ -17,6 +19,7 @@ module UmassCorum
       Account.config.journal_account_types.uniq!
       Account.config.creation_disabled_types << "NufsAccount"
       FacilityFacilityAccountsController.form_class = UmassCorum::FacilityAccountForm
+      Journal.send(:include, UmassCorum::JournalExtension)
       ResearchSafetyCertificationLookup.adapter_class = UmassCorum::OwlApiAdapter
       ViewHook.add_hook("devise.sessions.new", "login_screen_announcement", "umass_corum/sessions/request_login")
       ViewHook.add_hook("devise.sessions.new", "login_form", "umass_corum/sessions/login_form")

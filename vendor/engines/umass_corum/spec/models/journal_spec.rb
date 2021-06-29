@@ -42,8 +42,17 @@ RSpec.describe Journal do
       ref_2: /ALS\d{3}/,
       order_detail: order_details.first,
       account_id: account.id,
-      order_detail: order_details.first,
     )
+  end
+
+  it "sets the als_number field if feature flag is set", feature_setting: { als_number_generator: true } do
+    journal.save!
+    expect(journal.als_number).not_to be_nil
+  end
+
+  it "does not set the als_number field if feature flag is false", feature_setting: { als_number_generator: false } do
+    journal.save!
+    expect(journal.als_number).to be_nil
   end
 
   it "creates the recharge row" do
@@ -103,6 +112,17 @@ RSpec.describe Journal do
       expect(journal.journal_rows.map(&:account_id)).to eq(
         [subaccount1.id, nil, subaccount2.id, nil]
       )
+    end
+  end
+
+  describe "when we have reached the max_value for als_number", feature_setting: { als_number_generator: true } do
+    before do
+      allow(::UmassCorum::Journals::AlsNumberGenerator::AlsSequenceNumber).to receive(:maximum).and_return(999)
+    end
+    
+    it "should raise an error on create" do
+      expect { journal.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      expect(journal.id).to be_nil
     end
   end
 
