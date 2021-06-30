@@ -8,6 +8,7 @@ en:
         reservation: Reservation
         actions: Actions
         none: No active reservations found for today
+        no_user: No user found
       begin:
         title: Begin Reservation (%{user})
         confirm: Sign in to Confirm

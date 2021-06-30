@@ -13,6 +13,10 @@ class OfflineReservation < Reservation
 
   scope :current, -> { where(reserve_end_at: nil).where("reserve_start_at < ?", Time.current) }
 
+  def display_user
+    created_by
+  end
+
   def admin?
     true
   end

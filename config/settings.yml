@@ -118,6 +118,7 @@ feature:
   uses_ldap_authentication: false
   kiosk_view: true
   bypass_kiosk_auth: true
+  revenue_account_editable: false
   als_number_generator: true
 
 split_accounts:
@@ -168,3 +169,6 @@ price_policy_note_options: ~
 order_detail_price_change_reason_options: ~
 
 google_analytics_key: ~
+
+devise:
+  lock_strategy: :failed_attempts

@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# A model representing a recharge chart string account.
+# These are the accounts that are "recharged" when purchases are made.
+#
+# account_number - chart string for the account
+# revenue_account - an account code that signals the type of transaction expected
 class FacilityAccount < ApplicationRecord
 
   include Accounts::AccountNumberSectionable
@@ -13,6 +18,18 @@ class FacilityAccount < ApplicationRecord
   scope :inactive, -> { where(is_active: false) }
 
   alias_attribute :active, :is_active
+
+  def self.editable_attributes(user)
+    if revenue_account_editable_by_user?(user)
+      [:is_active, :revenue_account]
+    else
+      [:is_active]
+    end
+  end
+
+  def self.revenue_account_editable_by_user?(user)
+    SettingsHelper.feature_on?(:revenue_account_editable) && user.administrator?
+  end
 
   def to_s
     "#{account_number} (#{revenue_account})"

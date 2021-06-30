@@ -54,14 +54,14 @@ When merging in changes from the open source repo, differences in `scehma.rb` an
 
 *The `bin/merge_describer` script only describes commits which include the parenthesized branch number.*
 
-On github, squash commits include a parenthesized branch number like `(#45)` in the commit message by default, except when the PR only includes 1 commit. Merge commits do not include the parenthesized branch number. So...
+On github, squash commits include a parenthesized branch number like `(#45)` in the commit title by default, except when the PR only includes 1 commit. Merge commits do not include the parenthesized branch number in the title. So...
 
-* Use **Squash** for feature PRs, and make sure the parenthesized branch number is in the commit message so the squash commit will get described later on in the GitHub release and release ticket.
+* Use **Squash** for feature PRs, and copy the PR description into the squash merge message.  Make sure the parenthesized branch number is in the commit title so the squash commit will get described later on in the GitHub release and release ticket.
 * Use **Merge** commits for `latest_from_open_MMDDYYYY` branch PRs.
 
-## PR Descriptions
+## PR Titles
 
-For feature PRs, the PR description will become the squash commit message. These appear later in the `bin/merge_describer` output, which is used in the`latest_from_open_MMDDYYYY` PR description, github release, and release redmine ticket. Try to write feature PR descriptions that focus on user outcomes rather than technical details - "Fix ability to download CSV" is preferred over "Resolve issues with JSON parsing".
+For feature PRs, the PR title will become the squash commit message. These appear later in the `bin/merge_describer` output, which is used in the`latest_from_open_MMDDYYYY` PR description, github release, and release redmine ticket. Try to write feature PR titles that focus on user outcomes rather than technical details - "Fix ability to download CSV" is preferred over "Resolve issues with JSON parsing".
 
 ## Creating a GitHub release
 

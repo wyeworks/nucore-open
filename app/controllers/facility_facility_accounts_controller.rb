@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Controller for managing recharge chart string accounts.
 class FacilityFacilityAccountsController < ApplicationController
 
   admin_tab     :all

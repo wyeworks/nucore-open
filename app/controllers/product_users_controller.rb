@@ -3,6 +3,7 @@
 class ProductUsersController < ApplicationController
 
   include SearchHelper
+  include CsvEmailAction
   include BelongsToProductController
 
   admin_tab :index, :new
@@ -23,11 +24,25 @@ class ProductUsersController < ApplicationController
   # GET /facilities/:facility_id/services/service_id/users
   def index
     if @product.requires_approval?
-      @product_users = @product
-                       .product_users
-                       .includes(:user)
-                       .order("users.last_name ASC", "users.first_name ASC")
-                       .paginate(page: params[:page])
+      all_product_users = @product
+                          .product_users
+                          .includes(:user)
+                          .includes(:product_access_group)
+                          .order("users.last_name ASC", "users.first_name ASC")
+
+      respond_to do |format|
+        format.csv do
+          # used for "Export as CSV" link
+          yield_email_and_respond_for_report do |email|
+            access_list_report = Reports::ProductAccessListCsvReport.new(@product.name, all_product_users)
+            CsvReportMailer.csv_report_email(email, access_list_report).deliver
+          end
+        end
+
+        format.html do
+          @product_users = all_product_users.paginate(page: params[:page])
+        end
+      end
     else
       @product_users = nil
       flash.now[:notice] = text("index.not_required", model: downcase_product_type)

@@ -18,7 +18,7 @@ class KioskReservationsController < ApplicationController
     sign_out if params[:sign_out].present?
     schedules = current_facility.schedules_for_timeline(:public_instruments)
     instrument_ids = schedules.flat_map { |schedule| schedule.public_instruments.map(&:id) }
-    @reservations = Reservation.for_timeline(Time.current.beginning_of_day, instrument_ids).select(&:can_switch_instrument?)
+    @reservations = Reservation.for_timeline(Time.current.beginning_of_day, instrument_ids).select(&:kiosk?)
     if params[:refresh]
       render partial: "reservations_table", locals: { reservations: @reservations }
     end

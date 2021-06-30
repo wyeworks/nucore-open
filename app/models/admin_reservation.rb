@@ -16,6 +16,10 @@ class AdminReservation < Reservation
             inclusion: { in: CATEGORIES, allow_blank: true }
   validates :expires_mins_before, numericality: { only_integer: true, greater_than_or_equal_to: 0 }, allow_nil: true
 
+  def display_user
+    created_by
+  end
+
   # TODO: Move admin parts of Reservation here
 
   def admin?

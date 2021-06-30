@@ -10,7 +10,7 @@
       - reservations.each do |res|
         %tr
           %td
-            = res.user.full_name
+            = kiosk_reservation_user(res)
           %td
             = res
           %td
