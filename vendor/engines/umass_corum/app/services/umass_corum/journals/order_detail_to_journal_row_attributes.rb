@@ -43,7 +43,8 @@ module UmassCorum
       # Returns the journal batch ID. E.g. ALS034. It rolls over after ALS999
       def journal_als
         # als_numbers will only be present once the feature flag is turned on
-        journal.als_number.presence || "ALS#{format('%03d', journal.id % 1000)}"
+        als_number = journal.als_number.presence || journal.id
+        "ALS#{format('%03d', als_number % 1000)}"
       end
 
       # This field is something like "Biology-Maresca,Thomas". The first part is

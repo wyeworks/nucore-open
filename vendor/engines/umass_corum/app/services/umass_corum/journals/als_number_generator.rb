@@ -9,15 +9,15 @@ module UmassCorum
       class AlsNumberError < NUCore::Error; end
 
       def self.next_als
-        raise AlsNumberError, "ALS sequence has hit the max allowed value - please reset it before trying again" if AlsSequenceNumber.maximum(:id) == MAX_VALUE
+        raise AlsNumberError, "ALS sequence has hit the max allowed value - please reset it before trying again" if max_als_number == MAX_VALUE
 
-        seq_next = AlsSequenceNumber.create
-        "ALS#{format('%03d', seq_next.id)}"
+        max_als_number.to_i + 1
       end
 
       private
-      
-      class AlsSequenceNumber < ActiveRecord::Base
+
+      def self.max_als_number
+        Journal.maximum(:als_number).presence || 0
       end
     end
 

@@ -4,6 +4,7 @@ module UmassCorum
 
     def self.included(base)
       base.before_create :generate_als_number, if: :als_generator_feature_on?
+      base.validates :als_number, uniqueness: true
     end
 
     def als_generator_feature_on?

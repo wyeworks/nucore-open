@@ -45,16 +45,6 @@ RSpec.describe Journal do
     )
   end
 
-  it "sets the als_number field if feature flag is set", feature_setting: { als_number_generator: true } do
-    journal.save!
-    expect(journal.als_number).not_to be_nil
-  end
-
-  it "does not set the als_number field if feature flag is false", feature_setting: { als_number_generator: false } do
-    journal.save!
-    expect(journal.als_number).to be_nil
-  end
-
   it "creates the recharge row" do
     expect { journal.save! }.to change(JournalRow, :count).by(2)
     expect(JournalRow.second).to have_attributes(
@@ -115,9 +105,22 @@ RSpec.describe Journal do
     end
   end
 
+  it "sets the als_number field if feature flag is set", feature_setting: { als_number_generator: true } do
+    journal.save!
+    expect(journal.als_number).not_to be_nil
+
+    journal_2 = create(:journal, :with_completed_order)
+    expect(journal_2.als_number.to_i - journal.als_number.to_i).to eq 1
+  end
+
+  it "does not set the als_number field if feature flag is false", feature_setting: { als_number_generator: false } do
+    journal.save!
+    expect(journal.als_number).to be_nil
+  end
+
   describe "when we have reached the max_value for als_number", feature_setting: { als_number_generator: true } do
     before do
-      allow(::UmassCorum::Journals::AlsNumberGenerator::AlsSequenceNumber).to receive(:maximum).and_return(999)
+      allow(::UmassCorum::Journals::AlsNumberGenerator).to receive(:max_als_number).and_return(999)
     end
     
     it "should raise an error on create" do
