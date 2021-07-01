@@ -3,8 +3,8 @@ module UmassCorum
   module JournalExtension
 
     def self.included(base)
-      base.before_create :generate_als_number, if: :als_generator_feature_on?
-      base.validates :als_number, uniqueness: true
+      base.before_validation :generate_als_number, on: :create, if: :als_generator_feature_on?
+      base.validates :als_number, uniqueness: true, allow_nil: true, if: :als_generator_feature_on?
     end
 
     def als_generator_feature_on?
