@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_28_132615) do
+ActiveRecord::Schema.define(version: 2021_07_02_193221) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -248,7 +248,7 @@ ActiveRecord::Schema.define(version: 2021_06_28_132615) do
     t.integer "file_file_size"
     t.datetime "file_updated_at"
     t.datetime "journal_date", null: false
-    t.string "als_number"
+    t.integer "als_number"
     t.index ["facility_id"], name: "index_journals_on_facility_id"
   end
 
@@ -813,11 +813,6 @@ ActiveRecord::Schema.define(version: 2021_06_28_132615) do
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_training_requests_on_product_id"
     t.index ["user_id"], name: "index_training_requests_on_user_id"
-  end
-
-  create_table "umass_corum_als_sequence_numbers", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "umass_corum_api_speed_types", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|

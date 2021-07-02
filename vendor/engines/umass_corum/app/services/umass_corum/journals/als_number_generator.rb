@@ -11,7 +11,7 @@ module UmassCorum
       def self.next_als
         raise AlsNumberError, "ALS sequence has hit the max allowed value - please reset it before trying again" if max_als_number == MAX_VALUE
 
-        max_als_number.to_i + 1
+        max_als_number + 1
       end
 
       private

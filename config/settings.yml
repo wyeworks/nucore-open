@@ -119,7 +119,7 @@ feature:
   kiosk_view: true
   bypass_kiosk_auth: true
   revenue_account_editable: false
-  als_number_generator: true
+  als_number_generator: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts
