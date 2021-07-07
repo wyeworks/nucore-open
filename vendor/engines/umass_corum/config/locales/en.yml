@@ -41,6 +41,21 @@ en:
         mivp_pending: Mark MIVP Pending
         reconcile_mivp: Reconcile Voucher Split Accounts
     umass_corum:
+      admin_reports:
+        index:
+          title: Admin Reports
+        relays:
+          subject: "!app_name! Relay Data Export"
+          body: Your export is ready. Please see the attached file.
+          title: Download Relay Data (CSV)
+          facility_name: Facility Name
+          instrument_name: Instrument Name
+          instrument_active: Active/Inactive
+          relay_type: Relay Type
+          relay_ip_address: Relay IP Address
+          relay_ip_port: Relay IP Port
+          relay_outlet_number: Outlet Number
+          relay_auto_logout: Auto Logout Minutes
       sessions:
         request_login:
           request_login_link: |
