@@ -232,6 +232,14 @@ class Reservation < ApplicationRecord
     raise ActiveRecord::RecordInvalid.new(self) unless save_as_user(user)
   end
 
+  def display_user
+    user
+  end
+
+  def kiosk?
+    admin? || can_switch_instrument?
+  end
+
   def offline?
     type == "OfflineReservation"
   end

@@ -3,7 +3,7 @@
     %tr
       %th
       %th= User.human_attribute_name(:name)
-      %th= ProductUser.human_attribute_name(:date_added)
+      %th= t(".date_added")
       %th= User.human_attribute_name(:username)
       %th= User.human_attribute_name(:email)
       - if local_assigns[:f]

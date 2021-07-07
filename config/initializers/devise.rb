@@ -65,7 +65,7 @@ Devise.setup do |config|
 
   # ==> Configuration for :lockable
   # Number of authentication tries before locking an account.
-  config.lock_strategy = :failed_attempts
+  config.lock_strategy = Settings.devise.lock_strategy
   config.maximum_attempts = 5
 
   # Defines which strategy will be used to unlock an account.

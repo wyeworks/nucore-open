@@ -39,6 +39,10 @@ module ReservationsHelper
     safe_join(links, delimiter)
   end
 
+  def kiosk_reservation_user(reservation)
+    reservation.display_user&.full_name || text("no_user")
+  end
+
   def reservation_view_edit_link(reservation)
     ReservationUserActionPresenter.new(self, reservation).view_edit_link
   end

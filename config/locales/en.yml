@@ -752,6 +752,8 @@ en:
     new:
       label:
         search_term: "Search by name, NetID, or username"
+    table:
+      date_added: "Date Added"
 
   user_price_group_members:
     new:
@@ -960,6 +962,12 @@ en:
       subject: "!app_name! Transaction Export"
       body: Your export is ready. Please see the attached file.
       order_detail_notices: Notices
+    product_users:
+      export: Export as CSV
+      subject: "!app_name! Access List Export"
+      body: Your export is ready. Please see the attached file.
+      user_status: User Status
+      date_added: "Date Added"
 
   users:
     new_user:
@@ -968,6 +976,7 @@ en:
       add_to_payment_source: Add this user to a payment source
       order_for: Order on behalf of this user
     access_list:
+      date_added: "Date Added"
       head: "%{name} Access List"
       no_products: "%{name} does not have any available products."
       training_requested: Training Requested

@@ -24,7 +24,7 @@
           %tr
             %th.approval-column= Product.human_attribute_name(:can_be_used_by?)
             %th.product-column= Product.model_name.human
-            %th.product-column= ProductUser.human_attribute_name(:date_added)
+            %th.product-column= text("users.access_list.date_added")
             %th.scheduling-group-column= ProductAccessGroup.model_name.human
 
         %tbody

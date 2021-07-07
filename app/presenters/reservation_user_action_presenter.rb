@@ -3,7 +3,7 @@
 class ReservationUserActionPresenter
 
   attr_accessor :reservation, :controller
-  delegate :order_detail, :order, :facility, :product,
+  delegate :order_detail, :order, :facility, :product, :admin?,
            :can_switch_instrument?, :can_switch_instrument_on?, :can_switch_instrument_off?,
            :can_cancel?, :startable_now?, :can_customer_edit?, :started?, :ongoing?, to: :reservation
 
@@ -41,8 +41,12 @@ class ReservationUserActionPresenter
   def kiosk_user_actions
     actions = []
     actions << kiosk_accessories_link if accessories?
-    actions << kiosk_switch_actions if can_switch_instrument?
+    actions << kiosk_switch_actions if kiosk_actions?
     actions.compact
+  end
+
+  def kiosk_actions?
+    !admin? && can_switch_instrument?
   end
 
   def view_edit_link
@@ -66,7 +70,7 @@ class ReservationUserActionPresenter
   private
 
   def accessories?
-    ongoing? && order_detail.accessories?
+    ongoing? && order_detail&.accessories?
   end
 
   def accessories_link
@@ -102,7 +106,6 @@ class ReservationUserActionPresenter
   end
 
   def kiosk_switch_actions
-    kiosk_path = facility_kiosk_reservations_path(reservation.facility)
     if can_switch_instrument_on?
       link_to I18n.t("reservations.switch.start"),
               order_order_detail_reservation_kiosk_begin_path(order, order_detail, reservation),

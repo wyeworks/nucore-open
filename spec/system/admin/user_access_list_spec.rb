@@ -17,7 +17,7 @@ RSpec.describe "User access list" do
       login_as admin
       visit facility_user_path(facility, user)
       click_on "Access List"
-      expect(page).to have_content("Date added")
+      expect(page).to have_content("Date Added")
       expect(page).to have_content(product_user.approved_at.strftime("%m/%d/%Y"))
       uncheck product1.name
       check product2.name

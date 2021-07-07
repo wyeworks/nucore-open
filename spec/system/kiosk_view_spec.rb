@@ -11,6 +11,32 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
   let(:instrument) { create(:setup_instrument, facility: facility, control_mechanism: "timer") }
 
   shared_examples "kiosk_actions" do |login_label, password|
+
+    context "with an admin reservation" do
+      let!(:admin_reservation) { create(:admin_reservation, reserve_start_at: 15.minutes.ago, actual_start_at: 10.minutes.ago, product: instrument) }
+      let!(:accessory) { create(:accessory, parent: instrument) }
+
+      it "does not error" do
+        visit facility_kiosk_reservations_path(facility)
+
+        expect(page.current_path).to eq facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("No user found")
+        expect(page).to have_content(login_label)
+      end
+    end
+
+    context "with an offline reservation" do
+      let!(:offline_reservation) { create(:offline_reservation, reserve_start_at: 15.minutes.ago, actual_start_at: 10.minutes.ago, product: instrument) }
+
+      it "does not error" do
+        visit facility_kiosk_reservations_path(facility)
+
+        expect(page.current_path).to eq facility_kiosk_reservations_path(facility)
+        expect(page).to have_content("No user found")
+        expect(page).to have_content(login_label)
+      end
+    end
+
     context "with an active reservation that hasn't been started" do
       let!(:reservation) { create(:purchased_reservation, reserve_start_at: 15.minutes.ago, product: instrument, user: user) }
 
