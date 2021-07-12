@@ -4,7 +4,7 @@ module UmassCorum
 
     class JournalCsv
 
-      include ::Reports::CsvExporter
+      include Reports::CsvExporter
 
       def initialize(journal)
         @journal = journal
