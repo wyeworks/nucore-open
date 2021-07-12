@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_02_193221) do
+ActiveRecord::Schema.define(version: 2021_07_12_122939) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -248,7 +248,6 @@ ActiveRecord::Schema.define(version: 2021_07_02_193221) do
     t.integer "file_file_size"
     t.datetime "file_updated_at"
     t.datetime "journal_date", null: false
-    t.integer "als_number"
     t.index ["facility_id"], name: "index_journals_on_facility_id"
   end
 

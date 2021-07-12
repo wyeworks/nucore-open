@@ -104,26 +104,4 @@ RSpec.describe Journal do
       )
     end
   end
-
-  it "sets the als_number field if feature flag is set", feature_setting: { als_number_generator: true } do
-    create_list(:journal, 11, :with_completed_order)
-    expect(Journal.last.als_number - Journal.last(2).first.als_number).to eq 1
-  end
-
-  it "does not set the als_number field if feature flag is false", feature_setting: { als_number_generator: false } do
-    journal.save!
-    expect(journal.als_number).to be_nil
-  end
-
-  describe "when we have reached the max_value for als_number", feature_setting: { als_number_generator: true } do
-    before do
-      allow(::UmassCorum::Journals::AlsNumberGenerator).to receive(:max_als_number).and_return(999)
-    end
-    
-    it "should raise an error on create" do
-      expect { journal.save! }.to raise_error(ActiveRecord::RecordInvalid)
-      expect(journal.id).to be_nil
-    end
-  end
-
 end
