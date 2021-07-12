@@ -4,7 +4,7 @@ require "csv"
 
 module UmassCorum
 
-  module Reports
+  module AdminReports
 
     class RelayCsvReport
       include TextHelpers::Translation

@@ -2,8 +2,8 @@
 
 require "rails_helper"
 
-RSpec.describe UmassCorum::Reports::RelayCsvReport do
-  subject(:report) { UmassCorum::Reports::RelayCsvReport.new }
+RSpec.describe UmassCorum::AdminReports::RelayCsvReport do
+  subject(:report) { UmassCorum::AdminReports::RelayCsvReport.new }
 
   describe "#to_csv" do
     context "with no relays" do
