@@ -104,4 +104,68 @@ RSpec.describe Journal do
       )
     end
   end
+
+  describe "#als_number" do
+    let!(:old_journal_1) { create(:journal, :with_completed_order, facility: facility, journal_date: 1.month.ago, created_by: 0, ) }
+    let!(:old_journal_2) { create(:journal, :with_completed_order, facility: facility, journal_date: 2.months.ago, created_by: 0, ) }
+    let!(:old_journal_3) { create(:journal, :with_completed_order, facility: facility, journal_date: 3.months.ago, created_by: 0, ) }
+    let(:old_journal_4) { build(:journal, :with_completed_order, facility: facility, journal_date: 4.months.ago, created_by: 0, ) }
+    let!(:journal_1) { create(:journal, facility: facility, journal_date: journal_date, order_details_for_creation: order_details, created_by: 0) }
+    let!(:journal_2) { create(:journal, facility: facility, journal_date: journal_date, order_details_for_creation: order_details, created_by: 0) }
+    let!(:journal_3) { create(:journal, facility: facility, journal_date: journal_date, order_details_for_creation: order_details, created_by: 0) }
+    let(:journal_4) { build(:journal, facility: facility, journal_date: journal_date, order_details_for_creation: order_details, created_by: 0) }
+
+    it "sets the als_number field sequentially by fiscal year" do
+      expect(old_journal_1.als_number).to eq 1
+      expect(old_journal_2.als_number).to eq 2
+      expect(old_journal_3.als_number).to eq 3
+      expect(journal_1.als_number).to eq 1
+      expect(journal_2.als_number).to eq 2
+      expect(journal_3.als_number).to eq 3
+    end
+
+    describe "when the max_value for als_number is reached" do
+      before { journal_3.update_attribute(:als_number, 999) }
+
+      it "is invalid" do
+        journal_4.save
+        expect(journal_4).not_to be_persisted
+        expect(journal_4.errors).to include(:als_number)
+      end
+    end
+
+    describe "when there are gaps in the als_number sequence" do
+      before { journal_3.update_attribute(:als_number, 95) }
+
+      it "increments from the highest als_number in the fiscal_year" do
+        journal_4.save
+        expect(journal_4).to be_persisted
+        expect(journal_4.als_number).to eq 96
+      end
+    end
+
+    describe "when creating a journal for a previous fiscal year" do
+      before { journal_3.update_attribute(:als_number, 95) }
+
+      it "increments from the highest als_number in the previous fiscal_year" do
+        old_journal_4.save
+        expect(old_journal_4).to be_persisted
+        expect(old_journal_4.als_number).to eq 4
+      end
+    end
+
+    describe "when the als_number already exists in the fiscal year" do
+      before { journal_3.update(als_number: journal_2.als_number) }
+
+      it "is invalid" do
+        expect(journal_3.errors.full_messages).to include("Als number can only be used once per fiscal year")
+      end
+
+      it "is rejected by the database" do
+        expect{ journal_3.update_attribute(:als_number, journal_2.als_number) }.to raise_error(ActiveRecord::RecordNotUnique)
+      end
+    end
+
+  end
+
 end
