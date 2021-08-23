@@ -31,7 +31,7 @@
             %td= format_usa_datetime(pending_journal.created_at)
             - if cross_facility?
               %td= facility_abbreviations.join("<br>").html_safe
-            %td= f.input :reference, label: false, input_html: { class: 'input-medium' }
+            = render "reference_input", f: f, pending_journal: pending_journal
             %td= f.input :description, label: false, input_html: { class: 'input-medium' }
             %td
               = select_tag :journal_status, options_for_select([[' ', nil], ['Succeeded, no errors', 'succeeded'], ['Succeeded, with errors', 'succeeded_errors'], ['Failed', 'failed']], params[:journal_status]), class: 'input-medium'
