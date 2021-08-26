@@ -87,4 +87,27 @@ RSpec.describe Reports::ExportRaw do
       )
     end
   end
+
+  describe "with a journaled order" do
+    before { item.price_policies.update_all(unit_cost: 11, unit_subsidy: 1) }
+
+    let(:item) { FactoryBot.create(:setup_item, facility: facility) }
+    let(:order) { create(:complete_order, product: item, account: account, user: user, created_by: user.id) }
+    let(:order_detail) { order.order_details.first }
+    let(:journal) { create(:journal, facility: facility, updated_by: 1) }
+
+    before :each do
+      order.order_details.each do |order_detail|
+        order_detail.journal = journal
+        create(:journal_row, journal: journal, order_detail: order_detail, ref_2: "ALS001")
+        order_detail.save!
+      end
+    end
+
+    it "shows journal reference in report" do
+      expect(report).to have_column_values(
+        "Als Number" => ["ALS001", "ALS001"],
+      )
+    end
+  end
 end
