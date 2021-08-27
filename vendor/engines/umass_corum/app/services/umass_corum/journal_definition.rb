@@ -32,7 +32,7 @@ module UmassCorum
       Column.new(:trans_code, 3, type: :blank),
       Column.new(:speedtype, 6),
       Column.new(:account, 6),
-      Column.new(:trans_ref, 7),
+      Column.new(:trans_ref, 11),
       Column.new(:trans_date, 8, type: :date),
       Column.new(:trans_desc, 20),
       Column.new(:amount, 11, type: :decimal),

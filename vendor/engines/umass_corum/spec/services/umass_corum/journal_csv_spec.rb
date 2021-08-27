@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe UmassCorum::Journals::JournalCsv do
   let(:user) { create(:user, username: "CCOLEMAN") }
-  let(:facility) { create(:setup_facility, name: "Animal Imaging") }
+  let(:facility) { create(:setup_facility, name: "Animal Imaging", abbreviation: "ANIMALIMAGING") }
   let(:product) { create(:setup_item, facility: facility) }
   let(:order) { create(:purchased_order, product: product) }
   let(:order_detail) { order.order_details.first }
@@ -86,11 +86,11 @@ RSpec.describe UmassCorum::Journals::JournalCsv do
 
   it "writes the correct debit row" do
     row = output.split("\n").second
-    expect(row).to eq("UMAMH,753080,167998,53104,A091200002,B03,,S11310000000076,,350.01,\"Name, Owner\",#{order_detail},06/10/2020,BME,ALS001")
+    expect(row).to eq("UMAMH,753080,167998,53104,A091200002,B03,,S11310000000076,ANIMALIMAGI,350.01,\"Name, Owner\",#{order_detail},06/10/2020,BME,ALS001")
   end
 
   it "writes the amount correctly for the credit row" do
     row = output.split("\n").third
-    expect(row).to eq("UMAMH,99999,,,,,,,,-350.01,,,\"\",,")
+    expect(row).to eq("UMAMH,99999,,,,,,,ANIMALIMAGI,-350.01,,,\"\",,")
   end
 end
