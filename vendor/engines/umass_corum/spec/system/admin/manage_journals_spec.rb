@@ -27,6 +27,6 @@ RSpec.describe "Manage Journals" do
     click_button "Create"
 
     expect(page).to have_content("Pending Journal")
-    expect(find_field("journal_reference").value).to eq(JournalRow.last.ref_2)
+    expect(find_field("journal_reference").value).to eq(JournalRow.last.ref_2) # Reference field defaults to ref_2 value
   end
 end

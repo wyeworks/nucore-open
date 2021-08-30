@@ -18,7 +18,7 @@ module UmassCorum
 
       def als_number(order_detail)
         return unless order_detail.journal.present?
-        order_detail.journal.journal_rows.first.ref_2
+        order_detail.journal.journal_rows.first&.ref_2
       end
 
     end
