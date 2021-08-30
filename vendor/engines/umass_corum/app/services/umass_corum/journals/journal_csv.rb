@@ -30,7 +30,7 @@ module UmassCorum
           program: :program,
           class: :clazz,
           project: :project,
-          trans_ref: :trans_ref,
+          trans_ref: ->(journal_row) { journal_row.journal.facility.abbreviation[0, 11] },
           amount: :amount,
           description: :description,
           name_reference: :name_reference,

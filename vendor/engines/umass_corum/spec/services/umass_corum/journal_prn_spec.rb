@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe UmassCorum::Journals::JournalPrn do
   let(:user) { create(:user, username: "CCOLEMAN") }
-  let(:facility) { create(:setup_facility, name: "Animal Imaging") }
+  let(:facility) { create(:setup_facility, name: "Animal Imaging", abbreviation: "ANIMALIMAGING") }
   let(:product) { create(:setup_item, facility: facility) }
   let(:order) { create(:order, id: 1186, user: user, created_by: user.id) }
 
@@ -87,7 +87,7 @@ RSpec.describe UmassCorum::Journals::JournalPrn do
 
   it "writes the correct debit row" do
     row = output.split("\n").second
-    expect(row).to eq("    167998753080       06102020Name, Owner         00000035001DALS001            UMAMH       #{order_detail}           BME      53104A091200002B03       S11310000000076")
+    expect(row).to eq("    167998753080ANIMALIMAGI06102020Name, Owner         00000035001DALS001            UMAMH       #{order_detail}           BME      53104A091200002B03       S11310000000076")
   end
 
   it "writes the amount correctly for the credit row" do

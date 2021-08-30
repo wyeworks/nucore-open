@@ -45,7 +45,7 @@ module UmassCorum
         {
           speedtype: journal_row.speed_type,
           account: journal_row.account,
-          trans_ref: journal_row.trans_ref,
+          trans_ref: journal_row.journal.facility.abbreviation,
           trans_date: journal_row.trans_date,
           trans_desc: journal_row.description,
           amount: journal_row.amount.abs,
