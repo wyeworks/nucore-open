@@ -28,6 +28,7 @@ module UmassCorum
       ViewHook.add_hook("users.show", "custom_fields", "umass_corum/users/custom_fields")
       ViewHook.add_hook("users.new_external", "custom_fields", "umass_corum/users/new_external_custom_fields")
       ViewHook.add_hook("admin.shared.sidenav_billing", "custom_reconcilable_account_types", "facility_accounts/mivp_sidenav")
+      ::Reports::ExportRaw.transformers << "UmassCorum::AdminReports::ExportRawTransformer"
     end
 
     # Include migrations in main rails app
