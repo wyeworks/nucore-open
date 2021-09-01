@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_225450) do
+ActiveRecord::Schema.define(version: 2021_08_03_023106) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -172,6 +172,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_225450) do
     t.string "dashboard_token"
     t.string "payment_url"
     t.boolean "kiosk_enabled"
+    t.boolean "show_order_note", default: true, null: false
     t.index ["abbreviation"], name: "index_facilities_on_abbreviation", unique: true
     t.index ["is_active", "name"], name: "index_facilities_on_is_active_and_name"
     t.index ["name"], name: "index_facilities_on_name", unique: true
@@ -188,6 +189,13 @@ ActiveRecord::Schema.define(version: 2021_07_14_225450) do
     t.index ["facility_id"], name: "fk_facilities"
   end
 
+  create_table "holidays", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "date", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_holidays_on_date"
+  end
+
   create_table "instrument_alerts", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "instrument_id", null: false
     t.string "note", limit: 256, null: false
@@ -202,6 +210,14 @@ ActiveRecord::Schema.define(version: 2021_07_14_225450) do
     t.datetime "created_at", null: false
     t.index ["instrument_id", "created_at"], name: "index_instrument_statuses_on_instrument_id_and_created_at"
     t.index ["instrument_id"], name: "fk_int_stats_product"
+  end
+
+  create_table "journal_creation_reminders", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.datetime "starts_at"
+    t.datetime "ends_at"
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "journal_cutoff_dates", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -489,6 +505,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_225450) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "allow_holiday_access", default: false, null: false
     t.index ["product_id"], name: "index_product_access_groups_on_product_id"
   end
 
@@ -526,6 +543,19 @@ ActiveRecord::Schema.define(version: 2021_07_14_225450) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["facility_id"], name: "index_product_display_groups_on_facility_id"
+  end
+
+  create_table "product_user_imports", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+    t.string "file_file_name"
+    t.string "file_content_type"
+    t.bigint "file_file_size"
+    t.datetime "file_updated_at"
+    t.integer "created_by_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "processed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_product_user_imports_on_product_id"
   end
 
   create_table "product_users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
@@ -577,6 +607,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_225450) do
     t.text "issue_report_recipients"
     t.boolean "email_purchasers_on_order_status_changes", default: false, null: false
     t.boolean "problems_resolvable_by_user", default: false, null: false
+    t.boolean "restrict_holiday_access", default: false, null: false
     t.index ["dashboard_token"], name: "index_products_on_dashboard_token"
     t.index ["facility_account_id"], name: "fk_facility_accounts"
     t.index ["facility_id"], name: "fk_rails_0c9fa1afbe"

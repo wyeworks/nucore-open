@@ -146,6 +146,10 @@ class Facility < ApplicationRecord
     SettingsHelper.feature_on?(:kiosk_view) && instruments.active.any? && kiosk_enabled
   end
 
+  def show_multi_add_products?(product_scope, user)
+    user.present? && accepts_multi_add? && products.merge(product_scope).present?
+  end
+
   private
 
   def set_journal_mask

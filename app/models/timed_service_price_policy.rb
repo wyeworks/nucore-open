@@ -15,8 +15,6 @@ class TimedServicePricePolicy < PricePolicy
   end
 
   def estimate_cost_and_subsidy(duration)
-    return if restrict_purchase?
-
     calculate_for_time(duration)
   end
 
@@ -27,6 +25,8 @@ class TimedServicePricePolicy < PricePolicy
   private
 
   def calculate_for_time(duration)
+    return if restrict_purchase?
+
     costs = { cost: duration * usage_rate, subsidy: duration * usage_subsidy }
   end
 

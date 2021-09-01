@@ -31,6 +31,23 @@ RSpec.configure do |config|
     driven_by :selenium, using: :headless_chrome, screen_size: [1366, 768]
   end
 
+  # Gives more verbose output for JS errors, fails any spec with SEVERE errors
+  # Based on https://medium.com/@coorasse/catch-javascript-errors-in-your-system-tests-89c2fe6773b1
+  config.after(:each, type: :system, js: true) do |example|
+    # Must call page.driver.browser.manage.logs.get(:browser) after every run,
+    # otherwise the logs don't get cleared and leak into other specs.
+    js_errors = page.driver.browser.manage.logs.get(:browser)
+    # Some forms using remote: true return a 406 that is expected
+    unless example.metadata[:ignore_js_errors]
+      js_errors.each do |error|
+        if error.level == "SEVERE" || error.level == "WARNING"
+          STDERR.puts "JS error detected (#{error.level}): #{error.message}"
+        end
+      end
+      expect(js_errors.map(&:level)).not_to include "SEVERE"
+    end
+  end
+
   Capybara.server = :webrick
   require "capybara/email/rspec"
   Capybara.enable_aria_label = true

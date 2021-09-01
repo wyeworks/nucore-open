@@ -16,6 +16,8 @@
         });
       });
 
+- if @journal_creation_reminder
+  = render "journal_creation_modal", reminder_message: @journal_creation_reminder.message
 = render "shared/transactions/headers"
 = content_for :h1 do
   = current_facility

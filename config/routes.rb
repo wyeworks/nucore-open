@@ -67,6 +67,7 @@ Rails.application.routes.draw do
 
       resource :product_notification, only: [:show, :edit, :update], path: "notifications", as: "notifications"
       resources :product_research_safety_certification_requirements, only: [:index, :create, :destroy], path: "certification_requirements"
+      resources :product_user_imports, only: :create
     end
 
     resources :product_display_groups do
@@ -321,9 +322,11 @@ Rails.application.routes.draw do
   # global settings
   resources :affiliates, except: :show
   resources :journal_cutoff_dates
+  resources :journal_creation_reminders, except: :show
   resources :global_user_roles do
     get "search", on: :collection
   end
+  resources :holidays, except: :show
   resources :log_events, only: :index
   resources :research_safety_certificates, except: :show
 

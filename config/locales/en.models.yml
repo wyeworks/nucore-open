@@ -68,6 +68,7 @@ en:
         subsidy_greater_than_cost: "cannot be greater than the Usage cost"
         already_in_queue: Only one file may be in process at a time
         zero_minutes: must be at least 1 minute
+        start_after_end: must be after Ending Date
         # Append your own errors here or at the model/attributes scope.
       full_messages:
         format: "%{attribute} %{message}"
@@ -114,6 +115,8 @@ en:
             reserve_start_at:
               after_cutoff: must be at least %{hours} hours in the future
               in_past: must be in the future
+              holiday_access_restricted: |
+                cannot be on a holiday because you do not have holiday access. Please contact the facility for more information.
 
         stored_file:
           attributes:
@@ -230,6 +233,9 @@ en:
       user_preference:
         one: User Preference
         other: User Preferences
+      journal_creation_reminder:
+        one: Journal Creation Reminder
+        other: Journal Creation Reminders
     # Model Attributes
     attributes:
       account_user:
@@ -272,6 +278,7 @@ en:
         url_name: URL Name
         requires_approval: Requires Approval?
         allows_training_requests: Allows Training Requests?
+        restrict_holiday_access: Restrict Holiday Access?
         requires_approval_show: Requires Approval
         initial_order_status: Initial Order Status
         is_archived: Is Inactive?
@@ -284,6 +291,8 @@ en:
         order_notification_recipient: Order Notification Recipient
         cancellation_email_recipients: Cancellation Notification Recipients
         issue_report_recipients: Alternate Issue Report Recipients
+      product_access_group:
+        allow_holiday_access: Allow Holiday Access?
       product_accessory:
         scaling_type: Scaling Type
       product_display_group:
@@ -382,6 +391,8 @@ en:
         reserve_to_s: Reservation
         reserve_start_date: Reserve Start
         reserve_end_date: Reserve End
+        reserve_start_at: Reserve Start
+        reserve_end_at: Reserve End
         duration_mins: Duration
         actuals_string: Actual Usage
         actual_start_date: Actual Start
@@ -415,3 +426,6 @@ en:
         user: Name
         product: Instrument
         created_at: Requested on
+      journal_creation_reminder:
+        starts_at: Starting Date
+        ends_at: Ending Date

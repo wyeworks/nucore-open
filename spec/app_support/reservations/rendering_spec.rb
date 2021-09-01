@@ -75,17 +75,20 @@ RSpec.describe Reservations::Rendering do
     before { reservation.product = build_stubbed(:product, name: "Generic") }
 
     context "with an order" do
-      let(:order) { build_stubbed(:order, user: user) }
+      let(:facility) { build_stubbed(:facility) }
+      let(:order_detail) { build_stubbed(:order_detail, note: "Note to self...") }
+      let(:order) { build_stubbed(:order, user: user, facility: facility, order_details: [order_detail]) }
       let(:user) { build_stubbed(:user) }
 
       before { allow(reservation).to receive(:order).and_return(order) }
+      before { allow(reservation).to receive(:order_detail).and_return(order_detail) }
 
       context "with details requested" do
         let(:title) { user.full_name }
 
         it "returns a hash with extra details about the order" do
           expect(reservation.as_calendar_object(with_details: true))
-            .to eq(base_hash.merge(email: user.email, title: user.full_name, orderId: order.id))
+            .to eq(base_hash.merge(email: user.email, title: user.full_name, orderId: order.id, orderNote: "Note to self..."))
         end
       end
 
@@ -114,13 +117,13 @@ RSpec.describe Reservations::Rendering do
       context "with details requested" do
         it "returns a hash without extra details about the order" do
           expect(reservation.as_calendar_object(with_details: true))
-            .to eq(base_hash.merge(title: "Admin Hold", email: user.full_name, user_note: reservation.user_note))
+            .to eq(base_hash.merge(title: "Admin Hold", email: user.full_name, userNote: reservation.user_note))
         end
       end
 
       context "without details requested" do
         it "returns a hash without extra details about the order" do
-          expect(reservation.as_calendar_object).to eq(base_hash.merge(title: "Admin Hold", email: user.full_name, user_note: reservation.user_note))
+          expect(reservation.as_calendar_object).to eq(base_hash.merge(title: "Admin Hold", email: user.full_name, userNote: reservation.user_note))
         end
       end
     end

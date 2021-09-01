@@ -16,6 +16,7 @@ en:
       selection_needed: "Must select Account"
       rules_failed: "No rule generated a verdict"
       user_not_found: "User is not found"
+      holiday_access_restricted: User does not have holiday access
 
   pages:
     admin_occupancies: Occupancies

@@ -13,6 +13,7 @@
       %th
       %th= ProductAccessGroup.human_attribute_name(:name)
       %th= User.model_name.human.pluralize
+      %th= ProductAccessGroup.human_attribute_name(:allow_holiday_access)
 
   %tbody
     - @product_access_groups.each do |level|
@@ -32,3 +33,8 @@
           %td= level.name
 
         %td= level.users.size
+        %td
+          - if @product.restrict_holiday_access?
+            = t_boolean(level.allow_holiday_access)
+          - else
+            = t(".holiday_hint")

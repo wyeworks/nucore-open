@@ -28,7 +28,7 @@ class ReservationCreator
         raise ActiveRecord::RecordInvalid, @order_detail unless reservation_and_order_valid?(session_user)
 
         validator = OrderPurchaseValidator.new(@order_detail)
-        raise ActiveRecord::RecordInvalid, @order_detail if validator.invalid?
+        raise OrderPurchaseValidatorError, @order_detail if validator.invalid?
 
         save_reservation_and_order_detail(session_user)
 
@@ -42,8 +42,10 @@ class ReservationCreator
         else
           @success = :default
         end
-      rescue ActiveRecord::RecordInvalid => e
+      rescue OrderPurchaseValidatorError => e
         @error = e.message
+        raise ActiveRecord::Rollback
+      rescue ActiveRecord::RecordInvalid => e
         raise ActiveRecord::Rollback
       rescue StandardError => e
         @error = I18n.t("orders.purchase.error", message: e.message).html_safe

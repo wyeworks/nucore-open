@@ -10,6 +10,7 @@ module SecureRooms
       AccessRules::ArchivedProductRule,
       AccessRules::RequiresApprovalRule,
       AccessRules::EgressRule,
+      AccessRules::HolidayAccessRule,
       AccessRules::ScheduleRule,
       AccessRules::RequiresResearchSafetyCertificationsRule,
       AccessRules::AccountSelectionRule,

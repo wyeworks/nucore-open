@@ -9,6 +9,13 @@ en:
           purchase the %{product_type}.
         none: No users are currently approved.
         update: Update %{plural_label}
+        import_button: Import Approved Users
+        import_header: Approved User Import
+        import_hint: |
+          Click the button below to import a CSV file with a list of emails
+          or NetId's in the 'Username' column.  All other columns will be
+          ignored. Users that already have access will not be affected.
+
       table:
         confirm_removal: |
           Are you sure you wish to remove this user from this %{product_type}?

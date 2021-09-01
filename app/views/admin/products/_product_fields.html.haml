@@ -6,9 +6,11 @@
   = f.input :initial_order_status_id, collection: OrderStatus.initial_statuses(current_facility).collect {|cf| [cf.name_with_level, cf.id] }, hint: text("hints.initial_order_status"), include_blank: false
 
   %fieldset.well
-    = f.input :requires_approval, as: :boolean, label: false, inline_label: text("hints.requires_approval"), input_html: { data: { disables: ".#{f.object.class.model_name.to_s.underscore}_allows_training_requests"} }
+    = f.input :requires_approval, as: :boolean, label: false, inline_label: text("hints.requires_approval"), input_html: { data: { disables: ".#{f.object.class.model_name.to_s.underscore}_allows_training_requests, .instrument_restrict_holiday_access"} }
     - if SettingsHelper.feature_on?(:training_requests)
       = f.input :allows_training_requests, as: :boolean, label: false, inline_label: text("hints.allows_training_requests")
+    - if f.object.is_a?(Instrument)
+      = f.input :restrict_holiday_access, as: :boolean, label: false, inline_label: text("hints.restrict_holiday_access")
 
 = f.input :is_archived, as: :boolean, label: false, inline_label: text("hints.is_archived")
 = f.input :is_hidden, as: :boolean, label: false, inline_label: text("hints.is_hidden", field: f.object.class.model_name.human.downcase)

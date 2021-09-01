@@ -6,6 +6,7 @@ module SecureRooms
 
     class ScheduleRule < BaseRule
 
+      # TODO: Consider refactoring to make this logic more explicit.
       def evaluate
         deny!(:no_schedule) if secure_room.schedule_rules.none?
         deny!(:outside_schedule) unless secure_room.schedule_rules.cover?(Time.current)

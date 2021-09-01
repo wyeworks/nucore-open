@@ -1,0 +1,26 @@
+= content_for :h1 do
+  = t("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "journal_creation_reminders"
+
+%h2= JournalCreationReminder.model_name.human(count: 2)
+
+= link_to t(".new"), new_journal_creation_reminder_path, class: "btn-add"
+
+%table.table
+  %caption= t(".caption")
+  %thead
+    %th
+    %th{scope: "col"}= t(".start_date")
+    %th{scope: "col"}= t(".end_date")
+    %th{scope: "col"}= t(".fiscal_year")
+    %th{scope: "col"}= t(".message")
+  %tbody
+    - @journal_creation_reminders.each do |journal_creation_reminder|
+      %tr{class: journal_creation_reminder.past? ? "row-warning" : ""}
+        %td{"aria-label": "Edit Reminder ##{journal_creation_reminder.id}"}= link_to t(".edit"), edit_journal_creation_reminder_path(journal_creation_reminder)
+        %td= format_usa_datetime journal_creation_reminder.starts_at
+        %td= format_usa_datetime journal_creation_reminder.ends_at
+        %td= l(journal_creation_reminder.ends_at, format: "FY%y")
+        %th{scope: "row"}= journal_creation_reminder.message

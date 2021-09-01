@@ -17,6 +17,7 @@ module Reservations
             title: order.user.full_name,
             email: order.user.email,
             orderId: order.id,
+            orderNote: order_detail.facility.show_order_note? ? order_detail.note : nil,
           }
         else
           {}
@@ -32,7 +33,7 @@ module Reservations
           email: created_by.try(:full_name),
         }
         hash[:expiration] = "Expires #{MinutesToTimeFormatter.new(expires_mins_before)} prior" if expires_mins_before.present?
-        hash[:user_note] = user_note
+        hash[:userNote] = user_note
         hash
       end
     end

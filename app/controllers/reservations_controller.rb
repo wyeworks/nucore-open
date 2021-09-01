@@ -120,7 +120,8 @@ class ReservationsController < ApplicationController
       end
     else
       @reservation = creator.reservation
-      flash.now[:error] = creator.error.html_safe
+      # validation errors are handled by simple form
+      flash.now[:error] = creator.error.html_safe if creator.error.present?
       set_windows
       render :new
     end

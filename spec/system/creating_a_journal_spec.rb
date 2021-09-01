@@ -44,16 +44,62 @@ RSpec.describe "Creating a journal" do
     end
   end
 
-  describe "creating a journal" do
-    before do
-      visit new_facility_journal_path(facility)
+  describe "creating a journal", :js do
+    context "with no journal creation reminder" do
+      before do
+        visit new_facility_journal_path(facility)
+      end
+
+      it "can select order details and create a journal" do
+        expect(page).to have_content(OrderDetailPresenter.new(reviewed_order_detail).description_as_html)
+        check "order_detail_ids_"
+        click_button "Create"
+        expect(page).to have_content "Pending Journal"
+      end
     end
 
-    it "can select order details and create a journal" do
-      expect(page).to have_content(OrderDetailPresenter.new(reviewed_order_detail).description_as_html)
-      check "order_detail_ids_"
-      click_button "Create"
-      expect(page).to have_content "Pending Journal"
+    context "with a past journal creation reminder" do
+      before do
+        JournalCreationReminder.create(starts_at: 2.weeks.ago, ends_at: 2.days.ago, message: "We are in the year-end closing window.")
+        visit new_facility_journal_path(facility)
+      end
+
+      it "can select order details and create a journal" do
+        expect(page).to have_content(OrderDetailPresenter.new(reviewed_order_detail).description_as_html)
+        check "order_detail_ids_"
+        click_button "Create"
+        expect(page).to have_content "Pending Journal"
+      end
+    end
+
+    context "with a future journal creation reminder" do
+      before do
+        JournalCreationReminder.create(starts_at: 2.weeks.from_now, ends_at: 2.months.from_now, message: "We are in the year-end closing window.")
+        visit new_facility_journal_path(facility)
+      end
+
+      it "can select order details and create a journal" do
+        expect(page).to have_content(OrderDetailPresenter.new(reviewed_order_detail).description_as_html)
+        check "order_detail_ids_"
+        click_button "Create"
+        expect(page).to have_content "Pending Journal"
+      end
+    end
+
+    context "with a current journal creation reminder" do
+      before do
+        JournalCreationReminder.create(starts_at: 2.days.ago, ends_at: 2.days.from_now, message: "We are in the year-end closing window.")
+        visit new_facility_journal_path(facility)
+      end
+
+      it "can see a reminder message, then select order details and create a journal" do
+        expect(page).to have_content(OrderDetailPresenter.new(reviewed_order_detail).description_as_html)
+        check "order_detail_ids_"
+        click_link "Create"
+        expect(page).to have_content("We are in the year-end closing window.")
+        click_button "Create Journal"
+        expect(page).to have_content "Pending Journal"
+      end
     end
   end
 

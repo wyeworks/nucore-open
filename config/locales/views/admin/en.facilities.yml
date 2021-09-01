@@ -15,6 +15,7 @@ en:
           show_instrument_availability: Show Instrument Availability Status?
           dashboard_enabled: Enable Instrument Dashboard
           kiosk_enabled: Enable Kiosk View
+          show_order_note: Show Order Note on hover for admin calendars?
         inactive: "Uncheck this box to prevent end users from viewing or purchasing from this !facility_downcase!:"
         contact: "The following contact information will appear on statements and should indicate where payment should be sent"
         order_notification: |

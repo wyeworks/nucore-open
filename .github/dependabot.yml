@@ -1,0 +1,11 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "23:00"
+    timezone: America/Chicago
+  open-pull-requests-limit: 99
+  allow:
+  - dependency-type: all

@@ -26,6 +26,7 @@ en:
           hints:
             requires_approval: "Restrict access to approved users"
             allows_training_requests: "Allow users to request training"
+            restrict_holiday_access: "Restrict holiday access? (if checked, specific approval must be granted for holiday access)"
             initial_order_status: "Default status for new orders"
             is_archived: "Inactivate the product, disallowing purchase and viewing"
             is_hidden: "Hide %{field} from end users; visible to staff when \"ordering on behalf\" of another user"

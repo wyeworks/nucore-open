@@ -30,7 +30,8 @@ class SingleReservationsController < ApplicationController
       redirect_to purchase_order_path(@order, params.permit(:send_notification))
     else
       @reservation = creator.reservation
-      flash.now[:error] = creator.error.html_safe
+      # validation errors are handled by simple form
+      flash.now[:error] = creator.error.html_safe if creator.error.present?
       set_windows
       render "reservations/new"
     end

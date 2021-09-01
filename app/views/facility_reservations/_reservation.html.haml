@@ -12,7 +12,7 @@
       %span{ class: order_detail.order_status.to_s.downcase }
         = "- #{order_detail.order_status}"
 
-      - if order_detail.note.present?
+      - if order_detail.note.present? && order_detail.facility.show_order_note?
         %br
         %span= order_detail.note
 

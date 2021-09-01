@@ -1,0 +1,16 @@
+en:
+  views:
+    facility_orders:
+      show:
+        table_caption: "Order detail information"
+        pricing: "Pricing"
+        status: "Status"
+        actions: "Actions"
+        reserved: "Reserved"
+        actual: "Actual"
+        cost: "Cost"
+        subsidy: "Subsidy"
+        total: "Total"
+        order_table:
+          accessories: "Add Accessories"
+          download: "Download Event"

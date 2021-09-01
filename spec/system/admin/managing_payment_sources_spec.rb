@@ -27,4 +27,31 @@ RSpec.describe "Managing accounts" do
       expect(page).to have_content("Description\nNew description")
     end
   end
+
+  describe "changing a user's role" do
+    let(:account_factory) { Account.config.account_types.first.demodulize.underscore }
+    let!(:account) { create(account_factory, :with_account_owner, owner: owner) }
+
+    context "from anything to owner" do
+      let(:other_user) { create(:user) }
+      let!(:user_role) do
+        create(:account_user, account: account, user: other_user, user_role: AccountUser::ACCOUNT_PURCHASER)
+      end
+
+      it "fails gracefully" do
+        visit facility_accounts_path(facility)
+        fill_in "search_term", with: account.account_number
+        click_on "Search"
+        click_on account.to_s
+        click_on "Members"
+        click_on "Add Access"
+        fill_in "search_term", with: other_user.first_name
+        click_on "Search"
+        click_on other_user.last_first_name
+        select "Owner", from: "Role"
+        click_on "Create"
+        expect(page).to have_content("#{other_user.full_name} is already a member. Please remove #{other_user.full_name} before adding them as the new Owner.")
+      end
+    end
+  end
 end

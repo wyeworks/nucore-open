@@ -162,7 +162,27 @@ en:
       update_restrictions:
         success: "The users' scheduling groups have been updated."
 
+    product_user_imports:
+      create:
+        error: "Our apologies, but an error occurred while importing: %{error}"
+        failure: |
+          %{count} error(s) occurred while importing:
 
+          %{errors}
+        success:
+          zero: No new approved users were added.
+          one: |
+            %{count} new approved user imported successfully:
+
+            %{added}
+          other: |
+            %{count} new approved users imported successfully:
+
+            %{added}
+        skips: |
+          The following user(s) already had access:
+
+          %{skipped}
 
     orders:
       purchase:

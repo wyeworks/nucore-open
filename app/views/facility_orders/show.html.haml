@@ -14,60 +14,26 @@
 = render "merge_order"
 
 %table.order-list.table.table-striped.table-hover#order-management
+  %caption.text-left= t("views.facility_orders.show.table_caption")
   %thead
     %tr
-      %th{colspan: 4}
+      %td{colspan: 4}
       %th{colspan: 2}= OrderDetail.human_attribute_name(:quantity)
-      %th{colspan: 3} Pricing
+      %th{colspan: 3}= t("views.facility_orders.show.pricing")
     %tr
-      %th.order-id= OrderDetail.human_attribute_name(:id)
-      %th.badges Status
-      %th= Product.model_name.human
-      %th
-      %th.time Reserved
-      %th.time Actual
-      %th.currency Cost
-      %th.currency Subsidy
-      %th.currency Total
-      %th.badges
+      %th.order-id{scope: "col"}= OrderDetail.human_attribute_name(:id)
+      %th.badges{scope: "col"}= t("views.facility_orders.show.status")
+      %th{scope: "col"}= Product.model_name.human
+      %th{scope: "col"}= t("views.facility_orders.show.actions")
+      %th.time{scope: "col"}= t("views.facility_orders.show.reserved")
+      %th.time{scope: "col"}= t("views.facility_orders.show.actual")
+      %th.currency{scope: "col"}= t("views.facility_orders.show.cost")
+      %th.currency{scope: "col"}= t("views.facility_orders.show.subsidy")
+      %th.currency{scope: "col"}= t("views.facility_orders.show.total")
+      %td.badges
 
-  %tbody
-    - OrderDetailPresenter.wrap(@order_details).each do |od|
-      %tr{class: [od.parent_order_detail_id ? "child" : "parent", "status-#{od.order_status.root.name.underscore}", flash[:updated_order_details].try(:include?, od.id) ? "updated-order-detail" : ""] }
-        %td.order-id
-          = link_to od,
-            manage_order_detail_path(od),
-            class: "manage-order-detail"
-        %td.badges
-          = status_badge(od)
-        %td.product
-          = od.product
-          - if od.time_data.present?
-            %br
-            = od.time_data
-        %td.action
-          - if od.add_accessories?
-            = link_to new_facility_order_order_detail_accessory_path(current_facility, @order, od), class: ["has_accessories", "persistent", "undecorated"] do
-              = tooltip_icon "fa fa-plus-square", t("product_accessories.pick_accessories.title")
+  = render "order_table", order_details: @order_details
 
-          - if od.reservation.present?
-            = link_to(fa_icon("calendar"),
-              facility_order_order_detail_url(current_facility, @order, od, format: :ics),
-              title: t("ical.calendar_tooltip"))
-          = render "order_file_icon", od: od
-          = render "result_file_icon", od: od
-
-        %td.currency.timeinput= od.reservation.try(:duration_mins)
-        - if od.time_data.present?
-          %td.currency{class: od.time_data.actual_duration_mins ? "timeinput" : ""}= od.time_data.actual_duration_mins || "???"
-        - elsif od.quantity_as_time?
-          %td.currency.timeinput= od.quantity
-        - else
-          %td.currency= od.quantity
-        %td.currency= od.wrapped_cost
-        %td.currency= od.wrapped_subsidy
-        %td.currency= od.wrapped_total
-        %td.badges= order_detail_badges(od)
   %tfoot
     %tr
       %td

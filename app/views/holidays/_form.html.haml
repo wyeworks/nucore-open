@@ -1,0 +1,4 @@
+= simple_form_for(@holiday) do |f|
+  = f.input :date, as: :date_picker
+  = f.button :submit, t(".submit"), class: ["btn", "btn-primary"]
+  = link_to t(".cancel"), holidays_path

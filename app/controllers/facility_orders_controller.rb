@@ -31,6 +31,9 @@ class FacilityOrdersController < ApplicationController
   def show
     @order_details = @order.order_details.ordered_by_parents
     @order_details = @order_details.includes(:reservation, :order_status, :product, :order)
+    if params[:refresh]
+      render partial: "order_table", locals: { order_details: @order_details }
+    end
   end
 
   ## POST /facilities/:facility_id/orders/batch_update
