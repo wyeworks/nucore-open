@@ -1,4 +1,5 @@
 = javascript_include_tag "transaction_history"
+= javascript_include_tag "bulk_note"
 
 = content_for :h1 do
   = current_facility
@@ -12,7 +13,7 @@
 
 - if @unreconciled_details.present?
   = form_tag(update_umass_corum_voucher_splits_facility_accounts_path, method: :post) do
-    = render "voucher_splits_reconciliation/action_row"
+    = render "voucher_splits_reconciliation/action_row", inputs: true
     = render "voucher_splits_reconciliation/table", order_details: @unreconciled_details, next_order_status: "mivp_pending"
     = render "voucher_splits_reconciliation/action_row"
 

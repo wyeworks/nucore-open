@@ -21,6 +21,17 @@ RSpec.describe OrderDetails::Reconciler do
     it "reconciles all the orders" do
       expect { reconciler.reconcile_all }.to change { OrderDetail.reconciled.count }.from(0).to(5)
     end
+
+    context "with a bulk note" do
+      let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "this is a bulk note" ) }
+
+      it "adds the note to all order details" do
+        reconciler.reconcile_all
+        order_details.each do |od|
+          expect(od.reload.reconciled_note).to eq("this is a bulk note")
+        end
+      end
+    end
   end
 
   # describe "reconciling more than 1000 order details (because of oracle)" do

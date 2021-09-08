@@ -9,19 +9,19 @@
       %th{ scope: "col" }= t(".primary")
       %th{ scope: "col" }= t(".mivp")
       %th{ scope: "col" }= Statement.human_attribute_name(:total_cost)
-      %th{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
+      %th#reconcile-note.row-note-input{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
 
 
   %tbody
     - order_details.each do |order_detail|
       %tr
-        %td.centered= check_box_tag "order_detail[#{order_detail.id}][#{next_order_status}]", "1", false, class: "toggle"
-        %th{ scope: "row" }= "##{order_detail.statement_invoice_number}"
+        %td.centered= check_box_tag "order_detail[#{order_detail.id}][#{next_order_status}]", "1", false, class: "toggle", aria: {label: t(".checkbox_label", order_number:  order_detail.to_s)}
+        %td= "##{order_detail.statement_invoice_number}"
         %td
           = order_detail.account
           %br
           = order_detail.account.owner_user
-        %td.user-order-detail
+        %th.user-order-detail{ scope: "row" }
           .order-detail-description
             = link_to "##{order_detail.order_id}", facility_order_path(current_facility, order_detail.order_id)
             = "-"
@@ -37,4 +37,4 @@
           %td= primary_total(order_detail)
           %td.bold= mivp_total(order_detail)
         %td= show_actual_total(order_detail)
-        %td= text_area_tag "order_detail[#{order_detail.id}][reconciled_note]", order_detail.reconciled_note
+        %td.row-note-input= text_area_tag "order_detail[#{order_detail.id}][reconciled_note]", order_detail.reconciled_note

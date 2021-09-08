@@ -76,6 +76,9 @@ en:
       table_caption: Statemented Orders
       mivp: MIVP
       primary: Primary
+      checkbox_label: select order %{order_number} to be reconciled
     action_row:
       mivp_pending:
         submit: Mark Orders 'MIVP Pending'
+      bulk_note_checkbox: Use Bulk Note
+      bulk_note: Bulk Reconciliation Note

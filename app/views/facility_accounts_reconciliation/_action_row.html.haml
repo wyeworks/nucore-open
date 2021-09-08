@@ -1,10 +1,19 @@
 .row.table-actions.form-horizontal
   .span2.select_all_none= select_all_link
+  .span1.pull-right= submit_tag t("facility_accounts_reconciliation.index.submit"), class: ["btn", "btn-primary"], data: { disable_with: t("facility_accounts_reconciliation.index.submit") }
 
-  - if local_assigns[:date]
-    .span5.control-group.fields
+- if local_assigns[:date]
+  .row.table-actions.form-horizontal
+    .span5.pull-left.control-group.fields
       %label.control-label{ for: :reconciled_at }= OrderDetail.human_attribute_name(:reconciled_at)
       .controls
         = text_field_tag :reconciled_at, format_usa_date(Time.current), class: :datepicker__data, data: { min_date: unreconciled_order_details.map(&:journal_or_statement_date).min.iso8601, max_date: Time.current.iso8601 }
-
-  .span1.pull-right= submit_tag t("facility_journals.show.submit"), class: ["btn", "btn-primary"], data: { disable_with: t("facility_journals.show.submit") }
+  .row.table-actions.form-horizontal
+    .span3.control-group.fields
+      %label.control-label{ for: "bulk-note-checkbox" }= t("facility_accounts_reconciliation.index.bulk_note_checkbox")
+      .controls
+        = check_box_tag :bulk_note_checkbox, 0, false, id: "bulk-note-checkbox"
+    #bulk-note-input.span5.control-group.fields
+      %label.control-label{ for: :bulk_reconcile_note }= t("facility_accounts_reconciliation.index.bulk_note")
+      .controls
+        = text_field_tag :bulk_reconcile_note
