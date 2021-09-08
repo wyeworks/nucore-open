@@ -31,4 +31,13 @@ RSpec.describe UmassCorum::VoucherReconciler do
       expect { voucher_reconciler.reconcile_all }.to change { OrderDetail.last.reload.reconciled_note }.from(nil).to("test note")
     end
   end
+
+  context "when a bulk note is used for selected orders" do
+    let(:number_of_order_details) { 5 }
+    let(:voucher_reconciler) { described_class.new(OrderDetail.all, params, "this is the bulk note") }
+
+    it "changes all selected orders to have the bulk note" do
+      expect { voucher_reconciler.reconcile_all }.to change { OrderDetail.pluck(:reconciled_note).uniq }.from([nil]).to(["this is the bulk note"])
+    end
+  end
 end

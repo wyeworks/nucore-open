@@ -13,9 +13,10 @@ module UmassCorum
 
     validates :order_details, presence: true
 
-    def initialize(order_detail_scope, params)
+    def initialize(order_detail_scope, params, bulk_reconcile_note = nil)
       @params = params || ActionController::Parameters.new
       @order_details = order_detail_scope.readonly(false).find_ids(to_be_updated.keys)
+      @bulk_reconcile_note = bulk_reconcile_note
     end
 
     def reconcile_all
@@ -44,8 +45,9 @@ module UmassCorum
     end
 
     def mivp_pending(order_detail, params)
+      order_detail.assign_attributes(allowed(params))
+      order_detail.reconciled_note = @bulk_reconcile_note if @bulk_reconcile_note
       order_detail.change_status!(VoucherOrderStatus.mivp)
-      order_detail.update(reconciled_note: params[:reconciled_note])
       @count += 1
     rescue => e
       @error_fields = { order_detail.id => order_detail.errors.collect { |field, _error| field } }
@@ -53,6 +55,10 @@ module UmassCorum
       @persist_errors = [e.message] if @persist_errors.empty?
       @count = 0
       raise ActiveRecord::Rollback
+    end
+
+    def allowed(params)
+      params.except(:reconciled).permit(:reconciled_note)
     end
 
   end
