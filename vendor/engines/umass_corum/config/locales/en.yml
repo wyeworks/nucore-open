@@ -73,7 +73,9 @@ en:
       head: Mark MIVP Pending
       none: There are no statemented orders ready to be marked MIVP Pending at this time
     table:
-      table_caption: available to mark 'MIVP Pending'
+      table_caption:
+        mivp_pending: Statemented Orders (no payment recieved)
+        reconciled: Reconcilable Orders (MIVP Pending)
       mivp: MIVP
       primary: Primary
       checkbox_label: select order %{order_number} to be reconciled

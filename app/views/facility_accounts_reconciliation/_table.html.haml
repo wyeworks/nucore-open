@@ -1,5 +1,5 @@
 %table.table.table-striped.table-hover
-  %caption= "#{account_class.model_name.human(count: 2)} #{t("facility_accounts_reconciliation.index.caption")}"
+  %caption= t("facility_accounts_reconciliation.index.caption", model: account_class.model_name.human)
   %thead
     %tr
       %th{ scope: "col" }
