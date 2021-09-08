@@ -216,7 +216,7 @@ en:
       none: There are no %{model} with completed orders to be reconciled at this time
       submit: "Reconcile Orders"
       instructions: "Please review the following orders. Check those that are paid, record any notes, and click 'Reconcile Orders'."
-      caption: available to reconcile
+      caption: Reconcilable %{model} Orders
       checkbox_label: select order %{order_number} to be reconciled
       bulk_note_checkbox: Use Bulk Note
       bulk_note: Bulk Reconciliation Note
