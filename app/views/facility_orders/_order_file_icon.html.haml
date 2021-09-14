@@ -1,8 +1,8 @@
 - if od.survey_completed?
   .inline-icons
     = link_to od.external_service_receiver.show_url, target: "_blank" do
-      %i.fa.fa-file-text{data: { toggle: "tooltip" }, title: t("order_details.show.link.view.order_form") }
+      %i.fa.fa-file-text{ data: { toggle: "tooltip" }, title: t("order_details.show.link.view.order_form") }
 - od.stored_files.template_result.each do |stored_file|
   .inline-icons
     = link_to facility_template_result_path(stored_file) do
-      %i.fa.fa-file-text{data: { toggle: "tooltip" }, title: t("order_details.show.link.view.order_file") }
+      %i.fa.fa-file-text{ data: { toggle: "tooltip" }, title: t("order_details.show.link.view.order_file") }

@@ -12,6 +12,7 @@
   = f.input :description
   = f.input :banner_notice if SettingsHelper.feature_on?(:facility_banner_notice)
   = f.input :accepts_multi_add, label: text("views.facilities.facility_fields.labels.accepts_multi_add")
+  = f.input :show_order_note, label: text("views.facilities.facility_fields.labels.show_order_note")
   = f.input :show_instrument_availability, label: text("views.facilities.facility_fields.labels.show_instrument_availability")
   = f.input :dashboard_enabled, label: text("views.facilities.facility_fields.labels.dashboard_enabled")
   = f.input :kiosk_enabled, label: text("views.facilities.facility_fields.labels.kiosk_enabled") if SettingsHelper.feature_on?(:kiosk_view)

@@ -96,7 +96,7 @@ RSpec.describe "Facility Statement Admin" do
     end
   end
 
-  describe "resending statement emails" do
+  describe "resending statement emails", feature_setting: { send_statement_emails: true } do
     let!(:statement) { create(:statement, created_at: 3.days.ago, order_details: [order_details.first], account: order_details.first.account, facility: facility) }
 
     before do

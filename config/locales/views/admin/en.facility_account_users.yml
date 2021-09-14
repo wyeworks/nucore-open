@@ -4,6 +4,7 @@ en:
       create:
         success: "%{user} was added to the %{account_type} Account"
         error: An error was encountered while trying to add %{user} to the %{account_type} Account
+        existing_member_error: "%{user} is already a member. Please remove %{user} before adding them as the new Owner."
       destroy:
         success: The user was successfully removed from the payment method
         error: An error was encountered while attempting to remove the user from the payment method

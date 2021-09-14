@@ -1,0 +1,11 @@
+= content_for :h1 do
+  = t("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "holidays"
+
+%h2= t(".header")
+
+= link_to t(".delete"), holiday_path(@holiday), data: { confirm: t(".delete_confirm") }, class: "btn btn-danger pull-right", method: :delete
+
+= render "form"

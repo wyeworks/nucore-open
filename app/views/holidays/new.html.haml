@@ -1,0 +1,9 @@
+= content_for :h1 do
+  = t("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "holidays"
+
+%h2= t(".header")
+
+= render "form"

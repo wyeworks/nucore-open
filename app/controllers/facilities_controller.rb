@@ -215,6 +215,7 @@ class FacilitiesController < ApplicationController
       email
       fax_number
       is_active
+      show_order_note
       name
       order_notification_recipient
       phone_number

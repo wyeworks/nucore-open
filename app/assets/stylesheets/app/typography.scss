@@ -17,6 +17,21 @@ a {
   }
 }
 
+
+// Icon with link text has an underline between spaces,
+// TODO: broaden these classes for use elsewhere
+// Currently used for action links with icons in _order_table.html.haml
+
+.action a {
+  text-decoration: none;
+  display: block;
+
+  span {
+    text-decoration: underline;
+  }
+}
+
+
 h1, h2, h3, h4, h5 {
   font-weight: normal;
   color: black;

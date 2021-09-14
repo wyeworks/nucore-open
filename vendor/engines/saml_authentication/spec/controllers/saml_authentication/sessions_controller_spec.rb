@@ -184,7 +184,7 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
 
     it "redirects to the slo path" do
       delete :destroy
-      expect(response.location).to start_with(Devise.saml_config.idp_slo_target_url)
+      expect(response.location).to start_with(Devise.saml_config.idp_slo_service_url)
     end
 
     it "includes the username in the logout request" do
@@ -227,7 +227,7 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
 
       it "redirects back to the IdP" do
         get :idp_sign_out, params: { SAMLRequest: payload }
-        expect(response.location).to start_with(Devise.saml_config.idp_slo_target_url)
+        expect(response.location).to start_with(Devise.saml_config.idp_slo_service_url)
       end
     end
   end

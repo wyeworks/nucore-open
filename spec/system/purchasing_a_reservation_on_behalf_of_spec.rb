@@ -88,6 +88,22 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
     end
   end
 
+  describe "when the reservation is on a holiday" do
+    before do
+      instrument.update!(restrict_holiday_access: true)
+      Holiday.create(date: Time.current)
+    end
+
+    it "can purchase" do
+      click_link instrument.name
+      select user.accounts.first.description, from: "Payment Source"
+
+      click_button "Create"
+
+      expect(page).to have_content("Order Receipt")
+    end
+  end
+
   describe "creating multiple reservations" do
     it "can create reservations in the future" do
       fill_in "order[order_details][][quantity]", with: "2"

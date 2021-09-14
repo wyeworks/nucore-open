@@ -2,4 +2,5 @@
   .inline-icons
     - result_file_count = od.stored_files.sample_result.count
     = link_to admin_order_detail_path(:files, od), class: "results-file-upload" do
-      %i{class: result_file_count > 0 ? "fa fa-file" : "fa fa-file-o", data: { toggle: "tooltip" }, title: t("file_uploads.sample_result.count", count: result_file_count) }
+      %i{ class: result_file_count > 0 ? "fa fa-file" : "fa fa-file-o", data: { toggle: "tooltip" }, title: t("file_uploads.sample_result.upload") }
+      %span= t("file_uploads.sample_result.count", count: result_file_count)

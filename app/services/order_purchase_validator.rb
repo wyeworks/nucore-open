@@ -36,3 +36,6 @@ class OrderPurchaseValidator
   end
 
 end
+
+class OrderPurchaseValidatorError < ActiveRecord::RecordInvalid
+end

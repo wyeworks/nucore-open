@@ -67,6 +67,7 @@ en:
     global_settings: Global Settings
     global_user_roles: Global User Roles
     instrument_utilization_reports: Instrument Utilization
+    holidays: Holidays
     login: Login
     logout: Logout
     manage: Manage %{model}
@@ -220,8 +221,6 @@ en:
       checkbox_label: select order %{order_number} to be reconciled
       bulk_note_checkbox: Use Bulk Note
       bulk_note: Bulk Reconciliation Note
-    table:
-      table_caption: Reconcilable Orders
 
   facility_users:
     title: "!Facility! Staff"
@@ -273,6 +272,10 @@ en:
       expired_payment: These payment sources were not valid at the time of fulfillment. Please choose a different payment source.
       download_unjournalable: Export Errors as CSV
       no_transactions: There are no transactions requiring journals matching the search parameters.
+    journal_creation_reminder_modal:
+      header: Journal Date Reminder
+      proceed: Create Journal
+      cancel: Edit Journal Date
     index:
       head:
         pending: Pending Journal
@@ -546,6 +549,13 @@ en:
   product_access_groups:
     index:
       add_button: Add %{group}
+      holiday_hint: This product doesn't restrict access on holidays
+    fields:
+      url: Edit Details page
+      holiday_hint: |
+        This product doesn't restrict access on holidays.
+
+        To enable holiday restrictions for this product, check the boxes for "Restrict access to approved users" and "Restrict holiday access?" on the %{url}.
 
   reservations:
     logout:
@@ -896,7 +906,7 @@ en:
   file_uploads:
     sample_result:
       title: Results Files
-      count: "%{count} Results Files"
+      count: "%{count} Uploaded"
       upload: Upload Results
       none: No results have been uploaded yet.
       download_all: Download all as zip...
@@ -1160,6 +1170,58 @@ en:
     in_review: Transactions in Review
     none_in_review_found: No transactions in review were found.
     recently_reviewed: Recently Reviewed
+
+  journal_creation_reminders:
+    index:
+      caption: Messages to display when creating a new journal during the specified date range.
+      new: Add New Reminder
+      start_date: Starting
+      end_date: Ending
+      fiscal_year: Fiscal Year
+      message: Message
+      edit: Edit
+    create:
+      success: Reminder successfully added
+    destroy:
+      success: Reminder successfully deleted
+    edit:
+      delete: Delete
+      delete_confirm: Are you sure you want to delete this Reminder?
+      header: Edit Reminder
+    form:
+      submit: Submit
+      cancel: Cancel
+    new:
+      header: New Journal Reminder Dates
+    update:
+      success: Reminder successfully updated
+
+  holidays:
+    index:
+      title: Holidays
+      caption: A list of holidays with dates in the future
+      new: Add Holiday
+      actions: Actions
+      date: Date
+      edit: Edit
+      delete: Delete
+      confirm_delete: Delete this holiday?
+      recency: "Note: Holidays can be used to (optionally) restrict instrument access."
+    create:
+      success: Holiday successfully added
+    destroy:
+      success: Holiday successfully deleted
+    edit:
+      delete: Delete
+      delete_confirm: Are you sure you want to delete this holiday?
+      header: Edit Holiday
+    form:
+      submit: Submit
+      cancel: Cancel
+    new:
+      header: New Holiday
+    update:
+      success: Holiday successfully updated
 
   activerecord:
     errors:

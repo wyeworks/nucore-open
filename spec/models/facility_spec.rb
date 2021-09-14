@@ -167,4 +167,27 @@ RSpec.describe Facility do
       end.to change(facility, :dashboard_token)
     end
   end
+
+  describe "show_multi_add_products?" do
+    let(:user) { create(:user) }
+    let(:facility) { create(:facility, accepts_multi_add: true) }
+    let!(:hidden_product) {  create(:item, :without_validation, facility: facility, is_archived: false, is_hidden: true) }
+
+    it "returns false with no user" do
+      expect(facility.show_multi_add_products?(Product.all, nil)).to eq false
+    end
+
+    it "returns false with multi add disabled" do
+      facility.update(accepts_multi_add: false)
+      expect(facility.show_multi_add_products?(Product.all, user)).to eq false
+    end
+
+    it "returns false with no products in scope" do
+      expect(facility.show_multi_add_products?(Product.active, user)).to eq false
+    end
+
+    it "returns true with one or more products in scope" do
+      expect(facility.show_multi_add_products?(Product.not_archived, user)).to eq true
+    end
+  end
 end

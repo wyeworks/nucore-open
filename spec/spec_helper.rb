@@ -101,8 +101,12 @@ RSpec.configure do |config|
 
   config.around(:each, :time_travel) do |example|
     if defined?(now)
-      # Travel to a specific time if the spec defines let(:now)
-      travel_to_and_return(now) { example.call }
+      # Roll back any record created in the let(:now) block
+      ActiveRecord::Base.transaction do
+        # Travel to a specific time if the spec defines let(:now)
+        travel_to_and_return(now) { example.call }
+        raise ActiveRecord::Rollback
+      end
     else
       example.call
     end

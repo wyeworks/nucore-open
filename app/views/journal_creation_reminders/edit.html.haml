@@ -1,0 +1,12 @@
+= content_for :h1 do
+  = t("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "journal_creation_reminders"
+
+%h2= t(".header")
+
+= link_to t(".delete"), journal_creation_reminder_path(@journal_creation_reminder), data: { confirm: t(".delete_confirm") }, class: "btn btn-danger pull-right", method: :delete
+
+= render "form"
+

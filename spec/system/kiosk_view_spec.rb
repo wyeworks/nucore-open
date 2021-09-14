@@ -168,7 +168,7 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
     end
   end
 
-  context "with an LDAP authenticated user", :ldap, feature_setting: { kiosk_view: true, bypass_kiosk_auth: false, uses_ldap_authentication: true } do
+  context "with an LDAP authenticated user", :ldap, ignore_js_errors: true, feature_setting: { kiosk_view: true, bypass_kiosk_auth: false, uses_ldap_authentication: true } do
     let(:user) { create(:user, :netid, :purchaser, account: account, email: "internal@example.org", username: "netid") }
 
     before(:each) do
@@ -178,13 +178,13 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
     it_behaves_like "kiosk_actions", "Login", "netidpassword"
   end
 
-  context "with a locally authenticated user" do
+  context "with a locally authenticated user", ignore_js_errors: true do
     let(:user) { create(:user, :external, :purchaser, account: account) }
 
     it_behaves_like "kiosk_actions", "Login", "P@ssw0rd!!"
   end
 
-  context "with a locally authenticated user who is signed in" do
+  context "with a locally authenticated user who is signed in", ignore_js_errors: true do
     let(:user) { create(:user, :external, :purchaser, account: account) }
 
     before { login_as(user) }
@@ -192,7 +192,7 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
     it_behaves_like "kiosk_actions", "Logout", "P@ssw0rd!!"
   end
 
-  context "with an SSO authenticated user", feature_setting: { kiosk_view: true, bypass_kiosk_auth: true } do
+  context "with an SSO authenticated user", ignore_js_errors: true, feature_setting: { kiosk_view: true, bypass_kiosk_auth: true } do
     let(:user) { create(:user, :netid, :purchaser, account: account, email: "internal@example.org", username: "netid") }
 
     context "with an active reservation that hasn't been started" do
@@ -211,10 +211,10 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
       end
     end
 
-    context "with an active reservation that is running" do
+    context "with an active reservation that is running", ignore_js_errors: true do
       let!(:reservation) { create(:purchased_reservation, reserve_start_at: 15.minutes.ago, actual_start_at: 10.minutes.ago, product: instrument, user: user) }
 
-      it "can end reservations  (no password field)" do
+      it "can end reservations (no password field)" do
         visit facility_kiosk_reservations_path(facility)
         expect(page).to have_content("Login")
         expect(page).not_to have_content("Add Accessories")
@@ -248,7 +248,7 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
         expect(page).to have_content("Login")
       end
 
-      it "can add accessories when ending reservations  (no password field)" do
+      it "can add accessories when ending reservations (no password field)", ignore_js_errors: true do
         visit facility_kiosk_reservations_path(facility)
         expect(page).to have_content("Login")
         click_link "End Reservation"
@@ -265,7 +265,7 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
     end
   end
 
-  context "with a facility that has disabled the kiosk view" do
+  context "with a facility that has disabled the kiosk view", ignore_js_errors: true do
     let(:user) { create(:user, :external, :purchaser, account: account) }
     let(:facility) { create(:setup_facility, kiosk_enabled: false) }
     let!(:reservation) { create(:purchased_reservation, reserve_start_at: 15.minutes.ago, product: instrument, user: user) }

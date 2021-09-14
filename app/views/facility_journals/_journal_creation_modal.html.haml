@@ -1,0 +1,11 @@
+#journal-creation-reminder.modal.hide.fade{ data: { backdrop: "static" } }
+  .modal-header
+    = modal_close_button
+    %h3= text("facility_journals.journal_creation_reminder_modal.header")
+  .modal-body
+    = reminder_message
+  .modal-footer
+    %button.btn{ type: "button", data: { dismiss: "modal" } }
+      = text("facility_journals.journal_creation_reminder_modal.cancel")
+    - submit_form = "event.preventDefault();document.getElementById('journals_create_form').submit();"
+    = submit_tag text("facility_journals.journal_creation_reminder_modal.proceed"), class: "btn btn-primary", onclick: submit_form
