@@ -8,8 +8,18 @@ module UmassCorum
       @speed_type = speed_type
     end
 
-    def valid_at?(_datetime)
-      api_account.active?
+    def valid_at?(datetime)
+      if api_account.active?
+        api_account.date_added <= datetime
+      elsif api_account.date_removed.present?
+        api_account.date_added <= datetime && datetime <= api_account.date_removed
+      else
+        # This should never happen - api_account should be active OR have date_removed set
+        if defined?(Rollbar)
+          Rollbar.warning("Expired SpeedType with no expiration date", account_number: api_account.speed_type)
+        end
+        false
+      end
     end
 
     def account_is_open!(fulfilled_at = Time.current)
