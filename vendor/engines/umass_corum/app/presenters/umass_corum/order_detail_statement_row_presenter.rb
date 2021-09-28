@@ -14,7 +14,7 @@ module UmassCorum
     def to_row
       [
         quantity,
-        format_usa_date(order_detail.ordered_at),
+        format_usa_date(order_detail.fulfilled_at),
         order_detail.to_s,
         description,
         unit_of_measure,

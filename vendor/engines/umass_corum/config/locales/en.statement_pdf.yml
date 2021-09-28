@@ -5,7 +5,7 @@ en:
       header_address: |
         UMass Amherst - %{facility}
         %{address}
-      date_header: Date
+      date_header: Fulfilled date
       bill_to_header: Bill To
       remit_box: |
         Please make checks payable to
@@ -35,4 +35,4 @@ en:
         fax: "Fax #"
         email: Email
         website: Website
-      contact_url: <http://www.umass.edu/ials/core-facilities>
+      contact_url: <https://www.umass.edu/ials/core-facilities>
