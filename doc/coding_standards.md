@@ -118,6 +118,24 @@ included engines, database, etc.). Do your best to keep the common gems in Gemfi
 the same order. This will help prevent merge conflicts in `Gemfile`. Unfortunately, merge
 conflicts within `Gemfile.lock` are likely inevitable.
 
+Most gems are kept up to date by merging in changes from `nucore-open`, where dependabot is enabled. If your instance requires gem dependencies that are not included in `nucore-open`, you may want to enable dependabot for them by adding or modifying `.github/dependabot.yml`:
+
+```
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/"
+  schedule:
+    interval: daily
+    time: "23:00"
+    timezone: America/Chicago
+  open-pull-requests-limit: 99
+  allow:
+  - dependency-name: aws-sdk-rails
+  - dependency-name: aws-sdk-s3
+
+```
+
 If you are building an engine that depends on an additional gem, add that dependency to the
 engine's `gemspec`, not app's `Gemfile`.
 

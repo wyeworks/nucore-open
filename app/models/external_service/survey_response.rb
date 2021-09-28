@@ -21,6 +21,9 @@ class SurveyResponse
         receiver.manages_quantity = true
         od.quantity = params[:quantity].to_i
       end
+      if params[:order_detail].present?
+        od.assign_attributes(sanitized_order_detail_params)
+      end
       receiver.save!
       od.save!
       receiver
@@ -33,6 +36,12 @@ class SurveyResponse
     # old survey services (i.e. Surveyor) have the edit URL inferred
     edit_url = params[:survey_edit_url] || "#{show_url}/take"
     { show_url: show_url, edit_url: edit_url }.to_json
+  end
+
+  def sanitized_order_detail_params
+    params[:order_detail].keep_if { |k| k.starts_with?("orderDetail") }
+    params[:order_detail].transform_keys! { |k| k.sub("orderDetail", "").underscore }
+    params[:order_detail].permit(:note, :reference_id, :quantity)
   end
 
 end

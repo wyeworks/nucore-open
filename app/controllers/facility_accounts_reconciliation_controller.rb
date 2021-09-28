@@ -41,7 +41,7 @@ class FacilityAccountsReconciliationController < ApplicationController
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
     end
 
-    redirect_to([account_route, :facility_accounts])
+    redirect_to([account_route.to_sym, :facility_accounts])
   end
 
   private

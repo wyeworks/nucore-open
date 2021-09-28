@@ -1,4 +1,3 @@
-
 # frozen_string_literal: true
 
 class OrderPurchaseValidator
@@ -35,7 +34,4 @@ class OrderPurchaseValidator
     !valid?
   end
 
-end
-
-class OrderPurchaseValidatorError < ActiveRecord::RecordInvalid
 end

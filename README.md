@@ -36,6 +36,8 @@ As you pull in new features/bug fixes from open, please keep up with the [CHANGE
 to see changes that may break your school-specific repo and optional/required rake tasks you may want
 to run.
 
+[**See coding_standards.md**](doc/coding_standards.md) for more information on recommended strategies for customizing NUCore for a specific school.
+
 [**See HOWTO_related_repos.md**](doc/HOWTO_related_repos.md) for more information on merging changes from the open source repo and deployment processes.
 
 ## Quickstart
