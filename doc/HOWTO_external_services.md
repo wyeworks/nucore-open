@@ -43,6 +43,49 @@ For example, NU is using `acgt`, `sanger_sequencing`, and the IMSERC application
 
 6. Once the user has purchased the product, administrators will see a link to "View Order Form" under the order. This links to the `survey_url` that was passed back. 
 
+## Form.io
+
+Form.io is used as a survey tool/data aggregator for service requests associated with an order.
+Form data may include pathology sample information, machine shop project schematics, chemical formulae and requested experiment details, and other related non-financial service workflow information. Facility staff can view the forms to see what what is requested or required for the order.
+
+See https://pm.tablexi.com/issues/157154#note-7 for a list of facilities at NU that use form.io surveys.
+
+## Updating OrderDetail records on submission to Form.io
+
+A form.io survey can be configured to update the note, quantity, or reference ID in NUCore upon submission.
+On successful survey submission (new or update), an ajax call is made to update the order detail.
+
+This provides additional context for facility staff, especially when viewing a long list of open orders in the New/In Process queue.
+This helps staff effectively manage pending service requests and complete them for billing when the work is done.
+
+Here are the steps to configure the form.io survey:
+
+1. Log in to form.io
+1. Select the "Live" tab (form.io allows multiple stages for keeping forms organized)
+1. Select "Forms" on the side nav bar
+1. Click the form you want to edit
+1. Create a new form component (or click the gear icon to edit one)
+1. Click "API" tab on the top nav
+1. In the field for "Property Name", enter "orderDetailQuantity", "orderDetailNote", or "orderDetailReferenceId"
+1. Save the changes
+
+### Validating form inputs from Form.io
+
+1. Log in to form.io
+1. Select the "Live" tab (form.io allows multiple stages for keeping forms organized)
+1. Select "Forms" on the side nav bar
+1. Click the form you want to edit
+1. Create a new form component (or click the gear icon to edit one)
+1. Click "Validation" tab on the top nav
+1. Enter a max value in the field for "Maximum Length".  The max for note is 1000 characters, 255 for reference ID.  Use something sensible for quantity.
+1. Save the changes
+
+## Testing
+
+You will need a form.io account with access to the NU forms in order to debug or make changes on the form.io side.
+
+There is a product on NU staging set up for testing: https://nucore-staging.northwestern.edu/facilities/zed_mark_2/services/aaron_form_io
+
 ## Developer Notes
 
 Your new service must extend from `ExternalService` and contain the following methods:
