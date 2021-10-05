@@ -90,7 +90,7 @@ class ProductsCommonController < ApplicationController
     else
       flash[:error] = "There was a problem deleting the #{@product.class.name.to_lower}"
     end
-    redirect_to [current_facility, plural_object_name]
+    redirect_to [current_facility, plural_object_name.to_sym]
   end
 
   def manage

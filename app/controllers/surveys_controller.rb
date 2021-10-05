@@ -37,7 +37,15 @@ class SurveysController < ApplicationController
       Rails.logger.error("Could not save external surveyor response! #{e.message}\n#{e.backtrace.join("\n")}")
     end
 
-    redirect_to params[:referer]
+    if request.xhr?
+      # send the supplied string to the browser with a MIME type of text/javascript
+      render :js => "window.location = '#{params[:referer]}'"
+    else
+      # TO DO: Remove logging when the other consumers of this code path are better understood.
+      # This action should not be available via GET, but we need to know more before making that change.
+      Rails.logger.info("Non-Form.io survey completed for Order detail: #{params[:receiver_id]}, external service: #{params[:external_service_id]}")
+      redirect_to params[:referer]
+    end
   end
 
   private

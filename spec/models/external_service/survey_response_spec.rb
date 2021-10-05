@@ -108,4 +108,38 @@ RSpec.describe SurveyResponse do
     end
   end
 
+  describe "order detail updates" do
+    let(:order_detail) { external_service_receiver.receiver }
+
+    it "updates only the receiver note, reference ID, and quantity from form data" do
+      params[:order_detail] = {
+        "orderDetailQuantity" => "5",
+        "orderDetailReferenceId" => "123",
+        "orderDetailNote" => "note",
+        "orderDetailOrderStatus" => "Complete",
+        "otherKindOfNote" => "this note is not stored",
+      }
+
+      expect { survey_response.save! }.to change { order_detail.reload.note }.to("note")
+        .and change { order_detail.reload.reference_id }.to("123")
+        .and change { order_detail.reload.quantity }.to(5)
+      expect(order_detail.reload.order_status).to eq nil
+    end
+
+    it "does not change the note, reference ID, and quantity when not present" do
+      params[:order_detail] = {}
+      params[:quantity] = nil
+      expect_any_instance_of(OrderDetail).to_not receive "quantity=".to_sym
+      expect_any_instance_of(OrderDetail).to_not receive "note=".to_sym
+      expect_any_instance_of(OrderDetail).to_not receive "reference_id=".to_sym
+      expect { survey_response.save! }.not_to change { order_detail.reload }
+    end
+
+    it "updates quantity when order_detail params not present" do
+      params[:order_detail] = {}
+      params[:quantity] += 2
+      expect { survey_response.save! }.to change { order_detail.reload.quantity }
+    end
+  end
+
 end

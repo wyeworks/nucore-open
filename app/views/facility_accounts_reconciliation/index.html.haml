@@ -12,7 +12,7 @@
 = render "shared/transactions/search"
 
 - if @unreconciled_details.any?
-  = form_tag([:update, account_route, FacilityAccount], method: :post) do
+  = form_tag([:update, account_route.to_sym, FacilityAccount], method: :post) do
     = render "action_row", date: true, unreconciled_order_details: @unreconciled_details
     = render partial: "table"
     = render partial: "action_row"

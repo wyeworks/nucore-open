@@ -1,6 +1,6 @@
 = f.input :name, hint: text("hints.name", field: f.object.model_name.human.downcase)
 
-= f.input :url_name, hint: url_for([current_facility, f.object.model_name.singular, id: "URL_NAME"]), as: :string
+= f.input :url_name, hint: url_for([current_facility, f.object.model_name.singular.to_sym, id: "URL_NAME"]), as: :string
 
 - if SettingsHelper.feature_on? :product_specific_contacts
   = f.input :contact_email,

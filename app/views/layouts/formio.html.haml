@@ -6,6 +6,11 @@
     = stylesheet_link_tag "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css", media: "all"
     = stylesheet_link_tag "https://unpkg.com/formiojs@3.28.0/dist/formio.full.min.css", media: "all"
     = javascript_include_tag "https://unpkg.com/formiojs@3.28.0/dist/formio.full.min.js"
+    = javascript_include_tag "jquery"
+    = javascript_include_tag "jquery_ujs"
+    = javascript_include_tag "form_io_submission"
+    = csrf_meta_tag
+
     :css
       #formio {
         margin: 2em auto;
