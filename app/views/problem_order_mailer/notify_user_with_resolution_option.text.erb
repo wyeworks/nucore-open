@@ -1,6 +1,7 @@
 <%= text("body",
   user: @user,
   facility: @order_detail.facility.name,
+  facility_email: @order_detail.facility.email,
   product: @order_detail.product.name,
   order_detail: @order_detail,
   order_detail_link: order_order_detail_url(@order_detail.order, @order_detail),
