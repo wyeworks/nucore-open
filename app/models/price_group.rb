@@ -13,7 +13,7 @@ class PriceGroup < ApplicationRecord
 
   validates_presence_of   :facility_id # enforce facility constraint here, though it's not always required
   validates_presence_of   :name
-  validates_uniqueness_of :name, scope: :facility_id, unless: :deleted_at?
+  validates_uniqueness_of :name, scope: :facility_id, case_sensitive: false, unless: :deleted_at?
 
   default_scope -> { order(is_internal: :desc, display_order: :asc, name: :asc) }
 

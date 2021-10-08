@@ -12,7 +12,7 @@ class FacilityAccount < ApplicationRecord
   belongs_to :facility
 
   validates :revenue_account, numericality: { only_integer: true }
-  validates :account_number, presence: true, uniqueness: { scope: [:revenue_account, :facility_id] }
+  validates :account_number, presence: true, uniqueness: { scope: [:revenue_account, :facility_id], case_sensitive: false }
 
   scope :active, -> { where(is_active: true) }
   scope :inactive, -> { where(is_active: false) }
