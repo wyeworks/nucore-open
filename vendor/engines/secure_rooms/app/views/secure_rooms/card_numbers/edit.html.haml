@@ -11,6 +11,7 @@
 = simple_form_for [current_facility, @user], url: facility_user_card_number_update_path(current_facility, @user) do |f|
   .form-inputs
     = f.input :card_number
+    = f.input :i_class_number
     = f.button :submit, text("shared.update"), class: ["btn", "btn-primary"]
     &nbsp;
     = link_to text("shared.cancel"), facility_users_path

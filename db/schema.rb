@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_03_023106) do
+ActiveRecord::Schema.define(version: 2021_09_28_223323) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -916,9 +916,11 @@ ActiveRecord::Schema.define(version: 2021_08_03_023106) do
     t.integer "failed_attempts", default: 0, null: false
     t.datetime "locked_at"
     t.string "unlock_token"
-    t.index ["card_number"], name: "index_users_on_card_number"
+    t.string "i_class_number"
+    t.index ["card_number"], name: "index_users_on_card_number", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"
+    t.index ["i_class_number"], name: "index_users_on_i_class_number", unique: true
     t.index ["uid"], name: "index_users_on_uid"
     t.index ["username"], name: "index_users_on_username", unique: true
   end

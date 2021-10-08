@@ -44,6 +44,12 @@ class OrdersController < ApplicationController
     facility_ability = Ability.new(session_user, @order.facility, self)
     @order.being_purchased_by_admin = facility_ability.can?(:act_as, @order.facility)
     @order.validate_order! if @order.new?
+
+    return unless @order.order_details.any? && !@order.has_valid_payment?
+
+    @order.errors.add(:base, invalid_for_orderer_message)
+
+    flash[:error] = "There are errors in your order:<br>#{@order.errors.full_messages.join('<br>')}".html_safe
   end
 
   # PUT /orders/:id/clear
@@ -110,7 +116,11 @@ class OrdersController < ApplicationController
         rescue NUCore::MixedFacilityCart
           @order.errors.add(:base, "You can not add a product from another facility; please clear your cart or place a separate order.")
         rescue => e
-          @order.errors.add(:base, "An error was encountered while adding the product #{@product}.")
+          if !@order.has_valid_payment?
+            @order.errors.add(:base, invalid_for_orderer_message)
+          else
+            @order.errors.add(:base, "An error was encountered while adding the product #{@product}.")
+          end
           Rails.logger.error(e.message)
           Rails.logger.error(e.backtrace.join("\n"))
         end
@@ -379,6 +389,12 @@ class OrdersController < ApplicationController
       switch: "on",
       redirect_to: reservations_path,
     )
+  end
+
+  def invalid_for_orderer_message
+    text("models.order.account_invalid_for_orderer",
+      clear_cart_link: clear_order_path(@order),
+      change_payment_source_link: choose_account_order_path(@order))
   end
 
 end

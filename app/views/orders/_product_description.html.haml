@@ -1,5 +1,6 @@
 - unless order_detail.order.validated?
   .label.label-warning= order_detail.validate_for_purchase
-
+- unless order_detail.order.has_valid_payment?
+  .label.label-warning= "You are not approved to use this account"
 
 = order_detail.product

@@ -33,6 +33,7 @@ en:
   search:
     extra_headers:
       card_number: Card Number
+      i_class_number: iClass Number
 
   secure_rooms:
     facility_occupancies:
@@ -62,6 +63,7 @@ en:
     attributes:
       user:
         card_number: Card Number
+        i_class_number: iClass Number
       order_detail/occupancy:
         exit_at: Time of Exit
         actual_duration_mins: Duration
