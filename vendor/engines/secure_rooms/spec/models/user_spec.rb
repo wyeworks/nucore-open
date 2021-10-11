@@ -27,12 +27,33 @@ RSpec.describe User do
     end
 
     context "when 2 users have the same indala_number" do
-      let!(:user2) { create(:user, :netid, card_number: "12345") }
-      let(:card_number) { "12345-124" }
+      describe "when there is a matching indala number with NO facility code" do
+        let!(:user2) { create(:user, :netid, card_number: "12345") }
+        let(:card_number) { "12345-123" }
 
-      it "finds the user" do
-        expect(described_class.for_card_number(card_number)).to eq(user2)
+        it "finds the user with matching indala number and no facility code" do
+          expect(described_class.for_card_number("12345-789")).to eq(user2)
+        end
       end
+
+      describe "when there is a matching indala number with non-matching facility code" do
+        let!(:user2) { create(:user, :netid, card_number: "12345-456") }
+        let(:card_number) { "12345-123" }
+
+        it "deos not find a user" do
+          expect(described_class.for_card_number("12345-789")).to eq(nil)
+        end
+      end
+
+      describe "when there is an exact match" do
+        let!(:user2) { create(:user, :netid, card_number: "12345") }
+        let(:card_number) { "12345-124" }
+
+        it "finds the matching user" do
+          expect(described_class.for_card_number(card_number)).to eq(user)
+        end
+      end
+
     end
   end
 end

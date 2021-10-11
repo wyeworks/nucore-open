@@ -11,7 +11,7 @@ module SecureRooms
       validates :i_class_number, uniqueness: { allow_blank: true }
 
       def self.for_card_number(card_number) 
-        find_by(card_number: [card_number, card_number.split("-").first])
+        find_by(card_number: card_number) || find_by(card_number: card_number.split("-").first)
       end
     end
 
