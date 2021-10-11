@@ -37,6 +37,11 @@ en:
           Thank you
 
           [UMass Core Facilities](http://www.umass.edu/ials/core-facilities) Team
+      review_orders:
+        outro: |
+          Please log in to [!app_name!](%{login_url}) and review these charges.
+
+          Please take a moment to provide feedback on your experience with UMass Core Facilities: [UMass Core Facilities Customer Satisfaction Survey](https://umassamherst.co1.qualtrics.com/jfe/form/SV_24XapZ4ZXZSfeER)
 
     devise:
       sessions:

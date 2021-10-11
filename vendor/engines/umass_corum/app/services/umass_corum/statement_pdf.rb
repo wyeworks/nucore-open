@@ -187,6 +187,8 @@ module UmassCorum
     end
 
     def draw_footer
+      pdf.move_down(20)
+      pdf.text(html("survey_link", inline: true), align: :center, style: :bold, inline_format: true)
       # Start a new page if the the second row would get orphaned on its own page
       pdf.start_new_page if pdf.cursor < 36
       data = [
@@ -228,6 +230,8 @@ module UmassCorum
       [[{ content: pay_by_card, colspan: 5, inline_format: true }, { content: actual_total_text, colspan: 2 }]]
     end
 
+    # Each nested array represents a row
+    # Each hash represents a cell, provide content, and colspan for cell size
     def voucher_rows
       total_due_text = text("total_due", total: number_to_currency(total_due))
       [[{ content: "\n", colspan: 5 }, { content: actual_total_text, colspan: 2 }]] +
