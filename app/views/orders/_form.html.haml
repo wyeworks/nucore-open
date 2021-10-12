@@ -1,5 +1,5 @@
 = simple_form_for order, url: { action: :update_or_purchase } do |f|
-  %table.table.table-striped.table-hover.js--cart.js--responsive_table#cart
+  %table.table.table-striped.table-hover.js--cart.js--responsive_table#cart{ class: order.has_valid_payment? ? "" : " invalid" }
     %thead
       %tr
         %th &nbsp;
@@ -41,11 +41,21 @@
       .backdate_fields= render "edit_date", f: f
 
     %ul.inline{ style: "float: left" }
-      %li
-        = f.submit t("shared.update"),
-          class: "btn"
-      - if order.validated?
+      - if @order.has_valid_payment?
         %li
-          = f.submit t("shared.purchase"),
-            class: %w(btn btn-primary),
-            data: { disable_with: t("shared.purchase") }
+          = f.submit t("shared.update"),
+            class: "btn"
+        - if order.validated?
+          %li
+            = f.submit t("shared.purchase"),
+              class: %w(btn btn-primary),
+              data: { disable_with: t("shared.purchase") }
+      - else
+        - alert_error = t("models.order.account_invalid_for_orderer_tooltip")
+        %li
+          %a{ class: "btn disabled", data: { toggle: "tooltip" }, title: alert_error }
+            = t("shared.update")
+        - if order.validated?
+          %li
+            %a{ class: "btn btn-primary disabled", data: { toggle: "tooltip" }, title: alert_error }
+              = t("shared.purchase")

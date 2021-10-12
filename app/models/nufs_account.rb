@@ -2,7 +2,7 @@
 
 class NufsAccount < Account
 
-  validates_uniqueness_of :account_number, message: "already exists"
+  validates_uniqueness_of :account_number, message: "already exists", case_sensitive: false
   validates_presence_of :expires_at
 
   validate { validate_account_number }

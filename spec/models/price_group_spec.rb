@@ -4,25 +4,36 @@ require "rails_helper"
 
 RSpec.describe PriceGroup do
 
-  let(:facility) { @facility }
+  let(:facility) { FactoryBot.create(:facility) }
+  let(:price_group) { FactoryBot.create(:price_group, facility: facility) }
 
   before :each do
-    @facility = FactoryBot.create(:facility)
-    @price_group = FactoryBot.create(:price_group, facility: facility)
+    @facility = facility
+    @price_group = price_group
   end
 
-  it "should create using factory" do
-    expect(@price_group).to be_valid
+  it "is valid using the factory" do
+    expect(price_group).to be_valid
   end
 
-  it "should require name" do
+  it "requires name" do
     is_expected.to validate_presence_of(:name)
   end
 
-  it "should require unique name within a facility" do
-    @price_group2 = @facility.price_groups.build(FactoryBot.attributes_for(:price_group).update(name: @price_group.name))
-    expect(@price_group2).not_to be_valid
-    expect(@price_group2.errors[:name]).not_to be_nil
+  it "requires unique name within a facility" do
+    price_group2 = build(:price_group, name: price_group.name, facility: facility)
+    expect(price_group2).not_to be_valid
+    expect(price_group2.errors[:name]).to be_present
+  end
+
+  it "requires the unique name case-insensitively" do
+    price_group2 = build(:price_group, name: price_group.name.upcase, facility: facility)
+    expect(price_group2).not_to be_valid
+    expect(price_group2.errors[:name]).to be_present
+
+    price_group2.name.downcase!
+    expect(price_group2).not_to be_valid
+    expect(price_group2.errors[:name]).to be_present
   end
 
   context "can_purchase?" do

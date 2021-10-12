@@ -139,4 +139,34 @@ RSpec.describe "Placing an item order" do
       end
     end
   end
+
+  describe "when the order's account payment source is invalid" do
+    let(:other_user) { FactoryBot.create(:user) }
+    let(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: other_user) }
+    let!(:account_user) { FactoryBot.create(:account_user, :purchaser, account: account, user: user) }
+    let!(:other_account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: other_user) }
+    let!(:other_account_user) { FactoryBot.create(:account_user, :purchaser, account: other_account, user: user) }
+    let!(:other_account_price_group_member) do
+      FactoryBot.create(:account_price_group_member, account: other_account, price_group: price_policy.price_group)
+    end
+
+    def add_to_cart(payment_source)
+      visit "/"
+      click_link facility.name
+      click_link product.name
+      click_link "Add to cart"
+      choose payment_source.to_s
+      click_button "Continue"
+    end
+
+    before do
+      add_to_cart(account)
+      account_user.destroy!
+    end
+
+    it "shows error in cart" do
+      visit "/orders/cart"
+      expect(page).to have_content("The payment source is not valid for the orderer")
+    end
+  end
 end

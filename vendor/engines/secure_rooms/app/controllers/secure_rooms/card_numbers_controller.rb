@@ -49,7 +49,7 @@ module SecureRooms
     private
 
     def update_user_params
-      params.require(:user).permit(:card_number)
+      params.require(:user).permit(:card_number, :i_class_number)
     end
 
     def load_and_authorize_user_with_card_number

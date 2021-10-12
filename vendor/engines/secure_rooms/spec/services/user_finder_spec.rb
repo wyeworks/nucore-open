@@ -10,5 +10,12 @@ RSpec.describe UserFinder do
       found_users = UserFinder.search(card_number, nil)
       expect(found_users).to include(user)
     end
+
+    it "finds users by i_class_number" do
+      i_class_number = SecureRandom.hex(3)
+      user = FactoryBot.create(:user, i_class_number: i_class_number)
+      found_users = UserFinder.search(i_class_number, nil)
+      expect(found_users).to include(user)
+    end
   end
 end

@@ -21,7 +21,7 @@ class PurchaseNotifier < ApplicationMailer
   def order_notification(order, recipient)
     @order = order
     attach_all_icals_from_order(@order)
-    send_nucore_mail recipient, text("views.purchase_notifier.order_notification.subject"), "order_receipt"
+    send_nucore_mail recipient, text("views.purchase_notifier.order_notification.subject"), "order_receipt", @order.created_by_user.email
   end
 
   # Custom order forms send out a confirmation email when filled out by a
@@ -49,8 +49,12 @@ class PurchaseNotifier < ApplicationMailer
     }
   end
 
-  def send_nucore_mail(to, subject, template_name = nil)
-    mail(subject: subject, to: to, template_name: template_name)
+  def send_nucore_mail(to, subject, template_name = nil, reply_to = nil)
+    if reply_to
+      mail(subject: subject, to: to, template_name: template_name, reply_to: reply_to)
+    else
+      mail(subject: subject, to: to, template_name: template_name)
+    end
   end
 
 end
