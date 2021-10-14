@@ -187,8 +187,6 @@ module UmassCorum
     end
 
     def draw_footer
-      pdf.move_down(20)
-      pdf.text(html("survey_link", inline: true), align: :center, style: :bold, inline_format: true)
       # Start a new page if the the second row would get orphaned on its own page
       pdf.start_new_page if pdf.cursor < 36
       data = [
@@ -206,6 +204,8 @@ module UmassCorum
         position: :center,
         cell_style: CELL_STYLE.merge(align: :center),
       )
+      pdf.move_down(20)
+      pdf.text(html("survey_link", inline: true), align: :center, style: :bold, inline_format: true)
     end
 
     def order_detail_headers

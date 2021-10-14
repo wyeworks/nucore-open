@@ -28,7 +28,8 @@ en:
         You can pay by credit card:
         <%{url}>
       survey_link: |
-        Please take a moment to <a href="https://umassamherst.co1.qualtrics.com/jfe/form/SV_24XapZ4ZXZSfeER">provide feedback</a> on your experience with UMass Core Facilities: <a href="https://umassamherst.co1.qualtrics.com/jfe/form/SV_24XapZ4ZXZSfeER">https://umassamherst.co1.qualtrics.com/jfe/form/SV_24XapZ4ZXZSfeER</a>
+        Please take a moment to [provide feedback](https://www.umass.edu/ials/core-facilities/feedback) on your experience with UMass Core Facilities:
+        <https://www.umass.edu/ials/core-facilities/feedback>
       acutal_total: "Total: %{total}"
       mivp_total: "%{percent} MIVP Voucher: -%{total}"
       total_due: "Total Due: %{total}"
