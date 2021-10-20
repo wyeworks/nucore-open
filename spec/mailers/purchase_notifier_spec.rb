@@ -40,6 +40,7 @@ RSpec.describe PurchaseNotifier do
       expect(email.text_part.to_s).to include(order_detail.to_s)
       expect(email.html_part.to_s).to match(/Ordered By.+#{user.full_name}/m)
       expect(email.text_part.to_s).to include("Ordered By: #{user.full_name}")
+      expect(email.reply_to).to eq [order.created_by_user.email]
       expect(email.html_part.to_s).to match(/Payment Source.+#{order.account}/m)
       expect(email.text_part.to_s).to include("Payment Source: #{order.account}")
       expect(email.html_part.to_s).not_to include("Thank you for your order")
