@@ -11,7 +11,7 @@
   %tr
     %td
       %strong= OrderDetail.human_attribute_name(:ordered_by)
-    %td= @order.created_by_user.full_name
+    %td= mail_to @order.created_by_user.email, @order.created_by_user.full_name
   %tr
     %td
       %strong= Account.model_name.human

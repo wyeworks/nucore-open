@@ -14,14 +14,16 @@ class PurchaseNotifier < ApplicationMailer
     @order = order_detail.order
     @order_detail = OrderDetailPresenter.new(order_detail)
     attach_reservation_ical(order_detail.reservation) if order_detail.reservation.present?
-    send_nucore_mail recipient, text("views.purchase_notifier.product_order_notification.subject", product: order_detail.product)
+    subject = text("views.purchase_notifier.product_order_notification.subject", product: order_detail.product)
+    send_nucore_mail to: recipient, subject: subject, reply_to: @order.created_by_user.email
   end
 
   # Notifies the specified facility staff member if any order is placed within a facility
   def order_notification(order, recipient)
     @order = order
     attach_all_icals_from_order(@order)
-    send_nucore_mail recipient, text("views.purchase_notifier.order_notification.subject"), "order_receipt", @order.created_by_user.email
+    subject = text("views.purchase_notifier.order_notification.subject")
+    send_nucore_mail to: recipient, subject: subject, reply_to: @order.created_by_user.email, template_name: "order_receipt"
   end
 
   # Custom order forms send out a confirmation email when filled out by a
@@ -31,7 +33,7 @@ class PurchaseNotifier < ApplicationMailer
     @order = args[:order]
     @greeting = text("views.purchase_notifier.order_receipt.intro")
     attach_all_icals_from_order(@order)
-    send_nucore_mail args[:user].email, text("views.purchase_notifier.order_receipt.subject")
+    send_nucore_mail to: args[:user].email, subject: text("views.purchase_notifier.order_receipt.subject")
   end
 
   private
@@ -49,7 +51,7 @@ class PurchaseNotifier < ApplicationMailer
     }
   end
 
-  def send_nucore_mail(to, subject, template_name = nil, reply_to = nil)
+  def send_nucore_mail(to:, subject:, reply_to: nil, template_name: nil)
     if reply_to
       mail(subject: subject, to: to, template_name: template_name, reply_to: reply_to)
     else

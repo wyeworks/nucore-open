@@ -3,7 +3,7 @@
 class PurchaseNotifierPreview < ActionMailer::Preview
 
   def product_order_notification
-    order_detail = OrderDetail.last
+    order_detail = OrderDetail.purchased.last
     recipient = User.last
     PurchaseNotifier.product_order_notification(
       order_detail,
@@ -12,7 +12,7 @@ class PurchaseNotifierPreview < ActionMailer::Preview
   end
 
   def order_notification
-    order = Order.last
+    order = Order.purchased.last
     recipient = User.last
     PurchaseNotifier.order_notification(
       order,
