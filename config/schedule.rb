@@ -11,11 +11,11 @@ require File.expand_path(File.dirname(__FILE__) + "/environment")
 job_type :rake, "cd :path && :environment_variable=:environment bundle exec rake :task :output"
 
 every 5.minutes, roles: [:db] do
-  command "curl --silent -X POST #{Rails.application.routes.url_helpers.admin_services_process_five_minute_tasks_url}"
+  command "curl --silent -X POST #{Rails.application.routes.url_helpers.admin_services_process_five_minute_tasks_url} --insecure"
 end
 
 every 1.minute, roles: [:db] do
-  command "curl --silent -X POST #{Rails.application.routes.url_helpers.admin_services_process_one_minute_tasks_url}"
+  command "curl --silent -X POST #{Rails.application.routes.url_helpers.admin_services_process_one_minute_tasks_url} --insecure"
 end
 
 every :day, at: "4:17am", roles: [:db] do
