@@ -14,7 +14,7 @@ module RoutesHelper
 
   def sign_out_user_path
     # Allow for custom logout paths from saml or other authenticable options
-    strategy = warden.session(:user)[:strategy]
+    strategy = warden.session(:user)[:strategy]&.to_sym
     # facility_id will cause the user to be redirected to the facility's home page after logout
     [:destroy, strategy, :user_session, facility_id: current_facility&.url_name].compact
   end
