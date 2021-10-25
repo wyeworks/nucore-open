@@ -315,7 +315,7 @@ en:
     show:
       head:
         h2: "Journal #%{journal} Details"
-        h3: "Reconcile Orders"
+        h3: "Journal Orders"
       label:
         created_at: "Created At"
         created_by: "Created By"
@@ -325,8 +325,8 @@ en:
         description: "Notes"
       instruct:
         orders: |
-          Orders on this page reflect updates made to orders since journaling.  To view the journal as originally
-          submitted, you may download the XLS or XML journal for reference
+          NOTE: The orders below can still be updated.  To retain a copy of the journal as originally
+          submitted, you may download the XLS or XML journal for future reference.
         reconcile: |
           The journal was processed successfully, but individual orders must be reconciled.  Please edit orders to reflect changes made
           to the journal after the journal was submitted.  Once an order has been updated to reflect the necessary changes, you should mark that

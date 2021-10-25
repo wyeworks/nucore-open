@@ -21,16 +21,17 @@
 %hr
 
 %h3= t(".head.h3")
-%p= t(".instruct.orders")
 
 - if @journal.open?
   %p= t(".journal.pending")
 - elsif !@journal.successful?
   %p= t(".journal.failed")
+  %p= t(".instruct.orders")
 - elsif @journal.successful? && @journal.reconciled?
   %p= t(".journal.success")
 - else
   %p= t(".instruct.reconcile")
+  %p= t(".instruct.orders")
 
 - if @journal.order_details.present?
   = form_tag facility_journal_reconcile_path(current_facility, @journal), method: :post do
