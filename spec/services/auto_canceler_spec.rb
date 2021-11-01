@@ -43,7 +43,7 @@ RSpec.describe AutoCanceler, :time_travel do
 
   context "with auto-cancel minutes" do
     before :each do
-      instrument.update_attributes(auto_cancel_mins: 10, min_cancel_hours: 1)
+      instrument.update(auto_cancel_mins: 10, min_cancel_hours: 1)
     end
 
     it "should find the past reservation in cancelable" do
@@ -78,7 +78,7 @@ RSpec.describe AutoCanceler, :time_travel do
 
     context "with cancellation fee" do
       before :each do
-        instrument.price_policies.first.update_attributes(cancellation_cost: 10)
+        instrument.price_policies.first.update(cancellation_cost: 10)
       end
 
       it "should charge the fee" do
@@ -91,7 +91,7 @@ RSpec.describe AutoCanceler, :time_travel do
 
   context "without auto-cancel minutes" do
     before :each do
-      instrument.update_attributes(auto_cancel_mins: 0)
+      instrument.update(auto_cancel_mins: 0)
     end
 
     it "should not cancel reservations" do

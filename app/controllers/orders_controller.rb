@@ -177,7 +177,7 @@ class OrdersController < ApplicationController
         @order.transaction do
           begin
             @order.invalidate
-            @order.update_attributes!(account_id: account.id)
+            @order.update!(account_id: account.id)
           rescue ActiveRecord::ActiveRecordError => e
             success = false
             raise ActiveRecord::Rollback

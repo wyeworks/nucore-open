@@ -17,7 +17,7 @@ FactoryBot.define do
 
     trait :canceled do
       after(:create) do |reservation|
-        reservation.order_detail.update_attributes(canceled_at: 1.minute.ago)
+        reservation.order_detail.update(canceled_at: 1.minute.ago)
       end
     end
 

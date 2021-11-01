@@ -38,7 +38,7 @@ RSpec.describe FacilityAccountsReconciliationController do
 
   before do
     order_detail.change_status!(OrderStatus.complete)
-    order_detail.update_attributes(reviewed_at: 5.minutes.ago, statement: statement)
+    order_detail.update(reviewed_at: 5.minutes.ago, statement: statement)
   end
 
   describe "update" do

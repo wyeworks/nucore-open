@@ -15,7 +15,7 @@ RSpec.describe FacilitiesController do
     let(:admin) { FactoryBot.create(:user, :administrator) }
 
     before do
-      order_detail.update_attributes(project: project)
+      order_detail.update(project: project)
       sign_in admin
     end
 

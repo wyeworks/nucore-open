@@ -396,7 +396,7 @@ RSpec.describe Reservation do
     it { is_expected.not_to be_canceled }
 
     context "when canceled_at is set" do
-      before { order_detail.update_attributes(canceled_at: Time.current) }
+      before { order_detail.update(canceled_at: Time.current) }
       it { is_expected.to be_canceled }
     end
   end
@@ -442,13 +442,13 @@ RSpec.describe Reservation do
       end
 
       context "the reservation has been canceled" do
-        before { reservation.order_detail.update_attributes(canceled_at: 1.hour.ago) }
+        before { reservation.order_detail.update(canceled_at: 1.hour.ago) }
 
         it_behaves_like "a customer is not allowed to edit"
       end
 
       context "the reservation has not been canceled" do
-        before { reservation.order_detail.update_attributes(canceled_at: nil) }
+        before { reservation.order_detail.update(canceled_at: nil) }
 
         context "it is complete" do
           before :each do
@@ -550,12 +550,12 @@ RSpec.describe Reservation do
 
       it "does not hang on restricted instrument if user does not have access" do
         expect(@reservation1.earliest_possible).to be
-        @instrument.update_attributes(requires_approval: true)
+        @instrument.update(requires_approval: true)
         expect(@reservation1.reload.earliest_possible).to be_nil
       end
 
       it "does not look at time after the reservation" do
-        @instrument.update_attributes(max_reserve_mins: nil, reserve_interval: 1)
+        @instrument.update(max_reserve_mins: nil, reserve_interval: 1)
         @instrument.schedule_rules.update_all(start_hour: 0, end_hour: 24)
         # Make sure there is no time between now and the reservation
         order = @user.orders.create(attributes_for(:order, created_by: @user.id, account: @account, facility: facility))
@@ -703,7 +703,7 @@ RSpec.describe Reservation do
       end
 
       it "should not be moveable if the reservation is in the grace period" do
-        @instrument.update_attributes(reserve_interval: 1)
+        @instrument.update(reserve_interval: 1)
         @reservation1.duration_mins = 1
         travel_to_and_return(@reservation1.reserve_start_at - 4.minutes) do
           expect(@reservation1).to_not be_startable_now
@@ -712,7 +712,7 @@ RSpec.describe Reservation do
 
       it "should not be moveable if the reservation is canceled" do
         expect(@reservation1).to be_startable_now
-        @reservation1.order_detail.update_attributes(canceled_at: Time.zone.now)
+        @reservation1.order_detail.update(canceled_at: Time.zone.now)
         expect(@reservation1).not_to be_startable_now
       end
 
@@ -735,7 +735,7 @@ RSpec.describe Reservation do
       end
 
       it "should be able to move to now, but overlapping the current" do
-        @reservation1.update_attributes!(reserve_start_at: 30.minutes.from_now, reserve_end_at: 60.minutes.from_now)
+        @reservation1.update!(reserve_start_at: 30.minutes.from_now, reserve_end_at: 60.minutes.from_now)
         allow(@reservation1.order).to receive(:cart_valid?).and_return(true)
         @reservation1.order.validate_order!
         @reservation1.order.purchase!
@@ -748,7 +748,7 @@ RSpec.describe Reservation do
         before do
           ScheduleRule.destroy_all
           @instrument.schedule_rules.reload
-          @instrument.update_attributes(requires_approval: true)
+          @instrument.update(requires_approval: true)
           @everybody_schedule_rule = @instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule))
           group1 = FactoryBot.create(:product_access_group, product: @instrument)
           @everybody_schedule_rule.product_access_groups << group1
@@ -759,7 +759,7 @@ RSpec.describe Reservation do
         end
 
         it "should not be able to move to a schedule rule the user is not part of" do
-          @reservation1.update_attributes!(reserve_start_at: tomorrow_noon, reserve_end_at: tomorrow_noon + 30.minutes)
+          @reservation1.update!(reserve_start_at: tomorrow_noon, reserve_end_at: tomorrow_noon + 30.minutes)
           # 4:45pm today will be in the restricted schedule rule
           travel_to_and_return(Time.current.change(hour: 16, min: 45, sec: 0)) do
             expect(@reservation1.earliest_possible.reserve_start_at).to eq(1.day.from_now.change(hour: 9, min: 0, sec: 0))
@@ -771,7 +771,7 @@ RSpec.describe Reservation do
     context "requires_but_missing_actuals?" do
 
       it "should be true when there is a usage rate but no actuals" do
-        # @instrument_pp.update_attributes!(:usage_rate => 5)
+        # @instrument_pp.update!(:usage_rate => 5)
 
         expect(@reservation1.actual_start_at).to be_nil
         expect(@reservation1.actual_end_at).to be_nil
@@ -784,7 +784,7 @@ RSpec.describe Reservation do
       it "should be true when there is no policy assigned, but the one it would use requires actuals" do
         expect(@reservation1.actual_start_at).to be_nil
         expect(@reservation1.actual_end_at).to be_nil
-        @instrument_pp.update_attributes(usage_rate: 5)
+        @instrument_pp.update(usage_rate: 5)
 
         assert @reservation1.save
         expect(@instrument.cheapest_price_policy(@reservation1.order_detail, @reservation1.reserve_end_at)).to eq(@instrument_pp)
@@ -841,12 +841,12 @@ RSpec.describe Reservation do
     context "ordered_on_behalf_of?" do
       it "should return true if the associated order was ordered by someone else" do
         @user2 = FactoryBot.create(:user)
-        @reservation1.order.update_attributes(created_by_user: @user2)
+        @reservation1.order.update(created_by_user: @user2)
         expect(@reservation1.reload).to be_ordered_on_behalf_of
       end
       it "should return false if the associated order was not ordered on behalf of" do
         user = @reservation1.order_detail.order.user
-        @reservation1.order_detail.order.update_attributes(created_by_user: user)
+        @reservation1.order_detail.order.update(created_by_user: user)
         @reservation1.reload
         expect(@reservation1.reload).not_to be_ordered_on_behalf_of
       end
@@ -940,7 +940,7 @@ RSpec.describe Reservation do
     context "and the reservation has started" do
       before :each do
         # Actual start must be in the past
-        existing_user_reservation.update_attributes! reserve_start_at: 30.minutes.ago,
+        existing_user_reservation.update! reserve_start_at: 30.minutes.ago,
                                                      reserve_end_at: 30.minutes.from_now,
                                                      actual_start_at: 30.minutes.ago
 
@@ -954,7 +954,7 @@ RSpec.describe Reservation do
 
       context "and ended" do
         before :each do
-          existing_user_reservation.update_attributes!(actual_end_at: 20.minutes.ago)
+          existing_user_reservation.update!(actual_end_at: 20.minutes.ago)
         end
 
         it "should not conflict" do
@@ -1327,7 +1327,7 @@ RSpec.describe Reservation do
         let!(:product_access_group) { create(:product_access_group, product: instrument, schedule_rules: [@rule_5to7]) }
 
         it "allows a user to reserve if it doesn't require approval" do
-          instrument.update_attributes(requires_approval: false)
+          instrument.update(requires_approval: false)
           expect(reservation).to be_valid
         end
 
@@ -1380,7 +1380,7 @@ RSpec.describe Reservation do
           end
 
           it "should not allow an administrator to save outside of scheduling rules" do
-            reservation.update_attributes(reserve_start_hour: 10)
+            reservation.update(reserve_start_hour: 10)
             expect { reservation.save_as_user!(admin) }.to raise_error(ActiveRecord::RecordInvalid)
             expect(reservation.errors).to be_added(:base, :no_schedule_rule)
           end
@@ -1532,7 +1532,7 @@ RSpec.describe Reservation do
     let(:next_sunday) { Time.zone.at 1_362_290_400 } # Sun, 03 Mar 2013 00:00:00
 
     let!(:instrument) do
-      @instrument.update_attributes max_reserve_mins: nil, reserve_interval: 15
+      @instrument.update max_reserve_mins: nil, reserve_interval: 15
       @instrument.reload
     end
 
@@ -1642,7 +1642,7 @@ RSpec.describe Reservation do
 
     context "when the instrument has cutoff_hours set" do
       before do
-        instrument.update_attributes(cutoff_hours: 2, max_reserve_mins: 240)
+        instrument.update(cutoff_hours: 2, max_reserve_mins: 240)
       end
 
       context "when the reservation end_time is within cutoff_hours from now" do
@@ -1654,7 +1654,7 @@ RSpec.describe Reservation do
 
       context "when the reservation end_time is past cutoff_hours from now" do
         before do
-          reservation.update_attributes(reserve_end_at: reservation.reserve_start_at + 3.hours)
+          reservation.update(reserve_end_at: reservation.reserve_start_at + 3.hours)
         end
 
         context "when the reservation is started" do

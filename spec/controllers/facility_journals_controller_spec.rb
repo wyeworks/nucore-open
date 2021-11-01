@@ -19,7 +19,7 @@ RSpec.describe FacilityJournalsController do
     @order_detail1 = place_and_complete_item_order(user, facility, account, true)
     @order_detail2 = place_and_complete_item_order(user, facility, account)
     # make sure order detail 2 is not reviewed (it is if a zero day review period)
-    @order_detail2.update_attributes(reviewed_at: nil)
+    @order_detail2.update(reviewed_at: nil)
 
     @account2 = create(:nufs_account, :with_account_owner, owner: user)
     @authable_account2 = FactoryBot.create(:facility_account, facility: facility)
@@ -285,7 +285,7 @@ RSpec.describe FacilityJournalsController do
         before :each do
           journal = create(:journal)
           @params[:order_detail_ids] = [@order_detail1.id]
-          @order_detail1.update_attributes(journal_id: journal.id)
+          @order_detail1.update(journal_id: journal.id)
         end
 
         # order details that have journal id already set are filtered out in #order_detail_for_creation
@@ -294,8 +294,8 @@ RSpec.describe FacilityJournalsController do
 
       context "spans fiscal year", feature_setting: { journals_may_span_fiscal_years: false } do
         before :each do
-          @order_detail1.update_attributes(fulfilled_at: SettingsHelper.fiscal_year_end - 1.day)
-          @order_detail3.update_attributes(fulfilled_at: SettingsHelper.fiscal_year_end + 1.day)
+          @order_detail1.update(fulfilled_at: SettingsHelper.fiscal_year_end - 1.day)
+          @order_detail3.update(fulfilled_at: SettingsHelper.fiscal_year_end + 1.day)
         end
 
         it_behaves_like "journal error", "Journals may not span multiple fiscal years."
@@ -311,8 +311,8 @@ RSpec.describe FacilityJournalsController do
 
       context "trying to put journal date before fulfillment date" do
         before :each do
-          @order_detail1.update_attributes(fulfilled_at: 5.days.ago)
-          @order_detail3.update_attributes(fulfilled_at: 3.days.ago)
+          @order_detail1.update(fulfilled_at: 5.days.ago)
+          @order_detail3.update(fulfilled_at: 3.days.ago)
           @params[:journal_date] = format_usa_date(4.days.ago)
         end
 

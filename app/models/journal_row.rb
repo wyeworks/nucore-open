@@ -12,7 +12,7 @@ class JournalRow < ApplicationRecord
   delegate :fulfilled_at, to: :order_detail, allow_nil: true
 
   def update_amount
-    update_attributes(amount: order_detail.actual_cost)
+    update(amount: order_detail.actual_cost)
   end
 
 end

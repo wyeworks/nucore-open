@@ -27,7 +27,7 @@ RSpec.describe ProductUsersController do
     end
 
     it "should return empty and a flash if the product is not restricted" do
-      instrument.update_attributes!(requires_approval: false)
+      instrument.update!(requires_approval: false)
       sign_in admin
       do_request
 

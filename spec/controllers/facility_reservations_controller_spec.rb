@@ -53,7 +53,7 @@ RSpec.describe FacilityReservationsController do
       end_time = start_time + 1.hour
 
       order_details.each do |order_detail|
-        order_detail.reservation.update_attributes(
+        order_detail.reservation.update(
           reserve_start_at: start_time,
           reserve_end_at: end_time,
           actual_start_at: start_time,
@@ -179,7 +179,7 @@ RSpec.describe FacilityReservationsController do
 
         @product = FactoryBot.create(:item, facility_account: @facility_account, facility: @authable)
         @order_detail_item = place_product_order(@director, @authable, @product, @account)
-        @order_detail.order.update_attributes!(state: "purchased")
+        @order_detail.order.update!(state: "purchased")
 
         expect(@authable.reload.order_details).to contain_all [@order_detail_reservation, @order_detail_item]
         do_request
@@ -277,7 +277,7 @@ RSpec.describe FacilityReservationsController do
                                     state: "new",
                                    )
         # make sure the reservations are happening today
-        @reservation.update_attributes!(reserve_start_at: Time.zone.now, reserve_end_at: 1.hour.from_now)
+        @reservation.update!(reserve_start_at: Time.zone.now, reserve_end_at: 1.hour.from_now)
 
         @unpurchased_reservation = FactoryBot.create(:reservation, product: @product, reserve_start_at: 1.hour.from_now, reserve_end_at: 2.hours.from_now)
         @order_detail2 = FactoryBot.create(:order_detail, order: @order2, product: @product, reservation: @unpurchased_reservation)
@@ -359,7 +359,7 @@ RSpec.describe FacilityReservationsController do
         create(:account_price_group_member, account: account, price_group: @price_group)
         @instrument_pp = @product.instrument_price_policies.create(FactoryBot.attributes_for(:instrument_price_policy, price_group_id: @price_group.id))
         @instrument_pp.reload.restrict_purchase = false
-        @reservation.update_attributes(actual_start_at: nil, actual_end_at: nil)
+        @reservation.update(actual_start_at: nil, actual_end_at: nil)
         @params.merge!(reservation: {
                          reserve_start_at: @reservation.reserve_start_at,
                          reserve_end_at: @reservation.reserve_end_at - 15.minutes,

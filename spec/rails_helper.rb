@@ -28,23 +28,38 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system, js: true) do
-    driven_by :selenium, using: :headless_chrome, screen_size: [1366, 768]
+    if ENV["DOCKER"]
+      Capybara.register_driver :selenium_remote do |app|
+        Capybara::Selenium::Driver.new(app,
+                                       { url: "http://chrome:4444/wd/hub", browser: :remote, desired_capabilities: :chrome })
+      end
+
+      driven_by(:selenium_remote)
+      Capybara.server_host = "0.0.0.0"
+      Capybara.server_port = 4000
+      ip = Socket.ip_address_list.detect(&:ipv4_private?).ip_address
+      Capybara.app_host = "http://#{ip}:4000"
+    else
+      driven_by :selenium, using: :headless_chrome, screen_size: [1366, 768]
+    end
   end
 
   # Gives more verbose output for JS errors, fails any spec with SEVERE errors
   # Based on https://medium.com/@coorasse/catch-javascript-errors-in-your-system-tests-89c2fe6773b1
   config.after(:each, type: :system, js: true) do |example|
-    # Must call page.driver.browser.manage.logs.get(:browser) after every run,
-    # otherwise the logs don't get cleared and leak into other specs.
-    js_errors = page.driver.browser.manage.logs.get(:browser)
-    # Some forms using remote: true return a 406 that is expected
-    unless example.metadata[:ignore_js_errors]
-      js_errors.each do |error|
-        if error.level == "SEVERE" || error.level == "WARNING"
-          STDERR.puts "JS error detected (#{error.level}): #{error.message}"
+    unless ENV['DOCKER']
+      # Must call page.driver.browser.manage.logs.get(:browser) after every run,
+      # otherwise the logs don't get cleared and leak into other specs.
+      js_errors = page.driver.browser.manage.logs.get(:browser)
+      # Some forms using remote: true return a 406 that is expected
+      unless example.metadata[:ignore_js_errors]
+        js_errors.each do |error|
+          if error.level == "SEVERE" || error.level == "WARNING"
+            STDERR.puts "JS error detected (#{error.level}): #{error.message}"
+          end
         end
+        expect(js_errors.map(&:level)).not_to include "SEVERE"
       end
-      expect(js_errors.map(&:level)).not_to include "SEVERE"
     end
   end
 
@@ -133,9 +148,15 @@ RSpec.configure do |config|
 
   # Javascript specs need to be able to talk to localhost
   config.around(:each, :js) do |example|
-    WebMock.disable_net_connect!(allow_localhost: true)
-    example.call
-    WebMock.disable_net_connect!(allow_localhost: false)
+    if ENV["DOCKER"]
+      WebMock.allow_net_connect!
+      example.call
+      WebMock.disable_net_connect!
+    else
+      WebMock.disable_net_connect!(allow_localhost: true)
+      example.call
+      WebMock.disable_net_connect!(allow_localhost: false)
+    end
   end
 
   # Selenium needs to clean itself up once all the tests have been run

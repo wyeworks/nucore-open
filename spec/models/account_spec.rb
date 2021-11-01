@@ -64,7 +64,7 @@ RSpec.describe Account do
     subject { account.affiliate_to_s }
 
     before do
-      account.update_attributes(
+      account.update(
         affiliate_id: affiliate.try(:id),
         affiliate_other: affiliate_other,
       )
@@ -224,7 +224,7 @@ RSpec.describe Account do
       @account = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @user1))
 
       expect(@account.owner_user).to eq(@user1)
-      @account.owner.update_attributes(deleted_at: Time.zone.now, deleted_by: @user1.id)
+      @account.owner.update(deleted_at: Time.zone.now, deleted_by: @user1.id)
       @account_user2 = @account.account_users.create(user_id: @user2.id, user_role: "Owner", created_by: @user2.id)
       @account.reload # load fresh account users with update attributes
       expect(@account.owner_user).to eq(@user2)
@@ -270,7 +270,7 @@ RSpec.describe Account do
       expect(@account.can_be_used_by?(@admin)).to eq(true)
       expect(@account.can_be_used_by?(@user)).to eq(true)
 
-      @user_au.update_attributes(deleted_at: Time.zone.now, deleted_by: @owner.id)
+      @user_au.update(deleted_at: Time.zone.now, deleted_by: @owner.id)
       expect(@account.can_be_used_by?(@user)).to eq(false)
     end
   end

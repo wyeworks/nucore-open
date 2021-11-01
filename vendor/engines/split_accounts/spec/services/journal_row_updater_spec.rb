@@ -17,7 +17,7 @@ RSpec.describe JournalRowUpdater, type: :service do
     before do
       journal.create_journal_rows!([order_detail])
       journal2.create_journal_rows!([order_detail])
-      order_detail.update_attributes(journal_id: nil)
+      order_detail.update(journal_id: nil)
     end
 
     let(:journal_rows) { journal.journal_rows.where(order_detail_id: order_detail.id) }
@@ -26,7 +26,7 @@ RSpec.describe JournalRowUpdater, type: :service do
     describe "and I update the pricing" do
       before do
         order_detail.reload
-        order_detail.update_attributes(actual_cost: 20.37)
+        order_detail.update(actual_cost: 20.37)
       end
 
       it "updates the order detail" do

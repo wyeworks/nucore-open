@@ -20,7 +20,7 @@ to enable the "Sanger" top-level tab for a facility, set the
 table. From the rails console, you can do this by:
 
 ```ruby
-Facility.find_by(url_name: "facility-name").update_attributes(sanger_sequencing_enabled: true)
+Facility.find_by(url_name: "facility-name").update(sanger_sequencing_enabled: true)
 ```
 
 ### Set up the order form for a service

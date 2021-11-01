@@ -109,7 +109,7 @@ RSpec.describe PricePolicy do
     end
 
     it "should restrict purchase" do
-      @pp.update_attributes(can_purchase: false)
+      @pp.update(can_purchase: false)
       expect(@pp.restrict_purchase).to eq(true)
     end
 

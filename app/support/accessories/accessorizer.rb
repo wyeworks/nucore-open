@@ -39,7 +39,7 @@ class Accessories::Accessorizer
     update_attributes_of(unpurchased_accessory_order_details, params)
   end
 
-  def update_attributes(params)
+  def update_accessorizer_attributes(params)
     update_attributes_of(accessory_order_details, params)
   end
 

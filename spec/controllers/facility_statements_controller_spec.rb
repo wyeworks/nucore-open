@@ -25,7 +25,7 @@ if Account.config.statements_enabled?
     def create_order_details
       @order_detail1 = place_and_complete_item_order(@user, @authable, @account)
       @order_detail2 = place_and_complete_item_order(@user, @authable, @account)
-      @order_detail2.update_attributes(reviewed_at: nil)
+      @order_detail2.update(reviewed_at: nil)
 
       @account2 = FactoryBot.create(@account_sym, :with_account_owner, owner: @user, facility: @authable)
       @authable_account2 = FactoryBot.create(:facility_account, facility: @authable)

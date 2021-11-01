@@ -37,7 +37,7 @@ class FacilityAccountForm < SimpleDelegator
     valid? && facility_account.save(validate: false) # skip validations because we've already done them
   end
 
-  def update_attributes(*args)
+  def update_form_attributes(*args)
     assign_attributes(*args)
     save
   end

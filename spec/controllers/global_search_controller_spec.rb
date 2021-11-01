@@ -90,7 +90,7 @@ RSpec.describe GlobalSearchController do
 
       context "when it is purchased for the user" do
         before :each do
-          order.update_attributes(user: @guest)
+          order.update(user: @guest)
         end
 
         it_should_find_the_order
@@ -99,7 +99,7 @@ RSpec.describe GlobalSearchController do
 
       context "when it is purchased for another user" do
         before :each do
-          order.update_attributes(user: @admin)
+          order.update(user: @admin)
         end
 
         it_should_not_find_the_order

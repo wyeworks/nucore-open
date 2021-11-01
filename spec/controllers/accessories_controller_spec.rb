@@ -56,7 +56,7 @@ RSpec.describe AccessoriesController do
 
       describe "a completed reservation" do
         before do
-          reservation.update_attributes(actual_start_at: 1.hour.ago, actual_end_at: 30.minutes.ago)
+          reservation.update(actual_start_at: 1.hour.ago, actual_end_at: 30.minutes.ago)
           do_request
         end
 
@@ -82,7 +82,7 @@ RSpec.describe AccessoriesController do
 
       describe "an ongoing reservation" do
         before do
-          reservation.update_attributes!(actual_start_at: 37.minutes.ago, actual_end_at: nil)
+          reservation.update!(actual_start_at: 37.minutes.ago, actual_end_at: nil)
           do_request
         end
 
@@ -135,7 +135,7 @@ RSpec.describe AccessoriesController do
 
     context "as the user who made the reservation" do
       before :each do
-        reservation.update_attributes(actual_start_at: 1.hour.ago, actual_end_at: 30.minutes.ago)
+        reservation.update(actual_start_at: 1.hour.ago, actual_end_at: 30.minutes.ago)
         sign_in order.user
       end
 

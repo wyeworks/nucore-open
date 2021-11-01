@@ -1082,7 +1082,8 @@ en:
         Contact the !facility_downcase! for more information.
         You may place reservations, but if the instrument is still down at your
         scheduled time they will be canceled at no charge.
-
+    public_list:
+      empty: None
     public_schedule:
       title: Schedule
       place_reservation: Place Reservation

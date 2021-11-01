@@ -11,7 +11,7 @@ module SangerSequencing
     belongs_to :product
 
     validates :group, presence: true, inclusion: { in: GROUPS }
-    validates :product, presence: true, uniqueness: true
+    validates :product, presence: true, uniqueness: { case_sensitive: false }
 
   end
 

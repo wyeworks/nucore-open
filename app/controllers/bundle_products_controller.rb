@@ -45,7 +45,7 @@ class BundleProductsController < ApplicationController
 
   # PUT /facilities/:facility_id/bundles/:bundle_id/bundle_products/:id
   def update
-    if @bundle_product.update_attributes(update_params)
+    if @bundle_product.update(update_params)
       flash[:notice] = "The bundle product was successfully updated."
       redirect_to facility_bundle_bundle_products_path(current_facility, @bundle)
     else

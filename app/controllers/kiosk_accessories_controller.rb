@@ -54,7 +54,7 @@ class KioskAccessoriesController < ApplicationController
   end
 
   def update_accessories
-    accessorizer.update_attributes(params[:kiosk_accessories])
+    accessorizer.update_accessorizer_attributes(params[:kiosk_accessories])
   end
 
   def accessorizer

@@ -15,7 +15,7 @@ RSpec.describe "Creating a journal" do
   let!(:problem_order_detail) { place_and_complete_item_order(user, facility, expired_payment_source, true) }
 
   before do
-    unreviewed_order_detail.update_attributes(reviewed_at: nil)
+    unreviewed_order_detail.update(reviewed_at: nil)
     [reviewed_order_detail, problem_order_detail].each do |od|
       od.update_attribute(:reviewed_at, 1.day.ago)
     end

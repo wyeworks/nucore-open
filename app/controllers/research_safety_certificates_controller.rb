@@ -27,7 +27,7 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
   end
 
   def update
-    if @certificate.update_attributes(certificate_params)
+    if @certificate.update(certificate_params)
       flash[:notice] = text('update.notice', certificate_name: @certificate.name)
       redirect_to action: :index
     else
@@ -37,7 +37,7 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
 
   def destroy
     if @certificate.destroy
-      @certificate.update_attributes(deleted_by_id: current_user.id)
+      @certificate.update(deleted_by_id: current_user.id)
       flash[:notice] = text('destroy.notice', certificate_name: @certificate.name)
     else
       flash[:error] = text('destroy.error', certificate_name: @certificate.name)

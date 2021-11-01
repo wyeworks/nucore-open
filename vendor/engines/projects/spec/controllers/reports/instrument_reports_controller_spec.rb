@@ -13,7 +13,7 @@ RSpec.describe Reports::InstrumentReportsController do
 
   describe "the project report" do
     before do
-      order_detail.update_attributes(project: project)
+      order_detail.update(project: project)
       sign_in user
       get :index, params: { report_by: :project, facility_id: facility.url_name,
                             date_start: 1.month.ago, date_end: Time.current }, xhr: true

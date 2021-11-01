@@ -200,7 +200,7 @@ RSpec.describe Product do
         end
 
         it "should not validate without an email on either product or facility", :locales do
-          @facility.update_attributes!(email: "")
+          @facility.update!(email: "")
           @product.contact_email = ""
           expect(@product).not_to be_valid
           expect(@product.errors.full_messages).to include("Contact email must be set on either the product or the #{I18n.t('facility_downcase')}")
@@ -223,7 +223,7 @@ RSpec.describe Product do
         end
 
         it "should validate even if the facility's email is blank" do
-          @facility.update_attributes!(email: "")
+          @facility.update!(email: "")
           @product.contact_email = ""
           expect(@product).to be_valid
         end
@@ -251,12 +251,12 @@ RSpec.describe Product do
       end
 
       it "should not be purchasable if it is archived" do
-        @product.update_attributes is_archived: true
+        @product.update is_archived: true
         expect(@product).not_to be_available_for_purchase
       end
 
       it "should not be purchasable if the facility is inactive" do
-        @product.facility.update_attributes is_active: false
+        @product.facility.update is_active: false
         expect(@product).not_to be_available_for_purchase
       end
 

@@ -47,7 +47,7 @@ class OrderStatusesController < ApplicationController
 
   # PUT /facilities/:facility_id/order_statuses/:id
   def update
-    if @order_status.update_attributes(update_params)
+    if @order_status.update(update_params)
       flash[:notice] = "The Order Status was successfully updated."
       redirect_to facility_order_statuses_path
     else

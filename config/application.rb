@@ -13,6 +13,8 @@ module Nucore
 
   class Application < Rails::Application
 
+    # TO DO: Test the new defaults in new_framework_defaults_5_2.rb,
+    # then use config.load_defaults 5.2.
     config.load_defaults 5.0
     # It appears cancancan and/or delayed_job_active_record do some monkey patching of AR incorrectly,
     # so setting this in an initializer doesn't work. https://stackoverflow.com/a/39153224
@@ -48,6 +50,7 @@ module Nucore
     # Override the default ("#{Rails.root}/**/spec/mailers/previews") to also load
     # previews from within our engines.
     config.action_mailer.preview_path = "#{Rails.root}/**/spec/mailers/previews"
+    config.action_mailer.delivery_job = "ActionMailer::MailDeliveryJob"
 
     # Prevent invalid (usually malicious) URLs from causing exceptions/issues
     config.middleware.insert 0, Rack::UTF8Sanitizer

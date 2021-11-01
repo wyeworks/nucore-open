@@ -25,7 +25,7 @@ RSpec.describe "Facility Orders Search" do
 
   before do
     completed_orders.each do |order|
-      order.order_details.first.update_attributes(price_policy: nil)
+      order.order_details.first.update(price_policy: nil)
     end
   end
 

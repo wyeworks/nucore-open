@@ -11,7 +11,7 @@ RSpec.describe Account do
   let(:user) { create(:user) }
 
   before :each do
-    facility.update_attributes(accepts_cc: true, accepts_po: true)
+    facility.update(accepts_cc: true, accepts_po: true)
     item.reload
   end
 
@@ -21,7 +21,7 @@ RSpec.describe Account do
         AccountPriceGroupMember.create!(account_id: po_account.id, price_group_id: price_group.id)
       end
       expect(po_account.validate_against_product(item, user)).to be_nil
-      facility.update_attributes(accepts_po: false)
+      facility.update(accepts_po: false)
       item.reload
     end
 
@@ -37,7 +37,7 @@ RSpec.describe Account do
         AccountPriceGroupMember.create!(account_id: cc_account.id, price_group_id: price_group.id)
       end
       expect(cc_account.validate_against_product(item, user)).to be_nil
-      facility.update_attributes(accepts_cc: false)
+      facility.update(accepts_cc: false)
       item.reload
     end
 

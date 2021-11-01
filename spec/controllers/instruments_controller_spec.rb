@@ -136,7 +136,7 @@ RSpec.describe InstrumentsController do
     context "when the instrument requires approval" do
       before :each do
         instrument.schedule_rules.create(attributes_for(:schedule_rule))
-        instrument.update_attributes(requires_approval: true)
+        instrument.update(requires_approval: true)
       end
 
       context "if the user is not approved" do

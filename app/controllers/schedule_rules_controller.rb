@@ -62,7 +62,7 @@ class ScheduleRulesController < ApplicationController
     # existing ones for destruction
     params[:schedule_rule][:product_access_group_ids] ||= []
 
-    if @schedule_rule.update_attributes(schedule_rule_params)
+    if @schedule_rule.update(schedule_rule_params)
       flash[:notice] = text("update")
       redirect_to action: :index
     else

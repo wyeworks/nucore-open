@@ -18,7 +18,7 @@ class CreateSchedules < ActiveRecord::Migration[4.2]
 
     Instrument.all.each do |instrument|
       schedule = Schedule.create(name: "#{instrument.name} Schedule", facility_id: instrument.facility_id)
-      instrument.update_attributes(schedule_id: schedule.id)
+      instrument.update(schedule_id: schedule.id)
     end
   end
 

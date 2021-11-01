@@ -27,9 +27,9 @@ class User < ApplicationRecord
   has_many :user_preferences, dependent: :destroy
 
   validates_presence_of :username, :first_name, :last_name
-  # There are existing duplicate emails in NU -- they're all users that have both a netid
-  # account and a non-netid account.
-  validates :email, presence: true, email_format: true, uniqueness: { case_sensitive: true }
+
+  validates :email, presence: true, email_format: true
+  validates_uniqueness_of :email, case_sensitive: false
   validates :username, uniqueness: { case_sensitive: false }
   validates :suspension_note, length: { maximum: 255 }
 

@@ -86,7 +86,7 @@ RSpec.describe OrderDetail do
           let(:costs) { base_price_policy.estimate_cost_and_subsidy(order_detail.quantity) }
 
           before :each do
-            order_detail.update_attributes(
+            order_detail.update(
               statement_id: original_statement.id,
               estimated_cost: 10,
               estimated_subsidy: 0,
@@ -102,7 +102,7 @@ RSpec.describe OrderDetail do
 
           before :each do
             AccountPriceGroupMember.create! price_group: discount_price_group, account: new_account
-            order_detail.update_attributes(
+            order_detail.update(
               statement_id: original_statement.id,
               estimated_cost: 10,
               estimated_subsidy: 0,
@@ -127,7 +127,7 @@ RSpec.describe OrderDetail do
       context "with actual costs" do
         before :each do
           order_detail.backdate_to_complete!
-          order_detail.update_attributes!(actual_cost: 20, actual_subsidy: 10)
+          order_detail.update!(actual_cost: 20, actual_subsidy: 10)
           original_statement.add_order_detail(order_detail)
           original_statement.save!
 
@@ -187,7 +187,7 @@ RSpec.describe OrderDetail do
       let(:cc_account) { create(:credit_card_account, account_users_attributes: account_users_attributes_hash(user: user)) }
 
       before :each do
-        order_detail.facility.update_attributes(accepts_cc: false)
+        order_detail.facility.update(accepts_cc: false)
         order_detail.account = cc_account
         order_detail.save!
       end

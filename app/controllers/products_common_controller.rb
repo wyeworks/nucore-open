@@ -74,7 +74,7 @@ class ProductsCommonController < ApplicationController
   # PUT /services/1
   def update
     respond_to do |format|
-      if @product.update_attributes(resource_params)
+      if @product.update(resource_params)
         flash[:notice] = "#{@product.class.name.capitalize} was successfully updated."
         format.html { redirect_to([:manage, current_facility, @product]) }
       else

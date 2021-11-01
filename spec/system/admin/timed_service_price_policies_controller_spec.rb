@@ -16,7 +16,7 @@ RSpec.describe TimedServicePricePoliciesController, :js do
     facility.price_groups.destroy_all # get rid of the price groups created by the factories
   end
 
-  it "can set up price policies", feature_setting: { facility_directors_can_manage_price_groups: true }  do
+  it "can set up price policies", :aggregate_failures, feature_setting: { facility_directors_can_manage_price_groups: true } do
     visit facility_timed_services_path(facility, timed_service)
     click_link timed_service.name
     click_link "Pricing"

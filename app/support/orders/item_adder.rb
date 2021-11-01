@@ -52,7 +52,7 @@ class Orders::ItemAdder
       if @order.order_details.length > 0
         raise NUCore::MixedFacilityCart
       else
-        @order.update_attributes(facility: product.facility)
+        @order.update(facility: product.facility)
       end
     end
   end

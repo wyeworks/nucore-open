@@ -173,7 +173,7 @@ RSpec.describe SplitAccounts::OrderDetailSplitter, type: :service do
     let(:order_detail) { reservation.order_detail }
 
     it "does not do anything to the reservation" do
-      order_detail.update_attributes!(account: split_account)
+      order_detail.update!(account: split_account)
       expect {
         described_class.new(order_detail, split_time_data: true).split
       }.not_to change(Reservation, :count)

@@ -4,7 +4,7 @@ class UserPreference < ApplicationRecord
 
   belongs_to :user
   validates :value, presence: true
-  validates :name, presence: true, uniqueness: { scope: :user_id }
+  validates :name, presence: true, uniqueness: { scope: :user_id, case_sensitive: false }
 
   cattr_accessor(:options_list) { [] } # list of option class names
 

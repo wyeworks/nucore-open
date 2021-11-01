@@ -54,4 +54,22 @@ RSpec.describe "Managing accounts" do
       end
     end
   end
+
+  describe "editing credit cards" do
+    let!(:account) { FactoryBot.create(:credit_card_account, :with_account_owner, owner: owner, facility: facility) }
+
+    it "can edit a credit_cards expiration date", :aggregate_failures do
+      visit facility_accounts_path(facility)
+      fill_in "search_term", with: account.account_number
+      click_on "Search"
+      click_on account.to_s
+      click_on "Edit"
+      expect(page).to have_content("Expiration month")
+      expect(page).to have_content("Expiration year")
+      select "5", from: "Expiration month"
+      select "#{Time.zone.today.year + 5}", from: "Expiration year"
+      click_on "Save"
+      expect(page).to have_content("Expiration\n05/31/#{Time.zone.today.year + 5}")
+    end
+  end
 end

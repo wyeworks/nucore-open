@@ -58,12 +58,12 @@ RSpec.describe ChartStringReassignmentForm do
           users.each_with_index do |user, index|
             grant_accounts_to_user(accounts, user)
 
-            order_details[index].update_attributes(
+            order_details[index].update(
               account_id: random_item(accounts).id,
               order_id: orders[index].id,
             )
 
-            orders[index].update_attributes(
+            orders[index].update(
               account_id: order_details[index].account_id,
               user_id: user.id,
             )

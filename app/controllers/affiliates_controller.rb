@@ -37,7 +37,7 @@ class AffiliatesController < GlobalSettingsController
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "Affiliate with id #{id} not found!"
     else
-      return render action: :edit unless @affiliate.update_attributes(affiliate_params)
+      return render action: :edit unless @affiliate.update(affiliate_params)
 
       flash[:notice] = "Affiliate #{@affiliate.name} updated"
     end

@@ -29,7 +29,7 @@ class JournalCutoffDatesController < ApplicationController
   end
 
   def update
-    if @journal_cutoff_date.update_attributes(journal_cutoff_date_params)
+    if @journal_cutoff_date.update(journal_cutoff_date_params)
       redirect_to journal_cutoff_dates_path, notice: t("journal_cutoff_dates.update.success")
     else
       render :edit

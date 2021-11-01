@@ -71,7 +71,7 @@ RSpec.describe SplitAccounts::OrderDetailSplitter do
     let(:order_detail) { occupancy.order_detail }
 
     it "does not do anything to the occupancy" do
-      order_detail.update_attributes!(account: split_account)
+      order_detail.update!(account: split_account)
       described_class.new(order_detail, split_time_data: true).split
       expect(occupancy.reload).to be_persisted
     end

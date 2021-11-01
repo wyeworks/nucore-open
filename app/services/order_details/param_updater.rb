@@ -54,7 +54,7 @@ class OrderDetails::ParamUpdater
     @order_detail
   end
 
-  def update_attributes(params)
+  def update_param_attributes(params)
     params = params.try(:dup) || {}
 
     # Assign all the attributes first, and then update the order status.

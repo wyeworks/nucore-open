@@ -30,7 +30,7 @@ class MigrateRelays < ActiveRecord::Migration[4.2]
 
   def self.down
     Relay.all.each do |relay|
-      relay.instrument.update_attributes!(
+      relay.instrument.update!(
         relay_ip: relay.ip,
         relay_port: relay.port,
         relay_username: relay.username,

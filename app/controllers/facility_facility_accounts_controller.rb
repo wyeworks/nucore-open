@@ -55,7 +55,7 @@ class FacilityFacilityAccountsController < ApplicationController
   def update
     @facility_account = current_facility.facility_accounts.find(params[:id])
 
-    if @facility_account.update_attributes(update_params)
+    if @facility_account.update(update_params)
       flash[:notice] = text("update.success", model: FacilityAccount.model_name.human)
       redirect_to facility_facility_accounts_path
     else

@@ -17,7 +17,7 @@ RSpec.describe ProductAccessGroup do
   end
   it { is_expected.to validate_presence_of :name }
   it { is_expected.to validate_presence_of :product }
-  it { is_expected.to validate_uniqueness_of(:name).scoped_to(:product_id) }
+  it { is_expected.to validate_uniqueness_of(:name).scoped_to(:product_id).case_insensitive }
 
   it "removing the level should also remove the join to the scheduling rule" do
     @rule = @instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule))

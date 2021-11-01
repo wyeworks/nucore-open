@@ -34,7 +34,7 @@ class ProductResearchSafetyCertificationRequirementsController < ApplicationCont
 
   def destroy
     if @product_research_safety_certification_requirement.destroy
-      @product_research_safety_certification_requirement.update_attributes(deleted_by_id: current_user.id)
+      @product_research_safety_certification_requirement.update(deleted_by_id: current_user.id)
       flash[:notice] = text("destroy.notice", certificate_name: @product_research_safety_certification_requirement.research_safety_certificate.name)
     else
       flash[:error] = text("destroy.error", certificate_name: @product_research_safety_certification_requirement.research_safety_certificate.name)

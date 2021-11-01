@@ -399,7 +399,7 @@ RSpec.describe ScheduleRule do
         end
 
         it "should return the rule if requires_approval has been set to false" do
-          @instrument.update_attributes(requires_approval: false)
+          @instrument.update(requires_approval: false)
           expect(@instrument.available_schedule_rules(@user)).to eq([@rule])
         end
       end
