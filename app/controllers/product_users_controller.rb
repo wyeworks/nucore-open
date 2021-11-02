@@ -96,7 +96,7 @@ class ProductUsersController < ApplicationController
     end
     permitted_params.each do |product_user_id, product_access_group_params|
       product_user = @product.product_users.find(product_user_id)
-      product_user.update_attributes(product_access_group_params.permit(:product_access_group_id))
+      product_user.update(product_access_group_params.permit(:product_access_group_id))
     end
 
     flash[:notice] = text("update_restrictions.success")

@@ -24,7 +24,7 @@ class ProductAccessGroupsController < ApplicationController
   end
 
   def update
-    if @product_access_group.update_attributes(product_access_group_params)
+    if @product_access_group.update(product_access_group_params)
       flash[:notice] = "#{ProductAccessGroup.model_name.human} was successfully updated"
       redirect_to [current_facility, @product, ProductAccessGroup]
     else

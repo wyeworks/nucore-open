@@ -114,7 +114,7 @@ class FacilitiesController < ApplicationController
 
   # PUT /facilities/:facility_id
   def update
-    if current_facility.update_attributes(facility_params)
+    if current_facility.update(facility_params)
       flash[:notice] = text("update.success")
       redirect_to manage_facility_path(current_facility)
     else

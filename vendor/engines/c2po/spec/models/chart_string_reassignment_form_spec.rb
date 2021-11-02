@@ -18,7 +18,7 @@ RSpec.describe ChartStringReassignmentForm do
       before :each do
         setup_account(:purchase_order_account, other_facility, user)
 
-        order.update_attributes(facility_id: current_facility.id, user_id: user.id)
+        order.update(facility_id: current_facility.id, user_id: user.id)
 
         order_details.each do |order_detail|
           order_detail.update_attribute(:account_id, current_facility_account.id)

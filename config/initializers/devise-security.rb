@@ -45,3 +45,27 @@ Devise.setup do |config|
   # Time period for account expiry from last_activity_at
   # config.expire_after = 90.days
 end
+
+# By specifying devise_validation_enabled? = true, we prevent the devise-security
+# SecureValidatable module from adding a uniqueness validation to the email field.
+# This prevents the Rails 6 deprecation warning.
+# It is acceptable to prevent this validation because we are not using the
+# SecureValidatable module for email validation.
+# We are only including SecureValidatable to enforce password complexity rules.
+#
+# see https://github.com/devise-security/devise-security/blob/master/lib/devise-security/models/secure_validatable.rb#L41
+module Devise
+  module Models
+    module SecureValidatable
+      module ClassMethods
+
+        private
+
+        def devise_validation_enabled?
+          true
+        end
+
+      end
+    end
+  end
+end

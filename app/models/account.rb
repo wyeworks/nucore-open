@@ -128,11 +128,11 @@ class Account < ApplicationRecord
   end
 
   def suspend
-    update_attributes(suspended_at: Time.current)
+    update(suspended_at: Time.current)
   end
 
   def unsuspend
-    update_attributes(suspended_at: nil)
+    update(suspended_at: nil)
   end
 
   def display_status
@@ -221,7 +221,7 @@ class Account < ApplicationRecord
                            .readonly(false)
                            .to_a
 
-    details.each { |od| od.update_attributes(reviewed_at: Time.zone.now + Settings.billing.review_period, statement: statement) }
+    details.each { |od| od.update(reviewed_at: Time.zone.now + Settings.billing.review_period, statement: statement) }
   end
 
   def can_be_used_by?(user)

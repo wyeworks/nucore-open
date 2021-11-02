@@ -64,7 +64,7 @@ RSpec.describe FacilityAccountsController, :enable_split_accounts do
     end
 
     describe "re-activiating" do
-      before { split_account.update_attributes(suspended_at: 1.day.ago) }
+      before { split_account.update(suspended_at: 1.day.ago) }
 
       it "reactivates" do
         expect { get :unsuspend, params: { facility_id: facility.url_name, account_id: split_account.id } }
@@ -72,7 +72,7 @@ RSpec.describe FacilityAccountsController, :enable_split_accounts do
       end
 
       describe "and one of the children is suspended" do
-        before { split_account.subaccounts.first.update_attributes(suspended_at: 1.day.ago) }
+        before { split_account.subaccounts.first.update(suspended_at: 1.day.ago) }
 
         it "does not reactivate", :aggregate_failures do
           expect { get :unsuspend, params: { facility_id: facility.url_name, account_id: split_account.id } }

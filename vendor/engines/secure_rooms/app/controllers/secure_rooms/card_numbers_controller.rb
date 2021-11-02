@@ -25,7 +25,7 @@ module SecureRooms
     end
 
     def update
-      if @user.update_attributes(update_user_params)
+      if @user.update(update_user_params)
         flash[:notice] = text("success")
         redirect_to facility_user_path(current_facility, @user)
       else

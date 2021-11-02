@@ -37,7 +37,7 @@ RSpec.describe SecureRoomsApi::ScansController do
 
           it { is_expected.to have_http_status(:forbidden) }
           it "responds with JSON" do
-            expect(response.content_type).to eq("application/json")
+            expect(response.media_type).to eq("application/json")
           end
         end
 
@@ -46,7 +46,7 @@ RSpec.describe SecureRoomsApi::ScansController do
 
           it { is_expected.to have_http_status(:not_found) }
           it "responds with JSON" do
-            expect(response.content_type).to eq("application/json")
+            expect(response.media_type).to eq("application/json")
           end
         end
       end

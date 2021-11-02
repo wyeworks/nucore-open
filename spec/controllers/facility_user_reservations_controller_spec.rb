@@ -69,7 +69,7 @@ RSpec.describe FacilityUserReservationsController do
 
       context "when the reservation has already been canceled" do
         before do
-          reservation.order_detail.update_attributes(canceled_at: 1.second.ago)
+          reservation.order_detail.update(canceled_at: 1.second.ago)
           execute_cancel_request
         end
 

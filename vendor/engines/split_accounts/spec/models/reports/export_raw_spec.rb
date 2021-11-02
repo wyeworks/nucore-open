@@ -35,7 +35,7 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
     let(:order) { create(:complete_order, product: item, account: account) }
     let(:order_detail) do
       order.order_details.first.tap do |order_detail|
-        order_detail.update_attributes!(
+        order_detail.update!(
           quantity: 1,
           actual_cost: BigDecimal("19.99"),
           actual_subsidy: BigDecimal("9.99"),
@@ -75,7 +75,7 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
     end
     let(:order_detail) { reservation.order_detail }
 
-    before { order_detail.update_attributes!(account: account) }
+    before { order_detail.update!(account: account) }
 
     it "splits the fields correctly" do
       expect(report).to have_column_values(
@@ -103,7 +103,7 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
     let(:order_detail) { reservation.order_detail }
     before do
       instrument.price_policies.each { |pp| pp.update(start_date: 3.days.ago, usage_rate: 60) }
-      order_detail.update_attributes!(account: account)
+      order_detail.update!(account: account)
       reservation.really_destroy!
     end
 

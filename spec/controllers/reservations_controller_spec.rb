@@ -167,7 +167,7 @@ RSpec.describe ReservationsController do
         let(:restriction_level) { FactoryBot.create(:product_access_group, product_id: instrument.id) }
 
         before(:each) do
-          instrument.update_attributes(requires_approval: true)
+          instrument.update(requires_approval: true)
           @rule.product_access_groups = [restriction_level]
           @rule.save!
         end
@@ -298,8 +298,8 @@ RSpec.describe ReservationsController do
         @params = { status: "upcoming" }
         @upcoming = FactoryBot.create(:purchased_reservation, product: @instrument)
         @in_progress = FactoryBot.create(:purchased_reservation, product: @instrument, reserve_start_at: Time.zone.now, reserve_end_at: 1.hour.from_now)
-        @in_progress.update_attributes!(actual_start_at: Time.zone.now)
-        [@in_progress, @upcoming].each { |res| res.order_detail.order.update_attributes!(user: @staff) }
+        @in_progress.update!(actual_start_at: Time.zone.now)
+        [@in_progress, @upcoming].each { |res| res.order_detail.order.update!(user: @staff) }
       end
 
       it_should_require_login
@@ -330,16 +330,16 @@ RSpec.describe ReservationsController do
         end
 
         it "should have a message for todays reservations" do
-          @upcoming.update_attributes(reserve_start_at: 1.hour.from_now, reserve_end_at: 2.hours.from_now)
+          @upcoming.update(reserve_start_at: 1.hour.from_now, reserve_end_at: 2.hours.from_now)
           tomorrow_reservation = FactoryBot.create(:purchased_reservation, product: @instrument, reserve_start_at: 1.day.from_now)
-          tomorrow_reservation.order_detail.order.update_attributes(user: @staff)
+          tomorrow_reservation.order_detail.order.update(user: @staff)
           do_request
           expect(response.body).to include I18n.t("reservations.notices.upcoming", reservation: @upcoming)
           expect(response.body).to_not include I18n.t("reservations.notices.upcoming", reservation: @tomorrow)
         end
 
         it "should not have an upcoming message for a canceled reservation" do
-          @upcoming.update_attributes(reserve_start_at: 1.hour.from_now, reserve_end_at: 2.hours.from_now)
+          @upcoming.update(reserve_start_at: 1.hour.from_now, reserve_end_at: 2.hours.from_now)
           @upcoming.order_detail.update_order_status!(@staff, OrderStatus.canceled)
           do_request
           expect(response.body).to_not include I18n.t("reservations.notices.upcoming", reservation: @upcoming)
@@ -531,7 +531,7 @@ RSpec.describe ReservationsController do
 
         context "and there is no price policy" do
           before :each do
-            @price_policy.update_attributes(expire_date: 2.days.ago)
+            @price_policy.update(expire_date: 2.days.ago)
           end
 
           it_should_allow_all facility_operators, "to create the reservation, but have it be a problem order" do
@@ -572,7 +572,7 @@ RSpec.describe ReservationsController do
     context "creating a reservation in the future with no price policy" do
       before :each do
         @params[:reservation][:reserve_start_date] = format_usa_date(@price_policy.expire_date + 1.day)
-        @price_group_product.update_attributes(reservation_window: 365)
+        @price_group_product.update(reservation_window: 365)
         sign_in @guest
         do_request
       end
@@ -629,10 +629,10 @@ RSpec.describe ReservationsController do
 
     context "with a price policy attached to the account" do
       before :each do
-        @order.update_attributes(account: nil)
+        @order.update(account: nil)
         expect(@order.account).to be_nil
         expect(@order_detail.account).to be_nil
-        @instrument.price_policies.first.update_attributes usage_rate: 240
+        @instrument.price_policies.first.update usage_rate: 240
         @price_group2 = FactoryBot.create(:price_group, facility: facility)
         @pg_account        = FactoryBot.create(:account_price_group_member, account: @account, price_group: @price_group2)
         @price_policy2     = create :instrument_price_policy, product: @instrument, price_group_id: @price_group2.id, usage_rate: 120, usage_subsidy: 15
@@ -727,7 +727,7 @@ RSpec.describe ReservationsController do
       end
       context "the instrument has a minimum reservation time" do
         before :each do
-          @instrument.update_attributes(min_reserve_mins: 35)
+          @instrument.update(min_reserve_mins: 35)
           do_request
         end
 
@@ -738,7 +738,7 @@ RSpec.describe ReservationsController do
 
       context "the instrument has zero minimum reservation minutes" do
         before :each do
-          @instrument.update_attributes(min_reserve_mins: 0)
+          @instrument.update(min_reserve_mins: 0)
           do_request
         end
 
@@ -749,7 +749,7 @@ RSpec.describe ReservationsController do
 
       context "the instrument has nil minimum reservation minutes" do
         before :each do
-          @instrument.update_attributes(min_reserve_mins: nil)
+          @instrument.update(min_reserve_mins: nil)
           do_request
         end
 
@@ -825,7 +825,7 @@ RSpec.describe ReservationsController do
       before :each do
         sign_in @guest
         allow_any_instance_of(User).to receive(:price_groups).and_return([])
-        @order_detail.update_attributes(account: nil)
+        @order_detail.update(account: nil)
         # Only worry about one price group product
         @instrument.price_group_products.destroy_all
         pgp = FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 14)
@@ -853,7 +853,7 @@ RSpec.describe ReservationsController do
       let(:not_authorized_message) { "not on the authorized list" }
 
       before :each do
-        @instrument.update_attributes(requires_approval: true)
+        @instrument.update(requires_approval: true)
       end
 
       context "acting as non-authorized user" do
@@ -889,7 +889,7 @@ RSpec.describe ReservationsController do
             @merge_to_order = @order.dup
             assert @merge_to_order.save
             assert @order.update_attribute :merge_with_order_id, @merge_to_order.id
-            @instrument.update_attributes(requires_approval: true)
+            @instrument.update(requires_approval: true)
             ProductUser.create!(product: @instrument, user: @guest, approved_by: @admin.id)
             sign_in @admin
           end
@@ -1079,7 +1079,7 @@ RSpec.describe ReservationsController do
       before :each do
         # remove all scheduling rules/constraints to allow for the creation of a long reservation
         @instrument.schedule_rules.destroy_all
-        @instrument.update_attributes max_reserve_mins: nil
+        @instrument.update max_reserve_mins: nil
         FactoryBot.create(:all_day_schedule_rule, product: @instrument)
 
         @reservation = @instrument.reservations.create!(
@@ -1228,12 +1228,12 @@ RSpec.describe ReservationsController do
           let(:end_at) { 63.minutes.from_now }
 
           before :each do
-            @reservation.update_attributes!(reserve_start_at: start_at, reserve_end_at: end_at)
+            @reservation.update!(reserve_start_at: start_at, reserve_end_at: end_at)
             sign_in @guest
           end
 
           context "for a restricted instrument" do
-            before { @instrument.update_attributes(requires_approval: true) }
+            before { @instrument.update(requires_approval: true) }
             it "allows it to start" do
               do_request
               expect(assigns(:reservation).actual_start_at).to eq(Time.zone.now)
@@ -1242,7 +1242,7 @@ RSpec.describe ReservationsController do
 
           context "and the reservation is already at maximum length" do
             before do
-              @instrument.update_attributes(max_reserve_mins: 60)
+              @instrument.update(max_reserve_mins: 60)
               do_request
             end
 
@@ -1294,7 +1294,7 @@ RSpec.describe ReservationsController do
 
           before :each do
 
-            @reservation.update_attributes!(reserve_start_at: start_at, reserve_end_at: end_at)
+            @reservation.update!(reserve_start_at: start_at, reserve_end_at: end_at)
             sign_in @guest
           end
 
@@ -1314,7 +1314,7 @@ RSpec.describe ReservationsController do
           let(:end_at) { 57.minutes.from_now.change(usec: 0) }
 
           before :each do
-            @reservation.update_attributes!(reserve_start_at: start_at, reserve_end_at: end_at)
+            @reservation.update!(reserve_start_at: start_at, reserve_end_at: end_at)
             sign_in @guest
             do_request
           end

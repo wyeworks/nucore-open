@@ -36,7 +36,7 @@ class UserForm < SimpleDelegator
     valid? && user.save
   end
 
-  def update_attributes(params)
+  def update_form_attributes(params)
     user.assign_attributes(params)
     save
   end

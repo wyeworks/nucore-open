@@ -27,11 +27,18 @@ class CreditCardAccountBuilder < AccountBuilder
       :affiliate_id,
       :affiliate_other,
       :remittance_information,
+      :expiration_month,
+      :expiration_year,
     ]
   end
 
   # Hooks into superclass's `build` method.
   def after_build
+    set_expires_at
+  end
+
+  # Hooks into superclass's `update` method.
+  def after_update
     set_expires_at
   end
 

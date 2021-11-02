@@ -703,7 +703,7 @@ class OrderDetail < ApplicationRecord
     self.canceled_reason = canceled_reason
 
     if admin
-      return false unless update_attributes(canceled_at: Time.current)
+      return false unless update(canceled_at: Time.current)
 
       if admin_with_cancel_fee
         clear_statement if cancellation_fee == 0
@@ -715,7 +715,7 @@ class OrderDetail < ApplicationRecord
     else
       return false unless reservation&.can_cancel?
       # must set canceled_at after calling #can_cancel?
-      return false unless update_attributes(canceled_at: Time.current)
+      return false unless update(canceled_at: Time.current)
       clear_statement if cancellation_fee == 0
       cancel_with_fee order_status
     end

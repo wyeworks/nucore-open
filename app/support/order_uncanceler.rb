@@ -19,12 +19,12 @@ class OrderUncanceler
 
         if order_detail.reservation
           fulfilled_at = order_detail.reservation.reserve_end_at
-          order_detail.reservation.update_attributes!(
+          order_detail.reservation.update!(
             actual_start_at: order_detail.reservation.reserve_start_at,
             actual_end_at: order_detail.reservation.reserve_end_at)
         end
 
-        order_detail.update_attributes!(
+        order_detail.update!(
           canceled_by: nil,
           canceled_at: nil,
           canceled_reason: nil,

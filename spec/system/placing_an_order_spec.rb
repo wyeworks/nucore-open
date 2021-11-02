@@ -39,7 +39,7 @@ RSpec.describe "Placing an item order" do
     end
 
     it "can place an order with a note if the feature is enabled for the product" do
-      product.update_attributes!(user_notes_field_mode: "optional")
+      product.update!(user_notes_field_mode: "optional")
       add_to_cart
       fill_in "Note", with: "This is a note"
       click_button "Purchase"

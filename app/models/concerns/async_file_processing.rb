@@ -42,11 +42,11 @@ module AsyncFileProcessing
   end
 
   def succeed!
-    update_attributes!(status: "successful", processed_at: Time.current)
+    update!(status: "successful", processed_at: Time.current)
   end
 
   def fail!(message)
-    update_attributes!(status: "failed", processed_at: Time.current, error_message: message)
+    update!(status: "failed", processed_at: Time.current, error_message: message)
   end
 
   private

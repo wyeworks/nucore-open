@@ -10,7 +10,7 @@ class ProductAccessGroup < ApplicationRecord
   has_and_belongs_to_many :schedule_rules, join_table: "product_access_schedule_rules"
 
   validates :product, presence: true
-  validates :name, presence: true, uniqueness: { scope: :product_id }
+  validates :name, presence: true, uniqueness: { scope: :product_id, case_sensitive: false }
 
   def to_s
     name

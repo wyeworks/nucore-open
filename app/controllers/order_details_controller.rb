@@ -23,7 +23,7 @@ class OrderDetailsController < ApplicationController
 
   # Put /orders/:order_id/order_details/:id
   def update
-    if @order_detail.update_attributes(order_detail_params)
+    if @order_detail.update(order_detail_params)
       flash[:notice] = text("update.success")
       redirect_to action: :show
     else

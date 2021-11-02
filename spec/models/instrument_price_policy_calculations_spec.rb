@@ -77,7 +77,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
       let(:friday_evening) { Time.zone.parse("2017-04-21 23:00:15") }
       let(:saturday_morning) { Time.zone.parse("2017-04-22 1:00:37") }
       before :each do
-        policy.product.schedule_rules.first.update_attributes!(
+        policy.product.schedule_rules.first.update!(
           start_hour: 0,
           end_hour: 24,
           on_sat: false,

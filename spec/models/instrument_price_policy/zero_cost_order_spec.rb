@@ -7,7 +7,7 @@ RSpec.describe InstrumentPricePolicy do
     @instrument = FactoryBot.create(:setup_instrument)
     expect(@instrument.price_policies.count).to eq(1)
     @price_policy = @instrument.price_policies.first
-    @price_policy.update_attributes(usage_rate: 0,
+    @price_policy.update(usage_rate: 0,
                                     usage_subsidy: 0,
                                     minimum_cost: 0,
                                     cancellation_cost: 0)

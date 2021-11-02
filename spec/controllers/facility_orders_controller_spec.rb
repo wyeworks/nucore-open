@@ -23,7 +23,7 @@ RSpec.describe FacilityOrdersController do
                                 )
     @account = create_nufs_account_with_owner :director
     @order_detail = place_product_order(@director, @authable, @product, @account)
-    @order_detail.order.update_attributes!(state: "purchased")
+    @order_detail.order.update!(state: "purchased")
     @params = { facility_id: @authable.url_name }
   end
 
@@ -554,7 +554,7 @@ RSpec.describe FacilityOrdersController do
 
       @problem_order_details = (1..3).map do |_i|
         order_detail = place_and_complete_item_order(@staff, @authable)
-        order_detail.update_attributes(price_policy_id: nil)
+        order_detail.update(price_policy_id: nil)
         order_detail
       end
 

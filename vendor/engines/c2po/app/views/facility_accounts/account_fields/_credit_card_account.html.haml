@@ -1,7 +1,7 @@
 - if local_assigns[:is_new]
   = f.input :name_on_card, label: t('facility_accounts.account_fields.label.cc_name'), required: true
-  = f.input :expiration_month, required: true, collection: (1..12).to_a
-  = f.input :expiration_year, required: true, collection: (Time.zone.now.year..(Time.zone.now.year + 10)).to_a
+= f.input :expiration_month, required: true, collection: (1..12).to_a
+= f.input :expiration_year, required: true, collection: (Time.zone.now.year..(Time.zone.now.year + 10)).to_a
 
 = f.input :description, required: true, hint: t('facility_accounts.account_fields.label.all_instruct'), hint_html: { class: 'help-inline' }
 - if SettingsHelper.feature_on?(:account_reference_field)

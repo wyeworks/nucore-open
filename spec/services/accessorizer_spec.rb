@@ -88,7 +88,7 @@ RSpec.describe Accessories::Accessorizer do
     end
   end
 
-  describe "update_attributes" do
+  describe "update_accessorizer_attributes" do
     before do
       allow_any_instance_of(OrderDetail).to receive(:assign_estimated_price)
       allow_any_instance_of(OrderDetail).to receive(:save!)
@@ -100,7 +100,7 @@ RSpec.describe Accessories::Accessorizer do
       end
       context "creating" do
         it "sets the attributes" do
-          results = accessorizer.update_attributes(params).order_details
+          results = accessorizer.update_accessorizer_attributes(params).order_details
           expect(results.first.product).to eq(quantity_accessory)
           expect(results.first.enabled).to be true
           expect(results.first.quantity).to eq(3)
@@ -108,7 +108,7 @@ RSpec.describe Accessories::Accessorizer do
         end
 
         context "with an invalid entry" do
-          let(:results) { accessorizer.update_attributes(params) }
+          let(:results) { accessorizer.update_accessorizer_attributes(params) }
 
           it "is not valid" do
             expect(Accessories::UpdateResponse).to receive(:new) { double("UpdateResponse", valid?: false) }
@@ -121,7 +121,7 @@ RSpec.describe Accessories::Accessorizer do
         let(:child_order_detail) { build(:order_detail, product: quantity_accessory, order: order, quantity: 1) }
 
         it "updates the attributes" do
-          results = accessorizer.update_attributes(params).order_details
+          results = accessorizer.update_accessorizer_attributes(params).order_details
           expect(results.first.product).to eq(quantity_accessory)
           expect(results.first.enabled).to be true
           expect(results.first.quantity).to eq(3)
@@ -137,7 +137,7 @@ RSpec.describe Accessories::Accessorizer do
 
         it "removes the order detail" do
           expect(child_order_detail).to receive(:destroy)
-          accessorizer.update_attributes(params)
+          accessorizer.update_accessorizer_attributes(params)
         end
       end
 
@@ -156,7 +156,7 @@ RSpec.describe Accessories::Accessorizer do
 
       it "marks the children as complete" do
         expect_any_instance_of(OrderDetail).to receive(:backdate_to_complete!).with(order_detail.fulfilled_at)
-        accessorizer.update_attributes(params).order_details
+        accessorizer.update_accessorizer_attributes(params).order_details
 
       end
     end

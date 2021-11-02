@@ -292,7 +292,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
         expect(assigns(:account)).to eq(@account)
         expect(controller.current_facility).to eq(facility)
         expect(assigns(:statement)).to eq(statements.first)
-        expect(response.content_type).to eq("application/pdf")
+        expect(response.media_type).to eq("application/pdf")
         expect(response.body).to match(/\A%PDF-1.\d+\b/)
         is_expected.to render_template "statements/show"
       end

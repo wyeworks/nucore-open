@@ -18,7 +18,7 @@ RSpec.describe InstrumentIssue do
     end
 
     it "triggers an email" do
-      expect { valid_issue.send_notification }.to have_enqueued_job(ActionMailer::DeliveryJob)
+      expect { valid_issue.send_notification }.to have_enqueued_job(ActionMailer::MailDeliveryJob)
     end
 
     it "returns false for an invalid issue" do

@@ -80,7 +80,7 @@ class PriceGroupsController < ApplicationController
 
   # PUT /price_groups/:id
   def update
-    if @price_group.update_attributes(price_group_params)
+    if @price_group.update(price_group_params)
       flash[:notice] = I18n.t("controllers.price_groups.update.notice")
       redirect_to [current_facility, @price_group]
     else

@@ -30,7 +30,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
     updater = OrderDetails::ParamUpdater.new(@order_detail, user: session_user, cancel_fee: params[:with_cancel_fee] == "1")
 
-    if updater.update_attributes(params[:order_detail] || empty_params)
+    if updater.update_param_attributes(params[:order_detail] || empty_params)
       flash[:notice] = text("update.success")
       flash[:alert] = text("update.success_with_missing_actuals", order: @order_detail) if @order_detail.requires_but_missing_actuals?
       if @order_detail.updated_children.any?

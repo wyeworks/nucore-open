@@ -27,7 +27,7 @@ RSpec.describe Reports::ExportRaw do
       place_product_order(user, facility, item, account).tap do |od|
         od.complete!
         od.manually_priced!
-        od.update_attributes!(
+        od.update!(
           quantity: 3,
           actual_cost: BigDecimal("19.99"),
           actual_subsidy: BigDecimal("9.99"),
@@ -104,7 +104,7 @@ RSpec.describe Reports::ExportRaw do
       place_product_order(user, facility, timed_service, account).tap do |od|
         od.complete!
         od.manually_priced!
-        od.update_attributes!(
+        od.update!(
           quantity: 60,
           actual_cost: BigDecimal("199.99"),
           actual_subsidy: BigDecimal("29.99"),
@@ -159,7 +159,7 @@ RSpec.describe Reports::ExportRaw do
     let(:user) { order_detail.user }
     let(:order_detail) do
       reservation.order_detail.tap do |od|
-        od.update_attributes!(
+        od.update!(
           actual_cost: BigDecimal("19.99"),
           actual_subsidy: BigDecimal("9.99"),
           estimated_cost: BigDecimal("39.99"),

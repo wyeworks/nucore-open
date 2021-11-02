@@ -121,7 +121,7 @@ class UsersController < ApplicationController
   def update
     previous_price_groups = @user.price_groups.to_a
     @user_form = user_form_class.new(@user)
-    if @user_form.update_attributes(edit_user_params) && @user.update_price_group(price_group_params)
+    if @user_form.update_form_attributes(edit_user_params) && @user.update_price_group(price_group_params)
       if previous_price_groups != @user.price_groups.reload.to_a
         new_price_groups = @user.price_groups.to_a - previous_price_groups
         LogEvent.log(@user, :default_price_group_changed, current_user, metadata: { price_group_rate: new_price_groups.first.name })

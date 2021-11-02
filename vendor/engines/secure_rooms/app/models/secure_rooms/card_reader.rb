@@ -14,8 +14,8 @@ module SecureRooms
 
     validates :product_id, presence: true
     validates :control_device_number, presence: true, format: { with: MAC_ADDRESS_FORMAT }
-    validates :card_reader_number, presence: true, uniqueness: { scope: :control_device_number }
-    validates :tablet_token, uniqueness: true
+    validates :card_reader_number, presence: true, uniqueness: { scope: :control_device_number , case_sensitive: false }
+    validates :tablet_token, uniqueness: { case_sensitive: false }
 
     before_validation :clean_mac_address
     before_create :set_tablet_token

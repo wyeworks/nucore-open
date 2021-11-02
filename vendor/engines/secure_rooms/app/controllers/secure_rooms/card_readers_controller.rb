@@ -30,7 +30,7 @@ module SecureRooms
     end
 
     def create
-      if @card_reader.update_attributes(card_reader_params)
+      if @card_reader.update(card_reader_params)
         flash[:notice] = text("create.success")
         redirect_to facility_secure_room_card_readers_path(current_facility, @product)
       else
@@ -40,7 +40,7 @@ module SecureRooms
     end
 
     def update
-      if @card_reader.update_attributes(card_reader_params)
+      if @card_reader.update(card_reader_params)
         flash[:notice] = text("update.success")
         redirect_to facility_secure_room_card_readers_path(current_facility, @product)
       else

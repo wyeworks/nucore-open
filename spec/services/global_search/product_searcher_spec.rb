@@ -38,7 +38,7 @@ RSpec.describe GlobalSearch::ProductSearcher do
       let(:query) { "item" }
 
       before do
-        item.update_attributes(is_hidden: true)
+        item.update(is_hidden: true)
       end
 
       it { is_expected.to be_empty }
@@ -49,7 +49,7 @@ RSpec.describe GlobalSearch::ProductSearcher do
       let(:query) { "item" }
 
       before do
-        item.update_attributes(is_hidden: true)
+        item.update(is_hidden: true)
       end
 
       it { is_expected.to contain_exactly(item) }
@@ -60,7 +60,7 @@ RSpec.describe GlobalSearch::ProductSearcher do
       let(:query) { "item" }
 
       before do
-        item.update_attributes(facility: inactive_facility)
+        item.update(facility: inactive_facility)
       end
 
       it { is_expected.to be_empty }

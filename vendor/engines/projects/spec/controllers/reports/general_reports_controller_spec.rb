@@ -12,7 +12,7 @@ RSpec.describe Reports::GeneralReportsController do
 
   describe "the project report" do
     before do
-      order.order_details.first.update_attributes!(project_id: project.id)
+      order.order_details.first.update!(project_id: project.id)
       sign_in administrator
       get :index, params: { report_by: :project, date_start: 2.months.ago, date_end: Time.current,
                             status_filter: [OrderStatus.new_status], facility_id: facility.url_name,

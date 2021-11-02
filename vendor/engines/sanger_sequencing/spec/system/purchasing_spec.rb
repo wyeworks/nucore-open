@@ -150,7 +150,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
   describe "when the facility does not have sanger enabled" do
     before do
       login_as user
-      facility.update_attributes(sanger_sequencing_enabled: false)
+      facility.update(sanger_sequencing_enabled: false)
       visit facility_service_path(facility, service)
       click_link "Add to cart"
       choose account.to_s

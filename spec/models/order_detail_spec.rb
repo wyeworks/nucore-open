@@ -290,11 +290,11 @@ RSpec.describe OrderDetail do
       @price_group    = create(:price_group, facility: @facility)
       create(:account_price_group_member, account: account, price_group: @price_group)
       @item_pp = @item.item_price_policies.create(attributes_for(:item_price_policy, price_group_id: @price_group.id))
-      @order_detail.update_attributes(actual_cost: 20, actual_subsidy: 10, price_policy_id: @item_pp.id)
+      @order_detail.update(actual_cost: 20, actual_subsidy: 10, price_policy_id: @item_pp.id)
     end
 
     it "should not be valid if there is no account" do
-      @order_detail.update_attributes(account_id: nil)
+      @order_detail.update(account_id: nil)
       expect(@order_detail.valid_for_purchase?).not_to eq(true)
     end
 
@@ -310,17 +310,17 @@ RSpec.describe OrderDetail do
       end
 
       it "should be valid if there is no actual price" do
-        @order_detail.update_attributes(actual_cost: nil, actual_subsidy: nil)
+        @order_detail.update(actual_cost: nil, actual_subsidy: nil)
         expect(@order_detail.valid_for_purchase?).to eq(true)
       end
 
       it "should be valid if a price policy is not selected" do
-        @order_detail.update_attributes(price_policy_id: nil)
+        @order_detail.update(price_policy_id: nil)
         expect(@order_detail.valid_for_purchase?).to eq(true)
       end
 
       it "should not be valid if the user is not approved for the product" do
-        @item.update_attributes(requires_approval: true)
+        @item.update(requires_approval: true)
         @order_detail.reload # reload to update related item
         expect(@order_detail.valid_for_purchase?).not_to eq(true)
         ProductUser.create(product: @item, user: @user, approved_by: @user.id)
@@ -338,7 +338,7 @@ RSpec.describe OrderDetail do
       @service        = @facility.services.create(attributes_for(:service, facility_account_id: @facility_account.id))
       @service_pp     = @service.service_price_policies.create(attributes_for(:service_price_policy, price_group_id: @price_group.id))
       @order_detail   = @order.order_details.create(attributes_for(:order_detail).update(product_id: @service.id, account_id: @account.id))
-      @order_detail.update_attributes(actual_cost: 20, actual_subsidy: 10, price_policy_id: @service_pp.id)
+      @order_detail.update(actual_cost: 20, actual_subsidy: 10, price_policy_id: @service_pp.id)
     end
 
     ## TODO will need to re-write to check for file uploads
@@ -539,7 +539,7 @@ RSpec.describe OrderDetail do
           end
 
           describe "when it has actuals" do
-            before { order_detail.reservation.update_attributes(actual_start_at: Time.current, actual_end_at: Time.current + 1.minute) }
+            before { order_detail.reservation.update(actual_start_at: Time.current, actual_end_at: Time.current + 1.minute) }
             it do
               expect(order_detail.problem_description_key).to eq(:missing_price_policy)
             end
@@ -747,7 +747,7 @@ RSpec.describe OrderDetail do
           order_detail.reload
           order_detail.to_inprocess!
           order_detail.to_complete!
-          order_detail.update_attributes(actual_cost: 20, actual_subsidy: 10)
+          order_detail.update(actual_cost: 20, actual_subsidy: 10)
           expect(order_detail.statement).to be_present
           expect(order_detail.actual_total).to be_present
         end
@@ -1134,7 +1134,7 @@ RSpec.describe OrderDetail do
     context "needs statement" do
       before :each do
         @statement = Statement.create(facility: @facility, created_by: 1, account: @account)
-        @order_detail.update_attributes(statement: @statement, reviewed_at: (Time.zone.now - 1.day))
+        @order_detail.update(statement: @statement, reviewed_at: (Time.zone.now - 1.day))
         @statement2 = Statement.create(facility: @facility2, created_by: 1, account: @account)
         @order_detail2.statement = @statement2
         assert @order_detail2.save
@@ -1156,8 +1156,8 @@ RSpec.describe OrderDetail do
         @statement = create(:statement, facility: @facility, created_by: @user.id, account: @account, created_at: 1.day.ago)
         @order_detail.to_complete!
         @order_detail2.to_complete!
-        @order_detail.update_attributes(journal_id: @journal.id, fulfilled_at: 5.days.ago, reconciled_at: 4.days.ago)
-        @order_detail2.update_attributes(statement_id: @statement.id, fulfilled_at: 7.days.ago, reconciled_at: 6.days.ago)
+        @order_detail.update(journal_id: @journal.id, fulfilled_at: 5.days.ago, reconciled_at: 4.days.ago)
+        @order_detail2.update(statement_id: @statement.id, fulfilled_at: 7.days.ago, reconciled_at: 6.days.ago)
       end
 
       it "works for fulfilled at date" do
@@ -1218,12 +1218,12 @@ RSpec.describe OrderDetail do
   context "ordered_on_behalf_of?" do
     it "should return true if the associated order was ordered by someone else" do
       @user2 = create(:user)
-      @order_detail.order.update_attributes(created_by_user: @user2)
+      @order_detail.order.update(created_by_user: @user2)
       expect(@order_detail.reload).to be_ordered_on_behalf_of
     end
     it "should return false if the associated order was not ordered on behalf of" do
       user = @order_detail.order.user
-      @order_detail.order.update_attributes(created_by_user: user)
+      @order_detail.order.update(created_by_user: user)
       @order_detail.reload
       expect(@order_detail.reload).not_to be_ordered_on_behalf_of
     end
@@ -1234,10 +1234,10 @@ RSpec.describe OrderDetail do
       ignore_order_detail_account_validations
       @user = create(:user)
       @od_yesterday = place_product_order(@user, @facility, @item, @account)
-      @od_yesterday.update_attributes!(ordered_at: 1.day.ago)
+      @od_yesterday.update!(ordered_at: 1.day.ago)
 
       @od_tomorrow = place_product_order(@user, @facility, @item, @account)
-      @od_tomorrow.update_attributes!(ordered_at: 1.day.from_now)
+      @od_tomorrow.update!(ordered_at: 1.day.from_now)
 
       @od_today = place_product_order(@user, @facility, @item, @account)
 
@@ -1375,7 +1375,7 @@ RSpec.describe OrderDetail do
 
         context "the reservation was already canceled" do
           it "should not cancel" do
-            @reservation.order_detail.update_attributes(canceled_at: Time.zone.now)
+            @reservation.order_detail.update(canceled_at: Time.zone.now)
             expect(order_detail.cancel_reservation(user)).to be false
           end
         end
@@ -1437,7 +1437,7 @@ RSpec.describe OrderDetail do
         before :each do
           instrument.update_attribute(:min_cancel_hours, 2)
           order_detail.reload
-          reservation.order_detail.update_attributes(canceled_at: Time.current)
+          reservation.order_detail.update(canceled_at: Time.current)
         end
 
         context "when in the no-fee period" do
@@ -1448,7 +1448,7 @@ RSpec.describe OrderDetail do
           before :each do
             @current_time = Time.current
             travel(3.hours)
-            reservation.order_detail.update_attributes(canceled_at: Time.current)
+            reservation.order_detail.update(canceled_at: Time.current)
           end
 
           after { travel_to(@current_time) }
@@ -1474,14 +1474,14 @@ RSpec.describe OrderDetail do
       let!(:price_policy) { instrument_reservation_price_policy }
 
       context "when the reservation has been canceled" do
-        before { reservation.order_detail.update_attributes(canceled_at: Time.current) }
+        before { reservation.order_detail.update(canceled_at: Time.current) }
 
         it_should_behave_like "it charges cancellation fees appropriately"
       end
 
       context "when the reservation has been completed" do
         before :each do
-          reservation.update_attributes(
+          reservation.update(
             actual_start_at: 1.hour.ago,
             actual_end_at: Time.zone.now,
           )

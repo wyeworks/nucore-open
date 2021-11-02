@@ -95,7 +95,7 @@ def place_and_complete_item_order(ordered_by, facility, account = nil, reviewed 
   }
 
   od_attrs[:reviewed_at] = Time.zone.now - 1.day if reviewed
-  @order_detail.update_attributes(od_attrs)
+  @order_detail.update(od_attrs)
   @order_detail
 end
 
@@ -159,8 +159,8 @@ def place_reservation(facility, order_detail, reserve_start, extra_reservation_a
     duration_mins: 60,
     split_times: true,
   }
-  order_detail.update_attributes!(product: @instrument)
-  order_detail.order.update_attributes!(state: "purchased")
+  order_detail.update!(product: @instrument)
+  order_detail.order.update!(state: "purchased")
 
   res_attrs.merge!(extra_reservation_attrs) if extra_reservation_attrs
 

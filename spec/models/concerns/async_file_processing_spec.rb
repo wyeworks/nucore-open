@@ -27,7 +27,7 @@ RSpec.describe AsyncFileProcessing do
       self.class.repo[@id] = self
     end
 
-    def update_attributes!(params)
+    def update!(params)
       assign_attributes(params)
     end
 

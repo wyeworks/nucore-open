@@ -19,7 +19,7 @@ RSpec.describe Reports::InstrumentDayReportsController, :enable_split_accounts d
   let(:user) { reservation.order_detail.account.owner_user }
   let(:admin) { FactoryBot.create(:user, :administrator) }
 
-  before { reservation.order_detail.update_attributes!(account: account) }
+  before { reservation.order_detail.update!(account: account) }
   before { sign_in admin }
 
   def do_request(action)

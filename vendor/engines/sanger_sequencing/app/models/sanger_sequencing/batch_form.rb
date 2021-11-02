@@ -29,7 +29,7 @@ module SangerSequencing
       )
     end
 
-    def update_attributes(params = {})
+    def update_form_attributes(params = {})
       assign_attributes(params)
       save
     end

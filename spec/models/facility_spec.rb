@@ -20,7 +20,7 @@ RSpec.describe Facility do
 
     def convert_to_problem_order(order)
       order.order_details.each do |order_detail|
-        order_detail.update_attributes(price_policy: nil, state: "complete")
+        order_detail.update(price_policy: nil, state: "complete")
       end
     end
 

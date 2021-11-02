@@ -96,7 +96,7 @@ module Products::SchedulingSupport
 
   def update_schedule_name
     if schedule.name == "#{name_was} Schedule"
-      schedule.update_attributes(name: "#{name} Schedule")
+      schedule.update(name: "#{name} Schedule")
     end
   end
 

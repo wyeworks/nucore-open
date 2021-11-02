@@ -12,7 +12,7 @@ class StatementRow < ApplicationRecord
   after_destroy do
     if @parent_statement.statement_rows.reload.empty?
       @parent_statement.order_details.each do |order_detail|
-        order_detail.update_attributes(statement: nil)
+        order_detail.update(statement: nil)
       end
       @parent_statement.destroy
     end

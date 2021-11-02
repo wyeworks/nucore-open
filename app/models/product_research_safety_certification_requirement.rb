@@ -14,6 +14,6 @@ class ProductResearchSafetyCertificationRequirement < ApplicationRecord
 
   validates :product, presence: true
   validates :research_safety_certificate, presence: true
-  validates :research_safety_certificate, uniqueness: { scope: [:deleted_at, :product_id] }
+  validates :research_safety_certificate, uniqueness: { scope: [:deleted_at, :product_id], case_sensitive: false }
 
 end

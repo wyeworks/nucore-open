@@ -88,8 +88,8 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
         end
 
         it "sets the policies in the correct order" do
-          @price_group.update_attributes(display_order: 2)
-          @price_group2.update_attributes(display_order: 1)
+          @price_group.update(display_order: 2)
+          @price_group2.update(display_order: 1)
           do_request
           expect(assigns[:price_policies].map(&:price_group)).to eq([@price_group2, @price_group])
         end
@@ -141,7 +141,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
             expect(price_group3_policy).to_not be_can_purchase
           end
           it "uses the policy with the furthest out expiration date" do
-            @price_policy.update_attributes(unit_cost: 16.0)
+            @price_policy.update(unit_cost: 16.0)
             @price_policy2 = make_price_policy(@price_group, start_date: 1.year.from_now, expire_date: SettingsHelper.fiscal_year_end(1.year.from_now), unit_cost: 17.0)
             @price_policy3 = make_price_policy(@price_group, start_date: 1.year.ago, expire_date: SettingsHelper.fiscal_year_end(1.year.ago), unit_cost: 18.0)
             # Ensure the policy two is the one with the max expire date
@@ -532,7 +532,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
 
           context "when a price policy is active" do
             before(:each) do
-              price_policy.update_attributes(start_date: 1.day.ago, expire_date: 1.day.from_now)
+              price_policy.update(start_date: 1.day.ago, expire_date: 1.day.from_now)
               @params[:id] = price_policy.start_date.to_s
               do_request
             end

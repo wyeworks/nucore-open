@@ -41,7 +41,7 @@ class AccessoriesController < ApplicationController
     if core_manager_context?
       accessorizer.update_unpurchased_attributes(params[:accessories])
     else
-      accessorizer.update_attributes(params[:accessories])
+      accessorizer.update_accessorizer_attributes(params[:accessories])
     end
   end
 

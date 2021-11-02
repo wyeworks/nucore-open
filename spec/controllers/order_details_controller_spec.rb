@@ -24,7 +24,7 @@ RSpec.describe OrderDetailsController do
 
     context "when the order is disputable" do
       before(:each) do
-        order_detail.update_attributes!(state: "complete", reviewed_at: 7.days.from_now)
+        order_detail.update!(state: "complete", reviewed_at: 7.days.from_now)
         put :dispute, params: params.merge(order_detail: { dispute_reason: dispute_reason })
       end
 
@@ -83,7 +83,7 @@ RSpec.describe OrderDetailsController do
     describe "dispute box" do
       render_views
       before do
-        order_detail.update_attributes!(state: "complete", reviewed_at: 7.days.from_now)
+        order_detail.update!(state: "complete", reviewed_at: 7.days.from_now)
       end
 
       describe "as the owner" do
@@ -164,7 +164,7 @@ RSpec.describe OrderDetailsController do
 
         context "and the reservation is not cancelable" do
           before do
-            reservation.update_attributes(actual_start_at: Time.current)
+            reservation.update(actual_start_at: Time.current)
             put :cancel, params: { order_id: order.id, id: order_detail.id }
           end
 
@@ -217,7 +217,7 @@ RSpec.describe OrderDetailsController do
         before do
           FactoryBot.create(:account_user, :purchaser,
                             user: signed_in_user, account: order_detail.account)
-          order.update_attributes(user: signed_in_user)
+          order.update(user: signed_in_user)
           perform
         end
 
@@ -333,22 +333,22 @@ RSpec.describe OrderDetailsController do
         let(:reservation) { FactoryBot.create(:completed_reservation) }
 
         describe "while in the review period" do
-          before { order_detail.update_attributes!(reviewed_at: 7.days.from_now) }
+          before { order_detail.update!(reviewed_at: 7.days.from_now) }
           it_behaves_like "can modify the account"
         end
 
         describe "when the review period is over" do
-          before { order_detail.update_attributes!(reviewed_at: 1.day.ago) }
+          before { order_detail.update!(reviewed_at: 1.day.ago) }
           it_behaves_like "can modify the account"
         end
 
         describe "when the review period is over, but it is being disputed" do
-          before { order_detail.update_attributes!(reviewed_at: 1.day.ago, dispute_at: 2.days.ago, dispute_reason: "reason") }
+          before { order_detail.update!(reviewed_at: 1.day.ago, dispute_at: 2.days.ago, dispute_reason: "reason") }
           it_behaves_like "can modify the account"
         end
 
         describe "when the dispute has been resolved" do
-          before { order_detail.update_attributes!(reviewed_at: 1.day.ago, dispute_at: 2.days.ago, dispute_resolved_at: Time.current, dispute_reason: "reason", dispute_resolved_reason: "notes") }
+          before { order_detail.update!(reviewed_at: 1.day.ago, dispute_at: 2.days.ago, dispute_resolved_at: Time.current, dispute_reason: "reason", dispute_resolved_reason: "notes") }
           it_behaves_like "can modify the account"
         end
 
@@ -356,7 +356,7 @@ RSpec.describe OrderDetailsController do
           before do
             statement = create(
               :statement, account: account, facility: facility, created_by: user.id)
-            order_detail.update_attributes!(
+            order_detail.update!(
               reviewed_at: 1.day.ago, statement: statement)
           end
           it_behaves_like "cannot modify the account"
@@ -365,7 +365,7 @@ RSpec.describe OrderDetailsController do
         describe "when the order is journaled" do
           before do
             journal = create(:journal)
-            order_detail.update_attributes!(
+            order_detail.update!(
               reviewed_at: 1.day.ago, journal: journal)
           end
           it_behaves_like "cannot modify the account"

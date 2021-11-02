@@ -13,7 +13,7 @@ class ResearchSafetyCertificate < ApplicationRecord
   acts_as_paranoid # soft-delete functionality
 
   validates :name, presence: true
-  validates :name, uniqueness: { scope: :deleted_at }
+  validates :name, uniqueness: { scope: :deleted_at, case_sensitive: false }
 
   has_many :product_certification_requirements, class_name: "ProductResearchSafetyCertificationRequirement",
                                                 foreign_key: "nu_safety_certificate_id",

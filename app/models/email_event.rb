@@ -5,7 +5,7 @@ class EmailEvent < ApplicationRecord
 
   belongs_to :user
   validates :user, presence: true
-  validates :key, presence: true, uniqueness: { scope: :user_id }
+  validates :key, presence: true, uniqueness: { scope: :user_id, case_sensitive: false }
 
   # Use this to avoid sending too many emails to a user within a given timeframe
   # It accepts a block, and will yield if this method has not been called within
@@ -22,7 +22,7 @@ class EmailEvent < ApplicationRecord
 
     if event.last_sent_at.blank? || event.last_sent_at < wait.ago
       # if a race condition makes event invalid now, we don't yield
-      yield if event.update_attributes(last_sent_at: Time.current)
+      yield if event.update(last_sent_at: Time.current)
     end
   rescue ActiveRecord::RecordNotUnique
     # Do nothing, we're in a race condition with another new EmailEvent. Let that one win.

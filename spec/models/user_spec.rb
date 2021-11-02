@@ -16,7 +16,7 @@ RSpec.describe User do
     is_expected.to validate_uniqueness_of(:username).case_insensitive
   end
 
-  it { is_expected.to validate_uniqueness_of(:email) }
+  it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
 
   context "when the created username is mixed-case" do
     subject(:user) { create(:user, username: "AnEmail@example.org") }

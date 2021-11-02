@@ -351,9 +351,9 @@ RSpec.describe BulkEmail::RecipientSearcher do
     let(:user4) { FactoryBot.create(:user) }
 
     before :each do
-      product.update_attributes(requires_approval: true)
-      product2.update_attributes(requires_approval: true)
-      product3.update_attributes(requires_approval: false)
+      product.update(requires_approval: true)
+      product2.update(requires_approval: true)
+      product3.update(requires_approval: false)
       # Users 1 and 2 have access to product1
       # Users 2 and 3 have access to product2
       # User 4 has access to product3, which is inactive and requires no approval

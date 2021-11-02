@@ -24,8 +24,8 @@ RSpec.describe Journal do
     describe "#must_not_span_fiscal_years" do
       before do
         order.add(product)
-        order.reload.order_details.first.update_attributes(fulfilled_at: Time.current)
-        order.order_details.last.update_attributes(fulfilled_at: 1.year.ago)
+        order.reload.order_details.first.update(fulfilled_at: Time.current)
+        order.order_details.last.update(fulfilled_at: 1.year.ago)
         journal.order_details_for_creation = order.order_details
       end
 
@@ -366,9 +366,9 @@ RSpec.describe Journal do
       (0..23).each do |i|
         order = @owner.orders.create(FactoryBot.attributes_for(:order, created_by: @owner.id))
         od = order.order_details.create(FactoryBot.attributes_for(:order_detail, product: @item))
-        od.update_attributes(actual_cost: 20, actual_subsidy: 0)
+        od.update(actual_cost: 20, actual_subsidy: 0)
         od.to_complete!
-        od.update_attributes(fulfilled_at: d1 + i.months)
+        od.update(fulfilled_at: d1 + i.months)
         @order_details << od
       end
       expect(@order_details.size).to eq(24)

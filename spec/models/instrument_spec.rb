@@ -135,17 +135,17 @@ RSpec.describe Instrument do
       end
 
       it "should update the schedule's name when updating the primary instrument's name" do
-        @instrument.update_attributes(name: "New Name")
+        @instrument.update(name: "New Name")
         expect(@instrument.schedule.reload.name).to eq("New Name Schedule")
       end
 
       it "should not call update_schedule_name if name did not change" do
         expect(@instrument).to receive(:update_schedule_name).never
-        @instrument.update_attributes(description: "a description")
+        @instrument.update(description: "a description")
       end
 
       it "should not update the schedule's name when updating the secondary instrument" do
-        @instrument2.update_attributes(name: "New Name")
+        @instrument2.update(name: "New Name")
         expect(@instrument2.schedule.reload.name).to eq("#{@instrument.name} Schedule")
       end
     end
@@ -168,7 +168,7 @@ RSpec.describe Instrument do
       context "update with new control_mechanism: 'relay' (Timer with relay)" do
         context "when validations not met" do
           before :each do
-            @updated = @instrument.update_attributes(control_mechanism: "relay", relay_attributes: { type: "RelaySynaccessRevA" })
+            @updated = @instrument.update(control_mechanism: "relay", relay_attributes: { type: "RelaySynaccessRevA" })
           end
 
           it "should fail" do
@@ -182,7 +182,7 @@ RSpec.describe Instrument do
 
         context "when validations met" do
           before :each do
-            @updated = @instrument.update_attributes(control_mechanism: "relay", relay_attributes: FactoryBot.attributes_for(:relay))
+            @updated = @instrument.update(control_mechanism: "relay", relay_attributes: FactoryBot.attributes_for(:relay))
           end
 
           it "should succeed" do
@@ -201,7 +201,7 @@ RSpec.describe Instrument do
 
       context "update with new control_mechanism: 'manual' (Reservation Only)" do
         before :each do
-          @updated = @instrument.update_attributes(control_mechanism: "manual")
+          @updated = @instrument.update(control_mechanism: "manual")
         end
 
         it "should succeed" do
@@ -226,7 +226,7 @@ RSpec.describe Instrument do
 
       context "update with new control_mechanism: 'manual' (Reservation Only)" do
         before :each do
-          @updated = @instrument.update_attributes(control_mechanism: "manual")
+          @updated = @instrument.update(control_mechanism: "manual")
         end
 
         it "should succeed" do
@@ -244,7 +244,7 @@ RSpec.describe Instrument do
 
       context "update with new control_mechanism: 'timer' (Timer without relay)" do
         before :each do
-          @updated = @instrument.update_attributes(control_mechanism: "timer")
+          @updated = @instrument.update(control_mechanism: "timer")
         end
 
         it "should succeed" do
@@ -273,7 +273,7 @@ RSpec.describe Instrument do
       context "update with new control_mechanism: 'relay' (Timer with relay)" do
         context "when validations not met" do
           before :each do
-            @updated = @instrument.update_attributes(control_mechanism: "relay", relay_attributes: { type: "RelaySynaccessRevA" })
+            @updated = @instrument.update(control_mechanism: "relay", relay_attributes: { type: "RelaySynaccessRevA" })
           end
 
           it "should fail" do
@@ -287,7 +287,7 @@ RSpec.describe Instrument do
 
         context "when validations met" do
           before :each do
-            @updated = @instrument.update_attributes(control_mechanism: "relay", relay_attributes: FactoryBot.attributes_for(:relay))
+            @updated = @instrument.update(control_mechanism: "relay", relay_attributes: FactoryBot.attributes_for(:relay))
           end
           it "should succeed" do
             expect(@updated).to be true
@@ -305,7 +305,7 @@ RSpec.describe Instrument do
 
       context "update with new control_mechanism: 'timer' (Timer without relay)" do
         before :each do
-          @updated = @instrument.update_attributes(control_mechanism: "timer")
+          @updated = @instrument.update(control_mechanism: "timer")
         end
 
         it "should succeed" do
@@ -574,7 +574,7 @@ RSpec.describe Instrument do
     end
 
     it "should have last_reserve_date == tomorrow, last_reserve_days_from_now == 1 when window is 1" do
-      @instrument.price_group_products.each { |pgp| pgp.update_attributes(reservation_window: 1) }
+      @instrument.price_group_products.each { |pgp| pgp.update(reservation_window: 1) }
       assert_equal Time.zone.now.to_date + 1.day, @instrument.reload.last_reserve_date
       assert_equal 1, @instrument.max_reservation_window
     end
@@ -650,7 +650,7 @@ RSpec.describe Instrument do
 
       context "with expired price policies for user" do
         before :each do
-          @price_policy.update_attributes(start_date: 10.days.ago, expire_date: 1.day.ago)
+          @price_policy.update(start_date: 10.days.ago, expire_date: 1.day.ago)
         end
 
         it "should be set up right" do
@@ -664,7 +664,7 @@ RSpec.describe Instrument do
 
       context "with expired price policies, but not for user" do
         before :each do
-          @price_policy.update_attributes(start_date: 10.days.ago, expire_date: 1.day.ago)
+          @price_policy.update(start_date: 10.days.ago, expire_date: 1.day.ago)
         end
 
         it "should be set up right" do
@@ -697,14 +697,14 @@ RSpec.describe Instrument do
 
     context "zero minimum reservation" do
       before :each do
-        instrument.update_attributes(min_reserve_mins: 0)
+        instrument.update(min_reserve_mins: 0)
       end
       it { is_expected.to be_walkup_available }
     end
 
     context "with nil minimum reservation" do
       before :each do
-        instrument.update_attributes(min_reserve_mins: nil)
+        instrument.update(min_reserve_mins: nil)
       end
       it { is_expected.to be_walkup_available }
     end
@@ -746,7 +746,7 @@ RSpec.describe Instrument do
 
       context "with no minimum reservation" do
         before :each do
-          instrument.update_attributes!(min_reserve_mins: nil)
+          instrument.update!(min_reserve_mins: nil)
         end
 
         it { is_expected.to be_walkup_available }
@@ -755,7 +755,7 @@ RSpec.describe Instrument do
 
     context "instrument with timer" do
       before :each do
-        instrument.update_attributes!(control_mechanism: "manual")
+        instrument.update!(control_mechanism: "manual")
       end
 
       context "with a current reservation" do
@@ -768,7 +768,7 @@ RSpec.describe Instrument do
 
         context "and is started" do
           before :each do
-            reservation.update_attributes(reserved_by_admin: true,
+            reservation.update(reserved_by_admin: true,
                                           actual_start_at: 30.minutes.ago)
           end
 
@@ -776,7 +776,7 @@ RSpec.describe Instrument do
 
           context "but it was ended already" do
             before :each do
-              reservation.update_attributes(reserved_by_admin: true,
+              reservation.update(reserved_by_admin: true,
                                             actual_end_at: 10.minutes.ago)
             end
 

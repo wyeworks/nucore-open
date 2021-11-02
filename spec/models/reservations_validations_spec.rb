@@ -18,14 +18,14 @@ RSpec.describe Reservations::Validations do
   it "does not produce an error if the duration of the reservation is a factor of the instrument interval" do
     reservation.product.update_attribute :reserve_interval, 15
     expect(reservation.errors).to be_blank
-    reservation.update_attributes reserve_start_at: now, reserve_end_at: now + 1.hour
+    reservation.update reserve_start_at: now, reserve_end_at: now + 1.hour
     expect(reservation.errors).to be_blank
   end
 
   it "does not produce an error if the duration of the reservation is not a factor of the instrument interval" do
     reservation.product.update_attribute :reserve_interval, 15
     expect(reservation.errors).to be_blank
-    reservation.update_attributes reserve_start_at: now, reserve_end_at: now + 1.hour + 5.minutes
+    reservation.update reserve_start_at: now, reserve_end_at: now + 1.hour + 5.minutes
     expect(reservation.errors[:base]).to be_present
   end
 
@@ -76,7 +76,7 @@ RSpec.describe Reservations::Validations do
     context "with missing reserve_start_at" do
       it "does not run conditional validations" do
         expect(reservation).not_to receive :does_not_conflict_with_other_user_reservation
-        reservation.update_attributes(reserve_start_at: nil)
+        reservation.update(reserve_start_at: nil)
       end
     end
   end

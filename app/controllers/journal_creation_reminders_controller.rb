@@ -29,7 +29,7 @@ class JournalCreationRemindersController < ApplicationController
   end
 
   def update
-    if @journal_creation_reminder.update_attributes(journal_creation_reminder_params)
+    if @journal_creation_reminder.update(journal_creation_reminder_params)
       redirect_to journal_creation_reminders_path, notice: t("journal_creation_reminders.update.success")
     else
       render :edit

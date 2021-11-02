@@ -295,7 +295,7 @@ RSpec.describe OrdersController do
       before :each do
         # modify first od quantity behind the scenes
         @order_detail1 = @order_detail
-        @order_detail1.update_attributes(quantity: 4)
+        @order_detail1.update(quantity: 4)
 
         # add another item
         @order_detail2 = @order_detail1.order.add(@item, 3).first
@@ -351,7 +351,7 @@ RSpec.describe OrdersController do
     context "remove note" do
       let(:order_detail) { order.order_details.first }
       before do
-        order_detail.update_attributes(note: "old note")
+        order_detail.update(note: "old note")
         @action = :update
         params["note#{@order_detail.id}"] = ""
       end
@@ -399,7 +399,7 @@ RSpec.describe OrdersController do
 
       it "sets the order detail status to the product's default status" do # TODO: reword this so it's not identical to the previous spec
         @order_status = FactoryBot.create(:order_status, parent: OrderStatus.in_process)
-        @instrument.update_attributes!(initial_order_status_id: @order_status.id)
+        @instrument.update!(initial_order_status_id: @order_status.id)
         sign_in @staff
         do_request
         expect(assigns[:order].order_details.size).to eq(1)
@@ -414,7 +414,7 @@ RSpec.describe OrdersController do
       end
 
       it "redirects to switch on if the instrument has a relay" do
-        @instrument.update_attributes(relay: FactoryBot.create(:relay_dummy, instrument: @instrument))
+        @instrument.update(relay: FactoryBot.create(:relay_dummy, instrument: @instrument))
         sign_in @staff
         do_request
         expect(response).to redirect_to order_order_detail_reservation_switch_instrument_path(
@@ -1063,8 +1063,8 @@ RSpec.describe OrdersController do
 
     context "restricted instrument" do
       before :each do
-        @instrument.update_attributes(requires_approval: true)
-        @order.update_attributes(created_by_user: @director, account: @account)
+        @instrument.update(requires_approval: true)
+        @order.update(created_by_user: @director, account: @account)
         @order.add(@instrument)
         expect(@order.order_details.size).to eq(1)
         @params.merge!(id: @order.id)
@@ -1074,7 +1074,7 @@ RSpec.describe OrdersController do
         maybe_grant_always_sign_in :guest
         place_reservation(@authable, @order.order_details.first, Time.zone.now)
         # place reservation makes the @order purchased
-        @order.reload.update_attributes!(state: "new")
+        @order.reload.update!(state: "new")
         do_request
         expect(assigns[:order]).to eq(@order)
         expect(assigns[:order]).not_to be_validated
@@ -1083,7 +1083,7 @@ RSpec.describe OrdersController do
       it "allows purchasing a restricted item the user isn't authorized for" do
         place_reservation(@authable, @order.order_details.first, Time.zone.now)
         # place reservation makes the @order purchased
-        @order.reload.update_attributes!(state: "new")
+        @order.reload.update!(state: "new")
         maybe_grant_always_sign_in :director
         switch_to @guest
         do_request
