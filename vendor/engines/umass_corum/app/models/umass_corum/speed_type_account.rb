@@ -4,7 +4,7 @@ module UmassCorum
 
   class SpeedTypeAccount < ::Account
 
-    validates :account_number, presence: true, format: /\d{6}/, uniqueness: true
+    validates :account_number, presence: true, format: /\d{6}/, uniqueness: { case_sensitive: false }
 
     before_validation { self.expires_at ||= self.class.default_nil_exp_date }
 

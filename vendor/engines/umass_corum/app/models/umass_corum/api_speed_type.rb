@@ -6,7 +6,7 @@ module UmassCorum
   # the API.
   class ApiSpeedType < ApplicationRecord
 
-    validates :speed_type, presence: true, uniqueness: true
+    validates :speed_type, presence: true, uniqueness: { case_sensitive: false }
     validates :active, inclusion: [true, false]
 
     # Returns either a new record if it does not already exist in the database
