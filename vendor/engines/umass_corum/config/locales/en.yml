@@ -56,6 +56,41 @@ en:
           relay_ip_port: Relay IP Port
           relay_outlet_number: Outlet Number
           relay_auto_logout: Auto Logout Minutes
+        users:
+          title: Download User Data (CSV)
+          subject: "!app_name! User Data Export"
+          body: Your export is ready. Please see the attached file.
+          headers:
+            profile_url: URL
+            created_at: Created
+            last_login: Last Login
+            last_order_activity: Last Order Activity
+            first_name: First Name
+            last_name: Last Name
+            certifications: Safety Certs
+            card_number: Card Number
+            iclass_number: iClass Number
+            global_user_roles: Global Roles
+            email: Email
+            phone: Phone
+            internal_pricing: Internal Pricing?
+        account_users:
+          title: Download Payment Source Membership Data (CSV)
+          subject: "!app_name! Payment Source Membership Data Export"
+          body: Your export is ready. Please see the attached file.
+          headers:
+            account_number: Account Number
+            account_url: URL
+            description: Description
+            type: Account Type
+            expiration: Account Expired
+            suspended: Account Suspended
+            deleted: Access Revoked
+            facilities: Facilities
+            full_name: Full Name
+            username: Username
+            email: Email
+            account_role: Account Role
       sessions:
         request_login:
           request_login_link: |
