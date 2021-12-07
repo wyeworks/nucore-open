@@ -48,9 +48,9 @@ RSpec.configure do |config|
   # Based on https://medium.com/@coorasse/catch-javascript-errors-in-your-system-tests-89c2fe6773b1
   config.after(:each, type: :system, js: true) do |example|
     unless ENV['DOCKER']
-      # Must call page.driver.browser.manage.logs.get(:browser) after every run,
+      # Must call page.driver.browser.logs.get(:browser) after every run,
       # otherwise the logs don't get cleared and leak into other specs.
-      js_errors = page.driver.browser.manage.logs.get(:browser)
+      js_errors = page.driver.browser.logs.get(:browser)
       # Some forms using remote: true return a 406 that is expected
       unless example.metadata[:ignore_js_errors]
         js_errors.each do |error|

@@ -193,12 +193,24 @@ class OrderRowImporter
   end
 
   def validate_fields
-    validate_fulfillment_date
-    validate_order_date
-    validate_user
-    validate_product
-    validate_account
-    validate_existing_order
+    if empty_row?
+      add_error(:blank)
+    else
+      validate_fulfillment_date
+      validate_order_date
+      validate_user
+      validate_product
+      validate_account
+      validate_existing_order
+    end
+  end
+
+  # When skip_blanks is set to true, CSV will skip over empty rows,
+  # but it doesn't skip rows that contain column separators,
+  # even if the rows contain no actual data
+  # see https://ruby-doc.org/stdlib-2.6.1/libdoc/csv/rdoc/CSV.html#method-c-new
+  def empty_row?
+    @row.fields.compact.empty?
   end
 
   def validate_fulfillment_date

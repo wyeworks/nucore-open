@@ -6,6 +6,7 @@ en:
       notes: Note
       reference_id: Reference ID
     errors:
+      blank: All fields are empty
       purchase_fail: Couldn't purchase order
       validate_fail: Couldn't validate order
       invalid_date: "Invalid %{field}: Please use MM/DD/YYYY format"

@@ -20,7 +20,7 @@ The example config file provided with NUcore is enough to get started:
 cp config/ldap.yml.template config/ldap.yml
 ```
 
-The default settings are for an LDAP server running on `localhost` port 389,
+The default settings are for an LDAP server running on `localhost` port 636,
 which should work for the test LDAP server described below.
 
 Change the `host:` value if you are using an external LDAP server.
@@ -60,7 +60,7 @@ The easiest thing to do is add an LDAP server in `docker-compose`.
     image: osixia/openldap
     command: "--copy-service"
     ports:
-      - "389:389"
+      - "636:636"
     volumes:
       - "ldap-data:/var/lib/ldap"
       - "slapd-config:/etc/ldap/slapd.d"
