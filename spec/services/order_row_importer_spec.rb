@@ -105,6 +105,29 @@ RSpec.describe OrderRowImporter do
       end
     end
 
+    context "with an empty row" do
+      let(:username) { nil }
+      let(:chart_string) { nil }
+      let(:product_name) { nil }
+      let(:quantity) { nil }
+      let(:order_date) { nil }
+      let(:fulfillment_date) { nil }
+      let(:notes) { nil }
+      let(:order_number) { nil }
+      let(:reference_id) { nil }
+
+      before(:each) do
+        allow_any_instance_of(Product).to receive(:can_purchase?).and_return(true)
+      end
+
+      it_behaves_like "an order was not created"
+
+      it "has an error message" do
+        subject.import
+        expect(subject.errors).to eq(["All fields are empty"])
+      end
+    end
+
     context "when the reference_id field is missing" do
       include_context "valid row values"
       let(:reference_id) { "" }

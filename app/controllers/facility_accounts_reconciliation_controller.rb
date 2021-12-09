@@ -32,7 +32,13 @@ class FacilityAccountsReconciliationController < ApplicationController
 
   def update
     reconciled_at = parse_usa_date(params[:reconciled_at])
-    reconciler = OrderDetails::Reconciler.new(unreconciled_details, params[:order_detail], reconciled_at, params[:bulk_reconcile_note])
+    reconciler = OrderDetails::Reconciler.new(
+      unreconciled_details,
+      params[:order_detail],
+      reconciled_at,
+      params[:bulk_reconcile_note],
+      params[:bulk_note_checkbox],
+    )
 
     if reconciler.reconcile_all > 0
       count = reconciler.count

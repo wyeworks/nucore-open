@@ -2,12 +2,12 @@
 #
 # Required settings:
 #   'host' => Host of local LDAP server
-#   'port'  => Port of local LDAP server (usually port 389)
+#   'port'  => Port of local LDAP server (usually port 636)
 #   'base' => Base Distinguished Name (Base DN)
 #
 development:
   host: <%= ENV.fetch("LDAP_HOST", "localhost") %>
-  port: <%= ENV.fetch("LDAP_PORT", 389) %>
+  port: <%= ENV.fetch("LDAP_PORT", 636) %>
   base: dc=example,dc=org
   username_attribute: uid
   admin_user: "cn=admin,dc=example,dc=org"

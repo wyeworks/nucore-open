@@ -15,9 +15,7 @@ gem "rack-utf8_sanitizer"
 ## database
 gem "mysql2"
 # To use Oracle, remove the mysql2 gem above and uncomment these lines
-# There are fixes for fulltext indexing in the 6.0 master of the gem, but we need
-# to backport them to support 5.2.
-# gem "activerecord-oracle_enhanced-adapter", git: "https://github.com/jhanggi/oracle-enhanced", branch: "release52"
+# gem "activerecord-oracle_enhanced-adapter", "~> 6.0.0"
 # gem "ruby-oci8" # only for CRuby users
 
 
@@ -102,7 +100,7 @@ group :development do
   gem "ed25519", ">= 1.2", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
   gem "haml_lint", require: false
   gem "letter_opener"
-  gem "rubocop", "1.22.1", require: false
+  gem "rubocop", "1.22.3", require: false
   gem "rubocop-rspec"
   gem "web-console"
 end
