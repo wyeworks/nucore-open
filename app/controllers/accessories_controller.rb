@@ -27,9 +27,6 @@ class AccessoriesController < ApplicationController
       flash[:notice] = t("controllers.accessories.create.success", accessories: helpers.pluralize(update_data.persisted_count, "accessory"))
       respond_success
     else
-      if defined?(Rollbar)
-        Rollbar.debug("Accessory failed to update", order_detail_id: @order_detail.id, errors: update_data.order_details.map(&:errors))
-      end
       render :new, status: 406
     end
   end
