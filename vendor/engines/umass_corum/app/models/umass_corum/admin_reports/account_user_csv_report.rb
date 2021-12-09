@@ -45,6 +45,7 @@ module UmassCorum
 
       def headers
         [
+          text(".headers.username"),
           text(".headers.account_number"),
           text(".headers.account_url"),
           text(".headers.description"),
@@ -55,7 +56,6 @@ module UmassCorum
           text(".headers.account_role"),
           text(".headers.facilities"),
           text(".headers.full_name"),
-          text(".headers.username"),
           text(".headers.email"),
         ]
       end
@@ -64,6 +64,7 @@ module UmassCorum
         account = account_user.account
         user = account_user.user
         [
+          user.username,
           account.account_number,
           account_url(account),
           account.description,
@@ -74,7 +75,6 @@ module UmassCorum
           account_user.user_role,
           account.facilities.map(&:name).join(";"),
           user.full_name,
-          user.username,
           user.email,
         ]
       end

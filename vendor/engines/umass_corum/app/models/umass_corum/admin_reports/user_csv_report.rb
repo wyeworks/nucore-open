@@ -45,6 +45,7 @@ module UmassCorum
 
       def headers
         [
+          text(".headers.username"),
           text(".headers.profile_url"),
           text(".headers.created_at"),
           text(".headers.last_login"),
@@ -63,6 +64,7 @@ module UmassCorum
 
       def build_row(user)
         [
+          user.username,
           facility_user_path(facility, user),
           format_usa_datetime(user.created_at),
           format_usa_datetime(user.last_sign_in_at),
