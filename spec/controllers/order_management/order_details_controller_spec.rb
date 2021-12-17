@@ -25,7 +25,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
   before(:all) { create_users }
   let(:facility) { FactoryBot.create(:setup_facility) }
   let(:item) { FactoryBot.create(:setup_item, facility: facility) }
-  let(:instrument) { FactoryBot.create(:setup_instrument, facility: facility, control_mechanism: "timer") }
+  let(:instrument) { FactoryBot.create(:setup_instrument, :timer, facility: facility) }
   let(:order_detail) { reservation.order_detail }
   let(:original_account) { create(:setup_account, owner: order_detail.user) }
   let(:price_group) { facility.price_groups.find(&:is_not_global?) }

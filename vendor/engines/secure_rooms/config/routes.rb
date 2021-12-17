@@ -14,6 +14,8 @@ Rails.application.routes.draw do
         end
       end
       put "update_restrictions", to: "product_users#update_restrictions"
+
+      resource :ethernet_port, controller: "secure_rooms/ethernet_ports", only: [:edit, :update]
     end
 
     resources :users, only: [] do

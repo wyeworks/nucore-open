@@ -1115,6 +1115,8 @@ en:
           auto_logout_1: "Automatically power off the relay"
           auto_logout_2: "minutes after the reservation is scheduled to end"
           ip_port: "IP Port"
+          ethernet_port: "Ethernet Port"
+          ethernet_port_number: "Port Number"
         instruct:
           ip_port: "Leave blank unless your device is on a non-standard port"
           outlet: "e.g. 1 or 2"

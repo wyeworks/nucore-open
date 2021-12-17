@@ -151,7 +151,7 @@ RSpec.describe Instrument do
     end
   end
 
-  context "updating nested relay" do
+  context "updating nested relay with replace_relay" do
     before :each do
       @instrument = FactoryBot.create(:instrument,
                                       facility: facility,
@@ -165,28 +165,28 @@ RSpec.describe Instrument do
         expect(@instrument.control_mechanism).to eq("timer")
       end
 
-      context "update with new control_mechanism: 'relay' (Timer with relay)" do
+      context "replace with new control_mechanism: 'relay' (Timer with relay)" do
         context "when validations not met" do
           before :each do
-            @updated = @instrument.update(control_mechanism: "relay", relay_attributes: { type: "RelaySynaccessRevA" })
+            @updated = @instrument.replace_relay({type: "RelaySynaccessRevA" }, "relay")
           end
 
-          it "should fail" do
-            expect(@updated).to be false
+          it "relay should have errors" do
+            expect(@updated.errors.full_messages).not_to eq([])
           end
 
-          it "should have errors" do
-            expect(@instrument.errors.full_messages).not_to eq([])
+          it "instrument should have no errors" do
+            expect(@instrument.errors.full_messages).to eq([])
           end
         end
 
         context "when validations met" do
           before :each do
-            @updated = @instrument.update(control_mechanism: "relay", relay_attributes: FactoryBot.attributes_for(:relay))
+            @updated = @instrument.replace_relay(FactoryBot.attributes_for(:relay), "relay")
           end
 
           it "should succeed" do
-            expect(@updated).to be true
+            expect(@updated).to be_valid
           end
 
           it "should have no errors" do
@@ -199,17 +199,17 @@ RSpec.describe Instrument do
         end
       end
 
-      context "update with new control_mechanism: 'manual' (Reservation Only)" do
+      context "replace with new control_mechanism: 'manual' (Reservation Only)" do
         before :each do
-          @updated = @instrument.update(control_mechanism: "manual")
+          @updated = @instrument.replace_relay(nil, "manual")
         end
 
         it "should succeed" do
-          expect(@updated).to be true
+          expect(@updated.class).to be Relay
         end
 
         it "should have a control_mechanism of manual" do
-          expect(@instrument.reload.control_mechanism).to eq("manual")
+          expect(@instrument.reload.control_mechanism).to eq(Relay::CONTROL_MECHANISMS[:manual])
         end
 
         it "should destroy the relay" do
@@ -224,17 +224,17 @@ RSpec.describe Instrument do
         expect(@instrument.reload.control_mechanism).to eq("relay")
       end
 
-      context "update with new control_mechanism: 'manual' (Reservation Only)" do
+      context "replace with new control_mechanism: 'manual' (Reservation Only)" do
         before :each do
-          @updated = @instrument.update(control_mechanism: "manual")
+          @updated = @instrument.replace_relay(nil, "manual")
         end
 
         it "should succeed" do
-          expect(@updated).to be true
+          expect(@updated.class).to be Relay
         end
 
         it "should have a control_mechanism of manual" do
-          expect(@instrument.reload.control_mechanism).to eq("manual")
+          expect(@instrument.reload.control_mechanism).to eq(Relay::CONTROL_MECHANISMS[:manual])
         end
 
         it "should destroy the relay" do
@@ -242,13 +242,13 @@ RSpec.describe Instrument do
         end
       end
 
-      context "update with new control_mechanism: 'timer' (Timer without relay)" do
+      context "replace with new control_mechanism: 'timer' (Timer without relay)" do
         before :each do
-          @updated = @instrument.update(control_mechanism: "timer")
+          @updated = @instrument.replace_relay(nil, "timer")
         end
 
         it "should succeed" do
-          expect(@updated).to be true
+          expect(@updated.class).to be RelayDummy
         end
 
         it "control mechanism should be a timer" do
@@ -270,27 +270,27 @@ RSpec.describe Instrument do
         expect(@instrument.reload.control_mechanism).to eq(Relay::CONTROL_MECHANISMS[:manual])
       end
 
-      context "update with new control_mechanism: 'relay' (Timer with relay)" do
+      context "replace with new control_mechanism: 'relay' (Timer with relay)" do
         context "when validations not met" do
           before :each do
-            @updated = @instrument.update(control_mechanism: "relay", relay_attributes: { type: "RelaySynaccessRevA" })
+            @updated = @instrument.replace_relay({ type: "RelaySynaccessRevA" }, "relay")
           end
 
-          it "should fail" do
-            expect(@updated).to be false
+          it "relay should have errors" do
+            expect(@updated.errors.full_messages).not_to eq([])
           end
 
-          it "should have errors" do
-            expect(@instrument.errors.full_messages).not_to eq([])
+          it "instrument should have no errors" do
+            expect(@instrument.errors.full_messages).to eq([])
           end
         end
 
         context "when validations met" do
           before :each do
-            @updated = @instrument.update(control_mechanism: "relay", relay_attributes: FactoryBot.attributes_for(:relay))
+            @updated = @instrument.replace_relay(FactoryBot.attributes_for(:relay), "relay")
           end
           it "should succeed" do
-            expect(@updated).to be true
+            expect(@updated).to be_valid
           end
 
           it "should have no errors" do
@@ -303,13 +303,13 @@ RSpec.describe Instrument do
         end
       end
 
-      context "update with new control_mechanism: 'timer' (Timer without relay)" do
+      context "replace with new control_mechanism: 'timer' (Timer without relay)" do
         before :each do
-          @updated = @instrument.update(control_mechanism: "timer")
+          @updated = @instrument.replace_relay(nil, "timer")
         end
 
         it "should succeed" do
-          expect(@updated).to be true
+          expect(@updated).to be_valid
         end
 
         it "control mechanism should be a timer" do
@@ -755,7 +755,7 @@ RSpec.describe Instrument do
 
     context "instrument with timer" do
       before :each do
-        instrument.update!(control_mechanism: "manual")
+        instrument.replace_relay(nil, "manual")
       end
 
       context "with a current reservation" do

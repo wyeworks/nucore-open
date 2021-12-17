@@ -1,0 +1,35 @@
+= content_for :h1 do
+  = current_facility
+= content_for :sidebar do
+  = render "admin/shared/sidenav_product", sidenav_tab: "secure_rooms"
+= content_for :tabnav do
+  = render "admin/shared/tabnav_product", secondary_tab: "card_readers"
+
+%h2= @product
+
+= simple_form_for @product, url: facility_secure_room_ethernet_port_path(current_facility, @product) do |f|
+  = f.error_messages
+
+  %h3=text("views.admin.secure_rooms.card_readers.ethernet_port_fields.card_reader_title")
+  = f.input :card_reader_room_number,
+    label: text("views.admin.secure_rooms.card_readers.ethernet_port_fields.room_number")
+  = f.input :card_reader_circuit_number,
+    label: text("views.admin.secure_rooms.card_readers.ethernet_port_fields.circuit_number")
+  = f.input :card_reader_port_number,
+    label: text("views.admin.secure_rooms.card_readers.ethernet_port_fields.port_number")
+  = f.input :card_reader_location_description,
+    label: text("views.admin.secure_rooms.card_readers.ethernet_port_fields.location_description")
+  
+  %h3=text("views.admin.secure_rooms.card_readers.ethernet_port_fields.tablet_title")
+  = f.input :tablet_room_number,
+    label: text("views.admin.secure_rooms.card_readers.ethernet_port_fields.room_number")
+  = f.input :tablet_circuit_number,
+    label: text("views.admin.secure_rooms.card_readers.ethernet_port_fields.circuit_number")
+  = f.input :tablet_port_number,
+    label: text("views.admin.secure_rooms.card_readers.ethernet_port_fields.port_number")
+  = f.input :tablet_location_description,
+    label: text("views.admin.secure_rooms.card_readers.ethernet_port_fields.location_description")
+
+  %ul.inline
+    %li= f.submit text("shared.save"), class: ["btn", "btn-primary"]
+    %li= link_to text("shared.cancel"), facility_secure_room_card_readers_path(@current_facility, @product)

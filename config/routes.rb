@@ -103,6 +103,10 @@ Rails.application.routes.draw do
       resources :schedule_rules, except: [:show]
       resources :product_access_groups
       resources :price_policies, controller: "instrument_price_policies", except: [:show]
+      resources :relay_synaccess_rev_a, controller: "instrument_relays", type: "Synaccess Revision A", except: [:show]
+      resources :relay_synaccess_rev_b, controller: "instrument_relays", type: "Synaccess Revision B", except: [:show]
+      resources :relay_dummy, controller: "instrument_relays", type: "RelayDummy", except: [:show]
+      resources :relays, controller: "instrument_relays", except: [:show]
       resources :reservations, only: [:new, :create, :destroy], controller: "facility_reservations" do
         get "edit_admin", to: "facility_reservations#edit_admin"
         patch "update_admin", to: "facility_reservations#update_admin"

@@ -4,8 +4,6 @@
 
 = f.input :problems_resolvable_by_user, as: :boolean, hint: false
 
-= render "relay_manage", f: f
-
 = f.input :reserve_interval, value_method: :to_i, label: "Reservation Interval"
 = f.input :min_reserve_mins, value_method: :to_i
 = f.input :max_reserve_mins, default_value: "None"

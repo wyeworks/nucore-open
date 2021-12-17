@@ -254,88 +254,14 @@ RSpec.describe InstrumentsController do
       @action = :create
       @params.merge!(
         instrument: FactoryBot.attributes_for(:instrument,
+                                              no_relay: true,
                                               facility_account_id: facility.facility_accounts.first.id,
-                                              control_mechanism: "manual",
                                              ),
       )
     end
 
     it_should_allow_managers_only :redirect do
       assert_successful_creation { expect(assigns(:product).relay).to be_nil }
-    end
-
-    context "with relay" do
-
-      before :each do
-        @params[:instrument].merge!(control_mechanism: "relay",
-                                    relay_attributes: {
-                                      ip: "192.168.1.2",
-                                      outlet: 12,
-                                      username: "username",
-                                      password: "password",
-                                      type: RelaySynaccessRevA.name,
-                                      auto_logout: true,
-                                      auto_logout_minutes: 15,
-                                    })
-      end
-
-      it_should_allow :director, "to create a relay" do
-        assert_successful_creation do
-          relay = assigns(:product).relay
-          expect(relay).to be_is_a Relay
-          expect(relay.ip).to eq(@params[:instrument][:relay_attributes][:ip])
-          expect(relay.outlet).to eq(@params[:instrument][:relay_attributes][:outlet])
-          expect(relay.username).to eq(@params[:instrument][:relay_attributes][:username])
-          expect(relay.password).to eq(@params[:instrument][:relay_attributes][:password])
-          expect(relay.type).to eq(@params[:instrument][:relay_attributes][:type])
-          expect(relay.auto_logout_minutes).to eq(@params[:instrument][:relay_attributes][:auto_logout_minutes])
-        end
-      end
-
-      describe "relay validations" do
-        let!(:instrument2) { create(:instrument, facility: facility, no_relay: true) }
-        let!(:old_relay) { create(:relay_syna, instrument: instrument2) }
-
-        before :each do
-          sign_in @admin
-          @params[:instrument][:relay_attributes][:ip] = old_relay.ip
-          @params[:instrument][:relay_attributes][:outlet] = old_relay.outlet
-        end
-
-        context "and the relay is taken by a different instrument" do
-          it "does not allow the relay to be used again" do
-            do_request
-            expect(assigns(:product)).to_not be_persisted
-            expect(assigns(:product).errors).to include(:relay)
-          end
-        end
-
-        context "and the relay is taken, but on the same shared schedule" do
-          it "allows creation" do
-            @params[:instrument][:schedule_id] = instrument2.schedule_id
-            do_request
-            expect(assigns(:product)).to be_persisted
-            expect(assigns(:product).relay).to be_persisted
-          end
-        end
-      end
-
-    end
-
-    context "dummy relay" do
-
-      before :each do
-        # relay attributes
-        @params[:instrument].merge!(control_mechanism: "timer")
-      end
-
-      it_should_allow :director, "to create a timer" do
-        assert_successful_creation do
-          relay = assigns(:product).relay
-          expect(relay).to be_a Relay
-          expect(relay.type).to eq(RelayDummy.name)
-        end
-      end
     end
 
     describe "shared schedule" do
@@ -398,71 +324,6 @@ RSpec.describe InstrumentsController do
     before :each do
       @method = :put
       @action = :update
-      @params.merge!(instrument: instrument.attributes.merge!(control_mechanism: "manual"))
-    end
-
-    context "no relay" do
-      before :each do
-        RelaySynaccessRevA.create!(
-          ip: "192.168.1.2",
-          outlet: 12,
-          username: "username",
-          password: "password",
-          type: RelaySynaccessRevA.name,
-          instrument_id: instrument.id,
-        )
-      end
-
-      it_should_allow_managers_only :redirect do
-        assert_successful_update { expect(assigns(:product).reload.relay).to be_nil }
-      end
-    end
-
-    context "with relay" do
-
-      before :each do
-        @params[:instrument].merge!(control_mechanism: "relay",
-                                    relay_attributes: {
-                                      ip: "192.168.1.2",
-                                      outlet: 12,
-                                      username: "username",
-                                      password: "password",
-                                      type: RelaySynaccessRevA.name,
-                                      instrument_id: instrument.id,
-                                    })
-      end
-
-      it_should_allow :director, "to create a relay" do
-        assert_successful_update do
-          relay = assigns(:product).relay
-          expect(relay).to be_is_a Relay
-          expect(relay.ip).to eq(@params[:instrument][:relay_attributes][:ip])
-          expect(relay.outlet).to eq(@params[:instrument][:relay_attributes][:outlet])
-          expect(relay.username).to eq(@params[:instrument][:relay_attributes][:username])
-          expect(relay.password).to eq(@params[:instrument][:relay_attributes][:password])
-          expect(relay.type).to eq(@params[:instrument][:relay_attributes][:type])
-        end
-      end
-
-    end
-
-    context "dummy relay" do
-
-      before :each do
-        @params[:instrument].merge!(control_mechanism: "timer")
-      end
-
-      it_should_allow :director, "to create a timer" do
-        assert_successful_update do
-          relay = assigns(:product).relay
-          expect(relay).to be_is_a Relay
-          expect(relay.ip).to be_nil
-          expect(relay.outlet).to be_nil
-          expect(relay.username).to be_nil
-          expect(relay.password).to be_nil
-          expect(relay.type).to eq(RelayDummy.name)
-        end
-      end
     end
 
     def assert_successful_update

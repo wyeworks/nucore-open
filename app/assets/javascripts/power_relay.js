@@ -1,7 +1,7 @@
-// Used on the instrument manage page
+// Used on the instrument Relays tab
 $(function() {
   var power_relay_section = $('#power-relay')
-    , instrument_control_mechanism = $('#instrument_control_mechanism');
+    , instrument_control_mechanism = $('#relay_control_mechanism');
 
   instrument_control_mechanism.change(function() {
     var selection = instrument_control_mechanism.val();

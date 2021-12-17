@@ -5,7 +5,6 @@
   %body{ class: SettingsHelper.feature_on?(:use_manage) && manage_mode? ? "manage-mode" : "" }
     %header
       = render "/shared/acting_as"
-      = render_view_hook("banner")
       = yield(:banner)
       = render "/shared/header"
     %nav
