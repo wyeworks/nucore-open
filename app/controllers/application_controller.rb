@@ -203,7 +203,9 @@ class ApplicationController < ActionController::Base
   end
 
   def formats_with_html_fallback
-    request.formats.map(&:symbol) + [:html]
+    # request.formats returns a collection of Mime::Type objects
+    # Mime::Type#ref returns a symbol or string, and string must be a valid Mime type
+    request.formats.map(&:ref) + [:html]
   end
 
 end

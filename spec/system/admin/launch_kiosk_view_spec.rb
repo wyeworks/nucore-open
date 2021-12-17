@@ -9,7 +9,7 @@ RSpec.describe "Launching Kiosk View", feature_setting: { kiosk_view: true } do
   before { login_as director }
 
   context "with active reservations" do
-    let(:instrument) { create(:setup_instrument, facility: facility, control_mechanism: "timer") }
+    let(:instrument) { create(:setup_instrument, :timer, facility: facility) }
 
     before { create(:purchased_reservation, :running, product: instrument) }
 

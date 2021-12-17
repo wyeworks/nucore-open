@@ -8,7 +8,7 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
   let!(:account_user) { FactoryBot.create(:account_user, :purchaser, account: account, user: user) }
 
   let(:order_detail) { FactoryBot.create(:setup_order, product: instrument, account: account).order_details.first }
-  let(:instrument) { create(:setup_instrument, facility: facility, control_mechanism: "timer") }
+  let(:instrument) { create(:setup_instrument, :timer, facility: facility) }
 
   shared_examples "kiosk_actions" do |login_label, password|
 

@@ -120,6 +120,14 @@ en:
             title: Add Card Reader
           edit:
             title: Edit Card Reader
+          ethernet_port_fields:
+            card_reader_title: "Ethernet Port-Card Reader"
+            tablet_title: "Ethernet Port-Tablet"
+            room_number: "Building-Room Number"
+            circuit_number: "Circuit Number"
+            port_number: "Port Number"
+            location_description: "Location Description"
+            edit: "Edit Ethernet Ports"
 
         occupancies:
           index:

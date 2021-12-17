@@ -1,0 +1,39 @@
+- content_for :head_content do
+  = javascript_include_tag "power_relay"
+
+= simple_form_for [current_facility, @product, @relay.becomes(Relay)], as: :relay do |f|
+  - f.object = @relay.becomes(@relay.class)
+  = f.error_messages
+  = f.input :control_mechanism,
+    collection: options_for_control_mechanism,
+    include_blank: false,
+    selected: @relay.control_mechanism || :manual
+
+  .well#power-relay
+    %h3= text("instruments.instrument_fields.relay.label.relay")
+    %p= text("instruments.instrument_fields.relay.intro")
+    = f.input :type, collection: options_for_relay, include_blank: false
+    = f.input :ip, required: true
+    = f.input :ip_port,
+      hint: text("instruments.instrument_fields.relay.instruct.ip_port")
+    = f.input :outlet, required: true,
+      hint: text("instruments.instrument_fields.relay.instruct.outlet")
+    = f.input :username, required: true
+    = f.input :password, as: :string, required: true
+    = f.input :auto_logout do
+      = f.check_box :auto_logout
+      = text("instruments.instrument_fields.relay.label.auto_logout_1")
+      = f.input :auto_logout_minutes,
+          label: false,
+          error: false,
+          wrapper_html: { class: "input-inline" },
+          input_html: { style: "width: 38px" }
+      = text("instruments.instrument_fields.relay.label.auto_logout_2")
+      %h3=text("instruments.instrument_fields.relay.label.ethernet_port")
+      = f.input :mac_address
+      = f.input :building_room_number
+      = f.input :circuit_number
+      = f.input :ethernet_port_number, label: text("instruments.instrument_fields.relay.label.ethernet_port_number")
+  %ul.inline
+    %li= f.submit text("shared.save"), class: ["btn", "btn-primary"]
+    %li= link_to text("shared.cancel"), [current_facility, @product, Relay]
