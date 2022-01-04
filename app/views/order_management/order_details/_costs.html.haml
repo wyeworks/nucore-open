@@ -1,11 +1,17 @@
 - f.object.send(:extend, PriceDisplayment)
 - if f.object.actual_cost?
+  - if f.object.account.try(:splits).try(:present?)
+    = render "split_costs", order_detail: f.object, cost_type: :actual_cost
+
   .cost-table
     .cost= f.input :actual_cost, as: :currency
     .subsidy=  f.input :actual_subsidy, as: :currency, disabled: !f.object.price_policy.try(:has_subsidy?), hint: "#{f.object.price_policy.try(:price_group)}"
     .total= f.input :actual_total, as: :currency, disabled: true
 
 - else
+  - if f.object.account.try(:splits).try(:present?)
+    = render "split_costs", order_detail: f.object, cost_type: :estimated_cost
+
   .cost-table
     .cost= f.input :estimated_cost, as: :currency, disabled: true
     .subsidy= f.input :estimated_subsidy, as: :currency, disabled: true

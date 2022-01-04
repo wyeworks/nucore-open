@@ -79,6 +79,7 @@
     }
 
   }
+
   .cost-table {
     .cost, .subsidy, .total {
       float: left;
@@ -88,6 +89,15 @@
       .help-block {
         @extend .muted;
       }
+    }
+  }
+
+  .split-table {
+    margin-bottom: 2rem;
+
+    th {
+      text-align: left;
+      width: 88%;
     }
   }
 
