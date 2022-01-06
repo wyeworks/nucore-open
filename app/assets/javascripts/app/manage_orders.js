@@ -120,22 +120,31 @@ class OrderDetailManagement {
       const row = $(this).closest('.cost-table');
       const total = row.find('.cost input').val() - row.find('.subsidy input').val();
       row.find('.total input').val(total.toFixed(2));
-      // update split values
-      for (let field of $('.split-cost')) {
-        const splitCount = Math.round(100 / field.dataset.percent)
-        const totalPennies = total * 100;
-        // round down to handle remainders
-        var newSplit = Math.floor(totalPennies / splitCount);
 
-        if (field.dataset.applyRemainder === 'true') {
-          const remainder = (totalPennies % splitCount);
-          newSplit += remainder
-        }
-        field.innerHTML = '$' + (newSplit / 100).toFixed(2)
-      };
+      // update split table values
+      self.updateSplitValues(total);
+
       // notify page of changes
-      self.notifyOfUpdate($('.split-table'))
+      self.notifyOfUpdate($('.split-table'));
       return self.notifyOfUpdate($(row).find('input[name*=total]'));
+    });
+  }
+
+  updateSplitValues(total) {
+    const splitUpdateFields = $('.split-cost').toArray();
+    const splitTotal = (percent) => Math.floor(total * percent) / 100;
+    const reducer = (prev, splitField) => prev + splitTotal(splitField.dataset.percent);
+    // Add up each split accounts' total
+    const splitsTotalAmount = splitUpdateFields.reduce(reducer, 0);
+    // Any remaining pennies are added to the "Apply Remainder" account.
+    const remainder = total - splitsTotalAmount;
+
+    splitUpdateFields.forEach(function(splitField) {
+      var newSplitAmount = splitTotal(splitField.dataset.percent);
+      if (splitField.dataset.applyRemainder === 'true' && remainder != 0) {
+        newSplitAmount += remainder;
+      }
+      splitField.innerHTML = '$' + (newSplitAmount).toFixed(2);
     });
   }
 

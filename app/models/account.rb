@@ -234,6 +234,7 @@ class Account < ApplicationRecord
 
   delegate :to_s, to: :account_number, prefix: true
 
+  # with_facility is only used in PurchaseOrderAccount#to_s
   def to_s(with_owner = false, flag_suspended = true, with_facility: false)
     desc = "#{description} / #{account_number_to_s}"
     desc += " / #{owner_user_name}" if with_owner && owner_user.present?

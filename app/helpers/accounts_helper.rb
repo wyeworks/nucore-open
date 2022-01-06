@@ -17,6 +17,15 @@ module AccountsHelper
     end
   end
 
+  def split_account_link_or_text(account)
+    acct_desc = account.to_s(with_facility: false)
+    if current_ability.can?(:edit, account)
+      link_to acct_desc, facility_account_path(current_facility, account)
+    else
+      acct_desc
+    end
+  end
+
   def show_account_facilities_tab?(ability, account)
     SettingsHelper.feature_on?(:multi_facility_accounts) && account.per_facility? && ability.can?(:edit, AccountFacilityJoinsForm.new(account: account))
   end
