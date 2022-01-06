@@ -1,13 +1,18 @@
 .split-table
   %table
+    %caption
+      == Split Account:
+      = payment_source_link_or_text(order_detail.account)
     %tbody
       %tr
         %th{scope: "col"}== Subaccounts
         %th{scope: "col"}== Amount
+        %th{scope: "col"}== Percent
       - SplitAccounts::OrderDetailSplitter.new(order_detail).split.each do |split_order_detail|
         %tr
-          %th{scope: "row"}= payment_source_link_or_text(split_order_detail.account)
+          %th{scope: "row"}= split_account_link_or_text(split_order_detail.account)
           - split_percent = split_order_detail.split.percent
           - apply_remainder = split_order_detail.split.apply_remainder.to_s
           %td.split-cost{ data: { percent: split_percent, apply_remainder: apply_remainder } }
             = number_to_currency(split_order_detail.send(cost_type))
+          %td= split_percent

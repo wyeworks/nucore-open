@@ -54,9 +54,9 @@ There is a 2 cent remainder. That results in the accounts being charged the foll
     * B: $3.49
     * C: $3.49
 
-If the "Apply Remainder" flag were set on on account B, the results would be slightly
-more evenly:
+If the "Apply Remainder" flag were set on account B, the results would be slightly
+more even:
 
-    * A: $3.51
-    * B: $3.50
+    * A: $3.50
+    * B: $3.51
     * C: $3.49
