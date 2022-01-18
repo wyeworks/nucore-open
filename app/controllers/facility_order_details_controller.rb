@@ -39,7 +39,7 @@ class FacilityOrderDetailsController < ApplicationController
         flash[:notice] = I18n.t "controllers.facility_order_details.destroy.success"
       rescue => e
         Rails.logger.error "#{e.message}:#{e.backtrace.join("\n")}"
-        flash[:error] = I18n.t "controllers.facility_order_details.destroy.error", @order_detail.to_s
+        flash[:error] = I18n.t "controllers.facility_order_details.destroy.error", order_detail_id: @order_detail.to_s
       end
     else
       flash[:notice] = I18n.t "controllers.facility_order_details.destroy.notice"

@@ -92,8 +92,17 @@
     }
   }
 
+  .subaccount-link {
+    font-weight: normal;
+  }
+
   .split-table {
     margin-bottom: 2rem;
+
+    caption {
+      text-align: left;
+      font-weight: bold;
+    }
 
     th {
       text-align: left;
