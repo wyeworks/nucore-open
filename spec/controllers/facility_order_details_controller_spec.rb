@@ -44,6 +44,7 @@ RSpec.describe FacilityOrderDetailsController do
 
     context "merge order" do
       before :each do
+        # @clone is the original order, @order is the merge order
         @clone = @order.dup
         assert @clone.save
         @order.update_attribute :merge_with_order_id, @clone.id
@@ -54,6 +55,34 @@ RSpec.describe FacilityOrderDetailsController do
           .to raise_error ActiveRecord::RecordNotFound
         expect(flash[:notice]).to be_present
         assert_redirected_to facility_order_path(@authable, @clone)
+      end
+
+      context "when deleting fails" do
+        let(:merge_order) { @order.dup }
+        let(:journal) { FactoryBot.create(:journal) }
+        let(:service) { FactoryBot.create(:setup_service, :with_order_form) }
+        let(:complete_merge_order_detail) do
+          FactoryBot.create(:order_detail,
+                            :completed,
+                            order: merge_order,
+                            product: service,
+                            price_policy: @price_policy,
+                            ordered_at: Time.current,
+                            fulfilled_at: Time.current,
+                            account: @account,
+                            journal: journal)
+        end
+
+        before :each do
+          JournalRowBuilder.create_for_single_order_detail!(journal, complete_merge_order_detail)
+          @params = { facility_id: @authable.url_name, order_id: merge_order.id, id: complete_merge_order_detail.id }
+        end
+
+        it_should_allow :director, "to see an error message when destroy fails" do
+          expect(complete_merge_order_detail).to be_persisted
+          expect(flash[:error]).to be_present
+          assert_redirected_to facility_order_path(@authable, @clone)
+        end
       end
     end
   end

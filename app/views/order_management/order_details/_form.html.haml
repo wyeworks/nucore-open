@@ -9,10 +9,10 @@
         = render "warnings"
 
     .row
-      .span5.js--pricingUpdate
+      .span3.js--pricingUpdate
         = account_input(f)
 
-      .span5
+      .span3
         - if @order_statuses
           = f.association :order_status, collection: @order_statuses, label_method: :name_with_level, include_blank: false
           - if f.object.fulfilled_at.blank? || f.object.fulfilled_at_changed?
@@ -41,39 +41,44 @@
                 data: { connect: "#order_detail_order_status_id", show_on: OrderStatus.canceled.id }
               = t("facility_order_details.edit.label.with_cancel_fee")
 
-    = render_view_hook "after_order_status", f: f, order_detail: @order_detail
+    .row
+      .span3
+        = render_view_hook "after_order_status", f: f, order_detail: @order_detail
+      .span7
+        - if f.object.account.try(:splits).try(:present?)
+          = render "split_costs", order_detail: @order_detail
 
     .row
       - if @order_detail.time_data.present?
-        .span5= render "order_management/order_details/#{@order_detail.time_data.class.name.underscore}", f: f
+        .span3= render "order_management/order_details/#{@order_detail.time_data.class.name.underscore}", f: f
       - else
-        .span5.js--pricingUpdate
+        .span3.js--pricingUpdate
           = f.input :quantity, as: :order_detail_quantity, hint_html: { class: "help-inline" }
-
-      .span5
+      .span7
         = render "costs", f: f
 
     .row
-      .span5
-        = f.input :note, input_html: { class: "note", rows: 3 }
-        - if @order_detail.can_reconcile? || @order_detail.reconciled?
-          = f.input :reconciled_note, input_html: { class: "note" }
+      .span3
+        = render "assigned_user", f: f
 
-      .span4
+      .span3
+        = f.input :reference_id
+
+      .span3
         - if @order_detail.actual_cost?
           - if Settings.order_detail_price_change_reason_options.present?
             = f.input :price_change_reason_option, as: :select, collection: Settings.order_detail_price_change_reason_options + ["Other"], input_html: { class: "js--order-detail-price-change-reason-select", name: nil, id: nil }
             = f.input :price_change_reason, label: false, input_html: { class: "js--order-detail-price-change-reason", hidden: @order_detail.price_change_reason_option != "Other" }
           - else
             = f.input :price_change_reason
-
-      .span4
-        = render "assigned_user", f: f
       .span1= render "facility_orders/order_file_icon", od: @order_detail
 
     .row
-      .span5
-        = f.input :reference_id
+      .span3
+      .span7
+        = f.input :note, input_html: { class: "note", rows: 3 }
+        - if @order_detail.can_reconcile? || @order_detail.reconciled?
+          = f.input :reconciled_note, input_html: { class: "note" }
 
     - if @order_detail.dispute_at
       .row= render "dispute", f: f
