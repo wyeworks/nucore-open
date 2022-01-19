@@ -39,25 +39,6 @@ RSpec.describe UmassCorum::OwlApiAdapter do
       adapter.certified? instance_double(ResearchSafetyCertificate, name: "LABSAFE")
       adapter.certified? instance_double(ResearchSafetyCertificate, name: "RANDOM")
     end
-
-    context "with a refresher course and no intitial training" do
-      let(:response) { File.expand_path("../../fixtures/owl/success_refershers.json", __dir__) }
-
-      it "is certified for LABSAFE with the refresher LABRSAFE course" do
-        certificate = instance_double(ResearchSafetyCertificate, name: "LABSAFE")
-        expect(adapter).to be_certified(certificate)
-      end
-
-      it "is certified for BIOSAFE with the refresher BIOSFTYLAB course" do
-        certificate = instance_double(ResearchSafetyCertificate, name: "BIOSAFE")
-        expect(adapter).to be_certified(certificate)
-      end
-
-      it "is certified for RADSAFE with the refresher RADSFTRFSH course" do
-        certificate = instance_double(ResearchSafetyCertificate, name: "RADSAFE")
-        expect(adapter).to be_certified(certificate)
-      end
-    end
   end
 
   describe "an IP address violation" do
