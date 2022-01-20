@@ -72,5 +72,6 @@
     user: "{{ item.name }}"
     key: "{{ item.key_url }}"
     state: "{{ item.root_access }}"
+    exclusive: yes
   loop: "{{ authorized_keys }}"
   become: yes
