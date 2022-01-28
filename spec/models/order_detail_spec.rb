@@ -346,12 +346,22 @@ RSpec.describe OrderDetail do
       expect(@order_detail.valid_service_meta?).to be true
     end
 
-    it "should not validate_extras for a service file template upload with no template results" do
+    it "should be a problem with a service file template upload with no template results" do
       # add service file template
       @file1      = "#{Rails.root}/spec/files/template1.txt"
-      @template1  = @service.stored_files.create(name: "Template 1", file: File.open(@file1), file_type: "template",
+      @template1  = @service.stored_files.create(name: "Template 1",
+                                                 file: File.open(@file1),
+                                                 file_type: "template",
                                                  created_by: @user.id)
+      @order_detail.change_status!(OrderStatus.in_process)
+      @order_detail.change_status!(OrderStatus.complete)
+      @order_detail.reload
+
       expect(@order_detail.valid_service_meta?).to be false
+      expect(@order_detail.state).to eq "complete"
+      expect(@order_detail).to be_complete
+      expect(@order_detail).to be_problem_order
+      expect(@order_detail.problem_description_key).to eq(:missing_form)
     end
 
     it "should validate_extras for a service file template upload with template results" do
@@ -961,6 +971,19 @@ RSpec.describe OrderDetail do
         @order_detail.statement_id = 1
         expect(@order_detail).not_to be_ready_for_statement
       end
+
+      context "with a service with missing order form" do
+        let(:service) { create(:setup_service, :with_order_form) }
+        let(:order) { create(:setup_order, product: service) }
+        let(:order_detail) { order.order_details.first }
+
+        it "is not ready if it is missing an order form or survey" do
+          order_detail.change_status!(OrderStatus.in_process)
+          order_detail.change_status!(OrderStatus.complete)
+          order_detail.reviewed_at = 1.day.ago
+          expect(order_detail).not_to be_ready_for_statement
+        end
+      end
     end
 
     describe "a non-statementable account" do
@@ -976,7 +999,7 @@ RSpec.describe OrderDetail do
   end
 
   describe "#ready_for_journal?" do
-    describe "a statementable account" do
+    describe "a journalable account" do
       before do
         allow(Account.config).to receive(:using_journal?).and_return true
       end
@@ -986,7 +1009,7 @@ RSpec.describe OrderDetail do
         expect(@order_detail).not_to be_ready_for_journal
       end
 
-      it "is ready if it is not statemented and the reviewed_at is in the past" do
+      it "is ready if it is not journaled and the reviewed_at is in the past" do
         @order_detail.reviewed_at = 1.day.ago
         expect(@order_detail).to be_ready_for_journal
       end
@@ -1002,7 +1025,7 @@ RSpec.describe OrderDetail do
         expect(@order_detail).not_to be_ready_for_journal
       end
 
-      it "is not ready if it is statemented" do
+      it "is not ready if it is journaled" do
         @order_detail.reviewed_at = 1.day.ago
         @order_detail.journal_id = 1
         expect(@order_detail).not_to be_ready_for_journal
@@ -1017,9 +1040,22 @@ RSpec.describe OrderDetail do
         @order_detail.to_reconciled
         expect(@order_detail).not_to be_ready_for_journal
       end
+
+      context "with a service with missing order form" do
+        let(:service) { create(:setup_service, :with_order_form) }
+        let(:order) { create(:setup_order, product: service) }
+        let(:order_detail) { order.order_details.first }
+
+        it "is not ready if it is missing an order form or survey" do
+          order_detail.change_status!(OrderStatus.in_process)
+          order_detail.change_status!(OrderStatus.complete)
+          order_detail.reviewed_at = 1.day.ago
+          expect(order_detail).not_to be_ready_for_journal
+        end
+      end
     end
 
-    describe "a non-statementable account" do
+    describe "a non-journalable account" do
       before do
         allow(Account.config).to receive(:using_journal?).and_return false
       end
