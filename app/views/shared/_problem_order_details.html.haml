@@ -19,11 +19,16 @@
   %tbody
     - @order_details.each do |order_detail|
       %tr{ class: row_class(order_detail) }
-        %td.centered= link_to order_detail.order_id,
-          facility_order_path(current_facility, order_detail.order)
-        %td.centered= link_to order_detail.id,
-          manage_order_detail_path(order_detail),
-          class: "manage-order-detail"
+        - if order_detail.missing_form? && order_detail.order.merge_with_order_id
+          %td.centered= link_to order_detail.order.merge_with_order_id,
+            facility_order_path(current_facility, order_detail.order.merge_order)
+          %td.centered= order_detail.id
+        - else
+          %td.centered= link_to order_detail.order_id,
+            facility_order_path(current_facility, order_detail.order)
+          %td.centered= link_to order_detail.id,
+            manage_order_detail_path(order_detail),
+            class: "manage-order-detail"
         %td= problem_order_date(order_detail, local_assigns[:show_reservation_start_at])
         %td= order_detail.order.user
         %td.centered= order_detail.quantity
