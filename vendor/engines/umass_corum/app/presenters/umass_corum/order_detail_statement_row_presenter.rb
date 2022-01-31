@@ -19,7 +19,7 @@ module UmassCorum
         description,
         unit_of_measure,
         hourly_rate,
-        number_to_currency(order_detail.actual_total),
+        total_amount,
       ]
     end
 
@@ -50,6 +50,14 @@ module UmassCorum
         number_to_currency(price_policy.subsidized_hourly_usage_cost)
       else
         number_to_currency(price_policy.unit_total)
+      end
+    end
+
+    def total_amount
+      if order_detail.price_change_reason.present?
+        "adjusted: #{number_to_currency(order_detail.actual_total)}"
+      else
+        number_to_currency(order_detail.actual_total)
       end
     end
 
