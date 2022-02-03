@@ -129,7 +129,7 @@ GEM
     bcrypt (3.1.16)
     bcrypt_pbkdf (1.1.0)
     bindex (0.8.1)
-    bootsnap (1.10.2)
+    bootsnap (1.10.3)
       msgpack (~> 1.2)
     bootstrap-sass (2.3.2.2)
       sass (~> 3.2)
