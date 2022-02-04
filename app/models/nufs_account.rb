@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# TODO - This is not in use by UMass, do we need to keep it?
 class NufsAccount < Account
 
   validates_uniqueness_of :account_number, message: "already exists", case_sensitive: false
