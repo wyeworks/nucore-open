@@ -20,7 +20,7 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
   end
 
   context "when the entry in the DB is expired" do
-    before { create(:api_speed_type, :expired, speed_type: speed_type, date_removed: 1.month.ago) }
+    before { create(:api_speed_type, :expired, speed_type: speed_type, date_removed: 1.week.ago) }
 
     it "raises an error if the date passed in is after the expiration date" do
       expect { validator.account_is_open!(Time.current) }.to raise_error(ValidatorError, /expired/)
@@ -33,6 +33,14 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
     it "is valid if the date passed in is between the date_added and the expiration date" do
       expect(validator.account_is_open!(3.months.ago)).to be_truthy
     end
+
+    context "when the account is suspended" do
+      before { create(:speed_type_account, :with_account_owner, account_number: speed_type, suspended_at: 1.week.ago) }
+
+      it "raises an error" do
+        expect { validator.account_is_open! }.to raise_error(ValidatorError, /suspended/)
+      end
+    end
   end
 
   context "when the entry in the DB is active (not expired)" do
@@ -44,6 +52,14 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
 
     it "is valid if the date passed in is after the date_added" do
       expect(validator.account_is_open!(3.days.from_now)).to be_truthy
+    end
+
+    context "when the account is suspended" do
+      before { create(:speed_type_account, :with_account_owner, account_number: speed_type, suspended_at: 1.week.ago) }
+
+      it "raises an error" do
+        expect { validator.account_is_open! }.to raise_error(ValidatorError, /suspended/)
+      end
     end
   end
 

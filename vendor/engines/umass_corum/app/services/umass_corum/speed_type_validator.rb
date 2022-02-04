@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module UmassCorum
 
   class SpeedTypeValidator
@@ -6,6 +8,11 @@ module UmassCorum
 
     def initialize(speed_type, _recharge_account = nil)
       @speed_type = speed_type
+    end
+
+    def account_suspended?
+      UmassCorum::SpeedTypeAccount.where(account_number: speed_type)
+                                  .where.not(suspended_at: nil).present?
     end
 
     def valid_at?(datetime)
@@ -27,6 +34,8 @@ module UmassCorum
       # been fetched as part of account creation.
       raise ValidatorError, "Corum is unaware of this account. It should have been fetched from the API" unless api_account
 
+      raise ValidatorError, "This account is suspended" if account_suspended?
+
       unless valid_at?(fulfilled_at)
         error = api_account.error_desc.presence || "Was not legal at the time of fulfillment"
         raise ValidatorError, error
@@ -43,6 +52,7 @@ module UmassCorum
 
     def api_account
       return @api_account if defined?(@api_account)
+
       @api_account = UmassCorum::ApiSpeedType.find_by(speed_type: speed_type)
     end
 
@@ -51,6 +61,7 @@ module UmassCorum
     def latest_expiration
       UmassCorum::SpeedTypeAccount.default_nil_exp_date
     end
+
   end
 
 end
