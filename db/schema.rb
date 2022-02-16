@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_19_094923) do
+ActiveRecord::Schema.define(version: 2022_02_09_233321) do
 
   create_table "account_facility_joins", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -485,7 +485,7 @@ ActiveRecord::Schema.define(version: 2021_11_19_094923) do
     t.datetime "start_date", null: false
     t.decimal "unit_cost", precision: 10, scale: 2
     t.decimal "unit_subsidy", precision: 10, scale: 2
-    t.decimal "usage_rate", precision: 12, scale: 4
+    t.decimal "usage_rate", precision: 16, scale: 8
     t.decimal "minimum_cost", precision: 10, scale: 2
     t.decimal "cancellation_cost", precision: 10, scale: 2
     t.decimal "usage_subsidy", precision: 12, scale: 4

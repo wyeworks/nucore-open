@@ -3,8 +3,7 @@
 module AccountsHelper
 
   def account_input(form)
-    hint = t("facility_order_details.edit.label.account_owner_html", owner: @order_detail.account.owner_user)
-    form.input :account_id, hint: hint, label: OrderDetail.human_attribute_name(:account) do
+    form.input :account_id, label: OrderDetail.human_attribute_name(:account) do
       form.select :account_id, available_accounts_options, include_blank: false, disabled: edit_disabled?
     end
   end
