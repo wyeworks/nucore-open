@@ -11,6 +11,9 @@
     .row
       .span3.js--pricingUpdate
         = account_input(f)
+      .span3
+        %strong= t("facility_order_details.edit.label.account_owner")
+        .account-owner= @order_detail.account.owner_user
 
       .span3
         - if @order_statuses
@@ -48,14 +51,18 @@
         - if f.object.account.try(:splits).try(:present?)
           = render "split_costs", order_detail: @order_detail
 
-    .row
-      - if @order_detail.time_data.present?
-        .span3= render "order_management/order_details/#{@order_detail.time_data.class.name.underscore}", f: f
-      - else
+    - if @order_detail.time_data.present?
+      .row
+        .span3
+        .span7= render "costs", f: f
+      .row
+        .span3
+        .span7= render "order_management/order_details/#{@order_detail.time_data.class.name.underscore}", f: f
+    - else
+      .row
         .span3.js--pricingUpdate
           = f.input :quantity, as: :order_detail_quantity, hint_html: { class: "help-inline" }
-      .span7
-        = render "costs", f: f
+        .span7= render "costs", f: f
 
     .row
       .span3

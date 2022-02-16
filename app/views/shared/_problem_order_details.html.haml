@@ -41,7 +41,10 @@
         %td= order_detail.account
         %td.centered
           = order_detail_badges(order_detail)
-          = link_to text("shared.update"), manage_order_detail_path(order_detail), class: "manage-order-detail"
+          - if order_detail.missing_form? && order_detail.order.merge_with_order_id
+            = link_to text("shared.update"), facility_order_path(current_facility, order_detail.order.merge_order)
+          - else
+            = link_to text("shared.update"), manage_order_detail_path(order_detail), class: "manage-order-detail"
 
 = will_paginate(@order_details)
 = render partial: "shared/reconcile_footnote"

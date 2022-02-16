@@ -310,7 +310,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
       reservation.actual_start_at = reservation.reserve_start_at
       reservation.actual_end_at = reservation.reserve_end_at + 10.minutes
       new_costs = policy.calculate_cost_and_subsidy reservation
-      expect(new_costs[:cost]).to eq(29.169.to_d)
+      expect(new_costs[:cost]).to eq(29.1666669.to_d)
       expect(new_costs[:subsidy]).to eq(8.169.to_d)
     end
 

@@ -475,7 +475,7 @@ en:
         dispute_information: Dispute Information
         h3-5: "Bundle Summary"
       label:
-        account_owner_html: "<strong>Owner: </strong><span class='account-owner'>%{owner}</span>"
+        account_owner: Account Owner
         ordered:
           at: "Ordered At"
           for: "Ordered For"
@@ -490,7 +490,7 @@ en:
           resolve: "Resolution Notes"
         resolved: "Resolved At"
         reconcile: "Reconciliation Note:"
-        with_cancel_fee: Add reservation cost
+        with_cancel_fee: Add reservation fee
         updating: Calculating Price
         unreconcile: Unreconcile
       instruct:
@@ -578,7 +578,7 @@ en:
     delete:
       confirm: Are you sure you wish to cancel this reservation?
       confirm_with_fee: "Canceling this reservation will incur a %{fee} fee.  Are you sure you wish to cancel this reservation?"
-      confirm_with_full_price: Canceling this reservation incur the full reservation cost of %{fee}. Are you sure you wish to cancel this reservation?
+      confirm_with_full_price: Canceling this reservation incur the full reservation fee of %{fee}. Are you sure you wish to cancel this reservation?
       link: Cancel
     finished: Reservation Ended
     moving_up:
@@ -1128,7 +1128,7 @@ en:
           reserve_interval: "The minutes of an hour on which a reservation is allowed to begin (e.g. if 5 reservations can be scheduled every 5 minutes)"
           min_reserve: "Minimum amount of time for a reservation (optional; must be a multiple of the reservation interval)"
           max_reserve: "Maximum amount of time for a reservation (optional)"
-          cancel_hours: "Minimum length of time before a reservation begins that a user may cancel a reservation without invoking the reservation cost"
+          cancel_hours: "The number of hours before a reservation begins that marks the start of the Reservation Fee Window. Cancelations after the Reservation Fee Window has started will be charged a reservation fee. When blank or set to 0, no reservation fees will be charged."
           auto_cancel: |
             The number of minutes the system will wait before automatically
             canceling an unstarted reservation.
@@ -1141,7 +1141,7 @@ en:
           reserve_interval: "Interval (minutes)"
           min_reserve: "Minimum (minutes)"
           max_reserve: "Maximum (minutes)"
-          cancel_hours: "Cancelation Minimum (hours)"
+          cancel_hours: "Reservation Fee Window (hours)"
           auto_cancel: "Automatic Cancelation (minutes)"
           lock_window: "Reservation Lock Window (hours)"
           cutoff_hours: "Cutoff Time (hours)"
