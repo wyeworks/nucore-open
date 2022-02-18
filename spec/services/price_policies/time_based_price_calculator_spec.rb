@@ -84,13 +84,13 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
       describe "with no discount" do
         let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) } # Thursday
         let(:end_at) { start_at + 13.minutes }
-        it { is_expected.to eq(cost: 6.71666671, subsidy: 3.6829) }
+        it { is_expected.to eq(cost: 6.71666671, subsidy: 3.68333329) }
       end
 
       describe "with the weekend discount of 25%" do
         let(:start_at) { Time.zone.local(2017, 4, 29, 12, 0) } # Saturday
         let(:end_at) { start_at + 13.minutes }
-        it { is_expected.to eq(cost: 5.0375000325, subsidy: 2.762175) }
+        it { is_expected.to eq(cost: 5.0375000325, subsidy: 2.7624999675) }
       end
     end
 
@@ -102,12 +102,12 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
 
         describe "when you are below the minimum" do
           let(:end_at) { start_at + 29.minutes }
-          it { is_expected.to eq(cost: 30, subsidy: 5.001) }
+          it { is_expected.to eq(cost: 30, subsidy: 5.0000001) }
         end
 
         describe "when you are above the minimum" do
           let(:end_at) { start_at + 31.minutes }
-          it { is_expected.to eq(cost: 31, subsidy: 5.1677) }
+          it { is_expected.to eq(cost: 31, subsidy: 5.16666677) }
         end
       end
 

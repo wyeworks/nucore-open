@@ -78,7 +78,7 @@ RSpec.describe InstrumentPricePolicy do
       policy.usage_rate = 50
       policy.usage_subsidy = 5
       expect(policy.save).to be true
-      expect(policy.reload.usage_subsidy).to eq (5 / 60.0).round(4)
+      expect(policy.reload.usage_subsidy).to eq (5 / 60.0).round(8)
     end
 
     it "does not set the usage subsidy before save if there is no usage_rate" do
