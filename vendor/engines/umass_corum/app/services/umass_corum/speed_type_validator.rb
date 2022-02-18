@@ -10,9 +10,11 @@ module UmassCorum
       @speed_type = speed_type
     end
 
-    def account_suspended?
-      UmassCorum::SpeedTypeAccount.where(account_number: speed_type)
-                                  .where.not(suspended_at: nil).present?
+    def account_suspended_at?(fulfilled_at)
+      suspended_account = UmassCorum::SpeedTypeAccount.where(account_number: speed_type)
+                                                       .where.not(suspended_at: nil)
+                                                       .first
+      suspended_account.present? && fulfilled_at > suspended_account.suspended_at
     end
 
     def valid_at?(datetime)
@@ -34,7 +36,7 @@ module UmassCorum
       # been fetched as part of account creation.
       raise ValidatorError, "Corum is unaware of this account. It should have been fetched from the API" unless api_account
 
-      raise ValidatorError, "This account is suspended" if account_suspended?
+      raise ValidatorError, "This account is suspended" if account_suspended_at?(fulfilled_at)
 
       unless valid_at?(fulfilled_at)
         error = api_account.error_desc.presence || "Was not legal at the time of fulfillment"
