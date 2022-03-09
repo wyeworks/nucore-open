@@ -17,7 +17,7 @@ development:
 
 test:
   <<: *defaults
-  username: "c##nucore_nu_test"
+  username: "c##nucore_nu_test<%= ENV['TEST_ENV_NUMBER'] %>"
 
 staging:
   <<: *defaults

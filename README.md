@@ -237,13 +237,18 @@ You can run specs in parallel during local development using the [`parallel_test
     rake parallel:spec
     ```
 
-* Example RegEx patterns (ZSH users may require putting rake task in quotes to support args):
+* Example RegEx patterns:
 
 	```
     rake parallel:spec[^spec/requests] # every spec file in spec/requests folder
     rake parallel:spec[user]  # run users_controller + user_helper + user specs
     rake parallel:spec['user|instrument']  # run user and product related specs
     rake parallel:spec['spec\/(?!features)'] # run RSpec tests except the tests in spec/features
+    ```
+* ZSH users may need to run it with the brackets escaped, like this:
+
+    ```
+      bundle exec rake parallel:spec\['spec\/(?!features)'\]
     ```
 
 ## Optional Modules

@@ -11,7 +11,7 @@ class OrderStatus < ApplicationRecord
   validates_uniqueness_of :name, scope: [:parent_id, :facility_id], case_sensitive: false
   validates_each :parent_id do |model, attr, value|
     begin
-      model.errors.add(attr, "must be a root") unless value.nil? || OrderStatus.find(value).root?
+      model.errors.add(attr, "must be a root") unless value.nil? || OrderStatus.unscoped.find(value).root?
     rescue => e
       model.errors.add(attr, "must be a valid root")
     end

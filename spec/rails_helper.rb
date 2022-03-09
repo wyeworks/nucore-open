@@ -30,8 +30,11 @@ RSpec.configure do |config|
   config.before(:each, type: :system, js: true) do
     if ENV["DOCKER"]
       Capybara.register_driver :selenium_remote do |app|
-        Capybara::Selenium::Driver.new(app,
-                                       { url: "http://chrome:4444/wd/hub", browser: :remote, desired_capabilities: :chrome })
+        options = { url: "http://chrome:4444/wd/hub",
+                    browser: :chrome,
+                    capabilities: [:chrome]
+                  }
+        Capybara::Selenium::Driver.new(app, options)
       end
 
       driven_by(:selenium_remote)
@@ -40,7 +43,17 @@ RSpec.configure do |config|
       ip = Socket.ip_address_list.detect(&:ipv4_private?).ip_address
       Capybara.app_host = "http://#{ip}:4000"
     else
-      driven_by :selenium, using: :headless_chrome, screen_size: [1366, 768]
+      Capybara.register_driver(:headless_chrome) do |app|
+        options = Selenium::WebDriver::Chrome::Options.new
+        options.add_argument("--no-sandbox")
+        options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--window-size=1366,768")
+        Capybara::Selenium::Driver.new(app,
+                                       browser: :chrome,
+                                       capabilities: [options])
+      end
+      driven_by :headless_chrome
     end
   end
 
