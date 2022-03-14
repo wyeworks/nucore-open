@@ -37,8 +37,12 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
     context "when the account is suspended" do
       before { create(:speed_type_account, :with_account_owner, account_number: speed_type, suspended_at: 1.week.ago) }
 
-      it "raises an error" do
+      it "raises a suspended account error error if the fulfillment date is after suspended_at" do
         expect { validator.account_is_open! }.to raise_error(ValidatorError, /suspended/)
+      end
+
+      it "does not raise a suspended account error if the fulfillment date is before suspended_at" do
+        expect(validator.account_is_open!(3.months.ago)).to be_truthy
       end
     end
   end
@@ -57,8 +61,12 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
     context "when the account is suspended" do
       before { create(:speed_type_account, :with_account_owner, account_number: speed_type, suspended_at: 1.week.ago) }
 
-      it "raises an error" do
+      it "raises a suspended account error error if the fulfillment date is after suspended_at" do
         expect { validator.account_is_open! }.to raise_error(ValidatorError, /suspended/)
+      end
+
+      it "does not raise a suspended account error if the fulfillment date is before suspended_at" do
+        expect { validator.account_is_open!(2.months.ago) }.to raise_error(ValidatorError, /not legal at the time of fulfillment/)
       end
     end
   end

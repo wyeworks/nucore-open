@@ -38,7 +38,7 @@
                 %strong= "= #{number_to_currency price_policy.subsidized_hourly_usage_cost}"
 
               %p.per-minute-show
-                - price_per_minute = (price_policy.subsidized_hourly_usage_cost / 60).truncate(4)
+                - price_per_minute = (price_policy.subsidized_hourly_usage_cost / 60)
                 = number_to_currency price_per_minute, precision: 4
                 \/ minute
 

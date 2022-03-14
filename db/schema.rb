@@ -488,7 +488,7 @@ ActiveRecord::Schema.define(version: 2022_03_03_214507) do
     t.decimal "usage_rate", precision: 16, scale: 8
     t.decimal "minimum_cost", precision: 10, scale: 2
     t.decimal "cancellation_cost", precision: 10, scale: 2
-    t.decimal "usage_subsidy", precision: 12, scale: 4
+    t.decimal "usage_subsidy", precision: 16, scale: 8
     t.datetime "expire_date", null: false
     t.string "charge_for"
     t.string "legacy_rates"
