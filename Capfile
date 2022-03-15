@@ -16,5 +16,9 @@ require "whenever/capistrano"
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
 
+# Only keep the 3 most recent asset versions
+# See https://github.com/capistrano/rails#usage
+set :keep_assets, 3
+
 require "capistrano/scm/git"
 install_plugin Capistrano::SCM::Git

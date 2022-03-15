@@ -131,7 +131,7 @@ class ReservationUserActionPresenter
   end
 
   def report_an_issue_link
-    link_to(I18n.t("views.instrument_issues.new.title"), new_facility_instrument_issue_path(facility, product))
+    link_to(I18n.t("views.instrument_issues.new.title"), new_facility_order_order_detail_issue_path(facility, order, order_detail))
   end
 
   def fix_problem_link

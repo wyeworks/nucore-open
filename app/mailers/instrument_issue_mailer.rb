@@ -2,10 +2,13 @@
 
 class InstrumentIssueMailer < ApplicationMailer
 
-  def create(product:, user:, message:, recipients:)
+  def create(product:, user:, order_detail:, message:, recipients:)
     @product = product
     @user = user
     @message = message
+    @order_detail = order_detail
+    @order_number = @order_detail.order_number
+    @order_detail_link = manage_facility_order_order_detail_url(@order_detail.facility, @order_detail.order, @order_detail)
     mail(to: recipients, subject: text("create.subject", product: product))
   end
 

@@ -15,6 +15,8 @@ en:
           %{user} (<%{email}>) has reported an issue with the **%{product}** at the
           %{facility}.
 
+          Order [%{order_number}](%{order_detail_link})
+
           They said:
 
   controllers:
