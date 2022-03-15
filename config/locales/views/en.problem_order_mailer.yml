@@ -2,7 +2,7 @@ en:
   views:
     problem_order_mailer:
       notify_user:
-        subject: "!app_name! Problem Order Alert"
+        subject: "!app_name! - Your order requires additional information"
         body: |
           Hello %{user},
 

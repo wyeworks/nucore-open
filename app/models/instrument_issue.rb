@@ -4,11 +4,12 @@ class InstrumentIssue
 
   include ActiveModel::Model
 
-  attr_accessor :message, :user, :product
+  attr_accessor :message, :user, :product, :order_detail
 
   validates :message, presence: true
   validates :user, presence: true
   validates :product, presence: true
+  validates :order_detail, presence: true
 
   def send_notification
     return false unless valid?
@@ -17,6 +18,7 @@ class InstrumentIssue
       product: product,
       user: user,
       message: message,
+      order_detail: order_detail,
       recipients: recipients.to_a,
     ).deliver_later
   end

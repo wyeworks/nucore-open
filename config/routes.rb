@@ -95,7 +95,6 @@ Rails.application.routes.draw do
       get "public_schedule", to: "instruments#public_schedule"
       get "schedule",        to: "instruments#schedule"
       get "switch",          to: "instruments#switch"
-      resources :issues, only: [:new, :create], controller: "instrument_issues"
 
       put "bring_online", to: "offline_reservations#bring_online"
       resources :offline_reservations, only: [:new, :create, :edit, :update]
@@ -203,6 +202,8 @@ Rails.application.routes.draw do
       end
 
       resources :order_details, controller: "facility_order_details", only: [:show, :destroy] do
+        resources :issues, only: [:new, :create], controller: "instrument_issues"
+
         resources :reservations, controller: "facility_reservations", only: [:edit, :update, :show]
         resources :accessories, only: [:new, :create]
         resource :reconcilliation, only: [:destroy]

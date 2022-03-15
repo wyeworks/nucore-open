@@ -8,6 +8,7 @@ class InstrumentIssueMailerPreview < ActionMailer::Preview
       product: reservation.product,
       user: reservation.user,
       message: "I am having a problem with the #{reservation.product}.\n\nPlease help!",
+      order_detail: reservation.order_detail,
       recipients: InstrumentIssue.new(product: reservation.product).recipients,
     )
   end

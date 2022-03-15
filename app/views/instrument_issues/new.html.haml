@@ -18,6 +18,7 @@
 
 .row
   .span6
-    = simple_form_for([current_facility, @instrument_issue]) do |f|
+    - url = facility_order_order_detail_issues_path(current_facility, @order_detail.order, @order_detail)
+    = simple_form_for @instrument_issue, url: url, method: :post do |f|
       = f.input :message, as: :text, input_html: { class: "input-xxlarge", rows: 6 }
       = f.submit text("submit"), class: "btn btn-primary"

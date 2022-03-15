@@ -11,7 +11,16 @@ RSpec.describe InstrumentIssue do
   end
 
   describe "send_notification", active_job: :test do
-    let(:valid_issue) { described_class.new(user: create(:user), product: create(:setup_instrument), message: "Hello") }
+    let(:valid_issue) do 
+      user = create(:user)
+      product = create(:setup_instrument)
+
+      account = create(:setup_account, owner: user)
+      order = create(:order, account: account, created_by_user: user, user: user)
+      order_detail = create(:order_detail, order: order, product: product)
+
+      described_class.new(user: create(:user), product: product, order_detail: order_detail, message: "Hello") 
+    end
 
     it "returns a truthy value" do
       expect(valid_issue.send_notification).to be_truthy
