@@ -13,7 +13,7 @@ module UmassCorum
     end
 
     def self.permitted_params
-      super + [:no_netid, :phone_number]
+      super + [:no_netid, :phone_number, :subsidiary_account]
     end
 
     def assign_attributes(params)

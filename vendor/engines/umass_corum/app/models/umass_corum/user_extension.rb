@@ -7,7 +7,7 @@ module UmassCorum
     extend ActiveSupport::Concern
   
     included do
-      validates :umass_emplid, uniqueness: { allow_blank: true, case_sensitive: true }
+      validates :umass_emplid, uniqueness: { allow_blank: true, case_sensitive: true, on: :create, unless: :subsidiary_account? }
     end
 
   end
