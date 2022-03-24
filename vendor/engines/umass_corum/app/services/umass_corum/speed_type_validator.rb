@@ -34,13 +34,13 @@ module UmassCorum
     def account_is_open!(fulfilled_at = Time.current)
       # This error should never appear in practice as the Api model should have
       # been fetched as part of account creation.
-      raise ValidatorError, "Corum is unaware of this account. It should have been fetched from the API" unless api_account
+      raise AccountValidator::ValidatorError, "Corum is unaware of this account. It should have been fetched from the API" unless api_account
 
-      raise ValidatorError, "This account is suspended" if account_suspended_at?(fulfilled_at)
+      raise AccountValidator::ValidatorError, "This account is suspended" if account_suspended_at?(fulfilled_at)
 
       unless valid_at?(fulfilled_at)
         error = api_account.error_desc.presence || "Was not legal at the time of fulfillment"
-        raise ValidatorError, error
+        raise AccountValidator::ValidatorError, error
       end
 
       true
