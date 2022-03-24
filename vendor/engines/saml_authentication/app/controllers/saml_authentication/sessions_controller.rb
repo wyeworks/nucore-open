@@ -7,6 +7,16 @@ module SamlAuthentication
     before_action :store_logging_out_username, only: :destroy
     after_action :store_winning_strategy, only: :create
 
+    # See https://github.com/apokalipto/devise_saml_authenticatable/issues/181#issuecomment-696904192
+    rescue_from ActiveRecord::RecordInvalid, with: :handle_validation_error
+
+    def handle_validation_error(exception)
+      ::Rails.logger.warn "There was an error trying to log in the SAML user '#{exception}'"
+
+      flash[:alert] = I18n.t("devise.failure.saml_update_failed").html_safe
+      redirect_to new_user_session_path
+    end
+
     # Overrides SamlSessionsController.
     #
     # The default behavior for IdP-initiated signout uses a database-backed

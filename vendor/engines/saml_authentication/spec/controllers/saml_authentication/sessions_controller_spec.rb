@@ -168,6 +168,26 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
         expect { post :create, params: { SAMLResponse: saml_response } }.to change { user.reload.encrypted_password }.to(nil)
       end
     end
+
+    describe "the netid user already exists and validation fails" do
+      let!(:external_user) { create(:user, :external, email: "sst123@example.com", username: "sst123@example.com") }
+      let!(:user) { create(:user, :netid, username: "sst123", email: "something@old.com") }
+
+      it "does not log in the user" do
+        post :create, params: { SAMLResponse: saml_response }
+        expect(controller.current_user).to be_blank
+      end
+
+      it "sets a user-friendly error message in the flash" do
+        post :create, params: { SAMLResponse: saml_response }
+        expect(flash[:alert]).to eq(I18n.t("devise.failure.saml_update_failed"))
+      end
+
+      it "marks the message in :saml_update_failed as html_safe to allow including links" do
+        post :create, params: { SAMLResponse: saml_response }
+        expect(flash[:alert].html_safe?).to be true
+      end
+    end
   end
 
   describe "#destroy" do
