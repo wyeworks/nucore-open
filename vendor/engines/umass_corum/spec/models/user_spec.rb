@@ -23,4 +23,11 @@ RSpec.describe User do
     standard_user.email = "admin@nucore.org"
     expect(standard_user).to be_valid
   end
+
+  it "requires unique umass_emplid on update for standard user" do
+    create(:user, umass_emplid: "id_2")
+    standard_user = create(:user, umass_emplid: nil, subsidiary_account: false)
+    standard_user.umass_emplid = "id_2"
+    expect(standard_user).not_to be_valid
+  end
 end
