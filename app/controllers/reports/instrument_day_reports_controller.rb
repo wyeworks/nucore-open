@@ -9,7 +9,7 @@ module Reports
     helper_method :report_data_row
 
     def self.reports
-      @reports ||= HashWithIndifferentAccess.new(
+      @reports ||= ActiveSupport::HashWithIndifferentAccess.new(
         reserved_quantity: ->(res) { Reports::InstrumentDayReport::ReservedQuantity.new(res) },
         reserved_hours: ->(res) { Reports::InstrumentDayReport::ReservedHours.new(res) },
         actual_quantity: ->(res) { Reports::InstrumentDayReport::ActualQuantity.new(res) },

@@ -50,13 +50,13 @@ processes:
         rotate: "kill -USR1 {PID}"
 
   # This should only run on 1 instance.
-  # See run_auto_cancel in secrets.yml
-  - name: auto_cancel
+  <% if ENV["RECURRING"] == "true" %>
+  - name: recurring_tasks
     config:
-      start_command: ruby lib/daemons/auto_cancel.rb start -- --no-monitor
-      stop_command: ruby lib/daemons/auto_cancel.rb stop
-      stdall: log/auto_cancel.log
-      pid_file: tmp/pids/auto_cancel.pid
+      start_command: ruby lib/daemons/recurring_tasks.rb start -- --no-monitor
+      stop_command: ruby lib/daemons/recurring_tasks.rb stop
+      stdall: log/recurring_tasks.log
+      pid_file: tmp/pids/recurring_tasks.pid
       daemon: true
       smart_pid: true
       notify:
@@ -67,6 +67,7 @@ processes:
           times: 3
           every: 20 seconds
           below: 256 megabytes
+  <% end %>
 
   - name: delayed_job
     config:

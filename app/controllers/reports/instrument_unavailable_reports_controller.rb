@@ -7,7 +7,7 @@ module Reports
     helper_method(:export_csv_report_path)
 
     def self.reports
-      @reports ||= HashWithIndifferentAccess.new(instrument_unavailable: :type)
+      @reports ||= ActiveSupport::HashWithIndifferentAccess.new(instrument_unavailable: :type)
     end
 
     def export_csv_report_path

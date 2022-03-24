@@ -176,8 +176,8 @@ RSpec.describe AccountUser do
     end
 
     it "will still create the purchaser if the account is invalid per the validator" do
-      allow_any_instance_of(ValidatorFactory.validator_class)
-        .to receive(:account_is_open!).and_raise(ValidatorError)
+      allow_any_instance_of(AccountValidator::ValidatorFactory.validator_class)
+        .to receive(:account_is_open!).and_raise(AccountValidator::ValidatorError)
 
       result = described_class.grant(new_purchaser, AccountUser::ACCOUNT_PURCHASER, account, by: account_manager)
       expect(result).to be_persisted

@@ -11,10 +11,10 @@ class NufsAccount < Account
   after_find :load_components
 
   def set_expires_at
-    self.expires_at = ValidatorFactory.instance(account_number).latest_expiration
+    self.expires_at = AccountValidator::ValidatorFactory.instance(account_number).latest_expiration
     # If this Validator instance has an error, suppress it. The errors
     # will be handled later.
-  rescue ValidatorError, AccountNumberFormatError
+  rescue AccountValidator::ValidatorError, AccountValidator::AccountNumberFormatError
     # Suppress the "Expiration cannot be blank" error if it's invalid for
     # some other reason
     self.expires_at ||= Time.current
@@ -22,8 +22,8 @@ class NufsAccount < Account
 
   def account_open?(account_num)
     begin
-      ValidatorFactory.instance(account_number, account_num).account_is_open!
-    rescue ValidatorError
+      AccountValidator::ValidatorFactory.instance(account_number, account_num).account_is_open!
+    rescue AccountValidator::ValidatorError
       return false
     end
 
@@ -37,7 +37,7 @@ class NufsAccount < Account
   # [_return_]
   #   The Validator from which the components were retrieved
   def load_components
-    validator = ValidatorFactory.instance(account_number, Settings.accounts.product_default)
+    validator = AccountValidator::ValidatorFactory.instance(account_number, Settings.accounts.product_default)
     @components = validator.components
 
     @components.each do |k, v|
@@ -46,11 +46,11 @@ class NufsAccount < Account
     end
 
     validator
-  rescue AccountNumberFormatError => e
+  rescue AccountValidator::AccountNumberFormatError => e
     raise e
   rescue => e
     Rails.logger.error "#{e.message}\n#{e.backtrace.join("\n")}"
-    raise ValidatorError.new(e)
+    raise AccountValidator::ValidatorError.new(e)
   end
 
   private
@@ -58,17 +58,17 @@ class NufsAccount < Account
   def validate_account_number
     begin
       validator = load_components
-    rescue AccountNumberFormatError => e
+    rescue AccountValidator::AccountNumberFormatError => e
       e.apply_to_model(self)
       return
-    rescue ValidatorError => e
+    rescue AccountValidator::ValidatorError => e
       errors.add(:account_number, e.message)
       return
     end
 
     begin
       validator.account_is_open!
-    rescue ValidatorError => e
+    rescue AccountValidator::ValidatorError => e
       msg = e.message
       msg = "not found, is inactive, or is invalid" if msg.blank?
       errors.add(:account_number, msg)

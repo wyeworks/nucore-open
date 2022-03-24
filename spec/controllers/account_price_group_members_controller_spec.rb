@@ -136,7 +136,7 @@ RSpec.describe AccountPriceGroupMembersController do
 
   context "search_results" do
     # Ignore validation errors, e.g. number format
-    before { allow(ValidatorFactory).to receive(:instance).and_return(ValidatorDefault.new) }
+    before { allow(AccountValidator::ValidatorFactory).to receive(:instance).and_return(AccountValidator::ValidatorDefault.new) }
 
     let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, account_number: "TESTING123") }
 

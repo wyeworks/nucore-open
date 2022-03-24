@@ -14,6 +14,8 @@ module C2po
   class Engine < Rails::Engine
 
     config.autoload_paths << File.join(File.dirname(__FILE__), "../lib")
+    config.eager_load_paths << File.join(File.dirname(__FILE__), "../lib")
+
 
     config.to_prepare do
       # Include extensions
@@ -39,7 +41,7 @@ module C2po
 
     initializer :append_account_types, before: "set_routes_reloader_hook" do |app|
       C2PO_ACCOUNT_TYPES_APPENDER.call
-      app.reloader.to_run(&C2PO_ACCOUNT_TYPES_APPENDER)
+      app.reloader.to_prepare(&C2PO_ACCOUNT_TYPES_APPENDER)
     end
 
     initializer "model_core.factories", after: "factory_girl.set_factory_paths" do

@@ -32,7 +32,7 @@ class NufsAccountBuilder < AccountBuilder
     account.load_components
   rescue AccountNumberFormatError
     # do nothing
-  rescue ValidatorError => e
+  rescue AccountValidator::ValidatorError => e
     account.errors.add(:base, e.message)
   end
 

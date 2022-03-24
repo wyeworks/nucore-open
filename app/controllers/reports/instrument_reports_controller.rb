@@ -9,7 +9,7 @@ module Reports
     include InstrumentReporter
 
     def self.reports
-      @reports ||= HashWithIndifferentAccess.new(
+      @reports ||= ActiveSupport::HashWithIndifferentAccess.new(
         instrument: nil,
         account: ->(reservation) { reservation.order_detail.account },
         account_owner: ->(reservation) { format_username(reservation.order_detail.account.owner_user) },

@@ -1,10 +1,10 @@
 defaults: &defaults
   adapter: oracle_enhanced
-  database: //<%= ENV.fetch("ORACLE_HOST", "localhost") %>:<%= ENV.fetch("ORACLE_PORT", 1521) %>/<%= ENV.fetch("ORACLE_SERVICE_NAME", "ORCLCDB.localdomain") %>
+  database: //<%= ENV.fetch("ORACLE_HOST", "localhost") %>:<%= ENV.fetch("ORACLE_PORT", 1521) %>/<%= ENV.fetch("ORACLE_SERVICE_NAME", "ORCLCDB") %>
   # Alternative format:
-  # database: (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORCLCDB.localdomain)))
+  # database: (DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORCLCDB)))
   encoding: utf8
-  password: <%= ENV.fetch("ORACLE_PASSWORD", "password") %>
+  password: <%= ENV.fetch("ORACLE_PASSWORD", "Oradoc_db1") %>
   # This value must be less than the Oracle parameter of `open_cursors`. The default in
   # the adapter is 1000. The docker image we use has a default of 300. At NU, stage
   # has 300 and production has 500.

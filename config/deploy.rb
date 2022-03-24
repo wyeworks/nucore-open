@@ -21,3 +21,13 @@ after "deploy:updated", :symlink_uploads do
     execute "ln -nfs #{shared_path}/uploads #{release_path}/public/uploads"
   end
 end
+
+namespace :eye do
+  task :set_recurring_tasks do
+    on roles :db do |host|
+      set :eye_env, -> { { rails_env: fetch(:rails_env), recurring: true } }
+    end
+  end
+end
+
+before "eye:load_config", "eye:set_recurring_tasks"

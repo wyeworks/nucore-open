@@ -310,8 +310,8 @@ en:
         can_purchase: Can Purchase?
         minimum_cost: Minimum Cost
         hourly_usage_rate: Rate Per Hour
-        cancellation_cost: Reservation Fee
-        full_price_cancellation: Full reservation fee
+        cancellation_cost: Reservation Cost
+        full_price_cancellation: Full reservation cost
         unit_cost: Unit Cost
         unit_adjustment: Unit Adjustment
         unit_net_cost: Unit Net Cost

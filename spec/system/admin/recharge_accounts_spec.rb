@@ -10,7 +10,7 @@ RSpec.describe "Managing recharge accounts (FacilityFacilityAccountsController)"
 
   # This will run only in schools who have not overridden their validator with a
   # custom one. If it's custom, then the school should write their own feature spec.
-  it "can create a recharge account", if: ValidatorFactory.validator_class == ::ValidatorDefault do
+  it "can create a recharge account", if: AccountValidator::ValidatorFactory.validator_class == AccountValidator::ValidatorDefault do
     login_as director
     visit manage_facility_path(facility)
 

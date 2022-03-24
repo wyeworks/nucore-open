@@ -47,7 +47,7 @@ class FacilityJournalsController < ApplicationController
       @action_date_field = { journal_date: @earliest_journal_date }
     end
 
-    @valid_order_details, @invalid_order_details = ValidatorFactory.partition_valid_order_details(@order_details.unexpired_account)
+    @valid_order_details, @invalid_order_details = AccountValidator::ValidatorFactory.partition_valid_order_details(@order_details.unexpired_account)
     @invalid_order_details += @order_details.expired_account
     @invalid_order_details = @invalid_order_details.sort_by(&:fulfilled_at)
 

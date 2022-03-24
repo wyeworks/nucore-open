@@ -412,13 +412,6 @@ Rails.application.routes.draw do
   put   "/#{I18n.t('facilities_downcase')}/:facility_id/services/:service_id/surveys/:external_service_passer_id/deactivate", to: "surveys#deactivate",               as: "deactivate_survey"
   match "/#{I18n.t('facilities_downcase')}/:facility_id/services/:service_id/surveys/:external_service_id/complete", to: "surveys#complete", as: "complete_survey", via: [:get, :post]
 
-  namespace :admin do
-    namespace :services do
-      post "process_one_minute_tasks"
-      post "process_five_minute_tasks"
-    end
-  end
-
   # api
   namespace :api do
     resources :order_details, only: [:show, :index]
