@@ -5,7 +5,7 @@
 
     = of.input :actual_duration_mins, input_html: { class: "timeinput", data: { allow_init_blank: true } }, error: false
 
-    = of.input :exit_at, as: :time_dropdown, error: false
+    = of.input :exit_at, as: :time_dropdown, error: false, wrapper_html: { class: "datetime-block" }
 
 :coffeescript
   $ ->

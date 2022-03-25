@@ -4,7 +4,15 @@ Follow these instructions to set up the Oracle database to run in Docker, but th
 
 ## Setting up the Oracle Server with Docker
 
-### Set up Docker and Docker Hub
+### Set up Docker and Oracle Container Registry (for 19c)
+
+1. Install Docker for Mac by running `brew cask install docker`
+1. Sign up for an Oracle account at <https://container-registry.oracle.com/>. If you already have an Oracle account, you can skip this step and use your existing account.
+1. Select "Database" from the list of containers, then select the enterprise repository.  **This page also includes some good general documentation.**
+1. On the right hand side select your language and agree to the terms and services.
+1. In your terminal, make sure that docker is logged in with your Oracle credentials by running `docker login container-registry.oracle.com`.
+
+### Set up Docker and Docker Hub (for 12c)
 
 1. Install Docker for Mac by running `brew cask install docker`
 1. Sign up for a Docker Hub account at https://hub.docker.com/. If you already have a Docker Hub account, you can skip this step and use your existing account.
@@ -17,9 +25,11 @@ You can run Oracle via docker-compose service.  Here is an example of how you mi
 
 ```yaml
 # docker-compose.yaml
+
 services:
   db:
-    image: store/oracle/database-enterprise:12.2.0.1
+    image: container-registry.oracle.com/database/enterprise:19.3.0.0
+
     ports:
       - "1521:1521"
     volumes:
@@ -63,7 +73,7 @@ docker run \
   --publish 1521:1521 \
   --tty \
   --volume oracle:/ORCL \
-  store/oracle/database-enterprise:12.2.0.1
+  container-registry.oracle.com/database/enterprise:19.3.0.0
 ```
 
 When you no longer need the database, in another terminal tab run:
@@ -108,17 +118,18 @@ export NLS_LANG="AMERICAN_AMERICA.UTF8"
 
 ### Test Your Installation
 
-To connect to the Oracle server, run:
+To connect to the Oracle server from within the `db` docker service, run:
 
-```
-sqlplus "sys/Oradoc_db1@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORCLCDB.localdomain)))" as sysdba
+```sql
+sqlplus "sys/Oradoc_db1@(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=localhost)(PORT=1521))(CONNECT_DATA=(SERVER=DEDICATED)(SERVICE_NAME=ORCLCDB)))" as sysdba
 ```
 
 Your output should show something like this:
 
 ```
 Connected to:
-Oracle Database 12c Enterprise Edition Release 12.2.0.1.0 - 64bit Production
+Oracle Database 19c Enterprise Edition Release 19.0.0.0.0 - Production
+Version 19.3.0.0.0
 
 SQL>
 ```
@@ -129,6 +140,54 @@ SQL>
 1. Copy the Oracle template for `database.yml` by running `cp config/database.yml.oracle.template config/database.yml`.
 1. Run `bundle exec rake db:setup`.
 1. Optionally, run `bundle exec rake demo:seed` if you want to populate the database with demo data.
+
+## Some additional notes on database setup
+
+### Oracle error messages
+Oracle error messages are often not very helpful.  For example, if you try to run `rails console` before `bundle exec rake db:setup`, you will see an error related to invalid username/password when attempting to make a query:
+
+```bash
+Loading development environment (Rails 6.0.4.4)
+[1]nucore-nu(main)> User.count
+OCIError: ORA-01017: invalid username/password; logon denied
+from oci8.c:603:in oci8lib_260.bundle
+```
+
+The solution here is to run `rake db:setup`, nothing to do with username/password.
+
+### Oracle image setup issues
+The Oracle image can take a long time to download and initialize the first time (40+ minutes) and it also requires a lot of memory (8GB).  The logging from the oracle container is quite noisy, and error messages there usually do not indicate an actual problem.  If you encounter multiple unhelpful errors and all else fails, sometimes removing the image and starting over resolves the issue.
+
+### Oracle database usernames
+Oracle does not allow the use of "-" in database usernames.  Check your username config in `databse.yml` if you see the the following:
+OCIError: ORA-00922: missing or invalid option
+Couldn't create '//localhost:1521/ORCLCDB' database. Please check your configuration.
+
+## Debugging expiring passwords
+
+You may see an error like this when starting up the rails console:
+`OCIError: ORA-28001: the password has expired`
+
+Or when logging into sqlplus with sys user:
+`ERROR: ORA-28002: the password will expire within 7 days`
+
+Following https://blogs.oracle.com/sql/how-to-fix-ora-28002-the-password-will-expire-in-7-days-errors
+
+... update the default user profile so that passwords don't need to be updated:
+```sql
+  alter profile "DEFAULT" limit
+    password_life_time unlimited;
+
+```
+... then update the passwords for users you need to use for development:
+
+`alter user <username> identified by <password>;`
+
+```sql
+  alter user sys identified by Oradoc_db1;
+  alter user c##nucore_nu_development identified by password;
+  alter user c##nucore_nu_test identified by password;
+```
 
 # Optional Extras
 

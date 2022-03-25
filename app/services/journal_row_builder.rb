@@ -126,8 +126,8 @@ class JournalRowBuilder
   def validate_account(order_detail)
     account = order_detail.account
     begin
-      ValidatorFactory.instance(account.account_number, order_detail.product.account).account_is_open!(order_detail.fulfilled_at)
-    rescue ValidatorError => e
+      AccountValidator::ValidatorFactory.instance(account.account_number, order_detail.product.account).account_is_open!(order_detail.fulfilled_at)
+    rescue AccountValidator::ValidatorError => e
       @errors << I18n.t(
         "activerecord.errors.models.journal.invalid_account",
         account_number: account.account_number_to_s,

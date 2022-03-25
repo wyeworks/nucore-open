@@ -7,7 +7,7 @@ RSpec.describe AccountPriceGroupMembersController do
 
   describe "search_results" do
     # Ignore validation errors, e.g. number format
-    before { allow(ValidatorFactory).to receive(:instance).and_return(ValidatorDefault.new) }
+    before { allow(AccountValidator::ValidatorFactory).to receive(:instance).and_return(AccountValidator::ValidatorDefault.new) }
 
     let(:price_group) { create(:price_group, facility: facility) }
     let!(:global_account) { create(:nufs_account, :with_account_owner, account_number: "TESTING123") }

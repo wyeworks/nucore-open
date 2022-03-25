@@ -11,6 +11,12 @@ line is enabled in `Gemfile`.
 ## SecureRoom API
 The door security hardware communicates through an API with the following endpoints:
 
+For more info on the supporting elixir apps:
+https://github.com/tablexi/nucore-rooms/blob/develop/README.md
+
+For more info on the mobile app which serves the elixir apps on tablets:
+https://github.com/tablexi/nucore-rooms-mobile/blob/develop/README.md
+
 #### Testing
 
 To test these URLs without access to the door hardware: Use the following command, updating identifiers and URL as necessary:

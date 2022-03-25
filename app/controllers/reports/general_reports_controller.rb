@@ -9,7 +9,7 @@ module Reports
     include StatusFilterParams
 
     def self.reports
-      @reports ||= HashWithIndifferentAccess.new(
+      @reports ||= ActiveSupport::HashWithIndifferentAccess.new(
         product: :product,
         account: :account,
         account_owner: lambda do |od|

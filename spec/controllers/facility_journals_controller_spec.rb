@@ -331,10 +331,10 @@ RSpec.describe FacilityJournalsController do
         before(:each) do
           @params[:order_detail_ids] = [@order_detail.id]
 
-          expect_any_instance_of(ValidatorFactory.validator_class)
+          expect_any_instance_of(AccountValidator::ValidatorFactory.validator_class)
             .to receive(:account_is_open!)
             .with(fulfilled_at)
-            .and_raise(ValidatorError, "Not open")
+            .and_raise(AccountValidator::ValidatorError, "Not open")
         end
 
         it_behaves_like "journal error", "is invalid. Not open"

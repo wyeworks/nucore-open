@@ -4,6 +4,13 @@ Because we use squash and merge, you should be able to see the changes by lookin
 at the [commit log](https://github.com/tablexi/nucore-open/commits/master). However, we have begun keeping track of breaking changes
 or optional rake tasks.
 
+### Rename `auto_cancel` daemon to `recurring_tasks` and consolidate recurring tasks there ([#2957](https://github.com/tablexi/nucore-open/pull/2957))
+
+The `recurring_tasks` process should only run on one server per environment.  This is managed via `eye` now.  If you user another deployment process and have multiple servers running in production, you will need to ensure this daemon only runs on one server.  Setting`run_auto_cancel: false` in `secrets.yml` will no longer have an impact.  The list of recurring jobs is listed in `RecurringTaskConfig`.  You can add or remove items from the list from your school-specific engine like so:
+```ruby
+RecurringTaskConfig.recurring_tasks << [SecureRooms::AutoOrphanOccupancy, :perform, 5]
+```
+
 ### Configure `auto_cancel` process via `secrets.yml` ([#2544](https://github.com/tablexi/nucore-open/pull/2544))
 
 The `auto_cancel` process should only run on one server per environment.  If you have multiple servers running in production, set`run_auto_cancel: false` in `secrets.yml` on all but one production server.

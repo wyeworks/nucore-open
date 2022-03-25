@@ -39,7 +39,7 @@ class FacilityAccount < ApplicationRecord
     super # we must call super! Not doing so makes ruby 1.9.2 die a hard death
   rescue NoMethodError => e
     raise e unless account_number
-    validator = ValidatorFactory.instance(account_number)
+    validator = AccountValidator::ValidatorFactory.instance(account_number)
     raise e unless validator.components.key?(method_sym)
     validator.send(method_sym, *arguments)
   end
@@ -48,7 +48,7 @@ class FacilityAccount < ApplicationRecord
     return true if super
 
     begin
-      return account_number && ValidatorFactory.instance(account_number).respond_to?(method_sym)
+      return account_number && AccountValidator::ValidatorFactory.instance(account_number).respond_to?(method_sym)
     rescue
       return false
     end

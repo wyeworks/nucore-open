@@ -44,7 +44,7 @@ Skip Monitoring
 If you wish to forego monitoring, for example if you are using a separate monitoring
 system such as Eye, you can start up the daemon directly with the --no-monitor option:
 
-ruby lib/daemons/auto_cancel.rb start -- --no-monitor
+ruby lib/daemons/recurring_tasks.rb start -- --no-monitor
 (the additional -- is required)
 
-ruby lib/daemons/auto_cancel.rb stop
+ruby lib/daemons/recurring_tasks.rb stop

@@ -13,9 +13,7 @@ module Nucore
 
   class Application < Rails::Application
 
-    # TO DO: Test the new defaults in new_framework_defaults_5_2.rb,
-    # then use config.load_defaults 5.2.
-    config.load_defaults 5.0
+    config.load_defaults 6.0
     # It appears cancancan and/or delayed_job_active_record do some monkey patching of AR incorrectly,
     # so setting this in an initializer doesn't work. https://stackoverflow.com/a/39153224
     config.active_record.belongs_to_required_by_default = false
@@ -27,12 +25,11 @@ module Nucore
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
-    config.autoload_paths += Dir["#{config.root}/lib/**/"]
-    config.autoload_paths += Dir["#{config.root}/app/models/**/"]
-    config.autoload_paths += Dir["#{config.root}/app/controllers/concerns"]
-    config.autoload_paths += Dir["#{config.root}/app/mailers/concerns"]
-    config.autoload_paths += Dir["#{config.root}/app/models/concerns"]
-    config.autoload_paths += Dir["#{config.root}/app/validators"]
+    # config.autoload_paths += Dir["#{config.root}/lib"]
+    # config.eager_load_paths += Dir["#{config.root}/lib"]
+
+    config.autoload_paths += Dir["#{config.root}/app/models/external_services"]
+    config.eager_load_paths += Dir["#{config.root}/app/models/external_services"]
 
     # The default locale is :en and all translations under config/locales/ are auto-loaded
     # But we want to make sure anything in the override folder happens at the very end

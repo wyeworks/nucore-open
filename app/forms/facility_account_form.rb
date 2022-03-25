@@ -51,11 +51,11 @@ class FacilityAccountForm < SimpleDelegator
   # Hook into the callbacks by declaring `before_validate_chart_string :my_method_to_run`
   def validate_chart_string
     run_callbacks :validate_chart_string do
-      ValidatorFactory.instance(account_number, revenue_account).account_is_open!
+      AccountValidator::ValidatorFactory.instance(account_number, revenue_account).account_is_open!
     end
-  rescue AccountNumberFormatError => e
+  rescue AccountValidator::AccountNumberFormatError => e
     e.apply_to_model(self)
-  rescue ValidatorError => e
+  rescue AccountValidator::ValidatorError => e
     errors.add(:base, e.message)
   end
 

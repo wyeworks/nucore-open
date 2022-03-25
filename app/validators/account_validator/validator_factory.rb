@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-class ValidatorFactory
+class AccountValidator::ValidatorFactory
 
-  cattr_accessor(:validator_class) { Settings.validator.class_name.constantize }
+  cattr_accessor(:validator_class) do
+    Settings.validator.class_name.constantize
+  end
 
   def self.instance(*args)
     validator_class.new(*args)
@@ -19,7 +21,7 @@ class ValidatorFactory
           instance(virtual.account.account_number, virtual.product.account).account_is_open!(virtual.fulfilled_at)
         end
         true
-      rescue ValidatorError
+      rescue AccountValidator::ValidatorError
         false
       end
     end

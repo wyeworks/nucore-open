@@ -62,14 +62,14 @@ RSpec.describe FacilityFacilityAccountsController do
       before { sign_in director }
 
       it "allows a director to create an account if it is open" do
-        expect_any_instance_of(ValidatorFactory.validator_class).to receive(:account_is_open!).and_return(true)
+        expect_any_instance_of(AccountValidator::ValidatorFactory.validator_class).to receive(:account_is_open!).and_return(true)
 
         expect { put :create, params: params }.to change(FacilityAccount, :count).by(1)
         expect(response).to redirect_to(facility_facility_accounts_path)
       end
 
       it "renders errors if the account is not open" do
-        expect_any_instance_of(ValidatorFactory.validator_class).to receive(:account_is_open!).and_raise(ValidatorError, "not open")
+        expect_any_instance_of(AccountValidator::ValidatorFactory.validator_class).to receive(:account_is_open!).and_raise(AccountValidator::ValidatorError, "not open")
 
         expect { post :create, params: params }.not_to change(FacilityAccount, :count)
         expect(assigns(:facility_account)).to be_new_record
@@ -112,14 +112,14 @@ RSpec.describe FacilityFacilityAccountsController do
     end
 
     it "allows a director to update the account if it is valid" do
-      allow_any_instance_of(ValidatorFactory.validator_class).to receive(:account_is_open!).and_return(true)
+      allow_any_instance_of(AccountValidator::ValidatorFactory.validator_class).to receive(:account_is_open!).and_return(true)
 
       sign_in director
       expect { put :update, params: params }.to change { facility_account.reload.active? }.to be(true)
     end
 
     it "prevents the director from updating it even if it is invalid" do
-      allow_any_instance_of(ValidatorFactory.validator_class).to receive(:account_is_open!).and_raise(ValidatorError, "not open")
+      allow_any_instance_of(AccountValidator::ValidatorFactory.validator_class).to receive(:account_is_open!).and_raise(AccountValidator::ValidatorError, "not open")
 
       sign_in director
       expect { put :update, params: params }.to change { facility_account.reload.active? }.to be(true)

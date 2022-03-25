@@ -10,7 +10,7 @@ RSpec.describe NufsAccountBuilder, type: :service do
   end
 
   describe "#build override" do
-    before { allow(ValidatorFactory).to receive(:validator_class).and_return(ValidatorDefault) }
+    before { allow(AccountValidator::ValidatorFactory).to receive(:validator_class).and_return(AccountValidator::ValidatorDefault) }
 
     let(:options) do
       {
@@ -26,7 +26,7 @@ RSpec.describe NufsAccountBuilder, type: :service do
       let(:params) { {} }
 
       it "has no errors, even load_components raises an error" do
-        allow_any_instance_of(NufsAccount).to receive(:load_components).and_raise(ValidatorError, "validation error")
+        allow_any_instance_of(NufsAccount).to receive(:load_components).and_raise(AccountValidator::ValidatorError, "validation error")
 
         expect(builder.build.errors).to be_empty
       end
@@ -55,7 +55,7 @@ RSpec.describe NufsAccountBuilder, type: :service do
       end
 
       it "still sets the expiration date on a validator error" do
-        allow_any_instance_of(ValidatorDefault).to receive(:latest_expiration).and_raise(ValidatorError)
+        allow_any_instance_of(AccountValidator::ValidatorDefault).to receive(:latest_expiration).and_raise(AccountValidator::ValidatorError)
         expect(builder.build.expires_at).to be_present
       end
     end
