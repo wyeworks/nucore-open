@@ -31,7 +31,7 @@ class NufsAccount < Account
   end
 
   #
-  # Retrieves +#components+ from +ValidatorFactory#instance+ and sets
+  # Retrieves +#components+ from +AccountValidator::ValidatorFactory#instance+ and sets
   # the keys of the return as methods on this class (if necessary) and
   # then sets the value on self.
   # [_return_]

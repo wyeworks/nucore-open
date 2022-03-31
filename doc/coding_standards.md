@@ -82,7 +82,7 @@ into that with your engine. Try to avoid overriding entire views (as happens in
 the `c2po` engine). Then a change to the default view might need to happen in
 multiple places. See the following section for more information.
 
-* A factory configured in settings (e.g. `ValidatorFactory`, `StatementPdfFactory`
+* A factory configured in settings (e.g. `AccountValidator::ValidatorFactory`, `StatementPdfFactory`
 * Adding a module onto an existing class in the engine initializer (see `vendor/engines/c2po/lib/c2po.rb`)
 * Other things we haven't thought of
 

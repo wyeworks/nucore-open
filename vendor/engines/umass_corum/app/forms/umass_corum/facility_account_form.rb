@@ -20,7 +20,7 @@ module UmassCorum
       throw(:abort) if errors.any?
 
       api_speed_type = UmassCorum::ApiSpeedType.find_or_initialize_from_api(account_number)
-      raise ValidatorError, api_speed_type.error_desc unless api_speed_type.active? && api_speed_type.save!
+      raise AccountValidator::ValidatorError, api_speed_type.error_desc unless api_speed_type.active? && api_speed_type.save!
     end
 
   end
