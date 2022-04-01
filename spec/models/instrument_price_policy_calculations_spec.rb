@@ -369,7 +369,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
 
     before(:each) { allow(policy.product).to receive(:min_cancel_hours).and_return 3 }
 
-    describe "when it's inside the minimum cancelation window" do
+    describe "when it's inside the minimum cancellation window" do
       let(:reservation) { double reserve_start_at: now + 30.minutes, order_detail: order_detail }
       let(:order_detail) { double canceled_at: now }
 
@@ -388,7 +388,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
 
       specify { expect(policy).not_to be_cancellation_penalty(reservation) }
 
-      it "does not charge the cancelation cost" do
+      it "does not charge the cancellation cost" do
         expect(reservation).to receive(:canceled?).and_return(true)
 
         expect(policy.calculate_cost_and_subsidy(reservation)).to be_nil

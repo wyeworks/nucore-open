@@ -1077,7 +1077,7 @@ en:
         min_res: "Minimum Reservation Minutes"
         max_res: "Maximum Reservation Minutes"
         cancel_hours: "Reservation Cost Window (hours)"
-        cancel_mins: "Automatic Cancelation Minutes"
+        cancel_mins: "Automatic Cancellation Minutes"
     offline:
       note: Instrument is down
       notice: |
@@ -1142,7 +1142,7 @@ en:
           min_reserve: "Minimum (minutes)"
           max_reserve: "Maximum (minutes)"
           cancel_hours: "Reservation Cost Window (hours)"
-          auto_cancel: "Automatic Cancelation (minutes)"
+          auto_cancel: "Automatic Cancellation (minutes)"
           lock_window: "Reservation Lock Window (hours)"
           cutoff_hours: "Cutoff Time (hours)"
         warning:
