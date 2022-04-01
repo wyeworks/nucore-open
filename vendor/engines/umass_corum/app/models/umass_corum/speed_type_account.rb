@@ -17,8 +17,8 @@ module UmassCorum
 
     def account_open?(_revenue_account)
       begin
-        ValidatorFactory.instance(account_number).account_is_open!
-      rescue ValidatorError
+        AccountValidator::ValidatorFactory.instance(account_number).account_is_open!
+      rescue AccountValidator::ValidatorError
         return false
       end
 

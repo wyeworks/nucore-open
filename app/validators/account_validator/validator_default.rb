@@ -7,7 +7,7 @@
 # very little. In fact, it will consider every payment
 # source it validates as valid. Every real nucore instance
 # should replace this class with institution-specific
-# validation rules. See +ValidatorFactory+ for details
+# validation rules. See +AccountValidator::ValidatorFactory+ for details
 # on how to do that.
 class AccountValidator::ValidatorDefault
 
