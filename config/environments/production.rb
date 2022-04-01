@@ -79,6 +79,7 @@ Rails.application.configure do
     address: "mailhub.oit.umass.edu",
     port: 25,
     domain: "umass.edu",
+    openssl_verify_mode: OpenSSL::SSL::VERIFY_NONE,
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
