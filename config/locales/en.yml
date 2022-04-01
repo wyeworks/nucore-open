@@ -1076,7 +1076,7 @@ en:
         control_mech: "Control mechanism"
         min_res: "Minimum Reservation Minutes"
         max_res: "Maximum Reservation Minutes"
-        cancel_hours: "Minimum Cancelation Hours"
+        cancel_hours: "Reservation Cost Window (hours)"
         cancel_mins: "Automatic Cancelation Minutes"
     offline:
       note: Instrument is down
