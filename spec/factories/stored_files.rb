@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :stored_file do
-    swf_uploaded_data { fixture_file_upload("#{Rails.root}/spec/files/flash_file.swf", "application/x-shockwave-flash") }
+    swf_uploaded_data { Rack::Test::UploadedFile.new("#{Rails.root}/spec/files/flash_file.swf", "application/x-shockwave-flash") }
     sequence(:name) { |n| "flash_file-#{n}.swf" }
     file_type { "info" }
   end

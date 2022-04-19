@@ -42,7 +42,7 @@ module UmassCorum
       when :integer
         Integer(data, 10)
       when :decimal
-        BigDecimal.new(data) / BigDecimal.new(100)
+        BigDecimal(data) / BigDecimal(100)
       else
         data
       end

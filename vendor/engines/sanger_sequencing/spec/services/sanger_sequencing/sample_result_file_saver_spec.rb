@@ -13,7 +13,7 @@ RSpec.describe SangerSequencing::SampleResultFileSaver do
 
   let(:saver) { described_class.new(batch, user, params) }
 
-  let(:params) { { qqfile: fixture_file_upload(filename) } }
+  let(:params) { { qqfile: Rack::Test::UploadedFile.new(filename) } }
 
   describe "with a filename that doesn't begin with an integer" do
     let(:filename) { File.join(SangerSequencing::Engine.root, "spec/support/file_fixtures/invalid_file_name.txt") }

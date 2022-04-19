@@ -29,7 +29,7 @@ RSpec.describe Reports::ExportRaw do
     let(:order) { create(:complete_order, product: item, account: account, user: user, created_by: user.id) }
     let(:order_detail) do
       order.order_details.first.tap do |order_detail|
-        order_detail.update_attributes!(
+        order_detail.update!(
           quantity: 1,
           actual_cost: BigDecimal("19.99"),
           actual_subsidy: BigDecimal("9.99"),
@@ -70,7 +70,7 @@ RSpec.describe Reports::ExportRaw do
     end
     let(:order_detail) { reservation.order_detail }
 
-    before { order_detail.update_attributes!(account: account) }
+    before { order_detail.update!(account: account) }
 
     it "splits the fields correctly" do
       expect(report).to have_column_values(

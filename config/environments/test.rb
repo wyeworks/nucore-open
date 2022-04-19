@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "active_support/core_ext/integer/time"
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -30,6 +32,10 @@ Rails.application.configure do
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
+
+  # Store uploaded files on the local file system in a temporary directory.
+  config.active_storage.service = :test
+
   config.action_mailer.perform_caching = false
 
   # Tell Action Mailer not to deliver emails to the real world.
@@ -44,7 +50,16 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   # Raises error for missing translations
-  config.action_view.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
+
+  # Raise exceptions for disallowed deprecations.
+  config.active_support.disallowed_deprecation = :raise
+
+  # Tell Active Support which deprecation messages to disallow.
+  config.active_support.disallowed_deprecation_warnings = []
+
+  # Annotate rendered view with file names.
+  # config.action_view.annotate_rendered_view_with_filenames = true
 
   Rails.application.routes.default_url_options =
     config.action_mailer.default_url_options = { host: "localhost", port: 3000 }

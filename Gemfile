@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
-gem "rails", "~> 6.0.4"
+gem "rails", "~> 6.1.5"
 gem "sprockets", "< 4" # Temporarily lock as we upgrade
 gem "sprockets-rails", "3.2.2" # downgrade to avoid a bug
 gem "config"
@@ -102,7 +102,7 @@ group :development do
   gem "ed25519", ">= 1.2", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
   gem "haml_lint", require: false
   gem "letter_opener"
-  gem "rubocop", "1.25.1", require: false
+  gem "rubocop", "1.27.0", require: false
   gem "rubocop-rspec"
   gem "web-console"
 end

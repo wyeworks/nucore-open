@@ -3,8 +3,8 @@
 class Notifier < ActionMailer::Base
 
   include DateHelper
-  add_template_helper ApplicationHelper
-  add_template_helper ViewHookHelper
+  helper ApplicationHelper
+  helper ViewHookHelper
 
   default from: Settings.email.from, content_type: "multipart/alternative"
 

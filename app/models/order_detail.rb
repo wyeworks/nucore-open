@@ -344,7 +344,11 @@ class OrderDetail < ApplicationRecord
       sql = "(reservations.id IS NULL AND order_details.ordered_at < :end) OR (reservations.id IS NOT NULL AND reservations.reserve_start_at < :end)"
     end
 
-    query.where(sql, start: start_date, end: end_date)
+    if sql
+      query.where(sql, start: start_date, end: end_date)
+    else
+      query
+    end
   end
 
   include AASM

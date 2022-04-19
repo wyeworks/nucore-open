@@ -8,7 +8,7 @@
 
 %h1= @clone_to_user.full_name
 
-= form_with url: facility_user_clone_account_memberships_path(user_to_clone_id: @clone_from_user) do |f|
+= form_with url: facility_user_clone_account_memberships_path(user_to_clone_id: @clone_from_user), local: false do |f|
   - if @account_users.present?
     %h2= text("header", name: @clone_from_user.full_name)
     %p= text("instructions")

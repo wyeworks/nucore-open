@@ -13,7 +13,7 @@ RSpec.describe UmassCorum::JournalParser do
       specify { expect(output.header[:jml_type]).to be_blank }
       specify { expect(output.header[:batch_user_code]).to be_blank }
       specify { expect(output.header[:batch_trans_count]).to eq(74) }
-      specify { expect(output.header[:batch_trans_amount]).to eq(BigDecimal.new("14392.58")) }
+      specify { expect(output.header[:batch_trans_amount]).to eq(BigDecimal("14392.58")) }
       specify { expect(output.header[:batch_susp_id]).to be_blank }
       specify { expect(output.header[:batch_originator]).to eq("ELNUGENT") }
       specify { expect(output.header[:batch_business_unit]).to eq("UMAMH") }
@@ -27,7 +27,7 @@ RSpec.describe UmassCorum::JournalParser do
       specify { expect(row[:trans_ref]).to eq("LM19111") }
       specify { expect(row[:trans_date]).to eq(Date.parse("2019-06-17")) }
       specify { expect(row[:trans_desc]).to eq("Carter, Kenneth") }
-      specify { expect(row[:amount]).to eq(BigDecimal.new("67.50")) }
+      specify { expect(row[:amount]).to eq(BigDecimal("67.50")) }
       specify { expect(row[:credit_debit]).to eq("D") }
       specify { expect(row[:trans_2nd_ref]).to eq("ALS095") }
       specify { expect(row[:trans_id]).to be_blank }
@@ -51,7 +51,7 @@ RSpec.describe UmassCorum::JournalParser do
       specify { expect(row[:trans_ref]).to eq("LM19111") }
       specify { expect(row[:trans_date]).to eq(Date.parse("2019-06-17")) }
       specify { expect(row[:trans_desc]).to eq("Carter, Kenneth") }
-      specify { expect(row[:amount]).to eq(BigDecimal.new("67.50")) }
+      specify { expect(row[:amount]).to eq(BigDecimal("67.50")) }
       specify { expect(row[:credit_debit]).to eq("C") }
       specify { expect(row[:trans_2nd_ref]).to eq("ALS095") }
       specify { expect(row[:trans_id]).to be_blank }

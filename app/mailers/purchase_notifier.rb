@@ -3,9 +3,9 @@
 class PurchaseNotifier < ApplicationMailer
 
   include DateHelper
-  add_template_helper ApplicationHelper
-  add_template_helper OrdersHelper
-  add_template_helper ViewHookHelper
+  helper ApplicationHelper
+  helper OrdersHelper
+  helper ViewHookHelper
 
   default from: Settings.email.from, content_type: "multipart/alternative"
 

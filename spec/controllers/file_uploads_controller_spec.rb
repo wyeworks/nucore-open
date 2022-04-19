@@ -47,7 +47,7 @@ RSpec.describe FileUploadsController do
         stored_file: {
           name: "File 1",
           file_type: "info",
-          file: fixture_file_upload("#{Rails.root}/spec/files/template1.txt"),
+          file: Rack::Test::UploadedFile.new("#{Rails.root}/spec/files/template1.txt"),
         },
       }
     end
@@ -84,7 +84,7 @@ RSpec.describe FileUploadsController do
         facility_id: @authable.url_name,
         product: "services",
         product_id: @service.url_name,
-        qqfile: fixture_file_upload("#{Rails.root}/spec/files/flash_file.swf", "application/x-shockwave-flash"),
+        qqfile: Rack::Test::UploadedFile.new("#{Rails.root}/spec/files/flash_file.swf", "application/x-shockwave-flash"),
         file_type: "info",
         order_detail_id: @order_detail.id,
       }

@@ -13,7 +13,11 @@ module Nucore
 
   class Application < Rails::Application
 
-    config.load_defaults 6.0
+    config.load_defaults 6.1
+
+    # TODO- clean up unconventional inverse relations
+    config.active_record.has_many_inversing = false
+
     # It appears cancancan and/or delayed_job_active_record do some monkey patching of AR incorrectly,
     # so setting this in an initializer doesn't work. https://stackoverflow.com/a/39153224
     config.active_record.belongs_to_required_by_default = false
@@ -22,9 +26,12 @@ module Nucore
     # https://blog.bigbinary.com/2016/08/29/rails-5-disables-autoloading-after-booting-the-app-in-production.html
     config.enable_dependency_loading = true
 
+    # config.time_zone = "Central Time (US & Canada)"
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
+    # config.eager_load_paths << Rails.root.join("extras")
     # config.autoload_paths += Dir["#{config.root}/lib"]
     # config.eager_load_paths += Dir["#{config.root}/lib"]
 

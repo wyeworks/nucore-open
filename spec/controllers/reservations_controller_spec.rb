@@ -1442,7 +1442,7 @@ RSpec.describe ReservationsController do
 
     context "normal HTML" do
       it "renders the normal template" do
-        Rails.logger.ap reservation.errors
+        Rails.logger.debug reservation.errors
         get :show, params: { order_id: @order.id, order_detail_id: @order_detail.id,
                              id: reservation.id }
         is_expected.to render_template("show")

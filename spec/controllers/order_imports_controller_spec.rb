@@ -4,7 +4,7 @@ require "rails_helper"
 require "controller_spec_helper"
 
 def fixture_file(filename)
-  fixture_file_upload(
+  Rack::Test::UploadedFile.new(
     "#{Rails.root}/spec/files/order_imports/#{filename}",
     "text/csv",
   )

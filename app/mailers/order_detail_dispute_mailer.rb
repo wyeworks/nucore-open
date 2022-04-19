@@ -2,7 +2,7 @@
 
 class OrderDetailDisputeMailer < ApplicationMailer
 
-  add_template_helper DateHelper
+  helper DateHelper
 
   def dispute_resolved(order_detail:, user:)
     @order_detail = order_detail

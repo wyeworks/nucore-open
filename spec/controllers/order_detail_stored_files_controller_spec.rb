@@ -44,7 +44,7 @@ RSpec.describe OrderDetailStoredFilesController do
     before { sign_in user }
 
     it "can upload the file" do
-      file = fixture_file_upload(Rails.root.join("spec", "files", "template1.txt"))
+      file = Rack::Test::UploadedFile.new(Rails.root.join("spec", "files", "template1.txt"))
       post :upload_order_file, params: params.merge(stored_file: { file: file })
       expect(order_detail.stored_files.count).to eq(1)
     end
