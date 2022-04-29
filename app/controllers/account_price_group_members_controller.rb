@@ -10,7 +10,14 @@ class AccountPriceGroupMembersController < ApplicationController
   # GET /facilities/:facility_id/price_groups/:price_group_id/account_price_group_members/search_results
   def search_results
     @limit = 25
-    set_search_conditions if params[:search_term].present?
+    searcher = AccountSearcher.new(params[:search_term], scope: Account.for_facility(current_facility))
+
+    if searcher.valid?
+      @accounts = searcher.results
+    else
+      flash.now[:errors] = "Search terms must be 3 or more characters."
+    end
+
     render layout: false
   end
 
@@ -39,20 +46,6 @@ class AccountPriceGroupMembersController < ApplicationController
     @account_price_group_member.account ||= account
     @account_price_group_member.price_group ||= @price_group
     @account_price_group_member
-  end
-
-  def search_conditions
-    @search_conditions ||= [
-      "LOWER(account_number) LIKE ?",
-      generate_multipart_like_search_term(params[:search_term]),
-    ]
-  end
-
-  def set_search_conditions
-    @accounts = Account.for_facility(current_facility)
-                       .where(search_conditions)
-                       .order(:account_number)
-                       .limit(@limit)
   end
 
   def authorize_account_price_group_member!

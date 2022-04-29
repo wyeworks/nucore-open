@@ -164,7 +164,7 @@ en:
       head: "Recent Payment Sources"
       add_account: "Add Payment Source"
       label:
-        search_term: "Search by payment source number or payment source owner's name, NetID, or username"
+        search_term: "Search by payment source number, description, accounts receivable number, or payment source owner's name, NetID, or username"
       search: Search
     new_account_user_search:
       head: "Add Payment Source"
@@ -799,7 +799,7 @@ en:
   account_price_group_members:
     new:
       label:
-        search_term: "Search by payment source"
+        search_term: "Search by payment source number, description, accounts receivable number, or payment source owner's name, NetID, or username"
     search_results:
       head: "Select an Existing Payment Source"
       main: "Can't find the payment source you're looking for?"

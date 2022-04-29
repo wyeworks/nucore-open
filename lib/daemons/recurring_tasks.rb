@@ -7,10 +7,7 @@ Daemons::Base.new("recurring_tasks").start do
   RecurringTaskConfig.each do |recurring_task|
     recurring_task.invoke!(start_time)
   end
-
   run_time = Time.now - start_time
   interval = 1.minute.to_i - run_time
-
   sleep(interval) if interval > 0
 end
-

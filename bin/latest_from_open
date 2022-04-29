@@ -9,9 +9,9 @@ if [ -z "$release_date" ]; then
   echo "No release date specified. Please try again."
 elif git_status_output=$(git status --porcelain --untracked-files=no) && [ -z "$git_status_output" ]; then
   echo "Working directory clean, creating new branch: latest_from_open_$release_date"
-  git co master
+  git checkout master
   git pull
-  git co -b latest_from_open_$release_date
+  git checkout -b latest_from_open_$release_date
   git fetch upstream
   git merge upstream/master
   merge_result=$?
