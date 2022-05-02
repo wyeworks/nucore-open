@@ -49,6 +49,8 @@ services:
       - "3306:3306"
     volumes:
       - db-data:/var/lib/mysql
+    tty: true
+    stdin_open: true
     logging:
       driver: none
   mailcatcher:

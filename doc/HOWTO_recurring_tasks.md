@@ -1,6 +1,10 @@
 # Recurring Tasks
 
-There are some tasks that need to happen regularly, at 1 or 5 minute intervals.  These are currently all related to reservation management.  The list of recurring tasks is listed in `RecurringTaskConfig`, and managed by a daemon process (see [**HOWTO_daemons.txt**](./HOWTO_daemons.txt) for more information).  You can add or remove items from the list from your school-specific engine like so:
+There are some tasks that need to happen regularly, at 1 or 5 minute intervals.  These are currently all related to reservation management.  The list of recurring tasks is listed in `RecurringTaskConfig`, and managed by a daemon process (see [**HOWTO_daemons.txt**](./HOWTO_daemons.txt) for more information).
+
+The `recurring_tasks` process should only run on one server per environment.   Set `RECURRING=true` in the environment (`.bashrc` for example) to configure which servers should run these tasks.
+
+You can add or remove items from the list from your school-specific engine like so:
 ```ruby
 RecurringTaskConfig.recurring_tasks << [SecureRooms::AutoOrphanOccupancy, :perform, 5]
 ```

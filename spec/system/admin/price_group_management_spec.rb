@@ -106,5 +106,33 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
       end
     end
   end
+
+  describe "searching to add price group member", js: true do
+    let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
+    let(:price_group) { FactoryBot.create(:price_group, facility_id: facility.id ) }
+    let!(:account1) { FactoryBot.create(:account, :with_account_owner, account_number: "135711", description: "first account", facilities: [facility], owner: user) }
+    let!(:account2) { FactoryBot.create(:account, :with_account_owner, account_number: "246810", description: "second account", facilities: [facility], owner: user) }
+
+    before do
+      allow(Account.config).to receive(:facility_account_types).and_return(["Account"])
+      login_as user
+      visit new_facility_price_group_account_price_group_member_path(facility, price_group)
+    end
+
+    it "searches for accounts by partial description" do
+      fill_in "search_term", with: account1.description[0,5]
+      click_button "Search"
+      expect(page).to have_content(account1.description)
+      expect(page).to_not have_content(account2.description)
+    end
+
+    it "searches for accounts by partial account number" do
+      fill_in "search_term", with: account2.account_number[1,3]
+      click_button "Search"
+      expect(page).to have_content(account2.description)
+      expect(page).to_not have_content(account1.description)
+    end
+  end
+
   # TODO: Move tests out of price_groups_controller_spec.rb
 end

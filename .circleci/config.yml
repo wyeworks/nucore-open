@@ -18,10 +18,31 @@ jobs:
     steps:
       - checkout
 
+      # https://support.circleci.com/hc/en-us/articles/360051656632-Swap-node-version-on-CircleCI-convenience-image
+      - run:
+          name: Set node version
+          command: |
+            set +e
+            wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | bash
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+            nvm install v16.14.2
+            nvm alias default 16.14.2
+
+            echo 'export NVM_DIR="$HOME/.nvm"' >> $BASH_ENV
+            echo '[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+
       # Bundle
       - restore_cache:
           keys:
             - gem-cache-{{ arch }}--{{ .Branch }}-{{ checksum "Gemfile.lock" }}-{{ checksum ".ruby-version" }}
+
+      - run:
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
 
       - run: bundle install --path vendor/bundle
 

@@ -79,6 +79,7 @@ It makes a few assumptions:
 2. You have a running Oracle or MySQL instance with two brand new databases. (Oracle setup instructions [here](doc/HOWTO_oracle.md).)
 3. You have the following installed:
     * [Ruby](http://www.ruby-lang.org/en)
+    * [NodeJS](https://nodejs.org/en/)
     * [Bundler](http://gembundler.com)
     * [Git](http://git-scm.com)
     * [PhantomJS](http://phantomjs.org/)

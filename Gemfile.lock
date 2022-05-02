@@ -330,7 +330,6 @@ GEM
       addressable (~> 2.7)
     letter_opener (1.8.1)
       launchy (>= 2.2, < 3)
-    libv8 (7.3.492.27.1)
     loofah (2.16.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
@@ -347,8 +346,6 @@ GEM
       rake
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    mini_racer (0.2.15)
-      libv8 (> 7.3)
     minitest (5.15.0)
     momentjs-rails (2.29.1.1)
       railties (>= 3.1)
@@ -364,6 +361,10 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.4)
       mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    nokogiri (1.13.4-aarch64-linux)
+      racc (~> 1.4)
+    nokogiri (1.13.4-x86_64-linux)
       racc (~> 1.4)
     numerizer (0.1.1)
     oj (3.13.11)
@@ -403,7 +404,7 @@ GEM
       pry (~> 0.13.0)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    public_suffix (4.0.6)
+    public_suffix (4.0.7)
     puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
@@ -494,7 +495,7 @@ GEM
       unicode-display_width (>= 1.4.0, < 3.0)
     rubocop-ast (1.17.0)
       parser (>= 3.1.1.0)
-    rubocop-rspec (2.9.0)
+    rubocop-rspec (2.10.0)
       rubocop (~> 1.19)
     ruby-ole (1.2.12.2)
     ruby-progressbar (1.11.0)
@@ -591,7 +592,9 @@ GEM
     zeitwerk (2.5.4)
 
 PLATFORMS
+  aarch64-linux
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   aasm
@@ -637,8 +640,6 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   letter_opener
-  libv8 (< 8)
-  mini_racer (< 0.3)
   mysql2
   nested_form_fields
   nokogiri
@@ -694,4 +695,4 @@ RUBY VERSION
    ruby 2.6.6p146
 
 BUNDLED WITH
-   1.17.3
+   2.3.11

@@ -4,6 +4,10 @@ Because we use squash and merge, you should be able to see the changes by lookin
 at the [commit log](https://github.com/tablexi/nucore-open/commits/master). However, we have begun keeping track of breaking changes
 or optional rake tasks.
 
+### Use `.bashrc` to determine which servers should run recurring tasks ([#2994](https://github.com/tablexi/nucore-open/pull/2994))
+
+The `recurring_tasks` process should only run on one server per environment.   Set `RECURRING=true` in the environment (`.bashrc` for example) to configure which servers should run these tasks.  Attempting to set this via `capistrano` only works on deploy.
+
 ### Rename `auto_cancel` daemon to `recurring_tasks` and consolidate recurring tasks there ([#2957](https://github.com/tablexi/nucore-open/pull/2957))
 
 The `recurring_tasks` process should only run on one server per environment.  This is managed via `eye` now.  If you user another deployment process and have multiple servers running in production, you will need to ensure this daemon only runs on one server.  Setting `run_auto_cancel: false` in `secrets.yml` will no longer have an impact.  The list of recurring jobs is listed in `RecurringTaskConfig`.  You can add or remove items from the list from your school-specific engine like so:
