@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_21_173733) do
+ActiveRecord::Schema.define(version: 2022_04_26_185500) do
 
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 2022_03_21_173733) do
     t.string "affiliate_other"
     t.string "outside_contact_info"
     t.string "ar_number"
+    t.index ["account_number"], name: "index_accounts_on_account_number"
     t.index ["affiliate_id"], name: "index_accounts_on_affiliate_id"
   end
 
@@ -878,6 +879,7 @@ ActiveRecord::Schema.define(version: 2022_03_21_173733) do
     t.string "error_desc"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "date_added_admin_override"
     t.index ["speed_type"], name: "index_umass_corum_api_speed_types_on_speed_type", unique: true
   end
 

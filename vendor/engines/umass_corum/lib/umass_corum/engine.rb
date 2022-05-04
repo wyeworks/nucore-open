@@ -29,7 +29,9 @@ module UmassCorum
       ViewHook.add_hook("users.show", "custom_fields", "umass_corum/users/custom_fields")
       ViewHook.add_hook("users.new_external", "custom_fields", "umass_corum/users/new_external_custom_fields")
       ViewHook.add_hook("admin.shared.sidenav_billing", "custom_reconcilable_account_types", "facility_accounts/mivp_sidenav")
+      ViewHook.add_hook("facility_accounts.show", "additional_account_fields", "facility_accounts/custom_fields")
       ::Reports::ExportRaw.transformers << "UmassCorum::AdminReports::ExportRawTransformer"
+      SpeedTypeAccountBuilder.common_permitted_account_params << :api_speed_type_attributes
     end
 
     # Include migrations in main rails app

@@ -3,12 +3,22 @@
 module UmassCorum
 
   class SpeedTypeAccountBuilder < AccountBuilder
+    include ::DateHelper
 
     def account_params_key
       "speed_type_account"
     end
 
     protected
+
+    def after_update
+      api_account = account.api_speed_type
+      return unless api_account
+
+      date_string = params[:speed_type_account][:api_speed_type_attributes][:date_added_admin_override]
+      api_account.date_added_admin_override = parse_usa_date(date_string) unless date_string.blank?
+      api_account.save!
+    end
 
     def after_build
       # account_number will be blank on `new`, and we don't want the form to start with errors

@@ -17,11 +17,11 @@ module UmassCorum
       suspended_account.present? && fulfilled_at > suspended_account.suspended_at
     end
 
-    def valid_at?(datetime)
+    def valid_at?(fulfilled_date, start_date)
       if api_account.active?
-        api_account.date_added <= datetime
+        start_date <= fulfilled_date
       elsif api_account.date_removed.present?
-        api_account.date_added <= datetime && datetime <= api_account.date_removed
+        start_date <= fulfilled_date && fulfilled_date <= api_account.date_removed
       else
         # This should never happen - api_account should be active OR have date_removed set
         if defined?(Rollbar)
@@ -38,7 +38,9 @@ module UmassCorum
 
       raise AccountValidator::ValidatorError, "This account is suspended" if account_suspended_at?(fulfilled_at)
 
-      unless valid_at?(fulfilled_at)
+      active_date = api_account.date_added_admin_override || api_account.date_added
+
+      unless valid_at?(fulfilled_at, active_date)
         error = api_account.error_desc.presence || "Was not legal at the time of fulfillment"
         raise AccountValidator::ValidatorError, error
       end

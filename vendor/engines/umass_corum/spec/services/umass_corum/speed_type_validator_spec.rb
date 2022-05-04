@@ -9,6 +9,7 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
 
   let(:speed_type) { "847564" }
   let(:validator) { described_class.new(speed_type) }
+  let(:date_added) { Time.now - 1.year }
 
   it "returns successfully if the chart string exists in the DB" do
     create(:api_speed_type, speed_type: speed_type)
@@ -69,6 +70,16 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
         expect { validator.account_is_open!(2.months.ago) }.to raise_error(AccountValidator::ValidatorError, /not legal at the time of fulfillment/)
       end
     end
+  end
+
+  it "checks the date_added_admin_override, when it exists" do
+    create(:api_speed_type, speed_type: speed_type, date_added: date_added, date_added_admin_override: date_added - 1.years)
+    expect(validator.account_is_open!(date_added - 1.years + 1.day)).to be true
+  end
+
+  it "checks the date_added, when the date_added_admin_override does not exist" do
+    create(:api_speed_type, speed_type: speed_type, date_added: date_added)
+    expect{ validator.account_is_open!(date_added - 1.year + 1.day) }.to raise_error(AccountValidator::ValidatorError)
   end
 
   it "has a generic message if there is no error in the table" do

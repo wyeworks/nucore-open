@@ -3,6 +3,13 @@
 module UmassCorum
 
   class SpeedTypeAccount < ::Account
+    has_one :api_speed_type, 
+            foreign_key: :speed_type, 
+            primary_key: :account_number, 
+            required: false, 
+            inverse_of: :speed_type_account
+
+    accepts_nested_attributes_for :api_speed_type
 
     validates :account_number, presence: true, format: /\d{6}/, uniqueness: { case_sensitive: false }
 

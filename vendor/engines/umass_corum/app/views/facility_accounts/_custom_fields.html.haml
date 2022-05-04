@@ -1,0 +1,4 @@
+- if account.is_a?(UmassCorum::SpeedTypeAccount)
+  = f.simple_fields_for :api_speed_type do |api|
+    - date_added = api.object.date_added_admin_override || api.object.date_added
+    = api.input :date_added_admin_override, input_html: { value: format_usa_date(date_added) }
