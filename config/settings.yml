@@ -1,4 +1,5 @@
 header_logo_path: ~
+display_app_name_in_header: true
 
 price_group:
   name:

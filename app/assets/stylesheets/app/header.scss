@@ -12,10 +12,10 @@ header {
       font-size: 27px;
       color: $headerColor;
 
-      padding: 17px 20px 16px;
+      padding: $brandPadding;
 
       .img__brand {
-        height: 1em;
+        height: $imageBrandHeight;
       }
 
       span {
@@ -30,7 +30,7 @@ header {
   }
 
   .container {
-    height: 60px;
+    height: $headerContainerHeight;
     display: flex;
     justify-content: space-between;
     align-items: center;

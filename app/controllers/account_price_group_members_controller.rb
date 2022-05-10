@@ -13,7 +13,9 @@ class AccountPriceGroupMembersController < ApplicationController
     searcher = AccountSearcher.new(params[:search_term], scope: Account.for_facility(current_facility))
 
     if searcher.valid?
-      @accounts = searcher.results
+      search_results = searcher.results
+      @count = search_results.count
+      @accounts = search_results.limit(@limit)
     else
       flash.now[:errors] = "Search terms must be 3 or more characters."
     end
