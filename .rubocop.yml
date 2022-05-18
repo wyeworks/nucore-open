@@ -1,8 +1,13 @@
+require:
+  - rubocop-rails
+  - rubocop-performance
+
 inherit_from:
   - .rubocop-txi.yml
   - .rubocop_todo.yml
 
 AllCops:
+  NewCops: enable
   DisplayCopNames: true
   Exclude:
     # Rubocop does not seem to merge these from -txi in AllCops, so we need to

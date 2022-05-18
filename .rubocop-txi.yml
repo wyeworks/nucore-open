@@ -7,7 +7,7 @@ AllCops:
 Rails:
   Enabled: true
 
-Lint/HandleExceptions:
+Lint/SuppressedException:
   Exclude:
     - "config/unicorn/*"
 
@@ -15,9 +15,6 @@ Metrics/AbcSize:
   Max: 25
   Exclude:
     - "db/**/*" # Sometimes migrations are complex.
-
-Metrics/LineLength:
-  Max: 120
 
 Metrics/MethodLength:
   Max: 20
@@ -36,6 +33,9 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Exclude:
     - "db/**/*" # No need to require migrations to be documented.
+
+Layout/LineLength:
+  Max: 120
 
 Layout/EmptyLinesAroundBlockBody:
   Exclude:
