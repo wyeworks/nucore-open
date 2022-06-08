@@ -3,8 +3,9 @@ display_app_name_in_header: true
 
 price_group:
   name:
-    base: 'Base Rate'
-    external: 'External Rate'
+    base: "Base Rate"
+    external: "External Rate"
+    cancer_center: "IALS Members"
 
 time_zone: "Eastern Time (US & Canada)"
 
@@ -105,7 +106,7 @@ feature:
   equipment_list: true
   price_change_reason_required: true
   can_manage_global_price_groups: true
-  cross_facility_reports: false
+  cross_facility_reports: true
   product_list_columns: false
   azlist: false
   use_manage: false
