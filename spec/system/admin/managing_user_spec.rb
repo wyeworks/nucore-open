@@ -12,20 +12,18 @@ RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { 
   end
 
   describe "create", js: true do
-    let(:user) { User.find_by(email: "user123@email.test") }
-
     it "creates an external user" do
       visit new_external_facility_users_path(facility)
 
-      fill_in "First name", with: "First"
-      fill_in "Last name", with: "Last Name"
-      fill_in "Email", with: "user123@email.test"
+      fill_in "First name", with: "Moana"
+      fill_in "Last name", with: "Waialiki"
+      fill_in "Email", with: "moana@maui.island"
 
-      check("user[no_netid]") if UsersController.user_form_class.new(user).respond_to? :no_netid
+      check("user[no_netid]") if has_css?("#user_no_netid")
 
       click_on "Create"
 
-      expect(page).to have_content("You just created a new user, #{user.full_name} (#{user.username})")
+      expect(page).to have_content("You just created a new user, Moana Waialiki (moana@maui.island)")
 
       expect(page).to have_content("if this user is entitled to internal rates.")
     end
