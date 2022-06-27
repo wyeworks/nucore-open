@@ -11,7 +11,7 @@
 = simple_form_for([current_facility, @bundle, @bundle_product]) do |f|
   = f.error_messages
   .form-inputs
-    = f.input :quantity, as: :quantity, required: true
+    = f.input :quantity, required: true
   %ul.inline
     %li= f.submit text("shared.save"), class: "btn btn-primary"
     %li= link_to text("shared.cancel"), facility_bundle_bundle_products_path

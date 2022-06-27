@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 %html{lang: "en"}
   %head
-    = render :partial => '/shared/head'
+    = render partial: "/shared/head"
   %body{ class: SettingsHelper.feature_on?(:use_manage) && manage_mode? ? "manage-mode" : "" }
     %header
-      = render :partial => '/shared/header'
+      = render partial: "/shared/header"
     %nav
-      = render :partial => '/shared/nav'
+      = render partial: "/shared/nav"
     #content{role: "main"}
       .container
         .row
           .span12
-            %h1= yield :h1
-            %h2= yield :h2
+            - if content_for?(:h1)
+              %h1= yield(:h1)
+            - if content_for?(:h2)
+              %h2= yield(:h2)
         .row
           .span9.pull-right
-            = render partial: 'shared/flashes'
+            = render partial: "shared/flashes"
             = yield :tabnav
             = yield
           .span3.pull-left
             #sidebar
               = yield :sidebar
     %footer
-      = render :partial => '/shared/footer'
+      = render partial: "/shared/footer"

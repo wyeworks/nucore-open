@@ -9,7 +9,7 @@ module for SAML integration.
 1. Get the URL of the IdP's metadata
 1. Enable this gem, generate a certificate, and update the settings as described in "Enabling SAML Authentication"
 1. Deploy the application
-1. Import the app's (SP) metadata into the IdP (at `https://yourhost.edu/users/saml/auth`)
+1. Import the app's (SP) metadata into the IdP (at `https://yourhost.edu/users/saml/metadata`)
 1. Debug
 
 ## Enabling SAML Authentication

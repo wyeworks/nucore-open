@@ -30,7 +30,7 @@ class NufsAccountBuilder < AccountBuilder
 
     # This will populate virtual fields like fund, dept
     account.load_components
-  rescue AccountNumberFormatError
+  rescue AccountValidator::AccountNumberFormatError
     # do nothing
   rescue AccountValidator::ValidatorError => e
     account.errors.add(:base, e.message)

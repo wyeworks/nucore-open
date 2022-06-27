@@ -107,15 +107,20 @@ RSpec.describe "Placing an item order" do
 
     describe "that has a timed service" do
       let(:timed_service) { FactoryBot.create(:setup_timed_service) }
+      let(:quantity) { 3 }
+
       before do
         FactoryBot.create(:timed_service_price_policy, price_group: PriceGroup.base, product: timed_service)
-        bundle.bundle_products.create!(product: timed_service, quantity: 90)
+        bundle.bundle_products.create!(product: timed_service, quantity: quantity)
       end
 
-      it "adds the item as a single line item" do
+      it "adds one editable line item per quantity" do
         add_to_cart
-        expect(page).to have_content(timed_service.name).once
-        expect(page).to have_content("1:30")
+        ele = find_all(".timeinput").first
+        ele.fill_in with: "10"
+        click_button "Update"
+        expect(page).to have_content(timed_service.name, count: quantity)
+        expect(page).to have_content("$12.00")
       end
     end
 

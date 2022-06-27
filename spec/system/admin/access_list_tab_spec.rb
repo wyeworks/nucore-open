@@ -17,6 +17,10 @@ RSpec.describe "Access List Tab for various product types", :js do
   context "with an instrument" do
     let(:product) { create(:setup_instrument, requires_approval: true, facility: facility) }
 
+    it "is accessible" do
+      expect(page).to be_axe_clean
+    end
+
     it "renders the page" do
       expect(page.current_path).to eq polymorphic_path([facility, product, :users])
     end
@@ -24,6 +28,10 @@ RSpec.describe "Access List Tab for various product types", :js do
 
   context "with an item" do
     let(:product) { create(:setup_item, requires_approval: true, facility: facility) }
+
+    it "is accessible" do
+      expect(page).to be_axe_clean
+    end
 
     it "renders the page" do
       expect(page.current_path).to eq polymorphic_path([facility, product, :users])
@@ -33,6 +41,10 @@ RSpec.describe "Access List Tab for various product types", :js do
   context "with a service" do
     let(:product) { create(:setup_service, requires_approval: true, facility: facility) }
 
+    it "is accessible" do
+      expect(page).to be_axe_clean
+    end
+
     it "renders the page" do
       expect(page.current_path).to eq polymorphic_path([facility, product, :users])
     end
@@ -40,6 +52,10 @@ RSpec.describe "Access List Tab for various product types", :js do
 
   context "with a timed service" do
     let(:product) { create(:setup_timed_service, requires_approval: true, facility: facility) }
+
+    it "is accessible" do
+      expect(page).to be_axe_clean
+    end
 
     it "renders the page" do
       expect(page.current_path).to eq polymorphic_path([facility, product, :users])

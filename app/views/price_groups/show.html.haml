@@ -5,7 +5,7 @@
 = content_for :tabnav do
   = render "admin/shared/tabnav_price_group", secondary_tab: @tab.to_s
 
-%h3= @price_group.name
+%h2= @price_group.name
 - case @tab
 - when :accounts
   = render "accounts", price_group: @price_group

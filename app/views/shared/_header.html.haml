@@ -1,9 +1,9 @@
 .navbar.navbar-static-top
-  .navbar-inner
+  .navbar-inner{ style: staging_header_styles }
     .container
       = link_to :root, class: "brand" do
         - if Settings.header_logo_path.present?
-          = image_tag Settings.header_logo_path, class: "img__brand"
+          = image_tag Settings.header_logo_path, class: "img__brand", alt: t("pages.logo_alt_text")
         - if Settings.display_app_name_in_header
           %span= app_name
       - if session_user.nil?
