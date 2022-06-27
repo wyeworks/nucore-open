@@ -29,7 +29,7 @@ RSpec.describe "Managing User custom fields" do
 
         expect(current_path).to eq(facility_users_path(facility))
 
-        click_link("Danny Devito (ddevito)")
+        click_link("Danny Devito")
 
         expect(page).to have_content("123-123-1234")
       end
@@ -83,7 +83,7 @@ RSpec.describe "Managing User custom fields" do
 
         expect(current_path).to eq(facility_users_path(facility))
 
-        click_link("Danny Devito (danny@devi.to)")
+        click_link("Danny Devito")
 
         expect(page).to have_content("123-123-1234")
       end

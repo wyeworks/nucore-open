@@ -19,7 +19,7 @@ RSpec.describe do
 
         click_button "Create"
 
-        expect(page).to have_content("You just created a new user Testing Testerson (ttesterson)")
+        expect(page).to have_content("You just created a new user, Testing Testerson (ttesterson)")
 
         expect(ActionMailer::Base.deliveries.last.body.encoded).to include("A CORUM login account has been created for you")
           .and include("use your NetID and password")
@@ -69,7 +69,7 @@ RSpec.describe do
 
         click_button "Create"
 
-        expect(page).to have_content("You just created a new user Testing Testerson (email@example.org)")
+        expect(page).to have_content("You just created a new user, Testing Testerson (email@example.org)")
 
         expect(ActionMailer::Base.deliveries.last.body.encoded).to include("A CORUM login account has been created for you")
           .and include("using your username and password")
