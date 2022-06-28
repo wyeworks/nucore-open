@@ -27,6 +27,9 @@ Rails.application.configure do
   config.action_controller.perform_caching = false
   config.cache_store = :null_store
 
+  # Raise an error on page load if there are pending migrations.
+  config.active_record.migration_error = :page_load
+
   # Raise exceptions instead of rendering exception templates.
   config.action_dispatch.show_exceptions = false
 

@@ -32,7 +32,7 @@
         %tr
           %td.centered= link_to text("shared.remove"), facility_bundle_bundle_product_path(current_facility, @bundle, bundle_product), method: :delete if can? :delete, bundle_product
           %td= link_to product.to_s_with_status, [:manage, current_facility, product]
-          - if product.is_a?(Instrument) or cannot? :edit, bundle_product
+          - if product.is_a?(Instrument) or product.is_a?(TimedService) or cannot? :edit, bundle_product
             %td= bundle_product.quantity
           - else
             - quantity = QuantityPresenter.new(bundle_product, bundle_product.quantity)

@@ -97,7 +97,7 @@ group :development do
   gem "ed25519", ">= 1.2", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
   gem "haml_lint", require: false
   gem "letter_opener"
-  gem "rubocop", "1.29.0", require: false
+  gem "rubocop", "1.30.0", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"
@@ -106,6 +106,7 @@ end
 
 group :development, :test do
   gem "awesome_print"
+  gem "axe-core-rspec"
   # FactoryBot 5.X has some breaking changes we haven't sorted out
   # https://github.com/tablexi/nucore-open/pull/1865
   gem "factory_bot_rails", "< 5"

@@ -12,6 +12,7 @@ class UsersController < ApplicationController
   end
 
   include Overridable
+  include UsersHelper
   include TextHelpers::Translation
 
   customer_tab :password
@@ -34,7 +35,6 @@ class UsersController < ApplicationController
 
   # GET /facilities/:facility_id/users
   def index
-    @new_user = User.find_by(id: params[:user])
     @users = User.with_recent_orders(current_facility)
                  .order(:last_name, :first_name)
                  .paginate(page: params[:page])
@@ -237,11 +237,8 @@ class UsersController < ApplicationController
   end
 
   def save_user_success(user)
-    flash[:notice] = text("create.success")
-    if session_user.manager_of?(current_facility)
-      add_role = html("create.add_role", link: facility_facility_user_map_user_path(current_facility, user), inline: true)
-      flash[:notice].safe_concat(add_role)
-    end
+    flash[:notice] = creation_success_flash_text(user, current_facility)
+
     Notifier.new_user(user: user, password: user.password).deliver_later
     redirect_to facility_users_path(user: user.id)
   end

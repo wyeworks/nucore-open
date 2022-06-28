@@ -70,6 +70,7 @@ en:
     holidays: Holidays
     login: Login
     logout: Logout
+    logo_alt_text: "!app_name! - Home"
     manage: Manage %{model}
     my_tab: My %{model}
     transactions: My Transactions

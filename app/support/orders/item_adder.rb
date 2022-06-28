@@ -99,6 +99,8 @@ class Orders::ItemAdder
       case bundle_product.product
       when Instrument
         add_instruments(bundle_product.product, bundle_product.quantity, { bundle: product, group_id: group_id }.merge(attributes))
+      when TimedService
+        add_timed_services(bundle_product.product, bundle_product.quantity, DEFAULT_TIMED_SERVICES_DURATION, { bundle: product, group_id: group_id }.merge(attributes))
       else
         create_order_detail(
           {

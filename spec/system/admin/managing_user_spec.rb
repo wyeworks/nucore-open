@@ -5,14 +5,36 @@ require "rails_helper"
 RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { create_users: true, user_based_price_groups: true, reload_routes: true } do
 
   let(:facility) { FactoryBot.create(:facility) }
+  let(:admin) { FactoryBot.create(:user, :netid, :administrator) }
+
+  before do
+    login_as admin
+  end
+
+  describe "create", js: true do
+    it "creates an external user" do
+      visit new_external_facility_users_path(facility)
+
+      fill_in "First name", with: "Moana"
+      fill_in "Last name", with: "Waialiki"
+      fill_in "Email", with: "moana@maui.island"
+
+      check("user[no_netid]") if has_css?("#user_no_netid")
+
+      click_on "Create"
+
+      expect(page).to have_content("You just created a new user, Moana Waialiki (moana@maui.island)")
+
+      expect(page).to have_content("if this user is entitled to internal rates.")
+    end
+
+  end
 
   describe "edit" do
     describe "as a facility admin" do
-      let(:admin) { FactoryBot.create(:user, :netid, :administrator) }
       let(:user) { FactoryBot.create(:user, :netid, username: "user123") }
 
       before do
-        login_as admin
         visit facility_user_path(facility, user)
       end
 

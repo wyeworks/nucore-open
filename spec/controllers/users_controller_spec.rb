@@ -36,16 +36,6 @@ RSpec.describe UsersController do
       expect(assigns[:users]).to include @active_user
     end
 
-    context "with newly created user" do
-      before :each do
-        @user = FactoryBot.create(:user)
-        @params.merge!(user: @user.id)
-      end
-      it_should_allow_operators_only :success, "set the user" do
-        expect(assigns[:new_user]).to eq(@user)
-      end
-    end
-
   end
 
   describe "GET #edit", feature_setting: { create_users: true, reload_routes: true } do

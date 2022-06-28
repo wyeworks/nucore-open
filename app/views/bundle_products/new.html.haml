@@ -18,7 +18,7 @@
       required: true,
       collection: @bundle.products_for_group_select,
       group_method: :last,
-      input_html: { class: "js--bundleProducts__productSelect", data: { timed_quantity_types: TimedService.model_name.human(count: 2) } }
+      input_html: { class: "js--bundleProducts__productSelect", data: { timed_quantity_types: '' } }
 
     .js--bundleProducts__quantityField
       = f.input :quantity, required: true

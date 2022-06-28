@@ -29,6 +29,8 @@ For example, NU is using `acgt`, `sanger_sequencing`, and the IMSERC application
 
    `receiver_id` The OrderDetail ID
 
+ Other data is also sent along in the query string: order number, quantity, order date, ordering user name/email/NetID,  payment account owner name/email/NetID, and the payment account number.   See `UrlService#additional_query_params` and `SubmissionsController#prefill_data` for a current list of data passed along to the external service.
+
 4. Once the user completes the survey, the external service should redirect the user to `success_url`. The URL should have the following additional parameters:
 
    `receiver_id` Was passed to the external service

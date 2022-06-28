@@ -20,6 +20,11 @@ module ApplicationHelper
     (full_title + app_name).html_safe
   end
 
+  def staging_header_styles
+    stage_color = Settings.stage_color
+    "background-image: none; background-color: #{stage_color}" if stage_color
+  end
+
   def sortable(column, title = nil)
     title ||= column.titleize
     direction = column == sort_column && sort_direction == "asc" ? "desc" : "asc"

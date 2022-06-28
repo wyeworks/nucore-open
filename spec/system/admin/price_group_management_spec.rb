@@ -51,6 +51,10 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
         visit users_facility_price_group_path(facility, price_group)
       end
 
+      it "is accessible", :js do
+        expect(page).to be_axe_clean
+      end
+
       context "add a user to the price group" do
         it "creates a price group member and logs the new price group member" do
           click_link "Add User"
@@ -90,6 +94,10 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
         expect(current_path).to eq(facility_price_groups_path(facility))
         log_event = LogEvent.find_by(loggable: price_group, event_type: :delete)
         expect(log_event).to be_present
+      end
+
+      it "is accessible", :js do
+        expect(page).to be_axe_clean
       end
     end
 
@@ -131,6 +139,10 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
       click_button "Search"
       expect(page).to have_content(account2.description)
       expect(page).to_not have_content(account1.description)
+    end
+
+    it "is accessible" do
+      expect(page).to be_axe_clean
     end
   end
 
