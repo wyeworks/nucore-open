@@ -5,7 +5,7 @@ module Users
   class DefaultPriceGroupSelector
 
     def call(user)
-      user.email_user? ? PriceGroup.external : PriceGroup.base
+      user.authenticated_locally? ? PriceGroup.external : PriceGroup.base
     end
 
   end

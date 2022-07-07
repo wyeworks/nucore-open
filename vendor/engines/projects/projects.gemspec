@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name    = "projects"
   s.version = Projects::VERSION
   s.authors  = ["Table XI"]
-  s.email    = "devs@tablexi.com"
+  s.email    = "devs@txidigital.com"
   s.homepage = "https://github.com/tablexi/nucore-open"
   s.summary = "Optional projects feature"
   s.description = ""

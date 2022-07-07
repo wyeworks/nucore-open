@@ -5,6 +5,6 @@ Gem::Specification.new do |gem|
   gem.version = "1.0.0"
   gem.summary = "Provides interfacing with Dataprobe iPIO-8 relay monitor"
   gem.authors  = ["Table XI"]
-  gem.email    = "chris@tablexi.com"
+  gem.email    = "devs@txidigital.com"
   gem.homepage = "https://github.com/tablexi/nucore-open"
 end

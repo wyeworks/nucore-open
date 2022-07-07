@@ -40,7 +40,7 @@ RSpec.describe LogEventSearcher do
     let!(:log_2) { create(:log_event, loggable: account_user, event_type: :create) }
     let!(:log_3) { create(:log_event, loggable: user, event_type: :create) }
 
-    it "whitelists event type" do
+    it "allow-lists event type" do
       search = LogEventSearcher.new(events: ["user.create", "cheeseburger.create", "user.update"])
       expect(search.events).to contain_exactly("user.create")
     end

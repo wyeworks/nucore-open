@@ -42,7 +42,7 @@ class UserForm < SimpleDelegator
   end
 
   def admin_editable?
-    user.email_user?
+    user.authenticated_locally?
   end
 
   def username_editable?

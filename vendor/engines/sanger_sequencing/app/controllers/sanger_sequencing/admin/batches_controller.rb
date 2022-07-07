@@ -30,7 +30,7 @@ module SangerSequencing
       end
 
       def create
-        # Whitelisting should happen in the form object
+        # Allow-listing should happen in the form object
         if @batch.update_form_attributes(params[:batch].merge(created_by: current_user, facility: current_facility))
           redirect_to [current_facility, :sanger_sequencing, :admin, :batches, group: @batch.group], notice: text("create.success")
         else

@@ -661,8 +661,8 @@ RSpec.describe Product do
     end
 
     describe "invalid emails" do
-      let(:contacts) { "valid@tablexi.com, invalid@ " }
-      it { is_expected.to eq ["valid@tablexi.com", "invalid@"] }
+      let(:contacts) { "valid@txidigital, invalid@ " }
+      it { is_expected.to eq ["valid@txidigital", "invalid@"] }
       it "is invalid" do
         expect(product).to be_invalid
         expect(product.errors).to include(:training_request_contacts)

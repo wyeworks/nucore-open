@@ -18,12 +18,13 @@
       required: true,
       collection: @bundle.products_for_group_select,
       group_method: :last,
-      input_html: { class: "js--bundleProducts__productSelect", data: { timed_quantity_types: '' } }
+      input_html: { class: "js--bundleProducts__productSelect" }
 
     .js--bundleProducts__quantityField
       = f.input :quantity, required: true
-    .js--bundleProducts__timedQuantityField
-      = f.input :quantity, required: true, input_html: { class: "timeinput" }
+
+    %p.js--timedServices.hint
+      = t("timed_service_hint")
 
   %ul.inline
     %li= f.submit t("shared.create"), class: "btn"

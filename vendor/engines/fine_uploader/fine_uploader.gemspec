@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.name        = "fine_uploader"
   s.version     = FineUploader::VERSION
   s.authors     = ["Jason Hanggi"]
-  s.email       = ["jason@tablexi.com"]
+  s.email       = ["devs@txidigital.com"]
   s.homepage    = "http://fineuploader.com/"
   s.summary     = "FineUploader for Rails Asset Pipeline"
   s.description = "FineUploader for Rails Asset Pipeline."

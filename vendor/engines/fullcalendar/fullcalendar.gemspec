@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.name        = "fullcalendar"
   s.version     = Fullcalendar::VERSION
   s.authors     = ["Jason Hanggi"]
-  s.email       = ["jason@tablexi.com"]
+  s.email       = ["devs@txidigital.com"]
   s.homepage    = "https://fullcalendar.io/"
   s.summary     = "FullCalendar for Rails Asset Pipeline"
   s.description = "FullCalendar for Rails Asset Pipeline."

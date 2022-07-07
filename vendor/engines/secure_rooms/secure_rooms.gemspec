@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.name        = "secure_rooms"
   s.version     = SecureRooms::VERSION
   s.authors     = ["Table XI"]
-  s.email       = ["devs@tablexi.com"]
+  s.email       = ["devs@txidigital.com"]
   s.homepage    = "https://github.com/tablexi/nucore-open"
   s.summary     = "Optional Secure Room feature for NUcore"
   s.description = "Optional Secure Room feature for NUcore"

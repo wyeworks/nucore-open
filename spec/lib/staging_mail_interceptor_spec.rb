@@ -11,12 +11,12 @@ RSpec.describe StagingMailInterceptor do
     end
   end
 
-  describe "whitelisting" do
-    let(:whitelist) { ["allowed@example.org", "allowed2@example.org", "allowed3@example.org"] }
+  describe "allow_listing" do
+    let(:allow_list) { ["allowed@example.org", "allowed2@example.org", "allowed3@example.org"] }
     let(:send_to) { ["sendto@example.org"] }
 
     before do
-      allow(interceptor).to receive(:whitelist) { whitelist }
+      allow(interceptor).to receive(:allow_list) { allow_list }
       allow(interceptor).to receive(:send_to_addresses) { send_to }
       interceptor.process
     end
@@ -39,7 +39,7 @@ RSpec.describe StagingMailInterceptor do
       end
 
       describe "multiple addresses" do
-        let(:to) { whitelist.first(2) }
+        let(:to) { allow_list.first(2) }
 
         it "lets the email through" do
           expect(message.to).to eq(to)
@@ -58,7 +58,7 @@ RSpec.describe StagingMailInterceptor do
     describe "when the email is not on the list" do
       let(:to) { ["notallowed@example.org"] }
 
-      it "sends to the whitelist" do
+      it "sends to the allow_list" do
         expect(message.to).to eq(send_to)
       end
 

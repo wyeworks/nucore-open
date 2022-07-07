@@ -992,7 +992,6 @@ en:
     new_user:
       success: You just created a new user
       new_payment_source: Create a new payment source for this user
-      add_to_payment_source: Add this user to a payment source
       order_for: Order on behalf of this user
     access_list:
       date_added: "Date Added"
@@ -1269,3 +1268,5 @@ en:
     calendar_tooltip: Calendar file download
     summary: "%{facility}: %{product}"
     description: "%{facility} reservation for %{product}. Order number %{order_number}."
+  
+  timed_service_hint: The number of timed services, not time per service. Time can be adjusted in cart.

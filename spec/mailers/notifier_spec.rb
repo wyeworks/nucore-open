@@ -12,7 +12,7 @@ RSpec.describe Notifier do
   if EngineManager.engine_loaded?(:c2po)
     describe ".statement" do
       let(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner) }
-      let(:statement) { FactoryBot.build_stubbed(:statement, facility: facility, account: account) }
+      let(:statement) { FactoryBot.create(:statement, facility: facility, account: account) }
       let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
       let(:email_text) { email.text_part.to_s }
 
