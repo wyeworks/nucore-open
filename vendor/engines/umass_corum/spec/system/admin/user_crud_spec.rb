@@ -27,7 +27,7 @@ RSpec.describe do
         expect(User.find_by!(username: "ttesterson")).to have_attributes(
           username: "ttesterson",
           email: "email@example.org",
-          email_user?: false,
+          authenticated_locally?: false,
           encrypted_password: be_blank,
         )
       end
@@ -77,7 +77,7 @@ RSpec.describe do
         expect(User.find_by!(username: "email@example.org")).to have_attributes(
           username: "email@example.org",
           email: "email@example.org",
-          email_user?: true,
+          authenticated_locally?: true,
           encrypted_password: be_present,
         )
       end
