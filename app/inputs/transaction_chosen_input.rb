@@ -25,7 +25,7 @@ class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
     end
 
     option_data = option_elems(label_method, value_method)
-    selected = input_options[:selected] || object.public_send(attribute_name)
+    selected = input_options[:selected] || object.public_send(attribute_name) || default_order_statuses
     opts = template.options_for_select option_data, selected: selected
     template.select_tag("#{object.class.model_name.param_key}[#{attribute_name}]", opts, merged_input_options)
   end
@@ -36,6 +36,11 @@ class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
   end
 
   private
+
+  # Show all available order statuses as selected by default
+  def default_order_statuses
+    collection.map { |i| i.id.to_s } if attribute_name == "order_statuses"
+  end
 
   # Pass an array if you want arguments, [:full_name, suspended_label: true]
   def option_elems(label_method, value_method)
