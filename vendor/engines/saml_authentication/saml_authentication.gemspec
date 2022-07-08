@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.name        = "saml_authentication"
   s.version     = SamlAuthentication::VERSION
   s.authors     = ["Table XI"]
-  s.email       = ["devs@tablexi.com"]
+  s.email       = ["devs@txidigital.com"]
   s.homepage    = "https://github.com/tablexi/nucore-open"
   s.summary     = "SAML Authentication for NUcore"
   s.description = ""

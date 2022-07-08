@@ -15,7 +15,7 @@ module Users
     def convert!
       user = User.find_by!(username: @username)
 
-      raise "#{@username} is already an external user" if user.email_user?
+      raise "#{@username} is already an external user" if user.authenticated_locally?
 
       user.assign_attributes(
         username: user.email,

@@ -32,12 +32,12 @@ class StagingMailInterceptor
   def process
     message.subject = subject
 
-    return if all_addresses_whitelisted?
+    return if all_addresses_allow_listed?
 
     message.html_part.body = html_body if message.html_part
     message.text_part.body = text_body if message.text_part
 
-    message.to = whitelisted_addresses
+    message.to = allow_listed_addresses
     message.cc = nil
     message.bcc = nil
   end
@@ -74,32 +74,33 @@ class StagingMailInterceptor
     "Intercepted email:\n  to: #{message.to}\n  cc: #{message.cc}\n  bcc: #{message.bcc}"
   end
 
-  # Internal: Is the passed recipient whitelisted for communication? Permits
+  # Internal: Is the passed recipient allow_listed for communication? Permits
   # communication only with either Table XI employees or emails listed in
   # secrets in the staging environment.
   #
   # Returns a Boolean.
-  def whitelisted?(recipient)
+  def allow_listed?(recipient)
     recipient = Mail::Address.new(recipient)
     recipient.domain == "tablexi.com" ||
-      full_whitelist.map(&:downcase).include?(recipient.address.downcase)
+      recipient.domain == "txidigital.com" ||
+      full_allow_list.map(&:downcase).include?(recipient.address.downcase)
   end
 
-  # Internal: Get a list of the whitelisted email addresses for this message.
-  # If no email addresses are whitelisted, defaults to the configured exception
+  # Internal: Get a list of the allow_listed email addresses for this message.
+  # If no email addresses are allow_listed, defaults to the configured exception
   # notification email address.
   #
   # Returns a String or Array of Strings.
-  def whitelisted_addresses
-    message.to.select { |recipient| whitelisted?(recipient) }.presence ||
+  def allow_listed_addresses
+    message.to.select { |recipient| allow_listed?(recipient) }.presence ||
       send_to_addresses
   end
 
-  # Internal: Are all target email addresses whitelisted?
+  # Internal: Are all target email addresses allow_listed?
   #
   # Returns a Boolean.
-  def all_addresses_whitelisted?
-    message.to.all? { |recipient| whitelisted?(recipient) } &&
+  def all_addresses_allow_listed?
+    message.to.all? { |recipient| allow_listed?(recipient) } &&
       message.cc.blank? &&
       message.bcc.blank?
   end
@@ -107,16 +108,16 @@ class StagingMailInterceptor
   # Internal: The list of all users that will be able to receive emails
   #
   # Returns an Array of strings
-  def full_whitelist
-    send_to_addresses + whitelist + exception_recipients
+  def full_allow_list
+    send_to_addresses + allow_list + exception_recipients
   end
 
   def send_to_addresses
     Array(settings[:to])
   end
 
-  def whitelist
-    Array(settings[:whitelist])
+  def allow_list
+    Array(settings[:allow_list])
   end
 
   def exception_recipients

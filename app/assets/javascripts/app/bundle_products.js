@@ -1,30 +1,42 @@
-// On bundle_products#new, switch between a regular quantity field and a time
-// quantity field based on the type of product selected.
-$(function() {
-  $productSelect = $(".js--bundleProducts__productSelect");
+/**
+ * Show/hide helpful hint text on the bundle new page based on which kind of product
+ * is selected. The hint text is meant to give the user helpful information about
+ * the product type (e.g. Item, Timed Service, etc).
+ * 
+ * To add a hint, add an element with the .hint and .js--<camel cased product type> 
+ * classes to the page. E.g. the "Timed Services" hint is put in an element with the
+ * .js--timedServices, and .hint classes.
+ */
+(function() {
+  window.addEventListener("DOMContentLoaded", function() {
+    const productSelect = document.querySelector(".js--bundleProducts__productSelect");
 
-  if ($productSelect.length) {
-    var timeQuantityTypes = $productSelect.data("timed-quantity-types").split(", ")
-    var $quantityField = $(".js--bundleProducts__quantityField");
-    var $timedQuantityField = $(".js--bundleProducts__timedQuantityField");
+    if (productSelect) {
+      const hints = document.querySelectorAll(".hint");
 
-    $productSelect.bind("change", function(evt) {
-      var selectedType = $(evt.target).find(":selected").closest("optgroup").attr("label");
-      var isTimeSelected = timeQuantityTypes.includes(selectedType);
+      hideElements(hints);
 
-      // Show/hide and Enable/Disable the regular quantity vs time quantit fields
-      $quantityField.toggle(!isTimeSelected).find("input").prop("disabled", isTimeSelected);
-      $timedQuantityField.toggle(isTimeSelected).find("input").prop("disabled", !isTimeSelected);
-    }).trigger("change");
+      productSelect.addEventListener("change", function(evt) {
+        hideElements(hints);
 
-    // Keep the two fields synchronized. In the time input field, there is a visible
-    // field, which is the formatted (H:MM) version and the hidden is a raw quantity.
-    $quantityField.on("change", function(evt) {
-      $timedQuantityField.find("input[type=hidden]").val($(evt.target).val()).trigger("change");
-    });
+        let selectedType = $(evt.target).find(":selected").closest("optgroup").attr("label");
 
-    $timedQuantityField.on("change", "input[type=hidden]", function(evt) {
-      $quantityField.find("input").val($(evt.target).val())
-    });
-  }
-});
+        if (selectedType) {
+          let className = ".js--" + capitalizedToCamelCase(selectedType);
+          document.querySelector(className).hidden = false;
+        }
+
+      });
+    }
+
+    function capitalizedToCamelCase(str) {
+      return (str[0].toLowerCase() + str.slice(1)).replaceAll(" ", "");
+    }
+
+    function hideElements(elements) {
+      elements.forEach(function(element) {
+        element.hidden = true;
+      });
+    }
+  });
+})();

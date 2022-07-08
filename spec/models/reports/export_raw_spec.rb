@@ -76,7 +76,7 @@ RSpec.describe Reports::ExportRaw do
       describe "with a statement" do
         let(:statement) { create(:statement, facility: facility, created_by: 0, account: account) }
         before { order_detail.update(statement: statement) }
-        it { is_expected.to have_column("Invoice Number").with_value("#{account.id}-#{statement.id}") }
+        it { is_expected.to have_column("Invoice Number").with_value(statement.invoice_number) }
       end
     end
 

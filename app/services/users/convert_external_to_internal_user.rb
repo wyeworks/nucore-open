@@ -22,7 +22,7 @@ module Users
 
     def convert!
       existing_user = User.find_by!(email: @email)
-      raise "Is already an internal user" unless existing_user.email_user?
+      raise "Is already an internal user" unless existing_user.authenticated_locally?
 
       existing_user.assign_attributes(find_attributes)
 

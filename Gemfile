@@ -16,8 +16,8 @@ gem "rack-utf8_sanitizer"
 ## database
 gem "mysql2"
 # To use Oracle, remove the mysql2 gem above and uncomment these lines
-# TODO - remove patch in oracle.rb when we upgrade to rails 6.1
-# gem "activerecord-oracle_enhanced-adapter", "~> 6.0.0"
+# Check initializers/oracle.rb when upgrading
+# gem "activerecord-oracle_enhanced-adapter", "~> 6.1.0"
 # gem "ruby-oci8" # only for CRuby users
 
 

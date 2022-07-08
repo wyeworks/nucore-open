@@ -43,7 +43,7 @@ module UmassCorum
 
     def certified?(certificate)
       # Email users would never exist in the external system. They must have a valid netid.
-      return false if @user.email_user? || user_not_found?
+      return false if @user.authenticated_locally? || user_not_found?
 
       completed_certificate_ids.include?(certificate.name)
     end

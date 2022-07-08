@@ -4,7 +4,7 @@ module UsersHelper
 
   # Builds the text for the creation success flash notice
   def creation_success_flash_text(user, facility)
-    user_type = user.email_user? ? "external" : "internal"
+    user_type = user.authenticated_locally? ? "external" : "internal"
 
     html(
       "controllers.users.create.success.#{user_type}",

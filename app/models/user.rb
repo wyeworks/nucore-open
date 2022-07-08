@@ -85,14 +85,8 @@ class User < ApplicationRecord
     encrypted_password.present? && password_salt.present?
   end
 
-  #
-  # Returns true if this user uses Devise's authenticatable module
-  def email_user?
-    username.casecmp(email.downcase).zero?
-  end
-
   def password_updatable?
-    email_user?
+    authenticated_locally?
   end
 
   # Runs various validation checks and then saves the new password.
