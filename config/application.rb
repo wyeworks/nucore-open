@@ -26,6 +26,11 @@ module Nucore
     # https://blog.bigbinary.com/2016/08/29/rails-5-disables-autoloading-after-booting-the-app-in-production.html
     config.enable_dependency_loading = true
 
+
+    # Needed on the 6.1.6.1 version bump.
+    # https://github.com/rails/rails/blob/dc1242fd5a4d91e63846ab552a07e19ebf8716ac/activerecord/CHANGELOG.md
+    config.active_record.yaml_column_permitted_classes = [Symbol, ActiveSupport::HashWithIndifferentAccess]
+
     # config.time_zone = "Central Time (US & Canada)"
 
     # Settings in config/environments/* take precedence over those specified here.
