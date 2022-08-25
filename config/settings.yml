@@ -143,6 +143,8 @@ saml:
   login_enabled: true
   # We've been seeing certificate expiration errors, so we're temporarily using a
   # locally stored version of the metadata.
+  # You can add allowance for clock drift between the sp and idp - this is a time in seconds.
+  allowed_clock_drift_in_seconds: 1
   idp_metadata: "https://webauth.umass.edu/idp/shibboleth"
   # Overridden in staging/production
   # certificate_file: saml-certificate.p12 # Do not check in to version control.

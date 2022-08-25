@@ -45,12 +45,12 @@ RSpec.describe JournalRowBuilder, :enable_split_accounts, :default_journal_row_c
     end
 
     it "2 negative rows for the facility accounts" do
-      rows = builder.build.journal_rows.select { |row| row.account.to_i == facility_account.revenue_account }
+      rows = builder.build.journal_rows.select { |row| row.account.to_i == facility_account.revenue_account.to_i }
       expect(rows.length).to eq(1)
       expect(rows.first.amount).to eq(-20)
       expect(rows.first.order_detail_id).to be_blank
 
-      rows2 = builder.journal_rows.select { |row| row.account.to_i == facility_account2.revenue_account }
+      rows2 = builder.journal_rows.select { |row| row.account.to_i == facility_account2.revenue_account.to_i }
       expect(rows2.length).to eq(1)
       expect(rows2.first.amount).to eq(-3)
       expect(rows2.first.order_detail_id).to be_blank

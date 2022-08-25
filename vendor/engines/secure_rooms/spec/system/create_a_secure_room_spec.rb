@@ -48,7 +48,7 @@ RSpec.describe "Creating a SecureRoom" do
       uncheck "price_policy_#{facility_price_group.id}[can_purchase]"
       fill_in "price_policy_#{global_price_group.id}[usage_subsidy]", with: "60"
 
-      fill_in "Note", with: "This is a note"
+      fill_in "note", with: "This is a note"
 
       click_button "Add Pricing Rules"
     end

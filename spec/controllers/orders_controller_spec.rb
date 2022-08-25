@@ -508,6 +508,8 @@ RSpec.describe OrdersController do
     end
 
     context "backdating" do
+      let(:yesterday) { 1.day.ago.beginning_of_day }
+
       before :each do
         @order_detail = place_product_order(@staff, @authable, @item, @account, false)
         @order_detail.update_attribute(:ordered_at, nil)
@@ -541,9 +543,8 @@ RSpec.describe OrdersController do
         maybe_grant_always_sign_in :director
         switch_to @staff
         @params[:order_date] = format_usa_date(1.day.ago)
-        @params[:order_time] = { hour: "10", minute: "12", ampm: "AM" }
         do_request
-        expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date 1.day.ago.change(hour: 10, min: 12))
+        expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date yesterday)
       end
 
       it "sets ordered_at to now if not acting_as" do
@@ -619,21 +620,19 @@ RSpec.describe OrdersController do
           it "sets the order_detail fulfilled dates to the order time" do
             @item_pp = @item.item_price_policies.create!(FactoryBot.attributes_for(:item_price_policy, price_group_id: @price_group.id, start_date: 1.day.ago, expire_date: 1.day.from_now))
             @params[:order_date] = format_usa_date(1.day.ago)
-            @params[:order_time] = { hour: "10", minute: "13", ampm: "AM" }
             do_request
-            assigns[:order].reload.order_details.all? { |od| expect(od.fulfilled_at).to match_date 1.day.ago.change(hour: 10, min: 13) }
+            assigns[:order].reload.order_details.all? { |od| expect(od.fulfilled_at).to match_date yesterday }
           end
 
           context "price policies" do
             before :each do
               @item.item_price_policies.clear
-              @item_pp = @item.item_price_policies.create!(FactoryBot.attributes_for(:item_price_policy, price_group_id: @price_group.id, start_date: 1.day.ago, expire_date: 1.day.from_now))
-              @item_past_pp = @item.item_price_policies.create!(FactoryBot.attributes_for(:item_price_policy, price_group_id: @price_group.id, start_date: 7.days.ago, expire_date: 1.day.ago))
-              @params.merge!(order_time: { hour: "10", minute: "00", ampm: "AM" })
+              @item_pp = @item.item_price_policies.create!(FactoryBot.attributes_for(:item_price_policy, price_group_id: @price_group.id, start_date: yesterday, expire_date: 1.day.from_now.beginning_of_day))
+              @item_past_pp = @item.item_price_policies.create!(FactoryBot.attributes_for(:item_price_policy, price_group_id: @price_group.id, start_date: 7.days.ago.beginning_of_day, expire_date: yesterday))
             end
 
             it "uses the current price policy if the order date falls in the policy's date range" do
-              @params[:order_date] = format_usa_date(1.day.ago)
+              @params[:order_date] = format_usa_date(yesterday)
               do_request
               assigns[:order].reload.order_details.all? { |od| expect(od.price_policy).to eq(@item_pp) }
             end

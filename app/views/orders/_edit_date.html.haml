@@ -1,30 +1,27 @@
-- classes = ['collapsable']
-- classes << 'collapsed' if params['backdate_order'].blank?
-%fieldset#backdate-orders{ class: classes }
-  %label.legend= t("orders.show.more_options")
+%fieldset#backdate-orders
   = hidden_field_tag :backdate_order, true
   - default_time = time_floor(Time.zone.now)
+
   = simple_fields_for :backdate, builder: ModelLessFormBuilder, defaults: { required: false } do |f|
     = f.input :order_date,
       input_html: { value: params[:order_date] || format_usa_date(default_time),
           class: "datepicker__data",
-          data: { max_date: Time.current.iso8601 } },
-          disabled: true
-
-    = label_tag :order_time
-    .time-select= time_select_tag :order_time, params[:order_datetime] || default_time, disabled: true
+          data: { max_date: Time.current.iso8601 } }
 
     = f.input :order_status_id,
       collection: @order_statuses,
       label_method: :name_with_level,
+      input_html: { class: "js--order_status"},
       selected:  params[:order_status_id] || @order_statuses.first.try(:id),
-      label: OrderDetail.human_attribute_name(:order_status),
-      disabled: true
+      label: OrderDetail.human_attribute_name(:order_status)
+
+    = f.input :fulfilled_at,
+      input_html: { class: "datepicker__data js--fulfilled_at",
+          data: { max_date: ValidFulfilledAtDate.max.iso8601, min_date: ValidFulfilledAtDate.min.iso8601 } }
 
     = f.input :send_notification,
       as: :boolean,
       input_html: { value: 1 },
       default: params[:send_notification],
       label: false,
-      inline_label: true,
-      disabled: true
+      inline_label: true

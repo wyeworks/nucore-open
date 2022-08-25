@@ -11,6 +11,7 @@
           size: (options[:length] || 30) + 2,
           maxlength: options[:length] || 30,
           tabindex: i + 1,
-          readonly: local_assigns[:readonly]
+          readonly: local_assigns[:readonly],
+          value: f.object.account_number_part_value_or_default(section)
 
         = "-&nbsp;".html_safe unless i >= fields.size - 1

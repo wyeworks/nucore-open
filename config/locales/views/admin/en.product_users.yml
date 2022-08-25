@@ -4,17 +4,14 @@ en:
       index:
         header: Approved Users
         add: Add Approved User
-        explanation: |
-          This %{product_type} requires a user to be approved before they may
-          purchase the %{product_type}.
         none: No users are currently approved.
         update: Update %{plural_label}
         import_button: Import Approved Users
-        import_header: Approved User Import
         import_hint: |
-          Click the button below to import a CSV file with a list of emails
-          or NetId's in the 'Username' column.  All other columns will be
-          ignored. Users that already have access will not be affected.
+          This %{product_type} requires a user to be approved before they can make a 
+          reservation or purchase. Users can be approved individually or a list can be imported. 
+          When importing, create a CSV file with a single column titled ‘Username’ 
+          (NETID or email). New users are added to the existing access list.
 
       table:
         confirm_removal: |

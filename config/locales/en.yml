@@ -677,7 +677,6 @@ en:
         account: "Payment Source"
       link:
         change_account: "Change Payment Source"
-      more_options: More options
       order_form:
         edit: "Edit Online Order Form"
         new: "Complete Online Order Form"
