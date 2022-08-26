@@ -1,4 +1,4 @@
-= simple_form_for order, url: { action: :update_or_purchase } do |f|
+= simple_form_for order, html: { novalidate: false }, url: { action: :update_or_purchase } do |f|
   %table.table.table-striped.table-hover.js--cart.js--responsive_table#cart{ class: order.has_valid_payment? ? "" : " invalid" }
     %thead
       %tr

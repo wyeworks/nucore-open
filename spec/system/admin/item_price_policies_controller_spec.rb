@@ -26,7 +26,7 @@ RSpec.describe ItemPricePoliciesController, :js do
     fill_in "price_policy_#{cancer_center.id}[unit_subsidy]", with: "25.25"
     fill_in "price_policy_#{external_price_group.id}[unit_cost]", with: "125.15"
 
-    fill_in "Note", with: "This is my note"
+    fill_in "note", with: "This is my note"
 
     click_button "Add Pricing Rules"
 
@@ -43,7 +43,7 @@ RSpec.describe ItemPricePoliciesController, :js do
     click_link "Pricing"
     click_link "Add Pricing Rules"
 
-    fill_in "Note", with: "This is my note"
+    fill_in "note", with: "This is my note"
 
     fill_in "price_policy_#{base_price_group.id}[unit_cost]", with: "100.00"
     fill_in "price_policy_#{cancer_center.id}[unit_subsidy]", with: "25.25"

@@ -327,8 +327,8 @@ class OrdersController < ApplicationController
   private
 
   def build_order_date
-    if params[:order_date].present? && params[:order_time].present?
-      parse_usa_date(params[:order_date], join_time_select_values(params[:order_time]))
+    if params[:order_date].present?
+      parse_usa_date(params[:order_date])
     end
   end
 
@@ -372,7 +372,7 @@ class OrdersController < ApplicationController
   end
 
   def ordering_on_behalf_with_date_params?
-    params[:order_date].present? && params[:order_time].present? && acting_as?
+    params[:order_date].present? && acting_as?
   end
 
   def single_reservation?

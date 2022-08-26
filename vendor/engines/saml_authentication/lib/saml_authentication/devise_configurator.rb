@@ -20,6 +20,9 @@ module SamlAuthentication
         config.saml_update_resource_hook = SamlAuthentication::UserUpdater.new(**Hash(Settings.saml.user_updating))
         config.saml_sign_out_success_url = Rails.application.routes.url_helpers.root_url
         config.idp_entity_id_reader = SamlAuthentication::IdpEntityIdReader
+        # You can add allowance for clock drift between the sp and idp.
+        # This is a time in seconds.
+        config.allowed_clock_drift_in_seconds = Settings.saml.allowed_clock_drift_in_seconds
 
         config.saml_config = fetch_metadata_config(Hash(Settings.saml.metadata_parse_options))
         config.saml_configure do |settings|
