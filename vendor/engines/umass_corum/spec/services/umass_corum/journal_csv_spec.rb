@@ -81,16 +81,16 @@ RSpec.describe UmassCorum::Journals::JournalCsv do
 
   it "writes the correct header row" do
     header = output.split("\n").first
-    expect(header).to eq("Business Unit,Account,Speed Type,Fund,Dept,Program,Class,Project,Trans Ref,Amount,Description,Name Reference,Trans Date,Doc Ref,Ref 2")
+    expect(header).to eq("Business Unit,Account,Speed Type,Fund,Dept,Program,Class,Project,Amount,Description,Name Reference,Trans Date,Doc Ref,Ref 2,Trans Ref")
   end
 
   it "writes the correct debit row" do
     row = output.split("\n").second
-    expect(row).to eq("UMAMH,753080,167998,53104,A091200002,B03,,S11310000000076,ANIMALIMAGI,350.01,\"Name, Owner\",#{order_detail},06/10/2020,BME,ALS001")
+    expect(row).to eq("UMAMH,753080,167998,53104,A091200002,B03,,S11310000000076,350.01,\"Name, Owner\",#{order_detail},06/10/2020,BME,ALS001,ANIMALIMAGI")
   end
 
   it "writes the amount correctly for the credit row" do
     row = output.split("\n").third
-    expect(row).to eq("UMAMH,99999,,,,,,,ANIMALIMAGI,-350.01,,,\"\",,")
+    expect(row).to eq("UMAMH,99999,,,,,,,-350.01,,,\"\",,,ANIMALIMAGI")
   end
 end

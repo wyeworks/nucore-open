@@ -30,13 +30,13 @@ module UmassCorum
           program: :program,
           class: :clazz,
           project: :project,
-          trans_ref: ->(journal_row) { journal_row.journal.facility.abbreviation[0, 11] },
           amount: :amount,
           description: :description,
           name_reference: :name_reference,
           trans_date: ->(journal_row) { format_usa_date(journal_row.trans_date) },
           doc_ref: :doc_ref,
           ref_2: :ref_2,
+          trans_ref: ->(journal_row) { journal_row.journal.facility.abbreviation[0, 11] },
         }
       end
 
