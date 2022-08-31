@@ -1254,7 +1254,7 @@ en:
       not_found_in_database: "Invalid username or password."
       inactive: "Invalid username or password."
       saml_update_failed: "Login failed, please contact an administrator."
-      saml_invalid: "Invalid username or password."
+      saml_invalid: "Invalid username or password for %{username}/%{email}"
     mailer:
       # TODO
       reset_password_instructions:
