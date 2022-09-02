@@ -66,4 +66,4 @@ en:
       saml_update_failed: |
         There was a problem logging in with your CORUM user account.  Please contact <a href="mailto:corum@umass.edu">corum@umass.edu</a> to confirm your account details.
       saml_invalid: |
-        You have not yet signed up with CORUM. Please contact <a href="mailto:corum@umass.edu">corum@umass.edu to confirm your account.</a>
+        You have not yet signed up with CORUM (%{username}/%{email}). Please contact <a href="mailto:corum@umass.edu">corum@umass.edu to confirm your account.</a>
