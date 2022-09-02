@@ -22,9 +22,28 @@ module Devise
       # authentication to call fail!(:saml_invalid), which allows us to specify a separate
       # failure message for authentication via SAML.
       def failed_auth(msg)
+        log_to_rollbar(msg) if defined?(Rollbar)
         DeviseSamlAuthenticatable::Logger.send(msg)
-        fail!(I18n.t("devise.failure.saml_invalid").html_safe)
+        fail!(error_message.html_safe)
         Devise.saml_failed_callback.new.handle(@response, self) if Devise.saml_failed_callback # rubocop:disable Style/SafeNavigation
+      end
+
+      def failed_auth_user_attributes
+        attribute_map = Devise.saml_attribute_map_resolver.new("").attribute_map
+        saml_response = ::SamlAuthenticatable::SamlResponse.new(@response.attributes, attribute_map)
+        SamlAuthentication::SamlAttributes.new(saml_response).to_h
+      end
+
+      def error_message
+        I18n.t(
+          "devise.failure.saml_invalid",
+          username: failed_auth_user_attributes[:username]&.first,
+          email: failed_auth_user_attributes[:email]&.first
+        )
+      end
+
+      def log_to_rollbar(msg)
+        Rollbar.warn(msg, attributes: failed_auth_user_attributes) unless msg == "Resource could not be found"
       end
 
     end

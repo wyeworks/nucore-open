@@ -85,7 +85,7 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
 
       it "sets a user-friendly error message in the flash" do
         post :create, params: { SAMLResponse: saml_response }
-        expect(flash[:alert]).to eq(I18n.t("devise.failure.saml_invalid"))
+        expect(flash[:alert]).to eq(I18n.t("devise.failure.saml_invalid", username: "sst123", email: "sst123@example.com"))
       end
 
       it "marks the message in :saml_invalid as html_safe to allow including links" do
