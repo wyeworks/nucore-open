@@ -168,4 +168,15 @@ RSpec.describe Journal do
 
   end
 
+  describe "#als_prefix" do
+    let(:facility) { create(:setup_facility, url_name: "data-corps") }
+
+    it "prefixes DCR for data-corps facility" do
+      expect { journal.save! }.to change(JournalRow, :count).by(2)
+      expect(JournalRow.second).to have_attributes(
+        ref_2: /DCR\d{3}/,
+      )
+    end
+  end
+
 end

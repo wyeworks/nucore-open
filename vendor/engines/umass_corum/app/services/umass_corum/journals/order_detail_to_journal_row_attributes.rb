@@ -43,7 +43,15 @@ module UmassCorum
       # Returns the journal batch ID. E.g. ALS034. It rolls over after ALS999
       def journal_als
         als_number = journal.als_number.presence || journal.id
-        "ALS#{format('%03d', als_number % 1000)}"
+        "#{als_prefix}#{format('%03d', als_number % 1000)}"
+      end
+
+      def als_prefix
+        custom_journal_prexifes[journal.facility&.url_name] || "ALS"
+      end
+
+      def custom_journal_prexifes
+        { "data-corps" => "DCR" }
       end
 
       # This field is something like "Biology-Maresca,Thomas". The first part is
