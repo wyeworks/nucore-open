@@ -16,7 +16,7 @@
       label: OrderDetail.human_attribute_name(:order_status)
 
     = f.input :fulfilled_at,
-      input_html: { class: "datepicker__data js--fulfilled_at",
+      input_html: { value: params[:fulfilled_at], class: "datepicker__data js--fulfilled_at",
           data: { max_date: ValidFulfilledAtDate.max.iso8601, min_date: ValidFulfilledAtDate.min.iso8601 } }
 
     = f.input :send_notification,

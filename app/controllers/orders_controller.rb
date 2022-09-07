@@ -243,8 +243,6 @@ class OrdersController < ApplicationController
 
   # PUT /orders/:id/update
   def update
-    params[:order_datetime] = build_order_date if acting_as?
-
     @order.transaction do
       @order.assign_attributes(order_params)
 

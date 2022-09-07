@@ -77,7 +77,8 @@ class OrderPurchaser
       next if od.reservation # reservations should always have order_status dictated by their dates
 
       if order_status.root == OrderStatus.complete
-        od.backdate_to_complete!(od.ordered_at)
+        backdated_fulfilled_time = od.manual_fulfilled_at_time || od.ordered_at
+        od.backdate_to_complete!(backdated_fulfilled_time)
       else
         od.update_order_status!(update_by, order_status, admin: true)
       end

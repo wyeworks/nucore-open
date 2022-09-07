@@ -11,7 +11,7 @@ RSpec.describe "Placing an item order" do
                       price_group: PriceGroup.base,
                       product: product,
                       unit_cost: 33.25,
-                      start_date: 2.days.ago.beginning_of_day)
+                      start_date: 6.days.ago.beginning_of_day)
   end
   let!(:account_price_group_member) do
     FactoryBot.create(:account_price_group_member, account: account, price_group: price_policy.price_group)
@@ -79,6 +79,7 @@ RSpec.describe "Placing an item order" do
 
   it "can backdate an order", :js do # js needed for More options expansion
     two_days_ago = I18n.l(2.days.ago.to_date, format: :usa)
+    three_days_ago = I18n.l(3.days.ago.to_date, format: :usa)
     visit facility_path(facility)
     click_link product.name
     click_link "Add to cart"
@@ -88,7 +89,7 @@ RSpec.describe "Placing an item order" do
     fill_in "Order date", with: two_days_ago
     select "Complete", from: "Order Status"
 
-    fill_in "Fulfilled at", with: two_days_ago
+    fill_in "Fulfilled at", with: three_days_ago
 
     click_button "Purchase"
 
@@ -97,7 +98,11 @@ RSpec.describe "Placing an item order" do
     expect(page).to have_css(".currency .estimated_cost", count: 0)
     expect(page).to have_css(".currency .actual_cost", count: 2) # Cost and Total
 
-    expect(page).to have_content_i("Ordered Date\n#{two_days_ago}")
+    expect(page).to have_content("Ordered Date\n#{two_days_ago}")
+
+    click_link "Exit"
+    click_link "Billing"
+    expect(page).to have_content(three_days_ago)
   end
 
   it "can set a reference ID" do
