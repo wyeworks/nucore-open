@@ -63,7 +63,6 @@ module UmassCorum
     end
 
     def self.details
-      # Rails 5.2 will change this to be symbols
       OpenStruct.new(Rails.application.secrets.dig(:umass, :speed_type_api))
     end
 
