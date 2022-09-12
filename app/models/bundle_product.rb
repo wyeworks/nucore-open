@@ -9,6 +9,7 @@ class BundleProduct < ApplicationRecord
 
   validates_presence_of     :bundle_product_id, :product_id
   validates_numericality_of :quantity, only_integer: true, greater_than: 0
+  validates_numericality_of :quantity, less_than: 10, if: :timed_service_product?
   validates_uniqueness_of   :product_id, scope: [:bundle_product_id]
 
   scope :alphabetized, -> { joins(:product).order(Arel.sql("LOWER(products.name)")) }
@@ -16,6 +17,10 @@ class BundleProduct < ApplicationRecord
   # TODO: favor the alphabetized scope over relying on Array#sort
   def <=>(other)
     product.name <=> other.product.name
+  end
+
+  def timed_service_product?
+    product.is_a?(TimedService)
   end
 
 end
