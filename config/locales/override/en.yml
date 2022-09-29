@@ -57,6 +57,43 @@ en:
     account_field:
       note_hint: Visible to facility staff and on statement PDFs
 
+  # The sections below are provided as a starting point for customizing
+  # the preferred term for "statment" and "Chart String" in places where
+  # it is not easy to use the text_helpers `text` method instead of `I18n.t`
+  # To use, simply uncomment and update the terms here as needed.
+  
+  # activerecord:
+  #   models:
+  #     statement:
+  #       one: Statement
+  #       other: Statements
+  #     facility_account:
+  #       one: Recharge Chart String
+  #       other: Recharge Chart Strings
+  #     nufs_account:
+  #       one: Chart String
+  #       other: Chart Strings
+  #   attributes:
+  #     facility_account:
+  #       account_number: Chart String Number
+  #     product:
+  #       facility_account: Recharge Chart String
+  #     order_detail:
+  #       journal_or_statement_date: Journal/Statement Date
+  #
+  # activemodel:
+  #   errors:
+  #     models:
+  #       order_details/reconciler:
+  #         after_all_journal_dates: "Reconciliation Date must be after all journal or statement dates"
+  #
+  # admin:
+  #   transaction_search:
+  #     date_range_fields:
+  #       journal_or_statement_date: "Journal/Statement"
+  #     actions:
+  #       reassign_chart_strings: "Reassign Chart Strings"
+
   testing: # DO NOT DELETE: these are used to verify proper file loading in the specs
     locale_loading: This is here to verify the file is loaded in the specs
     overriding: This overrides the version in en.yml

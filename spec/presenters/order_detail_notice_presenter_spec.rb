@@ -49,6 +49,12 @@ RSpec.describe OrderDetailNoticePresenter do
       expect(presenter.badges_to_html).to have_badge("Ready for Journal")
     end
 
+    it "shows ready for statement" do
+      allow(order_detail).to receive(:ready_for_statement?).and_return(true)
+      statment_name = I18n.t("Statement")
+      expect(presenter.badges_to_html).to have_badge("Ready for #{statment_name}")
+    end
+
     it "does not show ready for journal if setting is off", feature_setting: { ready_for_journal_notice: false } do
       allow(order_detail).to receive(:ready_for_journal?).and_return(true)
       expect(presenter.badges_to_html).not_to have_badge("Ready for Journal")
@@ -187,6 +193,12 @@ RSpec.describe OrderDetailNoticePresenter do
     it "shows ready for journal if setting is on", feature_setting: { ready_for_journal_notice: true } do
       allow(order_detail).to receive(:ready_for_journal?).and_return(true)
       expect(presenter.alerts_to_html).to have_alert(/ready to be journaled/)
+    end
+
+    it "shows order is ready to be statemented" do
+      allow(order_detail).to receive(:ready_for_statement?).and_return(true)
+      statemented_name = I18n.t("statemented_downcase")
+      expect(presenter.alerts_to_html).to have_alert("This order is ready to be #{statemented_name}")
     end
 
     it "does not show ready for journal if setting is off", feature_setting: { ready_for_journal_notice: false } do

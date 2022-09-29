@@ -97,7 +97,7 @@ RSpec.describe FacilityAccountsReconciliationController do
 
         it "has a flash message" do
           perform
-          expect(flash[:error]).to include("must be after all journal or statement dates")
+          expect(flash[:error]).to include("must be after all journal or #{I18n.t("statement_downcase")} dates")
         end
       end
 

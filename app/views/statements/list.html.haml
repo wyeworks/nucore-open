@@ -1,14 +1,17 @@
+- # This template appears to be unused.  If nothing is logged to rollbar by June 2023, delete this file.
+- if defined?(Rollbar)
+  - Rollbar.info("Someone used the list.html page", account: @account)
 = content_for :tabnav do
   = render partial: "shared/tabnav_account", locals: {secondary_tab: "statements"}
 = content_for :h1 do
   = t(".head.h1")
 
 %h2= @account
-%h3= t(".head.h3", facility: @facility.to_s)
+%h3= text("statements.head.h3", facility: @facility.to_s)
 
 
 - if @statements.empty?
-  %p.notice= t(".notice")
+  %p.notice= text("statements.notice")
 - else
   %ul.grid_5
     - @statements.each do |statement|

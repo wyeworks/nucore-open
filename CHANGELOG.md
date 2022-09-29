@@ -4,6 +4,15 @@ Because we use squash and merge, you should be able to see the changes by lookin
 at the [commit log](https://github.com/tablexi/nucore-open/commits/master). However, we have begun keeping track of breaking changes
 or optional rake tasks.
 
+### Change in behavior of feature flag `expense_accounts: false` ([#3153](https://github.com/tablexi/nucore-open/pull/3153))
+
+Schools that have set the feature flag `expense_accounts: true` are not affected by this change.
+Schools that have set the feature flag `expense_accounts: false` typically include the `revenue_account` as part of the chart string account number.
+This changes expands the scope of the feature flag, so that when it is set to `false`:
+- The `revenue_account` value is not displayed in parentheses as part of the account number
+- The input for `revenue_account` is hidden, but the value is still set to `Settings.accounts.revenue_account_default`
+- You can determine what value to include in journal exports by over-riding the `FacilityAccount#revenue_account_for_journal` method.  The default is `revenue_account`.
+
 ### Use `.bashrc` to determine which servers should run recurring tasks ([#2994](https://github.com/tablexi/nucore-open/pull/2994))
 
 The `recurring_tasks` process should only run on one server per environment.   Set `RECURRING=true` in the environment (`.bashrc` for example) to configure which servers should run these tasks.  Attempting to set this via `capistrano` only works on deploy.

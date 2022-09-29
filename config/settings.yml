@@ -54,6 +54,8 @@ support_email: ~
 order_details:
   list_transformer: SplitAccounts::OrderDetailListTransformer
 
+order_import_template_name: bulk_import_template.csv
+
 reservations:
   grace_period: <%= 5.minutes %>
   timeout_period: <%= 12.hours %>

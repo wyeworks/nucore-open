@@ -10,7 +10,7 @@ en:
 
           A !app_name! account has been created for you. You may log in at [%{login_url}](%{login_url})."
         only_username: |
-          Log in using your NetID and password.
+          Log in using your !sso_id_downcase! and password.
         username_and_password: |
           You may log in with your username and password.
 

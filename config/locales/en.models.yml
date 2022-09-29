@@ -342,7 +342,7 @@ en:
         id: "Order #"
         journal_date: Journal Date
         journal_reference: Journal Reference
-        journal_or_statement_date: "Journal/Statement Date"
+        journal_or_statement_date: Journal/Statement Date
         note: Note
         order_status: Order Status
         ordered_at: Ordered Date

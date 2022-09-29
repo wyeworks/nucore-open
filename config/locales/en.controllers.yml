@@ -49,10 +49,10 @@ en:
 
     facility_statements:
       errors_html: We experienced the following errors. Please try again.<br/>%{errors}
-      order_error: Order %{order_detail_id} was either not found or cannot be statemented at this time.
+      order_error: Order %{order_detail_id} was either not found or cannot be !statemented_downcase! at this time.
       no_selection: No orders selected
-      success_html: Statements made successfully for:<br/>%{accounts}
-      success_with_email_html: Notifications sent successfully to:<br/>%{accounts}
+      success_html: '!Statements! made successfully for:<br/>%{accounts}'
+      success_with_email_html: Notifications sent successfully to:<br/>%{accounts}'
 
     facility_journals:
       update:

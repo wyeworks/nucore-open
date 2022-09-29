@@ -7,7 +7,7 @@ require "set"
 class JournalRowBuilder
 
   attr_reader :order_details, :journal, :journal_rows, :errors, :options,
-              :recharge_enabled, :product_recharges, :journaled_facility_ids
+              :product_recharges, :journaled_facility_ids
 
   # This is for when you need to create a journal row without all the additional
   # validations and error checking
@@ -160,7 +160,7 @@ class JournalRowBuilder
     JournalRow.new(attributes) if attributes.present?
   end
 
-  # If recharge_enabled, then sum up the product_recharges by product so each
+  # Sum up the product_recharges by product so each
   # product recharge can later be added as an additional journal_row.
   def update_product_recharges(order_detail)
     product_id = order_detail.product_id
@@ -171,8 +171,7 @@ class JournalRowBuilder
   # When you’re creating a journal, for a single order detail you’ll have one
   # or more journal rows for money coming out of an account and one journal row
   # for the money going into the recharge account. One journal row is positive
-  # and one is negative. Only builds journal_rows if the recharge_enabled
-  # feature is enabled.
+  # and one is negative. Only builds journal_rows.
   def add_journal_rows_from_product_recharges
     product_recharges.each_pair do |product_id, total|
       product = Product.find(product_id)

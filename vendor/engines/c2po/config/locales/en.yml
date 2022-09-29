@@ -14,7 +14,7 @@ en:
     c2po:
       facilities:
         facility_fields:
-          payment_options: "By default, all !facilities_downcase! accept Chart Strings; you may check additional payment options:"
+          payment_options: "By default, all !facilities_downcase! accept !Chart_strings!; you may check additional payment options:"
           labels:
             accepts_po: "Accept Purchase Orders?"
             accepts_cc: "Accept Credit Cards?"

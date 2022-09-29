@@ -1,5 +1,5 @@
 - if @user.nil? && params[:has_netid] == "yes"
-  %p.alert.alert-info= t(".netid_not_found")
+  %p.alert.alert-info= text("users.search.netid_not_found")
 - elsif @user.nil?
   %p.alert.alert-info= t(".email_not_found")
   %p= t(".main_html", link: new_external_facility_users_path(current_facility, email: params[:username_lookup]))

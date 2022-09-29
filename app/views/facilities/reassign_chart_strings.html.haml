@@ -11,8 +11,8 @@
   - @chart_string_reassignment_form.order_details.each do |order_detail|
     = hidden_field_tag :"order_detail_ids[]", order_detail.id
   = available_account_select_tag(form, @chart_string_reassignment_form.available_accounts)
-  %p= t(".account_select.explanation")
-  = submit_tag t(".submit"), class: "btn btn-primary"
+  %p= text("facilities.reassign_chart_strings.account_select.explanation")
+  = submit_tag text("facilities.reassign_chart_strings.submit"), class: "btn btn-primary"
   = link_to t("shared.cancel"), facility_movable_transactions_path(current_facility), class: "btn"
 
 .row

@@ -1,7 +1,7 @@
 = content_for :h1 do
   = current_facility
 - content_for :h2 do
-  = text("head")
+  = text("views.facility_statements.index.head")
 = content_for :sidebar do
   = render "admin/shared/sidenav_billing", sidenav_tab: "statement_history"
 
@@ -11,7 +11,7 @@
       - if @search_form.facility_filter?
         = f.input :facilities, collection: @search_form.available_facilities, as: :transaction_chosen, input_html: { class: "js--chosen" }
       = f.input :accounts, collection: @search_form.available_accounts, as: :transaction_chosen, input_html: { class: "js--chosen" }, label_method: :account_list_item
-      = f.input :account_admins, collection: @search_form.available_account_admins, as: :transaction_chosen, input_html: { class: "js--chosen" }, label: Statement.human_attribute_name(:account_admins), hint: t(".account_admins_hint")
+      = f.input :account_admins, collection: @search_form.available_account_admins, as: :transaction_chosen, input_html: { class: "js--chosen" }, label: Statement.human_attribute_name(:account_admins), hint: text(".account_admins_hint")
     %fieldset.span2
       = f.input :status, collection: @search_form.available_statuses
       = f.input :date_range_start, input_html: { class: "datepicker__data" }

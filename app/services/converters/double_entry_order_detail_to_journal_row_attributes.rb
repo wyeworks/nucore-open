@@ -46,7 +46,7 @@ module Converters
     def default_revenue_attributes
       {
         amount: total * -1,
-        account: order_detail.product.facility_account.revenue_account,
+        account: order_detail.product.facility_account.revenue_account_for_journal,
         journal: journal,
         description: order_detail.product.to_s,
       }
