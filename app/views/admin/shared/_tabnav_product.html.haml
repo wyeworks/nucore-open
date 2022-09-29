@@ -1,30 +1,29 @@
 - return nil if @product.nil? || @product.id.nil?
 %ul.nav.nav-tabs
   = tab "Details", [:manage, current_facility, @product], (secondary_tab == "details")
+  - if @product.is_a?(Instrument)
+    = tab "Timers & Relays", [current_facility, @product, Relay], (secondary_tab == "relays")
+  - if @product.requires_approval? && @product.respond_to?(:product_access_groups)
+    = tab ProductAccessGroup.model_name.human.pluralize, facility_instrument_product_access_groups_path(current_facility, @product), (secondary_tab == "restriction_levels")
   - if @product.respond_to?(:schedule_rules)
     = tab "Scheduling", [current_facility, @product, ScheduleRule], (secondary_tab == "schedule_rules")
   - if @product.requires_approval?
     = tab "Access List", [current_facility, @product, :users], (secondary_tab == "users")
-  - if @product.requires_approval? && @product.respond_to?(:product_access_groups)
-    = tab ProductAccessGroup.model_name.human.pluralize, facility_instrument_product_access_groups_path(current_facility, @product), (secondary_tab == "restriction_levels")
   - if @product.is_a?(Bundle)
     = tab "Bundled Products", facility_bundle_bundle_products_path(current_facility, @product), (secondary_tab == "products")
   - else
     - if can? :index, PricePolicy
       = tab "Pricing", [current_facility, @product, PricePolicy], (secondary_tab == "pricing_rules")
   - if @product.is_a?(Instrument)
-    = tab "Relays", [current_facility, @product, Relay], (secondary_tab == "relays")
     = tab "Restrictions", edit_facility_price_group_product_path(current_facility, @product), (secondary_tab == "restrictions")
     = tab "Reservations", facility_instrument_schedule_path(current_facility, @product), (secondary_tab == "reservations")
-
   = tab "Docs",
     [current_facility, @product, :file_uploads, file_type: "info"],
     (secondary_tab == "documentation")
-
-  - if @product.is_a?(Service)
-    = tab "Order Forms", product_survey_path(current_facility, @product.parameterize, @product.url_name), (secondary_tab == "surveys")
   - if @product.respond_to?(:reservations)
     = tab "Accessories", facility_product_product_accessories_path(current_facility, @product), (secondary_tab == "accessories")
+  - if @product.is_a?(Service)
+    = tab "Order Forms", product_survey_path(current_facility, @product.parameterize, @product.url_name), (secondary_tab == "surveys")
   = tab "Notifications", facility_product_notifications_path(current_facility, @product), (secondary_tab == "notifications")
   - unless @product.is_a?(Bundle)
     - if ResearchSafetyCertificate.any?

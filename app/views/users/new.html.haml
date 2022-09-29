@@ -21,9 +21,9 @@
 
         function has_netid_change() {
           if ($('#has_netid').val() == 'yes')
-            changeUsernameLookupText('#{t(".js.email")}', '#{t(".js.id")}');
+            changeUsernameLookupText('#{t(".js.email")}', '#{text("users.new.js.id")}');
           else
-            changeUsernameLookupText('#{t(".js.id")}', '#{t(".js.email")}');
+            changeUsernameLookupText('#{text("users.new.js.id")}', '#{t(".js.email")}');
         }
 
         $('#has_netid').change(function(e) {
@@ -52,7 +52,7 @@
               submit.attr("disabled", false);
             },
             error: function() {
-              error_div.html('<p class="error">#{t('.js.error')}</p>');
+              error_div.html('<p class="error">#{text('users.new.js.error')}</p>');
               submit.val(submit_val);
               submit.attr("disabled", false);
             }
@@ -64,13 +64,13 @@
 = simple_form_for :search, :url => search_facility_users_path, :html => { :id => 'username_search_form', :class => 'form-inline' }, :defaults => { :required => false } do |f|
   #error_result
 
-  %p= t('.intro')
+  %p= text('users.new.intro')
 
-  = f.input :has_netid, :collection => [['Yes','yes'],['No','no']], :selected => params[:hidden_has_netid] || 'yes', :label => t('.label.have_id'), :input_html => { :id => 'has_netid', :name => 'has_netid' }
+  = f.input :has_netid, :collection => [['Yes','yes'],['No','no']], :selected => params[:hidden_has_netid] || 'yes', :label => text('users.new.label.have_id'), :input_html => { :id => 'has_netid', :name => 'has_netid' }
 
   #username_lookup
-    = f.input :username_lookup, :label => t('.label.id'), :hint => t('.instruct'), :input_html => { :name => 'username_lookup' }
-    = submit_tag t('.submit'), :class => 'btn'
+    = f.input :username_lookup, :label => text('users.new.label.id'), :hint => text('users.new.instruct'), :input_html => { :name => 'username_lookup' }
+    = submit_tag text('users.new.submit'), :class => 'btn'
 
 
 #search_results

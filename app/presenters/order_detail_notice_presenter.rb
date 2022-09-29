@@ -68,6 +68,13 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   class Notice
 
     include ActionView::Helpers::TagHelper
+    include TextHelpers::Translation
+
+    # this is just to enable use of `text` from the TextHelpers::Translation
+    # module
+    def translation_scope
+      "order_details.notices"
+    end
 
     attr_reader :severity
 
@@ -77,11 +84,11 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
     end
 
     def badge_text
-      I18n.t("order_details.notices.#{@key}.badge")
+      text("#{@key}.badge")
     end
 
     def alert_text
-      I18n.t("order_details.notices.#{@key}.alert")
+      text("#{@key}.alert")
     end
 
     def badge_to_html

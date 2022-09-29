@@ -16,7 +16,7 @@ en:
           <p>Only %{importable_products} product types can be imported.</p>
           <p>Rows containing an existing Order Number will be added to that order.</p>
           <p>Rows without an Order Number will be added as new order(s).</p>
-          <p>Rows sharing the same NetID/Email, Chart String, and Order Date will be added to a single new order.</p>
+          <p>Rows sharing the same !Sso_id!/Email, !Chart_string!, and Order Date will be added to a single new order.</p>
         upload_file_hint: |
           <p>Click “Browse…” to select a bulk import file. Next, select error-handling and receipt options (below), then click “Import” to upload the orders.</p>
         fail_on_error_hint:

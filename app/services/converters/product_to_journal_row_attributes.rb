@@ -14,7 +14,7 @@ module Converters
 
     def convert
       {
-        account: product.facility_account.revenue_account,
+        account: product.facility_account.revenue_account_for_journal,
         amount: total * -1,
         description: product.to_s,
         journal_id: journal.try(:id),

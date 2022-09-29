@@ -2,5 +2,5 @@ en:
   views:
     statement_search_result_mailer:
       search_result:
-        subject: Statement Export
+        subject: "!Statement! Export"
         body: Your export is ready. Please see the attached file.

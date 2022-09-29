@@ -2,8 +2,10 @@ en:
   views:
     facility_statements:
       new:
-        instructions: Please review the following payment sources. A statement will be generated for each of the payment sources and an email with a link to the statement will be sent.
-        instructions_without_email: Please review the following payment sources. A statement will be generated for each of the payment sources.
-        no_orders: There are no completed orders that require statements.
+        instructions: Please review the following payment sources. A !statement_downcase! will be generated for each of the payment sources and an email with a link to the !statement_downcase! will be sent.
+        instructions_without_email: Please review the following payment sources. A !statement_downcase! will be generated for each of the payment sources.
+        no_orders: There are no completed orders that require !statements_downcase!.
+        no_transactions: There are no transactions requiring !statements_downcase! matching the search parameters.
       index:
-        head: Statement History
+        head: "!Statement! History"
+        account_admins_hint: Account owners and business admins receive !statements_downcase! by email.

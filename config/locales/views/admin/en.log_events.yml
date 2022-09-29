@@ -21,7 +21,7 @@ en:
         journal:
           create: Journal created
         statement:
-          create: Statement created
+          create: "!Statement! created"
         order_detail:
           dispute: Order disputed
           resolve: Order dispute resolved

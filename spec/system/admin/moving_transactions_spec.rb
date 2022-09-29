@@ -14,6 +14,9 @@ RSpec.describe "Moving transactions between accounts" do
     (accounts + [other_account]).map { |account| create(:complete_order, product: item, account: account) }
   end
   let!(:order_details) { orders.flat_map(&:order_details) }
+  let(:chart_strings_name_upcase) { I18n.t("Chart_strings") }
+  let(:chart_string_name_upcase) { I18n.t("Chart_string") }
+  let(:chart_strings_name_downcase) { I18n.t("chart_strings_downcase") }
 
   before do
     order_details.each { |od| od.update(note: "OD ##{od.order_number}") }
@@ -47,19 +50,19 @@ RSpec.describe "Moving transactions between accounts" do
       find("input[value='#{od.id}']").click
     end
 
-    click_button "Reassign Chart Strings"
+    click_button "Reassign #{chart_strings_name_upcase}"
 
-    expect(page).to have_content("All chart strings listed above are available")
+    expect(page).to have_content("All #{chart_strings_name_downcase} listed above are available")
 
     select accounts.first.account_list_item, from: "Payment Source"
-    click_button "Reassign Chart String"
+    click_button "Reassign #{chart_string_name_upcase}"
 
     expect(page).to have_content("Confirm Transaction Moves")
 
     # Because other_account's order detail cannot be moved
     expect(page).to have_content("Transactions that will not be moved:")
 
-    click_button "Reassign Chart String"
+    click_button "Reassign #{chart_string_name_upcase}"
 
     within(".notice") do
       expect(page).to have_content "2 transactions were reassigned"
@@ -79,16 +82,16 @@ RSpec.describe "Moving transactions between accounts" do
       find("input[value='#{od.id}']").click
     end
 
-    click_button "Reassign Chart Strings"
+    click_button "Reassign #{chart_strings_name_upcase}"
 
-    expect(page).to have_content("All chart strings listed above are available")
+    expect(page).to have_content("All #{chart_strings_name_downcase} listed above are available")
 
     select accounts.first.account_list_item, from: "Payment Source"
-    click_button "Reassign Chart String"
+    click_button "Reassign #{chart_string_name_upcase}"
 
     expect(page).to have_content("Confirm Transaction Moves")
 
-    click_button "Reassign Chart String"
+    click_button "Reassign #{chart_string_name_upcase}"
     expect(order_details.map(&:reload).map(&:account)).to eq([accounts.first, accounts.first, other_account])
   end
 end

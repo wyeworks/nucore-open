@@ -175,7 +175,7 @@ if Account.config.statements_enabled?
         it "displays properly formatted flash message" do
           sign_in(@user)
           do_request
-          expect(flash[:notice]).to start_with("Statements made successfully for:<br/>#{@account.account_list_item}<br")
+          expect(flash[:notice]).to start_with("#{I18n.t("Statements")} made successfully for:<br/>#{@account.account_list_item}<br")
         end
       end
 

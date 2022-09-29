@@ -12,11 +12,11 @@
 - if @order_details.any?
   = content_for :action_instructions do
     - if SettingsHelper.feature_on?(:send_statement_emails)
-      %p.notice.notice-info= text("instructions")
+      %p.notice.notice-info= text(".instructions")
     - else
-      %p.notice.notice-info= text("instructions_without_email")
+      %p.notice.notice-info= text(".instructions_without_email")
 
   = render "shared/transactions/table", order_details: @order_details
   = render "shared/reconcile_footnote"
 - else
-  %p.alert.alert-info= t(".no_transactions")
+  %p.alert.alert-info= text(".no_transactions")

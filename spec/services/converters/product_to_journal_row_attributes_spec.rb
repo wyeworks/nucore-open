@@ -8,7 +8,7 @@ RSpec.describe Converters::ProductToJournalRowAttributes, type: :service do
   let(:journal) { build_stubbed(:journal) }
   let(:product) do
     build_stubbed(:product).tap do |product|
-      allow(product).to receive_message_chain(:facility_account, :revenue_account) { "revenue_account" }
+      allow(product).to receive_message_chain(:facility_account, :revenue_account_for_journal) { "revenue_account" }
     end
   end
   let(:total) { 100 }
@@ -31,7 +31,7 @@ RSpec.describe Converters::ProductToJournalRowAttributes, type: :service do
     context "for the journal row attributes" do
 
       it "sets account" do
-        expect(returned[:account]).to eq(product.facility_account.revenue_account)
+        expect(returned[:account]).to eq(product.facility_account.revenue_account_for_journal)
       end
 
       it "sets amount" do

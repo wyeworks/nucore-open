@@ -32,7 +32,16 @@ class FacilityAccount < ApplicationRecord
   end
 
   def to_s
-    "#{account_number} (#{revenue_account})"
+    if SettingsHelper.feature_on?(:expense_accounts)
+      "#{account_number} (#{revenue_account})"
+    else
+      account_number
+    end
+  end
+
+  # Over-rideable from school-specific engines that don't use the expense_accounts feature flag
+  def revenue_account_for_journal
+    revenue_account
   end
 
   def method_missing(method_sym, *arguments, &block)

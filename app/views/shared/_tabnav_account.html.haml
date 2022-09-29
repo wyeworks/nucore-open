@@ -1,5 +1,5 @@
 %ul.nav.nav-tabs
   = tab t('shared.tabnav_account.details'), account_path(@account), (secondary_tab == 'details')
   - if @account.class.using_statements?
-    = tab t('shared.tabnav_account.statement'), account_statements_path(@account), (secondary_tab == 'statements')
+    = tab text('shared.tabnav_account.statement'), account_statements_path(@account), (secondary_tab == 'statements')
   = tab t('shared.tabnav_account.members'), account_account_users_path(@account), (secondary_tab == 'members')

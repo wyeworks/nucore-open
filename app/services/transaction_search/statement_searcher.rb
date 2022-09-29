@@ -22,6 +22,9 @@ module TransactionSearch
       :invoice_number
     end
 
+    def label
+      I18n.t("Statements")
+    end
   end
 
 end

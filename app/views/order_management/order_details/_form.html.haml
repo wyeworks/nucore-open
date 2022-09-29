@@ -65,6 +65,12 @@
         .span7= render "costs", f: f
 
     .row
+      .span7
+      .span3
+        .btn.btn-primary.js--recalculate-pricing
+          = text("order_management.order_details.form.recalculate_price")
+
+    .row
       .span3
         = render "assigned_user", f: f
 

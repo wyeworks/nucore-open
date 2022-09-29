@@ -2,4 +2,4 @@ en:
   views:
     shared:
       statements_table:
-        no_statements: No statements match your criteria
+        no_statements: "No !statements_downcase! match your criteria"

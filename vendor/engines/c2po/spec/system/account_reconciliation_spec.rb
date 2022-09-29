@@ -51,7 +51,7 @@ RSpec.describe "Account Reconciliation", js: true do
       expect(page).not_to have_content(other_order_number)
 
       visit credit_cards_facility_accounts_path(facility)
-      select_from_chosen statements.first.invoice_number, from: "Statements"
+      select_from_chosen statements.first.invoice_number, from: I18n.t("Statements")
       click_button "Filter"
       expect(page).to have_content(order_number)
       expect(page).not_to have_content(other_order_number)

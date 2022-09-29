@@ -6,7 +6,7 @@ en:
   views:
     clone_account_memberships:
       index:
-        search_term: "Search by name, NetID, or username"
+        search_term: "Search by !name_or_sso_id!"
         header: "Clone Payment Source Memberships"
         instructions: |
           You may clone payment source access from another user to this user. Search below to
