@@ -9,11 +9,11 @@ RSpec.describe AccountPriceGroupMembersController do
     # Ignore validation errors, e.g. number format
     before { allow(AccountValidator::ValidatorFactory).to receive(:instance).and_return(AccountValidator::ValidatorDefault.new) }
 
-    let(:partial_account_number) { build(:nufs_account).account_number[0..-5] }
+    let(:partial_account_number) { build(:nufs_account).account_number[0..-4] }
     let(:price_group) { create(:price_group, facility: facility) }
-    let!(:global_account) { create(:nufs_account, :with_account_owner, account_number: "#{partial_account_number}1234") }
-    let!(:facility_purchase_order) { create(:purchase_order_account, :with_account_owner, account_number: "#{partial_account_number}7894", facility: facility) }
-    let!(:other_facility_purchase_order) { create(:purchase_order_account, :with_account_owner, account_number: "#{partial_account_number}6542", facility: create(:facility)) }
+    let!(:global_account) { create(:nufs_account, :with_account_owner, account_number: "#{partial_account_number}234") }
+    let!(:facility_purchase_order) { create(:purchase_order_account, :with_account_owner, account_number: "#{partial_account_number}894", facility: facility) }
+    let!(:other_facility_purchase_order) { create(:purchase_order_account, :with_account_owner, account_number: "#{partial_account_number}542", facility: create(:facility)) }
 
     let(:user) { create(:user, :facility_administrator, facility: facility) }
 
