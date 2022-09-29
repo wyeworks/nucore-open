@@ -138,8 +138,8 @@ RSpec.describe AccountPriceGroupMembersController do
     # Ignore validation errors, e.g. number format
     before { allow(AccountValidator::ValidatorFactory).to receive(:instance).and_return(AccountValidator::ValidatorDefault.new) }
 
-    let!(:account_number) { FactoryBot.build(:nufs_account).account_number }
-    let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, account_number: account_number) }
+    let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner) }
+    let!(:account_number) { account.account_number }
 
     before :each do
       @method = :get
