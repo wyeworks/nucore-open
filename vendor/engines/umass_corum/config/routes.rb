@@ -7,9 +7,9 @@ Rails.application.routes.draw do
 
   resources :admin_reports, only: :index do
     collection do
-      get "relay_data"
-      get "user_data"
-      get "account_user_data"
+      post "relay_data"
+      post "user_data"
+      post "account_user_data"
     end
   end
 end

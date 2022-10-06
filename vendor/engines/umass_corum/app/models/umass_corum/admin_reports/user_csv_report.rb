@@ -15,7 +15,7 @@ module UmassCorum
       def to_csv
         CSV.generate do |csv|
           csv << headers
-          User.all.each do |user|
+          User.includes(:orders, :price_groups, :user_roles).find_each do |user|
             csv << build_row(user)
           end
         end

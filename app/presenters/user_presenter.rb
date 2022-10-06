@@ -4,8 +4,6 @@ class UserPresenter < SimpleDelegator
 
   include ActionView::Helpers::FormOptionsHelper
 
-  delegate :global, to: :user_roles, prefix: true
-
   def self.wrap(users)
     users.map { |user| new(user) }
   end
@@ -29,11 +27,8 @@ class UserPresenter < SimpleDelegator
 
   private
 
-  # TODO: Existing data may have duplicate roles, thus the "uniq" call.
-  # Duplicate UserRoles are invalid so new duplicates should not be possible.
-  # It should be safe to remove the "uniq" once the old duplicates are gone.
   def global_roles
-    user_roles_global.pluck(:role).uniq
+    user_roles.pluck(:role) & UserRole.global_roles
   end
 
 end

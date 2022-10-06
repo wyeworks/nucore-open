@@ -25,11 +25,11 @@ class PriceGroup < ApplicationRecord
   scope :globals, -> { where(facility_id: nil) }
 
   def self.base
-    globals.find_by(name: Settings.price_group.name.base)
+    @base ||= globals.find_by(name: Settings.price_group.name.base)
   end
 
   def self.external
-    globals.find_by(name: Settings.price_group.name.external)
+    @external ||= globals.find_by(name: Settings.price_group.name.external)
   end
 
   def is_not_global?
