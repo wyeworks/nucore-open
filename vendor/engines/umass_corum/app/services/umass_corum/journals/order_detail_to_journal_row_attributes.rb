@@ -51,7 +51,7 @@ module UmassCorum
       end
 
       def custom_journal_prexifes
-        { "data-corps" => "DCR" }
+        { "data-corps" => "DCR", "proposal-support-services" => "PSS" }
       end
 
       # This field is something like "Biology-Maresca,Thomas". The first part is
