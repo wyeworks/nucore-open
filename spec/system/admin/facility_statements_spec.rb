@@ -96,7 +96,7 @@ RSpec.describe "Facility Statement Admin" do
     end
   end
 
-  describe "resending statement emails", feature_setting: { send_statement_emails: true } do
+  describe "resending statement emails", :js, feature_setting: { send_statement_emails: true } do
     let!(:statement) { create(:statement, created_at: 3.days.ago, order_details: [order_details.first], account: order_details.first.account, facility: facility) }
 
     before do
@@ -105,7 +105,10 @@ RSpec.describe "Facility Statement Admin" do
     end
 
     it "resends the statement email" do
-      expect { click_link "Resend" }.to change(ActionMailer::Base.deliveries, :count)
+      accept_confirm { click_link "Resend" }
+
+      expect(page).to have_content("Notifications sent successfully to")
+      expect(ActionMailer::Base.deliveries.count).to eq 1
     end
   end
 end
