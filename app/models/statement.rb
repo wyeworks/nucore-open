@@ -86,6 +86,12 @@ class Statement < ApplicationRecord
     "Statement: #{invoice_number}"
   end
 
+  def users_to_notify
+    account.notify_users.map do |user|
+      "#{user.full_name} <#{user.email}>"
+    end
+  end
+
   def send_emails
     account.notify_users.each do |user|
         Notifier.statement(
