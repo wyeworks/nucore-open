@@ -6,7 +6,7 @@
 users:
   - name: jhanggi
     groups: ["umass", "ials"]
-  - name: rdunlop
+  - name: josephsimmon
     groups: ["umass", "ials"]
   - name: gshanan
     groups: ["umass", "ials"]
@@ -24,8 +24,8 @@ authorized_keys:
   - name: jhanggi
     key_url: https://github.com/jhanggi.keys
     root_access: "present"
-  - name: rdunlop
-    key_url: https://github.com/rdunlop.keys
+  - name: josephsimmon
+    key_url: https://github.com/jossim.keys
     root_access: "present"
   - name: gshanan
     key_url: https://github.com/giladshanan.keys

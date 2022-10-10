@@ -75,3 +75,10 @@
     exclusive: yes
   loop: "{{ authorized_keys }}"
   become: yes
+
+- name: Create ftp user
+  user:
+    name: "{{ ftp_user }}"
+    state: present
+    groups: ["umass", "ials"]
+  become: yes

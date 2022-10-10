@@ -20,8 +20,6 @@ module UmassCorum
         )
       end
 
-      private
-
       def common_attributes(speed_type:)
         api_speed_type = speed_type_cache[speed_type]
         {
