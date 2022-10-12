@@ -61,7 +61,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    aasm (5.3.0)
+    aasm (5.4.0)
       concurrent-ruby (~> 1.0)
     actioncable (6.1.7)
       actionpack (= 6.1.7)
@@ -130,10 +130,10 @@ GEM
     awesome_nested_set (3.5.0)
       activerecord (>= 4.0.0, < 7.1)
     awesome_print (1.9.2)
-    axe-core-api (4.4.1)
+    axe-core-api (4.4.2)
       dumb_delegator
       virtus
-    axe-core-rspec (4.4.1)
+    axe-core-rspec (4.4.2)
       axe-core-api
       dumb_delegator
       virtus
@@ -239,7 +239,7 @@ GEM
     crass (1.0.6)
     daemons (1.4.1)
     deep_merge (1.2.2)
-    delayed_job (4.1.10)
+    delayed_job (4.1.11)
       activesupport (>= 3.0, < 8.0)
     delayed_job_active_record (4.1.7)
       activerecord (>= 3.0, < 8.0)
@@ -319,8 +319,8 @@ GEM
     haml (5.2.2)
       temple (>= 0.8.0)
       tilt
-    haml_lint (0.40.1)
-      haml (>= 4.0, < 5.3)
+    haml_lint (0.42.0)
+      haml (>= 4.0, < 6.1)
       parallel (~> 1.10)
       rainbow
       rubocop (>= 0.50.0)
@@ -347,7 +347,7 @@ GEM
       addressable (~> 2.7)
     letter_opener (1.8.1)
       launchy (>= 2.2, < 3)
-    loofah (2.18.0)
+    loofah (2.19.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.7.1)
@@ -366,7 +366,7 @@ GEM
     minitest (5.16.3)
     momentjs-rails (2.29.4.1)
       railties (>= 3.1)
-    msgpack (1.5.6)
+    msgpack (1.6.0)
     mysql2 (0.5.4)
     nested_form_fields (0.8.4)
       coffee-rails (>= 3.2.1)
@@ -386,7 +386,7 @@ GEM
     numerizer (0.1.1)
     oj (3.13.21)
     orm_adapter (0.5.0)
-    paper_trail (12.3.0)
+    paper_trail (13.0.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
     paperclip (6.1.0)
@@ -396,7 +396,7 @@ GEM
       mimemagic (~> 0.3.0)
       terrapin (~> 0.6.0)
     parallel (1.22.1)
-    parallel_tests (3.12.1)
+    parallel_tests (3.13.0)
       parallel
     paranoia (2.6.0)
       activerecord (>= 5.1, < 7.1)
@@ -469,7 +469,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redcarpet (3.5.1)
-    regexp_parser (2.5.0)
+    regexp_parser (2.6.0)
     request_store (1.5.1)
       rack (>= 1.4)
     responders (3.0.1)
@@ -499,7 +499,7 @@ GEM
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
     rspec-support (3.11.1)
-    rspec_junit_formatter (0.5.1)
+    rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
     rubocop (1.36.0)
       json (~> 2.3)
@@ -516,11 +516,11 @@ GEM
     rubocop-performance (1.15.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
-    rubocop-rails (2.16.0)
+    rubocop-rails (2.16.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
-    rubocop-rspec (2.13.1)
+    rubocop-rspec (2.13.2)
       rubocop (~> 1.33)
     ruby-ole (1.2.12.2)
     ruby-progressbar (1.11.0)
@@ -547,7 +547,7 @@ GEM
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
-    shoulda-matchers (5.1.0)
+    shoulda-matchers (5.2.0)
       activesupport (>= 5.2.0)
     simple_form (5.1.0)
       actionpack (>= 5.2)
@@ -590,7 +590,7 @@ GEM
       concurrent-ruby (~> 1.0)
     uglifier (4.1.18)
       execjs (>= 0.3.0, < 3)
-    unicode-display_width (2.2.0)
+    unicode-display_width (2.3.0)
     unicorn (6.1.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
@@ -619,7 +619,7 @@ GEM
     will_paginate (3.3.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.0)
+    zeitwerk (2.6.1)
 
 PLATFORMS
   aarch64-linux

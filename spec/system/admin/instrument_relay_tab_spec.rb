@@ -50,7 +50,7 @@ RSpec.describe "Instrument Relay Tab" do
         expect(instrument.relay.mac_address).to eq("123abc456")
         expect(instrument.relay.building_room_number).to eq("1a")
         expect(instrument.relay.circuit_number).to eq("1")
-        expect(instrument.relay.ethernet_port_number).to eq(2000)
+        expect(instrument.relay.ethernet_port_number).to eq("2000")
       end
 
       it "raises an error if there's no outlet entered" do
@@ -113,7 +113,7 @@ RSpec.describe "Instrument Relay Tab" do
           expect(instrument.relay.mac_address).to eq("123abc456")
           expect(instrument.relay.building_room_number).to eq("1a")
           expect(instrument.relay.circuit_number).to eq("1")
-          expect(instrument.relay.ethernet_port_number).to eq(2000)
+          expect(instrument.relay.ethernet_port_number).to eq("2000")
         end
       end
 
@@ -187,7 +187,7 @@ RSpec.describe "Instrument Relay Tab" do
       expect(instrument.relay.mac_address).to eq("123abc456")
       expect(instrument.relay.building_room_number).to eq("1a")
       expect(instrument.relay.circuit_number).to eq("1")
-      expect(instrument.relay.ethernet_port_number).to eq(2000)
+      expect(instrument.relay.ethernet_port_number).to eq("2000")
     end
   end
 
