@@ -51,12 +51,7 @@ RSpec.describe OrderImport, :time_travel do
   let(:default_fulfilled_date) { 3.days.ago.to_date }
   let(:director) { @director }
   let(:error_file_row_count) do
-    Paperclip
-      .io_adapters
-      .for(order_import.error_file.file)
-      .read
-      .split("\n")
-      .count
+    order_import.error_file.read_attached_file.split("\n").count
   end
   let(:facility) { create(:facility) }
   let(:facility_account) { create(:facility_account, facility: facility) }
@@ -348,6 +343,11 @@ RSpec.describe OrderImport, :time_travel do
 
       it "sends an exception notification" do
         expect(ActiveSupport::Notifications).to receive(:instrument).with("background_error", anything)
+
+        if SettingsHelper.feature_on?(:active_storage)
+          expect(ActiveSupport::Notifications).to receive(:instrument).with("service_upload.active_storage", anything)
+        end
+
         import.process_upload!
       end
     end

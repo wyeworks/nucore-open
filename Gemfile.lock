@@ -101,6 +101,11 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_storage_validations (1.0.0)
+      activejob (>= 5.2.0)
+      activemodel (>= 5.2.0)
+      activestorage (>= 5.2.0)
+      activesupport (>= 5.2.0)
     activejob (6.1.7)
       activesupport (= 6.1.7)
       globalid (>= 0.3.6)
@@ -127,8 +132,6 @@ GEM
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
     ast (2.4.2)
-    awesome_nested_set (3.5.0)
-      activerecord (>= 4.0.0, < 7.1)
     awesome_print (1.9.2)
     axe-core-api (4.4.2)
       dumb_delegator
@@ -628,7 +631,7 @@ PLATFORMS
 
 DEPENDENCIES
   aasm
-  awesome_nested_set
+  active_storage_validations
   awesome_print
   axe-core-rspec
   bcrypt_pbkdf (>= 1.0, < 2.0)

@@ -53,7 +53,7 @@ class OrderImport < ApplicationRecord
   end
 
   def error_file_content
-    error_file.try(:read)
+    error_file.try(:read_attached_file)
   end
 
   def error_file_present?
@@ -197,23 +197,23 @@ class OrderImport < ApplicationRecord
 
   def store_error_report
     self.error_file = StoredFile.new(
-      file: StringIO.new(self.error_report),
+      name: "error_report.csv",
       file_content_type: "text/csv",
       file_type: "import_error",
-      name: "error_report.csv",
+      file: StringIO.new(self.error_report),
       created_by: creator.id,
     )
 
-    error_file.file.instance_write(:file_name, "error_report.csv")
+    error_file.update_filename("error_report.csv")
     error_file.save!
   end
 
   def upload_file_path
-    @upload_file_path ||= upload_file.file.path
+    @upload_file_path ||= upload_file.file_path
   end
 
   def csv
-    @csv ||= CSV.parse(upload_file.read, headers: true, skip_blanks: true)
+    @csv ||= CSV.parse(upload_file.read_attached_file, headers: true, skip_blanks: true)
   end
 
   class Result

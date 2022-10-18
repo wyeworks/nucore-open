@@ -6,7 +6,7 @@ RSpec.describe FacilityAccountsReconciliationController do
 
   class ReconciliationTestAccount < Account
 
-    include ReconcilableAccount
+    extend ReconcilableAccount
 
   end
 

@@ -23,10 +23,10 @@ class StoredFile < ApplicationRecord
   scope :template, -> { where(file_type: "template") }
   scope :template_result, -> { where(file_type: "template_result") }
 
-  validates_attachment_presence :file
-
-  def read
-    Paperclip.io_adapters.for(file).read
+  if SettingsHelper.feature_on?(:active_storage)
+    validates :file, attached: true
+  else
+    validates_attachment_presence :file
   end
 
   # Map file extensions to mime types.

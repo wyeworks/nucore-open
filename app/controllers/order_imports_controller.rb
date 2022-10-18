@@ -89,9 +89,9 @@ class OrderImportsController < ApplicationController
 
   def stored_file
     StoredFile.new(
+      name: upload_file.try(:original_filename),
       file: upload_file,
       file_type: "import_upload",
-      name: upload_file.try(:original_filename),
       created_by: session_user.id,
     )
   end

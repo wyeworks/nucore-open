@@ -12,6 +12,7 @@ public/plugin_assets/
 public/files/
 public/assets/
 public/system/
+storage/
 spec/models/nucs/
 spec/controllers/nucs/
 vendor/bundle

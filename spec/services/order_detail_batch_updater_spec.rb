@@ -155,15 +155,17 @@ RSpec.describe OrderDetailBatchUpdater do
       end
 
       context "when order_status_id is already set" do
+        let(:new_status_id) { OrderStatus.new_status.id }
+        let(:in_process_status_id) { OrderStatus.in_process.id }
         before(:each) do
-          order_detail.update_attribute(:order_status_id, 2)
+          order_detail.update_attribute(:order_status_id, in_process_status_id)
         end
 
         context "and the order_status_id parameter is blank" do
           it "does not change the order_status_id" do
             expect { updater.update! }
               .not_to change { order_detail.reload.order_status_id }
-              .from(2)
+              .from(in_process_status_id)
           end
 
           it "returns a no-changes-required note" do
@@ -172,13 +174,13 @@ RSpec.describe OrderDetailBatchUpdater do
         end
 
         context "and the order_status_id parameter is a new value" do
-          let(:order_status_id) { "1" }
+          let(:order_status_id) { new_status_id }
 
           it "updates order_status_id to the new value" do
             expect { updater.update! }
               .to change { order_detail.reload.order_status_id }
-              .from(2)
-              .to(1)
+              .from(in_process_status_id)
+              .to(new_status_id)
           end
 
           it "returns a successful update note" do
@@ -188,12 +190,12 @@ RSpec.describe OrderDetailBatchUpdater do
         end
 
         context "and the order_status_id parameter is the same value" do
-          let(:order_status_id) { "2" }
+          let(:order_status_id) { in_process_status_id }
 
           it "does not change the order_status_id" do
             expect { updater.update! }
               .not_to change { order_detail.reload.order_status_id }
-              .from(2)
+              .from(in_process_status_id)
           end
 
           it "returns a successful update note (despite nothing changing)" do

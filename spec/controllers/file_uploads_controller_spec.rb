@@ -60,7 +60,7 @@ RSpec.describe FileUploadsController do
     end
 
     it "should render upload template when no file specified" do
-      @params[:stored_file][:file] = ""
+      @params[:stored_file].delete(:file)
       sign_in @admin
       do_request
       is_expected.to render_template("index")

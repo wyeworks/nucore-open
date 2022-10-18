@@ -119,12 +119,13 @@ RSpec.configure do |config|
     PriceGroupMember.delete_all
     UserRole.delete_all
     User.delete_all
+    OrderStatus.delete_all
 
     # initialize order status constants
     OrderStatus.find_or_create_by(name: "New")
     OrderStatus.find_or_create_by(name: "In Process")
-    OrderStatus.find_or_create_by(name: "Complete")
     OrderStatus.find_or_create_by(name: "Canceled")
+    OrderStatus.find_or_create_by(name: "Complete")
     OrderStatus.find_or_create_by(name: "Reconciled")
 
     # initialize affiliates
