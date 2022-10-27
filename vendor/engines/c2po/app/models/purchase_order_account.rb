@@ -3,7 +3,7 @@
 class PurchaseOrderAccount < Account
 
   include AffiliateAccount
-  include ReconcilableAccount
+  extend ReconcilableAccount
 
   validates_presence_of :account_number
 

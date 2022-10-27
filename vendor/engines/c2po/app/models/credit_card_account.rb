@@ -3,7 +3,7 @@
 class CreditCardAccount < Account
 
   include AffiliateAccount
-  include ReconcilableAccount
+  extend ReconcilableAccount
 
   attr_readonly :account_number
   before_validation :setup_false_credit_card_number

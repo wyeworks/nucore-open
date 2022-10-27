@@ -136,7 +136,10 @@ _Known issue: if you run `db:setup` or all three in one rake command, the next t
 7. Configure your file storage
 
     By default, files are stored on the local filesystem. If you wish to use
-    Amazon's S3 instead, enable S3 in your environment by updateing the local settings override file such as
+    Amazon's S3 or Microsoft's Azure Blob Storage instead, see below.
+
+    ### Amazon S3 (via Paperclip)
+    Enable S3 in your environment by updating the local settings override file such as
     `config/settings/development.local.yml` or `config/settings/production.local.yml`.
     Uncomment the section under `paperclip`:
     ```
@@ -148,6 +151,32 @@ _Known issue: if you run `db:setup` or all three in one rake command, the next t
     Then add your credentials to the ENV or `secrets.yml`.
 
     See [`migrating_to_s3.md`](./doc/migrating_to_s3.md) for more info.
+
+    ### Microsoft Azure Blob Storage (via Active Storage)
+
+    Enable Active Storage in your environment by updating the  `settings.yml` file with:
+    ```
+    features:
+      active_storage: true
+    ```
+
+    In your gemfile, uncomment:
+    `gem "azure-storage-blob", "~> 2.0", require: false`
+
+    Environment files need to be updated as well (`development.rb`, `production.rb`):
+    `config.active_storage.service = :azure`
+
+    In `storage.yml`, uncomment the azure section:
+
+    ```
+    azure:
+      service: AzureStorage
+      storage_account_name: <%= Rails.application.secrets.dig(:active_storage, :azure, :storage_account_name) %>
+      storage_access_key: <%= Rails.application.secrets.dig(:active_storage, :azure, :storage_access_key) %>
+      container: <%= Rails.application.secrets.dig(:active_storage, :azure, :container) %>
+    ```
+
+    Then add your credentials to the ENV or `secrets.yml`.
 
 8. Start your server
 

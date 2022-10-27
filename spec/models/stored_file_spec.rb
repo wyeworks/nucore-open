@@ -54,7 +54,7 @@ RSpec.describe StoredFile do
     end
 
     it "stored the file content" do
-      expect(file_upload.read).to eq(File.read(file1))
+      expect(file_upload.read_attached_file).to eq(File.read(file1))
     end
   end
 end

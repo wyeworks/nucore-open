@@ -330,13 +330,15 @@ RSpec.describe Journal do
     expect(journal.errors[:is_successful]).to be_empty
   end
 
-  it "should create and attach journal spreadsheet" do
-    journal.valid?
-    # create nufs account
-    @owner    = FactoryBot.create(:user)
-    @account  = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @owner))
+  it "should create and attach journal spreadsheet when journal rows are present" do
+    journal = create(:journal, :with_completed_order)
     journal.create_spreadsheet
-    expect(journal.file.url).to match(/^\/files/)
+    expect(journal.file_path).to be_present
+  end
+
+  it "should not create and attach journal spreadsheet when no journal rows are present" do
+    journal.create_spreadsheet
+    expect(journal.file_path).to be_nil
   end
 
   it "should be open" do

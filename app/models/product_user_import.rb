@@ -67,7 +67,7 @@ class ProductUserImport < ApplicationRecord
 
   def parsed_import_file
     @parsed_import_file ||=
-      CSV.parse(Paperclip.io_adapters.for(file).read, headers: true, skip_lines: /^,*$/)
+      CSV.parse(read_attached_file, headers: true, skip_lines: /^,*$/)
   end
 
 end

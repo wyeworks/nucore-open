@@ -23,7 +23,7 @@ class StoredFileZipper
     Zip::OutputStream.write_buffer do |stream|
       files.each do |file|
         stream.put_next_entry(filename(file))
-        stream << file.read
+        stream << file.read_attached_file
       end
     end
   end

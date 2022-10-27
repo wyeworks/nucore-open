@@ -31,7 +31,6 @@ gem "devise-security"
 gem "aasm"
 gem "paperclip"
 gem "paper_trail"
-gem "awesome_nested_set"
 gem "nokogiri"
 gem "rails-observers"
 gem "icalendar"
@@ -73,6 +72,11 @@ gem "ice_cube"
 
 # Optional: File uploads to S3
 # gem "aws-sdk-s3"
+
+# Optional: File uploads to Azure Blob via ActiveStorage
+# gem "azure-storage-blob", "~> 2.0", require: false
+# only used when SettingsHelper.feature_on?(:active_storage) is true
+gem "active_storage_validations"
 
 ## custom
 gem "bulk_email", path: "vendor/engines/bulk_email"

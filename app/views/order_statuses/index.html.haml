@@ -10,21 +10,19 @@
 
 %table.table.table-striped.table-hover.order-statuses-table
   %tbody
-    - OrderStatus.roots.each_with_index do |root, i|
+    - @order_statuses.each do |order_status|
       %tr
         %td.action-column
-        %td= root.name
+          - if order_status.editable?
+            = link_to t("shared.remove"),
+              facility_order_status_path(current_facility, order_status),
+              data: { confirm: t("shared.confirm_message") },
+              method: :delete
 
-      - children_for_facility(root, current_facility.id) do |child|
-        %tr
-          %td.action-column
-            - if child.editable?
-              = link_to t("shared.remove"),
-                facility_order_status_path(current_facility, child),
-                data: { confirm: t("shared.confirm_message") },
-                method: :delete
-
+        - if order_status.root?
+          %td= order_status.name
+        - else
           %td.child
-            = child.name
-            - if child.editable?
-              %span.child (#{link_to('Edit', edit_facility_order_status_path(current_facility, child))})
+            = order_status.name
+            - if order_status.editable?
+              %span.child (#{link_to('Edit', edit_facility_order_status_path(current_facility, order_status))})

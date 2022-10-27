@@ -52,9 +52,6 @@ RSpec.describe OrderStatusesController do
       it "should have all statuses" do
         expect(assigns[:order_statuses]).to contain_all [@root_status, @root_status2, @order_status, @order_status2]
       end
-      it "should have the root statuses" do
-        expect(assigns[:root_order_statuses]).to contain_all [@root_status, @root_status2]
-      end
     end
   end
 

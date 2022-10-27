@@ -111,6 +111,10 @@ class Account < ApplicationRecord
     for_user(order_detail.user).for_facility(order_detail.facility)
   end
 
+  def self.reconcilable?
+    false
+  end
+
   def type_string
     I18n.t("activerecord.models.#{self.class.to_s.underscore}.one", default: self.class.model_name.human)
   end

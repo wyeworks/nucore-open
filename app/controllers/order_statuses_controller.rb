@@ -20,8 +20,7 @@ class OrderStatusesController < ApplicationController
 
   # GET /order_statuses
   def index
-    @order_statuses       = current_facility.order_statuses
-    @root_order_statuses  = OrderStatus.roots # .sort {|a,b| a.lft <=> b.lft }
+    @order_statuses       = current_facility.order_statuses.sorted
   end
 
   # GET /order_statuses/new
