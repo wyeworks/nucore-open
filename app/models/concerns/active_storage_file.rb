@@ -23,6 +23,10 @@ module ActiveStorageFile
     file
   end
 
+  def delete_file
+    file.purge
+  end
+
   def read_attached_file
     return file.download if persisted?
 

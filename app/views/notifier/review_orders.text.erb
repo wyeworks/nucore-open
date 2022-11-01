@@ -1,4 +1,4 @@
-<%= text("body", facility: @facility) %>
+<%= text("body", facility: @facility, contact_message: @contact_message) %>
 
 <% @accounts_grouped_by_owner.each do |owner, accounts| %>
 <%= text("owner_header", owner: owner) %>

@@ -18,6 +18,10 @@ module PaperclipFile
     file.expiring_url
   end
 
+  def delete_file
+    file.clear
+  end
+
   def read_attached_file
     Paperclip.io_adapters.for(file).read
   end

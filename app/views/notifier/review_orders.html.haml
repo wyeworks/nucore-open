@@ -1,4 +1,4 @@
-= html "body", accounts: @accounts, facility: @facility
+= html "body", accounts: @accounts, facility: @facility, contact_message: @contact_message
 
 - @accounts_grouped_by_owner.each do |owner, accounts|
   %strong= html("owner_header", owner: owner)

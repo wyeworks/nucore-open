@@ -4,6 +4,27 @@ Because we use squash and merge, you should be able to see the changes by lookin
 at the [commit log](https://github.com/tablexi/nucore-open/commits/master). However, we have begun keeping track of breaking changes
 or optional rake tasks.
 
+### Addition of `facility_tile_list: true` feature flag ([#3193](https://github.com/tablexi/nucore-open/pull/3193))
+
+Schools that have set the feature flag `facility_tile_list: false` are not affected by this change.
+
+Schools that have set the feature flag `facility_tile_list: true` have the home page's facility list in a tiled grid that can include images of each facility.
+
+This change is a new implementation of this feature flag and may require changes to existing implementations.
+
+In this implementation, facilities get their attached image via the `DownloadableFiles::Image` module. This module uses either Paperclip or ActiveStorage, depending on the `active_storage` feature flag. The attachment is called `file` and, if Paperclip is being used, the following migration is needed
+
+```ruby
+class AddAttachmentToFacility < ActiveRecord::Migration[6.1]
+  def change
+    add_attachment :facilities, :file
+  end
+end
+```
+
+In addition to this, interactions with the image are done using the `DownloadableFile` interface, rather than directly using Paperclip or ActiveStorage's interface.
+
+
 ### Change in behavior of feature flag `expense_accounts: false` ([#3153](https://github.com/tablexi/nucore-open/pull/3153))
 
 Schools that have set the feature flag `expense_accounts: true` are not affected by this change.

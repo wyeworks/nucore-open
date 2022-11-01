@@ -36,6 +36,7 @@ class FacilitiesController < ApplicationController
     @facilities = Facility.active.alphabetized
     @recently_used_facilities = MostRecentlyUsedSearcher.new(acting_user).recently_used_facilities.alphabetized
     @active_tab = SettingsHelper.feature_on?(:use_manage) ? "use" : "home"
+    @list_layout = SettingsHelper.feature_on?(:facility_tile_list) ? "tile" : "list"
     @recent_products = MostRecentlyUsedSearcher.new(acting_user).recently_used_products.includes(:facility).alphabetized
     @azlist = build_az_list(@facilities)
     render layout: "application"
@@ -225,6 +226,8 @@ class FacilitiesController < ApplicationController
       dashboard_enabled
       kiosk_enabled
       payment_url
+      file
+      remove_file
     )
   end
 

@@ -1,0 +1,38 @@
+ul.facility_list_container.tile {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-gap: 1rem;
+
+  .facility_listing.tile {
+    height: 300px;
+    min-width: 250px;
+    margin-right:10px;
+    max-width: 400px;
+    img {
+      margin-bottom: 1em;
+    }
+  }
+
+  .thumbnailFallBackContainer {
+    width: 100%;
+    padding-bottom: 50%;
+    position: relative;
+    margin-bottom: 1em;;
+  }
+	
+  .thumbnailFallback {
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    text-decoration: none;
+    background-color: rgb(231, 231, 231);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 5em;
+    color: rgb(110, 110, 110);
+  }
+	
+  .thumbnailFallback:hover {
+    color: rgb(71, 71, 71);
+  }
+}

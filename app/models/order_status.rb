@@ -55,7 +55,7 @@ class OrderStatus < ApplicationRecord
   end
 
   def self.canceled_statuses_for_facility(facility)
-    canceled.self_and_descendants.for_facility(current_facility).sorted
+    canceled.self_and_descendants.for_facility(facility).sorted
   end
 
   def self.sorted

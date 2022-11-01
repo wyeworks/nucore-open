@@ -2,6 +2,12 @@
   = f.input :name, hint: text(".hints.name")
   = f.input :abbreviation, hint: text(".hints.abbreviation")
   = f.input :url_name, hint: facility_url(f.object.url_name || "url-name"), as: :string
+  - if SettingsHelper.feature_on?(:facility_tile_list)
+    = f.input :file, as: :file, label: "Image", hint: t("simple_form.hints.image_dimensions"), hint_html: { class: "help-block" }
+
+    - if current_facility&.file_present?
+      = f.input(:remove_file, as: :boolean, inline_label: "Remove image")
+      = image_tag(current_facility.padded_image, class: "tile-image")
   = f.input :short_description, input_html: { class: "wide" }, hint: text(".hints.short_description")
   = f.input :description, input_html: { class: "editor" }, hint: text(".hints.description")
 
