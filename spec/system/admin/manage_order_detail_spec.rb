@@ -87,6 +87,10 @@ RSpec.describe "Managing an order detail" do
 
         expect(page).to have_content("Canceled")
         expect(page).to have_css("tfoot .currency", text: "$0.00", count: 3)
+
+        # Happy path coverage for canceled items in the order detail form
+        click_link order_detail.to_s
+        expect(page).to have_content("Canceled")
       end
     end
 

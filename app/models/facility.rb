@@ -2,6 +2,11 @@
 
 class Facility < ApplicationRecord
 
+  if SettingsHelper.feature_on?(:facility_tile_list)
+    # Migration is required if Paperclip is being used (see CHANGELOG)
+    include DownloadableFiles::Image
+  end
+
   before_validation :set_journal_mask, on: :create
 
   has_many :bundles, inverse_of: :facility

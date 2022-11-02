@@ -337,6 +337,9 @@ GEM
       ice_cube (~> 0.16)
     ice_cube (0.16.4)
     ice_nine (0.11.2)
+    image_processing (1.12.2)
+      mini_magick (>= 4.9.5, < 5)
+      ruby-vips (>= 2.0.17, < 3)
     jquery-rails (4.5.0)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -364,6 +367,7 @@ GEM
     mimemagic (0.3.10)
       nokogiri (~> 1)
       rake
+    mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
     minitest (5.16.3)
@@ -530,6 +534,8 @@ GEM
     ruby-saml (1.14.0)
       nokogiri (>= 1.10.5)
       rexml
+    ruby-vips (2.1.4)
+      ffi (~> 1.12)
     rubyzip (2.3.2)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -671,6 +677,7 @@ DEPENDENCIES
   health_check
   icalendar
   ice_cube
+  image_processing (>= 1.2)
   jquery-rails
   jquery-ui-rails
   letter_opener

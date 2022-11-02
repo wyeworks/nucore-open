@@ -1,9 +1,16 @@
 - if @facilities.any?
   %h2.facility_listing.js--facility_listing.all_header= text(".all")
-  %ul.unstyled
+  %ul.unstyled.facility_list_container{ class: @list_layout }
     - @azlist.map.with_index do |(letter, matched_facilities), index|
       - matched_facilities.each do |facility|
-        %li.facility_listing.js--facility_listing{ class: az_classname_for_facility(index, letter) }
+        %li.facility_listing.js--facility_listing{ class: [ az_classname_for_facility(index, letter), @list_layout ] }
+          - if SettingsHelper.feature_on?(:facility_tile_list)
+            = link_to facility_path(facility) do
+              - if facility.file_present?
+                = image_tag(facility.padded_image, class: "tile-image")
+              - else
+                .thumbnailFallBackContainer
+                  .thumbnailFallback= facility.abbreviation
           .facility_listing.facility_listing__header= link_to facility, facility_path(facility)
           %p= facility.short_description
 - else

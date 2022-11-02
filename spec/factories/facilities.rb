@@ -10,6 +10,10 @@ FactoryBot.define do
     is_active { true }
     sequence(:url_name) { |n| "facility#{n}" }
 
+    trait :with_image do
+      file { File.open("#{Rails.root}/spec/files/cern.jpeg") }
+    end
+
     trait :with_order_notification do
       sequence(:order_notification_recipient) { |n| "orders#{n}@example.com" }
     end

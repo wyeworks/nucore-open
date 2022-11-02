@@ -39,6 +39,13 @@ class Notifier < ActionMailer::Base
     @user = user
     @accounts = accounts
     @facility = facility
+
+    @contact_message = if facility.email
+                         "please email [#{facility.email}](mailto:#{facility.email})."
+                       else
+                         "please contact the facility administrator."
+                       end
+
     @accounts_grouped_by_owner = accounts.group_by(&:owner_user)
     send_nucore_mail @user.email, text("views.notifier.review_orders.subject", abbreviation: @facility.abbreviation)
   end

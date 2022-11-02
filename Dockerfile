@@ -7,8 +7,8 @@ ENV BUNDLE_PATH /gems
 RUN apt-get update && \
  # Installs the node repository
  curl -sL https://deb.nodesource.com/setup_16.x | bash && \
- # Installs the node repository
- apt-get install --yes nodejs && \
+ # Installs libvips and the node repository
+ apt-get install --yes libvips42 nodejs && \
  npm install --global yarn && \
  apt-get autoremove -y
 

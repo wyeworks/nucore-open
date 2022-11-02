@@ -38,6 +38,8 @@ en:
           New transactions have moved into the billing workflow. The default review
           period is seven days, after which the charges will be invoiced/journaled.
 
+          For any billing-related questions, %{contact_message}
+
           **Facility**: %{facility}
 
           **Payment source(s) and Owner**:
