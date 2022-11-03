@@ -347,6 +347,7 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.6.2)
+    jwt (2.5.0)
     kgio (2.11.4)
     kostya-sigar (2.0.10)
     launchy (2.5.0)
@@ -383,12 +384,12 @@ GEM
       net-ssh (>= 2.6.5)
     net-ssh (7.0.1)
     nio4r (2.5.8)
-    nokogiri (1.13.8)
+    nokogiri (1.13.9)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    nokogiri (1.13.8-aarch64-linux)
+    nokogiri (1.13.9-aarch64-linux)
       racc (~> 1.4)
-    nokogiri (1.13.8-x86_64-linux)
+    nokogiri (1.13.9-x86_64-linux)
       racc (~> 1.4)
     numerizer (0.1.1)
     oj (3.13.21)
@@ -680,6 +681,7 @@ DEPENDENCIES
   image_processing (>= 1.2)
   jquery-rails
   jquery-ui-rails
+  jwt
   letter_opener
   mysql2
   nested_form_fields

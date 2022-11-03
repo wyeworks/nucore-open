@@ -20,7 +20,6 @@ gem "mysql2"
 # gem "activerecord-oracle_enhanced-adapter", "~> 6.1.0"
 # gem "ruby-oci8" # only for CRuby users
 
-
 ## auth
 gem "cancancan", "3.1.0"
 gem "devise"
@@ -69,6 +68,7 @@ gem "rake"
 gem "spreadsheet"
 gem "daemons"
 gem "ice_cube"
+gem "jwt"
 
 # Optional: File uploads to S3
 # gem "aws-sdk-s3"

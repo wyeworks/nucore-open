@@ -1,0 +1,529 @@
+{
+  "jsonapi": {
+    "version": "1.0",
+    "meta": {
+      "links": {
+        "self": {
+          "href": "http://jsonapi.org/format/1.0/"
+        }
+      }
+    }
+  },
+  "data": [
+    {
+      "type": "raft_training_record--raft_training_record",
+      "id": "1234abcd",
+      "links": {
+        "self": {
+          "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/1234abcd"
+        }
+      },
+      "attributes": {
+        "drupal_internal__id": 789,
+        "langcode": "en",
+        "created": "2022-03-22T19:00:01+00:00",
+        "changed": "2022-03-22T19:00:01+00:00",
+        "external_source": null,
+        "score": null,
+        "status": 1,
+        "external_course_id": null,
+        "external_record_id": "1234"
+      },
+      "relationships": {
+        "user_id": {
+          "data": {
+            "type": "user--user",
+            "id": "7890xyz",
+            "meta": {
+              "drupal_internal__target_id": 123456
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/1234abcd/user_id"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/1234abcd/relationships/user_id"
+            }
+          }
+        },
+        "course_id": {
+          "data": {
+            "type": "node--raft_training_course",
+            "id": "lmnop4567",
+            "meta": {
+              "drupal_internal__target_id": 111222
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/1234abcd/course_id"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/1234abcd/relationships/course_id"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "raft_training_record--raft_training_record",
+      "id": "888999stst",
+      "links": {
+        "self": {
+          "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/888999stst"
+        }
+      },
+      "attributes": {
+        "drupal_internal__id": 1234,
+        "langcode": "en",
+        "created": "2022-03-23T19:00:01+00:00",
+        "changed": "2022-03-23T19:00:01+00:00",
+        "external_source": null,
+        "score": null,
+        "status": 1,
+        "external_course_id": null,
+        "external_record_id": "1234"
+      },
+      "relationships": {
+        "user_id": {
+          "data": {
+            "type": "user--user",
+            "id": "7890xyz",
+            "meta": {
+              "drupal_internal__target_id": 333666
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/888999stst/user_id"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/888999stst/relationships/user_id"
+            }
+          }
+        },
+        "course_id": {
+          "data": {
+            "type": "node--raft_training_course",
+            "id": "bbb222",
+            "meta": {
+              "drupal_internal__target_id": 190190
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/888999stst/course_id"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/888999stst/relationships/course_id"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "raft_training_record--raft_training_record",
+      "id": "4444lll",
+      "links": {
+        "self": {
+          "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/4444lll"
+        }
+      },
+      "attributes": {
+        "drupal_internal__id": 54321,
+        "langcode": "en",
+        "created": "2022-03-22T19:00:01+00:00",
+        "changed": "2022-03-22T19:00:01+00:00",
+        "external_source": null,
+        "score": null,
+        "status": 1,
+        "external_course_id": null,
+        "external_record_id": "13131"
+      },
+      "relationships": {
+        "user_id": {
+          "data": {
+            "type": "user--user",
+            "id": "7890xyz",
+            "meta": {
+              "drupal_internal__target_id": 141414
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/4444lll/user_id"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/4444lll/relationships/user_id"
+            }
+          }
+        },
+        "course_id": {
+          "data": {
+            "type": "node--raft_training_course",
+            "id": "7777ggg",
+            "meta": {
+              "drupal_internal__target_id": 1910785
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/4444lll/course_id"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record/4444lll/relationships/course_id"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "included": [
+    {
+      "type": "node--raft_training_course",
+      "id": "lmnop4567",
+      "links": {
+        "self": {
+          "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/lmnop4567?resourceVersion=id%3A80006732"
+        }
+      },
+      "attributes": {
+        "drupal_internal__nid": 1234567,
+        "drupal_internal__vid": 87654321,
+        "langcode": "en",
+        "revision_timestamp": "2022-09-15T18:14:47+00:00",
+        "revision_log": null,
+        "status": true,
+        "title": "Lab Safety Training for Lab Workers",
+        "created": "2022-10-13T16:02:01+00:00",
+        "changed": "2022-10-13T16:02:01+00:00",
+        "promote": true,
+        "sticky": false,
+        "default_langcode": true,
+        "revision_translation_affected": true,
+        "operative_status": true,
+        "path": {
+          "alias": null,
+          "pid": null,
+          "langcode": "en"
+        },
+        "body": {
+          "value": "<p>Working Safely teaches procedures prudent practices for working safely in the lab, how to recognize exposure to hazards, to procedures to follow during work and in case of emergencies, and how to best secure the lab.</p>",
+          "format": null,
+          "processed": "<p>&lt;p&gt;Working Safely teaches procedures prudent practices for working safely in the lab, how to recognize exposure to hazards, to procedures to follow during work and in case of emergencies, and how to best secure the lab.&lt;/p&gt;</p>\n",
+          "summary": null
+        },
+        "field_course_type": "bioraft3",
+        "field_course_url": "664"
+      },
+      "relationships": {
+        "node_type": {
+          "data": {
+            "type": "node_type--node_type",
+            "id": "939393sssss",
+            "meta": {
+              "drupal_internal__target_id": "raft_training_course"
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/lmnop4567/node_type?resourceVersion=id%3A80006732"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/lmnop4567/relationships/node_type?resourceVersion=id%3A80006732"
+            }
+          }
+        },
+        "revision_uid": {
+          "data": {
+            "type": "user--user",
+            "id": "98765test",
+            "meta": {
+              "drupal_internal__target_id": 1
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/lmnop4567/revision_uid?resourceVersion=id%3A80006732"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/lmnop4567/relationships/revision_uid?resourceVersion=id%3A80006732"
+            }
+          }
+        },
+        "uid": {
+          "data": {
+            "type": "user--user",
+            "id": "98765test",
+            "meta": {
+              "drupal_internal__target_id": 1
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/lmnop4567/uid?resourceVersion=id%3A80006732"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/lmnop4567/relationships/uid?resourceVersion=id%3A80006732"
+            }
+          }
+        },
+        "field_training_course_category": {
+          "data": [
+            {
+              "type": "config_terms_term--config_terms_term",
+              "id": "a082dd68-0f48-4243-9090-a0acbd0ed403",
+              "meta": {
+                "drupal_internal__target_id": "laboratory_safety"
+              }
+            }
+          ],
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/lmnop4567/field_training_course_category?resourceVersion=id%3A80006732"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/lmnop4567/relationships/field_training_course_category?resourceVersion=id%3A80006732"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "node--raft_training_course",
+      "id": "bbb222",
+      "links": {
+        "self": {
+          "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/bbb222?resourceVersion=id%3A80006738"
+        }
+      },
+      "attributes": {
+        "drupal_internal__nid": 1907654,
+        "drupal_internal__vid": 80006738,
+        "langcode": "en",
+        "revision_timestamp": "2022-09-15T18:14:47+00:00",
+        "revision_log": null,
+        "status": true,
+        "title": "OSU Fire Extinguisher Course (in person)",
+        "created": "2022-04-21T13:54:38+00:00",
+        "changed": "2022-09-15T13:22:34+00:00",
+        "promote": true,
+        "sticky": false,
+        "default_langcode": true,
+        "revision_translation_affected": true,
+        "operative_status": true,
+        "path": {
+          "alias": null,
+          "pid": null,
+          "langcode": "en"
+        },
+        "body": {
+          "value": "<p>University employees should not use fire extinguishers unless they have been formally trained in the proper operation of extinguisher use. This training gives employee's an overview of how and when a fire extinguisher should be used.</p>",
+          "format": null,
+          "processed": "<p>&lt;p&gt;University employees should not use fire extinguishers unless they have been formally trained in the proper operation of extinguisher use. This training gives employee&#039;s an overview of how and when a fire extinguisher should be used.&lt;/p&gt;</p>\n",
+          "summary": null
+        },
+        "field_course_type": "classroom",
+        "field_course_url": null
+      },
+      "relationships": {
+        "node_type": {
+          "data": {
+            "type": "node_type--node_type",
+            "id": "939393sssss",
+            "meta": {
+              "drupal_internal__target_id": "raft_training_course"
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/bbb222/node_type?resourceVersion=id%3A80006738"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/bbb222/relationships/node_type?resourceVersion=id%3A80006738"
+            }
+          }
+        },
+        "revision_uid": {
+          "data": {
+            "type": "user--user",
+            "id": "98765test",
+            "meta": {
+              "drupal_internal__target_id": 1
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/bbb222/revision_uid?resourceVersion=id%3A80006738"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/bbb222/relationships/revision_uid?resourceVersion=id%3A80006738"
+            }
+          }
+        },
+        "uid": {
+          "data": {
+            "type": "user--user",
+            "id": "98765test",
+            "meta": {
+              "drupal_internal__target_id": 1
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/bbb222/uid?resourceVersion=id%3A80006738"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/bbb222/relationships/uid?resourceVersion=id%3A80006738"
+            }
+          }
+        },
+        "field_training_course_category": {
+          "data": [
+            {
+              "type": "config_terms_term--config_terms_term",
+              "id": "9ef9a7f4-1709-43e3-8b50-d43a9528bcee",
+              "meta": {
+                "drupal_internal__target_id": "fire_and_life_safety"
+              }
+            }
+          ],
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/bbb222/field_training_course_category?resourceVersion=id%3A80006738"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/bbb222/relationships/field_training_course_category?resourceVersion=id%3A80006738"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "node--raft_training_course",
+      "id": "7777ggg",
+      "links": {
+        "self": {
+          "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/7777ggg?resourceVersion=id%3A80006704"
+        }
+      },
+      "attributes": {
+        "drupal_internal__nid": 1910785,
+        "drupal_internal__vid": 80006704,
+        "langcode": "en",
+        "revision_timestamp": "2022-09-15T18:14:47+00:00",
+        "revision_log": null,
+        "status": true,
+        "title": "Hazardous Waste Awareness Training",
+        "created": "2022-10-13T16:01:57+00:00",
+        "changed": "2022-10-13T16:12:17+00:00",
+        "promote": true,
+        "sticky": false,
+        "default_langcode": true,
+        "revision_translation_affected": true,
+        "operative_status": true,
+        "path": {
+          "alias": null,
+          "pid": null,
+          "langcode": "en"
+        },
+        "body": {
+          "value": "<p>Employees will learn the requirements of 40 CFR 262.34 (d)(5)(C)(iii). This mandatory training is required for all OSU personnel who generate hazardous waste, so that they may learn to manage the waste they generate. Topics covered in training include: Rules of the Resource Conservation and Recovery Act (RCRA) and Hazardous waste identification, storage and disposal.</p>",
+          "format": null,
+          "processed": "<p>&lt;p&gt;Employees will learn the requirements of 40 CFR 262.34 (d)(5)(C)(iii). This mandatory training is required for all OSU personnel who generate hazardous waste, so that they may learn to manage the waste they generate. Topics covered in training include: Rules of the Resource Conservation and Recovery Act (RCRA) and Hazardous waste identification, storage and disposal.&lt;/p&gt;</p>\n",
+          "summary": null
+        },
+        "field_course_type": "bioraft3",
+        "field_course_url": "1055"
+      },
+      "relationships": {
+        "node_type": {
+          "data": {
+            "type": "node_type--node_type",
+            "id": "939393sssss",
+            "meta": {
+              "drupal_internal__target_id": "raft_training_course"
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/7777ggg/node_type?resourceVersion=id%3A80006704"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/7777ggg/relationships/node_type?resourceVersion=id%3A80006704"
+            }
+          }
+        },
+        "revision_uid": {
+          "data": {
+            "type": "user--user",
+            "id": "98765test",
+            "meta": {
+              "drupal_internal__target_id": 1
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/7777ggg/revision_uid?resourceVersion=id%3A80006704"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/7777ggg/relationships/revision_uid?resourceVersion=id%3A80006704"
+            }
+          }
+        },
+        "uid": {
+          "data": {
+            "type": "user--user",
+            "id": "98765test",
+            "meta": {
+              "drupal_internal__target_id": 1
+            }
+          },
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/7777ggg/uid?resourceVersion=id%3A80006704"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/7777ggg/relationships/uid?resourceVersion=id%3A80006704"
+            }
+          }
+        },
+        "field_training_course_category": {
+          "data": [
+            {
+              "type": "config_terms_term--config_terms_term",
+              "id": "a082dd68-0f48-4243-9090-a0acbd0ed403",
+              "meta": {
+                "drupal_internal__target_id": "laboratory_safety"
+              }
+            },
+            {
+              "type": "config_terms_term--config_terms_term",
+              "id": "f88fad38-3253-4340-9b8d-22ad4429969f",
+              "meta": {
+                "drupal_internal__target_id": "occupational_health_and_safety"
+              }
+            }
+          ],
+          "links": {
+            "related": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/7777ggg/field_training_course_category?resourceVersion=id%3A80006704"
+            },
+            "self": {
+              "href": "https://test-university.scishield.com/jsonapi/node/raft_training_course/7777ggg/relationships/field_training_course_category?resourceVersion=id%3A80006704"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "meta": {
+    "count": "3"
+  },
+  "links": {
+    "self": {
+      "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record?filter%5Bstatus%5D=1&filter%5Buser%5D%5Bcondition%5D%5Bpath%5D=user_id.mail&filter%5Buser%5D%5Bcondition%5D%5Boperator%5D=%3D&filter%5Buser%5D%5Bcondition%5D%5Bvalue%5D=Todd.Miller%40oregonstate.edu&include=course_id"
+    }
+  }
+}

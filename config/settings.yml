@@ -34,6 +34,9 @@ converters:
   product_to_journal_rows: UmassCorum::Journals::ProductToJournalRowAttributes
   order_detail_to_journal_rows: UmassCorum::Journals::OrderDetailToJournalRowAttributes
 
+research_safety_adapter:
+  class_name: <%= ENV.fetch("RESEARCH_SAFETY_ADAPTER_CLASS", "ResearchSafetyAdapters::ResearchSafetyAlwaysCertifiedAdapter") %>
+
 statement_pdf:
   class_name: UmassCorum::StatementPdf
   font_name: Roboto
