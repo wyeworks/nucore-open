@@ -1,0 +1,23 @@
+{
+  "jsonapi": {
+    "version": "1.0",
+    "meta": {
+      "links": {
+        "self": {
+          "href": "http://jsonapi.org/format/1.0/"
+        }
+      }
+    }
+  },
+  "data": [
+
+  ],
+  "meta": {
+    "count": "0"
+  },
+  "links": {
+    "self": {
+      "href": "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record?filter%5Bstatus%5D=1&filter%5Buser%5D%5Bcondition%5D%5Bpath%5D=user_id.mail&filter%5Buser%5D%5Bcondition%5D%5Boperator%5D=%3D&filter%5Buser%5D%5Bcondition%5D%5Bvalue%5D=gsdfgd&include=course_id"
+    }
+  }
+}
