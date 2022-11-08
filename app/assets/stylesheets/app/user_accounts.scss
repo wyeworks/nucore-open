@@ -1,0 +1,15 @@
+td.expired {
+  background-color: $errorBackground !important;
+  color: $errorText;
+}
+
+.toggle_expired_btn {
+  float: right;
+}
+
+.inline {
+  .toggle_expired_btn {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}

@@ -5,16 +5,7 @@ require "rails_helper"
 RSpec.describe ResearchSafetyAdapters::ScishieldApiAdapter do
   subject(:adapter) { described_class.new(user) }
   let(:user) { build(:user, email: "research@osu.edu") }
-  let(:test_endpoint) { "https://test-university.scishield.com/jsonapi/raft_training_record/raft_training_record" }
   let(:api_endpoint) { adapter.client.api_endpoint(user.email) }
-
-  before(:each) {
-    allow(Rails.application.secrets).to receive(:dig).with(:scishield, :key).and_return(nil)
-    allow(Rails.application.secrets).to receive(:dig).with(:scishield, :key_id).and_return(nil)
-    allow(Rails.application.secrets).to receive(:dig).with(:scishield, :rsa_private_key).and_return(nil)
-    allow(Rails.application.secrets).to receive(:dig).with(:scishield, :scishield_endpoint).and_return(test_endpoint)
-
-  }
 
   describe "with a successful response" do
     let(:response) { File.expand_path("../fixtures/scishield/success.json", __dir__) }
