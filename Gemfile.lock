@@ -682,7 +682,6 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   jwt
-  ldap_authentication!
   letter_opener
   mysql2
   nested_form_fields
