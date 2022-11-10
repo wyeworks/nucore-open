@@ -3,7 +3,13 @@
 class ResultsFileNotifierPreview < ActionMailer::Preview
 
   def file_uploaded
-    file = StoredFile.sample_result.last
+    file = FactoryBot.build(
+      :stored_file,
+      :results,
+      creator: User.first,
+      order_detail: OrderDetail.first
+    )
+
     ResultsFileNotifierMailer.file_uploaded(file)
   end
 

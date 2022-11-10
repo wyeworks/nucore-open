@@ -3,6 +3,8 @@ en:
     facility_accounts:
       account_table:
         all: "!views.accounts.index.all!"
+        show_text: Show Expired Accounts
+        hide_text: Hide Expired Accounts
       show_statement:
         no_transactions: No transactions exist for this period.
         transaction_date: Transaction Date

@@ -11,7 +11,7 @@
     options_for_select(assigned_user_options), class: "sync_select", id: nil
 
 %td.action-form
-  %select{ name: "order_status_id", class: "sync_select", id: nil }
+  %select{ name: "order_status_id", class: "sync_select status_dropdown", id: nil }
     = options_for_select([["Status...", nil]])
     - OrderStatus.non_protected_statuses(current_facility).each do |order_status|
       = options_for_select([[order_status.name_with_level, order_status.id]])

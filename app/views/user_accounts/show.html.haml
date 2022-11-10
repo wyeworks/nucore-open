@@ -14,16 +14,22 @@
     = link_to t(".edit"), edit_facility_user_accounts_path(current_facility, @user), class: "btn btn-primary"
   - if current_facility.cross_facility? && current_ability.can?(:clone_accounts, current_facility)
     = link_to text("views.clone_account_memberships.index.header"), facility_user_clone_account_memberships_path(current_facility, @user), class: "btn"
+
+  %p.toggle_expired_accts_btn--js.toggle_expired_btn.btn.btn-primary= t("views.facility_accounts.account_table.hide_text")
+
   %table.table.table-striped.table-hover
     %thead
       %tr
         %th= Account.model_name.human
         %th.centered= Facility.model_name.human
-    %tbody
+        %th= Account.human_attribute_name(:expires_at)
+    %tbody.user_accounts
       - @accounts.each do |account|
-        %tr
+        %tr{ class: account.expired? ? "expired--js" : "" }
           %td= payment_source_link_or_text(account)
           %td= account.per_facility? ? account.facilities.join(", ") :  content_tag(:i, t("shared.all"))
+          %td{ class: account.expired? ? "expired" : "" }
+            = human_date(account.expires_at)
 - else
   %p.notice= t('.notice', user_name: @user.full_name)
   - if current_facility.cross_facility? && current_ability.can?(:clone_accounts, current_facility)

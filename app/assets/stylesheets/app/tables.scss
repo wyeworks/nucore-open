@@ -25,6 +25,10 @@ table {
   }
 }
 
+table.reservations select.status_dropdown {
+  min-width: 84px;
+}
+
 .table-user-accounts {
   thead {
     th {
