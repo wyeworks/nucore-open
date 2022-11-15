@@ -48,4 +48,18 @@ namespace :order_details do
       end
     end
   end
+
+  # In the case that a service is modified to require a form after it has been
+  # purchased, the order detail will state that it's missing a form, but there's
+  # no way to add the needed template_result file via the UI after purchase.
+  # This task adds a template_result file to an order detail by copying the template
+  # file from the product that was purchased.
+  desc "Adds a template_result file to an order detail"
+  task :add_template_result, [:id] => :environment do |_t, args|
+    order_detail = OrderDetail.find args[:id]
+    file = order_detail.product.stored_files.template.first.dup
+    file.file_type = "template_result"
+    order_detail.stored_files << file
+    order_detail.save
+  end
 end

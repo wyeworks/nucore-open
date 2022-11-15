@@ -21,6 +21,17 @@ RSpec.describe OrderStatus do
 
   let!(:facility) { create(:facility) }
 
+  describe ".ordered_root_statuses" do
+    let(:ordered_roots) { root_statuses.values.map(&:name) }
+
+    it "allows adding and removing root order statuses" do
+      OrderStatus.ordered_root_statuses << "TEST"
+      expect(described_class.ordered_root_statuses).to eq(ordered_roots + ["TEST"])
+      OrderStatus.ordered_root_statuses.pop
+      expect(described_class.ordered_root_statuses).to eq(ordered_roots)
+    end
+  end
+
   describe ".new_status" do
     let!(:new_order_status) { create(:order_status, name: "New") }
 

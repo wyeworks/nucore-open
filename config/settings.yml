@@ -183,3 +183,5 @@ google_analytics_key: ~
 
 devise:
   lock_strategy: :failed_attempts
+  unlock_strategy: :email
+  minutes_to_unlock_in: 5
