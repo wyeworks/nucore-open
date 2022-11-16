@@ -19,6 +19,7 @@ module UmassCorum
       Account.config.journal_account_types.unshift(UmassCorum::SpeedTypeAccount.name)
       Account.config.journal_account_types.uniq!
       Account.config.creation_disabled_types << "NufsAccount"
+      OrderStatus.ordered_root_statuses << "MIVP Pending"
       FacilityFacilityAccountsController.form_class = UmassCorum::FacilityAccountForm
       Journal.send(:include, UmassCorum::JournalExtension)
       ViewHook.add_hook("admin.shared.sidenav_global", "after", "umass_corum/shared/admin_reports_tab")

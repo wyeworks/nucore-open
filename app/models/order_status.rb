@@ -19,7 +19,10 @@ class OrderStatus < ApplicationRecord
 
   scope :for_facility, ->(facility) { where(facility_id: [nil, facility&.id]) }
 
-  STATUS_ORDER = ["New", "In Process", "Canceled", "Complete", "Reconciled"].freeze
+  ROOT_STATUS_ORDER = ["New", "In Process", "Canceled", "Complete", "Reconciled"].freeze
+
+  # Needs to be overridable by engines
+  cattr_accessor(:ordered_root_statuses) { ROOT_STATUS_ORDER.dup }
 
   # This one is different because `new` is a reserved keyword
   def self.new_status
@@ -79,7 +82,7 @@ class OrderStatus < ApplicationRecord
   end
 
   def position
-    [STATUS_ORDER.index(root.name), id]
+    [ordered_root_statuses.index(root.name), id]
   end
 
   def name_with_level
