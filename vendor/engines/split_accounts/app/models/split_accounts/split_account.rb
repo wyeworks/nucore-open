@@ -21,6 +21,10 @@ module SplitAccounts
       errors.add(:splits, :percent_total) if percent_total != 100
     end
 
+    def account_number_to_s
+      "(SPLIT) #{super}"
+    end
+
     def percent_total
       splits.reduce(0) do |sum, split|
         split.percent.present? ? sum + split.percent : sum
