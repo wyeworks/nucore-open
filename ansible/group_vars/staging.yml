@@ -1,4 +1,4 @@
-ftp_user: corumftpdev
+ftp_host: interfaces-dev.umasscs.net
 nginx_apps:
   - host: corum-test.umass.edu
     alias: ials-core-web-test-01.it.umass.edu

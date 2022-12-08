@@ -76,9 +76,26 @@
   loop: "{{ authorized_keys }}"
   become: yes
 
-- name: Create ftp user
-  user:
-    name: "{{ ftp_user }}"
-    state: present
-    groups: ["umass", "ials"]
-  become: yes
+# Copies the private key file from local source
+- name: Create SSH key file for ftp access
+  become_user: corum
+  become: true
+  copy:
+    src: "keys/umgl7056ial.key"
+    dest: "/home/corum/.ssh/umgl7056ial.key"
+
+# Even though we are using the "copy" module,
+# by specifying content with no src,
+# this actually creates the file.
+# see: https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html#parameter-content
+- name: Create SSH config file for ftp access
+  become_user: corum
+  become: true
+  copy:
+    dest: "/home/corum/.ssh/config"
+    content: |
+      Host {{ ftp_host }}
+        User umgl7056ial
+        Port 22
+        IdentityFile ~/.ssh/umgl7056ial.key
+
