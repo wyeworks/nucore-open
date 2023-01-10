@@ -39,6 +39,10 @@ class FacilityAccount < ApplicationRecord
     end
   end
 
+  def display_account_number
+    account_number + (is_active? ? "" : " (inactive)")
+  end
+
   # Over-rideable from school-specific engines that don't use the expense_accounts feature flag
   def revenue_account_for_journal
     revenue_account

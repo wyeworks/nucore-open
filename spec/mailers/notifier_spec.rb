@@ -27,7 +27,7 @@ RSpec.describe Notifier do
 
       it "generates a statement email", :aggregate_failures do
         expect(email.to).to eq [user.email]
-        expect(email.subject).to include("Statement")
+        expect(email.subject).to include(I18n.t(".Statement"))
         expect(email_html).to include(statement.account.to_s)
         expect(email_text).to include(statement.account.to_s)
       end

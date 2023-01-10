@@ -23,7 +23,6 @@ en:
       account_fields:
         purchase_order_account:
           account_number: Account Number
-          ar_number_label: Account Receivable Number
           ar_number_hint: if applicable
           outside_contact_label: Outside Contact Info
           outside_contact_hint: Contact information (phone number, email, fax, etc.)
@@ -46,6 +45,7 @@ en:
     attributes:
       purchase_order_account:
         account_number: Payment Source
+        ar_number: Account Receivable Number
       credit_card_account:
         account_number: Payment Source
         name_on_card: Name On Card

@@ -13,7 +13,7 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
   shared_examples "kiosk_actions" do |login_label, password|
 
     context "with an admin reservation" do
-      let!(:admin_reservation) { create(:admin_reservation, reserve_start_at: 15.minutes.ago, actual_start_at: 10.minutes.ago, product: instrument) }
+      let!(:admin_reservation) { create(:admin_reservation, reserve_start_at: 15.minutes.ago, product: instrument) }
       let!(:accessory) { create(:accessory, parent: instrument) }
 
       it "does not error" do
@@ -26,7 +26,7 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
     end
 
     context "with an offline reservation" do
-      let!(:offline_reservation) { create(:offline_reservation, reserve_start_at: 15.minutes.ago, actual_start_at: 10.minutes.ago, product: instrument) }
+      let!(:offline_reservation) { create(:offline_reservation, reserve_start_at: 15.minutes.ago, product: instrument) }
 
       it "does not error" do
         visit facility_kiosk_reservations_path(facility)
@@ -182,6 +182,16 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
     let(:user) { create(:user, :external, :purchaser, account: account) }
 
     it_behaves_like "kiosk_actions", "Login", "P@ssw0rd!!"
+
+    it "has a list of instruments" do
+      name1 = instrument.name
+      name2 = create(:setup_instrument, :timer, facility: facility).name
+      visit facility_kiosk_reservations_path(facility)
+      timeline = find(".timeline-wrapper")
+
+      expect(timeline).to have_content name1
+      expect(timeline).to have_content name2
+    end
   end
 
   context "with a locally authenticated user who is signed in", ignore_js_errors: true do

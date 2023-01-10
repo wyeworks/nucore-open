@@ -1,8 +1,7 @@
-= f.input :account_number, label: text("account_number"), required: true
+= f.input :account_number, required: true
 
 = f.input :formatted_expires_at, required: true,
-  input_html: { class: "datepicker" },
-  label: Account.human_attribute_name(:expires_at)
+  input_html: { class: "datepicker" }
 
 = f.input :description, required: true
 
@@ -19,7 +18,6 @@
   hint_html: { class: "help-inline" }
 
 = f.input :ar_number,
-  label: text("ar_number_label"),
   hint: text("ar_number_hint"),
   hint_html: { class: "help-inline" }
 

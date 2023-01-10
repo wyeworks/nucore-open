@@ -1,0 +1,5 @@
+%div{ style: "width: #{reservation_width(@display_datetime, reservation)}; left: #{reservation_left_position(@display_datetime, reservation)}; z-index: #{reservation_counter};", class: reservation_classes(reservation, product) }[reservation, :block]
+
+- unless reservation.blackout?
+  %div[reservation, :tooltip]
+    %span= reservation_date_range_display(@display_datetime, reservation)
