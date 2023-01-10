@@ -36,7 +36,7 @@ RSpec.describe UmassCorum::JournalWriter do
       program_code: "B03",
       project_id: "S12100000001075",
     }
-    expect(journal.rows.first).to eq("   15530875308006172019Carter, Kenneth     00000006750DALS095            LM19111    UMAMH       Light Micro         PSE      53106A090700034B03       S12100000001075")
+    expect(journal.rows.first).to eq("   155308753080LM1911106172019Carter, Kenneth     00000006750DALS095            UMAMH       Light Micro         PSE      53106A090700034B03       S12100000001075")
   end
 
   it "writes multiple rows" do
@@ -58,6 +58,6 @@ RSpec.describe UmassCorum::JournalWriter do
       department_id: "A606363000",
       program_code: "D06",
     }
-    expect(journal.rows.drop(1).first).to eq("   15522669990006172019Carter, Kenneth     00000006750CALS095            LM19111    UMAMH       Light Micro         PSE      51511A606363000D06                      ")
+    expect(journal.rows.drop(1).first).to eq("   155226699900LM1911106172019Carter, Kenneth     00000006750CALS095            UMAMH       Light Micro         PSE      51511A606363000D06                      ")
   end
 end

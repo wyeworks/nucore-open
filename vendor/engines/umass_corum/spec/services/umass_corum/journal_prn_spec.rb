@@ -87,7 +87,7 @@ RSpec.describe UmassCorum::Journals::JournalPrn do
 
   it "writes the correct debit row" do
     row = output.split("\n").second
-    expect(row).to eq("    16799875308006102020Name, Owner         00000035001DALS001            ANIMALIMAGIUMAMH       #{order_detail}           BME      53104A091200002B03       S11310000000076")
+    expect(row).to eq("   167998753080ANIMALI06102020Name, Owner         00000035001DALS001            UMAMH       #{order_detail}           BME      53104A091200002B03       S11310000000076")
   end
 
   it "writes the amount correctly for the credit row" do
