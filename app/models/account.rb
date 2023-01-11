@@ -115,6 +115,10 @@ class Account < ApplicationRecord
     false
   end
 
+  def require_affiliate?
+    true
+  end
+
   def type_string
     I18n.t("activerecord.models.#{self.class.to_s.underscore}.one", default: self.class.model_name.human)
   end

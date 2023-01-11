@@ -1,8 +1,14 @@
 = content_for :head_content do
+  = javascript_include_tag "tooltipsy"
+  = javascript_include_tag "timeline"
   = javascript_include_tag "dashboard_refresh"
 
 = content_for :h1 do
   = text("title", facility: current_facility)
 
 .js--dashboardRefresh{ data: { refresh_interval: 5.minutes } }
-  = render partial: "reservations_table", locals: { reservations: @reservations }
+  = render partial: "reservations_table", locals: { reservations: @actionable_reservations }
+
+.row
+  .span12.timeline-wrapper
+    = render partial: "schedule", collection: @schedules, as: :schedule

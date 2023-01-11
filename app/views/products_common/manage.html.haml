@@ -16,7 +16,10 @@
 
   - unless @product.is_a?(Bundle)
     = f.input :facility_account,
-      input_html: { value: @product.facility_account.account_number + (@product.facility_account.is_active? ? "" : " (inactive)") }
+      input_html: { value: @product.facility_account.display_account_number },
+      label: text("facility_accounts.account_fields.label.recharge_account")
+
+    = render_view_hook("after_facility_account", { f: f })
 
     = f.input :initial_order_status
     = f.input :requires_approval

@@ -48,7 +48,7 @@ en:
         outro: Please log in to [!app_name!](%{login_url}) and review these charges.
 
       statement:
-        subject: "!app_name! Statement"
+        subject: "!app_name! !Statement!"
         body: |
           Thank you for using %{facility}.
 

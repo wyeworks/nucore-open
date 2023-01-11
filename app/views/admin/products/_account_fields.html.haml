@@ -1,11 +1,13 @@
 -# Use `label_text` to add * marking the field as required because
 -# `include_blank: false` gets ignored if you use `required: true`
 = f.input :facility_account_id,
-  label: FacilityAccount.model_name.human,
+  label: text("facility_accounts.account_fields.label.recharge_account"),
   label_text: -> (label, _required, _) { "* #{label}" },
   include_blank: false,
   collection: current_facility.facility_accounts.active,
   hint: text("hints.deposit_account")
+
+= render_view_hook("after_facility_account", { f: f })
 
 %p= link_to text("deposit_account.add"), :facility_facility_accounts
 

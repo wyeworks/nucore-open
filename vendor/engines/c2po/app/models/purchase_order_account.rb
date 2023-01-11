@@ -2,8 +2,9 @@
 
 class PurchaseOrderAccount < Account
 
-  include AffiliateAccount
   extend ReconcilableAccount
+
+  include AffiliateAccount
 
   validates_presence_of :account_number
 
@@ -12,6 +13,10 @@ class PurchaseOrderAccount < Account
     desc += " / #{facility_description}" if with_facility && facilities.present?
     desc += " (#{display_status.upcase})" if flag_suspended && suspended?
     desc
+  end
+
+  def require_affiliate?
+    SettingsHelper.feature_on? :po_require_affiliate_account
   end
 
   private

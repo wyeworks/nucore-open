@@ -15,12 +15,17 @@ class KioskReservationsController < ApplicationController
   include ReservationSwitch
 
   def index
+    @display_datetime = Time.current.beginning_of_day
     sign_out if params[:sign_out].present?
-    schedules = current_facility.schedules_for_timeline(:public_instruments)
-    instrument_ids = schedules.flat_map { |schedule| schedule.public_instruments.map(&:id) }
-    @reservations = Reservation.for_timeline(Time.current.beginning_of_day, instrument_ids).select(&:kiosk?)
+    @schedules = current_facility.schedules_for_timeline(:public_instruments)
+    instrument_ids = @schedules.flat_map { |schedule| schedule.public_instruments.map(&:id) }
+    todays_reservations = Reservation.for_timeline(Time.current.beginning_of_day, instrument_ids)
+    @actionable_reservations = todays_reservations.select(&:kiosk?)
+
+    @reservations_by_instrument = todays_reservations.group_by(&:product)
+
     if params[:refresh]
-      render partial: "reservations_table", locals: { reservations: @reservations }
+      render partial: "reservations_table", locals: { reservations: @actionable_reservations }
     end
   end
 

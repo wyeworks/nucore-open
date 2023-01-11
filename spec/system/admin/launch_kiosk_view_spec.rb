@@ -20,12 +20,22 @@ RSpec.describe "Launching Kiosk View", feature_setting: { kiosk_view: true } do
       # user should be logged out
       expect(page).to have_content("Login")
     end
+
+    it "does not raise an error when refreshing" do
+      visit facility_kiosk_reservations_path(facility, refresh: true)
+      expect(page).to have_content(instrument.name)
+    end
   end
 
   context "with no active reservations" do
     it "cannot launch the Kiosk View" do
       visit timeline_facility_reservations_path(facility)
       expect(page).not_to have_content("Launch Kiosk View")
+    end
+
+    it "does not raise an error when refreshing" do
+      visit facility_kiosk_reservations_path(facility, refresh: true)
+      expect(page).to have_content("No currently actionable reservations found")
     end
   end
 

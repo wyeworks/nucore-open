@@ -27,6 +27,7 @@
 * `facility_payment_urls` Store a payment url for each facility (can be used on statement PDFs to direct users to pay via CC)
 * `default_journal_cutoff_time` Journal cutoff time
 * `statement_pdf:class_name` PDF Statement formatting
+* `po_require_affiliate_account` Whether or not Purchase Order accounts will be required to have affiliates
 
 ## Billing and Pricing
 

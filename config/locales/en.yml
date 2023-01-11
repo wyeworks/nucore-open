@@ -195,6 +195,7 @@ en:
         affiliate: "Name" # used for labeling affiliate_other field in forms
         remit: "Bill To"
         all_instruct: "Enter a text description to help you and the user identify this payment source."
+        recharge_account: "!activerecord.models.facility_account.one!"
     account_table:
       notice: "No payment sources found."
       foot: "* Includes transactions for which the user has not been sent a !statement_downcase! or that are in the user review period."

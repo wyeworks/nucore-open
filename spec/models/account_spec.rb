@@ -364,7 +364,9 @@ RSpec.describe Account do
         @facility2_accounts = [@nufs_account]
 
         Account.config.facility_account_types.each do |class_name|
-          class_sym = class_name.underscore.to_sym
+          # ensures namespaced accounts like OsuRelms::NonPurchaseOrderAccount 
+          # don't turn into :"osu_relms/non_purchase_order_account"
+          class_sym = class_name.underscore.split("/").last.to_sym
           @facility1_accounts << FactoryBot.create(class_sym, account_users_attributes: account_users_attributes_hash(user: @user), facility: @facility1)
           @facility2_accounts << FactoryBot.create(class_sym, account_users_attributes: account_users_attributes_hash(user: @user), facility: @facility2)
         end

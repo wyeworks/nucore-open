@@ -101,14 +101,20 @@ class ProductsCommonController < ApplicationController
   private
 
   def resource_params
-    params.require(:"#{singular_object_name}").permit(:name, :url_name, :contact_email, :description,
-                                                      :facility_account_id, :account, :initial_order_status_id,
-                                                      :requires_approval, :allows_training_requests, :is_archived, :is_hidden, :email_purchasers_on_order_status_changes,
-                                                      :user_notes_field_mode, :user_notes_label, :show_details,
-                                                      :schedule_id, :reserve_interval,
-                                                      :min_reserve_mins, :max_reserve_mins, :min_cancel_hours,
-                                                      :auto_cancel_mins, :lock_window, :cutoff_hours,
-                                                      :problems_resolvable_by_user, :restrict_holiday_access)
+    params.require(:"#{singular_object_name}").permit(*permitted_params)
+  end
+
+  def permitted_params
+    [
+      :name, :url_name, :contact_email, :description,
+      :facility_account_id, :account, :initial_order_status_id,
+      :requires_approval, :allows_training_requests, :is_archived, :is_hidden, :email_purchasers_on_order_status_changes,
+      :user_notes_field_mode, :user_notes_label, :show_details,
+      :schedule_id, :reserve_interval,
+      :min_reserve_mins, :max_reserve_mins, :min_cancel_hours,
+      :auto_cancel_mins, :lock_window, :cutoff_hours,
+      :problems_resolvable_by_user, :restrict_holiday_access
+    ]
   end
 
   def current_facility_products

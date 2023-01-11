@@ -7,7 +7,7 @@ en:
         name: Name
         reservation: Reservation
         actions: Actions
-        none: No active reservations found for today
+        none: No currently actionable reservations found
         no_user: No user found
       begin:
         title: Begin Reservation (%{user})

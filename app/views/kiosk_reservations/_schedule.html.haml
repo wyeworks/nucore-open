@@ -1,0 +1,7 @@
+- if schedule.public_instruments.size > 1
+  .timeline-schedule
+    %h3= schedule.name
+    = render partial: "instrument", collection: schedule.public_instruments, as: :instrument
+- else
+  .timeline-single
+    = render partial: "instrument", collection: schedule.public_instruments, as: :instrument
