@@ -181,6 +181,17 @@ RSpec.describe Journal do
       end
     end
 
+    context "with gel-permeation-chromatography facility" do
+      let(:facility) { create(:setup_facility, url_name: "gel-permeation-chromatography") }
+
+      it "prefixes GPC for gel-permeation-chromatography facility" do
+        expect { journal.save! }.to change(JournalRow, :count).by(2)
+        expect(JournalRow.second).to have_attributes(
+          ref_2: /GPC\d{3}/,
+        )
+      end
+    end
+
     context "with proposal-support-services facility" do
       let(:facility) { create(:setup_facility, url_name: "proposal-support-services") }
 
