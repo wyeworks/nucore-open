@@ -26,4 +26,6 @@
   - if ResearchSafetyCertificate.any?
     = tab text("views.user_research_safety_certifications.tab"), facility_user_user_research_safety_certifications_path(current_facility, @user), secondary_tab == "user_certificates"
 
+  = tab t(".user_docs"), facility_user_user_file_uploads_path(current_facility, @user), secondary_tab == "docs"
+
   = render_view_hook "after", secondary_tab: secondary_tab

@@ -183,6 +183,8 @@ Rails.application.routes.draw do
         get :search, on: :collection
       end
       resources :user_research_safety_certifications, only: [:index]
+      resources :user_file_uploads, only: [:index, :create, :destroy]
+      get "/files/:id", to: "user_file_uploads#download", as: "download_user_file"
     end
 
     resources :facility_accounts,

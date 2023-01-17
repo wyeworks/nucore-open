@@ -1,0 +1,49 @@
+= content_for :h1 do
+  = current_facility
+
+= content_for :sidebar do
+  = render partial: "admin/shared/sidenav_users", locals: { sidenav_tab: "users" }
+
+= content_for :tabnav do
+  = render partial: "admin/shared/tabnav_users", locals: { secondary_tab: "docs" }
+
+%h1= @user
+
+= simple_form_for(@file, url: [current_facility, @user, :user_file_uploads, id: @file]) do |f|
+  = f.error_messages 
+
+  = f.input :file
+  = f.input :name
+
+  %ul.inline
+    %li
+      = f.submit t(".submit"),
+        data: { disabled_with: t(".submitted") },
+        class: "btn"
+
+- if @files.empty?
+  %p.notice= t(".no_uploads")
+
+- else
+  %table.table.table-striped.table-hover
+    %thead
+      %tr
+        %th= t(".th.file")
+        %th= t(".th.created_at")
+        %th= t(".th.created_by")
+
+    %tbody
+      - @files.each do |uploaded_file|
+        %tr
+          %td
+            - if can?(:delete, uploaded_file)
+              = link_to t("shared.delete"),
+                [current_facility, @user, :user_file_upload, id: uploaded_file],
+                method: :delete,
+                data: { confirm: t(".confirm_delete") }
+
+          %td= link_to(uploaded_file.name, facility_user_download_user_file_path(current_facility, @user, uploaded_file))
+       
+          %td= format_usa_datetime(uploaded_file.created_at)
+          %td= User.find(uploaded_file.created_by).full_name           
+
