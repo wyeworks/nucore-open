@@ -23,6 +23,7 @@
           %ul.nav.pull-right.hide-from-print
             - if acting_as?
               %li.navbar-text= "#{acting_user.full_name} (#{acting_user.username})"
+              %li.divider-vertical
               = render "/shared/support"
               %li= link_to "#{t('pages.cart')} (#{current_cart.order_details.count})", :cart
             - else

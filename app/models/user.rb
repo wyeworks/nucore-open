@@ -23,6 +23,7 @@ class User < ApplicationRecord
   has_many :facilities, through: :user_roles
   has_many :training_requests, dependent: :destroy
   has_many :stored_files, through: :order_details, class_name: "StoredFile"
+  has_many :file_uploads, class_name: "StoredFile" # accessed in the UI on the user's Docs tab
   has_many :log_events, as: :loggable
   has_many :user_preferences, dependent: :destroy
 

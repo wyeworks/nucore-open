@@ -57,6 +57,7 @@ en:
         reservations: "Reservations"
         accounts: "Payment Sources"
         access_list: "Access List"
+        user_docs: "Docs"
       tabnav_payment_method:
         details: Details
         members: Members
@@ -924,6 +925,21 @@ en:
         users: "Number of Users"
         accounts: "Number of Payment Sources"
 
+  user_file_uploads:
+    index:
+      submit: Upload
+      submitted: Uploading...
+      no_uploads: No uploaded files
+      confirm_delete: Are you sure?
+      th:
+        file: File
+        created_at: Date Uploaded
+        created_by: Uploaded by
+    create:
+      notice: "File uploaded"
+    destroy:
+      notice: "The file was deleted successfully"
+      error: "An error was encountered while attempting to delete the file"
   file_uploads:
     sample_result:
       title: Results Files
@@ -936,7 +952,7 @@ en:
       intro: "You may provide an Online Order Form and/or an Order File Template.  If provided, the user must complete one before placing an order."
       order_form:
         head: "Online Order Form"
-        main: "Online Order Forms are external Surveyor services. Multiple Online Order Forms may be added, but only one may be active at a time. Please contact the !app_name! support specialist for more information."
+        main: "Please contact !app_name! Support (%{email}) for more information."
         notice: "No Online Order Forms have been added."
       download_form:
         head: "Downloadable Order Form"

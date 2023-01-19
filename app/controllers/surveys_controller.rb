@@ -34,7 +34,7 @@ class SurveysController < ApplicationController
     begin
       SurveyResponse.new(params).save!
     rescue => e
-      Rails.logger.error("Could not save external surveyor response! #{e.message}\n#{e.backtrace.join("\n")}")
+      Rails.logger.error("Could not save external survey response! #{e.message}\n#{e.backtrace.join("\n")}")
     end
 
     if request.xhr?
