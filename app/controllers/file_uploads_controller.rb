@@ -77,7 +77,7 @@ class FileUploadsController < ApplicationController
     end
   end
 
-  # GET /facilities/1/services/3/files/survey_upload
+  # GET /facilities/1/services/3/files/product_survey
   def product_survey
     @file = @product.stored_files.new(file_type: "template")
     @survey = UrlService.new

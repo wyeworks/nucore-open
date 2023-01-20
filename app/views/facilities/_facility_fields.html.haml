@@ -2,7 +2,7 @@
   = f.input :name, hint: text(".hints.name")
   = f.input :abbreviation, hint: text(".hints.abbreviation")
   = f.input :url_name, hint: facility_url(f.object.url_name || "url-name"), as: :string
-  - if SettingsHelper.feature_on?(:facility_tile_list)
+  - if SettingsHelper.feature_on?(:facility_tile_list_admin)
     = f.input :file, as: :file, label: "Image", hint: t("simple_form.hints.image_dimensions"), hint_html: { class: "help-block" }
 
     - if current_facility&.file_present?

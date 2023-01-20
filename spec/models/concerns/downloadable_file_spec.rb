@@ -32,7 +32,7 @@ RSpec.describe DownloadableFile do
     )
   end
 
-  context "active record", feature_setting: { active_storage: true } do
+  context "active storage", feature_setting: { active_storage: true } do
 
     it "is not persisted" do
       expect(stored_file).not_to be_persisted

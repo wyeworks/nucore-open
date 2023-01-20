@@ -12,6 +12,24 @@ RSpec.describe StoredFile do
     is_expected.to validate_presence_of(:file_type)
   end
 
+  if SettingsHelper.feature_on?(:active_storage)
+    context "active storage", feature_setting: { active_storage: true } do
+      let(:stored_file) { StoredFile.create(file_type: "user_info") }
+
+      it "should limit file size for user_info files" do
+        expect(stored_file).to validate_size_of(:file).less_than(10.megabytes)
+      end
+    end
+  else
+    context "paperclip", feature_setting: { active_storage: false } do
+      let(:stored_file) { StoredFile.create(file_type: "user_info") }
+
+      it "should limit file size for user_info files" do
+        expect(stored_file).to validate_attachment_size(:file).less_than(10.megabytes)
+      end
+    end
+  end
+
   context "product_id" do
     it "should be required for 'info' file_type" do
       @fu = StoredFile.create(file_type: "info")

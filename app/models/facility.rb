@@ -2,7 +2,7 @@
 
 class Facility < ApplicationRecord
 
-  if SettingsHelper.feature_on?(:facility_tile_list)
+  if SettingsHelper.feature_on?(:facility_tile_list_admin) || SettingsHelper.feature_on?(:facility_tile_list)
     # Migration is required if Paperclip is being used (see CHANGELOG)
     include DownloadableFiles::Image
   end
