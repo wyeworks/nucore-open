@@ -42,6 +42,10 @@ en:
           Please log in to [!app_name!](%{login_url}) and review these charges.
 
           Please take a moment to provide feedback on your experience with UMass Core Facilities: [UMass Core Facilities Customer Satisfaction Survey](https://umassamherst.co1.qualtrics.com/jfe/form/SV_24XapZ4ZXZSfeER)
+    facility_accounts:
+      account_fields:
+        purchase_order_account:
+          outside_contact_hint: "Contact information (phone number, email, fax, etc.)<br/>Note: This information is NOT used by !app_name! for any automated communication."
 
     devise:
       sessions:
