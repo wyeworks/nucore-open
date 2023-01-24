@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_12_231558) do
+ActiveRecord::Schema.define(version: 2023_01_23_164845) do
 
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -202,6 +202,10 @@ ActiveRecord::Schema.define(version: 2022_12_12_231558) do
     t.string "payment_url"
     t.boolean "kiosk_enabled"
     t.boolean "show_order_note", default: true, null: false
+    t.string "file_file_name"
+    t.string "file_content_type"
+    t.bigint "file_file_size"
+    t.datetime "file_updated_at"
     t.index ["abbreviation"], name: "index_facilities_on_abbreviation", unique: true
     t.index ["is_active", "name"], name: "index_facilities_on_is_active_and_name"
     t.index ["name"], name: "index_facilities_on_name", unique: true
