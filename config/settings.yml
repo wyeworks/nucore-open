@@ -129,6 +129,7 @@ feature:
   revenue_account_editable: false
   active_storage: false
   facility_tile_list: false
+  facility_tile_list_admin: false
   po_require_affiliate_account: true
 
 split_accounts:

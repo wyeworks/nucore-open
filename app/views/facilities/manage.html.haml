@@ -8,7 +8,7 @@
   = f.input :name
   = f.input :abbreviation
   = f.input :url_name
-  - if SettingsHelper.feature_on?(:facility_tile_list) && current_facility.file_present?
+  - if SettingsHelper.feature_on?(:facility_tile_list_admin) && current_facility.file_present?
     = image_tag(current_facility.padded_image, class: "tile-image")
   = f.input :short_description
   = f.input :description
