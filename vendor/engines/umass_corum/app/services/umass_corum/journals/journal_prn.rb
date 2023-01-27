@@ -10,7 +10,7 @@ module UmassCorum
         @journal = journal
       end
 
-      def render
+      def render(batch: false)
         writer = UmassCorum::JournalWriter.new(
           headers: headers
         )
@@ -19,7 +19,7 @@ module UmassCorum
           writer << hash_for(journal_row)
         end
 
-        writer.to_s
+        batch ? writer.to_a : writer.to_s
       end
 
       private

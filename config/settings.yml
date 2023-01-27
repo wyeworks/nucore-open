@@ -19,7 +19,7 @@ financial:
   # in the format MM-DD
   fiscal_year_begins: 07-01
   journal_format:
-    # Note that xml and xls have custom responders
+    # Note that xml and xls have custom responders so they don't need a class_name
     # - key: xml
     # - key: xls
     - key: csv

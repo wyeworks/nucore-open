@@ -83,6 +83,7 @@
   copy:
     src: "keys/umgl7056ial.key"
     dest: "/home/corum/.ssh/umgl7056ial.key"
+    mode: "400"
 
 # Even though we are using the "copy" module,
 # by specifying content with no src,

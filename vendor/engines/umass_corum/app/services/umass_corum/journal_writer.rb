@@ -26,7 +26,11 @@ module UmassCorum
     end
 
     def to_s
-      ([header_row] + rows.to_a).join("\n")
+      to_a.join("\n")
+    end
+
+    def to_a
+      [header_row] + rows.to_a
     end
 
     private
