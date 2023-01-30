@@ -233,6 +233,31 @@ NUcore uses [Rspec](http://rspec.info) to run tests. Try any of the following fr
     rake spec:controllers
     ```
 
+#### Github Actions
+
+To use Github Actions for CI testing you may need to maintain a testing image with specific versions of dependencies set.  To do this:
+```
+# Set your desired version of node and bundler
+export NODE_VERSION=setup_16.x
+export BUNDLER_VERSION=2.3.11
+
+# Build the image
+docker build . -f Dockerfile.github-actions --build-arg NODE_VERSION=$NODE_VERSION --build-arg BUNDLER_VERSION
+
+# Check the IMAGE ID
+docker image ls
+
+# Tag the image with the appropriate ruby version
+docker tag {IMAGE ID} nucoretxi/ruby-node-chrome-pack:2.7.5
+
+# Check the image was tagged correctly
+docker image ls
+
+# login and push the new tag
+docker login -u nucoretxi
+docker push nucoretxi/ruby-node-chrome-pack:2.7.5
+```
+
 #### Parallel Tests
 
 You can run specs in parallel during local development using the [`parallel_tests`](https://github.com/grosser/parallel_tests) gem.

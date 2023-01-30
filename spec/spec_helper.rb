@@ -126,7 +126,7 @@ RSpec.configure do |config|
   require "webmock/rspec"
   WebMock.disable_net_connect!(allow_localhost: true)
 
-  # for testing paperclip attachments
+  # for testing attachment validations
   config.include Paperclip::Shoulda::Matchers
   config.include ActiveStorageValidations::Matchers
 end

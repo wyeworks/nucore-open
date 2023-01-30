@@ -2,11 +2,11 @@
 
 require "rails_helper"
 
-RSpec.describe "Facility list tile", feature_setting: { facility_tile_list: true } do
+RSpec.describe "Facility list tile", feature_setting: { facility_tile_list_admin: true, facility_tile_list: true } do
   # This spec requires that Facility have an attachement. Currently that can be done using
   # either Paperclip or ActiveStorage. Because Paperclip requires a migration that may or
   # may not have occurred, these specs are only set to run if ActiveStorage is being used.
-  if SettingsHelper.feature_on?(:active_storage)
+  if SettingsHelper.feature_on?(:active_storage_for_images_only)
     Facility.include DownloadableFiles::Image
 
     let(:admin_user) { create(:user, :administrator) }

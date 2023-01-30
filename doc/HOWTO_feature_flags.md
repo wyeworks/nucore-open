@@ -9,7 +9,8 @@
 * `limit_short_description` Limit the short description section for facilities (300 characters)
 * `product_list_columns` Display product lists in columns or one long list
 * `azlist` Display one long list of facilities, or an alphabetized collection (only facilities that start with A, and ...a top nav to access facilities that start with other letters)
-* `facility_tile_list` Grid view of facility list on home page, in the UI this also enables an image to be associated with a facility
+* `facility_tile_list` Display a grid view of the facility list on the home page, this will include images of the facilities, if the given facility has an image. This does not enable the ability to add or remove images from facilities -- this works independently of `facility_tile_list_admin`, though you may want to use these flags together.
+* `facility_tile_list_admin` Adds the ability to add and remove images from facilities.  These images will only be displayed on the home page if `facility_tile_list` is set to true.
 
 ## Onboarding
 
@@ -55,3 +56,4 @@
 * `kiosk_view` Kiosk mode - display a list of actionable reservations without logging in (optionally allow acting w/o auth)
 * `reservations: grace_period`, `reservations: timeout_period`, `occupancies: timeout_period`, `billing: review_period` various grace periods, time periods, and review periods
 * `active_storage` use `ActiveStorage` if `true`, or `Paperclip` if `false`
+* `active_storage_for_images_only` enables `ActiveStorage` for the `DownloadableFiles::Image` module. This flag needs to be enabled even if `active_storage` is
