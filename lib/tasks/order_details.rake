@@ -22,17 +22,34 @@ namespace :order_details do
     end
   end
 
+  # bundle exec rake 'order_details:recalculate_prices[flow]'
+  # bundle exec rake 'order_details:recalculate_prices[flow,commit]'
   desc "Retouch all complete order details and recalculate pricing"
-  task :recalculate_prices, [:facility_slug] => :environment do |_t, _args|
-    Facility.find_by(url_name: "path").order_details.where(state: "complete").each do |od|
+  task :recalculate_prices, [:facility_url, :commit] => :environment do |_t, args|
+    commit = args[:commit].to_s == "commit"
+    facility = Facility.find_by!(url_name: args[:facility_url])
+    # Change this query for when we need to recalculate prices for just a subset of Order details
+    # Changes to this should be marked with the ticket number in the git commit message
+    query = facility.order_details.where("fulfilled_at >= ? and fulfilled_at < ?",
+                        Time.zone.local(2020, 9, 1), Time.zone.now.end_of_day)
+
+    only_completed = query.where(state: "complete", journal_id: nil, statement_id: nil)
+                          .joins(:order).where(orders: { state: "purchased" })
+
+    only_completed.readonly(false).each do |od|
       old_cost = od.actual_cost
       old_subsidy = od.actual_subsidy
       old_total = od.actual_total
       old_price_group = od.price_policy.try(:price_group)
+      old_price_policy = od.price_policy
       od.assign_price_policy
-      puts "#{od}|#{od.order_status}|#{od.account}|#{od.user}|#{od.product}|#{od.fulfilled_at}|#{old_price_group}|#{old_cost}|#{old_subsidy}|#{old_total}|#{od.price_policy.try(:price_group)}|#{od.actual_cost}|#{od.actual_subsidy}|#{od.actual_total}|#{od.actual_total == old_total}"
-    end
 
+      # Change this guard clause depending on the use case
+      next if od.price_policy.nil? || (od.price_policy == old_price_policy)
+
+      od.save! if commit
+      puts "#{od.facility.name}|#{od}|#{od.order_status}|#{od.account}|#{od.user}|#{od.product}|#{od.fulfilled_at}|#{old_price_group}|#{old_cost}|#{old_subsidy}|#{old_total}|#{od.price_policy.try(:price_group)}|#{od.actual_cost}|#{od.actual_subsidy}|#{od.actual_total}"
+    end
   end
 
   desc "Uncancels a list of order details. The file should contain just the OD ID, one per line"
@@ -54,12 +71,27 @@ namespace :order_details do
   # no way to add the needed template_result file via the UI after purchase.
   # This task adds a template_result file to an order detail by copying the template
   # file from the product that was purchased.
-  desc "Adds a template_result file to an order detail"
-  task :add_template_result, [:id] => :environment do |_t, args|
-    order_detail = OrderDetail.find args[:id]
-    file = order_detail.product.stored_files.template.first.dup
-    file.file_type = "template_result"
-    order_detail.stored_files << file
-    order_detail.save
+  #
+  # Example: `rake order_details:add_template_result["44 43"]`
+  desc "Adds a template_result file to order details that are missing forms"
+  task :add_template_result, [:ids] => :environment do |_t, args|
+    order_details = OrderDetail.where id: args[:ids].split
+
+    puts "Attempting to add missing files to order details..."
+
+    order_details.each do |order_detail|
+      next unless order_detail.missing_form?
+
+      order_detail.stored_files << StoredFile.new(
+        file: StringIO.new("Placeholder text for missing template."),
+        file_type: "template_result",
+        name: "placeholder.csv",
+        created_by: order_detail.user.id
+      )
+
+      puts "...missing file added to order detail #{order_detail.id}"
+
+      order_detail.save
+    end
   end
 end
