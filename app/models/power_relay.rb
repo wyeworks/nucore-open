@@ -49,7 +49,7 @@ module PowerRelay
   # fetch the status once.
   # Note that if one has nil (e.g. default) and the other has "80", it will still do two
   # network queries. This is so this model can be agnostic about the actual relay's default port
-  # (e.g. Synaccess is 80 while Dataprobe is 9200).
+  # (e.g. Synaccess is 80 while Dataprobe is 9100).
   def status_cache_key
     [
       ip,

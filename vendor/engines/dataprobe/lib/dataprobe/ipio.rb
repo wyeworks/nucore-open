@@ -13,7 +13,7 @@ module Dataprobe
 
     def initialize(host, options = {})
       @ip = host
-      @port = 9100
+      @port = set_port(options[:port])
       @username = (options[:username].presence || "user").ljust(21, "\x00")
       @password = (options[:password].presence || "user").ljust(21, "\x00")
     end
@@ -44,7 +44,7 @@ module Dataprobe
       sequence_number[0] += 1
       block.call(socket, sequence_number.pack("s<"))
     ensure
-      socket.close
+      raise Dataprobe::Error.new("Network error while communicating with relay") unless socket&.close
     end
 
     def write(socket, string)
@@ -67,6 +67,15 @@ module Dataprobe
 
     def hex_s(int)
       [int].pack "C"
+    end
+
+    # restrict port to valid range
+    def set_port(port_string)
+      return 9100 if port_string.blank?
+      return 1 if port_string.to_i < 1
+      return 65535 if port_string.to_i > 65535
+
+      port_string.to_i
     end
 
   end
