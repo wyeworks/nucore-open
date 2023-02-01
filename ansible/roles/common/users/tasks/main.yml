@@ -81,8 +81,8 @@
   become_user: corum
   become: true
   copy:
-    src: "keys/umgl7056ial.key"
-    dest: "/home/corum/.ssh/umgl7056ial.key"
+    src: "keys/id_rsa"
+    dest: "/home/corum/.ssh/id_rsa"
     mode: "400"
 
 # Even though we are using the "copy" module,
@@ -98,5 +98,5 @@
       Host {{ ftp_host }}
         User umgl7056ial
         Port 22
-        IdentityFile ~/.ssh/umgl7056ial.key
+        IdentityFile ~/.ssh/id_rsa
 

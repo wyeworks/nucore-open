@@ -7,8 +7,10 @@ class PrnRenderer
   UPLOAD_FILENAME = "A100.UMGL7056.IAL.INPUT"
 
   def initialize(from_dir, to_dir = nil)
-    @from_dir = from_dir
-    @to_dir = to_dir
+    # /home/corum/files/FTP-out/temp
+    @from_dir = create_dir(from_dir)
+    # /home/corum/files/FTP-out/current
+    @to_dir = create_dir(to_dir)
   end
 
   def self.render(from_dir, to_dir = nil)
@@ -36,6 +38,11 @@ class PrnRenderer
     end
 
     FileUtils.mv batch_file_src, File.join(to_dir, batch_file_name) if to_dir
+  end
+
+  def create_dir(path)
+    FileUtils.mkdir_p(path) if path.present? && !Dir.exist?(path)
+    path
   end
 
   private
