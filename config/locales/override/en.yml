@@ -46,7 +46,10 @@ en:
       account_fields:
         purchase_order_account:
           outside_contact_hint: "Contact information (phone number, email, fax, etc.)<br/>Note: This information is NOT used by !app_name! for any automated communication."
-
+    users:
+      edit:
+        subhead: "Note: For external users without a NetID username, the email address and username must match."
+        
     devise:
       sessions:
         new:
