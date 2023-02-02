@@ -44,7 +44,9 @@ module Dataprobe
       sequence_number[0] += 1
       block.call(socket, sequence_number.pack("s<"))
     ensure
-      raise Dataprobe::Error.new("Network error while communicating with relay") unless socket&.close
+      raise Dataprobe::Error.new("Network error while communicating with relay") if socket.nil?
+
+      socket.close
     end
 
     def write(socket, string)
