@@ -10,6 +10,8 @@
 
 = readonly_form_for :account, defaults: { hint: false } do |f|
 
+  = render_view_hook("account_label", f: f, account: @account)
+
   = f.input :owner_user
   = f.input :type_string
   = f.input :description
