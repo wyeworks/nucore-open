@@ -11,7 +11,7 @@ PATH
 PATH
   remote: vendor/engines/dataprobe
   specs:
-    dataprobe (1.0.0)
+    dataprobe (1.0.1)
 
 PATH
   remote: vendor/engines/fine_uploader

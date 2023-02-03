@@ -24,19 +24,19 @@ RSpec.describe Dataprobe::Ipio do
     end
 
     it "defaults port to 9100" do
-      expect(described_class.new(ip, options = {:port => ""}).port).to eq 9100
+      expect(described_class.new(ip, options = {port: ""}).port).to eq 9100
     end
 
     it "sets port to 9101" do
-      expect(described_class.new(ip, options = {:port => "9101"}).port).to eq 9101
+      expect(described_class.new(ip, options = {port: "9101"}).port).to eq 9101
     end
 
     it "sets port to 1 when out of range < 1" do
-      expect(described_class.new(ip, options = {:port => "0"}).port).to eq 1
+      expect(described_class.new(ip, options = {port: "0"}).port).to eq 1
     end
 
     it "sets port to 65535 when out of range > 65535" do
-      expect(described_class.new(ip, options = {:port => "65536"}).port).to eq 65535
+      expect(described_class.new(ip, options = {port: "65536"}).port).to eq 65535
     end
 
     it "sets username from the passed-in options and encodes it" do

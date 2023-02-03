@@ -5,8 +5,9 @@
     = render_view_hook "head"
     -# using resource links recommended by form.io representative
     = stylesheet_link_tag "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css", media: "all"
-    = stylesheet_link_tag "https://cdn.form.io/formiojs/4.13.8/formio.full.min.css", media: "all"
-    = javascript_include_tag "https://cdn.form.io/formiojs/4.13.8/formio.full.min.js"
+    - formio_version = ENV.fetch("FORMIO_VERSION", "4.13.8")
+    = stylesheet_link_tag "https://cdn.form.io/formiojs/#{formio_version}/formio.full.min.css", media: "all"
+    = javascript_include_tag "https://cdn.form.io/formiojs/#{formio_version}/formio.full.min.js"
     = javascript_include_tag "jquery"
     = javascript_include_tag "jquery_ujs"
     = javascript_include_tag "form_io_submission"

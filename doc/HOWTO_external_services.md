@@ -52,6 +52,21 @@ Form data may include pathology sample information, machine shop project schemat
 
 See https://pm.tablexi.com/issues/157154#note-7 for a list of facilities at NU that use form.io surveys.
 
+### Checking and upgrading form.io assets
+
+From time to time we should upgrade the version of the JS and CSS assets used to support and render form.io forms.
+
+To check the latest version, you can:
+- Visit https://github.com/formio/formio.js/ and look for the most recent tag (with no `-m` or `-rc` qualifiers).
+- Visit https://unpkg.com/formiojs@latest/dist/formio.full.min.css, which redirects to the latest stable release version.
+
+You can upgrade the version by setting `FORMIO_VERSION` on the server, then doing a full eye-patch quit/load to pick up the version change.  This allows for some testing to be done without a code change and deployment.
+
+To confirm the the upgraded assets are being used:
+- Place an order for a service with a form.io order form (https://nucore-staging.northwestern.edu/facilities/test-facility/services/tester)
+- When you get to the cart, click "Complete Online Order Form".
+- Inspect the page to confirm the version being used.
+
 ## Updating OrderDetail records on submission to Form.io
 
 A form.io survey can be configured to update the note, quantity, or reference ID in NUCore upon submission.
