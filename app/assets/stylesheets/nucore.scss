@@ -303,8 +303,7 @@ p.per-minute-show {
 }
 
 /* Account Fields */
-.order_account,
-.order_detail_account {
+.order_account {
   select {
     width: inherit;
     max-width: 100%;
@@ -313,6 +312,19 @@ p.per-minute-show {
 .order_detail_account_id {
   select {
     width: 100%;
+  }
+}
+
+.order_detail_account {
+  select {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+.order_detail_order_status {
+  select {
+    width: inherit;
   }
 }
 

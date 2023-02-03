@@ -3,9 +3,13 @@
 module AccountsHelper
 
   def account_input(form)
-    form.input :account_id, label: OrderDetail.human_attribute_name(:account) do
-      form.select :account_id, available_accounts_options, include_blank: false, disabled: edit_disabled?
-    end
+    form.input :account,
+      as: :select,
+      label: OrderDetail.human_attribute_name(:account),
+      collection: available_accounts_array,
+      selected: @order_detail.account_id,
+      include_blank: false,
+      disabled: edit_disabled?
   end
 
   def payment_source_link_or_text(account)
@@ -39,10 +43,6 @@ module AccountsHelper
         { "data-account-owner" => account.owner_user_name },
       ]
     end
-  end
-
-  def available_accounts_options
-    options_for_select(available_accounts_array, @order_detail.account_id)
   end
 
 end
