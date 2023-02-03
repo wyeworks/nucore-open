@@ -310,6 +310,11 @@ p.per-minute-show {
     max-width: 100%;
   }
 }
+.order_detail_account_id {
+  select {
+    width: 100%;
+  }
+}
 
 ul.inline > li, ol.inline > li {
   &.account_number_field {

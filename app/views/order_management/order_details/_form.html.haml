@@ -9,13 +9,13 @@
         = render "warnings"
 
     .row
-      .span3.js--pricingUpdate
+      .span5.js--pricingUpdate
         = account_input(f)
-      .span3
+      .span2
         %strong= t("facility_order_details.edit.label.account_owner")
         .account-owner= @order_detail.account.owner_user
 
-      .span3
+      .span2
         - if @order_statuses
           = f.association :order_status, collection: @order_statuses, label_method: :name_with_level, include_blank: false
           - if f.object.fulfilled_at.blank? || f.object.fulfilled_at_changed?
