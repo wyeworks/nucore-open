@@ -7,6 +7,8 @@
 #   rake "something"
 # end
 
+job_type :script, "cd :path && :task"
+
 set :output, "log/#{@environment}.log"
 
 every :day, at: "8:45am", roles: [:db] do

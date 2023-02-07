@@ -2,15 +2,16 @@
 
 class PrnRenderer
 
-  attr_reader :from_dir, :to_dir
+  attr_reader :from_dir, :to_dir, :date
 
   UPLOAD_FILENAME = "A100.UMGL7056.IAL.INPUT"
 
-  def initialize(from_dir, to_dir = nil)
+  def initialize(from_dir, to_dir = nil, date = Date.today)
     # /home/corum/files/FTP-out/temp
     @from_dir = create_dir(from_dir)
     # /home/corum/files/FTP-out/current
     @to_dir = create_dir(to_dir)
+    @date = date # handy for debugging
   end
 
   def self.render(from_dir, to_dir = nil)
@@ -20,7 +21,7 @@ class PrnRenderer
   def render
     raise ArgumentError, "Must specify a directory to render in" unless from_dir
     # The UMass-run file watcher script takes a break on Sat/Sun
-    return if Date.today.on_weekend?
+    return if date.on_weekend?
 
     render!
   end
@@ -65,7 +66,7 @@ class PrnRenderer
   end
 
   def today
-    Date.today.to_s
+    date.to_s
   end
 
 end
