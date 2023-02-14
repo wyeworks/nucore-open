@@ -13,9 +13,9 @@ class StoredFile < ApplicationRecord
   validates_inclusion_of  :file_type, in: %w(info user_info template template_result sample_result import_error import_upload)
   validates :name, uniqueness: { scope: :order_detail_id, case_sensitive: false }, if: :order_detail_id?
   if SettingsHelper.feature_on?(:active_storage)
-    validates :file, size: { less_than: 10.megabytes }, if: ->(o) { o.file_type == "user_info" }
+    validates :file, size: { less_than: 10.megabytes, message: "must be less than 10 MB" }, if: ->(o) { o.file_type == "user_info" }
   else
-    validates_with AttachmentSizeValidator, attributes: :file, less_than: 10.megabytes, if: ->(o) { o.file_type == "user_info" }
+    validates_attachment_size :file, less_than: 10.megabytes, if: ->(o) { o.file_type == "user_info" }
   end
 
   delegate :user, to: :order_detail

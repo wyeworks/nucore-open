@@ -29,6 +29,11 @@ class UserFileUploadsController < ApplicationController
       flash[:notice] = t(".notice")
       redirect_to [current_facility, @user, :user_file_uploads]
     else
+      # This is because paperclip duplicates error messages
+      # See: https://github.com/thoughtbot/paperclip/pull/1554 and
+      # https://github.com/thoughtbot/paperclip/commit/2aeb491fa79df886a39c35911603fad053a201c0
+      @file.errors.delete(:file) unless SettingsHelper.feature_on?(:active_storage)
+
       render :index
     end
   end

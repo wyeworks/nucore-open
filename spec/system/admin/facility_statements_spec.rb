@@ -107,7 +107,8 @@ RSpec.describe "Facility Statement Admin" do
     it "resends the statement email" do
       accept_confirm { click_link "Resend" }
 
-      expect(page).to have_content("Notifications sent successfully to")
+      # sometimes takes longer to load and causes failures in CI
+      expect(page).to have_content("Notifications sent successfully to", wait: 4)
       expect(ActionMailer::Base.deliveries.count).to eq 1
     end
   end
