@@ -12,7 +12,7 @@ set :linked_files, fetch(:linked_files, []).concat(
   %w(config/database.yml config/secrets.yml config/saml-certificate.p12),
 )
 set :linked_dirs, fetch(:linked_dirs, []).concat(
-  %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/files),
+  %w(bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system public/files storage),
 )
 
 # This symlinks public/uploads to shared/uploads, which is an NFS mount
