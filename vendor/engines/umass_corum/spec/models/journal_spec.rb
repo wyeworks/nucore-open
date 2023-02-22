@@ -40,6 +40,7 @@ RSpec.describe Journal do
       trans_date: order_detail.fulfilled_at,
       doc_ref: "Polymer",
       ref_2: /ALS\d{3}/,
+      trans_id: facility.abbreviation,
       order_detail: order_details.first,
       account_id: account.id,
     )
@@ -62,6 +63,7 @@ RSpec.describe Journal do
       trans_date: order_detail.fulfilled_at,
       doc_ref: "Polymer",
       ref_2: /ALS\d{3}/,
+      trans_id: facility.abbreviation,
       account_id: be_blank,
       order_detail: be_blank, # Recharges are not tied to an order detail, only the expenses
     )
@@ -158,7 +160,7 @@ RSpec.describe Journal do
       before { journal_3.update(als_number: journal_2.als_number) }
 
       it "is invalid" do
-        expect(journal_3.errors.full_messages).to include("Als number can only be used once per fiscal year")
+        expect(journal_3.errors.map(&:full_message)).to include("Als number can only be used once per fiscal year")
       end
 
       it "is rejected by the database" do

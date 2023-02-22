@@ -15,7 +15,6 @@ class CreateAlarmEvents < ActiveRecord::Migration[4.2]
       t.string :priority
       t.string :task_code
       t.string :task_description
-      t.string :task_description
 
       t.text :raw_post
 

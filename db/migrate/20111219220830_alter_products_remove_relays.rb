@@ -3,6 +3,7 @@
 class AlterProductsRemoveRelays < ActiveRecord::Migration[4.2]
 
   def self.up
+    remove_index "products", %w(relay_ip relay_port), unique: true
     remove_column(:products, :relay_ip)
     remove_column(:products, :relay_port)
     remove_column(:products, :relay_username)

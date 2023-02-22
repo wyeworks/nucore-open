@@ -33,6 +33,7 @@ module UmassCorum
           description: order_detail.account.owner_user.last_first_name(suspended_label: false).first(20),
           name_reference: order_detail.order_number,
           trans_date: order_detail.fulfilled_at,
+          trans_id: journal.facility&.abbreviation, # safe navigation only used in testing
           doc_ref: extract_doc_ref(api_speed_type.dept_desc),
           ref_2: journal_als
         }
@@ -45,7 +46,7 @@ module UmassCorum
       end
 
       def als_prefix
-        custom_journal_prexifes[journal.facility&.url_name] || "ALS"
+        custom_journal_prexifes[journal.facility&.url_name] || "ALS" # safe navigation only used in testing
       end
 
       def custom_journal_prexifes
