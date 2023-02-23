@@ -23,6 +23,7 @@ RSpec.describe UmassCorum::Journals::JournalPrn do
       journal: journal,
       order_detail: order_detail,
       ref_2: "ALS001",
+      trans_id: facility.abbreviation,
       speed_type: 167998,
       account: 753080,
       trans_date: Time.zone.parse("2020-06-10"),
@@ -42,6 +43,7 @@ RSpec.describe UmassCorum::Journals::JournalPrn do
       amount: -350.01,
       journal: journal,
       order_detail: nil,
+      trans_id: facility.abbreviation,
     )
   end
   let!(:zero_debit_journal_row) do
@@ -50,6 +52,7 @@ RSpec.describe UmassCorum::Journals::JournalPrn do
       journal: journal,
       order_detail: zero_order_detail,
       ref_2: "ALS001",
+      trans_id: facility.abbreviation,
       speed_type: 167998,
       account: 753080,
       trans_date: Time.zone.parse("2020-06-10"),
@@ -68,7 +71,8 @@ RSpec.describe UmassCorum::Journals::JournalPrn do
       :journal_row,
       amount: -0.0,
       journal: journal,
-      order_detail: nil
+      order_detail: nil,
+      trans_id: facility.abbreviation,
     )
   end
 
@@ -87,11 +91,16 @@ RSpec.describe UmassCorum::Journals::JournalPrn do
 
   it "writes the correct debit row" do
     row = output.split("\n").second
-    expect(row).to eq("   167998753080ANIMALI06102020Name, Owner         00000035001DALS001            UMAMH       #{order_detail}           BME      53104A091200002B03       S11310000000076")
+    expect(row).to eq("   167998753080ANIMALI06102020Name, Owner         00000035001DALS001 ANIMALIMAGIUMAMH       #{order_detail}           BME      53104A091200002B03       S11310000000076")
   end
 
   it "writes the amount correctly for the credit row" do
     row = output.split("\n").third
     expect(row).to include("00000035001C")
+  end
+
+  it "writes the trans_id correctly for the credit row" do
+    row = output.split("\n").third
+    expect(row).to include(facility.abbreviation.first(11))
   end
 end

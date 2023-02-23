@@ -51,6 +51,7 @@ module UmassCorum
           amount: journal_row.amount.abs,
           credit_debit: journal_row.amount.positive? ? "D" : "C",
           trans_2nd_ref: journal_row.ref_2,
+          trans_id: journal_row.trans_id,
           campus_business_unit: journal_row.business_unit,
           name: journal_row.name_reference,
           doc_reference: journal_row.doc_ref,
