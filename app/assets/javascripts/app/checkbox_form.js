@@ -1,25 +1,47 @@
 $(document).ready(function() {
-  var submitButton = $('.js--requireValueForSubmit');
-  var checkboxes = submitButton.parents('form').find(':checkbox');
+  let submitButton = $(".js--requireValueForSubmit");
+  let checkboxes = submitButton.parents("form").find(":checkbox");
+  let confirmationSpan = document.querySelector(".js--confirmationSpan");
 
-  $('.js--select_all').click(function(e) {
-    var check = this.innerHTML == $(this).data("select-all");
-    $('.js--select_all').each(function() {
-      this.innerHTML = check ? $(this).data("select-none") : $(this).data("select-all");
+  function toggleCheckBoxes(selectAllSubmitted) {
+    $(".js--select_all").each(function() {
+      this.innerHTML = selectAllSubmitted ? $(this).data("select-none") : $(this).data("select-all");
     });
-    $('.toggle:checkbox').each(function() {
+
+    $(".toggle:checkbox").each(function() {
       if (!this.disabled) {
-        this.checked = check;
+        this.checked = selectAllSubmitted;
       }
     });
-    checkboxes.first().trigger('change');
-    return false;
+  }
+
+  function promptUserConfirmation() {
+    if (confirmationSpan) {
+      return confirm(confirmationSpan.dataset.confirmMessage);
+    } else {
+      return true;
+    }
+  }
+
+  document.querySelectorAll(".js--select_all").forEach((selectAllLink) => {
+    selectAllLink.addEventListener("click", function(event) {
+      event.preventDefault();
+
+      let selectAllSubmitted = this.innerHTML == this.dataset.selectAll;
+
+      if (selectAllSubmitted && promptUserConfirmation()) {
+        toggleCheckBoxes(selectAllSubmitted);
+      } else {
+        toggleCheckBoxes(selectAllSubmitted);
+      }
+      checkboxes.first().trigger("change");
+    });
   });
 
   // Disable the submit button if no values are checked
-  checkboxes.on('change', function() {
-    var checkedCount = checkboxes.filter(":checked");
-    submitButton.prop('disabled', checkedCount.length == 0);
+  checkboxes.on("change", function() {
+    let checkedCount = checkboxes.filter(":checked");
+    submitButton.prop("disabled", checkedCount.length == 0);
   });
-  checkboxes.first().trigger('change');
+  checkboxes.first().trigger("change");
 });

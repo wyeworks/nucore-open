@@ -356,7 +356,6 @@ namespace :demo do
           description: "Paul PI's Speed Type",
         ),
       )
-      speed_type_account.set_expires_at
     end
 
     # create a second speed_type_account for split accounts
@@ -370,7 +369,6 @@ namespace :demo do
           description: "Paul PI's Other Speed Type",
         ),
       )
-      speed_type_account_2.set_expires_at
     end
 
     # create split account if the feature is enabled

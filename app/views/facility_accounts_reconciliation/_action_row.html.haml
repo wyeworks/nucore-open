@@ -1,6 +1,6 @@
 .row.table-actions.form-horizontal
   .span2.select_all_none= select_all_link
-  .span1.pull-right= submit_tag t("facility_accounts_reconciliation.index.submit"), class: ["btn", "btn-primary"], data: { disable_with: t("facility_accounts_reconciliation.index.submit") }
+  .span1.pull-right= submit_tag t("facility_accounts_reconciliation.index.submit"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { disable_with: t("facility_accounts_reconciliation.index.submit") }
 
 - if local_assigns[:date]
   .row.table-actions.form-horizontal

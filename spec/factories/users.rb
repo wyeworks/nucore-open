@@ -4,8 +4,8 @@ FactoryBot.define do
   factory :user do
     first_name { "User" }
     sequence(:last_name) { |n| "Last#{n}" }
-    sequence(:username) { |n| "username#{n}" }
-    sequence(:email) { |n| "user#{n}@example.com" }
+    sequence(:username) { |n| "username#{User.count + n}" }
+    sequence(:email) { |n| "user#{User.count + n}@example.com" }
 
     trait :netid do
       password { nil }

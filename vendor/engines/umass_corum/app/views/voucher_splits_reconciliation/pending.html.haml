@@ -13,6 +13,8 @@
 
 - if @unreconciled_details.present?
   = form_tag(update_umass_corum_voucher_splits_facility_accounts_path, method: :post) do
+    = render("confirmation_span") if @unreconciled_details.total_entries > 150
+
     = render "voucher_splits_reconciliation/action_row", inputs: true
     = render "voucher_splits_reconciliation/table", order_details: @unreconciled_details, next_order_status: "mivp_pending"
     = render "voucher_splits_reconciliation/action_row"

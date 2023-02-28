@@ -49,11 +49,6 @@ class VoucherSplitsReconciliationController < ApplicationController
     @active_tab = "admin_billing"
   end
 
-  def account_route
-    Account.config.account_type_to_route(params[:account_type])
-  end
-  helper_method :account_route
-
   def account_class
     UmassCorum::VoucherSplitAccount
   end
@@ -72,7 +67,8 @@ class VoucherSplitsReconciliationController < ApplicationController
     order_details = unreconciled_details_scope
                     .joins(:account)
                     .where(accounts: { type: account_class.to_s })
-                    .includes(:order, :product, :statement)
+                    .where(order_status: order_status)
+                    .includes(:order, :product, :statement, :account)
 
     @search_form = TransactionSearch::SearchForm.new(params[:search])
 
@@ -82,8 +78,7 @@ class VoucherSplitsReconciliationController < ApplicationController
       TransactionSearch::StatementSearcher,
     ).search(order_details, @search_form)
 
-    @unreconciled_details = @search.order_details.select { |od| od.order_status == order_status }
-    @unreconciled_details = @unreconciled_details.paginate(page: params[:page], per_page: 25)
+    @unreconciled_details = @search.order_details.paginate(page: params[:page], per_page: 150)
   end
 
 end

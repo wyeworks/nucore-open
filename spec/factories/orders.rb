@@ -51,7 +51,7 @@ FactoryBot.define do
 
     factory :complete_order, parent: :purchased_order do
       after(:create) do |order|
-        order.order_details.each(&:to_complete!)
+        order.order_details.each(&:complete!)
       end
     end
 

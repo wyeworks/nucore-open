@@ -1,6 +1,6 @@
 .row.table-actions.form-horizontal
   .span2.select_all_none= select_all_link
-  .span1.pull-right= submit_tag t(".mivp_pending.submit"), class: ["btn", "btn-primary"], data: { disable_with: t(".mivp_pending.submit") }
+  .span1.pull-right= submit_tag t(".mivp_pending.submit"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { disable_with: t(".mivp_pending.submit") }
 
 - if local_assigns[:inputs]
   .row.table-actions.form-horizontal
