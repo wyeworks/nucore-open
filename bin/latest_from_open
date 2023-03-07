@@ -24,6 +24,10 @@ elif git_status_output=$(git status --porcelain --untracked-files=no) && [ -z "$
     echo ""
     bin/merge_describer
   fi
+  # trim '.git'
+  remote_url=$(git remote get-url origin | sed 's/\.git//')
+  echo "Use the URL below to open a release PR:"
+  echo "$remote_url/compare/master...latest_from_open_$release_date?quick_pull=1&template=release_pr_template.md"
 else
   echo "Uncommitted changes. Please stash your changes and try again."
 fi

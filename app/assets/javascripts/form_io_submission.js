@@ -15,7 +15,10 @@ function handleFormioSubmission(form, surveyUrl, surveyCompleteUrl, prefillData)
 
   form.on('submitDone', function(submission) {
     if (prefillData) {
-      surveyUrl = surveyUrl + submission._id;
+      // Prevent double-clicks from breaking things
+      if (!surveyUrl.includes(submission._id)) {
+        surveyUrl = surveyUrl + submission._id;
+      }
     }
     var orderDetailData = {
       order_detail: submission.data,

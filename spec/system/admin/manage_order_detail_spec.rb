@@ -5,6 +5,7 @@ require "rails_helper"
 RSpec.describe "Managing an order detail" do
 
   let(:facility) { create(:setup_facility) }
+  let!(:account) { create(:setup_account, :with_account_owner, facility: order_detail.facility, owner: order_detail.user) }
   let(:instrument) { create(:setup_instrument, :timer, facility: facility) }
   let(:reservation) { create(:purchased_reservation, product: instrument) }
   let(:order_detail) { reservation.order_detail }
@@ -35,6 +36,15 @@ RSpec.describe "Managing an order detail" do
 
       expect(order_detail.reservation.reload.reserve_end_at).to eq(new_end_at)
       expect(page).to have_content("successfully updated")
+    end
+
+    it "can change the payment source" do
+      select account.to_s, from: "Payment Source"
+      click_button "Save"
+      click_link order_detail.to_s
+
+      expect(order_detail.reload.account).to eq(account)
+      expect(page).to have_content(account.to_s)
     end
   end
 
