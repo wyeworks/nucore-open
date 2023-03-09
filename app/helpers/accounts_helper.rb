@@ -3,7 +3,7 @@
 module AccountsHelper
 
   def account_input(form)
-    form.input :account,
+    form.input :account_id,
       as: :select,
       label: OrderDetail.human_attribute_name(:account),
       collection: available_accounts_array,

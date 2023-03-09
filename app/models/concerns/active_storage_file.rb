@@ -46,7 +46,7 @@ module ActiveStorageFile
 
   def file_path
     # service is nil when no file is attached
-    file.service&.path_for("file")
+    file.service&.path_for(file.key)
   end
 
   def update_filename(value)

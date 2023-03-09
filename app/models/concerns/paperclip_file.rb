@@ -12,6 +12,8 @@ module PaperclipFile
 
     # TODO: Limit attachment types for safe uploads
     do_not_validate_attachment_file_type :file
+
+    after_validation :clean_up_paperclip_errors
   end
 
   def download_url
@@ -36,6 +38,15 @@ module PaperclipFile
 
   def file=(attachable)
     super
+  end
+
+  private
+
+  # This is because paperclip duplicates error messages
+  # See: https://github.com/thoughtbot/paperclip/pull/1554 and
+  # https://github.com/thoughtbot/paperclip/commit/2aeb491fa79df886a39c35911603fad053a201c0
+  def clean_up_paperclip_errors
+    errors.delete(:file) if errors[:file] == errors[:file_file_size]
   end
 
 end
