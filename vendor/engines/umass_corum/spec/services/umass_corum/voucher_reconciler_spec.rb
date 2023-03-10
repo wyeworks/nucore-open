@@ -26,18 +26,45 @@ RSpec.describe UmassCorum::VoucherReconciler do
     it "marks all the order details MIVP Pending" do
       expect { voucher_reconciler.reconcile_all }.to change { mivp.order_details.count }.from(0).to(5)
     end
+  end
 
-    it "saves the reconciled note to the Order Detail"  do
-      expect { voucher_reconciler.reconcile_all }.to change { OrderDetail.last.reload.reconciled_note }.from(nil).to("test note")
+  describe "#add_all_order_details_to_params" do
+    let(:number_of_order_details) { 5 }
+
+    it "adds all other details to params" do
+      order_detail_id_to_add = order_details.last.id.to_s
+      order_detail_param = params.extract!(order_detail_id_to_add)
+
+      # Clear the reconciled_note value so we can use this to model expected state
+      # as if this order detail was not in params from the front end
+      order_detail_param[order_detail_id_to_add]["reconciled_note"] = ""
+
+      # Make sure the order detail is not initially included in params
+      expect(params[order_detail_param.keys.first]).to be_nil
+
+      described_class.add_all_order_details_to_params(order_details, params, "mivp_pending")
+
+      expect(params[order_detail_id_to_add]).to eq order_detail_param[order_detail_id_to_add]
     end
   end
 
   context "when a bulk note is used for selected orders" do
     let(:number_of_order_details) { 5 }
-    let(:voucher_reconciler) { described_class.new(OrderDetail.all, params, "this is the bulk note") }
 
-    it "changes all selected orders to have the bulk note" do
-      expect { voucher_reconciler.reconcile_all }.to change { OrderDetail.pluck(:reconciled_note).uniq }.from([nil]).to(["this is the bulk note"])
+    context "bulk note checkbox checked" do
+      let(:voucher_reconciler) { described_class.new(OrderDetail.all, params, "this is the bulk note", "1") }
+
+      it "changes all selected orders to have the bulk note" do
+        expect { voucher_reconciler.reconcile_all }.to change { OrderDetail.pluck(:reconciled_note).uniq }.from([nil]).to(["this is the bulk note"])
+      end
+    end
+
+    context "bulk note checkbox unchecked" do
+      let(:voucher_reconciler) { described_class.new(OrderDetail.all, params, "this is the bulk note", "0") }
+
+      it "does not change all selected orders to have the bulk note" do
+        expect { voucher_reconciler.reconcile_all }.to change { OrderDetail.pluck(:reconciled_note).uniq }.from([nil]).to(["test note"])
+      end
     end
   end
 end

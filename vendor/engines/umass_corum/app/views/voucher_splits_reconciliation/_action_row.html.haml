@@ -5,9 +5,9 @@
 - if local_assigns[:inputs]
   .row.table-actions.form-horizontal
     .span3.control-group.fields
-      %label.control-label{ for: "bulk-note-checkbox" }= t(".bulk_note_checkbox")
+      %label.control-label{ for: "bulk_note_checkbox" }= t(".bulk_note_checkbox")
       .controls
-        = check_box_tag :bulk_note_checkbox, 0, false, id: "bulk-note-checkbox"
+        = check_box_tag :bulk_note_checkbox
     #bulk-note-input.span5.control-group.fields
       %label.control-label{ for: :bulk_reconcile_note }= t(".bulk_note")
       .controls

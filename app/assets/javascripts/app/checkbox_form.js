@@ -1,11 +1,24 @@
 $(document).ready(function() {
   let submitButton = $(".js--requireValueForSubmit");
   let checkboxes = submitButton.parents("form").find(":checkbox");
-  let confirmationSpan = document.querySelector(".js--confirmationSpan");
+  let confirmationMessageEle = document.querySelector(".js--confirmationMessage");
+  let reconcileAll = document.querySelector("#js--reconcileAll");
 
   function toggleCheckBoxes(selectAllSubmitted) {
     $(".js--select_all").each(function() {
-      this.innerHTML = selectAllSubmitted ? $(this).data("select-none") : $(this).data("select-all");
+      if (selectAllSubmitted) {
+        this.innerHTML = $(this).data("select-none");
+
+        if (reconcileAll) {
+          reconcileAll.value = true;
+        }
+      } else {
+        this.innerHTML = $(this).data("select-all");
+
+        if (reconcileAll) {
+          reconcileAll.value = false;
+        }
+      }
     });
 
     $(".toggle:checkbox").each(function() {
@@ -16,8 +29,8 @@ $(document).ready(function() {
   }
 
   function promptUserConfirmation() {
-    if (confirmationSpan) {
-      return confirm(confirmationSpan.dataset.confirmMessage);
+    if (confirmationMessageEle) {
+      return confirm(confirmationMessageEle.dataset.confirmMessage);
     } else {
       return true;
     }
@@ -27,12 +40,14 @@ $(document).ready(function() {
     selectAllLink.addEventListener("click", function(event) {
       event.preventDefault();
 
-      let selectAllSubmitted = this.innerHTML == this.dataset.selectAll;
+      let selectAllTextPresent = this.innerHTML == this.dataset.selectAll;
 
-      if (selectAllSubmitted && promptUserConfirmation()) {
-        toggleCheckBoxes(selectAllSubmitted);
+      if (selectAllTextPresent) {
+        if (promptUserConfirmation()) {
+          toggleCheckBoxes(selectAllTextPresent);
+        }
       } else {
-        toggleCheckBoxes(selectAllSubmitted);
+        toggleCheckBoxes(selectAllTextPresent);
       }
       checkboxes.first().trigger("change");
     });

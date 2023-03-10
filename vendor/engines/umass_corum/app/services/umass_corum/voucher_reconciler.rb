@@ -13,10 +13,18 @@ module UmassCorum
 
     validates :order_details, presence: true
 
-    def initialize(order_detail_scope, params, bulk_reconcile_note = nil)
+    def self.add_all_order_details_to_params(order_details, order_detail_params, checkbox_key)
+      order_details.each do |order_detail|
+        unless order_detail_params[order_detail.id.to_s]
+          order_detail_params[order_detail.id.to_s] = ActionController::Parameters.new({ checkbox_key => "1", "reconciled_note" => "" })
+        end
+      end
+    end
+
+    def initialize(order_detail_scope, params, bulk_reconcile_note = nil, bulk_reconcile_checkbox = nil)
       @params = params || ActionController::Parameters.new
       @order_details = order_detail_scope.readonly(false).find_ids(to_be_updated.keys)
-      @bulk_reconcile_note = bulk_reconcile_note
+      @bulk_reconcile_note = bulk_reconcile_note if bulk_reconcile_checkbox == "1"
     end
 
     def reconcile_all
