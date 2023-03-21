@@ -3,6 +3,12 @@ en:
   app_name: CORUM
   institution_name: University of Massachusetts
 
+  # using a more generic account number, rather than chart string
+  Chart_string: Account Number
+  Chart_strings: Account Numbers
+  chart_string_downcase: account number
+  chart_strings_downcase: account numbers
+  
   views:
     facilities:
       index:
