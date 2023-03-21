@@ -209,7 +209,7 @@ def setup_reservation(facility, account, user)
   @price_group = FactoryBot.create(:price_group, facility: facility)
   FactoryBot.create(:price_group_product, product: @instrument, price_group: @price_group)
   # add rule, available every day from 9 to 5, 60 minutes duration
-  @instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule, end_hour: 23))
+  @instrument.schedule_rules << FactoryBot.build(:schedule_rule, end_hour: 23)
   # create price policy with default window of 1 day
   @instrument.instrument_price_policies.create(FactoryBot.attributes_for(:instrument_price_policy).update(price_group_id: @price_group.id))
   # create order, order detail

@@ -133,7 +133,7 @@ RSpec.shared_examples_for "ReservationProduct" do |product_type|
   let!(:pp_g3) { make_price_policy(usage_rate: 5, price_group: price_group3) }
   let!(:pp_g4) { make_price_policy(usage_rate: 4, price_group: price_group4) }
 
-  let!(:schedule_rule) { product.schedule_rules.create!(FactoryBot.attributes_for(:schedule_rule)) }
+  let!(:schedule_rule) { product.schedule_rules << FactoryBot.build(:schedule_rule) }
 
   let!(:account_price_group_member) { FactoryBot.create(:account_price_group_member, account: account, price_group: price_group) }
   let!(:account_price_group_member2) { FactoryBot.create(:account_price_group_member, account: account, price_group: price_group2) }

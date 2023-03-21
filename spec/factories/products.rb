@@ -23,7 +23,7 @@ FactoryBot.define do
       end
 
       sequence(:name) { |n| "Instrument #{n}" }
-      sequence(:url_name) { |n| "instrument#{n}" }
+      sequence(:url_name) { |n| "instrument#{Product.count + n}" }
       min_reserve_mins { 60 }
       max_reserve_mins { 120 }
       reserve_interval { 1 }
@@ -35,17 +35,17 @@ FactoryBot.define do
 
     factory :item, class: Item do
       sequence(:name) { |n| "Item #{n}" }
-      sequence(:url_name) { |n| "item_url_#{n}" }
+      sequence(:url_name) { |n| "item_url_#{Product.count + n}" }
     end
 
     factory :service, class: Service do
       sequence(:name) { |n| "Service #{n}" }
-      sequence(:url_name) { |n| "service#{n}" }
+      sequence(:url_name) { |n| "service#{Product.count + n}" }
     end
 
     factory :timed_service, class: TimedService do
       sequence(:name) { |n| "Timed Service #{n}" }
-      sequence(:url_name) { |n| "timed_service#{n}" }
+      sequence(:url_name) { |n| "timed_service#{Product.count + n}" }
     end
 
     factory :bundle, class: Bundle do
@@ -55,7 +55,7 @@ FactoryBot.define do
 
       account { nil } # bundles don't have accounts
       sequence(:name) { |n| "Bundle #{n}" }
-      sequence(:url_name) { |n| "bundle-#{n}" }
+      sequence(:url_name) { |n| "bundle-#{Product.count + n}" }
 
       after(:create) do |bundle, evaluator|
         evaluator.bundle_products.each do |product|
@@ -77,7 +77,7 @@ FactoryBot.define do
     facility factory: :setup_facility
 
     sequence(:name) { |n| "Product #{n}" }
-    sequence(:url_name) { |n| "product-#{n}" }
+    sequence(:url_name) { |n| "product-#{Product.count + n}" }
     description { "Product description" }
     account { 71_234 }
     requires_approval { false }
@@ -128,6 +128,7 @@ FactoryBot.define do
   factory :setup_instrument, class: Instrument, parent: :setup_product do
     transient do
       charge_for { "reservation" }
+      skip_schedule_rules { false }
     end
 
     reserve_interval { 1 }
@@ -135,7 +136,7 @@ FactoryBot.define do
     schedule { create :schedule, facility: facility }
 
     after(:create) do |product, evaluator|
-      create :schedule_rule, product: product
+      create :schedule_rule, product: product unless evaluator.skip_schedule_rules
       create :instrument_price_policy, price_group: product.facility.price_groups.last, usage_rate: 1, product: product, charge_for: evaluator.charge_for
       product.reload
     end

@@ -22,7 +22,7 @@ module PricePolicies
 
     def calculate_discount(start_at, end_at)
       discount = product.schedule_rules.to_a.sum do |sr|
-        sr.discount_for(start_at, end_at)
+        sr.discount_for(start_at, end_at, price_policy.price_group)
       end
 
       1 - (discount / 100)

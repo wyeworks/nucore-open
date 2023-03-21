@@ -7,7 +7,7 @@ FactoryBot.define do
 
     trait :with_schedule_rule do
       after(:create) do |room, _evaluator|
-        room.schedule_rules.create(attributes_for(:schedule_rule))
+        room.schedule_rules << build(:schedule_rule)
       end
     end
 

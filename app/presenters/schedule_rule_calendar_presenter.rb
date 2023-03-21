@@ -58,13 +58,15 @@ class ScheduleRuleCalendarPresenter
   end
 
   def title
-    [discount_percent, product_access_groups].compact.join("\n")
+    [discount_percents, product_access_groups].compact.join("\n")
   end
 
-  def discount_percent
-    if schedule_rule.discount_percent.to_i > 0
-      number = number_to_percentage(schedule_rule.discount_percent, strip_insignificant_zeros: true)
-      "#{ScheduleRule.human_attribute_name(:discount_percent)}: #{number}"
+  def discount_percents
+    schedule_rule.price_group_discounts.map do |pgd|
+      if pgd.discount_percent.to_i > 0
+        number = number_to_percentage(pgd.discount_percent, strip_insignificant_zeros: true)
+        "#{pgd.price_group.name}: #{number}"
+      end
     end
   end
 

@@ -84,11 +84,13 @@ RSpec.describe InstrumentPricePolicyCalculations do
           on_sun: false,
         )
 
-        policy.product.reload.schedule_rules << create(:weekend_schedule_rule,
-                                                       product: policy.product,
-                                                       discount_percent: 25,
-                                                       start_hour: 0,
-                                                       end_hour: 24)
+        policy.product.reload
+
+        create(:weekend_schedule_rule,
+               product: policy.product,
+               discount_percent: 25,
+               start_hour: 0,
+               end_hour: 24)
       end
 
       describe "uses the discounts properly" do

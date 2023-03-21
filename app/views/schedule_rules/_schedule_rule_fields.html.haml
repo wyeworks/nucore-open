@@ -15,11 +15,19 @@
       = f.label :end_time
       = time_select24(f, :end, hours: (0..24), minute_step: @product.reserve_interval)
 
-= f.input :discount_percent, label: false, hint: false do
-  = f.label :discount_percent
-  = f.hint :discount_percent
-  = f.number_field :discount_percent, size: 4
+%h3= t("views.schedule_rules.discount")
+
+%p= t("views.schedule_rules.discount_hint")
+
+= f.association :price_group_discounts do |pgd|
+  = pgd.label pgd.object.price_group.name
+  = pgd.number_field :discount_percent, size: 4
+  = pgd.hidden_field :price_group_id, value: pgd.object.price_group.id
   = "%"
+  - if pgd.object.price_group == PriceGroup.base 
+    = pgd.hint :base_discount_hint
+  - elsif pgd.object.price_group == PriceGroup.external
+    = pgd.hint :external_discount_hint
 
 - if @product.has_product_access_groups?
   = f.association :product_access_groups, as: :check_boxes, collection: @product.product_access_groups, wrapper_html: { class: "inline-checkbox-list" }

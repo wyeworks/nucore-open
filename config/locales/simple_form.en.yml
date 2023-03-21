@@ -21,10 +21,12 @@ en:
       defaults:
         charge_for: "Select 'Usage' to charge for real time used, 'Reservation' for reserved time only, 'Overage' for reserved time plus additional time"
       schedule_rule:
-        discount_percent: "During the period covered by this schedule rule, overall cost will be discounted by"
+        price_group_discounts:
+          base_discount_hint: Discount also applies to all internal price groups
+          external_discount_hint: Discount also applies to all external price groups
         end_time: Start and end times are in 24-hour time format.
       instrument:
-        schedule: You may share a schedule with other products. Choose an exisiting schedule or use an unshared schedule.
+        schedule: You may share a schedule with other products. Choose an existing schedule or use an unshared schedule.
         control_mechanism: Time management options for the Instrument. 'Reservation' tracks reserved time only. Both 'Timer' settings track actual usage time.
         problems_resolvable_by_user: Allow users to update their usage time if they forget to sign out
       image_dimensions: Image will be resized to 400x200

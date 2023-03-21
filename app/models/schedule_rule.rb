@@ -6,11 +6,13 @@ class ScheduleRule < ApplicationRecord
 
   # oracle has a maximum table name length of 30, so we have to abbreviate it down
   has_and_belongs_to_many :product_access_groups, join_table: "product_access_schedule_rules"
+  has_many :price_group_discounts, dependent: :destroy
+
+  accepts_nested_attributes_for :price_group_discounts
 
   attr_accessor :unavailable # virtual attribute
 
   validates_presence_of :product_id
-  validates_numericality_of :discount_percent, greater_than_or_equal_to: 0, less_than: 100
   validates_numericality_of :start_hour, :end_hour, only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 24
   validates_numericality_of :start_min,  :end_min, only_integer: true, greater_than_or_equal_to: 0, less_than: 60
 
@@ -130,8 +132,33 @@ class ScheduleRule < ApplicationRecord
     ScheduleRuleCalendarPresenter.new(self, options).to_json
   end
 
-  def discount_for(start_at, end_at)
-    percent_overlap(start_at, end_at) * discount_percent.to_f
+  def discount_for(start_at, end_at, price_group)
+    percent_overlap(start_at, end_at) * discount_for_price_group(price_group)
+  end
+
+  def discount_for_price_group(price_group)
+    pgd = price_group_discounts.where(
+      price_group: effective_price_group(price_group)
+    ).first
+
+    # TODO: This should always be defined, remove once price_group_discounts have been
+    # added to all existing schedule rules and this is no longer needed.
+    if pgd
+      pgd.discount_percent.to_f
+    else
+      Rollbar.warn("Schedule rule missing price group discount", schedule_rule: id) if defined? Rollbar
+      0
+    end
+  end
+
+  def effective_price_group(price_group)
+    if price_group.global?
+      price_group
+    elsif price_group.is_internal?
+      PriceGroup.base
+    else
+      PriceGroup.external
+    end
   end
 
   # Inverts a set of rules into another set of rules representing the times the
