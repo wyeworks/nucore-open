@@ -35,7 +35,10 @@ en:
         date_added_admin_override: Date added
     hints:
       voucher_split_account:
-        description: The description for Voucher Split Accounts should include the Voucher number.
+        account_number: |
+          MIVP A-[voucher number], ex: "MIVP A-123"
+        description: |
+          MA company name - no extra wording of any kind, no slashes
 
   views:
     facility_accounts:
