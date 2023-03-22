@@ -30,7 +30,7 @@ RSpec.describe OrderRowImporter do
   let(:row) do
     ref = {
       "Netid / Email" => username,
-      "Chart String" => chart_string,
+      "#{I18n.t('Chart_string')}" => chart_string,
       "Product Name" => product_name,
       "Quantity" => quantity,
       "Order Date" => order_date,
@@ -505,7 +505,7 @@ RSpec.describe OrderRowImporter do
       end
 
       it_behaves_like "an order was not created"
-      it_behaves_like "it has an error message", "Missing headers: Chart String"
+      it_behaves_like "it has an error message", "Missing headers: #{I18n.t('Chart_string')}"
     end
 
     context "when the note field is invalid" do
@@ -591,7 +591,7 @@ RSpec.describe OrderRowImporter do
     let(:row) do
       {
         "Netid / Email" => username,
-        "Chart String" => chart_string,
+        "#{I18n.t('Chart_string')}" => chart_string,
         "Product Name" => product_name,
         "Quantity" => quantity,
         "Order Date" => order_date,
@@ -603,7 +603,7 @@ RSpec.describe OrderRowImporter do
       expect(subject.row_with_errors.headers).to eq(
         [
           "Netid / Email",
-          "Chart String",
+          "#{I18n.t('Chart_string')}",
           "Product Name",
           "Quantity",
           "Order Date",

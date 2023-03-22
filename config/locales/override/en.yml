@@ -100,6 +100,15 @@ en:
   #       journal_or_statement_date: "Journal/Statement"
   #     actions:
   #       reassign_chart_strings: "Reassign Chart Strings"
+  #
+  #  order_row_importer:
+  #    headers:
+  #      chart_string: Chart String
+
+  order_row_importer:
+    headers:
+      chart_string: Account Number
+
   admin:
     transaction_search:
       actions:

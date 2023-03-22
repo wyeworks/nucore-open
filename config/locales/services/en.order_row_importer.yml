@@ -5,6 +5,7 @@ en:
       order_number: Order
       notes: Note
       reference_id: Reference ID
+      chart_string: Chart String
     errors:
       blank: All fields are empty
       purchase_fail: Couldn't purchase order
