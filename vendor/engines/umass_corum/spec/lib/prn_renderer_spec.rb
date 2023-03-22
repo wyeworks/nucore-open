@@ -54,7 +54,7 @@ RSpec.describe PrnRenderer do
         # 1 header + 2 rows for 1 OrderDetail
         expect(rows.count).to eq 3
         # header row
-        expect(rows.first).to include("$$$ALS00102142013", journal.facility.name.slice(14), "UMAMH")
+        expect(rows.first).to include("$$$ALS00102142013", journal.facility.name, "UMAMH")
         # debit row
         expect(rows.second).to include(journal.facility.abbreviation, "00000000100DALS001", "UMAMH", order_detail.user.last_name, order_detail.to_s)
         # credit row

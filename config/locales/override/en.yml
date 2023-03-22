@@ -100,7 +100,10 @@ en:
   #       journal_or_statement_date: "Journal/Statement"
   #     actions:
   #       reassign_chart_strings: "Reassign Chart Strings"
-
+  admin:
+    transaction_search:
+      actions:
+        reassign_chart_strings: "Reassign Account Numbers"
   testing: # DO NOT DELETE: these are used to verify proper file loading in the specs
     locale_loading: This is here to verify the file is loaded in the specs
     overriding: This overrides the version in en.yml
