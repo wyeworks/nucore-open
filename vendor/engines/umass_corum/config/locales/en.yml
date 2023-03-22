@@ -102,8 +102,11 @@ en:
           request_login_link: |
             [Request an account](https://www.umass.edu/ials/core-facility-user-authorization-form)
         login_form:
+          subheading: External Users
+          note: |
+            For CORUM users with a non-UMass email address or username:
           submit: Sign in
-          username_signin: Sign in with Username/Password
+          username_signin: Click here to sign in with Username/Password
           username_warning: Only sign in with Username/Password if you do not have a NetID
 
   voucher_splits_reconciliation:

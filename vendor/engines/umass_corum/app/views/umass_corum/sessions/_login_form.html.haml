@@ -1,4 +1,6 @@
 = simple_form_for resource, as: resource_name, url: session_path(resource_name) do |f|
+  %h2= text("subheading")
+  %p= text("note")
   %fieldset.collapsable.collapsed
     %label.legend= text("username_signin")
     .alert.alert-danger= text("username_warning")

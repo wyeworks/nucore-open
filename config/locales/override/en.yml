@@ -22,6 +22,9 @@ en:
       sessions:
         new:
           sso_button: Sign in with NetID
+          subheading: UMass Single Sign-On (SSO)
+          note: |
+            For CORUM users with a UMass NetID or NENS account:
     notifier:
       new_user:
         intro: |
@@ -59,7 +62,7 @@ en:
     devise:
       sessions:
         new:
-          title: UMass Login
+          title: CORUM Login
   shared:
     footer:
       copyright_html: "&copy; Copyright 2011&ndash;%{to_date} University of Massachusetts"
