@@ -148,7 +148,6 @@ namespace :demo do
     @bundle        = bundle
 
     sr = ScheduleRule.find_or_create_by!(product: instrument) do |schedule_rule|
-      schedule_rule.discount_percent = 0
       schedule_rule.start_hour = 8
       schedule_rule.start_min = 0
       schedule_rule.end_hour = 19
@@ -160,6 +159,13 @@ namespace :demo do
       schedule_rule.on_thu = true
       schedule_rule.on_fri = true
       schedule_rule.on_sat = true
+    end
+
+    PriceGroup.globals.each do |price_group|
+      sr.price_group_discounts.create(
+        price_group: price_group,
+        discount_percent: 0
+      )
     end
 
     [item, service, bundle].each do |product|

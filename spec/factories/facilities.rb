@@ -2,20 +2,20 @@
 
 FactoryBot.define do
   factory :facility do
-    sequence(:name, "AAAAAAAA") { |n| "Facility#{n}" }
-    sequence(:email) { |n| "facility-#{n}@example.com" }
-    sequence(:abbreviation) { |n| "FA#{n}" }
+    sequence(:name, "AAAAAAAA") { |n| "Facility#{Facility.count + n.to_i}" }
+    sequence(:email) { |n| "facility-#{Facility.count + n}@example.com" }
+    sequence(:abbreviation) { |n| "FA#{Facility.count + (2 * n)}" }
     short_description { "Short Description" }
     description { "Facility Description" }
     is_active { true }
-    sequence(:url_name) { |n| "facility#{n}" }
+    sequence(:url_name) { |n| "facility#{Facility.count + (2 * n)}" }
 
     trait :with_image do
       file { File.open("#{Rails.root}/spec/files/cern.jpeg") }
     end
 
     trait :with_order_notification do
-      sequence(:order_notification_recipient) { |n| "orders#{n}@example.com" }
+      sequence(:order_notification_recipient) { |n| "orders#{Facility.count + n}@example.com" }
     end
   end
 

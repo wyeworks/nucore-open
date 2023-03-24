@@ -57,7 +57,7 @@ support_email: ~
 order_details:
   list_transformer: SplitAccounts::OrderDetailListTransformer
 
-order_import_template_name: bulk_import_template.csv
+order_import_template_name: umass_corum_bulk_import_template.csv
 
 reservations:
   grace_period: <%= 5.minutes %>

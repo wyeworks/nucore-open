@@ -11,7 +11,7 @@
     = simple_form_for [:facility, @order_import], html: { multipart: true } do |f|
       .well.well-small#bulk-import-fields
         .pull-right
-          = link_to text("download_link"), "#{root_path}templates/bulk_import_template.csv", id: "bulk-import-template"
+          = link_to text("download_link"), "#{root_path}templates/#{Settings.order_import_template_name}", id: "bulk-import-template"
         = f.file_field :upload_file
         = html("upload_file_hint")
         = f.input :fail_on_error, inline_label: text("fail_on_error"), label: false, hint: html("fail_on_error_hint")

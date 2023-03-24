@@ -9,7 +9,7 @@ RSpec.describe OrderImport, :time_travel do
 
   CSV_HEADERS = [
     "Netid / Email",
-    "Chart String",
+    I18n.t("Chart_string"),
     "Product Name",
     "Quantity",
     "Order Date",

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_21_181650) do
+ActiveRecord::Schema.define(version: 2023_02_23_221431) do
 
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -474,6 +474,16 @@ ActiveRecord::Schema.define(version: 2023_02_21_181650) do
     t.index ["account_id"], name: "index_payments_on_account_id"
     t.index ["paid_by_id"], name: "index_payments_on_paid_by_id"
     t.index ["statement_id"], name: "index_payments_on_statement_id"
+  end
+
+  create_table "price_group_discounts", charset: "utf8", force: :cascade do |t|
+    t.integer "price_group_id", null: false
+    t.integer "schedule_rule_id", null: false
+    t.decimal "discount_percent", precision: 10, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["price_group_id"], name: "index_price_group_discounts_on_price_group_id"
+    t.index ["schedule_rule_id"], name: "index_price_group_discounts_on_schedule_rule_id"
   end
 
   create_table "price_group_members", id: :integer, charset: "utf8", force: :cascade do |t|
@@ -1055,6 +1065,8 @@ ActiveRecord::Schema.define(version: 2023_02_21_181650) do
   add_foreign_key "payments", "accounts"
   add_foreign_key "payments", "statements"
   add_foreign_key "payments", "users", column: "paid_by_id"
+  add_foreign_key "price_group_discounts", "price_groups"
+  add_foreign_key "price_group_discounts", "schedule_rules"
   add_foreign_key "price_group_members", "accounts"
   add_foreign_key "price_group_members", "price_groups"
   add_foreign_key "price_group_members", "users"

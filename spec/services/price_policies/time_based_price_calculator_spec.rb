@@ -4,14 +4,14 @@ require "rails_helper"
 
 RSpec.describe PricePolicies::TimeBasedPriceCalculator do
 
-  let(:product) { build_stubbed(:instrument, schedule_rules: schedule_rules) }
-  let(:schedule_rules) { [day_schedule, night_schedule, weekend_schedule] }
-  let(:day_schedule) { build_stubbed(:schedule_rule, :weekday) }
-  let(:night_schedule) { build_stubbed(:schedule_rule, :weekday, :evening, discount_percent: 10) }
-  let(:weekend_schedule) { build_stubbed(:schedule_rule, :weekend, :all_day, discount_percent: 25) }
+  let(:product) { create(:setup_instrument, skip_schedule_rules: true) }
+  let!(:day_schedule) { create(:schedule_rule, :weekday, product: product) }
+  let!(:night_schedule) { create(:schedule_rule, :weekday, :evening, discount_percent: 10, product: product) }
+  let!(:weekend_schedule) { create(:schedule_rule, :weekend, :all_day, discount_percent: 25, product: product) }
   let(:calculator) { described_class.new(price_policy) }
   let(:price_policy) { build_stubbed(:instrument_price_policy, options.merge(product: product)) }
   let(:options) { {} }
+
   describe "#calculate" do
     subject(:costs) { calculator.calculate(start_at, end_at) }
 

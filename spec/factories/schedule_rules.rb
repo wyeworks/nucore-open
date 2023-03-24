@@ -2,7 +2,6 @@
 
 FactoryBot.define do
   factory :schedule_rule do
-    discount_percent { 0.00 }
     start_hour { 9 }
     start_min { 00 }
     end_hour { 17 }
@@ -14,6 +13,12 @@ FactoryBot.define do
     on_thu { true }
     on_fri { true }
     on_sat { true }
+
+    transient do
+      # this column is now deprecated, but it's
+      # useful to pass in a single value when setting up specs
+      discount_percent { 0.00 }
+    end
 
     trait :weekday do
       on_sun { false }
@@ -40,12 +45,28 @@ FactoryBot.define do
       end_hour { 24 }
     end
 
+    trait :with_setup_product do
+      product { create(:setup_instrument, skip_schedule_rules: true) }
+    end
+
     factory :weekend_schedule_rule do
       weekend
     end
 
     factory :all_day_schedule_rule do
       all_day
+    end
+
+    after(:build) do |schedule_rule, evaluator|
+      if evaluator.discount_percent
+        PriceGroup.globals.each do |price_group|
+          schedule_rule.price_group_discounts.build(price_group: price_group, discount_percent: evaluator.discount_percent)
+        end
+      end
+    end
+
+    after(:create) do |schedule_rule, evaluator|
+      evaluator.product.schedule_rules << schedule_rule if evaluator.product
     end
   end
 end

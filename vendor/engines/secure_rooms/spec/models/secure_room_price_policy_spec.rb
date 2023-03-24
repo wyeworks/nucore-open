@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe SecureRoomPricePolicy do
   describe "#calculate_cost_and_subsidy_from_order_detail" do
-    let(:product) { build_stubbed(:secure_room, schedule_rules: [schedule_rule]) }
-    let(:schedule_rule) { build_stubbed(:schedule_rule, :all_day) }
+    let(:product) { create(:secure_room) }
+    let!(:schedule_rule) { create(:schedule_rule, :all_day, product: product) }
     let(:order_detail) { build_stubbed(:order_detail, product: product, occupancy: occupancy) }
     let(:price_policy) { build_stubbed(:secure_room_price_policy, product: product, usage_rate: 60, usage_subsidy: 15, minimum_cost: 30) }
     subject(:costs) { price_policy.calculate_cost_and_subsidy_from_order_detail(order_detail) }
@@ -36,7 +36,7 @@ RSpec.describe SecureRoomPricePolicy do
     end
 
     describe "with a discount" do
-      before { schedule_rule.discount_percent = 10 }
+      let!(:schedule_rule) { create(:schedule_rule, :all_day, product: product, discount_percent: 10) }
 
       describe "rounding seconds" do
         let(:occupancy) { build_stubbed(:occupancy, entry_at: 1.hour.ago + 15.seconds, exit_at: Time.current) }

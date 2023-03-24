@@ -26,7 +26,7 @@ RSpec.describe Reservation do
   before(:each) do
     @instrument = create(:instrument, facility: facility, reserve_interval: 15)
     # add rule, available every day from 12 am to 5 pm, 60 minutes duration
-    @rule = @instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule).merge(start_hour: 0, end_hour: 17))
+    @rule = FactoryBot.create(:schedule_rule, product: @instrument, start_hour: 0, end_hour: 17)
     allow_any_instance_of(Reservation).to receive(:admin?).and_return(false)
   end
 
@@ -148,14 +148,14 @@ RSpec.describe Reservation do
     end
 
     describe "admin reservation" do
-      let(:instrument) { create(:setup_instrument) }
+      let(:instrument) { create(:setup_instrument, skip_schedule_rules: true) }
       let!(:reservation) { create(:admin_reservation, product: instrument, reserve_start_at: nine_am, reserve_end_at: ten_am) }
       let(:now) { nine_am + 5.minutes }
       it { is_expected.to include(reservation) }
     end
 
     describe "offline_reservation" do
-      let(:instrument) { create(:setup_instrument) }
+      let(:instrument) { create(:setup_instrument, skip_schedule_rules: true) }
       let!(:reservation) { create(:offline_reservation, product: instrument, reserve_start_at: nine_am, reserve_end_at: nil) }
       let(:now) { nine_am + 5.minutes }
       it { is_expected.to include(reservation) }
@@ -677,7 +677,7 @@ RSpec.describe Reservation do
       end
 
       context "when the reserved instrument is offline" do
-        let(:instrument) { FactoryBot.create(:setup_instrument, :offline) }
+        let(:instrument) { FactoryBot.create(:setup_instrument, :offline, skip_schedule_rules: true) }
 
         it { is_expected.not_to be_startable_now }
       end
@@ -1273,8 +1273,8 @@ RSpec.describe Reservation do
         @instrument.schedule_rules.destroy_all
         @instrument.schedule_rules.reload
         @instrument.update_attribute :reserve_interval, 15
-        @rule_9to5 = @instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule, start_hour: 9, end_hour: 17))
-        @rule_5to7 = @instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule, start_hour: 17, end_hour: 19))
+        @rule_9to5 = FactoryBot.create(:schedule_rule, product: @instrument, start_hour: 9, end_hour: 17)
+        @rule_5to7 = FactoryBot.create(:schedule_rule, product: @instrument, start_hour: 17, end_hour: 19)
       end
 
       it "allows a reservation within the schedule rules" do

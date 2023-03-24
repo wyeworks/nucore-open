@@ -172,7 +172,7 @@ RSpec.describe ScheduleRule do
       @instrument = FactoryBot.create(:instrument,
                                       facility: @facility)
       # create rule every day from 9 am to 5 pm
-      @rule = @instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule, discount_percent: 5))
+      @rule = FactoryBot.create(:schedule_rule, product: @instrument, discount_percent: 5)
       assert @rule.valid?
 
       # find past sunday, and build calendar object
@@ -181,7 +181,8 @@ RSpec.describe ScheduleRule do
 
       # each title should be the same
       @calendar.each do |hash|
-        expect(hash["title"]).to eq("Discount: 5%")
+        expect(hash["title"]).to include("#{PriceGroup.base}: 5%")
+        expect(hash["title"]).to include("#{PriceGroup.external}: 5%")
         expect(hash["allDay"]).to eq(false)
       end
 
@@ -227,20 +228,38 @@ RSpec.describe ScheduleRule do
                                       reserve_interval: 60)
       # create rule tue 1 am - 3 am
       @options = {
-        on_mon: false, on_tue: true, on_wed: false, on_thu: false, on_fri: false, on_sat: false, on_sun: false,
-        start_hour: 1, start_min: 0, end_hour: 3, end_min: 0, discount_percent: 0
+        product: @instrument,
+        on_mon: false,
+        on_tue: true,
+        on_wed: false,
+        on_thu: false,
+        on_fri: false,
+        on_sat: false,
+        on_sun: false,
+        start_hour: 1, start_min: 0,
+        end_hour: 3, end_min: 0,
+        discount_percent: 0
       }
 
-      @rule1 = @instrument.schedule_rules.create(@options)
+      @rule1 = FactoryBot.create(:schedule_rule, @options)
       assert @rule1.valid?
 
       # create rule tue 7 am - 9 am
       @options = {
-        on_mon: false, on_tue: true, on_wed: false, on_thu: false, on_fri: false, on_sat: false, on_sun: false,
-        start_hour: 7, start_min: 0, end_hour: 9, end_min: 0, discount_percent: 0
+        product: @instrument,
+        on_mon: false,
+        on_tue: true,
+        on_wed: false,
+        on_thu: false,
+        on_fri: false,
+        on_sat: false,
+        on_sun: false,
+        start_hour: 7, start_min: 0,
+        end_hour: 9, end_min: 0,
+        discount_percent: 0
       }
 
-      @rule2 = @instrument.schedule_rules.create(@options)
+      @rule2 = FactoryBot.create(:schedule_rule, @options)
       assert @rule2.valid?
 
       # find past tuesday, and build calendar objects
@@ -286,19 +305,37 @@ RSpec.describe ScheduleRule do
                                       reserve_interval: 60)
       # create rule tue 9 pm - 12 am
       @options = {
-        on_mon: false, on_tue: true, on_wed: false, on_thu: false, on_fri: false, on_sat: false, on_sun: false,
-        start_hour: 21, start_min: 0, end_hour: 24, end_min: 0, discount_percent: 0
+        product: @instrument,
+        on_mon: false,
+        on_tue: true,
+        on_wed: false,
+        on_thu: false,
+        on_fri: false,
+        on_sat: false,
+        on_sun: false,
+        start_hour: 21, start_min: 0,
+        end_hour: 24, end_min: 0,
+        discount_percent: 0
       }
 
-      @rule1 = @instrument.schedule_rules.create(@options)
+      @rule1 = FactoryBot.create(:schedule_rule, @options)
       assert @rule1.valid?
       # create rule wed 12 am - 9 am
       @options = {
-        on_mon: false, on_tue: false, on_wed: true, on_thu: false, on_fri: false, on_sat: false, on_sun: false,
-        start_hour: 0, start_min: 0, end_hour: 9, end_min: 0, discount_percent: 0
+        product: @instrument,
+        on_mon: false,
+        on_tue: false,
+        on_wed: true,
+        on_thu: false,
+        on_fri: false,
+        on_sat: false,
+        on_sun: false,
+        start_hour: 0, start_min: 0,
+        end_hour: 9, end_min: 0,
+        discount_percent: 0
       }
 
-      @rule2 = @instrument.schedule_rules.create(@options)
+      @rule2 = FactoryBot.create(:schedule_rule, @options)
       assert @rule2.valid?
 
       # find past tuesday, and build calendar objects
@@ -403,6 +440,35 @@ RSpec.describe ScheduleRule do
           expect(@instrument.available_schedule_rules(@user)).to eq([@rule])
         end
       end
+    end
+  end
+
+  # for the unlikley case where the price group discount doesn't exist, should return 0
+  describe "#discount_for_price_group" do
+    let(:price_group) { create(:price_group, facility: facility) }
+    let(:schedule_rule) { build(:schedule_rule, discount_percent: nil) }
+
+    it "returns 0 if no price group discount is found" do
+      expect(schedule_rule.discount_for_price_group(price_group)).to eq 0
+    end
+  end
+
+  describe "#effective_price_group" do
+    let(:schedule_rule) { described_class.new }
+    let(:global_price_group) { PriceGroup.base }
+    let(:internal_price_group) { build(:price_group, is_internal: true) }
+    let(:external_price_group) { build(:price_group, is_internal: false) }
+
+    it "returns a global price group when it recieves one" do
+      expect(schedule_rule.effective_price_group(global_price_group)).to eq global_price_group
+    end
+
+    it "returns the global base price group when it recieves a non-global internal price group" do
+      expect(schedule_rule.effective_price_group(internal_price_group)).to eq PriceGroup.base
+    end
+
+    it "returns the global external group when it recieves a non-global external price gorup" do
+      expect(schedule_rule.effective_price_group(external_price_group)).to eq PriceGroup.external
     end
   end
 end

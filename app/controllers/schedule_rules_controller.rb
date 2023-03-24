@@ -38,6 +38,10 @@ class ScheduleRulesController < ApplicationController
       end_hour: 17,
       end_min: 0,
     )
+
+    PriceGroup.globals.each do |price_group|
+      @schedule_rule.price_group_discounts.build(price_group: price_group, discount_percent: 0)
+    end
   end
 
   # POST /schedule_rules
@@ -81,8 +85,9 @@ class ScheduleRulesController < ApplicationController
   private
 
   def schedule_rule_params
-    params.require(:schedule_rule).permit(:discount_percent, :start_hour, :start_min, :end_hour, :end_min,
+    params.require(:schedule_rule).permit(:start_hour, :start_min, :end_hour, :end_min,
                                           :on_sun, :on_mon, :on_tue, :on_wed, :on_thu, :on_fri, :on_sat,
+                                          price_group_discounts_attributes: [:discount_percent, :price_group_id, :id],
                                           product_access_group_ids: [])
   end
 

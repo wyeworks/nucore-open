@@ -1,0 +1,3 @@
+# list of order details to remove in the format: {order ID}-{order detail ID}
+123-456
+789-1010
