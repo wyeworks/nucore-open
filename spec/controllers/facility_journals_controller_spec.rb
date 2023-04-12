@@ -10,8 +10,6 @@ RSpec.describe FacilityJournalsController do
   let(:user) { @user }
   let(:journal) { @journal }
 
-  include DateHelper
-
   render_views
 
   def create_order_details
@@ -214,7 +212,7 @@ RSpec.describe FacilityJournalsController do
     it_should_deny_all [:staff, :senior_staff]
 
     it_should_allow_managers_only :redirect, "and respond gracefully when no order details given" do |_user|
-      journal_date = parse_usa_date(@journal_date)
+      journal_date = SpecDateHelper.parse_usa_date(@journal_date)
       expect(flash[:error]).not_to be_nil
     end
 
@@ -303,7 +301,7 @@ RSpec.describe FacilityJournalsController do
 
       context "trying to journal in the future" do
         before :each do
-          @params[:journal_date] = format_usa_date(1.day.from_now)
+          @params[:journal_date] = SpecDateHelper.format_usa_date(1.day.from_now)
         end
 
         it_behaves_like "journal error", "Journal Date may not be in the future"
@@ -313,13 +311,13 @@ RSpec.describe FacilityJournalsController do
         before :each do
           @order_detail1.update(fulfilled_at: 5.days.ago)
           @order_detail3.update(fulfilled_at: 3.days.ago)
-          @params[:journal_date] = format_usa_date(4.days.ago)
+          @params[:journal_date] = SpecDateHelper.format_usa_date(4.days.ago)
         end
 
         it_behaves_like "journal error", "Journal Date may not be before the latest fulfillment date."
 
         it "does allow to be the same day" do
-          @params[:journal_date] = format_usa_date(3.days.ago)
+          @params[:journal_date] = SpecDateHelper.format_usa_date(3.days.ago)
           do_request
           expect(assigns(:journal)).to be_persisted
         end

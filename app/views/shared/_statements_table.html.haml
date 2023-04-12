@@ -13,9 +13,11 @@
           %th= Facility.model_name.human
         %th.currency # of #{Order.model_name.human.pluralize}
         %th.currency= Statement.human_attribute_name(:total_cost)
+        %th= t("statements.closed_at")
+        %th= t("statements.closed_by")
         %th= Statement.human_attribute_name(:status)
     %tbody
-      - @statements.each do |s|
+      - StatementPresenter.wrap(@statements).each do |s|
         %tr
           %td.centered
             = "##{s.invoice_number}"
@@ -33,6 +35,8 @@
             %td= s.facility.name
           %td.currency= s.order_details.count
           %td.currency= number_to_currency(s.total_cost)
+          %td= s.closed_by_times
+          %td= s.closed_by_user_full_names
           %td= t("statements.reconciled.#{s.reconciled?}")
 
   = will_paginate(@statements)

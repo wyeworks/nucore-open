@@ -19,7 +19,7 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
     describe "happy path" do
       let(:body) do
         <<~CSV
-          Netid / Email,#{I18n.t("Chart_string")},Product Name,Quantity,Order Date,Fulfillment Date,Note,Order,Reference ID
+          #{I18n.t("order_row_importer.headers.user")},#{I18n.t("Chart_string")},Product Name,Quantity,Order Date,Fulfillment Date,Note,Order,Reference ID
           sst123@example.com,#{account.account_number},Example Item,1,02/15/2020,02/15/2020,Add to 1,#{order.id},123456789
           sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,Add to 2,#{order.id},123456000
           sst123@example.com,#{account2.account_number},Example Item,1,02/15/2020,02/15/2020,Add to other,#{order2.id},abc123

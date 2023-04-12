@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Reservation do
-  include DateHelper
-
   subject(:reservation) do
     instrument.reservations.create(
       reserve_start_date: 1.day.from_now.to_date,
@@ -683,13 +681,13 @@ RSpec.describe Reservation do
       end
 
       it "should return the earliest possible time slot" do
-        expect(human_date(@reservation1.reserve_start_at)).to eq(human_date(@morning + 1.day))
+        expect(SpecDateHelper.human_date(@reservation1.reserve_start_at)).to eq(SpecDateHelper.human_date(@morning + 1.day))
 
         earliest = nil
         travel_to_and_return(@morning) do
           earliest = @reservation1.earliest_possible
         end
-        expect(human_date(earliest.reserve_start_at)).to eq(human_date(@morning))
+        expect(SpecDateHelper.human_date(earliest.reserve_start_at)).to eq(SpecDateHelper.human_date(@morning))
 
         new_min = 0
 

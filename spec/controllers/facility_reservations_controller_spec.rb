@@ -5,8 +5,6 @@ require "controller_spec_helper"
 require "order_detail_batch_update_shared_examples"
 
 RSpec.describe FacilityReservationsController do
-  include DateHelper
-
   let(:account) { @account }
   let(:facility) { @authable }
   let(:product) { @product }

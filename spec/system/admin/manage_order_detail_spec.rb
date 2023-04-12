@@ -48,6 +48,27 @@ RSpec.describe "Managing an order detail" do
     end
   end
 
+  describe "order detail with missing fomr" do
+    let(:service) { create(:setup_service, :with_order_form, facility: facility) }
+    let!(:order) { create(:purchased_order, product: service) }
+    let(:order_detail) { order.order_details.first }
+
+    before do
+      order_detail.change_status!(OrderStatus.in_process)
+      order_detail.change_status!(OrderStatus.complete)
+      order_detail.reviewed_at = 1.day.ago
+      visit manage_facility_order_order_detail_path(facility, order, order_detail)
+    end
+
+    it "allows admins to add missing form" do
+      expect(order_detail).to be_missing_form
+      click_button "Add missing form"
+      expect(page).to have_content("Placeholder file successfully added")
+      order_detail.reload
+      expect(order_detail).not_to be_missing_form
+    end
+  end
+
   describe "editing a problem order detail with a reservation" do
     let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility: facility) }
     let!(:reservation) do

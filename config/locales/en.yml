@@ -29,6 +29,8 @@ en:
   facility_downcase: facility
   facilities_downcase: facilities
 
+  # When updating sso, chart string, or statement, check override/en.yml for
+  # additional changes that are necessary
   Sso_id: NetID
   sso_id_downcase: NetID
   name_or_sso_id: name, NetID, or username
@@ -341,6 +343,8 @@ en:
         journal_status: "Journal Status"
         reference: "Reference"
         description: "Notes"
+        closed_at: Closed At
+        closed_by: Closed By
       instruct:
         orders: |
           NOTE: The orders below can still be updated.  To retain a copy of the journal as originally
@@ -565,6 +569,8 @@ en:
         remove_from_journal: "Remove From Journal"
       form:
         recalculate_price: "Recalculate pricing"
+      warnings:
+        missing_form_button: Add missing form
 
   product_access_groups:
     index:
@@ -656,6 +662,8 @@ en:
       "true": Reconciled
       "false": Unreconciled
     resend: Resend
+    closed_at: Closed At
+    closed_by: Closed By
 
   orders:
     add_account:

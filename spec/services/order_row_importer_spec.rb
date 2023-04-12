@@ -4,8 +4,6 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe OrderRowImporter do
-  include DateHelper
-
   subject { OrderRowImporter.new(row, order_import) }
   let(:account) { create(:nufs_account, :with_account_owner, owner: user) }
   let(:facility) { create(:setup_facility) }
@@ -30,7 +28,7 @@ RSpec.describe OrderRowImporter do
   let(:row) do
     ref = {
       "Netid / Email" => username,
-      "#{I18n.t('Chart_string')}" => chart_string,
+      I18n.t("Chart_string") => chart_string,
       "Product Name" => product_name,
       "Quantity" => quantity,
       "Order Date" => order_date,
@@ -64,7 +62,7 @@ RSpec.describe OrderRowImporter do
         before { subject.import }
 
         it "has the expected ordered_at" do
-          expect(order.order_details.map(&:ordered_at)).to all(eq parse_usa_date(order_date))
+          expect(order.order_details.map(&:ordered_at)).to all(eq SpecDateHelper.parse_usa_date(order_date))
         end
 
         it "has the expected creator" do
@@ -591,7 +589,7 @@ RSpec.describe OrderRowImporter do
     let(:row) do
       {
         "Netid / Email" => username,
-        "#{I18n.t('Chart_string')}" => chart_string,
+        I18n.t("Chart_string") => chart_string,
         "Product Name" => product_name,
         "Quantity" => quantity,
         "Order Date" => order_date,
@@ -603,7 +601,7 @@ RSpec.describe OrderRowImporter do
       expect(subject.row_with_errors.headers).to eq(
         [
           "Netid / Email",
-          "#{I18n.t('Chart_string')}",
+          I18n.t("Chart_string"),
           "Product Name",
           "Quantity",
           "Order Date",
