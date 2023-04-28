@@ -4,9 +4,6 @@ require "rails_helper"
 
 # TODO: Capybara deprecation
 RSpec.describe "Editing your own reservation" do
-
-  include DateHelper
-
   let!(:instrument) do
     FactoryBot.create(:setup_instrument, user_notes_field_mode: "optional", lock_window: 12, min_reserve_mins: nil)
   end
@@ -30,8 +27,8 @@ RSpec.describe "Editing your own reservation" do
       visit reservations_path
       click_link reservation.to_s
 
-      fill_in "Reserve Start", with: format_usa_date(reservation.reserve_start_at + 1.hour)
-      fill_in "Reserve End", with: format_usa_date(reservation.reserve_end_at + 1.hour)
+      fill_in "Reserve Start", with: SpecDateHelper.format_usa_date(reservation.reserve_start_at + 1.hour)
+      fill_in "Reserve End", with: SpecDateHelper.format_usa_date(reservation.reserve_end_at + 1.hour)
       fill_in "Duration", with: "30"
       click_button "Save"
 
@@ -42,8 +39,8 @@ RSpec.describe "Editing your own reservation" do
       visit reservations_path
       click_link reservation.to_s
 
-      fill_in "Reserve Start", with: format_usa_date(reservation.reserve_start_at - 1.day)
-      fill_in "Reserve End", with: format_usa_date(reservation.reserve_end_at - 1.day)
+      fill_in "Reserve Start", with: SpecDateHelper.format_usa_date(reservation.reserve_start_at - 1.day)
+      fill_in "Reserve End", with: SpecDateHelper.format_usa_date(reservation.reserve_end_at - 1.day)
       click_button "Save"
 
       expect(page).to have_content("My Reservations")

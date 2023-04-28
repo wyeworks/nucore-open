@@ -41,6 +41,7 @@ and controller locales. Use the standard [Rails I18n](http://guides.rubyonrails.
 * When including references to "facility" and "facilities", within a longer string,
   use text-helper's interpolation features with `facility_downcase`/`facilities_downcase`
   e.g. `text("in this !facility_downcase!"). _We haven't found a better way to do this yet_
+* Varitations of "chart string", "statement", and "NetID" need to be changed in multiple places in order to be changed application wide. In addition to changes in `en.yml` (see `Sso_id:`, `Chart_string:`, `Statement:`) and `override/en.yml` (see the comments), a new order import template needs to be created and set in `settings.yml` (the `order_import_template_name` setting).
 
 ## Rubocop
 

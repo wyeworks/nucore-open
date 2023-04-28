@@ -3,6 +3,7 @@
 class StatementPresenter < SimpleDelegator
 
   include Rails.application.routes.url_helpers
+  include DateHelper
 
   def self.wrap(statements)
     statements.map { |statement| new(statement) }
@@ -24,6 +25,18 @@ class StatementPresenter < SimpleDelegator
     User.find(created_by).full_name
   rescue ActiveRecord::RecordNotFound
     I18n.t("statements.show.created_by.unknown")
+  end
+
+  def closed_by_user_full_names
+    closed_events.map { |event| event.user.full_name }.join("\n")
+  end
+
+  def closed_by_times
+    closed_events.map { |event| format_usa_datetime(event.event_time) }.join("\n")
+  end
+
+  def closed_events
+    @closed_events ||= LogEvent.where(loggable_type: "Statement", loggable_id: id, event_type: "closed")
   end
 
 end

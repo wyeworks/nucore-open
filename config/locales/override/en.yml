@@ -70,7 +70,9 @@ en:
   # The sections below are provided as a starting point for customizing
   # the preferred term for "statment" and "Chart String" in places where
   # it is not easy to use the text_helpers `text` method instead of `I18n.t`
-  # To use, simply uncomment and update the terms here as needed.
+  # To use, simply uncomment and update the terms here as needed. In addition
+  # to these, you may need to create an order upload template (and update
+  # `order_import_template_name`) if your changes affect the headers in that file
   
   # activerecord:
   #   models:
@@ -106,6 +108,7 @@ en:
   #
   #  order_row_importer:
   #    headers:
+  #      user: Netid / Email
   #      chart_string: Chart String
 
   order_row_importer:

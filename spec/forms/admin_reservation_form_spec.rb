@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe AdminReservationForm do
-  include DateHelper
-
   let(:instrument) { create(:setup_instrument) }
   let(:start_date) { Time.zone.parse("2017-10-17 12:00:00") }
   let(:admin_reservation) { build(:admin_reservation, product: instrument, reserve_start_at: start_date, duration: 1.hour) }
@@ -13,26 +11,26 @@ RSpec.describe AdminReservationForm do
   describe "validations" do
     describe "cannot_exceed_max_end_date" do
       it "invalid past max end date" do
-        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: format_usa_date(start_date + 14.weeks))
+        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: SpecDateHelper.format_usa_date(start_date + 14.weeks))
         expect(form).not_to be_valid
         expect(form.errors).to be_added(:repeat_end_date, :too_far_in_future, time: "12 weeks")
       end
 
       it "valid before max end date" do
-        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: format_usa_date(start_date + 12.weeks))
+        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: SpecDateHelper.format_usa_date(start_date + 12.weeks))
         expect(form).to be_valid
       end
     end
 
     describe "repeat_end_date_after_initial_date" do
       it "invalid before initial date" do
-        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: format_usa_date(start_date - 1.day))
+        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: SpecDateHelper.format_usa_date(start_date - 1.day))
         expect(form).not_to be_valid
         expect(form.errors).to be_added(:repeat_end_date, :must_be_after_initial_reservation)
       end
 
       it "valid after initial date" do
-        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: format_usa_date(start_date + 1.day))
+        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: SpecDateHelper.format_usa_date(start_date + 1.day))
         expect(form).to be_valid
       end
     end
@@ -42,7 +40,7 @@ RSpec.describe AdminReservationForm do
 
     context "weekdays_only" do
       before do
-        form.assign_attributes(repeats: "1", repeat_frequency: "weekdays_only", repeat_end_date: format_usa_date(start_date + 7.days))
+        form.assign_attributes(repeats: "1", repeat_frequency: "weekdays_only", repeat_end_date: SpecDateHelper.format_usa_date(start_date + 7.days))
       end
 
       it "builds the right number of reservations" do
@@ -59,7 +57,7 @@ RSpec.describe AdminReservationForm do
     context "daily" do
       context "over daylight savings shift" do
         before do
-          form.assign_attributes(repeats: "1", repeat_frequency: "daily", repeat_end_date: format_usa_date(start_date + 30.days))
+          form.assign_attributes(repeats: "1", repeat_frequency: "daily", repeat_end_date: SpecDateHelper.format_usa_date(start_date + 30.days))
         end
 
         it "builds the right number of reservations" do
@@ -75,7 +73,7 @@ RSpec.describe AdminReservationForm do
 
     context "weekly" do
       before do
-        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: format_usa_date(start_date + 7.weeks))
+        form.assign_attributes(repeats: "1", repeat_frequency: "weekly", repeat_end_date: SpecDateHelper.format_usa_date(start_date + 7.weeks))
       end
 
       it "builds the right number of reservations" do
@@ -85,7 +83,7 @@ RSpec.describe AdminReservationForm do
 
     context "monthly" do
       before do
-        form.assign_attributes(repeats: "1", repeat_frequency: "monthly", repeat_end_date: format_usa_date(start_date + 3.months))
+        form.assign_attributes(repeats: "1", repeat_frequency: "monthly", repeat_end_date: SpecDateHelper.format_usa_date(start_date + 3.months))
       end
 
       it "builds the right number of reservations" do

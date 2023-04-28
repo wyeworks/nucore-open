@@ -1,13 +1,14 @@
+%div{class: modal? ? "modal-body" : ""}
+  .row
+    .span10
+      = render "warnings"
+
 = simple_form_for @order_detail,
     url: manage_facility_order_order_detail_path(current_facility, @order, @order_detail),
     remote: modal?,
     html: { class: ["manage_order_detail", edit_disabled? ? "disabled" : ""] } do |f|
 
   %div{class: modal? ? "modal-body" : ""}
-    .row
-      .span10
-        = render "warnings"
-
     .row
       .span5.js--pricingUpdate
         = account_input(f)

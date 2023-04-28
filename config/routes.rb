@@ -361,6 +361,7 @@ Rails.application.routes.draw do
     resources :order_details, only: [:show, :edit, :update] do
       put :cancel, on: :member
       put :dispute, on: :member
+      put :add_missing_form, on: :member
       get :order_file, controller: "order_detail_stored_files"
       post :upload_order_file, controller: "order_detail_stored_files"
       get :remove_order_file, controller: "order_detail_stored_files"

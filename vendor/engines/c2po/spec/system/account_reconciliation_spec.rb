@@ -13,6 +13,7 @@ RSpec.describe "Account Reconciliation", js: true do
   end
 
   let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:statement) { StatementPresenter.new order_detail.statement }
 
   before do
     orders.zip(statements).each do |order, statement|
@@ -65,6 +66,10 @@ RSpec.describe "Account Reconciliation", js: true do
       expect(order_detail.reload).to be_reconciled
       expect(order_detail.reconciled_note).to eq("this is a note!")
       expect(order_detail.reconciled_at).to eq(1.day.ago.beginning_of_day)
+
+      # ensure the closed by times show up on the statement history page
+      click_link "Statement History"
+      expect(page).to have_content(statement.closed_by_times)
     end
 
     context "with bulk reconciliation note" do
@@ -128,6 +133,10 @@ RSpec.describe "Account Reconciliation", js: true do
       expect(order_detail.reload).to be_reconciled
       expect(order_detail.reconciled_note).to eq("this is a note!")
       expect(order_detail.reconciled_at).to eq(1.day.ago.beginning_of_day)
+
+      # ensure the closed by times show up on the statement history page
+      click_link "Statement History"
+      expect(page).to have_content(statement.closed_by_times)
     end
 
     it "can take a bulk reconciliation note" do

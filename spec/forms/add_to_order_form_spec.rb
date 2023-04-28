@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe AddToOrderForm do
-  include DateHelper
   let(:order) { create(:complete_order, product: product, ordered_at: 1.week.ago) }
   let(:product) { create(:setup_item, :with_facility_account) }
   subject(:form) { described_class.new(order) }
@@ -103,7 +102,7 @@ RSpec.describe AddToOrderForm do
         end
 
         it "has the second order's fulfilled_at to the matching date" do
-          expect(parse_usa_date(form.fulfilled_at)).to eq(second_order_detail.fulfilled_at.beginning_of_day)
+          expect(SpecDateHelper.parse_usa_date(form.fulfilled_at)).to eq(second_order_detail.fulfilled_at.beginning_of_day)
         end
       end
     end

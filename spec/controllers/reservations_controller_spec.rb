@@ -4,8 +4,6 @@ require "rails_helper"
 require "controller_spec_helper"
 
 RSpec.describe ReservationsController do
-  include DateHelper
-
   let(:facility) { @authable }
   let(:instrument) { @instrument }
   let(:order) { @order }
@@ -396,7 +394,7 @@ RSpec.describe ReservationsController do
         order_detail_id: @order_detail.id,
         order_account: @account.id,
         reservation: {
-          reserve_start_date: format_usa_date(Time.zone.now.to_date - 5.days),
+          reserve_start_date: SpecDateHelper.format_usa_date(Time.zone.now.to_date - 5.days),
           reserve_start_hour: "9",
           reserve_start_min: "0",
           reserve_start_meridian: "am",
@@ -447,7 +445,7 @@ RSpec.describe ReservationsController do
       @params.merge!(
         order_account: @account.id,
         reservation: {
-          reserve_start_date: format_usa_date(Time.zone.now.to_date + 1.day),
+          reserve_start_date: SpecDateHelper.format_usa_date(Time.zone.now.to_date + 1.day),
           reserve_start_hour: "9",
           reserve_start_min: "0",
           reserve_start_meridian: "am",
@@ -571,7 +569,7 @@ RSpec.describe ReservationsController do
 
     context "creating a reservation in the future with no price policy" do
       before :each do
-        @params[:reservation][:reserve_start_date] = format_usa_date(@price_policy.expire_date + 1.day)
+        @params[:reservation][:reserve_start_date] = SpecDateHelper.format_usa_date(@price_policy.expire_date + 1.day)
         @price_group_product.update(reservation_window: 365)
         sign_in @guest
         do_request
@@ -596,7 +594,7 @@ RSpec.describe ReservationsController do
         expect(assigns[:reservation].duration_mins).to eq(60)
       end
       it "should not lose the time" do
-        expect(assigns[:reservation].reserve_start_date).to eq(format_usa_date(Time.zone.now.to_date + 1.day))
+        expect(assigns[:reservation].reserve_start_date).to eq(SpecDateHelper.format_usa_date(Time.zone.now.to_date + 1.day))
         expect(assigns[:reservation].reserve_start_hour).to eq(9)
         expect(assigns[:reservation].reserve_start_min).to eq(0)
         expect(assigns[:reservation].reserve_start_meridian).to eq("am")
@@ -1133,10 +1131,10 @@ RSpec.describe ReservationsController do
       expect(assigns(:order_detail)).to eq(order_detail)
       expect(assigns(:instrument)).to eq(instrument)
       expect(assigns(:reservation)).to eq(reservation)
-      expect(format_usa_datetime(assigns(:reservation).reserve_start_at))
-        .to eq(format_usa_datetime(reservation.earliest_possible.reserve_start_at))
-      expect(format_usa_datetime(assigns(:reservation).reserve_end_at))
-        .to eq(format_usa_datetime(reservation.earliest_possible.reserve_end_at))
+      expect(SpecDateHelper.format_usa_datetime(assigns(:reservation).reserve_start_at))
+        .to eq(SpecDateHelper.format_usa_datetime(reservation.earliest_possible.reserve_start_at))
+      expect(SpecDateHelper.format_usa_datetime(assigns(:reservation).reserve_end_at))
+        .to eq(SpecDateHelper.format_usa_datetime(reservation.earliest_possible.reserve_end_at))
       is_expected.to set_flash
       assert_redirected_to reservations_status_path(status: "upcoming")
     end
@@ -1166,8 +1164,8 @@ RSpec.describe ReservationsController do
         expect(assigns(:order_detail)).to eq(@order_detail)
         expect(assigns(:instrument)).to eq(@instrument)
         expect(assigns(:reservation)).to eq(@reservation)
-        expect(format_usa_datetime(assigns(:reservation).reserve_start_at)).to eq(format_usa_datetime(@orig_start_at))
-        expect(format_usa_datetime(assigns(:reservation).reserve_end_at)).to eq(format_usa_datetime(@orig_end_at))
+        expect(SpecDateHelper.format_usa_datetime(assigns(:reservation).reserve_start_at)).to eq(SpecDateHelper.format_usa_datetime(@orig_start_at))
+        expect(SpecDateHelper.format_usa_datetime(assigns(:reservation).reserve_end_at)).to eq(SpecDateHelper.format_usa_datetime(@orig_end_at))
         is_expected.to set_flash
         assert_redirected_to reservations_status_path(status: "upcoming")
       end

@@ -57,6 +57,7 @@ support_email: corum@umass.edu?subject=CORUM%20Support%20Request
 order_details:
   list_transformer: SplitAccounts::OrderDetailListTransformer
 
+# Make sure to update order_row_importers/headers keys in override/en.yml
 order_import_template_name: umass_corum_bulk_import_template.csv
 
 reservations:

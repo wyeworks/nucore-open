@@ -69,6 +69,7 @@ class FacilityJournalsController < ApplicationController
 
     if action.perform params[:journal_status]
       flash[:notice] = I18n.t "controllers.facility_journals.update.notice"
+      LogEvent.log(@pending_journal, :closed, session_user)
       redirect_to facility_journals_path(current_facility)
     else
       @order_details = OrderDetail.for_facility(current_facility).need_journal
@@ -102,7 +103,7 @@ class FacilityJournalsController < ApplicationController
     if @journal.errors.blank? && @journal.save
       @journal.create_spreadsheet if Journals::JournalFormat.exists?(:xls)
       flash[:notice] = I18n.t("controllers.facility_journals.create.notice")
-      LogEvent.log(@journal, :create, session_user)
+      LogEvent.log(@journal, :create, current_user)
       redirect_to facility_journals_path(current_facility)
     else
       flash_error_messages
@@ -113,6 +114,7 @@ class FacilityJournalsController < ApplicationController
   # GET /facilities/journals/:id
   def show
     @journal_rows = @journal.journal_rows
+    @log_event = LogEvent.where(loggable_type: "Journal", loggable_id: @journal.id, event_type: "closed").last
     respond_to do |format|
       format.html {}
 
