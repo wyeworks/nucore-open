@@ -52,7 +52,7 @@ email:
   fake:
     enabled: false
 
-support_email: ~
+support_email: corum@umass.edu?subject=CORUM%20Support%20Request
 
 order_details:
   list_transformer: SplitAccounts::OrderDetailListTransformer
