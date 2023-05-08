@@ -33,6 +33,7 @@ module UmassCorum
       ViewHook.add_hook("facility_accounts.show", "top_of_readonly_form", "facility_accounts/account_label")
       ::Reports::ExportRaw.transformers << "UmassCorum::AdminReports::ExportRawTransformer"
       SpeedTypeAccountBuilder.common_permitted_account_params << :api_speed_type_attributes
+      VoucherSplitAccountBuilder.common_permitted_account_params << :account_number
     end
 
     # Include migrations in main rails app
