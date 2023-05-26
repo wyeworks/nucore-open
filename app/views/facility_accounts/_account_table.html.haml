@@ -6,6 +6,7 @@
     %thead
       %tr
         %th= t(".th.account")
+        %th= t(".th.account_type")
         %th= t(".th.owner")
         %th= Account.human_attribute_name(:expires_at)
         - if current_facility.cross_facility?
@@ -14,6 +15,7 @@
       - @accounts.each do |account|
         %tr{ class: account.expired? ? "expired--js" : "" }
           %td= payment_source_link_or_text(account)
+          %td= account.type_string
           %td= account.owner_user.full_name if account.owner_user
           %td{ class: account.expired? ? "expired" : "" }
             = human_date(account.expires_at)

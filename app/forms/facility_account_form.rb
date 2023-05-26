@@ -26,8 +26,8 @@ class FacilityAccountForm < SimpleDelegator
     if facility_account.valid? && super
       true
     else
-      facility_account.errors.each do |k, error_messages|
-        errors.add(k, error_messages)
+      facility_account.errors.each do |error|
+        errors.add(error.attribute, error.type, message: error.message)
       end
       false
     end

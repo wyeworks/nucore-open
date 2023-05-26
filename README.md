@@ -248,14 +248,14 @@ docker build . -f Dockerfile.github-actions --build-arg NODE_VERSION=$NODE_VERSI
 docker image ls
 
 # Tag the image with the appropriate ruby version
-docker tag {IMAGE ID} nucoretxi/ruby-node-chrome-pack:2.7.5
+docker tag {IMAGE ID} nucoretxi/ruby-node-chrome-pack:3.1.1
 
 # Check the image was tagged correctly
 docker image ls
 
 # login and push the new tag
 docker login -u nucoretxi
-docker push nucoretxi/ruby-node-chrome-pack:2.7.5
+docker push nucoretxi/ruby-node-chrome-pack:3.1.1
 ```
 
 #### Parallel Tests
@@ -305,6 +305,12 @@ You can run specs in parallel during local development using the [`parallel_test
     ```
       bundle exec rake parallel:spec\['spec\/(?!features)'\]
     ```
+
+### Deprecation Toolkit
+
+It is possible to track deprecation warnings locally with [deprecation_toolkit](https://github.com/Shopify/deprecation_toolkit). If you set the `RECORD_DEPRECATIONS` environment variable, `deprecation_toolkit` will collect deprecation warnings in YAML files in the `deprecations/` folder when specs are run.
+
+`deprecation_toolkit` is configured in [`spec/deprecation_toolkit_env.rb`](spec/deprecation_toolkit_env.rb).
 
 ## Optional Modules
 

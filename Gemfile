@@ -12,6 +12,11 @@ gem "config"
 gem "bootsnap", require: false
 gem "puma"
 gem "rack-utf8_sanitizer"
+gem "net-smtp"
+gem "net-imap"
+gem "net-pop"
+gem "tzinfo-data"
+gem "webrick"
 
 ## database
 gem "mysql2"
@@ -28,7 +33,8 @@ gem "devise-security"
 
 ## models
 gem "aasm"
-gem "paperclip"
+# TODO: switch from Paperclip to ActiveStorage
+gem "kt-paperclip"
 gem "paper_trail"
 gem "nokogiri"
 gem "rails-observers"
@@ -42,7 +48,8 @@ gem "uglifier", "= 4.1.18" # 4.1.19 has an issue https://github.com/mishoo/Uglif
 gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
 gem "haml"
 gem "will_paginate"
-gem "dynamic_form"
+# TODO: Remove dynamic_form and use Rails to display errors
+gem "dynamic_form", git: "https://github.com/payrollhero/dynamic_form"
 # 5.0 has breaking changes based which need to be addressed before we can upgrade
 gem "ckeditor", "< 5"
 gem "jquery-rails"
@@ -60,6 +67,8 @@ gem "rubyzip"
 
 ## PDF generation
 gem "prawn-rails"
+# https://github.com/prawnpdf/prawn/issues/1195
+gem "matrix"
 
 ## other
 gem "delayed_job_active_record"
@@ -102,7 +111,7 @@ group :development do
   gem "ed25519", ">= 1.2", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
   gem "haml_lint", require: false
   gem "letter_opener"
-  gem "rubocop", "1.49.0", require: false
+  gem "rubocop", "1.51.0", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"
@@ -121,7 +130,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rspec-activejob"
   gem "teaspoon-jasmine"
-  gem "phantomjs"
+  gem "selenium-webdriver"
 end
 
 group :test do
@@ -130,10 +139,10 @@ group :test do
   gem "rails-controller-testing"
   gem "rspec-collection_matchers"
   gem "rspec_junit_formatter"
-  gem "selenium-webdriver"
   gem "shoulda-matchers"
   gem "single_test"
   gem "webmock"
+  gem "deprecation_toolkit"
 end
 
 group :staging, :production do

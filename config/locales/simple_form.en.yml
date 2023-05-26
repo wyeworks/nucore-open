@@ -15,6 +15,7 @@ en:
         ip: "IP Address"
         ip_port: "IP Port"
         outlet: "Device Outlet"
+        secondary_outlet: "Secondary Device Outlet"
         username: "Username"
         password: "Password"
     hints:

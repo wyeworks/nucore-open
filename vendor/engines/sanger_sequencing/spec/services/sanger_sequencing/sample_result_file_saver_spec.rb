@@ -50,7 +50,7 @@ RSpec.describe SangerSequencing::SampleResultFileSaver do
 
     it "does not save" do
       expect(saver.save).to be(false)
-      expect(saver.errors[:name]).to include("Filename already exists for this order")
+      expect(saver.errors).to be_added(:name, "Filename already exists for this order")
     end
   end
 

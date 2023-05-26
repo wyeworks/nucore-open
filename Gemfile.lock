@@ -1,3 +1,9 @@
+GIT
+  remote: https://github.com/payrollhero/dynamic_form
+  revision: 7f904005f6001a0b908dd879c34547b0e87a34e7
+  specs:
+    dynamic_form (1.1.4)
+
 PATH
   remote: vendor/engines/bulk_email
   specs:
@@ -127,7 +133,7 @@ GEM
       minitest (>= 5.1)
       tzinfo (~> 2.0)
       zeitwerk (~> 2.3)
-    addressable (2.8.1)
+    addressable (2.8.4)
       public_suffix (>= 2.0.2, < 6.0)
     airbrussh (1.4.1)
       sshkit (>= 1.6.1, != 1.7.0)
@@ -170,7 +176,7 @@ GEM
     capistrano-rvm (0.1.2)
       capistrano (~> 3.0)
       sshkit (~> 1.2)
-    capybara (3.36.0)
+    capybara (3.39.1)
       addressable
       matrix
       mini_mime (>= 0.1.3)
@@ -234,7 +240,7 @@ GEM
       execjs
       json
     concurrent-ruby (1.2.2)
-    config (4.1.0)
+    config (4.2.0)
       deep_merge (~> 1.2, >= 1.2.1)
       dry-validation (~> 1.0, >= 1.0.0)
     crack (0.4.5)
@@ -248,6 +254,8 @@ GEM
     delayed_job_active_record (4.1.7)
       activerecord (>= 3.0, < 8.0)
       delayed_job (>= 3.0, < 5)
+    deprecation_toolkit (2.0.3)
+      activesupport (>= 5.2)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     devise (4.9.2)
@@ -264,40 +272,39 @@ GEM
       devise (> 2.0.0)
       ruby-saml (~> 1.7)
     diff-lcs (1.5.0)
-    dry-configurable (0.13.0)
+    dry-configurable (1.0.1)
+      dry-core (~> 1.0, < 2)
+      zeitwerk (~> 2.6)
+    dry-core (1.0.0)
       concurrent-ruby (~> 1.0)
-      dry-core (~> 0.6)
-    dry-container (0.9.0)
+      zeitwerk (~> 2.6)
+    dry-inflector (1.0.0)
+    dry-initializer (3.1.1)
+    dry-logic (1.5.0)
       concurrent-ruby (~> 1.0)
-      dry-configurable (~> 0.13, >= 0.13.0)
-    dry-core (0.7.1)
+      dry-core (~> 1.0, < 2)
+      zeitwerk (~> 2.6)
+    dry-schema (1.13.1)
       concurrent-ruby (~> 1.0)
-    dry-inflector (0.2.1)
-    dry-initializer (3.0.4)
-    dry-logic (1.2.0)
-      concurrent-ruby (~> 1.0)
-      dry-core (~> 0.5, >= 0.5)
-    dry-schema (1.8.0)
-      concurrent-ruby (~> 1.0)
-      dry-configurable (~> 0.13, >= 0.13.0)
-      dry-core (~> 0.5, >= 0.5)
+      dry-configurable (~> 1.0, >= 1.0.1)
+      dry-core (~> 1.0, < 2)
       dry-initializer (~> 3.0)
-      dry-logic (~> 1.0)
-      dry-types (~> 1.5)
-    dry-types (1.5.1)
+      dry-logic (>= 1.4, < 2)
+      dry-types (>= 1.7, < 2)
+      zeitwerk (~> 2.6)
+    dry-types (1.7.1)
       concurrent-ruby (~> 1.0)
-      dry-container (~> 0.3)
-      dry-core (~> 0.5, >= 0.5)
-      dry-inflector (~> 0.1, >= 0.1.2)
-      dry-logic (~> 1.0, >= 1.0.2)
-    dry-validation (1.7.0)
+      dry-core (~> 1.0)
+      dry-inflector (~> 1.0)
+      dry-logic (~> 1.4)
+      zeitwerk (~> 2.6)
+    dry-validation (1.10.0)
       concurrent-ruby (~> 1.0)
-      dry-container (~> 0.7, >= 0.7.1)
-      dry-core (~> 0.5, >= 0.5)
+      dry-core (~> 1.0, < 2)
       dry-initializer (~> 3.0)
-      dry-schema (~> 1.8, >= 1.8.0)
+      dry-schema (>= 1.12, < 2)
+      zeitwerk (~> 2.6)
     dumb_delegator (1.0.0)
-    dynamic_form (1.1.4)
     ed25519 (1.3.0)
     erubi (1.12.0)
     execjs (2.8.1)
@@ -352,13 +359,19 @@ GEM
     jwt (2.7.0)
     kgio (2.11.4)
     kostya-sigar (2.0.10)
+    kt-paperclip (7.1.1)
+      activemodel (>= 4.2.0)
+      activesupport (>= 4.2.0)
+      marcel (~> 1.0.1)
+      mime-types
+      terrapin (~> 0.6.0)
     launchy (2.5.2)
       addressable (~> 2.8)
     letter_opener (1.8.1)
       launchy (>= 2.2, < 3)
-    loofah (2.20.0)
+    loofah (2.21.3)
       crass (~> 1.0.2)
-      nokogiri (>= 1.5.9)
+      nokogiri (>= 1.12.0)
     mail (2.8.1)
       mini_mime (>= 0.1.1)
       net-imap
@@ -370,16 +383,13 @@ GEM
     mime-types (3.4.1)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2023.0218.1)
-    mimemagic (0.3.10)
-      nokogiri (~> 1)
-      rake
     mini_magick (4.12.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.1)
+    mini_portile2 (2.8.2)
     minitest (5.18.0)
     momentjs-rails (2.29.4.1)
       railties (>= 3.1)
-    msgpack (1.7.0)
+    msgpack (1.7.1)
     mysql2 (0.5.5)
     nested_form_fields (0.8.4)
       coffee-rails (>= 3.2.1)
@@ -397,35 +407,28 @@ GEM
     net-smtp (0.3.3)
       net-protocol
     net-ssh (7.1.0)
-    nio4r (2.5.8)
-    nokogiri (1.13.10)
-      mini_portile2 (~> 2.8.0)
+    nio4r (2.5.9)
+    nokogiri (1.15.1)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.13.10-aarch64-linux)
+    nokogiri (1.15.1-aarch64-linux)
       racc (~> 1.4)
-    nokogiri (1.13.10-x86_64-linux)
+    nokogiri (1.15.1-x86_64-linux)
       racc (~> 1.4)
     numerizer (0.1.1)
-    oj (3.14.2)
+    oj (3.14.3)
     orm_adapter (0.5.0)
     paper_trail (13.0.0)
       activerecord (>= 5.2)
       request_store (~> 1.1)
-    paperclip (6.1.0)
-      activemodel (>= 4.2.0)
-      activesupport (>= 4.2.0)
-      mime-types
-      mimemagic (~> 0.3.0)
-      terrapin (~> 0.6.0)
-    parallel (1.22.1)
-    parallel_tests (3.13.0)
+    parallel (1.23.0)
+    parallel_tests (4.2.1)
       parallel
     paranoia (2.6.1)
       activerecord (>= 5.1, < 7.1)
-    parser (3.2.2.0)
+    parser (3.2.2.1)
       ast (~> 2.4.1)
     pdf-core (0.9.0)
-    phantomjs (2.1.1.0)
     prawn (2.4.0)
       pdf-core (~> 0.9.0)
       ttfunk (~> 1.7)
@@ -444,10 +447,10 @@ GEM
     pry-rails (0.3.9)
       pry (>= 0.10.4)
     public_suffix (5.0.1)
-    puma (6.2.1)
+    puma (6.2.2)
       nio4r (~> 2.0)
     racc (1.6.2)
-    rack (2.2.6.4)
+    rack (2.2.7)
     rack-test (2.1.0)
       rack (>= 1.3)
     rack-utf8_sanitizer (1.8.0)
@@ -491,7 +494,7 @@ GEM
     rb-inotify (0.10.1)
       ffi (~> 1.0)
     redcarpet (3.6.0)
-    regexp_parser (2.7.0)
+    regexp_parser (2.8.0)
     request_store (1.5.1)
       rack (>= 1.4)
     responders (3.1.0)
@@ -504,9 +507,9 @@ GEM
       rspec-mocks
     rspec-collection_matchers (1.2.0)
       rspec-expectations (>= 2.99.0.beta1)
-    rspec-core (3.12.1)
+    rspec-core (3.12.2)
       rspec-support (~> 3.12.0)
-    rspec-expectations (3.12.2)
+    rspec-expectations (3.12.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-mocks (3.12.5)
@@ -523,7 +526,7 @@ GEM
     rspec-support (3.12.0)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.49.0)
+    rubocop (1.51.0)
       json (~> 2.3)
       parallel (~> 1.10)
       parser (>= 3.2.0.0)
@@ -533,10 +536,12 @@ GEM
       rubocop-ast (>= 1.28.0, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.28.0)
+    rubocop-ast (1.28.1)
       parser (>= 3.2.1.0)
-    rubocop-capybara (2.17.1)
+    rubocop-capybara (2.18.0)
       rubocop (~> 1.41)
+    rubocop-factory_bot (2.23.1)
+      rubocop (~> 1.33)
     rubocop-performance (1.16.0)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
@@ -544,9 +549,10 @@ GEM
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
-    rubocop-rspec (2.19.0)
+    rubocop-rspec (2.22.0)
       rubocop (~> 1.33)
       rubocop-capybara (~> 2.17)
+      rubocop-factory_bot (~> 2.22)
     ruby-ole (1.2.12.2)
     ruby-progressbar (1.13.0)
     ruby-saml (1.15.0)
@@ -601,14 +607,14 @@ GEM
       railties (>= 3.2.5)
     teaspoon-jasmine (2.9.1)
       teaspoon (>= 1.0.0)
-    temple (0.10.0)
+    temple (0.10.1)
     terrapin (0.6.0)
       climate_control (>= 0.0.3, < 1.0)
     text_helpers (1.2.0)
       activesupport
       i18n (>= 0.6.8)
       redcarpet (>= 3.5.1)
-    thor (1.2.1)
+    thor (1.2.2)
     thread_safe (0.3.6)
     tilt (2.1.0)
     timeout (0.3.2)
@@ -616,6 +622,8 @@ GEM
     ttfunk (1.7.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
+    tzinfo-data (1.2023.3)
+      tzinfo (>= 1.0.0)
     uglifier (4.1.18)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (2.4.2)
@@ -639,6 +647,7 @@ GEM
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
+    webrick (1.8.1)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -647,7 +656,7 @@ GEM
     will_paginate (3.3.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.7)
+    zeitwerk (2.6.8)
 
 PLATFORMS
   aarch64-linux
@@ -681,10 +690,11 @@ DEPENDENCIES
   daemons
   dataprobe!
   delayed_job_active_record
+  deprecation_toolkit
   devise
   devise-encryptable
   devise-security
-  dynamic_form
+  dynamic_form!
   ed25519 (>= 1.2, < 2.0)
   eye-patch
   factory_bot_rails (< 5)
@@ -700,16 +710,19 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   jwt
+  kt-paperclip
   letter_opener
+  matrix
   mysql2
   nested_form_fields
+  net-imap
+  net-pop
+  net-smtp
   nokogiri
   oj
   paper_trail
-  paperclip
   parallel_tests
   paranoia
-  phantomjs
   prawn-rails
   projects!
   pry-byebug
@@ -725,7 +738,7 @@ DEPENDENCIES
   rspec-collection_matchers
   rspec-rails
   rspec_junit_formatter
-  rubocop (= 1.49.0)
+  rubocop (= 1.51.0)
   rubocop-performance
   rubocop-rails
   rubocop-rspec
@@ -745,17 +758,19 @@ DEPENDENCIES
   synaccess_connect
   teaspoon-jasmine
   text_helpers
+  tzinfo-data
   uglifier (= 4.1.18)
   umass_corum!
   unicorn
   vuejs-rails (~> 1.0.26)
   web-console
   webmock
+  webrick
   whenever
   will_paginate
 
 RUBY VERSION
-   ruby 2.6.6p146
+   ruby 3.1.1
 
 BUNDLED WITH
    2.3.11

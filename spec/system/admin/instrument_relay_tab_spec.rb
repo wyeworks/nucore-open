@@ -32,6 +32,7 @@ RSpec.describe "Instrument Relay Tab" do
         fill_in "relay_ip", with: "123.456.789"
         fill_in "relay_ip_port", with: "1234"
         fill_in "relay_outlet", with: "1"
+        fill_in "relay_secondary_outlet", with: "2"
         fill_in "relay_username", with: "root"
         fill_in "relay_password", with: "root"
         fill_in "relay_mac_address", with: "123abc456"
@@ -45,6 +46,7 @@ RSpec.describe "Instrument Relay Tab" do
         expect(instrument.relay.ip).to eq("123.456.789")
         expect(instrument.relay.ip_port).to eq(1234)
         expect(instrument.relay.outlet).to eq(1)
+        expect(instrument.relay.secondary_outlet).to eq(2)
         expect(instrument.relay.username).to eq("root")
         expect(instrument.relay.password).to eq("root")
         expect(instrument.relay.mac_address).to eq("123abc456")
@@ -95,6 +97,7 @@ RSpec.describe "Instrument Relay Tab" do
           fill_in "relay_ip", with: "123.456.789"
           fill_in "relay_ip_port", with: "1234"
           fill_in "relay_outlet", with: "1"
+          fill_in "relay_secondary_outlet", with: "2"
           fill_in "relay_username", with: "root"
           fill_in "relay_password", with: "root"
           fill_in "relay_mac_address", with: "123abc456"
@@ -108,6 +111,7 @@ RSpec.describe "Instrument Relay Tab" do
           expect(instrument.relay.ip).to eq("123.456.789")
           expect(instrument.relay.ip_port).to eq(1234)
           expect(instrument.relay.outlet).to eq(1)
+          expect(instrument.relay.secondary_outlet).to eq(2)
           expect(instrument.relay.username).to eq("root")
           expect(instrument.relay.password).to eq("root")
           expect(instrument.relay.mac_address).to eq("123abc456")
@@ -170,6 +174,7 @@ RSpec.describe "Instrument Relay Tab" do
       fill_in "relay_ip", with: "123.456.789"
       fill_in "relay_ip_port", with: "1234"
       fill_in "relay_outlet", with: "1"
+      fill_in "relay_secondary_outlet", with: "2"
       fill_in "relay_username", with: "root"
       fill_in "relay_password", with: "root"
       fill_in "relay_mac_address", with: "123abc456"
@@ -182,6 +187,7 @@ RSpec.describe "Instrument Relay Tab" do
       expect(instrument.relay.ip).to eq("123.456.789")
       expect(instrument.relay.ip_port).to eq(1234)
       expect(instrument.relay.outlet).to eq(1)
+      expect(instrument.relay.secondary_outlet).to eq(2)
       expect(instrument.relay.username).to eq("root")
       expect(instrument.relay.password).to eq("root")
       expect(instrument.relay.mac_address).to eq("123abc456")

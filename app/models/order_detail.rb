@@ -271,8 +271,9 @@ class OrderDetail < ApplicationRecord
   }
   scope :with_in_progress_reservation, -> { new_or_inprocess.with_reservation.merge(Reservation.relay_in_progress) }
 
-  scope :for_accounts, ->(accounts) { where("order_details.account_id in (?)", accounts) unless accounts.nil? || accounts.empty? }
-  scope :for_facilities, ->(facilities) { joins(:order).where("orders.facility_id in (?)", facilities) unless facilities.nil? || facilities.empty? }
+  scope :for_accounts, ->(accounts) { where("order_details.account_id in (?)", accounts) unless accounts.blank? }
+  scope :for_account_types, ->(account_types) { where("accounts.type in (?)", account_types) unless account_types.blank? }
+  scope :for_facilities, ->(facilities) { joins(:order).where("orders.facility_id in (?)", facilities) unless facilities.blank? }
   scope :for_products, ->(products) { where("order_details.product_id in (?)", products) unless products.blank? }
   scope :for_users, ->(user_ids) { joins(:order).where(orders: { user_id: user_ids }) unless user_ids.blank? }
   scope :for_owners, lambda { |owners|
@@ -582,6 +583,8 @@ class OrderDetail < ApplicationRecord
     templates = product.stored_files.template
     if templates.empty?
       nil # no file templates
+    elsif skip_missing_form?
+      nil # admin users can over-ride a missing template result file
     else
       # check for a template result
       results = stored_files.template_result
@@ -594,6 +597,8 @@ class OrderDetail < ApplicationRecord
       nil # no active survey
     elsif product.active_survey? && survey_completed?
       nil # active survey with a completed response set
+    elsif skip_missing_form?
+      nil # admin users can over-ride a missing response set
     else
       # active survey but no response
       "Please complete the online order form"

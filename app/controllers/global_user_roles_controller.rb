@@ -84,7 +84,7 @@ class GlobalUserRolesController < GlobalSettingsController
   end
 
   def translate(key, arguments = {})
-    I18n.t("global_user_roles.#{key}", arguments)
+    I18n.t("global_user_roles.#{key}", **arguments)
   end
 
 end

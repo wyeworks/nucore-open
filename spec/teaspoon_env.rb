@@ -83,12 +83,6 @@ Teaspoon.configure do |config|
 
   config.asset_paths += EngineManager.loaded_nucore_engines.map { |e| File.join(e.root, "spec/javascripts") }
 
-  config.suite :engines do |suite|
-    engine_names = EngineManager.loaded_nucore_engines.map { |e| e.name.underscore.split("/engine").first }
-    spec_paths = engine_names.map { |engine_name| "vendor/engines/#{engine_name}/spec/javascripts"}
-    suite.matcher = "{#{spec_paths.join(',')}}/**/*_spec.{js,js.coffee,coffee}"
-  end
-
   # CONSOLE RUNNER SPECIFIC
   #
   # These configuration directives are applicable only when running via the rake task or command line interface. These
@@ -107,14 +101,42 @@ Teaspoon.configure do |config|
   # PhantomJS: https://github.com/modeset/teaspoon/wiki/Using-PhantomJS
   # Selenium Webdriver: https://github.com/modeset/teaspoon/wiki/Using-Selenium-WebDriver
   # Capybara Webkit: https://github.com/modeset/teaspoon/wiki/Using-Capybara-Webkit
-  # config.driver = :phantomjs
+  config.driver = :selenium
 
   # Specify additional options for the driver.
   #
   # PhantomJS: https://github.com/modeset/teaspoon/wiki/Using-PhantomJS
   # Selenium Webdriver: https://github.com/modeset/teaspoon/wiki/Using-Selenium-WebDriver
   # Capybara Webkit: https://github.com/modeset/teaspoon/wiki/Using-Capybara-Webkit
-  # config.driver_options = nil
+  selenium_args = ["headless", "disable-gpu", "no-sandbox", "window-size=1366,768"]
+  selenium_options = { capabilities: Selenium::WebDriver::Chrome::Options.new(args: selenium_args) }
+
+  # Using a standalone chrome container for testing.
+  # https://github.com/jejacks0n/teaspoon/wiki/Using-docker-compose-with-selenium-standalone-%2A
+  if ENV['SELENIUM_HOST']
+    docker_ip = `hostname -i`.strip
+    config.server_host = docker_ip
+    config.server_port = ENV["TEST_APP_PORT"]
+
+    http_client = Selenium::WebDriver::Remote::Http::Default.new(read_timeout: 120)
+    selenium_options.merge!(
+      {
+        url: "http://#{ENV['SELENIUM_HOST']}:#{ENV['SELENIUM_PORT']}/wd/hub",
+        http_client: http_client,
+      }
+    )
+  end
+
+  config.driver_options = {
+    client_driver: :chrome,
+    selenium_options: selenium_options
+  }
+
+  config.suite :engines do |suite|
+    engine_names = EngineManager.loaded_nucore_engines.map { |e| e.name.underscore.split("/engine").first }
+    spec_paths = engine_names.map { |engine_name| "vendor/engines/#{engine_name}/spec/javascripts"}
+    suite.matcher = "{#{spec_paths.join(',')}}/**/*_spec.{js,js.coffee,coffee}"
+  end
 
   # Specify the timeout for the driver. Specs are expected to complete within this time frame or the run will be
   # considered a failure. This is to avoid issues that can arise where tests stall.

@@ -175,6 +175,7 @@ class User < ApplicationRecord
   def full_name(suspended_label: true)
     Users::NamePresenter.new(self, suspended_label: suspended_label).full_name
   end
+
   alias to_s full_name
   alias name full_name
 

@@ -9,7 +9,7 @@ class Reservations::DurationChangeValidations
   include ActiveModel::Validations
   include ActiveModel::Validations::Callbacks
 
-  attr_reader :reservation
+  attr_reader :reservation, :reserve_start_at, :duration_mins
   validate :start_time_not_changed, unless: -> { reservation.in_cart? }
   validate :duration_not_shortened, unless: -> { reservation.in_cart? }
 
@@ -20,8 +20,8 @@ class Reservations::DurationChangeValidations
   end
 
   def copy_errors!
-    errors.each do |field, message|
-      reservation.errors.add(field, message)
+    errors.each do |error|
+      reservation.errors.add(error.attribute, error.type, message: error.message)
     end
   end
 

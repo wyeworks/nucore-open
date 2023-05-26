@@ -15,7 +15,7 @@ class ViewHook
   # Best used through `render_view_hook` helper method
   def render_view_hook(view, placement, context, args = {})
     find(view, placement).each_with_object("".html_safe) do |partial, buffer|
-      buffer.safe_concat context.render(partial, args)
+      buffer.safe_concat context.render(partial, **args)
     end
   end
 

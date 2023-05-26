@@ -14,7 +14,7 @@
 %p= t(".intro")
 .box_no_fill.margin_bottom
   %h3= t(".order_form.head")
-  %p= text("file_uploads.product_survey.order_form.main", email: Settings.support_email)
+  %p= html("file_uploads.product_survey.order_form.main", email: Settings.support_email)
 
   = simple_form_for(@survey, url: create_product_survey_path(current_facility, @product.parameterize, @product), html: { multipart: true }) do |f|
     = f.error_messages

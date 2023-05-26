@@ -11,9 +11,12 @@ class  AccountValidator::AccountNumberFormatError < AccountValidator::ValidatorE
     self.errors = errors
   end
 
+  # TODO: test this in Northwestern
+  #
+  # This error is only raised in `NucsValidator#chart_string``
   def apply_to_model(model)
-    errors.messages.each do |attr, values|
-      model.errors.add(attr, values.first)
+    errors.each do |error|
+      model.errors.add(error.attribute, error.type, message: error.message)
     end
   end
 

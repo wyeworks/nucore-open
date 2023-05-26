@@ -12,7 +12,7 @@ RSpec.describe BulkEmail::Mailer do
     let(:args) { { body: body, subject: custom_subject, recipient: recipient, facility: nil } }
 
     before do
-      described_class.send_mail(args).deliver_now
+      described_class.send_mail(**args).deliver_now
     end
 
     it "has correct content", :aggregate_failures do

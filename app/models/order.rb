@@ -146,9 +146,9 @@ class Order < ApplicationRecord
 
       unless order_detail.update(updates)
         logger.debug "errors on #{order_detail.id}"
-        order_detail.errors.each do |attr, error|
-          logger.debug "#{attr} #{error}"
-          errors.add attr, error
+        order_detail.errors.each do |error|
+          logger.debug "#{error.attribute} #{error.message}"
+          errors.add error.attribute, error.message
         end
         next
       end

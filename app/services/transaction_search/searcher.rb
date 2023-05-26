@@ -10,6 +10,7 @@ module TransactionSearch
     cattr_accessor(:default_searchers) do
       [
         TransactionSearch::AccountSearcher,
+        TransactionSearch::AccountTypeSearcher,
         TransactionSearch::ProductSearcher,
         TransactionSearch::AccountOwnerSearcher,
         TransactionSearch::OrderedForSearcher,

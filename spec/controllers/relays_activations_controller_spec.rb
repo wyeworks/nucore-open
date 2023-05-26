@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe RelaysActivationsController do
   let(:instrument) { FactoryBot.create(:setup_instrument) }
   let(:user) { FactoryBot.create(:user, :facility_director, facility: instrument.facility) }
-  let(:relay) { build_stubbed(:relay) }
+  let(:relay) { build_stubbed(:relay, secondary_outlet: 2) }
 
   before do
     allow_any_instance_of(Instrument).to receive(:has_real_relay?).and_return true
