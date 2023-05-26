@@ -6,11 +6,11 @@ RSpec.describe "Creating a journal" do
   let(:admin) { FactoryBot.create(:user, :administrator) }
   let(:user) { FactoryBot.create(:user) }
   let(:facility) { FactoryBot.create(:facility) }
-  let(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user, facility: facility) }
+  let(:account) { FactoryBot.create(:speed_type_account, :with_account_owner, :with_api_speed_type, owner: user, facility: facility) }
   let!(:reviewed_order_detail) { place_and_complete_item_order(user, facility, account, true) }
   let!(:unreviewed_order_detail) { place_and_complete_item_order(user, facility, account) }
   let(:expiry_date) { 1.year.ago }
-  let(:expired_payment_source) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user, expires_at: expiry_date, facility: facility) }
+  let(:expired_payment_source) { FactoryBot.create(:speed_type_account, :with_account_owner, owner: user, expires_at: expiry_date, facility: facility) }
   let!(:problem_order_detail) { place_and_complete_item_order(user, facility, expired_payment_source, true) }
 
   before do
@@ -124,6 +124,7 @@ RSpec.describe "Creating a journal" do
         end
 
         it "has a 90 day and journal creation reminder pop up" do
+          check "order_detail_ids_"
           click_button "Create"
           expect(page).to have_content "90-Day Justification"
           click_link "OK"
