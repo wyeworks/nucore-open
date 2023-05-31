@@ -1,4 +1,4 @@
-FROM ruby:2.6.6 as base
+FROM ruby:3.1.1 as base
 
 WORKDIR /app
 ENV BUNDLE_PATH /gems

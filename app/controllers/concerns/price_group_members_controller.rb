@@ -59,7 +59,7 @@ module PriceGroupMembersController
 
   def set_flash(kind, action, arguments = {})
     flash[kind] =
-      I18n.t("controllers.#{controller_name}.#{action}.#{kind}", arguments)
+      I18n.t("controllers.#{controller_name}.#{action}.#{kind}", **arguments)
   end
 
   def load_price_group_and_ability!

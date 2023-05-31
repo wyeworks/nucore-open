@@ -57,8 +57,7 @@ module LdapAuthentication
   def self.load_config_from_file
     config_file_path = Rails.root.join("config", "ldap.yml")
     parsed = ERB.new(File.read(config_file_path)).result
-    # safe_load(yaml, whitelist_classes, whitelist_symbols, allow_aliases)
-    yaml = YAML.safe_load(parsed, [], [], true) || {}
+    yaml = YAML.safe_load(parsed, permitted_classes: [], permitted_symbols: [], aliases: true) || {}
     yaml.fetch(Rails.env, {})
   end
 

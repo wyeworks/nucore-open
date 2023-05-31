@@ -5,9 +5,9 @@
 - if @earliest_possible
   .modal-body
     - if @formatted_dates[:start_date] == @formatted_dates[:end_date]
-      %p= t('reservations.moving_up.confirm_same_day', @formatted_dates)
+      %p= t('reservations.moving_up.confirm_same_day', **@formatted_dates)
     - else
-      %p= t('reservations.moving_up.confirm_different_day', @formatted_dates)
+      %p= t('reservations.moving_up.confirm_different_day', **@formatted_dates)
 
     %p= t('reservations.moving_up.confirm')
   .modal-footer

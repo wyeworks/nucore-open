@@ -44,9 +44,14 @@ class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
 
   # Pass an array if you want arguments, [:full_name, suspended_label: true]
   def option_elems(label_method, value_method)
+    # Ruby 3 requires us to be explicit about keyword arguments, so creating a
+    # hash of potential keyword arguments to double splat in the method call
+    label_options = label_method.is_a?(Array) ? label_method[1] : {}
+    label_symbol = label_method.is_a?(Array) ? label_method[0] : label_method
+
     collection.map do |i|
       [
-        i.public_send(*label_method),
+        i.public_send(label_symbol, **label_options),
         i.public_send(*value_method),
         data_for_item(i),
       ]

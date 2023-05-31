@@ -21,12 +21,14 @@
     %thead
       %tr
         %th= Account.model_name.human
+        %th= t("views.facility_accounts.account_table.account_type")
         %th.centered= Facility.model_name.human
         %th= Account.human_attribute_name(:expires_at)
     %tbody.user_accounts
       - @accounts.each do |account|
         %tr{ class: account.expired? ? "expired--js" : "" }
           %td= payment_source_link_or_text(account)
+          %td= account.type_string
           %td= account.per_facility? ? account.facilities.join(", ") :  content_tag(:i, t("shared.all"))
           %td{ class: account.expired? ? "expired" : "" }
             = human_date(account.expires_at)

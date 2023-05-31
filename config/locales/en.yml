@@ -204,6 +204,7 @@ en:
       foot: "* Includes transactions for which the user has not been sent a !statement_downcase! or that are in the user review period."
       th:
         account: "Payment Source"
+        account_type: "Type"
         owner: "Owner"
     accounts:
       th:
@@ -296,6 +297,11 @@ en:
       header: Journal Date Reminder
       proceed: Create Journal
       cancel: Edit Journal Date
+    journal_90day_modal:
+      header: 90-Day Justification
+      body: Please complete and file “90-Day Rule Justifications” for transactions fulfilled more than 90 days in the past.
+      cancel_button: Cancel
+      submit_button: OK
     index:
       head:
         pending: Pending Journal
@@ -570,7 +576,7 @@ en:
       form:
         recalculate_price: "Recalculate pricing"
       warnings:
-        missing_form_button: Add missing form
+        missing_form_button: Skip missing form
 
   product_access_groups:
     index:
@@ -960,7 +966,7 @@ en:
       intro: "You may provide an Online Order Form and/or an Order File Template.  If provided, the user must complete one before placing an order."
       order_form:
         head: "Online Order Form"
-        main: "Please contact !app_name! Support (%{email}) for more information."
+        main: "Please contact !app_name! Support ([%{email}](mailto:%{email})) for more information."
         notice: "No Online Order Forms have been added."
       download_form:
         head: "Downloadable Order Form"
@@ -1157,6 +1163,7 @@ en:
         instruct:
           ip_port: "Leave blank unless your device is on a non-standard port"
           outlet: "e.g. 1 or 2"
+          secondary_outlet: "turned on/off in sync with the outlet above (Synaccess only)"
       reservation:
         instruct:
           reserve_interval: "The minutes of an hour on which a reservation is allowed to begin (e.g. if 5 reservations can be scheduled every 5 minutes)"

@@ -67,7 +67,12 @@ class Orders::ItemAdder
 
   def add_timed_services(product, quantity, duration, attributes)
     Array.new(quantity) do
-      create_order_detail({ product: product, quantity: duration || DEFAULT_TIMED_SERVICES_DURATION }.merge(attributes))
+      order_detail_parameters = {
+        product: product,
+        quantity: duration || DEFAULT_TIMED_SERVICES_DURATION,
+      }.merge(attributes)
+
+      create_order_detail(**order_detail_parameters)
     end
   end
 

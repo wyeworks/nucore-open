@@ -1,5 +1,6 @@
 - if @earliest_journal_date
   = content_for :head_content do
+    = javascript_include_tag "facility_journal"
     :javascript
       $(function(){
         var today = "#{l(Time.zone.now.to_date, format: :usa)}";
@@ -18,6 +19,8 @@
 
 - if @journal_creation_reminder
   = render "journal_creation_modal", reminder_message: @journal_creation_reminder.message
+= render "journal_90day_modal"
+
 = render "shared/transactions/headers"
 = content_for :h1 do
   = current_facility
@@ -39,3 +42,5 @@
   = render "shared/reconcile_footnote"
 - if @order_details.none?
   %p.alert.alert-info= t(".no_transactions")
+
+

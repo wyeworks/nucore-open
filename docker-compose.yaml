@@ -5,6 +5,11 @@ services:
   app:
     build:
       context: .
+      # To debug Github Actions CI issues:
+      # 1) Replace `target: develop` with `dockerfile: Dockerfile.github-actions`,
+      # 2) Update the `command:` (for example `command: cd app && bundle install && bundle exec rake teaspoon`)
+      # 3) Run `docker compose build app`.
+      # 4) Re-run as needed ot attach to the container to run other debugging commands
       target: develop
     command: bash -c "bundle install && bundle exec rails s -p 3000 -b '0.0.0.0'"
     ports:
@@ -12,7 +17,7 @@ services:
       - "4000:4000"
     depends_on:
       - db
-      - chrome
+      - selenium
     volumes:
       - .:/app
       - gem_cache:/gems
@@ -21,7 +26,13 @@ services:
       - MYSQL_USER=root
       - MYSQL_PASSWORD=root
       - SMTP_HOST=mailcatcher
+      - SELENIUM_HOST=selenium
+      - SELENIUM_PORT=4444
+      - TEST_APP_PORT=3000
       - DOCKER=true
+      # Uncomment below to run teaspoon tests
+      # - RAILS_ENV=test
+      # - TEASPOON_RAILS_ENV=test
     tty: true
     stdin_open: true
   delayed_job:
@@ -65,8 +76,8 @@ services:
       - gem_cache:/gems
     tty: true
     stdin_open: true
-  # For system-tests
-  chrome:
+  # For system-tests and teaspoon
+  selenium:
     image: selenium/standalone-chrome-debug
     logging:
       driver: none

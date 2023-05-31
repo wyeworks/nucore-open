@@ -4,9 +4,6 @@ description: "Install dependencies and create the database"
 runs:
   using: "composite"
   steps:
-    # Install dependencies for mysql2 gem
-    - run: apt-get update && apt-get -y install libmysqlclient-dev
-      shell: bash
     - name: cache gems
       uses: actions/cache@v3
       with:

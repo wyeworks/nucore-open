@@ -60,6 +60,7 @@ class InstrumentRelaysController < ApplicationController
           .permit(:ip,
                   :ip_port,
                   :outlet,
+                  :secondary_outlet,
                   :username,
                   :password,
                   :type,

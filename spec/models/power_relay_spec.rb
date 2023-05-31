@@ -15,6 +15,7 @@ RSpec.describe SomeRelay do
   it { is_expected.to validate_presence_of :username }
   it { is_expected.to validate_presence_of :password }
   it { is_expected.not_to validate_presence_of :auto_logout_minutes }
+  it { is_expected.not_to validate_presence_of :secondary_outlet }
 
   describe "outlet range" do
     let(:relay) { SomeRelay.new(ip: "123", username: "nucore", password: "password") }
@@ -51,6 +52,16 @@ RSpec.describe SomeRelay do
 
     it "allows a nil value" do
       relay.ip_port = nil
+
+      expect(relay).to be_valid
+    end
+  end
+
+  describe "secondary outlet" do
+    let(:relay) { SomeRelay.new(ip: "123", username: "nucore", password: "password", outlet: 1, instrument_id: 1) }
+
+    it "allows a secondary outlet allocation" do
+      relay.secondary_outlet = 3
 
       expect(relay).to be_valid
     end

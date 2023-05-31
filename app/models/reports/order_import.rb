@@ -19,9 +19,9 @@ class Reports::OrderImport
     when @order_import.result.blank?
       I18n.t("reports.order_import.blank")
     when @order_import.result.failed?
-      I18n.t(failure_message_key, @order_import.result.to_h)
+      I18n.t(failure_message_key, **@order_import.result.to_h)
     else
-      I18n.t("reports.order_import.success", @order_import.result.to_h)
+      I18n.t("reports.order_import.success", **@order_import.result.to_h)
     end
   end
 

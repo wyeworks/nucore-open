@@ -19,10 +19,7 @@
             &nbsp;
         .span2
           .submit
-            - if @journal_creation_reminder
-              = link_to text(@order_detail_action, scope: "admin.transaction_search.actions"), "#journal-creation-reminder", class: "btn btn-primary", data: { toggle: "modal" }
-            - else
-              = submit_tag text(@order_detail_action, scope: "admin.transaction_search.actions"), class: "btn btn-primary"
+            = submit_tag text(@order_detail_action, scope: "admin.transaction_search.actions"), class: "btn btn-primary"
       .row
         .span12= render "shared/transactions/table_inside", order_details: order_details
   - else

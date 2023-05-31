@@ -9,7 +9,7 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
     let(:order) { create(:purchased_order, product: item) }
     let(:order_detail) { order.order_details.first }
     let(:account) { order.account }
-    let(:searcher) { described_class.new(TransactionSearch::AccountSearcher, TransactionSearch::DateRangeSearcher) }
+    let(:searcher) { described_class.new(TransactionSearch::AccountSearcher, TransactionSearch::DateRangeSearcher, TransactionSearch::AccountTypeSearcher) }
     let(:scope) { OrderDetail.all.joins(:order) }
     before do
       order_detail.to_complete!
@@ -35,6 +35,28 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       it "does not find it with a different account" do
         result = searcher.search(scope, accounts: [account.id + 1])
         expect(result.order_details).to be_empty
+      end
+    end
+
+    describe "account type searching" do
+      it "can search by the account type" do
+        result = searcher.search(scope, account_types: [account.type])
+        expect(result.order_details).to include(order_detail)
+      end
+
+      it "can search by the account type with a blank" do
+        result = searcher.search(scope, account_types: ["", account.type])
+        expect(result.order_details).to include(order_detail)
+      end
+
+      it "does not find it with a different account type" do
+        result = searcher.search(scope, account_types: ["FakeAccountType"])
+        expect(result.order_details).to be_empty
+      end
+
+      it "returns the scope when passed nil" do
+        result = searcher.search(scope, account_types: nil)
+        expect(result.order_details).to match_array scope
       end
     end
 

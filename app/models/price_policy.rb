@@ -200,7 +200,7 @@ class PricePolicy < ApplicationRecord
 
   def subsidy_less_than_rate
     return unless defined?(rate_field)
-    errors.add subsidy_field, :subsidy_greater_than_cost if self[rate_field] && self[subsidy_field] && self[subsidy_field] > self[rate_field]
+    errors.add(subsidy_field, :subsidy_greater_than_cost) if self[rate_field] && self[subsidy_field] && self[subsidy_field] > self[rate_field]
   end
 
   def truncate_existing_policies

@@ -7,7 +7,7 @@ $headerBackgroundColor: white;
 $headerBackgroundColorHighLight: darken($headerBackgroundColor, 5%);
 
 /* Login, Cart, etc Links */
-$usernavColor: $navbarLinkColor;
+$usernavColor: darken($navbarLinkColor, 3%);
 $usernavColorHover: $navbarLinkColorHover;
 $usernavDividerColor: transparentize($grayDark, 0.95);
 

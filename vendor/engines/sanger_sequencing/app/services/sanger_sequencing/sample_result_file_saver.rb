@@ -76,8 +76,8 @@ module SangerSequencing
     end
 
     def copy_errors_from_file
-      stored_file.errors.each do |k, v|
-        errors.add(k, v)
+      stored_file.errors.each do |error|
+        errors.add(error.attribute, error.type, message: error.message)
       end
     end
 

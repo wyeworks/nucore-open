@@ -2,6 +2,7 @@ en:
   views:
     facility_accounts:
       account_table:
+        account_type: Type
         all: "!views.accounts.index.all!"
         show_text: Show Expired Accounts
         hide_text: Hide Expired Accounts

@@ -26,13 +26,7 @@ class TransactionsController < ApplicationController
       },
     )
 
-    @search = TransactionSearch::Searcher.new(TransactionSearch::FacilitySearcher,
-                                              TransactionSearch::AccountSearcher,
-                                              TransactionSearch::ProductSearcher,
-                                              TransactionSearch::DateRangeSearcher,
-                                              TransactionSearch::OrderStatusSearcher,
-                                              TransactionSearch::AccountOwnerSearcher,
-                                              TransactionSearch::OrderedForSearcher).search(order_details, @search_form)
+    @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: true)
     @date_range_field = @search_form.date_params[:field]
     @order_details = @search.order_details.reorder(sort_clause)
 
@@ -47,13 +41,8 @@ class TransactionsController < ApplicationController
     order_details = current_user.administered_order_details.in_review
 
     @search_form = TransactionSearch::SearchForm.new(params[:search])
-    @search = TransactionSearch::Searcher.new(TransactionSearch::FacilitySearcher,
-                                              TransactionSearch::AccountSearcher,
-                                              TransactionSearch::ProductSearcher,
-                                              TransactionSearch::DateRangeSearcher,
-                                              TransactionSearch::OrderStatusSearcher,
-                                              TransactionSearch::AccountOwnerSearcher,
-                                              TransactionSearch::OrderedForSearcher).search(order_details, @search_form)
+    @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: true)
+
     @date_range_field = @search_form.date_params[:field]
     params[:sort] = "date_range_field" if params[:sort].nil? # set default sort column
     @order_details = @search.order_details.reorder(sort_clause)

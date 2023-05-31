@@ -18,6 +18,8 @@
       hint: text("instruments.instrument_fields.relay.instruct.ip_port")
     = f.input :outlet, required: true,
       hint: text("instruments.instrument_fields.relay.instruct.outlet")
+    = f.input :secondary_outlet,
+      hint: text("instruments.instrument_fields.relay.instruct.secondary_outlet")
     = f.input :username, required: true
     = f.input :password, as: :string, required: true
     = f.input :auto_logout do

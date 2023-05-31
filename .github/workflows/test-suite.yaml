@@ -4,7 +4,7 @@ name: Run test suite
 on:
   push:
     branches:
-      - "*"
+      - "**"
 
 jobs:
   run-rspec-engines:
@@ -19,7 +19,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
-      image: nucoretxi/ruby-node-chrome-pack:2.6.6
+      image: nucoretxi/ruby-node-chrome-pack:3.1.1
       credentials:
         username: nucoretxi
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
@@ -33,7 +33,7 @@ jobs:
       - uses: ./.github/actions
 
       - name: Glob match
-        uses: tj-actions/glob@v16
+        uses: tj-actions/glob@v17
         id: glob
         with:
           files: |
@@ -60,7 +60,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
-      image: nucoretxi/ruby-node-chrome-pack:2.6.6
+      image: nucoretxi/ruby-node-chrome-pack:3.1.1
       credentials:
         username: nucoretxi
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
@@ -85,17 +85,26 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+      selenium:
+        image: selenium/standalone-chrome:latest
+        ports:
+          - 4444:4444
+        options: --shm-size="2g"
     container:
-      image: nucoretxi/ruby-node-chrome-pack:2.6.6
+      image: nucoretxi/ruby-node-chrome-pack:3.1.1
       credentials:
         username: nucoretxi
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
     env:
+      TEASPOON_RAILS_ENV: test
       RAILS_ENV: test
       MYSQL_HOST: mariadb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
+      SELENIUM_HOST: selenium
+      SELENIUM_PORT: 4444
+      TEST_APP_PORT: 3000
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions
-      - run: bundle exec teaspoon
+      - run: bundle exec rake teaspoon

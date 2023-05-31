@@ -40,9 +40,9 @@ class TrainingRequestsController < ApplicationController
   # DELETE /facilities/:facility_id/training_requests/:id
   def destroy
     if @training_request.destroy
-      flash[:notice] = t("training_requests.destroy.success", flash_arguments)
+      flash[:notice] = t("training_requests.destroy.success", **flash_arguments)
     else
-      flash[:error] = t("training_requests.destroy.failure", flash_arguments)
+      flash[:error] = t("training_requests.destroy.failure", **flash_arguments)
     end
     redirect_to facility_training_requests_path(current_facility)
   end

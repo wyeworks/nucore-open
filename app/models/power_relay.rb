@@ -12,6 +12,7 @@ module PowerRelay
     validates_presence_of :ip, :outlet, :username, :password
     validates :auto_logout_minutes, presence: { if: :auto_logout }
     validates :outlet, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: MAXIMUM_OUTLETS }
+    validates :secondary_outlet, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: MAXIMUM_OUTLETS, allow_nil: true }
     validates :ip_port, numericality: { only_integer: true, greater_than: 0, allow_nil: true }
   end
 
@@ -28,16 +29,42 @@ module PowerRelay
     options
   end
 
+  # Returns:
+  # boolean - The new on/off status of the outlet (and secondary outlet, if configured).
   def toggle(status)
     log_power_relay_connection(:toggle) do
-      relay_connection.toggle(outlet, status)
+      toggled_status = relay_connection.toggle(outlet, status)
+      if secondary_outlet
+        secondary_toggled_status = relay_connection.toggle(secondary_outlet, status)
+        handle_mismatch_status(status, toggled_status) if toggled_status != secondary_toggled_status
+      end
+      toggled_status
     end
   end
 
+  # Returns:
+  # boolean - The current on/off status of the outlet (and secondary outlet, if configured).
   def query_status
     log_power_relay_connection(:status) do
-      relay_connection.status(outlet)
+      relay_status = relay_connection.status(outlet)
+      if secondary_outlet
+        secondary_outlet_status = relay_connection.status(secondary_outlet)
+        handle_mismatch_status if relay_status != secondary_outlet_status
+      end
+      relay_status
     end
+  end
+
+  # Returns:
+  # string - an error
+  def handle_mismatch_status(requested_status=nil, primary_status=nil)
+    event = if requested_status.present?
+      "toggling relays (#{requested_status ? "on" : "off"})"
+    else
+      "querying status"
+    end
+    msg = "Outlet statuses don't match after #{event} for relay #{id} - outlet #{outlet} is (#{primary_status ? "on" : "off"}), outlet #{secondary_outlet} is (#{primary_status ? "off" : "on"})"
+    Rollbar.error(msg, relay: id)
   end
 
   def relay_connection
@@ -55,6 +82,7 @@ module PowerRelay
       ip,
       ip_port,
       outlet,
+      secondary_outlet,
       # Include username/password so that if one of the shared schedule is right and
       # the other is wrong we still do multiple queries: one gets an error and the other
       # doesn't.
@@ -85,6 +113,7 @@ module PowerRelay
         host: host,
         ip_port: ip_port,
         outlet: outlet,
+        secondary_outlet: secondary_outlet,
       }.merge(connection_options.except(:username, :password))
     }
   end

@@ -48,7 +48,7 @@ RSpec.describe "Managing an order detail" do
     end
   end
 
-  describe "order detail with missing fomr" do
+  describe "order detail with missing form" do
     let(:service) { create(:setup_service, :with_order_form, facility: facility) }
     let!(:order) { create(:purchased_order, product: service) }
     let(:order_detail) { order.order_details.first }
@@ -60,10 +60,32 @@ RSpec.describe "Managing an order detail" do
       visit manage_facility_order_order_detail_path(facility, order, order_detail)
     end
 
-    it "allows admins to add missing form" do
+    it "allows admins to skip missing form" do
       expect(order_detail).to be_missing_form
-      click_button "Add missing form"
-      expect(page).to have_content("Placeholder file successfully added")
+      click_button "Skip missing form"
+      expect(page).to have_content("Missing form successfully skipped")
+      order_detail.reload
+      expect(order_detail).not_to be_missing_form
+    end
+  end
+
+  describe "order detail with missing survey" do
+    let(:service) { create(:setup_service, facility: facility) }
+    let!(:order) { create(:purchased_order, product: service) }
+    let(:order_detail) { order.order_details.first }
+
+    before do
+      order_detail.change_status!(OrderStatus.in_process)
+      order_detail.change_status!(OrderStatus.complete)
+      order_detail.reviewed_at = 1.day.ago
+      allow_any_instance_of(Service).to receive(:active_survey?).and_return(true)
+      visit manage_facility_order_order_detail_path(facility, order, order_detail)
+    end
+
+    it "allows admins to skip missing form" do
+      expect(order_detail).to be_missing_form
+      click_button "Skip missing form"
+      expect(page).to have_content("Missing form successfully skipped")
       order_detail.reload
       expect(order_detail).not_to be_missing_form
     end
