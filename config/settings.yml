@@ -55,7 +55,7 @@ email:
 # support_email_subject is only applied on the Support header link
 # this will be encoded by the mail_to helper, so use standard spaces (not %20)
 support_email: corum@umass.edu
-support_email_subject: CORUM Support Request
+support_email_subject: "CORUM Support Request"
 
 order_details:
   list_transformer: SplitAccounts::OrderDetailListTransformer
