@@ -47,6 +47,10 @@ validator:
     factory: # relative to Rails.root
     helper: 'spec/validator_helper' # relative to Rails.root
 
+testing:
+  account_factory: speed_type_account
+  api_account_factory: api_speed_type
+
 email:
   from: "corum@umass.edu"
   fake:

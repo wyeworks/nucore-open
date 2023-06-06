@@ -6,11 +6,12 @@ RSpec.describe "Creating a journal" do
   let(:admin) { FactoryBot.create(:user, :administrator) }
   let(:user) { FactoryBot.create(:user) }
   let(:facility) { FactoryBot.create(:facility) }
-  let(:account) { FactoryBot.create(:speed_type_account, :with_account_owner, :with_api_speed_type, owner: user, facility: facility) }
+  let(:account) { FactoryBot.create(Settings.testing.account_factory.to_sym, :with_account_owner, owner: user, facilities: [facility]) }
+  let!(:account_api_record) { create(Settings.testing.api_account_factory.to_sym, account_number: account.account_number) } if Settings.testing.api_account_factory
   let!(:reviewed_order_detail) { place_and_complete_item_order(user, facility, account, true) }
   let!(:unreviewed_order_detail) { place_and_complete_item_order(user, facility, account) }
   let(:expiry_date) { 1.year.ago }
-  let(:expired_payment_source) { FactoryBot.create(:speed_type_account, :with_account_owner, owner: user, expires_at: expiry_date, facility: facility) }
+  let(:expired_payment_source) { FactoryBot.create(Settings.testing.account_factory.to_sym, :with_account_owner, owner: user, expires_at: expiry_date, facilities: [facility]) }
   let!(:problem_order_detail) { place_and_complete_item_order(user, facility, expired_payment_source, true) }
 
   before do

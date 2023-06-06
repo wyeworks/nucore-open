@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :api_speed_type, class: UmassCorum::ApiSpeedType do
     # If we build more than 1 million over the course of the test suite, ensure
     # that we still only use six characters so the format is valid
-    sequence(:speed_type, "000000") { |n| format('%06d', (n % 1_000_000)) }
+    sequence(:speed_type) { |n| format('%06d', (n % 1_000_000)) }
 
     # These attributes are based on an actual response from the API
     active { true }
@@ -19,6 +19,14 @@ FactoryBot.define do
     project_desc { "National Multiple Sclerosis So" }
     project_id { "S17110000000118" }
     date_added { 1.year.ago }
+
+    transient do
+      account_number { nil }
+    end
+
+    after(:build) do |account, evaluator|
+      account.speed_type = evaluator.account_number if evaluator.account_number
+    end
 
     # Recharge speed types do not have project/grant info attached to them
     trait :recharge do

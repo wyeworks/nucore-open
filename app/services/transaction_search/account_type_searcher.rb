@@ -5,7 +5,7 @@ module TransactionSearch
   class AccountTypeSearcher < BaseSearcher
 
     def options
-      Account.config.account_types.map(&:constantize)
+      Account.config.creation_enabled_types.map(&:constantize)
     end
 
     def search(params)
