@@ -85,6 +85,7 @@ multiple places. See the following section for more information.
 
 * A factory configured in settings (e.g. `AccountValidator::ValidatorFactory`, `StatementPdfFactory`
 * Adding a module onto an existing class in the engine initializer (see `vendor/engines/c2po/lib/c2po.rb`)
+* A spec configured in settings (e.g. `spec/system/creating_a_journal_spec.rb`)
 * Other things we haven't thought of
 
 ## Extending views within engines

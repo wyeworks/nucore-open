@@ -50,6 +50,10 @@ class AccountConfig
     @creation_disabled_types ||= []
   end
 
+  def creation_enabled_types
+    account_types - creation_disabled_types
+  end
+
   def creation_enabled?(type)
     type.to_s.in?(account_types - creation_disabled_types)
   end

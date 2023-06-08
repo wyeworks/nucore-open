@@ -145,4 +145,11 @@ RSpec.describe AccountConfig, type: :model do
     end
   end
 
+  describe "#creation_enabled_types" do
+    it "does not included disabled account types" do
+      expect(instance.creation_enabled_types).to include("NufsAccount")
+      instance.creation_disabled_types << "NufsAccount"
+      expect(instance.creation_enabled_types).not_to include("NufsAccount")
+    end
+  end
 end
