@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const journalDate = new Date(journalDateInput.value);
   
     const dateDiff = moment(journalDate).diff(earliestFulfilledAtDate, "days");
-  
-    if (dateDiff >= 90) {
+    const atLeastOneRowChecked = typeof(earliestFulfilledAtDate) === "object" && earliestFulfilledAtDate !== null
+    if (atLeastOneRowChecked && dateDiff >= 90) {
       event.preventDefault();
       $("#journal-date-popup").modal("show");
     }

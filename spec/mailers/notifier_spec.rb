@@ -30,6 +30,10 @@ RSpec.describe Notifier do
         expect(email.subject).to include(I18n.t(".Statement"))
         expect(email_html).to include(statement.account.to_s)
         expect(email_text).to include(statement.account.to_s)
+
+        if Settings.email.invoice_bcc
+          expect(email.bcc).to eq [Settings.email.invoice_bcc]
+        end
       end
     end
   end
