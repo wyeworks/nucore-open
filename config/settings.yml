@@ -53,7 +53,7 @@ testing:
 
 email:
   from: "corum@umass.edu"
-  invoice_bcc: 'corum@umass.edu'
+  invoice_bcc: ~
   fake:
     enabled: false
 
