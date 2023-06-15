@@ -59,7 +59,7 @@ class Notifier < ActionMailer::Base
     @account = args[:account]
     @statement = args[:statement]
     attach_statement_pdf
-    send_nucore_mail args[:user].email, text("views.notifier.statement.subject", facility: @facility)
+    send_nucore_mail args[:user].email, text("views.notifier.statement.subject", facility: @facility), nil, Settings.email.invoice_bcc
   end
 
   def order_detail_status_changed(order_detail)
@@ -85,8 +85,8 @@ class Notifier < ActionMailer::Base
     @statement_pdf ||= StatementPdfFactory.instance(@statement)
   end
 
-  def send_nucore_mail(to, subject, template_name = nil)
-    mail(subject: subject, to: to, template_name: template_name)
+  def send_nucore_mail(to, subject, template_name = nil, bcc = nil)
+    mail(subject: subject, to: to, template_name: template_name, bcc: bcc)
   end
 
 end
