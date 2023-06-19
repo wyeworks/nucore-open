@@ -12,7 +12,7 @@ module UmassCorum
       User.send :include, UmassCorum::UserExtension
       UsersController.user_form_class = UmassCorum::UserForm
       EngineManager.allow_view_overrides!("umass_corum")
-      Account.config.account_types << "UmassCorum::VoucherSplitAccount"
+      Account.config.account_types.concat(["UmassCorum::VoucherSplitAccount", "UmassCorum::SubsidyAccount"])
       Account.config.statement_account_types << "UmassCorum::VoucherSplitAccount"
       Account.config.account_types.unshift(UmassCorum::SpeedTypeAccount.name)
       Account.config.account_types.uniq!
@@ -22,6 +22,7 @@ module UmassCorum
       OrderStatus.ordered_root_statuses << "MIVP Pending"
       FacilityFacilityAccountsController.form_class = UmassCorum::FacilityAccountForm
       Journal.send(:include, UmassCorum::JournalExtension)
+      ::AbilityExtensionManager.extensions << "UmassCorum::AbilityExtension"
       ViewHook.add_hook("admin.shared.sidenav_global", "after", "umass_corum/shared/admin_reports_tab")
       ViewHook.add_hook("devise.sessions.new", "login_screen_announcement", "umass_corum/sessions/request_login")
       ViewHook.add_hook("devise.sessions.new", "login_form", "umass_corum/sessions/login_form")

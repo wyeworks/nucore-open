@@ -7,6 +7,9 @@ en:
       umass_corum/speed_type_account:
         one: SpeedType
         other: SpeedTypes
+      umass_corum/subsidy_account:
+        one: Subsidy Account
+        other: Subsidy Accounts
     errors:
       models:
         facility_account:
@@ -33,12 +36,16 @@ en:
         mivp_percent: MIVP Percent
       api_speed_type:
         date_added_admin_override: Date added
+      subsidy_account:
+        account_number: Funding Source
     hints:
       voucher_split_account:
         account_number: |
           MIVP A-[voucher number], ex: "MIVP A-123"
         description: |
           MA company name - no extra wording of any kind, no slashes
+      subsidy_account:
+        account_number: Used for journaling
 
   views:
     facility_accounts:
