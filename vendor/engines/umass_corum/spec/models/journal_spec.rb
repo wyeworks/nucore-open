@@ -69,6 +69,28 @@ RSpec.describe Journal do
     )
   end
 
+  describe "with SubsidyAccount" do
+    let(:account) do
+      create(:subsidy_account, :with_account_owner,
+             account_number: create(
+               :speed_type_account,
+               :with_account_owner,
+               account_number: api_speed_type.speed_type,
+               owner: owner).account_number
+      )
+    end
+
+    let(:funding_source) { account.funding_source }
+
+    it "creates the charge row with the funding source account number and account owner's name" do
+      expect { journal.save! }.to change(JournalRow, :count).by(2)
+      expect(JournalRow.first).to have_attributes(
+        speed_type: funding_source.account_number,
+        description: account.owner.user.last_first_name,
+      )
+    end
+  end
+
   describe "with a second order detail" do
     let(:order2) { create(:purchased_order, product: product, account: account) }
     let(:order_details) { order.order_details + order2.order_details }

@@ -14,9 +14,10 @@ module UmassCorum
       EngineManager.allow_view_overrides!("umass_corum")
       Account.config.account_types.concat(["UmassCorum::VoucherSplitAccount", "UmassCorum::SubsidyAccount"])
       Account.config.statement_account_types << "UmassCorum::VoucherSplitAccount"
-      Account.config.account_types.unshift(UmassCorum::SpeedTypeAccount.name)
+      Account.config.account_types.unshift("UmassCorum::SpeedTypeAccount")
       Account.config.account_types.uniq!
-      Account.config.journal_account_types.unshift(UmassCorum::SpeedTypeAccount.name)
+      Account.config.journal_account_types << "UmassCorum::SubsidyAccount"
+      Account.config.journal_account_types.unshift("UmassCorum::SpeedTypeAccount")
       Account.config.journal_account_types.uniq!
       Account.config.creation_disabled_types << "NufsAccount"
       OrderStatus.ordered_root_statuses << "MIVP Pending"
