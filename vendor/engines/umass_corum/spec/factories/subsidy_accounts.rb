@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :subsidy_account, parent: :account, class: UmassCorum::SubsidyAccount do
     type { "UmassCorum::SubsidyAccount" }
     expires_at { 5.years.from_now }
+    description "Subsidy account description"
     account_number { nil }
 
     callback(:after_build) do |account, _evaluator|

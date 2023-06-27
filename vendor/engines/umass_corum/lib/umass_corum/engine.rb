@@ -23,6 +23,7 @@ module UmassCorum
       OrderStatus.ordered_root_statuses << "MIVP Pending"
       FacilityFacilityAccountsController.form_class = UmassCorum::FacilityAccountForm
       Journal.send(:include, UmassCorum::JournalExtension)
+      NotificationSender.send(:prepend, UmassCorum::NotificationSenderExtension)
       ::AbilityExtensionManager.extensions << "UmassCorum::AbilityExtension"
       ViewHook.add_hook("admin.shared.sidenav_global", "after", "umass_corum/shared/admin_reports_tab")
       ViewHook.add_hook("devise.sessions.new", "login_screen_announcement", "umass_corum/sessions/request_login")

@@ -56,7 +56,6 @@ class Account < ApplicationRecord
 
   validate { errors.add(:base, :missing_owner) if missing_owner? }
 
-  delegate :administrators, to: :account_users
   delegate :global?, :per_facility?, to: :class
 
   # The @@config class variable stores account configuration details via a
@@ -129,6 +128,20 @@ class Account < ApplicationRecord
 
   def <=>(other)
     account_number <=> other.account_number
+  end
+
+  # A collection of users to be notified when transaction notifications are sent.
+  def administrators
+    account_users.administrators
+  end
+
+  # If desired, override this in a subclass with the user who auto-disputes
+  # transactions of the given account type. For example, this happens with
+  # UMass' UmassCorum::SubsidyAccount. If this is not set, transactions 
+  # will not be auto-disputed. If the method returns a truthy value, all
+  # transactions for this account will be auto-disputed.
+  def auto_dispute_by
+    nil
   end
 
   def owner_user_name

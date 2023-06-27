@@ -25,6 +25,7 @@ class NotificationSender
     OrderDetail.transaction do
       account_ids_to_notify # needs to be memoized before order_details get reviewed
       mark_order_details_as_reviewed
+      auto_dispute_order_details
       notify_accounts
     end
   end
@@ -42,6 +43,13 @@ class NotificationSender
                                   .need_notification
                                   .where_ids_in(@order_detail_ids)
                                   .includes(:product, :order, :price_policy, :reservation)
+  end
+
+  # If desired, override this method to automatically dispute order details,
+  # during NotificationSender#perform. As an example, UMass overrides this 
+  # method in UmassCorum::NotificationSenderExtension
+  def auto_dispute_order_details
+    nil
   end
 
   private

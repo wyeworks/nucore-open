@@ -16,6 +16,18 @@ module UmassCorum
     def funding_source
       UmassCorum::SpeedTypeAccount.find_by(account_number: account_number)
     end
+
+    def auto_dispute_by
+      funding_source_owner
+    end
+
+    def funding_source_owner
+      funding_source.owner.user
+    end
+
+    def administrators
+      (super.to_a + [funding_source_owner]).uniq
+    end
   end
 
 end
