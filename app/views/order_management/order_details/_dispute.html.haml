@@ -5,7 +5,7 @@
     = banner_label      @order_detail, :dispute_reason
     = banner_date_label @order_detail, :dispute_resolved_at
     = banner_label      @order_detail, :dispute_resolved_reason
-- else
+- elsif !@order_detail.global_admin_must_resolve? || current_ability.can?(:manage, :all)
   .span10
     .well.well-small
       %h4= t('facility_order_details.edit.head.resolve_dispute')
@@ -19,3 +19,5 @@
           = f.input :dispute_reason, as: :readonly
         .span4
           = f.input :dispute_resolved_reason, input_html: { class: 'note' }
+- else
+  = t("order_details.notices.global_admin_must_resolve.alert")

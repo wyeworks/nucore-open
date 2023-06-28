@@ -46,7 +46,7 @@ class NotificationSender
   end
 
   # If desired, override this method to automatically dispute order details,
-  # during NotificationSender#perform. As an example, UMass overrides this 
+  # during NotificationSender#perform. As an example, UMass overrides this
   # method in UmassCorum::NotificationSenderExtension
   def auto_dispute_order_details
     nil

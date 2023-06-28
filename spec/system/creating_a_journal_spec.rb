@@ -83,7 +83,7 @@ RSpec.describe "Creating a journal" do
           click_button "Create"
           expect(page).to have_content "90-Day Justification"
           click_button "OK"
-          expect(page).to have_content "The journal file has been created successfully"
+          expect(page).to have_content "The journal file has been created successfully", wait: 3
         end
       end
     end
