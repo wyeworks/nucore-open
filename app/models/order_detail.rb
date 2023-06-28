@@ -756,6 +756,10 @@ class OrderDetail < ApplicationRecord
     dispute_at.present? && dispute_resolved_at.nil? && !canceled?
   end
 
+  def global_admin_must_resolve?
+    account&.global_admin_must_resolve_disputes?
+  end
+
   def in_review?
     reviewed_at.try(:future?) && !in_dispute?
   end

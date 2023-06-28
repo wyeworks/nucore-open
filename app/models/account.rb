@@ -135,13 +135,18 @@ class Account < ApplicationRecord
     account_users.administrators
   end
 
-  # If desired, override this in a subclass with the user who auto-disputes
+  # If desired, override this in a subclass with the `User` who auto-disputes
   # transactions of the given account type. For example, this happens with
-  # UMass' UmassCorum::SubsidyAccount. If this is not set, transactions 
-  # will not be auto-disputed. If the method returns a truthy value, all
+  # UMass' UmassCorum::SubsidyAccount. If this is not set, transactions
+  # will not be auto-disputed. If the method returns a truthy value &
+  # NotificationSender#auto_dispute_order_details is implemented, all
   # transactions for this account will be auto-disputed.
   def auto_dispute_by
     nil
+  end
+  
+  def global_admin_must_resolve_disputes?
+    false
   end
 
   def owner_user_name

@@ -39,6 +39,12 @@ RSpec.describe OrderDetailNoticePresenter do
       expect(presenter.badges_to_html).to have_badge("In Dispute")
     end
 
+    it "shows in dispute" do
+      allow(order_detail).to receive(:in_dispute?).and_return(true)
+      allow(order_detail).to receive(:global_admin_must_resolve?).and_return(true)
+      expect(presenter.badges_to_html).to have_badge("In Dispute (Admin)")
+    end
+
     it "shows can reconcile" do
       allow(order_detail).to receive(:can_reconcile_journaled?).and_return(true)
       expect(presenter.badges_to_html).to have_badge("Can Reconcile")

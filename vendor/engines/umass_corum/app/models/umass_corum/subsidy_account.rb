@@ -25,6 +25,10 @@ module UmassCorum
       funding_source.owner.user
     end
 
+    def global_admin_must_resolve_disputes?
+      true
+    end
+
     def administrators
       (super.to_a + [funding_source_owner]).uniq
     end

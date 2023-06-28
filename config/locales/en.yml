@@ -758,6 +758,9 @@ en:
       in_dispute:
         badge: In Dispute
         alert: 'To resolve the dispute, please make the necessary changes, including entering in Resolution Notes, and click "Resolve Dispute".'
+      global_admin_must_resolve:
+        badge: In Dispute (Admin)
+        alert: Only global administrators can resolve disputes with this account type.
       in_open_journal:
         badge: Open Journal
         alert: You are unable to edit all aspects of this order because it is part of a pending journal. Please close the journal first.
