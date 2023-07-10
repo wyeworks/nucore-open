@@ -377,7 +377,24 @@ namespace :demo do
       )
     end
 
-    subsidy_account = UmassCorum::SubsidyAccount.find_by(account_number: speed_type_account.account_number) || FactoryBot.create(:subsidy_account, :with_account_owner, account_number: speed_type_account.account_number)
+    [173276, 173289, 181597].each_with_index do |speed_type, index|
+      next if UmassCorum::SpeedTypeAccount.find_by(account_number: speed_type)
+
+      FactoryBot.create(
+        :speed_type_account,
+        :with_account_owner,
+        :with_api_speed_type,
+        account_number: speed_type,
+        description: "Funding source #{index + 1}"
+      )
+
+      FactoryBot.create(
+        :subsidy_account,
+        :with_account_owner,
+        account_number: speed_type,
+        description: "Subsidy account #{index + 1}"
+      )
+    end
 
     # create split account if the feature is enabled
     if SettingsHelper.feature_on?(:split_accounts)

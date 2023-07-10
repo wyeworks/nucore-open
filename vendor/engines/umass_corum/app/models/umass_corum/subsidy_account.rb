@@ -4,6 +4,10 @@ module UmassCorum
 
   class SubsidyAccount < ::Account
 
+    def self.funding_source_accounts
+      UmassCorum::SpeedTypeAccount.where(account_number: funding_source_account_numbers)
+    end
+
     def self.funding_source_account_numbers
       [173276, 173289, 181597]
     end

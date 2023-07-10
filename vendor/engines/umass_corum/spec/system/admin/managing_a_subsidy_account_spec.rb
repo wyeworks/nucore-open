@@ -5,6 +5,15 @@ RSpec.describe "Managing a subsidy account" do
   let!(:user) { create(:user) }
   let(:facility_admin) { create(:user, :facility_administrator, facility:) }
   let(:administrator) { create(:user, :administrator) }
+  let!(:funding_source) do
+    create(
+      :speed_type_account,
+      :with_account_owner,
+      :with_api_speed_type,
+      account_number: 173276,
+      description: "Funding source"
+    )
+  end
 
   describe "creating a subsidy account" do
     context "global admin" do
@@ -19,7 +28,7 @@ RSpec.describe "Managing a subsidy account" do
 
       it "can create a subsidy account" do
         fill_in "Description", with: "Test subsidy"
-        select "173276", from: "Funding Source"
+        select funding_source.to_s, from: "Funding Source"
         click_button "Create"
         expect(page).to have_content "Account was successfully created."
       end
