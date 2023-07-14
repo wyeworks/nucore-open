@@ -4,26 +4,32 @@ module UsersHelper
 
   # Builds the text for the creation success flash notice
   def creation_success_flash_text(user, facility)
-    user_type = user.authenticated_locally? ? "external" : "internal"
-
     html(
-      "controllers.users.create.success.#{user_type}",
+      "controllers.users.create.success.#{translation_key(user)}",
       user_info: "#{user.full_name} (#{user.username})",
       user_link: facility_user_path(facility, user),
-      price_group: price_group_name(user_type),
+      price_group: price_group_name(user),
       app_name: t("app_name"),
-      support_contact: support_contact
+      support_contact:
     )
   end
 
-	private
+  private
 
-  def price_group_name(user_type)
-    if user_type == "internal"
-      Settings.price_group.name.base
+  def translation_key(user)
+    name = price_group_name(user)
+
+    if name == PriceGroup.base.name
+      "internal"
+    elsif name == PriceGroup.external.name
+      "external"
     else
-      Settings.price_group.name.external
+      name.parameterize(separator: '_')
     end
+  end
+
+  def price_group_name(user)
+    user.default_price_group.name
   end
 
   def support_contact
@@ -34,4 +40,5 @@ module UsersHelper
       " at [#{email}](mailto:#{email})"
     end
   end
+
 end

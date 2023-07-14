@@ -21,13 +21,13 @@ RSpec.describe UsersHelper, controller: true do
       end
 
       it "gives text for external user" do
-        test_string = "<p>The default Price Group for this user is &ldquo;#{Settings.price_group.name.external}.&rdquo; Please notify #{t('app_name')} support at <a href=\"mailto:help@example.com\">help@example.com</a> if this user is entitled to internal&nbsp;rates.</p>"
+        test_string = "<p>The default Price Group for this user is &ldquo;#{PriceGroup.external.name}.&rdquo; Please notify #{t('app_name')} support at <a href=\"mailto:help@example.com\">help@example.com</a> if this user is entitled to internal&nbsp;rates.</p>"
 
         expect(creation_success_flash_text(external_user, facility)).to include test_string
       end
 
       it "gives text for internal user" do
-        test_string = "<p>The default Price Group for this user is &ldquo;#{Settings.price_group.name.base}&rdquo; (internal rates). Please notify #{t('app_name')} support at <a href=\"mailto:help@example.com\">help@example.com</a> if this is an external&nbsp;user.</p>"
+        test_string = "<p>The default Price Group for this user is &ldquo;#{PriceGroup.base.name}&rdquo; (internal rates). Please notify #{t('app_name')} support at <a href=\"mailto:help@example.com\">help@example.com</a> if this is an external&nbsp;user.</p>"
 
         expect(creation_success_flash_text(internal_user, facility)).to include test_string
       end
@@ -39,13 +39,13 @@ RSpec.describe UsersHelper, controller: true do
       end
 
       it "gives text for external user" do
-        test_string = "<p>The default Price Group for this user is &ldquo;#{Settings.price_group.name.external}.&rdquo; Please notify #{t('app_name')} support if this user is entitled to internal&nbsp;rates.</p>"
+        test_string = "<p>The default Price Group for this user is &ldquo;#{PriceGroup.external.name}.&rdquo; Please notify #{t('app_name')} support if this user is entitled to internal&nbsp;rates.</p>"
 
         expect(creation_success_flash_text(external_user, facility)).to include test_string
       end
 
       it "gives text for internal user" do
-        test_string = "<p>The default Price Group for this user is &ldquo;#{Settings.price_group.name.base}&rdquo; (internal rates). Please notify #{t('app_name')} support if this is an external&nbsp;user.</p>"
+        test_string = "<p>The default Price Group for this user is &ldquo;#{PriceGroup.base.name}&rdquo; (internal rates). Please notify #{t('app_name')} support if this is an external&nbsp;user.</p>"
 
         expect(creation_success_flash_text(internal_user, facility)).to include test_string
       end
