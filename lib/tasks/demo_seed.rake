@@ -52,24 +52,18 @@ namespace :demo do
       end
     end
 
-    order = 1
     pgnu = pgex = nil
 
     Settings.price_group.name.to_hash.each do |k, v|
-      price_group = PriceGroup.find_or_initialize_by(name: v) do |pg|
-        pg.is_internal = (k == :base || k == :cancer_center)
-        pg.display_order = order
-      end
-
-      price_group.save(validate: false) # override facility validator
+      price_group = PriceGroup.setup_global(
+        name: v, is_internal: (k == :base || k == :cancer_center)
+      )
 
       if k == :base
         pgnu = price_group
       elsif k == :external
         pgex = price_group
       end
-
-      order += 1
     end
 
     recharge_api_speed_type = UmassCorum::ApiSpeedType.find_by(speed_type: "123123") || FactoryBot.create(:api_speed_type, speed_type: "123123") # UMass Speed Types are 6 digits

@@ -76,6 +76,7 @@ class OrderDetails::ParamUpdater
       if order_status_id && order_status_id.to_i != @order_detail.order_status_id
         change_order_status(order_status_id, @options[:cancel_fee]) || raise(ActiveRecord::Rollback)
       else
+        @order_detail.update_completed_fulfilled_at(@editing_user)
         @order_detail.save_as_user(@editing_user) || raise(ActiveRecord::Rollback)
       end
     end

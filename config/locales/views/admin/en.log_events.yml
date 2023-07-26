@@ -32,6 +32,7 @@ en:
           problem_queue: Order added to problem queue %{cause}
           price_change: Order's price was manually changed
           resolve_from_problem_queue: Problem order resolved
+          updated_fulfilled_at: Fulfilled date updated on completed order
         product_user:
           create: User added to access list
           delete: User removed from access list

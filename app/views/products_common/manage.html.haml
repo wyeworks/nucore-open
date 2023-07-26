@@ -22,6 +22,7 @@
     = render_view_hook("after_facility_account", { f: f })
 
     = f.input :initial_order_status
+    = f.input :billing_mode
     = f.input :requires_approval
     - if f.object.requires_approval?
       = f.input :allows_training_requests

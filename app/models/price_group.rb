@@ -33,6 +33,14 @@ class PriceGroup < ApplicationRecord
     @external ||= globals.find_by(name: Settings.price_group.name.external)
   end
 
+  # Create a global price group, if it does not exist, and setup all the
+  # schedule rules with price group discounts for the price group.
+  def self.setup_global(name:, is_internal: false, admin_editable: true, discount_percent: 0, display_order: nil)
+    price_group = find_or_create_global(name:, is_internal:, admin_editable:, display_order:)
+    price_group.setup_schedule_rules(discount_percent:)
+    price_group
+  end
+
   def is_not_global?
     !global?
   end
@@ -78,4 +86,50 @@ class PriceGroup < ApplicationRecord
     !is_internal?
   end
 
+  # Creates price group discounts for this price group, if they do not exist
+  def setup_schedule_rules(discount_percent: 0)
+    ScheduleRule.all.each do |schedule_rule|
+      schedule_price_groups = schedule_rule.price_group_discounts.map(&:price_group)
+
+      if schedule_price_groups.include? self
+        puts("price_group_discount for #{self} already exists for schedule rule #{schedule_rule.id}") unless Rails.env.test?
+        next
+      end
+
+      schedule_rule.price_group_discounts.create(
+        price_group: self,
+        discount_percent:
+      )
+
+      puts("Created price_group_discount for #{self} and schedule rule #{schedule_rule.id}") unless Rails.env.test?
+    end
+  end
+
+  private
+
+  # Find a global price group by name, or create it if it does not exist
+  def self.find_or_create_global(name:, display_order:, is_internal: false, admin_editable: true)
+    global_price_groups = PriceGroup.globals
+    found_price_group = global_price_groups.find_by(name:)
+
+    if found_price_group
+      puts("Global price group '#{name}' already exists.") unless Rails.env.test?
+
+      found_price_group
+    else
+      pg = PriceGroup.new(
+        name:,
+        is_internal:,
+        admin_editable:,
+        facility_id: nil,
+        display_order: display_order || (global_price_groups.count + 1)
+      )
+
+      pg.save(validate: false)
+
+      puts("Created global price group '#{name}'") unless Rails.env.test?
+
+      pg
+    end
+  end
 end

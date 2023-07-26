@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 namespace :schedule_rule do
-  desc "Adds PriceGroupDiscounts for global price groups to every schedule rule"
+  # This task is useful for switching a school over to PriceGroupDiscounts. If a
+  # school is already using price group discounts on all its schedule rules, this
+  # task will do nothing
+  desc "Adds PriceGroupDiscounts for existing global price groups to every schedule rule"
   task add_price_group_discounts: :environment do |_t, _args|
     price_groups = PriceGroup.globals
 

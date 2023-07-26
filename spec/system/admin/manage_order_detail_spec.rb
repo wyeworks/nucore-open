@@ -10,11 +10,12 @@ RSpec.describe "Managing an order detail" do
   let(:reservation) { create(:purchased_reservation, product: instrument) }
   let(:order_detail) { reservation.order_detail }
   let(:order) { reservation.order }
-
+  let(:administrator) { create(:user, :administrator) }
   let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:logged_in_user) { director }
 
   before do
-    login_as director
+    login_as logged_in_user
   end
 
   describe "editing an order detail with a reservation" do
@@ -243,6 +244,41 @@ RSpec.describe "Managing an order detail" do
     it "cannot do anything", :js do
       expect(page).to have_field("Reconciliation Note", with: "I was reconciled", disabled: true)
       expect(page).not_to have_button("Save")
+    end
+  end
+
+  describe "updating fulfilled date of a completed order" do
+    before do
+      order_detail.update!(state: :complete, fulfilled_at: 3.days.ago, order_status: OrderStatus.complete)
+      visit manage_facility_order_order_detail_path(facility, order, order_detail)
+    end
+
+    context "as global admin" do
+      let(:logged_in_user) { administrator }
+
+      before do
+        expect(page).to have_selector("input[name='order_detail[fulfilled_at]']")
+        fill_in "order_detail[fulfilled_at]", with: DateTime.now.to_s
+        click_button "Save"
+        expect(page).to have_content("The order was successfully updated.")
+        click_link order_detail.to_s
+      end
+
+      it "can update the fulfilled at date" do
+        expect(page).to have_content SpecDateHelper.format_usa_date(Date.today)
+      end
+
+      it "logs fulfilled at date updates" do
+        expect(LogEvent).to be_exists(loggable: order_detail, event_type: :updated_fulfilled_at, user: logged_in_user)
+      end
+    end
+
+    context "as non-global admin" do
+      let(:logged_in_user) { director }
+
+      it "cannont update the fulfilled at date" do
+        expect(page).to have_no_selector("input[name='order_detail[fulfilled_at]']")
+      end
     end
   end
 end

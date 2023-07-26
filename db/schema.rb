@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_05_19_154410) do
+ActiveRecord::Schema.define(version: 2023_07_24_224847) do
 
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -664,6 +664,7 @@ ActiveRecord::Schema.define(version: 2023_05_19_154410) do
     t.string "tablet_circuit_number"
     t.integer "tablet_port_number"
     t.text "tablet_location_description"
+    t.string "billing_mode", default: "Default", null: false
     t.index ["dashboard_token"], name: "index_products_on_dashboard_token"
     t.index ["facility_account_id"], name: "fk_facility_accounts"
     t.index ["facility_id"], name: "fk_rails_0c9fa1afbe"
