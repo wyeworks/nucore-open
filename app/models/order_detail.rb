@@ -927,6 +927,17 @@ class OrderDetail < ApplicationRecord
     ActiveModel::Type::Boolean.new.cast(resolve_dispute)
   end
 
+  # This is called by OrderDetails::ParamUpdater#update_param_attributes and
+  # handles (and logs) the case when `fulfilled_at` is updated on an
+  # OrderDetail that is complete.
+  def update_completed_fulfilled_at(editing_user)
+    return unless complete? && manual_fulfilled_at_time
+    return if manual_fulfilled_at_time.beginning_of_day == fulfilled_at.beginning_of_day
+
+    make_complete
+    LogEvent.log(self, :updated_fulfilled_at, editing_user)
+  end
+
   private
 
   # Is there enough information to move an associated order to complete/problem?

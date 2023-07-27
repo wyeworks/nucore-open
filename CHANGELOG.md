@@ -4,6 +4,14 @@ Because we use squash and merge, you should be able to see the changes by lookin
 at the [commit log](https://github.com/tablexi/nucore-open/commits/master). However, we have begun keeping track of breaking changes
 or optional rake tasks.
 
+### Addition of `PriceGroupDiscount` ([#3397](https://github.com/tablexi/nucore-open/pull/3397), [#3594](https://github.com/tablexi/nucore-open/pull/3594))
+
+Rather than one discount being set on a schedule rule, each global price group has its own discount (`PriceGroupDiscount`) for each schedule rule.
+
+When transitioning a school to use `PriceGroupDiscount`s, the `schedule_rule:add_price_group_discounts` rake task should be run, which adds `PriceGroupDiscount`s for every global price group to every schedule rule.
+
+When adding a new global price group, the `price_group:add_global_price_group` rake task should be run. This creates the global price group and sets up `PriceGroupDiscount`s for it for every schedule rule.
+
 ### Addition of `facility_tile_list: true` feature flag ([#3193](https://github.com/tablexi/nucore-open/pull/3193))
 
 Schools that have set the feature flag `facility_tile_list: false` are not affected by this change.

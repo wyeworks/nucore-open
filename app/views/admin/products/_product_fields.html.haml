@@ -5,6 +5,9 @@
 
   = f.input :initial_order_status_id, collection: OrderStatus.initial_statuses(current_facility).collect {|cf| [cf.name_with_level, cf.id] }, hint: text("hints.initial_order_status"), include_blank: false
 
+  - if @product.id.blank? && current_user.administrator?
+    = f.input :billing_mode, collection: Product.billing_modes, include_blank: false, hint: text("hints.billing_mode")
+
   %fieldset.well
     = f.input :requires_approval, as: :boolean, label: false, inline_label: text("hints.requires_approval"), input_html: { data: { disables: ".#{f.object.class.model_name.to_s.underscore}_allows_training_requests, .instrument_restrict_holiday_access"} }
     - if SettingsHelper.feature_on?(:training_requests)

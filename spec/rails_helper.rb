@@ -132,9 +132,8 @@ RSpec.configure do |config|
     Affiliate.OTHER
 
     # initialize price groups
-    @nupg = PriceGroup.find_or_create_by(name: Settings.price_group.name.base, is_internal: true, display_order: 1)
-    @nupg.save(validate: false)
-    PriceGroup.find_or_create_by(name: Settings.price_group.name.external, is_internal: false, display_order: 3).save(validate: false)
+    @nupg = PriceGroup.setup_global(name: Settings.price_group.name.base, is_internal: true, display_order: 1)
+    PriceGroup.setup_global(name: Settings.price_group.name.external, is_internal: false, display_order: 3)
 
     # Because many specs rely on not crossing a fiscal year boundary we lock the
     # time globally. Rails's `travel_to` helper does not work well with nesting, so

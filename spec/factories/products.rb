@@ -8,6 +8,7 @@ FactoryBot.define do
     is_archived { false }
     is_hidden { false }
     initial_order_status_id { FactoryBot.create(:order_status, name: "New").id }
+    billing_mode { Product.billing_modes.first }
 
     after(:build) do |product|
       if product.facility_account.present?

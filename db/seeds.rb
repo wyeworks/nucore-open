@@ -21,13 +21,17 @@ Affiliate.OTHER
 PriceGroup.reset_column_information
 
 [
-  PriceGroup.create_with(is_internal: true, admin_editable: false).find_or_initialize_by(name: Settings.price_group.name.base),
-  PriceGroup.create_with(is_internal: true, admin_editable: true).find_or_initialize_by(name: Settings.price_group.name.cancer_center),
-  PriceGroup.create_with(is_internal: false, admin_editable: false).find_or_initialize_by(name: Settings.price_group.name.external),
-].each_with_index do |price_group, index|
-  next if price_group.name.blank? || price_group.persisted?
-  price_group.display_order = index + 1
-  price_group.save(validate: false)
+  { name: Settings.price_group.name.base, is_internal: true, admin_editable: false },
+  { name: Settings.price_group.name.cancer_center, is_internal: true, admin_editable: true },
+  { name: Settings.price_group.name.external, is_internal: false, admin_editable: false },
+].each do |pg_data|
+  next if pg_data[:name].blank?
+
+  PriceGroup.setup_global(
+    name: pg_data[:name],
+    is_internal: pg_data[:is_internal],
+    admin_editable: pg_data[:admin_editable]
+  )
 end
 
 UmassCorum::Engine.load_seed

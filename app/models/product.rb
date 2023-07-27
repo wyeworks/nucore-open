@@ -55,6 +55,11 @@ class Product < ApplicationRecord
     errors.add(:contact_email, text("errors.models.product.attributes.contact_email.required")) unless email.present?
   end
 
+  def self.billing_modes
+    ["Default", "Skip Review", "Nonbillable"]
+  end
+  validates :billing_mode, inclusion: Product.billing_modes
+
   scope :active, -> { where(is_archived: false, is_hidden: false) }
   scope :alphabetized, -> { order(Arel.sql("LOWER(products.name)")) }
   scope :archived, -> { where(is_archived: true) }
