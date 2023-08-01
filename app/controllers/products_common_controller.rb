@@ -104,7 +104,12 @@ class ProductsCommonController < ApplicationController
     params.require(:"#{singular_object_name}").permit(*permitted_params)
   end
 
+  # Needs to be over-rideable from engines
   def permitted_params
+    default_permitted_params
+  end
+
+  def default_permitted_params
     [
       :name, :url_name, :contact_email, :description,
       :facility_account_id, :account, :initial_order_status_id,
