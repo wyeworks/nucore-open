@@ -6,7 +6,7 @@ PriceGroup.setup_global(
 )
 
 PriceGroup.setup_global(
-  name: "Other academic (UMass Affiliated)",
+  name: "Other academic (Non-UMass Affiliated)",
   is_internal: false,
   admin_editable: false,
   display_order: 3
