@@ -87,6 +87,19 @@ namespace :demo do
       example_item.facility_account_id = fa.id
     end
 
+    skip_review_item = Item.find_or_create_by!(url_name: "skip-review-example-item") do |example_item|
+      example_item.facility_id = facility.id
+      example_item.account = Settings.accounts.product_default
+      example_item.name = "Skip Review Example Item"
+      example_item.description = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>"
+      example_item.requires_approval = false
+      example_item.initial_order_status_id = new_status.id
+      example_item.is_archived = false
+      example_item.is_hidden = false
+      example_item.facility_account_id = fa.id
+      example_item.billing_mode = "Skip Review"
+    end
+
     service = Service.find_or_create_by!(url_name: "example-service") do |example_service|
       example_service.facility_id = facility.id
       example_service.account = Settings.accounts.product_default
@@ -97,6 +110,19 @@ namespace :demo do
       example_service.is_archived = false
       example_service.is_hidden = false
       example_service.facility_account_id = fa.id
+    end
+
+    skip_review_service = Service.find_or_create_by!(url_name: "skip-review-example-service") do |example_service|
+      example_service.facility_id = facility.id
+      example_service.account = Settings.accounts.product_default
+      example_service.name = "Example Service"
+      example_service.description = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>"
+      example_service.requires_approval = false
+      example_service.initial_order_status_id = in_process.id
+      example_service.is_archived = false
+      example_service.is_hidden = false
+      example_service.facility_account_id = fa.id
+      example_service.billing_mode = "Skip Review"
     end
 
     instrument = Instrument.find_or_create_by!(url_name: "example-instrument") do |example_instrument|
@@ -110,6 +136,20 @@ namespace :demo do
       example_instrument.is_hidden = false
       example_instrument.facility_account_id = fa.id
       example_instrument.reserve_interval = 5
+    end
+
+    skip_review_instrument = Instrument.find_or_create_by!(url_name: "skip-review-example-instrument") do |example_instrument|
+      example_instrument.facility_id = facility.id
+      example_instrument.account = Settings.accounts.product_default
+      example_instrument.name = "Skip Review Example Instrument"
+      example_instrument.description = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>"
+      example_instrument.initial_order_status_id = new_status.id
+      example_instrument.requires_approval = false
+      example_instrument.is_archived = false
+      example_instrument.is_hidden = false
+      example_instrument.facility_account_id = fa.id
+      example_instrument.reserve_interval = 5
+      example_instrument.billing_mode = "Skip Review"
     end
 
     RelaySynaccessRevB.find_or_create_by!(instrument_id: instrument.id) do |relay_instrument|

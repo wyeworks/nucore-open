@@ -2,8 +2,8 @@
   .banner-list
     .row
       = banner_date_label @order_detail, :ordered_at
-      = banner_label @order_detail, :created_by_user
-      = banner_label @order_detail, :user
+      = banner_label @order_detail, :created_by_user # ordered by
+      = banner_label @order_detail, :user # ordered for
       = banner_date_label @order_detail, :canceled_at
       = banner_label @order_detail, :canceled_by_user
       = banner_label @order_detail, :canceled_reason
