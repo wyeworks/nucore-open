@@ -250,6 +250,11 @@ RSpec.describe "Managing an order detail" do
   describe "updating fulfilled date of a completed order" do
     before do
       order_detail.update!(state: :complete, fulfilled_at: 3.days.ago, order_status: OrderStatus.complete)
+      reservation.actual_start_at = 2.hours.ago
+      reservation.actual_end_at = 1.hour.ago
+      reservation.save
+      order_detail.price_policy = create(:item_price_policy, product: order_detail.product, price_group: PriceGroup.globals.first)
+      order_detail.save
       visit manage_facility_order_order_detail_path(facility, order, order_detail)
     end
 
@@ -258,15 +263,16 @@ RSpec.describe "Managing an order detail" do
 
       before do
         expect(page).to have_selector("input[name='order_detail[fulfilled_at]']")
-        fill_in "order_detail[fulfilled_at]", with: 1.day.ago.to_s
+        fill_in "order_detail[fulfilled_at]", with: SpecDateHelper.format_usa_date(1.day.ago)
         click_button "Save"
         expect(page).to have_content("The order was successfully updated.")
         click_link order_detail.to_s
       end
 
-      it "can update the fulfilled at date" do
-        expect(page).to have_content(SpecDateHelper.format_usa_date(1.day.ago.to_s))
-        expect(page).to have_field("order_detail[fulfilled_at]", with: SpecDateHelper.format_usa_date(1.day.ago.to_s))
+      it "can update the fulfilled at date", :js do
+        expect(page).to have_content(SpecDateHelper.format_usa_date(1.day.ago))
+        expect(page).not_to have_content("invalid date format")
+        expect(page).to have_field("order_detail[fulfilled_at]", with: SpecDateHelper.format_usa_date(1.day.ago))
       end
 
       it "logs fulfilled at date updates" do

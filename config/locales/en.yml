@@ -936,9 +936,12 @@ en:
       link:
         add: "Add Price Group"
       notice: "No price groups exist yet."
+      true: "Yes"
+      false: "No"
       th:
         pg: "Price Group"
         type: "Type"
+        global: "Global"
         users: "Number of Users"
         accounts: "Number of Payment Sources"
 

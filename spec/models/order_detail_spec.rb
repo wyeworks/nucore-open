@@ -2017,4 +2017,27 @@ RSpec.describe OrderDetail do
     end
 
   end
+
+  describe "#reconcile_if_skip_review" do
+    before do
+      order_detail.actual_cost = 10
+      order_detail.actual_subsidy = 0
+      order_detail.state = "complete"
+    end
+
+    it "reconciles if product billing mode is 'Skip Review'" do
+      item.billing_mode = "Skip Review"
+      item.save
+      order_detail.product.reload
+      order_detail.reconcile_if_skip_review
+      expect(order_detail.reconciled?).to be true
+      expect(order_detail.state).to eq "reconciled"
+    end
+
+    it "does not reconcile if product billing mode is 'Default'" do
+      order_detail.reconcile_if_skip_review
+      expect(order_detail.reconciled?).to be false
+      expect(order_detail.state).to eq "complete"
+    end
+  end
 end

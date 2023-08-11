@@ -50,7 +50,7 @@ class OrderDetail < ApplicationRecord
   belongs_to :journal
   belongs_to :order, inverse_of: :order_details, required: true
   belongs_to :assigned_user, class_name: "User", foreign_key: "assigned_user_id"
-  belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
+  belongs_to :created_by_user, class_name: "User", foreign_key: :created_by # created_by_user is the ordered_by user, not ordered_for user
   belongs_to :dispute_by, class_name: "User"
   belongs_to :price_changed_by_user, class_name: "User"
   belongs_to :order_status
@@ -75,7 +75,7 @@ class OrderDetail < ApplicationRecord
   has_many :vestal_versions, as: :versioned
 
   delegate :edit_url, to: :external_service_receiver, allow_nil: true
-  delegate :in_cart?, :facility, :user, to: :order
+  delegate :in_cart?, :facility, :user, to: :order # user is the ordered_for user, not ordered_by user
   delegate :invoice_number, to: :statement, prefix: true
   delegate :journal_date, to: :journal, allow_nil: true
   delegate :ordered_on_behalf_of?, to: :order
@@ -352,6 +352,8 @@ class OrderDetail < ApplicationRecord
     end
   end
 
+  after_save :reconcile_if_skip_review, if: :complete?
+
   include AASM
 
   CANCELABLE_STATES = [:new, :inprocess, :complete].freeze
@@ -381,6 +383,16 @@ class OrderDetail < ApplicationRecord
     event :to_canceled do
       transitions to: :canceled, from: CANCELABLE_STATES, guard: :cancelable?
     end
+  end
+
+  def reconcile_if_skip_review
+    change_status!(OrderStatus.reconciled) if skip_review?
+  end
+
+  def skip_review?
+    actual_total &&
+      complete? &&
+      product.billing_mode == "Skip Review"
   end
 
   # block will be called after the transition, but before the save
