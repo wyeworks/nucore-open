@@ -158,7 +158,7 @@ paperclip:
   path: ":rails_root/public/uploads/:class/:attachment/:id_partition/:style/:safe_filename"
 
 saml:
-  create_user: false
+  create_user: true
   login_enabled: true
   # We've been seeing certificate expiration errors, so we're temporarily using a
   # locally stored version of the metadata.
