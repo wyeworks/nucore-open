@@ -392,7 +392,7 @@ class OrderDetail < ApplicationRecord
   def skip_review?
     actual_total &&
       complete? &&
-      product.billing_mode == "Skip Review"
+      product.skip_order_review?
   end
 
   # block will be called after the transition, but before the save
@@ -519,6 +519,8 @@ class OrderDetail < ApplicationRecord
 
   def account_usable_by_order_owner?
     return unless order && account_id
+    return if product.nonbillable_mode? && account.is_a?(NonbillableAccount)
+
     errors.add("account_id", "is not valid for the orderer") unless AccountUser.find_by(user_id: order.user_id, account_id: account_id, deleted_at: nil)
   end
 
