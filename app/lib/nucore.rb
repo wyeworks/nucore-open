@@ -11,6 +11,9 @@ module NUCore
   class MixedFacilityCart < NUCore::Error
   end
 
+  class MixedBillingMode < NUCore::Error
+  end
+
   class NotPermittedWhileActingAs < NUCore::Error
   end
 

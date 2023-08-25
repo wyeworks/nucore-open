@@ -56,6 +56,15 @@ class User < ApplicationRecord
   scope :with_recent_orders, ->(facility) { distinct.joins(:order_details).merge(OrderDetail.recent.for_facility(facility)) }
   scope :sort_last_first, -> { order(Arel.sql("LOWER(users.last_name), LOWER(users.first_name)")) }
 
+  def self.nonbillable_account_owner
+    find_or_create_by!(
+      username: "None (Nonbillable)",
+      first_name: "Nonbillable",
+      last_name: "User",
+      email: (Settings.support_email || Settings.email.from),
+    )
+  end
+
   # This method is only used by devise-security to determine
   # whether or not password validations should run.
   # A better name would be password_validations_required?
@@ -157,6 +166,8 @@ class User < ApplicationRecord
   # Given a +Product+ returns all valid accounts this user has for
   # purchasing that product
   def accounts_for_product(product)
+    return [NonbillableAccount.singleton_instance] if product.nonbillable_mode?
+
     acts = accounts.active.for_facility(product.facility).to_a
     acts.reject! { |acct| !acct.validate_against_product(product, self).nil? }
     acts

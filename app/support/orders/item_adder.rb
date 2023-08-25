@@ -10,6 +10,7 @@ class Orders::ItemAdder
   end
 
   def add(product, quantity = 1, attributes = {})
+    check_for_mixed_billing_mode product
     check_for_mixed_facility! product
     quantity = quantity.to_i
     # Only TimedServices care about duration
@@ -46,6 +47,17 @@ class Orders::ItemAdder
   end
 
   private
+
+  # Raise an error if the Nonbillable billing mode is mixed with any other mode
+  def check_for_mixed_billing_mode(product)
+    billing_modes = Set.new
+    billing_modes << product.billing_mode
+    @order.order_details.each { |od| billing_modes << od.product.billing_mode }
+
+    if billing_modes.count > 1 && billing_modes.include?("Nonbillable")
+      raise NUCore::MixedBillingMode
+    end
+  end
 
   def check_for_mixed_facility!(product)
     if product.facility != @order.facility

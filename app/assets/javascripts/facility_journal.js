@@ -1,9 +1,11 @@
 document.addEventListener("DOMContentLoaded", function() {
+  const selectAllLink = document.querySelector(".js--select_all");
   const table = document.querySelector("table.js--transactions-table");
   const submitDiv = document.querySelector(".submit");
   let earliestFulfilledAtDate;
-  
+
   table.addEventListener("click", setEarliestFulfilledAtDate);
+  selectAllLink.addEventListener("click", setEarliestFulfilledAtDate);
   submitDiv.addEventListener("click", handleModals);
   
   function setEarliestFulfilledAtDate(event) {
@@ -26,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function() {
   
     const dateDiff = moment(journalDate).diff(earliestFulfilledAtDate, "days");
     const atLeastOneRowChecked = typeof(earliestFulfilledAtDate) === "object" && earliestFulfilledAtDate !== null
+
     if (atLeastOneRowChecked && dateDiff >= 90) {
       event.preventDefault();
       $("#journal-date-popup").modal("show");
