@@ -62,6 +62,10 @@ email:
 support_email: corum@umass.edu
 support_email_subject: "CORUM Support Request"
 
+nonbillable_user:
+  email: "nonbillableuser@example.come"
+  username: "none (nonbillable)"
+
 order_details:
   list_transformer: SplitAccounts::OrderDetailListTransformer
 
