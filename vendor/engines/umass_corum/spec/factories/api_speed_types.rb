@@ -19,6 +19,8 @@ FactoryBot.define do
     project_desc { "National Multiple Sclerosis So" }
     project_id { "S17110000000118" }
     date_added { 1.year.ago }
+    project_start_date { 1.year.ago }
+    project_end_date { 1.year.from_now }
 
     transient do
       account_number { nil }
@@ -40,6 +42,14 @@ FactoryBot.define do
       active { false }
       date_removed { 1.month.ago }
       error_desc { "Speed_type has expired" }
+    end
+
+    trait :not_valid_start_date do
+      project_start_date { nil }
+    end
+
+    trait :not_valid_end_date do
+      project_start_date { nil }
     end
   end
 end

@@ -86,7 +86,7 @@ namespace :order_details do
         file: StringIO.new("Placeholder text for missing template."),
         file_type: "template_result",
         name: "placeholder.csv",
-        created_by: order_detail.user.id
+        created_by: order_detail.user.id,
       )
 
       puts "...missing file added to order detail #{order_detail.id}"

@@ -12,12 +12,29 @@ module UmassCorum
 
     def account_suspended_at?(fulfilled_at)
       suspended_account = UmassCorum::SpeedTypeAccount.where(account_number: speed_type)
-                                                       .where.not(suspended_at: nil)
-                                                       .first
+                                                      .where.not(suspended_at: nil)
+                                                      .first
       suspended_account.present? && fulfilled_at > suspended_account.suspended_at
     end
 
-    def valid_at?(fulfilled_date, start_date)
+    def valid_at?(fulfilled_date)
+      if api_account.project_id.present?
+        valid_project_account?(fulfilled_date)
+      else
+        valid_non_project_account?(fulfilled_date)
+      end
+    end
+
+    def valid_project_account?(fulfilled_date)
+      project_start_date = api_account.project_start_date
+      project_end_date = api_account.project_end_date
+      return false if project_start_date.blank? || project_end_date.blank?
+
+      fulfilled_date.between?(project_start_date, project_end_date)
+    end
+
+    def valid_non_project_account?(fulfilled_date)
+      start_date = api_account.date_added_admin_override || api_account.date_added
       if api_account.active?
         start_date <= fulfilled_date
       elsif api_account.date_removed.present?
@@ -38,9 +55,11 @@ module UmassCorum
 
       raise AccountValidator::ValidatorError, "This account is suspended" if account_suspended_at?(fulfilled_at)
 
-      active_date = api_account.date_added_admin_override || api_account.date_added
+      if api_account.project_id.present?
+        raise AccountValidator::ValidatorError, "Both project start and end dates are required for validation." unless api_account.project_start_date && api_account.project_end_date
+      end
 
-      unless valid_at?(fulfilled_at, active_date)
+      unless valid_at?(fulfilled_at)
         error = api_account.error_desc.presence || "Was not legal at the time of fulfillment"
         raise AccountValidator::ValidatorError, error
       end
@@ -67,5 +86,5 @@ module UmassCorum
     end
 
   end
-
+  
 end

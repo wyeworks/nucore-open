@@ -10,9 +10,11 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
   let(:speed_type) { "847564" }
   let(:validator) { described_class.new(speed_type) }
   let(:date_added) { Time.now - 1.year }
+  let(:project_start_date) { 1.month.ago }
+  let(:project_end_date) { 1.month.from_now }
 
   it "returns successfully if the chart string exists in the DB" do
-    create(:api_speed_type, speed_type: speed_type)
+    create(:api_speed_type, speed_type: speed_type, project_start_date: project_start_date, project_end_date: project_end_date)
     validator.account_is_open!
   end
 
@@ -21,7 +23,7 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
   end
 
   context "when the entry in the DB is expired" do
-    before { create(:api_speed_type, :expired, speed_type: speed_type, date_removed: 1.week.ago) }
+    before { create(:api_speed_type, :expired, speed_type: speed_type, date_removed: 1.week.ago, project_id: nil) }
 
     it "raises an error if the date passed in is after the expiration date" do
       expect { validator.account_is_open!(Time.current) }.to raise_error(AccountValidator::ValidatorError, /expired/)
@@ -48,8 +50,8 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
     end
   end
 
-  context "when the entry in the DB is active (not expired)" do
-    before { create(:api_speed_type, speed_type: speed_type, date_added: 1.month.ago) }
+  context "when the entry in the DB is active (not expired) and there is no project_id" do
+    before { create(:api_speed_type, speed_type: speed_type, date_added: 1.month.ago, project_id: nil) }
 
     it "raises an error if the date passed in is before the date_added" do
       expect { validator.account_is_open!(2.months.ago) }.to raise_error(AccountValidator::ValidatorError, /not legal at the time of fulfillment/)
@@ -72,18 +74,40 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
     end
   end
 
+  context "when the entry in the DB is active (not expired) and there is project_id" do
+    it "raises an error if the date passed is not between the project dates" do
+      create(:api_speed_type, speed_type: speed_type, date_added: 1.year.ago, project_start_date: 1.year.ago, project_end_date: 1.year.ago)
+      expect { validator.account_is_open!(Time.current) }.to raise_error(AccountValidator::ValidatorError, /Was not legal at the time of fulfillment/)
+    end
+
+    it "is valid if the date passed is between the project dates" do
+      create(:api_speed_type, speed_type: speed_type, date_added: 1.year.ago, project_start_date: 1.year.ago, project_end_date: 1.year.from_now)
+      expect(validator.account_is_open!(3.days.from_now)).to be_truthy
+    end
+
+    it "raises an error if it has no project_start_date" do
+      create(:api_speed_type, :not_valid_start_date, speed_type: speed_type)
+      expect { validator.account_is_open!(Time.current) }.to raise_error(AccountValidator::ValidatorError, /Both project start and end dates are required for validation/)
+    end
+
+    it "raises an error if it has no project_end_date" do
+      create(:api_speed_type, :not_valid_end_date, speed_type: speed_type)
+      expect { validator.account_is_open!(Time.current) }.to raise_error(AccountValidator::ValidatorError, /Both project start and end dates are required for validation/)
+    end
+  end
+
   it "checks the date_added_admin_override, when it exists" do
-    create(:api_speed_type, speed_type: speed_type, date_added: date_added, date_added_admin_override: date_added - 1.years)
+    create(:api_speed_type, speed_type: speed_type, date_added: date_added, date_added_admin_override: date_added - 1.years, project_id: nil)
     expect(validator.account_is_open!(date_added - 1.years + 1.day)).to be true
   end
 
   it "checks the date_added, when the date_added_admin_override does not exist" do
     create(:api_speed_type, speed_type: speed_type, date_added: date_added)
-    expect{ validator.account_is_open!(date_added - 1.year + 1.day) }.to raise_error(AccountValidator::ValidatorError)
+    expect { validator.account_is_open!(date_added - 1.year + 1.day) }.to raise_error(AccountValidator::ValidatorError)
   end
 
   it "has a generic message if there is no error in the table" do
-    create(:api_speed_type, :expired, speed_type: speed_type, error_desc: "")
+    create(:api_speed_type, :expired, speed_type: speed_type, error_desc: "", project_id: nil)
     expect { validator.account_is_open! }.to raise_error(AccountValidator::ValidatorError, /not legal at the time/)
   end
 end

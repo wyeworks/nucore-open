@@ -930,6 +930,8 @@ ActiveRecord::Schema.define(version: 2023_07_24_224847) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "date_added_admin_override"
+    t.datetime "project_start_date"
+    t.datetime "project_end_date"
     t.index ["speed_type"], name: "index_umass_corum_api_speed_types_on_speed_type", unique: true
   end
 
