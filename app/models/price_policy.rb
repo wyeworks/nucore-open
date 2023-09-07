@@ -21,11 +21,15 @@ class PricePolicy < ApplicationRecord
   end
   validates :note, length: { maximum: 256 }
 
-  validates_each :expire_date do |record, _attr, value|
+  validates_each :expire_date, if: :order_review_product? do |record, _attr, value|
     start_date = record.start_date
     if value.present? && start_date.present?
       gen_exp_date = generate_expire_date(start_date)
-      record.errors.add(:expire_date, "must be after #{start_date.to_date} and before #{gen_exp_date.to_date}") if value <= start_date || value > gen_exp_date
+      outside_fiscal_year = gen_exp_date < value || value <= start_date
+
+      if outside_fiscal_year
+        record.errors.add(:expire_date, "must be after #{start_date.to_date} and before #{gen_exp_date.to_date}")
+      end
     end
   end
 
@@ -106,6 +110,11 @@ class PricePolicy < ApplicationRecord
   def self.generate_expire_date(price_policy_or_date)
     start_date = price_policy_or_date.is_a?(PricePolicy) ? price_policy_or_date.start_date : price_policy_or_date
     SettingsHelper.fiscal_year_end(start_date)
+  end
+
+  def order_review_product?
+    return true unless product
+    !product.skip_order_review?
   end
 
   def has_subsidy?

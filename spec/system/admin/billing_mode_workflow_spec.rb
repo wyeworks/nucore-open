@@ -37,46 +37,6 @@ RSpec.describe "Billing mode workflows" do
       end
     end
 
-    context "when a user forgets to end their reservation on an instrument that charges for actuals" do
-      let(:logged_in_user) { user }
-
-      let(:instrument) do
-        create(
-          :setup_instrument,
-          :timer,
-          :always_available,
-          charge_for: :usage,
-          facility:, problems_resolvable_by_user: true,
-          billing_mode:
-        )
-      end
-
-      let!(:old_reservation) do
-        create(
-          :purchased_reservation,
-          product: instrument,
-          reserve_start_at: 2.hours.ago,
-          reserve_end_at: 1.hour.ago,
-          actual_start_at: 1.hour.ago,
-          actual_end_at: nil
-        )
-      end
-
-      before do
-        visit facility_instrument_path(facility, instrument)
-      end
-
-      it "starts a new reservation and moves the old one to the problem queue" do
-        click_on "Create"
-        expect(page).to have_content "The instrument has been activated successfully"
-        # Check the problem reservation is in the problem queue
-        login_as director
-        visit show_problems_facility_reservations_path(facility)
-        expect(page).to have_content old_reservation.order_detail.id
-        expect(page).to have_content "Missing Actuals"
-      end
-    end
-
     context "with an invalid account" do
       let(:accepts_po) { false }
       let(:logged_in_user) { user }

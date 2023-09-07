@@ -2,6 +2,7 @@
 
 class NonbillableAccount < Account
   before_validation :set_owner, :set_description, :set_created_by, :set_account_number, :set_expries_at
+  after_create :set_price_group
 
   # Since this account can be used by anyone, we only need one in the system
   # so this class method should be used to access it.
@@ -26,6 +27,12 @@ class NonbillableAccount < Account
   end
 
   private
+
+  # This insures that NonbillableAccount#price_groups isn't empty, in the case
+  # the user doesn't have a price group
+  def set_price_group
+    price_group_members.create(price_group: PriceGroup.nonbillable, type: "AccountPriceGroupMember")
+  end
 
   def set_account_number
     return if account_number

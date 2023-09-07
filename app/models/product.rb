@@ -24,6 +24,7 @@ class Product < ApplicationRecord
   has_one :product_display_group, through: :product_display_group_product
 
   after_create :create_default_price_group_products
+  after_create :create_nonbillable_price_policy, if: :skip_order_review?
 
   email_list_attribute :training_request_contacts
 
@@ -204,8 +205,12 @@ class Product < ApplicationRecord
 
   def create_default_price_group_products
     PriceGroup.globals.find_each do |price_group|
-      price_group_products.create!(price_group: price_group)
+      price_group_products.create!(price_group:)
     end
+  end
+
+  def create_nonbillable_price_policy
+    PricePolicyBuilder.create_nonbillable_for(self)
   end
 
   def available_for_purchase?
@@ -237,7 +242,13 @@ class Product < ApplicationRecord
   end
 
   def can_purchase_order_detail?(order_detail)
-    can_purchase? order_detail.price_groups.map(&:id)
+    price_group_ids = if skip_order_review?
+                        [PriceGroup.nonbillable.id]
+                      else
+                        order_detail.price_groups.map(&:id)
+                      end
+
+    can_purchase? price_group_ids
   end
 
   def cheapest_price_policy(order_detail, date = Time.zone.now)

@@ -76,7 +76,12 @@ class ProductForCart
 
   def check_that_product_has_price_groups_accessible_to_user(user)
     proc do
-      price_group_ids = (user.price_groups + user.account_price_groups).flatten.uniq.map(&:id)
+      price_group_ids = if product.skip_order_review?
+                          [PriceGroup.nonbillable.id]
+                        else
+                          (user.price_groups + user.account_price_groups).flatten.uniq.map(&:id)
+                        end
+
       @error_message = text(".no_price_groups", i18n_params) unless product.can_purchase?(price_group_ids)
     end
   end
