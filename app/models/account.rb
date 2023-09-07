@@ -4,6 +4,9 @@ class Account < ApplicationRecord
 
   module Overridable
 
+    # Consider creating a default price gorup, when `user_based_price_groups` is
+    # set to `false`. Currently Dartmouth is the only school with this feature 
+    # flag set to false, and they do this in their account_extension.rb
     def price_groups
       (price_group_members.collect(&:price_group) + (owner_user ? owner_user.price_groups : [])).uniq
     end

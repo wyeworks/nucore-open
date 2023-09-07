@@ -4,8 +4,9 @@ require "rails_helper"
 
 RSpec.describe InstrumentPricePoliciesController do
   let(:facility) { create(:setup_facility) }
-  let!(:instrument) { create(:instrument, facility: facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:billing_mode) { "Default" }
+  let!(:instrument) { create(:instrument, facility:, billing_mode:) }
+  let(:director) { create(:user, :facility_director, facility:) }
 
   let(:base_price_group) { PriceGroup.base }
   let(:external_price_group) { PriceGroup.external }
@@ -112,6 +113,41 @@ RSpec.describe InstrumentPricePoliciesController do
       expect(page).to have_content("$120.00\n- $60.00\n= $60.00") # Cancer Center Minimum Cost
       expect(page).not_to have_content("$15.00")
       expect(page).to have_content(PricePolicy.human_attribute_name(:full_price_cancellation), count: 3)
+    end
+  end
+
+  describe "with 'Nonbillable' billing mode enabled" do
+    let(:billing_mode) { "Nonbillable" }
+
+    it "does not allow adding, editing, or removing of price policies" do
+      visit facility_instruments_path(facility, instrument)
+      click_link instrument.name
+      click_link "Pricing"
+      expect(page).not_to have_content "Add Pricing Rules"
+
+      expect(page).to have_content "Edit"
+      expect(page).to have_no_link "Edit"
+
+      expect(page).to have_content "Remove"
+      expect(page).to have_no_link "Remove"
+    end
+  end
+
+  describe "with 'Skip Review' billing mode enabled" do
+    let(:billing_mode) { "Skip Review" }
+
+    it "does not allow adding, editing, or removing of price policies" do
+      visit facility_instruments_path(facility, instrument)
+      click_link instrument.name
+      click_link "Pricing"
+
+      expect(page).not_to have_content "Add Pricing Rules"
+
+      expect(page).to have_content "Edit"
+      expect(page).to have_no_link "Edit"
+
+      expect(page).to have_content "Remove"
+      expect(page).to have_no_link "Remove"
     end
   end
 end

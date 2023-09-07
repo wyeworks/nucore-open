@@ -14,7 +14,7 @@
       %tr
         - if price_policies_to_show.first == price_policy
           %td.centered{ :rowspan => price_policies_to_show.length }
-            - if price_policies.all?(&:editable?) && can?(:edit, PricePolicy)
+            - if price_policies.all?(&:editable?) && can?(:edit, PricePolicy)  && !@product.skip_order_review?
               %p
                 = link_to t("shared.edit"),
                   [:edit, current_facility, product, :price_policy, id: url_date]

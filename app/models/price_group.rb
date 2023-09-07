@@ -33,6 +33,10 @@ class PriceGroup < ApplicationRecord
     @external ||= globals.find_by(name: Settings.price_group.name.external)
   end
 
+  def self.nonbillable
+    base
+  end
+
   # Create a global price group, if it does not exist, and setup all the
   # schedule rules with price group discounts for the price group.
   def self.setup_global(name:, is_internal: false, admin_editable: true, discount_percent: 0, display_order: nil)

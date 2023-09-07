@@ -4,6 +4,7 @@ en:
       index:
         description: Pricing rules determine the specific rate applied to each price group.
         add: Add Pricing Rules
+        skip_review_message: "Because this %{type} is set to %{billing_mode} mode, price rules cannot be changed."
         none: You must add current pricing rules before you may bill for this item.
         current: Current Pricing Rules
         upcoming: Upcoming Pricing Rules
