@@ -664,10 +664,8 @@ en:
     pdf:
       filename: "%{facility}-%{invoice_number}-%{date}.pdf"
       download: Download
-    reconciled:
-      "true": Reconciled
-      "false": Unreconciled
     resend: Resend
+    cancel: Cancel
     closed_at: Closed At
     closed_by: Closed By
 

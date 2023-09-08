@@ -17,7 +17,7 @@ class StatementSearchForm
   end
 
   def available_statuses
-    [true, false].map { |v| [I18n.t(v, scope: "statements.reconciled"), v] }
+    ["Reconciled", "Unreconciled", "Canceled"]
   end
 
   def facility_filter?
@@ -41,10 +41,12 @@ class StatementSearchForm
 
   def add_reconciled_status_filter(results)
     case status
-    when "true"
+    when "Reconciled"
       results.reconciled
-    when "false"
+    when "Unreconciled"
       results.unreconciled
+    when "Canceled"
+      results.where.not(canceled_at: nil)
     else
       results
     end

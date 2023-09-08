@@ -36,6 +36,26 @@ RSpec.describe Statement do
     end
   end
 
+  context "when canceled" do
+    subject(:statement) { create(:statement, account: account, created_by: user.id, facility: facility, canceled_at: Time.current) }
+
+    it "should not be reconciled" do
+      expect(statement).to_not be_reconciled
+    end
+
+    it "is not in the reconciled scope" do
+      expect(described_class.reconciled).not_to include(statement)
+    end
+
+    it "is not in the unreconciled scope" do
+      expect(described_class.unreconciled).to_not include(statement)
+    end
+
+    it "should not be cancelable" do
+      expect(statement).to_not be_can_cancel
+    end
+  end
+
   context "with order details" do
     before :each do
       @order_details = []
@@ -74,9 +94,17 @@ RSpec.describe Statement do
       expect(described_class.unreconciled).to include(statement)
     end
 
+    it "should be cancelable" do
+      expect(statement).to be_can_cancel
+    end
+
     context "with one order detail reconciled" do
       before :each do
         @order_details.first.to_reconciled!
+      end
+
+      it "should not be cancelable" do
+        expect(statement).to_not be_can_cancel
       end
 
       it "should not be reconciled" do
@@ -95,6 +123,10 @@ RSpec.describe Statement do
     context "with all order_details reconciled" do
       before :each do
         @order_details.each(&:to_reconciled!)
+      end
+
+      it "should not be cancelable" do
+        expect(statement).to_not be_can_cancel
       end
 
       it "should be reconciled" do
