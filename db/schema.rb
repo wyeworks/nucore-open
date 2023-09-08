@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_07_24_224847) do
+ActiveRecord::Schema.define(version: 2023_09_07_173215) do
 
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
@@ -882,6 +882,7 @@ ActiveRecord::Schema.define(version: 2023_07_24_224847) do
     t.integer "created_by", null: false
     t.datetime "created_at", null: false
     t.integer "account_id", null: false
+    t.datetime "canceled_at"
     t.index ["account_id"], name: "index_statements_on_account_id"
     t.index ["facility_id"], name: "fk_statement_facilities"
   end

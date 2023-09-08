@@ -34,4 +34,4 @@
         %td.currency
           = number_to_currency(statement.total_cost)
         %td
-          = t("statements.reconciled.#{statement.reconciled?}")
+          = statement.status

@@ -52,7 +52,7 @@ class StatementSearchResultMailer < CsvReportMailer
         statement.facility,
         statement.order_details.count,
         number_to_currency(statement.total_cost),
-        I18n.t(statement.reconciled?, scope: "statements.reconciled"),
+        statement.status,
       ]
     end
   end

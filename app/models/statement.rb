@@ -27,8 +27,8 @@ class Statement < ApplicationRecord
     end
   }
 
-  scope :reconciled, -> { where.not(id: OrderDetail.unreconciled.where.not(statement_id: nil).select(:statement_id)) }
-  scope :unreconciled, -> { where(id: OrderDetail.unreconciled.where.not(statement_id: nil).select(:statement_id)) }
+  scope :reconciled, -> { where(canceled_at: nil).where.not(id: OrderDetail.unreconciled.where.not(statement_id: nil).select(:statement_id)) }
+  scope :unreconciled, -> { where(canceled_at: nil).where(id: OrderDetail.unreconciled.where.not(statement_id: nil).select(:statement_id)) }
 
   # Use this for restricting the the current facility
   scope :for_facility, ->(facility) { where(facility: facility) if facility.single_facility? }
@@ -62,7 +62,21 @@ class Statement < ApplicationRecord
   end
 
   def reconciled?
-    order_details.unreconciled.empty?
+    order_details.unreconciled.empty? && canceled_at.blank?
+  end
+
+  def can_cancel?
+    order_details.reconciled.empty? && canceled_at.blank?
+  end
+
+  def status
+    if canceled_at
+      "Canceled"
+    elsif reconciled?
+      "Reconciled"
+    else
+      "Unreconciled"
+    end
   end
 
   def paid_in_full?
