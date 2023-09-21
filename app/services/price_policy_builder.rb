@@ -14,10 +14,32 @@ class PricePolicyBuilder
     new(product, start_date).new_policies_based_on_most_recent
   end
 
+  def self.create_skip_review_for(product, price_groups = nil)
+    groups = price_groups || PriceGroup.globals
+    groups.each do |price_group|
+      PricePolicy.create(
+        type: "#{product.type}PricePolicy",
+        product:,
+        start_date: 1.month.ago,
+        expire_date: 75.years.from_now,
+        price_group:,
+        usage_rate: 0,
+        minimum_cost: 0,
+        cancellation_cost: 0,
+        usage_subsidy: 0,
+        unit_cost: 0,
+        unit_subsidy: 0,
+        can_purchase: true,
+        charge_for: "reservation",
+        note: "Price rule automatically created because of billing mode"
+      )
+    end
+  end
+
   def self.create_nonbillable_for(product)
     PricePolicy.create(
       type: "#{product.type}PricePolicy",
-      product: product,
+      product:,
       start_date: 1.month.ago,
       expire_date: 75.years.from_now,
       price_group: PriceGroup.nonbillable,

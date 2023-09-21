@@ -48,13 +48,17 @@ class Orders::ItemAdder
 
   private
 
+  def nonbillable_account?
+    @order.account == NonbillableAccount.singleton_instance
+  end  
+
   # Raise an error if the Nonbillable billing mode is mixed with any other mode
   def check_for_mixed_billing_mode(product)
     billing_modes = Set.new
     billing_modes << product.billing_mode
     @order.order_details.each { |od| billing_modes << od.product.billing_mode }
 
-    if billing_modes.count > 1 && billing_modes.include?("Nonbillable")
+    if billing_modes.count > 1 && billing_modes.include?("Nonbillable") && nonbillable_account?
       raise NUCore::MixedBillingMode
     end
   end

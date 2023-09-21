@@ -392,6 +392,7 @@ class OrderDetail < ApplicationRecord
   def skip_review?
     actual_total &&
       complete? &&
+      !problem_order? &&
       product.skip_order_review?
   end
 
@@ -503,6 +504,8 @@ class OrderDetail < ApplicationRecord
   end
 
   def price_groups
+    return [PriceGroup.nonbillable] if product.nonbillable_mode?
+
     groups = user.price_groups
     groups += account.price_groups if account
     groups.uniq

@@ -109,7 +109,7 @@ FactoryBot.define do
 
     factory :setup_item, class: Item do
       after(:create) do |product|
-        create(:item_price_policy, product: product, price_group: product.facility.price_groups.last)
+        create(:item_price_policy, product: product, price_group: product.facility.price_groups.last) if product.default_mode?
       end
     end
 

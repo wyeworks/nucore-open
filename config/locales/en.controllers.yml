@@ -53,6 +53,8 @@ en:
       no_selection: No orders selected
       success_html: '!Statements! made successfully for:<br/>%{accounts}'
       success_with_email_html: Notifications sent successfully to:<br/>%{accounts}'
+      cancel_success: "!Statement! has been canceled"
+      cancel_fail: "Unable to cancel !statement!"
 
     facility_journals:
       update:
