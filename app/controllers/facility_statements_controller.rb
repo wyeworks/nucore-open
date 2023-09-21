@@ -91,9 +91,9 @@ class FacilityStatementsController < ApplicationController
     if statement.save
       OrderDetail.where(statement_id: statement.id).update_all(statement_id: nil)
       LogEvent.log(statement, :closed, current_user)
-      flash[:notice] = "Statement has been canceled"
+      flash[:notice] = text("cancel_success")
     else
-      flash[:error] = "Unable to cancel statement"
+      flash[:error] = text("cancel_fail")
     end
 
     redirect_to action: :index

@@ -26,12 +26,21 @@
               - # TODO: Refactor Statement#order_details to go through statement_rows so we can generate PDFs for canceled statements
               - path = current_facility ? statement_path(s) : account_statement_path(s.account, s, format: :pdf)
               = link_to t("statements.pdf.download"), path
-              - if SettingsHelper.feature_on?(:send_statement_emails) && current_facility
-                %br
-                = link_to(t("statements.resend"), resend_emails_facility_statement_path(current_facility, s), method: :post, class: "js--resend", data: { confirm: "You are about to re-send this invoice to the following recipients: #{s.users_to_notify.join(", ")}" })
+              - if current_facility
+                - if SettingsHelper.feature_on?(:send_statement_emails)
+                  %br
+                  - confirm = "You are about to re-send this invoice to the following recipients: #{s.users_to_notify.join(", ")}"
+                  = link_to(t("statements.resend"),
+                    resend_emails_facility_statement_path(current_facility, s),
+                    method: :post,
+                    class: "js--resend",
+                    data: { confirm: confirm })
 
-                - if s.can_cancel?
-                  %span= link_to(t("statements.cancel"), cancel_facility_statement_path(current_facility, s), method: :post, class: "btn btn-danger", data: {confirm: "Are you sure you want to cancel?"})
+                - if s.can_cancel? && show_cancel_button
+                  = button_to(t("statements.cancel"),
+                    cancel_facility_statement_path(current_facility, s),
+                    class: "btn btn-danger",
+                    data: { confirm: "Are you sure you want to cancel?" })
           %td= format_usa_datetime(s.created_at)
           %td= s.account.notify_users.map(&:full_name).join(', ')
           - unless @account

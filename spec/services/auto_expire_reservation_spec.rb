@@ -52,6 +52,45 @@ RSpec.describe AutoExpireReservation, :time_travel do
       end
     end
 
+    context "a started Nonbillable reservation" do
+      let(:instrument) { create(:setup_instrument, :timer, min_reserve_mins: 1, problems_resolvable_by_user: true, billing_mode: "Nonbillable") }
+
+      let!(:reservation) do
+        create(:purchased_reservation, :yesterday, actual_start_at: 1.hour.ago,
+                                                   product: instrument)
+      end
+
+      it "completes the reservation" do
+        expect { action.perform }.to change { order_detail.reload.state }.from("new").to("complete")
+      end
+
+      it "sets this to a problem reservation" do
+        expect { action.perform }.to change { order_detail.reload.problem }.to(true)
+      end
+
+      it "logs the problem reservation" do
+        action.perform
+        log_event = LogEvent.find_by(loggable: reservation.order_detail, event_type: :problem_queue)
+        expect(log_event).to be_present
+        expect(log_event.metadata).to eq("cause"=>"auto_expire")
+      end
+
+      it "assigns a price policy" do
+        action.perform
+        expect(order_detail.reload.price_policy).to be_present
+        expect(order_detail.reload.price_policy.unit_cost).to eq 0
+      end
+
+      it "sets the reservation fulfilled at time" do
+        expect { action.perform }.to change { order_detail.reload.fulfilled_at }.to(reservation.reserve_end_at)
+      end
+
+      it "triggers an email with a link to fix it themselves" do
+        expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("click on the link below")
+      end
+    end
+
     context "a started reservation that is already in the problem queue" do
       let!(:reservation) do
         create(:purchased_reservation, :yesterday, actual_start_at: 1.hour.ago,

@@ -8,4 +8,4 @@
   %h3= @account.account_number
   %p= @account.description_to_s
 
-= render "shared/statements_table"
+= render "shared/statements_table", locals: { show_cancel_button: false }

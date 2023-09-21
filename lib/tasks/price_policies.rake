@@ -45,4 +45,25 @@ namespace :price_policies do
     puts "DONE"
   end
 
+  # bundle exec rake 'price_policies:update_skip_review'
+  # bundle exec rake 'price_policies:update_skip_review[commit]'
+  desc "Update current price policies existing Skip Review products"
+  task :update_skip_review, [:commit] => :environment do |_t, args|
+    commit = args[:commit].to_s == "commit"
+
+    # We already have a price policy for PriceGroup.nonbillable
+    groups = PriceGroup.globals - [PriceGroup.nonbillable]
+
+    skip_review_products = Product.where(billing_mode: "Skip Review")
+    if commit
+      skip_review_products.each do |product|
+        PricePolicyBuilder.create_skip_review_for(product, groups)
+      end
+    else
+      puts "Found #{skip_review_products.count} Skip Review products"
+      puts "Price Groups to add price policies for:"
+      puts groups
+    end
+  end
+
 end
