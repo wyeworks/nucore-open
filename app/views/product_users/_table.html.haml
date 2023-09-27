@@ -1,7 +1,7 @@
 %table.table.table-striped.table-hover
   %thead
     %tr
-      %th
+      %th= t(".actions")
       %th= User.human_attribute_name(:name)
       %th= t(".date_added")
       %th= User.human_attribute_name(:username)
@@ -18,9 +18,7 @@
             method: :delete,
             data: { confirm: text("confirm_removal", product_type: @product.model_name.human.downcase) }
 
-        %td
-          = link_to user.last_first_name, [current_facility, user]
-
+        %td= link_to(user.last_first_name, [current_facility, user])
         %td= month_day_year(product_user.approved_at)
         %td= user.username
         %td= user.email
