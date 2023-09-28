@@ -43,12 +43,8 @@ module SecureRooms
 
       ViewHook.add_hook "search.results_table", "extra_headers", "search/extra_headers"
       ViewHook.add_hook "search.results_table", "extra_columns", "search/extra_columns"
-    end
 
-    initializer "secure_rooms.action_controller" do
-      ActiveSupport.on_load :action_controller do
-        helper SecureRooms::SecureRoomsHelper
-      end
+      ApplicationController.helper SecureRooms::SecureRoomsHelper
     end
 
     initializer :append_migrations do |app|

@@ -35,7 +35,7 @@ module SangerSequencing
           redirect_to [current_facility, :sanger_sequencing, :admin, :batches, group: @batch.group], notice: text("create.success")
         else
           @submissions = Submission.ready_for_batch.for_facility(current_facility)
-          flash.now[:alert] = @batch.errors.map { |_k, msg| msg }.to_sentence
+          flash.now[:alert] = @batch.errors.full_messages.to_sentence
           render :new
         end
       end
@@ -67,7 +67,7 @@ module SangerSequencing
         response = if saver.save
                      { success: true }
                    else
-                     { success: false, error: saver.errors.map { |_k, msg| msg }.to_sentence }
+                     { success: false, error: saver.errors.full_messages.to_sentence }
         end
 
         respond_to do |format|

@@ -233,6 +233,21 @@ NUcore uses [Rspec](http://rspec.info) to run tests. Try any of the following fr
     rake spec:controllers
     ```
 
+* To run just the javascript tests
+    ```
+    bundle exec rake teaspoon
+    ```
+    ... or to run with docker, first set ENV variables in `docker-compose.yml`:
+    ```
+    # Uncomment below to run teaspoon tests
+    - RAILS_ENV=test
+    - TEASPOON_RAILS_ENV=test
+    ```
+    ... and then:
+    ```
+    docker compose run app bundle exec rake teaspoon
+    ```
+
 #### Github Actions
 
 To use Github Actions for CI testing you may need to maintain a testing image with specific versions of dependencies set.  To do this:

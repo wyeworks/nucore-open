@@ -38,8 +38,8 @@ class Facility < ApplicationRecord
   validates_format_of :journal_mask, with: /\AC\d{2}\z/, message: "must be in the format C##"
 
   validates :order_notification_recipient,
-            email_format: true,
-            if: proc { |facility| facility.order_notification_recipient.present? }
+            format: URI::MailTo::EMAIL_REGEXP,
+            allow_blank: true
 
   validates :short_description,
             length: { maximum: 300 },
