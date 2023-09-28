@@ -26,7 +26,7 @@ RSpec.describe ServicePricePolicy do
     it "should not allow a subsidy more than cost" do
       pp = FactoryBot.build(:item_price_policy, unit_subsidy: 10, unit_cost: 5)
       expect(pp).not_to be_valid
-      expect(pp.errors.keys).to be_include :unit_subsidy
+      expect(pp.errors.attribute_names).to be_include :unit_subsidy
     end
   end
 

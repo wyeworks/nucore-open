@@ -6,12 +6,12 @@ module Nucore
 
     def self.oracle?
       return @is_oracle if defined?(@is_oracle)
-      @is_oracle = ActiveRecord::Base.connection_config[:adapter] == "oracle_enhanced"
+      @is_oracle = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "oracle_enhanced"
     end
 
     def self.mysql?
       return @is_mysql if defined?(@is_mysql)
-      @is_mysql = ActiveRecord::Base.connection_config[:adapter] == "mysql2"
+      @is_mysql = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "mysql2"
     end
 
     def self.boolean(value)

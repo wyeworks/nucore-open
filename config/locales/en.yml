@@ -805,6 +805,7 @@ en:
       label:
         search_term: "Search by !name_or_sso_id!"
     table:
+      actions: "Actions"
       date_added: "Date Added"
 
   user_price_group_members:
@@ -937,6 +938,7 @@ en:
       true: "Yes"
       false: "No"
       th:
+        actions: "Actions"
         pg: "Price Group"
         type: "Type"
         global: "Global"

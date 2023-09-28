@@ -184,25 +184,28 @@ class ReservationsController < ApplicationController
 
     render_edit && return unless changes_valid_for_update?
 
+    # merge state can change after call to #save! due to OrderDetailObserver#before_save
+    mergeable = @order_detail.order.to_be_merged?
+    success = true
+
     Reservation.transaction do
       begin
-        # merge state can change after call to #save! due to OrderDetailObserver#before_save
-        mergeable = @order_detail.order.to_be_merged?
-
         save_reservation_and_order_detail
-
-        flash[:notice] = "The reservation was successfully updated."
-        if mergeable
-          redirect_to facility_order_path(@order_detail.facility, @order_detail.order.merge_order || @order_detail.order)
-        else
-          redirect_to (@order.purchased? ? reservations_path : cart_path)
-        end
-        return
       rescue ActiveRecord::RecordInvalid => e
+        success = false
         raise ActiveRecord::Rollback
       end
     end
-    render_edit
+
+    if mergeable && success
+      flash[:notice] = "The reservation was successfully updated."
+      redirect_to facility_order_path(@order_detail.facility, @order_detail.order.merge_order || @order_detail.order)
+    elsif success
+      flash[:notice] = "The reservation was successfully updated."
+      redirect_to (@order.purchased? ? reservations_path : cart_path)
+    else
+      render_edit
+    end
   end
 
   # POST /orders/:order_id/order_details/:order_detail_id/reservations/:reservation_id/move

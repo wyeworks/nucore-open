@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
-gem "rails", "~> 6.1.7"
+gem "rails", "~> 7.0.8"
 gem "sprockets", "< 4" # Temporarily lock as we upgrade
 gem "sprockets-rails", "3.2.2" # downgrade to avoid a bug
 gem "config"
@@ -129,8 +129,8 @@ group :development, :test do
   gem "pry-byebug"
   gem "rspec-rails"
   gem "rspec-activejob"
-  gem "teaspoon-jasmine"
   gem "selenium-webdriver"
+  gem "teaspoon-jasmine"
 end
 
 group :test do

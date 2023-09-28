@@ -32,6 +32,19 @@ module Nucore
     # https://github.com/rails/rails/blob/dc1242fd5a4d91e63846ab552a07e19ebf8716ac/activerecord/CHANGELOG.md
     config.active_record.yaml_column_permitted_classes = [Symbol, ActiveSupport::HashWithIndifferentAccess]
 
+    # ** Please read carefully, this must be configured in config/application.rb **
+    # Change the format of the cache entry.
+    # Changing this default means that all new cache entries added to the cache
+    # will have a different format that is not supported by Rails 6.1 applications.
+    # Only change this value after your application is fully deployed to Rails 7.0
+    # and you have no plans to rollback.
+    config.active_support.cache_format_version = 7.0
+
+    # ** Please read carefully **
+    # Disables the deprecated #to_s override in some Ruby core classes
+    # See https://guides.rubyonrails.org/configuring.html#config-active-support-disable-to-s-conversion for more information.
+    config.active_support.disable_to_s_conversion = true
+
     # config.time_zone = "Central Time (US & Canada)"
 
     # Settings in config/environments/* take precedence over those specified here.
@@ -46,9 +59,11 @@ module Nucore
 
     # The default locale is :en and all translations under config/locales/ are auto-loaded
     # But we want to make sure anything in the override folder happens at the very end
+    # In Rails 7, the application by default overloads nested locales, so we do not need to override the load_path in the application.rb
+    # https://blog.saeloun.com/2021/07/20/rails-7-allows-nested-locales/
+    # In order to ensure overrides are loaded last, we need to store them outside of config/locales.  See https://github.com/rails/rails/pull/41872#issuecomment-1083413346
     initializer "nucore.i18n.move_overrides_to_end", after: "text_helpers.i18n.add_load_paths" do
-      config.i18n.load_path -= Dir[Rails.root.join("config", "locales", "override", "*.{rb,yml}").to_s]
-      config.i18n.load_path += Dir[Rails.root.join("config", "locales", "override", "*.{rb,yml}").to_s]
+      config.i18n.load_path += Dir[Rails.root.join("config", "override_locales", "*.{rb,yml}").to_s]
     end
 
     config.active_job.queue_adapter = :delayed_job
