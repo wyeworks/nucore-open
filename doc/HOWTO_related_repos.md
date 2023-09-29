@@ -50,6 +50,8 @@ You can use the [`bin/latest_from_open`](bin/latest_from_open) script to create 
 
 When merging in changes from the open source repo, differences in `scehma.rb` and `Gemfile.lock` tend to be the trickiest to resolve.  Run `bundle` and `rails db:migrate` locally to ensure any conflicts have been resolved as expected.
 
+Before merging “latest from open” PRs, make sure that the related PR against nucore-open has deployed successfully.
+
 ## Squash vs Merge
 
 *The `bin/merge_describer` script only describes commits which include the parenthesized branch number.*
@@ -57,7 +59,7 @@ When merging in changes from the open source repo, differences in `scehma.rb` an
 On github, squash commits include a parenthesized branch number like `(#45)` in the commit title by default, except when the PR only includes 1 commit. Merge commits do not include the parenthesized branch number in the title. So...
 
 * Use **Squash** for feature PRs, and copy the PR description into the squash merge message.  Make sure the parenthesized branch number is in the commit title so the squash commit will get described later on in the GitHub release and release ticket.
-* Use **Merge** commits for `latest_from_open_MMDDYYYY` branch PRs.
+* Use **Merge** commits for `latest_from_open_MMDDYYYY` branch PRs.  Make sure that the related PR against nucore-open has deployed successfully before merging.
 
 ## PR Titles
 
