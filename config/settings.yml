@@ -156,6 +156,7 @@ split_accounts:
 # appropriate environment, e.g. config/settings/production.yml.
 # If you wish to use it for development, add it to a `config/settings/development.local.yml`
 # file (this file is gitignored).
+# This needs to be here even if you're using Active Storage
 paperclip:
   storage: filesystem
   url: ":rails_relative_url_root/uploads/:class/:attachment/:id_partition/:style/:safe_filename"
