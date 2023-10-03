@@ -84,18 +84,12 @@ class FileUploadsController < ApplicationController
   end
 
   def create_product_survey
-    @flash_notice = nil
     if params[:stored_file]
       create_product_survey_from_file
     else
       create_product_survey_from_url
     end
-    flash[:notice] = @flash_notice if @flash_notice
-    if @redirect_to
-      redirect_to(@redirect_to)
-    else
-      render :product_survey
-    end
+    render :product_survey unless performed?
   end
 
   def destroy
@@ -149,8 +143,8 @@ class FileUploadsController < ApplicationController
           raise ActiveRecord::Rollback
         end
         @file.save!
-        @flash_notice = "Order File Template uploaded"
-        @redirect_to = product_survey_path(current_facility, @product.parameterize, @product)
+        flash[:notice] = "Order File Template uploaded"
+        redirect_to(product_survey_path(current_facility, @product.parameterize, @product)) && return
       rescue => e
         @file.errors.add(:base, "Order File Template delete error: #{e.message}")
         raise ActiveRecord::Rollback
@@ -172,13 +166,13 @@ class FileUploadsController < ApplicationController
         esp = ExternalServicePasser.where(passer_id: @product.id, external_service_id: ext.id).first
 
         if esp
-          @flash_notice = "That Online Order Form already exists"
+          flash[:notice] = "That Online Order Form already exists"
         else
-          @flash_notice = "Online Order Form added"
+          flash[:notice] = "Online Order Form added"
           ExternalServicePasser.create!(passer: @product, external_service: ext)
         end
 
-        @redirect_to = product_survey_path(current_facility, @product.parameterize, @product)
+        redirect_to(product_survey_path(current_facility, @product.parameterize, @product)) && return
       rescue => e
         @survey ||= UrlService.new
         @survey.errors.add(:base, "Online Order Form add error: #{e.message}")
