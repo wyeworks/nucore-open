@@ -25,7 +25,7 @@ module UmassCorum
 
     def quantity
       if order_detail.time_data.present? && order_detail.time_data.respond_to?(:billable_minutes)
-        minutes = order_detail.time_data.billable_minutes
+        minutes = order_detail.time_data.billable_duration_mins
         QuantityPresenter.new(order_detail.product, minutes).to_s if minutes
       else
         QuantityPresenter.new(order_detail.product, order_detail.quantity).to_s
