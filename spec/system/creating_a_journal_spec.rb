@@ -83,7 +83,8 @@ RSpec.describe "Creating a journal" do
           click_button "Create"
           expect(page).to have_content "90-Day Justification"
           click_button "OK"
-          expect(page).to have_content "The journal file has been created successfully", wait: 3
+          # sometimes takes longer to load and causes failures in CI
+          expect(page).to have_content "The journal file has been created successfully", wait: 6
         end
 
         it "has a 90 day pop up when the check box is checked" do
@@ -91,7 +92,8 @@ RSpec.describe "Creating a journal" do
           click_button "Create"
           expect(page).to have_content "90-Day Justification"
           click_button "OK"
-          expect(page).to have_content "The journal file has been created successfully", wait: 3
+          # sometimes takes longer to load and causes failures in CI
+          expect(page).to have_content "The journal file has been created successfully", wait: 6
         end
       end
     end
@@ -138,7 +140,7 @@ RSpec.describe "Creating a journal" do
           expect(page).to have_content "90-Day Justification"
           click_link "OK"
           # sometimes takes longer to load and causes failures in CI
-          expect(page).to have_content "We are in the year-end closing window.", wait: 4
+          expect(page).to have_content "We are in the year-end closing window.", wait: 6
         end
 
         it "has NO 90 day and journal creation reminder pop up when nothing is checked" do

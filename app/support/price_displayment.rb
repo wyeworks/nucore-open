@@ -65,11 +65,26 @@ module PriceDisplayment
     build_quantity_presenter.html
   end
 
+  def wrapped_statement_quanity
+    build_statement_quantity_presenter.html
+  end
+
   def csv_quantity
     build_quantity_presenter.csv
   end
 
   private
+
+  def build_statement_quantity_presenter
+    quantity_to_display = if reservation.billable_duration_mins > 0
+                            reservation.billable_duration_mins
+                          elsif time_data.try(:duration_mins)
+                            time_data.duration_mins
+                          else
+                            quantity
+                          end
+    QuantityPresenter.new(product, quantity_to_display)
+  end
 
   def build_quantity_presenter
     quantity_to_display = if time_data.try(:actual_duration_mins) && time_data.actual_duration_mins.to_i > 0
