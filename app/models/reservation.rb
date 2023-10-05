@@ -387,8 +387,11 @@ class Reservation < ApplicationRecord
     self.billable_minutes = calculated_billable_minutes
   end
 
-  def calculated_billable_minutes
-    if order_detail&.complete? && order_detail&.canceled_at.blank? && price_policy.present?
+  def set_billable_minutes?
+    order_detail&.complete? && order_detail&.canceled_at.blank? && price_policy.present?
+  end
+
+  def billable_duration_mins
       case price_policy.charge_for
       when InstrumentPricePolicy::CHARGE_FOR.fetch(:reservation)
         TimeRange.new(reserve_start_at, reserve_end_at).duration_mins
@@ -398,7 +401,10 @@ class Reservation < ApplicationRecord
         end_time = [reserve_end_at, actual_end_at].max
         TimeRange.new(reserve_start_at, end_time).duration_mins
       end
-    end
+  end
+
+  def calculated_billable_minutes
+    set_billable_minutes? ? billable_duration_mins : nil
   end
 
 end
