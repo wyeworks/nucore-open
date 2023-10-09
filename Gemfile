@@ -53,8 +53,7 @@ gem "dynamic_form", git: "https://github.com/payrollhero/dynamic_form"
 # 5.0 has breaking changes based which need to be addressed before we can upgrade
 gem "ckeditor", "< 5"
 gem "jquery-rails"
-# https://github.com/jquery-ui-rails/jquery-ui-rails/issues/146#issuecomment-1655225232
-gem "jquery-ui-rails", git: "https://github.com/jquery-ui-rails/jquery-ui-rails.git"
+gem "jquery-ui-rails", "~> 6.0"
 gem "vuejs-rails", "~> 1.0.26" # 2.0 introduces breaking changes
 gem "clockpunch"
 gem "simple_form"
