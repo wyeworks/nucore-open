@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_07_173215) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_10_131628) do
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -932,6 +932,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_07_173215) do
     t.datetime "date_added_admin_override", precision: nil
     t.datetime "project_start_date", precision: nil
     t.datetime "project_end_date", precision: nil
+    t.string "setid"
+    t.string "speedchart_desc"
+    t.string "hr_acct_cd"
     t.index ["speed_type"], name: "index_umass_corum_api_speed_types_on_speed_type", unique: true
   end
 
