@@ -39,7 +39,7 @@ module UmassCorum
         logger.info(exception.message)
         false
       else
-        logger.info("ID ##{speed_type_account.id}, HR Account Code: #{hr_acct_cd}, Set ID: #{speed_type_account.set_id}, Speed Chart Description: #{speedchart_desc}")
+        logger.info("ID ##{speed_type_account.id}, HR Account Code: #{api_speed_type.hr_acct_cd}, Set ID: #{api_speed_type.setid}, Speed Chart Description: #{api_speed_type.speedchart_desc}")
 
         api_speed_type.save!
       end
