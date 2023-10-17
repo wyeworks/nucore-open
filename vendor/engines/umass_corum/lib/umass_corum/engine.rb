@@ -34,6 +34,7 @@ module UmassCorum
       ViewHook.add_hook("admin.shared.sidenav_billing", "custom_reconcilable_account_types", "facility_accounts/mivp_sidenav")
       ViewHook.add_hook("facility_accounts.show", "additional_account_fields", "facility_accounts/custom_fields")
       ViewHook.add_hook("facility_accounts.show", "top_of_readonly_form", "facility_accounts/account_label")
+      ViewHook.add_hook("accounts.show", "after_end_of_form", "accounts/project_dates")
       ::Reports::ExportRaw.transformers << "UmassCorum::AdminReports::ExportRawTransformer"
       SpeedTypeAccountBuilder.common_permitted_account_params << :api_speed_type_attributes
       VoucherSplitAccountBuilder.common_permitted_account_params << :account_number
