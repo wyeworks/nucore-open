@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_10_131628) do
+ActiveRecord::Schema[7.0].define(version: 2023_10_12_210150) do
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -134,6 +134,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_10_131628) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
+  create_table "duration_rates", charset: "utf8", force: :cascade do |t|
+    t.integer "min_duration"
+    t.decimal "rate", precision: 16, scale: 8
+    t.integer "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_duration_rates_on_product_id"
   end
 
   create_table "email_events", id: :integer, charset: "utf8", force: :cascade do |t|
@@ -519,6 +528,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_10_131628) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
+    t.boolean "highlighted", default: false, null: false
     t.index ["deleted_at"], name: "index_price_groups_on_deleted_at"
     t.index ["facility_id", "name"], name: "index_price_groups_on_facility_id_and_name"
   end
@@ -664,6 +674,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_10_131628) do
     t.integer "tablet_port_number"
     t.text "tablet_location_description"
     t.string "billing_mode", default: "Default", null: false
+    t.string "pricing_mode", default: "Schedule Rule", null: false
     t.index ["dashboard_token"], name: "index_products_on_dashboard_token"
     t.index ["facility_account_id"], name: "fk_facility_accounts"
     t.index ["facility_id"], name: "fk_rails_0c9fa1afbe"
@@ -1040,6 +1051,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_10_131628) do
   add_foreign_key "bulk_email_jobs", "users"
   add_foreign_key "bundle_products", "products", column: "bundle_product_id", name: "fk_bundle_prod_prod"
   add_foreign_key "bundle_products", "products", name: "fk_bundle_prod_bundle"
+  add_foreign_key "duration_rates", "products"
   add_foreign_key "email_events", "users"
   add_foreign_key "facility_accounts", "facilities", name: "fk_facilities"
   add_foreign_key "instrument_statuses", "products", column: "instrument_id", name: "fk_int_stats_product"

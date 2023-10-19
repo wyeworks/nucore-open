@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# NOTE: only still in use by NU and UMass
 
 ENV["RAILS_ENV"] = @environment
 require File.expand_path(File.dirname(__FILE__) + "/environment")

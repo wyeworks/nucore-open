@@ -133,6 +133,7 @@ FactoryBot.define do
     end
 
     reserve_interval { 1 }
+    pricing_mode { "Schedule Rule" }
 
     schedule { create :schedule, facility: facility }
 

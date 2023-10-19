@@ -1,0 +1,8 @@
+= pgd.label pgd.object.price_group.name
+= pgd.number_field :discount_percent, size: 4
+= pgd.hidden_field :price_group_id, value: pgd.object.price_group.id
+= "%"
+- if pgd.object.price_group == PriceGroup.base 
+  = pgd.hint :base_discount_hint
+- elsif pgd.object.price_group == PriceGroup.external
+  = pgd.hint :external_discount_hint

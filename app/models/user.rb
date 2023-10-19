@@ -150,7 +150,7 @@ class User < ApplicationRecord
   end
 
   def account_price_groups
-    groups = accounts.active.collect(&:price_groups).flatten.uniq
+    accounts.active.collect(&:price_groups).flatten.uniq
   end
 
   #

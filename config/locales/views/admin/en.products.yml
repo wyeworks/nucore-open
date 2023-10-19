@@ -30,7 +30,21 @@ en:
             initial_order_status: "Default status for new orders"
             is_archived: "Inactivate the product, disallowing purchase and viewing"
             is_hidden: "Hide %{field} from end users; visible to staff when \"ordering on behalf\" of another user"
-            billing_mode: "<b>Default</b>: Standard billing workflow, and payment source required.<br><b>Skip Review</b>: Reconciled on completion, and payment source required<br><b>Nonbillable</b>: Reconciled on completion, and NO payment source is required"
+            billing_mode: "<b>Default</b>: Standard billing workflow, payment source required.<br><b>Skip Review</b>: Reconciled on completion, payment source required.<br><b>Nonbillable</b>: Reconciled on completion, NO payment source required."
+        tabnav:
+          details: "Details"
+          relays: "Timers & Relays"
+          schedule_rules: "Scheduling"
+          users: "Access List"
+          products: "Bundled Products"
+          pricing_rules: "Pricing"
+          restrictions: "Restrictions"
+          duration_pricing: "Duration Pricing"
+          reservations: "Reservations"
+          documentation: "Docs"
+          accessories: "Accessories"
+          surveys: "Order Forms"
+          notifications: "Notifications"
 
       services:
         index:

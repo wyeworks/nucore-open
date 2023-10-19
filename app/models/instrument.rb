@@ -8,14 +8,18 @@ class Instrument < Product
   include EmailListAttribute
 
   RESERVE_INTERVALS = [1, 5, 10, 15, 30, 60].freeze
+  PRICING_MODES = ["Schedule Rule", "Duration"].freeze
 
   with_options foreign_key: "product_id" do |instrument|
     instrument.has_many :admin_reservations
     instrument.has_many :instrument_price_policies
     instrument.has_many :offline_reservations
     instrument.has_many :current_offline_reservations, -> { current }, class_name: "OfflineReservation"
+    instrument.has_many :duration_rates
   end
   has_one :alert, dependent: :destroy, class_name: "InstrumentAlert"
+
+  accepts_nested_attributes_for :duration_rates
 
   email_list_attribute :cancellation_email_recipients
   email_list_attribute :issue_report_recipients
@@ -35,6 +39,12 @@ class Instrument < Product
            :maximum_reservation_is_multiple_of_interval,
            :max_reservation_not_less_than_min
 
+  validates :pricing_mode, presence: true, inclusion: { in: PRICING_MODES }
+
+  validate :duration_rates_only_for_duration_pricing_mode
+  validate :unique_duration_rates
+  validates :duration_rates, length: { maximum: 4 }
+
   # Callbacks
   # --------
 
@@ -48,7 +58,6 @@ class Instrument < Product
     joins("LEFT OUTER JOIN relays ON relays.instrument_id = products.id")
       .where("relays.instrument_id IS NULL")
   end
-
   # Instance methods
   # -------
 
@@ -97,6 +106,10 @@ class Instrument < Product
     end
   end
 
+  def duration_pricing_mode?
+    pricing_mode == "Duration"
+  end
+
   private
 
   def minimum_reservation_is_multiple_of_interval
@@ -120,6 +133,20 @@ class Instrument < Product
   def max_reservation_not_less_than_min
     if max_reserve_mins && min_reserve_mins && max_reserve_mins < min_reserve_mins
       errors.add :max_reserve_mins, :max_less_than_min
+    end
+  end
+
+  def unique_duration_rates
+    return unless duration_pricing_mode?
+
+    if duration_rates.pluck(:min_duration).uniq.length < duration_rates.length
+      errors.add(:base, "Minimum duration values must be unique")
+    end
+  end
+
+  def duration_rates_only_for_duration_pricing_mode
+    if !duration_pricing_mode? && duration_rates.present?
+      errors.add(:base, "Can only be set for Instruments with Duration pricing mode")
     end
   end
 
