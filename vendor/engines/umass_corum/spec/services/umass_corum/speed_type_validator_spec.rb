@@ -96,6 +96,48 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
     end
   end
 
+  describe "#valid_at?" do
+    context "when there is a project_id" do
+      let!(:api_speed_type) { create(:api_speed_type, speed_type: speed_type, project_start_date: 4.days.ago, project_end_date: 4.days.from_now) }
+
+      it "returns true for a fulfilled_date at the beginning of the project_start_date day" do
+        expect(validator.valid_at?(4.days.ago.beginning_of_day)).to be true
+      end
+
+      it "returns true for a fulfilled_date at the end of the project_end_date day" do
+        expect(validator.valid_at?(4.days.from_now.end_of_day)).to be true
+      end
+
+      it "returns false with fulfilled_date is before the project_start_date" do
+        expect(validator.valid_at?(5.days.ago)).to be false
+      end
+
+      it "returns false with fulfilled_date is after the project_end_date" do
+        expect(validator.valid_at?(5.days.from_now)).to be false
+      end
+    end
+
+    context "when there is not a project_id and there is a date_removed" do
+      let!(:api_speed_type) { create(:api_speed_type, speed_type: speed_type, project_id: nil, date_added: 4.days.ago, date_removed: 4.days.from_now, active: false) }
+
+      it "returns true for a fulfilled_date at the beginning of the date_added day" do
+        expect(validator.valid_at?(4.days.ago.beginning_of_day)).to be true
+      end
+
+      it "returns true for a fulfilled_date at the end of the date_removed day" do
+        expect(validator.valid_at?(4.days.from_now.end_of_day)).to be true
+      end
+
+      it "returns false with fulfilled_date is before the date_added" do
+        expect(validator.valid_at?(5.days.ago)).to be false
+      end
+
+      it "returns false with fulfilled_date is after the date_removed" do
+        expect(validator.valid_at?(5.days.from_now)).to be false
+      end
+    end
+  end
+
   it "checks the date_added_admin_override, when it exists" do
     create(:api_speed_type, speed_type: speed_type, date_added: date_added, date_added_admin_override: date_added - 1.years, project_id: nil)
     expect(validator.account_is_open!(date_added - 1.years + 1.day)).to be true

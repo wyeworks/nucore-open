@@ -26,8 +26,8 @@ module UmassCorum
     end
 
     def valid_project_account?(fulfilled_date)
-      project_start_date = api_account.project_start_date
-      project_end_date = api_account.project_end_date
+      project_start_date = api_account.project_start_date&.beginning_of_day
+      project_end_date = api_account.project_end_date&.end_of_day
       return false if project_start_date.blank? || project_end_date.blank?
 
       fulfilled_date.between?(project_start_date, project_end_date)
@@ -36,9 +36,9 @@ module UmassCorum
     def valid_non_project_account?(fulfilled_date)
       start_date = api_account.date_added_admin_override || api_account.date_added
       if api_account.active?
-        start_date <= fulfilled_date
+        start_date.beginning_of_day <= fulfilled_date
       elsif api_account.date_removed.present?
-        start_date <= fulfilled_date && fulfilled_date <= api_account.date_removed
+        start_date.beginning_of_day <= fulfilled_date && fulfilled_date <= api_account.date_removed.end_of_day
       else
         # This should never happen - api_account should be active OR have date_removed set
         if defined?(Rollbar)
