@@ -303,6 +303,9 @@ en:
         max_reserve_mins: Maximum Reservation Minutes
         min_cancel_hours: Reservation Cost Window (hours)
         auto_cancel_mins: Automatic Cancellation Minutes
+      instrument/duration_rates:
+        min_duration: Minimum duration
+        rate: Hourly rate
       price_group:
         is_internal: Is Internal?
       price_policy:

@@ -7,12 +7,12 @@
   = f.association :schedule,
     collection: current_facility.schedules.active.order(:name),
     include_blank: text("instruments.instrument_fields.schedule.unshared")
+  = f.input :pricing_mode, as: :radio_buttons, collection: Instrument::PRICING_MODES, label: text("instruments.instrument_fields.schedule.pricing_mode"), item_wrapper_class: :radio, item_wrapper_tag: :div
 - else
   = f.input :schedule, as: :readonly, value_method: :display_name, hint: false
 
 = f.input :problems_resolvable_by_user, as: :boolean, label: false, inline_label: true
 
-= f.input :pricing_mode, as: :radio_buttons, collection: Instrument::PRICING_MODES, label: text("instruments.instrument_fields.schedule.pricing_mode"), item_wrapper_class: :radio, item_wrapper_tag: :div
 
 .well
   %h3= text("instruments.instrument_fields.reservation.label.restrict")
