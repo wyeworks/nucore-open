@@ -8,6 +8,7 @@ class Instrument < Product
   include EmailListAttribute
 
   RESERVE_INTERVALS = [1, 5, 10, 15, 30, 60].freeze
+  PRICING_MODES = ["Schedule Rule", "Duration"].freeze
 
   with_options foreign_key: "product_id" do |instrument|
     instrument.has_many :admin_reservations
@@ -35,6 +36,8 @@ class Instrument < Product
            :maximum_reservation_is_multiple_of_interval,
            :max_reservation_not_less_than_min
 
+  validates :pricing_mode, presence: true, inclusion: { in: PRICING_MODES }
+
   # Callbacks
   # --------
 
@@ -48,7 +51,6 @@ class Instrument < Product
     joins("LEFT OUTER JOIN relays ON relays.instrument_id = products.id")
       .where("relays.instrument_id IS NULL")
   end
-
   # Instance methods
   # -------
 

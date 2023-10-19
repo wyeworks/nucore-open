@@ -19,15 +19,20 @@
 
 %p= t("views.schedule_rules.discount_hint")
 
-= f.association :price_group_discounts do |pgd|
-  = pgd.label pgd.object.price_group.name
-  = pgd.number_field :discount_percent, size: 4
-  = pgd.hidden_field :price_group_id, value: pgd.object.price_group.id
-  = "%"
-  - if pgd.object.price_group == PriceGroup.base 
-    = pgd.hint :base_discount_hint
-  - elsif pgd.object.price_group == PriceGroup.external
-    = pgd.hint :external_discount_hint
+- unless @highlighted_price_group_discounts&.empty?
+  .well
+    %h4= t("views.schedule_rules.highlighted_heading")
+    = f.association :price_group_discounts, collection: @highlighted_price_group_discounts do |pgd|
+      = render partial: "price_group_discount", locals: { pgd: pgd }
+
+- unless @non_highlighted_price_group_discounts&.empty?
+  .well
+    - if @highlighted_price_group_discounts.blank?
+      %h4= t("views.schedule_rules.price_groups_heading")
+    - else
+      %h4= t("views.schedule_rules.non_highlighted_heading")
+    = f.association :price_group_discounts, collection: @non_highlighted_price_group_discounts do |pgd|
+      = render partial: "price_group_discount", locals: { pgd: pgd }
 
 - if @product.has_product_access_groups?
   = f.association :product_access_groups, as: :check_boxes, collection: @product.product_access_groups, wrapper_html: { class: "inline-checkbox-list" }

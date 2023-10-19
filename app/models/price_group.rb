@@ -24,6 +24,7 @@ class PriceGroup < ApplicationRecord
 
   scope :for_facility, ->(facility) { where(facility_id: [nil, facility.id]) }
   scope :globals, -> { where(facility_id: nil) }
+  scope :by_display_order, -> { reorder(display_order: :asc, name: :asc) }
 
   def self.base
     @base ||= globals.find_by(name: Settings.price_group.name.base)
