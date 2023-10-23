@@ -19,7 +19,7 @@
 
 %p= t("views.schedule_rules.discount_hint")
 
-- unless @highlighted_price_group_discounts&.empty?
+- if @highlighted_price_group_discounts&.present?
   .well
     %h4= t("views.schedule_rules.highlighted_heading")
     = f.association :price_group_discounts, collection: @highlighted_price_group_discounts do |pgd|
