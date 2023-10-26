@@ -56,14 +56,38 @@ module UmassCorum
     # For the purpose of comparison with other date fields,
     # an expires_at date far in the future should be treated as nil.
     def needs_update?
-      return false if speed_type_account.expires_at > 75.years.from_now && api_speed_type.date_removed.blank?
+      # If for some reason there's a project_id but not a project_end_date, this will fall back
+      # to the previous behavior before project_end_date was being used. This probably isn't a
+      # state the API will be in, so this is an edge case that will be logged to Rollbar
 
-      api_speed_type.date_removed != speed_type_account.expires_at
+      if api_speed_type.project_id.present? && api_speed_type.project_end_date.blank?
+        msg = "UmassCorum::ApiSpeedType (ID #{api_speed_type.id}) has a project_id but no project_end_date"
+
+        logger.info(msg)
+
+        if defined?(Rollbar)
+          Rollbar.warn(msg)
+        end
+      end
+
+      if api_speed_type.project_id.present? && api_speed_type.project_end_date.present?
+        api_speed_type.project_end_date != speed_type_account.expires_at
+      elsif api_speed_type.date_removed.present?
+        api_speed_type.date_removed != speed_type_account.expires_at
+      else
+        speed_type_account.expires_at <= 75.years.from_now
+      end
     end
 
     # SpeedTypeAccount#expires_at is required, use the default if date_removed is nil
     def new_exp_date
-      api_speed_type.date_removed || speed_type_account.class.default_nil_exp_date
+      if api_speed_type.project_id.present? && api_speed_type.project_end_date.present?
+        api_speed_type.project_end_date
+      elsif api_speed_type.date_removed
+        api_speed_type.date_removed
+      else
+        speed_type_account.class.default_nil_exp_date
+      end
     end
 
   end
