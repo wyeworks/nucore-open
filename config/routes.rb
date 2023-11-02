@@ -144,8 +144,6 @@ Rails.application.routes.draw do
 
     resources :price_group_products, only: [:edit, :update]
 
-    resources :instrument_duration_rates, only: [:edit, :update]
-
     resources :order_statuses, except: [:show]
 
     resources :facility_users, controller: "facility_users", only: [:index, :destroy], path: "#{I18n.t('facility_downcase')}_users" do

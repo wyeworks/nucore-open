@@ -70,8 +70,8 @@ RSpec.describe PriceGroup do
 
   describe "can_delete?" do
     it "should not be deletable if global" do
-      @global_price_group = FactoryBot.build(:price_group, facility: nil)
-      @global_price_group.save(validate: false)
+      @global_price_group = FactoryBot.build(:price_group, facility: nil, global: true)
+      @global_price_group.save
       expect(@global_price_group).to be_persisted
       expect(@global_price_group).to be_global
       expect(@global_price_group).not_to be_can_delete
@@ -129,12 +129,5 @@ RSpec.describe PriceGroup do
       end
     end
   end
-
-  # global price groups are special cases; we don't test them here because price groups are required to have facilities
-  # it "should not be deletable if its a global price group" do
-  #   @global_price_group = FactoryBot.create(:price_group)
-  #   @global_price_group.should be_valid
-  #   @global_price_group.destroy.should == false
-  # end
 
 end

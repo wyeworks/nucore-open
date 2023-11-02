@@ -8,14 +8,9 @@ FactoryBot.define do
     is_internal { true }
     admin_editable { true }
 
-    trait :skip_validations do
-      to_create { |instance| instance.save(validate: false) }
-    end
-
     trait :global do
-      # Global PriceGroups are technically invalid because they have no facility
-      skip_validations
       facility { nil }
+      global { true }
       admin_editable { false }
     end
 

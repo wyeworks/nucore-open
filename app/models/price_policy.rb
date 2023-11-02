@@ -9,6 +9,9 @@ class PricePolicy < ApplicationRecord
   belongs_to :created_by, class_name: "User"
   has_many :order_details
 
+  accepts_nested_attributes_for :product
+  accepts_nested_attributes_for :price_group
+
   validates :start_date, :expire_date, presence: true
   validates :price_group_id, :type, presence: true
   validate :start_date_is_unique, if: :start_date?
