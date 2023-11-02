@@ -699,7 +699,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_02_000551) do
     t.index ["facility_id"], name: "index_projects_on_facility_id"
   end
 
-  create_table "rate_starts", charset: "utf8mb3", force: :cascade do |t|
+  create_table "rate_starts", charset: "utf8", force: :cascade do |t|
     t.integer "min_duration"
     t.integer "product_id", null: false
     t.datetime "created_at", null: false
