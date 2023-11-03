@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_10_12_210150) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_02_000551) do
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -137,12 +137,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_210150) do
   end
 
   create_table "duration_rates", charset: "utf8", force: :cascade do |t|
-    t.integer "min_duration"
     t.decimal "rate", precision: 16, scale: 8
-    t.integer "product_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["product_id"], name: "index_duration_rates_on_product_id"
+    t.decimal "subsidy", precision: 16, scale: 8
+    t.bigint "price_group_id"
+    t.bigint "rate_start_id"
+    t.index ["price_group_id"], name: "index_duration_rates_on_price_group_id"
+    t.index ["rate_start_id"], name: "index_duration_rates_on_rate_start_id"
   end
 
   create_table "email_events", id: :integer, charset: "utf8", force: :cascade do |t|
@@ -529,6 +531,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_210150) do
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
     t.boolean "highlighted", default: false, null: false
+    t.boolean "global", default: false, null: false
     t.index ["deleted_at"], name: "index_price_groups_on_deleted_at"
     t.index ["facility_id", "name"], name: "index_price_groups_on_facility_id_and_name"
   end
@@ -694,6 +697,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_210150) do
     t.boolean "active", default: true, null: false
     t.index ["facility_id", "name"], name: "index_projects_on_facility_id_and_name", unique: true
     t.index ["facility_id"], name: "index_projects_on_facility_id"
+  end
+
+  create_table "rate_starts", charset: "utf8", force: :cascade do |t|
+    t.integer "min_duration"
+    t.integer "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id"], name: "index_rate_starts_on_product_id"
   end
 
   create_table "relays", id: :integer, charset: "utf8", force: :cascade do |t|
@@ -1051,7 +1062,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_210150) do
   add_foreign_key "bulk_email_jobs", "users"
   add_foreign_key "bundle_products", "products", column: "bundle_product_id", name: "fk_bundle_prod_prod"
   add_foreign_key "bundle_products", "products", name: "fk_bundle_prod_bundle"
-  add_foreign_key "duration_rates", "products"
   add_foreign_key "email_events", "users"
   add_foreign_key "facility_accounts", "facilities", name: "fk_facilities"
   add_foreign_key "instrument_statuses", "products", column: "instrument_id", name: "fk_int_stats_product"
@@ -1102,6 +1112,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_10_12_210150) do
   add_foreign_key "products", "facility_accounts", name: "fk_facility_accounts"
   add_foreign_key "products", "schedules", name: "fk_instruments_schedule"
   add_foreign_key "projects", "facilities"
+  add_foreign_key "rate_starts", "products"
   add_foreign_key "reservations", "order_details"
   add_foreign_key "reservations", "products", name: "reservations_instrument_id_fk"
   add_foreign_key "reservations", "users", column: "created_by_id"

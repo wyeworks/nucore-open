@@ -1,1 +1,4 @@
-= render "time_based_price_policies/price_policy_fields", f: f, cancellation: true, minimum_cost: true, charge_for_collection: charge_for_options(@price_policies.first.product)
+- if @product.duration_pricing_mode?
+  = render "time_based_price_policies/stepped_billing_price_policy_fields", f: f, cancellation: true, minimum_cost: true, charge_for_collection: charge_for_options(@price_policies.first.product)
+- else
+  = render "time_based_price_policies/price_policy_fields", f: f, cancellation: true, minimum_cost: true, charge_for_collection: charge_for_options(@price_policies.first.product)

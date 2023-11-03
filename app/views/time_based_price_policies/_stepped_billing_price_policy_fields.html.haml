@@ -1,0 +1,67 @@
+= content_for :head_content do
+  = javascript_include_tag "price_policy"
+
+- price_policy = @price_policies.first
+= render "price_policies/common_fields", f: f, price_policy: price_policy
+
+- if local_assigns[:charge_for_collection]
+  = f.input :charge_for,
+    collection: charge_for_collection,
+    selected: price_policy.charge_for
+
+%div{ style: "display: flex; flex-direction: row-reverse" }
+  %h4.half-width= "Stepped Billing Rates"
+%table.table.table-striped.table-hover.price-policy-table
+  %thead
+    %tr
+      %th{ rowspan: "2" }= PriceGroup.model_name.human
+      %th{ rowspan: "2" }= price_policy.class.human_attribute_name(:type)
+      %th{ rowspan: "2" }= price_policy.class.human_attribute_name(:can_purchase)
+      - if local_assigns[:minimum_cost]
+        %th= price_policy.class.human_attribute_name(:minimum_cost)
+      - if local_assigns[:cancellation]
+        %th= price_policy.class.human_attribute_name(:cancellation_cost)
+      %th= "Initial Rate"
+      %th= "Step 2"
+      %th= "Step 3"
+      %th= "Step 4"
+  %tbody
+    %tr
+      %td
+      %td
+      %td
+      - if local_assigns[:minimum_cost]
+        %td
+      - if local_assigns[:cancellation]
+        %td
+      %td= 0
+      = fields_for :product, @product do |p|
+        = p.fields_for :rate_starts do |rs|
+          %td
+            = rs.label :min_duration, "Rate Start (hr):", class: "normal-weight"
+            = rs.number_field :min_duration, min: 1, class: "half-width"
+    - @price_policies.each do |price_policy|
+      - price_group = price_policy.price_group
+      = fields_for "price_policy_#{price_group.id}", price_policy do |pp|
+        - row_class = []
+        - row_class << "js--masterInternalRow" if price_group.master_internal?
+        - row_class << "js--adjustmentRow" unless price_group.external? || price_group.master_internal?
+        %tr{class: row_class}
+          %td= price_group.name
+          %td= price_group.type_string
+          %td= pp.check_box :can_purchase, class: "js--canPurchase"
+          - if price_group.external? || price_group.master_internal?
+            = render "time_based_price_policies/stepped_billing_amount_row", price_group: price_group, price_policy: price_policy, pp: pp, cancellation: cancellation, minimum_cost: minimum_cost
+          - else
+            = render "time_based_price_policies/stepped_billing_adjustment_row", price_group: price_group, price_policy: price_policy, pp: pp, cancellation: cancellation, minimum_cost: minimum_cost
+          = pp.fields_for :price_group do |pg|
+            = pg.fields_for :duration_rates do |dr|
+              - if price_group.external? || price_group.master_internal?
+                %td
+                  = dr.label :rate, "Rate per hr:", class: "normal-weight"
+                  = dr.text_field :rate, value: number_to_currency(dr.object.rate, unit: "", delimiter: ""), size: 8
+              - else
+                %td
+                  = dr.label :subsidy, "Adjustment:", class: "normal-weight"
+                  %span="-"
+                  = dr.text_field :subsidy, value: number_to_currency(dr.object.subsidy, unit: "", delimiter: ""), size: 8
