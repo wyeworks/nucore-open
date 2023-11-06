@@ -52,13 +52,16 @@ class PricePolicyUpdater
     @price_policies.each do |price_policy|
       price_group_id = price_policy.price_group.id
       duration_rates = @params["price_policy_#{price_group_id}"]["price_group_attributes"]["duration_rates_attributes"]
-      duration_rates.values.each_with_index do |dr, index|
-        if dr["rate"].present? || dr["subsidy"].present?
-          rate_start_id = dr["rate_start_id"] || @product.rate_starts[index]&.id
 
-          duration_rates["#{index}"].merge! ({ rate_start_id: rate_start_id, price_group_id: price_group_id })
-        else
-          duration_rates.delete(index.to_s)
+      if duration_rates.present?
+        duration_rates.values.each_with_index do |dr, index|
+          if dr["rate"].present? || dr["subsidy"].present?
+            rate_start_id = dr["rate_start_id"] || @product.rate_starts[index]&.id
+
+            duration_rates["#{index}"].merge! ({ rate_start_id: rate_start_id, price_group_id: price_group_id })
+          else
+            duration_rates.delete(index.to_s)
+          end
         end
       end
     end
@@ -99,7 +102,11 @@ class PricePolicyUpdater
   end
 
   def permitted_price_group_attributes(price_group)
-    @params["price_policy_#{price_group.id}"]&.permit(*permitted_params) || { can_purchase: false }
+    price_policy_params = @params["price_policy_#{price_group.id}"]&.permit(*permitted_params)
+
+    return { can_purchase: false } if price_policy_params.nil? || price_policy_params.keys.empty? || price_policy_params.keys == ["price_group_attributes"]
+
+    price_policy_params
   end
 
   def permitted_common_params
