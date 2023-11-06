@@ -156,6 +156,7 @@ RSpec.describe InstrumentPricePoliciesController do
 
   context "Duration pricing mode" do
     let(:pricing_mode) { "Duration" }
+    let!(:cannot_purchase_group) { create(:price_group, facility:) }
 
     it "can set up the price policies", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
       visit facility_instruments_path(facility, instrument)
@@ -184,6 +185,8 @@ RSpec.describe InstrumentPricePoliciesController do
       fill_in "price_policy_#{external_price_group.id}[price_group_attributes][duration_rates_attributes][0][rate]", with: "110"
       fill_in "price_policy_#{external_price_group.id}[price_group_attributes][duration_rates_attributes][1][rate]", with: "100"
       fill_in "price_policy_#{external_price_group.id}[price_group_attributes][duration_rates_attributes][2][rate]", with: "90"
+
+      uncheck "price_policy_#{cannot_purchase_group.id}[can_purchase]"
 
       fill_in "note", with: "This is my note"
 
