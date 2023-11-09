@@ -2,7 +2,7 @@
 
 class DurationRate < ApplicationRecord
 
-  belongs_to :price_group
+  belongs_to :price_policy
   belongs_to :rate_start, required: true
 
   validate :rate_or_subsidy

@@ -8,9 +8,10 @@ class PricePolicy < ApplicationRecord
   belongs_to :product
   belongs_to :created_by, class_name: "User"
   has_many :order_details
+  has_many :duration_rates, dependent: :destroy
 
   accepts_nested_attributes_for :product
-  accepts_nested_attributes_for :price_group
+  accepts_nested_attributes_for :duration_rates
 
   validates :start_date, :expire_date, presence: true
   validates :price_group_id, :type, presence: true
@@ -18,6 +19,8 @@ class PricePolicy < ApplicationRecord
   validate :expire_date_within_fiscal_year, if: :order_review_product?
 
   validate :subsidy_less_than_rate, unless: :restrict_purchase?
+
+  validates :duration_rates, length: { maximum: 3 }
 
   with_options if: -> { SettingsHelper.feature_on?(:price_policy_requires_note) } do
     # Length of 10 is defined by Dartmouth.

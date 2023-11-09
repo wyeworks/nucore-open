@@ -10,6 +10,7 @@ class Notifier < ActionMailer::Base
 
   # Welcome user, login credentials
   def new_user(user:, password:)
+    attachments.inline["email_logo.png"] = File.read("#{Rails.root}#{Settings.email_logo_path}") if Settings.email_logo_path.present?
     @user = user
     @password = password
     send_nucore_mail @user.email, text("views.notifier.new_user.subject")

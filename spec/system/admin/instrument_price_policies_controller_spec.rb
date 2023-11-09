@@ -172,9 +172,9 @@ RSpec.describe InstrumentPricePoliciesController do
       fill_in "price_policy_#{base_price_group.id}[minimum_cost]", with: "120"
       fill_in "price_policy_#{base_price_group.id}[cancellation_cost]", with: "15"
 
-      fill_in "price_policy_#{base_price_group.id}[price_group_attributes][duration_rates_attributes][0][rate]", with: "50"
-      fill_in "price_policy_#{base_price_group.id}[price_group_attributes][duration_rates_attributes][1][rate]", with: "40"
-      fill_in "price_policy_#{base_price_group.id}[price_group_attributes][duration_rates_attributes][2][rate]", with: "30"
+      fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][0][rate]", with: "50"
+      fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][1][rate]", with: "40"
+      fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]", with: "30"
 
       fill_in "price_policy_#{cancer_center.id}[usage_subsidy]", with: "30"
 
@@ -182,9 +182,9 @@ RSpec.describe InstrumentPricePoliciesController do
       fill_in "price_policy_#{external_price_group.id}[minimum_cost]", with: "122"
       fill_in "price_policy_#{external_price_group.id}[cancellation_cost]", with: "31"
 
-      fill_in "price_policy_#{external_price_group.id}[price_group_attributes][duration_rates_attributes][0][rate]", with: "110"
-      fill_in "price_policy_#{external_price_group.id}[price_group_attributes][duration_rates_attributes][1][rate]", with: "100"
-      fill_in "price_policy_#{external_price_group.id}[price_group_attributes][duration_rates_attributes][2][rate]", with: "90"
+      fill_in "price_policy_#{external_price_group.id}[duration_rates_attributes][0][rate]", with: "110"
+      fill_in "price_policy_#{external_price_group.id}[duration_rates_attributes][1][rate]", with: "100"
+      fill_in "price_policy_#{external_price_group.id}[duration_rates_attributes][2][rate]", with: "90"
 
       uncheck "price_policy_#{cannot_purchase_group.id}[can_purchase]"
 

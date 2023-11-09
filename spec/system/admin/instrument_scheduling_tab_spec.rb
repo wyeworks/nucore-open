@@ -5,6 +5,7 @@ require "rails_helper"
 RSpec.describe "Instrument Scheduling Tab" do
   let(:facility) { FactoryBot.create(:setup_facility) }
   let(:user) { FactoryBot.create(:user, :administrator) }
+  let!(:expert_access_group) { create(:product_access_group, name: "Expert", product: instrument) }
 
   before do
     login_as user
@@ -22,6 +23,7 @@ RSpec.describe "Instrument Scheduling Tab" do
 
       it "shows common Schedule rule fields, but NOT Price Group Discounts" do
         expect(page).to have_content(instrument.name)
+        expect(page).to have_content("Restricted to only these groups")
         expect(page).to have_content("Add Schedule Rule")
         expect(page).not_to have_content("Price Group Discounts")
 
@@ -47,6 +49,7 @@ RSpec.describe "Instrument Scheduling Tab" do
       it "shows common Schedule rule fields, but NOT Price Group Discounts" do
         expect(page).to have_content("Editing Schedule Rule")
         expect(page).not_to have_content("Price Group Discounts")
+        expect(page).to have_content("Restricted to only these groups")
 
         check "Mon"
 
@@ -74,6 +77,7 @@ RSpec.describe "Instrument Scheduling Tab" do
         expect(page).to have_content(instrument.name)
         expect(page).to have_content("Add Schedule Rule")
         expect(page).to have_content("Price Group Discounts")
+        expect(page).to have_content("Restricted to only these groups")
 
         check "Sun"
 
@@ -97,6 +101,7 @@ RSpec.describe "Instrument Scheduling Tab" do
       it "shows all Schedule rule fields" do
         expect(page).to have_content("Editing Schedule Rule")
         expect(page).to have_content("Price Group Discounts")
+        expect(page).to have_content("Restricted to only these groups")
         # As the instrument has no highlighted price groups, header should not be displayed
         expect(page).not_to have_content("Highlighted Price Groups")
         expect(page).to have_content("Price Groups")

@@ -51,7 +51,7 @@ class PricePolicyUpdater
   def assign_attributes_for_stepped_billing
     @price_policies.each do |price_policy|
       price_group_id = price_policy.price_group.id
-      duration_rates = @params["price_policy_#{price_group_id}"]["price_group_attributes"]["duration_rates_attributes"]
+      duration_rates = @params.dig("price_policy_#{price_group_id}", "duration_rates_attributes")
 
       if duration_rates.present?
         duration_rates.values.each_with_index do |dr, index|
@@ -104,7 +104,7 @@ class PricePolicyUpdater
   def permitted_price_group_attributes(price_group)
     price_policy_params = @params["price_policy_#{price_group.id}"]&.permit(*permitted_params)
 
-    return { can_purchase: false } if price_policy_params.nil? || price_policy_params.keys.empty? || price_policy_params.keys == ["price_group_attributes"]
+    return { can_purchase: false } if price_policy_params.nil? || price_policy_params.keys.empty? || price_policy_params.keys == ["duration_rates_attributes"]
 
     price_policy_params
   end
@@ -126,15 +126,12 @@ class PricePolicyUpdater
       :cancellation_cost,
       :unit_cost,
       :unit_subsidy,
-      price_group_attributes: [
+      duration_rates_attributes: [
         :id,
-        duration_rates_attributes: [
-          :id,
-          :subsidy,
-          :rate,
-          :price_group_id,
-          :rate_start_id
-        ]
+        :subsidy,
+        :rate,
+        :price_policy_id,
+        :rate_start_id
       ]
     ].tap do |attributes|
       attributes << :full_price_cancellation if SettingsHelper.feature_on?(:charge_full_price_on_cancellation)

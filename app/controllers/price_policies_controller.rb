@@ -146,7 +146,7 @@ class PricePoliciesController < ApplicationController
 
   def build_duration_rates
     @price_policies.each do |price_policy|
-      (Instrument::MAX_RATE_STARTS - price_policy.price_group.duration_rates.length).times { price_policy.price_group.duration_rates.build }
+      (Instrument::MAX_RATE_STARTS - price_policy.duration_rates.length).times { price_policy.duration_rates.build }
     end
   end
 

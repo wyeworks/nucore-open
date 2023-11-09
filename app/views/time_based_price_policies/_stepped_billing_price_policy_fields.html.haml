@@ -54,14 +54,13 @@
             = render "time_based_price_policies/stepped_billing_amount_row", price_group: price_group, price_policy: price_policy, pp: pp, cancellation: cancellation, minimum_cost: minimum_cost
           - else
             = render "time_based_price_policies/stepped_billing_adjustment_row", price_group: price_group, price_policy: price_policy, pp: pp, cancellation: cancellation, minimum_cost: minimum_cost
-          = pp.fields_for :price_group do |pg|
-            = pg.fields_for :duration_rates do |dr|
-              - if price_group.external? || price_group.master_internal?
-                %td
-                  = dr.label :rate, "Rate per hr:", class: "normal-weight"
-                  = dr.text_field :rate, value: number_to_currency(dr.object.rate, unit: "", delimiter: ""), size: 8
-              - else
-                %td
-                  = dr.label :subsidy, "Adjustment:", class: "normal-weight"
-                  %span="-"
-                  = dr.text_field :subsidy, value: number_to_currency(dr.object.subsidy, unit: "", delimiter: ""), size: 8
+          = pp.fields_for :duration_rates do |dr|
+            - if price_group.external? || price_group.master_internal?
+              %td
+                = dr.label :rate, "Rate per hr:", class: "normal-weight"
+                = dr.text_field :rate, value: number_to_currency(dr.object.rate, unit: "", delimiter: ""), size: 8
+            - else
+              %td
+                = dr.label :subsidy, "Adjustment:", class: "normal-weight"
+                %span="-"
+                = dr.text_field :subsidy, value: number_to_currency(dr.object.subsidy, unit: "", delimiter: ""), size: 8
