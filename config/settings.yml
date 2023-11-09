@@ -48,6 +48,7 @@ validator:
     helper: 'spec/validator_helper' # relative to Rails.root
 
 testing:
+  account_class_name: UmassCorum::SpeedTypeAccount
   account_factory: speed_type_account
   api_account_factory: api_speed_type
 
@@ -142,7 +143,7 @@ feature:
   revenue_account_editable: false
   active_storage: false
   active_storage_for_images_only: true
-  facility_tile_list: <%= ENV.fetch("FACILITY_TILE_LIST", false) %>  
+  facility_tile_list: <%= ENV.fetch("FACILITY_TILE_LIST", false) %>
   facility_tile_list_admin: true
   po_require_affiliate_account: true
 

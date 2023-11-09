@@ -13,7 +13,11 @@ FactoryBot.define do
 
     trait :with_api_speed_type do
       after(:build) do |account, _evaluator|
-        create(:api_speed_type, speed_type: account.account_number)
+        if account.expired?
+          create(:api_speed_type, :expired, speed_type: account.account_number)
+        else
+          create(:api_speed_type, speed_type: account.account_number)
+        end
       end
     end
   end

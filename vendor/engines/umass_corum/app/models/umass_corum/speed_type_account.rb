@@ -22,9 +22,9 @@ module UmassCorum
       100.years.from_now.end_of_day
     end
 
-    def account_open?(_revenue_account)
+    def account_open?(_revenue_account = nil, fulfillment_time: Time.current)
       begin
-        AccountValidator::ValidatorFactory.instance(account_number).account_is_open!
+        AccountValidator::ValidatorFactory.instance(account_number).account_is_open!(fulfillment_time)
       rescue AccountValidator::ValidatorError
         return false
       end

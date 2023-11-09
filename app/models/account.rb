@@ -41,7 +41,8 @@ class Account < ApplicationRecord
   accepts_nested_attributes_for :account_users
   has_many :log_events, as: :loggable
 
-  scope :active, -> { where("expires_at > ?", Time.current).where(suspended_at: nil) }
+  scope :active, -> { active_at (Time.current) }
+  scope :active_at, ->(time) { where("expires_at > ?", time).where(suspended_at: nil) }
 
   scope :administered_by, lambda { |user|
     for_user(user).where("account_users.user_role" => AccountUser.admin_user_roles)
@@ -196,7 +197,7 @@ class Account < ApplicationRecord
     "#{account_number} #{description}"
   end
 
-  def validate_against_product(product, user)
+  def validate_against_product(product, user, fulfillment_time = Time.current)
     # does the facility accept payment method?
     return "#{product.facility.name} does not accept #{type_string} payment" unless product.facility.can_pay_with_account?(self)
 
@@ -207,7 +208,7 @@ class Account < ApplicationRecord
     if respond_to?(:account_open?)
       accts = product.is_a?(Bundle) ? product.products.collect(&:account) : [product.account]
       accts.uniq.each do |acct|
-        return I18n.t("not_open", model: type_string, scope: "activerecord.errors.models.account") unless account_open?(acct)
+        return I18n.t("not_open", model: type_string, scope: "activerecord.errors.models.account") unless account_open?(acct, fulfillment_time: fulfillment_time)
       end
     end
 

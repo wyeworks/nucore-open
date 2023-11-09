@@ -5,7 +5,8 @@ require "csv"
 
 RSpec.describe OrderRowImporter do
   subject { OrderRowImporter.new(row, order_import) }
-  let(:account) { create(:nufs_account, :with_account_owner, owner: user) }
+  let(:account) { create(Settings.testing.account_factory.to_sym, :with_account_owner, owner: user) }
+  let!(:account_api_record) { create(Settings.testing.api_account_factory.to_sym, account_number: account.account_number) } if Settings.testing.api_account_factory
   let(:facility) { create(:setup_facility) }
   let(:order_import) { build(:order_import, creator: user, facility: facility) }
   let(:service) { create(:setup_service, facility: facility) }
@@ -16,8 +17,8 @@ RSpec.describe OrderRowImporter do
     let(:chart_string) { account.account_number }
     let(:product_name) { service.name }
     let(:quantity) { "1" }
-    let(:order_date) { "1/1/2015" }
-    let(:fulfillment_date) { "1/2/2015" }
+    let(:order_date) { I18n.l(1.day.ago.to_date, format: :usa) }
+    let(:fulfillment_date) { I18n.l(Time.current.to_date, format: :usa) }
     let(:reference_id) { "123456" }
 
     before(:each) do
@@ -90,6 +91,36 @@ RSpec.describe OrderRowImporter do
 
       it "has the error message '#{message}'" do
         expect(subject.errors).to include(match /#{message}/)
+      end
+    end
+
+    context "when the account is expired" do
+      include_context "valid row values"
+
+      let!(:account) do
+        create(Settings.testing.account_factory.to_sym,
+          :with_account_owner,
+          owner: user,
+          expires_at: 1.month.ago
+        )
+      end
+
+      context "when the order occurred before the account expires" do
+        let(:order_date) { I18n.l(50.days.ago.to_date, format: :usa) }
+        let(:fulfillment_date) { I18n.l(45.days.ago.to_date, format: :usa) }
+
+        it "creates an order" do
+          expect { subject.import }.to change(Order, :count)
+        end
+      end
+
+      context "when the order occurred after the account expires" do
+        let(:order_date) { I18n.l(1.day.ago.to_date, format: :usa) }
+        let(:fulfillment_date) { I18n.l(Time.current.to_date, format: :usa) }
+
+        it "does not create an order" do
+          expect { subject.import }.not_to change(Order, :count)
+        end
       end
     end
 
@@ -393,8 +424,8 @@ RSpec.describe OrderRowImporter do
 
     context "when the user has an account for the product's facility" do
       let(:chart_string) { account.account_number }
-      let(:fulfillment_date) { "1/1/1999" }
-      let(:order_date) { "1/1/1999" }
+      let(:order_date) { I18n.l(Time.current.to_date, format: :usa) }
+      let(:fulfillment_date) { I18n.l(Time.current.to_date, format: :usa) }
       let(:product) { service }
       let(:product_name) { product.name }
       let(:username) { user.username }
@@ -413,7 +444,7 @@ RSpec.describe OrderRowImporter do
           end
 
           it_behaves_like "an order was not created"
-          it_behaves_like "it has an error message", "does not accept #{NufsAccount.model_name.human} payment"
+          it_behaves_like "it has an error message", "does not accept #{Settings.testing.account_class_name.constantize.model_name.human} payment"
         end
 
         context "and the account is valid for the product" do
@@ -495,8 +526,8 @@ RSpec.describe OrderRowImporter do
       let(:chart_string) { account.account_number }
       let(:product_name) { service.name }
       let(:quantity) { 1 }
-      let(:order_date) { "1/1/2015" }
-      let(:fulfillment_date) { "1/2/2015" }
+      let(:order_date) { I18n.l(Time.current.to_date, format: :usa) }
+      let(:fulfillment_date) { I18n.l(Time.current.to_date, format: :usa) }
 
       before(:each) do
         allow_any_instance_of(Product).to receive(:can_purchase?).and_return(true)

@@ -41,6 +41,7 @@ FactoryBot.define do
     trait :expired do
       active { false }
       date_removed { 1.month.ago }
+      project_end_date { 1.month.ago }
       error_desc { "Speed_type has expired" }
     end
 

@@ -20,9 +20,9 @@ class NufsAccount < Account
     self.expires_at ||= Time.current
   end
 
-  def account_open?(account_num)
+  def account_open?(account_num, fulfillment_time: Time.current)
     begin
-      AccountValidator::ValidatorFactory.instance(account_number, account_num).account_is_open!
+      AccountValidator::ValidatorFactory.instance(account_number, account_num).account_is_open!(fulfillment_time)
     rescue AccountValidator::ValidatorError
       return false
     end
