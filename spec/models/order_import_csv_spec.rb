@@ -15,9 +15,9 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
     let!(:order2) { create(:purchased_order, product: item, account: original_account, user: user, created_by: user.id) }
     let(:file) { create(:csv_stored_file, file: StringIO.new(body)) }
     let(:order_import) { described_class.new(facility: facility, created_by: user.id, upload_file: file) }
-    let(:two_weeks_ago) { I18n.l(15.days.ago.to_date, format: :usa) } # 1
-    let(:yesterday) { I18n.l(1.day.ago.to_date, format: :usa) } # 15
-    let(:today) { I18n.l(Time.current.to_date, format: :usa) } #16
+    let(:two_weeks_ago) { I18n.l(15.days.ago.to_date, format: :usa) }
+    let(:yesterday) { I18n.l(1.day.ago.to_date, format: :usa) }
+    let(:today) { I18n.l(Time.current.to_date, format: :usa) }
 
     describe "happy path" do
       let(:body) do

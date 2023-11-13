@@ -35,5 +35,5 @@
       = f.association :price_group_discounts, collection: @non_highlighted_price_group_discounts do |pgd|
         = render partial: "price_group_discount", locals: { pgd: pgd }
 
-  - if @product.has_product_access_groups?
-    = f.association :product_access_groups, as: :check_boxes, collection: @product.product_access_groups, wrapper_html: { class: "inline-checkbox-list" }
+- if @product.has_product_access_groups?
+  = f.association :product_access_groups, as: :check_boxes, collection: @product.product_access_groups, wrapper_html: { class: "inline-checkbox-list" }
