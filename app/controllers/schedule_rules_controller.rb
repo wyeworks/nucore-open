@@ -42,10 +42,7 @@ class ScheduleRulesController < ApplicationController
     PriceGroup.by_display_order.globals.each do |price_group|
       @schedule_rule.price_group_discounts.build(price_group:, discount_percent: 0)
     end
-
-    @highlighted_price_group_discounts, @non_highlighted_price_group_discounts = @schedule_rule.price_group_discounts.partition do |pgd|
-      pgd.price_group.highlighted
-    end
+    partition_price_group_discounts
   end
 
   # POST /schedule_rules
@@ -62,6 +59,7 @@ class ScheduleRulesController < ApplicationController
 
   # GET /schedule_rules/1/edit
   def edit
+    partition_price_group_discounts
   end
 
   # PUT /schedule_rules/1
@@ -97,6 +95,12 @@ class ScheduleRulesController < ApplicationController
 
   def init_schedule_rule
     @schedule_rule = @product.schedule_rules.find(params[:id])
+  end
+
+  def partition_price_group_discounts
+    @highlighted_price_group_discounts, @non_highlighted_price_group_discounts = @schedule_rule.price_group_discounts.partition do |pgd|
+      pgd.price_group.highlighted
+    end
   end
 
 end

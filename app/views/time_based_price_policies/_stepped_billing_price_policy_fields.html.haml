@@ -10,7 +10,7 @@
     selected: price_policy.charge_for
 
 %div{ style: "display: flex; flex-direction: row-reverse" }
-  %h4.half-width= "Stepped Billing Rates"
+  %h4.half-width= t(".title")
 %table.table.table-striped.table-hover.price-policy-table
   %thead
     %tr
@@ -21,10 +21,10 @@
         %th= price_policy.class.human_attribute_name(:minimum_cost)
       - if local_assigns[:cancellation]
         %th= price_policy.class.human_attribute_name(:cancellation_cost)
-      %th= "Initial Rate"
-      %th= "Step 2"
-      %th= "Step 3"
-      %th= "Step 4"
+      %th{ scope: "col" }= t(".initial_rate")
+      %th{ scope: "col" }= t(".step_1")
+      %th{ scope: "col" }= t(".step_2")
+      %th{ scope: "col" }= t(".step_3")
   %tbody
     %tr
       %td
@@ -34,33 +34,39 @@
         %td
       - if local_assigns[:cancellation]
         %td
-      %td= 0
-      = fields_for :product, @product do |p|
-        = p.fields_for :rate_starts do |rs|
-          %td
-            = rs.label :min_duration, "Rate Start (hr):", class: "normal-weight"
-            = rs.number_field :min_duration, min: 1, class: "half-width"
-    - @price_policies.each do |price_policy|
+      %th{ scope: "col" }
+        %p
+          = t(".rate_start")
+          = 0
+      - @min_durations.each_with_index do |min_duration, column_index|
+        %th{ scope: "col" }
+          .control-group
+            = label :min_duration, t(".rate_start"), class: "normal-weight"
+            = number_field :min_duration, column_index, min: 1, value: min_duration, class: "half-width js--minDuration", data: { index: column_index }
+    - @price_policies.each_with_index do |price_policy, index|
       - price_group = price_policy.price_group
       = fields_for "price_policy_#{price_group.id}", price_policy do |pp|
         - row_class = []
         - row_class << "js--masterInternalRow" if price_group.master_internal?
         - row_class << "js--adjustmentRow" unless price_group.external? || price_group.master_internal?
         %tr{class: row_class}
-          %td= price_group.name
+          %th{ scope: "row" }= price_group.name
           %td= price_group.type_string
           %td= pp.check_box :can_purchase, class: "js--canPurchase"
           - if price_group.external? || price_group.master_internal?
             = render "time_based_price_policies/stepped_billing_amount_row", price_group: price_group, price_policy: price_policy, pp: pp, cancellation: cancellation, minimum_cost: minimum_cost
           - else
             = render "time_based_price_policies/stepped_billing_adjustment_row", price_group: price_group, price_policy: price_policy, pp: pp, cancellation: cancellation, minimum_cost: minimum_cost
-          = pp.fields_for :duration_rates do |dr|
+          - duration_rates = pp.object.duration_rates.sort_by { |d| d.min_duration_hours || 1_000 }
+          = pp.fields_for :duration_rates, duration_rates do |dr|
             - if price_group.external? || price_group.master_internal?
               %td
-                = dr.label :rate, "Rate per hr:", class: "normal-weight"
+                = dr.label :rate, t(".rate_per_hr"), class: "normal-weight"
                 = dr.text_field :rate, value: number_to_currency(dr.object.rate, unit: "", delimiter: ""), size: 8
+                = dr.hidden_field :min_duration_hours
             - else
               %td
-                = dr.label :subsidy, "Adjustment:", class: "normal-weight"
+                = dr.label :subsidy, t(".adjustment"), class: "normal-weight"
                 %span="-"
                 = dr.text_field :subsidy, value: number_to_currency(dr.object.subsidy, unit: "", delimiter: ""), size: 8
+                = dr.hidden_field :min_duration_hours

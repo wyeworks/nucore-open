@@ -1,1 +1,4 @@
-= render "time_based_price_policies/table", price_policies: price_policies, url_date: url_date, cancellation: true, minimum_cost: true, product: product
+- if @product.is_a?(Instrument) && @product.duration_pricing_mode?
+  = render "time_based_price_policies/stepped_billing_table", price_policies: price_policies, url_date: url_date, cancellation: true, minimum_cost: true, product: product
+- else
+  = render "time_based_price_policies/table", price_policies: price_policies, url_date: url_date, cancellation: true, minimum_cost: true, product: product

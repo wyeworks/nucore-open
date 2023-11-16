@@ -51,15 +51,25 @@ class ProductUserImportsController < ApplicationController
 
   def import_success_alert(import)
     if import.skipped.present?
-      html("controllers.product_user_imports.create.success", count: import.successes.count, added: import.successes.join) +
-      html("controllers.product_user_imports.create.skips", skipped: import.skipped.join)
+      html_text = html("controllers.product_user_imports.create.success", count: import.successes.count)
+
+      html_text += if import.skipped.count < 30
+                     html("controllers.product_user_imports.create.skips", skipped: import.skipped.join)
+                   else
+                     html("controllers.product_user_imports.create.skips_number", count: import.skipped.count)
+                   end
+      html_text
     else
-      html("controllers.product_user_imports.create.success", count: import.successes.count, added: import.successes.join)
+      html("controllers.product_user_imports.create.success", count: import.successes.count)
     end
   end
 
   def import_failed_alert(import)
-    html("controllers.product_user_imports.create.failure", count: import.failures.count, errors: import.failures.join)
+    if import.failures.count < 30
+      html("controllers.product_user_imports.create.failure", count: import.failures.count, errors: import.failures.join)
+    else
+      html("controllers.product_user_imports.create.failure_count", count: import.failures.count, support_email: Settings.support_email)
+    end
   end
 
   def file

@@ -28,7 +28,7 @@ class PricePolicyUpdater
 
   def update_all
     if @product.is_a?(Instrument) && @product.duration_pricing_mode?
-      save_for_stepped_billing
+      assign_attributes_for_stepped_billing && save
     else
       assign_attributes && save
     end
@@ -51,17 +51,13 @@ class PricePolicyUpdater
   def assign_attributes_for_stepped_billing
     @price_policies.each do |price_policy|
       price_group_id = price_policy.price_group.id
-      duration_rates = @params.dig("price_policy_#{price_group_id}", "duration_rates_attributes")
+      duration_rate_params = @params.dig("price_policy_#{price_group_id}", "duration_rates_attributes")
 
-      if duration_rates.present?
-        duration_rates.values.each_with_index do |dr, index|
-          if dr["rate"].present? || dr["subsidy"].present?
-            rate_start_id = dr["rate_start_id"] || @product.rate_starts[index]&.id
-
-            duration_rates["#{index}"].merge! ({ rate_start_id: rate_start_id, price_group_id: price_group_id })
-          else
-            duration_rates.delete(index.to_s)
-          end
+      if duration_rate_params.present?
+        duration_rate_params.each do |key, dr|
+          values_are_blank = dr["rate"].blank? && dr["subsidy"].blank?
+          rate_exists = DurationRate.where(id: dr[:id]).present?
+          duration_rate_params[key].merge! ({ _destroy: '1' }) if values_are_blank && rate_exists
         end
       end
     end
@@ -69,29 +65,6 @@ class PricePolicyUpdater
     @price_policies.each do |price_policy|
       price_policy.assign_attributes(price_group_attributes(price_policy.price_group))
     end
-  end
-
-  def save_for_stepped_billing
-    ActiveRecord::Base.transaction do
-      (save_product && assign_attributes_for_stepped_billing && @price_policies.all?(&:save)) || raise(ActiveRecord::Rollback)
-    end
-  end
-
-  def save_product
-    keys_from_built_rate_starts = []
-
-    rate_starts_params = permitted_product_params[:rate_starts_attributes].clone
-    rate_starts_params.values.each_with_index do |dr, index|
-      if dr[:min_duration].blank?
-        if dr[:id].present?
-          rate_starts_params["#{index}"].merge! ({ _destroy: '1' })
-        else
-          keys_from_built_rate_starts << "#{index}"
-        end
-      end
-    end
-
-    @product.update({ rate_starts_attributes: rate_starts_params.except(*keys_from_built_rate_starts) })
   end
 
   def price_group_attributes(price_group)
@@ -113,10 +86,6 @@ class PricePolicyUpdater
     @params.permit(:charge_for, :note, :created_by_id)
   end
 
-  def permitted_product_params
-    @params[:product].permit(rate_starts_attributes: [:min_duration, :id])
-  end
-
   def permitted_params
     [
       :can_purchase,
@@ -131,7 +100,8 @@ class PricePolicyUpdater
         :subsidy,
         :rate,
         :price_policy_id,
-        :rate_start_id
+        :min_duration_hours,
+        :_destroy
       ]
     ].tap do |attributes|
       attributes << :full_price_cancellation if SettingsHelper.feature_on?(:charge_full_price_on_cancellation)
