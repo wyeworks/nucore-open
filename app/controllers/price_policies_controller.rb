@@ -28,6 +28,9 @@ class PricePoliciesController < ApplicationController
     @current_start_date = @current_price_policies.first.try(:start_date)
     @past_price_policies_by_date = @product.past_price_policies_grouped_by_start_date
     @next_price_policies_by_date = @product.upcoming_price_policies_grouped_by_start_date
+
+    init_min_durations_for_index
+
     render "price_policies/index"
   end
 
@@ -35,7 +38,12 @@ class PricePoliciesController < ApplicationController
   def new
     @start_date = active_policies? ? Date.tomorrow : Date.today
 
-    @price_policies = PricePolicyBuilder.get_new_policies_based_on_most_recent(@product, @start_date)
+    @price_policies = PricePolicyBuilder.get_new_policies_based_on_most_recent(
+      @product,
+      @start_date,
+      force_new_policies = @product.is_a?(Instrument) && @product.duration_pricing_mode?
+    )
+
     raise ActiveRecord::RecordNotFound if @price_policies.blank?
 
     build_instrument_stepped_billing_fields
@@ -49,6 +57,7 @@ class PricePoliciesController < ApplicationController
       build_instrument_stepped_billing_fields
 
       flash.now[:error] = text("errors.save")
+
       render :new
     end
   end
@@ -61,6 +70,7 @@ class PricePoliciesController < ApplicationController
       build_instrument_stepped_billing_fields
 
       flash.now[:error] = text("errors.save")
+
       render :edit
     end
   end
@@ -140,19 +150,43 @@ class PricePoliciesController < ApplicationController
     )
   end
 
-  def build_rate_starts
-    (Instrument::MAX_RATE_STARTS - @product.rate_starts.length).times { @product.rate_starts.build }
+  # TO DO: consider moving the methods below to InstrumentPricePolicyController
+  ## Duration Rates methods start here
+  ## These only apply to instruments with duration pricing mode
+
+  # Builds a collection of unique min duration hrs values
+  # from price policies in memory,
+  # adding nil values as needed to reach a total of MAX_RATE_STARTS (3),
+  # in ascending order with nil values at the end.
+  # Used to prefill values in the form.
+  def build_min_durations
+    min_durations = @price_policies.flat_map { |pp| pp.duration_rates.map(&:min_duration_hours) }.uniq
+    (PricePolicy::MAX_RATE_STARTS - min_durations.length).times { min_durations << nil }
+    @min_durations = min_durations.sort_by { |d| d || 1_000 }
+  end
+
+  # Builds a collection of unique min duration hrs values
+  # for the current set of price policies,
+  # adding nil values as needed to reach a total of MAX_RATE_STARTS (3),
+  # in ascending order with nil values at the end.
+  # Used to build the column sub-headers in the price policy table.
+  def init_min_durations_for_index
+    return unless @product.is_a?(Instrument) && @product.duration_pricing_mode?
+
+    min_durations = @current_price_policies.flat_map { |pp| pp.duration_rates.map(&:min_duration_hours) }.uniq
+    (PricePolicy::MAX_RATE_STARTS - min_durations.length).times { min_durations << nil }
+    @min_durations = min_durations.sort_by { |d| d || 1_000 }
   end
 
   def build_duration_rates
     @price_policies.each do |price_policy|
-      (Instrument::MAX_RATE_STARTS - price_policy.duration_rates.length).times { price_policy.duration_rates.build }
+      (PricePolicy::MAX_RATE_STARTS - price_policy.duration_rates.length).times { price_policy.duration_rates.build }
     end
   end
 
   def build_instrument_stepped_billing_fields
     if @product.is_a?(Instrument) && @product.duration_pricing_mode?
-      build_rate_starts
+      build_min_durations
       build_duration_rates
     end
   end

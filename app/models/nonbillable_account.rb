@@ -10,7 +10,10 @@ class NonbillableAccount < Account
     first || create
   end
 
-  def account_open?(_account_number)
+  # This account is always open, so the parameters don't matter.
+  # Though the method signature for other accounts is
+  # account_open?(account_number, fulfillment_time: fulfillment_time)
+  def account_open?(*)
     true
   end
 

@@ -20,13 +20,13 @@
 
   %p= t("views.schedule_rules.discount_hint")
 
-  - if @highlighted_price_group_discounts&.present?
+  - if @highlighted_price_group_discounts.present?
     .well
       %h4= t("views.schedule_rules.highlighted_heading")
       = f.association :price_group_discounts, collection: @highlighted_price_group_discounts do |pgd|
         = render partial: "price_group_discount", locals: { pgd: pgd }
 
-  - unless @non_highlighted_price_group_discounts&.empty?
+  - if @non_highlighted_price_group_discounts.present?
     .well
       - if @highlighted_price_group_discounts.blank?
         %h4= t("views.schedule_rules.price_groups_heading")

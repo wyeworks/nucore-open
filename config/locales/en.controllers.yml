@@ -175,20 +175,20 @@ en:
           %{count} error(s) occurred while importing:
 
           %{errors}
+        failure_count: |
+          %{count} errors occurred while importing. Contact %{support_email}
         success:
           zero: No new approved users were added.
           one: |
-            %{count} new approved user imported successfully:
-
-            %{added}
+            %{count} new approved user imported successfully
           other: |
-            %{count} new approved users imported successfully:
-
-            %{added}
+            %{count} new approved users imported successfully
         skips: |
           The following user(s) already had access:
 
           %{skipped}
+        skips_number: |
+          %{count} users already had access
 
     orders:
       purchase:

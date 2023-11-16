@@ -9,18 +9,14 @@ class Instrument < Product
 
   RESERVE_INTERVALS = [1, 5, 10, 15, 30, 60].freeze
   PRICING_MODES = ["Schedule Rule", "Duration"].freeze
-  MAX_RATE_STARTS = 3
 
   with_options foreign_key: "product_id" do |instrument|
     instrument.has_many :admin_reservations
     instrument.has_many :instrument_price_policies
     instrument.has_many :offline_reservations
     instrument.has_many :current_offline_reservations, -> { current }, class_name: "OfflineReservation"
-    instrument.has_many :rate_starts
   end
   has_one :alert, dependent: :destroy, class_name: "InstrumentAlert"
-
-  accepts_nested_attributes_for :rate_starts, allow_destroy: true
 
   email_list_attribute :cancellation_email_recipients
   email_list_attribute :issue_report_recipients
@@ -41,10 +37,6 @@ class Instrument < Product
            :max_reservation_not_less_than_min
 
   validates :pricing_mode, presence: true, inclusion: { in: PRICING_MODES }
-
-  validate :rate_starts_only_for_duration_pricing_mode
-  validate :unique_rate_starts
-  validates :rate_starts, length: { maximum: MAX_RATE_STARTS }
 
   # Callbacks
   # --------
@@ -134,22 +126,6 @@ class Instrument < Product
   def max_reservation_not_less_than_min
     if max_reserve_mins && min_reserve_mins && max_reserve_mins < min_reserve_mins
       errors.add :max_reserve_mins, :max_less_than_min
-    end
-  end
-
-  def unique_rate_starts
-    return unless duration_pricing_mode?
-
-    rate_starts_with_valid_min_duration = rate_starts.select { |dr| dr.min_duration.present? }
-
-    if rate_starts_with_valid_min_duration.pluck(:min_duration).uniq.length < rate_starts_with_valid_min_duration.length
-      errors.add(:base, "Rate start values must be unique")
-    end
-  end
-
-  def rate_starts_only_for_duration_pricing_mode
-    if !duration_pricing_mode? && rate_starts.present?
-      errors.add(:base, "Can only be set for Instruments with Duration pricing mode")
     end
   end
 

@@ -10,8 +10,17 @@ class PricePolicyBuilder
     new(product, start_date).price_policies
   end
 
-  def self.get_new_policies_based_on_most_recent(product, start_date)
-    new(product, start_date).new_policies_based_on_most_recent
+  def self.get_new_policies_based_on_most_recent(product, start_date, force_new_policies = false)
+    existing_price_policies = new(product, start_date).new_policies_based_on_most_recent
+
+    return existing_price_policies unless force_new_policies
+
+    existing_price_policies.map do |pp|
+      price_policy = pp.dup
+      price_policy.duration_rates = pp.duration_rates.map(&:dup)
+
+      price_policy
+    end
   end
 
   def self.create_skip_review_for(product, price_groups = nil)

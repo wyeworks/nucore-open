@@ -38,7 +38,7 @@ RSpec.describe "Importing Approved Users", :js do
 
       expect(page.current_path).to eq facility_instrument_users_path(facility, instrument)
       expect(page).to have_content("The following user(s) already had access:\n#{user_1.username}\n")
-      expect(page).to have_content("1 new approved user imported successfully:\n#{user_2.username}")
+      expect(page).to have_content("1 new approved user imported successfully")
     end
   end
 
