@@ -15,6 +15,24 @@ class DurationRate < ApplicationRecord
 
   scope :sorted, -> { order(min_duration_hours: :asc) }
 
+  def rate=(hourly_rate)
+    super
+    self[:rate] /= SIXTY_MIN if self[:rate].respond_to? :/
+  end
+
+  def subsidy=(hourly_subsidy)
+    super
+    self[:subsidy] /= SIXTY_MIN if self[:subsidy].respond_to? :/
+  end
+
+  def hourly_rate
+    rate.try :*, SIXTY_MIN
+  end
+
+  def hourly_subsidy
+    subsidy.try :*, SIXTY_MIN
+  end
+
   private
 
   def rate_or_subsidy
@@ -27,7 +45,7 @@ class DurationRate < ApplicationRecord
     return unless price_group.external? || price_group.master_internal?
     return unless price_policy.usage_rate && rate
 
-    if rate / SIXTY_MIN > price_policy.usage_rate
+    if rate > price_policy.usage_rate
       errors.add(:base, "Rate must be lesser than or equal to Base rate")
     end
   end
@@ -36,7 +54,7 @@ class DurationRate < ApplicationRecord
     return if price_group.external? || price_group.master_internal?
     return unless price_policy.usage_rate && subsidy
 
-    if subsidy / SIXTY_MIN > price_policy.usage_rate
+    if subsidy > price_policy.usage_rate
       errors.add(:base, "Subsidy must be lesser than or equal to Base rate")
     end
   end

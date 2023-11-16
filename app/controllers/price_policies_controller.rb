@@ -151,7 +151,7 @@ class PricePoliciesController < ApplicationController
   end
 
   # TO DO: consider moving the methods below to InstrumentPricePolicyController
-  ## Durate Rates methods start here
+  ## Duration Rates methods start here
   ## These only apply to instruments with duration pricing mode
 
   # Builds a collection of unique min duration hrs values

@@ -73,9 +73,9 @@
           - price_policy.duration_rates.sorted.each do |duration_rate|
             %td.currency
               - if duration_rate.rate.present?
-                .rate= number_to_currency duration_rate.rate
+                .rate= number_to_currency duration_rate.hourly_rate
               - if duration_rate.subsidy.present?
-                .subsidy= "- #{number_to_currency duration_rate.subsidy}"
+                .subsidy= "- #{number_to_currency duration_rate.hourly_subsidy}"
           - (PricePolicy::MAX_RATE_STARTS - price_policy.duration_rates.length).times do
             %td.currency
 

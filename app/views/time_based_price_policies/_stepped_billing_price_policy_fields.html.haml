@@ -35,9 +35,8 @@
       - if local_assigns[:cancellation]
         %td
       %th{ scope: "col" }
-        %p
-          = t(".rate_start")
-          = 0
+        = label :default_min_duration, t(".rate_start"), class: "normal-weight"
+        = number_field :default_min_duration, "default", value: 0, readonly: true, disabled:true, class: "half-width"
       - @min_durations.each_with_index do |min_duration, column_index|
         %th{ scope: "col" }
           .control-group
@@ -62,11 +61,11 @@
             - if price_group.external? || price_group.master_internal?
               %td
                 = dr.label :rate, t(".rate_per_hr"), class: "normal-weight"
-                = dr.text_field :rate, value: number_to_currency(dr.object.rate, unit: "", delimiter: ""), size: 8
+                = dr.text_field :rate, value: number_to_currency(dr.object.hourly_rate, unit: "", delimiter: ""), size: 8
                 = dr.hidden_field :min_duration_hours
             - else
               %td
                 = dr.label :subsidy, t(".adjustment"), class: "normal-weight"
                 %span="-"
-                = dr.text_field :subsidy, value: number_to_currency(dr.object.subsidy, unit: "", delimiter: ""), size: 8
+                = dr.text_field :subsidy, value: number_to_currency(dr.object.hourly_subsidy, unit: "", delimiter: ""), size: 8
                 = dr.hidden_field :min_duration_hours
