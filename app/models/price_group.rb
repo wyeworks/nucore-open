@@ -89,7 +89,7 @@ class PriceGroup < ApplicationRecord
   end
 
   # Creates price group discounts for this price group, if they do not exist
-  def setup_schedule_rules(discount_percent: 0)
+  def setup_schedule_rules(discount_percent: nil)
     ScheduleRule.all.each do |schedule_rule|
       schedule_price_groups = schedule_rule.price_group_discounts.map(&:price_group)
 
@@ -100,7 +100,7 @@ class PriceGroup < ApplicationRecord
 
       schedule_rule.price_group_discounts.create(
         price_group: self,
-        discount_percent:
+        discount_percent: discount_percent || schedule_rule.discount_percent # this column defaults to 0
       )
 
       puts("Created price_group_discount for #{self} and schedule rule #{schedule_rule.id}") unless Rails.env.test?

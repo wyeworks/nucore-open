@@ -153,7 +153,7 @@ class OrderRowImporter
   end
 
   def purchase_order!
-    if order.validate_order!
+    if order.validate_order!(import_fulfillment_date: fulfillment_date)
       add_error(:purchase_fail) unless order.purchase_without_default_status!
     else
       add_error(:validate_fail)

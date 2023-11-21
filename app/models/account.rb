@@ -5,7 +5,7 @@ class Account < ApplicationRecord
   module Overridable
 
     # Consider creating a default price gorup, when `user_based_price_groups` is
-    # set to `false`. Currently Dartmouth is the only school with this feature 
+    # set to `false`. Currently Dartmouth is the only school with this feature
     # flag set to false, and they do this in their account_extension.rb
     def price_groups
       (price_group_members.collect(&:price_group) + (owner_user ? owner_user.price_groups : [])).uniq
@@ -41,8 +41,8 @@ class Account < ApplicationRecord
   accepts_nested_attributes_for :account_users
   has_many :log_events, as: :loggable
 
-  scope :active, -> { active_at (Time.current) }
-  scope :active_at, ->(time) { where("expires_at > ?", time).where(suspended_at: nil) }
+  scope :active, -> { where("expires_at > ?", Time.current).where(suspended_at: nil) }
+  scope :active_at, ->(time) { where("expires_at >= ?", time).where(suspended_at: nil) }
 
   scope :administered_by, lambda { |user|
     for_user(user).where("account_users.user_role" => AccountUser.admin_user_roles)
@@ -148,7 +148,7 @@ class Account < ApplicationRecord
   def auto_dispute_by
     nil
   end
-  
+
   def global_admin_must_resolve_disputes?
     false
   end
