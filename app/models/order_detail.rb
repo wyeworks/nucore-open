@@ -531,7 +531,7 @@ class OrderDetail < ApplicationRecord
     journal_id.blank? && statement_id.blank? && !canceled?
   end
 
-  def validate_for_purchase
+  def validate_for_purchase(fulfilled_time = Time.zone.now)
     # can purchase product
     return "The product may not be purchased" unless product.available_for_purchase?
 
@@ -539,7 +539,7 @@ class OrderDetail < ApplicationRecord
     return "You must select a payment method" if account.nil?
 
     # payment method is not expired
-    return "The account is expired and cannot be used" if account.expires_at < Time.zone.now || account.suspended_at
+    return "The account is expired and cannot be used" if account.expires_at < fulfilled_time || account.suspended_at
 
     # TODO: if chart string, is chart string + account valid
     return I18n.t("not_open", model: account.type_string, scope: "activerecord.errors.models.account") if account.respond_to?(:account_open?) && !account.account_open?(product.account)
@@ -560,8 +560,8 @@ class OrderDetail < ApplicationRecord
     "No assigned price groups allow purchase of this product"
   end
 
-  def valid_for_purchase?
-    validate_for_purchase.nil? ? true : false
+  def valid_for_purchase?(fulfilled_time = Time.zone.now)
+    validate_for_purchase(fulfilled_time).nil? ? true : false
   end
 
   def validate_reservation
