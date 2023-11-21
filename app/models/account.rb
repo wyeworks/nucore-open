@@ -41,8 +41,8 @@ class Account < ApplicationRecord
   accepts_nested_attributes_for :account_users
   has_many :log_events, as: :loggable
 
-  scope :active, -> { active_at (Time.current) }
-  scope :active_at, ->(time) { where("expires_at > ?", time).where(suspended_at: nil) }
+  scope :active, -> { where("expires_at > ?", Time.current).where(suspended_at: nil) }
+  scope :active_at, ->(time) { where("expires_at >= ?", time).where(suspended_at: nil) }
 
   scope :administered_by, lambda { |user|
     for_user(user).where("account_users.user_role" => AccountUser.admin_user_roles)
