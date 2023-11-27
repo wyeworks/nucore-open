@@ -807,6 +807,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_194445) do
     t.index ["facility_id"], name: "i_schedules_facility_id"
   end
 
+  create_table "scishield_trainings", charset: "utf8mb3", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "course_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "secure_rooms_alarm_events", id: :integer, charset: "utf8", force: :cascade do |t|
     t.text "additional_data"
     t.string "class_code"
