@@ -12,23 +12,43 @@ module ResearchSafetyAdapters
         Rails.logger.error(msg)
         Rollbar.error(msg) if defined?(Rollbar)
       else
+        user_certs = {}
+
+        # In some cases, making many requests in a row results in the API not
+        # responding. Making requests in batches with sleep in between seems
+        # to make the API work in cases where this is a problem. `sleep` is put
+        # first here because `api_unavailable?` will have already made 10 API
+        # requests.
+        users.in_batches(of: batch_size) do |user_batch|
+          sleep(batch_sleep_time)
+
+          user_batch.each do |user|
+            adapter = ScishieldApiAdapter.new(user, api_client)
+            begin
+              cert_names = adapter.certified_course_names_from_api
+              user_certs[user.id.to_s] = cert_names if cert_names.presence
+            rescue => e
+              Rails.logger.error(e.message)
+              Rollbar.error(e.message) if defined?(Rollbar)
+            end
+          end
+        end
+
         ScishieldTraining.transaction do
           ScishieldTraining.delete_all
 
-          users.find_each do |user|
-            adapter = ScishieldApiAdapter.new(user)
-            cert_names = adapter.certified_course_names_from_api
+          user_certs.each do |user_id, cert_names|
             trainings_added = 0
 
-            cert_names.each do |cert_name|
-              st = ScishieldTraining.create(user_id: user.id, course_name: cert_name)
-              trainings_added += 1 if st.errors.blank?
+            cert_names.each do |name|
+              st = ScishieldTraining.create!(user_id:, course_name: name)
+              trainings_added += 1 if st.persisted?
             end
 
-            puts "#{trainings_added} trainings added for user id #{user.id}"
+            puts "#{trainings_added} trainings added for user id #{user_id}"
           end
-        rescue StandardError
-          msg = "ScishieldTrainingSynchronizer error, rolling back transaction"
+        rescue StandardError => e
+          msg = "Rolling back transaction, ScishieldTrainingSynchronizer error: #{e.message}"
 
           Rails.logger.error(msg)
           Rollbar.error(msg) if defined?(Rollbar)
@@ -41,8 +61,7 @@ module ResearchSafetyAdapters
     def api_unavailable?
       # Test API responses for 10 random users
       users.sample(10).map do |user|
-        client = ScishieldApiClient.new
-        response = client.training_api_request(user.email)
+        response = api_client.training_api_request(user.email)
         http_status = response.code
 
         # track if http status is 5xx, 403, or 404, or not
@@ -52,6 +71,18 @@ module ResearchSafetyAdapters
 
     def users
       @users ||= User.active.select(ScishieldApiAdapter.user_attributes)
+    end
+
+    def api_client
+      @api_client ||= ScishieldApiClient.new
+    end
+
+    def batch_size
+      Settings.research_safety_adapter.scishield.batch_size
+    end
+
+    def batch_sleep_time
+      Settings.research_safety_adapter.scishield.batch_sleep_time
     end
   end
 

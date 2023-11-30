@@ -4,16 +4,15 @@ module ResearchSafetyAdapters
 
   class ScishieldApiAdapter
 
+    attr_reader :client
+
     def self.user_attributes
       [:id, :email]
     end
 
-    def initialize(user)
+    def initialize(user, client = ScishieldApiClient.new)
       @user = user
-    end
-
-    def client
-      @client ||= ScishieldApiClient.new
+      @client = client
     end
 
     def certified?(certificate)

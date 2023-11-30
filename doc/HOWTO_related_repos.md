@@ -17,7 +17,7 @@ or just a few commits with a cherry-picked branch.
 1. Open a new branch (for more details see the sections on creating a [latest_from_open](#creating-a-latest_from_open_mmddyyyy-branch) or [cherry-picked](#creating-a-branch-with-cherry-picked-commits) branch below)
 1. Merge the PR (not squash) once it has been approved and CI is green [(see below)](#squash-vs-merge)
 1. For a production release, create a Github release [(see below)](#creating-a-github-release)
-1. Deploy the new code using capistrano or helm/CircleCI [(see below)](#deploy)
+1. Deploy the new code using capistrano or Github Actions [(see below)](#deploy)
 1. Perform any release/deployment related tasks (e.g. add new env variables, run one-off rake task, etc.)
 1. Check the site in a browser and confirm new functionality is there
 
@@ -58,12 +58,14 @@ Before merging “latest from open” PRs, make sure that the related PR against
 
 On github, squash commits include a parenthesized branch number like `(#45)` in the commit title by default, except when the PR only includes 1 commit. Merge commits do not include the parenthesized branch number in the title. So...
 
-* Use **Squash** for feature PRs, and copy the PR description into the squash merge message.  Make sure the parenthesized branch number is in the commit title so the squash commit will get described later on in the GitHub release and release ticket.
+* Use **Squash** for feature PRs, and copy the PR description into the squash merge message.  Make sure the parenthesized branch number is in the commit title so the squash commit will get described later on in the GitHub release and release notes.
 * Use **Merge** commits for `latest_from_open_MMDDYYYY` branch PRs.  Make sure that the related PR against nucore-open has deployed successfully before merging.
 
 ## PR Titles
 
-For feature PRs, the PR title will become the squash commit message. These appear later in the `bin/merge_describer` output, which is used in the`latest_from_open_MMDDYYYY` PR description, github release, and release redmine ticket. Try to write feature PR titles that focus on user outcomes rather than technical details - "Fix ability to download CSV" is preferred over "Resolve issues with JSON parsing".
+For feature PRs, the PR title will become the squash commit message. These appear later in the `bin/merge_describer` and `bin/release_describer` output, which is used in the`latest_from_open_MMDDYYYY` PR description, github release, and release notes. Try to write feature PR titles that focus on user outcomes rather than technical details - "Fix ability to download CSV" is preferred over "Resolve issues with JSON parsing".
+
+PR Titles that include “Shared Dev” or “Tech Task”, or start with “Security:” or “Fix:” will be automatically sorted by `bin/release_describer`.
 
 ## Creating a GitHub release
 
@@ -91,9 +93,10 @@ git cherry-pick XXXXX
 # Deploy
 
 Deploy process will vary depending on the hosting setup.
-Helm is used for apps hosted in kubernetes, and capistrano is used for legacy-hosting setups.
+Github Actions is used to trigger deploys for cloud-hosting setups (ECS and Azure).
+Capistrano is used for legacy-hosting setups.
 
-## Helm deploy steps
+## Github Actions deploy steps
 
 ### To staging:
 
@@ -101,7 +104,7 @@ Merging to `master` will trigger a stage deployment.
 
 ### To production:
 
-Approve the CircleCI job to trigger a production deployment.
+Create a Github Release with a tag starting with `v` to trigger a production deployment.
 
 ## Capistrano deploy steps
 

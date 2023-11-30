@@ -8,7 +8,7 @@
 target_branch=${1:-master}
 git log $target_branch.. | egrep '\(#\d+\)$' | while read LINE; do
   pr=$(echo $LINE | sed -E 's/^.+\(#//' | sed -E 's/\)$//')
-  desc=$(echo $LINE | sed -E 's/ *\(#[0-9]+\)$//')
+  desc=$(echo "$LINE" | sed -E 's/ *\(#[0-9]+\)$//' | sed -E 's/[*]//')
   echo "$pr\t$desc"
 done | sort -n |
 

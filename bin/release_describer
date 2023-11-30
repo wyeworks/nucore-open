@@ -1,0 +1,79 @@
+#!/usr/bin/env ruby
+# Usage:
+# The script will output a summary of changes since the previous release tag.
+# Run this from the root of the nucore-open repo (or any repo in the nucore-* family).
+# All repos should be checked out to the same parent directory,
+# with the default branch checked out, up to date, and clean (stash any changes).
+#
+# The first argument is the previous release tag
+# bin/release_describer v2023-11-08
+
+require "set"
+
+repos = ["nucore-open", "nucore-nu", "nucore-osu", "nucore-umass", "nucore-dartmouth"]
+repo_dir = `dirname $PWD`.chomp
+previous_release_tag = ARGV.first
+
+data = Hash.new do |h, k|
+  h[k] = {
+    shared_dev: Set.new,
+    open_highlights: Set.new,
+    fixes: Set.new,
+    tech_tasks: Set.new,
+    security: Set.new,
+    school_specific: Set.new,
+    behind: Set.new,
+    ahead: Set.new,
+  }
+end
+repos.each do |repo|
+  puts "Processing changes from #{repo} ..."
+  git_log = `cd #{repo_dir}/#{repo} && bin/merge_describer #{previous_release_tag}`
+  git_log.split("\n").each do |line|
+    ticket_number_match = line.match(/\[#(\d*)/)
+    formatted_line = if ticket_number_match
+      line.gsub(/\[#(\d*)\]/, "[##{ticket_number_match[1]}](https://pm.tablexi.com/issues/#{ticket_number_match[1]})")
+    else
+      line
+    end
+
+    downcased_line = line.downcase
+    if downcased_line.include?("nucore-open")
+      if downcased_line.include?("shared dev")
+        data[repo][:shared_dev] << formatted_line
+      elsif downcased_line.start_with?("* bump") || downcased_line.include?("tech task")
+        data[repo][:tech_tasks] << formatted_line
+      elsif downcased_line.include?("security:")
+        data[repo][:security] << formatted_line
+      elsif downcased_line.include?("fix:")
+        data[repo][:fixes] << formatted_line
+      else
+        data[repo][:open_highlights] << formatted_line
+      end
+    else
+      data[repo][:school_specific] << formatted_line
+    end
+  end
+  data[repo].each do |key, value|
+    next if key == :ahead || key == :behind || key == :school_specific
+
+    data[repo][:behind].merge(data["nucore-open"][key] - data[repo][key])
+    data[repo][:ahead].merge(data[repo][key] - data["nucore-open"][key])
+  end
+end
+
+data.each do |repo, value_hash|
+  keys = if repo == "nucore-open"
+    [:shared_dev, :open_highlights, :fixes, :tech_tasks, :security]
+  else
+    [:school_specific, :behind, :ahead]
+  end
+  puts "\n#{repo}"
+  value_hash.slice(*keys).each do |key, value|
+    title = key.to_s.split("_").map(&:capitalize).join(" ")
+    puts "\n#{title} (#{value.size})"
+    puts value.sort.join("\n")
+  end
+  puts "~~~~~~~~~~~~~~~~~~~~~"
+end
+
