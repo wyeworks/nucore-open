@@ -47,14 +47,18 @@ namespace :schedule_rule do
           next if schedule_rule.price_group_discounts.find_by(price_group_id: price_group.id)
 
           missing[schedule_rule.id][:price_groups] << price_group.name
-          missing[schedule_rule.id][:previous] << schedule_rule.discount_percent
+          missing[schedule_rule.id][:previous] << "#{price_group.name} - #{schedule_rule.discount_percent}" unless schedule_rule.discount_percent == discount_percent.to_f
         end
       end
       puts "Missing Price Groups:"
       puts missing.values.map { |data| data[:price_groups] }.flatten.uniq
+      changes = missing.map do |key, data|
+        data[:previous].present? ? "#{key}: #{data[:previous].compact.join(", ")}" : nil
+      end
       puts "Missing price_group_discount for #{missing.count} schedule rules."
+      puts "#{changes.count} schedule rules would have their discount_percent changed."
       puts "Existing legacy discount values:"
-      missing.map { |key, data| puts "#{key}: #{data[:previous].join(", ")}" }
+      changes.compact.map { |change| puts change }
     end
 
   end
