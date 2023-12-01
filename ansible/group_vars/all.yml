@@ -10,7 +10,7 @@ users:
     groups: ["umass", "ials"]
   - name: gshanan
     groups: ["umass", "ials"]
-  - name: lerrandonea
+  - name: kcarrell
     groups: ["umass", "ials"]
   - name: anniewang
     groups: ["umass", "ials"]
@@ -30,8 +30,8 @@ authorized_keys:
   - name: gshanan
     key_url: https://github.com/giladshanan.keys
     root_access: "present"
-  - name: lerrandonea
-    key_url: https://github.com/LeticiaErrandonea.keys
+  - name: kcarrell
+    key_url: https://github.com/karaajc.keys
     root_access: "present"
   - name: anniewang
     key_url: https://github.com/wangminghao.keys
