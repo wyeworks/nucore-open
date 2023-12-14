@@ -130,6 +130,7 @@ FactoryBot.define do
     transient do
       charge_for { "reservation" }
       skip_schedule_rules { false }
+      skip_price_policies { false }
     end
 
     reserve_interval { 1 }
@@ -139,7 +140,7 @@ FactoryBot.define do
 
     after(:create) do |product, evaluator|
       create :schedule_rule, product: product unless evaluator.skip_schedule_rules
-      create :instrument_price_policy, price_group: product.facility.price_groups.last, usage_rate: 1, product: product, charge_for: evaluator.charge_for
+      create :instrument_price_policy, price_group: product.facility.price_groups.last, usage_rate: 1, product: product, charge_for: evaluator.charge_for unless evaluator.skip_price_policies
       product.reload
     end
 

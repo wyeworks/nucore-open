@@ -76,6 +76,8 @@
                 .rate= number_to_currency duration_rate.hourly_rate
               - if duration_rate.subsidy.present?
                 .subsidy= "- #{number_to_currency duration_rate.hourly_subsidy}"
+                %strong= "= #{number_to_currency duration_rate.subsidized_hourly_cost}"
+
           - (PricePolicy::MAX_RATE_STARTS - price_policy.duration_rates.length).times do
             %td.currency
 

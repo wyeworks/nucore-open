@@ -38,7 +38,7 @@ converters:
 research_safety_adapter:
   class_name: <%= ENV.fetch("RESEARCH_SAFETY_ADAPTER_CLASS", "ResearchSafetyAdapters::ResearchSafetyAlwaysCertifiedAdapter") %>
   scishield:
-    batch_sleep_time: <%= ENV.fetch("SCISHIELD_BATCH_SLEEP_TIME", 0) %>
+    batch_sleep_time: <%= ENV.fetch("SCISHIELD_BATCH_SLEEP_TIME", 20) %>
     batch_size: <%= ENV.fetch("SCISHIELD_BATCH_SIZE", 15) %>
 
 statement_pdf:

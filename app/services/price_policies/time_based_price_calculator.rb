@@ -74,13 +74,8 @@ module PricePolicies
       ]
 
       sorted_duration_rates.each_with_index do |duration_rate, index|
-        if duration_rate.rate.present?
-          step_rate = duration_rate.rate
-          step_subsidy = nil
-        elsif duration_rate.subsidy.present?
-          step_rate = usage_rate
-          step_subsidy = duration_rate.subsidy
-        end
+        step_rate = duration_rate.rate
+        step_subsidy = duration_rate.subsidy
 
         interval_start = duration_rate.min_duration_hours
         interval_end = sorted_duration_rates[index + 1]&.min_duration_hours || Float::INFINITY

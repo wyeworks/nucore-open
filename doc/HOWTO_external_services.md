@@ -19,9 +19,9 @@ For example, NU is using `acgt`, `sanger_sequencing`, and the IMSERC application
     The link will look like this: `https://[form-io-stage-path].form.io/[survey-path]`
 
 2. User adds the service to their cart
-   
+
    ![Screenshot](images/complete-online-order-form.png)
-   
+
 3. The "Complete Online Order Form" button links (via GET) to the URL added to the product. It also includes the following parameters:
 
    `success_url` The URL that the external service should redirect to upon completion of the survey.
@@ -34,16 +34,16 @@ For example, NU is using `acgt`, `sanger_sequencing`, and the IMSERC application
 4. Once the user completes the survey, the external service should redirect the user to `success_url`. The URL should have the following additional parameters:
 
    `receiver_id` Was passed to the external service
-   
+
    `survey_url` This is the URL to view the completed survey.
 
 5. The user may go and edit their order form
-    
+
     ![Screenshot](images/edit-online-order-form.png)
-    
+
     The link to this will be the `survey_url` passed back unless you have overridden `edit_url` in a subclass of `UrlService`.
 
-6. Once the user has purchased the product, administrators will see a link to "View Order Form" under the order. This links to the `survey_url` that was passed back. 
+6. Once the user has purchased the product, administrators will see a link to "View Order Form" under the order. This links to the `survey_url` that was passed back.
 
 ## Form.io
 
@@ -66,6 +66,15 @@ To confirm the the upgraded assets are being used:
 - Place an order for a service with a form.io order form (https://nucore-staging.northwestern.edu/facilities/test-facility/services/tester)
 - When you get to the cart, click "Complete Online Order Form".
 - Inspect the page to confirm the version being used.
+
+### Upgrading form.io premium assets
+1. SSH onto the server
+1. Run `npm login` and log in with credentials that have access to premium module assets.
+1. Run `npm update @formio/premium --registry https://pkg.form.io`
+1. Perform a full eye-patch quit and then load.
+
+More info:
+https://pkg.form.io/-/web/detail/@formio/premium
 
 ## Updating OrderDetail records on submission to Form.io
 

@@ -29,13 +29,19 @@ RSpec.configure do |config|
   end
 
   config.before(:each, type: :system, js: true) do
-    if ENV["DOCKER"]
+    if ENV["DOCKER_LOCAL_DEV"]
       Capybara.register_driver :selenium_remote do |app|
-        options = { url: "http://chrome:4444/wd/hub",
-                    browser: :chrome,
-                    options: [:chrome]
-                  }
-        Capybara::Selenium::Driver.new(app, options)
+        options = Selenium::WebDriver::Chrome::Options.new
+        options.add_argument("--headless")
+        options.add_argument("--window-size=1366,768")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--disable-dev-shm-usage")
+        Capybara::Selenium::Driver.new(app,
+                                       browser: :remote,
+                                       url: "http://selenium:4444/wd/hub",
+                                       options:)
+
       end
 
       driven_by(:selenium_remote)
@@ -61,7 +67,7 @@ RSpec.configure do |config|
   # Gives more verbose output for JS errors, fails any spec with SEVERE errors
   # Based on https://medium.com/@coorasse/catch-javascript-errors-in-your-system-tests-89c2fe6773b1
   config.after(:each, type: :system, js: true) do |example|
-    unless ENV['DOCKER']
+    unless ENV["DOCKER_LOCAL_DEV"]
       # Must call page.driver.browser.logs.get(:browser) after every run,
       # otherwise the logs don't get cleared and leak into other specs.
       js_errors = page.driver.browser.logs.get(:browser)
@@ -162,9 +168,12 @@ RSpec.configure do |config|
 
   # Javascript specs need to be able to talk to localhost
   config.around(:each, :js) do |example|
-    if ENV["DOCKER"]
-      WebMock.allow_net_connect!
+    if ENV["DOCKER_LOCAL_DEV"]
+      # As a workaround for https://github.com/bblimke/webmock/issues/1014,
+      # we disable WebMock completely for specs run locally within docker.
+      WebMock.disable!
       example.call
+      WebMock.enable!
       WebMock.disable_net_connect!
     else
       WebMock.disable_net_connect!(allow_localhost: true)
