@@ -72,6 +72,22 @@ $(document).ready(function() {
     }
   });
 
+  $(".js--baseRate").each(function (_index, element) {
+    setRate(element);
+  });
+
+  $(".js--baseRate").on("change", function (event) {
+    setRate(event.target)
+  });
+
+  function setRate(params) {
+    const columnIndex = params.dataset.index;
+    const stepBaseRate = params.value;
+    $(`input[name*='duration_rates_attributes][${columnIndex}][rate]']`).val(
+      stepBaseRate
+    );
+  }
+
   $(".js--minDuration").on("change", function (event) {
     setMinDurationHours(event.target)
     preventDuplicateMinDurations()

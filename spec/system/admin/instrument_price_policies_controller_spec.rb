@@ -179,6 +179,9 @@ RSpec.describe InstrumentPricePoliciesController do
       fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]", with: "30"
 
       fill_in "price_policy_#{cancer_center.id}[usage_subsidy]", with: "25"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][0][subsidy]", with: "20"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][1][subsidy]", with: "10"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][2][subsidy]", with: "5"
 
       fill_in "price_policy_#{external_price_group.id}[usage_rate]", with: "120.11"
       fill_in "price_policy_#{external_price_group.id}[minimum_cost]", with: "122"
@@ -194,9 +197,14 @@ RSpec.describe InstrumentPricePoliciesController do
 
       click_button "Add Pricing Rules"
 
-      expect(page).to have_content("$60.00\n- $25.00\n= $35.00") # Cancer Center Usage Rate
-      expect(page).to have_content("$120.00\n- $50.00\n= $70.00") # Cancer Center Minimum Cost
       expect(page).to have_content("$15.00", count: 2) # Internal and Cancer Center Reservation Costs
+
+      # Cancer center
+      expect(page).to have_content("$60.00\n- $25.00\n= $35.00")    # Usage Rate
+      expect(page).to have_content("$120.00\n- $50.00\n= $70.00")   # Minimum Cost
+      expect(page).to have_content("$50.00\n- $20.00\n= $30.00")    # Step 2 rate
+      expect(page).to have_content("$40.00\n- $10.00\n= $30.00")    # Step 3 rate
+      expect(page).to have_content("$30.00\n- $5.00\n= $25.00")     # Step 4 rate
 
       # External price group
       expect(page).to have_content("$120.11")
@@ -241,14 +249,21 @@ RSpec.describe InstrumentPricePoliciesController do
         expect(page).to have_content("Duration rates base Rate must be lesser than or equal to Base rate")
       end
 
-      it "fails to save when duration subsidy is higher than base rate", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+      it "fails to save when duration subsidy is higher than step rate", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
         visit new_facility_instrument_price_policy_path(facility, instrument)
 
         fill_in "min_duration_0", with: "2"
+        fill_in "min_duration_1", with: "3"
+        fill_in "min_duration_2", with: "4"
 
         fill_in "price_policy_#{base_price_group.id}[usage_rate]", with: "60"
+        fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][0][rate]", with: "50"
+        fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][1][rate]", with: "40"
+        fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]", with: "30"
 
-        fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][0][subsidy]", with: "70"
+        fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][0][subsidy]", with: "60"
+        fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][1][subsidy]", with: "20"
+        fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][2][subsidy]", with: "20"
 
         uncheck "price_policy_#{external_price_group.id}[can_purchase]"
         uncheck "price_policy_#{cannot_purchase_group.id}[can_purchase]"
@@ -257,7 +272,24 @@ RSpec.describe InstrumentPricePoliciesController do
 
         click_button "Add Pricing Rules"
 
-        expect(page).to have_content("Duration rates base Subsidy must be lesser than or equal to Base rate")
+        expect(page).to have_content("Subsidy must be lesser than or equal to step rate")
+      end
+
+      it "fails to save if not all steps are filled", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+        visit new_facility_instrument_price_policy_path(facility, instrument)
+
+        fill_in "price_policy_#{base_price_group.id}[usage_rate]", with: "60"
+        fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][0][rate]", with: "50"
+
+        uncheck "price_policy_#{cancer_center.id}[can_purchase]"
+        uncheck "price_policy_#{external_price_group.id}[can_purchase]"
+        uncheck "price_policy_#{cannot_purchase_group.id}[can_purchase]"
+
+        fill_in "note", with: "This is my note"
+
+        click_button "Add Pricing Rules"
+
+        expect(page).to have_content("Missing rate or subsidy for #{base_price_group.name}")
       end
 
       it "fails to save duration rates do not have a rate start provided", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
@@ -265,6 +297,8 @@ RSpec.describe InstrumentPricePoliciesController do
 
         fill_in "price_policy_#{base_price_group.id}[usage_rate]", with: "60"
         fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][0][rate]", with: "50"
+        fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][1][rate]", with: "50"
+        fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]", with: "50"
 
         uncheck "price_policy_#{cancer_center.id}[can_purchase]"
         uncheck "price_policy_#{external_price_group.id}[can_purchase]"
@@ -294,6 +328,9 @@ RSpec.describe InstrumentPricePoliciesController do
       fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]", with: "30"
 
       fill_in "price_policy_#{cancer_center.id}[usage_subsidy]", with: "25"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][0][subsidy]", with: "15"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][1][subsidy]", with: "15"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][2][subsidy]", with: "5"
 
       fill_in "price_policy_#{external_price_group.id}[usage_rate]", with: "120.11"
       fill_in "price_policy_#{external_price_group.id}[minimum_cost]", with: "122"

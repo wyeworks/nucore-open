@@ -47,6 +47,49 @@ RSpec.describe "Managing an order detail" do
       expect(order_detail.reload.account).to eq(account)
       expect(page).to have_content(account.to_s)
     end
+
+    context "for a duration based pricing instrument", :js do
+      let(:instrument) { create(:setup_instrument, facility: facility, pricing_mode: "Duration", skip_price_policies: true) }
+      let(:base_group_price_policy) { create(:instrument_price_policy, product: instrument, usage_rate: 100, price_group: PriceGroup.base) }
+      let(:cancer_center_price_group) { create(:price_group, :cancer_center) }
+      let(:cancer_center_price_policy) { create(:instrument_price_policy, product: instrument, usage_rate: 100, usage_subsidy: 10, price_group: cancer_center_price_group) }
+
+      let(:account) { create(:setup_account, owner: director, facility: facility) }
+      let!(:base_duration_rates) do
+        [
+          create(:duration_rate, min_duration_hours: 2, rate: 30, price_policy: base_group_price_policy),
+          create(:duration_rate, min_duration_hours: 4, rate: 35, price_policy: base_group_price_policy),
+          create(:duration_rate, min_duration_hours: 6, rate: 45, price_policy: base_group_price_policy),
+        ]
+      end
+      let!(:cancer_center_duration_rates) do
+        [
+          create(:duration_rate, min_duration_hours: 2, rate: 30, subsidy: 15, price_policy: cancer_center_price_policy),
+          create(:duration_rate, min_duration_hours: 4, rate: 35, subsidy: 20, price_policy: cancer_center_price_policy),
+          create(:duration_rate, min_duration_hours: 6, rate: 45, subsidy: 30, price_policy: cancer_center_price_policy),
+        ]
+      end
+      let!(:account_price_group_member) { create(:account_price_group_member, account: account, price_group: cancer_center_price_group) }
+
+      let(:order_detail) { create(:purchased_order, product: instrument, account: account).order_details.first }
+      let!(:reservation) { create(:setup_reservation, product: instrument, order_detail: order_detail) }
+
+      before do
+        account.reload
+        order_detail.reload
+        order_detail.assign_price_policy
+        visit manage_facility_order_order_detail_path(facility, order_detail.order, order_detail)
+      end
+
+      it "shows the correct subsidy" do
+        fill_in "Duration", with: "6:00", fill_options: { clear: :backspace }
+        find_field("Duration").native.send_keys :tab # change focus to trigger the price calculation
+
+        expect(page).to have_field("Estimated Price", disabled: true, with: "330.00")
+        expect(page).to have_field("Estimated Adjustment", with: "90.00")
+        expect(page).to have_field("Estimated Total", disabled: true, with: "240.00")
+      end
+    end
   end
 
   describe "order detail with missing form" do

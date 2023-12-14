@@ -5,11 +5,12 @@ require "rails_helper"
 RSpec.describe PricePolicies::TimeBasedPriceCalculator do
 
   let(:calculator) { described_class.new(price_policy) }
-  let(:price_policy) { build_stubbed(:instrument_price_policy, options.merge(product: product)) }
+  let(:price_policy) { build_stubbed(:instrument_price_policy, options.merge(product: product, price_group: price_group)) }
   let(:options) { {} }
 
   context "when product has schedule rules pricing mode" do
     let(:product) { create(:setup_instrument, skip_schedule_rules: true) }
+    let(:price_group) { create(:price_group) }
     let!(:day_schedule) { create(:schedule_rule, :weekday, product: product) }
     let!(:night_schedule) { create(:schedule_rule, :weekday, :evening, discount_percent: 10, product: product) }
     let!(:weekend_schedule) { create(:schedule_rule, :weekend, :all_day, discount_percent: 25, product: product) }
@@ -205,100 +206,79 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     describe "#calculate" do
       subject(:costs) { calculator.calculate(start_at, end_at) }
 
-      describe "with no duration rates set" do
-        let(:options) { { usage_rate: 120 } }
-        let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
-        let(:end_at) { start_at + 1.hour }
+      describe "for external price group" do
+        let(:price_group) { create(:price_group, is_internal: false) }
 
-        it "uses usage_rate as rate" do
-          is_expected.to eq(cost: 120, subsidy: 0)
-        end
-      end
+        describe "with no duration rates set" do
+          let(:options) { { usage_rate: 120 } }
+          let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
+          let(:end_at) { start_at + 1.hour }
 
-      context "with duration rates" do
-        context "rounded to hour time range" do
-          context "which is below lowest duration rate minimum duration" do
-            let(:options) { { usage_rate: 120 } }
-            let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
-            let(:end_at) { start_at + 1.hour }
-
-            it "uses usage rate" do
-              create(:duration_rate, price_policy: price_policy, min_duration_hours: 3)
-
-              is_expected.to eq(cost: 120, subsidy: 0)
-            end
-          end
-
-          context "which is above lowest duration rate minimum duration" do
-            let(:options) { { usage_rate: 120 } }
-            let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
-            let(:end_at) { start_at + 4.hour }
-
-            it "uses both usage rate and duration rates" do
-              create(:duration_rate, price_policy: price_policy, min_duration_hours: 3)
-
-              # 3 hours @ $120 = $360 Usage rate
-              # 1 hour  @ $60  = $60  Duration rate
-              is_expected.to eq(cost: 420, subsidy: 0)
-            end
+          it "uses usage_rate as rate" do
+            is_expected.to eq(cost: 120, subsidy: 0)
           end
         end
 
-        context "not rounded to hour time range" do
-          context "which is below lowest duration rate minimum duration" do
-            let(:options) { { usage_rate: 120 } }
-            let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
-            let(:end_at) { start_at + 1.hour + 15.minute }
+        context "with duration rates" do
+          context "rounded to hour time range" do
+            context "which is below lowest duration rate minimum duration" do
+              let(:options) { { usage_rate: 120 } }
+              let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
+              let(:end_at) { start_at + 1.hour }
 
-            it "uses usage rate" do
-              create(:duration_rate, price_policy: price_policy, min_duration_hours: 3)
+              it "uses usage rate" do
+                create(:duration_rate, price_policy: price_policy, min_duration_hours: 3)
 
-              is_expected.to eq(cost: 120 + 30, subsidy: 0)
-            end
-          end
-
-          context "which is above lowest duration rate minimum duration" do
-            let(:options) { { usage_rate: 120 } }
-            let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
-            let(:end_at) { start_at + 4.hour + 15.minute }
-
-            it "uses both usage rate and duration rates" do
-              create(:duration_rate, price_policy: price_policy, min_duration_hours: 3)
-
-              # 3 hours    @ $120 = $360 Usage rate
-              # 1.25 hour  @ $60  = $75  Duration rate
-              is_expected.to eq(cost: 435, subsidy: 0)
-            end
-          end
-        end
-
-        context "multiple of them" do
-          context "and not rounded to hour time range" do
-            context "which is above highest duration rate minimum duration" do
-              context "and has subsidy set" do
-                let(:options) { { usage_rate: 120, usage_subsidy: 30 } }
-                let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
-                let(:end_at) { start_at + 5.hour + 15.minute }
-
-                it "uses usage rate, usage subsidy and duration rates" do
-                  create(:duration_rate, price_policy: price_policy, min_duration_hours: 1, rate: nil, subsidy: 25)
-                  create(:duration_rate, price_policy: price_policy, min_duration_hours: 3, rate: nil, subsidy: 20)
-                  create(:duration_rate, price_policy: price_policy, min_duration_hours: 5, rate: nil, subsidy: 15)
-
-                  # Cost
-                  # 5.25 hours    @ $120   = $630   Usage rate
-
-                  # Subsidy
-                  # 1 hours       @ $30   = $30      Usage subsidy
-                  # 2 hours       @ $25   = $50      Duration rate - Minimum duration: 1 hour
-                  # 2 hours       @ $20   = $40      Duration rate - Minimum duration: 3 hours
-                  # 0.25 hours    @ $15   = $3.75    Duration rate - Minimum duration: 5 hours
-                  expect(calculator.calculate(start_at, end_at)[:cost]).to eq(630)
-                  expect(calculator.calculate(start_at, end_at)[:subsidy].round(4)).to eq(123.75)
-                end
+                is_expected.to eq(cost: 120, subsidy: 0)
               end
+            end
 
-              context "and has rate set" do
+            context "which is above lowest duration rate minimum duration" do
+              let(:options) { { usage_rate: 120 } }
+              let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
+              let(:end_at) { start_at + 4.hour }
+
+              it "uses both usage rate and duration rates" do
+                create(:duration_rate, price_policy: price_policy, min_duration_hours: 3)
+
+                # 3 hours @ $120 = $360 Usage rate
+                # 1 hour  @ $60  = $60  Duration rate
+                is_expected.to eq(cost: 420, subsidy: 0)
+              end
+            end
+          end
+
+          context "not rounded to hour time range" do
+            context "which is below lowest duration rate minimum duration" do
+              let(:options) { { usage_rate: 120 } }
+              let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
+              let(:end_at) { start_at + 1.hour + 15.minute }
+
+              it "uses usage rate" do
+                create(:duration_rate, price_policy: price_policy, min_duration_hours: 3)
+
+                is_expected.to eq(cost: 120 + 30, subsidy: 0)
+              end
+            end
+
+            context "which is above lowest duration rate minimum duration" do
+              let(:options) { { usage_rate: 120 } }
+              let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
+              let(:end_at) { start_at + 4.hour + 15.minute }
+
+              it "uses both usage rate and duration rates" do
+                create(:duration_rate, price_policy: price_policy, min_duration_hours: 3)
+
+                # 3 hours    @ $120 = $360 Usage rate
+                # 1.25 hour  @ $60  = $75  Duration rate
+                is_expected.to eq(cost: 435, subsidy: 0)
+              end
+            end
+          end
+
+          context "multiple of them" do
+            context "and not rounded to hour time range" do
+              context "which is above highest duration rate minimum duration" do
                 let(:options) { { usage_rate: 120 } }
                 let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
                 let(:end_at) { start_at + 5.hour + 15.minute }
@@ -317,6 +297,33 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
               end
             end
           end
+        end
+      end
+
+      describe "for internal price group" do
+        let(:price_group) { create(:price_group, :cancer_center) }
+        let(:options) { { usage_rate: 120, usage_subsidy: 30 } }
+        let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) }
+        let(:end_at) { start_at + 5.hour + 15.minute }
+
+        it "uses usage rate, usage subsidy and duration rates" do
+          create(:duration_rate, price_policy: price_policy, min_duration_hours: 1, rate: 110, subsidy: 25)
+          create(:duration_rate, price_policy: price_policy, min_duration_hours: 3, rate: 100, subsidy: 20)
+          create(:duration_rate, price_policy: price_policy, min_duration_hours: 5, rate: 90, subsidy: 15)
+
+          # Cost
+          # 1 hours       @ $120   = $120      Usage rate
+          # 2 hours       @ $110   = $220      Duration rate - Minimum duration: 1 hour
+          # 2 hours       @ $100   = $200      Duration rate - Minimum duration: 3 hours
+          # 0.25 hours    @ $90    = $22.5    Duration rate - Minimum duration: 5 hours
+
+          # Subsidy
+          # 1 hours       @ $30   = $30      Usage subsidy
+          # 2 hours       @ $25   = $50      Duration rate - Minimum duration: 1 hour
+          # 2 hours       @ $20   = $40      Duration rate - Minimum duration: 3 hours
+          # 0.25 hours    @ $15   = $3.75    Duration rate - Minimum duration: 5 hours
+          expect(calculator.calculate(start_at, end_at)[:cost]).to eq(562.5)
+          expect(calculator.calculate(start_at, end_at)[:subsidy].round(4)).to eq(123.75)
         end
       end
     end

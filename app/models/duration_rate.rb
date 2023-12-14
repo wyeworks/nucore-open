@@ -6,12 +6,13 @@ class DurationRate < ApplicationRecord
 
   belongs_to :price_policy, required: true
 
-  validate :rate_or_subsidy
-  validates :rate, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
+  validates :rate, presence: true
+  validates :rate, numericality: { greater_than_or_equal_to: 0 }
+  validates :subsidy, presence: { message: ->(object, _data) { "^Missing subsidy for #{object.price_group.name}" } }, if: -> { requires_subsidy? }
   validates :subsidy, numericality: { greater_than: 0, allow_blank: true }
   validates :min_duration_hours, presence: true, numericality: { greater_than: 0, allow_blank: true }, uniqueness: { scope: :price_policy_id }
   validate :rate_lesser_than_or_equal_to_base_rate
-  validate :subsidy_lesser_than_or_equal_to_base_rate
+  validate :subsidy_lesser_than_or_equal_to_rate
 
   scope :sorted, -> { order(min_duration_hours: :asc) }
 
@@ -33,16 +34,24 @@ class DurationRate < ApplicationRecord
     subsidy.try :*, SIXTY_MIN
   end
 
-  private
-
-  def rate_or_subsidy
-    if rate.blank? && subsidy.blank?
-      errors.add(:base, "Either Rate or Adjustment must be provided")
-    end
+  def subsidized_hourly_cost
+    hourly_rate - hourly_subsidy
   end
 
+  def price_group
+    price_policy.price_group
+  end
+
+  def set_rate_from_base
+    return unless requires_subsidy?
+    return if rate.present?
+
+    self.rate = price_policy.hourly_usage_rate
+  end
+
+  private
+
   def rate_lesser_than_or_equal_to_base_rate
-    return unless price_group.external? || price_group.master_internal?
     return unless price_policy.usage_rate && rate
 
     if rate > price_policy.usage_rate
@@ -50,17 +59,17 @@ class DurationRate < ApplicationRecord
     end
   end
 
-  def subsidy_lesser_than_or_equal_to_base_rate
-    return if price_group.external? || price_group.master_internal?
-    return unless price_policy.usage_rate && subsidy
+  def subsidy_lesser_than_or_equal_to_rate
+    return unless requires_subsidy?
+    return unless rate && subsidy
 
-    if subsidy > price_policy.usage_rate
-      errors.add(:base, "Subsidy must be lesser than or equal to Base rate")
+    if subsidy > rate
+      errors.add(:base, "Subsidy must be lesser than or equal to step rate")
     end
   end
 
-  def price_group
-    price_policy.price_group
+  def requires_subsidy?
+    price_group.is_internal? && !price_group.master_internal?
   end
 
 end
