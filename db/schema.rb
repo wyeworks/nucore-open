@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_16_194445) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_21_205402) do
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -290,6 +290,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_16_194445) do
     t.string "doc_ref"
     t.string "ref_2"
     t.string "trans_id"
+    t.string "trans_3rd_ref"
     t.index ["account_id"], name: "index_journal_rows_on_account_id"
     t.index ["journal_id"], name: "index_journal_rows_on_journal_id"
     t.index ["order_detail_id"], name: "index_journal_rows_on_order_detail_id"

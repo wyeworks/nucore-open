@@ -53,6 +53,7 @@ module UmassCorum
           trans_2nd_ref: journal_row.ref_2,
           trans_id: journal_row.trans_id,
           campus_business_unit: journal_row.business_unit,
+          trans_3rd_ref: journal_row.trans_3rd_ref,
           name: journal_row.name_reference,
           doc_reference: journal_row.doc_ref,
           fund_code: journal_row.fund,
