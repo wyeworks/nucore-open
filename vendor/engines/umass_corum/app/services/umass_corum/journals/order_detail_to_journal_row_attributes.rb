@@ -17,6 +17,7 @@ module UmassCorum
         common_attributes(speed_type: order_detail.product.facility_account.account_number).merge(
           # dept_desc is "IALS M2M" for recharges, but we want to use the expense account's department for this field
           doc_ref: extract_doc_ref(expense_speed_type.dept_desc),
+          trans_3rd_ref: expense_speed_type.speed_type, # the expense account speedtype is more useful for reporting, so we want it to show up in Summit
         )
       end
 
@@ -35,7 +36,8 @@ module UmassCorum
           trans_date: order_detail.fulfilled_at,
           trans_id: journal.facility&.abbreviation, # safe navigation only used in testing
           doc_ref: extract_doc_ref(api_speed_type.dept_desc),
-          ref_2: journal_als
+          ref_2: journal_als,
+          trans_3rd_ref: nil, # Intentionally blank
         }
       end
 
@@ -50,10 +52,10 @@ module UmassCorum
       end
 
       def custom_journal_prexifes
-        { 
+        {
           "data-corps" => "DCR",
-          "gel-permeation-chromatography" => "GPC", 
-          "proposal-support-services" => "PSS" 
+          "gel-permeation-chromatography" => "GPC",
+          "proposal-support-services" => "PSS"
         }
       end
 

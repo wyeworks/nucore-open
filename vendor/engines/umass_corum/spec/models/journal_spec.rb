@@ -43,6 +43,7 @@ RSpec.describe Journal do
       trans_id: facility.abbreviation,
       order_detail: order_details.first,
       account_id: account.id,
+      trans_3rd_ref: be_blank,
     )
   end
 
@@ -66,6 +67,7 @@ RSpec.describe Journal do
       trans_id: facility.abbreviation,
       account_id: be_blank,
       order_detail: be_blank, # Recharges are not tied to an order detail, only the expenses
+      trans_3rd_ref: api_speed_type.speed_type,
     )
   end
 
