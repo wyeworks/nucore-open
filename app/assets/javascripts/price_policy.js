@@ -73,19 +73,19 @@ $(document).ready(function() {
   });
 
   $(".js--baseRate").each(function (_index, element) {
-    setRate(element);
+    setRateForSubsidyPrieGroups(element);
   });
 
   $(".js--baseRate").on("change", function (event) {
-    setRate(event.target)
+    setRateForSubsidyPrieGroups(event.target)
   });
 
-  function setRate(params) {
+  function setRateForSubsidyPrieGroups(params) {
     const columnIndex = params.dataset.index;
     const stepBaseRate = params.value;
-    $(`input[name*='duration_rates_attributes][${columnIndex}][rate]']`).val(
-      stepBaseRate
-    );
+    $(
+      `input[name*='duration_rates_attributes][${columnIndex}][rate]'].js--hiddenRate`
+    ).val(stepBaseRate);
   }
 
   $(".js--minDuration").on("change", function (event) {
