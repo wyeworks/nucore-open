@@ -74,4 +74,4 @@
                 %span="-"
                 = dr.text_field :subsidy, value: number_to_currency(dr.object.hourly_subsidy, unit: "", delimiter: ""), size: 8
                 = dr.hidden_field :min_duration_hours
-                = dr.hidden_field :rate
+                = dr.hidden_field :rate, class: "js--hiddenRate"
