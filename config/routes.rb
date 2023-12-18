@@ -3,8 +3,6 @@
 require "facility_product_routing_concern"
 
 Rails.application.routes.draw do
-  get 'errors/not_found'
-  get 'errors/internal_server_error'
   get "/users/sign_in.pdf" => redirect("/users/sign_in")
   devise_for :users
   mount SangerSequencing::Engine => "/" if defined?(SangerSequencing)
