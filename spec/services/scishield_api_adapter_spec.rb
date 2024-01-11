@@ -40,6 +40,22 @@ RSpec.describe ResearchSafetyAdapters::ScishieldApiAdapter do
         adapter.certified? instance_double(ResearchSafetyCertificate, name: "Hazardous Waste Awareness Training")
         adapter.certified? instance_double(ResearchSafetyCertificate, name: "RANDOM")
       end
+
+      context "without a data attribute" do
+        let(:response) { File.expand_path("../fixtures/scishield/empty_success.json", __dir__) }
+
+        before do
+          stub_request(:get, api_endpoint)
+            .to_return(
+              body: File.new(response),
+              status: 200,
+            )
+        end
+
+        it "gives an empty array" do
+          expect(adapter.certified_course_names_from_api).to eq []
+        end
+      end
     end
 
     describe "unable to connect" do

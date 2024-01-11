@@ -21,6 +21,7 @@ $(document).ready(function() {
     const isDisabled = !$checkbox.prop("checked");
     $cells.toggleClass("disabled", isDisabled);
     $cells.find("input[type=text], input[type=hidden], input[type=checkbox]").not($checkbox).each((_i, elem) => hardToggleField($(elem), isDisabled));
+    $cells.find(".per-minute").toggleClass("hidden", isDisabled);
     // If we are enabling the row, make sure the cancellation cost field gets the correct state
     if (!isDisabled) { return $cells.find(".js--fullCancellationCost").trigger("change"); }
   };

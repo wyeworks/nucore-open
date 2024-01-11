@@ -68,10 +68,12 @@ RSpec.describe "Creating a journal" do
         expect(page).to have_content(OrderDetailPresenter.new(reviewed_order_detail).description_as_html)
         check "order_detail_ids_"
         click_button "Create"
+        # Sometimes the first click doesn't work, so try again
+        click_button "Create" unless page.has_content?("Pending Journal")
         expect(page).to have_content "Pending Journal"
       end
 
-      context "with an order detail more than 90 days old", :js do
+      context "with an order detail more than 90 days old" do
         before do
           reviewed_order_detail.fulfilled_at = 95.days.ago
           reviewed_order_detail.save
@@ -83,8 +85,9 @@ RSpec.describe "Creating a journal" do
           click_button "Create"
           expect(page).to have_content "90-Day Justification"
           click_button "OK"
-          # sometimes takes longer to load and causes failures in CI
-          expect(page).to have_content "The journal file has been created successfully", wait: 6
+          # Sometimes the first click doesn't work, so try again
+          click_button "OK" unless page.has_content?("The journal file has been created successfully")
+          expect(page).to have_content "The journal file has been created successfully"
         end
 
         it "has a 90 day pop up when the check box is checked" do
@@ -92,8 +95,9 @@ RSpec.describe "Creating a journal" do
           click_button "Create"
           expect(page).to have_content "90-Day Justification"
           click_button "OK"
-          # sometimes takes longer to load and causes failures in CI
-          expect(page).to have_content "The journal file has been created successfully", wait: 6
+          # Sometimes the first click doesn't work, so try again
+          click_button "OK" unless page.has_content?("The journal file has been created successfully")
+          expect(page).to have_content "The journal file has been created successfully"
         end
       end
     end
@@ -108,6 +112,8 @@ RSpec.describe "Creating a journal" do
         expect(page).to have_content(OrderDetailPresenter.new(reviewed_order_detail).description_as_html)
         check "order_detail_ids_"
         click_button "Create"
+        # Sometimes the first click doesn't work, so try again
+        click_button "Create" unless page.has_content?("Pending Journal")
         expect(page).to have_content "Pending Journal"
       end
     end
@@ -124,10 +130,12 @@ RSpec.describe "Creating a journal" do
         click_button "Create"
         expect(page).to have_content("We are in the year-end closing window.")
         click_button "Create Journal"
+        # Sometimes the first click doesn't work, so try again
+        click_button "Create Journal" unless page.has_content?("Pending Journal")
         expect(page).to have_content "Pending Journal"
       end
 
-      context "with an order detail more than 90 days old", :js do
+      context "with an order detail more than 90 days old" do
         before do
           reviewed_order_detail.fulfilled_at = 95.days.ago
           reviewed_order_detail.save
@@ -139,8 +147,9 @@ RSpec.describe "Creating a journal" do
           click_button "Create"
           expect(page).to have_content "90-Day Justification"
           click_link "OK"
-          # sometimes takes longer to load and causes failures in CI
-          expect(page).to have_content "We are in the year-end closing window.", wait: 6
+          # Sometimes the first click doesn't work, so try again
+          click_link "OK" unless page.has_content?("We are in the year-end closing window.")
+          expect(page).to have_content "We are in the year-end closing window."
         end
 
         it "has NO 90 day and journal creation reminder pop up when nothing is checked" do

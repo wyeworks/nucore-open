@@ -11,6 +11,15 @@ module ResearchSafetyAdapters
     PRIVATE_KEY = Rails.application.secrets.dig(:scishield, :rsa_private_key)
     API_ENDPOINT = Rails.application.secrets.dig(:scishield, :scishield_endpoint)
 
+    def invalid_response?(email)
+      response = training_api_request(email)
+      http_status_error = response.code.match?(/5|403|404/)
+      certification_data = JSON.parse(response.body)
+      certification_data_error = certification_data.dig("data").nil?
+
+      http_status_error || certification_data_error
+    end
+    
     def token
       return @token if @token.present?
       return nil unless keys_present?

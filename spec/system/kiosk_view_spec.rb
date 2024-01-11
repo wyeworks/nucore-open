@@ -79,6 +79,8 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
         fill_in "Password", with: password
         click_button "End Reservation"
 
+        wait_for_ajax
+
         expect(page).not_to have_content("End Reservation")
         expect(page).not_to have_content("Begin Reservation")
         expect(page.current_path).to eq facility_kiosk_reservations_path(facility)

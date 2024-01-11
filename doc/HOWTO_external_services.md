@@ -61,6 +61,7 @@ To check the latest version, you can:
 - Visit https://unpkg.com/formiojs@latest/dist/formio.full.min.css, which redirects to the latest stable release version.
 
 You can upgrade the version by setting `FORMIO_VERSION` on the server, then doing a full eye-patch quit/load to pick up the version change.  This allows for some testing to be done without a code change and deployment.
+Check `~/.bash_profile.d/env_variables_nucore` for the `FORMIO_VERSION` value.
 
 To confirm the the upgraded assets are being used:
 - Place an order for a service with a form.io order form (https://nucore-staging.northwestern.edu/facilities/test-facility/services/tester)
@@ -69,7 +70,7 @@ To confirm the the upgraded assets are being used:
 
 ### Upgrading form.io premium assets
 1. SSH onto the server
-1. Run `npm login` and log in with credentials that have access to premium module assets.
+1. Run `npm login --registry https://pkg.form.io` and log in with credentials that have access to premium module assets.
 1. Run `npm update @formio/premium --registry https://pkg.form.io`
 1. Perform a full eye-patch quit and then load.
 
