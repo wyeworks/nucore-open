@@ -72,11 +72,19 @@
                 \/ minute
           - price_policy.duration_rates.sorted.each do |duration_rate|
             %td.currency
+              - per_minute = nil
               - if duration_rate.rate.present?
                 .rate= number_to_currency duration_rate.hourly_rate
+                - per_minute = duration_rate.hourly_rate / 60
               - if duration_rate.subsidy.present?
                 .subsidy= "- #{number_to_currency duration_rate.hourly_subsidy}"
                 %strong= "= #{number_to_currency duration_rate.subsidized_hourly_cost}"
+                - per_minute = duration_rate.subsidized_hourly_cost / 60
+
+              - if per_minute.present?
+                %p.per-minute-show
+                  = number_to_currency per_minute, precision: 4
+                  \/ minute
 
           - (PricePolicy::MAX_RATE_STARTS - price_policy.duration_rates.length).times do
             %td.currency

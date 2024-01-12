@@ -35,7 +35,7 @@ module ResearchSafetyAdapters
               # happen. Sleeping before retrying an individual request seems to
               # allow that request to succeed. Each retry sleeps 25% longer than
               # the previous try.
-              if retries < 5
+              if retries < retry_max
                 retry_sleep_time *= 1.25
                 msg = "ScishieldTrainingSynchronizer#synchronize request for user id #{user.id} failed, retrying in #{retry_sleep_time} seconds. Error: #{e.message}"
 
@@ -80,11 +80,7 @@ module ResearchSafetyAdapters
     def api_unavailable?
       # Test API responses for 10 random users
       users.sample(10).map do |user|
-        response = api_client.training_api_request(user.email)
-        http_status = response.code
-
-        # track if http status is 5xx, 403, or 404, or not
-        http_status.match?(/5|403|404/)
+        api_client.invalid_response?(user.email)
       end.all?
     end
 
@@ -102,6 +98,10 @@ module ResearchSafetyAdapters
 
     def batch_sleep_time
       Settings.research_safety_adapter.scishield.batch_sleep_time
+    end
+
+    def retry_max
+      Settings.research_safety_adapter.scishield.retry_max
     end
   end
 

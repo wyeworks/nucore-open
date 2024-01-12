@@ -288,8 +288,7 @@ RSpec.describe InstrumentPricePoliciesController do
         fill_in "note", with: "This is my note"
 
         click_button "Add Pricing Rules"
-
-        expect(page).to have_content("Missing rate or subsidy for #{base_price_group.name}")
+        expect(page).to have_content("Missing value for 'Rate start (hr)'")
       end
 
       it "fails to save duration rates do not have a rate start provided", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
@@ -308,7 +307,7 @@ RSpec.describe InstrumentPricePoliciesController do
 
         click_button "Add Pricing Rules"
 
-        expect(page).to have_content("Duration rates min duration hours may not be blank")
+        expect(page).to have_content("Missing value for 'Rate start (hr)'")
       end
     end
 
@@ -330,7 +329,7 @@ RSpec.describe InstrumentPricePoliciesController do
       fill_in "price_policy_#{cancer_center.id}[usage_subsidy]", with: "25"
       fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][0][subsidy]", with: "15"
       fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][1][subsidy]", with: "15"
-      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][2][subsidy]", with: "5"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][2][subsidy]", with: "4"
 
       fill_in "price_policy_#{external_price_group.id}[usage_rate]", with: "120.11"
       fill_in "price_policy_#{external_price_group.id}[minimum_cost]", with: "122"
@@ -358,28 +357,47 @@ RSpec.describe InstrumentPricePoliciesController do
       expect(page).to have_field("price_policy_#{base_price_group.id}[duration_rates_attributes][1][rate]", with: "40.00")
       expect(page).to have_field("price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]", with: "30.00")
 
-      fill_in "min_duration_2", with: "5"
-      fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]", with: "20"
+      # Update values for Step 2
+      fill_in "min_duration_1", with: "5"
+      fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][1][rate]", with: "20"
 
-      find_field("price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]").native.send_keys :tab # change focus to trigger the onchange event
-      expect(page).to have_field("price_policy_#{cancer_center.id}[duration_rates_attributes][2][rate]", with: "20", type: :hidden)
-      expect(page).to have_field("price_policy_#{external_price_group.id}[duration_rates_attributes][2][rate]", with: "90.00")
+      ## START When values for Step 3 are removed, you can still save Step 1 and 2
+      # Remove all values for Step 3
+      fill_in "min_duration_2", with: ""
+      fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]", with: ""
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][2][subsidy]", with: ""
+      fill_in "price_policy_#{external_price_group.id}[duration_rates_attributes][2][rate]", with: ""
+
+      find_field("price_policy_#{base_price_group.id}[duration_rates_attributes][1][rate]").native.send_keys :tab # change focus to trigger the onchange event
+
+      expect(page).to have_field("price_policy_#{cancer_center.id}[duration_rates_attributes][1][rate]", with: "20", type: :hidden)
+      expect(page).to have_field("price_policy_#{external_price_group.id}[duration_rates_attributes][1][rate]", with: "100.00")
 
       click_button "Save Rules"
 
       expect(page).to have_content("Price Rules were successfully updated.")
 
+      # Base rate start for Step 2 is updated
       expect(page).to have_content("Over 5 hrs")
+      expect(page).not_to have_content("Over 3 hrs")
+
+      # Rate start for Step 3 is removed
       expect(page).not_to have_content("Over 4 hrs")
 
       # Base price group - Duration rates
       expect(page).to have_content("$50.00")
-      expect(page).to have_content("$40.00")
+      expect(page).not_to have_content("$30.00") # Step 3 rate (removed)
+
+      # Duration rate for Step 2 is updated
+      expect(page).not_to have_content("$40.00")
       expect(page).to have_content("$20.00")
-      expect(page).not_to have_content("$30.00")
 
       # Cancer Center subsidy
       expect(page).to have_content("$25.00")
+      expect(page).not_to have_content("$4.00") # Step 3 subsidy (removed)
+
+      # External
+      expect(page).not_to have_content("$90.00") # Step 3 rate (removed)
     end
   end
 end

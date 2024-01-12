@@ -48,3 +48,4 @@ keys/
 *.p12
 *.sublime-*
 .envrc
+.vscode

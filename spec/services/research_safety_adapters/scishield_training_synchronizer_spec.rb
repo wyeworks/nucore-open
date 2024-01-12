@@ -31,6 +31,17 @@ RSpec.describe ResearchSafetyAdapters::ScishieldTrainingSynchronizer do
   context "when the API responds with error" do
     before { 2.times { create(:scishield_training, user_id: 1) } }
 
+    context "when the response is missing the data attribute" do
+      let(:response) { File.expand_path("../../fixtures/scishield/empty_success.json", __dir__) }
+      let(:status_code) { "200" }
+
+      it "does not add courses to database" do
+        expect(ScishieldTraining.count).to eq 2
+        synchronizer.synchronize
+        expect(ScishieldTraining.count).to eq 2
+      end
+    end
+
     context "when the API responds with a 500 error" do
       let(:status_code) { 500 }
 

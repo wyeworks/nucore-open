@@ -11,11 +11,20 @@ namespace :cleanup do
   end
 
   namespace :carts do
+    # rake cleanup:carts:destroy_abandoned[12]
+    # rake cleanup:carts:destroy_abandoned
     desc "Cleans out abandoned carts (i.e. cart that have only an instrument order detail in them)"
-    task destroy_abandoned: :environment do
+    task :destroy_abandoned, [:days] => :environment do |_t, args|
       Rails.logger = Logger.new(STDOUT)
       Rails.logger.level = Logger::INFO
-      Cart.destroy_all_instrument_only_carts(5.days.ago)
+
+      days_ago = if args[:days]
+                   args[:days].to_i.days.ago
+                 else
+                   5.days.ago
+                 end
+
+      Cart.destroy_all_instrument_only_carts(days_ago)
     end
   end
 

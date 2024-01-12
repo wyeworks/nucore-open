@@ -28,10 +28,19 @@ module ResearchSafetyAdapters
     end
 
     def certified_course_names_from_api
-      certification_data["data"].map do |training_record|
-        course_id = training_record["relationships"]["course_id"]["data"]["id"]
-        course = certification_data["included"].select { |course| course["id"] == course_id }.first
-        course.dig("attributes", "title")
+      # The "data" key should always be present with a default value of an empty array.
+      # Sometimes during the retry process the "data" key is missing, which causes an error.
+      if certification_data.dig("data").nil?
+        # TODO: Remove this logging when the cause is better understood
+        msg = "User #{@user.id} has no data in the SciShield API"
+        Rollbar.error(msg) if defined?(Rollbar)
+        []
+      else
+        certification_data["data"].map do |training_record|
+          course_id = training_record["relationships"]["course_id"]["data"]["id"]
+          course = certification_data["included"].select { |course| course["id"] == course_id }.first
+          course.dig("attributes", "title")
+        end
       end
     end
 
