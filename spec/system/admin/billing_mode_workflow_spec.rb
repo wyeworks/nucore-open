@@ -33,6 +33,8 @@ RSpec.describe "Billing mode workflows" do
         click_button "Save"
         visit facility_transactions_path(facility)
 
+        wait_for_ajax
+
         expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
       end
     end
@@ -61,6 +63,8 @@ RSpec.describe "Billing mode workflows" do
 
       click_button "Save"
       visit facility_transactions_path(facility)
+
+      wait_for_ajax
 
       expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
     end
