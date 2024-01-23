@@ -1,24 +1,10 @@
-%p Pricing policies apply to orders placed by the the following users:
-- if @price_group_ability.can?(:create, UserPriceGroupMember) && price_group.can_manage_price_group_members?
-  %p= link_to "Add User", new_facility_price_group_user_price_group_member_path(current_facility, @price_group), class: "btn-add"
+%p= t("price_groups.show.users.intro")
+- if @price_group_ability.can?(:create, UserPriceGroupMember) && @price_group.can_manage_price_group_members?
+  %p= link_to text("price_groups.show.users.add_user"), new_facility_price_group_user_price_group_member_path(current_facility, @price_group), class: "btn-add"
 
-- if @user_members.empty?
-  %p.notice No users have been added to this price group.
-- else
-  %table.table.table-striped.table-hover
-    %thead
-      %tr
-        - if @price_group_ability.can?(:destroy, UserPriceGroupMember) && price_group.can_manage_price_group_members?
-          %th
-        %th== Name
-        %th== Username
-        %th== Email
-    %tbody
-      - @user_members.each do |user_price_group_member|
-        %tr{class: cycle(:odd, :even)}
-          - if @price_group_ability.can?(:destroy, UserPriceGroupMember) && price_group.can_manage_price_group_members?
-            %td= link_to "Remove", [current_facility, @price_group, user_price_group_member], data: { confirm: "Are you sure?" }, method: :delete
-          %td= user_price_group_member.user.full_name
-          %td= user_price_group_member.user.username
-          %td= user_price_group_member.user.email
-  = will_paginate(@user_members)
+= form_tag users_search_facility_price_group_path, id: "ajax_form", method: :get do
+  = label_tag :price_group_user_search, text("price_groups.show.users.search_form.label")
+  = text_field_tag :search, nil, size: 50, class: "search-query", id: "price_group_user_search"
+  = submit_tag text("price_groups.show.users.search_form.button"), class: "btn"
+
+= render "users_results"

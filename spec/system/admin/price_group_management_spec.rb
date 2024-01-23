@@ -76,6 +76,44 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
         end
       end
 
+      context "search for a user", :js do
+        let(:user_searchable) { create(:user, first_name: "John", last_name: "Doe", username: "jdoe") }
+        let(:user_not_found) { create(:user, first_name: "Jane", last_name: "Holmes", username: "jholmes") }
+
+        before do
+          create(:user_price_group_member, price_group: price_group, user: user_not_found)
+          create(:user_price_group_member, price_group: price_group, user: user_searchable)
+          visit users_facility_price_group_path(facility, price_group)
+        end
+
+        it "searches for users by first name" do
+          fill_in "price_group_user_search", with: "John"
+          click_button "Search"
+          wait_for_ajax
+          expect(page).to have_content(user_searchable.name)
+          expect(page).to_not have_content(user_not_found.name)
+          expect(page).to_not have_content(user2.name)
+        end
+
+        it "searches for users by last name" do
+          fill_in "price_group_user_search", with: "Doe"
+          click_button "Search"
+          wait_for_ajax
+          expect(page).to have_content(user_searchable.name)
+          expect(page).to_not have_content(user_not_found.name)
+          expect(page).to_not have_content(user2.name)
+        end
+
+        it "searches for users by username" do
+          fill_in "price_group_user_search", with: "jdoe"
+          click_button "Search"
+          wait_for_ajax
+          expect(page).to have_content(user_searchable.name)
+          expect(page).to_not have_content(user_not_found.name)
+          expect(page).to_not have_content(user2.name)
+        end
+      end
+
     end
   end
 

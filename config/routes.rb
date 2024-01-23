@@ -292,6 +292,7 @@ Rails.application.routes.draw do
     resources :price_groups do
       member do
         get "users"
+        get "users_search"
         get "accounts"
       end
 

@@ -44,6 +44,9 @@ RSpec.describe "Instrument Schedule Display Order" do
       select "Second Schedule", from: "Instrument Schedules"
       find("[title='Move Up']").click
       click_button "Update Ordering"
+
+      wait_for_ajax
+
       expect(["Second", "Third", "First", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       # check the new display order

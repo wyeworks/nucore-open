@@ -8,7 +8,7 @@ class PriceGroupsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_acting_as
   before_action :init_current_facility
-  before_action :load_price_group_and_ability!, only: [:accounts, :destroy, :edit, :show, :update, :users]
+  before_action :load_price_group_and_ability!, only: [:accounts, :destroy, :edit, :show, :update, :users, :users_search]
 
   load_and_authorize_resource
 
@@ -31,18 +31,21 @@ class PriceGroupsController < ApplicationController
 
   # GET /facilities/:facility_id/price_groups/:id/users
   def users
-    unless SettingsHelper.feature_on?(:user_based_price_groups) && @price_group_ability.can?(:read, UserPriceGroupMember)
-      raise ActiveRecord::RecordNotFound
-    end
+    can_see_price_group_users!
 
-    @user_members = @price_group.user_price_group_members
-                                .includes(:user)
-                                .joins(:user)
-                                .merge(User.sort_last_first)
-    @user_members = paginate(@user_members)
+    set_user_members
     @tab = :users
 
     render action: "show"
+  end
+
+  def users_search
+    can_see_price_group_users!
+
+    set_user_members(params[:search])
+    @tab = :users
+
+    render layout: false
   end
 
   # GET /facilities/:facility_id/price_groups/:id/accounts
@@ -108,12 +111,31 @@ class PriceGroupsController < ApplicationController
 
   private
 
+  def set_user_members(search_term = nil)
+    @user_members = @price_group.user_price_group_members
+                                .includes(:user)
+                                .joins(:user)
+
+    if search_term.present?
+      @user_members = @user_members.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: search_term)
+    end
+
+    @user_members = @user_members.merge(User.sort_last_first)
+    @user_members = paginate(@user_members)
+  end
+
+  def can_see_price_group_users!
+    unless SettingsHelper.feature_on?(:user_based_price_groups) && @price_group_ability.can?(:read, UserPriceGroupMember)
+      raise ActiveRecord::RecordNotFound
+    end
+  end
+
   def price_group_params
     params.require(:price_group).permit(:name, :display_order, :is_internal, :admin_editable, :facility_id)
   end
 
   def paginate(relation)
-    relation.paginate(page: params[:page], per_page: 10)
+    relation.paginate(page: params[:page], per_page: 50)
   end
 
   def load_price_group_and_ability!

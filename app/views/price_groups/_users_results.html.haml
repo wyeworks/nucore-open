@@ -1,0 +1,21 @@
+#result
+  - if @user_members.empty?
+    %p.notice= t("price_groups.show.users.notice")
+  - else
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          - if @price_group_ability.can?(:destroy, UserPriceGroupMember) && @price_group.can_manage_price_group_members?
+            %th
+          %th= t("price_groups.show.users.table.name")
+          %th= t("price_groups.show.users.table.username")
+          %th= t("price_groups.show.users.table.email")
+      %tbody
+        - @user_members.each do |user_price_group_member|
+          %tr{class: cycle(:odd, :even)}
+            - if @price_group_ability.can?(:destroy, UserPriceGroupMember) && @price_group.can_manage_price_group_members?
+              %td= link_to t("price_groups.show.users.remove_user"), [current_facility, @price_group, user_price_group_member], data: { confirm: "Are you sure?" }, method: :delete
+            %td= user_price_group_member.user.full_name
+            %td= user_price_group_member.user.username
+            %td= user_price_group_member.user.email
+    = will_paginate(@user_members)

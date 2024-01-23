@@ -78,7 +78,7 @@ services:
     stdin_open: true
   # For system-tests and teaspoon
   selenium:
-    image: selenium/standalone-chrome:119.0.6045.199-chromedriver-119.0.6045.105
+    image: selenium/standalone-chrome:120.0.6099.109-chromedriver-120.0.6099.109
     logging:
       driver: none
     ports:
