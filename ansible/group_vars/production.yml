@@ -4,4 +4,4 @@ nginx_apps:
     alias: ials-core-web-prod-01.it.umass.edu ials-core-web-prod-02.it.umass.edu
     user: corum
     rails_env: production
-    ruby_versions: ["3.1.1"]
+    ruby_versions: ["3.3.0"]
