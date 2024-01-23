@@ -19,7 +19,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
-      image: nucoretxi/ruby-node-chrome-pack:3.1.1
+      image: nucoretxi/ruby-node-chrome-pack:3.3.0
       credentials:
         username: nucoretxi
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
@@ -60,7 +60,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
-      image: nucoretxi/ruby-node-chrome-pack:3.1.1
+      image: nucoretxi/ruby-node-chrome-pack:3.3.0
       credentials:
         username: nucoretxi
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
@@ -70,10 +70,10 @@ jobs:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     steps:
-      # Uncomment below to open ssh tunnel for debugging
-      # - uses: mxschmitt/action-tmate@v3
       - uses: actions/checkout@v3
       - uses: ./.github/actions
+      # Uncomment below to open ssh tunnel for debugging
+      # - uses: mxschmitt/action-tmate@v3
       - run: bundle exec rspec
 
   run-teaspoon:
@@ -94,7 +94,7 @@ jobs:
           - 4444:4444
         options: --shm-size="2g"
     container:
-      image: nucoretxi/ruby-node-chrome-pack:3.1.1
+      image: nucoretxi/ruby-node-chrome-pack:3.3.0
       credentials:
         username: nucoretxi
         password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}

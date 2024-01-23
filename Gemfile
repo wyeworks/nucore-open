@@ -49,7 +49,7 @@ gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
 gem "haml"
 gem "will_paginate"
 # TODO: Remove dynamic_form and use Rails to display errors
-gem "dynamic_form", git: "https://github.com/payrollhero/dynamic_form"
+gem "dynamic_form"
 # 5.0 has breaking changes based which need to be addressed before we can upgrade
 gem "ckeditor", "< 5"
 gem "jquery-rails"
