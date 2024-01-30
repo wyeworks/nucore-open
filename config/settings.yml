@@ -40,7 +40,7 @@ research_safety_adapter:
   scishield:
     batch_sleep_time: <%= ENV.fetch("SCISHIELD_BATCH_SLEEP_TIME", 20) %>
     batch_size: <%= ENV.fetch("SCISHIELD_BATCH_SIZE", 15) %>
-    retry_max: <%= ENV.fetch("SCISHIELD_SYNC_RETRY_MAX", 5) %>)
+    retry_max: <%= ENV.fetch("SCISHIELD_SYNC_RETRY_MAX", 5) %>
 
 statement_pdf:
   class_name: UmassCorum::StatementPdf
