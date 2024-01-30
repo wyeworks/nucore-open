@@ -4,6 +4,8 @@ WORKDIR /app
 ENV BUNDLE_PATH /gems
 
 # Install NodeJS based on https://github.com/nodesource/distributions#installation-instructions
+ARG NODE_VERSION=setup_16.x
+ENV NODE_VERISON ${NODE_VERSION}
 RUN apt-get update && \
  # Installs the node repository
   apt-get install -y ca-certificates curl gnupg && \
@@ -14,8 +16,9 @@ RUN apt-get update && \
   apt-get update && \
   apt-get install nodejs -y && \
  # Installs libvips and the node repository
- apt-get install --yes libvips42 nodejs && \
- npm install --global yarn && \
+  apt-get install --yes libvips42 nodejs && \
+  apt-get install npm -y
+RUN npm install --global yarn && \
  apt-get autoremove -y
 
 # Copy just what we need in order to bundle

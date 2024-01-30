@@ -1,6 +1,15 @@
 # Sanger Sequencing
 
-[TODO Explain feature]
+Supports integration with Sanger Sequencing research equipment.
+As a user, I can place an order and specify samples.
+Samples are grouped together into submissions (one per order detail).
+
+As a facility admin, I can group submissions into a batch and arrange multiple submissions on a well plate.
+As a facility admin, I can download a CSV that corresponds to the submission layouts on the well plate.
+As a facility admin, I can upload the CSV to the Sanger machine. (outside of NUCore)
+As a facility admin, I can upload the test results in NUCore and attach them to the relevant batch.
+
+As a user, I can download my test results when they are ready.
 
 ## Enabling Sanger Sequencing
 

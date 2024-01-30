@@ -31,9 +31,10 @@ RSpec.describe "Billing mode workflows" do
         select "Complete", from: "Order Status"
 
         click_button "Save"
-        visit facility_transactions_path(facility)
 
-        wait_for_ajax
+        expect(page).to have_content("The order was successfully updated")
+
+        visit facility_transactions_path(facility)
 
         expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
       end
@@ -62,9 +63,10 @@ RSpec.describe "Billing mode workflows" do
       select "Complete", from: "Order Status"
 
       click_button "Save"
-      visit facility_transactions_path(facility)
 
-      wait_for_ajax
+      expect(page).to have_content("The order was successfully updated")
+
+      visit facility_transactions_path(facility)
 
       expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
     end
