@@ -120,7 +120,7 @@ class ProductUsersController < ApplicationController
                     .includes(:product_access_group)
 
     if search_term.present?
-      product_users = product_users.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: search_term)
+      product_users = product_users.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: search_term.downcase)
     end
 
     product_users.order("users.last_name ASC", "users.first_name ASC")

@@ -37,6 +37,14 @@ RSpec.shared_examples_for "search for a user" do
       expect(page).to have_content(user_searchable.last_first_name)
       expect(page).to_not have_content(user_not_found.last_first_name)
     end
+
+    it "searches for users by first name (case insensitive)" do
+      fill_in "access_list_search", with: "john"
+      click_button "Search"
+      wait_for_ajax
+      expect(page).to have_content(user_searchable.last_first_name)
+      expect(page).to_not have_content(user_not_found.last_first_name)
+    end
   end
 end
 
