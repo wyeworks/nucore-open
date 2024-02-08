@@ -112,6 +112,15 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
           expect(page).to_not have_content(user_not_found.name)
           expect(page).to_not have_content(user2.name)
         end
+
+        it "searches for users by first name (case insensitive)" do
+          fill_in "price_group_user_search", with: "john"
+          click_button "Search"
+          wait_for_ajax
+          expect(page).to have_content(user_searchable.name)
+          expect(page).to_not have_content(user_not_found.name)
+          expect(page).to_not have_content(user2.name)
+        end
       end
 
     end

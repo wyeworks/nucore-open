@@ -5,14 +5,17 @@
 # All repos should be checked out to the same parent directory,
 # with the default branch checked out, up to date, and clean (stash any changes).
 #
-# The first argument is the previous release tag
+# Runs against the previous release tag by default
+# You can also pass in a release tag a an optional first argument
+# bin/release_describer
 # bin/release_describer v2023-11-08
 
 require "set"
 
 repos = ["nucore-open", "nucore-nu", "nucore-osu", "nucore-umass", "nucore-dartmouth"]
 repo_dir = `dirname $PWD`.chomp
-previous_release_tag = ARGV.first
+previous_release_tag =  ARGV.first || `git describe --tags --abbrev=0`
+puts "Preparing to describe changes since the tag: #{previous_release_tag}"
 
 data = Hash.new do |h, k|
   h[k] = {
@@ -27,8 +30,23 @@ data = Hash.new do |h, k|
   }
 end
 repos.each do |repo|
+  run_in_repo = "cd #{repo_dir}/#{repo} &&"
   puts "Processing changes from #{repo} ..."
-  git_log = `cd #{repo_dir}/#{repo} && bin/merge_describer #{previous_release_tag}`
+  git_status_output = `#{run_in_repo} git status --porcelain --untracked-files=no`
+  puts git_status_output
+
+  if !git_status_output.empty?
+    puts "Repo #{repo} has unstaged changes. Type 'yes' to stash any changes and continue.  Any other input will skip this repo."
+    if gets.chomp == "yes"
+      puts `#{run_in_repo} git stash`
+    else
+      puts "Skipping."
+      next
+    end
+  end
+
+  `#{run_in_repo} git checkout master && git pull`
+  git_log = `#{run_in_repo} bin/merge_describer #{previous_release_tag}`
   git_log.split("\n").each do |line|
     ticket_number_match = line.match(/\[#(\d*)/)
     formatted_line = if ticket_number_match

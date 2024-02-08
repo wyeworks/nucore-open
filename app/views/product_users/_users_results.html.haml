@@ -1,0 +1,33 @@
+:javascript
+  $(document).ready(function() {
+    $("form#ajax_form").submit(submitAjaxForm);
+  })
+
+#result
+  - if @product_users.present? || @search_term
+    -# There are users to search for or the search action was performed
+    = form_tag polymorphic_path([:search, current_facility, @product, :users]), id: "ajax_form", class: "inline", method: :get do
+      = label_tag :access_list_search, text("search_form.label")
+      = text_field_tag :search, nil, size: 50, class: "search-query", id: "access_list_search", value: @search_term
+      = submit_tag text("search_form.button"), class: "btn"
+
+  - if @product_users.nil?
+    - # Access list not required for this product
+  - elsif @product_users.empty? && @search_term
+    - # search results returned empty
+    %p.notice= text("no_results")
+  - elsif @product_users.empty?
+    - # no users have access to this product, no search was performed
+    %p.notice= text("empty_access_list")
+  - else
+    - if @search_term.blank?
+      -# Search action wasn't performed or it was performed with the empty string
+      = render "export_csv"
+
+    - if @product.has_product_access_groups?
+      = form_for @product, url: [current_facility, @product, :update_restrictions], method: :put do |f|
+        = render "table", f: f
+        = f.submit text("update", plural_label: ProductAccessGroup.model_name.human.pluralize),
+          class: ["btn", "btn-primary"]
+    - else
+      = render "table"

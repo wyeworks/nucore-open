@@ -20,22 +20,4 @@
         = text("import_button")
         %span{ style:"display:none" }= f.file_field :file, onchange: "form.submit()"
 
-- if @product_users.nil?
-- elsif @product_users.empty?
-  %p.notice= text("none")
-- else
-  = form_tag polymorphic_path([current_facility, @product, :users], format: :csv), method: :get, class: "search_form" do
-    = hidden_field_tag :email, current_user.email, disabled: true
-    = hidden_field_tag :format, params[:format], disabled: true
-
-  = link_to t("reports.product_users.export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
-
-  - if @product.has_product_access_groups?
-    = form_for @product, url: [current_facility, @product, :update_restrictions], method: :put do |f|
-      = render "table", f: f
-      = f.submit text("update", plural_label: ProductAccessGroup.model_name.human.pluralize),
-        class: ["btn", "btn-primary"]
-  - else
-    = render "table"
-
-  = will_paginate(@product_users)
+= render "users_results"

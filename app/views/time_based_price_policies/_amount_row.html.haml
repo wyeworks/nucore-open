@@ -1,10 +1,3 @@
-%td
-  = pp.label :usage_rate, t("price_policies.rate"), class: "normal-weight"
-  = pp.text_field :usage_rate, value: display_usage_rate(price_group, price_policy),
-    size: 8,
-    class: "#{price_group.master_internal? ? 'master_usage_cost' : ''} usage_rate",
-    data: { target: ".js--usageRate" }
-
 - if local_assigns[:minimum_cost]
   %td
     = pp.label :minimum_cost, t("price_policies.amount"), class: "normal-weight"
@@ -25,3 +18,10 @@
           class: "js--fullCancellationCost"
         = price_policy.class.human_attribute_name(:full_price_cancellation)
         = tooltip_icon "fa fa-question-circle-o", t("price_policies.charge_full_price_on_cancellation_hint")
+
+%td
+  = pp.label :usage_rate, t("price_policies.rate"), class: "normal-weight"
+  = pp.text_field :usage_rate, value: display_usage_rate(price_group, price_policy),
+    size: 8,
+    class: "#{price_group.master_internal? ? 'master_usage_cost' : ''} usage_rate",
+    data: { target: ".js--usageRate" }

@@ -28,3 +28,5 @@
               = pu.select :product_access_group_id,
                 options_from_collection_for_select(@product.product_access_groups, "id", "name", product_user.product_access_group_id),
                 include_blank: true
+
+= will_paginate(@product_users)
