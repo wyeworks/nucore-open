@@ -41,7 +41,7 @@ class PricePoliciesController < ApplicationController
     @price_policies = PricePolicyBuilder.get_new_policies_based_on_most_recent(
       @product,
       @start_date,
-      force_new_policies = @product.is_a?(Instrument) && @product.duration_pricing_mode?
+      force_new_policies = @product.duration_pricing_mode?
     )
 
     raise ActiveRecord::RecordNotFound if @price_policies.blank?
@@ -171,7 +171,7 @@ class PricePoliciesController < ApplicationController
   # in ascending order with nil values at the end.
   # Used to build the column sub-headers in the price policy table.
   def init_min_durations_for_index
-    return unless @product.is_a?(Instrument) && @product.duration_pricing_mode?
+    return unless @product.duration_pricing_mode?
 
     min_durations = @current_price_policies.flat_map { |pp| pp.duration_rates.map(&:min_duration_hours) }.uniq
     (PricePolicy::MAX_RATE_STARTS - min_durations.length).times { min_durations << nil }
@@ -185,7 +185,7 @@ class PricePoliciesController < ApplicationController
   end
 
   def build_instrument_stepped_billing_fields
-    if @product.is_a?(Instrument) && @product.duration_pricing_mode?
+    if @product.duration_pricing_mode?
       build_min_durations
       build_duration_rates
     end

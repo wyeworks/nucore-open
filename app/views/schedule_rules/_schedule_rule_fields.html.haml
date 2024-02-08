@@ -15,7 +15,7 @@
       = f.label :end_time
       = time_select24(f, :end, hours: (0..24), minute_step: @product.reserve_interval)
 
-- unless @product.is_a?(Instrument) && @product.duration_pricing_mode?
+- unless @product.duration_pricing_mode?
   %h3= t("views.schedule_rules.discount")
 
   %p= t("views.schedule_rules.discount_hint")

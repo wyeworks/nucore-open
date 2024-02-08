@@ -27,7 +27,7 @@ class PricePolicyUpdater
   end
 
   def update_all
-    if @product.is_a?(Instrument) && @product.duration_pricing_mode?
+    if @product.duration_pricing_mode?
       assign_attributes_for_stepped_billing && save
     else
       assign_attributes && save

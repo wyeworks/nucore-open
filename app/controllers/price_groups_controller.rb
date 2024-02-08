@@ -117,7 +117,7 @@ class PriceGroupsController < ApplicationController
                                 .joins(:user)
 
     if search_term.present?
-      @user_members = @user_members.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: search_term)
+      @user_members = @user_members.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: search_term.downcase)
     end
 
     @user_members = @user_members.merge(User.sort_last_first)

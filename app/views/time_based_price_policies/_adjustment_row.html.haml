@@ -1,11 +1,3 @@
-%td
-  = pp.hidden_field :usage_rate, value: display_usage_rate(price_group, price_policy),
-    class: "js--usageRate"
-  = pp.label :usage_subsidy, t("price_policies.adjustment"), class: "normal-weight"
-  = pp.text_field :usage_subsidy, value: display_usage_subsidy(price_group, price_policy),
-    size: 8,
-    class: "usage_adjustment"
-
 - if local_assigns[:minimum_cost]
   %td
     = pp.label :minimum_cost, t("price_policies.amount"), class: "normal-weight"
@@ -26,3 +18,8 @@
 
     = pp.hidden_field :full_price_cancellation, class: "js--fullCancellationCost", readonly: true
 
+%td
+  = pp.hidden_field :usage_rate, value: display_usage_rate(price_group, price_policy),
+    class: "js--usageRate"
+  = pp.label :usage_subsidy, t("price_policies.adjustment"), class: "normal-weight"
+  = "- #{pp.text_field :usage_subsidy, value: display_usage_subsidy(price_group, price_policy), size: 8, class: "usage_adjustment"}"

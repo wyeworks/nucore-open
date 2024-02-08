@@ -13,6 +13,8 @@ class ProductUsersController < ApplicationController
 
   layout "two_column"
 
+  USERS_PER_PAGE = 50
+
   def initialize
     @active_tab = "admin_products"
     super
@@ -24,12 +26,6 @@ class ProductUsersController < ApplicationController
   # GET /facilities/:facility_id/services/service_id/users
   def index
     if @product.requires_approval?
-      all_product_users = @product
-                          .product_users
-                          .includes(:user)
-                          .includes(:product_access_group)
-                          .order("users.last_name ASC", "users.first_name ASC")
-
       respond_to do |format|
         format.csv do
           # used for "Export as CSV" link
@@ -40,13 +36,25 @@ class ProductUsersController < ApplicationController
         end
 
         format.html do
-          @product_users = all_product_users.paginate(page: params[:page])
+          @product_users = all_product_users.paginate(page: params[:page], per_page: USERS_PER_PAGE)
         end
       end
     else
       @product_users = nil
       flash.now[:notice] = text("index.not_required", model: downcase_product_type)
     end
+  end
+
+  # GET /facilities/:facility_id/bundles/bundle_id/users/search
+  # GET /facilities/:facility_id/instruments/instrument_id/users/search
+  # GET /facilities/:facility_id/items/item_id/users/search
+  # GET /facilities/:facility_id/services/service_id/users/search
+  def search
+    @product_users = all_product_users(params[:search]).paginate(page: params[:page], per_page: USERS_PER_PAGE)
+
+    @search_term = params[:search]
+
+    render layout: false
   end
 
   # GET /facilities/:facility_id/bundles/bundle_id/users/new
@@ -104,6 +112,19 @@ class ProductUsersController < ApplicationController
   end
 
   private
+
+  def all_product_users(search_term = nil)
+    product_users = @product
+                    .product_users
+                    .includes(:user)
+                    .includes(:product_access_group)
+
+    if search_term.present?
+      product_users = product_users.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: search_term.downcase)
+    end
+
+    product_users.order("users.last_name ASC", "users.first_name ASC")
+  end
 
   def downcase_product_type
     @product.class.model_name.human.downcase

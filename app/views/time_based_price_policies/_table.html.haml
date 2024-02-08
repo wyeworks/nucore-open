@@ -1,48 +1,59 @@
+%div{ style: "display: flex; flex-direction: row-reverse" }
+  - if @product.duration_pricing_mode?
+    %h4.half-width= t("time_based_price_policies.table.stepped_rates_title")
+  - else
+    %h4.half-width= t("time_based_price_policies.table.rates_title")
+
+- if price_policies.all?(&:editable?) && can?(:edit, PricePolicy) && !@product.skip_order_review?
+  %div
+    %p{ aria_label: "Edit Price Policies" }
+      = link_to t("time_based_price_policies.table.edit"),
+        [:edit, current_facility, product, :price_policy, id: url_date]
+    %p
+      = link_to t("time_based_price_policies.table.remove"),
+        [current_facility, product, :price_policy, id: url_date],
+        data: { confirm: t("shared.confirm_message") },
+        method: :delete
+- else
+  %p.muted= t("shared.edit")
+  %p.muted= t("shared.remove")
 %table.table
   %thead
     %tr
-      %th.actions{ rowspan: 2 }
       %th{ rowspan: 2 }= "#{PriceGroup.model_name.human} (#{PricePolicy.human_attribute_name(:type)})"
-      %th.currency{ colspan: 2 }= PricePolicy.human_attribute_name(:hourly_usage_rate)
       - if local_assigns[:minimum_cost]
         %th.currency{ rowspan: 2 }= PricePolicy.human_attribute_name(:minimum_cost)
       - if local_assigns[:cancellation]
         %th.currency{ rowspan: 2 }= PricePolicy.human_attribute_name(:cancellation_cost)
+      - if @product.duration_pricing_mode?
+        %th.currency{ scope: "col" }= t("time_based_price_policies.table.initial_rate")
+        %th.currency{ scope: "col" }= t("time_based_price_policies.table.step_1")
+        %th.currency{ scope: "col" }= t("time_based_price_policies.table.step_2")
+        %th.currency{ scope: "col" }= t("time_based_price_policies.table.step_3")
+      - else 
+        %th.hourly_rate{ scope: "col" }= t("activerecord.attributes.price_policy.hourly_usage_rate")
+
   %tbody
+    %tr
+      - if @product.duration_pricing_mode?
+        %td
+        - if local_assigns[:minimum_cost]
+          %td
+        - if local_assigns[:cancellation]
+          %td
+        %th.currency{ scope: "col" }= t(".over_hrs", hrs: 0)
+        - @min_durations.each do |min_duration|
+          - if min_duration.present?
+            %th.currency{ scope: "col" }= t(".over_hrs", hrs: min_duration)
+          - else
+            %th.currency
     - price_policies_to_show = price_policies.select(&:can_purchase?)
     - price_policies_to_show.each do |price_policy|
       %tr
-        - if price_policies_to_show.first == price_policy
-          %td.centered{ rowspan: price_policies_to_show.length }
-            - if price_policies.all?(&:editable?) && can?(:edit, PricePolicy) && !@product.skip_order_review?
-              %p
-                = link_to t("shared.edit"),
-                  [:edit, current_facility, product, :price_policy, id: url_date]
-              %p
-                = link_to t("shared.remove"),
-                  [current_facility, product, :price_policy, id: url_date],
-                  data: { confirm: t("shared.confirm_message") },
-                  method: :delete
-            - else
-              %p.muted= t("shared.edit")
-              %p.muted= t("shared.remove")
-
-        %td= "#{price_policy.price_group.name} (#{price_policy.price_group.type_string})"
+        - price_group = price_policy.price_group
+        %th{ scope: "row" }= "#{price_group.name} (#{price_group.type_string})"
 
         - if price_policy.valid?
-          %td.currency{ colspan: 2 }
-            - if price_policy.has_rate?
-              .rate= number_to_currency price_policy.hourly_usage_rate
-              - if price_policy.has_subsidy?
-                .subsidy= "- #{number_to_currency price_policy.hourly_usage_subsidy}"
-                %strong= "= #{number_to_currency price_policy.subsidized_hourly_usage_cost}"
-
-              %p.per-minute-show
-                - price_per_minute = (price_policy.subsidized_hourly_usage_cost / 60)
-                = number_to_currency price_per_minute, precision: 4
-                \/ minute
-
-
           - if local_assigns[:minimum_cost]
             %td.currency
               .rate= number_to_currency price_policy.minimum_cost
@@ -56,8 +67,37 @@
                 = price_policy.class.human_attribute_name(:full_price_cancellation)
               - else
                 = number_to_currency(price_policy.cancellation_cost)
+          %td.currency
+            - if price_policy.has_rate?
+              .rate= number_to_currency price_policy.hourly_usage_rate
+              - if price_policy.has_subsidy?
+                .subsidy= "- #{number_to_currency price_policy.hourly_usage_subsidy}"
+                %strong= "= #{number_to_currency price_policy.subsidized_hourly_usage_cost}"
+
+              %p.per-minute-show
+                - price_per_minute = (price_policy.subsidized_hourly_usage_cost / 60)
+                = number_to_currency price_per_minute, precision: 4
+                \/ minute
+          - price_policy.duration_rates.sorted.each do |duration_rate|
+            %td.currency
+              - per_minute = nil
+              - if duration_rate.rate.present?
+                .rate= number_to_currency duration_rate.hourly_rate
+                - per_minute = duration_rate.hourly_rate / 60
+              - if duration_rate.subsidy.present?
+                .subsidy= "- #{number_to_currency duration_rate.hourly_subsidy}"
+                %strong= "= #{number_to_currency duration_rate.subsidized_hourly_cost}"
+                - per_minute = duration_rate.subsidized_hourly_cost / 60
+
+              - if per_minute.present?
+                %p.per-minute-show
+                  = number_to_currency per_minute, precision: 4
+                  \/ minute
+
+          - (PricePolicy::MAX_RATE_STARTS - price_policy.duration_rates.length).times do
+            %td.currency
 
         - else
           %td.centered{ colspan: 5 }
-            = t("price_policies.problem")
+            = t("time_based_price_policies.problem")
             = price_policy.errors.full_messages.to_sentence

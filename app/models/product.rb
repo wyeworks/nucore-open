@@ -334,6 +334,10 @@ class Product < ApplicationRecord
     nil
   end
 
+  def duration_pricing_mode?
+    false
+  end
+
   protected
 
   def translation_scope

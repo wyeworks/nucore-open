@@ -1,0 +1,5 @@
+= form_tag polymorphic_path([current_facility, @product, :users], format: :csv), method: :get, class: "search_form inline" do
+  = hidden_field_tag :email, current_user.email, disabled: true
+  = hidden_field_tag :format, params[:format], disabled: true
+
+= link_to t("reports.product_users.export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }

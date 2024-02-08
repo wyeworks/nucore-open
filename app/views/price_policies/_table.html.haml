@@ -1,9 +1,22 @@
 - price_policy = price_policies.first
 
+- if price_policies.all?(&:editable?) && can?(:edit, PricePolicy) && !@product.skip_order_review?
+  %div
+    %p{ aria_label: "Edit Price Policies" }
+      = link_to t("price_policies.table.edit"),
+        [:edit, current_facility, product, :price_policy, id: url_date]
+    %p
+      = link_to t("price_policies.table.remove"),
+        [current_facility, product, :price_policy, id: url_date],
+        data: { confirm: t("shared.confirm_message") },
+        method: :delete
+- else
+  %p.muted= t("shared.edit")
+  %p.muted= t("shared.remove")
+
 %table.table
   %thead
     %tr
-      %th.actions
       %th{ rowspan: 2 }= "#{PriceGroup.model_name.human} (#{price_policy.class.human_attribute_name(:type)})"
       %th.currency= price_policy.class.human_attribute_name(:unit_cost)
       %th.currency= price_policy.class.human_attribute_name(:unit_adjustment)
@@ -12,21 +25,6 @@
     - price_policies_to_show = price_policies.select(&:can_purchase?)
     - price_policies_to_show.each do |price_policy|
       %tr
-        - if price_policies_to_show.first == price_policy
-          %td.centered{ :rowspan => price_policies_to_show.length }
-            - if price_policies.all?(&:editable?) && can?(:edit, PricePolicy) && !@product.skip_order_review?
-              %p
-                = link_to t("shared.edit"),
-                  [:edit, current_facility, product, :price_policy, id: url_date]
-              %p
-                = link_to t("shared.remove"),
-                  price_policy_path(price_policy, url_date),
-                  data: { confirm: t("shared.confirm_message") },
-                  method: :delete
-            - else
-              %p.muted= t("shared.edit")
-              %p.muted= t("shared.remove")
-
         %td= "#{price_policy.price_group.name} (#{price_policy.price_group.type_string})"
         - if price_policy.valid?
           %td.currency= number_to_currency price_policy.unit_cost
