@@ -628,23 +628,6 @@ RSpec.describe OrderRowImporter do
       }
     end
 
-    it "has all of the columns in the correct order" do
-      expect(subject.row_with_errors.headers).to eq(
-        [
-          "Netid / Email",
-          I18n.t("Chart_string"),
-          "Product Name",
-          "Quantity",
-          "Order Date",
-          "Fulfillment Date",
-          "Note",
-          "Order",
-          "Reference ID",
-          "Errors",
-        ],
-      )
-    end
-
     context "when the import has no errors" do
       it "does not add errors to the error column" do
         expect(subject.row_with_errors["Errors"]).to be_blank

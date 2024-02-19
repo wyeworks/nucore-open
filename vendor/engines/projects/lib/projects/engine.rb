@@ -15,6 +15,8 @@ module Projects
       OrderDetailBatchUpdater.send :include, Projects::OrderDetailBatchUpdaterExtension
       OrdersController.send :include, Projects::OrdersControllerExtension
       Reservation.send :include, Projects::ReservationExtension
+      OrderRowImporter.send :prepend, Projects::OrderRowImporterExtension
+      OrderRowImporter.order_import_headers.concat [:project_id]
 
       ViewHook.add_hook "reservations.account_field",
                         "after_account",
