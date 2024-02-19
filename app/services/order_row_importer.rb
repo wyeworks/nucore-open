@@ -6,18 +6,23 @@ class OrderRowImporter
 
   include DateHelper
 
-  HEADERS = [
-    :user,
-    :chart_string,
-    :product_name,
-    :quantity,
-    :order_date,
-    :fulfillment_date,
-    :notes,
-    :order_number,
-    :reference_id,
-    :errors,
-  ].lazy.map { |k| header(k) }
+  cattr_accessor(:importable_product_types) { [Item, Service, TimedService] }
+  cattr_accessor(:order_import_headers) do
+    %i[
+      user
+      chart_string
+      product_name
+      quantity
+      order_date
+      fulfillment_date
+      notes
+      order_number
+      reference_id
+      errors
+    ]
+  end
+
+  HEADERS = order_import_headers.lazy.map { |k| header(k) }
 
   REQUIRED_HEADERS = [
     :user,
@@ -27,8 +32,6 @@ class OrderRowImporter
     :order_date,
     :fulfillment_date,
   ].lazy.map { |k| header(k) }
-
-  cattr_accessor(:importable_product_types) { [Item, Service, TimedService] }
 
   attr_accessor :order_import, :order
   delegate :id, to: :order, prefix: true
@@ -81,7 +84,7 @@ class OrderRowImporter
   end
 
   def import
-    add_product_to_order if has_valid_headers? && has_valid_fields?
+    add_to_order if has_valid_headers? && has_valid_fields?
   end
 
   def order_date
@@ -128,20 +131,19 @@ class OrderRowImporter
 
   private
 
-  def add_product_to_order
+  def add_to_order
     ActiveRecord::Base.transaction do
       begin
         @order = field(:order_number).present? ? existing_order : @order_import.fetch_or_create_order!(self)
 
-        attributes = { note: field(:notes), account: account, reference_id: field(:reference_id) }
         # The order adding feature has some quirky behavior because of the "order form"
         # feature: if you add multiple of a timed service, it creates multiple line items
         # in your cart. Also, in the "add to order" feature, there is a separate `duration`
         # field. To account for this idiosyncrasy, we need to handle it as a special case.
         if product.quantity_as_time?
-          @order_details = order.add(product, 1, attributes.merge(duration: field(:quantity)))
+          @order_details = order.add(product, 1, to_add_attributes.merge(duration: field(:quantity)))
         else
-          @order_details = order.add(product, field(:quantity), attributes)
+          @order_details = order.add(product, field(:quantity), to_add_attributes)
         end
         purchase_order! unless order.purchased?
         backdate_order_details_to_complete!
@@ -150,6 +152,14 @@ class OrderRowImporter
         raise ActiveRecord::Rollback
       end
     end
+  end
+
+  def to_add_attributes
+    { note: field(:notes), account:, reference_id: field(:reference_id) }.merge(custom_attributes)
+  end
+
+  def custom_attributes
+    {}
   end
 
   def purchase_order!

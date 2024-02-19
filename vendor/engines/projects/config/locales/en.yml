@@ -20,6 +20,9 @@ en:
       update:
         success: "Project %{project_name} was updated."
 
+  order_row_importer:
+    headers:
+      project_id: Project ID
   projects:
     projects:
       edit:

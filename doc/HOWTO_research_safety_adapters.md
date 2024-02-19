@@ -41,3 +41,14 @@ systemctl enable ntpd.service
 # set the hardware clock to the current system time
 hwclock -w
 ```
+
+### Generating a new key
+
+A private RSA key is accessed via `Rails.application.secrets.dig(:scishield, :rsa_private_key)` and can be stored in an environment variable. The corresponding public key needs to be given to SciShield so they can provide access (similar to ssh authorized keys). A key pair can be generated as follows.
+
+```
+require 'openssl'
+key_pair = OpenSSL::PKey::RSA.generate(2048)
+key_pair.public_key # the public key
+key_pair.to_pem # the private key
+```
