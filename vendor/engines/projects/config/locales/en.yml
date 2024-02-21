@@ -22,7 +22,9 @@ en:
 
   order_row_importer:
     headers:
-      project_id: Project ID
+      project_name: Project Name
+    errors:
+      project_not_found: Project not found
   projects:
     projects:
       edit:

@@ -274,6 +274,7 @@ GEM
       devise (> 2.0.0)
       ruby-saml (~> 1.7)
     diff-lcs (1.5.1)
+    domain_name (0.6.20240107)
     dry-configurable (1.1.0)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
@@ -346,6 +347,9 @@ GEM
     hashdiff (1.1.0)
     health_check (3.1.0)
       railties (>= 5.0)
+    http-accept (1.7.0)
+    http-cookie (1.0.5)
+      domain_name (~> 0.5)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     icalendar (2.10.1)
@@ -374,7 +378,7 @@ GEM
     language_server-protocol (3.17.0.3)
     launchy (2.5.2)
       addressable (~> 2.8)
-    letter_opener (1.8.1)
+    letter_opener (1.9.0)
       launchy (>= 2.2, < 3)
     loofah (2.22.0)
       crass (~> 1.0.2)
@@ -384,6 +388,8 @@ GEM
       net-imap
       net-pop
       net-smtp
+    mailgun-ruby (1.2.14)
+      rest-client (>= 2.0.2)
     marcel (1.0.2)
     matrix (0.4.2)
     method_source (1.0.0)
@@ -392,7 +398,6 @@ GEM
     mime-types-data (3.2024.0206)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.5)
     minitest (5.22.2)
     momentjs-rails (2.29.4.1)
       railties (>= 3.1)
@@ -417,11 +422,11 @@ GEM
     net-smtp (0.4.0.1)
       net-protocol
     net-ssh (7.2.1)
+    netrc (0.11.0)
     nio4r (2.7.0)
-    nokogiri (1.16.2)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.16.2-aarch64-linux)
+      racc (~> 1.4)
+    nokogiri (1.16.2-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.2-x86_64-linux)
       racc (~> 1.4)
@@ -433,7 +438,7 @@ GEM
       activerecord (>= 6.1)
       request_store (~> 1.4)
     parallel (1.24.0)
-    parallel_tests (4.5.0)
+    parallel_tests (4.5.1)
       parallel
     paranoia (2.6.2)
       activerecord (>= 5.1, < 7.1)
@@ -514,8 +519,13 @@ GEM
     responders (3.1.0)
       actionpack (>= 5.2)
       railties (>= 5.2)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rexml (3.2.6)
-    rollbar (3.5.1)
+    rollbar (3.5.2)
     rspec-activejob (0.6.1)
       activejob (>= 4.2)
       rspec-mocks
@@ -592,7 +602,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    selenium-webdriver (4.17.0)
+    selenium-webdriver (4.18.1)
       base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
@@ -663,7 +673,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webmock (3.20.0)
+    webmock (3.22.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
@@ -681,7 +691,7 @@ GEM
 
 PLATFORMS
   aarch64-linux
-  ruby
+  arm64-darwin-21
   x86_64-linux
 
 DEPENDENCIES
@@ -733,6 +743,7 @@ DEPENDENCIES
   jwt
   kt-paperclip
   letter_opener
+  mailgun-ruby (~> 1.2.14)
   matrix
   mysql2
   nested_form_fields
