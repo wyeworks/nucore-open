@@ -216,6 +216,7 @@ class OrderRowImporter
       validate_product
       validate_account
       validate_existing_order
+      validate_custom_attributes
     end
   end
 
@@ -292,5 +293,9 @@ class OrderRowImporter
     elsif existing_order.user != user
       add_error(:order_user_mismatch)
     end
+  end
+
+  # Projects adds a custom attribute and overrides this method to validate it
+  def validate_custom_attributes
   end
 end

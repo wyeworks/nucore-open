@@ -9,6 +9,7 @@ RSpec.describe Projects::OrderRowImporterExtension do
   let!(:account_api_record) { create(Settings.testing.api_account_factory.to_sym, account_number: account.account_number) } if Settings.testing.api_account_factory
   let(:facility) { create(:setup_facility) }
   let(:project) { create(:project, facility:) }
+  let(:project_name) { project.name }
   let(:order_import) { build(:order_import, creator: user, facility:) }
   let(:service) { create(:setup_service, facility:) }
   let(:user) { create(:user) }
@@ -22,7 +23,7 @@ RSpec.describe Projects::OrderRowImporterExtension do
 
   let(:row) do
     ref = {
-      "Netid / Email" => username,
+      I18n.t("order_row_importer.headers.user") => username,
       I18n.t("Chart_string") => chart_string,
       "Product Name" => product_name,
       "Quantity" => quantity,
@@ -30,7 +31,7 @@ RSpec.describe Projects::OrderRowImporterExtension do
       "Fulfillment Date" => fulfillment_date,
       "Note" => "This is a note",
       "Reference ID" => reference_id,
-      "Project ID" => project.id,
+      "Project Name" => project_name,
     }
     CSV::Row.new(ref.keys, ref.values)
   end
@@ -40,17 +41,38 @@ RSpec.describe Projects::OrderRowImporterExtension do
   end
 
   describe "#import" do
-    it "creates an order detail with a project" do
-      subject.import
-      expect(subject.errors).to be_empty
-      expect(OrderDetail.last.project_id).to eq project.id
+    context "with existing project name" do
+      it "creates an order detail with a project" do
+        subject.import
+        expect(subject.errors).to be_empty
+        expect(OrderDetail.last.project_id).to eq project.id
+      end
+    end
+
+    context "with non-existing project name" do
+      let(:project_name) { "Non-existing project" }
+
+      it "produces and error" do
+        subject.import
+        expect(subject.errors).to eq ["Project not found"]
+      end
+    end
+
+    context "with an empty string as a project name" do
+      let(:project_name) { "" }
+
+      it "creates an order detail with no project" do
+        subject.import
+        expect(subject.errors).to be_empty
+        expect(OrderDetail.last.project_id).to be_nil
+      end
     end
   end
 
   it "has all of the columns in the correct order" do
     expect(subject.row_with_errors.headers).to eq(
       [
-        "Netid / Email",
+        I18n.t("order_row_importer.headers.user"),
         I18n.t("Chart_string"),
         "Product Name",
         "Quantity",
@@ -59,8 +81,8 @@ RSpec.describe Projects::OrderRowImporterExtension do
         "Note",
         "Order",
         "Reference ID",
+        "Project Name",
         "Errors",
-        "Project ID",
       ],
     )
   end
