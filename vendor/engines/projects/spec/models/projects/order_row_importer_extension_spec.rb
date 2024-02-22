@@ -23,7 +23,7 @@ RSpec.describe Projects::OrderRowImporterExtension do
 
   let(:row) do
     ref = {
-      "Netid / Email" => username,
+      I18n.t("order_row_importer.headers.user") => username,
       I18n.t("Chart_string") => chart_string,
       "Product Name" => product_name,
       "Quantity" => quantity,
@@ -72,7 +72,7 @@ RSpec.describe Projects::OrderRowImporterExtension do
   it "has all of the columns in the correct order" do
     expect(subject.row_with_errors.headers).to eq(
       [
-        "Netid / Email",
+        I18n.t("order_row_importer.headers.user"),
         I18n.t("Chart_string"),
         "Product Name",
         "Quantity",

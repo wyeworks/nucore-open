@@ -15,8 +15,6 @@ module Projects
       OrderDetailBatchUpdater.send :include, Projects::OrderDetailBatchUpdaterExtension
       OrdersController.send :include, Projects::OrdersControllerExtension
       Reservation.send :include, Projects::ReservationExtension
-      OrderRowImporter.send :prepend, Projects::OrderRowImporterExtension
-      OrderRowImporter.order_import_headers.insert(-2, :project_name)
 
       ViewHook.add_hook "reservations.account_field",
                         "after_account",
@@ -48,6 +46,11 @@ module Projects
 
       ::Reports::GeneralReportsController.reports[:project] = Projects::ReportsExtension.general_report
       ::Reports::InstrumentReportsController.reports[:project] = Projects::ReportsExtension.instrument_report
+    end
+
+    config.after_initialize do
+      OrderRowImporter.send :prepend, Projects::OrderRowImporterExtension
+      OrderRowImporter.order_import_headers.insert(-2, :project_name)
     end
 
     initializer :append_migrations do |app|
