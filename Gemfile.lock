@@ -274,7 +274,6 @@ GEM
       devise (> 2.0.0)
       ruby-saml (~> 1.7)
     diff-lcs (1.5.1)
-    domain_name (0.6.20240107)
     dry-configurable (1.1.0)
       dry-core (~> 1.0, < 2)
       zeitwerk (~> 2.6)
@@ -347,9 +346,6 @@ GEM
     hashdiff (1.1.0)
     health_check (3.1.0)
       railties (>= 5.0)
-    http-accept (1.7.0)
-    http-cookie (1.0.5)
-      domain_name (~> 0.5)
     i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     icalendar (2.10.1)
@@ -388,8 +384,6 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mailgun-ruby (1.2.14)
-      rest-client (>= 2.0.2)
     marcel (1.0.2)
     matrix (0.4.2)
     method_source (1.0.0)
@@ -422,7 +416,6 @@ GEM
     net-smtp (0.4.0.1)
       net-protocol
     net-ssh (7.2.1)
-    netrc (0.11.0)
     nio4r (2.7.0)
     nokogiri (1.16.2-aarch64-linux)
       racc (~> 1.4)
@@ -519,11 +512,6 @@ GEM
     responders (3.1.0)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rest-client (2.1.0)
-      http-accept (>= 1.7.0, < 2.0)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 4.0)
-      netrc (~> 0.8)
     rexml (3.2.6)
     rollbar (3.5.2)
     rspec-activejob (0.6.1)
@@ -743,7 +731,6 @@ DEPENDENCIES
   jwt
   kt-paperclip
   letter_opener
-  mailgun-ruby (~> 1.2.14)
   matrix
   mysql2
   nested_form_fields

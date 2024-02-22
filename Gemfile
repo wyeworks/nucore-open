@@ -70,9 +70,6 @@ gem "prawn-rails"
 # https://github.com/prawnpdf/prawn/issues/1195
 gem "matrix"
 
-## Email
-gem "mailgun-ruby", "~>1.2.14"
-
 ## other
 gem "delayed_job_active_record"
 gem "health_check"
