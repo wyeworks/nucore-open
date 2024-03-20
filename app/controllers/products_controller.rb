@@ -29,4 +29,13 @@ class ProductsController < ApplicationController
     end
   end
 
+  def available_for_cross_core_ordering
+    respond_to do |format|
+      format.js do
+        @facility_products = current_facility.products.mergeable_into_order.cross_core_available.alphabetized.map { |p| { id: p.id, name: p.name, time_based: p.order_quantity_as_time? } }
+
+        render json: @facility_products
+      end
+    end
+  end
 end

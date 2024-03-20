@@ -46,7 +46,7 @@ RUN apt-get install -y google-chrome-stable
 
 # Install chromedriver
 RUN CHROMEDRIVER_VERSION=$(curl https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE); \
- wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip
+ wget https://storage.googleapis.com/chrome-for-testing-public/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip
 RUN unzip chromedriver-linux64.zip
 RUN rm -f chromedriver-linux64.zip
 RUN mv chromedriver-linux64/chromedriver /usr/bin/chromedriver

@@ -185,4 +185,55 @@ RSpec.describe "Adding to an existing order" do
     end
   end
 
+  describe "adding a product from another facility", :js do
+    let(:facility2) { create(:setup_facility) }
+    let(:product) { create(:setup_item, :with_facility_account) }
+    let!(:product2) { create(:setup_item, :with_facility_account, facility: facility2) }
+
+    before do
+      visit facility_order_path(facility, order)
+    end
+
+    context "with staff role" do
+      it "does not have a facility dropdown" do
+        expect { page.find_by_id("add_to_order_form[facility_id]") }.to raise_error
+      end
+    end
+
+    context "with admin role" do
+      let(:user) { create(:user, :facility_administrator, facility:) }
+
+      it "changes the button text" do
+        expect(page).to have_button("Add To Order")
+        select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
+        select_from_chosen product2.name, from: "add_to_order_form[product_id]"
+        expect(page).to have_button("Add to Cross-Core Order")
+      end
+
+      it "creates a new order for the selected facility" do
+        expect(page).not_to have_content("Cross Core Project ID")
+        select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
+        select_from_chosen product2.name, from: "add_to_order_form[product_id]"
+        click_button "Add to Cross-Core Order"
+
+        expect(page).to have_content("#{product2.name} was successfully added to this order.")
+        expect(page).to have_content(facility2.to_s), count: 2
+        expect(page).to have_content(user.full_name), count: 2
+
+        order.reload
+
+        project = order.cross_core_project
+        expect(project).to be_present
+
+        expect(page).to have_content("Cross Core Project ID")
+        expect(page).to have_content(project.id)
+
+        project_total = project.orders.sum(&:total)
+        expect(page).to have_content("Cross-Core Project Total")
+        expect(page).to have_content(project_total)
+      end
+    end
+
+  end
+
 end

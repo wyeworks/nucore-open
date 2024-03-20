@@ -1,0 +1,14 @@
+= content_for :h1 do
+  = "#{@facility.abbreviation} / #{@instrument.name}"
+
+%h2.gray= "#{t(".order_number")}: #{reservation.order_detail}"
+
+%dl
+  %dt= t(".reservation_date")
+  %dd= human_date(reservation.reserve_start_at)
+
+  %dt= t(".reservation_time")
+  %dd.underline= "#{human_time(reservation.reserve_start_at)} - #{human_time(reservation.reserve_end_at)}"
+
+  %dt= t(".status")
+  %dd= reservation.order_detail.state.capitalize

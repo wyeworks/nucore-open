@@ -69,6 +69,10 @@ Rails.application.routes.draw do
       resource :product_notification, only: [:show, :edit, :update], path: "notifications", as: "notifications"
       resources :product_research_safety_certification_requirements, only: [:index, :create, :destroy], path: "certification_requirements"
       resources :product_user_imports, only: :create
+
+      collection do
+        get :available_for_cross_core_ordering
+      end
     end
 
     resources :product_display_groups do
@@ -84,6 +88,9 @@ Rails.application.routes.draw do
     resources :training_requests, only: [:index, :destroy] if SettingsHelper.feature_on?(:training_requests)
 
     resources :instruments do
+      resources :quick_reservations, only: [:new, :create, :show]
+      post "quick_reservations/start", to: "quick_reservations#start"
+
       get :dashboard, to: "instruments_dashboard#dashboard", on: :collection
       get :public_dashboard, to: "instruments_dashboard#public_dashboard", on: :collection
 

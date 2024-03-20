@@ -67,6 +67,7 @@ class Product < ApplicationRecord
   scope :archived, -> { where(is_archived: true) }
   scope :not_archived, -> { where(is_archived: false) }
   scope :mergeable_into_order, -> { not_archived.where(type: mergeable_types) }
+  scope :cross_core_available, -> { where(cross_core_ordering_available: true) }
   scope :in_active_facility, -> { joins(:facility).where(facilities: { is_active: true }) }
   scope :of_type, ->(type) { where(type: type) }
   scope :with_schedule, -> { where.not(schedule_id: nil) }

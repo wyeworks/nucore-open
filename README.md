@@ -198,9 +198,11 @@ _Known issue: if you run `db:setup` or all three in one rake command, the next t
     | ------------------ | ---- |
     | admin@example.com  | Admin|
     | ppi123@example.com | PI   |
-    | sst123@example.com | Normal User |
-    | ast123@example.com | Facility Staff |
-    | ddi123@example.com | Facility Director |
+    | sst123@example.com | Normal User (Example Facility) |
+    | ast123@example.com | Facility Staff (Example Facility) |
+    | ddi123@example.com | Facility Director (Example Facility) |
+    | sst456@example.com | Normal User (Second Facility) |
+    | ddi456@example.com | Facility Director (Second Facility) |
 
 10. Play around! You're running NUcore!
 

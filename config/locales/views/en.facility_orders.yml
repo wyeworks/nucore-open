@@ -2,6 +2,8 @@ en:
   views:
     facility_orders:
       show:
+        cross_core_project_id: "Cross Core Project ID"
+        cross_core_project_total: "Cross-Core Project Total"
         table_caption: "Order detail information"
         pricing: "Pricing"
         status: "Status"
@@ -11,6 +13,8 @@ en:
         cost: "Cost"
         subsidy: "Subsidy"
         total: "Total"
+        order_by: "Order By"
+        order_date: "Order Date"
         order_table:
           accessories: "Add Accessories"
           download: "Download Event"

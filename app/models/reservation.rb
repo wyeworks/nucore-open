@@ -80,6 +80,7 @@ class Reservation < ApplicationRecord
   scope :not_canceled, -> { where(order_details: { canceled_at: nil }) } # dubious
   scope :not_started, -> { where(actual_start_at: nil) }
   scope :not_ended, -> { where(actual_end_at: nil) }
+  scope :ongoing, -> { not_ended.where("actual_start_at <= ?", Time.current) }
 
   def self.not_this_reservation(reservation)
     if reservation.id
@@ -88,8 +89,6 @@ class Reservation < ApplicationRecord
       all
     end
   end
-
-  scope :ongoing, -> { not_ended.where("actual_start_at <= ?", Time.current) }
 
   scope :current_in_use, lambda {
     not_canceled
@@ -388,7 +387,7 @@ class Reservation < ApplicationRecord
 
     # Compare int values, not timestamps. If you do the
     # latter fractions of a second can cause false positives.
-    at >= grace_period_begin && at <= grace_period_end
+    grace_period_begin <= at && at <= grace_period_end
   end
 
   def grace_period_duration

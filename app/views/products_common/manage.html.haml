@@ -9,6 +9,10 @@
 = readonly_form_for @product.class.name.underscore, @product do |f|
   = f.input :url_name, input_html: { value: link_to(polymorphic_url([current_facility, @product]), [current_facility, @product]) }
 
+  - if @product.is_a?(Instrument) && SettingsHelper.feature_on?(:walkup_reservations)
+    .control-group
+      %label= t("views.products_common.manage.quick_reservation_label")
+      = link_to nil, new_facility_instrument_quick_reservation_url(current_facility, @product)
   - if SettingsHelper::feature_on? :product_specific_contacts
     = f.input :email
 
@@ -27,6 +31,7 @@
     - if f.object.requires_approval?
       = f.input :allows_training_requests
       = f.input :restrict_holiday_access
+  = f.input :cross_core_ordering_available
   = f.input :is_archived
   = f.input :is_hidden
   - unless @product.is_a?(Bundle)

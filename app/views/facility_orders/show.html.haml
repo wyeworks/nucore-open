@@ -8,52 +8,35 @@
     = banner_date_label @order, :ordered_at
     = banner_label @order, :user
     = banner_label @order, :created_by_user
+    - project_id = @cross_core_order_details_by_facility.present? ? @order_details.first&.project_id : nil
+    - if project_id
+      %dl.span2
+        %dt= t("views.facility_orders.show.cross_core_project_id")
+        = link_to facility_project_path(current_facility, project_id) do
+          %dd= project_id
+      %dl.span2
+        %dt= t("views.facility_orders.show.cross_core_project_total")
+        - gross_order_value = @order.total + @cross_core_orders_by_facility.values.sum(&:total)
+        %dd= number_to_currency gross_order_value
     - if @merge_orders.blank? && current_ability.can?(:send_receipt, @order)
       .pull-right= render "send_receipt"
 
 = render "merge_order"
 
 %table.order-list.table.table-striped.table-hover#order-management
-  %caption.text-left= t("views.facility_orders.show.table_caption")
-  %thead
-    %tr
-      %td{colspan: 4}
-      %th{colspan: 2}= OrderDetail.human_attribute_name(:quantity)
-      %th{colspan: 3}= t("views.facility_orders.show.pricing")
-    %tr
-      %th.order-id{scope: "col"}= OrderDetail.human_attribute_name(:id)
-      %th.badges{scope: "col"}= t("views.facility_orders.show.status")
-      %th{scope: "col"}= Product.model_name.human
-      %th{scope: "col"}= t("views.facility_orders.show.actions")
-      %th.time{scope: "col"}= t("views.facility_orders.show.reserved")
-      %th.time{scope: "col"}= t("views.facility_orders.show.actual")
-      %th.currency{scope: "col"}= t("views.facility_orders.show.cost")
-      %th.currency{scope: "col"}= t("views.facility_orders.show.subsidy")
-      %th.currency{scope: "col"}= t("views.facility_orders.show.total")
-      %td.badges
-
-  = render "order_table", order_details: @order_details
-
-  %tfoot
-    %tr
-      %td
-      %td
-      %td
-      %td
-      %td
-      %td
-      %td.currency
-        %strong
-          = number_to_currency @order.cost
-      %td.currency
-        %strong
-          = number_to_currency @order.subsidy
-      %td.currency
-        %strong
-          = number_to_currency @order.total
-      %td
+  = render "order_table_headers", cross_core: false
+  = render "order_table", order_details: @order_details, cross_core: false
+  = render "order_table_footer", order: @order, cross_core: false
 
 - if current_ability.can?(:update, Order)
   = render "merge_order_form"
+
+- if @cross_core_order_details_by_facility.present?
+  - @cross_core_order_details_by_facility.each do |facility, order_details|
+    %h3= facility
+    %table.order-list.table.table-striped.table-hover
+      = render "order_table_headers", cross_core: true
+      = render "order_table", order_details: order_details, cross_core: true
+      = render "order_table_footer", order: @cross_core_orders_by_facility[facility], cross_core: true
 
 #order-detail-modal.modal.hide.fade{ data: { backdrop: "static" } }

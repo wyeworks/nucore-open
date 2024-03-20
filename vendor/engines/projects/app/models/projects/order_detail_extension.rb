@@ -12,7 +12,6 @@ module Projects
                  foreign_key: :project_id,
                  inverse_of: :order_details
 
-      validate :project_facility_must_match
       validate :project_must_be_active, if: :project_id_changed?
 
       delegate :projects, to: :facility, prefix: true
@@ -23,12 +22,6 @@ module Projects
     end
 
     private
-
-    def project_facility_must_match
-      if project_id.present? && project.facility != facility
-        errors.add(:project_id, :project_facility_mismatch)
-      end
-    end
 
     def project_must_be_active
       if project.present? && !project.active?

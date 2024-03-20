@@ -151,6 +151,7 @@ feature:
   facility_tile_list: <%= ENV.fetch("FACILITY_TILE_LIST", false) %>
   facility_tile_list_admin: true
   po_require_affiliate_account: true
+  walkup_reservations: <%= ENV.fetch("WALKUP_RESERVATIONS", Rails.env.staging?) %>
 
 split_accounts:
   # Roles are allowed to create Split Accounts

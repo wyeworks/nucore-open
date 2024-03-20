@@ -274,6 +274,7 @@ en:
         is_active: "Is Active?"
       product:
         can_be_used_by?: Approved?
+        cross_core_ordering_available: "Available for Cross-Core Ordering?"
         url: URL
         url_name: URL Name
         requires_approval: Requires Approval?

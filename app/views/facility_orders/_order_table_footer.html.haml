@@ -1,0 +1,21 @@
+%tfoot
+  %tr
+    %td
+    %td
+    %td
+    - if cross_core
+      %td
+      %td
+    %td
+    %td
+    %td
+    %td.currency
+      %strong
+        = number_to_currency order.cost
+    %td.currency
+      %strong
+        = number_to_currency order.subsidy
+    %td.currency
+      %strong
+        = number_to_currency order.total
+    %td

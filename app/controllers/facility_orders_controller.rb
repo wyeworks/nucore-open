@@ -15,6 +15,7 @@ class FacilityOrdersController < ApplicationController
   before_action :load_order, only: [:show, :update, :send_receipt]
   before_action :load_merge_orders, only: [:show, :update]
   before_action :load_add_to_order_form, only: [:show, :update]
+  before_action :load_cross_core_order_details, only: [:show]
 
   load_and_authorize_resource class: Order
 
@@ -32,7 +33,7 @@ class FacilityOrdersController < ApplicationController
     @order_details = @order.order_details.ordered_by_parents
     @order_details = @order_details.includes(:reservation, :order_status, :product, :order)
     if params[:refresh]
-      render partial: "order_table", locals: { order_details: @order_details }
+      render partial: "order_table", locals: { order_details: @order_details, cross_core: false }
     end
   end
 
@@ -70,6 +71,7 @@ class FacilityOrdersController < ApplicationController
       redirect_to facility_order_path(current_facility, @order)
     else
       flash.now[:error] = @add_to_order_form.error_message
+      load_cross_core_order_details
       show # set @order_details
       render :show
     end
@@ -84,7 +86,7 @@ class FacilityOrdersController < ApplicationController
   private
 
   def add_to_order_params
-    params.require(:add_to_order_form).permit(:quantity, :product_id, :order_status_id, :note, :fulfilled_at, :duration, :account_id, :reference_id)
+    params.require(:add_to_order_form).permit(:quantity, :product_id, :order_status_id, :note, :fulfilled_at, :duration, :account_id, :reference_id, :facility_id)
   end
 
   def batch_updater
@@ -112,6 +114,24 @@ class FacilityOrdersController < ApplicationController
 
   def problem_order_details
     current_facility.problem_plain_order_details
+  end
+
+  def load_cross_core_order_details
+    project = @order.cross_core_project
+
+    @cross_core_order_details_by_facility = {}
+    @cross_core_orders_by_facility = {}
+
+    if project.present?
+      project_orders = project.orders.where.not(id: @order.id)
+
+      project_orders.each do |order|
+        order_facility = order.facility.to_s
+
+        @cross_core_order_details_by_facility[order_facility] = order.order_details.ordered_by_parents
+        @cross_core_orders_by_facility[order_facility] = order
+      end
+    end
   end
 
 end

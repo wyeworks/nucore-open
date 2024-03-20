@@ -22,13 +22,16 @@ RSpec.describe "Creating an item" do
     expect(current_path).to eq(manage_facility_item_path(facility, Item.last))
     expect(page).to have_content("My New Item")
     expect(page).to have_content("Required")
+    expect(page).to have_content(I18n.t("views.admin.products.product_fields.hints.cross_core_ordering_available"))
 
     click_link "Edit"
     fill_in "item[description]", with: "Some description"
+    uncheck "item[cross_core_ordering_available]"
     click_button "Save"
 
     expect(current_path).to eq(manage_facility_item_path(facility, Item.last))
     expect(page).to have_content("Some description")
+    expect(page).to have_content("#{I18n.t('views.admin.products.product_fields.hints.cross_core_ordering_available')}\nNo")
   end
 
   context "when billing mode is Skip Review" do
