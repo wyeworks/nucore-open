@@ -8,16 +8,17 @@
     = banner_date_label @order, :ordered_at
     = banner_label @order, :user
     = banner_label @order, :created_by_user
-    - project_id = @cross_core_order_details_by_facility.present? ? @order_details.first&.project_id : nil
-    - if project_id
-      %dl.span2
-        %dt= t("views.facility_orders.show.cross_core_project_id")
-        = link_to facility_project_path(current_facility, project_id) do
-          %dd= project_id
-      %dl.span2
-        %dt= t("views.facility_orders.show.cross_core_project_total")
-        - gross_order_value = @order.total + @cross_core_orders_by_facility.values.sum(&:total)
-        %dd= number_to_currency gross_order_value
+    - if SettingsHelper.feature_on?(:cross_core_projects)
+      - project_id = @cross_core_order_details_by_facility.present? ? @order_details.first&.project_id : nil
+      - if project_id
+        %dl.span2
+          %dt= t("views.facility_orders.show.cross_core_project_id")
+          = link_to facility_project_path(current_facility, project_id) do
+            %dd= project_id
+        %dl.span2
+          %dt= t("views.facility_orders.show.cross_core_project_total")
+          - gross_order_value = @order.total + @cross_core_orders_by_facility.values.sum(&:total)
+          %dd= number_to_currency gross_order_value
     - if @merge_orders.blank? && current_ability.can?(:send_receipt, @order)
       .pull-right= render "send_receipt"
 
@@ -31,7 +32,7 @@
 - if current_ability.can?(:update, Order)
   = render "merge_order_form"
 
-- if @cross_core_order_details_by_facility.present?
+- if SettingsHelper.feature_on?(:cross_core_projects) && @cross_core_order_details_by_facility.present?
   - @cross_core_order_details_by_facility.each do |facility, order_details|
     %h3= facility
     %table.order-list.table.table-striped.table-hover

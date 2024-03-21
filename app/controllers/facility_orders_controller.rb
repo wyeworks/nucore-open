@@ -117,6 +117,8 @@ class FacilityOrdersController < ApplicationController
   end
 
   def load_cross_core_order_details
+    return unless SettingsHelper.feature_on?(:cross_core_projects)
+
     project = @order.cross_core_project
 
     @cross_core_order_details_by_facility = {}

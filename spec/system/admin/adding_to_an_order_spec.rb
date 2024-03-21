@@ -185,7 +185,7 @@ RSpec.describe "Adding to an existing order" do
     end
   end
 
-  describe "adding a product from another facility", :js do
+  describe "adding a product from another facility", :js, feature_setting: { cross_core_projects: true } do
     let(:facility2) { create(:setup_facility) }
     let(:product) { create(:setup_item, :with_facility_account) }
     let!(:product2) { create(:setup_item, :with_facility_account, facility: facility2) }
