@@ -225,7 +225,7 @@ RSpec.describe "Adding to an existing order" do
         project = order.cross_core_project
         expect(project).to be_present
 
-        expect(page).to have_content("Cross Core Project ID")
+        expect(page).to have_content("Cross-Core Project ID")
         expect(page).to have_content(project.id)
 
         project_total = project.orders.sum(&:total)

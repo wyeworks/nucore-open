@@ -3,8 +3,12 @@
 /* Header */
 $headerFont: Georgia, 'Times New Roman', Times, serif;
 $headerColor: black;
-$headerBackgroundColor: white;
+$headerBackgroundColor: $primaryColor;
 $headerBackgroundColorHighLight: darken($headerBackgroundColor, 5%);
+
+/* Quick reservation colors */
+$reservationLabelColor: $secondaryColor;
+$reservationLinkColor: $secondaryColor;
 
 /* Login, Cart, etc Links */
 $usernavColor: darken($navbarLinkColor, 3%);

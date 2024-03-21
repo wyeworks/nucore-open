@@ -1,5 +1,25 @@
 body.quick_reservation {
+  padding: 0;
+
+  header {
+    text-align: center;
+    color: $reservationLinkColor;
+
+    img {
+      padding: 1em;
+    }
+
+    #app_name {
+      border-bottom: none;
+      font-size: 2em;
+      line-height: 2.5em;
+    }
+  }
+
   div#content {
+    padding: 0 20px;
+    color: $reservationLinkColor;
+
     h1 {
       font-size: 2em;
       border: none;
@@ -13,16 +33,18 @@ body.quick_reservation {
     }
 
     div.reservation_notice {
-      h2 {
-        margin: 0;
-        line-height: 1em;
-      }
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: stretch;
       justify-content: center;
       text-align: center;
+
+      h2 {
+        margin: 0;
+        line-height: 1em;
+      }
+
       p {
         padding: 0 15%;
         color: $navbarActiveBorderColor;
@@ -32,24 +54,27 @@ body.quick_reservation {
 
     dl {
       width: 100%;
+
       dt {
         color: $navbarActiveBorderColor;
         clear: both;
       }
+
       dd {
         margin: 0;
         font-weight: bold;
         margin-bottom: 1em;
         clear: both;
       }
+
       dd.underline {
-        border-bottom: 3px solid $linkColor;
+        border-bottom: 3px solid $reservationLinkColor;
         float: left;
       }
     }
 
     a.end_link {
-      background-color: $linkColor;
+      background-color: $reservationLabelColor;
       color: white;
       text-decoration: none;
       padding: 1em;
@@ -69,31 +94,37 @@ body.quick_reservation {
       width: 100%;
       float: right;
       margin-top: 0;
+
       legend {
         border: none;
       }
+
       label {
         width: 100%;
-        border: 1px solid $linkColor;
-        color: $linkColor;
+        border: 1px solid $reservationLabelColor;
+        color: $reservationLabelColor;
         text-align: center;
         position: relative;
         top: -20px;
         padding: 1em 0;
       }
+
       input[type="radio"] {
         opacity: 0; // doing this instead of display:none so that browser validation information is shown
       }
+
       input[type="radio"]:checked + label {
-        background-color: $linkColor;
+        background-color: $reservationLabelColor;
         color: white;
       }
+
       select {
         width: 100%;
         height: 4em;
       }
+
       input[type="submit"] {
-        background-color: $linkColor;
+        background-color: $reservationLinkColor;
         color: white;
         width: 100%;
         padding: 1em 0;
@@ -107,8 +138,10 @@ body.quick_reservation {
     border-top: 1px solid $navbarActiveBorderColor;
     text-align: center;
     padding-top: 1em;
+    margin: 0 20px;
+
     a {
-      color: $linkColor;
+      color: $reservationLinkColor;
     }
   }
 }
