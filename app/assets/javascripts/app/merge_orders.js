@@ -50,12 +50,14 @@ window.MergeOrder = class MergeOrder {
     const crossCoreButtonText = button.data("cross-core-button-text");
 
     return facility_field.on("change", (event) => {
-      const url = $(event.target).find(":selected").data("products-path");
+      const selectedElement = $(event.target).find(":selected");
+      const url = selectedElement.data("products-path");
+      const originalOrderFacility = selectedElement.data("original-order-facility");
       const facility_id = $(event.target).val();
 
       return $.ajax({
         type: "get",
-        data: { facility_id },
+        data: { facility_id, original_order_facility: originalOrderFacility },
         url,
         success(data) {
           // Populate dropdown

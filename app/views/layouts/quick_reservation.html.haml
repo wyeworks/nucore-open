@@ -3,6 +3,12 @@
   %head
     = render "/shared/head"
   %body.quick_reservation
+    %header
+      .navbar-inner
+        - if Settings.header_logo_path.present?
+          = image_tag Settings.header_logo_path, class: "img__brand", alt: t("pages.logo_alt_text")
+        - else
+          %span#app_name= t("app_name")
     #content{ role: "main" }
       #quick_reservation
         .container
@@ -12,6 +18,5 @@
               = render partial: "shared/flashes"
 
               = yield
-
     %footer.quick_reservation
       %p= "#{link_to t(:app_name), root_path} | #{link_to t('.my_reservation'), reservations_path}"

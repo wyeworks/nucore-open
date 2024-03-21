@@ -92,8 +92,17 @@ class AddToOrderForm
     AvailableAccountsFinder.new(original_order.user, current_facility)
   end
 
-  def facilities
-    @facilities ||= Facility.alphabetized
+  def facilities_options
+    @facilities_options ||= Facility.alphabetized.map do |f|
+      [
+        f.name,
+        f.id,
+        {
+          "data-products-path": Rails.application.routes.url_helpers.available_for_cross_core_ordering_facility_products_path(f, format: :js),
+          "data-original-order-facility": @original_order.facility_id,
+        }
+      ]
+    end
   end
 
   # We're using the ordered_at of the order details to determine if additional OrderDetails

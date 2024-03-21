@@ -2,9 +2,8 @@
   .well
     = simple_form_for [current_facility, @add_to_order_form], url: facility_order_path(current_facility, @order), method: :put, html: { class: "js--edit-order" } do |f|
       - if SettingsHelper.feature_on?(:cross_core_projects) && can?(:available_for_cross_core_ordering, Product)
-        - facilities = @add_to_order_form.facilities.map { |f| [f.name, f.id, {"data-products-path" => available_for_cross_core_ordering_facility_products_path(f, format: :js)}] }
         = f.input_field :facility_id,
-          collection: facilities,
+          collection: @add_to_order_form.facilities_options,
           class: "js--edit-order__facility js--chosen",
           label: Facility.model_name.human,
           include_blank: false
