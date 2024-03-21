@@ -29,11 +29,7 @@ RSpec.describe Projects::OrderDetailExtension do
       context "when the Project belongs to a different facility than the Order" do
         let(:facility) { FactoryBot.create(:facility) }
 
-        it "is invalid" do
-          is_expected.not_to be_valid
-          expect(order_detail.errors[:project_id])
-            .to include("The project belongs to another facility")
-        end
+        it { is_expected.to be_valid }
       end
     end
 

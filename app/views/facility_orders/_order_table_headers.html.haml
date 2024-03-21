@@ -1,0 +1,19 @@
+%thead
+  %tr
+    %td{colspan: 7}
+    %th{colspan: 2}= OrderDetail.human_attribute_name(:quantity)
+    %th{colspan: 3}= t("views.facility_orders.show.pricing")
+  %tr
+    %th.order-id{scope: "col"}= OrderDetail.human_attribute_name(:id)
+    %th.badges{scope: "col"}= t("views.facility_orders.show.status")
+    %th{scope: "col"}= Product.model_name.human
+    - if cross_core
+      %th{scope: "col"}= t("views.facility_orders.show.order_by")
+      %th{scope: "col"}= t("views.facility_orders.show.order_date")
+    %th{scope: "col"}= t("views.facility_orders.show.actions")
+    %th.time{scope: "col"}= t("views.facility_orders.show.reserved")
+    %th.time{scope: "col"}= t("views.facility_orders.show.actual")
+    %th.currency{scope: "col"}= t("views.facility_orders.show.cost")
+    %th.currency{scope: "col"}= t("views.facility_orders.show.subsidy")
+    %th.currency{scope: "col"}= t("views.facility_orders.show.total")
+    %td.badges

@@ -5,7 +5,6 @@ en:
         order_detail:
           attributes:
             project_id:
-              project_facility_mismatch: The project belongs to another facility
               project_is_inactive: The project is inactive
 
     models:

@@ -8,6 +8,7 @@ class Order < ApplicationRecord
   belongs_to :account
   belongs_to :facility
   belongs_to :order_import
+  belongs_to :cross_core_project, class_name: "Projects::Project"
   has_many   :order_details, inverse_of: :order, dependent: :destroy
 
   validates_presence_of :user_id, :created_by

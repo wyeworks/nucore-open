@@ -1,10 +1,13 @@
 %tbody.js--orderTableRefresh
-  - OrderDetailPresenter.wrap(@order_details).each do |od|
+  - OrderDetailPresenter.wrap(order_details).each do |od|
     %tr{class: [od.parent_order_detail_id ? "child" : "parent", "status-#{od.order_status.root.name.underscore}", flash[:updated_order_details].try(:include?, od.id) ? "updated-order-detail" : ""] }
       %th.order-id{scope: "row"}
-        = link_to od,
-          manage_order_detail_path(od),
-          class: "manage-order-detail"
+        - if cross_core
+          = od
+        - else
+          = link_to od,
+            manage_order_detail_path(od),
+            class: "manage-order-detail"
       %td.badges
         = status_badge(od)
       %td.product
@@ -12,6 +15,11 @@
         - if od.time_data.present?
           %br
           = od.time_data
+      - if cross_core
+        %td.user
+          = od.created_by_user
+        %td.order_date
+          = od.ordered_at&.strftime("%m/%d/%Y")
       %td.action
         - if od.add_accessories?
           = link_to new_facility_order_order_detail_accessory_path(current_facility, @order, od), class: ["has_accessories", "persistent", "undecorated"] do

@@ -1,0 +1,31 @@
+= content_for :h1 do
+  = "#{@facility.abbreviation} / #{@instrument.name}"
+
+- if @walkup_available
+  %h2= t(".reservation_details")
+- else
+  %div.reservation_notice
+    %h2= t(".reserved")
+    %p= t(".reserved_message")
+
+%dl
+  %dt= t(".reservation_date")
+  %dd= "#{@reservation_data[:reserve_start_at].strftime("%A")} #{human_date(@reservation_data[:reserve_start_at])}"
+
+  %dt= t(".reservation_time")
+  %dd= human_time(@reservation_data[:reserve_start_at])
+
+- if @can_add_to_cart
+  = form_with url: facility_instrument_quick_reservations_path(@facility, @instrument) do |f|
+    %fieldset
+      %legend= t(".reservation_length")
+      - @possible_reservation_data.each_with_index do |res_data, index|
+        - checked_value = index == 0 ? "checked" : ""
+        = f.radio_button "reservation[duration_mins]", res_data[:duration_mins], required: true, checked: checked_value
+        = f.label "reservation[duration_mins]_#{res_data[:duration_mins]}", "#{res_data[:duration_mins]} mins"
+    %fieldset
+      - accounts = @current_user.accounts_for_product(@instrument)
+      %legend= t(".payment_details")
+      = f.select :order_account, accounts.map { |a| [a, a.id] }, {}, {"aria-label": "account" }
+    %br
+    = f.submit t(".create_reservation")

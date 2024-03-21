@@ -7,7 +7,7 @@ class AddToOrderForm
   include DateHelper
 
   attr_reader :original_order, :current_facility
-  attr_accessor :quantity, :product_id, :order_status_id, :note, :duration, :created_by, :fulfilled_at, :account_id, :reference_id
+  attr_accessor :quantity, :product_id, :order_status_id, :note, :duration, :created_by, :fulfilled_at, :account_id, :reference_id, :facility_id
   attr_accessor :error_message
 
   validates :account_id, presence: true
@@ -25,7 +25,29 @@ class AddToOrderForm
   def save
     raise(ActiveRecord::RecordInvalid, self) unless valid?
 
-    add_to_order!
+    @facility_id = @facility_id&.to_i
+
+    @order_project = original_order.cross_core_project
+
+    if @original_order.facility.id == @facility_id
+      add_to_order!
+    end
+
+    return true unless SettingsHelper.feature_on?(:cross_core_projects)
+
+    if @order_project.nil?
+      create_cross_core_project_and_add_order!
+    else
+      facility_order_in_project = @order_project.orders.find { |o| o.facility_id == @facility_id }
+
+      if facility_order_in_project.present?
+        @merge_order = facility_order_in_project
+        add_to_order!
+      else # Create new order for facility and add to the project
+        create_cross_core_project_and_add_order!
+      end
+    end
+
     true
   rescue AASM::InvalidTransition
     @error_message = text("invalid_status", product: product, status: order_status)
@@ -51,8 +73,12 @@ class AddToOrderForm
     text("notices", product: product.name)
   end
 
+  def product_facility
+    @product_facility ||= Facility.find(@facility_id)
+  end
+
   def product
-    @product ||= current_facility.products.find(product_id)
+    @product ||= product_facility.products.find(product_id)
   end
 
   # Will be blank if the account_id is suspended or expired. That should only happen
@@ -64,6 +90,19 @@ class AddToOrderForm
 
   def available_accounts
     AvailableAccountsFinder.new(original_order.user, current_facility)
+  end
+
+  def facilities_options
+    @facilities_options ||= Facility.alphabetized.map do |f|
+      [
+        f.name,
+        f.id,
+        {
+          "data-products-path": Rails.application.routes.url_helpers.available_for_cross_core_ordering_facility_products_path(f, format: :js),
+          "data-original-order-facility": @original_order.facility_id,
+        }
+      ]
+    end
   end
 
   # We're using the ordered_at of the order details to determine if additional OrderDetails
@@ -94,16 +133,56 @@ class AddToOrderForm
 
   def add_to_order!
     OrderDetail.transaction do
-      merge_order.add(product, quantity, params).each do |order_detail|
+      item_adder_params = @original_order.facility_id == @facility_id ? params : params.merge(ordered_at: Time.zone.now)
+
+      merge_order.add(product, quantity, item_adder_params).each do |order_detail|
         backdate(order_detail)
 
         order_detail.set_default_status!
         order_detail.change_status!(order_status) if order_status.present?
 
+        order_detail.update!(project_id: @order_project.id) if @order_project.present?
+
         if merge_order.to_be_merged? && !order_detail.valid_for_purchase?
           @notifications = true
           MergeNotification.create_for!(created_by, order_detail)
         end
+      end
+
+      merge_order.update!(cross_core_project: @order_project) if @order_project.present?
+    end
+  end
+
+  def create_cross_core_project_and_add_order!
+    Projects::Project.transaction do
+      @order_project ||= Projects::Project.new(
+        name: "#{current_facility.abbreviation}-#{original_order.id}",
+        facility_id: current_facility.id
+      )
+
+      # Update original order's order details to be included in the project
+      if @order_project.new_record?
+        @order_project.save!
+        original_order.order_details.each do |od|
+          od.update!(project_id: @order_project.id)
+        end
+      end
+
+      original_order.update!(cross_core_project: @order_project)
+
+      product_order = Order.find_or_create_by!(
+        facility: product_facility,
+        account_id:,
+        user_id: original_order.user_id,
+        created_by: created_by.id,
+        cross_core_project: @order_project
+      )
+
+      product_order.add(product, quantity, params.merge(ordered_at: Time.zone.now)).each do |order_detail|
+        order_detail.set_default_status!
+        order_detail.change_status!(order_status) if order_status.present?
+
+        order_detail.update!(project_id: @order_project.id)
       end
     end
   end
@@ -113,6 +192,7 @@ class AddToOrderForm
     @account_id = original_order.account_id
     @quantity = 1
     @duration = 1
+    @facility_id = original_order.facility_id
 
     if previously_added_to?
       # This is a string so it displays on the form correctly.

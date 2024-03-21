@@ -11,3 +11,8 @@ Optional.
 # Additional Context
 
 Optional. Feel free to add/modify additional headers as appropriate, e.g. "Refactorings", "Concerns".
+
+# Accessibility
+- [ ] Did you scan for accessibility issues?
+- [ ] Did you check our accessibility goal checklist?
+- [ ] Did you add accessibility [specs](https://github.com/dequelabs/axe-core-gems/blob/develop/packages/axe-core-rspec/README.md)?

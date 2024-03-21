@@ -6,6 +6,7 @@ module Projects
 
     belongs_to :facility, foreign_key: :facility_id
     has_many :order_details, inverse_of: :project
+    has_many :orders, inverse_of: :cross_core_project, foreign_key: :cross_core_project_id
 
     validates :facility_id, presence: true
     validates :name,

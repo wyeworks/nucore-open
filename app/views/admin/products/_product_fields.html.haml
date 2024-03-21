@@ -15,10 +15,10 @@
     - if f.object.is_a?(Instrument)
       = f.input :restrict_holiday_access, as: :boolean, label: false, inline_label: text("hints.restrict_holiday_access")
 
+= f.input :cross_core_ordering_available, as: :boolean, label: false, inline_label: text("hints.cross_core_ordering_available")
 = f.input :is_archived, as: :boolean, label: false, inline_label: text("hints.is_archived")
 = f.input :is_hidden, as: :boolean, label: false, inline_label: text("hints.is_hidden", field: f.object.class.model_name.human.downcase)
 - unless f.object.is_a?(Bundle)
   = f.input :user_notes_field_mode, collection: Products::UserNoteMode.all, include_blank: false
   = f.input :user_notes_label
 = f.input :email_purchasers_on_order_status_changes, label: false, inline_label: true
-

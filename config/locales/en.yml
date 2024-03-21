@@ -50,6 +50,7 @@ en:
     shared:
       add: "Add %{model}"
       add_to: "Add To %{model}"
+      add_to_cross_core_order: "Add to Cross-Core Order"
       edit: "Edit %{model}"
       turn_all_relays_on: Turn All Relays ON
       turn_all_relays_off: Turn All Relays OFF

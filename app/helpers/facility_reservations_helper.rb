@@ -28,10 +28,14 @@ module FacilityReservationsHelper
       )
     else
       links << link_to(I18n.t("reservations.switch.start"), order_order_detail_reservation_switch_instrument_path(reservation.order, reservation.order_detail, reservation, switch: "on")) if reservation.can_switch_instrument_on?
-      links << link_to(I18n.t("reservations.switch.end"), order_order_detail_reservation_switch_instrument_path(reservation.order, reservation.order_detail, reservation, switch: "off"), class: end_reservation_class(reservation)) if reservation.can_switch_instrument_off?
+      links << end_reservation_link(reservation)
       links << link_to(I18n.t("reservations.edit.link"), facility_order_path(reservation.facility, reservation.order))
     end
     links.join(" | ").html_safe
+  end
+
+  def end_reservation_link(reservation, html_classes = "")
+    link_to(I18n.t("reservations.switch.end"), order_order_detail_reservation_switch_instrument_path(reservation.order, reservation.order_detail, reservation, switch: "off"), class: "#{end_reservation_class(reservation)} #{html_classes}") if reservation.can_switch_instrument_off?
   end
 
   def edit_admin_reservation_path(reservation)

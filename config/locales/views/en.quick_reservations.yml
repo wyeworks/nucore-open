@@ -1,0 +1,23 @@
+en:
+  layouts:
+    quick_reservation:
+      my_reservation: My Reservations
+  quick_reservations:
+    new:
+      reservation_details: Reservation Details
+      reserved: Walkup Reservations Not Available
+      reserved_message: "The next available start time is:"
+      reservation_date: Reservation Date
+      reservation_time: Reservation Time
+      reservation_length: Reservation Length
+      payment_details: Payment Details
+      create_reservation: Create Reservation
+    show:
+      start: Start Reservation
+      end: End Reservation
+      come_back_later: Come back closer to reservation time to start your reservation.
+    reservation_information:
+      order_number: "Order #"
+      reservation_date: Reservation Date
+      reservation_time: Reservation Time
+      status: Status

@@ -29,6 +29,18 @@ namespace :demo do
       example_facility.is_active = true
     end
 
+    facility2 = Facility.find_or_create_by!(url_name: "second-facility") do |example_facility|
+      example_facility.name = "Second Facility"
+      example_facility.abbreviation = "SF"
+      example_facility.short_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam in mi tellus. Nunc ut turpis rhoncus mauris vehicula volutpat in fermentum metus. Sed eleifend purus at nunc facilisis fermentum metus."
+      example_facility.description = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris scelerisque metus et augue elementum ac pellentesque neque blandit. Nunc ultrices auctor velit, et ullamcorper lacus ultrices id. Pellentesque vulputate dapibus mauris, sollicitudin mollis diam malesuada nec. Fusce turpis augue, consectetur nec consequat nec, tristique sit amet urna. Nunc vitae imperdiet est. Aenean gravida, risus eget posuere fermentum, risus odio bibendum ligula, sit amet lobortis enim odio facilisis ipsum. Donec iaculis dolor vitae massa ullamcorper pulvinar. In hac habitasse platea dictumst. Pellentesque iaculis sapien id est auctor a semper odio tincidunt. Suspendisse nec lectus sit amet est imperdiet elementum non sagittis nulla. Sed tempor velit nec sapien rhoncus consequat semper neque malesuada. Nunc gravida justo in felis tempus dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tristique diam dolor. Curabitur lacinia molestie est vel mollis. Ut facilisis vestibulum scelerisque. Aenean placerat purus in nisi auctor scelerisque.</p>"
+      example_facility.address = "Second Facility\nFinancial Dept\n111 University Rd.\nEvanston, IL 60201-0111"
+      example_facility.phone_number = "(312) 123-4321"
+      example_facility.fax_number = "(312) 123-1234"
+      example_facility.email = "second-support@example.com"
+      example_facility.is_active = true
+    end
+
     # create chart strings, which are required when creating a facility account and nufs account
     chart_strings = [
       {
@@ -75,6 +87,14 @@ namespace :demo do
     end
     fa.save(validate: false) # specifically to skip account_number validations
 
+    fa2 = FacilityAccount.find_or_initialize_by(facility_id: facility2.id) do |facility_account|
+      facility_account.account_number = "123-1234567-12345678"
+      facility_account.revenue_account = "50617"
+      facility_account.is_active = true
+      facility_account.created_by = 1
+    end
+    fa2.save(validate: false) # specifically to skip account_number validations
+
     item = Item.find_or_create_by!(url_name: "example-item") do |example_item|
       example_item.facility_id = facility.id
       example_item.account = Settings.accounts.product_default
@@ -85,6 +105,17 @@ namespace :demo do
       example_item.is_archived = false
       example_item.is_hidden = false
       example_item.facility_account_id = fa.id
+    end
+
+    item2 = Item.find_or_create_by!(url_name: "second-example-item", facility_id: facility2.id) do |example_item|
+      example_item.account = Settings.accounts.product_default
+      example_item.name = "Second Example Item"
+      example_item.description = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>"
+      example_item.requires_approval = false
+      example_item.initial_order_status_id = new_status.id
+      example_item.is_archived = false
+      example_item.is_hidden = false
+      example_item.facility_account_id = fa2.id
     end
 
     skip_review_item = Item.find_or_create_by!(url_name: "skip-review-example-item") do |example_item|
@@ -242,7 +273,7 @@ namespace :demo do
       )
     end
 
-    [item, service, bundle].each do |product|
+    [item, item2, service, bundle].each do |product|
       PriceGroupProduct.find_or_create_by!(price_group_id: pgnu.id, product_id: product.id)
       PriceGroupProduct.find_or_create_by!(price_group_id: pgex.id, product_id: product.id)
     end
@@ -277,6 +308,16 @@ namespace :demo do
     end
 
     itpp.save(validate: false) # override date validator
+
+    itpp2 = ItemPricePolicy.find_or_initialize_by(product_id: item2.id, price_group_id: pgnu.id) do |price_policy|
+      price_policy.can_purchase = true
+      price_policy.start_date = SettingsHelper.fiscal_year_beginning
+      price_policy.expire_date = SettingsHelper.fiscal_year_end
+      price_policy.unit_cost = 30
+      price_policy.unit_subsidy = 0
+    end
+
+    itpp2.save(validate: false) # override date validator
 
     spp = ServicePricePolicy.find_or_initialize_by(product_id: service.id, price_group_id: pgnu.id) do |price_policy|
       price_policy.can_purchase = true
@@ -317,6 +358,16 @@ namespace :demo do
                               last_name: "Student")
       user_student.password = "P@ssw0rd!!"
       user_student.save!
+    end
+
+    user_student2 = User.find_by(username: "sst456@example.com")
+    unless user_student2
+      user_student2 = User.new(username: "sst456@example.com",
+                              email: "sst456@example.com",
+                              first_name: "Greg",
+                              last_name: "Student")
+      user_student2.password = "P@ssw0rd!!"
+      user_student2.save!
     end
 
     user_staff = User.find_by(username: "ast123@example.com")
@@ -363,6 +414,17 @@ namespace :demo do
       UserRole.grant(user_director, UserRole::FACILITY_DIRECTOR, facility)
     end
 
+    user_director2 = User.find_by(username: "ddi456@example.com")
+    unless user_director2
+      user_director2 = User.new(username: "ddi456@example.com",
+                               email: "ddi456@example.com",
+                               first_name: "Eric",
+                               last_name: "Facililty Director")
+      user_director2.password = "P@ssw0rd!!"
+      user_director2.save
+      UserRole.grant(user_director2, UserRole::FACILITY_DIRECTOR, facility2)
+    end
+
     user_account_manager = User.find_by(username: "aam123@example.com")
     unless user_account_manager
       user_account_manager = User.new(username: "aam123@example.com",
@@ -403,6 +465,8 @@ namespace :demo do
     UserPriceGroupMember.find_or_create_by!(user_id: user_staff.id, price_group_id: pgnu.id)
     UserPriceGroupMember.find_or_create_by!(user_id: user_director.id, price_group_id: pgnu.id)
 
+    UserPriceGroupMember.find_or_create_by!(user_id: user_student2.id, price_group_id: pgnu.id)
+
     # account creation / setup
     # see FacilityAccountsController#create
 
@@ -424,6 +488,11 @@ namespace :demo do
       expires_at: 1.year.from_now,
       created_by: user_director.id,
       account_users_attributes: account_users_attributes,
+    }
+    account_purchaser_attributes = {
+      user_id: user_student2.id,
+      user_role: "Purchaser",
+      created_by: user_director2.id,
     }
 
     api_speed_type = UmassCorum::ApiSpeedType.find_by(speed_type: "123456") || FactoryBot.create(:api_speed_type, speed_type: "123456")
@@ -506,6 +575,16 @@ namespace :demo do
                                           created_by: user_director.id)
 
         split_account.save
+
+        split_account = builder.new(account_type: "SplitAccounts::SplitAccount",
+                                    current_user: user_director2,
+                                    owner_user: user_pi,
+                                    params: params).build
+
+        split_account.account_users.build(user_id: user_student2.id,
+                                          user_role: "Purchaser",
+                                          created_by: user_director2.id)
+
       end
     end
 

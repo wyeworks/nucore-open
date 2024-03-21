@@ -1,4 +1,6 @@
 $baseFontSize: 12px; // Default is 14px
+$primaryColor: white;
+$secondaryColor: #005B8A;
 
 @import "bootstrap-accessibility";
 @import "bootstrap-variables";
@@ -36,6 +38,7 @@ $baseFontSize: 12px; // Default is 14px
 @import "app/move_between_selects";
 @import "app/kiosk";
 @import "app/user_accounts";
+@import "app/quick_reservation";
 
 @import "fine-uploader/fine-uploader-new";
 @import "fine-uploader-override";

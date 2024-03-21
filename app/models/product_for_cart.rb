@@ -7,8 +7,9 @@ class ProductForCart
   attr_accessor :error_message
   attr_accessor :error_path
 
-  def initialize(product)
+  def initialize(product, quick_reservation: false)
     @product = product
+    @quick_reservation = quick_reservation
   end
 
   def purchasable_by?(acting_user, session_user)
@@ -65,6 +66,7 @@ class ProductForCart
             @error_message = text("models.product_for_cart.already_requested_access", i18n_params)
             @error_path = url_helpers.facility_path(product.facility)
           else
+            @error_message = html("requires_approval", i18n_params) if @quick_reservation
             @error_path = url_helpers.new_facility_product_training_request_path(product.facility, product)
           end
         else

@@ -42,7 +42,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
         context "that is associated with a different facility" do
           let(:project_id) { FactoryBot.create(:project).id }
-          it { expect(order_detail.project_id).to be_blank }
+          it { expect(order_detail.project_id).to eq(project_id) }
         end
       end
 

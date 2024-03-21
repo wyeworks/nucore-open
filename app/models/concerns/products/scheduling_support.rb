@@ -20,9 +20,9 @@ module Products::SchedulingSupport
       .merge(Reservation.relay_in_progress)
   end
 
-  def walkup_available?(time = Time.zone.now)
+  def walkup_available?(time = Time.zone.now, interval: reserve_interval)
     # zero and nil should default to 1 minute
-    reservation_length = [min_reserve_mins.to_i, reserve_interval.to_i].max
+    reservation_length = [min_reserve_mins.to_i, interval.to_i].max
     reservation = Reservation.new(
       product: self,
       reserve_start_at: time,
@@ -39,6 +39,33 @@ module Products::SchedulingSupport
     # move the reservation to
     return nil unless rules.any?
     reservation_in_week(after, duration, rules, options)
+  end
+
+  def quick_reservation_data(after: 1.minute.from_now)
+    res = next_available_reservation(after:, duration: quick_reservation_intervals.first)
+
+    quick_reservation_intervals.select { |i| walkup_available?(after, interval: i) }
+                               .map { |i| { reserve_start_at: res.reserve_start_at, duration_mins: i } }
+  end
+
+  def quick_reservation_intervals
+    intervals = case reserve_interval
+                when 1, 5, 15
+                  [15, 30, 60]
+                when 10
+                  [10, 30, 60]
+                when 30
+                  [30, 60, 90]
+                when 60
+                  [60, 120, 180]
+                end
+
+    max_time = max_reserve_mins.presence || 181
+    min_time = min_reserve_mins.to_i
+
+    intervals.select do |i|
+      min_time < i && i < max_time
+    end
   end
 
   def offline?
