@@ -16,7 +16,11 @@ class UserResearchSafetyCertificationsController < ApplicationController
 
   def index
     @user = User.find(params[:user_id])
-    @certificates = ResearchSafetyCertificationLookup.certificates_with_status_for(@user)
+    begin
+      @certificates = ResearchSafetyCertificationLookup.certificates_with_status_for(@user)
+    rescue ResearchSafetyAdapters::ScishieldApiError => e
+      flash[:error] = e.message
+    end
   end
 
   # During rendering, we want to use the Ability as if we were using the UsersController

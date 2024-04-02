@@ -32,6 +32,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
       click_button "Create Reservation"
       expect(page).to have_content("9:31 AM - 10:01 AM")
       expect(page).to have_content("End Reservation")
+      expect(page).to have_content("Report an Issue")
     end
   end
 

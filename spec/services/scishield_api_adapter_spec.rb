@@ -65,7 +65,7 @@ RSpec.describe ResearchSafetyAdapters::ScishieldApiAdapter do
       end
 
       it "raises an error" do
-        expect { adapter.certified?(anything) }.to raise_error(Timeout::Error)
+        expect { adapter.certified?(anything) }.to raise_error(ResearchSafetyAdapters::ScishieldApiError)
       end
     end
 

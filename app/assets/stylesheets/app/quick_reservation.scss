@@ -73,6 +73,12 @@ body.quick_reservation {
       }
     }
 
+    p.issue {
+      font-weight: bold;
+      display: block;
+      padding-bottom: 3em;
+    }
+
     a.end_link {
       background-color: $reservationLabelColor;
       color: white;

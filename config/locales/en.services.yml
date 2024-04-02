@@ -1,0 +1,7 @@
+#
+# Messages that come from services
+en:
+  services:
+    research_safety_adapters:
+      scishield_api_client:
+        request_failed: "Scishield API error: Unable to access training certificates."

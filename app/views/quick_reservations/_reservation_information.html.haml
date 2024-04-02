@@ -12,3 +12,5 @@
 
   %dt= t(".status")
   %dd= reservation.order_detail.state.capitalize
+
+%p.issue= link_to t(".report_issue"), new_facility_order_order_detail_issue_path(@facility.url_name, @order.id, @order_detail.id)

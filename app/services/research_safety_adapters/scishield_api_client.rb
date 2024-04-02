@@ -2,6 +2,9 @@
 
 module ResearchSafetyAdapters
 
+  class ScishieldApiError < StandardError
+  end
+
   class ScishieldApiClient
 
     require "jwt"
@@ -19,7 +22,7 @@ module ResearchSafetyAdapters
 
       http_status_error || certification_data_error
     end
-    
+
     def token
       return @token if @token.present?
       return nil unless keys_present?
@@ -46,6 +49,8 @@ module ResearchSafetyAdapters
     def certifications_for(email)
       response = training_api_request(email)
       response.body
+    rescue Net::OpenTimeout
+      raise ScishieldApiError, I18n.t("services.research_safety_adapters.scishield_api_client.request_failed")
     end
 
     def training_api_request(email)

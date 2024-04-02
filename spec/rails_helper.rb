@@ -116,6 +116,15 @@ RSpec.configure do |config|
     Settings.billing.review_period = original_review_period
   end
 
+  config.around(:each, :safety_adapter_class) do |example|
+    original_class = ResearchSafetyCertificationLookup.adapter_class
+    ResearchSafetyCertificationLookup.adapter_class = example.metadata[:safety_adapter_class]
+
+    example.call
+
+    ResearchSafetyCertificationLookup.adapter_class = original_class
+  end
+
   config.before(:all) do
     # users are not created within transactions, so delete them all here before running tests
     PriceGroupMember.delete_all
