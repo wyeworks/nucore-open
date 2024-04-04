@@ -101,6 +101,29 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
     end
   end
 
+  context "when the user has an ongoing, complete reservation" do
+    let!(:reservation) do
+      r = create(
+        :purchased_reservation,
+        product: instrument,
+        user:,
+        reserve_start_at: 30.minutes.ago,
+        actual_start_at: 30.minutes.ago,
+        reserve_end_at: 5.minutes.ago
+      )
+
+      od = r.order_detail
+
+      od.change_status!(OrderStatus.in_process)
+      od.change_status!(OrderStatus.complete)
+      od.save
+    end
+
+    it "does not redirect to the reservation" do
+      expect(page).to have_current_path(new_facility_instrument_quick_reservation_path(facility, instrument))
+    end
+  end
+
   context "when another reservation exists in the future" do
     let(:start_at) {}
     let(:end_at) { start_at + 30.minutes }
@@ -256,6 +279,16 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
         expect(page).to have_content("9:31 AM - 10:01 AM")
         expect(page).to have_content("End Reservation")
       end
+    end
+  end
+
+  context "when the insturment has no schedule rules" do
+    let!(:instrument) do
+      create(:setup_instrument, :timer, min_reserve_mins: 5, skip_schedule_rules: true)
+    end
+
+    it "shows an error message" do
+      expect(page).to have_content(I18n.t("models.instrument_for_cart.schedule_not_available"))
     end
   end
 end

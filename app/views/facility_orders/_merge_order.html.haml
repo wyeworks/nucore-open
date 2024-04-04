@@ -16,7 +16,7 @@
         - @merge_orders.each do |order|
           - order.order_details.each do |order_detail|
             %tr
-              %td.centered= link_to "Remove", facility_order_order_detail_path(current_facility, order, order_detail), method: :delete
+              %td.centered= link_to "Remove", facility_order_order_detail_path(order.facility, order, order_detail), method: :delete
               %td
                 = render partial: "orders/#{order_detail.product.class.name.underscore}_desc", locals: { order_detail: order_detail }
               %td.centered

@@ -6,7 +6,7 @@ class QuickReservationsController < ApplicationController
   before_action :authenticate_user!
   load_resource :facility, find_by: :url_name
   load_resource :instrument, through: :facility, find_by: :url_name
-  before_action :get_startable_reservation, only: [:start, :new]
+  before_action :set_actionable_reservation, only: [:start, :new]
   before_action :prepare_reservation_data, only: [:new, :create]
 
   # GET /facilities/:facility_id/instruments/:instrument_id/quick_reservations/:id
@@ -27,11 +27,6 @@ class QuickReservationsController < ApplicationController
     @reservation = NextAvailableReservationFinder.new(@instrument).next_available_for(current_user, current_user)
     @reservation.order_detail = @order_detail
     authorize! :new, @reservation
-
-    # Check if the user can create a reservation
-    instrument_for_cart = InstrumentForCart.new(@instrument, quick_reservation: true)
-    @can_add_to_cart = instrument_for_cart.purchasable_by?(current_user, current_user)
-    flash.now[:notice] = instrument_for_cart.error_message if instrument_for_cart.error_message
 
     interval = @instrument.quick_reservation_intervals.first
     @walkup_available = @instrument.walkup_available?(interval:)
@@ -57,7 +52,7 @@ class QuickReservationsController < ApplicationController
       facility_ability = Ability.new(session_user, @order.facility, self)
       @order.being_purchased_by_admin = facility_ability.can?(:act_as, @order.facility)
       authorize! :create, @reservation
-      
+
       @order.transaction do
         order_purchaser.purchase!
       end
@@ -115,20 +110,30 @@ class QuickReservationsController < ApplicationController
   def prepare_reservation_data
     @possible_reservation_data = @instrument.quick_reservation_data
 
-    # if no reservations are available right now, find reservations at the next
-    # available time
-    if @possible_reservation_data.empty?
-      duration = @instrument.quick_reservation_intervals.first.minutes
-      next_available_reservation = @instrument.next_available_reservation(duration:)
-      after = next_available_reservation.reserve_start_at
-      @possible_reservation_data = @instrument.quick_reservation_data(after:)
-    end
+    # Check if the user can create a reservation, among other things, this will
+    # catch instruments with no schedule rules
+    instrument_for_cart = InstrumentForCart.new(@instrument, quick_reservation: true)
+    @can_add_to_cart = instrument_for_cart.purchasable_by?(current_user, current_user)
 
-    @reservation_data = @possible_reservation_data.first
+    if instrument_for_cart.error_message
+      flash.now[:notice] = instrument_for_cart.error_message
+    else
+      # if no reservations are available right now, find reservations at the next
+      # available time
+      if @possible_reservation_data.empty?
+        duration = @instrument.quick_reservation_intervals.first.minutes
+        next_available_reservation = @instrument.next_available_reservation(duration:)
+        after = next_available_reservation.reserve_start_at
+        @possible_reservation_data = @instrument.quick_reservation_data(after:)
+      end
+
+      @reservation_data = @possible_reservation_data.first
+
+    end
   end
 
-  def get_startable_reservation
-    reservations = current_user.reservations.where(product_id: @instrument.id)
+  def set_actionable_reservation
+    reservations = current_user.reservations.where(product_id: @instrument.id).joins(:order_detail).merge(OrderDetail.new_or_inprocess)
     startable = reservations.find(&:startable_now?)
     ongoing = reservations.ongoing.first
 

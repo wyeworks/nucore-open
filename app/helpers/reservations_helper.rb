@@ -27,8 +27,8 @@ module ReservationsHelper
     reservation.order_detail.accessories? ? :has_accessories : nil
   end
 
-  def reservation_actions(reservation)
-    delimiter = "&nbsp;|&nbsp;".html_safe
+  def reservation_actions(reservation, use_delimiter: true)
+    delimiter = use_delimiter ? "&nbsp;|&nbsp;".html_safe : ""
     links = ReservationUserActionPresenter.new(self, reservation).user_actions
     safe_join(links, delimiter)
   end

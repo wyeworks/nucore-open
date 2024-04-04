@@ -55,7 +55,9 @@
         data: { disable_with: t("shared.create") }
 
     %li
-      - if @order.to_be_merged?
+      - if @cross_core_cancel_path
+        = link_to t("shared.cancel"), @cross_core_cancel_path
+      - elsif @order.to_be_merged?
         = link_to t("shared.cancel"), facility_order_path(@instrument.facility, @order.merge_order)
       - elsif @order.persisted?
         = link_to t("shared.cancel"), cart_path

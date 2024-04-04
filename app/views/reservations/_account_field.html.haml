@@ -3,7 +3,7 @@
     .row
       .span6
         = simple_fields_for @order do |order_fields|
-          - accounts = @order.user.accounts_for_product(@instrument)
+          - accounts = @accounts_for_cross_core_project || @order.user.accounts_for_product(@instrument)
 
           - selected_account_id = @order.account_id || params[:order_account]
           - if selected_account_id.blank? && accounts.count == 1
