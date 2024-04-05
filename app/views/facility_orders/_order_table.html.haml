@@ -31,6 +31,9 @@
             = tooltip_icon "fa fa-calendar", t("ical.calendar_tooltip")
             %span= t("views.facility_orders.show.order_table.download")
 
+          - if cross_core
+            = reservation_actions(od.reservation, use_delimiter: false)
+
         = render "order_file_icon", od: od
         = render "result_file_icon", od: od
 

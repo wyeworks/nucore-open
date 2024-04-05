@@ -7,7 +7,18 @@ RSpec.describe Instrument do
   it_should_behave_like "ReservationProduct", :instrument
 
   let(:facility) { FactoryBot.create(:setup_facility) }
-  subject(:instrument) { build :instrument, facility: facility }
+  let(:min_reserve_mins) { 60 }
+  let(:max_reserve_mins) { 120 }
+  let(:reserve_interval) { 1 }
+
+  subject(:instrument) do
+    build(:instrument,
+          facility:,
+          min_reserve_mins:,
+          max_reserve_mins:,
+          reserve_interval:,
+         )
+  end
 
   it "should create using factory" do
     expect(instrument).to be_valid
@@ -899,6 +910,31 @@ RSpec.describe Instrument do
       it "reserves 5 PM to midnight as unavailable" do
         expect(reservations.last.reserve_start_at).to eq(Time.zone.parse("2015-07-05T17:00:00"))
         expect(reservations.last.reserve_end_at).to eq(Time.zone.parse("2015-07-06T00:00:00"))
+      end
+    end
+  end
+
+  describe "#quick_reservation_intervals" do
+    before do
+      instrument.min_reserve_mins = min_reserve_mins
+      instrument.max_reserve_mins = max_reserve_mins
+      instrument.reserve_interval = reserve_interval
+    end
+
+    context "when min_reserve_mins is larger than all reserve intervals" do
+      let(:min_reserve_mins) { 100 }
+
+      it "returns the min_reserve_mins" do
+        expect(instrument.quick_reservation_intervals).to eq [min_reserve_mins]
+      end
+    end
+
+    context "when min_reserve_mins is smaller than all the reserve intervals" do
+      let(:min_reserve_mins) { 5 }
+
+      it "returns an array of 3 intervals" do
+        expect(instrument.quick_reservation_intervals).to eq [15, 30, 60]
+        expect(instrument.quick_reservation_intervals.count).to eq 3
       end
     end
   end

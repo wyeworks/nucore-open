@@ -263,7 +263,7 @@ RSpec.describe InstrumentPricePoliciesController do
 
         fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][0][subsidy]", with: "60"
         fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][1][subsidy]", with: "20"
-        fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][2][subsidy]", with: "20"
+        fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][2][subsidy]", with: "0"
 
         uncheck "price_policy_#{external_price_group.id}[can_purchase]"
         uncheck "price_policy_#{cannot_purchase_group.id}[can_purchase]"

@@ -9,7 +9,7 @@ class DurationRate < ApplicationRecord
   validates :rate, presence: true
   validates :rate, numericality: { greater_than_or_equal_to: 0 }
   validates :subsidy, presence: { message: ->(object, _data) { "^Missing subsidy for #{object.price_group.name}" } }, if: -> { requires_subsidy? }
-  validates :subsidy, numericality: { greater_than: 0, allow_blank: true }
+  validates :subsidy, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
   validates :min_duration_hours,
     presence: { message: ->(object, _data) { "^Missing value for 'Rate start (hr)'" } },
     numericality: { greater_than: 0, allow_blank: true },

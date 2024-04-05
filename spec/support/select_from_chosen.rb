@@ -2,6 +2,7 @@
 
 module SelectFromChosen
 
+  # Allow running system specs with JS enabled and still access 'chosen' select inputs
   def select_from_chosen(item_text, options)
     field = find_field(options[:from], visible: false)
     find("##{field[:id]}_chosen").click

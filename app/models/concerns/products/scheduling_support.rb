@@ -63,9 +63,13 @@ module Products::SchedulingSupport
     max_time = max_reserve_mins.presence || 181
     min_time = min_reserve_mins.to_i
 
-    intervals.select do |i|
-      min_time < i && i < max_time
+    intervals.select! do |i|
+      min_time <= i && i <= max_time
     end
+
+    intervals = [min_reserve_mins] if intervals.empty?
+
+    intervals
   end
 
   def offline?

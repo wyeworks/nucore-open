@@ -10,8 +10,9 @@
 %h1
   = text("title", name: @user.full_name)
 
-%ul.unstyled
-  - @certificates.each do |certificate, active|
-    %li{ class: active ? "" : "muted" }
-      = active ? fa_icon("check", class: "text-success") : fa_icon("ban")
-      = certificate.name
+- if @certificates
+  %ul.unstyled
+    - @certificates.each do |certificate, active|
+      %li{ class: active ? "" : "muted" }
+        = active ? fa_icon("check", class: "text-success") : fa_icon("ban")
+        = certificate.name

@@ -7,6 +7,8 @@ class ReservationsController < ApplicationController
   before_action :check_acting_as, only: [:switch_instrument, :list]
   before_action :load_basic_resources, only: [:new, :create, :edit, :update]
   before_action :load_and_check_resources, only: [:move, :switch_instrument]
+  before_action :set_accounts_for_cross_core_project, only: [:new, :create]
+  before_action :set_cross_core_cancel_path, only: [:new]
   authorize_resource only: [:edit, :update, :move]
 
   include TranslationHelper
@@ -108,7 +110,11 @@ class ReservationsController < ApplicationController
       flash[:error] = I18n.t("controllers.reservations.create.admin_hold_warning") if creator.reservation.conflicting_admin_reservation?
 
       if creator.merged_order?
-        redirect_to facility_order_path(@order_detail.facility, @order_detail.order.merge_order || @order_detail.order)
+        if original_project_order.present?
+          redirect_to facility_order_path(original_project_order.facility, original_project_order.merge_order || original_project_order)
+        else
+          redirect_to facility_order_path(@order_detail.facility, @order_detail.order.merge_order || @order_detail.order)
+        end
       elsif creator.instrument_only_order?
         redirect_params = {}
         redirect_params[:send_notification] = "1" if params[:send_notification] == "1"
@@ -136,7 +142,7 @@ class ReservationsController < ApplicationController
 
     authorize! :new, @reservation
 
-    unless @instrument.can_be_used_by?(@order_detail.user)
+    unless @instrument.can_be_used_by?(@order_detail.user_for_order)
       flash[:notice] = text(".acting_as_not_on_approval_list")
     end
     set_windows
@@ -395,4 +401,37 @@ class ReservationsController < ApplicationController
     validator.valid?
   end
 
+  def set_accounts_for_cross_core_project
+    return unless SettingsHelper.feature_on?(:cross_core_projects)
+
+    return if @order.cross_core_project_id.nil?
+
+    @accounts_for_cross_core_project = AvailableAccountsFinder.new(original_project_order.user, original_project_order.facility)
+  end
+
+  def original_project_order
+    return @original_project_order if defined?(@original_project_order)
+
+    project = @order.cross_core_project
+
+    return if project.blank?
+
+    @original_project_order = project.orders.find { |order| order.facility_id == project.facility_id }
+  end
+
+  def set_cross_core_cancel_path
+    return unless SettingsHelper.feature_on?(:cross_core_projects)
+
+    return if @order.cross_core_project_id.blank?
+
+    current_user_facilities = current_user.facilities
+    facility_orders = @order_detail.order.cross_core_project.orders.where(facility: current_user_facilities)
+
+    if facility_orders.count.zero?
+      @cross_core_cancel_path = root_path
+    else
+      facility_order = facility_orders.first
+      @cross_core_cancel_path = facility_order_path(facility_order.facility, facility_order)
+    end
+  end
 end

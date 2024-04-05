@@ -171,7 +171,8 @@ module Reservations::Validations
     # If we're saving as an administrator, they can override the user's schedule rules.
     return true if reserved_by_admin
     # Some old specs don't set an order detail, so we need to safe-navigate
-    product.available_schedule_rules(order_detail&.order&.user).cover?(reserve_start_at, reserve_end_at)
+
+    product.available_schedule_rules(order_detail&.user_for_order).cover?(reserve_start_at, reserve_end_at)
   end
 
   def in_the_future?

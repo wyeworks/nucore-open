@@ -33,6 +33,8 @@ class FacilityOrderDetailsController < ApplicationController
   end
 
   def destroy
+    redirect_to_order = @order.merge_order
+
     if @order.to_be_merged?
       begin
         @order_detail.destroy
@@ -43,10 +45,14 @@ class FacilityOrderDetailsController < ApplicationController
       end
     else
       flash[:notice] = I18n.t "controllers.facility_order_details.destroy.notice"
-      return redirect_to facility_order_path(current_facility, @order)
+      redirect_to_order = @order
     end
 
-    redirect_to facility_order_path(current_facility, @order.merge_order)
+    if @order_detail.order.cross_core_project.present?
+      redirect_back(fallback_location: root_path)
+    else
+      redirect_to facility_order_path(current_facility, redirect_to_order)
+    end
   end
 
   private

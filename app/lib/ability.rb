@@ -177,10 +177,36 @@ class Ability
     if resource.is_a?(Reservation) && user.facility_administrator_of?(resource.product.facility)
       can :read, ProductAccessory
       can :manage, Reservation
+    elsif controller.is_a?(ReservationsController) && resource.is_a?(Reservation)
+      project = resource.order_detail.order.cross_core_project
+
+      return if project.nil?
+
+      original_order = project.orders.first
+
+      can :manage, Reservation if user.facility_administrator_of?(original_order.facility)
+    elsif controller.is_a?(FacilityOrderDetailsController) && resource.is_a?(Facility) && SettingsHelper.feature_on?(:cross_core_projects)
+      can [:destroy], OrderDetail do |order_detail|
+        project = order_detail.order.cross_core_project
+
+        return false if project.blank?
+
+        user.facility_administrator_of?(project.facility) || user.facility_administrator_of?(order_detail.order.facility)
+      end
     end
 
-    if resource.is_a?(OrderDetail) && user.facility_administrator_of?(resource.facility)
-      can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
+    if resource.is_a?(OrderDetail)
+      if user.facility_administrator_of?(resource.facility)
+        can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
+      end
+
+      if SettingsHelper.feature_on?(:cross_core_projects)
+        project = resource.order.cross_core_project
+
+        if project.present?
+          can [:add_accessories, :new, :show, :update, :cancel], OrderDetail if user.facility_administrator_of?(project.facility)
+        end
+      end
     end
 
     if resource.is_a?(Facility) && user.facility_administrator_of?(resource)
