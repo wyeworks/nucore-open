@@ -9,6 +9,12 @@ RSpec.describe ResearchSafetyAdapters::ScishieldTrainingSynchronizer do
   let(:satus_code) { nil }
   let(:api_endpoint) { ResearchSafetyAdapters::ScishieldApiClient.new.api_endpoint(user.email) }
 
+  before do
+    # In settings.yml, `synchronizer.batch_sleep_time` defaults to 20 seconds
+    # so this is to speed up spec runs
+    allow(synchronizer).to receive(:batch_sleep_time).and_return(0)
+  end
+
   describe "#retry_max" do
     it "returns an integer" do
       expect(synchronizer.retry_max).to be_a(Integer)
@@ -38,11 +44,6 @@ RSpec.describe ResearchSafetyAdapters::ScishieldTrainingSynchronizer do
 
     context "when the API responds without error" do
       let(:status_code) { "200" }
-      before do
-        # In settings.yml, `synchronizer.batch_sleep_time` defaults to 20 seconds
-        # so this is to speed up spec runs
-        allow(synchronizer).to receive(:batch_sleep_time).and_return(0)
-      end
 
       it "adds courses to database" do
         expect(ScishieldTraining.count).to eq 0

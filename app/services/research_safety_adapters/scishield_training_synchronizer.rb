@@ -79,7 +79,8 @@ module ResearchSafetyAdapters
 
     def api_unavailable?
       # Test API responses for 10 random users
-      users.sample(10).map do |user|
+      users.sample(batch_size).map do |user|
+        sleep(batch_sleep_time / 2)
         api_client.invalid_response?(user.email)
       end.all?
     end

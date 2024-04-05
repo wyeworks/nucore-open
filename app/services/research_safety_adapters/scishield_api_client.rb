@@ -29,7 +29,9 @@ module ResearchSafetyAdapters
 
       now = Time.current.to_i
       payload = {
-        iat: now,
+        # SciShield Support suggested setting this a couple of minutes in the past to make requests more reliable.
+        # There may be an issue with the API related to the time change for DST
+        iat: now - Settings.scishield.iat_offset.to_i.minutes.to_i,
         exp: now + 3600,
         drupal: { uid: KEY }
       }
