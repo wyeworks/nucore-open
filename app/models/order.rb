@@ -22,6 +22,12 @@ class Order < ApplicationRecord
   # Used to allow validating order imports against the fulfillment date instead of the current time
   attr_reader :import_fulfillment_date
 
+  def cross_core_project
+    return nil unless SettingsHelper.feature_on?(:cross_core_projects)
+
+    super
+  end
+
   def self.created_by_user(user)
     where(created_by: user.id)
   end
