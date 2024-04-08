@@ -14,6 +14,9 @@ window.MergeOrder = class MergeOrder {
 
     this.$quantity_field = this.$form.find(".js--edit-order__quantity");
     this.$duration_display_field = this.$form.find(".js--edit-order__duration");
+    this.$duration_display_container = this.$form.find(
+      ".js--edit-order__duration-container"
+    );
 
     // clockpunch converts the original field into a field with name _display.
     // We will need to disable both the visible display field and the hidden field
@@ -28,6 +31,8 @@ window.MergeOrder = class MergeOrder {
       this.$duration_display_field.toggle(is_timed);
       this.$duration_display_field.prop("disabled", !is_timed);
       this.$duration_hidden_field.prop("disabled", !is_timed);
+
+      this.$duration_display_container.toggle(is_timed);
 
       if (is_timed) { this.$quantity_field.val(1); }
       return this.$quantity_field.prop("disabled", is_timed);
