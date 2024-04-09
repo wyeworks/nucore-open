@@ -29,9 +29,6 @@
   = render "order_table", order_details: @order_details, cross_core: false
   = render "order_table_footer", order: @order, cross_core: false
 
-- if current_ability.can?(:update, Order)
-  = render "merge_order_form"
-
 - if SettingsHelper.feature_on?(:cross_core_projects) && @cross_core_order_details_by_facility.present?
   - @cross_core_order_details_by_facility.each do |facility, order_details|
     %h3= facility
@@ -39,5 +36,8 @@
       = render "order_table_headers", cross_core: true
       = render "order_table", order_details: order_details, cross_core: true
       = render "order_table_footer", order: @cross_core_orders_by_facility[facility], cross_core: true
+
+- if current_ability.can?(:update, Order)
+  = render "merge_order_form"
 
 #order-detail-modal.modal.hide.fade{ data: { backdrop: "static" } }

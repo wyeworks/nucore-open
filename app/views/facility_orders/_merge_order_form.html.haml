@@ -2,21 +2,29 @@
   .well
     = simple_form_for [current_facility, @add_to_order_form], url: facility_order_path(current_facility, @order), method: :put, html: { class: "js--edit-order" } do |f|
       - if SettingsHelper.feature_on?(:cross_core_projects) && can?(:available_for_cross_core_ordering, Product)
+        = f.label :facility_id, Facility.model_name.human
         = f.input_field :facility_id,
           collection: @add_to_order_form.facilities_options,
           class: "js--edit-order__facility js--chosen",
           label: Facility.model_name.human,
           include_blank: false
 
-      = f.input_field :quantity, class: "js--edit-order__quantity", style: "width: 3em;"
+      .inline-form-controls
+        %div
+          = f.label :quantity, Product.human_attribute_name(:quantity)
+          = f.input_field :quantity, class: "js--edit-order__quantity", style: "width: 3em;"
 
-      = f.input_field :product_id,
-        collection: current_facility.products.mergeable_into_order.alphabetized.map { |p| [p.name, p.id, {"data-timed-product" => p.order_quantity_as_time?}] },
-        class: "js--edit-order__product js--chosen",
-        label: Product.model_name.human,
-        include_blank: false
+        .margin_x
+          = f.label :product_id, Product.model_name.human
+          = f.input_field :product_id,
+            collection: current_facility.products.mergeable_into_order.alphabetized.map { |p| [p.name, p.id, {"data-timed-product" => p.order_quantity_as_time?}] },
+            class: "js--edit-order__product js--chosen",
+            label: Product.model_name.human,
+            include_blank: false
 
-      = f.input_field :duration, class: "js--edit-order__duration"
+        .js--edit-order__duration-container
+          = f.label :duration, Product.human_attribute_name(:duration)
+          = f.input_field :duration, class: "js--edit-order__duration"
 
       .inline-form-controls
         = f.input :order_status_id,

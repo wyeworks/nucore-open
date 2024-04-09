@@ -175,63 +175,66 @@ RSpec.describe "Adding to an existing order" do
       let!(:instrument) { create(:setup_instrument, facility: facility2, cross_core_ordering_available: true) }
       let(:user) { create(:user, :facility_administrator, facility:) }
 
-      before do
-        visit facility_order_path(facility, order)
-        select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
-        select_from_chosen instrument.name, from: "add_to_order_form[product_id]"
-        fill_in "add_to_order_form[quantity]", with: "1"
-        click_button "Add to Cross-Core Order"
+      describe "with one reservation" do
+        before do
+          visit facility_order_path(facility, order)
+          select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
+          select_from_chosen instrument.name, from: "add_to_order_form[product_id]"
+          fill_in "add_to_order_form[quantity]", with: "1"
+          click_button "Add to Cross-Core Order"
+        end
+
+        it "requires a reservation to be set up before adding to the order" do
+          expect(page).to have_content("The following order details need your attention.")
+
+          click_link "Make a Reservation"
+          click_button "Create"
+
+          expect(order.reload.order_details.count).to be(1)
+          project = order.cross_core_project
+          expect(project).to be_present
+          expect(project.orders.last.order_details.last.product).to eq(instrument)
+        end
+
+        it "brings you back to the facility order path on 'Cancel'" do
+          click_link "Make a Reservation"
+          click_link "Cancel"
+
+          expect(current_path).to eq(facility_order_path(facility, order))
+          expect(page).to have_link("Make a Reservation")
+        end
       end
 
-      it "requires a reservation to be set up before adding to the order" do
-        expect(page).to have_content("The following order details need your attention.")
+      describe "with a product from before" do
+        let(:facility2) { create(:setup_facility) }
+        let!(:product2) { create(:setup_item, facility: facility2, cross_core_ordering_available: true) }
 
-        click_link "Make a Reservation"
-        click_button "Create"
+        before do
+          visit facility_order_path(facility, order)
+          select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
+          select_from_chosen product2.name, from: "add_to_order_form[product_id]"
+          fill_in "add_to_order_form[quantity]", with: "1"
+          click_button "Add to Cross-Core Order"
+        end
 
-        expect(order.reload.order_details.count).to be(1)
-        project = order.cross_core_project
-        expect(project).to be_present
-        expect(project.orders.last.order_details.last.product).to eq(instrument)
-      end
+        it "sets the merge_with_order_id until the reservation is created" do
+          project = order.reload.cross_core_project
+          second_facility_order = project.orders.last
 
-      it "brings you back to the facility order path on 'Cancel'" do
-        click_link "Make a Reservation"
-        click_link "Cancel"
+          select_from_chosen facility2.name, from: "add_to_order_form[facility_id]", scroll_to: :center
+          select_from_chosen instrument.name, from: "add_to_order_form[product_id]"
+          fill_in "add_to_order_form[quantity]", with: "1"
+          click_button "Add to Cross-Core Order"
 
-        expect(current_path).to eq(facility_order_path(facility, order))
-        expect(page).to have_link("Make a Reservation")
-      end
+          # This is the second order for this facility so it has a merge_order set
+          expect(project.reload.orders.last.merge_with_order_id).to eq(second_facility_order.id)
 
-      xit "sets the merge_with_order_id until the reservation is created" do
-        expect(page).to have_content("The following order details need your attention.")
+          click_link "Make a Reservation"
+          click_button "Create"
 
-        # This is the first order for this facility so it doesn't have a merge_order
-        project = order.reload.cross_core_project
-        second_facility_order = project.orders.last
-        expect(second_facility_order.merge_with_order_id).to eq(nil)
-
-        # Make a reservation for facility2,
-        # this is the first reservation created for facility2 in this order
-        click_link "Make a Reservation"
-        click_button "Create"
-
-        # Add a second order detail for an instrument from facility2 to this order
-        visit facility_order_path(facility, order)
-        wait_for_ajax
-        select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
-        select_from_chosen instrument.name, from: "add_to_order_form[product_id]"
-        fill_in "add_to_order_form[quantity]", with: "1"
-        click_button "Add to Cross-Core Order"
-
-        # This is the second order for this facility so it has a merge_order set
-        expect(project.reload.orders.last.merge_with_order_id).to eq(second_facility_order.id)
-
-        click_link "Make a Reservation"
-        click_button "Create"
-
-        # After the reservation is created, the merge_order is cleared
-        expect(project.reload.orders.last.merge_with_order_id).to eq(nil)
+          # After the reservation is created, the merge_order is cleared
+          expect(project.reload.orders.last.merge_with_order_id).to eq(nil)
+        end
       end
     end
   end

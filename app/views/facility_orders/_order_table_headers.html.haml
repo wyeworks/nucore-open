@@ -1,6 +1,9 @@
 %thead
   %tr
-    %td{colspan: 7}
+    - if cross_core
+      %td{colspan: 6}
+    - else
+      %td{colspan: 4}
     %th{colspan: 2}= OrderDetail.human_attribute_name(:quantity)
     %th{colspan: 3}= t("views.facility_orders.show.pricing")
   %tr
