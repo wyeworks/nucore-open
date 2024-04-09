@@ -221,8 +221,7 @@ RSpec.describe "Adding to an existing order" do
           project = order.reload.cross_core_project
           second_facility_order = project.orders.last
 
-          puts page.body
-          select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
+          select_from_chosen facility2.name, from: "add_to_order_form[facility_id]", scroll_to: :center
           select_from_chosen instrument.name, from: "add_to_order_form[product_id]"
           fill_in "add_to_order_form[quantity]", with: "1"
           click_button "Add to Cross-Core Order"
