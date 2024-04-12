@@ -10,8 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< HEAD
 ActiveRecord::Schema[7.0].define(version: 2024_03_19_182716) do
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
+=======
+ActiveRecord::Schema[7.0].define(version: 2024_04_10_203410) do
+  create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+>>>>>>> upstream/master
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
     t.datetime "deleted_at", precision: nil
@@ -682,7 +687,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_19_182716) do
     t.text "tablet_location_description"
     t.string "billing_mode", default: "Default", null: false
     t.string "pricing_mode", default: "Schedule Rule", null: false
-    t.boolean "cross_core_ordering_available", default: true, null: false
+    t.boolean "cross_core_ordering_available", default: false, null: false
     t.index ["dashboard_token"], name: "index_products_on_dashboard_token"
     t.index ["facility_account_id"], name: "fk_facility_accounts"
     t.index ["facility_id"], name: "fk_rails_0c9fa1afbe"

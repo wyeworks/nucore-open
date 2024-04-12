@@ -1,5 +1,5 @@
 = render partial: "reservation_information", locals: { reservation: @reservation }
-- if @reservation.startable_now?
+- if @reservation.movable_to_now?
   = form_with url: facility_instrument_quick_reservations_start_path(@facility, @instrument) do |f|
     = f.submit t(".start")
 - elsif @reservation.ongoing?

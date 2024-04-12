@@ -5,7 +5,7 @@ class ReservationUserActionPresenter
   attr_accessor :reservation, :controller
   delegate :order_detail, :order, :facility, :product, :admin?,
            :can_switch_instrument?, :can_switch_instrument_on?, :can_switch_instrument_off?,
-           :can_cancel?, :startable_now?, :can_customer_edit?, :started?, :ongoing?, to: :reservation
+           :can_cancel?, :movable_to_now?, :can_customer_edit?, :started?, :ongoing?, to: :reservation
 
   delegate :current_facility, to: :controller
 
@@ -25,7 +25,7 @@ class ReservationUserActionPresenter
 
     if can_switch_instrument?
       actions << switch_actions
-    elsif startable_now?
+    elsif movable_to_now?
       actions << move_link
     end
 

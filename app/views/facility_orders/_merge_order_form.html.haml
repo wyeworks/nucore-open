@@ -6,7 +6,6 @@
         = f.input_field :facility_id,
           collection: @add_to_order_form.facilities_options,
           class: "js--edit-order__facility js--chosen",
-          label: Facility.model_name.human,
           include_blank: false
 
       .inline-form-controls
@@ -19,7 +18,6 @@
           = f.input_field :product_id,
             collection: current_facility.products.mergeable_into_order.alphabetized.map { |p| [p.name, p.id, {"data-timed-product" => p.order_quantity_as_time?}] },
             class: "js--edit-order__product js--chosen",
-            label: Product.model_name.human,
             include_blank: false
 
         .js--edit-order__duration-container

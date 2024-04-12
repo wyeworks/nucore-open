@@ -20,6 +20,12 @@ RSpec.describe ResearchSafetyAdapters::ScishieldApiClient do
     end
   end
 
+  describe "#iat_offset" do
+    it "returns 0 by default" do
+      expect(client.iat_offset).to eq(0)
+    end
+  end
+
   describe "#invalid_response?" do
     before do
       stub_request(:get, api_endpoint)

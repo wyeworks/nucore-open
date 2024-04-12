@@ -41,6 +41,10 @@ module Products::SchedulingSupport
     reservation_in_week(after, duration, rules, options)
   end
 
+  # The next available reservation that is valid must be in the future
+  # (see Reservations::Validations#in_the_future) so the `after` parameter is
+  # set to 1 minute in the future so quick_reservation_data returns data that
+  # can be used to create a valid reservation
   def quick_reservation_data(after: 1.minute.from_now)
     res = next_available_reservation(after:, duration: quick_reservation_intervals.first)
 

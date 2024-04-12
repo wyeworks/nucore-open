@@ -36,7 +36,8 @@ module Reservations::MovingUp
     false
   end
 
-  def startable_now?
+  # It is possible to move the reservation to the current time?
+  def movable_to_now?
     product.online? &&
       !(canceled? || order_detail.complete? || in_grace_period? || earliest_possible.nil?) # TODO: refactor?
   end
