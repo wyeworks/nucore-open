@@ -10,13 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema[7.0].define(version: 2024_03_19_182716) do
-  create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
-=======
 ActiveRecord::Schema[7.0].define(version: 2024_04_10_203410) do
-  create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
->>>>>>> upstream/master
+  create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
     t.datetime "deleted_at", precision: nil
