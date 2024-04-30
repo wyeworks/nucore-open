@@ -2,6 +2,7 @@ en:
   views:
     facility_orders:
       show:
+        cross_core_orders_header: "Cross-Core Orders"
         cross_core_project_id: "Cross-Core Project ID"
         cross_core_project_total: "Cross-Core Project Total"
         table_caption: "Order detail information"

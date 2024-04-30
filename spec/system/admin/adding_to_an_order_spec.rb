@@ -169,6 +169,37 @@ RSpec.describe "Adding to an existing order" do
       end
     end
 
+    describe "from same facility (with feature flag on)", :js, feature_setting: { cross_core_projects: true } do
+      let(:product) { create(:setup_item, :with_facility_account) }
+      let!(:instrument) { create(:setup_instrument, facility: facility) }
+      let(:user) { create(:user, :facility_administrator, facility:) }
+
+      before do
+        visit facility_order_path(facility, order)
+        fill_in "add_to_order_form[quantity]", with: "1"
+        select_from_chosen instrument.name, from: "add_to_order_form[product_id]"
+        click_button "Add To Order"
+      end
+
+      it "requires a reservation to be set up before adding to the order" do
+        expect(page).to have_content("The following order details need your attention.")
+
+        click_link "Make a Reservation"
+        click_button "Create"
+
+        expect(order.reload.order_details.count).to be(2)
+        expect(order.order_details.last.product).to eq(instrument)
+      end
+
+      it "brings you back to the facility order path on 'Cancel'" do
+        click_link "Make a Reservation"
+        click_link "Cancel"
+
+        expect(current_path).to eq(facility_order_path(facility, order))
+        expect(page).to have_link("Make a Reservation")
+      end
+    end
+
     describe "from another facility", :js, feature_setting: { cross_core_projects: true } do
       let(:facility2) { create(:setup_facility) }
       let(:product) { create(:setup_item, :with_facility_account) }
@@ -275,6 +306,7 @@ RSpec.describe "Adding to an existing order" do
 
     context "with admin role" do
       let(:user) { create(:user, :facility_administrator, facility:) }
+      let!(:facility2_account) { create(:account, :with_account_owner, type: "CreditCardAccount", owner: order.user, description: "Other Account", facility: facility2) }
 
       it "changes the button text" do
         expect(page).to have_button("Add To Order")
@@ -287,9 +319,11 @@ RSpec.describe "Adding to an existing order" do
         expect(page).not_to have_content("Cross Core Project ID")
         expect(page.has_selector?("option", text: cross_core_product_facility.name, visible: false)).to be(true)
         expect(page.has_selector?("option", text: product.name, visible: false)).to be(true)
+        expect(page.has_selector?("option", text: facility2_account.to_s, visible: false)).to be(false)
 
         select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
         select_from_chosen cross_core_product_facility2.name, from: "add_to_order_form[product_id]"
+        select_from_chosen facility2_account.to_s, from: "Payment Source"
 
         expect(page.has_selector?("option", text: product2.name, visible: false)).to be(false)
 

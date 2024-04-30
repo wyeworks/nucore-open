@@ -1,7 +1,8 @@
 - if @merge_orders.blank?
   .well
     = simple_form_for [current_facility, @add_to_order_form], url: facility_order_path(current_facility, @order), method: :put, html: { class: "js--edit-order" } do |f|
-      - if SettingsHelper.feature_on?(:cross_core_projects) && can?(:available_for_cross_core_ordering, Product)
+      - enable_cross_core_changes = SettingsHelper.feature_on?(:cross_core_projects) && can?(:available_for_cross_core_ordering, Product)
+      - if enable_cross_core_changes
         = f.label :facility_id, Facility.model_name.human
         = f.input_field :facility_id,
           collection: @add_to_order_form.facilities_options,
@@ -31,12 +32,12 @@
           input_html: { class: "js--chosen" },
           include_blank: false,
           label: OrderDetail.human_attribute_name(:order_status)
+        - input_html = enable_cross_core_changes ? { class: "js--edit-order__account js--chosen", data: { "include-blank" => !@order.account.active? } } : { class: "js--chosen" }
         = f.input :account_id,
           collection: @add_to_order_form.available_accounts,
           include_blank: !@order.account.active?,
           hint: @order.account.active? ? "" : t(".original_account_inactive", account: @order.account),
-          input_html: { class: "js--chosen" }
-
+          input_html: input_html
 
       = f.input_field :fulfilled_at,
         placeholder: OrderDetail.human_attribute_name(:fulfilled_at),

@@ -13,8 +13,8 @@
       - if project_id
         %dl.span2
           %dt= t("views.facility_orders.show.cross_core_project_id")
-          = link_to facility_project_path(current_facility, project_id) do
-            %dd= project_id
+          %dd
+            = link_to project_id, facility_project_path(current_facility, project_id)
         %dl.span2
           %dt= t("views.facility_orders.show.cross_core_project_total")
           - gross_order_value = @order.total + @cross_core_orders_by_facility.values.sum(&:total)
@@ -29,13 +29,15 @@
   = render "order_table", order_details: @order_details, cross_core: false
   = render "order_table_footer", order: @order, cross_core: false
 
+%h2= t("views.facility_orders.show.cross_core_orders_header")
 - if SettingsHelper.feature_on?(:cross_core_projects) && @cross_core_order_details_by_facility.present?
-  - @cross_core_order_details_by_facility.each do |facility, order_details|
-    %h3= facility
-    %table.order-list.table.table-striped.table-hover
-      = render "order_table_headers", cross_core: true
-      = render "order_table", order_details: order_details, cross_core: true
-      = render "order_table_footer", order: @cross_core_orders_by_facility[facility], cross_core: true
+  #accordion
+    - @cross_core_order_details_by_facility.each do |facility, order_details|
+      %h3= facility
+      %table.order-list.table.table-striped.table-hover
+        = render "order_table_headers", cross_core: true
+        = render "order_table", order_details: order_details, cross_core: true
+        = render "order_table_footer", order: @cross_core_orders_by_facility[facility], cross_core: true
 
 - if current_ability.can?(:update, Order)
   = render "merge_order_form"
