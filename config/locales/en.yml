@@ -400,7 +400,18 @@ en:
     index:
       no_new_or_inprocess_orders: There are no "New" or "In Process" orders.
     edit:
-      attention: "The following order details need your attention. Before you can add to this order you need to address them."
+      actions: Actions
+      missing_form_modal:
+        header: Action Required - Missing Form
+        body_html: |
+          Your order includes order details that need your attention. <br>
+          Before you can add anything else to this order you need to address them. <br>
+          Please click the "Complete Online Order Form" button below to complete the form (required).
+        ok: OK
+      attention_html: |
+        Your order includes order details that need your attention. <br>
+        Before you can add anything else to this order you need to address them. <br>
+        Please click the button below to complete the form (required).
       head:
         h1: "Summary Of Order #%{order_number}"
         h2: "Order Detail #%{order_number}"
@@ -1330,5 +1341,5 @@ en:
     calendar_tooltip: Calendar file download
     summary: "%{facility}: %{product}"
     description: "%{facility} reservation for %{product}. Order number %{order_number}."
-  
+
   timed_service_hint: The number of timed services, not time per service. Time can be adjusted in cart.
