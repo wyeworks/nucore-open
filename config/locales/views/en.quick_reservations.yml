@@ -16,6 +16,8 @@ en:
       start: Start Reservation
       end: End Reservation
       come_back_later: Come back closer to reservation time to start your reservation.
+      back_to_reservation_form: Need to schedule a new reservation?  Click the link below.
+      new: Schedule Another Reservation
     reservation_information:
       order_number: "Order #"
       reservation_date: Reservation Date
