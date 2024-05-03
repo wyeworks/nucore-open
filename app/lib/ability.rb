@@ -168,6 +168,10 @@ class Ability
   def facility_administrator_abilities(user, resource, controller)
     can :available_for_cross_core_ordering, Product if controller.is_a?(ProductsController)
 
+    if controller.is_a?(FacilityAccountsController) && user.facility_administrator_of_any_facility?
+      can [:accounts_available_for_order, :show], Account
+    end
+
     if resource.is_a?(PriceGroup) && user.facility_administrator_of?(resource.facility)
       if !resource.global?
         can :manage, [AccountPriceGroupMember, UserPriceGroupMember]

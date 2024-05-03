@@ -31,14 +31,12 @@ class AddToOrderForm
 
     if @original_order.facility.id == @facility_id
       add_to_order!
-    end
-
-    return true unless SettingsHelper.feature_on?(:cross_core_projects)
-
-    if order_for_selected_facility.nil?
-      create_cross_core_project_and_add_order!
-    else
-      add_to_order!
+    elsif SettingsHelper.feature_on?(:cross_core_projects)
+      if order_for_selected_facility.nil?
+        create_cross_core_project_and_add_order!
+      else
+        add_to_order!
+      end
     end
 
     true
@@ -82,7 +80,7 @@ class AddToOrderForm
   end
 
   def available_accounts
-    AvailableAccountsFinder.new(original_order.user, current_facility)
+    AvailableAccountsFinder.new(original_order.user, product_facility)
   end
 
   def facilities_options
@@ -92,7 +90,9 @@ class AddToOrderForm
         f.id,
         {
           "data-products-path": Rails.application.routes.url_helpers.available_for_cross_core_ordering_facility_products_path(f, format: :js),
+          "data-accounts-path": Rails.application.routes.url_helpers.accounts_available_for_order_facility_accounts_path(f, format: :js),
           "data-original-order-facility": @original_order.facility_id,
+          "data-original-order": @original_order.id,
         }
       ]
     end

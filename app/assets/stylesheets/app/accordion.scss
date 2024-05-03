@@ -1,0 +1,18 @@
+#accordion {
+  margin-bottom: 2em;
+
+  .ui-state-default, .ui-state-hover, .ui-state-active {
+    background: none;
+    border: none;
+    color: black;
+  }
+
+  .ui-widget-content {
+    border: none;
+  }
+
+  .ui-accordion-header {
+    font-size: 20px;
+    padding: 0;
+  }
+}

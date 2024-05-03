@@ -29,14 +29,18 @@ module ResearchSafetyAdapters
 
       now = Time.current.to_i
       payload = {
-        # SciShield Support suggested setting this a couple of minutes in the past to make requests more reliable.
-        # There may be an issue with the API related to the time change for DST
-        iat: now - Settings.research_safety_adapter.scishield.iat_offset.to_i.minutes.to_i,
+        iat: now - iat_offset,
         exp: now + 3600,
         drupal: { uid: KEY }
       }
       rsa_private = OpenSSL::PKey::RSA.new(unescape(PRIVATE_KEY))
       @token = JWT.encode(payload, rsa_private, "RS256", { kid: KEY_ID })
+    end
+
+    # SciShield Support suggested setting this a couple of minutes in the past to make requests more reliable.
+    # There may be an issue with the API related to the time change for DST
+    def iat_offset
+      Settings.research_safety_adapter.scishield.iat_offset.to_i.minutes.to_i
     end
 
     # need to make sure \n gets unescaped when reading this in from ENV

@@ -288,6 +288,10 @@ Rails.application.routes.draw do
       end
 
       resources :orders, controller: "facility_account_orders", only: [:index]
+
+      collection do
+        get :accounts_available_for_order
+      end
     end
 
     ######

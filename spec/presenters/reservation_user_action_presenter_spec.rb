@@ -20,7 +20,7 @@ RSpec.describe ReservationUserActionPresenter do
     allow(reservation).to receive(:can_switch_instrument?).and_return true
     allow(reservation).to receive(:can_switch_instrument_off?).and_return false
     allow(reservation).to receive(:can_switch_instrument_on?).and_return false
-    allow(reservation).to receive(:startable_now?).and_return false
+    allow(reservation).to receive(:movable_to_now?).and_return false
     allow(reservation).to receive(:can_cancel?).and_return false
     allow(reservation).to receive(:ongoing?).and_return false
   end
@@ -178,7 +178,7 @@ RSpec.describe ReservationUserActionPresenter do
 
       before do
         expect(reservation).to receive(:can_switch_instrument?).and_return false
-        expect(reservation).to receive(:startable_now?).and_return true
+        expect(reservation).to receive(:movable_to_now?).and_return true
       end
 
       it "includes the move 'Move Up' link" do

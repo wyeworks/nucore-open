@@ -12,6 +12,7 @@ class FacilityAccountsController < ApplicationController
   before_action :init_current_facility
   before_action :init_account, except: :search_results
   before_action :build_account, only: [:new, :create]
+  before_action :set_facility_accounts_for_user, only: [:accounts_available_for_order]
 
   authorize_resource :account
 
@@ -119,6 +120,14 @@ class FacilityAccountsController < ApplicationController
     end
   end
 
+  def accounts_available_for_order
+    respond_to do |format|
+      format.js do
+        render json: @facility_accounts_for_user
+      end
+    end
+  end
+
   private
 
   def available_account_types
@@ -156,6 +165,18 @@ class FacilityAccountsController < ApplicationController
       owner_user: @owner_user,
       params: params,
     ).build
+  end
+
+  def set_facility_accounts_for_user
+    order_id = params[:order_id]
+    order = Order.find(order_id) if order_id
+
+    if order
+      order_user = order.user
+      @facility_accounts_for_user = AvailableAccountsFinder.new(order_user, current_facility).accounts.map { |a| { id: a.id, label: a.to_s } }
+    else
+      @facility_accounts_for_user = []
+    end
   end
 
 end

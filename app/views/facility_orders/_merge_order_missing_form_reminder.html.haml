@@ -1,0 +1,11 @@
+#merge-order-missing-form-reminder.modal.hide.fade{ data: { backdrop: "static" } }
+  .modal-header
+    = modal_close_button
+    %h3= text("facility_orders.edit.missing_form_modal.header")
+  .modal-body
+    %p.alert.alert-error
+      = t("facility_orders.edit.missing_form_modal.body_html")
+  .modal-footer
+    %button.btn{ type: "button", data: { dismiss: "modal" } }= text("facility_orders.edit.missing_form_modal.ok")
+
+= javascript_tag "$('#merge-order-missing-form-reminder').modal('show');"

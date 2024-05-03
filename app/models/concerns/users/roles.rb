@@ -33,6 +33,10 @@ module Users
       end
     end
 
+    def facility_administrator_of_any_facility?
+      user_roles.find { |r| r.role == UserRole::FACILITY_ADMINISTRATOR }.present?
+    end
+
     # Returns relation of facilities for which this user is a director or admin
     def manageable_facilities
       if administrator? || global_billing_administrator?
