@@ -401,17 +401,12 @@ en:
       no_new_or_inprocess_orders: There are no "New" or "In Process" orders.
     edit:
       actions: Actions
-      missing_form_modal:
-        header: Action Required - Missing Form
-        body_html: |
-          Your order includes order details that need your attention. <br>
-          Before you can add anything else to this order you need to address them. <br>
-          Please click the "Complete Online Order Form" button below to complete the form (required).
-        ok: OK
-      attention_html: |
-        Your order includes order details that need your attention. <br>
-        Before you can add anything else to this order you need to address them. <br>
-        Please click the button below to complete the form (required).
+      missing_merge_order_info:
+        header: Action Required - Missing Order Info
+        attention_html: |
+          Your order includes one or more incomplete items. <br>
+          Please provide the required order form or reservation info <br>
+          before adding additional items or completing the purchase.
       head:
         h1: "Summary Of Order #%{order_number}"
         h2: "Order Detail #%{order_number}"

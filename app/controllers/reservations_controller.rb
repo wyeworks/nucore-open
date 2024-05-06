@@ -406,7 +406,7 @@ class ReservationsController < ApplicationController
 
     return if @order.cross_core_project_id.nil?
 
-    @accounts_for_cross_core_project = AvailableAccountsFinder.new(original_project_order.user, original_project_order.facility)
+    @accounts_for_cross_core_project = AvailableAccountsFinder.new(original_project_order.user, @order.facility)
   end
 
   def original_project_order
