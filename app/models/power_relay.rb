@@ -36,10 +36,16 @@ module PowerRelay
       toggled_status = relay_connection.toggle(outlet, status)
       if secondary_outlet
         secondary_toggled_status = relay_connection.toggle(secondary_outlet, status)
-        handle_mismatch_status(status, toggled_status) if toggled_status != secondary_toggled_status
       end
       toggled_status
     end
+  end
+
+  # This method will toggle the secondary outlet to match the primary outlet.
+  # Useful to sync up the outlets whenever the secondary outlet changes.
+  def activate_secondary_outlet
+    primary_outlet_status = relay_connection.status(outlet)
+    relay_connection.toggle(secondary_outlet, primary_outlet_status)
   end
 
   # Returns:
@@ -49,22 +55,9 @@ module PowerRelay
       relay_status = relay_connection.status(outlet)
       if secondary_outlet
         secondary_outlet_status = relay_connection.status(secondary_outlet)
-        handle_mismatch_status if relay_status != secondary_outlet_status
       end
       relay_status
     end
-  end
-
-  # Returns:
-  # string - an error
-  def handle_mismatch_status(requested_status=nil, primary_status=nil)
-    event = if requested_status.present?
-      "toggling relays (#{requested_status ? "on" : "off"})"
-    else
-      "querying status"
-    end
-    msg = "Outlet statuses don't match after #{event} for relay #{id} - outlet #{outlet} is (#{primary_status ? "on" : "off"}), outlet #{secondary_outlet} is (#{primary_status ? "off" : "on"})"
-    Rollbar.error(msg, relay: id)
   end
 
   def relay_connection

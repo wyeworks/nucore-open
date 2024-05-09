@@ -38,6 +38,7 @@ class InstrumentRelaysController < ApplicationController
   def handle_relay(action_string)
     @relay = @product.replace_relay(relay_params, params[:relay][:control_mechanism])
     if @relay.valid?
+      @relay.try(:activate_secondary_outlet)
       flash[:notice] = "Relay was successfully updated."
       redirect_to facility_instrument_relays_path(current_facility, @product)
     else

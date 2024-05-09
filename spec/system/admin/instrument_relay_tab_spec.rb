@@ -7,6 +7,7 @@ RSpec.describe "Instrument Relay Tab" do
   let(:user) { FactoryBot.create(:user, :administrator) }
 
   before do
+    allow_any_instance_of(RelaySynaccessRevA).to receive(:activate_secondary_outlet).and_return(true)
     login_as user
     visit facility_instrument_relays_path(facility, instrument)
   end
@@ -104,7 +105,7 @@ RSpec.describe "Instrument Relay Tab" do
           fill_in "relay_building_room_number", with: "1a"
           fill_in "relay_circuit_number", with: "1"
           fill_in "relay_ethernet_port_number", with: "2000"
-  
+
           click_button "Save"
           instrument.reload
           expect(instrument.relay).to be_present
@@ -136,7 +137,7 @@ RSpec.describe "Instrument Relay Tab" do
           click_button "Save"
           expect(page).to have_content("Outlet has already been taken")
         end
-        
+
         context "both instruments have the same schedule" do
           let!(:instrument2) { create(:instrument, facility: facility, no_relay: true, schedule: instrument.schedule) }
           let!(:existing_relay) { create(:relay_syna, instrument: instrument2) }
@@ -199,7 +200,7 @@ RSpec.describe "Instrument Relay Tab" do
 
   context "switching relay types" do
     let(:instrument) { FactoryBot.create(:setup_instrument, facility: facility, relay: build(:relay)) }
-    
+
     before do
       click_link "Edit"
     end
@@ -213,7 +214,7 @@ RSpec.describe "Instrument Relay Tab" do
 
         expect(instrument.relay).to be_a(RelayDummy)
       end
-      
+
     end
 
     context "from relay to reservation only" do
@@ -226,7 +227,7 @@ RSpec.describe "Instrument Relay Tab" do
 
         expect(instrument.relay).not_to be_present
       end
-      
+
     end
 
     context "from reservation only to timer" do
