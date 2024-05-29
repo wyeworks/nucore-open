@@ -22,6 +22,10 @@ module TransactionSearch
       false
     end
 
+    def input_type
+      :transaction_chosen
+    end
+
     def label_method
       nil
     end

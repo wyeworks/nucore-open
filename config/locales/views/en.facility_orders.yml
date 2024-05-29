@@ -1,6 +1,8 @@
 en:
   views:
     facility_orders:
+      index:
+        ordered_by: "Ordered By"
       show:
         cross_core_orders_header: "Cross-Core Orders"
         cross_core_project_id: "Cross-Core Project ID"

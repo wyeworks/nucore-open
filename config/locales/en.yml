@@ -120,6 +120,9 @@ en:
     all: All
     cancel: Cancel
     create: Create
+    cross_core_label: Cross-Core
+    cross_core_facility_abbreviation_order_details:
+      cross_core_icon_tooltip: "Cross core order from %{facility}"
     confirm_message: Are you sure?
     delete: Delete
     dispute: Dispute
@@ -145,6 +148,7 @@ en:
     problem_order_details:
       assign_price_policies: Assign Price Policies
       th:
+        ordered_by: Ordered By
         quantity_and_product: "Quantity / Product"
         problem: Problem
         actual_start: Actual Start Date

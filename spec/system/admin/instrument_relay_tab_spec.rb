@@ -7,7 +7,6 @@ RSpec.describe "Instrument Relay Tab" do
   let(:user) { FactoryBot.create(:user, :administrator) }
 
   before do
-    allow_any_instance_of(RelaySynaccessRevA).to receive(:activate_secondary_outlet).and_return(true)
     login_as user
     visit facility_instrument_relays_path(facility, instrument)
   end
@@ -29,6 +28,7 @@ RSpec.describe "Instrument Relay Tab" do
       end
 
       it "saves a new relay" do
+        expect_any_instance_of(RelaySynaccessRevA).to receive(:activate_secondary_outlet).and_return(true)
         select "Timer with relay", from: "Control mechanism"
         fill_in "relay_ip", with: "123.456.789"
         fill_in "relay_ip_port", with: "1234"
@@ -94,6 +94,7 @@ RSpec.describe "Instrument Relay Tab" do
         let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
 
         it "saves a new relay" do
+          expect_any_instance_of(RelaySynaccessRevA).to receive(:activate_secondary_outlet).and_return(true)
           select "Timer with relay", from: "Control mechanism"
           fill_in "relay_ip", with: "123.456.789"
           fill_in "relay_ip_port", with: "1234"
@@ -143,6 +144,8 @@ RSpec.describe "Instrument Relay Tab" do
           let!(:existing_relay) { create(:relay_syna, instrument: instrument2) }
 
           it "saves the relay" do
+            # existing relay has no secondary outlet, so this should not be called
+            expect_any_instance_of(RelaySynaccessRevA).not_to receive(:activate_secondary_outlet)
             select "Timer with relay", from: "Control mechanism"
             select "Synaccess Revision A", from: "Relay Type"
             fill_in "relay_ip", with: existing_relay.ip
@@ -171,6 +174,7 @@ RSpec.describe "Instrument Relay Tab" do
     end
 
     it "can be saved" do
+      expect_any_instance_of(RelaySynaccessRevA).to receive(:activate_secondary_outlet).and_return(true)
       select "Timer with relay", from: "Control mechanism"
       fill_in "relay_ip", with: "123.456.789"
       fill_in "relay_ip_port", with: "1234"

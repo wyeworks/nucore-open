@@ -1,0 +1,7 @@
+- if order_detail.order.cross_core_project.present?
+  - facility_abbreviation = order_detail.order.cross_core_project.facility.abbreviation
+  - if order_detail.order.cross_core_project.facility == current_facility
+    %i.fa.fa-building{ data: { toggle: "tooltip" }, title: t(".cross_core_icon_tooltip", facility: facility_abbreviation)}
+  - else
+    %i.fa.fa-users{ data: { toggle: "tooltip" }, title: t(".cross_core_icon_tooltip", facility: facility_abbreviation)}
+  = facility_abbreviation.truncate(6)

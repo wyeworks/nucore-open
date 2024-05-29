@@ -16,6 +16,7 @@ module TransactionSearch
         TransactionSearch::OrderedForSearcher,
         TransactionSearch::OrderStatusSearcher,
         TransactionSearch::DateRangeSearcher,
+        TransactionSearch::CrossCoreSearcher,
       ]
     end
 

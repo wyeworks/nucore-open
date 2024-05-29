@@ -8,10 +8,18 @@ module NewInprocessController
     order_details = new_or_in_process_orders.joins(:order)
 
     @search_form = TransactionSearch::SearchForm.new(params[:search], defaults: { date_range_field: "ordered_at", allowed_date_fields: ["ordered_at"] })
-    @search = TransactionSearch::Searcher.new(TransactionSearch::ProductSearcher,
-                                              TransactionSearch::OrderedForSearcher,
-                                              TransactionSearch::OrderStatusSearcher,
-                                              TransactionSearch::DateRangeSearcher).search(order_details, @search_form)
+    searchers = [
+      TransactionSearch::ProductSearcher,
+      TransactionSearch::OrderedForSearcher,
+      TransactionSearch::OrderStatusSearcher,
+      TransactionSearch::DateRangeSearcher,
+    ]
+
+    if SettingsHelper.feature_on?(:cross_core_order_view)
+      searchers << TransactionSearch::CrossCoreSearcher
+    end
+
+    @search = TransactionSearch::Searcher.new(*searchers).search(order_details, @search_form)
     @order_details = @search.order_details.includes(:order_status).joins_assigned_users.reorder(sort_clause)
     @date_range_field = @search_form.date_params[:field]
     @label_key_prefix = "estimated"
