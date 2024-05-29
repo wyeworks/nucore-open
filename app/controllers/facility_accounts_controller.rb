@@ -14,7 +14,7 @@ class FacilityAccountsController < ApplicationController
   before_action :build_account, only: [:new, :create]
   before_action :set_facility_accounts_for_user, only: [:accounts_available_for_order]
 
-  authorize_resource :account
+  authorize_resource :account, except: [:accounts_available_for_order]
 
   layout "two_column"
   before_action { @active_tab = "admin_users" }

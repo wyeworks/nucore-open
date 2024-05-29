@@ -29,6 +29,10 @@ class UserRole < ApplicationRecord
       any? { |ur| ur.facility == facility && ur.in?(facility_management_roles) }
     end
 
+    def staff?(facility)
+      any? { |ur| ur.facility == facility && ur.in?(facility_staff) }
+    end
+
   end
 
   def self.account_manager
@@ -49,6 +53,10 @@ class UserRole < ApplicationRecord
 
   def self.facility_roles
     facility_management_roles + [FACILITY_STAFF, FACILITY_SENIOR_STAFF, FACILITY_BILLING_ADMINISTRATOR]
+  end
+
+  def self.facility_staff
+    [FACILITY_STAFF, FACILITY_SENIOR_STAFF]
   end
 
   def self.global_roles

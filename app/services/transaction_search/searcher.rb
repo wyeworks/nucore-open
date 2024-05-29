@@ -50,7 +50,7 @@ module TransactionSearch
       order_details = add_global_optimizations(order_details)
 
       @searchers.reduce(Results.new(order_details)) do |results, searcher_class|
-        searcher = searcher_class.new(results.order_details)
+        searcher = searcher_class.new(results.order_details, params[:current_facility_id])
         search_params = params[searcher_class.key.to_sym]
         search_params = Array(search_params).reject(&:blank?) unless searcher.multipart?
 

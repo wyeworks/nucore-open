@@ -33,8 +33,12 @@ module Users
       end
     end
 
-    def facility_administrator_of_any_facility?
-      user_roles.find { |r| r.role == UserRole::FACILITY_ADMINISTRATOR }.present?
+    def facility_staff_or_manager_of_any_facility?
+      user_roles.find { |r| [UserRole::FACILITY_ADMINISTRATOR, UserRole::FACILITY_SENIOR_STAFF, UserRole::FACILITY_STAFF].include?(r.role) }.present?
+    end
+
+    def facility_staff_or_manager_of?(facility)
+      manager_of?(facility) || facility_staff_of?(facility)
     end
 
     # Returns relation of facilities for which this user is a director or admin
@@ -54,6 +58,12 @@ module Users
     def manager_of?(facility)
       return false if facility.blank?
       user_roles.manager?(facility) || administrator?
+    end
+
+    def facility_staff_of?(facility)
+      return false if facility.blank?
+
+      user_roles.staff?(facility) || administrator?
     end
 
     def can_override_restrictions?(product)

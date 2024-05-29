@@ -9,7 +9,8 @@ module TransactionSearch
     attr_accessor :date_range_field, :date_range_start, :date_range_end, :allowed_date_fields
     attr_accessor :facilities, :accounts, :products, :account_owners,
                   :order_statuses, :statements, :date_ranges, :ordered_fors,
-                  :account_types, :cross_cores
+                  :account_types, :cross_cores, :cross_core_facilties,
+                  :current_facility_id
 
     def self.model_name
       ActiveModel::Name.new(self, nil, "Search")

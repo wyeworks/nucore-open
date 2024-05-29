@@ -26,6 +26,10 @@ en:
       project_not_found: Project not found
   projects:
     projects:
+      cross_core_orders:
+        filter_label: "Participating !facilities_downcase!"
+        head: "Cross Core Orders"
+        no_orders: There are no orders for your Cross Core projects.
       edit:
         description: Description as it will appear on the project's page
         name: Name of the label as displayed to the end user
@@ -33,9 +37,10 @@ en:
       index:
         add: Add Project
         head: Manage Projects
-        tab:
-          active: "Active Projects (%{count})"
-          inactive: "Inactive Projects (%{count})"
+      tabnav:
+        active: "Active Projects (%{count})"
+        inactive: "Inactive Projects (%{count})"
+        cross_core_orders: "Cross Core Orders"
 
       new:
         add: Add Project

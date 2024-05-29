@@ -10,8 +10,9 @@ module TransactionSearch
       to_s.sub(/\ATransactionSearch::/, "").sub(/Searcher\z/, "").pluralize.underscore
     end
 
-    def initialize(order_details)
+    def initialize(order_details, current_facility_id = nil)
       @order_details = order_details
+      @current_facility_id = current_facility_id
     end
 
     def key
