@@ -187,8 +187,9 @@ table.order-list {
 }
 
 .label {
-  font-size: 1.4em;
+  font-size: 1.0em;
   font-weight: 300;
+  background-color: $grayDark;
   &.status-complete,
   &.status-reconciled {
     @extend .label-success;
@@ -197,6 +198,11 @@ table.order-list {
   &.status-canceled {
     @extend .label-important;
   }
+
+}
+
+.label-warning {
+  background-color: $errorText;
 }
 
 .updating-message {

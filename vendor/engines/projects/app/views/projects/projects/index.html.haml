@@ -1,17 +1,7 @@
 = content_for :h1 do
   = t(".head")
 
-=content_for :tabnav do
-  %ul.nav.nav-tabs
-    %li.active
-      = tab t(".tab.active", count: @all_projects.active.count),
-        { action: :index },
-        !showing_inactive?
-
-    %li
-      = tab t(".tab.inactive", count: @all_projects.inactive.count),
-        { action: :inactive },
-        showing_inactive?
+= render "tabnav", all_projects: @all_projects
 
 - if current_ability.can?(:create, Projects::Project)
   %p= link_to t(".add"), new_facility_project_path, class: "btn-add"

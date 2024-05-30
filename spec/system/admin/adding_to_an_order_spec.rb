@@ -323,8 +323,44 @@ RSpec.describe "Adding to an existing order" do
     end
 
     context "with staff role" do
-      it "does not have a facility dropdown" do
-        expect { page.find_by_id("add_to_order_form[facility_id]") }.to raise_error
+      let!(:facility2_account) { create(:account, :with_account_owner, type: "CreditCardAccount", owner: order.user, description: "Other Account", facility: facility2) }
+
+      it "changes the button text" do
+        expect(page).to have_button("Add To Order")
+        select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
+        select_from_chosen cross_core_product_facility2.name, from: "add_to_order_form[product_id]"
+        expect(page).to have_button("Add to Cross-Core Order")
+      end
+
+      it "creates a new order for the selected facility" do
+        expect(page).not_to have_content("Cross Core Project ID")
+        expect(page.has_selector?("option", text: cross_core_product_facility.name, visible: false)).to be(true)
+        expect(page.has_selector?("option", text: product.name, visible: false)).to be(true)
+        expect(page.has_selector?("option", text: facility2_account.to_s, visible: false)).to be(false)
+
+        select_from_chosen facility2.name, from: "add_to_order_form[facility_id]", scroll_to: :center
+        select_from_chosen cross_core_product_facility2.name, from: "add_to_order_form[product_id]"
+        select_from_chosen facility2_account.to_s, from: "Payment Source", scroll_to: :center
+
+        expect(page.has_selector?("option", text: product2.name, visible: false)).to be(false)
+
+        click_button "Add to Cross-Core Order"
+
+        expect(page).to have_content("#{cross_core_product_facility2.name} was successfully added to this order.")
+        expect(page).to have_content(facility2.to_s), count: 2
+        expect(page).to have_content(user.full_name), count: 2
+
+        order.reload
+
+        project = order.cross_core_project
+        expect(project).to be_present
+
+        expect(page).to have_content("Cross-Core Project ID")
+        expect(page).to have_content(project.id)
+
+        project_total = project.orders.sum(&:total)
+        expect(page).to have_content("Cross-Core Project Total")
+        expect(page).to have_content(project_total)
       end
     end
 

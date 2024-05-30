@@ -154,6 +154,7 @@ feature:
   po_require_affiliate_account: true
   walkup_reservations: true
   cross_core_projects: true
+  cross_core_order_view: <%= ENV.fetch("CROSS_CORE_ORDER_VIEW", Rails.env.staging? || Rails.env.development?) %>
 
 split_accounts:
   # Roles are allowed to create Split Accounts

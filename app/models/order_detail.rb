@@ -966,6 +966,14 @@ class OrderDetail < ApplicationRecord
     end
   end
 
+  def estimated_price_group_name
+    return if account && !product.facility.can_pay_with_account?(account)
+
+    estimated_price_policy = product.cheapest_price_policy(self, fulfilled_at || Time.current)
+
+    estimated_price_policy&.price_group&.name
+  end
+
   private
 
   # Is there enough information to move an associated order to complete/problem?
