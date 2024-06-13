@@ -44,6 +44,8 @@ RSpec.describe "Reservation actions", :js, feature_setting: { cross_core_project
       find("a", text: "Move Up").click
       click_button "Move"
 
+      wait_for_ajax
+
       expect(page).to have_content("The reservation was moved successfully.")
       expect(page).to have_content("Order ##{originating_order_facility1.id}")
     end
