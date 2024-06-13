@@ -12,6 +12,10 @@ job_type :script, "cd :path && :task"
 
 set :output, "log/#{@environment}.log"
 
+every :day, at: "6:00am", roles: [:db] do
+  rake "research_safety_adapters:scishield:synchronize_training"
+end
+
 every :day, at: "8:45am", roles: [:db] do
   rake "umass_corum:synchronize_speedtype_accounts"
 end
@@ -26,6 +30,3 @@ every :day, at: "5:20pm", roles: [:db] do
   script "vendor/engines/umass_corum/script/ftp-send.sh"
 end
 
-every :day, at: "6:00am", roles: [:db] do
-  rake "research_safety_adapters:scishield:synchronize_training"
-end
