@@ -251,3 +251,7 @@ $(function() {
 
   return $('.timeinput').timeinput();
 });
+
+$(function() {
+  new AjaxModal(".js--reportAnIssue", "#js--reportAnIssueModal");
+});

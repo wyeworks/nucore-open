@@ -45,7 +45,8 @@ class OrderDetailsController < ApplicationController
           raise ActiveRecord::Rollback
         end
       end
-      redirect_to(reservations_path)
+
+      redirect_to redirect_to_path
     else
       raise ActiveRecord::RecordNotFound
     end
@@ -118,6 +119,17 @@ class OrderDetailsController < ApplicationController
 
   def order_detail_params
     params.require(:order_detail).permit(:account_id)
+  end
+
+  def redirect_to_path
+    redirect_to_order_id = params[:redirect_to_order_id]
+
+    if redirect_to_order_id.present?
+      order = Order.find(redirect_to_order_id)
+      facility_order_path(order.facility, order)
+    else
+      reservations_path
+    end
   end
 
 end

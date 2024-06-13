@@ -134,6 +134,10 @@ class OrderDetail < ApplicationRecord
     .where.not(orders: { cross_core_project_id: nil })
   }
 
+  def cross_core?
+    order.cross_core_project_id.present?
+  end
+
   def self.for_facility(facility)
     for_facility_id(facility.id)
   end

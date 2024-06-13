@@ -222,7 +222,7 @@ class ReservationsController < ApplicationController
       flash[:error] = @reservation.errors.full_messages.join("<br/>").html_safe
     end
 
-    redirect_to reservations_status_path(status: "upcoming")
+    redirect_to redirect_to_path
   end
 
   # GET /orders/:order_id/order_details/:order_detail_id/reservations/:reservation_id/move
@@ -238,6 +238,8 @@ class ReservationsController < ApplicationController
         end_time: human_time(@earliest_possible.reserve_end_at),
       }
     end
+
+    @redirect_to_order_id = params[:redirect_to_order_id]
 
     render layout: false
   end
@@ -432,6 +434,18 @@ class ReservationsController < ApplicationController
     else
       facility_order = facility_orders.first
       @cross_core_cancel_path = facility_order_path(facility_order.facility, facility_order)
+    end
+  end
+
+  def redirect_to_path
+    redirect_to_order_id = params[:redirect_to_order_id]
+
+    if redirect_to_order_id.present?
+      facility_order = Order.find(redirect_to_order_id)
+
+      facility_order_path(facility_order.facility, facility_order)
+    else
+      reservations_status_path(status: "upcoming")
     end
   end
 end

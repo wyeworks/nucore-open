@@ -32,7 +32,7 @@
             %span= t("views.facility_orders.show.order_table.download")
 
           - if cross_core
-            = reservation_actions(od.reservation, use_delimiter: false)
+            = reservation_actions(od.reservation, redirect_to_order_id: @order.id)
 
         = render "order_file_icon", od: od
         = render "result_file_icon", od: od

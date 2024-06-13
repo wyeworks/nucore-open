@@ -44,7 +44,7 @@ module Reports
         facility: :facility,
         order: :to_s,
         ordered_at: :ordered_at,
-        fulfilled_at: ->(od) { od.fulfilled_at },
+        fulfilled_at: :fulfilled_at,
         order_status: ->(od) { od.order_status.name },
         order_state: :state,
         ordered_by: ->(od) { od.created_by_user.username },
@@ -111,6 +111,9 @@ module Reports
         problem_resolved_by: :problem_resolved_by,
         reference_id: :reference_id,
         notices: ->(od) { OrderDetailNoticePresenter.new(od).badges_to_text },
+        cross_core: :cross_core?,
+        cross_core_project_id: ->(od) { od.order.cross_core_project_id },
+        cross_core_project_active: ->(od) { od.order.cross_core_project&.active? },
       }
       if SettingsHelper.has_review_period?
         hash

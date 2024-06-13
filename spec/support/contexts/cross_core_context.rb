@@ -39,5 +39,4 @@ RSpec.shared_context "cross core orders" do
       create(:purchased_order, cross_core_project: cross_core_project3, product: facility2_item2, account: accounts.last),
     ]
   end
-
 end
