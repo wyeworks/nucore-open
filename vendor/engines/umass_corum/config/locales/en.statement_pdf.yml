@@ -1,6 +1,7 @@
 en:
   umass_corum:
     statement_pdf:
+      cross_core_message: "Items on this !statement_downcase! may have been placed on your behalf by another !facility_downcase!."
       invoice_header: External Invoice
       header_address: |
         UMass Amherst - %{facility}

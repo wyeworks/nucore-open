@@ -9,7 +9,6 @@ module UmassCorum
 
   class StatementPdf < ::StatementPdf
 
-    include TextHelpers::Translation
     def translation_scope
       "umass_corum.statement_pdf"
     end
@@ -107,9 +106,16 @@ module UmassCorum
     end
 
     def draw_remit_box
-      data = [
-        [text("remit_box", address: @statement.facility.address)],
-      ]
+      data = if @statement.display_cross_core_messsage?
+        [
+          [text("cross_core_message")],
+          [text("remit_box", address: @statement.facility.address)],
+        ]
+      else
+        [
+          [text("remit_box", address: @statement.facility.address)],
+        ]
+      end
 
       pdf.table(data,
         cell_style: CELL_STYLE.merge(align: :center),
