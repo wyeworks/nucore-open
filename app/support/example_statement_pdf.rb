@@ -2,6 +2,8 @@
 
 class ExampleStatementPdf < StatementPdf
 
+  include TextHelpers::Translation
+
   def generate(pdf)
     generate_document_header(pdf)
     generate_contact_info(pdf) if @facility.has_contact_info?
@@ -30,10 +32,13 @@ class ExampleStatementPdf < StatementPdf
   def generate_document_header(pdf)
     pdf.font_size = 10.5
 
-    pdf.text @facility.to_s, size: 20, font_style: :bold
+    pdf.text @facility.to_s, size: 20, style: :bold
     pdf.text "Invoice ##{@statement.invoice_number}"
     pdf.text "Account: #{@account}"
     pdf.text "Owner: #{@account.owner_user.full_name(suspended_label: false)}"
+    pdf.move_down(10)
+    cross_core_message = text("cross_core_message")
+    pdf.text cross_core_message, style: :italic if @statement.display_cross_core_messsage?
     pdf.move_down(10)
   end
 
@@ -68,6 +73,10 @@ class ExampleStatementPdf < StatementPdf
         number_to_currency(order_detail.actual_total),
       ]
     end
+  end
+
+  def translation_scope
+    "statement_pdf"
   end
 
 end

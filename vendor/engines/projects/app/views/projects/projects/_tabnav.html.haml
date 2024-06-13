@@ -10,7 +10,7 @@
         { action: :inactive },
         @active_tab == "inactive"
 
-    - if current_ability.can?(:cross_core_orders, Projects::Project)
+    - if current_ability.can?(:cross_core_orders, Projects::Project) && SettingsHelper.feature_on?(:cross_core_order_view)
       %li
         = tab t(".cross_core_orders"),
           { action: :cross_core_orders },

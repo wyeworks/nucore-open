@@ -1,0 +1,3 @@
+en:
+  statement_pdf:
+    cross_core_message: "Items on this !statement_downcase! may have been placed on your behalf by another !facility_downcase!."
