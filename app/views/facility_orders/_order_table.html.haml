@@ -15,24 +15,14 @@
         - if od.time_data.present?
           %br
           = od.time_data
+        - if od.add_accessories? || od.reservation.present?
+          %br
+          = render "order_table_actions", od: od, cross_core: cross_core
       - if cross_core
         %td.user
           = od.created_by_user
         %td.order_date
           = od.ordered_at&.strftime("%m/%d/%Y")
-      %td.action
-        - if od.add_accessories?
-          = link_to new_facility_order_order_detail_accessory_path(current_facility, @order, od), class: ["has_accessories", "persistent", "undecorated"] do
-            = tooltip_icon "fa fa-plus-square", t("product_accessories.pick_accessories.title")
-            %span= t("views.facility_orders.show.order_table.accessories")
-
-        - if od.reservation.present?
-          = link_to facility_order_order_detail_url(current_facility, @order, od, format: :ics) do
-            = tooltip_icon "fa fa-calendar", t("ical.calendar_tooltip")
-            %span= t("views.facility_orders.show.order_table.download")
-
-          - if cross_core
-            = reservation_actions(od.reservation, use_delimiter: false)
 
         = render "order_file_icon", od: od
         = render "result_file_icon", od: od

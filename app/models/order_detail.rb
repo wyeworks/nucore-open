@@ -129,6 +129,14 @@ class OrderDetail < ApplicationRecord
   scope :batch_updatable, -> { where(dispute_at: nil, state: %w(new inprocess)) }
   scope :new_or_inprocess, -> { purchased.where(state: %w(new inprocess)) }
   scope :non_canceled, -> { where.not(state: "canceled") }
+  scope :cross_core, lambda {
+    joins(order: [:facility, :cross_core_project])
+    .where.not(orders: { cross_core_project_id: nil })
+  }
+
+  def cross_core?
+    order.cross_core_project_id.present?
+  end
 
   def self.for_facility(facility)
     for_facility_id(facility.id)

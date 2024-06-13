@@ -4,6 +4,7 @@ class StatementPdf
 
   include ActionView::Helpers::NumberHelper
   include DateHelper
+  include TextHelpers::Translation
 
   LABEL_ROW_STYLE = { font_style: :bold, background_color: "cccccc" }.freeze
 
@@ -54,6 +55,10 @@ class StatementPdf
     else
       DEFAULT_OPTIONS.dup
     end
+  end
+
+  def translation_scope
+    "statement_pdf"
   end
 
 end

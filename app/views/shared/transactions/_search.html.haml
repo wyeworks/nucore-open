@@ -3,10 +3,14 @@
     %fieldset.span6#search
       - @search.options.reject(&:multipart?).each do |searcher|
         - html_class = searcher.input_type == :select ? "quarter-width" : ""
-        = f.input searcher.key, as: searcher.input_type,
-          collection: searcher.options, label: searcher.label,
-          label_method: searcher.label_method, data_attrs: searcher.method(:data_attrs),
-          input_html: { id: searcher.key, class: html_class }, include_blank: false
+        = f.input searcher.key,
+          as: searcher.input_type,
+          collection: searcher.options,
+          label: searcher.label,
+          label_method: searcher.label_method,
+          data_attrs: searcher.method(:data_attrs),
+          input_html: { id: searcher.key, class: html_class },
+          include_blank: false
 
     %fieldset.span2#calendar_filter
       - if @search.options.map(&:key).include?("date_ranges")

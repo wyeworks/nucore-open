@@ -19,7 +19,9 @@ class ReservationUserActionPresenter
     @controller = controller
   end
 
-  def user_actions
+  def user_actions(redirect_to_order_id = nil)
+    @redirect_to_order_id = redirect_to_order_id
+
     actions = []
     actions << accessories_link if accessories?
 
@@ -60,6 +62,11 @@ class ReservationUserActionPresenter
                     "confirm"
                   end
     confirm_text = I18n.t(confirm_key, scope: "reservations.delete", fee: number_to_currency(canceler.total_cost))
+
+    if modal_display?
+      path = cancel_order_order_detail_path(order, order_detail, redirect_to_order_id: @redirect_to_order_id)
+    end
+
     link_to I18n.t("reservations.delete.link"), path, method: :put, data: { confirm: confirm_text }
   end
 
@@ -125,13 +132,22 @@ class ReservationUserActionPresenter
   end
 
   def move_link
-    link_to I18n.t("reservations.moving_up.link"), order_order_detail_reservation_move_reservation_path(order, order_detail, reservation),
-            class: "move-res",
-            data: { reservation_id: reservation.id }
+    path = if @redirect_to_order_id.present?
+             order_order_detail_reservation_move_reservation_path(order, order_detail, reservation, redirect_to_order_id: @redirect_to_order_id)
+           else
+             order_order_detail_reservation_move_reservation_path(order, order_detail, reservation)
+           end
+
+    link_to I18n.t("reservations.moving_up.link"), path, class: "move-res", data: { reservation_id: reservation.id }
   end
 
   def report_an_issue_link
-    link_to(I18n.t("views.instrument_issues.new.title"), new_facility_order_order_detail_issue_path(facility, order, order_detail))
+    if modal_display?
+      link_to I18n.t("views.instrument_issues.new.title"), new_facility_order_order_detail_issue_path(facility, order, order_detail, redirect_to_order_id: @redirect_to_order_id),
+              class: "js--reportAnIssue"
+    else
+      link_to(I18n.t("views.instrument_issues.new.title"), new_facility_order_order_detail_issue_path(facility, order, order_detail))
+    end
   end
 
   def fix_problem_link
@@ -140,6 +156,13 @@ class ReservationUserActionPresenter
 
   def can_fix_problem?
     OrderDetails::ProblemResolutionPolicy.new(order_detail).user_can_resolve?
+  end
+
+  # When the action links are in the order show, they should be opened in a modal.
+  # In that case, a redirect_to_order_id is set, so after the user submits the form,
+  # they are redirected back to the proper order show.
+  def modal_display?
+    @redirect_to_order_id.present?
   end
 
 end

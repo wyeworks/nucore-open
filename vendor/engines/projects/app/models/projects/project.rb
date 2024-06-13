@@ -17,6 +17,12 @@ module Projects
     scope :inactive, -> { where(active: false) }
     scope :display_order, -> { order(:name) }
 
+    # This includes all projects which include any order from the given facility,
+    # including projects that have orders from multiple facilities.
+    scope :for_facility, lambda { |facility|
+      joins(:orders).where(orders: { facility: })
+    }
+
     def to_s
       name
     end

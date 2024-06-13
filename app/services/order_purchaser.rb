@@ -42,6 +42,19 @@ class OrderPurchaser
     @errors = order.errors.full_messages
   end
 
+  def purchase_cross_core!
+    validate_order!
+    return unless do_additional_validations
+    purchase_order!
+
+    # This is only going to notify emails set for the product.
+    send_purchase_notifications
+
+    @success = true
+  rescue NUCore::OrderDetailUpdateException => e
+    @errors = order.errors.full_messages
+  end
+
   def success?
     @success
   end

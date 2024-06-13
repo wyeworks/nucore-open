@@ -31,6 +31,8 @@
 
 %h2= t("views.facility_orders.show.cross_core_orders_header")
 - if SettingsHelper.feature_on?(:cross_core_projects) && @cross_core_order_details_by_facility.present?
+  #js--reportAnIssueModal.modal.hide.fade
+
   #accordion
     - @cross_core_order_details_by_facility.each do |facility, order_details|
       %h3= facility

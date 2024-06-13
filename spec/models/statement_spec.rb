@@ -172,6 +172,49 @@ RSpec.describe Statement do
           expect(statement).to be_paid_in_full
         end
       end
+
+      describe "#display_cross_core_message" do
+        # Defined in spec/support/contexts/cross_core_context.rb
+        include_context "cross core orders"
+
+        context "with a cross core project that originates in the current facility" do
+          let(:order_detail) { cross_core_orders[0].order_details.first }
+
+          before :each do
+            statement.add_order_detail(order_detail)
+          end
+
+          it "does NOT display a message" do
+            expect(statement).not_to be_display_cross_core_messsage
+          end
+        end
+
+        context "with a cross core project that originates in a different facility, but includes an order in the current facility" do
+          let(:order_detail) { cross_core_orders[2].order_details.first }
+
+          before :each do
+            statement.add_order_detail(order_detail)
+          end
+
+          it "DOES display a message" do
+            expect(statement).to be_display_cross_core_messsage
+          end
+        end
+
+        context "with a cross core project that has no relation to the current facility" do
+          before :each do
+            order_detail_from_unrelated_facility = cross_core_orders[4].order_details.first
+            other_facility_statement = create(:statement, account: account, created_by: user.id, facility: facility3)
+            other_facility_statement.add_order_detail(order_detail_from_unrelated_facility)
+          end
+          
+          it "does NOT display a message" do
+            expect(statement).not_to be_display_cross_core_messsage
+          end
+        end
+
+      end
+
     end
   end
 end

@@ -117,4 +117,17 @@ class Statement < ApplicationRecord
     end
   end
 
+  def cross_core_order_details
+    order_details.cross_core
+  end
+
+  def cross_core_order_details_from_other_facilities
+    cross_core_order_details
+      .where.not(projects: { facility: facility})
+  end
+
+  def display_cross_core_messsage?
+    cross_core_order_details_from_other_facilities.any?
+  end
+
 end

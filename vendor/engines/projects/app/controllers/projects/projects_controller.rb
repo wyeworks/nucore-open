@@ -26,7 +26,16 @@ module Projects
 
       order_details = cross_core_order_details
 
-      @search_form = TransactionSearch::SearchForm.new(params[:search], defaults: { date_range_field: "ordered_at", allowed_date_fields: ["ordered_at"], cross_core_facilties: "other", current_facility_id: current_facility.id })
+      @search_form = TransactionSearch::SearchForm.new(
+        params[:search],
+        defaults: {
+          date_range_field: "ordered_at",
+          allowed_date_fields: ["ordered_at"],
+          cross_core_facilties: "other",
+          order_statuses: default_order_statuses(order_details),
+          current_facility_id: current_facility.id
+        }
+      )
       searchers = [
         TransactionSearch::ProductSearcher,
         TransactionSearch::OrderedForSearcher,
@@ -74,13 +83,17 @@ module Projects
 
     private
 
-    def cross_core_order_details
-      project_ids = current_facility.order_details.joins(:order).pluck(:cross_core_project_id).compact.uniq
+    def default_order_statuses(order_details)
+      TransactionSearch::OrderStatusSearcher.new(order_details).options - [OrderStatus.canceled, OrderStatus.reconciled].map(&:id)
+    end
 
-      OrderDetail
-        .joins(:order)
-        .joins(order: :facility)
-        .where(orders: { cross_core_project_id: project_ids })
+    # Fetch ALL cross core order details related to the current facility
+    # Includes all order details from any cross core project that is associated with the current facility,
+    # and also all order details from any cross core project that includes an order from the current facility.
+    def cross_core_order_details
+      projects = Projects::Project.for_facility(current_facility)
+      OrderDetail.cross_core
+        .where(orders: { cross_core_project_id: projects })
     end
 
     def sort_lookup_hash

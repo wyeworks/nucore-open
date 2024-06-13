@@ -11,7 +11,8 @@
 
     %p= t('reservations.moving_up.confirm')
   .modal-footer
-    = form_for :reservation, :url => order_order_detail_reservation_move_reservation_path(@reservation.order, @reservation.order_detail, @reservation), :method => "post" do |f|
+    - url = order_order_detail_reservation_move_reservation_path(@reservation.order, @reservation.order_detail, @reservation, redirect_to_order_id: @redirect_to_order_id)
+    = form_for :reservation, url: url, method: "post" do |f|
       = f.submit t('reservations.moving_up.button'), :class => ['btn', 'btn-primary']
       = modal_cancel_button
 

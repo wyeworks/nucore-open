@@ -259,4 +259,28 @@ RSpec.describe Reports::ExportRaw do
       )
     end
   end
+
+  describe "with cross core order details" do
+    # Defined in spec/support/contexts/cross_core_context.rb
+    include_context "cross core orders"
+
+    describe "for order details from a cross core project" do
+      let(:order_detail) { facility.orders.first.order_details.first }
+      let(:order_details) { facility.orders.flat_map(&:order_details) }
+
+      it "exports correct number of line items" do
+        expect(report.to_csv.split("\n").length).to eq(4)
+      end
+
+      it "populates the report" do
+        expect(report).to have_column_values(
+          "Order" => order_details.map(&:to_s),
+          "Ordered By" => order_details.map { |od| od.user.username },
+          "Cross Core" => order_details.map { |od| od.cross_core?.to_s },
+          "Cross Core Project" => order_details.map { |od| od.order.cross_core_project_id.to_s },
+          "Cross Core Project Active" => order_details.map { |od| od.order.cross_core_project&.active?.to_s },
+        )
+      end
+    end
+  end
 end
