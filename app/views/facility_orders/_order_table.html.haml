@@ -18,14 +18,16 @@
         - if od.add_accessories? || od.reservation.present?
           %br
           = render "order_table_actions", od: od, cross_core: cross_core
+
+        %br
+        = render "order_file_icon", od: od
+        = render "result_file_icon", od: od
+
       - if cross_core
         %td.user
           = od.created_by_user
         %td.order_date
           = od.ordered_at&.strftime("%m/%d/%Y")
-
-        = render "order_file_icon", od: od
-        = render "result_file_icon", od: od
 
       %td.currency.timeinput= od.reservation.try(:duration_mins)
       - if od.time_data.present?

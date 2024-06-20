@@ -136,6 +136,8 @@ RSpec.describe "Adding to an existing order" do
         expect(new_order_detail).to be_complete
         expect(I18n.l(new_order_detail.fulfilled_at.to_date, format: :usa)).to eq(fulfilled_at_string)
         expect(I18n.l(new_order_detail.ordered_at.to_date, format: :usa)).to eq(fulfilled_at_string)
+
+        expect(page).to have_content("0 Uploaded"), count: 2
       end
     end
   end
