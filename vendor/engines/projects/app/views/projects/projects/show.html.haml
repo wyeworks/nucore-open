@@ -1,16 +1,17 @@
 = content_for :h1 do
-  = @project.facility
+  = current_facility
 
 %h2= @project.name
 = sanitize @project.description
 
-- if @project.order_details.any?
+- if @order_details.any?
   %h3= "Total Cost: #{number_to_currency(@project.total_cost)}"
 
   - @date_range_field = :ordered_at
   = render "shared/transactions/table",
     order_details: @order_details
 
-= link_to t(".edit"),
-  edit_facility_project_path(@project.facility, @project),
-  class: "btn btn-primary"
+- if can?(:edit, @project)
+  = link_to t(".edit"),
+    edit_facility_project_path(current_facility, @project),
+    class: "btn btn-primary"

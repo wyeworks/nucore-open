@@ -23,6 +23,17 @@ module Projects
       joins(:orders).where(orders: { facility: })
     }
 
+    scope :cross_core, lambda {
+      joins(:orders)
+        .where.not(orders: { cross_core_project_id: nil })
+    }
+
+    scope :for_single_facility, lambda { |facility|
+      left_outer_joins(:orders)
+        .where(orders: { cross_core_project_id: nil })
+        .where(facility: facility)
+    }
+
     def to_s
       name
     end
@@ -31,6 +42,16 @@ module Projects
     # uses the estimated cost.
     def total_cost
       order_details.inject(0) { |sum, od| sum += od.total }
+    end
+
+    def cross_core?
+      orders.any?
+    end
+
+    def name
+      return "#{facility.abbreviation} Project - #{id}" if cross_core?
+
+      super
     end
 
   end

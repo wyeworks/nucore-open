@@ -9,12 +9,11 @@
     = banner_label @order, :user
     = banner_label @order, :created_by_user
     - if SettingsHelper.feature_on?(:cross_core_projects)
-      - project_id = @cross_core_order_details_by_facility.present? ? @order_details.first&.project_id : nil
-      - if project_id
+      - if @cross_core_project.present?
         %dl.span2
           %dt= t("views.facility_orders.show.cross_core_project_id")
           %dd
-            = link_to project_id, facility_project_path(current_facility, project_id)
+            = link_to @cross_core_project.name, facility_project_path(current_facility, @cross_core_project.id)
         %dl.span2
           %dt= t("views.facility_orders.show.cross_core_project_total")
           - gross_order_value = @order.total + @cross_core_orders_by_facility.values.sum(&:total)

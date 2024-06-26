@@ -1,14 +1,9 @@
 =content_for :tabnav do
   %ul.nav.nav-tabs
-    %li.active
-      = tab t(".active", count: all_projects.active.count),
-        { action: :index },
-        @active_tab == "index" || @active_tab == "admin_projects"
-
     %li
-      = tab t(".inactive", count: all_projects.inactive.count),
-        { action: :inactive },
-        @active_tab == "inactive"
+      = tab t(".projects"),
+        { action: :index },
+        @active_tab == "index"
 
     - if current_ability.can?(:cross_core_orders, Projects::Project) && SettingsHelper.feature_on?(:cross_core_order_view)
       %li

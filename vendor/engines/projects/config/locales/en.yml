@@ -38,8 +38,7 @@ en:
         add: Add Project
         head: Manage Projects
       tabnav:
-        active: "Active Projects (%{count})"
-        inactive: "Inactive Projects (%{count})"
+        projects: "Projects"
         cross_core_orders: "Cross Core Orders"
 
       new:

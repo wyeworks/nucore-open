@@ -1,10 +1,12 @@
 = content_for :h1 do
   = t(".head")
 
-= render "tabnav", all_projects: @all_projects
+= render "tabnav"
 
 - if current_ability.can?(:create, Projects::Project)
   %p= link_to t(".add"), new_facility_project_path, class: "btn-add"
+
+= render "projects/search"
 
 - if @projects.any?
   %table.table.table-striped.table-hover
@@ -15,6 +17,9 @@
       - @projects.each do |project|
         %tr
           %td
-            = link_to project.name, facility_project_path(project.facility, project)
+            = link_to project.name, facility_project_path(current_facility, project)
 
   = will_paginate(@projects)
+
+- else
+  .notice= t("projects.index.no_results")

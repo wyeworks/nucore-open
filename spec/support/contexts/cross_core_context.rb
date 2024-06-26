@@ -39,4 +39,17 @@ RSpec.shared_context "cross core orders" do
       create(:purchased_order, cross_core_project: cross_core_project3, product: facility2_item2, account: accounts.last),
     ]
   end
+
+  before do
+    all_cross_core_orders = cross_core_orders
+    all_cross_core_orders << originating_order_facility1
+    all_cross_core_orders << originating_order_facility2
+    all_cross_core_orders << originating_order_facility3
+
+    all_cross_core_orders.each do |order|
+      order.order_details.each do |order_detail|
+        order_detail.update(project: order.cross_core_project)
+      end
+    end
+  end
 end

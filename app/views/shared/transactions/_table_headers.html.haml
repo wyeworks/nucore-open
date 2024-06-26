@@ -3,11 +3,14 @@
 %th.nowrap=  OrderDetail.human_attribute_name(@date_range_field)
 - if @extra_date_column
   %th.nowrap= OrderDetail.human_attribute_name(@extra_date_column_header || @extra_date_column)
-- if current_facility.blank? || cross_facility?
+- should_show_facility_column = current_facility.blank? || cross_facility? || controller_name == "projects"
+- if should_show_facility_column
   %th= Facility.model_name.human
 %th.order-note= OrderDetail.human_attribute_name("description")
 %th.nowrap=  OrderDetail.human_attribute_name("user")
-- unless @account
+- if controller_name == "projects"
+  %th.nowrap= OrderDetail.human_attribute_name(:ordered_by)
+- elsif @account.nil?
   %th=  Account.model_name.human
   %th= Account.human_attribute_name("owner")
 %th.currency= OrderDetail.human_attribute_name("cost")

@@ -1,23 +1,28 @@
 #!/bin/sh
+# A script to parse git log output and generate a list of PRs that have been merged.
+# Useful for PR descriptions when merging in changes from nucore-open.
+# This is also a dependency of the release_describer script.
+#
 # Usage:
 # Compare your current branch to master:
 # bin/merge_describer
 #
-# Compare your current branch to master:
-# bin/merge_describer master
+# Compare your current branch to a tag:
+# bin/merge_describer v2024-06-18
 target_branch=${1:-master}
 git log $target_branch.. | egrep '\(#\d+\)$' | while read LINE; do
-  pr=$(echo $LINE | sed -E 's/^.+\(#//' | sed -E 's/\)$//')
-  desc=$(echo "$LINE" | sed -E 's/ *\(#[0-9]+\)$//' | sed -E 's/[*]//')
-  echo "$pr\t$desc"
-done | sort -n |
-
-while read LINE; do
-  pr=$(echo $LINE | cut -d' ' -f1)
-  desc=$(echo $LINE | cut -d' ' -f2-)
-  if [[ ${#pr} -gt 3 ]]; then
+  # $LINE looks like this:
+  # 4369    Move render to right td
+  # The PR number is the first part (4369)...
+  pr=$(echo $LINE | sed -E 's/^.+\(#//' | sed -E 's/\)$//' | cut -d' ' -f1)
+  # ... and the description is the rest (Move render to right td)
+  desc=$(echo "$LINE" | sed -E 's/ *\(#[0-9]+\)$//' | sed -E 's/[*]//' | cut -d' ' -f1-)
+  # Add a bullet point (*) and link to the PR, either in nucore-open or the current repo:
+  # * Move render to right td (https://github.com/tablexi/nucore-open/pull/4369)
+  # If the PR number is greater than 4000, it's a nucore-open PR.
+  if [[ $pr -gt 4000 ]]; then
     echo "* $desc (https://github.com/tablexi/nucore-open/pull/$pr)"
   else
     echo "* $desc (#$pr)"
   fi
-done
+done | sort -n
