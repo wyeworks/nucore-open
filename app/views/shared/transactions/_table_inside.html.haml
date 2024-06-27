@@ -56,7 +56,7 @@
         - if controller_name == "projects"
           %td= order_detail.created_by_user.full_name
           - colspan_for_total += 1
-        - if @account.nil?
+        - if @account.nil? && controller_name != "projects"
           %td= order_detail.account
           %td= order_detail.account.owner_user
           - colspan_for_total += 2
