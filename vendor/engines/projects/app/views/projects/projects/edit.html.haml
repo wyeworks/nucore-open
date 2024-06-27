@@ -1,15 +1,15 @@
 = render "shared/headers/ckeditor"
 
 = content_for :h1 do
-  = @project.facility
+  = current_facility
 
 %h2= t(".update")
 
-= simple_form_for @project, url: facility_project_path(@project.facility, @project), method: :put do |f|
+= simple_form_for @project, url: facility_project_path(current_facility, @project), method: :put do |f|
   .form-inputs
-    = f.input :name, hint: t(".name")
+    = f.input :name, hint: t(".name"), disabled: @project.cross_core?
     = f.input :description, hint: t(".description"), input_html: { class: :editor }
-    = f.input :active
+    = f.input :active, disabled: @project.cross_core?
   .form-actions
     = f.button :submit, t(".update"), class: "btn-primary"
     = link_to t("shared.cancel"), facility_projects_path(current_facility)

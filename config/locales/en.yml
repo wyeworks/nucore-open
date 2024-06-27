@@ -600,6 +600,14 @@ en:
 
         To enable holiday restrictions for this product, check the boxes for "Restrict access to approved users" and "Restrict holiday access?" on the %{url}.
 
+  projects:
+    index:
+      active_searcher:
+        label: "Active/Inactive"
+      cross_core_searcher:
+        label: "Cross Core"
+      no_results: "No projects found"
+
   reservations:
     logout:
       body: "You will be logged out automatically in 60 seconds. Would you like to remain logged in?"

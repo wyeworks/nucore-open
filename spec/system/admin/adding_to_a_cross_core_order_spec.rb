@@ -213,7 +213,7 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
         expect(project).to be_present
 
         expect(page).to have_content("Cross-Core Project ID")
-        expect(page).to have_content(project.id)
+        expect(page).to have_content(project.name)
 
         expect(project.orders.first.state).to eq("purchased")
         expect(project.orders.last.state).to eq("purchased")
@@ -258,7 +258,7 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
         expect(project).to be_present
 
         expect(page).to have_content("Cross-Core Project ID")
-        expect(page).to have_content(project.id)
+        expect(page).to have_content(project.name)
 
         project_total = project.orders.sum(&:total)
         expect(page).to have_content("Cross-Core Project Total")

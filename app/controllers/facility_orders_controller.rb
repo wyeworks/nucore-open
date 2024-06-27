@@ -132,13 +132,13 @@ class FacilityOrdersController < ApplicationController
   def load_cross_core_order_details
     return unless SettingsHelper.feature_on?(:cross_core_projects)
 
-    project = @order.cross_core_project
+    @cross_core_project = @order.cross_core_project
 
     @cross_core_order_details_by_facility = {}
     @cross_core_orders_by_facility = {}
 
-    if project.present?
-      project_orders = project.orders.where.not(facility_id: @order.facility_id)
+    if @cross_core_project.present?
+      project_orders = @cross_core_project.orders.where.not(facility_id: @order.facility_id)
 
       project_orders.each do |order|
         order_facility = order.facility.to_s

@@ -8,17 +8,23 @@ module Projects
     admin_tab :all
     before_action { @active_tab = action_name || "admin_projects" }
 
-    load_and_authorize_resource through: :current_facility
+    load_and_authorize_resource through: :current_facility, except: [:show, :edit, :update]
+    load_and_authorize_resource only: [:show, :edit, :update]
 
     def index
-      @all_projects = @projects.display_order
-      @projects = @all_projects.active.paginate(page: params[:page])
-    end
+      @search_form = ProjectsSearch::SearchForm.new(
+        params[:search],
+        defaults: {
+          current_facility_id: current_facility.id,
+        },
+      )
 
-    def inactive
-      @all_projects = @projects.display_order
-      @projects = @all_projects.inactive.paginate(page: params[:page])
-      render action: :index
+      @search = ProjectsSearch::Searcher.search(nil, @search_form)
+      @projects = @search.projects.display_order
+
+      respond_to do |format|
+        format.html { @projects = @projects.paginate(page: params[:page]) }
+      end
     end
 
     def cross_core_orders
@@ -76,11 +82,6 @@ module Projects
       render action: :edit unless save_project
     end
 
-    def showing_inactive?
-      action_name == "inactive"
-    end
-    helper_method :showing_inactive?
-
     private
 
     def default_order_statuses(order_details)
@@ -113,7 +114,15 @@ module Projects
       if @project.save
         flash[:notice] =
           text(".#{action_name}.success", project_name: @project.name)
-        redirect_to facility_project_path(@project.facility, @project)
+        redirect_to facility_project_path(current_facility, @project)
+      end
+    end
+
+    def ability_resource
+      if ["show", "edit", "update"].include?(params[:action])
+        @project
+      else
+        current_facility
       end
     end
 
