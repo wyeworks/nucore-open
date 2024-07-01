@@ -156,4 +156,19 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
       end
     end
   end
+
+  context "global admin tabs" do
+    # https://pm.tablexi.com/issues/162319
+    let(:admin) { create(:user, :administrator) }
+
+    before do
+      login_as admin
+
+      visit facility_project_path(facility, active_project)
+    end
+
+    it "has a link to Users tab" do
+      expect(page).to have_link("Users", href: facility_users_path(facility))
+    end
+  end
 end

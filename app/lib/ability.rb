@@ -53,7 +53,9 @@ class Ability
         cannot [:manage_accounts, :manage_billing], Facility.cross_facility
       end
       unless user.account_manager?
-        cannot :manage, User unless resource.is_a?(Facility)
+        # TODO: Refactor
+        # We think this is here to keep the Users tab visible. See LinkCollection#admin_users.
+        cannot :manage, User unless resource.is_a?(Facility) || resource.is_a?(Projects::Project)
         if SettingsHelper.feature_off?(:create_users)
           cannot([:edit, :update], User)
         end
