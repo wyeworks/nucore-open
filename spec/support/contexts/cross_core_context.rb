@@ -40,12 +40,9 @@ RSpec.shared_context "cross core orders" do
     ]
   end
 
-  before do
-    all_cross_core_orders = cross_core_orders
-    all_cross_core_orders << originating_order_facility1
-    all_cross_core_orders << originating_order_facility2
-    all_cross_core_orders << originating_order_facility3
+  let(:all_cross_core_orders) { cross_core_orders + [originating_order_facility1, originating_order_facility2, originating_order_facility3] }
 
+  before do
     all_cross_core_orders.each do |order|
       order.order_details.each do |order_detail|
         order_detail.update(project: order.cross_core_project)

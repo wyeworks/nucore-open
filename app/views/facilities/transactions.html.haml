@@ -3,7 +3,7 @@
 - content_for :h1 do
   = current_facility
 - content_for :h2 do
-  %h2= text(:history, scope: "admin.transaction_search.actions")
+  = text(:history, scope: "admin.transaction_search.actions")
 
 = content_for :top_block do
   = render "shared/transactions/top", tab: "transactions"

@@ -22,12 +22,12 @@ module Projects
 
       def restrict(projects)
         projects.select do |project|
-          Ability.new(user, project.facility).can?(:show, project)
+          Ability.new(user, project).can?(:show, project)
         end
       end
 
       def search
-        query_object.where("lower(name) LIKE ?", "%#{query.downcase}%")
+        query_object.where("lower(name) LIKE ?", "%#{query.downcase}%").or(Projects::Project.where(id: query))
       end
 
     end

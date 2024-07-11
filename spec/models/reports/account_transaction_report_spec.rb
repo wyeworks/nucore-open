@@ -3,6 +3,9 @@
 require "rails_helper"
 
 RSpec.describe Reports::AccountTransactionsReport do
+  # Defined in spec/support/contexts/cross_core_context.rb
+  include_context "cross core orders"
+
   subject(:report) { Reports::AccountTransactionsReport.new(order_details, report_options) }
   let(:report_options) { {} }
 
@@ -20,7 +23,15 @@ RSpec.describe Reports::AccountTransactionsReport do
       let(:order_details) { OrderDetail }
 
       it "generates an order detail line" do
-        expect(report.to_csv.lines.count).to eq(2)
+        expect(report.to_csv.lines.count).to eq(11)
+      end
+
+      it "generates headers with Cross Core Project Facility" do
+        expect(report.to_csv.lines.first).to include("Cross Core Project Facility")
+      end
+
+      it "includes the order detail's cross core project facility" do
+        expect(report.to_csv.lines.second).to include(cross_core_project.facility.abbreviation)
       end
 
       describe "with estimated label_key_prefix" do
