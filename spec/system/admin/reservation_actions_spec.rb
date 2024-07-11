@@ -42,6 +42,9 @@ RSpec.describe "Reservation actions", :js, feature_setting: { cross_core_project
     it "redirects to original order show" do
       find("h3", text: cross_core_reservation_order.facility.to_s, match: :first).click
       find("a", text: "Move Up").click
+
+      wait_for_ajax
+
       click_button "Move"
 
       wait_for_ajax

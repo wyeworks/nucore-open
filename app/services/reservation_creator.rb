@@ -36,6 +36,9 @@ class ReservationCreator
           # The purchase_order_path or cart_path will handle the backdating, but we need
           # to do this here for merged reservations.
           backdate_reservation_if_necessary(session_user)
+
+          purchase_original_cross_core_order
+
           @success = :merged_order
         elsif @order.order_details.one?
           @success = :instrument_only_order
@@ -102,6 +105,21 @@ class ReservationCreator
 
   def status_q
     ActiveSupport::StringInquirer.new(@success.to_s)
+  end
+
+  def purchase_original_cross_core_order
+    original_order = Order.find(@order.merge_with_order_id)
+
+    if original_order.order_details.one? && original_order.cross_core_project.present?
+      order_purchaser = OrderPurchaser.new(
+        order: original_order,
+        acting_as: original_order.user,
+        order_in_past: nil,
+        params: ActionController::Parameters.new({}),
+        user: original_order.created_by
+      )
+      order_purchaser.purchase_cross_core!
+    end
   end
 
 end

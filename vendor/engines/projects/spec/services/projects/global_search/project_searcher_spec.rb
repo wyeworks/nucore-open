@@ -68,6 +68,14 @@ RSpec.describe Projects::GlobalSearch::ProjectSearcher do
         end
       end
 
+      context "when the query matches a project id" do
+        context "that belongs to the facility" do
+          let(:project_a) { facility_a_projects.first }
+          let(:query) { project_a.id.to_s }
+          it { is_expected.to eq [project_a] }
+        end
+      end
+
       context "when projects in different facilities have identical names" do
         let(:project_a) { facility_a_projects.first }
         let(:project_b) { facility_b_projects.first }

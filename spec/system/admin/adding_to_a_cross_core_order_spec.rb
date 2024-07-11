@@ -105,6 +105,7 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
           expect(project).to be_present
           expect(project.orders.last.order_details.last.product).to eq(instrument)
           expect(project.orders.last.account_id).to eq(facility2_account.id)
+          expect(project.orders.last.state).to eq("purchased")
         end
 
         it "brings you back to the facility order path on 'Cancel'" do

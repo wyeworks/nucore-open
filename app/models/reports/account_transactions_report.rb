@@ -70,6 +70,7 @@ class Reports::AccountTransactionsReport
       Account.human_attribute_name(:expires_at),
       OrderDetail.human_attribute_name(:order_status),
       OrderDetail.human_attribute_name(:note),
+      text(".cross_core_project_facility"),
       text(".order_detail_notices"),
     ]
   end
@@ -100,6 +101,7 @@ class Reports::AccountTransactionsReport
       format_usa_date(order_detail.account.expires_at),
       order_detail.order_status,
       order_detail.note,
+      originating_cross_core_facility(order_detail),
       notices_for(order_detail),
     ]
   end
@@ -115,6 +117,12 @@ class Reports::AccountTransactionsReport
       ""
     else
       order_detail.csv_quantity
+    end
+  end
+
+  def originating_cross_core_facility(order_detail)
+    if order_detail.cross_core_activity_for_facility?(order_detail.facility)
+      order_detail.order.cross_core_project.facility.abbreviation
     end
   end
 

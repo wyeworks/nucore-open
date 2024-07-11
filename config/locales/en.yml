@@ -166,8 +166,14 @@ en:
       users: "Users"
       edit: "Edit"
     transactions:
+      cross_core_icon:
+        tooltip: "This order placed on your behalf by %{facility}"
       table_inside:
         total: Total
+        grand_total: Grand Total
+        page_subtotal: Page Subtotal
+        too_many_results: Unavailable
+        too_many_results_tooltip: "There are more than 1,000 transactions results.  You can use the 'Export as CSV' link to generate a CSV, then use the CSV to calculate the grand total."
     update: Update
 
   global_search:
@@ -1062,6 +1068,7 @@ en:
       fail_continue_on_error: "The import failed. %{successes} line item(s) created successfully, %{failures} failed. Please download the error report below, view each error message, correct the error, and try to import again."
       success: "The import completed successfully. %{successes} line items were created."
     account_transactions:
+      cross_core_project_facility: Cross Core Project Facility
       export: Export as CSV
       subject: "!app_name! Transaction Export"
       body: Your export is ready. Please see the attached file.
