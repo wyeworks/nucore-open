@@ -41,8 +41,16 @@ RSpec.describe "All Transactions Search", :js do
   it "is accessible", :js do
     login_as director
     visit facility_transactions_path(facility)
-    
+
     # Skip these two violations because the chosen JS library is hard to make accessible
     expect(page).to be_axe_clean.skipping("label", "select-name")
+  end
+
+  it "does not show the Participating Facilities filter" do
+    login_as director
+    visit transactions_path
+
+    expect(page).to have_content("Transaction History")
+    expect(page).not_to have_content("Participating Facilities")
   end
 end

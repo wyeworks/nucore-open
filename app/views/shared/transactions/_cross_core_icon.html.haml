@@ -1,3 +1,3 @@
-- if order_detail.cross_core_activity_for_facility?(current_facility)
+- if order_detail.cross_core_for_originating_facility?
   %br
   %i.fa.fa-users{ data: { toggle: "tooltip" }, title: t(".tooltip", facility: order_detail.order.cross_core_project.facility.abbreviation)}
