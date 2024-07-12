@@ -12,6 +12,8 @@ module Projects
     load_and_authorize_resource only: [:show, :edit, :update]
 
     def index
+      raise ActionController::RoutingError, "Projects are only available in a facility context" unless current_facility
+
       @search_form = ProjectsSearch::SearchForm.new(
         params[:search],
         defaults: {
@@ -28,6 +30,8 @@ module Projects
     end
 
     def cross_core_orders
+      raise ActionController::RoutingError, "Projects are only available in a facility context" unless current_facility
+
       @all_projects = @projects.display_order
 
       order_details = cross_core_order_details
@@ -39,9 +43,10 @@ module Projects
           allowed_date_fields: ["ordered_at"],
           cross_core_facilties: "other",
           order_statuses: default_order_statuses(order_details),
-          current_facility_id: current_facility.id
+          current_facility_id: current_facility.id,
         }
       )
+
       searchers = [
         TransactionSearch::ProductSearcher,
         TransactionSearch::OrderedForSearcher,

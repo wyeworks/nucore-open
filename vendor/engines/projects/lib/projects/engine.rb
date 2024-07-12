@@ -33,7 +33,7 @@ module Projects
                         "projects/shared/select_project"
 
       TransactionSearch.register(Projects::ProjectSearcher)
-      TransactionSearch.register(Projects::CrossCoreFacilitySearcher)
+      TransactionSearch.register(Projects::CrossCoreFacilitySearcher, default: false)
 
       ViewHook.add_hook "shared.transactions.search",
                         "end_of_first_column",

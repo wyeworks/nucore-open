@@ -982,8 +982,8 @@ class OrderDetail < ApplicationRecord
     estimated_price_policy&.price_group&.name
   end
 
-  def cross_core_activity_for_facility?(facility)
-    order.cross_core_project.present? && order.cross_core_project.facility_id != facility.id
+  def cross_core_for_originating_facility?
+    order.cross_core_project.present? && order.cross_core_project.facility_id != order.facility_id
   end
 
   private
