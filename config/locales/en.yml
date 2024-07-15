@@ -167,7 +167,7 @@ en:
       edit: "Edit"
     transactions:
       cross_core_icon:
-        tooltip: "This order placed on your behalf by %{facility}"
+        tooltip: "Placed on your behalf by <br/> %{facility}"
       table_inside:
         total: Total
         grand_total: Grand Total
