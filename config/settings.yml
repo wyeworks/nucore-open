@@ -179,12 +179,12 @@ saml:
   # locally stored version of the metadata.
   # You can add allowance for clock drift between the sp and idp - this is a time in seconds.
   allowed_clock_drift_in_seconds: 1
-  idp_metadata: "https://webauth.umass.edu/idp/shibboleth"
+  idp_metadata: https://webauth.umass.edu/saml2/idp/metadata.php
   # Overridden in staging/production
   # certificate_file: saml-certificate.p12 # Do not check in to version control.
   driver:
     name_identifier_format: urn:oasis:names:tc:SAML:2.0:nameid-format:transient
-    idp_slo_target_url: https://webauth.umass.edu/Logout
+    idp_slo_target_url: https://webauth.umass.edu/saml2/idp/SingleLogoutService.php
   metadata_parse_options: # Optional, but setting the sso_binding option is highly recommended. See RubySaml::IdpMetadataParser for valid options.
     sso_binding: ["urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"] #  Otherwise the binding will default to the first one specified in the IdP by default, which can cause problems if the IdP metadata changes.
   attribute_map:
