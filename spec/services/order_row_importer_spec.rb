@@ -11,6 +11,7 @@ RSpec.describe OrderRowImporter do
   let(:order_import) { build(:order_import, creator: user, facility: facility) }
   let(:service) { create(:setup_service, facility: facility) }
   let(:user) { create(:user) }
+  let(:project) { create(:project, facility:) }
 
   shared_context "valid row values" do
     let(:username) { user.username }
@@ -20,6 +21,7 @@ RSpec.describe OrderRowImporter do
     let(:order_date) { I18n.l(1.day.ago.to_date, format: :usa) }
     let(:fulfillment_date) { I18n.l(Time.current.to_date, format: :usa) }
     let(:reference_id) { "123456" }
+    let(:project_name) { project.name }
 
     before(:each) do
       allow_any_instance_of(Product).to receive(:can_purchase?).and_return(true)
@@ -37,6 +39,7 @@ RSpec.describe OrderRowImporter do
       "Note" => notes,
       "Order" => order_number,
       "Reference ID" => reference_id,
+      "Project Name" => project_name,
     }
     CSV::Row.new(ref.keys, ref.values)
   end
@@ -50,6 +53,7 @@ RSpec.describe OrderRowImporter do
   let(:notes) { "column7" }
   let(:order_number) { "" }
   let(:reference_id) { "column9" }
+  let(:project_name) { "column10" }
 
   describe "#import" do
     shared_examples_for "an order was created" do
@@ -144,6 +148,7 @@ RSpec.describe OrderRowImporter do
       let(:notes) { nil }
       let(:order_number) { nil }
       let(:reference_id) { nil }
+      let(:project_name) { nil }
 
       before(:each) do
         allow_any_instance_of(Product).to receive(:can_purchase?).and_return(true)
@@ -429,6 +434,7 @@ RSpec.describe OrderRowImporter do
       let(:product) { service }
       let(:product_name) { product.name }
       let(:username) { user.username }
+      let(:project_name) { nil }
 
       before(:each) do
         allow_any_instance_of(User).to receive(:accounts)
@@ -595,6 +601,36 @@ RSpec.describe OrderRowImporter do
 
         it_behaves_like "an order was not created"
         it_behaves_like "it has an error message", "The user does not match the existing order's"
+      end
+    end
+
+    context "with existing project name" do
+      include_context "valid row values"
+      it "creates an order detail with a project" do
+        subject.import
+        expect(subject.errors).to be_empty
+        expect(OrderDetail.last.project_id).to eq project.id
+      end
+    end
+
+    context "with non-existing project name" do
+      include_context "valid row values"
+      let(:project_name) { "Non-existing project" }
+
+      it "produces and error" do
+        subject.import
+        expect(subject.errors).to eq ["Project not found"]
+      end
+    end
+
+    context "with an empty string as a project name" do
+      include_context "valid row values"
+      let(:project_name) { "" }
+
+      it "creates an order detail with no project" do
+        subject.import
+        expect(subject.errors).to be_empty
+        expect(OrderDetail.last.project_id).to be_nil
       end
     end
   end

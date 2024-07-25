@@ -8,7 +8,7 @@ class Order < ApplicationRecord
   belongs_to :account
   belongs_to :facility
   belongs_to :order_import
-  belongs_to :cross_core_project, class_name: "Projects::Project"
+  belongs_to :cross_core_project, class_name: "Project"
   has_many   :order_details, inverse_of: :order, dependent: :destroy
 
   validates_presence_of :user_id, :created_by
@@ -21,6 +21,8 @@ class Order < ApplicationRecord
 
   # Used to allow validating order imports against the fulfillment date instead of the current time
   attr_reader :import_fulfillment_date
+
+  attr_reader :project_id
 
   def cross_core_project
     return nil unless SettingsHelper.feature_on?(:cross_core_projects)
@@ -130,6 +132,7 @@ class Order < ApplicationRecord
     order_details.destroy_all
     self.facility = nil
     self.account = nil
+    self.cross_core_project_id = nil
     save
   end
 
@@ -214,6 +217,11 @@ class Order < ApplicationRecord
   # If user_id doesn't match created_by, that means it was ordered on behalf of
   def ordered_on_behalf_of?
     user_id != created_by
+  end
+
+  def project_id=(project_id)
+    @project_id = project_id
+    order_details.each { |order_detail| order_detail.project_id = project_id }
   end
 
   private

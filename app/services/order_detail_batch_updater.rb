@@ -43,7 +43,7 @@ class OrderDetailBatchUpdater
   #                   defaults to 'orders'
 
   def self.permitted_attributes
-    @permitted_attributes ||= %i(assigned_user_id order_status_id)
+    @permitted_attributes ||= %i(assigned_user_id order_status_id project_id)
   end
 
   def initialize(order_detail_ids, facility, user, params, msg_type = "orders")

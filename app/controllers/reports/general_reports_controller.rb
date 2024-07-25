@@ -19,6 +19,7 @@ module Reports
         purchaser: ->(od) { format_username od.order.user },
         price_group: ->(od) { od.price_policy ? od.price_policy.price_group.name : text("unassigned") },
         assigned_to: ->(od) { od.assigned_user.presence ? format_username(od.assigned_user) : text("unassigned") },
+        project: ->(order_detail) { order_detail.project || " No Project" },
       )
     end
 

@@ -12,6 +12,7 @@ RSpec.describe OrderDetail do
   let(:order_detail) { @order_detail }
   let(:price_group) { create(:price_group, facility: facility) }
   let(:user) { @user }
+  let(:project) { create(:project, facility: facility) }
 
   before(:each) do
     @facility = create(:facility)

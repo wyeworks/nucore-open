@@ -37,6 +37,8 @@
   - if order.order_details.size > 0
 
     - if acting_as?
+      = render "projects/shared/select_project", f: f, order_detail: order.order_details.first
+      - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
       = render_view_hook "acting_as", f: f, order_detail: order.order_details.first
       .backdate_fields= render "edit_date", f: f
 

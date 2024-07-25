@@ -32,7 +32,7 @@ class SurveyResponse
 
   def response_data
     show_url = params[:survey_url]
-    # new survey services (i.e. IMSERC) provide the edit URL
+    # new survey services (i.e. form.io) provide the edit URL
     # old survey services (i.e. Surveyor) have the edit URL inferred
     edit_url = params[:survey_edit_url] || "#{show_url}/take"
     { show_url: show_url, edit_url: edit_url }.to_json

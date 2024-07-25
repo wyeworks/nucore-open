@@ -26,9 +26,11 @@ PATH
       momentjs-rails
 
 PATH
-  remote: vendor/engines/projects
+  remote: vendor/engines/ldap_authentication
   specs:
-    projects (0.0.1)
+    ldap_authentication (0.0.1)
+      devise_ldap_authenticatable (>= 0.8.6)
+      rails (>= 4.2)
 
 PATH
   remote: vendor/engines/saml_authentication
@@ -354,11 +356,11 @@ GEM
       railties (>= 5.0)
     i18n (1.14.5)
       concurrent-ruby (~> 1.0)
-    icalendar (2.10.1)
+    icalendar (2.10.2)
       ice_cube (~> 0.16)
     ice_cube (0.16.4)
     ice_nine (0.11.2)
-    image_processing (1.12.2)
+    image_processing (1.13.0)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
     jquery-rails (4.6.0)
@@ -467,7 +469,7 @@ GEM
       pry (>= 0.13, < 0.15)
     pry-rails (0.3.9)
       pry (>= 0.10.4)
-    public_suffix (6.0.0)
+    public_suffix (6.0.1)
     puma (6.4.2)
       nio4r (~> 2.0)
     racc (1.8.0)
@@ -523,7 +525,7 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.3.1)
+    rexml (3.3.2)
       strscan
     rollbar (3.5.2)
     rspec-activejob (0.6.1)
@@ -566,20 +568,21 @@ GEM
     rubocop-performance (1.21.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rails (2.25.0)
+    rubocop-rails (2.25.1)
       activesupport (>= 4.2.0)
       rack (>= 1.1)
       rubocop (>= 1.33.0, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    rubocop-rspec (3.0.2)
+    rubocop-rspec (3.0.3)
       rubocop (~> 1.61)
     ruby-ole (1.2.13.1)
     ruby-progressbar (1.13.0)
     ruby-saml (1.15.0)
       nokogiri (>= 1.13.10)
       rexml
-    ruby-vips (2.2.1)
+    ruby-vips (2.2.2)
       ffi (~> 1.12)
+      logger
     rubyzip (2.3.2)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -754,7 +757,6 @@ DEPENDENCIES
   parallel_tests
   paranoia
   prawn-rails
-  projects!
   pry-byebug
   pry-rails
   puma
@@ -803,4 +805,4 @@ RUBY VERSION
    ruby 3.3.0p0
 
 BUNDLED WITH
-   2.4.20
+   2.5.8

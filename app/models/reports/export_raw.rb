@@ -71,6 +71,7 @@ module Reports
         owner_email: ->(od) { od.account.owner_user.email },
         price_group: ->(od) { od.price_policy.try(:price_group).try(:name) },
         charge_for: ->(od) { ChargeMode.for_order_detail(od).to_s.titleize },
+        project: :project,
         estimated_cost: ->(od) { as_currency(od.estimated_cost) },
         estimated_subsidy: ->(od) { as_currency(od.estimated_subsidy) },
         estimated_total: ->(od) { as_currency(od.estimated_total) },

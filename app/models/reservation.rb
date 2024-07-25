@@ -45,6 +45,7 @@ class Reservation < ApplicationRecord
   delegate :facility, to: :product, allow_nil: true
   delegate :lock_window, to: :product, prefix: true
   delegate :owner, to: :account, allow_nil: true
+  delegate :project_id, :project_id=, to: :order_detail, allow_nil: true
 
   def canceled?
     return false unless order_detail

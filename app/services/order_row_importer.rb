@@ -18,6 +18,7 @@ class OrderRowImporter
       notes
       order_number
       reference_id
+      project_name
       errors
     ]
   end
@@ -155,9 +156,10 @@ class OrderRowImporter
   end
 
   def to_add_attributes
-    { note: field(:notes), account:, reference_id: field(:reference_id) }.merge(custom_attributes)
+    { note: field(:notes), account:, reference_id: field(:reference_id), project_id: project&.id }.merge(custom_attributes)
   end
 
+  # TODO: This may be now unsued and could be removed
   def custom_attributes
     {}
   end
@@ -216,6 +218,7 @@ class OrderRowImporter
       validate_product
       validate_account
       validate_existing_order
+      validate_project_name
       validate_custom_attributes
     end
   end
@@ -295,7 +298,18 @@ class OrderRowImporter
     end
   end
 
-  # Projects adds a custom attribute and overrides this method to validate it
+  def validate_project_name
+    if field(:project_name).present? && project.nil?
+      add_error(:project_not_found)
+    end
+  end
+
+  # TODO: This may be now unsued and could be removed
   def validate_custom_attributes
   end
+
+  def project
+    facility.projects.active.find_by name: field(:project_name)
+  end
+
 end

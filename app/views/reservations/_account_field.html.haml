@@ -16,6 +16,8 @@
             selected: selected_account_id
 
         - if acting_as?
+          = render "projects/shared/select_project", f: f, order_detail: @order_detail
+          - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
           = render_view_hook "after_account", f: f, order_detail: @order_detail
 
       - if show_note_input_to_user?(@order_detail)

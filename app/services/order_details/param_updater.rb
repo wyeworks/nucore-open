@@ -13,6 +13,7 @@ class OrderDetails::ParamUpdater
         :note,
         :price_change_reason,
         :editing_time_data,
+        :project_id,
         :reconciled_note,
         :reference_id,
         reservation: [
