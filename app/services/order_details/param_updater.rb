@@ -13,7 +13,9 @@ class OrderDetails::ParamUpdater
         :note,
         :price_change_reason,
         :editing_time_data,
+        :project_id,
         :reconciled_note,
+        :deposit_number,
         :reference_id,
         reservation: [
           :reserve_start_date,

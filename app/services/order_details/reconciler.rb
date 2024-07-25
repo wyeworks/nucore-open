@@ -12,11 +12,12 @@ module OrderDetails
     validate :reconciliation_must_be_in_past
     validate :all_journals_and_statements_must_be_before_reconciliation_date
 
-    def initialize(order_detail_scope, params, reconciled_at, bulk_reconcile_note = nil, bulk_reconcile_checkbox = nil)
+    def initialize(order_detail_scope, params, reconciled_at, bulk_reconcile_note = nil, bulk_deposit_number = nil, bulk_reconcile_checkbox = nil)
       @params = params || ActionController::Parameters.new
       @order_details = order_detail_scope.readonly(false).find_ids(to_be_reconciled.keys)
       @reconciled_at = reconciled_at
       @bulk_reconcile_note = bulk_reconcile_note if bulk_reconcile_checkbox == "1"
+      @bulk_deposit_number = bulk_deposit_number if bulk_reconcile_checkbox == "1"
     end
 
     def reconcile_all
@@ -47,6 +48,7 @@ module OrderDetails
       order_detail.reconciled_at = @reconciled_at
       order_detail.assign_attributes(allowed(params))
       order_detail.reconciled_note = @bulk_reconcile_note if @bulk_reconcile_note.present?
+      order_detail.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
       order_detail.change_status!(OrderStatus.reconciled)
       @count += 1
     rescue => e
@@ -58,7 +60,7 @@ module OrderDetails
     end
 
     def allowed(params)
-      params.except(:reconciled).permit(:reconciled_note)
+      params.except(:reconciled).permit(:reconciled_note, :deposit_number)
     end
 
     def reconciliation_must_be_in_past

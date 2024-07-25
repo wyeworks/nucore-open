@@ -18,6 +18,7 @@ class OrderRowImporter
       notes
       order_number
       reference_id
+      project_name
       errors
     ]
   end
@@ -68,11 +69,16 @@ class OrderRowImporter
   end
 
   def account
-    @account ||=
-      user
-      .accounts
-      .for_facility(facility)
-      .active_at(fulfillment_date).find_by(account_number: field(:chart_string))
+    return @account if defined?(@account)
+
+    @account = if field(:chart_string).match?(/^nonbillable$/i)
+                 NonbillableAccount.singleton_instance
+               else
+                 user
+                   .accounts
+                   .for_facility(facility)
+                   .active_at(fulfillment_date).find_by(account_number: field(:chart_string))
+               end
   end
 
   def errors?
@@ -155,9 +161,10 @@ class OrderRowImporter
   end
 
   def to_add_attributes
-    { note: field(:notes), account:, reference_id: field(:reference_id) }.merge(custom_attributes)
+    { note: field(:notes), account:, reference_id: field(:reference_id), project_id: project&.id }.merge(custom_attributes)
   end
 
+  # TODO: This may be now unsued and could be removed
   def custom_attributes
     {}
   end
@@ -216,6 +223,7 @@ class OrderRowImporter
       validate_product
       validate_account
       validate_existing_order
+      validate_project_name
       validate_custom_attributes
     end
   end
@@ -273,8 +281,13 @@ class OrderRowImporter
 
   def validate_account
     return if user.blank? || product.blank?
+
     if account.present?
-      add_error(account.validate_against_product(product, user, fulfillment_date))
+      if product.nonbillable_mode? && !account.is_a?(NonbillableAccount)
+        add_error(:invalid_nonbillable_account)
+      else
+        add_error(account.validate_against_product(product, user, fulfillment_date))
+      end
     else
       add_error(:account_not_found)
     end
@@ -295,7 +308,18 @@ class OrderRowImporter
     end
   end
 
-  # Projects adds a custom attribute and overrides this method to validate it
+  def validate_project_name
+    if field(:project_name).present? && project.nil?
+      add_error(:project_not_found)
+    end
+  end
+
+  # TODO: This may be now unsued and could be removed
   def validate_custom_attributes
   end
+
+  def project
+    facility.projects.active.find_by name: field(:project_name)
+  end
+
 end

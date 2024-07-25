@@ -29,6 +29,7 @@ class OrderDetail < ApplicationRecord
   # Used to mark a dispute as resolved
   attr_accessor :resolve_dispute
   before_validation :mark_dispute_resolved, if: :resolve_dispute
+
   after_validation :reset_dispute
 
   before_save :clear_statement, if: :account_id_changed?
@@ -58,6 +59,7 @@ class OrderDetail < ApplicationRecord
   belongs_to :bundle, foreign_key: "bundle_product_id"
   belongs_to :canceled_by_user, foreign_key: :canceled_by, class_name: "User"
   belongs_to :problem_resolved_by, class_name: "User"
+  belongs_to :project, class_name: "Project", foreign_key: :project_id, inverse_of: :order_details
   has_one    :reservation, inverse_of: :order_detail
   # for some reason, dependent: :delete on reservation isn't working with paranoia, hitting foreign key constraints
   before_destroy { reservation.try(:really_destroy!) }
@@ -72,7 +74,7 @@ class OrderDetail < ApplicationRecord
   # allow access to the vestal data.
   # once that data is no longer needed, this line and the
   # associated class can be removed
-  has_many :vestal_versions, as: :versioned
+  has_many   :vestal_versions, as: :versioned
 
   delegate :edit_url, to: :external_service_receiver, allow_nil: true
   delegate :in_cart?, :facility, :user, to: :order # user is the ordered_for user, not ordered_by user
@@ -81,6 +83,7 @@ class OrderDetail < ApplicationRecord
   delegate :ordered_on_behalf_of?, to: :order
   delegate :price_group, to: :price_policy, allow_nil: true
   delegate :reference, to: :journal, prefix: true, allow_nil: true
+  delegate :projects, to: :facility, prefix: true
 
   def estimated_price_group
     estimated_price_policy.try(:price_group)
@@ -113,6 +116,7 @@ class OrderDetail < ApplicationRecord
   validates_length_of :note, maximum: 1000, allow_blank: true, allow_nil: true
   validate :valid_manual_fulfilled_at
   validates :price_change_reason, presence: true, length: { minimum: 10, allow_blank: true }, if: :pricing_note_required?
+  validate :project_must_be_active, if: :project_id_changed?
 
   def actual_costs_match_calculated?
     dup_od = dup
@@ -986,6 +990,10 @@ class OrderDetail < ApplicationRecord
     order.cross_core_project.present? && order.cross_core_project.facility_id != order.facility_id
   end
 
+  def selectable_projects
+    (facility_projects.active.display_order + [project]).uniq.compact
+  end
+
   private
 
   # Is there enough information to move an associated order to complete/problem?
@@ -1083,5 +1091,11 @@ class OrderDetail < ApplicationRecord
 
   def update_billable_minutes_on_reservation
     reservation.update_billable_minutes
+  end
+
+  def project_must_be_active
+    if project.present? && !project.active?
+      errors.add(:project_id, :project_is_inactive)
+    end
   end
 end

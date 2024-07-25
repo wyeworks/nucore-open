@@ -15,7 +15,7 @@ class OrdersController < ApplicationController
   end
 
   def self.permitted_acting_as_params
-    @permitted_acting_as_params ||= []
+    @permitted_acting_as_params ||= [:project_id]
   end
 
   def initialize

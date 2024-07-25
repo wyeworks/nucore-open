@@ -1,6 +1,8 @@
 - @facility_users ||= User.find_users_by_facility(current_facility) || []
 
 %td.action-form
+  = render "projects/shared/select_facility_project", facility: current_facility
+  - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
   = render_view_hook "batch_update_above_product_column", facility: current_facility
 
 %td.action-form

@@ -14,6 +14,7 @@ module Reports
         account: ->(reservation) { reservation.order_detail.account },
         account_owner: ->(reservation) { format_username(reservation.order_detail.account.owner_user) },
         purchaser: ->(reservation) { format_username(reservation.order_detail.user) },
+        project: ->(reservation) { reservation.order_detail.project || " No Project" },
       )
     end
 

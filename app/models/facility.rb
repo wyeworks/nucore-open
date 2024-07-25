@@ -30,6 +30,7 @@ class Facility < ApplicationRecord
   has_many :users, -> { distinct }, through: :user_roles
   has_many :reservations, through: :instruments
   has_many :product_display_groups
+  has_many :projects, inverse_of: :facility, dependent: :destroy # Though Facilities cannot be destroyed
 
   validates_presence_of :name, :short_description, :abbreviation
   validate_url_name :url_name
@@ -48,6 +49,7 @@ class Facility < ApplicationRecord
   delegate :in_dispute, to: :order_details, prefix: true
 
   scope :active, -> { where(is_active: true) }
+  scope :inactive, -> { where(is_active: false) }
   scope :alphabetized, -> { order(:name) }
   # Finds exact name case-insensitive
   scope :name_query, ->(name) { where(arel_table[:name].lower.eq(name.downcase)) if name.present? }

@@ -16,6 +16,7 @@ en:
       invalid_user: Invalid username or email
       product_not_found: Couldn't find product by name '%{product}'
       invalid_product_type: Import of %{type} orders not allowed at this time
+      invalid_nonbillable_account: "Invalid !Chart_string! provided for a Nonbillable product."
       requires_survey: "%{type} requires survey"
       requires_template: "%{type} requires template"
       account_not_found: Can't find account

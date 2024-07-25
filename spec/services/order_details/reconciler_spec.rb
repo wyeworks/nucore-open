@@ -24,23 +24,25 @@ RSpec.describe OrderDetails::Reconciler do
 
     context "with a bulk note" do
       context "bulk note checkbox checked" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "this is a bulk note", "1") }
+        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "this is a bulk note", "CRT1234567", "1") }
 
         it "adds the note to all order details" do
           reconciler.reconcile_all
           order_details.each do |od|
             expect(od.reload.reconciled_note).to eq("this is a bulk note")
+            expect(od.reload.deposit_number).to eq("CRT1234567")
           end
         end
       end
 
       context "bulk note checkbox UNchecked" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "this is a bulk note") }
+        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "this is a bulk note", "CRT1234567") }
 
         it "does NOT add the note to the order details" do
           reconciler.reconcile_all
           order_details.each do |od|
             expect(od.reload.reconciled_note).to eq(nil)
+            expect(od.reload.deposit_number).to eq(nil)
           end
         end
       end
@@ -60,21 +62,22 @@ RSpec.describe OrderDetails::Reconciler do
       end
 
       context "with NO reconciled note set" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "" ) }
+        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "", "" ) }
 
         it "does not set a value" do
           reconciler.reconcile_all
           order_details.each do |od|
             expect(od.reload.reconciled_note).to eq(nil)
+            expect(od.reload.deposit_number).to eq(nil)
           end
         end
       end
 
       context "with previous reconciled note value, no new value set" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "" ) }
+        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "", "" ) }
         before(:each) do
           order_details.each do |od|
-            od.update!(reconciled_note: "rec note #{od.id}")
+            od.update!(reconciled_note: "rec note #{od.id}", deposit_number: "CRT0000123")
           end
         end
 
@@ -82,6 +85,7 @@ RSpec.describe OrderDetails::Reconciler do
           reconciler.reconcile_all
           order_details.each do |od|
             expect(od.reload.reconciled_note).to eq("rec note #{od.id}")
+            expect(od.reload.deposit_number).to eq("CRT0000123")
           end
         end
       end

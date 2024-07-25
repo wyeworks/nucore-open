@@ -67,13 +67,17 @@ class FacilitiesController < ApplicationController
     # show list of operable facilities for current user, and admins manage all facilities
     @active_tab = "manage_facilites"
     if session_user.administrator?
-      @facilities = Facility.alphabetized
-      flash.now[:notice] = "No facilities have been added" if @facilities.empty?
+      facilities = Facility.alphabetized
+      @active_facilities = facilities.active
+      @inactive_facilities = facilities.inactive
+      flash.now[:notice] = "No facilities have been added" if facilities.empty?
     else
-      @facilities = operable_facilities
-      raise ActiveRecord::RecordNotFound if @facilities.empty?
-      if @facilities.size == 1
-        redirect_to dashboard_facility_path(@facilities.first)
+      facilities = operable_facilities
+      @active_facilities = facilities.active
+      @inactive_facilities = facilities.inactive
+      raise ActiveRecord::RecordNotFound if facilities.empty?
+      if facilities.size == 1
+        redirect_to dashboard_facility_path(facilities.first)
         return
       end
     end

@@ -47,6 +47,8 @@
 
     .row
       .span3
+        = render "projects/shared/select_project", f: f, order_detail: @order_detail
+        - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
         = render_view_hook "after_order_status", f: f, order_detail: @order_detail
       .span7
         - if f.object.account.try(:splits).try(:present?)

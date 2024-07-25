@@ -34,6 +34,7 @@ class Ability
     end
 
     ability_extender.extend(user, resource)
+    Projects::AbilityExtension.new(self).extend(user, resource)
   end
 
 
@@ -55,7 +56,7 @@ class Ability
       unless user.account_manager?
         # TODO: Refactor
         # We think this is here to keep the Users tab visible. See LinkCollection#admin_users.
-        cannot :manage, User unless resource.is_a?(Facility) || resource.is_a?(Projects::Project)
+        cannot :manage, User unless resource.is_a?(Facility) || resource.is_a?(Project)
         if SettingsHelper.feature_off?(:create_users)
           cannot([:edit, :update], User)
         end

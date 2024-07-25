@@ -15,6 +15,7 @@ RSpec.describe FacilitiesController do
   before(:all) { create_users }
 
   let(:facility) { FactoryBot.create(:facility) }
+  let(:inactive_facility) { FactoryBot.create(:facility, is_active: false) }
   let(:facility_account) { FactoryBot.create(:facility_account, facility: facility) }
 
   before(:each) do
@@ -268,12 +269,14 @@ RSpec.describe FacilitiesController do
       before(:each) do
         @facility2 = FactoryBot.create(:facility)
         allow(@controller).to receive(:current_facility).and_return(@authable)
-        allow(@controller).to receive(:operable_facilities).and_return([@authable, @facility2])
+        allow(@controller).to receive(:operable_facilities).and_return(Facility.where(id: [@authable, @facility2, inactive_facility]))
         expect(@controller).to receive(:init_current_facility).never
       end
 
       it_should_allow_all facility_operators do
-        expect(assigns(:facilities)).to eq([@authable, @facility2])
+        expect(assigns(:facilities)).to eq([@authable, @facility2, inactive_facility])
+        expect(assigns(:active_facilities)).to eq([@authable, @facility2])
+        expect(assigns(:inactive_facilities)).to eq([inactive_facility])
         expect(response).to be_successful.and render_template("facilities/list")
       end
     end

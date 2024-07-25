@@ -1,0 +1,12 @@
+%h3= Project.model_name.human(count: 2)
+
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th= Project.human_attribute_name(:name)
+  %tbody
+    - results.each do |project|
+      %tr
+        %td
+          = link_to project.name,
+            facility_project_path(project.facility, project)

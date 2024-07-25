@@ -10,7 +10,9 @@ module TransactionSearch
     attr_accessor :facilities, :accounts, :products, :account_owners,
                   :order_statuses, :statements, :date_ranges, :ordered_fors,
                   :account_types, :cross_cores, :cross_core_facilties,
-                  :current_facility_id
+                  :current_facility_id,
+                  :projects,
+                  :cross_core_facilties
 
     def self.model_name
       ActiveModel::Name.new(self, nil, "Search")

@@ -1,0 +1,56 @@
+en:
+  activerecord:
+    errors:
+      models:
+        order_detail:
+          attributes:
+            project_id:
+              project_is_inactive: The project is inactive
+
+    models:
+      project:
+        one: Project
+        other: Projects
+
+  controllers:
+    projects:
+      create:
+        success: "New project %{project_name} was created."
+      update:
+        success: "Project %{project_name} was updated."
+
+  order_row_importer:
+    headers:
+      project_name: Project Name
+    errors:
+      project_not_found: Project not found
+  projects:
+    cross_core_orders:
+      filter_label: "Participating !facilities_downcase!"
+      head: "Cross Core Orders"
+      no_orders: There are no orders for your Cross Core projects.
+    edit:
+      description: Description as it will appear on the project's page
+      name: Name of the label as displayed to the end user
+      update: Update Project
+    index:
+      add: Add Project
+      head: Manage Projects
+    tabnav:
+      projects: "Projects"
+      cross_core_orders: "Cross Core Orders"
+
+    new:
+      add: Add Project
+      create: Create a Project
+      cancel: Cancel
+      description: Description as it will appear on the project's page
+      head: Add Project
+      name: Name of the label as displayed to the end user
+    show:
+      edit: Edit Project
+
+    shared:
+      select_project:
+        placeholder: Choose a project...
+        unassign: Unassign

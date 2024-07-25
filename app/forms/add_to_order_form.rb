@@ -145,8 +145,8 @@ class AddToOrderForm
   end
 
   def create_cross_core_project_and_add_order!
-    Projects::Project.transaction do
-      @order_project ||= Projects::Project.new(
+    Project.transaction do
+      @order_project ||= Project.new(
         name: "#{current_facility.abbreviation}-#{original_order.id}",
         facility_id: current_facility.id
       )

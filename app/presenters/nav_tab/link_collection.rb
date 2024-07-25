@@ -23,6 +23,7 @@ class NavTab::LinkCollection
       admin_products
       admin_users
       admin_reports
+      admin_projects
       admin_facility
     )
   end
@@ -123,6 +124,16 @@ class NavTab::LinkCollection
   def admin_facility
     if single_facility? && ability.can?(:edit, facility)
       NavTab::Link.new(tab: :admin_facility, url: manage_facility_path(facility))
+    end
+  end
+
+  def admin_projects
+    if single_facility? && ability.can?(:index, Project)
+      NavTab::Link.new(
+        tab: :admin_projects,
+        text: Project.model_name.human(count: 2),
+        url: facility_projects_path(facility),
+      )
     end
   end
 

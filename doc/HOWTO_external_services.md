@@ -9,7 +9,7 @@ Currently, you can only use one external service class at a time.
 You can change the default external service by creating a new class that extends from [`ExternalService`](../app/models/external_service.rb). The current implementation, [`UrlService`](../app/models/url_service.rb), provides the majority of functionality.
 
 There may be other gems or companion applications that utilize `UrlService`.
-For example, NU is using `acgt`, `sanger_sequencing`, and the IMSERC application (https://github.com/tablexi/nucore-imserc).
+For example, NU is using `acgt` and `sanger_sequencing`.
 
 ## Process
 

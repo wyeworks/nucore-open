@@ -52,6 +52,14 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :facilities, only: [] do
+    resources :projects, controller: "projects", except: [:destroy] do
+      collection do
+        get "cross_core_orders"
+      end
+    end
+  end
+  
   resources :facilities, except: [:delete], path: I18n.t("facilities_downcase") do
     collection do
       get "list"

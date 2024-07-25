@@ -344,12 +344,14 @@ RSpec.describe Order do
     context "clear" do
       it "clear should destroy all order_details and set the cart.facility to nil when clearing cart" do
         @cart.add(@service, 1)
+        @cart.update(cross_core_project_id: create(:project, facility: @facility).id)
         expect(@cart.reload.facility).to eq(@facility)
         @cart.clear!
         expect(@cart.facility).to be_nil
         expect(@cart.order_details.size).to eq(0)
         expect(@cart.account).to be_nil
         expect(@cart.state).to eq("new")
+        expect(@cart.cross_core_project_id).to be_nil
       end
     end
 
