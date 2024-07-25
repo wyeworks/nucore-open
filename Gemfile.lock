@@ -26,13 +26,6 @@ PATH
       momentjs-rails
 
 PATH
-  remote: vendor/engines/ldap_authentication
-  specs:
-    ldap_authentication (0.0.1)
-      devise_ldap_authenticatable (>= 0.8.6)
-      rails (>= 4.2)
-
-PATH
   remote: vendor/engines/saml_authentication
   specs:
     saml_authentication (0.0.1)
