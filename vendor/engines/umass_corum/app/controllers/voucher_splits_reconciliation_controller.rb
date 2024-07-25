@@ -30,7 +30,7 @@ class VoucherSplitsReconciliationController < ApplicationController
 
       reconciled_at = parse_usa_date(params[:reconciled_at])
 
-      reconciler = OrderDetails::Reconciler.new(unreconciled_details_scope, params[:order_detail], reconciled_at, params[:bulk_reconcile_note], params[:bulk_note_checkbox])
+      reconciler = OrderDetails::Reconciler.new(unreconciled_details_scope, params[:order_detail], reconciled_at, params[:bulk_reconcile_note], params[:bulk_deposit_number], params[:bulk_note_checkbox])
       redirect_route = voucher_splits_path
     else
       UmassCorum::VoucherReconciler.add_all_order_details_to_params(unreconciled_details_scope, params[:order_detail], "mivp_pending") if reconcile_all
