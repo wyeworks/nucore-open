@@ -1,0 +1,13 @@
+- if facilities.any?
+  %h2= title
+  %table.table.table-striped.table-hover
+    %thead
+      %tr
+        %th= Facility.human_attribute_name(:name).titlecase
+    %tbody
+      -if current_user.administrator? && SettingsHelper.feature_on?(:cross_facility_reports)
+        %tr
+          %td= link_to Facility.cross_facility.to_s, facility_general_reports_path(Facility.cross_facility, report_by: :product)
+      - facilities.each do |facility|
+        %tr
+          %td= link_to facility, dashboard_facility_path(facility)

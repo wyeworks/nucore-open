@@ -49,6 +49,7 @@ class Facility < ApplicationRecord
   delegate :in_dispute, to: :order_details, prefix: true
 
   scope :active, -> { where(is_active: true) }
+  scope :inactive, -> { where(is_active: false) }
   scope :alphabetized, -> { order(:name) }
   # Finds exact name case-insensitive
   scope :name_query, ->(name) { where(arel_table[:name].lower.eq(name.downcase)) if name.present? }

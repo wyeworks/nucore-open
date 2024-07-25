@@ -4,18 +4,6 @@
 - if current_user.administrator?
   %p= link_to text("admin.shared.add", model: Facility.model_name.human), new_facility_path, class: "btn-add"
 
-- if @facilities.any?
-  %table.table.table-striped.table-hover
-    %thead
-      %tr
-        %th= Facility.human_attribute_name(:name).titlecase
-        %th= Facility.human_attribute_name(:status).titlecase
-    %tbody
-      -if current_user.administrator? && SettingsHelper.feature_on?(:cross_facility_reports)
-        %tr
-          %td= link_to Facility.cross_facility.to_s, facility_general_reports_path(Facility.cross_facility, report_by: :product)
-          %td= Facility.cross_facility.status_string
-      - @facilities.each do |facility|
-        %tr
-          %td= link_to facility, dashboard_facility_path(facility)
-          %td= facility.status_string
+= render "table", facilities: @active_facilities, title: t(".active")
+%hr
+= render "table", facilities: @inactive_facilities, title: t(".inactive")
