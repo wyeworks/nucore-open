@@ -8,6 +8,7 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
   describe "adding to existing orders" do
     let!(:user) { create(:user, username: "sst123@example.com") }
     let!(:item) { create(:setup_item, name: "Example Item", facility: facility) }
+    let!(:nonbillable_item) { create(:setup_item, name: "Nonbillable Item", billing_mode: Product.billing_modes.last, facility: facility) }
     let!(:account) { create(:nufs_account, :with_account_owner, owner: user) }
     let!(:account2) { create(:nufs_account, :with_account_owner, owner: user) }
     let!(:original_account) { create(:nufs_account, :with_account_owner, owner: user) }
@@ -18,6 +19,7 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
     let(:two_weeks_ago) { I18n.l(15.days.ago.to_date, format: :usa) }
     let(:yesterday) { I18n.l(1.day.ago.to_date, format: :usa) }
     let(:today) { I18n.l(Time.current.to_date, format: :usa) }
+    let(:nonbillable_account) { NonbillableAccount.singleton_instance }
 
     describe "happy path" do
       let(:body) do
@@ -25,6 +27,7 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
           #{I18n.t("order_row_importer.headers.user")},#{I18n.t("Chart_string")},Product Name,Quantity,Order Date,Fulfillment Date,Note,Order,Reference ID
           sst123@example.com,#{account.account_number},Example Item,1,#{yesterday},#{yesterday},Add to 1,#{order.id},123456789
           sst123@example.com,#{account2.account_number},Example Item,1,#{yesterday},#{yesterday},Add to 2,#{order.id},123456000
+          sst123@example.com,nonbillable,Nonbillable Item,1,#{yesterday},#{yesterday},Add to 3,#{order.id},123456700
           sst123@example.com,#{account2.account_number},Example Item,1,#{yesterday},#{yesterday},Add to other,#{order2.id},abc123
           sst123@example.com,#{account.account_number},Example Item,1,#{yesterday},#{yesterday},New 1,,
           SST123@EXAMPLE.COM,#{account.account_number},Example Item,1,#{yesterday},#{yesterday},New 1-2 - Miscased,,
@@ -32,11 +35,13 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
           sst123@example.com,#{account2.account_number},Example Item,1,#{yesterday},#{yesterday},New 2-2,,1234
           sst123@example.com,#{account2.account_number},Example Item,1,#{two_weeks_ago},#{yesterday},New 3 - Different Order Date,,
           sst123@example.com,#{account2.account_number},Example Item,1,#{yesterday},#{today},New 2-3 - Different fulfilled,,
+          sst123@example.com,NONBILLABLE,Nonbillable Item,1,#{yesterday},#{yesterday},New 3,,
+          sst123@example.com,Nonbillable,Nonbillable Item,1,#{yesterday},#{yesterday},New 3-2,,
         CSV
       end
 
-      it "adds the two items to the order" do
-        expect { order_import.process_upload! }.to change(order.reload.order_details, :count).by(2)
+      it "adds the three items to the order" do
+        expect { order_import.process_upload! }.to change(order.reload.order_details, :count).by(3)
       end
 
       it "puts the right accounts on the added details" do
@@ -45,6 +50,7 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
           anything, # this is the original detail
           having_attributes(account: account, note: "Add to 1", reference_id: "123456789"),
           having_attributes(account: account2, note: "Add to 2", reference_id: "123456000"),
+          having_attributes(account: nonbillable_account, note: "Add to 3", reference_id: "123456700"),
         ])
       end
 
@@ -54,7 +60,7 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
 
       it "creates additional orders based on the keys" do
         existing = Order.all.to_a
-        expect { order_import.process_upload! }.to change(Order, :count).by(3)
+        expect { order_import.process_upload! }.to change(Order, :count).by(4)
 
         expect(Order.all.to_a - existing).to match([
           having_attributes(
@@ -72,6 +78,12 @@ RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } d
           ),
           having_attributes(
             order_details: [having_attributes(account: account2, note: "New 3 - Different Order Date")]
+          ),
+          having_attributes(
+            order_details: [
+              having_attributes(account: nonbillable_account, note: "New 3"),
+              having_attributes(account: nonbillable_account, note: "New 3-2"),
+            ]
           ),
         ])
       end
