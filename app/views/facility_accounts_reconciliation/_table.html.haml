@@ -8,6 +8,9 @@
       %th{ scope: "col" }= Order.model_name.human
       %th{ scope: "col" }= Statement.human_attribute_name(:total_cost)
       %th#reconcile-note.row-note-input{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
+      - if show_reconciliation_deposit_number
+        %th#reconcile-deposit-number.row-note-input{ scope: "col", data: { toggle: "tooltip" }, title: t("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
+          = OrderDetail.human_attribute_name(:deposit_number)
 
   %tbody
     - @unreconciled_details.each do |order_detail|
@@ -28,3 +31,5 @@
               .order-detail-extra.order-detail-note= order_detail.note
         %td= show_actual_total(order_detail)
         %td.row-note-input= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]", nil, aria: {labelledby: "reconcile-note"}
+        - if show_reconciliation_deposit_number
+          %td.row-note-input= text_field_tag "order_detail[#{order_detail.id}][deposit_number]", nil, aria: {labelledby: "reconcile-deposit-number"}

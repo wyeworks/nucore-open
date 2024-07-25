@@ -102,6 +102,7 @@ module Reports
         invoice_number: ->(od) { od.statement.try(:invoice_number) },
         journal_date: ->(od) { od.journal.journal_date if od.journal },
         reconciled_note: :reconciled_note,
+        deposit_number: :deposit_number,
         reconciled_at: :reconciled_at,
         price_change_reason: :price_change_reason,
         price_changed_by_user: ->(od) { od.price_changed_by_user&.full_name(suspended_label: false) },

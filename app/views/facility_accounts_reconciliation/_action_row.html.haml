@@ -17,3 +17,11 @@
       %label.control-label{ for: :bulk_reconcile_note }= t("facility_accounts_reconciliation.index.bulk_note")
       .controls
         = text_field_tag :bulk_reconcile_note
+
+      - if show_reconciliation_deposit_number
+        .deposit-number-row
+          %label.inline{ for: :bulk_deposit_number, data: { toggle: "tooltip" }, title: t("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
+            = t("facility_accounts_reconciliation.index.bulk_deposit_number")
+          %span
+            = t("facility_accounts_reconciliation.index.bulk_deposit_number_prefix")
+          = text_field_tag :bulk_deposit_number

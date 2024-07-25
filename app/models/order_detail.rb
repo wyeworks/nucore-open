@@ -29,6 +29,7 @@ class OrderDetail < ApplicationRecord
   # Used to mark a dispute as resolved
   attr_accessor :resolve_dispute
   before_validation :mark_dispute_resolved, if: :resolve_dispute
+
   after_validation :reset_dispute
 
   before_save :clear_statement, if: :account_id_changed?

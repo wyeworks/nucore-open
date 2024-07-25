@@ -155,6 +155,7 @@ feature:
   walkup_reservations: true
   cross_core_projects: true
   cross_core_order_view: <%= ENV.fetch("CROSS_CORE_ORDER_VIEW", true) %>
+  show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
 
 split_accounts:
   # Roles are allowed to create Split Accounts

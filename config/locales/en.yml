@@ -29,6 +29,8 @@ en:
   facility_downcase: facility
   facilities_downcase: facilities
 
+  deposit_number_prefix: ""
+
   # When updating sso, chart string, or statement, check override/en.yml for
   # additional changes that are necessary
   Sso_id: NetID
@@ -253,6 +255,9 @@ en:
       checkbox_label: select order %{order_number} to be reconciled
       bulk_note_checkbox: Use Bulk Note
       bulk_note: Bulk Reconciliation Note
+      bulk_deposit_number: "Bulk !deposit_number_prefix! Number"
+      bulk_deposit_number_prefix: "!deposit_number_prefix!"
+      bulk_deposit_number_hint: "Please enter the !deposit_number_prefix! Number from your GL008"
 
   facility_users:
     title: "!Facility! Staff"
