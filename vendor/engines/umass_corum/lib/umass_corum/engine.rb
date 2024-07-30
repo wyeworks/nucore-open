@@ -11,6 +11,7 @@ module UmassCorum
     config.to_prepare do
       User.send :include, UmassCorum::UserExtension
       UsersController.user_form_class = UmassCorum::UserForm
+      GlobalSearchController.send :include, UmassCorum::GlobalSearchControllerExtension
       EngineManager.allow_view_overrides!("umass_corum")
       Account.config.account_types.concat(["UmassCorum::VoucherSplitAccount", "UmassCorum::SubsidyAccount"])
       Account.config.statement_account_types << "UmassCorum::VoucherSplitAccount"
