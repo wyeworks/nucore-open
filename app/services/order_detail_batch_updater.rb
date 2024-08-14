@@ -146,11 +146,15 @@ class OrderDetailBatchUpdater
         unless order_detail.cancel_reservation(user, order_status: order_status, admin: true)
           raise "#{msg_type} ##{order_detail} failed cancellation."
         end
-      # cancel other orders or change status of any order
+      # cancel other orders
+      elsif order_status.root_canceled?
+        order_detail.canceled_by_user = @user
+        order_detail.canceled_at = Time.current
+        order_detail.change_status!(order_status)
+      # ... or change status of any order
       else
         order_detail.change_status!(order_status)
       end
-      order_detail.notify_purchaser_of_order_status
     end
   rescue => e
     msg_hash[:error] =

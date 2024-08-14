@@ -85,7 +85,7 @@ class Reports::AccountTransactionsReport
       order_detail.id,
       format_usa_date(order_detail.send(:"#{@date_range_field}")),
       order_detail.order.facility,
-      order_detail.description_as_html,
+      order_detail.description_as_html(skip_html_escape: true),
       format_usa_datetime(reservation.reserve_start_at),
       format_usa_datetime(reservation.reserve_end_at),
       format_usa_datetime(order_detail.time_data.try(:actual_start_at)),

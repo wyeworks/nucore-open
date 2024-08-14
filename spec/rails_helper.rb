@@ -37,6 +37,8 @@ RSpec.configure do |config|
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--remote-debugging-pipe")
 
+    Capybara.default_max_wait_time = 15
+
     if ENV["DOCKER_LOCAL_DEV"]
       Capybara.register_driver :selenium_remote do |app|
         Capybara::Selenium::Driver.new(app,

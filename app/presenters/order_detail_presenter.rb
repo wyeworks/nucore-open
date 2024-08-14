@@ -14,9 +14,9 @@ class OrderDetailPresenter < SimpleDelegator
     order_details.map { |order_detail| new(order_detail) }
   end
 
-  def description_as_html
+  def description_as_html(skip_html_escape: false)
     [bundle, product].compact.map do |description|
-      ERB::Util.html_escape(description)
+      skip_html_escape ? description : ERB::Util.html_escape(description)
     end.join(" &mdash; ").html_safe
   end
 

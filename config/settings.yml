@@ -16,6 +16,9 @@ accounts:
   product_default: 753080
   revenue_account_default: 699900
 
+admin_holds:
+  repeat_end_date_in_weeks: <%= ENV.fetch("ADMIN_HOLD_REPEAT_END_DATE_IN_WEEKS", 12) %>
+
 financial:
   # in the format MM-DD
   fiscal_year_begins: 07-01

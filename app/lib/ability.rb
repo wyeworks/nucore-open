@@ -446,6 +446,17 @@ class Ability
         can [:add_accessories, :new, :show, :update, :cancel], OrderDetail if user.facility_staff_or_manager_of?(project.facility)
       end
     end
+
+    if controller.is_a?(FileUploadsController) && resource.is_a?(Facility) && SettingsHelper.feature_on?(:cross_core_projects)
+      can [:upload_sample_results, :destroy], StoredFile do |fileupload|
+        project = fileupload.order_detail.project
+
+        project&.cross_core? &&
+          (user.facility_staff_or_manager_of?(project.facility) ||
+            user.facility_staff_or_manager_of?(order_detail.order.facility)) &&
+          fileupload.file_type == "sample_result"
+      end
+    end
   end
 
 

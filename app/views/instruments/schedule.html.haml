@@ -17,6 +17,12 @@
 
 %h2= @product
 
+%h3= t(".reservations_calendar")
+#overlay
+  #spinner
+    #hide
+      #calendar
+
 %h3= t(".administrative_reservations")
 
 %p
@@ -86,10 +92,3 @@
               = link_to reservation, edit_facility_instrument_offline_reservation_path(current_facility, @product, reservation)
             %td= reservation_category_label(reservation)
             %td= reservation.admin_note
-
-%h3= t(".reservations_calendar")
-
-#overlay
-  #spinner
-    #hide
-      #calendar

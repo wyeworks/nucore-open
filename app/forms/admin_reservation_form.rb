@@ -92,12 +92,12 @@ class AdminReservationForm
   end
 
   def max_end_date
-    reserve_start_at + 12.weeks
+    reserve_start_at + admin_hold_weeks.weeks
   end
 
   def cannot_exceed_max_end_date
     if repeat_end_date && repeat_end_date > max_end_date
-      errors.add :repeat_end_date, :too_far_in_future, time: "12 weeks"
+      errors.add :repeat_end_date, :too_far_in_future, time: "#{admin_hold_weeks} weeks"
     end
   end
 
@@ -111,4 +111,7 @@ class AdminReservationForm
     repeats == "1"
   end
 
+  def admin_hold_weeks
+    Settings.admin_holds.repeat_end_date_in_weeks
+  end
 end

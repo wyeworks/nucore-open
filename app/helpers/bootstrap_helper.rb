@@ -11,11 +11,17 @@ module BootstrapHelper
   end
 
   def modal_cancel_button(options = {})
+    data = { dismiss: "modal" }
+    class_name = "btn"
+
+    data.merge!(options[:data]) if options[:data]
+    class_name = "#{class_name} #{options[:class_name]}" if options[:class_name]
+
     if request.xhr?
       content_tag :button,
                   options[:text] || "Cancel",
-                  data: { dismiss: "modal" },
-                  class: "btn",
+                  data:,
+                  class: class_name,
                   type: "button"
     end
   end

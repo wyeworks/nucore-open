@@ -6,6 +6,7 @@ RSpec.describe Reports::AccountTransactionsReport do
   # Defined in spec/support/contexts/cross_core_context.rb
   include_context "cross core orders"
 
+  let(:item) { create(:setup_item, facility:, name: "Item for testing & checking") }
   subject(:report) { Reports::AccountTransactionsReport.new(order_details, report_options) }
   let(:report_options) { {} }
 
@@ -32,6 +33,10 @@ RSpec.describe Reports::AccountTransactionsReport do
 
       it "includes the order detail's cross core project facility" do
         expect(report.to_csv.lines.second).to include(cross_core_project.facility.abbreviation)
+      end
+
+      it "includes the product's name" do
+        expect(report.to_csv.lines.second).to include(item.name)
       end
 
       describe "with estimated label_key_prefix" do

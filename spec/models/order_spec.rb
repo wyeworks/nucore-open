@@ -287,7 +287,7 @@ RSpec.describe Order do
       end
 
       context "service" do
-        it "should add two order_details when has an active survey and a quantity of 2" do
+        it "should add one order_detail when has an active survey and a quantity of 2" do
           # setup
           @service_w_active_survey = FactoryBot.create(:service, facility: @facility, initial_order_status: @order_status)
           allow(@service_w_active_survey).to receive(:active_survey?).and_return(true)
@@ -297,10 +297,11 @@ RSpec.describe Order do
 
           # asserts
           expect(@ods).to respond_to :each
-          expect(@ods.size).to eq(2)
+          expect(@ods.size).to eq(1)
+          expect(@ods.first.quantity).to eq(2)
         end
 
-        it "should add two order_details when has an active template and a quantity of 2" do
+        it "should add one order_detail when has an active template and a quantity of 2" do
           # setup
           @service_w_active_template = FactoryBot.create(:service, facility: @facility, initial_order_status: @order_status)
           @service_w_active_template.stored_files.create! FactoryBot.attributes_for(:stored_file, file_type: "template", created_by: @user.id)
@@ -310,7 +311,8 @@ RSpec.describe Order do
 
           # asserts
           expect(@ods).to respond_to :each
-          expect(@ods.size).to eq(2)
+          expect(@ods.size).to eq(1)
+          expect(@ods.first.quantity).to eq(2)
         end
 
         it "should add one order_detail when has a quantity of 2 and service doesn't have a template or survey" do

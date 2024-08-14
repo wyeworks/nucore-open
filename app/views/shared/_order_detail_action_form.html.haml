@@ -1,18 +1,18 @@
 - @facility_users ||= User.find_users_by_facility(current_facility) || []
 
-%td.action-form
+%td.action-form{ colspan: 2 }
   = render "projects/shared/select_facility_project", facility: current_facility
   - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
   = render_view_hook "batch_update_above_product_column", facility: current_facility
 
-%td.action-form
+%td.action-form{ colspan: 2 }
   -# TODO: refactor/extract/I18n options building:
   - assigned_user_options = @facility_users.map { |u| [u.full_name, u.id] }.unshift(["Assign to...", nil], ["Unassign", "unassign"])
 
   = select_tag :assigned_user_id,
     options_for_select(assigned_user_options), class: "sync_select", id: nil
 
-%td.action-form
+%td.action-form{ colspan: 2 }
   %select{ name: "order_status_id", class: "sync_select status_dropdown", id: nil }
     = options_for_select([["Status...", nil]])
     - OrderStatus.non_protected_statuses(current_facility).each do |order_status|
