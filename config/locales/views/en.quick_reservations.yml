@@ -4,6 +4,7 @@ en:
       my_reservation: My Reservations
   quick_reservations:
     new:
+      note_hint: Visible to facility staff only
       reservation_details: Reservation Details
       reserved: Walkup Reservations Not Available
       reserved_message: "The next available start time is:"

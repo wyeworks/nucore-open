@@ -157,6 +157,7 @@ RSpec.describe OrderDetailBatchUpdater do
       context "when order_status_id is already set" do
         let(:new_status_id) { OrderStatus.new_status.id }
         let(:in_process_status_id) { OrderStatus.in_process.id }
+        let(:canceled_status_id) { OrderStatus.canceled.id }
         before(:each) do
           order_detail.update_attribute(:order_status_id, in_process_status_id)
         end
@@ -199,6 +200,29 @@ RSpec.describe OrderDetailBatchUpdater do
           end
 
           it "returns a successful update note (despite nothing changing)" do
+            expect(updater.update!)
+              .to eq(notice: "The #{record_type} were successfully updated")
+          end
+        end
+
+        context "and the order is canceled" do
+          let(:order_status_id) { canceled_status_id }
+
+          it "updates order_status_id to the new value" do
+            expect { updater.update! }
+              .to change { order_detail.reload.order_status_id }
+              .from(in_process_status_id)
+              .to(canceled_status_id)
+          end
+
+          it "sets canceled info" do
+            expect { updater.update! }
+              .to change { order_detail.reload.canceled_by_user }
+              .from(nil)
+              .to(user)
+          end
+
+          it "returns a successful update note" do
             expect(updater.update!)
               .to eq(notice: "The #{record_type} were successfully updated")
           end

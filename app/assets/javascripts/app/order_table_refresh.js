@@ -6,20 +6,25 @@
 document.addEventListener("DOMContentLoaded", function() {
 
   function fetchAndRefresh() {
-    const table = document.getElementsByClassName("js--orderTableRefresh")[0];
+    const updatedFacilityId = this.getElementsByClassName(
+      "js--orderTableRefreshData"
+    )[0].dataset.updatedFacility;
+
+    const table = document.querySelector(
+      `.js--orderTableRefresh#facility_id_${updatedFacilityId}`
+    );
     const url = new URL(document.location);
 
     url.searchParams.set("refresh", "true");
+    url.searchParams.set("updated_facility_id", updatedFacilityId);
     const headers = { Accept: "text/html" };
 
-    fetch(url, { headers: headers })
-    .then(function (response) {
+    fetch(url, { headers: headers }).then(function (response) {
       if (response.ok) {
-        response.text()
-        .then(function(body) {
+        response.text().then(function (body) {
           table.innerHTML = body;
-          setResultsFileUploadModals()
-         });
+          setResultsFileUploadModals();
+        });
       }
     });
   }

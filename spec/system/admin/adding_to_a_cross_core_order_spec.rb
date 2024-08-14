@@ -11,7 +11,9 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
   let!(:facility2_credit_card_account) { create(:account, :with_account_owner, type: "CreditCardAccount", owner: order.user, description: "Other Account", facility: facility2) }
   let!(:facility2_account) { create(:nufs_account, :with_account_owner, owner: order.user, description: "Internal Account", facility: facility2) }
   let(:price_group) { PriceGroup.base }
-  let!(:account_price_group_member) { create(:account_price_group_member, account: facility2_account, price_group: price_group) }
+  let!(:account_price_group_member) { create(:account_price_group_member, account: facility2_account, price_group:) }
+  let(:external_price_group) { PriceGroup.external }
+  let!(:account_price_group_member) { create(:account_price_group_member, account: facility2_account, price_group: external_price_group) }
 
   before do
     login_as user
@@ -65,6 +67,32 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
         expect(I18n.l(order_detail.fulfilled_at.to_date, format: :usa)).to eq(fulfilled_at_string)
         expect(I18n.l(order_detail.ordered_at.to_date, format: :usa)).to eq(fulfilled_at_string)
       end
+    end
+  end
+
+  context "when it does not require an order form" do
+    let(:product) { create(:setup_service, :with_facility_account) }
+    let!(:cross_core_product_facility2) { create(:setup_service, :with_facility_account, facility: facility2, cross_core_ordering_available: true) }
+    let!(:service_price_policy) { create(:service_price_policy, product: cross_core_product_facility2, price_group: external_price_group ) }
+
+    before do
+      visit facility_order_path(facility, order)
+
+      select_from_chosen facility2.name, from: "add_to_order_form[facility_id]", scroll_to: :center
+      select_from_chosen cross_core_product_facility2.name, from: "add_to_order_form[product_id]"
+      select_from_chosen facility2_account.to_s, from: "Payment Source", scroll_to: :center
+      fill_in "add_to_order_form[quantity]", with: "1"
+      click_button "Add to Cross-Core Order"
+    end
+
+    it "uploads file" do
+      find("h3", text: facility2.to_s).click
+      find_all("a", text: "0 Uploaded").last.click
+      expect(page).to have_content("Upload Results")
+      attach_file "qqfile", Rails.root.join("spec", "files", "template1.txt"), make_visible: true
+      expect(page).to have_content("Download all as zip...")
+      click_button "Done"
+      expect(page).to have_content("1 Uploaded")
     end
   end
 

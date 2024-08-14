@@ -21,14 +21,12 @@ class Orders::ItemAdder
     ods = case product
           when Bundle
             add_bundles(product, quantity, attributes)
-          when Service
-            add_services(product, quantity, attributes)
           when TimedService
             add_timed_services(product, quantity, duration, attributes)
           when Instrument
             add_instruments(product, quantity, attributes)
           else
-            [create_order_detail({ product: product, quantity: quantity }.merge(attributes))]
+            [create_order_detail({ product:, quantity: }.merge(attributes))]
           end
     ods || []
   end
@@ -36,14 +34,7 @@ class Orders::ItemAdder
   # Returns true if adding the product creates multiple line items if you add a
   # quantity greater than 1.
   def self.multiline?(product)
-    case product
-    when Service
-      product.active_template? || product.active_survey?
-    when Bundle, TimedService, Instrument
-      true
-    else
-      false
-    end
+    [Bundle, TimedService, Instrument].any? { |klass| product.is_a?(klass) }
   end
 
   private
@@ -89,21 +80,6 @@ class Orders::ItemAdder
       }.merge(attributes)
 
       create_order_detail(**order_detail_parameters)
-    end
-  end
-
-  # If the service has a survey or order form, we create one row for each quantity since
-  # each one will require a separate upload form.
-  def add_services(product, quantity, attributes)
-    separate = (product.active_template? || product.active_survey?)
-    # can't add single order_detail for service when it requires a template or a survey.
-    # number of order details to add
-    repeat = separate ? quantity : 1
-    # quantity to add them with
-    individual_quantity = separate ? 1 : quantity
-
-    Array.new(repeat) do
-      create_order_detail({ product: product, quantity: individual_quantity }.merge(attributes))
     end
   end
 

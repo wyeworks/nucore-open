@@ -245,7 +245,7 @@ class Reservation < ApplicationRecord
   end
 
   def admin?
-    order.nil? && !blackout?
+    order_detail_id.nil? && !blackout?
   end
 
   def admin_removable?

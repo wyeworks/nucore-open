@@ -16,8 +16,7 @@
             = link_to @cross_core_project.name, facility_project_path(current_facility, @cross_core_project.id)
         %dl.span2
           %dt= t("views.facility_orders.show.cross_core_project_total")
-          - gross_order_value = @order.total + @cross_core_orders_by_facility.values.sum(&:total)
-          %dd= number_to_currency gross_order_value
+          %dd= number_to_currency @gross_order_value
     - if @merge_orders.blank? && current_ability.can?(:send_receipt, @order)
       .pull-right= render "send_receipt"
 
@@ -25,20 +24,20 @@
 
 %table.order-list.table.table-striped.table-hover#order-management
   = render "order_table_headers", cross_core: false
-  = render "order_table", order_details: @order_details, cross_core: false
+  = render "order_table", order_details: @order_details, cross_core: false, facility_id: current_facility.id
   = render "order_table_footer", order: @order, cross_core: false
 
 %h2= t("views.facility_orders.show.cross_core_orders_header")
-- if SettingsHelper.feature_on?(:cross_core_projects) && @cross_core_order_details_by_facility.present?
+- if SettingsHelper.feature_on?(:cross_core_projects) && @cross_core_data_by_facility_id.present?
   #js--reportAnIssueModal.modal.hide.fade
 
   #accordion
-    - @cross_core_order_details_by_facility.each do |facility, order_details|
-      %h3= facility
+    - @cross_core_data_by_facility_id.each do |facility_id, data|
+      %h3= data[:facility_name]
       %table.order-list.table.table-striped.table-hover
         = render "order_table_headers", cross_core: true
-        = render "order_table", order_details: order_details, cross_core: true
-        = render "order_table_footer", order: @cross_core_orders_by_facility[facility], cross_core: true
+        = render "order_table", order_details: data[:order_details], cross_core: true, facility_id: facility_id
+        = render "order_table_footer", order: @cross_core_data_by_facility_id[facility_id][:order], cross_core: true
 
 - if current_ability.can?(:update, Order)
   = render "merge_order_form"

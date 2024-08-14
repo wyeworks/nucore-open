@@ -13,10 +13,10 @@
   %dl
     %dt= t(".reservation_date")
     %dd= "#{@reservation_data[:reserve_start_at].strftime("%A")} #{human_date(@reservation_data[:reserve_start_at])}"
-  
+
     %dt= t(".reservation_time")
     %dd= human_time(@reservation_data[:reserve_start_at])
-  
+
   - if @can_add_to_cart
     = form_with url: facility_instrument_quick_reservations_path(@facility, @instrument) do |f|
       %fieldset
@@ -29,5 +29,11 @@
         - accounts = @current_user.accounts_for_product(@instrument)
         %legend= t(".payment_details")
         = f.select :order_account, accounts.map { |a| [a, a.id] }, {}, {"aria-label": "account" }
+
+      - if show_note_input_to_user?(@order_detail)
+        %fieldset
+          %legend= @order_detail.product.user_notes_label.presence || OrderDetail.human_attribute_name(:note)
+          = f.text_field "reservation[note]", { required: @order_detail.product.user_notes_field_mode.required?, "aria-label": "note" }
+          %span= t(".note_hint")
       %br
       = f.submit t(".create_reservation")
