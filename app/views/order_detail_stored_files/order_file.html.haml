@@ -13,7 +13,7 @@
 
 %h2= @order_detail.product
 
-= form_for(@file, url: order_order_detail_upload_order_file_path, html: { multipart: true, method: :post }) do |f|
+= form_for(@file, url: order_order_detail_upload_order_file_path(original_order_id: @original_order_id), html: { multipart: true, method: :post }) do |f|
   = f.error_messages
   %table.table.table-striped.table-hover
     %tbody
@@ -31,5 +31,5 @@
             %b Upload the completed order form
           %p= f.file_field :file
   %ul.inline
-    %li= f.submit('Upload', :disable_with => "Uploading...", :class => 'btn')
+    %li= f.submit('Upload', disable_with: "Uploading...", class: 'btn')
     %li= link_to('Cancel', order_path(@order))

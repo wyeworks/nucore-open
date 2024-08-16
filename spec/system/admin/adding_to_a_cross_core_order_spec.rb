@@ -54,9 +54,7 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
         click_button "Upload"
       end
 
-      # Skipping because it fails with a JS error. It's redirected to 404.
-      # Will get fixed after actions are in a modal, so user is no longer redirected.
-      xit "sets the expected attributes", :aggregate_failures do
+      it "sets the expected attributes", :aggregate_failures do
         project = order.reload.cross_core_project
 
         expect(project).to be_present
