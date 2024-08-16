@@ -443,7 +443,7 @@ class Ability
       project = resource.order.cross_core_project
 
       if project.present?
-        can [:add_accessories, :new, :show, :update, :cancel], OrderDetail if user.facility_staff_or_manager_of?(project.facility)
+        can [:add_accessories, :new, :show, :update, :cancel, :template_results], OrderDetail if user.facility_staff_or_manager_of?(project.facility)
       end
     end
 

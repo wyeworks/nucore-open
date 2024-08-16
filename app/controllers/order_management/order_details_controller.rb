@@ -8,14 +8,14 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   load_resource :facility, find_by: :url_name
 
-  load_resource :order, through: :facility, except: [:files]
-  load_resource :order_detail, through: :order, except: [:files]
+  load_resource :order, through: :facility, except: [:files, :template_results]
+  load_resource :order_detail, through: :order, except: [:files, :template_results]
   # We can't load through the facility because of cross-core orders
-  before_action :init_order_detail, only: [:files]
+  before_action :init_order_detail, only: [:files, :template_results]
 
   helper_method :edit_disabled?
 
-  before_action :authorize_order_detail, except: %i(sample_results template_results)
+  before_action :authorize_order_detail, except: %i(sample_results)
   before_action :load_accounts, only: [:edit, :update]
   before_action :load_order_statuses, only: [:edit, :update]
 
