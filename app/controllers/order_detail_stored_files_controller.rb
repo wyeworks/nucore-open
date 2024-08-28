@@ -49,7 +49,7 @@ class OrderDetailStoredFilesController < ApplicationController
         @order_detail.save! # trigger the OrderDetailObserver callbacks
         redirect_to_facility_order(consider_merge_order: true)
       else
-        redirect_to_facility_order
+        redirect_to(order_path(@order))
       end
     else
       flash.now[:error] = text("upload_order_file.error")
