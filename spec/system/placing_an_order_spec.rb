@@ -145,6 +145,23 @@ RSpec.describe "Placing an item order" do
     end
   end
 
+  describe "adding a service that requires form" do
+    let!(:product) { create(:setup_service, :with_order_form) }
+
+    it "can place an order" do
+      visit facility_service_path(facility.url_name, product.url_name)
+      click_link "Add to cart"
+      choose account.to_s
+      click_button "Continue"
+      click_link "Upload Order Form"
+      attach_file "stored_file[file]", Rails.root.join("spec", "files", "template1.txt")
+      click_button "Upload"
+      expect(page).to have_current_path(order_path(Order.last))
+      click_button "Purchase"
+      expect(page).to have_content "Order Receipt"
+    end
+  end
+
   describe "when the order's account payment source is invalid" do
     let(:other_user) { FactoryBot.create(:user) }
     let(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: other_user) }
