@@ -5,10 +5,13 @@ class OrdersController < ApplicationController
   customer_tab  :all
 
   before_action :authenticate_user!
-  before_action :check_acting_as,          except: [:cart, :add, :choose_account, :show, :remove, :purchase, :update_or_purchase, :receipt, :update]
-  before_action :init_order,               except: [:cart, :index, :receipt]
-  before_action :protect_purchased_orders, except: [:cart, :receipt, :confirmed, :index]
+  before_action :check_acting_as,          except: [:cart, :cart_order_details_count, :add, :choose_account, :show, :remove, :purchase, :update_or_purchase, :receipt, :update]
+  before_action :init_order,               except: [:cart, :cart_order_details_count, :index, :receipt]
+  before_action :protect_purchased_orders, except: [:cart, :cart_order_details_count, :receipt, :confirmed, :index]
   before_action :load_statuses, only: [:show, :update, :purchase, :update_or_purchase]
+
+  # Using fetch instead of jQuery/XHR, and the only thing this action does is update the cart count
+  skip_after_action :verify_same_origin_request, only: [:cart_order_details_count]
 
   def self.permitted_params
     @permitted_params ||= []
@@ -37,6 +40,16 @@ class OrdersController < ApplicationController
   def cart
     @order = acting_user.cart(session_user)
     redirect_to(order_path(@order)) && return
+  end
+
+  def cart_order_details_count
+    respond_to do |format|
+      format.js do
+        order_details_count = acting_user.cart(session_user).order_details.count
+
+        render json: { data: { count: order_details_count } }
+      end
+    end
   end
 
   # GET /orders/:id

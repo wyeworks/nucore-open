@@ -25,7 +25,7 @@
               %li.navbar-text= "#{acting_user.full_name} (#{acting_user.username})"
               %li.divider-vertical
               = render "/shared/support"
-              %li= link_to "#{t('pages.cart')} (#{current_cart.order_details.count})", :cart
+              %li= link_to t("pages.cart"), :cart, class: "js--cart_count", data: { url: orders_cart_count_url }
             - else
               - if UserPreference.options_for(current_user).any?
                 %li.visible-with-link= link_to "#{current_user.full_name} (#{current_user.username})", user_user_preferences_path(current_user)
@@ -37,7 +37,7 @@
                 %li.divider-vertical
               -# .visible-with-nav is visible > 979px
               = render "/shared/support"
-              %li.visible-with-nav= link_to t('pages.cart') + " (#{current_cart.order_details.count})", :cart
+              %li.visible-with-nav= link_to t("pages.cart"), :cart, class: "js--cart_count", data: { url: orders_cart_count_url }
               %li.divider-vertical
               = render "shared/message_summary"
               %li= link_to t('pages.logout'), sign_out_user_path
@@ -45,5 +45,3 @@
                 %li
                   = form_tag global_search_path, class: "navbar-search pull-right hidden-with-nav" do
                     = text_field_tag :search, nil, placeholder: t("global_search.search"), class: "search-query span2", aria: { label: t("global_search.search") }
-
-

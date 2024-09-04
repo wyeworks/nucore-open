@@ -81,6 +81,9 @@ module Nucore
     config.middleware.insert 0, Rack::UTF8Sanitizer
 
     config.active_storage.variant_processor = :vips
+
+    # Indicate to the browser that an image should be lazily loaded
+    config.action_view.image_loading = "lazy"
   end
 
 end
