@@ -361,6 +361,7 @@ Rails.application.routes.draw do
 
   # order process
   get "/orders/cart", to: "orders#cart", as: "cart"
+  get "/orders/cart_count", to: "orders#cart_order_details_count"
   get "/orders(\/:status)", to: "orders#index", as: "orders_status", constraints: { status: /pending|all/ } ## emacs quoting \/
 
   put "/orders/:id/remove/:order_detail_id", to: "orders#remove", as: "remove_order"
