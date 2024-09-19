@@ -185,22 +185,30 @@ class OrdersController < ApplicationController
   # GET  /orders/:id/choose_account
   # POST /orders/:id/choose_account
   def choose_account
-    if request.post?
-      account = Account.find(params[:account_id])
-      add_account_to_order(account)
-    end
-
     @product = if session[:add_to_cart].blank?
-                 @order.order_details[0].try(:product)
-               else
-                 Product.find(session[:add_to_cart].first[:product_id])
-               end
+              @order.order_details[0].try(:product)
+            else
+              Product.find(session[:add_to_cart].first[:product_id])
+            end
+    # For nonbillable products, we don't ask the user to choose an account
+    # POST requests are sent from the form on the choose_account page,
+    # so we need to assign the account selected by the user to the order
+    account = if @product.blank?
+                nil
+              elsif @product.nonbillable_mode?
+                NonbillableAccount.singleton_instance
+              elsif request.post?
+                Account.where(id: params[:account_id]).first
+              end
+    add_account_result = add_account_to_order(account) if account.present?
 
-    redirect_to(cart_path) && return unless @product
-
-    if @product.nonbillable_mode?
-      add_account_to_order(NonbillableAccount.singleton_instance)
+    if @product.blank?
+      redirect_to(cart_path)
+    elsif add_account_result && add_account_result[:success]
+      redirect_to add_account_result[:redirect_path]
     else
+      flash.now[:error] = add_account_result[:error_message] if add_account_result && add_account_result[:error_message]
+      flash.now[:error] = I18n.t("controllers.orders.choose_account.missing_account") if account.blank? && request.post?
       @accounts = AvailableAccountsFinder.new(acting_user, @product.facility).accounts
       @errors   = {}
       details   = @order.order_details
@@ -335,16 +343,21 @@ class OrdersController < ApplicationController
       end
     end
 
+    result = { success: success, redirect_path: nil, error_message: nil }
     if success
-      if session[:add_to_cart].nil?
-        redirect_to cart_path
+      result[:redirect_path] = if session[:add_to_cart].nil?
+        cart_path
       else
-        redirect_to add_order_path(@order)
+        add_order_path(@order)
       end
-      return
     else
-      flash.now[:error] = account.nil? ? "Please select a payment method." : "An error was encountered while selecting a payment method."
+      result[:error_message] = if account.nil?
+        "Please select a payment method."
+      else
+        "An error was encountered while selecting a payment method."
+      end
     end
+    result
   end
 
   def build_order_date

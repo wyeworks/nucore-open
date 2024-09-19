@@ -36,6 +36,7 @@ class FacilityAccountsReconciliationController < ApplicationController
       unreconciled_details,
       params[:order_detail],
       reconciled_at,
+      params[:order_status],
       params[:bulk_reconcile_note],
       params[:bulk_deposit_number],
       params[:bulk_note_checkbox],
@@ -50,7 +51,7 @@ class FacilityAccountsReconciliationController < ApplicationController
         LogEvent.log(statement, :closed, current_user)
       end
 
-      flash[:notice] = "#{count} payment#{count == 1 ? '' : 's'} successfully reconciled" if count > 0
+      flash[:notice] = "#{count} payment#{count == 1 ? '' : 's'} successfully updated" if count > 0
     else
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
     end

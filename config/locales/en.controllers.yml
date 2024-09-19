@@ -196,6 +196,8 @@ en:
         quantities_changed: Quantities have changed. Please review updated prices then click "Purchase"
         reservation:
           success: Reservation created successfully
+      choose_account:
+        missing_account: "Payment source not found.  Please select a payment source and try again."
 
     order_imports:
       create:

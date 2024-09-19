@@ -6,7 +6,7 @@ RSpec.describe "Facility Statement Admin" do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility: facility) }
   let(:item) { create(:setup_item, facility: facility) }
-  let(:accounts) { create_list(:account, 2, :with_account_owner, type: Account.config.statement_account_types.first) }
+  let(:accounts) { create_list(:account, 3, :with_account_owner, type: Account.config.statement_account_types.first) }
   let(:orders) do
     accounts.map { |account| create(:complete_order, product: item, account: account) }
   end
@@ -32,10 +32,12 @@ RSpec.describe "Facility Statement Admin" do
   end
 
   describe "searching statements" do
-    let!(:statement1) { create(:statement, created_at: 3.days.ago, order_details: [order_details.first], account: order_details.first.account, facility: facility) }
-    let!(:statement2) { create(:statement, created_at: 6.days.ago, order_details: [order_details.second], account: order_details.second.account, facility: facility) }
+    let!(:statement1) { create(:statement, created_at: 9.days.ago, order_details: [order_details.first], account: order_details.first.account, facility:) }
+    let!(:statement2) { create(:statement, created_at: 6.days.ago, order_details: [order_details.second], account: order_details.second.account, facility:) }
+    let!(:statement3) { create(:statement, created_at: 3.days.ago, order_details: [order_details.last], account: order_details.last.account, facility:) }
 
     before do
+      order_details.last.change_status!(OrderStatus.unrecoverable)
       login_as director
       visit facility_statements_path(facility)
     end
@@ -56,6 +58,19 @@ RSpec.describe "Facility Statement Admin" do
 
       expect(page).not_to have_content(statement1.invoice_number)
       expect(page).to have_content(statement2.invoice_number)
+    end
+
+    it "can filter by the status" do
+      expect(page).to have_content(statement1.invoice_number)
+      expect(page).to have_content(statement2.invoice_number)
+      expect(page).to have_content(statement3.invoice_number)
+
+      select "Unrecoverable", from: "Status"
+      click_button "Filter"
+
+      expect(page).not_to have_content(statement1.invoice_number)
+      expect(page).not_to have_content(statement2.invoice_number)
+      expect(page).to have_content(statement3.invoice_number)
     end
 
     it "can filter by the owner/business admin" do
@@ -80,15 +95,17 @@ RSpec.describe "Facility Statement Admin" do
       fill_in "Start Date", with: I18n.l(4.days.ago.to_date, format: :usa)
       click_button "Filter"
 
-      expect(page).to have_content(statement1.invoice_number)
+      expect(page).not_to have_content(statement1.invoice_number)
       expect(page).not_to have_content(statement2.invoice_number)
+      expect(page).to have_content(statement3.invoice_number)
 
       fill_in "Start Date", with: ""
       fill_in "End Date", with: I18n.l(4.days.ago.to_date, format: :usa)
 
       click_button "Filter"
-      expect(page).not_to have_content(statement1.invoice_number)
+      expect(page).to have_content(statement1.invoice_number)
       expect(page).to have_content(statement2.invoice_number)
+      expect(page).not_to have_content(statement3.invoice_number)
     end
 
     it "sends a csv in an email" do

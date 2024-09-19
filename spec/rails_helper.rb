@@ -140,6 +140,7 @@ RSpec.configure do |config|
     OrderStatus.find_or_create_by(name: "Canceled")
     OrderStatus.find_or_create_by(name: "Complete")
     OrderStatus.find_or_create_by(name: "Reconciled")
+    OrderStatus.find_or_create_by(name: "Unrecoverable")
 
     # initialize affiliates
     Affiliate.OTHER

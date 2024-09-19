@@ -13,6 +13,7 @@ OrderStatus.find_or_create_by(name: "In Process")
 OrderStatus.find_or_create_by(name: "Canceled")
 OrderStatus.find_or_create_by(name: "Complete")
 OrderStatus.find_or_create_by(name: "Reconciled")
+OrderStatus.find_or_create_by(name: "Unrecoverable")
 
 Affiliate.OTHER
 
