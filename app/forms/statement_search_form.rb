@@ -17,7 +17,7 @@ class StatementSearchForm
   end
 
   def available_statuses
-    ["Reconciled", "Unreconciled", "Canceled"]
+    ["Reconciled", "Unreconciled", "Unrecoverable", "Canceled"]
   end
 
   def facility_filter?
@@ -45,6 +45,8 @@ class StatementSearchForm
       results.reconciled
     when "Unreconciled"
       results.unreconciled
+    when "Unrecoverable"
+      results.unrecoverable
     when "Canceled"
       results.where.not(canceled_at: nil)
     else

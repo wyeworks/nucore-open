@@ -368,13 +368,14 @@ class OrderDetail < ApplicationRecord
 
   include AASM
 
-  CANCELABLE_STATES = [:new, :inprocess, :complete].freeze
+  CANCELABLE_STATES = [:new, :inprocess, :complete, :unrecoverable].freeze
   aasm column: :state do
     state :new, initial: true
     state :inprocess
     state :complete, enter: :make_complete
     state :reconciled, enter: :set_reconciled_at
     state :canceled, enter: :clear_costs
+    state :unrecoverable
 
     event :to_new do
       transitions to: :new, from: :inprocess
@@ -390,6 +391,10 @@ class OrderDetail < ApplicationRecord
 
     event :to_reconciled do
       transitions to: :reconciled, from: :complete, guard: :actual_total
+    end
+
+    event :to_unrecoverable do
+      transitions to: :unrecoverable, from: :complete, guard: :can_be_marked_as_unrecoverable?
     end
 
     event :to_canceled do
@@ -489,6 +494,11 @@ class OrderDetail < ApplicationRecord
   def cancelable?
     # can't cancel if the reservation isn't already canceled or if this OD has been added to a journal
     state_is_cancelable? && journal.nil? && !has_uncanceled_reservation?
+  end
+
+  def can_be_marked_as_unrecoverable?
+    # Can only be marked as unrecoverable if it has already been invoiced
+    state.to_sym == :complete && statement.present?
   end
 
   def pending?
@@ -752,7 +762,10 @@ class OrderDetail < ApplicationRecord
         change_status! order_status
       end
     else
+      # If the order status is Unrecoverable, then it shouldn't be cancelable by the customer
+      return false if state.to_sym == :unrecoverable
       return false unless reservation&.can_cancel?
+
       # must set canceled_at after calling #can_cancel?
       return false unless update(canceled_at: Time.current)
       clear_statement if cancellation_fee == 0

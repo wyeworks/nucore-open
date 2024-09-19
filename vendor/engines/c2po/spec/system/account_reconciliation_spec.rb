@@ -61,7 +61,7 @@ RSpec.describe "Account Reconciliation", js: true do
 
       fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
       fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
-      click_button "Reconcile Orders", match: :first
+      click_button "Update Orders", match: :first
 
       expect(order_detail.reload).to be_reconciled
       expect(order_detail.reconciled_note).to eq("this is a note!")
@@ -82,7 +82,7 @@ RSpec.describe "Account Reconciliation", js: true do
         check "order_detail_#{order_detail.id}_reconciled"
         check "order_detail_#{orders.last.order_details.first.id}_reconciled"
         fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
-        click_button "Reconcile Orders", match: :first
+        click_button "Update Orders", match: :first
 
         expect(order_detail.reload.reconciled_note).to eq("this is the bulk note")
         expect(orders.last.order_details.first.reload.reconciled_note).to eq("this is the bulk note")
@@ -98,7 +98,7 @@ RSpec.describe "Account Reconciliation", js: true do
         check "order_detail_#{order_detail.id}_reconciled"
         check "order_detail_#{orders.last.order_details.first.id}_reconciled"
         fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
-        click_button "Reconcile Orders", match: :first
+        click_button "Update Orders", match: :first
 
         expect(order_detail.reload.reconciled_note).to eq("")
         expect(orders.last.order_details.first.reload.reconciled_note).to eq("")
@@ -128,7 +128,7 @@ RSpec.describe "Account Reconciliation", js: true do
       check "order_detail_#{order_detail.id}_reconciled"
       fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
       fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
-      click_button "Reconcile Orders", match: :first
+      click_button "Update Orders", match: :first
 
       expect(order_detail.reload).to be_reconciled
       expect(order_detail.reconciled_note).to eq("this is a note!")
@@ -148,7 +148,7 @@ RSpec.describe "Account Reconciliation", js: true do
       check "order_detail_#{order_detail.id}_reconciled"
       check "order_detail_#{orders.last.order_details.first.id}_reconciled"
       fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
-      click_button "Reconcile Orders", match: :first
+      click_button "Update Orders", match: :first
       expect(order_detail.reload.reconciled_note).to eq("this is the bulk note")
       expect(orders.last.order_details.first.reload.reconciled_note).to eq("this is the bulk note")
     end

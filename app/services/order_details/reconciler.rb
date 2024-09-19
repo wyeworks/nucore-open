@@ -12,8 +12,17 @@ module OrderDetails
     validate :reconciliation_must_be_in_past
     validate :all_journals_and_statements_must_be_before_reconciliation_date
 
-    def initialize(order_detail_scope, params, reconciled_at, bulk_reconcile_note = nil, bulk_deposit_number = nil, bulk_reconcile_checkbox = nil)
+    def initialize(
+        order_detail_scope,
+        params,
+        reconciled_at,
+        order_status,
+        bulk_reconcile_note = nil,
+        bulk_deposit_number = nil,
+        bulk_reconcile_checkbox = nil
+      )
       @params = params || ActionController::Parameters.new
+      @order_status = order_status || "reconciled"
       @order_details = order_detail_scope.readonly(false).find_ids(to_be_reconciled.keys)
       @reconciled_at = reconciled_at
       @bulk_reconcile_note = bulk_reconcile_note if bulk_reconcile_checkbox == "1"
@@ -26,7 +35,7 @@ module OrderDetails
       OrderDetail.transaction do
         order_details.each do |od|
           od_params = @params[od.id.to_s]
-          reconcile(od, od_params)
+          update_status(od, od_params)
         end
       end
       @count
@@ -44,12 +53,20 @@ module OrderDetails
       @params.select { |_order_detail_id, params| params[:reconciled] == "1" }
     end
 
-    def reconcile(order_detail, params)
-      order_detail.reconciled_at = @reconciled_at
+    def update_status(order_detail, params)
       order_detail.assign_attributes(allowed(params))
-      order_detail.reconciled_note = @bulk_reconcile_note if @bulk_reconcile_note.present?
-      order_detail.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
-      order_detail.change_status!(OrderStatus.reconciled)
+
+      if @order_status == "reconciled"
+        order_detail.reconciled_at = @reconciled_at
+        order_detail.reconciled_note = @bulk_reconcile_note if @bulk_reconcile_note.present?
+        order_detail.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
+        order_detail.change_status!(OrderStatus.reconciled)
+      else
+        order_detail.reconciled_at = nil
+        order_detail.reconciled_note = nil
+        order_detail.deposit_number = nil
+        order_detail.change_status!(OrderStatus.unrecoverable)
+      end
       @count += 1
     rescue => e
       @error_fields = { order_detail.id => order_detail.errors.collect { |field, _error| field } }

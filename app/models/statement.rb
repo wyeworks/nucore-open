@@ -29,6 +29,7 @@ class Statement < ApplicationRecord
 
   scope :reconciled, -> { where(canceled_at: nil).where.not(id: OrderDetail.unreconciled.where.not(statement_id: nil).select(:statement_id)) }
   scope :unreconciled, -> { where(canceled_at: nil).where(id: OrderDetail.unreconciled.where.not(statement_id: nil).select(:statement_id)) }
+  scope :unrecoverable, -> { where(canceled_at: nil).where(id: OrderDetail.unrecoverable.where.not(statement_id: nil).select(:statement_id)) }
 
   # Use this for restricting the the current facility
   scope :for_facility, ->(facility) { where(facility: facility) if facility.single_facility? }
@@ -65,6 +66,11 @@ class Statement < ApplicationRecord
     order_details.unreconciled.empty? && canceled_at.blank?
   end
 
+  # A statement is unrecoverable if it has at least one unrecoverable order detail
+  def unrecoverable?
+    order_details.unrecoverable.present? && canceled_at.blank?
+  end
+
   def can_cancel?
     order_details.reconciled.empty? && canceled_at.blank?
   end
@@ -74,6 +80,8 @@ class Statement < ApplicationRecord
       "Canceled"
     elsif reconciled?
       "Reconciled"
+    elsif unrecoverable?
+      "Unrecoverable"
     else
       "Unreconciled"
     end

@@ -19,7 +19,7 @@ class OrderStatus < ApplicationRecord
 
   scope :for_facility, ->(facility) { where(facility_id: [nil, facility&.id]) }
 
-  ROOT_STATUS_ORDER = ["New", "In Process", "Canceled", "Complete", "Reconciled"].freeze
+  ROOT_STATUS_ORDER = ["New", "In Process", "Canceled", "Complete", "Reconciled", "Unrecoverable"].freeze
 
   # Needs to be overridable by engines
   cattr_accessor(:ordered_root_statuses) { ROOT_STATUS_ORDER.dup }
@@ -43,6 +43,10 @@ class OrderStatus < ApplicationRecord
 
   def self.reconciled
     find_by(name: "Reconciled")
+  end
+
+  def self.unrecoverable
+    find_by(name: "Unrecoverable")
   end
 
   def self.add_to_order_statuses(facility)
