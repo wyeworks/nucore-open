@@ -42,7 +42,9 @@
                     class: "btn btn-danger",
                     data: { confirm: "Are you sure you want to cancel?" })
           %td= format_usa_datetime(s.created_at)
-          %td= s.account.notify_users.map(&:full_name).join(', ')
+          %td
+            - s.account.notify_users.each do |user|
+              = mail_to user.email, user.full_name
           - unless @account
             %td= link_to s.account, facility_account_path(current_facility, s.account)
           - if current_facility&.cross_facility?

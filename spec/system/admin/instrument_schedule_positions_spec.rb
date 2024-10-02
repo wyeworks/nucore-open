@@ -25,6 +25,8 @@ RSpec.describe "Instrument Schedule Display Order" do
   describe "as a director" do
     let(:user) { create(:user, :facility_director, facility: facility) }
 
+    # Some of these specs have been failing even though the arrays look the same in the error message.
+    # I wasn't able to reproduce the failure locally.
     it "can reorder the schedules", :js do
       # check starting display order
       visit dashboard_facility_instruments_path(facility)
@@ -45,8 +47,12 @@ RSpec.describe "Instrument Schedule Display Order" do
       find("[title='Move Up']").click
       click_button "Update Ordering"
 
-      wait_for_ajax
+      # Sometimes the first click doesn't work, so try again
+      expected_flash_message = "The Instruments have been reordered"
+      click_button "Update Ordering" unless page.has_content?(expected_flash_message)
 
+      # This expectation has been failing from time to time even though the arrays look the same in the error message.
+      # If this doesn't work, we should take a look at the matcher.
       expect(["Second", "Third", "First", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       # check the new display order
