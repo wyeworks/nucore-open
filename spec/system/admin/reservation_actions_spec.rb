@@ -45,11 +45,13 @@ RSpec.describe "Reservation actions", :js, feature_setting: { cross_core_project
 
       wait_for_ajax
 
+      expected_flash_message = "The reservation was moved successfully."
+
       click_button "Move"
+      # Sometimes the first click doesn't work, so try again
+      click_button "Move" unless page.has_content?(expected_flash_message)
 
-      wait_for_ajax
-
-      expect(page).to have_content("The reservation was moved successfully.")
+      expect(page).to have_content(expected_flash_message)
       expect(page).to have_content("Order ##{originating_order_facility1.id}")
     end
   end

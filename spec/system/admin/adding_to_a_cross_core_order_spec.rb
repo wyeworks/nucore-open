@@ -8,7 +8,7 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
   let(:user) { create(:user, :staff, facility: facility) }
   let!(:other_account) { create(:nufs_account, :with_account_owner, owner: order.user, description: "Other Account") }
   let(:facility2) { create(:setup_facility) }
-  let!(:facility2_credit_card_account) { create(:account, :with_account_owner, type: "CreditCardAccount", owner: order.user, description: "Other Account", facility: facility2) }
+  let!(:facility2_credit_card_account) { create(:account, :with_account_owner, type: "CreditCardAccount", owner: order.user, description: "Credit Card Account", facility: facility2) }
   let!(:facility2_account) { create(:nufs_account, :with_account_owner, owner: order.user, description: "Internal Account", facility: facility2) }
   let(:price_group) { PriceGroup.base }
   let!(:account_price_group_member) { create(:account_price_group_member, account: facility2_account, price_group:) }
@@ -41,6 +41,7 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
       expect(OrderDetail.order(:id).last.ordered_at).to be_blank
     end
 
+    # This expectation is in its own it because it kept failing, so we'd like to get more information about the failure.
     it "requires a file to be uploaded before adding to the order" do
       expect(page).to have_content("Your order includes one or more incomplete items.")
     end
@@ -215,18 +216,21 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
         expect(page).to have_button("Add to Cross-Core Order")
       end
 
+      it "account for another facility cannot be selected" do
+        expect(page).not_to have_selector("option", text: facility2_credit_card_account.to_s, visible: false)
+      end
+
       it "creates a new order for the selected facility" do
         expect(page).not_to have_content("Cross Core Project ID")
-        expect(page.has_selector?("option", text: cross_core_product_facility.name, visible: false)).to be(true)
-        expect(page.has_selector?("option", text: product.name, visible: false)).to be(true)
-        expect(page.has_selector?("option", text: facility2_credit_card_account.to_s, visible: false)).to be(false)
+        expect(page).to have_selector("option", text: cross_core_product_facility.name, visible: false)
+        expect(page).to have_selector("option", text: product.name, visible: false)
 
         select_from_chosen facility2.name, from: "add_to_order_form[facility_id]", scroll_to: :center
         select_from_chosen cross_core_product_facility2.name, from: "add_to_order_form[product_id]"
         expect(page.has_selector?("option", text: facility2_credit_card_account.to_s, visible: false)).to be(true)
         select_from_chosen facility2_account.to_s, from: "Payment Source", scroll_to: :center
 
-        expect(page.has_selector?("option", text: product2.name, visible: false)).to be(false)
+        expect(page).not_to have_selector("option", text: product2.name, visible: false)
 
         click_button "Add to Cross-Core Order"
 
@@ -263,15 +267,15 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
 
       it "creates a new order for the selected facility" do
         expect(page).not_to have_content("Cross Core Project ID")
-        expect(page.has_selector?("option", text: cross_core_product_facility.name, visible: false)).to be(true)
-        expect(page.has_selector?("option", text: product.name, visible: false)).to be(true)
-        expect(page.has_selector?("option", text: facility2_credit_card_account.to_s, visible: false)).to be(false)
+        expect(page).to have_selector("option", text: cross_core_product_facility.name, visible: false)
+        expect(page).to have_selector("option", text: product.name, visible: false)
+        expect(page).not_to have_selector("option", text: facility2_credit_card_account.to_s, visible: false)
 
         select_from_chosen facility2.name, from: "add_to_order_form[facility_id]", scroll_to: :center
         select_from_chosen cross_core_product_facility2.name, from: "add_to_order_form[product_id]"
         select_from_chosen facility2_account.to_s, from: "Payment Source", scroll_to: :center
 
-        expect(page.has_selector?("option", text: product2.name, visible: false)).to be(false)
+        expect(page).not_to have_selector("option", text: product2.name, visible: false)
 
         click_button "Add to Cross-Core Order"
 
