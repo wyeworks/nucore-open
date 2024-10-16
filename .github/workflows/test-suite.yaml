@@ -29,7 +29,7 @@ jobs:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions
 
       - name: Glob match
@@ -70,7 +70,7 @@ jobs:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions
       # Uncomment below to open ssh tunnel for debugging
       # - uses: mxschmitt/action-tmate@v3
@@ -107,6 +107,6 @@ jobs:
       SELENIUM_PORT: 4444
       TEST_APP_PORT: 3000
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./.github/actions
       - run: bundle exec rake teaspoon

@@ -27,7 +27,9 @@
   = render "order_table", order_details: @order_details, cross_core: false, facility_id: current_facility.id
   = render "order_table_footer", order: @order, cross_core: false
 
-%h2= t("views.facility_orders.show.cross_core_orders_header")
+- subheader_key = (@cross_core_project.present? ? "views.facility_orders.show.add_to_cross_core_order_header" : "views.facility_orders.show.add_to_order_header")
+
+%h2= t(subheader_key)
 - if SettingsHelper.feature_on?(:cross_core_projects) && @cross_core_data_by_facility_id.present?
   #js--reportAnIssueModal.modal.hide.fade
 

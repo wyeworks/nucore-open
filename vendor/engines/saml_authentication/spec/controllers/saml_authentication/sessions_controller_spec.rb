@@ -11,7 +11,10 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
     end
 
     def self.encode(saml)
-      new.send(:encode_raw_saml, saml, OpenStruct.new(compress_request: true))
+      encoded = new.send(:encode_raw_saml, saml, OpenStruct.new(compress_request: true))
+      # encode_raw_saml url-encodes the encoded saml so it's correctly sent over http.
+      # Since this is a controller spec we don't have the automatic url-decoding step on params.
+      CGI.unescape(encoded)
     end
 
   end

@@ -29,7 +29,7 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
       end
 
       it "shows the order details" do
-        expect(page).to have_content(active_project_order.order_details.first.id)
+        expect(page).to have_content(active_project_order.order_details.first.id.to_s)
       end
 
       it "shows Edit button" do
@@ -41,9 +41,9 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
       end
 
       it "navigates to order" do
-        click_link active_project_order.id
+        click_link active_project_order.id.to_s
 
-        expect(page).to have_content(active_project_order.id)
+        expect(page).to have_content(active_project_order.id.to_s)
       end
     end
 
@@ -73,17 +73,17 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
         end
 
         it "shows the order details" do
-          expect(page).to have_content(originating_order_facility1.order_details.first.id)
-          expect(page).to have_content(cross_core_orders[0].order_details.first.id)
-          expect(page).to have_content(cross_core_orders[1].order_details.first.id)
+          expect(page).to have_content(originating_order_facility1.order_details.first.id.to_s)
+          expect(page).to have_content(cross_core_orders[0].order_details.first.id.to_s)
+          expect(page).to have_content(cross_core_orders[1].order_details.first.id.to_s)
         end
 
         it "shows other facility's orders as text" do
-          expect(page).not_to have_link(cross_core_orders[0].id)
-          expect(page).not_to have_link(cross_core_orders[1].id)
+          expect(page).not_to have_link(cross_core_orders[0].id.to_s)
+          expect(page).not_to have_link(cross_core_orders[1].id.to_s)
 
-          expect(page).to have_content(cross_core_orders[0].id)
-          expect(page).to have_content(cross_core_orders[1].id)
+          expect(page).to have_content(cross_core_orders[0].id.to_s)
+          expect(page).to have_content(cross_core_orders[1].id.to_s)
         end
 
         it "shows Edit button" do
@@ -95,9 +95,9 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
         end
 
         it "navigates to original order" do
-          click_link originating_order_facility1.id
+          click_link originating_order_facility1.id.to_s
 
-          expect(page).to have_content(originating_order_facility1.id)
+          expect(page).to have_content(originating_order_facility1.id.to_s)
           expect(page).to have_content(facility2.name)
           expect(page).to have_content(facility3.name)
         end
@@ -113,9 +113,9 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
         end
 
         it "shows the order details" do
-          expect(page).to have_content(originating_order_facility2.order_details.first.id)
-          expect(page).to have_content(cross_core_orders[2].order_details.first.id)
-          expect(page).to have_content(cross_core_orders[3].order_details.first.id)
+          expect(page).to have_content(originating_order_facility2.order_details.first.id.to_s)
+          expect(page).to have_content(cross_core_orders[2].order_details.first.id.to_s)
+          expect(page).to have_content(cross_core_orders[3].order_details.first.id.to_s)
         end
 
         it "shows Edit button" do
@@ -127,17 +127,17 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
         end
 
         it "shows other facility's orders as text" do
-          expect(page).not_to have_link(originating_order_facility2.id)
-          expect(page).not_to have_link(cross_core_orders[3].id)
+          expect(page).not_to have_link(originating_order_facility2.id.to_s)
+          expect(page).not_to have_link(cross_core_orders[3].id.to_s)
 
-          expect(page).to have_content(originating_order_facility2.id)
-          expect(page).to have_content(cross_core_orders[3].id)
+          expect(page).to have_content(originating_order_facility2.id.to_s)
+          expect(page).to have_content(cross_core_orders[3].id.to_s)
         end
 
         it "navigates to facility order" do
-          click_link cross_core_orders[2].id
+          click_link cross_core_orders[2].id.to_s
 
-          expect(page).to have_content(cross_core_orders[2].id)
+          expect(page).to have_content(cross_core_orders[2].id.to_s)
           expect(page).to have_content(facility2.name)
           expect(page).to have_content(facility3.name)
         end

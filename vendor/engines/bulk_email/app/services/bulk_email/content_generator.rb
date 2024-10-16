@@ -6,8 +6,6 @@ module BulkEmail
 
     include TextHelpers::Translation
 
-    DEFAULT_RECIPIENT_NAME = "Firstname Lastname"
-
     attr_reader :facility, :subject_product
 
     def initialize(facility, subject_product = nil)
@@ -23,13 +21,13 @@ module BulkEmail
       end
     end
 
-    def wrap_text(text, recipient_name = nil)
-      [greeting(recipient_name), text].compact.join("\n\n")
+    def wrap_text(text)
+      [greeting, text].compact.join("\n\n")
     end
 
-    def greeting(recipient_name = nil)
+    def greeting
       [
-        text("body.greeting", recipient_name: recipient_name || DEFAULT_RECIPIENT_NAME),
+        text("body.greeting"),
         reason_statement,
       ].compact.join("\n\n")
     end

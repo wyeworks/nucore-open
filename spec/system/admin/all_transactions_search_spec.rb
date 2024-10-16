@@ -33,8 +33,8 @@ RSpec.describe "All Transactions Search", :js do
     expect(page).to have_link(orders.second.order_details.first.id.to_s, href: manage_facility_order_order_detail_path(orders.second.facility, orders.second, orders.second.order_details.first))
 
     # Cross Core orders
-    expect(page).not_to have_link(originating_order_facility1.id, href: facility_order_path(originating_order_facility1.facility, originating_order_facility1))
-    expect(page).to have_link(cross_core_orders[2].id, href: facility_order_path(cross_core_orders[2].facility, cross_core_orders[2]))
+    expect(page).not_to have_link(originating_order_facility1.id.to_s, href: facility_order_path(originating_order_facility1.facility, originating_order_facility1))
+    expect(page).to have_link(cross_core_orders[2].id.to_s, href: facility_order_path(cross_core_orders[2].facility, cross_core_orders[2]))
     expect(page).to have_css(".fa-users", count: 1) # cross_core_orders[2] is a cross-core order that didn't originate in the current facility
   end
 

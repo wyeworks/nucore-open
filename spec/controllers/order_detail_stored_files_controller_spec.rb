@@ -51,7 +51,10 @@ RSpec.describe OrderDetailStoredFilesController do
 
     it "gets an error if there is no file" do
       post :upload_order_file, params: params
-      expect(assigns(:file).errors).to be_added(:file, :blank)
+
+      error_options = SettingsHelper.feature_on?(:active_storage) ? { validator_type: :attached } : {}
+
+      expect(assigns(:file).errors).to be_added(:file, :blank, error_options)
     end
   end
 end

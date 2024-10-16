@@ -10,17 +10,8 @@ RSpec.describe BulkEmail::ContentGenerator do
   let(:recipient) { FactoryBot.build(:user) }
 
   describe "#greeting" do
-    context "without a recipient name" do
-      it "generates a greeting with a placeholder name" do
-        expect(subject.greeting).to include("Firstname Lastname")
-      end
-    end
-
-    context "with a recipient name" do
-      it "generates a greeting with a placeholder name" do
-        expect(subject.greeting(recipient.full_name))
-          .to include(recipient.full_name)
-      end
+    it "generates a greeting" do
+      expect(subject.greeting).to include(I18n.t('bulk_email.body.greeting'))
     end
 
     context "with an offline instrument as a subject_product" do

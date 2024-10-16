@@ -402,6 +402,64 @@ RSpec.describe BulkEmail::RecipientSearcher do
     end
   end
 
+  context "when searching for problem_reservation" do
+    let(:problem_reservation_users) { create_list(:user, 2) }
+    let(:user) { problem_reservation_users.first }
+    let(:user2) { problem_reservation_users.second }
+    let(:user3) { create(:user) }
+    let(:product) { create(:setup_instrument, :timer, :always_available, facility:, problems_resolvable_by_user: true) }
+    let(:product2) { create(:setup_instrument, :timer, :always_available, facility:, problems_resolvable_by_user: true, is_hidden: true) }
+    let(:product3) { create(:setup_instrument, :timer, :always_available, facility:, problems_resolvable_by_user: true, is_archived: true) }
+
+    # Users 1 and 2 have reservations with problems
+    # User 3 has a reservation without a problem
+    let!(:problem_reservation) { create(:purchased_reservation, product:, reserve_start_at: 2.hours.ago, reserve_end_at: 1.hour.ago, actual_start_at: 1.hour.ago, actual_end_at: nil, user:) }
+    let!(:problem_reservation2) { create(:purchased_reservation, product: product2, reserve_start_at: 2.hours.ago, reserve_end_at: 1.hour.ago, actual_start_at: 1.hour.ago, actual_end_at: nil, user: user2) }
+    let!(:reservation3) { create(:purchased_reservation, product:, user: user3) }
+
+    before :each do
+      MoveToProblemQueue.move!(problem_reservation.order_detail, force: true, cause: :reservation_started)
+      MoveToProblemQueue.move!(problem_reservation2.order_detail, force: true, cause: :reservation_started)
+
+      params[:bulk_email].merge!(user_types: [:problem_reservation])
+    end
+
+    it_behaves_like "active/inactive users"
+
+    context "when specifying no specific instrument" do
+      before { params[:products] = [] }
+
+      it "returns all authorized users for any active instrument" do
+        # user3 (reservation3.user) is not in the list because they don't have a problem reservation
+        expect(users).to match_array(problem_reservation_users)
+      end
+    end
+
+    context "when specifying the first instrument" do
+      before { params[:products] = [product.id] }
+
+      it "returns only the users that have a problem reservation for the first instrument" do
+        expect(users).to contain_exactly(problem_reservation_users.first)
+      end
+    end
+
+    context "when specifying the second instrument" do
+      before { params[:products] = [product2.id] }
+
+      it "returns only the users that have a problem reservation for the second product" do
+        expect(users).to contain_exactly(problem_reservation_users.second)
+      end
+    end
+
+    context "when specifying the the first and second instruments" do
+      before { params[:products] = [product.id, product2.id] }
+
+      it "returns only the users for both products and no more" do
+        expect(users).to match_array(problem_reservation_users)
+      end
+    end
+  end
+
   context "when searching for customers and authorized_users" do
     before(:each) do
       params[:bulk_email][:user_types] = %i(authorized_users customers)

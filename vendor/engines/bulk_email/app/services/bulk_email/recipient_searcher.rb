@@ -17,10 +17,10 @@ module BulkEmail
     end
 
     def self.user_types
-      if SettingsHelper.feature_on?(:training_requests)
-        %i(customers authorized_users training_requested account_owners)
-      else
-        %i(customers authorized_users account_owners)
+      %i(customers authorized_users account_owners problem_reservation).tap do |user_types|
+        if SettingsHelper.feature_on?(:training_requests)
+          user_types.insert(2, :training_requested)
+        end
       end
     end
 
@@ -77,14 +77,25 @@ module BulkEmail
         .where(training_requests: { product: products_from_params })
     end
 
+    def search_problem_reservation
+      products = products_from_params(use_require_approval_filter: false)
+
+      users
+        .distinct
+        .joins(orders: { order_details: :reservation })
+        .where(order_details: { problem: true, product: products })
+    end
+
     private
 
     def hidden_tags_for(key, values)
       Array(values).map { |value| hidden_field_tag(key, value, id: nil) }
     end
 
-    def products_from_params
-      query = Product.for_facility(facility).not_archived.requiring_approval
+    def products_from_params(use_require_approval_filter: true)
+      query = Product.for_facility(facility).not_archived
+
+      query = query.requiring_approval if use_require_approval_filter
       query = query.where(facility: search_fields[:facilities]) if search_fields[:facilities].present?
       query = query.where(id: search_fields[:products]) if search_fields[:products].present?
       query
