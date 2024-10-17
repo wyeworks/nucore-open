@@ -7,11 +7,8 @@ updates:
     time: "23:00"
     timezone: America/Chicago
   open-pull-requests-limit: 99
-  allow:
-  - dependency-type: all
-
-# Check for updates to GitHub Actions every week
-- package-ecosystem: "github-actions"
-  directory: "/"
-  schedule:
-    interval: "weekly"
+  ignore:
+    # All nucore-umass dependencies updates are handled
+    # in nucore-open. Whenever this changes we should
+    # allow only a specifc subset gem to be updated here.
+    - dependency-name: '*'
