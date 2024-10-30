@@ -35,6 +35,7 @@ class PricePolicy < ApplicationRecord
   before_create :truncate_existing_policies
 
   scope :for_date, ->(start_date) { where("start_date >= ? AND start_date <= ?", start_date.beginning_of_day, start_date.end_of_day) if start_date }
+  scope :with_visible_price_group, -> { joins(:price_group).where(price_groups: { is_hidden: false }) }
 
   def self.current
     current_for_date(Time.zone.now)
@@ -183,6 +184,10 @@ class PricePolicy < ApplicationRecord
 
   def note_option
     Settings.price_policy_note_options.include?(note) ? note : "Other"
+  end
+
+  def daily_booking?
+    product&.daily_booking?
   end
 
   private

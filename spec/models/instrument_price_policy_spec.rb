@@ -175,4 +175,80 @@ RSpec.describe InstrumentPricePolicy do
     end
   end
 
+  describe "daily rates" do
+    let(:instrument) do
+      build :instrument, pricing_mode: Instrument::Pricing::SCHEDULE_DAILY
+    end
+
+    let(:policy) { build :instrument_price_policy, product: instrument }
+
+    shared_examples "validates policy field" do |field_name|
+      before { policy.valid? }
+
+      it { expect(policy).to_not be_valid }
+      it { expect(policy.errors).to include(field_name) }
+    end
+
+    describe "with negative usage_rate_daily value" do
+      before { policy.usage_rate_daily = -1 }
+
+      it_behaves_like "validates policy field", :usage_rate_daily
+    end
+
+    describe "with negative usage_subsidy_daily value" do
+      before { policy.usage_subsidy_daily = -1 }
+
+      it_behaves_like "validates policy field", :usage_subsidy_daily
+    end
+
+    describe "with negative usage_rate_daily value" do
+      before { policy.usage_rate_daily = -1 }
+
+      it_behaves_like "validates policy field", :usage_rate_daily
+    end
+
+    describe "with missing usage_rate_daily value" do
+      before { policy.usage_rate_daily = nil }
+
+      it_behaves_like "validates policy field", :usage_rate_daily
+    end
+
+    describe "when subsidy is greater than rate" do
+      before do
+        policy.usage_rate_daily = 9.9
+        policy.usage_subsidy_daily = 10
+      end
+
+      it_behaves_like "validates policy field", :usage_subsidy_daily
+    end
+
+    it "does not save usage_rate if usage_rate_daily is present" do
+      policy.usage_rate_daily = 10
+      policy.usage_rate = 10
+      policy.usage_subsidy = 10
+
+      expect(policy).to be_valid
+      expect(policy.usage_rate).to be_nil
+      expect(policy.usage_subsidy).to be_nil
+    end
+
+    it "does not require usage_rate when instrument is scheduled daily" do
+      policy.usage_rate_daily = 10
+      policy.usage_rate = nil
+
+      expect(policy).to be_valid
+    end
+
+    it "does not require usage_rate_daily if instrument is nil" do
+      policy.product = nil
+
+      expect(policy).to be_valid
+    end
+
+    it "does not require usage_rate_daily if instrument is not scheduled daily" do
+      instrument.pricing_mode = Instrument::Pricing::DURATION
+
+      expect(policy).to be_valid
+    end
+  end
 end

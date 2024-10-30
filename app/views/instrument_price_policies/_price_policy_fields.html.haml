@@ -1,1 +1,3 @@
-= render "time_based_price_policies/price_policy_fields", f: f, cancellation: true, minimum_cost: true, charge_for_collection: charge_for_options(@price_policies.first.product)
+= render("time_based_price_policies/price_policy_fields",
+  f: f, cancellation: !@product.daily_booking?, minimum_cost: !@product.daily_booking?,
+  charge_for_collection: charge_for_options(@price_policies.first.product))

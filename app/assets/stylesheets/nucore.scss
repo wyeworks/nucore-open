@@ -215,9 +215,14 @@ th.order-note {
 
 td.currency,
 th.currency,
-th.hourly_rate {
+th.hourly_rate,
+th.daily_rate {
   text-align: right;
 }
+td.daily_rate {
+  width: 120px;
+}
+
 .currency-input input {
   width: 7em;
 }
@@ -282,13 +287,21 @@ th.hourly_rate {
   }
 }
 
-.price-policy-table input[type=text],
 .half-width {
   width: 50%;
 }
 
 .full-width {
   width: 100%;
+}
+
+.negative-number::before {
+  content: '–';
+  width: 0;
+  display: inline-block;
+  overflow: visible;
+  position: relative;
+  left: -10px;
 }
 
 /* Price policies */
@@ -303,6 +316,10 @@ p.per-minute {
 p.per-minute-show {
   @extend .per-minute;
   margin-top: 0;
+}
+
+.price-policy-table input[type=text] {
+  width: 80%;
 }
 
 /* Account Fields */

@@ -31,7 +31,7 @@ RSpec.describe TimedServicePricePoliciesController, :js do
     click_button "Add Pricing Rules"
 
     expect(page).to have_content("$2.0000 / minute") # Base rate
-    expect(page).to have_content("$120.00\n- $25.25\n= $94.75") # Cancer center
+    expect(page).to have_content("$120.00\n$25.25\n= $94.75") # Cancer center
     expect(page).to have_content("$1.5792 / minute") # Cancer center
     expect(page).to have_content("$2.0858 / minute") # External
 

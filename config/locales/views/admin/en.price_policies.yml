@@ -24,6 +24,7 @@ en:
       edit: "Edit Price Policies"
       remove: "Remove Price Policies"
   time_based_price_policies:
+    problem: "There are errors in this policy:"
     table:
       stepped_rates_title: Stepped Billing Rates
       rates_title: Billing Rates

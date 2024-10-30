@@ -69,12 +69,15 @@ jobs:
       MYSQL_HOST: mariadb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
+      PARALLEL_TEST_PROCESSORS: 4
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions
       # Uncomment below to open ssh tunnel for debugging
       # - uses: mxschmitt/action-tmate@v3
-      - run: bundle exec rspec
+      - run: bundle exec rails parallel:create
+      - run: bundle exec rails parallel:load_schema
+      - run: bundle exec rails parallel:spec
 
   run-teaspoon:
     runs-on: ubuntu-latest

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe InstrumentPricePoliciesController do
   let(:facility) { create(:setup_facility) }
   let(:billing_mode) { "Default" }
-  let(:pricing_mode) { "Schedule Rule" }
+  let(:pricing_mode) { Instrument::Pricing::SCHEDULE_RULE }
   let!(:instrument) { create(:instrument, facility:, billing_mode:, pricing_mode:) }
   let(:director) { create(:user, :facility_director, facility:) }
 
@@ -39,8 +39,8 @@ RSpec.describe InstrumentPricePoliciesController do
 
       click_button "Add Pricing Rules"
 
-      expect(page).to have_content("$60.00\n- $30.00\n= $30.00") # Cancer Center Usage Rate
-      expect(page).to have_content("$120.00\n- $60.00\n= $60.00") # Cancer Center Minimum Cost
+      expect(page).to have_content("$60.00\n$30.00\n= $30.00") # Cancer Center Usage Rate
+      expect(page).to have_content("$120.00\n$60.00\n= $60.00") # Cancer Center Minimum Cost
       expect(page).to have_content("$15.00", count: 2) # Internal and Cancer Center Reservation Costs
 
       # External price group
@@ -113,8 +113,8 @@ RSpec.describe InstrumentPricePoliciesController do
 
         click_button "Add Pricing Rules"
 
-        expect(page).to have_content("$60.00\n- $30.00\n= $30.00") # Cancer Center Usage Rate
-        expect(page).to have_content("$120.00\n- $60.00\n= $60.00") # Cancer Center Minimum Cost
+        expect(page).to have_content("$60.00\n$30.00\n= $30.00") # Cancer Center Usage Rate
+        expect(page).to have_content("$120.00\n$60.00\n= $60.00") # Cancer Center Minimum Cost
         expect(page).not_to have_content("$15.00")
         expect(page).to have_content(PricePolicy.human_attribute_name(:full_price_cancellation), count: 3)
       end
@@ -154,10 +154,16 @@ RSpec.describe InstrumentPricePoliciesController do
         expect(page).to have_no_link "Remove"
       end
     end
+
+    describe "with hidden price policies", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+      let(:item) { instrument }
+
+      include_examples "with hidden price groups", "instrument"
+    end
   end
 
   context "Duration pricing mode" do
-    let(:pricing_mode) { "Duration" }
+    let(:pricing_mode) { Instrument::Pricing::DURATION }
     let!(:cannot_purchase_group) { create(:price_group, facility:) }
 
     it "can set up the price policies", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
@@ -200,11 +206,11 @@ RSpec.describe InstrumentPricePoliciesController do
       expect(page).to have_content("$15.00", count: 2) # Internal and Cancer Center Reservation Costs
 
       # Cancer center
-      expect(page).to have_content("$60.00\n- $25.00\n= $35.00")    # Usage Rate
-      expect(page).to have_content("$120.00\n- $50.00\n= $70.00")   # Minimum Cost
-      expect(page).to have_content("$50.00\n- $20.00\n= $30.00")    # Step 2 rate
-      expect(page).to have_content("$40.00\n- $10.00\n= $30.00")    # Step 3 rate
-      expect(page).to have_content("$30.00\n- $5.00\n= $25.00")     # Step 4 rate
+      expect(page).to have_content("$60.00\n$25.00\n= $35.00")    # Usage Rate
+      expect(page).to have_content("$120.00\n$50.00\n= $70.00")   # Minimum Cost
+      expect(page).to have_content("$50.00\n$20.00\n= $30.00")    # Step 2 rate
+      expect(page).to have_content("$40.00\n$10.00\n= $30.00")    # Step 3 rate
+      expect(page).to have_content("$30.00\n$5.00\n= $25.00")     # Step 4 rate
 
       # External price group
       expect(page).to have_content("$120.11")
@@ -339,6 +345,8 @@ RSpec.describe InstrumentPricePoliciesController do
       fill_in "price_policy_#{external_price_group.id}[duration_rates_attributes][1][rate]", with: "100"
       fill_in "price_policy_#{external_price_group.id}[duration_rates_attributes][2][rate]", with: "90"
 
+      expect(page).to have_content("/ minute")
+
       uncheck "price_policy_#{cannot_purchase_group.id}[can_purchase]"
 
       fill_in "note", with: "This is my note"
@@ -398,6 +406,132 @@ RSpec.describe InstrumentPricePoliciesController do
 
       # External
       expect(page).not_to have_content("$90.00") # Step 3 rate (removed)
+    end
+
+    describe "with hidden price policies", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+      let(:item) { instrument }
+
+      include_examples "with hidden price groups", "instrument"
+    end
+  end
+
+  context "Schedule Rule Daily pricing mode", feature_setting: { facility_directors_can_manage_price_groups: true } do
+    let(:pricing_mode) { Instrument::Pricing::SCHEDULE_DAILY }
+
+    it "can add price policies", :js do
+      visit new_facility_instrument_price_policy_path(facility, instrument)
+
+      expect(page).to have_content("Rate Per Day")
+      expect(page).to_not have_content("Rate Per Hour")
+
+      expect(page).to_not have_content("Reservation Cost")
+      expect(page).to_not have_content("Minimum Cost")
+
+      PriceGroup.find_each do |price_group|
+        expect(page).to_not have_field("price_policy_#{price_group.id}[minimum_cost]")
+        expect(page).to_not have_field("price_policy_#{price_group.id}[cancellation]")
+        expect(page).to_not have_field("price_policy_#{price_group.id}[usage_rate]")
+      end
+
+      fill_in("note", with: "Some note about pricing")
+
+      check("price_policy_#{base_price_group.id}[can_purchase]")
+      check("price_policy_#{cancer_center.id}[can_purchase]")
+      uncheck("price_policy_#{external_price_group.id}[can_purchase]")
+
+      fill_in("price_policy_#{base_price_group.id}[usage_rate_daily]", with: "100")
+      fill_in("price_policy_#{cancer_center.id}[usage_subsidy_daily]", with: "30")
+
+      find_field(
+        "price_policy_#{cancer_center.id}[usage_rate_daily]",
+        type: "hidden"
+      ).tap do |hidden_input|
+        expect(hidden_input.value).to eq("100")
+      end
+
+      expect(page).to_not have_content("/ minute")
+
+      expect { click_button("Add Pricing Rules") }.to(
+        change { instrument.price_policies.reload.count }.by(3)
+      )
+
+      expect(page).to(
+        have_current_path(facility_instrument_price_policies_path(facility, instrument))
+      )
+      expect(page).to have_content("Price Rules were successfully created.")
+    end
+
+    describe "already created price policies" do
+      include ActiveSupport::NumberHelper
+
+      let(:start_date) { Date.today }
+      let(:expire_date) { PricePolicy.generate_expire_date(@start_date) }
+      let(:base_price_policy) { instrument.price_policies.find_by(price_group: base_price_group) }
+      let(:price_policies) { instrument.price_policies }
+
+      before do
+        PriceGroup.find_each do |price_group|
+          create(
+            :instrument_daily_booking_price_policy,
+            product: instrument,
+            price_group:
+          )
+        end
+      end
+
+      it "can view daily rates" do
+        visit facility_instrument_price_policies_path(facility, instrument)
+
+        expect(page).to have_content("Rate Per Day")
+        expect(page).to_not have_content("Rate Per Hour")
+
+        expect(page).to_not have_content("Reservation Cost")
+        expect(page).to_not have_content("Minimum Cost")
+      end
+
+      it "can edit price policies" do
+        visit edit_facility_instrument_price_policy_path(facility, instrument, start_date)
+
+        expect(page).to have_content("Edit Pricing Rules")
+
+        new_rate = BigDecimal("1081.99")
+        fill_in("price_policy_#{base_price_group.id}[usage_rate_daily]", with: new_rate)
+
+        expect { click_button("Save Rules") }.to(
+          change do
+            base_price_policy.reload.usage_rate_daily
+          end.from(
+            base_price_policy.usage_rate_daily
+          ).to(
+            new_rate
+          )
+        )
+
+        expect(page).to have_content("Price Rules were successfully updated.")
+        expect(page).to have_content(number_to_currency(new_rate))
+      end
+
+      it "can submit with errors, fix and re-submit" do
+        visit edit_facility_instrument_price_policy_path(facility, instrument, start_date)
+
+        new_rate = "99.90"
+        new_subsidy = "79.78"
+
+        fill_in("price_policy_#{base_price_group.id}[usage_rate_daily]", with: "value with error")
+        fill_in("price_policy_#{cancer_center.id}[usage_subsidy_daily]", with: new_subsidy)
+
+        click_button("Save Rules")
+
+        expect(page).to have_content("There were problems with the following fields")
+
+        fill_in("price_policy_#{base_price_group.id}[usage_rate_daily]", with: new_rate)
+
+        click_button("Save Rules")
+
+        expect(page).to have_content("Price Rules were successfully updated.")
+        expect(page).to have_content(number_to_currency(new_rate))
+        expect(page).to have_content(number_to_currency(new_subsidy))
+      end
     end
   end
 end

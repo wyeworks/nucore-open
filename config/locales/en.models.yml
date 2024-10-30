@@ -309,11 +309,13 @@ en:
         rate: Hourly rate
       price_group:
         is_internal: Is Internal?
+        is_hidden: Is Hidden?
       price_policy:
         type: Type
         can_purchase: Can Purchase?
         minimum_cost: Minimum Cost
         hourly_usage_rate: Rate Per Hour
+        usage_rate_daily: Rate Per Day
         cancellation_cost: Reservation Cost
         full_price_cancellation: Full reservation cost
         unit_cost: Unit Cost

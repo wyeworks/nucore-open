@@ -30,7 +30,9 @@
         %th.currency{ scope: "col" }= t("time_based_price_policies.table.step_1")
         %th.currency{ scope: "col" }= t("time_based_price_policies.table.step_2")
         %th.currency{ scope: "col" }= t("time_based_price_policies.table.step_3")
-      - else 
+      - elsif @product.daily_booking?
+        %th.daily_rate{ scope: "col" }= PricePolicy.human_attribute_name(:usage_rate_daily)
+      - else
         %th.hourly_rate{ scope: "col" }= t("activerecord.attributes.price_policy.hourly_usage_rate")
 
   %tbody
@@ -58,7 +60,7 @@
             %td.currency
               .rate= number_to_currency price_policy.minimum_cost
               - if price_policy.has_minimum_cost? && price_policy.has_subsidy?
-                .subsidy= "- #{number_to_currency price_policy.minimum_cost_subsidy}"
+                .subsidy.negative-number= number_to_currency price_policy.minimum_cost_subsidy
                 %strong= "= #{number_to_currency price_policy.subsidized_minimum_cost}"
 
           - if local_assigns[:cancellation]
@@ -71,13 +73,19 @@
             - if price_policy.has_rate?
               .rate= number_to_currency price_policy.hourly_usage_rate
               - if price_policy.has_subsidy?
-                .subsidy= "- #{number_to_currency price_policy.hourly_usage_subsidy}"
+                .subsidy.negative-number= number_to_currency price_policy.hourly_usage_subsidy
                 %strong= "= #{number_to_currency price_policy.subsidized_hourly_usage_cost}"
 
               %p.per-minute-show
                 - price_per_minute = (price_policy.subsidized_hourly_usage_cost / 60)
                 = number_to_currency price_per_minute, precision: 4
                 \/ minute
+            - elsif price_policy.usage_rate_daily.present?
+              .rate= number_to_currency price_policy.usage_rate_daily
+              - if price_policy.usage_subsidy_daily.present?
+                .subsidy.negative-number= number_to_currency price_policy.usage_subsidy_daily
+                %strong= "= #{number_to_currency price_policy.subsidized_daily_usage_cost}"
+
           - price_policy.duration_rates.sorted.each do |duration_rate|
             %td.currency
               - per_minute = nil
@@ -85,7 +93,7 @@
                 .rate= number_to_currency duration_rate.hourly_rate
                 - per_minute = duration_rate.hourly_rate / 60
               - if duration_rate.subsidy.present?
-                .subsidy= "- #{number_to_currency duration_rate.hourly_subsidy}"
+                .subsidy.negative-number= number_to_currency duration_rate.hourly_subsidy
                 %strong= "= #{number_to_currency duration_rate.subsidized_hourly_cost}"
                 - per_minute = duration_rate.subsidized_hourly_cost / 60
 

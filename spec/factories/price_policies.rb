@@ -22,6 +22,13 @@ FactoryBot.define do
     charge_for { InstrumentPricePolicy::CHARGE_FOR[:overage] }
   end
 
+  factory :instrument_daily_booking_price_policy, parent: :instrument_price_policy do
+    usage_rate { nil }
+    usage_subsidy { nil }
+    usage_rate_daily { 100 }
+    usage_subsidy_daily { 0 }
+  end
+
   factory :item_price_policy do
     can_purchase { true }
     unit_cost { 1 }

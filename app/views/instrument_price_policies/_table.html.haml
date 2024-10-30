@@ -1,1 +1,5 @@
-= render "time_based_price_policies/table", price_policies: price_policies, url_date: url_date, cancellation: true, minimum_cost: true, product: product
+= render "time_based_price_policies/table",
+  price_policies: price_policies, url_date: url_date,
+  cancellation: !@product.daily_booking?,
+  minimum_cost: !@product.daily_booking?,
+  product: product

@@ -2,13 +2,23 @@
 
 class Instrument < Product
 
+  module Pricing
+    SCHEDULE_RULE = "Schedule Rule"
+    SCHEDULE_DAILY = "Schedule Rule (Daily Booking only)"
+    DURATION = "Duration"
+  end
+
   include Products::RelaySupport
   include Products::ScheduleRuleSupport
   include Products::SchedulingSupport
   include EmailListAttribute
 
   RESERVE_INTERVALS = [1, 5, 10, 15, 30, 60].freeze
-  PRICING_MODES = ["Schedule Rule", "Duration"].freeze
+  PRICING_MODES = [Pricing::SCHEDULE_RULE, Pricing::DURATION].tap do |pricing_modes|
+    if SettingsHelper.feature_on?(:show_daily_rate_option)
+      pricing_modes.insert(1, Pricing::SCHEDULE_DAILY)
+    end
+  end.freeze
 
   with_options foreign_key: "product_id" do |instrument|
     instrument.has_many :admin_reservations
@@ -25,7 +35,7 @@ class Instrument < Product
   # --------
 
   validates :initial_order_status_id, presence: true
-  validates :reserve_interval, presence: true, inclusion: { in: RESERVE_INTERVALS, allow_blank: true }
+  validates :reserve_interval, presence: true, inclusion: { in: RESERVE_INTERVALS, allow_blank: true }, if: -> { !daily_booking? }
   validates :min_reserve_mins,
             :max_reserve_mins,
             :auto_cancel_mins,
@@ -43,6 +53,8 @@ class Instrument < Product
 
   # Triggered by Product
   # after_create :create_default_price_group_products
+
+  before_create :clean_up_reservation_rules
 
   # Scopes
   # --------
@@ -100,7 +112,11 @@ class Instrument < Product
   end
 
   def duration_pricing_mode?
-    pricing_mode == "Duration"
+    pricing_mode == Pricing::DURATION
+  end
+
+  def daily_booking?
+    pricing_mode == Pricing::SCHEDULE_DAILY
   end
 
   private
@@ -126,6 +142,17 @@ class Instrument < Product
   def max_reservation_not_less_than_min
     if max_reserve_mins && min_reserve_mins && max_reserve_mins < min_reserve_mins
       errors.add :max_reserve_mins, :max_less_than_min
+    end
+  end
+
+  def clean_up_reservation_rules
+    if daily_booking?
+      min_reserve_mins = nil
+      max_reserve_mins = nil
+      reserve_interval = nil
+    else
+      min_reserve_days = nil
+      max_reserve_days = nil
     end
   end
 

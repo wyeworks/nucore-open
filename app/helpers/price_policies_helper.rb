@@ -21,12 +21,16 @@ module PricePoliciesHelper
 
   def display_usage_rate(price_group, price_policy)
     param_for_price_group(price_group, :usage_rate) ||
-      number_to_currency(price_policy.hourly_usage_rate, unit: "", delimiter: "")
+      display_rate(price_policy.hourly_usage_rate)
   end
 
   def display_usage_subsidy(price_group, price_policy)
     param_for_price_group(price_group, :usage_subsidy) ||
-      number_to_currency(price_policy.hourly_usage_subsidy, unit: "", delimiter: "")
+      display_rate(price_policy.hourly_usage_subsidy)
+  end
+
+  def display_rate(value)
+    number_to_currency(value, unit: "", delimiter: "")
   end
 
   private
