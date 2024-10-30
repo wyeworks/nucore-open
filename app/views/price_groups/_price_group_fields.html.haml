@@ -5,3 +5,8 @@
 
   = f.input :is_internal, as: :boolean, inline_label: true, label: false
 
+
+.well.well-small
+  %p.help-block= t(".hidden_instruction")
+
+  = f.input :is_hidden, as: :boolean, inline_label: true, label: false

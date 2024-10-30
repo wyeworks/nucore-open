@@ -12,3 +12,30 @@ updates:
     # in nucore-open. Whenever this changes we should
     # allow only a specifc subset gem to be updated here.
     - dependency-name: '*'
+  allow:
+  - dependency-type: all
+  groups:
+    rails-gems:
+      update-types:
+        - patch
+        - minor
+
+      patterns:
+        - rails
+        - railties
+        - actioncable
+        - actionmailbox
+        - actionmailer
+        - actionpack
+        - actiontext
+        - actionview
+        - activejob
+        - activemodel
+        - activerecord
+        - activestorage
+
+# Check for updates to GitHub Actions every week
+- package-ecosystem: "github-actions"
+  directory: "/"
+  schedule:
+    interval: "weekly"

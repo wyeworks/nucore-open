@@ -23,6 +23,7 @@
         %th= t(".th.global")
         %th= t(".th.users")
         %th= t(".th.accounts")
+        %th= t(".th.is_hidden")
     %tbody
       - @price_groups.each do |price_group|
         %tr
@@ -45,3 +46,5 @@
             %td= t("shared.not_applicable")
 
           %td= price_group.account_price_group_members.count
+          %td= t(".#{price_group.is_hidden.to_s}")
+

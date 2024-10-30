@@ -339,6 +339,10 @@ class Product < ApplicationRecord
     false
   end
 
+  def daily_booking?
+    false
+  end
+
   protected
 
   def translation_scope

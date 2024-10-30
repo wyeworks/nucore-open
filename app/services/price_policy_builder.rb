@@ -94,7 +94,7 @@ class PricePolicyBuilder
 
   def get_price_policies
     return [] unless editable?
-    facility.price_groups.map do |price_group|
+    facility.price_groups.visible.map do |price_group|
       policy_for_price_group(price_group)
     end
   end

@@ -954,6 +954,7 @@ en:
   price_groups:
     price_group_fields:
       internal_instruction: "Check this box if this price group is internal:"
+      hidden_instruction: "Check this box if this price group is no longer used:"
     accounts:
       intro: "Pricing policies apply to orders paid for with the following payment sources."
       notice: "No payment sources have been added to this price group."
@@ -978,6 +979,7 @@ en:
         global: "Global"
         users: "Number of Users"
         accounts: "Number of Payment Sources"
+        is_hidden: "Is Hidden?"
     show:
       users:
         add_user: "Add User"
@@ -1236,8 +1238,10 @@ en:
         label:
           restrict: "Reservation Restrictions"
           reserve_interval: "Interval (minutes)"
-          min_reserve: "Minimum (minutes)"
-          max_reserve: "Maximum (minutes)"
+          min_reserve_mins: "Minimum (minutes)"
+          max_reserve_mins: "Maximum (minutes)"
+          min_reserve_days: "Minimum (days)"
+          max_reserve_days: "Maximum (days)"
           cancel_hours: "Reservation Cost Window (hours)"
           auto_cancel: "Automatic Cancellation (minutes)"
           lock_window: "Reservation Lock Window (hours)"

@@ -14,6 +14,10 @@ require "axe-rspec"
 # in ./support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 
+# Keep factory_bot v4 build strategy behaviour
+# https://github.com/thoughtbot/factory_bot/blob/v6.5.0/GETTING_STARTED.md#build-strategies-1
+FactoryBot.use_parent_strategy = false
+
 RSpec.configure do |config|
 
   config.filter_rails_from_backtrace!

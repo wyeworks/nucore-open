@@ -19,6 +19,11 @@ FactoryBot.define do
       admin_editable { true }
       sequence(:name, "AAAAAA") { |n| "Cancer Center #{n}" }
     end
+
+    trait :hidden do
+      is_hidden { true }
+      sequence(:name, "AAAAAA") { |n| "Hidden Group #{n}" }
+    end
   end
 
   factory :price_group_product do

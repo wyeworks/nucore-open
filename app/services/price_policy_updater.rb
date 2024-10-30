@@ -12,6 +12,12 @@ class PricePolicyUpdater
     new(product, price_policies, start_date).destroy_all!
   end
 
+  def self.restrict_purchase(policies)
+    policies.each do |policy|
+      policy.update(can_purchase: false)
+    end
+  end
+
   def initialize(product, price_policies, start_date, expire_date = nil, params = nil)
     @product = product
     @price_policies = price_policies
@@ -90,19 +96,23 @@ class PricePolicyUpdater
     [
       :can_purchase,
       :usage_rate,
+      :usage_rate_daily,
       :usage_subsidy,
+      :usage_subsidy_daily,
       :minimum_cost,
       :cancellation_cost,
       :unit_cost,
       :unit_subsidy,
-      duration_rates_attributes: [
-        :id,
-        :subsidy,
-        :rate,
-        :price_policy_id,
-        :min_duration_hours,
-        :_destroy
-      ]
+      {
+        duration_rates_attributes: [
+          :id,
+          :subsidy,
+          :rate,
+          :price_policy_id,
+          :min_duration_hours,
+          :_destroy,
+        ],
+      },
     ].tap do |attributes|
       attributes << :full_price_cancellation if SettingsHelper.feature_on?(:charge_full_price_on_cancellation)
     end

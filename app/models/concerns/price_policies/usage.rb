@@ -7,8 +7,25 @@ module PricePolicies
     extend ActiveSupport::Concern
 
     included do
-      validates :usage_rate, presence: true, unless: :restrict_purchase?
-      validates :usage_rate, :usage_subsidy, :minimum_cost, numericality: { allow_blank: true, greater_than_or_equal_to: 0 }
+      validates :usage_rate,
+                presence: true,
+                unless: -> { restrict_purchase? || daily_booking? }
+      validates :usage_rate_daily,
+                presence: true,
+                unless: -> { restrict_purchase? || !daily_booking? }
+
+      validates(
+        :usage_rate,
+        :usage_rate_daily,
+        :usage_subsidy,
+        :usage_subsidy_daily,
+        :minimum_cost,
+        numericality: { allow_blank: true, greater_than_or_equal_to: 0 }
+      )
+
+      validate :daily_subsidy_less_than_rate, if: :daily_booking?
+
+      before_validation :sanitize_usage_rate
     end
 
     def has_rate?
@@ -41,6 +58,10 @@ module PricePolicies
       hourly_usage_rate - hourly_usage_subsidy
     end
 
+    def subsidized_daily_usage_cost
+      usage_rate_daily - usage_subsidy_daily
+    end
+
     def minimum_cost_subsidy
       return unless has_minimum_cost?
       minimum_cost * subsidy_ratio
@@ -64,6 +85,20 @@ module PricePolicies
 
     def subsidy_field
       :usage_subsidy
+    end
+
+    def daily_subsidy_less_than_rate
+      return if usage_subsidy_daily.blank? || usage_rate_daily.blank?
+      return if usage_subsidy_daily <= usage_rate_daily
+
+      errors.add(:usage_subsidy_daily, :subsidy_greater_than_cost)
+    end
+
+    def sanitize_usage_rate
+      if usage_rate_daily_changed? && daily_booking?
+        self.usage_rate = nil
+        self.usage_subsidy = nil
+      end
     end
 
   end

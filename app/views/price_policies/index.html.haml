@@ -29,7 +29,7 @@
   %p
     %em= text("note", note: policy.note)
   = render "table",
-    price_policies: @current_price_policies,
+    price_policies: @current_price_policies.with_visible_price_group,
     url_date: @current_start_date.strftime("%Y-%m-%d"),
     product: @product
 

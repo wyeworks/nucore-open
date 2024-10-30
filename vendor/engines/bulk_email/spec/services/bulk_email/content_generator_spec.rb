@@ -11,7 +11,7 @@ RSpec.describe BulkEmail::ContentGenerator do
 
   describe "#greeting" do
     it "generates a greeting" do
-      expect(subject.greeting).to include(I18n.t('bulk_email.body.greeting'))
+      expect(subject.greeting).to include(I18n.t("bulk_email.body.greeting"))
     end
 
     context "with an offline instrument as a subject_product" do
