@@ -537,11 +537,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.datetime "deleted_at", precision: nil
     t.boolean "highlighted", default: false, null: false
     t.boolean "global", default: false, null: false
-<<<<<<< HEAD
-    t.index ["deleted_at"], name: "index_price_groups_on_deleted_at"
-=======
     t.boolean "is_hidden", default: false, null: false
->>>>>>> upstream/master
+    t.index ["deleted_at"], name: "index_price_groups_on_deleted_at"
     t.index ["facility_id", "name"], name: "index_price_groups_on_facility_id_and_name"
   end
 
