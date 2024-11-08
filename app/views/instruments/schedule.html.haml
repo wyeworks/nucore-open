@@ -12,7 +12,7 @@
   = render "admin/shared/tabnav_product", secondary_tab: "reservations"
 
 :javascript
-  var events_path = "#{facility_instrument_reservations_path(current_facility, @product, format: 'js', with_details: true, all: true)}";
+  var events_path = "#{calendar_events_path(current_facility, @product, with_details: true)}";
   var orders_path_base = "#{facility_orders_path(current_facility)}";
 
 %h2= @product
@@ -21,7 +21,7 @@
 #overlay
   #spinner
     #hide
-      #calendar
+      #calendar{ data: { default_view: product_calendar_view(@product) } }
 
 %h3= t(".administrative_reservations")
 

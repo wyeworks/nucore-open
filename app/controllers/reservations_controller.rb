@@ -48,23 +48,26 @@ class ReservationsController < ApplicationController
     @reservations = admin_reservations + user_reservations + offline_reservations
 
     # We don't need the unavailable hours month view
-    unless month_view?
-      @rules = @instrument.schedule_rules
-
-      if @instrument.requires_approval? && acting_user && acting_user.cannot_override_restrictions?(@instrument)
-        @rules = @rules.available_to_user(acting_user)
-      end
-
-      @unavailable = ScheduleRule.unavailable(@rules)
+    @rules = @instrument.schedule_rules
+    if @instrument.requires_approval? && acting_user && acting_user.cannot_override_restrictions?(@instrument)
+      @rules = @rules.available_to_user(acting_user)
     end
 
     @show_details = params[:with_details] == "true" && (@instrument.show_details? || can?(:administer, Reservation))
 
     respond_to do |format|
-      as_calendar_object_options = { start_date: @start_at.beginning_of_day, with_details: @show_details }
       format.js do
-        render json: Reservation.as_calendar_objects(@reservations, as_calendar_object_options) +
-                     ScheduleRule.as_calendar_objects(@unavailable, as_calendar_object_options)
+        render(
+          json: CalendarEventsPresenter.new(
+            @instrument,
+            @reservations,
+            @rules,
+            start_at: @start_at,
+            end_at: @end_at,
+            with_details: @show_details,
+            view: params[:view]
+          ).to_json
+        )
       end
     end
   end

@@ -1,9 +1,15 @@
 $(document).ready(function() {
-  new FullCalendarConfig($("#calendar"), {
-    header: {
-      left: 'title',
-      center: '',
-      right: 'prev,next today agendaDay,agendaWeek,month',
-    }
-  }).init();
+  const calendar = $("#calendar");
+  let defaultView = calendar.data('defaultView');
+
+  const header = { left: 'title', center: '', right: '' };
+
+  if (defaultView != 'month') {
+    header.right = 'prev,next today agendaDay,agendaWeek,month';
+  }
+
+  new FullCalendarConfig(
+    calendar,
+    { header: header }
+  ).init();
 });

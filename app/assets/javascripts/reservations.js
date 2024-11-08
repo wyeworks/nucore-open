@@ -1,17 +1,21 @@
 $(document).ready(function() {
   init_datepickers();
 
+  function reservationInput(fieldName) {
+    return $(`[name="reservation[${fieldName}]"]`);
+  }
+
   let form = {
-    isDailyBooking: $("#calendar").length == 0,
-    durationDaysEl: $('[name="reservation[duration_days]"]'),
-    startDateEl: $('[name="reservation[reserve_start_date]"]'),
-    endDateEl: $('[name="reservation[reserve_end_date]"]'),
-    startHourEl: $('[name="reservation[reserve_start_hour]"]'),
-    startMinEl: $('[name="reservation[reserve_start_min]"]'),
-    startMeridianEl: $('[name="reservation[reserve_start_meridian]"]'),
-    endHourEl: $('[name="reservation[reserve_end_hour]"]'),
-    endMinEl: $('[name="reservation[reserve_end_min]"]'),
-    endMeridianEl: $('[name="reservation[reserve_end_meridian]"]'),
+    isDailyBooking: reservationInput('duration_days').length > 0,
+    durationDaysEl: reservationInput('duration_days'),
+    startDateEl: reservationInput('reserve_start_date'),
+    endDateEl: reservationInput('reserve_end_date'),
+    startHourEl: reservationInput('reserve_start_hour'),
+    startMinEl: reservationInput('reserve_start_min'),
+    startMeridianEl: reservationInput('reserve_start_meridian'),
+    endHourEl: reservationInput('reserve_end_hour'),
+    endMinEl: reservationInput('reserve_end_min'),
+    endMeridianEl: reservationInput('reserve_end_meridian'),
   };
 
   // initialize datepicker
@@ -28,7 +32,7 @@ $(document).ready(function() {
       $(this).datepicker({'minDate': minDaysFromNow, 'maxDate': maxDaysFromNow})
         .change(function() {
           var d = new Date(Date.parse($(this).val()));
-          if (!form.isDailyBooking) $('#calendar').fullCalendar('gotoDate', d);
+          $('#calendar').fullCalendar('gotoDate', d);
         });
     });
   }
@@ -44,7 +48,7 @@ $(document).ready(function() {
     });
 
     // duration_mins doesn't follow the same pattern, so do it separately
-    var newval = $('[name="reservation[duration_mins]"]').val();
+    var newval = reservationInput('duration_mins').val();
 
     $('[name="reservation[actual_duration_mins]_display"]').val(newval).trigger('change');
   }
@@ -84,8 +88,7 @@ $(document).ready(function() {
     form.startHourEl.on('change', copyFieldValueCallback(form.endHourEl));
     form.startMinEl.on('change', copyFieldValueCallback(form.endMinEl));
     form.startMeridianEl.on('change', copyFieldValueCallback(form.endMeridianEl));
-  } else {
-    new ReservationCalendar().init($("#calendar"), $(".js--reservationForm"));
   }
+  new ReservationCalendar().init($("#calendar"), $(".js--reservationForm"));
 });
 
