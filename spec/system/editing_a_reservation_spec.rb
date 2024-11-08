@@ -91,4 +91,98 @@ RSpec.describe "Editing your own reservation" do
       expect(page).to have_content "cannot be shortened once the reservation has started"
     end
   end
+
+  describe "with a daily booking instrument" do
+    let(:today) { Time.current.beginning_of_day }
+    let(:unavailable_period_start) { today + 3.days }
+    let(:instrument) do
+      create(
+        :setup_instrument,
+        :always_available,
+        :daily_booking,
+      )
+    end
+    let!(:reservation) do
+      create(
+        :purchased_reservation,
+        user:,
+        reserve_start_at: today + 10.days,
+        reserve_end_at: today + 11.days,
+        product: instrument,
+      )
+    end
+    before do
+      create(
+        :purchased_reservation,
+        user: create(:user),
+        reserve_start_at: today + 1.day,
+        reserve_end_at: today + 2.days,
+        product: instrument,
+      )
+    end
+
+    shared_examples "move daily booking reservation" do |error_key|
+      it "cannot make a reservation in the unavailable day" do
+        new_reserve_end_at = unavailable_period_start + 1.minute
+        invalid_reservation = build(
+          :purchased_reservation,
+          user:,
+          reserve_start_at: new_reserve_end_at - 1.day,
+          reserve_end_at: new_reserve_end_at,
+          product: instrument
+        )
+
+        expect(invalid_reservation).to_not be_valid
+        expect(invalid_reservation.errors.map(&:type)).to include(error_key)
+      end
+
+      it "moves just before the unavailable day" do
+        visit reservations_path
+
+        expect(page).to have_content("Move Up")
+
+        click_link("Move Up")
+
+        expect(page).to have_content("Would you like to move your reservation?")
+
+        click_button("Move")
+
+        expect(page).to have_content("The reservation was moved successfully")
+
+        expect(page).to_not have_content("Move Up")
+
+        # Move the reservation just before unavailable period starts
+        expect(reservation.reload.reserve_start_at).to eq(
+          unavailable_period_start - reservation.duration_days.days
+        )
+        expect(reservation.reserve_end_at).to eq unavailable_period_start
+      end
+    end
+
+    describe "just before unavailable day at 00:00" do
+      before do
+        reservation.product.schedule_rules.first.then do |schedule_rule|
+          wday = unavailable_period_start.wday
+          wday_name = Date::ABBR_DAYNAMES[wday].downcase
+          schedule_rule.update("on_#{wday_name}" => false)
+        end
+      end
+
+      include_examples "move daily booking reservation", :no_schedule_rule
+    end
+
+    describe "just before another reservation at 00:00" do
+      before do
+        create(
+          :purchased_reservation,
+          user: create(:user),
+          reserve_start_at: unavailable_period_start,
+          reserve_end_at: unavailable_period_start + 1.day,
+          product: instrument,
+        )
+      end
+
+      include_examples "move daily booking reservation", :conflict
+    end
+  end
 end
