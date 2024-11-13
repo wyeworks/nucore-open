@@ -1,17 +1,20 @@
 # frozen_string_literal: true
 
+
 FactoryBot.define do
   factory :instrument_price_policy do
     price_group
     charge_for { InstrumentPricePolicy::CHARGE_FOR[:reservation] }
     association :product, factory: :setup_instrument
-    usage_rate { 10 / 60.0 }
-    usage_subsidy { 0 }
     minimum_cost { 1 }
     can_purchase { true }
     start_date { Time.zone.now.beginning_of_day }
     expire_date { PricePolicy.generate_expire_date(start_date) }
     note { "This is note" }
+    usage_rate_daily { daily_booking? ? 100 : nil }
+    usage_subsidy_daily { daily_booking? ? 0 : nil }
+    usage_rate { daily_booking? ? nil : 10 / 60.0 }
+    usage_subsidy { daily_booking? ? nil : 0 }
   end
 
   factory :instrument_usage_price_policy, parent: :instrument_price_policy do
@@ -20,13 +23,6 @@ FactoryBot.define do
 
   factory :instrument_overage_price_policy, parent: :instrument_price_policy do
     charge_for { InstrumentPricePolicy::CHARGE_FOR[:overage] }
-  end
-
-  factory :instrument_daily_booking_price_policy, parent: :instrument_price_policy do
-    usage_rate { nil }
-    usage_subsidy { nil }
-    usage_rate_daily { 100 }
-    usage_subsidy_daily { 0 }
   end
 
   factory :item_price_policy do

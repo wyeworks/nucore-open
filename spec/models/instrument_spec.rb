@@ -443,7 +443,7 @@ RSpec.describe Instrument do
     before(:each) do
       # create instrument, min reserve time is 60 minutes, max is 60 minutes
       @instrument = create(:instrument,
-                           facility: facility,
+                           facility:,
                            min_reserve_mins: 60,
                            reserve_interval: 60,
                            max_reserve_mins: 60)
@@ -521,8 +521,39 @@ RSpec.describe Instrument do
       assert @reservation1.valid?
       # find next reservation after 12 am tomorrow at 10 am tomorrow
       @next_reservation = @instrument.next_available_reservation(after: Time.zone.tomorrow.beginning_of_day)
-      assert_equal (Time.zone.now + 1.day).day, @next_reservation.reserve_start_at.day
+      assert_equal 1.day.from_now.day, @next_reservation.reserve_start_at.day
       assert_equal 10, @next_reservation.reserve_start_at.hour
+    end
+  end
+
+  context "next available reservation with daily booking" do
+    let!(:instrument) do
+      create(
+        :setup_instrument,
+        :daily_booking,
+        :always_available,
+        facility:,
+        min_reserve_days: 2
+      )
+    end
+
+    it "correctly finds reservations for n * 24 hour blocks" do
+      after = 1.minute.from_now
+      duration =  instrument.min_reserve_days.days
+
+      reservation = instrument.next_available_reservation(
+        after:, duration:
+      )
+
+      expect(reservation).to be_present
+      expect(reservation.save).to be true
+
+      second_reservation = instrument.next_available_reservation(
+        after:, duration:
+      )
+
+      expect(second_reservation).to be_present
+      expect(second_reservation.reserve_start_at).to_not be_before(reservation.reserve_end_at)
     end
   end
 
@@ -530,7 +561,7 @@ RSpec.describe Instrument do
     before(:each) do
       # create instrument, min reserve time is 60 minutes, max is 60 minutes
       @instrument = FactoryBot.create(:instrument,
-                                      facility: facility,
+                                      facility:,
                                       min_reserve_mins: 60,
                                       max_reserve_mins: 60)
       assert @instrument.valid?
@@ -936,6 +967,37 @@ RSpec.describe Instrument do
         expect(instrument.quick_reservation_intervals).to eq [15, 30, 60]
         expect(instrument.quick_reservation_intervals.count).to eq 3
       end
+    end
+  end
+
+  describe "with daily booking pricing mode" do
+    subject(:instrument) do
+      build(
+        :setup_instrument,
+        :daily_booking,
+        facility:,
+      )
+    end
+
+    it "sets the reserve_interval to daily reserve interval" do
+      instrument.save!
+
+      expect(instrument.reserve_interval).to eq(Instrument::RESERVE_INTERVAL_DAILY)
+    end
+
+    it "unsets min_reserve_mins and max_reserve_mins" do
+      instrument.assign_attributes(
+        min_reserve_mins: 10,
+        max_reserve_mins: 10,
+        min_reserve_days: 1,
+        max_reserve_days: 20
+      )
+      instrument.save!
+
+      expect(instrument.min_reserve_mins).to be_nil
+      expect(instrument.max_reserve_mins).to be_nil
+      expect(instrument.min_reserve_days).to_not be_nil
+      expect(instrument.max_reserve_days).to_not be_nil
     end
   end
 end

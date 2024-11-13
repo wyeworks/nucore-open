@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SingleReservationsController < ApplicationController
 
   customer_tab  :all
@@ -8,7 +10,10 @@ class SingleReservationsController < ApplicationController
   before_action { @submit_action = facility_instrument_single_reservations_path }
 
   def new
-    @reservation = NextAvailableReservationFinder.new(@instrument).next_available_for(current_user, acting_user)
+    @reservation = NextAvailableReservationFinder
+                   .new(@instrument)
+                   .next_available_for(current_user, acting_user)
+
     @reservation.order_detail = @order_detail
 
     authorize! :new, @reservation

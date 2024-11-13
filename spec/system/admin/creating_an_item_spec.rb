@@ -34,43 +34,11 @@ RSpec.describe "Creating an item" do
     expect(page).to have_content("#{I18n.t('views.admin.products.product_fields.hints.cross_core_ordering_available')}\nNo")
   end
 
-  context "when billing mode is Skip Review" do
-    let(:logged_in_user) { administrator }
-
-    it "can create an item, which automatically creates a price rule" do
-      visit facility_products_path(facility)
-      click_link "Items"
-      click_link "Add Item"
-
-      fill_in "Name", with: "My New Item", match: :first
-      fill_in "URL Name", with: "new-item"
-      select "Required", from: "item[user_notes_field_mode]"
-      select "Skip Review", from: "item[billing_mode]"
-
-      click_button "Create"
-      click_on "Pricing"
-
-      expect(page).to have_content "#{PriceGroup.nonbillable} (#{PriceGroup.nonbillable.type_string}) $0"
-    end
+  context "when billing mode is Nonbillable" do
+    include_examples "creates a product with billing mode", "service", "Nonbillable"
   end
 
-  context "when billing mode is Nonbillable" do
-    let(:logged_in_user) { administrator }
-
-    it "can create an item, which automatically creates a price rule" do
-      visit facility_products_path(facility)
-      click_link "Items"
-      click_link "Add Item"
-
-      fill_in "Name", with: "My New Item", match: :first
-      fill_in "URL Name", with: "new-item"
-      select "Required", from: "item[user_notes_field_mode]"
-      select "Nonbillable", from: "item[billing_mode]"
-
-      click_button "Create"
-      click_on "Pricing"
-
-      expect(page).to have_content "#{PriceGroup.nonbillable} (#{PriceGroup.nonbillable.type_string}) $0"
-    end
+  context "when billing mode is Skip Review" do
+    include_examples "creates a product with billing mode", "service", "Skip Review"
   end
 end

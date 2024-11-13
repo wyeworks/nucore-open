@@ -38,6 +38,52 @@ RSpec.describe TimeRange do
     end
   end
 
+  describe "duration_days" do
+    subject(:duration_days) { range.duration_days }
+
+    describe "when start_at and end_at are nil" do
+      let(:start_at) { nil }
+      let(:end_at) { nil }
+
+      it { is_expected.to be_nil }
+    end
+
+    describe "when start_at is nil and end_at is not" do
+      let(:start_at) { nil }
+      let(:end_at) { Time.zone.now }
+
+      it { is_expected.to be_nil }
+    end
+
+    describe "when end_at is nil and start_at is not" do
+      let(:start_at) { Time.zone.now }
+      let(:end_at) { nil }
+
+      it { is_expected.to be_nil }
+    end
+
+    describe "when it starts and end the following day less than 24 hours appart" do
+      let(:start_at) { Time.zone.local(2024, 10, 24, 16, 0, 0) }
+      let(:end_at) { Time.zone.local(2024, 10, 25, 11, 0, 0) }
+
+      it { is_expected.to be_between(0, 1).exclusive }
+    end
+
+    describe "when it starts and end 24 hours appart" do
+      let(:start_at) { Time.zone.local(2024, 10, 24, 16, 0, 0) }
+      let(:end_at) { start_at + 1.day }
+
+      it { is_expected.to eq(1) }
+    end
+
+    describe "when it starts and end the following day more than 24 hours appart" do
+      let(:start_at) { Time.zone.local(2024, 10, 24, 10, 0, 0) }
+      let(:end_at) { Time.zone.local(2024, 10, 25, 19, 0, 0) }
+
+      it { is_expected.to be_between(1, 2).exclusive }
+    end
+  end
+
   describe "to_s" do
     subject(:string) { range.to_s }
 
@@ -86,5 +132,4 @@ RSpec.describe TimeRange do
       it { is_expected.to eq("??? - ???") }
     end
   end
-
 end

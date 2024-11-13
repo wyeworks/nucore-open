@@ -3,9 +3,11 @@
 class Instrument < Product
 
   module Pricing
+
     SCHEDULE_RULE = "Schedule Rule"
     SCHEDULE_DAILY = "Schedule Rule (Daily Booking only)"
     DURATION = "Duration"
+
   end
 
   include Products::RelaySupport
@@ -14,6 +16,8 @@ class Instrument < Product
   include EmailListAttribute
 
   RESERVE_INTERVALS = [1, 5, 10, 15, 30, 60].freeze
+  RESERVE_INTERVAL_DAILY = 1
+
   PRICING_MODES = [Pricing::SCHEDULE_RULE, Pricing::DURATION].tap do |pricing_modes|
     if SettingsHelper.feature_on?(:show_daily_rate_option)
       pricing_modes.insert(1, Pricing::SCHEDULE_DAILY)
@@ -86,7 +90,7 @@ class Instrument < Product
   def create_default_price_group_products
     PriceGroup.globals.find_each do |price_group|
       price_group_products.create!(
-        price_group: price_group,
+        price_group:,
         reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW
       )
     end
@@ -135,7 +139,7 @@ class Instrument < Product
     return unless reserve_interval.to_i > 0 && field_value > 0
 
     if field_value % reserve_interval != 0
-      errors.add attribute, :not_interval, reserve_interval: reserve_interval
+      errors.add attribute, :not_interval, reserve_interval:
     end
   end
 
@@ -147,12 +151,12 @@ class Instrument < Product
 
   def clean_up_reservation_rules
     if daily_booking?
-      min_reserve_mins = nil
-      max_reserve_mins = nil
-      reserve_interval = nil
+      self.min_reserve_mins = nil
+      self.max_reserve_mins = nil
+      self.reserve_interval = RESERVE_INTERVAL_DAILY
     else
-      min_reserve_days = nil
-      max_reserve_days = nil
+      self.min_reserve_days = nil
+      self.max_reserve_days = nil
     end
   end
 

@@ -10,7 +10,7 @@ RSpec.describe "Purchasing a reservation" do
   let!(:price_policy) { FactoryBot.create(:instrument_price_policy, price_group: PriceGroup.base, product: instrument) }
   let(:user) { FactoryBot.create(:user) }
   let!(:account_price_group_member) do
-    FactoryBot.create(:account_price_group_member, account: account, price_group: price_policy.price_group)
+    FactoryBot.create(:account_price_group_member, account:, price_group: price_policy.price_group)
   end
 
   before do
@@ -100,7 +100,6 @@ RSpec.describe "Purchasing a reservation" do
         let!(:admin_reservation) { create(:admin_reservation, product: instrument, reserve_start_at: 30.minutes.from_now, duration: 1.hour, deleted_at: 1.hour.ago) }
 
         it "can purchase" do
-
           click_link instrument.name
           select user.accounts.first.description, from: "Payment Source"
           fill_in "Duration", with: 90
@@ -112,7 +111,6 @@ RSpec.describe "Purchasing a reservation" do
         end
       end
     end
-
   end
 
   it "clicking 'cancel' returns you to the facility page" do
@@ -180,7 +178,7 @@ RSpec.describe "Purchasing a reservation" do
     end
 
     context "as an admin" do
-      let(:user) { FactoryBot.create(:user, :facility_administrator, facility: facility) }
+      let(:user) { FactoryBot.create(:user, :facility_administrator, facility:) }
 
       it "shows the hidden instrument" do
         expect(page).to have_button("Create Order")
@@ -202,7 +200,7 @@ RSpec.describe "Purchasing a reservation" do
     end
 
     context "as an admin" do
-      let(:user) { FactoryBot.create(:user, :facility_administrator, facility: facility) }
+      let(:user) { FactoryBot.create(:user, :facility_administrator, facility:) }
 
       it "will not show the Create Order button" do
         expect(page).not_to have_button("Create Order")
@@ -210,4 +208,59 @@ RSpec.describe "Purchasing a reservation" do
     end
   end
 
+  describe "new daily reservation" do
+    let(:instrument) do
+      create(
+        :setup_instrument,
+        :always_available,
+        pricing_mode: Instrument::Pricing::SCHEDULE_DAILY
+      )
+    end
+    let(:reservation_path) do
+      new_facility_instrument_single_reservation_path(
+        facility, instrument
+      )
+    end
+
+    context "as user" do
+      let(:user) { create(:user) }
+
+      before do
+        login_as user
+      end
+
+      include_examples "new daily reservation"
+    end
+
+    context "as admin" do
+      let(:success_message) do
+        "The reservation was successfully created"
+      end
+      let(:admin_user) do
+        create(
+          :user,
+          :facility_administrator,
+          facility:
+        )
+      end
+      let(:note) { "Some note about the reservation" }
+
+      before do
+        login_as admin_user
+
+        visit facility_user_switch_to_path(facility, user)
+      end
+
+      include_examples(
+        "new daily reservation",
+        before_submit: proc do
+          fill_in("reservation[note]", with: note)
+        end,
+        after_submit: proc do
+          expect(page).to have_content(note)
+          expect(user.reservations.count).to eq(1)
+        end
+      )
+    end
+  end
 end

@@ -25,6 +25,14 @@ class TimeRange
     [minutes, 1].max
   end
 
+  def duration_days
+    return unless start_at && end_at
+
+    seconds = end_at - start_at
+
+    seconds / 1.day
+  end
+
   private
 
   def start_string

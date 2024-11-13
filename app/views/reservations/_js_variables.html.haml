@@ -9,8 +9,11 @@
   var isBundle        = #{@order_detail.bundled? || @order.order_details.count > 1};
   var ctrlMechanism   = "#{@instrument.control_mechanism}";
   var ordering_on_behalf = #{acting_as?};
-  var reserveInterval = #{@instrument.reserve_interval};
   var reserveMinimum  = #{@instrument.min_reserve_mins || 0};
   var reserveMaximum  = #{@instrument.max_reserve_mins || 0};
   var instrumentOnline = #{@instrument.online?};
   var initialDate = "#{@reservation&.reserve_start_at&.iso8601}";
+
+- if !@instrument.daily_booking?
+  :javascript
+    var reserveInterval = #{@instrument.reserve_interval};

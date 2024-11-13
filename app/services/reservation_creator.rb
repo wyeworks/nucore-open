@@ -68,10 +68,26 @@ class ReservationCreator
   private
 
   def reservation_create_params
-    params.require(:reservation)
-          .except(:reserve_end_date, :reserve_end_hour, :reserve_end_min, :reserve_end_meridian)
-          .permit(:reserve_start_date, :reserve_start_hour, :reserve_start_min, :reserve_start_meridian, :duration_mins, :note, :reference_id, :project_id)
-          .merge(product: @order_detail.product)
+    duration_field = if @order_detail.product.daily_booking?
+                       :duration_days
+                     else
+                       :duration_mins
+                     end
+
+    params
+      .require(:reservation)
+      .permit(
+        :reserve_start_date,
+        :reserve_start_hour,
+        :reserve_start_min,
+        :reserve_start_meridian,
+        :note,
+        :reference_id,
+        :project_id,
+        duration_field,
+      ).merge(
+        product: @order_detail.product,
+      )
   end
 
   def update_order_account

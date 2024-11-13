@@ -136,7 +136,7 @@ FactoryBot.define do
     reserve_interval { 1 }
     pricing_mode { "Schedule Rule" }
 
-    schedule { create :schedule, facility: facility }
+    schedule { create :schedule, facility: }
 
     after(:create) do |product, evaluator|
       create :schedule_rule, product: product unless evaluator.skip_schedule_rules
@@ -176,6 +176,10 @@ FactoryBot.define do
             reserve_start_at: 1.month.ago,
           )
       end
+    end
+
+    trait :daily_booking do
+      pricing_mode { Instrument::Pricing::SCHEDULE_DAILY }
     end
   end
 

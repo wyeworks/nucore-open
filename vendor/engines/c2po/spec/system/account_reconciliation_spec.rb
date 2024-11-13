@@ -78,8 +78,12 @@ RSpec.describe "Account Reconciliation", js: true do
         click_link "Reconcile Credit Cards"
 
         check "Use Bulk Note"
+        expect(page).to have_button("Update Orders", disabled: true)
+
         fill_in "Bulk Reconciliation Note", with: "this is the bulk note"
         check "order_detail_#{order_detail.id}_reconciled"
+        expect(page).to have_button("Update Orders", disabled: false)
+
         check "order_detail_#{orders.last.order_details.first.id}_reconciled"
         fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
         click_button "Update Orders", match: :first

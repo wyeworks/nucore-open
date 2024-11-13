@@ -472,7 +472,7 @@ RSpec.describe InstrumentPricePoliciesController do
       before do
         PriceGroup.find_each do |price_group|
           create(
-            :instrument_daily_booking_price_policy,
+            :instrument_price_policy,
             product: instrument,
             price_group:
           )

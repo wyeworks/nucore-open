@@ -1,6 +1,6 @@
 $(document).ready(function() {
   let submitButton = $(".js--requireValueForSubmit");
-  let checkboxes = submitButton.parents("form").find(":checkbox");
+  let checkboxes = submitButton.parents("form").find(":checkbox").not('[name="bulk_note_checkbox"]');
   let confirmationMessageEle = document.querySelector(".js--confirmationMessage");
   let reconcileAll = document.querySelector("#js--reconcileAll");
 

@@ -16,7 +16,7 @@ module ReservationsHelper
     new_order_order_detail_kiosk_accessory_path(reservation.order_detail.order, reservation.order_detail, switch: switch)
   end
 
-  def default_duration
+  def default_duration_mins
     duration = @instrument.min_reserve_mins
     duration = nil if duration == 0
     duration ||= 30 if @instrument.reserve_interval < 30

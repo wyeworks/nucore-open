@@ -28,7 +28,7 @@
 = simple_form_for [@order, @order_detail, @reservation], html: { class: "js--reservationForm js--reservationUpdateCreateAndStart" }, url: @submit_action do |f|
   = f.error_messages
   = render "reservations/account_field", f: f unless @order_detail.bundled?
-  = render "reservations/reservation_fields", f: f
+  = render "reservations/reservation_fields", f: f, daily_booking: @instrument.daily_booking?
 
   - if acting_as?
     .row
@@ -64,7 +64,8 @@
       - else
         = link_to t("shared.cancel"), facility_path(@instrument.facility)
 
-#overlay
-  #spinner
-    #hide
-      #calendar{ data: { show_tooltip: @instrument.show_details.to_s, start_editable: "true" } }
+- unless @instrument.daily_booking?
+  #overlay
+    #spinner
+      #hide
+        #calendar{ data: { show_tooltip: @instrument.show_details.to_s, start_editable: "true" } }

@@ -163,7 +163,7 @@ module Products::SchedulingSupport
     def next_reserval_interval_start(time)
       # ensure reservation start times abide by instrument's reserve_interval (i.e. 5 min increments)
       reserve_interval = @rule.product.reserve_interval.to_i
-      if (time.min % reserve_interval).zero?
+      if reserve_interval <= 0 || (time.min % reserve_interval).zero?
         time
       else
         time + (reserve_interval - time.min % reserve_interval).minutes

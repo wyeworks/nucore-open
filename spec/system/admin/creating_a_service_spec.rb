@@ -54,4 +54,12 @@ RSpec.describe "Creating a service" do
     expect(page).to have_content("Date Uploaded")
     expect(page).not_to have_content("No Downloadable Order Forms have been uploaded")
   end
+
+  context "when billing mode is Nonbillable" do
+    include_examples "creates a product with billing mode", "service", "Nonbillable"
+  end
+
+  context "when billing mode is Skip Review" do
+    include_examples "creates a product with billing mode", "service", "Skip Review"
+  end
 end

@@ -197,6 +197,8 @@ class Reservation < ApplicationRecord
   end
 
   def round_reservation_times
+    return self unless product.reserve_interval.present?
+
     interval = product.reserve_interval.minutes # Round to the nearest reservation interval
     self.reserve_start_at = time_ceil(reserve_start_at, interval) if reserve_start_at
     self.reserve_end_at   = time_ceil(reserve_end_at, interval) if reserve_end_at

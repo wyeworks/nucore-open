@@ -214,6 +214,42 @@ RSpec.describe "Adding to an existing order" do
         expect(page).to have_link("Make a Reservation")
       end
     end
+
+    describe "when the instrument has daily booking pricing mode" do
+      let(:product) do
+        create(
+          :setup_item,
+          :with_facility_account
+        )
+      end
+      let!(:instrument) do
+        create(
+          :setup_instrument,
+          :always_available,
+          facility:,
+          pricing_mode: Instrument::Pricing::SCHEDULE_DAILY
+        )
+      end
+      let(:order_detail) do
+        create(
+          :order_detail,
+          order:,
+          product: instrument,
+          created_by_user: user,
+        )
+      end
+      let(:success_message) { "The reservation was successfully created" }
+      let(:reservation_path) do
+        new_order_order_detail_reservation_path(order, order_detail)
+      end
+
+      include_examples(
+        "new daily reservation",
+        after_submit: proc do
+          expect(Reservation.last.product).to eq(instrument)
+        end
+      )
+    end
   end
 
   describe "adding a timed service" do

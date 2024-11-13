@@ -239,12 +239,6 @@ RSpec.describe InstrumentPricePolicy do
       expect(policy).to be_valid
     end
 
-    it "does not require usage_rate_daily if instrument is nil" do
-      policy.product = nil
-
-      expect(policy).to be_valid
-    end
-
     it "does not require usage_rate_daily if instrument is not scheduled daily" do
       instrument.pricing_mode = Instrument::Pricing::DURATION
 

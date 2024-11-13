@@ -26,42 +26,12 @@ class PricePolicyBuilder
   def self.create_skip_review_for(product, price_groups = nil)
     groups = price_groups || PriceGroup.globals
     groups.each do |price_group|
-      PricePolicy.create(
-        type: "#{product.type}PricePolicy",
-        product:,
-        start_date: 1.month.ago,
-        expire_date: 75.years.from_now,
-        price_group:,
-        usage_rate: 0,
-        minimum_cost: 0,
-        cancellation_cost: 0,
-        usage_subsidy: 0,
-        unit_cost: 0,
-        unit_subsidy: 0,
-        can_purchase: true,
-        charge_for: "reservation",
-        note: "Price rule automatically created because of billing mode"
-      )
+      create_price_policy_for(product, price_group)
     end
   end
-
+  
   def self.create_nonbillable_for(product)
-    PricePolicy.create(
-      type: "#{product.type}PricePolicy",
-      product:,
-      start_date: 1.month.ago,
-      expire_date: 75.years.from_now,
-      price_group: PriceGroup.nonbillable,
-      usage_rate: 0,
-      minimum_cost: 0,
-      cancellation_cost: 0,
-      usage_subsidy: 0,
-      unit_cost: 0,
-      unit_subsidy: 0,
-      can_purchase: true,
-      charge_for: "reservation",
-      note: "Price rule automatically created because of billing mode"
-    )
+    create_price_policy_for(product, PriceGroup.nonbillable)
   end
 
   def initialize(product, start_date)
@@ -152,6 +122,29 @@ class PricePolicyBuilder
   def price_policies_for_start_date
     return [] if start_date.blank?
     product.price_policies.for_date(start_date)
+  end
+
+  def self.create_price_policy_for(product, price_group)
+    PricePolicy.create(
+      type: "#{product.type}PricePolicy",
+      product:,
+      start_date: 1.month.ago,
+      expire_date: 75.years.from_now,
+      price_group:,
+      usage_rate: usage_rate_for(product),
+      minimum_cost: 0,
+      cancellation_cost: 0,
+      usage_subsidy: 0,
+      unit_cost: 0,
+      unit_subsidy: 0,
+      can_purchase: true,
+      charge_for: "reservation",
+      note: "Price rule automatically created because of billing mode"
+    )
+  end
+
+  def self.usage_rate_for(product)
+    ["Service", "Item"].include?(product.type) ? nil : 0
   end
 
 end

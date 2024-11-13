@@ -7,7 +7,7 @@ module Reservations::DateSupport
   extend ActiveSupport::Concern
 
   included do
-    attr_writer :duration_mins, :actual_duration_mins,
+    attr_writer :duration_mins, :actual_duration_mins, :duration_days,
                 :reserve_start_date, :reserve_start_hour, :reserve_start_min, :reserve_start_meridian,
                 :actual_start_date, :actual_start_hour, :actual_start_min, :actual_start_meridian,
                 :actual_end_date, :actual_end_hour, :actual_end_min, :actual_end_meridian
@@ -63,10 +63,16 @@ module Reservations::DateSupport
     if @duration_mins
       @duration_mins.to_i
     elsif reserve_end_at && reserve_start_at
-      TimeRange.new(reserve_start_at, reserve_end_at).duration_mins
+      reserve_time_range.duration_mins
     else
       0
     end
+  end
+
+  def duration_days
+    return @duration_days.to_i if @duration_days
+
+    reserve_time_range.duration_days&.ceil || 0
   end
 
   # If the reservation is ongoing, we sometimes want to know how long a currently
@@ -175,6 +181,7 @@ module Reservations::DateSupport
     reserve_attrs = params.slice(:reserve_start_date, :reserve_start_hour, :reserve_start_min, :reserve_start_meridian,
                                  :duration_mins,
                                  :reserve_start_at, :reserve_end_at)
+
     # need to be reset to nil so the individual pieces will
     # take precedence, but only reset them if we're going to overwrite them
 
@@ -208,9 +215,13 @@ module Reservations::DateSupport
 
   # set reserve_end_at based on duration_mins
   def set_reserve_end_at
-    return if reserve_end_at.present? || reserve_start_at.blank? || @duration_mins.nil?
+    return if reserve_end_at.present? || reserve_start_at.blank?
 
-    self.reserve_end_at = reserve_start_at + @duration_mins.to_i.minutes
+    self.reserve_end_at = if product.daily_booking? && @duration_days.present?
+                            reserve_start_at + @duration_days.to_i.days
+                          elsif @duration_mins.present?
+                            reserve_start_at + @duration_mins.to_i.minutes
+                          end
   end
 
   def set_actual_start_at
@@ -227,6 +238,10 @@ module Reservations::DateSupport
     elsif @actual_duration_mins && actual_start_at
       self.actual_end_at = actual_start_at + @actual_duration_mins.to_i.minutes
     end
+  end
+
+  def reserve_time_range
+    TimeRange.new(reserve_start_at, reserve_end_at)
   end
 
 end
