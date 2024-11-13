@@ -1,0 +1,8 @@
+= f.input :account_number
+= f.input :description
+
+- if f.object.new_record?
+  .well
+    - primary_account_options = UmassCorum::VoucherSplitAccount.available_accounts_options(current_facility)
+    = f.input :primary_subaccount_id, collection: primary_account_options, input_html: { class: "js--chosen" }
+    = f.input :mivp_percent, as: :select, collection: UmassCorum::VoucherSplitAccount.mivp_percent_options

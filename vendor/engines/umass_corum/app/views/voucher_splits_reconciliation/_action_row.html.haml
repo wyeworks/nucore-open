@@ -1,0 +1,14 @@
+.row.table-actions.form-horizontal
+  .span2.select_all_none= select_all_link
+  .span1.pull-right= submit_tag t(".mivp_pending.submit"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { disable_with: t(".mivp_pending.submit") }
+
+- if local_assigns[:inputs]
+  .row.table-actions.form-horizontal
+    .span3.control-group.fields
+      %label.control-label{ for: "bulk_note_checkbox" }= t(".bulk_note_checkbox")
+      .controls
+        = check_box_tag :bulk_note_checkbox
+    #bulk-note-input.span5.control-group.fields
+      %label.control-label{ for: :bulk_reconcile_note }= t(".bulk_note")
+      .controls
+        = text_field_tag :bulk_reconcile_note

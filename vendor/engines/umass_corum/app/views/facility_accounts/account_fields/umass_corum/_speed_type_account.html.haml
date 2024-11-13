@@ -1,0 +1,8 @@
+- if local_assigns[:is_new]
+  = f.input :account_number
+- elsif current_ability.can?(:manage, :all)
+  = f.input :account_number, as: :readonly
+  = f.simple_fields_for :api_speed_type do |api|
+    = api.input :date_added_admin_override, input_html: { placeholder: format_usa_date(api.object.date_added) }, as: :date_picker
+
+= f.input :description

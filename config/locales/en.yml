@@ -37,10 +37,10 @@ en:
   sso_id_downcase: NetID
   name_or_sso_id: name, NetID, or username
 
-  Chart_string: Chart String
-  Chart_strings: Chart Strings
-  chart_string_downcase: chart string
-  chart_strings_downcase: chart strings
+  Chart_string: Account Number
+  Chart_strings: Account Numbers
+  chart_string_downcase: account number
+  chart_strings_downcase: account numbers
 
   Statement: Statement
   Statements: Statements

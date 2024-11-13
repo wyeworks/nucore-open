@@ -1,0 +1,7 @@
+%span.js--confirmationMessage{ 
+  {
+    "data-confirm-message": "You are selecting #{@unreconciled_details.total_entries}, would you like to continue?"
+  }
+}
+
+= hidden_field_tag "reconcile_all", false, id: "js--reconcileAll"

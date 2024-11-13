@@ -2,15 +2,16 @@
   %caption= t("facility_accounts_reconciliation.index.caption", model: account_class.model_name.human)
   %thead
     %tr
-      %th
-      %th{scope: "col"}= Statement.human_attribute_name(:invoice_number)
-      %th{scope: "col"}= Account.model_name.human
-      %th{scope: "col"}= Order.model_name.human
-      %th{scope: "col"}= Statement.human_attribute_name(:total_cost)
-      %th#reconcile-note.row-note-input.js--reconcileField{scope: "col"}= Statement.human_attribute_name(:reconcile_note)
+      %th{ scope: "col" }
+      %th{ scope: "col" }= Statement.human_attribute_name(:invoice_number)
+      %th{ scope: "col" }= Account.model_name.human
+      %th{ scope: "col" }= Order.model_name.human
+      %th{ scope: "col" }= Statement.human_attribute_name(:total_cost)
+      %th#reconcile-note.row-note-input.js--reconcileField{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
       - if show_reconciliation_deposit_number
         %th#reconcile-deposit-number.row-note-input.js--reconcileField{ scope: "col", data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
           = OrderDetail.human_attribute_name(:deposit_number)
+
   %tbody
     - @unreconciled_details.each do |order_detail|
       %tr
@@ -20,7 +21,7 @@
           = order_detail.account
           %br
           = order_detail.account.owner_user
-        %th.user-order-detail{scope: "row"}
+        %th.user-order-detail{ scope: "row" }
           .order-detail-description
             = link_to "##{order_detail.order_id}", facility_order_path(current_facility, order_detail.order_id)
             = "-"
@@ -28,7 +29,6 @@
             = ": #{order_detail.product}"
             - if order_detail.note.present?
               .order-detail-extra.order-detail-note= order_detail.note
-
         %td= show_actual_total(order_detail)
         %td.row-note-input.js--reconcileField= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]", nil, aria: {labelledby: "reconcile-note"}
         - if show_reconciliation_deposit_number

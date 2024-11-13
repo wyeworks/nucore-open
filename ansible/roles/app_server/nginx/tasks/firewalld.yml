@@ -1,0 +1,12 @@
+- firewalld:
+    service: https
+    permanent: yes
+    state: enabled
+  notify: Restart firewalld
+  become: yes
+- firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+  notify: Restart firewalld
+  become: yes

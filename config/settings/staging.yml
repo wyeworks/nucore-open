@@ -1,0 +1,27 @@
+email:
+  fake:
+    enabled: true
+    to:
+      - nucore@txidigital.com
+      - stevens@umass.edu
+    whitelist:
+      - aburnsid@umass.edu # Amy Burnside - Flow Cytometry Director
+      - asburnside@comcast.net # Amy's personal account for testing
+      - aeribbe@umass.edu # Alex Ribbe - Electron Microscopy Director
+      - andrew.scott@umass.edu
+      - arshpatel@umass.edu # Arsh - Amy's intern/student
+      - avinard@umass.edu # Andrew Vinard
+      - charlene.coleman@umass.edu # Billing
+      - stephen.battisti@umass.edu # IT
+      - stevens@umass.edu # Bob Stevens
+saml:
+  certificate_file: config/saml-certificate.p12
+
+# paperclip:
+#   storage: s3
+#   s3_credentials:
+#     access_key_id: <%= ENV.fetch("AWS_ACCESS_KEY", Rails.application.secrets.dig(:paperclip, :aws_access_key_id)) %>
+#     secret_access_key: <%= ENV.fetch("AWS_SECRET_ACCESS_KEY", Rails.application.secrets.dig(:paperclip, :aws_secret_access_key)) %>
+#   s3_region: us-east-1
+#   s3_permissions: private
+#   bucket: "nucore-staging"

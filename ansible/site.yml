@@ -1,0 +1,9 @@
+---
+- hosts: all
+  roles:
+    - { role: common/hostname, tags: "hostname" }
+    - { role: common/users, tags: "users" }
+    - { role: app_server/nginx, tags: "nginx" }
+    - { role: app_server/rvm_dependencies, tags: "rvm_dependencies" }
+    - { role: app_server/rails, tags: "rails" }
+    - { role: umass/nfs_mount, tags: "nfs_mount" }

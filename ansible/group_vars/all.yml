@@ -1,0 +1,38 @@
+---
+# The value for `name` should be a netid.
+# To remove users, specify `state: absent` and `remove: yes` and run the playbook.
+# Note: This doesn't seem to work, possibly because user access is handled via LDAP. Last tested April 2021.
+# Then remove the user entry from the list below.
+users:
+  - name: jhanggi
+    groups: ["umass", "ials"]
+  - name: josephsimmon
+    groups: ["umass", "ials"]
+  - name: gshanan
+    groups: ["umass", "ials"]
+  - name: kcarrell
+    groups: ["umass", "ials"]
+  - name: anniewang
+    groups: ["umass", "ials"]
+  - name: corum
+    groups: ["corum"]
+
+# All users listed here will have ssh access to corum servers via the corum user.
+# Users that need to manage infrastructure should be specified with root_access: "present".
+# Use root_access: "absent" to remove root access.
+authorized_keys:
+  - name: jhanggi
+    key_url: https://github.com/jhanggi.keys
+    root_access: "present"
+  - name: josephsimmon
+    key_url: https://github.com/jossim.keys
+    root_access: "present"
+  - name: gshanan
+    key_url: https://github.com/giladshanan.keys
+    root_access: "present"
+  - name: kcarrell
+    key_url: https://github.com/karaajc.keys
+    root_access: "present"
+  - name: anniewang
+    key_url: https://github.com/wangminghao.keys
+    root_access: "present"

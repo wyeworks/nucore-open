@@ -9,3 +9,15 @@ Example of this to include here:
   $headerBackgroundColor: #571963;
   $headerColor: white;
 */
+
+$headerBackgroundColor: $primaryColor;
+$headerBackgroundColorHighLight: darken($headerBackgroundColor, 2%);
+$headerColor: $white;
+$navbarActiveBorderColor: $black;
+$usernavColor: $white;
+$usernavColorHover: $white;
+$usernavDividerColor: transparentize($usernavColor, 0.9);
+$sidebarActiveBackgroundColor: $primaryColor;
+$sidebarActiveBackgroundColorHighlight: lighten($sidebarActiveBackgroundColor, 3%);
+
+@import "umass_corum/application";

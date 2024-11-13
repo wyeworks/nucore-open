@@ -1,0 +1,11 @@
+- include_role:
+    name: rvm.ruby
+  with_items: "{{ nginx_apps }}"
+  loop_control:
+    loop_var: app
+  vars:
+    tags: ruby
+    # The last ruby listed will be set as the default ruby
+    rvm1_rubies: "{{ app.ruby_versions | default(ruby_versions) }}"
+    rvm1_user: "{{ app.user }}"
+  when: nginx_apps is defined

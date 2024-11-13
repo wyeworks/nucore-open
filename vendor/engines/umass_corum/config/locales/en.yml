@@ -1,0 +1,140 @@
+en:
+  activerecord:
+    models:
+      umass_corum/voucher_split_account:
+        one: Voucher Split Account
+        other: Voucher Split Accounts
+      umass_corum/speed_type_account:
+        one: SpeedType
+        other: SpeedTypes
+      umass_corum/subsidy_account:
+        one: Subsidy Account
+        other: Subsidy Accounts
+    errors:
+      models:
+        facility_account:
+          attributes:
+            revenue_account:
+              invalid: must be a six digit number starting with 6
+            account_number:
+              invalid: must be a six digit number
+        umass_corum/speed_type_account:
+          attributes:
+            account_number:
+              invalid: must be a six digit number
+
+  activemodel:
+    attributes:
+      umass_corum/user_form:
+        username: Username/NetID
+        netid: NetID
+        no_netid: This user does not have a NetID
+
+  simple_form:
+    labels:
+      voucher_split_account:
+        mivp_percent: MIVP Percent
+      api_speed_type:
+        date_added_admin_override: Date added
+        hr_acct_cd: HR Account Code
+        setid: Set ID
+        speedchart_desc: Speed Chart Description
+      subsidy_account:
+        account_number: Funding Source
+    hints:
+      voucher_split_account:
+        account_number: |
+          MIVP A-[voucher number], ex: "MIVP A-123"
+        description: |
+          MA company name - no extra wording of any kind, no slashes
+      subsidy_account:
+        account_number: Used for journaling
+
+  views:
+    facility_accounts:
+      mivp_sidenav:
+        mivp_pending: Mark MIVP Pending
+        reconcile_mivp: Reconcile Voucher Split Accounts
+    umass_corum:
+      admin_reports:
+        index:
+          title: Admin Reports
+        relays:
+          subject: "!app_name! Relay Data Export"
+          body: Your export is ready. Please see the attached file.
+          title: Download Relay Data (CSV)
+          facility_name: Facility Name
+          instrument_name: Instrument Name
+          instrument_active: Active/Inactive
+          relay_type: Relay Type
+          relay_ip_address: Relay IP Address
+          relay_ip_port: Relay IP Port
+          relay_outlet_number: Outlet Number
+          relay_auto_logout: Auto Logout Minutes
+        users:
+          title: Download User Data (CSV)
+          subject: "!app_name! User Data Export"
+          body: Your export is ready. Please see the attached file.
+          headers:
+            username: Username
+            profile_url: URL
+            created_at: Created
+            last_login: Last Login
+            last_order_activity: Last Order Activity
+            first_name: First Name
+            last_name: Last Name
+            certifications: Safety Certs
+            card_number: Card Number
+            iclass_number: iClass Number
+            global_user_roles: Global Roles
+            email: Email
+            phone: Phone
+            internal_pricing: Internal Pricing?
+        account_users:
+          title: Download Payment Source Membership Data (CSV)
+          subject: "!app_name! Payment Source Membership Data Export"
+          body: Your export is ready. Please see the attached file.
+          headers:
+            username: Username
+            account_number: Account Number
+            account_url: URL
+            description: Description
+            type: Account Type
+            expiration: Account Expired
+            suspended: Account Suspended
+            deleted: Access Revoked
+            facilities: Facilities
+            full_name: Full Name
+            email: Email
+            account_role: Account Role
+      sessions:
+        request_login:
+          request_login_link: |
+            [Request an account](https://www.umass.edu/ials/core-facility-user-authorization-form)
+        login_form:
+          subheading: External Users
+          note: |
+            For CORUM users with a non-UMass email address or username:
+          submit: Sign in
+          username_signin: Click here to sign in with Username/Password
+          username_warning: Only sign in with Username/Password if you do not have a NetID
+
+  voucher_splits_reconciliation:
+    index:
+      head: Reconcile %{model}
+      none: There are no Voucher Split Accounts with MIVP Pending orders to be reconciled at this time
+    pending:
+      head: Mark MIVP Pending
+      none: There are no statemented orders ready to be marked MIVP Pending at this time
+    table:
+      table_caption:
+        mivp_pending: Statemented Orders (no payment recieved)
+        reconciled: Reconcilable Orders (MIVP Pending)
+      mivp: MIVP
+      primary: Primary
+      checkbox_label: select order %{order_number} to be reconciled
+    action_row:
+      mivp_pending:
+        submit: Mark Orders 'MIVP Pending'
+      bulk_note_checkbox: Use Bulk Note
+      bulk_note: Bulk Reconciliation Note

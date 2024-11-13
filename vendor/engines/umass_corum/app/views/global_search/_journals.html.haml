@@ -1,0 +1,12 @@
+%h3= Journal.model_name.human(count: 2)
+
+%table.table.table-striped.table-hover
+  %thead
+    %tr
+      %th= Journal.human_attribute_name(:name)
+  %tbody
+    - results.each do |journal|
+      %tr
+        %td
+          = link_to journal.reference,
+            facility_journal_path(journal.facility, journal)

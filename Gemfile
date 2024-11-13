@@ -70,9 +70,6 @@ gem "prawn-rails"
 # https://github.com/prawnpdf/prawn/issues/1195
 gem "matrix"
 
-## Email
-gem "mailgun-ruby", "~>1.2.15"
-
 ## other
 gem "delayed_job_active_record"
 gem "health_check"
@@ -83,7 +80,7 @@ gem "ice_cube"
 gem "jwt"
 
 # Optional: File uploads to S3
-gem "aws-sdk-s3"
+# gem "aws-sdk-s3"
 
 # Optional: File uploads to Azure Blob via ActiveStorage
 # gem "azure-storage-blob", "~> 2.0", require: false
@@ -95,12 +92,12 @@ gem "image_processing", ">= 1.2"
 gem "bulk_email", path: "vendor/engines/bulk_email"
 gem "c2po", path: "vendor/engines/c2po"
 gem "dataprobe", path: "vendor/engines/dataprobe"
-gem "ldap_authentication", path: "vendor/engines/ldap_authentication"
 gem "saml_authentication", path: "vendor/engines/saml_authentication"
 gem "sanger_sequencing", path: "vendor/engines/sanger_sequencing"
 gem "secure_rooms", path: "vendor/engines/secure_rooms"
 gem "split_accounts", path: "vendor/engines/split_accounts"
 gem "synaccess_connect"
+gem "umass_corum", path: "vendor/engines/umass_corum"
 
 group :development do
   gem "bcrypt_pbkdf", ">= 1.0", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
@@ -145,8 +142,7 @@ group :test do
   gem "deprecation_toolkit"
 end
 
-group :stage, :production do
-  gem "exception_notification"
+group :staging, :production do
   gem "eye-patch", require: false
   gem "oj"
   gem "rollbar"

@@ -1,0 +1,5 @@
+- if action_name == "show"
+  = f.input :subsidiary_account, inline_label: true
+- else
+  = f.input :subsidiary_account, label: false, inline_label: true
+= f.input :phone_number

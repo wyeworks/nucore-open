@@ -1,0 +1,3 @@
+- if current_ability.can?(:manage, :all)
+  = f.input :account_number, value_method: :account_number, collection: UmassCorum::SubsidyAccount.funding_source_accounts, input_html: { class: "js--chosen" }
+  = f.input :description
