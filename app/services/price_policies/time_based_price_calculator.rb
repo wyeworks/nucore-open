@@ -13,7 +13,7 @@ module PricePolicies
     end
 
     def calculate(start_at, end_at)
-      return unless start_at < end_at
+      return if start_at > end_at
 
       strategy_class.new(price_policy, start_at, end_at).calculate
     end
