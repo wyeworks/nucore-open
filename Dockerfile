@@ -48,12 +48,10 @@ ENTRYPOINT ["./docker-entrypoint.sh"]
 FROM base as deploy
 
 ENV RAILS_ENV production
-ARG SECRET_KEY_BASE
-ENV SECRET_KEY_BASE ${SECRET_KEY_BASE}
 ARG RAILS_HOST
 ENV RAILS_HOST ${RAILS_HOST}
 RUN bundle install --without=development test
 RUN yarn install
 
 # asset compile
-RUN bundle exec rake assets:precompile
+RUN SECRET_KEY_BASE=fake bundle exec rake assets:precompile
