@@ -46,4 +46,60 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 # end
 
 # Allow puma to be restarted by `rails restart` command.
-plugin :tmp_restart
+# plugin :tmp_restart
+
+# Config for ACME
+config.bind "tcp://0.0.0.0:80"
+
+plugin :acme
+
+config.bind ENV.fetch("ACME_BIND", "acme://0.0.0.0:443")
+
+# Account contact URL(s). For email, use the form 'mailto:user@domain.tld'.
+# Recommended for account recovery and revocation.
+acme_contact "mailto:itis-monitor@gmail.com"
+
+# Specify server names (SAN extension).
+acme_server_names "corum-dev.it.umass.edu", "www.corum-dev.it.umass.edu"
+
+# Enable automatic renewal based on an amount of time or fraction of life
+# remaining. For an amount of time, use Integer seconds, for example the value
+# 2592000 will set renewal to 30 days before certificate expiry. For a fraction
+# of life remaining, use a Float between 0 and 1, for example the value 0.75
+# will set renewal at 75% of the way through the certificate lifetime.
+acme_renew_at 0.75
+
+# URL of ACME server's directory URL, defaults to LetsEncrypt.
+acme_directory "https://acme.enterprise.sectigo.com"
+
+# Accept the Terms of Service (TOS) of an ACME server with the server's
+# directory URL as a string or true to accept any server's TOS.
+acme_tos_agreed true
+
+# External Account Binding (EAB) token KID & secret HMAC key for the ACME
+# server. See RFC 8555, Section 7.3.4 for details.
+acme_eab_kid      ENV["ACME_KID"]
+acme_eab_hmac_key ENV["ACME_HMAC_KEY"]
+
+# Encryption key algorithm, either :ecdsa or :rsa, defaults to :ecdsa.
+acme_algorithm :ecdsa
+
+# Provision mode, either :background or :foreground, defaults to :background.
+# Background mode provisions certificates in a background thread without
+# blocking binding or request serving for non-acme listeners.
+# Foreground mode blocks all binding listeners until a certificate
+# provisions, compatible only with zero-challenge ACME flow.
+acme_mode :background
+
+# ActiveSupport::Cache::Store compatible cache to store account, order, and
+# certificate data. Defaults to a local filesystem based cache.
+acme_cache Rails.cache
+
+# Path to the cache directory for the default cache, defaults to 'tmp/acme'.
+acme_cache_dir "tmp/acme"
+
+# Time to wait in seconds before rechecking order status, defaults to 1 second.
+acme_poll_interval 1
+
+# Time to wait in seconds before checking for renewal, defaults to 1 hour.
+acme_renew_interval 60 * 60

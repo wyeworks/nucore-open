@@ -87,6 +87,8 @@ gem "jwt"
 # only used when SettingsHelper.feature_on?(:active_storage) is true
 gem "active_storage_validations"
 gem "image_processing", ">= 1.2"
+# For SSL communication with the load balancer
+gem "puma-acme"
 
 ## custom
 gem "bulk_email", path: "vendor/engines/bulk_email"
