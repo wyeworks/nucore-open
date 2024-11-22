@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "puma/acme"
+
 # Puma can serve each request in a thread from an internal thread pool.
 # The `threads` method setting takes two numbers a minimum and maximum.
 # Any libraries that use thread pools should be configured to match
@@ -49,11 +51,10 @@ environment ENV.fetch("RAILS_ENV") { "development" }
 # plugin :tmp_restart
 
 # Config for ACME
-config.bind "tcp://0.0.0.0:80"
-
 plugin :acme
 
-config.bind ENV.fetch("ACME_BIND", "acme://0.0.0.0:443")
+bind "tcp://0.0.0.0:80"
+bind ENV.fetch("ACME_BIND", "acme://0.0.0.0:443")
 
 # Account contact URL(s). For email, use the form 'mailto:user@domain.tld'.
 # Recommended for account recovery and revocation.
@@ -93,7 +94,7 @@ acme_mode :background
 
 # ActiveSupport::Cache::Store compatible cache to store account, order, and
 # certificate data. Defaults to a local filesystem based cache.
-acme_cache Rails.cache
+# acme_cache Rails.cache
 
 # Path to the cache directory for the default cache, defaults to 'tmp/acme'.
 acme_cache_dir "tmp/acme"
