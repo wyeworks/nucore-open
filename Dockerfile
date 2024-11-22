@@ -50,7 +50,8 @@ FROM base as deploy
 ENV RAILS_ENV production
 ARG RAILS_HOST
 ENV RAILS_HOST ${RAILS_HOST}
-RUN bundle install --without=development test
+RUN bundle config set without 'development test'
+RUN bundle install
 RUN yarn install
 
 # asset compile
