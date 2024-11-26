@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "puma/acme"
+require "rails" # for Rails.cache
 
 # Puma can serve each request in a thread from an internal thread pool.
 # The `threads` method setting takes two numbers a minimum and maximum.
