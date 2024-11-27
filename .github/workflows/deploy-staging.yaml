@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # run this job if it was manually started or the parent workflow succeeded
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    # if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout to the branch
