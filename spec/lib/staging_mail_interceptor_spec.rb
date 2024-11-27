@@ -4,10 +4,48 @@ require "rails_helper"
 
 RSpec.describe StagingMailInterceptor do
   let(:to) { [] }
-  let(:interceptor) { StagingMailInterceptor.new(message) }
+  let(:send_to) { [] }
+  let(:allow_list) { [] }
+  let(:allow_domains) { [] }
+  let(:interceptor) { described_class.new(message) }
   subject(:message) do
-    Mail::Message.new(to: to, subject: "A message").tap do |msg|
+    Mail::Message.new(to:, subject: "A message").tap do |msg|
       msg.text_part = Mail::Part.new(body: "testing")
+    end
+  end
+  let(:config) do
+    {
+      to: send_to,
+      allow_list:,
+      allow_domains:,
+    }
+  end
+
+  before do
+    allow(Settings).to receive_message_chain("email.fake") { config }
+  end
+
+  describe "validates domain in allow_domain" do
+    let(:allow_domains) { ["test.org"] }
+    let(:subject) { interceptor.instance_eval { allow_listed_addresses } }
+
+    context "when domain is not included" do
+      let(:to) { ["people@notest.org"] }
+
+      it { is_expected.to be_empty }
+    end
+
+    context "when domain is included" do
+      let(:to) { ["people@test.org"] }
+
+      it { is_expected.to eq(to) }
+    end
+
+    context "when there's a mixed bag" do
+      let(:allow_domains) { ["test.org", "unrelated.org"] }
+      let(:to) { ["people@notest.org", "people@test.org", "gente@test.org"] }
+
+      it { is_expected.to eq(["people@test.org", "gente@test.org"]) }
     end
   end
 
@@ -16,8 +54,6 @@ RSpec.describe StagingMailInterceptor do
     let(:send_to) { ["sendto@example.org"] }
 
     before do
-      allow(interceptor).to receive(:allow_list) { allow_list }
-      allow(interceptor).to receive(:send_to_addresses) { send_to }
       interceptor.process
     end
 
