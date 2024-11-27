@@ -1,19 +1,20 @@
 var ReservationCalendar = function() {}
 
 ReservationCalendar.prototype = {
-  init: function($calendar, $reservationForm) {
+  init: function($calendar, $reservationForm, readOnly) {
     this.id = $reservationForm.data("reservation-id") || "new";
     this.$calendar = $calendar;
     this.$reservationForm = $reservationForm;
 
     self = this; // so our callbacks have access to this object
 
-    fullCalendarOptions = {
+    const fullCalendarOptions = readOnly ? {} : {
       eventDrop: this._handleEventDragDrop,
       eventResize: this._handleEventDragDrop,
       dayClick: this._handleClick,
-      eventOverlap: false,
-    }
+    };
+
+    fullCalendarOptions.eventOverlap = false;
 
     new FullCalendarConfig($calendar, fullCalendarOptions).init();
     $calendar.on("calendar:rendered", this._removeSelfFromSource);
@@ -31,7 +32,7 @@ ReservationCalendar.prototype = {
       title: "My Reservation",
       start: start,
       end: end,
-      color: "#378006",
+      className: 'current-event',
       allDay: false,
       startEditable: this._isStartEditable(),
       durationEditable: true

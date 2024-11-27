@@ -31,7 +31,7 @@ module Reservations::Rendering
   end
 
   def calendar_presenter
-    Reservations::CalendarPresenter.new(self)
+    Reservations::CalendarPresenter.build(self)
   end
 
 end

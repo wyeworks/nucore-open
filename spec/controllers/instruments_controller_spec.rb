@@ -3,11 +3,11 @@
 require "rails_helper"
 require "controller_spec_helper"
 
-RSpec.describe InstrumentsController do
+RSpec.describe InstrumentsController, type: :controller do
   render_views
 
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:instrument) { FactoryBot.create(:instrument, facility: facility, no_relay: true) }
+  let(:instrument) { FactoryBot.create(:instrument, facility:, no_relay: true) }
 
   before(:all) { create_users }
 
@@ -261,12 +261,18 @@ RSpec.describe InstrumentsController do
     end
 
     it_should_allow_managers_only :redirect do
-      assert_successful_creation { expect(assigns(:product).relay).to be_nil }
+      expect(assigns(:product)).to be_kind_of Instrument
+      expect(assigns(:product).initial_order_status_id).to eq(OrderStatus.default_order_status.id)
+
+      expect(assigns(:product).relay).to be_nil
+
+      is_expected.to set_flash
+      assert_redirected_to manage_facility_instrument_url(facility, assigns(:product))
     end
 
     describe "shared schedule" do
       before :each do
-        @schedule = FactoryBot.create(:schedule, facility: facility)
+        @schedule = FactoryBot.create(:schedule, facility:)
         sign_in @admin
       end
 
@@ -298,7 +304,6 @@ RSpec.describe InstrumentsController do
     end
 
     context "fail" do
-
       before :each do
         @params[:instrument].delete(:name)
       end
@@ -308,15 +313,49 @@ RSpec.describe InstrumentsController do
         expect(assigns(:product).initial_order_status_id).to eq(OrderStatus.default_order_status.id)
         is_expected.to render_template "new"
       end
-
     end
 
-    def assert_successful_creation
-      expect(assigns(:product)).to be_kind_of Instrument
-      expect(assigns(:product).initial_order_status_id).to eq(OrderStatus.default_order_status.id)
-      yield
-      is_expected.to set_flash
-      assert_redirected_to manage_facility_instrument_url(facility, assigns(:product))
+    describe "daily booking permissions" do
+      before do
+        @params[:instrument] = attributes_for(
+          :instrument,
+          pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
+          facility_account_id: facility.facility_accounts.first.id,
+        )
+      end
+
+      shared_examples "daily booking creation disallowed" do
+        it "does not allow user to create daily booking instrument" do
+          sign_in(user)
+
+          expect { do_request }.to_not change { Instrument.count }
+          expect(@response.body).to(
+            include(I18n.t("controllers.instruments.create.daily_booking_not_authorized"))
+          )
+        end
+      end
+
+      context "as facility admin" do
+        let(:user) { create(:user, :facility_administrator, facility:) }
+
+        include_examples "daily booking creation disallowed"
+      end
+
+      context "as facility director" do
+        let(:user) { create(:user, :facility_director, facility:) }
+
+        include_examples "daily booking creation disallowed"
+      end
+
+      context "as administrator" do
+        let(:user) { create(:user, :administrator) }
+
+        it "allows to create a daily booking instrument" do
+          sign_in user
+
+          expect { do_request }.to change { Instrument.count }.by(1)
+        end
+      end
     end
   end
 
@@ -362,7 +401,6 @@ RSpec.describe InstrumentsController do
     end
 
     context "schedule" do
-
       before :each do
         @method = :get
         @action = :schedule
@@ -396,7 +434,6 @@ RSpec.describe InstrumentsController do
           is_expected.to render_template "schedule"
         end
       end
-
     end
 
     context "instrument_statuses" do
@@ -404,7 +441,7 @@ RSpec.describe InstrumentsController do
         @method = :get
         @action = :instrument_statuses
         @instrument_with_relay = FactoryBot.create(:instrument,
-                                                   facility: facility,
+                                                   facility:,
                                                    no_relay: true)
         FactoryBot.create(:relay_syna, instrument: @instrument_with_relay)
       end
@@ -427,11 +464,9 @@ RSpec.describe InstrumentsController do
           )
         end
       end
-
     end
 
     context "switch" do
-
       before :each do
         @method = :get
         @action = :switch
@@ -439,7 +474,6 @@ RSpec.describe InstrumentsController do
       end
 
       it_should_allow_operators_only
-
     end
   end
 end

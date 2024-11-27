@@ -1,0 +1,23 @@
+.hidden-phone
+  %table.open-hours.table.table-striped.table-bordered
+    %tbody
+      %tr
+        %th= text("instruments.schedule.open_hours_day")
+        - ScheduleRules::OpenHours.weekdays.each do |weekday|
+          %th= weekday
+      %tr
+        %th= text("instruments.schedule.open_hours_time")
+        - ScheduleRules::OpenHours.weekdays.each do |weekday|
+          %td= weekday_opening_times[weekday] || '-'
+
+.hidden-desktop.hidden-tablet
+  %table.open-hours.table.table-striped.table-bordered
+    %tbody
+      %tr
+        %th= text("instruments.schedule.open_hours_day")
+        %th= text("instruments.schedule.open_hours_time")
+        - ScheduleRules::OpenHours.weekdays.each do |weekday|
+          %tr
+            %th= weekday
+            %td= weekday_opening_times[weekday] || '-'
+

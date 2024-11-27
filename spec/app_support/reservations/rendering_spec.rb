@@ -103,16 +103,20 @@ RSpec.describe Reservations::Rendering do
       subject(:reservation) do
         build_stubbed(
           :admin_reservation,
-          reserve_start_at: reserve_start_at,
-          reserve_end_at: reserve_end_at,
-          actual_start_at: actual_start_at,
-          actual_end_at: actual_end_at,
+          reserve_start_at:,
+          reserve_end_at:,
+          actual_start_at:,
+          actual_end_at:,
           created_by: user,
           user_note: "this is a note",
         )
       end
 
       let(:user) { FactoryBot.build(:user) }
+
+      before do
+        base_hash.merge!(className: "unavailable")
+      end
 
       context "with details requested" do
         it "returns a hash without extra details about the order" do

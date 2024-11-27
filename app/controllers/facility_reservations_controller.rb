@@ -34,7 +34,8 @@ class FacilityReservationsController < ApplicationController
 
     raise ActiveRecord::RecordNotFound unless @reservation == Reservation.find(params[:id])
     set_windows
-    return redirect_to facility_order_order_detail_reservation_path(current_facility, @order, @order_detail, @reservation) if @reservation.locked?
+
+    redirect_to facility_order_order_detail_reservation_path(current_facility, @order, @order_detail, @reservation) if @reservation.locked?
   end
 
   # PUT /facilities/:facility_id/orders/:order_id/order_details/:order_detail_id/reservations/:id

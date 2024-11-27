@@ -6,6 +6,10 @@
   color: #fff;
 }
 
+.fc-event.current-event {
+  background: #378006;
+}
+
 #overlay.on #spinner #hide  {
   background: image-url('transparent.png') top left repeat;
   filter: alpha(opacity=50);

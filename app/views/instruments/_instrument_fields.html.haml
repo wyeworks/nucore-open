@@ -13,7 +13,7 @@
   = f.input :schedule, as: :readonly, value_method: :display_name, hint: false
 
 - if f.object.new_record?
-  = f.input :pricing_mode, as: :radio_buttons, collection: Instrument::PRICING_MODES, label: text("instruments.instrument_fields.schedule.pricing_mode"),
+  = f.input :pricing_mode, as: :radio_buttons, collection: instrument_pricing_modes, label: text("instruments.instrument_fields.schedule.pricing_mode"),
     item_wrapper_class: :radio, item_wrapper_tag: :div, wrapper_html: { class: "js--pricing-mode" }
 
 - daily_booking = f.object.daily_booking?

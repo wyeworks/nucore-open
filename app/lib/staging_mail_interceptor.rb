@@ -75,14 +75,14 @@ class StagingMailInterceptor
   end
 
   # Internal: Is the passed recipient allow_listed for communication? Permits
-  # communication only with either Table XI employees or emails listed in
-  # secrets in the staging environment.
+  # communication only with either domains or emails listed in secrets in the staging
+  # environment.
   #
   # Returns a Boolean.
   def allow_listed?(recipient)
     recipient = Mail::Address.new(recipient)
-    recipient.domain == "tablexi.com" ||
-      recipient.domain == "txidigital.com" ||
+
+    allow_domains.include?(recipient.domain) ||
       full_allow_list.map(&:downcase).include?(recipient.address.downcase)
   end
 
@@ -118,6 +118,10 @@ class StagingMailInterceptor
 
   def allow_list
     Array(settings[:allow_list])
+  end
+
+  def allow_domains
+    Array(settings[:allow_domains])
   end
 
   def exception_recipients

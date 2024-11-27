@@ -13,7 +13,12 @@ window.FullCalendarConfig = class FullCalendarConfig {
   }
 
   init() {
-    return this.$element.fullCalendar($.extend(this.options(), this.customOptions));
+    let options = $.extend(
+      this.options(),
+      this.customOptions,
+      this.calendarDataConfig(),
+    );
+    return this.$element.fullCalendar(options);
   }
 
   options() {
@@ -47,6 +52,24 @@ window.FullCalendarConfig = class FullCalendarConfig {
         return this.toggleNextPrev(view);
       }
     };
+  }
+
+  calendarDataConfig() {
+    const ret = {};
+    const allowedKeys = [
+      "defaultView",
+      "editable",
+    ];
+
+    let self = this;
+    allowedKeys.forEach(function(key) {
+      let value = self.$element.data(key)
+      if (value) {
+        ret[key] = value;
+      }
+    });
+
+    return ret;
   }
 
   toggleOverlay(isLoading) {

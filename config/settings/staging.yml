@@ -2,9 +2,9 @@ email:
   fake:
     enabled: true
     to:
-      - nucore@txidigital.com
+      - nucore@wyeworks.com
       - stevens@umass.edu
-    whitelist:
+    allow_list:
       - aburnsid@umass.edu # Amy Burnside - Flow Cytometry Director
       - asburnside@comcast.net # Amy's personal account for testing
       - aeribbe@umass.edu # Alex Ribbe - Electron Microscopy Director
@@ -14,6 +14,10 @@ email:
       - charlene.coleman@umass.edu # Billing
       - stephen.battisti@umass.edu # IT
       - stevens@umass.edu # Bob Stevens
+    allow_domains:
+      - wyeworks.com
+      - txidigital.com
+      - tablexi.com
 saml:
   certificate_file: config/saml-certificate.p12
 

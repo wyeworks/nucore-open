@@ -33,16 +33,19 @@
               required: @order_detail.product.user_notes_field_mode.required?,
               hint: t("reservations.account_field.note_hint")
 
-  = render "reservation_fields", f: f
+  = render "reservation_fields", f: f, daily_booking: @instrument.daily_booking?
 
   %ul.inline
-    %li= f.submit 'Save', class: 'btn'
+    %li= f.submit t('shared.save'), class: 'btn'
     - if @order.purchased?
-      %li= link_to 'Cancel', reservations_path
+      %li= link_to t('shared.cancel'), reservations_path
     - else
-      %li= link_to 'Cancel', cart_path
+      %li= link_to t('shared.cancel'), cart_path
+
+- if @instrument.daily_booking?
+  = render "reservations/open_hours"
 
 #overlay
   #spinner
     #hide
-      #calendar{ data: { show_tooltip: @instrument.show_details.to_s, start_editable: start_time_editing_enabled?(@reservation).to_s } }
+      #calendar{ data: reservations_calendar_config }

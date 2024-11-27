@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "date"
-
 class Reservation < ApplicationRecord
 
   acts_as_paranoid # soft deletes
@@ -247,7 +245,13 @@ class Reservation < ApplicationRecord
   end
 
   def admin?
-    order_detail_id.nil? && !blackout?
+    has_order_detail = if persisted?
+                         order_detail_id.present?
+                       else
+                         order_detail.present?
+                       end
+
+    !has_order_detail && !blackout?
   end
 
   def admin_removable?
@@ -265,8 +269,8 @@ class Reservation < ApplicationRecord
     Reservation
       .not_started
       .where("reserve_start_at > :now", now: Time.current)
-      .where("reserve_start_at < :reserve_start_at", reserve_start_at: reserve_start_at)
-      .where(product_id: product_id)
+      .where("reserve_start_at < :reserve_start_at", reserve_start_at:)
+      .where(product_id:)
       .joins(:order_detail)
       .where("order_detail_id IS NULL OR order_details.state IN ('new', 'inprocess')")
       .none?

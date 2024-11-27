@@ -45,6 +45,16 @@ FactoryBot.define do
       end_hour { 24 }
     end
 
+    trait :unavailable do
+      on_sun { false }
+      on_mon { false }
+      on_tue { false }
+      on_wed { false }
+      on_thu { false }
+      on_fri { false }
+      on_sat { false }
+    end
+
     trait :with_setup_product do
       product { create(:setup_instrument, skip_schedule_rules: true) }
     end

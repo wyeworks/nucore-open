@@ -1,5 +1,5 @@
 :javascript
-  var events_path     = "#{facility_instrument_reservations_path(@instrument.facility, @instrument, format: 'js', with_details: @instrument.show_details?)}";
+  var events_path     = "#{calendar_events_path(@instrument.facility, @instrument)}";
   var minDate         = "#{@reservation_window&.min_date}";
   var maxDate         = "#{@reservation_window&.max_date}";
   var maxDaysFromNow  = #{@reservation_window&.max_window};
@@ -13,7 +13,4 @@
   var reserveMaximum  = #{@instrument.max_reserve_mins || 0};
   var instrumentOnline = #{@instrument.online?};
   var initialDate = "#{@reservation&.reserve_start_at&.iso8601}";
-
-- if !@instrument.daily_booking?
-  :javascript
-    var reserveInterval = #{@instrument.reserve_interval};
+  var reserveInterval = #{@instrument.reserve_interval || 1};

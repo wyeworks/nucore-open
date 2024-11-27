@@ -1,21 +1,14 @@
 $(document).ready(function() {
-  init_datepickers();
+  initDatepickers();
 
-  let form = {
-    isDailyBooking: $("#calendar").length == 0,
-    durationDaysEl: $('[name="reservation[duration_days]"]'),
-    startDateEl: $('[name="reservation[reserve_start_date]"]'),
-    endDateEl: $('[name="reservation[reserve_end_date]"]'),
-    startHourEl: $('[name="reservation[reserve_start_hour]"]'),
-    startMinEl: $('[name="reservation[reserve_start_min]"]'),
-    startMeridianEl: $('[name="reservation[reserve_start_meridian]"]'),
-    endHourEl: $('[name="reservation[reserve_end_hour]"]'),
-    endMinEl: $('[name="reservation[reserve_end_min]"]'),
-    endMeridianEl: $('[name="reservation[reserve_end_meridian]"]'),
-  };
+  function reservationInput(fieldName) {
+    return $(`[name="reservation[${fieldName}]"]`);
+  }
+
+  let isDailyBooking = reservationInput('duration_days').length > 0;
 
   // initialize datepicker
-  function init_datepickers() {
+  function initDatepickers() {
     if (typeof minDaysFromNow == "undefined") {
       window['minDaysFromNow'] = 0;
     }
@@ -28,7 +21,7 @@ $(document).ready(function() {
       $(this).datepicker({'minDate': minDaysFromNow, 'maxDate': maxDaysFromNow})
         .change(function() {
           var d = new Date(Date.parse($(this).val()));
-          if (!form.isDailyBooking) $('#calendar').fullCalendar('gotoDate', d);
+          $('#calendar').fullCalendar('gotoDate', d);
         });
     });
   }
@@ -44,48 +37,47 @@ $(document).ready(function() {
     });
 
     // duration_mins doesn't follow the same pattern, so do it separately
-    var newval = $('[name="reservation[duration_mins]"]').val();
+    var newval = reservationInput('duration_mins').val();
 
     $('[name="reservation[actual_duration_mins]_display"]').val(newval).trigger('change');
   }
 
-  /**
-   * Update reservation_end_date out of duration days and start date
-   */
-  function updateReserveEndDate() {
-    let duration = parseInt(form.durationDaysEl.val());
-    let startDateEpoch = Date.parse(form.startDateEl.val());
-
-    if (!(duration > 0 && startDateEpoch > 0)) { return; }
-
-    let startDate = new Date(startDateEpoch);
-    let endDate = new Date(startDate);
-
-    endDate.setDate(startDate.getDate() + duration);
-
-    let dateFormat = form.startDateEl.datepicker('option', 'dateFormat');
-    let dateStr = $.datepicker.formatDate(dateFormat, endDate)
-
-    form.endDateEl.val(dateStr);
-  }
-
-  function copyFieldValueCallback(targetEl) {
-    return function(event) {
-      $(targetEl).val($(event.target).val())
-    }
-  }
-
   $('.copy_actual_from_reservation a').click(copyReservationTimeIntoActual);
 
-  if (form.isDailyBooking) {
-    form.durationDaysEl.on('keyup', updateReserveEndDate);
-    form.startDateEl.on('change', updateReserveEndDate);
-    // Copy start time to end time when changes
-    form.startHourEl.on('change', copyFieldValueCallback(form.endHourEl));
-    form.startMinEl.on('change', copyFieldValueCallback(form.endMinEl));
-    form.startMeridianEl.on('change', copyFieldValueCallback(form.endMeridianEl));
-  } else {
-    new ReservationCalendar().init($("#calendar"), $(".js--reservationForm"));
+  const reservationFormEl = $(".js--reservationForm");
+  const formHandlerOpts = {
+    "start": [
+      "reservation[reserve_start_date]",
+      "reservation[reserve_start_hour]",
+      "reservation[reserve_start_min]",
+      "reservation[reserve_start_meridian]"
+    ],
+    "end": [
+      "reservation[reserve_end_date]",
+      "reservation[reserve_end_hour]",
+      "reservation[reserve_end_min]",
+      "reservation[reserve_end_meridian]"
+    ],
+  };
+
+  if (isDailyBooking) {
+    new DailyReservationTimeFieldAdjustor(
+      reservationFormEl,
+      {
+        ...formHandlerOpts,
+        "duration": "reservation[duration_days]"
+      }
+    );
+  } else if (typeof reserveInterval !== 'undefined') {
+    new ReservationTimeFieldAdjustor(
+      reservationFormEl,
+      {
+        ...formHandlerOpts,
+        "duration": "reservation[duration_mins]"
+      },
+      reserveInterval,
+    );
   }
+  new ReservationCalendar().init($("#calendar"), reservationFormEl, isDailyBooking);
 });
 

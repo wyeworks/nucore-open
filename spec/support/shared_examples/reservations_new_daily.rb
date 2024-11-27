@@ -20,8 +20,18 @@ RSpec.shared_examples "new daily reservation" do |before_submit: nil, after_subm
   it "creates a daily reservation", :js do
     visit reservation_path
 
+    # Form and open hour table to be axe clean
+    expect(page).to be_axe_clean.within(".simple_form")
+    expect(page).to be_axe_clean.within(".open-hours")
+
     expect(page).to have_content("Create Reservation")
     expect(page).to have_content("Duration days")
+
+    # Start time availability table is present
+    expect(page).to have_xpath("//table/tbody/tr/th[text()='Start Time Availability']")
+
+    # Calendar is rendered with correct view
+    expect(page).to have_xpath("//div[@id='calendar'][@data-default-view='month']")
 
     start_date = 1.day.from_now.to_date
     start_hour = "6"
