@@ -11,7 +11,7 @@ on: [push]
   # Allow mannually triggering this workflow by visiting
   # https://github.com/tablexi/nucore-dartmouth/actions/workflows/nucore-auto-deploy-staging.yml
   # and clicking "Run Workflow"
-  workflow_dispatch:
+  # workflow_dispatch:
 
 jobs:
   build:
