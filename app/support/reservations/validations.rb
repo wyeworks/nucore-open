@@ -51,7 +51,9 @@ module Reservations::Validations
   end
 
   def starts_before_cutoff
-    errors.add(:reserve_start_at, :after_cutoff, hours: product.cutoff_hours) if starts_before_cutoff?
+    return unless starts_before_cutoff?
+
+    errors.add(:reserve_start_at, :after_cutoff, hours: product.cutoff_hours)
   end
 
   def duration_is_interval
@@ -164,7 +166,7 @@ module Reservations::Validations
   end
 
   def in_all_schedule_rules?
-    product.schedule_rules.cover?(reserve_start_at, reserve_end_at)
+    covered_by_schedule_rules?(product.schedule_rules)
   end
 
   def in_allowed_schedule_rules?
@@ -172,7 +174,7 @@ module Reservations::Validations
     return true if reserved_by_admin
     # Some old specs don't set an order detail, so we need to safe-navigate
 
-    product.available_schedule_rules(order_detail&.user_for_order).cover?(reserve_start_at, reserve_end_at)
+    covered_by_schedule_rules?(product.available_schedule_rules(order_detail&.user_for_order))
   end
 
   def in_the_future?
@@ -226,6 +228,14 @@ module Reservations::Validations
 
   def default_reservation_window
     product.price_group_products.map(&:reservation_window).min
+  end
+
+  def covered_by_schedule_rules?(schedule_rules)
+    if product.daily_booking?
+      schedule_rules.cover_time?(reserve_start_at)
+    else
+      schedule_rules.cover?(reserve_start_at, reserve_end_at)
+    end
   end
 
 end

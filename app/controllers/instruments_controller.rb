@@ -35,6 +35,16 @@ class InstrumentsController < ProductsCommonController
     end
   end
 
+  def create
+    if resource_params[:pricing_mode] == Instrument::Pricing::SCHEDULE_DAILY && cannot?(:create_daily_booking, Instrument)
+      flash.now[:error] = t("controllers.instruments.create.daily_booking_not_authorized")
+
+      render :new
+    else
+      super
+    end
+  end
+
   # GET /facilities/:facility_id/instruments/:instrument_id/schedule
   def schedule
     @admin_reservations =
@@ -79,6 +89,16 @@ class InstrumentsController < ProductsCommonController
       # raise ActiveRecord::RecordNotFound
     end
     render json: @status
+  end
+
+  private
+
+  def permitted_params
+    params = super
+
+    (params += %i[min_reserve_days max_reserve_days]) if can?(:create_daily_booking, Instrument)
+
+    params
   end
 
 end

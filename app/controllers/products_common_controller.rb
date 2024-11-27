@@ -54,6 +54,10 @@ class ProductsCommonController < ApplicationController
     @product = current_facility_products.new(account: Settings.accounts.product_default)
   end
 
+  # GET /facilities/alpha/(items|services|instruments)/1/edit
+  def edit
+  end
+
   # POST /services
   def create
     @product = current_facility_products.new(resource_params)
@@ -65,10 +69,6 @@ class ProductsCommonController < ApplicationController
     else
       render action: "new"
     end
-  end
-
-  # GET /facilities/alpha/(items|services|instruments)/1/edit
-  def edit
   end
 
   # PUT /services/1
@@ -119,8 +119,7 @@ class ProductsCommonController < ApplicationController
       :min_reserve_mins, :max_reserve_mins, :min_cancel_hours,
       :auto_cancel_mins, :lock_window, :cutoff_hours,
       :problems_resolvable_by_user, :restrict_holiday_access, :billing_mode,
-      :pricing_mode, :cross_core_ordering_available,
-      :min_reserve_days, :max_reserve_days
+      :pricing_mode, :cross_core_ordering_available
     ]
   end
 

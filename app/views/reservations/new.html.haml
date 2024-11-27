@@ -64,8 +64,10 @@
       - else
         = link_to t("shared.cancel"), facility_path(@instrument.facility)
 
-- unless @instrument.daily_booking?
-  #overlay
-    #spinner
-      #hide
-        #calendar{ data: { show_tooltip: @instrument.show_details.to_s, start_editable: "true" } }
+- if @instrument.daily_booking?
+  = render "reservations/open_hours"
+
+#overlay
+  #spinner
+    #hide
+      #calendar{ data: reservations_calendar_config }

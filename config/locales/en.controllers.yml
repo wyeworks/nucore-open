@@ -80,6 +80,10 @@ en:
         success: The reservation has been canceled successfully.
         error: An error was encountered while canceling the order.
 
+    instruments:
+      create:
+        daily_booking_not_authorized: "Not allowed to create daily booking instruments"
+
     offline_reservations:
       bring_online:
         success: The instrument is back online
@@ -136,6 +140,7 @@ en:
         Please add it again to make a reservation.
       update:
         failure: The reservation cannot be updated.
+        success: The reservation was successfully updated.
       switch_instrument:
         prior_is_still_running: Cannot "Begin Reservation" when a previously scheduled reservation is ongoing.
 

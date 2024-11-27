@@ -89,7 +89,7 @@ FactoryBot.define do
   factory :setup_reservation, class: Reservation, parent: :reservation do
     product factory: :setup_instrument
 
-    order_detail { FactoryBot.create(:setup_order, product: product).order_details.first }
+    order_detail { FactoryBot.create(:setup_order, product:).order_details.first }
   end
 
   factory :validated_reservation, parent: :setup_reservation do

@@ -27,6 +27,14 @@ module ProductsHelper
     }
   end
 
+  def instrument_pricing_modes
+    return Instrument::PRICING_MODES if can?(:create_daily_booking, Instrument)
+
+    Instrument::PRICING_MODES.reject do |pricing_mode|
+      pricing_mode == Instrument::Pricing::SCHEDULE_DAILY
+    end
+  end
+
   def public_calendar_link(product)
     return unless product.respond_to? :reservations
 

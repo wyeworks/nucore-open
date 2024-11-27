@@ -161,7 +161,7 @@ FactoryBot.define do
     trait :always_available do
       after(:create) do |product|
         product.schedule_rules.destroy_all
-        create(:all_day_schedule_rule, product: product)
+        create(:all_day_schedule_rule, product:)
         product.reload
       end
     end

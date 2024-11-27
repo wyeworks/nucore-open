@@ -31,21 +31,23 @@ class ScheduleRule < ApplicationRecord
   # Use this on an ActiveRecord::Relation. Is every minute within the range covered
   # by one of the rules?
   def self.cover?(start_at, end_at = start_at)
-    rule_set = all.to_a
-
     # Time Ranges aren't iterable, so fake it by creating an array of each minute
     # beween the two times. If start_at == end_at, the result will be one element.
     minutes = (end_at - start_at) / 60
     each_minute_in_range = 0.upto(minutes).collect { |n| start_at.advance(minutes: n) }
 
     each_minute_in_range.all? do |time|
-      rule_set.any? { |rule| rule.cover? time }
+      cover_time?(time)
     end
+  end
+
+  def self.cover_time?(time)
+    any? { |rule| rule.cover?(time) }
   end
 
   # Returns a single array of calendar objects representing the set of schedule_rules
   def self.as_calendar_objects(schedule_rules, options = {})
-    ScheduleRuleCalendarPresenter.to_json(schedule_rules, options)
+    ScheduleRules::CalendarPresenter.events(schedule_rules, options).as_json
   end
 
   def at_least_one_day_selected
@@ -114,8 +116,18 @@ class ScheduleRule < ApplicationRecord
     "#{end_hour}:#{sprintf '%02d', end_min}"
   end
 
-  def on_day?(datetime)
-    public_send(%(on_#{datetime.strftime('%a').downcase}?))
+  def time_range
+    [start_time, end_time].join(" - ")
+  end
+
+  def on_day?(value)
+    weekday = case value
+              when Integer then Date::ABBR_DAYNAMES[value]
+              when String then value
+              when Time then value.strftime("%a")
+              end
+
+    Date::ABBR_DAYNAMES.include?(weekday) && public_send(:"on_#{weekday.downcase}?")
   end
 
   def cover?(dt)
@@ -129,7 +141,7 @@ class ScheduleRule < ApplicationRecord
   # Returns an array of hashes. A Mon-Fri 9-5 rule would return 5 hashes, one for
   # each day.
   def as_calendar_objects(options = {})
-    ScheduleRuleCalendarPresenter.new(self, options).to_json
+    ScheduleRules::CalendarPresenter.new(self, options).as_json
   end
 
   def discount_for(start_at, end_at, price_group)

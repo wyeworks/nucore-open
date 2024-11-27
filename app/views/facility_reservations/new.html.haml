@@ -1,7 +1,7 @@
 = content_for :head_content do
   = render "shared/headers/calendar"
   :javascript
-    var events_path = "#{facility_instrument_reservations_path(@instrument.facility, @instrument, format: :js, with_details: true)}";
+    var events_path = "#{calendar_events_path(@instrument.facility, @instrument, with_details: true)}";
     var minTime = #{@instrument.first_available_hour};
     var maxTime = #{@instrument.last_available_hour + 1};
   = javascript_include_tag "reservations.js"

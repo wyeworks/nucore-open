@@ -275,6 +275,38 @@ RSpec.describe ReservationsController do
         end
       end
     end
+
+    context "end date restriction" do
+      let(:subject) { assigns(:end_at) }
+      let(:start_at) { Time.current }
+      let(:maximum_period) { described_class::MAX_RESERVATIONS_PERIOD }
+
+      before do
+        @params[:start] = start_at
+        @params[:end] = end_at
+
+        do_request
+      end
+
+      describe "when end not present" do
+        let(:end_at) { nil }
+
+        it { is_expected.to eq start_at.end_of_day }
+      end
+
+      describe "when end is less than maximum period from start" do
+        let(:end_at) { start_at + 1.day }
+
+        it { is_expected.to eq end_at }
+      end
+
+      describe "when end is greater than maximum period from start" do
+        let(:end_at) { start_at + maximum_period + 1.day }
+
+        it { is_expected.to be < end_at }
+        it { is_expected.to eq start_at + maximum_period }
+      end
+    end
   end
 
   context "list" do
@@ -1291,7 +1323,6 @@ RSpec.describe ReservationsController do
           end
 
           before :each do
-
             @reservation.update!(reserve_start_at: start_at, reserve_end_at: end_at)
             sign_in @guest
           end
@@ -1322,7 +1353,6 @@ RSpec.describe ReservationsController do
             expect(assigns(:reservation).reserve_end_at).to eq(end_at)
           end
         end
-
       end
 
       context "off" do
@@ -1453,9 +1483,6 @@ RSpec.describe ReservationsController do
                              id: reservation.id, format: :ics }
         expect(response.body).to match(/BEGIN:VCALENDAR/)
       end
-
     end
-
   end
-
 end

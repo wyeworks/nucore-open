@@ -9,13 +9,15 @@ module Reservations::MovingUp
   # to the next accommodating time slot on the calendar from NOW. Returns nil
   # if there is no such time slot. For read-only purposes.
   def earliest_possible
-    after = 1.minute.from_now
-    next_res = product.next_available_reservation(after: after,
-                                                  duration: duration_mins.minutes,
-                                                  options:
-                                                    { exclude: self,
-                                                      user: user,
-                                                      until: reserve_start_at })
+    next_res = product.next_available_reservation(
+      after: 1.minute.from_now,
+      duration: duration_mins.minutes,
+      options: {
+        exclude: self, user:,
+        until: reserve_start_at
+      }
+    )
+
     return nil if next_res.nil? || next_res.reserve_start_at >= reserve_start_at
     next_res
   end

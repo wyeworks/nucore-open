@@ -1200,6 +1200,8 @@ en:
       setup_instrument_alert: Setup Instrument Alert
       deactivate_instrument_alert: Deactivate Instrument Alert
       instrument_alert_is_active: "An instrument alert is currently active with the note: %{note}"
+      open_hours_day: Day of Week
+      open_hours_time: Start Time Availability
 
     instrument_fields:
       show_details: "Show reservation details (name, email, etc) on schedule"

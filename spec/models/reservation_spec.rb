@@ -1805,4 +1805,52 @@ RSpec.describe Reservation do
       end
     end
   end
+
+  describe "#admin?" do
+    let(:subject) { reservation.admin? }
+    let(:reservation) do
+      build(:reservation, product: instrument)
+    end
+
+    before do
+      allow_any_instance_of(Reservation).to receive(:admin?).and_call_original
+    end
+
+    context "when order detail and order detail id are not present and blackout is nil" do
+      it { is_expected.to be true }
+    end
+
+    context "when order detail is present but not its id" do
+      before do
+        reservation.order_detail = build(:order_detail)
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context "when order detail id is present" do
+      before do
+        reservation.order_detail = order_detail
+        reservation.save!
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context "when order detail not present and blackout" do
+      before do
+        reservation.blackout = true
+      end
+
+      it { is_expected.to be false }
+    end
+
+    context "when order detail not present and not blackout" do
+      before do
+        reservation.blackout = false
+      end
+
+      it { is_expected.to be true }
+    end
+  end
 end

@@ -16,6 +16,8 @@ class ReservationsController < ApplicationController
   include ReservationSwitch
   helper TimelineHelper
 
+  MAX_RESERVATIONS_PERIOD = 45.days
+
   def initialize
     super
     @active_tab = "reservations"
@@ -35,7 +37,10 @@ class ReservationsController < ApplicationController
     @instrument = @facility.instruments.find_by!(url_name: params[:instrument_id])
 
     @start_at = parse_time_param(params[:start]) || Time.zone.now
-    @end_at = parse_time_param(params[:end]) || @start_at.end_of_day
+    @end_at = [
+      parse_time_param(params[:end]) || @start_at.end_of_day,
+      @start_at + MAX_RESERVATIONS_PERIOD,
+    ].min
 
     admin_reservations = @instrument.schedule.admin_reservations.in_range(@start_at, @end_at)
     user_reservations = @instrument.schedule
@@ -48,23 +53,26 @@ class ReservationsController < ApplicationController
     @reservations = admin_reservations + user_reservations + offline_reservations
 
     # We don't need the unavailable hours month view
-    unless month_view?
-      @rules = @instrument.schedule_rules
-
-      if @instrument.requires_approval? && acting_user && acting_user.cannot_override_restrictions?(@instrument)
-        @rules = @rules.available_to_user(acting_user)
-      end
-
-      @unavailable = ScheduleRule.unavailable(@rules)
+    @rules = @instrument.schedule_rules
+    if @instrument.requires_approval? && acting_user && acting_user.cannot_override_restrictions?(@instrument)
+      @rules = @rules.available_to_user(acting_user)
     end
 
     @show_details = params[:with_details] == "true" && (@instrument.show_details? || can?(:administer, Reservation))
 
     respond_to do |format|
-      as_calendar_object_options = { start_date: @start_at.beginning_of_day, with_details: @show_details }
       format.js do
-        render json: Reservation.as_calendar_objects(@reservations, as_calendar_object_options) +
-                     ScheduleRule.as_calendar_objects(@unavailable, as_calendar_object_options)
+        render(
+          json: CalendarEventsPresenter.new(
+            @instrument,
+            @reservations,
+            @rules,
+            start_at: @start_at,
+            end_at: @end_at,
+            with_details: @show_details,
+            view: params[:view]
+          ).to_json
+        )
       end
     end
   end
@@ -204,10 +212,10 @@ class ReservationsController < ApplicationController
     end
 
     if mergeable && success
-      flash[:notice] = "The reservation was successfully updated."
+      flash[:notice] = I18n.t("controllers.reservations.update.success")
       redirect_to facility_order_path(@order_detail.facility, @order_detail.order.merge_order || @order_detail.order)
     elsif success
-      flash[:notice] = "The reservation was successfully updated."
+      flash[:notice] = I18n.t("controllers.reservations.update.success")
       redirect_to (@order.purchased? ? reservations_path : cart_path)
     else
       render_edit

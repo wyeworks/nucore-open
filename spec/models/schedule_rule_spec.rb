@@ -368,13 +368,14 @@ RSpec.describe ScheduleRule do
       @rule = @instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule))
       assert @rule.valid?
 
-      # set start_date as wednesday
+      # set start_at as wednesday
       @wednesday = Time.current.beginning_of_week(:sunday).to_date + 3
-      @calendar = @rule.as_calendar_objects(start_date: @wednesday)
+      @calendar = @rule.as_calendar_objects(start_at: @wednesday)
 
       # should start on wednesday
       expect(@calendar.size).to eq(7)
       expect(Time.zone.parse(@calendar[0]["start"]).to_date).to eq(@wednesday)
+      expect(Time.zone.parse(@calendar[-1]["end"]).to_date).to eq(@wednesday + 6)
     end
   end
 
