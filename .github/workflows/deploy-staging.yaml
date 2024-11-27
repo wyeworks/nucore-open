@@ -1,23 +1,23 @@
 name: Staging auto deployment
 
 # When this action will be executed
-on: [push]
-  # workflow_run:
-  #   workflows: [ "Run test suite" ]
-  #   branches: [ master ]
-  #   types:
-  #     - completed
+on:
+  workflow_run:
+    workflows: [ "Run test suite" ]
+    branches: [ master ]
+    types:
+      - completed
 
   # Allow mannually triggering this workflow by visiting
   # https://github.com/tablexi/nucore-dartmouth/actions/workflows/nucore-auto-deploy-staging.yml
   # and clicking "Run Workflow"
-  # workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     # run this job if it was manually started or the parent workflow succeeded
-    # if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout to the branch
