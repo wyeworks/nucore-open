@@ -1,0 +1,71 @@
+This XML file does not appear to have any style information associated with it. The document tree is shown below.
+<EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" entityID="https://webauth.umass.edu/idp/shibboleth">
+<IDPSSODescriptor protocolSupportEnumeration="urn:mace:shibboleth:1.0 urn:oasis:names:tc:SAML:1.1:protocol urn:oasis:names:tc:SAML:2.0:protocol">
+<Extensions>
+<shibmd:Scope regexp="false">umass.edu</shibmd:Scope>
+<mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+<mdui:DisplayName xml:lang="en">University of Massachusetts Amherst</mdui:DisplayName>
+</mdui:UIInfo>
+</Extensions>
+<KeyDescriptor>
+<ds:KeyInfo>
+<ds:X509Data>
+<!--
+ Serial No. 16811425045483705400, expires on Sun Jun  8 14:41:20 2025 GMT
+-->
+<ds:X509Certificate>
+MIIDCzCCAfOgAwIBAgIJAOlOLgIUKVQ4MA0GCSqGSIb3DQEBCwUAMBwxGjAYBgNV BAMMEXdlYmF1dGgudW1hc3MuZWR1MB4XDTE1MDYxMTE0NDEyMFoXDTI1MDYwODE0 NDEyMFowHDEaMBgGA1UEAwwRd2ViYXV0aC51bWFzcy5lZHUwggEiMA0GCSqGSIb3 DQEBAQUAA4IBDwAwggEKAoIBAQCoMhmyJmOehl8dQmhXu8S2rA63negrnXxeLhYQ s9pxn1TN0o30r3VrSTKFKlUXa0Tl3igEYs4tcwh1WDejxFVHdHEE7yu5wiuLAtNE FBLrh4bbcNNKUI7piHq94/pY9yBdUU1WxAPrILmdQMwP9eodqxpwQe6qyU9yXpEO B8g9iO+lx+9vQTZ1T1dkxSHYPepkpt9fveAw77MM7sup0XeUOC4W60gw5Ij87u70 jeBd0lAInU7qF0hqrzBlwJwxnPJg70TFxh9Ziok5+VhoVTHKi+c/tnJVllpyr6y2 V6qcxyL4oLCl9w3luRyNMzgDlYnaDSGBwu+VYt4q0fFiuiwjAgMBAAGjUDBOMB0G A1UdDgQWBBQH4v/lIJActQtxTkeSBwEc+9/tpzAfBgNVHSMEGDAWgBQH4v/lIJAc tQtxTkeSBwEc+9/tpzAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBb qhjPIEtB4sAT+O6lbItB4lz1OSnHowfSGIlPUKwS2JSktwEYsP4Ib54inQXooIr/ UCAwIyWGe3gN0zPDMAg8/vZcwSkW3Aw24WKbe27uNHVc4EXnghMSbwro9LagNhcm NPBh63Pk9Gv7Re6v8GhKdzwgcWvYMuuB0sTT4sAnnBCk5cWKbq82MjhE6j8cFtft 3VH91yvbHwgsHYlmfHdpcDmQD562uy6rfjnLGjfHAfBStCChBaKrdeH+zTeIjay4 aS+HBnPJbqy6mvY0QGjDBsjELvRUs2UgCgq+/SItQAK3pT2aWh5xlD29Z3vxSPZB boJsiAVVlmU6bfxOdpHv
+</ds:X509Certificate>
+</ds:X509Data>
+</ds:KeyInfo>
+</KeyDescriptor>
+<ArtifactResolutionService index="1" Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding" Location="https://webauth.umass.edu:8443/idp/profile/SAML1/SOAP/ArtifactResolution"/>
+<ArtifactResolutionService index="2" Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP" Location="https://webauth.umass.edu:8443/idp/profile/SAML2/SOAP/ArtifactResolution"/>
+<NameIDFormat>urn:mace:shibboleth:1.0:nameIdentifier</NameIDFormat>
+<NameIDFormat>
+urn:oasis:names:tc:SAML:2.0:nameid-format:transient
+</NameIDFormat>
+<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://webauth.umass.edu/idp/profile/SAML2/POST/SSO"/>
+<SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect" Location="https://webauth.umass.edu/idp/profile/SAML2/Redirect/SSO"/>
+<SingleSignOnService Binding="urn:mace:shibboleth:1.0:profiles:AuthnRequest" Location="https://webauth.umass.edu/idp/profile/Shibboleth/SSO"/>
+</IDPSSODescriptor>
+<AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:1.1:protocol">
+<Extensions>
+<shibmd:Scope regexp="false">umass.edu</shibmd:Scope>
+</Extensions>
+<KeyDescriptor>
+<ds:KeyInfo>
+<ds:X509Data>
+<!--
+ Serial No. 16811425045483705400, expires on Sun Jun  8 14:41:20 2025 GMT
+-->
+<ds:X509Certificate>
+MIIDCzCCAfOgAwIBAgIJAOlOLgIUKVQ4MA0GCSqGSIb3DQEBCwUAMBwxGjAYBgNV BAMMEXdlYmF1dGgudW1hc3MuZWR1MB4XDTE1MDYxMTE0NDEyMFoXDTI1MDYwODE0 NDEyMFowHDEaMBgGA1UEAwwRd2ViYXV0aC51bWFzcy5lZHUwggEiMA0GCSqGSIb3 DQEBAQUAA4IBDwAwggEKAoIBAQCoMhmyJmOehl8dQmhXu8S2rA63negrnXxeLhYQ s9pxn1TN0o30r3VrSTKFKlUXa0Tl3igEYs4tcwh1WDejxFVHdHEE7yu5wiuLAtNE FBLrh4bbcNNKUI7piHq94/pY9yBdUU1WxAPrILmdQMwP9eodqxpwQe6qyU9yXpEO B8g9iO+lx+9vQTZ1T1dkxSHYPepkpt9fveAw77MM7sup0XeUOC4W60gw5Ij87u70 jeBd0lAInU7qF0hqrzBlwJwxnPJg70TFxh9Ziok5+VhoVTHKi+c/tnJVllpyr6y2 V6qcxyL4oLCl9w3luRyNMzgDlYnaDSGBwu+VYt4q0fFiuiwjAgMBAAGjUDBOMB0G A1UdDgQWBBQH4v/lIJActQtxTkeSBwEc+9/tpzAfBgNVHSMEGDAWgBQH4v/lIJAc tQtxTkeSBwEc+9/tpzAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBCwUAA4IBAQBb qhjPIEtB4sAT+O6lbItB4lz1OSnHowfSGIlPUKwS2JSktwEYsP4Ib54inQXooIr/ UCAwIyWGe3gN0zPDMAg8/vZcwSkW3Aw24WKbe27uNHVc4EXnghMSbwro9LagNhcm NPBh63Pk9Gv7Re6v8GhKdzwgcWvYMuuB0sTT4sAnnBCk5cWKbq82MjhE6j8cFtft 3VH91yvbHwgsHYlmfHdpcDmQD562uy6rfjnLGjfHAfBStCChBaKrdeH+zTeIjay4 aS+HBnPJbqy6mvY0QGjDBsjELvRUs2UgCgq+/SItQAK3pT2aWh5xlD29Z3vxSPZB boJsiAVVlmU6bfxOdpHv
+</ds:X509Certificate>
+</ds:X509Data>
+</ds:KeyInfo>
+</KeyDescriptor>
+<AttributeService Binding="urn:oasis:names:tc:SAML:1.0:bindings:SOAP-binding" Location="https://webauth.umass.edu:8443/idp/profile/SAML1/SOAP/AttributeQuery"/>
+</AttributeAuthorityDescriptor>
+<Organization>
+<OrganizationName xml:lang="en">University of Massachusetts Amherst</OrganizationName>
+<OrganizationDisplayName xml:lang="en">University of Massachusetts Amherst</OrganizationDisplayName>
+<OrganizationURL xml:lang="en">http://www.umass.edu/</OrganizationURL>
+</Organization>
+<ContactPerson contactType="technical">
+<GivenName>Identity Management</GivenName>
+<EmailAddress>shibboleth@oit.umass.edu</EmailAddress>
+</ContactPerson>
+<ContactPerson contactType="administrative">
+<GivenName>Identity Management</GivenName>
+<EmailAddress>shibboleth@oit.umass.edu</EmailAddress>
+</ContactPerson>
+<ContactPerson contactType="support">
+<GivenName>Identity Management</GivenName>
+<EmailAddress>shibboleth@oit.umass.edu</EmailAddress>
+</ContactPerson>
+<ContactPerson xmlns:icmd="http://id.incommon.org/metadata" contactType="other" icmd:contactType="http://id.incommon.org/metadata/contactType/security">
+<GivenName>Security Response Team</GivenName>
+<EmailAddress>security@oit.umass.edu</EmailAddress>
+</ContactPerson>
+</EntityDescriptor>

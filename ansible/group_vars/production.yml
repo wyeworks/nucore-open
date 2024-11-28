@@ -1,0 +1,7 @@
+ftp_host: interfaces.umasscs.net
+nginx_apps:
+  - host: corum.umass.edu
+    alias: ials-core-web-prod-01.it.umass.edu ials-core-web-prod-02.it.umass.edu
+    user: corum
+    rails_env: production
+    ruby_versions: ["3.3.0"]

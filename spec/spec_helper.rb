@@ -128,6 +128,9 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-core/v/3-0/docs/configuration/global-namespace-dsl
   config.expose_dsl_globally = false
 
+  require "webmock/rspec"
+  WebMock.disable_net_connect!(allow_localhost: true)
+
   # for testing attachment validations
   config.include Paperclip::Shoulda::Matchers
   config.include ActiveStorageValidations::Matchers

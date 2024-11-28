@@ -1,0 +1,40 @@
+%table.table.table-striped.table-hover
+  %caption= t(".table_caption.#{next_order_status}")
+  %thead
+    %tr
+      %th{ scope: "col" }
+      %th{ scope: "col" }= Statement.human_attribute_name(:invoice_number)
+      %th{ scope: "col" }= Account.model_name.human
+      %th{ scope: "col" }= Order.model_name.human
+      %th{ scope: "col" }= t(".primary")
+      %th{ scope: "col" }= t(".mivp")
+      %th{ scope: "col" }= Statement.human_attribute_name(:total_cost)
+      %th#reconcile-note.row-note-input{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
+
+
+  %tbody
+    - order_details.each do |order_detail|
+      %tr
+        %td.centered= check_box_tag "order_detail[#{order_detail.id}][#{next_order_status}]", "1", false, class: "toggle", aria: {label: t(".checkbox_label", order_number:  order_detail.to_s)}
+        %td= "##{order_detail.statement_invoice_number}"
+        %td
+          = order_detail.account
+          %br
+          = order_detail.account.owner_user
+        %th.user-order-detail{ scope: "row" }
+          .order-detail-description
+            = link_to "##{order_detail.order_id}", facility_order_path(current_facility, order_detail.order_id)
+            = "-"
+            = link_to "#{order_detail.id}", manage_order_detail_path(order_detail), class: "manage-order-detail"
+            = ": #{order_detail.product}"
+            - if order_detail.note.present?
+              .order-detail-extra.order-detail-note= order_detail.note
+
+        - if next_order_status == "mivp_pending"
+          %td.bold= primary_total(order_detail)
+          %td= mivp_total(order_detail)
+        - else
+          %td= primary_total(order_detail)
+          %td.bold= mivp_total(order_detail)
+        %td= show_actual_total(order_detail)
+        %td.row-note-input= text_area_tag "order_detail[#{order_detail.id}][reconciled_note]", order_detail.reconciled_note

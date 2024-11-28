@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
-  create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
     t.datetime "deleted_at", precision: nil
@@ -21,7 +21,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["facility_id"], name: "index_account_facility_joins_on_facility_id"
   end
 
-  create_table "account_users", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "account_users", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "user_id", null: false
     t.string "user_role", limit: 50, null: false
@@ -33,7 +33,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id"], name: "index_account_users_on_user_id"
   end
 
-  create_table "accounts", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "accounts", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "type", limit: 50, null: false
     t.string "account_number", limit: 50, null: false
     t.string "description", limit: 50, null: false
@@ -51,10 +51,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.string "affiliate_other"
     t.string "outside_contact_info"
     t.string "ar_number"
+    t.index ["account_number"], name: "index_accounts_on_account_number"
     t.index ["affiliate_id"], name: "index_accounts_on_affiliate_id"
   end
 
-  create_table "active_storage_attachments", charset: "utf8mb3", force: :cascade do |t|
+  create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -64,7 +65,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb3", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -76,20 +77,20 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb3", force: :cascade do |t|
+  create_table "active_storage_variant_records", charset: "utf8", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "affiliates", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "affiliates", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "subaffiliates_enabled", default: false, null: false
   end
 
-  create_table "budgeted_chart_strings", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "budgeted_chart_strings", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "fund", limit: 20, null: false
     t.string "dept", limit: 20, null: false
     t.string "project", limit: 20
@@ -99,7 +100,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.datetime "expires_at", precision: nil, null: false
   end
 
-  create_table "bulk_email_jobs", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "bulk_email_jobs", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id"
     t.integer "user_id", null: false
     t.string "subject", null: false
@@ -112,7 +113,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id"], name: "fk_rails_7cd8662ccc"
   end
 
-  create_table "bundle_products", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "bundle_products", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "bundle_product_id", null: false
     t.integer "product_id", null: false
     t.integer "quantity", null: false
@@ -120,7 +121,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "fk_bundle_prod_bundle"
   end
 
-  create_table "delayed_jobs", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "delayed_jobs", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
     t.text "handler", size: :long, null: false
@@ -135,7 +136,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "duration_rates", charset: "utf8mb3", force: :cascade do |t|
+  create_table "duration_rates", charset: "utf8", force: :cascade do |t|
     t.decimal "rate", precision: 16, scale: 8
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -147,7 +148,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["rate_start_id"], name: "index_duration_rates_on_rate_start_id"
   end
 
-  create_table "email_events", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "email_events", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "key", null: false
     t.datetime "last_sent_at", precision: nil, null: false
@@ -156,7 +157,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id", "key"], name: "index_email_events_on_user_id_and_key", unique: true
   end
 
-  create_table "external_service_passers", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "external_service_passers", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "external_service_id"
     t.integer "passer_id"
     t.string "passer_type"
@@ -167,7 +168,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["passer_id", "passer_type"], name: "i_external_passer_id"
   end
 
-  create_table "external_service_receivers", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "external_service_receivers", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "external_service_id"
     t.integer "receiver_id"
     t.string "receiver_type"
@@ -180,14 +181,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["receiver_id", "receiver_type"], name: "i_external_receiver_id"
   end
 
-  create_table "external_services", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "external_services", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "type"
     t.string "location"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "facilities", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "facilities", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name", limit: 200, null: false
     t.string "abbreviation", limit: 50, null: false
     t.string "url_name", limit: 50, null: false
@@ -212,13 +213,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.string "payment_url"
     t.boolean "kiosk_enabled"
     t.boolean "show_order_note", default: true, null: false
+    t.string "file_file_name"
+    t.string "file_content_type"
+    t.bigint "file_file_size"
+    t.datetime "file_updated_at", precision: nil
     t.index ["abbreviation"], name: "index_facilities_on_abbreviation", unique: true
+    t.index ["dashboard_token"], name: "index_facilities_on_dashboard_token"
     t.index ["is_active", "name"], name: "index_facilities_on_is_active_and_name"
     t.index ["name"], name: "index_facilities_on_name", unique: true
     t.index ["url_name"], name: "index_facilities_on_url_name", unique: true
   end
 
-  create_table "facility_accounts", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "facility_accounts", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.string "account_number", limit: 50, null: false
     t.boolean "is_active", null: false
@@ -228,14 +234,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["facility_id"], name: "fk_facilities"
   end
 
-  create_table "holidays", charset: "utf8mb3", force: :cascade do |t|
+  create_table "holidays", charset: "utf8", force: :cascade do |t|
     t.datetime "date", precision: nil, null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["date"], name: "index_holidays_on_date"
   end
 
-  create_table "instrument_alerts", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "instrument_alerts", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "instrument_id", null: false
     t.string "note", limit: 256, null: false
     t.datetime "created_at", precision: nil, null: false
@@ -243,14 +249,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["instrument_id"], name: "index_instrument_alerts_on_instrument_id"
   end
 
-  create_table "instrument_statuses", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "instrument_statuses", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "instrument_id", null: false
     t.boolean "is_on", null: false
     t.datetime "created_at", precision: nil, null: false
     t.index ["instrument_id", "created_at"], name: "index_instrument_statuses_on_instrument_id_and_created_at"
   end
 
-  create_table "journal_creation_reminders", charset: "utf8mb3", force: :cascade do |t|
+  create_table "journal_creation_reminders", charset: "utf8", force: :cascade do |t|
     t.datetime "starts_at", precision: nil
     t.datetime "ends_at", precision: nil
     t.text "message"
@@ -258,25 +264,39 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "journal_cutoff_dates", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "journal_cutoff_dates", id: :integer, charset: "utf8", force: :cascade do |t|
     t.datetime "cutoff_date", precision: nil
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "journal_rows", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "journal_rows", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "journal_id", null: false
     t.integer "order_detail_id"
     t.string "account"
     t.decimal "amount", precision: 9, scale: 2, null: false
     t.string "description", limit: 512
     t.integer "account_id"
+    t.string "business_unit", default: "UMAMH", null: false
+    t.string "speed_type"
+    t.string "fund"
+    t.string "dept_id"
+    t.string "program"
+    t.string "clazz"
+    t.string "project"
+    t.string "trans_ref"
+    t.string "name_reference"
+    t.datetime "trans_date", precision: nil
+    t.string "doc_ref"
+    t.string "ref_2"
+    t.string "trans_id"
+    t.string "trans_3rd_ref"
     t.index ["account_id"], name: "index_journal_rows_on_account_id"
     t.index ["journal_id"], name: "index_journal_rows_on_journal_id"
     t.index ["order_detail_id"], name: "index_journal_rows_on_order_detail_id"
   end
 
-  create_table "journals", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "journals", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id"
     t.string "reference", limit: 50
     t.string "description", limit: 200
@@ -290,10 +310,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.integer "file_file_size"
     t.datetime "file_updated_at", precision: nil
     t.datetime "journal_date", precision: nil, null: false
+    t.integer "als_number"
+    t.datetime "fiscal_year", precision: nil
+    t.index ["als_number", "fiscal_year"], name: "index_journals_on_als_number_and_fiscal_year", unique: true
     t.index ["facility_id"], name: "index_journals_on_facility_id"
   end
 
-  create_table "log_events", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "log_events", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "loggable_type"
     t.integer "loggable_id"
     t.string "event_type"
@@ -306,7 +329,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id"], name: "index_log_events_on_user_id"
   end
 
-  create_table "notifications", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "notifications", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "type", null: false
     t.integer "subject_id", null: false
     t.string "subject_type", null: false
@@ -319,7 +342,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
-  create_table "nu_product_cert_requirements", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "nu_product_cert_requirements", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "product_id"
     t.integer "nu_safety_certificate_id"
     t.datetime "deleted_at", precision: nil
@@ -330,7 +353,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "index_nu_product_cert_requirements_on_product_id"
   end
 
-  create_table "nu_safety_certificates", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "nu_safety_certificates", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "deleted_at", precision: nil
     t.integer "deleted_by_id"
@@ -340,7 +363,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["name"], name: "index_nu_safety_certificates_on_name"
   end
 
-  create_table "order_details", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "order_details", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "order_id", null: false
     t.integer "parent_order_detail_id"
     t.integer "product_id", null: false
@@ -408,7 +431,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["statement_id"], name: "index_order_details_on_statement_id"
   end
 
-  create_table "order_imports", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "order_imports", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id"
     t.integer "upload_file_id", null: false
     t.integer "error_file_id"
@@ -424,7 +447,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["upload_file_id"], name: "index_order_imports_on_upload_file_id"
   end
 
-  create_table "order_statuses", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "order_statuses", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.integer "facility_id"
     t.integer "parent_id"
@@ -434,7 +457,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["parent_id"], name: "index_order_statuses_on_parent_id"
   end
 
-  create_table "orders", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "orders", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "account_id"
     t.integer "user_id", null: false
     t.integer "created_by", null: false
@@ -454,7 +477,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
-  create_table "payments", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "payments", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "statement_id"
     t.string "source", null: false
@@ -469,7 +492,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["statement_id"], name: "index_payments_on_statement_id"
   end
 
-  create_table "price_group_discounts", charset: "utf8mb3", force: :cascade do |t|
+  create_table "price_group_discounts", charset: "utf8", force: :cascade do |t|
     t.integer "price_group_id", null: false
     t.integer "schedule_rule_id", null: false
     t.decimal "discount_percent", precision: 10, null: false
@@ -479,7 +502,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["schedule_rule_id"], name: "index_price_group_discounts_on_schedule_rule_id"
   end
 
-  create_table "price_group_members", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "price_group_members", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "type", limit: 50, null: false
     t.integer "price_group_id", null: false
     t.integer "user_id"
@@ -488,11 +511,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
     t.index ["account_id"], name: "index_price_group_members_on_account_id"
+    t.index ["deleted_at"], name: "index_price_group_members_on_deleted_at"
     t.index ["price_group_id"], name: "fk_rails_0425013e5b"
     t.index ["user_id"], name: "index_price_group_members_on_user_id"
   end
 
-  create_table "price_group_products", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "price_group_products", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "price_group_id", null: false
     t.integer "product_id", null: false
     t.integer "reservation_window"
@@ -502,7 +526,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "index_price_group_products_on_product_id"
   end
 
-  create_table "price_groups", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "price_groups", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id"
     t.string "name", limit: 50, null: false
     t.integer "display_order", null: false
@@ -514,10 +538,11 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.boolean "highlighted", default: false, null: false
     t.boolean "global", default: false, null: false
     t.boolean "is_hidden", default: false, null: false
+    t.index ["deleted_at"], name: "index_price_groups_on_deleted_at"
     t.index ["facility_id", "name"], name: "index_price_groups_on_facility_id_and_name"
   end
 
-  create_table "price_policies", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "price_policies", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "type", limit: 50, null: false
     t.integer "product_id"
     t.integer "price_group_id", null: false
@@ -542,7 +567,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "index_price_policies_on_product_id"
   end
 
-  create_table "product_access_groups", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "product_access_groups", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "product_id", null: false
     t.string "name"
     t.datetime "created_at", precision: nil, null: false
@@ -551,14 +576,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "index_product_access_groups_on_product_id"
   end
 
-  create_table "product_access_schedule_rules", id: false, charset: "utf8mb3", force: :cascade do |t|
+  create_table "product_access_schedule_rules", id: false, charset: "utf8", force: :cascade do |t|
     t.integer "product_access_group_id", null: false
     t.integer "schedule_rule_id", null: false
     t.index ["product_access_group_id"], name: "index_product_access_schedule_rules_on_product_access_group_id"
     t.index ["schedule_rule_id"], name: "index_product_access_schedule_rules_on_schedule_rule_id"
   end
 
-  create_table "product_accessories", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "product_accessories", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "product_id", null: false
     t.integer "accessory_id", null: false
     t.string "scaling_type", default: "quantity", null: false
@@ -567,7 +592,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "index_product_accessories_on_product_id"
   end
 
-  create_table "product_display_group_products", charset: "utf8mb3", force: :cascade do |t|
+  create_table "product_display_group_products", charset: "utf8", force: :cascade do |t|
     t.bigint "product_display_group_id", null: false
     t.integer "product_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -578,7 +603,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "index_product_display_group_products_on_product_id"
   end
 
-  create_table "product_display_groups", charset: "utf8mb3", force: :cascade do |t|
+  create_table "product_display_groups", charset: "utf8", force: :cascade do |t|
     t.integer "facility_id"
     t.string "name", null: false
     t.integer "position"
@@ -587,7 +612,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["facility_id"], name: "index_product_display_groups_on_facility_id"
   end
 
-  create_table "product_user_imports", charset: "utf8mb3", force: :cascade do |t|
+  create_table "product_user_imports", charset: "utf8", force: :cascade do |t|
     t.string "file_file_name"
     t.string "file_content_type"
     t.bigint "file_file_size"
@@ -600,7 +625,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "index_product_user_imports_on_product_id"
   end
 
-  create_table "product_users", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "product_users", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "product_id", null: false
     t.integer "user_id", null: false
     t.integer "approved_by", null: false
@@ -610,12 +635,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
+    t.index ["deleted_at"], name: "index_product_users_on_deleted_at"
     t.index ["product_access_group_id"], name: "index_product_users_on_product_access_group_id"
     t.index ["product_id"], name: "fk_products"
     t.index ["user_id"], name: "index_product_users_on_user_id"
   end
 
-  create_table "products", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "products", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "type", limit: 50, null: false
     t.integer "facility_id", null: false
     t.string "name", limit: 200, null: false
@@ -673,7 +699,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["url_name"], name: "index_products_on_url_name"
   end
 
-  create_table "projects", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "projects", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
     t.integer "facility_id", null: false
@@ -684,7 +710,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["facility_id"], name: "index_projects_on_facility_id"
   end
 
-  create_table "relays", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "relays", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "instrument_id"
     t.string "ip"
     t.integer "outlet"
@@ -704,7 +730,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["instrument_id"], name: "index_relays_on_instrument_id"
   end
 
-  create_table "reservations", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "reservations", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "order_detail_id"
     t.integer "product_id", null: false
     t.datetime "reserve_start_at", precision: nil, null: false
@@ -728,7 +754,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["type", "deleted_at", "product_id", "reserve_start_at", "reserve_end_at"], name: "reservations_for_timeline"
   end
 
-  create_table "sanger_seq_product_groups", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "sanger_seq_product_groups", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "product_id", null: false
     t.string "group", null: false
     t.datetime "created_at", precision: nil
@@ -736,7 +762,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "index_sanger_seq_product_groups_on_product_id", unique: true
   end
 
-  create_table "sanger_sequencing_batches", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "sanger_sequencing_batches", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "created_by_id"
     t.text "well_plates_raw"
     t.datetime "created_at", precision: nil
@@ -748,7 +774,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["group"], name: "index_sanger_sequencing_batches_on_group"
   end
 
-  create_table "sanger_sequencing_samples", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "sanger_sequencing_samples", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "submission_id", null: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
@@ -756,7 +782,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["submission_id"], name: "index_sanger_sequencing_samples_on_submission_id"
   end
 
-  create_table "sanger_sequencing_submissions", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "sanger_sequencing_submissions", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "order_detail_id"
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
@@ -765,7 +791,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["order_detail_id"], name: "index_sanger_sequencing_submissions_on_order_detail_id"
   end
 
-  create_table "schedule_rules", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "schedule_rules", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "product_id", null: false
     t.decimal "discount_percent", precision: 10, scale: 2, default: "0.0", null: false
     t.integer "start_hour", null: false
@@ -782,7 +808,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "index_schedule_rules_on_product_id"
   end
 
-  create_table "schedules", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "schedules", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "name"
     t.integer "facility_id"
     t.datetime "created_at", precision: nil, null: false
@@ -791,14 +817,14 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["facility_id"], name: "i_schedules_facility_id"
   end
 
-  create_table "scishield_trainings", charset: "utf8mb3", force: :cascade do |t|
+  create_table "scishield_trainings", charset: "utf8", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "course_name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "secure_rooms_alarm_events", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "secure_rooms_alarm_events", id: :integer, charset: "utf8", force: :cascade do |t|
     t.text "additional_data"
     t.string "class_code"
     t.string "event_code"
@@ -815,7 +841,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.datetime "updated_at", precision: nil, null: false
   end
 
-  create_table "secure_rooms_card_readers", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "secure_rooms_card_readers", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "product_id", null: false
     t.string "card_reader_number"
     t.string "control_device_number"
@@ -829,7 +855,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["tablet_token"], name: "index_secure_rooms_card_readers_on_tablet_token", unique: true
   end
 
-  create_table "secure_rooms_events", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "secure_rooms_events", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "card_reader_id", null: false
     t.integer "user_id"
     t.datetime "occurred_at", precision: nil
@@ -844,7 +870,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id"], name: "index_secure_rooms_events_on_user_id"
   end
 
-  create_table "secure_rooms_occupancies", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "secure_rooms_occupancies", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "product_id", null: false
     t.integer "user_id", null: false
     t.integer "account_id"
@@ -864,7 +890,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id"], name: "index_secure_rooms_occupancies_on_user_id"
   end
 
-  create_table "splits", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "splits", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "parent_split_account_id", null: false
     t.integer "subaccount_id", null: false
     t.decimal "percent", precision: 6, scale: 3, null: false
@@ -873,7 +899,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["subaccount_id"], name: "index_splits_on_subaccount_id"
   end
 
-  create_table "statement_rows", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "statement_rows", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "statement_id", null: false
     t.integer "order_detail_id", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -882,7 +908,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["statement_id"], name: "index_statement_rows_on_statement_id"
   end
 
-  create_table "statements", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "statements", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "created_by", null: false
     t.datetime "created_at", precision: nil, null: false
@@ -892,7 +918,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["facility_id"], name: "fk_statement_facilities"
   end
 
-  create_table "stored_files", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "stored_files", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "order_detail_id"
     t.integer "product_id"
     t.string "name", limit: 200, null: false
@@ -908,7 +934,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["product_id"], name: "fk_files_product"
   end
 
-  create_table "training_requests", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "training_requests", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "user_id"
     t.integer "product_id"
     t.datetime "created_at", precision: nil, null: false
@@ -917,7 +943,34 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id"], name: "index_training_requests_on_user_id"
   end
 
-  create_table "user_preferences", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "umass_corum_api_speed_types", id: :integer, charset: "utf8", force: :cascade do |t|
+    t.string "speed_type", null: false
+    t.boolean "active", null: false
+    t.integer "version"
+    t.string "clazz"
+    t.string "dept_desc"
+    t.string "dept_id"
+    t.string "fund_code"
+    t.string "fund_desc"
+    t.string "manager_hr_emplid"
+    t.string "program_code"
+    t.string "project_desc"
+    t.string "project_id"
+    t.datetime "date_added", precision: nil
+    t.datetime "date_removed", precision: nil
+    t.string "error_desc"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "date_added_admin_override", precision: nil
+    t.datetime "project_start_date", precision: nil
+    t.datetime "project_end_date", precision: nil
+    t.string "setid"
+    t.string "speedchart_desc"
+    t.string "hr_acct_cd"
+    t.index ["speed_type"], name: "index_umass_corum_api_speed_types_on_speed_type", unique: true
+  end
+
+  create_table "user_preferences", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "user_id"
     t.string "name", null: false
     t.string "value", null: false
@@ -926,18 +979,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["user_id", "name"], name: "index_user_preferences_on_user_id_and_name", unique: true
   end
 
-  create_table "user_roles", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "user_roles", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "facility_id"
     t.string "role", null: false
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.datetime "deleted_at", precision: nil
+    t.index ["deleted_at"], name: "index_user_roles_on_deleted_at"
     t.index ["facility_id"], name: "fk_rails_dca27403dd"
     t.index ["user_id", "facility_id", "role"], name: "index_user_roles_on_user_id_and_facility_id_and_role"
   end
 
-  create_table "users", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "users", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "username", null: false
     t.string "first_name"
     t.string "last_name"
@@ -959,10 +1013,13 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.string "card_number"
     t.datetime "expired_at", precision: nil
     t.string "expired_note"
+    t.string "umass_emplid"
+    t.string "phone_number"
     t.integer "failed_attempts", default: 0, null: false
     t.datetime "locked_at", precision: nil
     t.string "unlock_token"
     t.string "i_class_number"
+    t.boolean "subsidiary_account", default: false
     t.index ["card_number"], name: "index_users_on_card_number", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["expired_at"], name: "index_users_on_expired_at"
@@ -971,7 +1028,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  create_table "versions", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "versions", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "item_type", limit: 191, null: false
     t.integer "item_id", null: false
     t.string "event", null: false
@@ -982,7 +1039,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_22_135335) do
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
-  create_table "vestal_versions", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "vestal_versions", id: :integer, charset: "utf8", force: :cascade do |t|
     t.string "versioned_type"
     t.integer "versioned_id"
     t.string "user_type"

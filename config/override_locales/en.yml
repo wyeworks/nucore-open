@@ -1,12 +1,71 @@
 # Put any locale overrides specific to your fork in this file
 en:
-  # app_name: NUcore
-  # institution_name: Northwestern
+  app_name: CORUM
+  institution_name: University of Massachusetts
 
-  # shared:
-  #   footer:
-  #     copyright_html: "&copy; Copyright 2011%{to_date} Northwestern University"
-  #     logo_alt: "Northwestern University Logo"
+  views:
+    facilities:
+      index:
+        welcome: |
+          Welcome to !app_name!, the centralized ordering system for shared !facilities_downcase!.
+          Please select the shared !facility_downcase! below to view and purchase services
+          and products offered by the !facility_downcase!.
+          <br/>
+          For help using this system, please refer to the CORUM user guides at <https://www.umass.edu/ials/corum>.
+    saml_authentication:
+      sessions:
+        new:
+          sso_button: Sign in with NetID
+          subheading: UMass Single Sign-On (SSO)
+          note: |
+            For CORUM users with a UMass NetID or NENS account:
+    notifier:
+      new_user:
+        intro: |
+          Hello %{first_name},
+        only_username: |
+          A CORUM login account has been created for you. You may log in at <https://corum.umass.edu/>. Please be sure to click the
+          "Sign in with NetID" button and use your NetID and password. To make reservations,
+          you must have a SpeedType associated with your account. If you need to add a SpeedType
+          please [fill out this form](https://www.umass.edu/ials/core-facility-user-authorization-form).
+        username_and_password: |
+          A CORUM login account has been created for you. You may log in at <https://corum.umass.edu/> using your username and password.
+
+          Username: %{username}<br/>
+          Password: %{password}
+        outro: |
+          If you have questions, please feel free to contact your core facility manager or email <it@umass.edu> with "CORUM" as
+          part of the subject line. Informational resources are available [here](https://www.umass.edu/ials/corum).
+
+          Thank you
+
+          [UMass Core Facilities](http://www.umass.edu/ials/core-facilities) Team
+      review_orders:
+        outro: |
+          Please log in to [!app_name!](%{login_url}) and review these charges.
+
+          Please take a moment to provide feedback on your experience with UMass Core Facilities: [UMass Core Facilities Customer Satisfaction Survey](https://umassamherst.co1.qualtrics.com/jfe/form/SV_24XapZ4ZXZSfeER)
+    facility_accounts:
+      account_fields:
+        purchase_order_account:
+          outside_contact_hint: "Contact information (phone number, email, fax, etc.)<br/>Note: This information is NOT used by !app_name! for any automated communication."
+    users:
+      edit:
+        subhead: "Note: For external users without a NetID username, the email address and username must match."
+        
+    devise:
+      sessions:
+        new:
+          title: CORUM Login
+  shared:
+    footer:
+      copyright_html: "&copy; Copyright 2011&ndash;%{to_date} University of Massachusetts"
+      logo_alt: "UMass Amherst Logo"
+      logo_file: "logo-horizontal.svg"
+
+  reservations:
+    account_field:
+      note_hint: Visible to facility staff and on statement PDFs
 
   # The sections below are provided as a starting point for customizing
   # the preferred term for "statment" and "Chart String" in places where
@@ -47,11 +106,26 @@ en:
   #     actions:
   #       reassign_chart_strings: "Reassign Chart Strings"
   #
-  # order_row_importer:
-  #   headers:
+  #  order_row_importer:
+  #    headers:
   #      user: Netid / Email
   #      chart_string: Chart String
 
+  order_row_importer:
+    headers:
+      chart_string: Account Number
+
+  admin:
+    transaction_search:
+      actions:
+        reassign_chart_strings: "Reassign Account Numbers"
   testing: # DO NOT DELETE: these are used to verify proper file loading in the specs
     locale_loading: This is here to verify the file is loaded in the specs
     overriding: This overrides the version in en.yml
+
+  devise:
+    failure:
+      saml_update_failed: |
+        There was a problem logging in with your CORUM user account.  Please contact <a href="mailto:corum@umass.edu">corum@umass.edu</a> to confirm your account details.
+      saml_invalid: |
+        You have not yet signed up with CORUM (%{username}/%{email}). Please contact <a href="mailto:corum@umass.edu">corum@umass.edu to confirm your account.</a>

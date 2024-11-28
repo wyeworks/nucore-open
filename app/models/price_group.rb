@@ -29,11 +29,11 @@ class PriceGroup < ApplicationRecord
   scope :visible, -> { where(is_hidden: false) }
 
   def self.base
-    globals.find_by(name: Settings.price_group.name.base)
+    @base ||= globals.find_by(name: Settings.price_group.name.base)
   end
 
   def self.external
-    globals.find_by(name: Settings.price_group.name.external)
+    @external ||= globals.find_by(name: Settings.price_group.name.external)
   end
 
   def self.nonbillable

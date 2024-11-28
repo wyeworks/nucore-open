@@ -9,6 +9,7 @@ $headerBackgroundColorHighLight: darken($headerBackgroundColor, 5%);
 /* Quick reservation colors */
 $reservationLabelColor: $secondaryColor;
 $reservationLinkColor: $secondaryColor;
+$reservationGray: $grayDark;
 
 /* Login, Cart, etc Links */
 $usernavColor: darken($navbarLinkColor, 3%);

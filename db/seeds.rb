@@ -34,3 +34,5 @@ PriceGroup.reset_column_information
     admin_editable: pg_data[:admin_editable]
   )
 end
+
+UmassCorum::Engine.load_seed

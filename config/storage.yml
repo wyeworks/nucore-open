@@ -6,13 +6,20 @@ local:
   service: Disk
   root: <%= Rails.root.join("storage") %>
 
+# In production, shared/uploads is mapped to an NFS mount
+# We have 2 prod servers and active storage files need to be
+# stored in a drive accessible by both of them
+production:
+  service: Disk
+  root: <%= Rails.root.join("../../shared/uploads/storage") %>
+
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
-amazon:
-  service: S3
-  access_key_id: <%= Rails.application.secrets.dig(:active_storage, :s3, :access_key_id) %>
-  secret_access_key: <%= Rails.application.secrets.dig(:active_storage, :s3, :secret_access_key) %>
-  region: us-east-1
-  bucket: <%= Rails.application.secrets.dig(:active_storage, :s3, :bucket) %>
+# amazon:
+#   service: S3
+#   access_key_id: <%= Rails.application.secrets.dig(:active_storage, :s3, :access_key_id) %>
+#   secret_access_key: <%= Rails.application.secrets.dig(:active_storage, :s3, :secret_access_key) %>
+#   region: us-east-1
+#   bucket: <%= Rails.application.secrets.dig(:active_storage, :s3, :bucket) %>
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:

@@ -1,3 +1,6 @@
+saml:
+  certificate_file: config/saml-certificate.p12
+  
 # paperclip:
 #   storage: s3
 #   s3_credentials:

@@ -1,0 +1,4 @@
+# Used by ftp-send.sh
+cd incoming
+put A100.UMGL7056.IAL.INPUT
+bye

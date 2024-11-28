@@ -1,0 +1,17 @@
+= simple_form_for resource, as: resource_name, url: session_path(resource_name) do |f|
+  %h2= text("subheading")
+  %p= text("note")
+  %fieldset.collapsable.collapsed
+    %label.legend= text("username_signin")
+    .alert.alert-danger= text("username_warning")
+    .form-inputs
+      = f.input :username, required: false, autofocus: true
+      = f.input :password, required: false
+      = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
+
+      = f.button :submit, text("submit"), class: ["btn", "btn-primary"]
+
+      - if SettingsHelper.feature_on? :password_update
+        %br
+        %br
+        %p= link_to text("views.devise.sessions.new.forgot_password"), :reset_password

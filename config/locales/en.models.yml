@@ -416,7 +416,6 @@ en:
         created_by: Sent By
         created_at: Created At
         invoice_number: "Invoice #"
-        reconcile_note: Reconcile Note
         account_admins: Account Admins
         total_cost: Total
       account:
