@@ -343,6 +343,10 @@ class Product < ApplicationRecord
     false
   end
 
+  def can_apply_discounts?
+    true
+  end
+
   protected
 
   def translation_scope

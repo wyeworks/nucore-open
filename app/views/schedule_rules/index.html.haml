@@ -27,7 +27,7 @@
         %th Days of Week
         %th Start Time
         %th End Time
-        - unless @product.duration_pricing_mode?
+        - if @product.can_apply_discounts?
           - PriceGroup.globals.each do |price_group|
             %th.currency= "#{price_group.name} Discount (%)"
           - if @product.product_access_groups.to_a.any?
@@ -47,7 +47,7 @@
           %td= schedule_rule.days_string
           %td= human_time(Time.zone.parse(schedule_rule.start_time))
           %td= human_time(Time.zone.parse(schedule_rule.end_time))
-          - unless @product.duration_pricing_mode?
+          - if @product.can_apply_discounts?
             - PriceGroup.globals.each do |price_group|
               - discount = schedule_rule.discount_for_price_group(price_group)
               %td.currency= number_to_percentage(discount, strip_insignificant_zeros: true)

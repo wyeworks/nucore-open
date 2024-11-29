@@ -13,7 +13,7 @@ RSpec.describe "Instrument Scheduling Tab" do
 
   context "when the instrument has duration pricing mode" do
     let!(:instrument) do
-      FactoryBot.create(:setup_instrument, pricing_mode: "Duration", facility: facility)
+      FactoryBot.create(:setup_instrument, pricing_mode: "Duration", facility:)
     end
 
     context "new schedule rule" do
@@ -65,7 +65,7 @@ RSpec.describe "Instrument Scheduling Tab" do
 
   context "when the instrument has schedule pricing mode" do
     let!(:instrument) do
-      FactoryBot.create(:setup_instrument, pricing_mode: "Schedule Rule", facility: facility)
+      FactoryBot.create(:setup_instrument, pricing_mode: "Schedule Rule", facility:)
     end
 
     context "new schedule rule" do
@@ -109,4 +109,55 @@ RSpec.describe "Instrument Scheduling Tab" do
     end
   end
 
+  describe "daily booking instrument" do
+    let(:instrument) { create :setup_instrument, :daily_booking }
+    let(:facility) { instrument.facility }
+
+    before do
+      login_as user
+    end
+
+    it "does not show discounts in index table" do
+      expect(instrument.schedule_rules).to_not be_empty
+
+      visit facility_instrument_schedule_rules_path(facility, instrument)
+
+      expect(page).to_not have_content("Discount")
+      within("table") do
+        expect(page).to have_content("Days of Week")
+      end
+    end
+
+    it "works as expected on create" do
+      # Destroy other rules so we don't deal with conflicts
+      instrument.schedule_rules.destroy_all
+
+      visit new_facility_instrument_schedule_rule_path(facility, instrument)
+
+      expect(page).to_not have_content("Discount")
+
+      check("Tue")
+      click_button("Create")
+
+      expect(page).to have_content(I18n.t("controllers.schedule_rules.create"))
+    end
+
+    it "works as expected on edit" do
+      schedule_rule = instrument.schedule_rules.last
+      # Destroy other rules so we don't deal with conflicts
+      instrument.schedule_rules.where.not(id: schedule_rule.id).destroy_all
+
+      visit edit_facility_instrument_schedule_rule_path(facility, instrument, schedule_rule)
+
+      expect(page).to_not have_content("Discount")
+
+      check("Mon")
+      check("Tue")
+      check("Wed")
+
+      click_button("Update")
+
+      expect(page).to have_content(I18n.t("controllers.schedule_rules.update"))
+    end
+  end
 end

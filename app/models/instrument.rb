@@ -123,6 +123,10 @@ class Instrument < Product
     pricing_mode == Pricing::SCHEDULE_DAILY
   end
 
+  def can_apply_discounts?
+    !(duration_pricing_mode? || daily_booking?)
+  end
+
   private
 
   def minimum_reservation_is_multiple_of_interval
