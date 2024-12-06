@@ -99,7 +99,7 @@ if ENV["PUMA_ACME"] == "enable"
   # acme_cache Rails.cache
 
   # Path to the cache directory for the default cache, defaults to 'tmp/acme'.
-  acme_cache_dir "tmp/acme"
+  acme_cache_dir "../shared/acme"
 
   # Time to wait in seconds before rechecking order status, defaults to 1 second.
   acme_poll_interval 1
