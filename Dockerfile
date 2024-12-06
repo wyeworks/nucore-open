@@ -35,9 +35,6 @@ RUN bundle install
 # Copy application code base into image
 COPY . /app
 
-RUN cp config/database.yml.mysql.template config/database.yml && \
-  cp config/secrets.yml.template config/secrets.yml
-
 EXPOSE 3000
 CMD ["bundle", "exec", "puma", "-p", "3000"]
 
