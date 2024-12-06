@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ErrorsController < ApplicationController
+  skip_authorization_check
+  skip_before_action :authenticate_user!
 
   def not_found
     respond_to do |format|

@@ -118,23 +118,6 @@ class ApplicationController < ActionController::Base
     acting_user.object_id != session_user.object_id
   end
 
-  # Global exception handlers
-  rescue_from NUCore::PermissionDenied, CanCan::AccessDenied, with: :render_403
-  def render_403(_exception)
-    # if current_user is nil, the user should be redirected to login
-    if current_user
-      render "/403", status: 403, layout: "application", formats: formats_with_html_fallback
-    else
-      store_location_for(:user, request.fullpath)
-      redirect_to new_user_session_path
-    end
-  end
-
-  rescue_from NUCore::NotPermittedWhileActingAs, with: :render_acting_error
-  def render_acting_error
-    render "/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
-  end
-
   def after_sign_out_path_for(_)
     if current_facility.present?
       facility_path(current_facility)
