@@ -151,6 +151,14 @@ class ApplicationController < ActionController::Base
     @current_ability ||= Ability.new(current_user, ability_resource, self)
   end
 
+  rescue_from CanCan::AccessDenied do |exception|
+    if current_user.nil?
+      redirect_to new_user_session_path, alert: "You need to log in to access this page."
+    else
+      render "errors/forbidden", status: :forbidden
+    end
+  end
+
   private
 
   #
