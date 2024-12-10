@@ -118,12 +118,12 @@ RSpec.describe BulkEmail::BulkEmailController do
 
       context "as an unprivileged user" do
         let(:user) { FactoryBot.create(:user) }
-        it { is_expected.to render_template("403") }
+        it { is_expected.to render_template("errors/forbidden") }
       end
 
       context "when logged in as facility staff" do
         let(:user) { FactoryBot.create(:user, :staff, facility: facility) }
-        it { is_expected.to render_template("403") }
+        it { is_expected.to render_template("errors/forbidden") }
       end
 
       context "when logged in as senior facility staff" do
@@ -136,7 +136,7 @@ RSpec.describe BulkEmail::BulkEmailController do
 
         context "in a cross-facility context" do
           let(:facility) { Facility.cross_facility }
-          it { is_expected.to render_template("403") }
+          it { is_expected.to render_template("errors/forbidden") }
         end
       end
 

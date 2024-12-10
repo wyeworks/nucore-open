@@ -118,6 +118,48 @@ class ApplicationController < ActionController::Base
     acting_user.object_id != session_user.object_id
   end
 
+  # Global exception handlers
+  rescue_from ActiveRecord::RecordNotFound do |exception|
+    Rails.logger.debug("#{exception.message}: #{exception.backtrace.join("\n")}") unless Rails.env.production?
+    render_404(exception)
+  end
+
+  rescue_from ActionController::RoutingError do |exception|
+    Rails.logger.debug("#{exception.message}: #{exception.backtrace.join("\n")}") unless Rails.env.production?
+    render_404(exception)
+  end
+
+  def render_404(_exception)
+    # Add html fallback in case the 404 is a PDF or XML so the view can be found
+    render "errors/not_found", status: 404, layout: "application", formats: formats_with_html_fallback
+  end
+
+  rescue_from NUCore::PermissionDenied, CanCan::AccessDenied, with: :render_403
+  def render_403(_exception)
+    # if current_user is nil, the user should be redirected to login
+    if current_user
+      render "errors/forbidden", status: 403, layout: "application", formats: formats_with_html_fallback
+    else
+      store_location_for(:user, request.fullpath)
+      redirect_to new_user_session_path
+    end
+  end
+
+  rescue_from NUCore::NotPermittedWhileActingAs, with: :render_acting_error
+  def render_acting_error
+    render "error/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
+  end
+
+  rescue_from NUCore::PermissionDenied, CanCan::AccessDenied, with: :render_403
+  def render_403(_exception)
+    if current_user
+      render "errors/forbidden", status: 403, layout: "application", formats: formats_with_html_fallback
+    else
+      store_location_for(:user, request.fullpath)
+      redirect_to new_user_session_path
+    end
+  end
+
   def after_sign_out_path_for(_)
     if current_facility.present?
       facility_path(current_facility)
@@ -149,14 +191,6 @@ class ApplicationController < ActionController::Base
 
   def current_ability
     @current_ability ||= Ability.new(current_user, ability_resource, self)
-  end
-
-  rescue_from CanCan::AccessDenied do |exception|
-    if current_user.nil?
-      redirect_to new_user_session_path, alert: "You need to log in to access this page."
-    else
-      render "errors/forbidden", status: :forbidden
-    end
   end
 
   private
