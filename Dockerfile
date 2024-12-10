@@ -36,7 +36,7 @@ RUN bundle install
 COPY . /app
 
 EXPOSE 3000
-CMD ["bundle", "exec", "puma", "-p", "3000"]
+CMD ["bundle", "exec", "puma"]
 
 FROM base as develop
 
