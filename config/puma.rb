@@ -63,7 +63,7 @@ if ENV["PUMA_ACME"] == "enable"
   acme_contact "mailto:itis-monitor@gmail.com"
 
   # Specify server names (SAN extension).
-  acme_server_names "corum-dev.it.umass.edu", "www.corum-dev.it.umass.edu"
+  acme_server_names ENV.fetch("ACME_SERVER_NAMES", "example.com,www.example.com").split(",").to_a
 
   # Enable automatic renewal based on an amount of time or fraction of life
   # remaining. For an amount of time, use Integer seconds, for example the value
@@ -73,7 +73,7 @@ if ENV["PUMA_ACME"] == "enable"
   acme_renew_at 0.75
 
   # URL of ACME server's directory URL, defaults to LetsEncrypt.
-  acme_directory "https://acme.enterprise.sectigo.com"
+  acme_directory ENV.fetch("ACME_DIRECTORY_URL", "acme://0.0.0.0:443")
 
   # Accept the Terms of Service (TOS) of an ACME server with the server's
   # directory URL as a string or true to accept any server's TOS.
