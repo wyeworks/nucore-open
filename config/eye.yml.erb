@@ -1,0 +1,87 @@
+<% app_root = File.expand_path("..", __dir__) %>
+<% rails_env = ENV["RAILS_ENV"] %>
+---
+name: CORUM (<%= rails_env %>)
+
+config:
+  logger: <%= app_root %>/log/eye.log
+
+application:
+  working_dir: <%= app_root %>
+  stop_on_delete: true
+
+triggers:
+  - name: flapping
+    config:
+      times: 5
+      within: 5 minutes
+
+notifications:
+  - name: crash
+    type: mail
+    level: error
+    contact: nucore@tablexi.opsgenie.net
+    config:
+      from_mail: it-corum-dev@umass.edu
+      host: mailhub.oit.umass.edu
+      port: 25
+      domain: umass.edu
+
+processes:
+  - name: unicorn
+    config:
+      pid_file: tmp/pids/unicorn.pid
+      start_command: unicorn -E deployment -Dc config/unicorn/<%= rails_env %>.rb
+      restart_command: "kill -USR2 {PID}"
+      start_timeout: 15 seconds
+      restart_timeout: 15 seconds
+      restart_grace: 5 seconds
+      stdout: log/unicorn.stdout.log
+      stderr: log/unicorn.stderr.log
+      monitor_children:
+        stop_command: "kill -QUIT {PID}"
+        checks:
+          - name: memory
+            config:
+              times: 3
+              every: 20 seconds
+              below: 512 megabytes
+      user_commands:
+        rotate: "kill -USR1 {PID}"
+
+  # This should only run on 1 instance.
+  <% if ENV["RECURRING"] == "true" %>
+  - name: recurring_tasks
+    config:
+      start_command: ruby lib/daemons/recurring_tasks.rb start -- --no-monitor
+      stop_command: ruby lib/daemons/recurring_tasks.rb stop
+      stdall: log/recurring_tasks.log
+      pid_file: tmp/pids/recurring_tasks.pid
+      daemon: true
+      smart_pid: true
+      notify:
+        crash: error
+    checks:
+      - name: memory
+        config:
+          times: 3
+          every: 20 seconds
+          below: 256 megabytes
+  <% end %>
+
+  - name: delayed_job
+    config:
+      start_command: ./script/delayed_job start
+      stop_command: ./script/delayed_job stop
+      stdall: log/delayed_job.log
+      pid_file: tmp/pids/delayed_job.pid
+      start_timeout: 60 seconds
+      stop_timeout: 40 seconds
+      notify:
+        crash: error
+    checks:
+      - name: memory
+        config:
+          times: 3
+          every: 20 seconds
+          below: 1 gigabyte

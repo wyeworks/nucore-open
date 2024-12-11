@@ -1,0 +1,11 @@
+= content_for :h1 do
+  = text("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "admin_reports"
+
+%h2= text("views.umass_corum.admin_reports.index.title")
+
+%p= link_to text("views.umass_corum.admin_reports.relays.title"), relay_data_admin_reports_path, method: :post
+%p= link_to text("views.umass_corum.admin_reports.users.title"), user_data_admin_reports_path, method: :post
+%p= link_to text("views.umass_corum.admin_reports.account_users.title"), account_user_data_admin_reports_path, method: :post

@@ -26,13 +26,6 @@ PATH
       momentjs-rails
 
 PATH
-  remote: vendor/engines/ldap_authentication
-  specs:
-    ldap_authentication (0.0.1)
-      devise_ldap_authenticatable (>= 0.8.6)
-      rails (>= 4.2)
-
-PATH
   remote: vendor/engines/saml_authentication
   specs:
     saml_authentication (0.0.1)
@@ -54,6 +47,11 @@ PATH
   remote: vendor/engines/split_accounts
   specs:
     split_accounts (0.0.1)
+
+PATH
+  remote: vendor/engines/umass_corum
+  specs:
+    umass_corum (0.1.0)
 
 GEM
   remote: https://rubygems.org/
@@ -136,22 +134,6 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     amazing_print (1.6.0)
     ast (2.4.2)
-    aws-eventstream (1.3.0)
-    aws-partitions (1.1019.0)
-    aws-sdk-core (3.214.0)
-      aws-eventstream (~> 1, >= 1.3.0)
-      aws-partitions (~> 1, >= 1.992.0)
-      aws-sigv4 (~> 1.9)
-      jmespath (~> 1, >= 1.6.1)
-    aws-sdk-kms (1.96.0)
-      aws-sdk-core (~> 3, >= 3.210.0)
-      aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.176.0)
-      aws-sdk-core (~> 3, >= 3.210.0)
-      aws-sdk-kms (~> 1)
-      aws-sigv4 (~> 1.5)
-    aws-sigv4 (1.10.1)
-      aws-eventstream (~> 1, >= 1.0.2)
     axe-core-api (4.10.2)
       dumb_delegator
       ostruct
@@ -168,6 +150,8 @@ GEM
     base64 (0.2.0)
     bcrypt (3.1.20)
     bcrypt_pbkdf (1.1.1)
+    bcrypt_pbkdf (1.1.1-arm64-darwin)
+    bcrypt_pbkdf (1.1.1-x86_64-darwin)
     bigdecimal (3.1.8)
     bindex (0.8.1)
     bootsnap (1.18.4)
@@ -287,23 +271,16 @@ GEM
       devise (>= 2.1.0)
     devise-security (0.18.0)
       devise (>= 4.3.0)
-    devise_ldap_authenticatable (0.8.7)
-      devise (>= 3.4.1)
-      net-ldap (>= 0.16.0)
     devise_saml_authenticatable (1.9.1)
       devise (> 2.0.0)
       ruby-saml (~> 1.7)
     diff-lcs (1.5.1)
-    domain_name (0.6.20240107)
     dumb_delegator (1.0.0)
     dynamic_form (1.3.1)
       actionview (> 5.2.0)
       activemodel (> 5.2.0)
     ed25519 (1.3.0)
     erubi (1.13.0)
-    exception_notification (4.5.0)
-      actionmailer (>= 5.2, < 8)
-      activesupport (>= 5.2, < 8)
     execjs (2.10.0)
     eye (0.10.0)
       celluloid (~> 0.17.3)
@@ -319,8 +296,9 @@ GEM
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
-    ffi (1.17.0)
     ffi (1.17.0-aarch64-linux-gnu)
+    ffi (1.17.0-arm64-darwin)
+    ffi (1.17.0-x86_64-darwin)
     ffi (1.17.0-x86_64-linux-gnu)
     font-awesome-rails (4.7.0.9)
       railties (>= 3.2, < 9.0)
@@ -339,9 +317,6 @@ GEM
     hashdiff (1.1.2)
     health_check (3.1.0)
       railties (>= 5.0)
-    http-accept (1.7.0)
-    http-cookie (1.0.8)
-      domain_name (~> 0.5)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
     icalendar (2.10.3)
@@ -352,7 +327,6 @@ GEM
     image_processing (1.13.0)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
-    jmespath (1.6.2)
     jquery-rails (4.6.0)
       rails-dom-testing (>= 1, < 3)
       railties (>= 4.2.0)
@@ -385,8 +359,6 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mailgun-ruby (1.2.16)
-      rest-client (>= 2.0.2)
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.1.0)
@@ -409,7 +381,6 @@ GEM
     net-imap (0.5.1)
       date
       net-protocol
-    net-ldap (0.19.0)
     net-pop (0.1.2)
       net-protocol
     net-protocol (0.2.2)
@@ -421,14 +392,9 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     net-ssh (7.3.0)
-    netrc (0.11.0)
     nio4r (2.7.4)
     nokogiri (1.17.0)
       mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
-    nokogiri (1.17.0-aarch64-linux)
-      racc (~> 1.4)
-    nokogiri (1.17.0-x86_64-linux)
       racc (~> 1.4)
     numerizer (0.1.1)
     oj (3.16.7)
@@ -523,11 +489,6 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rest-client (2.1.0)
-      http-accept (>= 1.7.0, < 2.0)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 4.0)
-      netrc (~> 0.8)
     rexml (3.3.9)
     rollbar (3.6.0)
     rspec-activejob (0.6.1)
@@ -694,14 +655,14 @@ GEM
 
 PLATFORMS
   aarch64-linux
-  ruby
+  arm64-darwin-23
+  x86_64-darwin-23
   x86_64-linux
 
 DEPENDENCIES
   aasm
   active_storage_validations
   amazing_print
-  aws-sdk-s3
   axe-core-rspec
   bcrypt_pbkdf (>= 1.0, < 2.0)
   bootsnap
@@ -731,7 +692,6 @@ DEPENDENCIES
   devise-security
   dynamic_form
   ed25519 (>= 1.2, < 2.0)
-  exception_notification
   eye-patch
   factory_bot_rails
   fine_uploader!
@@ -747,9 +707,7 @@ DEPENDENCIES
   jquery-ui-rails (~> 6.0)
   jwt
   kt-paperclip
-  ldap_authentication!
   letter_opener
-  mailgun-ruby (~> 1.2.16)
   matrix
   mysql2
   nested_form_fields
@@ -797,6 +755,7 @@ DEPENDENCIES
   text_helpers
   tzinfo-data
   uglifier (= 4.1.18)
+  umass_corum!
   unicorn
   vuejs-rails (~> 1.0.26)
   web-console

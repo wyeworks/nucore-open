@@ -43,7 +43,7 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for NGINX
 
   # Store uploaded files on the local file system (see config/storage.yml for options)
-  config.active_storage.service = :amazon
+  config.active_storage.service = :production
 
   # Mount Action Cable outside main process or domain
   # config.action_cable.mount_path = nil
@@ -68,23 +68,17 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "nucore_#{Rails.env}"
   config.action_mailer.perform_caching = false
 
-
-  config.bucketeer_aws_access_key_id = ENV["BUCKETEER_AWS_ACCESS_KEY_ID"]
-  config.bucketeer_aws_secret_access_key = ENV["BUCKETEER_AWS_SECRET_ACCESS_KEY"]
-  config.bucketeer_aws_region = ENV["BUCKETEER_AWS_REGION"]
-  config.aws_bucket_name = ENV["BUCKETEER_BUCKET_NAME"]
-
-
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.delivery_method       = :smtp
   Rails.application.routes.default_url_options =
-    config.action_mailer.default_url_options   = { host: "nucore.example.com", protocol: "https" }
+    config.action_mailer.default_url_options   = { host: ENV.fetch("RAILS_HOST"), protocol: "https" }
+
   config.action_mailer.smtp_settings = {
-    address: "mail.example.com",
+    address: "mailhub.oit.umass.edu",
     port: 25,
-    domain: "example.com",
+    domain: "umass.edu",
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
@@ -115,13 +109,6 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-
-  config.middleware.use ExceptionNotification::Rack,
-                        ignore_exceptions: ["ActionController::UnknownHttpMethod", "ActionController::UnknownFormat"] + ExceptionNotifier.ignored_exceptions,
-                        email: {
-                          sender_address: Settings.email.exceptions.sender,
-                          exception_recipients: Settings.email.exceptions.recipients,
-                        }
 
   # Inserts middleware to perform automatic connection switching.
   # The `database_selector` hash is used to pass options to the DatabaseSelector

@@ -47,7 +47,7 @@ RSpec.describe ResearchSafetyAdapters::ScishieldTrainingSynchronizer do
 
       it "adds courses to database" do
         expect(ScishieldTraining.count).to eq 0
-        synchronizer.synchronize 
+        synchronizer.synchronize
         expect(ScishieldTraining.count).to eq 3
         expect(ScishieldTraining.all.map(&:course_name)).to contain_exactly(*course_names)
       end

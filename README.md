@@ -1,6 +1,30 @@
-# NUcore Open
+# Corum (NUcore - UMass)
 
-Open source version of Northwestern University Core Facility Management Software
+University of Massachusetts Amherst fork of NUCore Core Facility Management Software.
+
+Forked from https://github.com/tablexi/nucore-open
+
+[UMass Specific Integrations](vendor/engines/umass_corum/README.md)
+
+## UMass Environments
+
+| Domain               | Server                             | Deployment             | RAILS_ENV  |
+| -------------------- | ---------------------------------- | -----------------------| ---------- |
+| corum.umass.edu      | ials-core-web-prod-01.it.umass.edu | cap production deploy  | production |
+| corum.umass.edu      | ials-core-web-prod-02.it.umass.edu | cap production deploy  | production |
+| corum-test.umass.edu | ials-core-web-test-01.it.umass.edu | cap staging deploy     | staging    |
+| corum-dev.umass.edu  | ials-core-web-dev-01.it.umass.edu  | cap development deploy | staging    |
+
+Notes:
+* _You must be on the UMass VPN in order to access the Dev and Test sites, as well as to SSH to any of the servers_
+* _UMass requested a "development" environment, which we will be treating as a staging
+environment, but will likely have more experimental data._
+* _They called what we would call staging "test"_
+* We're using "staging" as the `RAILS_ENV` to avoid confusion with Rails's environments
+
+See [`ansible`](ansible/README.md) for our configuration-as-code for the servers.
+
+[Additional information on UMass specific features](vendor/engines/umass_corum/README.md)
 
 ## NUCore Open Environment
 
@@ -69,13 +93,13 @@ It makes a few assumptions:
 1. Download the project code from Github
 
     ```
-    git clone git@github.com:tablexi/nucore-open.git nucore
+    git clone git@github.com:tablexi/nucore-umass.git nucore-umass
     ```
 
 2. Install dependencies
 
     ```
-    cd nucore
+    cd nucore-umass
     bundle install
     ```
 

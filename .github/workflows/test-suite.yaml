@@ -11,19 +11,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     services:
-      mysql:
-        image: mysql:8.0.28
+      mariadb:
+        image: mariadb:10.2.11
         ports:
           - 3306
         env:
-          MYSQL_ROOT_PASSWORD: 'root'
-          MYSQL_ROOT_HOST: "%"
+          MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
       image: wyeworkshub/ruby-node-chrome-pack:3.3.0
     env:
       RAILS_ENV: test
-      MYSQL_HOST: mysql
+      MYSQL_HOST: mariadb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     steps:
@@ -42,6 +41,7 @@ jobs:
             vendor/engines/saml_authentication/spec/**/*_spec.rb
             vendor/engines/sanger_sequencing/spec/**/*_spec.rb
             vendor/engines/split_accounts/spec/**/*_spec.rb
+            vendor/engines/umass_corum/spec/**/*_spec.rb
 
       - run: bundle exec rspec ${{ steps.glob.outputs.paths }}
 
@@ -49,19 +49,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     services:
-      mysql:
-        image: mysql:8.0.28
+      mariadb:
+        image: mariadb:10.2.11
         ports:
           - 3306
         env:
-          MYSQL_ROOT_PASSWORD: 'root'
-          MYSQL_ROOT_HOST: "%"
+          MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
       image: wyeworkshub/ruby-node-chrome-pack:3.3.0
     env:
       RAILS_ENV: test
-      MYSQL_HOST: mysql
+      MYSQL_HOST: mariadb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       PARALLEL_TEST_PROCESSORS: 4
@@ -78,13 +77,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 60
     services:
-      mysql:
-        image: mysql:8.0.28
+      mariadb:
+        image: mariadb:10.2.11
         ports:
           - 3306
         env:
-          MYSQL_ROOT_PASSWORD: 'root'
-          MYSQL_ROOT_HOST: "%"
+          MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
       selenium:
         image: selenium/standalone-chrome:latest
@@ -96,7 +94,7 @@ jobs:
     env:
       TEASPOON_RAILS_ENV: test
       RAILS_ENV: test
-      MYSQL_HOST: mysql
+      MYSQL_HOST: mariadb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       SELENIUM_HOST: selenium

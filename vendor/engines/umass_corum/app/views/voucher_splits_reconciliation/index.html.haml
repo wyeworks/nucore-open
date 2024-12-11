@@ -1,0 +1,25 @@
+= javascript_include_tag "transaction_history"
+= javascript_include_tag "bulk_note"
+
+= content_for :h1 do
+  = current_facility
+
+= content_for :sidebar do
+  = render :partial => "admin/shared/sidenav_billing", locals: { sidenav_tab: "umass_corum_voucher_splits" }
+
+%h2= t(".head", model: account_class.model_name.human(count: 2))
+
+= render "shared/transactions/search"
+
+- if @unreconciled_details.present?
+  = form_tag(update_umass_corum_voucher_splits_facility_accounts_path, method: :post) do
+    = render("confirmation_span") if @unreconciled_details.total_entries > 150
+
+    - show_reconciliation_deposit_number = SettingsHelper.feature_on?(:show_reconciliation_deposit_number)
+    = render "facility_accounts_reconciliation/action_row", date: true, unreconciled_order_details: @unreconciled_details, show_reconciliation_deposit_number: show_reconciliation_deposit_number
+    = render "voucher_splits_reconciliation/table", order_details: @unreconciled_details, next_order_status: "reconciled"
+    = render "facility_accounts_reconciliation/action_row", show_reconciliation_deposit_number: show_reconciliation_deposit_number
+
+  %p= will_paginate(@unreconciled_details)
+- else
+  %p.notice= t(".none")

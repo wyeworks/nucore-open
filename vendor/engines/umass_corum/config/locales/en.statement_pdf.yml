@@ -1,0 +1,42 @@
+en:
+  umass_corum:
+    statement_pdf:
+      cross_core_message: "Items on this !statement_downcase! may have been placed on your behalf by another !facility_downcase!."
+      invoice_header: External Invoice
+      header_address: |
+        UMass Amherst - %{facility}
+        %{address}
+      date_header: Date
+      bill_to_header: Bill To
+      remit_box: |
+        Please make checks payable to
+
+        The University of Massachusetts Amherst
+        %{address}
+      po_number_header: "PO #"
+      cc_description_header: "Credit Card Description"
+      terms_header: Terms
+      terms_text: Payments due net 30
+      order_detail_headers:
+        quantity: Quantity
+        date: Fulfilled date
+        order_number: Order Number
+        description: Description
+        unit_of_measure: U/M
+        rate: Rate
+        amount: Amount
+      pay_by_card: |
+        You can pay by credit card:
+        <%{url}>
+      survey_link: |
+        Please take a moment to [provide feedback](https://www.umass.edu/ials/core-facilities/feedback) on your experience with UMass Core Facilities:
+        <https://www.umass.edu/ials/core-facilities/feedback>
+      acutal_total: "Total: %{total}"
+      mivp_total: "%{percent} MIVP Voucher: -%{total}"
+      total_due: "Total Due: %{total}"
+      footer_headers:
+        phone: "Phone #"
+        fax: "Fax #"
+        email: Email
+        website: Website
+      contact_url: <https://www.umass.edu/ials/core-facilities>

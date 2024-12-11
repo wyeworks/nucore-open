@@ -7,6 +7,11 @@ updates:
     time: "23:00"
     timezone: America/Chicago
   open-pull-requests-limit: 99
+  ignore:
+    # All nucore-umass dependencies updates are handled
+    # in nucore-open. Whenever this changes we should
+    # allow only a specifc subset gem to be updated here.
+    - dependency-name: '*'
   allow:
   - dependency-type: all
   groups:

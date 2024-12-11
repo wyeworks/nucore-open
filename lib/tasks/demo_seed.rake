@@ -15,6 +15,7 @@ namespace :demo do
     canceled   = OrderStatus.find_or_create_by!(name: "Canceled")
     complete   = OrderStatus.find_or_create_by!(name: "Complete")
     reconciled = OrderStatus.find_or_create_by!(name: "Reconciled")
+    mivp = OrderStatus.find_or_create_by!(name: "MIVP Pending")
     unrecoverable  = OrderStatus.find_or_create_by!(name: "Unrecoverable")
 
     facility = Facility.find_or_create_by!(url_name: "example") do |example_facility|
@@ -22,7 +23,7 @@ namespace :demo do
       example_facility.abbreviation = "EF"
       example_facility.short_description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam in mi tellus. Nunc ut turpis rhoncus mauris vehicula volutpat in fermentum metus. Sed eleifend purus at nunc facilisis fermentum metus."
       example_facility.description = "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris scelerisque metus et augue elementum ac pellentesque neque blandit. Nunc ultrices auctor velit, et ullamcorper lacus ultrices id. Pellentesque vulputate dapibus mauris, sollicitudin mollis diam malesuada nec. Fusce turpis augue, consectetur nec consequat nec, tristique sit amet urna. Nunc vitae imperdiet est. Aenean gravida, risus eget posuere fermentum, risus odio bibendum ligula, sit amet lobortis enim odio facilisis ipsum. Donec iaculis dolor vitae massa ullamcorper pulvinar. In hac habitasse platea dictumst. Pellentesque iaculis sapien id est auctor a semper odio tincidunt. Suspendisse nec lectus sit amet est imperdiet elementum non sagittis nulla. Sed tempor velit nec sapien rhoncus consequat semper neque malesuada. Nunc gravida justo in felis tempus dapibus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis tristique diam dolor. Curabitur lacinia molestie est vel mollis. Ut facilisis vestibulum scelerisque. Aenean placerat purus in nisi auctor scelerisque.</p>"
-      example_facility.address = "Example Facility\nFinancial Dept\n111 University Rd.\nEvanston, IL 60201-0111"
+      example_facility.address = "Example Facility\nFinancial Dept\n111 Thatcher Road\nAmherst, MA 01003-9364"
       example_facility.phone_number = "(312) 123-4321"
       example_facility.fax_number = "(312) 123-1234"
       example_facility.email = "example-support@example.com"
@@ -78,8 +79,9 @@ namespace :demo do
       end
     end
 
+    recharge_api_speed_type = UmassCorum::ApiSpeedType.find_by(speed_type: "123123") || FactoryBot.create(:api_speed_type, speed_type: "123123") # UMass Speed Types are 6 digits
     fa = FacilityAccount.find_or_initialize_by(facility_id: facility.id) do |facility_account|
-      facility_account.account_number = "123-1234567-12345678"
+      facility_account.account_number = recharge_api_speed_type.speed_type
       facility_account.revenue_account = "50617"
       facility_account.is_active = true
       facility_account.created_by = 1
@@ -494,29 +496,48 @@ namespace :demo do
       created_by: user_director2.id,
     }
 
-    nufsaccount = NufsAccount.find_by(account_number: "111-2222222-33333333-01")
+    api_speed_type = UmassCorum::ApiSpeedType.find_by(speed_type: "123456") || FactoryBot.create(:api_speed_type, speed_type: "123456")
+    speed_type_account = UmassCorum::SpeedTypeAccount.find_by(account_number: api_speed_type.speed_type)
 
-    unless nufsaccount
-      nufsaccount = NufsAccount.create!(
+    unless speed_type_account
+      speed_type_account = UmassCorum::SpeedTypeAccount.create!(
         nufs_account_attributes.merge(
-          account_number: "111-2222222-33333333-01",
-          description: "Paul PI's Chart String",
+          account_number: api_speed_type.speed_type,
+          description: "Paul PI's Speed Type",
         ),
       )
-      nufsaccount.set_expires_at
     end
 
-    # create a second nufsaccount for split accounts
-    nufsaccount2 = NufsAccount.find_by(account_number: "123-1234567-12345678-01")
+    # create a second speed_type_account for split accounts
+    api_speed_type2 = UmassCorum::ApiSpeedType.find_by(speed_type: "654321") || FactoryBot.create(:api_speed_type, speed_type: "654321")
+    speed_type_account_2 = UmassCorum::SpeedTypeAccount.find_by(account_number: api_speed_type2.speed_type)
 
-    unless nufsaccount2
-      nufsaccount2 = NufsAccount.create!(
+    unless speed_type_account_2
+      speed_type_account_2 = UmassCorum::SpeedTypeAccount.create!(
         nufs_account_attributes.merge(
-          account_number: "123-1234567-12345678-01",
-          description: "Paul PI's Other Chart String",
+          account_number: api_speed_type2.speed_type,
+          description: "Paul PI's Other Speed Type",
         ),
       )
-      nufsaccount2.set_expires_at
+    end
+
+    [173276, 173289, 181597].each_with_index do |speed_type, index|
+      next if UmassCorum::SpeedTypeAccount.find_by(account_number: speed_type)
+
+      FactoryBot.create(
+        :speed_type_account,
+        :with_account_owner,
+        :with_api_speed_type,
+        account_number: speed_type,
+        description: "Funding source #{index + 1}"
+      )
+
+      FactoryBot.create(
+        :subsidy_account,
+        :with_account_owner,
+        account_number: speed_type,
+        description: "Subsidy account #{index + 1}"
+      )
     end
 
     # create split account if the feature is enabled
@@ -530,12 +551,12 @@ namespace :demo do
             description: "Paul PI's 50/50 Split Account",
             splits_attributes: [
               {
-                subaccount_id: nufsaccount.id,
+                subaccount_id: speed_type_account.id,
                 percent: 50,
                 apply_remainder: true,
               },
               {
-                subaccount_id: nufsaccount2.id,
+                subaccount_id: speed_type_account_2.id,
                 percent: 50,
                 apply_remainder: false,
               },

@@ -1,0 +1,4 @@
+- if account.is_a?(UmassCorum::SpeedTypeAccount)
+  = f.simple_fields_for :api_speed_type do |api|
+    = api.input :project_start_date, input_html: { value: format_usa_date(api.object.project_start_date) }
+    = api.input :project_end_date, input_html: { value: format_usa_date(api.object.project_end_date) }

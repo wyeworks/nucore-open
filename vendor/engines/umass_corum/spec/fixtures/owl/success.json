@@ -1,0 +1,58 @@
+{
+  "certifications": [
+    {
+      "id": "BIOSAFE",
+      "completed_at": "2018-09-24T16:07:00.000-04:00",
+      "name": "Biological Safety (CLASSROOM Training)",
+      "valid_until": "2023-09-24"
+    },
+    {
+      "id": "BIOSFTYLAB",
+      "completed_at": "2019-09-09T21:57:12.000-04:00",
+      "name": "Biological Safety (For Laboratory Personnel)",
+      "valid_until": "2020-09-09"
+    },
+    {
+      "id": "DRYICE",
+      "completed_at": "2019-08-12T13:22:59.000-04:00",
+      "name": "Shipping with Dry Ice",
+      "valid_until": "2020-08-12"
+    },
+    {
+      "id": "FIRESAFE",
+      "completed_at": "2015-10-28T13:30:00.000-04:00",
+      "name": "Fire Safety / Fire Extinguisher Training (CLASSROOM Training)",
+      "valid_until": "2020-10-28"
+    },
+    {
+      "id": "HZRDWAST",
+      "completed_at": "2019-08-12T12:24:12.000-04:00",
+      "name": "Hazardous Waste Management",
+      "valid_until": "2020-08-12"
+    },
+    {
+      "id": "HZRDWORKPL",
+      "completed_at": "2019-08-12T12:39:43.000-04:00",
+      "name": "Right to Know (Hazardous Materials in the Workplace)",
+      "valid_until": "2020-08-12"
+    },
+    {
+      "id": "LABRSAFE",
+      "completed_at": "2019-08-12T13:06:51.000-04:00",
+      "name": "Laboratory Safety",
+      "valid_until": "2020-08-12"
+    },
+    {
+      "id": "LABSAFE",
+      "completed_at": "2015-10-21T13:00:00.000-04:00",
+      "name": "Laboratory Safety (CLASSROOM Training)",
+      "valid_until": "2020-10-21"
+    },
+    {
+      "id": "SHIPBIOCATB",
+      "completed_at": "2019-09-09T22:07:21.000-04:00",
+      "name": "Shipping Exempt Biological Substances Category B",
+      "valid_until": "2020-09-09"
+    }
+  ]
+}

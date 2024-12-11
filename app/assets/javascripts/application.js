@@ -18,3 +18,4 @@
 //= require fine-uploader/jquery.fine-uploader
 //= require moment
 //= require polyfills
+//= require umass_corum/application
