@@ -40,6 +40,9 @@ services:
     tty: true
 ```
 
+If you are using a computer with an apple silicon processor (M1, M2, etc) you may need to select an arm64 compatible version such as 19.19.0.0.
+You can check available versions at the end of the page on step 3 of [Set up Docker and Oracle Container Registry](#Set-up-Docker-and-Oracle-Container-Registry-(for-19c))
+
 To start the `db` service, run:
 
 ```
@@ -227,3 +230,91 @@ impdp \
   REMAP_SCHEMA="bc_nucore:c##nucore_open_development"
   REMAP_TABLESPACE="bc_nucore:USERS"
 ```
+
+
+## Troubleshooting
+
+### Known issues on Apple Silicon computers
+
+#### Oracle instant client architecture
+
+If you are using an arm64 architecture you may have installed an arm64 ruby version.
+
+When running the bundle install there's the oracle gem called ruby-oci8 that requires you to have Oracle instant client locally. If you followed the [Install Oracle Instant Client](#Install-Oracle-Instant-Client) section on this readme, you have the 86x version of the Oracle instant client locally and this may cause conflicts while installing the gem. Installing the x64 version of the client does the job and allows you to install the gem but it causes issues while running the rails server.
+
+The solution is to install ruby 86x version, unluckily reinstalling ruby with a different architecture would make your other local repositories that use the same ruby version stop working.
+This issue can be solved by having 2 instances of the same ruby version but for different architectures simultaneously.
+
+1. You are going to need Homebrew installed for both architectures so we are going to teach the terminal which Homebrew path to use depending on the current selected architecture.
+
+Add the following code to your `~/.profile`, `~/.zshrc` or `~/.bash_profile` depending on your terminal's platform.
+
+```
+if [ "$(uname -m)" = "arm64" ]; then
+  echo "arm64"
+  export PATH="/opt/homebrew/bin:${PATH}"
+  [ -f /opt/homebrew/bin/brew ] && eval "$(/opt/homebrew/bin/brew shellenv)"
+else
+  echo "$(uname -m)"
+  export PATH="/usr/local/bin:${PATH}"
+  [ -f /usr/local/bin/brew ] && eval "$(/usr/local/bin/brew shellenv)"
+fi
+```
+
+After saving this, every time you open a new terminal it should print the current architecture.
+
+2. Install Homebrew in the native terminal
+* This step you'll probably have it done already, if so just skip it
+* Run `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+  -  Make sure the root of the install is **/opt/homebrew/**
+
+
+3. Install Homebrew in the x86 terminal
+
+* First we need to change our terminal's architecture
+  - Run this on your terminal `arch -x86_64 /bin/zsh`
+  - The output should print "x86_64"
+  - You can check your actual architecture by running `arch`, if the output is "i386" you're good to go
+
+* Now you can install Homebrew normally
+  - Run `/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"`
+  - Make sure the root of the install is **/usr/local/**
+
+4. Install Ruby version for your current architecture.
+
+* If you had the arm64 ruby version already installed it won't allow you to install Ruby x86 with the plain rvm install command as it will detect that version is already installed.
+
+* We need to call it a different name and make sure it uses the desired architecture.
+  - Run `rvm install ruby-3.3.0 --name ruby-3.3.0-x86_64 --with-architecture=x86_64`
+
+* Once installed make sure to use this ruby instance
+  - Run `rvm use ruby-3.3.0-x86_64`
+
+5. If ruby-oci8 doesn't find Oracle instant client installed you can install it manually and specifying the route where Oracle instant client is located.
+As the Oracle instant client was installed before setting the x86 Homebrew path, it will be located at the arm64 Homebrew path.
+
+  - Run `export DYLD_LIBRARY_PATH=/opt/homebrew/Cellar/instantclient-basic/19.8.0.0.0dbru/lib`
+  - Run `gem install ruby-oci8 -- --with-instant-client-dir=/opt/homebrew/Cellar/instantclient-basic/19.8.0.0.0dbru`
+
+This is an example path, please make sure to type your specific path.
+
+### Oracle instant client folder structure
+
+It can happen that you have Oracle instant client correctly installed but ruby-oci8 can't find specific files on the instantclient-basic folder. This happens as Oracle instant client consists of different packages and they may be stored in different folders.
+
+Here is the fix:
+
+1. Find the folder where instant client packages are installed
+
+you should find the following folders:
+
+```
+instanclient-basic
+instanclient-sdk
+instanclient-sqlplus
+instanclient-tools
+```
+
+2. Copy or move the content of the every other folder inside the instantclient-basic folder
+
+3. Now while installing ruby-oci8 gem it should find all the files at the expected locations.
