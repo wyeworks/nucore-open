@@ -17,10 +17,6 @@ RSpec.describe "Account Reconciliation", js: true do
   let(:director) { create(:user, :facility_director, facility: facility) }
   let(:statement) { StatementPresenter.new order_detail.statement }
 
-  def credit_card_account_enabled?
-    Account.config.reconcilable_account_types.include?("CreditCardAccount")
-  end
-
   before do
     orders.zip(statements).each do |order, statement|
       order.order_details.each do |od|
