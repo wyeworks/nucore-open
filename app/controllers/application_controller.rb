@@ -118,46 +118,20 @@ class ApplicationController < ActionController::Base
     acting_user.object_id != session_user.object_id
   end
 
-  # Global exception handlers
-  rescue_from ActiveRecord::RecordNotFound do |exception|
-    Rails.logger.debug("#{exception.message}: #{exception.backtrace.join("\n")}") unless Rails.env.production?
-    render_404(exception)
-  end
-
-  rescue_from ActionController::RoutingError do |exception|
-    Rails.logger.debug("#{exception.message}: #{exception.backtrace.join("\n")}") unless Rails.env.production?
-    render_404(exception)
-  end
-
-  def render_404(_exception)
-    # Add html fallback in case the 404 is a PDF or XML so the view can be found
-    render "errors/not_found", status: 404, layout: "application", formats: formats_with_html_fallback
-  end
-
-  rescue_from NUCore::PermissionDenied, CanCan::AccessDenied, with: :render_403
-  def render_403(_exception)
-    # if current_user is nil, the user should be redirected to login
-    if current_user
-      render "errors/forbidden", status: 403, layout: "application", formats: formats_with_html_fallback
-    else
-      store_location_for(:user, request.fullpath)
-      redirect_to new_user_session_path
+  # Test exception handlers
+  if Rails.env.test?
+    rescue_from ActiveRecord::RecordNotFound do |exception|
+      Rails.logger.debug("#{exception.message}: #{exception.backtrace.join("\n")}") 
+      render_404
     end
-  end
 
-  rescue_from NUCore::NotPermittedWhileActingAs, with: :render_acting_error
-  def render_acting_error
-    render "error/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
-  end
-
-  rescue_from NUCore::PermissionDenied, CanCan::AccessDenied, with: :render_403
-  def render_403(_exception)
-    if current_user
-      render "errors/forbidden", status: 403, layout: "application", formats: formats_with_html_fallback
-    else
-      store_location_for(:user, request.fullpath)
-      redirect_to new_user_session_path
+    rescue_from ActionController::RoutingError do |exception|
+      Rails.logger.debug("#{exception.message}: #{exception.backtrace.join("\n")}")
+      render_404
     end
+
+    rescue_from NUCore::PermissionDenied, CanCan::AccessDenied, with: :render_403
+    rescue_from NUCore::NotPermittedWhileActingAs, with: :render_acting_error
   end
 
   def after_sign_out_path_for(_)
@@ -216,6 +190,24 @@ class ApplicationController < ActionController::Base
     # request.formats returns a collection of Mime::Type objects
     # Mime::Type#ref returns a symbol or string, and string must be a valid Mime type
     request.formats.map(&:ref) + [:html]
+  end
+
+  def render_403(_exception)
+    if current_user
+      render "errors/forbidden", status: 403, layout: "application", formats: formats_with_html_fallback
+    else
+      store_location_for(:user, request.fullpath)
+      redirect_to new_user_session_path
+    end
+  end
+
+  def render_acting_error
+    render "error/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
+  end
+
+  def render_404
+    # Add html fallback in case the 404 is a PDF or XML so the view can be found
+    render "errors/not_found", status: 404, layout: "application", formats: formats_with_html_fallback
   end
 
 end

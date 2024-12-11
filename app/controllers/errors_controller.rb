@@ -26,7 +26,7 @@ class ErrorsController < ApplicationController
   private
 
   def render_error(template, status)
-    render template, status: status.to_sym, formats: formats_with_html_fallback
+    render template, status: status, formats: formats_with_html_fallback
   rescue ActionController::UnknownFormat
     head status
   end
