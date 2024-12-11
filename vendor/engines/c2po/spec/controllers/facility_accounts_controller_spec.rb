@@ -4,6 +4,8 @@ require "rails_helper"
 require "controller_spec_helper"
 
 RSpec.describe FacilityAccountsController do
+  include C2poTestHelper
+
   render_views
 
   let(:facility) { create(:setup_facility) }
@@ -144,6 +146,8 @@ RSpec.describe FacilityAccountsController do
         let(:account_type) { "CreditCardAccount" }
 
         it "loads the account" do
+          skip_if_credit_card_unreconcilable
+
           expect(response).to be_successful
           expect(assigns(:account)).to be_a(CreditCardAccount)
         end
@@ -237,6 +241,8 @@ RSpec.describe FacilityAccountsController do
       end
 
       it_should_allow :director do
+        skip_if_credit_card_unreconcilable
+
         expect(assigns(:account)).to be_persisted
         expect(assigns(:account).expires_at)
           .to be_within(1.second).of(Time.zone.parse("#{expiration_year}-5-1").end_of_month.end_of_day)
