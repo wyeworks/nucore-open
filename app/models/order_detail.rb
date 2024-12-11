@@ -369,6 +369,7 @@ class OrderDetail < ApplicationRecord
   include AASM
 
   CANCELABLE_STATES = [:new, :inprocess, :complete, :unrecoverable].freeze
+  COMPLETABLE_STATES = [:new, :inprocess, :unrecoverable].freeze
   aasm column: :state do
     state :new, initial: true
     state :inprocess
@@ -386,7 +387,7 @@ class OrderDetail < ApplicationRecord
     end
 
     event :to_complete do
-      transitions to: :complete, from: [:new, :inprocess], guard: :time_data_completeable?
+      transitions to: :complete, from: COMPLETABLE_STATES, guard: :time_data_completeable?
     end
 
     event :to_reconciled do

@@ -12,6 +12,11 @@
     %td
       %strong= OrderDetail.human_attribute_name(:ordered_by)
     %td= mail_to @order.created_by_user.email, @order.created_by_user.full_name
+  - if @order.created_by != @order.user_id
+    %tr
+      %td
+        %strong= text(".order_for")
+      %td= mail_to @order.user.email, @order.user.full_name
   %tr
     %td
       %strong= Account.model_name.human

@@ -269,14 +269,14 @@ docker build . -f Dockerfile.github-actions --build-arg NODE_VERSION=$NODE_VERSI
 docker image ls
 
 # Tag the image with the appropriate ruby version
-docker tag {IMAGE ID} nucoretxi/ruby-node-chrome-pack:3.3.0
+docker tag {IMAGE ID} wyeworkshub/ruby-node-chrome-pack:3.3.0
 
 # Check the image was tagged correctly
 docker image ls
 
 # login and push the new tag
-docker login -u nucoretxi
-docker push nucoretxi/ruby-node-chrome-pack:3.3.0
+docker login
+docker push wyeworkshub/ruby-node-chrome-pack:3.3.0
 ```
 
 #### Parallel Tests

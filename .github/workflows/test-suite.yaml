@@ -19,10 +19,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
-      image: nucoretxi/ruby-node-chrome-pack:3.3.0
-      credentials:
-        username: nucoretxi
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      image: wyeworkshub/ruby-node-chrome-pack:3.3.0
     env:
       RAILS_ENV: test
       MYSQL_HOST: mariadb
@@ -60,10 +57,7 @@ jobs:
           MYSQL_ROOT_PASSWORD: root
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
-      image: nucoretxi/ruby-node-chrome-pack:3.3.0
-      credentials:
-        username: nucoretxi
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      image: wyeworkshub/ruby-node-chrome-pack:3.3.0
     env:
       RAILS_ENV: test
       MYSQL_HOST: mariadb
@@ -96,10 +90,7 @@ jobs:
           - 4444:4444
         options: --shm-size="2g"
     container:
-      image: nucoretxi/ruby-node-chrome-pack:3.3.0
-      credentials:
-        username: nucoretxi
-        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      image: wyeworkshub/ruby-node-chrome-pack:3.3.0
     env:
       TEASPOON_RAILS_ENV: test
       RAILS_ENV: test

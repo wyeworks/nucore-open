@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Managing an order detail" do
-
   let(:facility) { create(:setup_facility) }
   let!(:account) { create(:setup_account, :with_account_owner, facility: order_detail.facility, owner: order_detail.user) }
   let(:instrument) { create(:setup_instrument, :timer, facility: facility) }
@@ -188,6 +187,39 @@ RSpec.describe "Managing an order detail" do
         # Happy path coverage for canceled items in the order detail form
         click_link order_detail.to_s
         expect(page).to have_content("Canceled")
+      end
+    end
+
+    describe "Setting completed order to Unrecoverable" do
+      let(:item) { create(:setup_item, facility: facility) }
+      let(:order) { create(:complete_order, product: item) }
+      let(:order_detail) do
+        order.order_details.first.tap do |od|
+          od.update!(reviewed_at: 5.days.ago, dispute_at: 3.days.ago, dispute_reason: "asdsfa", statement: statement)
+        end
+      end
+
+      let(:statement) { create(:statement, facility:, created_by: 1) }
+
+      before do
+        visit manage_facility_order_order_detail_path(facility, order, order_detail)
+      end
+
+      it "allows admins to update order status to unrecoverable" do
+        select "Unrecoverable", from: "Status"
+        click_button "Save"
+
+        expect(page).to have_content("Unrecoverable")
+        click_link order_detail.to_s
+
+        expect(page).to have_content("Unrecoverable")
+        select "Complete", from: "Status"
+        expect(page).to have_button("Save")
+        click_button "Save"
+
+        expect(page).to have_content("Complete")
+        click_link order_detail.to_s
+        expect(page).to have_content("Complete")
       end
     end
 

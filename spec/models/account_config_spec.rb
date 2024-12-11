@@ -152,4 +152,30 @@ RSpec.describe AccountConfig, type: :model do
       expect(instance.creation_enabled_types).not_to include("NufsAccount")
     end
   end
+
+  describe "reconcilable_account_types" do
+    let(:some_account_type) { "SomeAccount" }
+
+    before do
+      account_type_double = double(some_account_type)
+      allow(account_type_double).to receive(:reconcilable?).and_return(true)
+      allow(account_type_double).to receive(:to_s).and_return(some_account_type)
+
+      allow_any_instance_of(String).to receive(:constantize).and_return(
+        account_type_double
+      )
+
+      instance.statement_account_types << some_account_type.dup
+    end
+
+    it "includes statement account types" do
+      expect(instance.reconcilable_account_types).to include(some_account_type)
+    end
+
+    it "does not include creation_disabled_types" do
+      instance.creation_disabled_types << some_account_type
+
+      expect(instance.reconcilable_account_types).to_not include(some_account_type)
+    end
+  end
 end

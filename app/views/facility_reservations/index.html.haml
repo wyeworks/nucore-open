@@ -22,8 +22,8 @@
             %th.nowrap= sortable "order_number", Order.model_name.human
             %th.nowrap= OrderDetail.model_name.human
             %th.nowrap= sortable "ordered_for", Order.human_attribute_name(:user)
-            %th.nowrap{colspan: 2}= sortable "ordered_at", Order.human_attribute_name(:ordered_at)
-            %th.nowrap{colspan: 2}= sortable "reserve_range", Reservation.human_attribute_name(:reserve_range)
+            %th.nowrap= sortable "ordered_at", Order.human_attribute_name(:ordered_at)
+            %th.nowrap= sortable "reserve_range", Reservation.human_attribute_name(:reserve_range)
             %th.nowrap.order-note= sortable "product_name", OrderDetail.human_attribute_name(:product)
             %th.nowrap= sortable "assigned_to", OrderDetail.human_attribute_name(:assigned_user)
             %th.nowrap= sortable "status"
@@ -39,9 +39,9 @@
               %td.centered= link_to od.order_id, facility_order_path(current_facility, order)
               %td.centered= link_to od.id, manage_order_detail_path(od), class: "manage-order-detail"
               %td= mail_to(order.user.email, order.user.full_name, title: "Compose Email")
-              %td{colspan: 2}
+              %td
                 = format_usa_datetime(od.ordered_at)
-              %td{colspan: 2}
+              %td
                 - if res.admin_editable?
                   = link_to res, edit_facility_order_order_detail_reservation_path(current_facility, order, od, res)
                 - else

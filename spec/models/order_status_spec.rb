@@ -87,6 +87,7 @@ RSpec.describe OrderStatus do
         described_class.canceled,
         facility_status,
         described_class.complete,
+        described_class.unrecoverable,
       ]
 
       expect(described_class.non_protected_statuses(facility)).to eq(expected_statuses)
@@ -98,6 +99,7 @@ RSpec.describe OrderStatus do
         described_class.in_process,
         described_class.canceled,
         described_class.complete,
+        described_class.unrecoverable,
       ]
 
       expect(described_class.non_protected_statuses(nil)).to eq(expected_statuses)

@@ -101,8 +101,14 @@ class OrderManagement::OrderDetailsController < ApplicationController
     return if @order_detail.reconciled?
 
     if @order_detail.complete?
-      @order_statuses = [OrderStatus.complete, OrderStatus.canceled]
-      @order_statuses << OrderStatus.reconciled if @order_detail.can_reconcile?
+      @order_statuses = OrderStatus.by_names([
+        OrderStatus::COMPLETE,
+        OrderStatus::CANCELED,
+        OrderStatus::UNRECOVERABLE,
+        OrderStatus::RECONCILED
+      ]).to_a
+    
+      @order_statuses.reject! { |status| status.name == OrderStatus::RECONCILED } unless @order_detail.can_reconcile?
     elsif @order_detail.order_status.root == OrderStatus.canceled
       @order_statuses = OrderStatus.canceled_statuses_for_facility(current_facility)
     else

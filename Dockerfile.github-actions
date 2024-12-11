@@ -1,4 +1,4 @@
-# More info: https://hub.docker.com/repository/docker/nucoretxi/ruby-node-chrome-pack/general
+# More info: https://hub.docker.com/repository/docker/wyeworkshub/ruby-node-chrome-pack/general
 #
 # To build with specific versions of bundler or node, pass in a build arg.
 # You can set these explicitly:

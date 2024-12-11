@@ -17,36 +17,45 @@ class OrderStatus < ApplicationRecord
     end
   end
 
-  scope :for_facility, ->(facility) { where(facility_id: [nil, facility&.id]) }
-
-  ROOT_STATUS_ORDER = ["New", "In Process", "Canceled", "Complete", "Reconciled", "Unrecoverable"].freeze
+  NEW = "New".freeze
+  IN_PROCESS = "In Process".freeze
+  CANCELED = "Canceled".freeze
+  COMPLETE = "Complete".freeze
+  RECONCILED = "Reconciled".freeze
+  UNRECOVERABLE = "Unrecoverable".freeze
+  
+  ROOT_STATUS_ORDER = [NEW, IN_PROCESS, CANCELED, COMPLETE, RECONCILED, UNRECOVERABLE].freeze
 
   # Needs to be overridable by engines
   cattr_accessor(:ordered_root_statuses) { ROOT_STATUS_ORDER.dup }
 
+  scope :for_facility, ->(facility) { where(facility_id: [nil, facility&.id]) }
+  scope :by_name, ->(name) { find_by(name: name) }
+  scope :by_names, ->(names) { where(name: names) }
+
   # This one is different because `new` is a reserved keyword
   def self.new_status
-    find_by(name: "New")
+    by_name(NEW)
   end
 
   def self.in_process
-    find_by(name: "In Process")
+    by_name(IN_PROCESS)
   end
 
   def self.canceled
-    find_by(name: "Canceled")
+    by_name(CANCELED)
   end
 
   def self.complete
-    find_by(name: "Complete")
+    by_name(COMPLETE)
   end
 
   def self.reconciled
-    find_by(name: "Reconciled")
+    by_name(RECONCILED)
   end
 
   def self.unrecoverable
-    find_by(name: "Unrecoverable")
+    by_name(UNRECOVERABLE)
   end
 
   def self.add_to_order_statuses(facility)
@@ -122,6 +131,7 @@ class OrderStatus < ApplicationRecord
       new_status.self_and_descendants
         .or(in_process.self_and_descendants)
         .or(canceled.self_and_descendants)
+        .or(unrecoverable.self_and_descendants)
         .or(complete.self_and_descendants)
         .for_facility(facility).sorted
     end
