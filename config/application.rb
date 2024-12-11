@@ -80,6 +80,8 @@ module Nucore
     # Prevent invalid (usually malicious) URLs from causing exceptions/issues
     config.middleware.insert 0, Rack::UTF8Sanitizer
 
+    config.exceptions_app = self.routes
+
     config.active_storage.variant_processor = :vips
 
     # Indicate to the browser that an image should be lazily loaded

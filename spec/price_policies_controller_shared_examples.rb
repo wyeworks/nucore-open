@@ -211,7 +211,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
         do_request
         expect(assigns[:start_date]).to eq(Time.zone.parse(@params[:id]))
         expect(assigns[:price_policies]).to be_empty
-        is_expected.to render_template "404"
+        is_expected.to render_template "errors/not_found"
       end
     end
 
