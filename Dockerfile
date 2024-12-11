@@ -53,3 +53,6 @@ RUN yarn install
 
 # asset compile
 RUN SECRET_KEY_BASE=fake bundle exec rake assets:precompile
+
+# Create a shared directory for uploads via active storage
+RUN ln -s /shared /app/public/uploads
