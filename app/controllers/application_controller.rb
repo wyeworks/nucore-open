@@ -118,6 +118,8 @@ class ApplicationController < ActionController::Base
     acting_user.object_id != session_user.object_id
   end
 
+  rescue_from NUCore::NotPermittedWhileActingAs, with: :render_acting_error
+  
   # Test exception handlers
   if Rails.env.test?
     rescue_from ActiveRecord::RecordNotFound do |exception|
@@ -131,7 +133,6 @@ class ApplicationController < ActionController::Base
     end
 
     rescue_from NUCore::PermissionDenied, CanCan::AccessDenied, with: :render_403
-    rescue_from NUCore::NotPermittedWhileActingAs, with: :render_acting_error
   end
 
   def after_sign_out_path_for(_)
@@ -193,6 +194,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_403(_exception)
+    byebug
     if current_user
       render "errors/forbidden", status: 403, layout: "application", formats: formats_with_html_fallback
     else
