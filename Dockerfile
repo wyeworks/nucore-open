@@ -16,10 +16,12 @@ RUN apt-get update && \
   apt-get update && \
   apt-get install nodejs -y && \
  # Installs libvips and the node repository
-  apt-get install --yes libvips42 nodejs && \
+  apt-get install -y libvips42 nodejs && \
   apt-get install npm -y
 RUN npm install --global yarn && \
  apt-get autoremove -y
+# Install cron
+RUN apt-get install cron -y
 
 # Copy just what we need in order to bundle
 COPY Gemfile Gemfile.lock .ruby-version /app/
@@ -56,3 +58,7 @@ RUN SECRET_KEY_BASE=fake bundle exec rake assets:precompile
 
 # Create a shared directory for uploads via active storage
 RUN ln -s /shared /app/public/uploads
+
+FROM deploy as cron
+RUN SECRET_KEY_BASE=fake bundle exec whenever --update-crontab
+CMD ["cron"]
