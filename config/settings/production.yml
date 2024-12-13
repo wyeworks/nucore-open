@@ -1,6 +1,6 @@
 saml:
-  certificate_file: config/saml-certificate.p12
-  
+  certificate_file: <%= ENV.fetch("SAML_CERTIFICATE_PATH", "config/saml-certificate.p12") %>
+
 # paperclip:
 #   storage: s3
 #   s3_credentials:
