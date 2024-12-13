@@ -73,7 +73,8 @@ if ENV["PUMA_ACME"] == "enable"
   acme_renew_at 0.75
 
   # URL of ACME server's directory URL, defaults to LetsEncrypt.
-  acme_directory ENV.fetch("ACME_DIRECTORY_URL", "acme://0.0.0.0:443")
+  acme_directory_url = ENV.fetch("ACME_DIRECTORY_URL", "")
+  acme_directory acme_directory_url if acme_directory_url.present?
 
   # Accept the Terms of Service (TOS) of an ACME server with the server's
   # directory URL as a string or true to accept any server's TOS.
