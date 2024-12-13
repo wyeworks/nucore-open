@@ -15,13 +15,14 @@ RUN apt-get update && \
   echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
   apt-get update && \
   apt-get install nodejs -y && \
- # Installs libvips and the node repository
+  # Installs libvips and the node repository
   apt-get install -y libvips42 nodejs && \
-  apt-get install npm -y
+  apt-get install npm -y && \
+  # Install vim
+  apt-get install vim -y
+
 RUN npm install --global yarn && \
  apt-get autoremove -y
-# Install cron
-RUN apt-get install cron -y
 
 # Copy just what we need in order to bundle
 COPY Gemfile Gemfile.lock .ruby-version /app/
@@ -60,5 +61,12 @@ RUN SECRET_KEY_BASE=fake bundle exec rake assets:precompile
 RUN ln -s /shared /app/public/uploads
 
 FROM deploy as cron
+# Install cron
+RUN apt-get update && \
+  apt-get install cron -y && \
+  apt-get autoremove -y
 RUN SECRET_KEY_BASE=fake bundle exec whenever --update-crontab
+# make sure ENV variables are set
+ENTRYPOINT ["./docker-cron-entrypoint.sh"]
+
 CMD ["cron"]
