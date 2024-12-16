@@ -120,7 +120,6 @@ class ApplicationController < ActionController::Base
 
   rescue_from NUCore::NotPermittedWhileActingAs, with: :render_acting_error
 
-
   def after_sign_out_path_for(_)
     if current_facility.present?
       facility_path(current_facility)
@@ -169,8 +168,8 @@ class ApplicationController < ActionController::Base
     ActionController::Parameters.new
   end
 
-  def with_dropped_params(&block)
-    QuietStrongParams.with_dropped_params(&block)
+  def with_dropped_params(&)
+    QuietStrongParams.with_dropped_params(&)
   end
 
   def formats_with_html_fallback
@@ -179,22 +178,8 @@ class ApplicationController < ActionController::Base
     request.formats.map(&:ref) + [:html]
   end
 
-  def render_403(_exception)
-    if current_user
-      render "errors/forbidden", status: 403, layout: "application", formats: formats_with_html_fallback
-    else
-      store_location_for(:user, request.fullpath)
-      redirect_to new_user_session_path
-    end
-  end
-
   def render_acting_error
     render "error/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
-  end
-
-  def render_404
-    # Add html fallback in case the 404 is a PDF or XML so the view can be found
-    render "errors/not_found", status: 404, layout: "application", formats: formats_with_html_fallback
   end
 
 end

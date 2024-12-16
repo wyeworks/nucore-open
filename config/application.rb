@@ -5,7 +5,6 @@ require_relative "boot"
 require "rails/all"
 require "will_paginate/array"
 require "active_storage/engine"
-require_relative "../lib/middlewares/sanitize_headers_middleware"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -27,7 +26,6 @@ module Nucore
     # Rails 5 disables autoloading in production by default.
     # https://blog.bigbinary.com/2016/08/29/rails-5-disables-autoloading-after-booting-the-app-in-production.html
     config.enable_dependency_loading = true
-
 
     # Needed on the 6.1.6.1 version bump.
     # https://github.com/rails/rails/blob/dc1242fd5a4d91e63846ab552a07e19ebf8716ac/activerecord/CHANGELOG.md
@@ -55,9 +53,6 @@ module Nucore
     # config.autoload_paths += Dir["#{config.root}/lib"]
     # config.eager_load_paths += Dir["#{config.root}/lib"]
 
-    config.autoload_paths << Rails.root.join("lib/middlewares")
-    config.eager_load_paths << Rails.root.join("lib/middlewares")
-
     config.autoload_paths += Dir["#{config.root}/app/models/external_services"]
     config.eager_load_paths += Dir["#{config.root}/app/models/external_services"]
 
@@ -83,9 +78,8 @@ module Nucore
 
     # Prevent invalid (usually malicious) URLs from causing exceptions/issues
     config.middleware.insert 0, Rack::UTF8Sanitizer
-    config.middleware.insert_before Rack::UTF8Sanitizer, SanitizeHeadersMiddleware
 
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
 
     config.active_storage.variant_processor = :vips
 
