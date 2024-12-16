@@ -546,10 +546,9 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
           context "when there are no price policies for the start_date" do
             before(:each) do
               @params[:id] = (price_policy.start_date + 1.day).to_s
-              do_request
             end
 
-            it { expect(response.code).to eq("404") }
+            it { expect { do_request }.to raise_error(ActiveRecord::RecordNotFound) }
           end
         end
       end

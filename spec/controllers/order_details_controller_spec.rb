@@ -143,6 +143,7 @@ RSpec.describe OrderDetailsController do
           let(:user) { FactoryBot.create(:user) }
           before do
             FactoryBot.create(:account_user, :business_administrator, account: account, user: user)
+            
             put :cancel, params: { order_id: order.id, id: order_detail.id }
           end
 
