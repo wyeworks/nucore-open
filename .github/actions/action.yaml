@@ -13,10 +13,6 @@ runs:
 
     - run: bundle install --path vendor/bundle
       shell: bash
-    - run: cp config/database.yml.mysql.template config/database.yml
-      shell: bash
-    - run: cp config/secrets.yml.template config/secrets.yml
-      shell: bash
     - run: bundle exec rake db:create db:schema:load
       shell: bash
 
