@@ -90,8 +90,11 @@ module DateHelper
 
   def time_select24(f, field, options = {})
     options.reverse_merge! hours: (0..23)
-    output =  f.select(:"#{field}_hour", options[:hours].to_a)
-    output += f.select(:"#{field}_min", minute_options(options[:minute_step]))
+    hours = options.delete(:hours).to_a
+    minute_step = options.delete(:minute_step)
+
+    output = f.select(:"#{field}_hour", hours, {}, options)
+    output += f.select(:"#{field}_min", minute_options(minute_step), {}, options)
     content_tag :div, output, class: "time-select"
   end
 

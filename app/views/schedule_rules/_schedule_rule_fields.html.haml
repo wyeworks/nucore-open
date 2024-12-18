@@ -5,15 +5,19 @@
       %li= f.input "on_#{day.downcase}", label: day
 
 .well
-  = f.hint :end_time
+
+  - if @product.fixed_start_time?
+    %p.help-block= t("views.schedule_rules.fixed_start_time_help")
+  - else
+    = f.hint :end_time
   %ul.inline
     %li
       = f.label :start_time
-      = time_select24(f, :start, minute_step: @product.reserve_interval)
+      = time_select24(f, :start, minute_step: @product.reserve_interval, disabled: @product.fixed_start_time?)
   %ul.inline
     %li
       = f.label :end_time
-      = time_select24(f, :end, hours: (0..24), minute_step: @product.reserve_interval)
+      = time_select24(f, :end, hours: (0..24), minute_step: @product.reserve_interval, disabled: @product.fixed_start_time?)
 
 - if @product.can_apply_discounts?
   %h3= t("views.schedule_rules.discount")

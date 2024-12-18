@@ -32,12 +32,7 @@ class ScheduleRulesController < ApplicationController
 
   # GET /schedule_rules/new
   def new
-    @schedule_rule = @product.schedule_rules.build(
-      start_hour: 9,
-      start_min: 0,
-      end_hour: 17,
-      end_min: 0,
-    )
+    @schedule_rule = build_schedule_rule
 
     PriceGroup.by_display_order.globals.each do |price_group|
       @schedule_rule.price_group_discounts.build(price_group:, discount_percent: 0)
@@ -87,10 +82,18 @@ class ScheduleRulesController < ApplicationController
   private
 
   def schedule_rule_params
-    params.require(:schedule_rule).permit(:start_hour, :start_min, :end_hour, :end_min,
-                                          :on_sun, :on_mon, :on_tue, :on_wed, :on_thu, :on_fri, :on_sat,
-                                          price_group_discounts_attributes: [:discount_percent, :price_group_id, :id],
-                                          product_access_group_ids: [])
+    params
+      .require(:schedule_rule)
+      .permit(
+        :start_hour, :start_min, :end_hour, :end_min,
+        :on_sun, :on_mon, :on_tue, :on_wed, :on_thu, :on_fri, :on_sat,
+        price_group_discounts_attributes: [:discount_percent, :price_group_id, :id],
+        product_access_group_ids: []
+      ).tap do |schedule_rule_params|
+        if @product.fixed_start_time?
+          schedule_rule_params.merge! ScheduleRule.full_day_attributes
+        end
+      end
   end
 
   def init_schedule_rule
@@ -103,6 +106,19 @@ class ScheduleRulesController < ApplicationController
     end
     @highlighted_price_group_discounts = @highlighted_price_group_discounts.sort_by { |pgd| pgd.price_group.display_order }
     @non_highlighted_price_group_discounts = @non_highlighted_price_group_discounts.sort_by { |pgd| pgd.price_group.display_order }
+  end
+
+  def build_schedule_rule
+    attrs = if @product.fixed_start_time?
+              ScheduleRule.full_day_attributes
+            else
+              {
+                start_hour: 9, start_min: 0,
+                end_hour: 17, end_min: 0
+              }
+            end
+
+    @product.schedule_rules.build(attrs)
   end
 
 end

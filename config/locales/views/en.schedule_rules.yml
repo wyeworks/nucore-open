@@ -3,6 +3,7 @@ en:
     schedule_rules:
       discount: Price Group Discounts
       discount_hint: During the period covered by this schedule rule, overall cost will be discounted by the following percentages.
+      fixed_start_time_help: This instrument can only be reserved on full days
       highlighted_heading: Highlighted Price Groups
       non_highlighted_heading: Other Price Groups
       price_groups_heading: Price Groups
