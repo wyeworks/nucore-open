@@ -14,14 +14,14 @@ RUN apt-get update && \
   NODE_MAJOR=16 && \
   echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
   apt-get update && \
-  apt-get install nodejs -y && \
+  apt-get install -y nodejs \
   # Installs libvips and the node repository
-  apt-get install -y libvips42 nodejs && \
-  apt-get install npm -y && \
-  # Install vim
-  apt-get install vim -y && \
+  libvips42 \
+  nodejs \
+  npm \
+  vim \
   # Install ssl cert
-  apt-get install ssl-cert
+  ssl-cert
 
 RUN npm install --global yarn && \
  apt-get autoremove -y
