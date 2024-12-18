@@ -1,4 +1,4 @@
-FROM ruby:3.3.0 as base
+FROM --platform=linux/amd64 ruby:3.3.0 as base
 
 WORKDIR /app
 ENV BUNDLE_PATH /gems
@@ -19,7 +19,9 @@ RUN apt-get update && \
   apt-get install -y libvips42 nodejs && \
   apt-get install npm -y && \
   # Install vim
-  apt-get install vim -y
+  apt-get install vim -y && \
+  # Install ssl cert
+  apt-get install ssl-cert
 
 RUN npm install --global yarn && \
  apt-get autoremove -y
