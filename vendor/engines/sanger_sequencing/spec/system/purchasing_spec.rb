@@ -117,8 +117,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           visit sanger_sequencing_submission_path(SangerSequencing::Submission.last)
           expect(page.status_code).to eq(200)
 
-          visit edit_sanger_sequencing_submission_path(SangerSequencing::Submission.last)
-          expect(page.status_code).to eq(404)
+          expect { visit edit_sanger_sequencing_submission_path(SangerSequencing::Submission.last) }.to raise_error(ActiveRecord::RecordNotFound)
         end
 
         it "renders the sample ID on the receipt" do
@@ -158,8 +157,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
     end
 
     it "is not found" do
-      click_link "Complete Online Order Form"
-      expect(page.status_code).to eq(404)
+      expect { click_link "Complete Online Order Form" }.to raise_error(ActionController::RoutingError)
     end
   end
 end

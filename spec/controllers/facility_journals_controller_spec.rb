@@ -461,7 +461,7 @@ RSpec.describe FacilityJournalsController do
       end
 
       it "does not reconcile either" do
-        perform
+        expect { perform }.to raise_error(ActiveRecord::RecordNotFound)
         expect(@order_detail1.reload.state).to eq("complete")
         expect(@order_detail2.reload.state).to eq("complete")
       end

@@ -12,8 +12,7 @@ RSpec.describe "Managing JournalCreationReminder" do
     let(:user) { FactoryBot.create(:user) }
 
     it "does not give access to index" do
-      visit journal_creation_reminders_path
-      expect(page).to have_content("403 – Permission Denied")
+      expect { visit journal_creation_reminders_path }.to raise_error(CanCan::AccessDenied)
     end
   end
 

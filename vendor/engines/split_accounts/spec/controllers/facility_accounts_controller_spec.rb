@@ -153,9 +153,8 @@ RSpec.describe FacilityAccountsController, :enable_split_accounts do
     describe "show" do
       let(:split_account) { FactoryBot.create(:split_account) }
 
-      before { get :show, params: { facility_id: facility.url_name, id: split_account.id } }
-
       it "does not show the edit/suspend buttons", :aggregate_failures do
+        expect { get :show, params: { facility_id: facility.url_name, id: split_account.id } }.to raise_error(CanCan::AccessDenied)
         expect(response.body).not_to include("Edit")
         expect(response.body).not_to include("Suspend")
       end
@@ -163,19 +162,17 @@ RSpec.describe FacilityAccountsController, :enable_split_accounts do
 
     describe "edit" do
       let(:split_account) { FactoryBot.create(:split_account) }
-      before { get :edit, params: { facility_id: facility.url_name, id: split_account.id } }
 
       it "returns a 403" do
-        expect(response.code).to eq("403")
+        expect { get :edit, params: { facility_id: facility.url_name, id: split_account.id } }.to raise_error(CanCan::AccessDenied)
       end
     end
 
     describe "update" do
       let(:split_account) { FactoryBot.create(:split_account) }
-      before { post :update, params: { facility_id: facility.url_name, id: split_account.id } }
 
       it "returns a 403" do
-        expect(response.code).to eq("403")
+        expect { post :update, params: { facility_id: facility.url_name, id: split_account.id } }.to raise_error(CanCan::AccessDenied)
       end
     end
   end

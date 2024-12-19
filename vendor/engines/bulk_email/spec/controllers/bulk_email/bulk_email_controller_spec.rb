@@ -28,10 +28,7 @@ RSpec.describe BulkEmail::BulkEmailController do
       let!(:authorized_user) { FactoryBot.create(:user) }
       let!(:product_user) { FactoryBot.create(:product_user, user: authorized_user, product_id: restricted_item.id) if restricted_item }
 
-      before do
-        sign_in user
-        post "search", params: params
-      end
+      before { sign_in user }
 
       shared_examples_for "it can search for recipients" do
         context "when at least one user_type is set" do
@@ -118,16 +115,19 @@ RSpec.describe BulkEmail::BulkEmailController do
 
       context "as an unprivileged user" do
         let(:user) { FactoryBot.create(:user) }
-        it { is_expected.to render_template("errors/forbidden") }
+        it { expect { post "search", params: params }.to raise_error(CanCan::AccessDenied) }
       end
 
       context "when logged in as facility staff" do
         let(:user) { FactoryBot.create(:user, :staff, facility: facility) }
-        it { is_expected.to render_template("errors/forbidden") }
+        it { expect { post "search", params: params }.to raise_error(CanCan::AccessDenied) }
       end
 
       context "when logged in as senior facility staff" do
         let(:user) { FactoryBot.create(:user, :senior_staff, facility: facility) }
+
+        before { post "search", params: params }
+
         it_behaves_like "it can search for recipients"
       end
 
@@ -136,7 +136,7 @@ RSpec.describe BulkEmail::BulkEmailController do
 
         context "in a cross-facility context" do
           let(:facility) { Facility.cross_facility }
-          it { is_expected.to render_template("errors/forbidden") }
+          it { expect { post "search", params: params }.to raise_error(CanCan::AccessDenied) }
         end
       end
 
@@ -144,6 +144,9 @@ RSpec.describe BulkEmail::BulkEmailController do
         let(:user) { FactoryBot.create(:user, :administrator) }
         let(:facility) { Facility.cross_facility }
         let(:params) { super().merge(facility_id: "all") }
+
+        before { post "search", params: params }
+
         it_behaves_like "it can search for recipients"
       end
     end

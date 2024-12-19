@@ -19,7 +19,6 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 FactoryBot.use_parent_strategy = false
 
 RSpec.configure do |config|
-
   config.filter_rails_from_backtrace!
   config.filter_gems_from_backtrace("spring")
   # rspec-rails by default excludes stack traces from within vendor Lots of our
