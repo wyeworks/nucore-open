@@ -26,8 +26,7 @@ RSpec.describe SangerSequencing::SubmissionsController do
       let(:other_user) { FactoryBot.create(:user) }
       before { sign_in other_user }
       it "does not have access" do
-        get :edit, params: { id: submission.id }
-        expect(response.code).to eq("403")
+        expect { get :edit, params: { id: submission.id } }.to raise_error(CanCan::AccessDenied)
       end
     end
 
@@ -35,8 +34,7 @@ RSpec.describe SangerSequencing::SubmissionsController do
       let(:admin) { FactoryBot.create(:user, :administrator) }
       before { sign_in admin }
       it "does not have access" do
-        get :edit, params: { id: submission.id }
-        expect(response.code).to eq("403")
+        expect { get :edit, params: { id: submission.id } }.to raise_error(CanCan::AccessDenied)
       end
     end
   end
