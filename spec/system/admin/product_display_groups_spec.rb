@@ -146,5 +146,4 @@ RSpec.describe "ProductDisplayGroups" do
       expect(page.status_code).to eq(403)
     end
   end
-
 end

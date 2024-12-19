@@ -26,25 +26,25 @@ RSpec.describe Reports::GeneralReportsController do
     end
 
     context "defaults" do
-      before { get :index, params: { facility_id: facility.url_name, report_by: :product } }
-
       it "assigns the proper start date" do
+        expect { get :index, params: { facility_id: facility.url_name, report_by: :product } }.to raise_error(CanCan::AccessDenied)
         expect(assigns(:date_start)).to eq(Time.zone.local(2014, 2, 1))
       end
 
       it "assigns the proper end date" do
+        expect { get :index, params: { facility_id: facility.url_name, report_by: :product } }.to raise_error(CanCan::AccessDenied)
         expect(assigns(:date_end).to_i).to eq(Time.zone.local(2014, 2, 28, 23, 59, 59).to_i)
       end
     end
 
     context "with date parameters" do
-      before { get :index, params: { facility_id: facility.url_name, report_by: :product, date_start: "01/01/2014", date_end: "01/31/2014" } }
-
       it "assigns the start date to the beginning of the day" do
+        expect { get :index, params: { facility_id: facility.url_name, report_by: :product, date_start: "01/01/2014", date_end: "01/31/2014" } }.to raise_error(CanCan::AccessDenied)
         expect(assigns(:date_start)).to eq(Time.zone.local(2014, 1, 1))
       end
 
       it "assigns the end date to the end of the day" do
+        expect { get :index, params: { facility_id: facility.url_name, report_by: :product, date_start: "01/01/2014", date_end: "01/31/2014" } }.to raise_error(CanCan::AccessDenied)
         expect(assigns(:date_end).to_i).to eq(Time.zone.local(2014, 1, 31, 23, 59, 59).to_i)
       end
     end
@@ -203,13 +203,11 @@ RSpec.describe Reports::GeneralReportsController do
     before { sign_in user }
 
     it "returns a 404" do
-      get :index, params: { report_by: "asdfasdf", facility_id: facility.url_name }
-      expect(response.code).to eq("404")
+      expect { get :index, params: { report_by: "asdfasdf", facility_id: facility.url_name } }.to raise_error(ActionController::RoutingError)
     end
 
     it "returns a 404 for a blank report_by" do
-      get :index, params: { facility_id: facility.url_name, report_by: "" }
-      expect(response.code).to eq("404")
+      expect { get :index, params: { facility_id: facility.url_name, report_by: "" } }.to raise_error(ActionController::RoutingError)
     end
   end
 
@@ -267,5 +265,4 @@ RSpec.describe Reports::GeneralReportsController do
       expect(rows[i][3]).to eq(to_percent(od.total / assigns(:total_cost)))
     end
   end
-
 end

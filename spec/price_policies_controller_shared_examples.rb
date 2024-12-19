@@ -45,7 +45,6 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
     end
 
     context "when facility_directors_can_manage_price_groups on", feature_setting: { facility_directors_can_manage_price_groups: true } do
-
       it_should_allow_managers_only {}
 
       context "signed in" do
@@ -159,7 +158,6 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
     context "when facility_directors_can_manage_price_groups off", feature_setting: { facility_directors_can_manage_price_groups: false } do
       it_should_allow_admin_only {}
     end
-
   end
 
   context "#edit" do
@@ -171,7 +169,6 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
     end
 
     context "when facility_directors_can_manage_price_groups on", feature_setting: { facility_directors_can_manage_price_groups: true } do
-
       it_should_allow_managers_only {}
 
       context "signed in" do
@@ -208,17 +205,15 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
         @order_detail = @order.order_details.create(FactoryBot.attributes_for(:order_detail).update(product_id: @product.id, account_id: @account.id, price_policy: @price_policy))
         UserPriceGroupMember.create!(price_group: @price_group, user: @director)
         maybe_grant_always_sign_in :director
-        do_request
+        expect { do_request }.to raise_error(ActiveRecord::RecordNotFound)
         expect(assigns[:start_date]).to eq(Time.zone.parse(@params[:id]))
         expect(assigns[:price_policies]).to be_empty
-        is_expected.to render_template "errors/not_found"
       end
     end
 
     context "when facility_directors_can_manage_price_groups off", feature_setting: { facility_directors_can_manage_price_groups: false } do
       it_should_allow_admin_only {}
     end
-
   end
 
   context "with policy params" do
@@ -235,7 +230,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
       before :each do
         @method = :post
         @action = :create
-        @start_date = Time.zone.now + 1.year
+        @start_date = 1.year.from_now
         @expire_date = PricePolicy.generate_expire_date(@start_date)
         @params[:start_date] = @start_date.to_s
         @params[:expire_date] = @expire_date.to_s
@@ -245,7 +240,6 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
       end
 
       context "when facility_directors_can_manage_price_groups on", feature_setting: { facility_directors_can_manage_price_groups: true } do
-
         it_should_allow_managers_only(:redirect) {}
 
         context "signed in" do
@@ -336,7 +330,6 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
       context "when facility_directors_can_manage_price_groups off", feature_setting: { facility_directors_can_manage_price_groups: false } do
         it_should_allow_admin_only(:redirect) {}
       end
-
     end
 
     describe "#update" do
@@ -357,7 +350,6 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
       end
 
       context "when facility_directors_can_manage_price_groups on", feature_setting: { facility_directors_can_manage_price_groups: true } do
-
         it_should_allow_managers_only(:redirect) {}
 
         context "when signed in as a director" do
@@ -498,7 +490,6 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
       context "when facility_directors_can_manage_price_groups off", feature_setting: { facility_directors_can_manage_price_groups: false } do
         it_should_allow_admin_only(:redirect) {}
       end
-
     end
 
     describe "#destroy" do
@@ -511,7 +502,6 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
       end
 
       context "when facility_directors_can_manage_price_groups on", feature_setting: { facility_directors_can_manage_price_groups: true } do
-
         it_should_allow_managers_only(:redirect) {}
 
         context "when signed in as a director" do
@@ -556,14 +546,13 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
       context "when facility_directors_can_manage_price_groups off", feature_setting: { facility_directors_can_manage_price_groups: false } do
         it_should_allow_admin_only(:redirect) {}
       end
-
     end
   end
 
   private
 
   def price_policy_index_path
-    send("facility_#{@product_type}_price_policies_path", @authable, @product)
+    send(:"facility_#{@product_type}_price_policies_path", @authable, @product)
   end
 
   def make_price_policy(price_group, extra_attr = {})
@@ -575,5 +564,4 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
     @price_policy.expire_date = PricePolicy.generate_expire_date(@price_policy)
     assert @price_policy.save
   end
-
 end

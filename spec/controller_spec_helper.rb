@@ -71,8 +71,7 @@ end
 def it_should_deny(user_sym, spec_desc = "")
   it "should deny #{user_sym} " + spec_desc, auth: true do
     maybe_grant_always_sign_in(user_sym)
-    do_request
-    is_expected.to render_template("errors/forbidden")
+    expect { do_request }.to raise_error(CanCan::AccessDenied)
   end
 end
 
@@ -247,6 +246,6 @@ def grant_and_sign_in(user)
 end
 
 def maybe_grant_always_sign_in(user_sym)
-  user = instance_variable_get("@#{user_sym}")
+  user = instance_variable_get(:"@#{user_sym}")
   grant_and_sign_in(user)
 end

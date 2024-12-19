@@ -19,8 +19,7 @@ RSpec.describe ProblemReservationsController do
       before { instrument.update(problems_resolvable_by_user: false) }
 
       it "is a 404" do
-        get :edit, params: { id: problem_reservation }
-        expect(response).to be_not_found
+        expect { get :edit, params: { id: problem_reservation } }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
@@ -28,8 +27,7 @@ RSpec.describe ProblemReservationsController do
   describe "as a random user" do
     before { sign_in create(:user) }
     it "is a 404" do
-      get :edit, params: { id: problem_reservation }
-      expect(response).to be_not_found
+      expect { get :edit, params: { id: problem_reservation } }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
@@ -37,8 +35,7 @@ RSpec.describe ProblemReservationsController do
     before { sign_in create(:user, :facility_director, facility: facility) }
 
     it "is a 404" do
-      get :edit, params: { id: problem_reservation }
-      expect(response).to be_not_found
+      expect { get :edit, params: { id: problem_reservation } }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
@@ -46,8 +43,7 @@ RSpec.describe ProblemReservationsController do
     before { sign_in create(:user, :administrator) }
 
     it "is a 404" do
-      get :edit, params: { id: problem_reservation }
-      expect(response).to be_not_found
+      expect { get :edit, params: { id: problem_reservation } }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

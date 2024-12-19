@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { create_users: true, user_based_price_groups: true, reload_routes: true } do
-
   let(:facility) { FactoryBot.create(:facility) }
   let(:admin) { FactoryBot.create(:user, :netid, :administrator) }
 
@@ -27,7 +26,6 @@ RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { 
 
       expect(page).to have_content("if this user is entitled to internal rates.")
     end
-
   end
 
   describe "edit" do
@@ -101,11 +99,8 @@ RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { 
       end
 
       it "cannot access the page" do
-        visit edit_facility_user_path(Facility.cross_facility, user)
-        expect(page).to have_content("Permission Denied")
+        expect { visit edit_facility_user_path(Facility.cross_facility, user) }.to raise_error(CanCan::AccessDenied)
       end
-
     end
-
   end
 end

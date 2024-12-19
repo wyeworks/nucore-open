@@ -136,12 +136,13 @@ RSpec.describe OrdersController do
       context "when add_to_cart is set in the session" do
         before(:each) do
           session[:add_to_cart] = [{ product_id: added_item_id }]
-          do_request
         end
 
         context "and the product exists" do
           let(:added_item) { create(:setup_item) }
           let(:added_item_id) { added_item.id }
+
+          before { do_request }
 
           it "sets @product to the first product in the cart" do
             expect(assigns(:product)).to eq(added_item)
@@ -151,7 +152,7 @@ RSpec.describe OrdersController do
         context "and the product does not exist" do
           let(:added_item_id) { 0 }
 
-          it { expect(response.response_code).to eq(404) }
+          it { expect { do_request }.to raise_error(ActiveRecord::RecordNotFound) }
         end
       end
 
@@ -792,7 +793,6 @@ RSpec.describe OrdersController do
         expect(@item.price_policies).not_to be_empty
         expect(@order.reload.order_details.first.estimated_cost).not_to be_nil
       end
-
     end
 
     context "instrument" do
@@ -824,7 +824,6 @@ RSpec.describe OrdersController do
 
           assert_redirected_to choose_account_order_url(@order)
         end
-
       end
 
       context "with non-empty cart" do
@@ -959,8 +958,7 @@ RSpec.describe OrdersController do
       @order_detail2 = @order2.order_details[0]
       @params[:order_detail_id] = @order_detail2.id
       maybe_grant_always_sign_in :staff
-      do_request
-      expect(response.response_code).to eq(404)
+      expect { do_request }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     context "removing last item in cart" do

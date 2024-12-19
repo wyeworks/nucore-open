@@ -67,32 +67,31 @@ RSpec.describe PriceGroupsController do
       context "when user-based price groups are disabled", feature_setting: { user_based_price_groups: false, facility_directors_can_manage_price_groups: true } do
         before(:each) do
           maybe_grant_always_sign_in(user)
-          do_request
         end
 
         context "for admins" do
           let(:user) { :admin }
-          it { expect(response.code).to eq("404") }
+          it { expect { do_request }.to raise_error(ActiveRecord::RecordNotFound) }
         end
 
         context "for directors" do
           let(:user) { :director }
-          it { expect(response.code).to eq("404") }
+          it { expect { do_request }.to raise_error(ActiveRecord::RecordNotFound) }
         end
 
         context "for senior staff" do
           let(:user) { :senior_staff }
-          it { expect(response.code).to eq("403") }
+          it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
         end
 
         context "for staff" do
           let(:user) { :staff }
-          it { expect(response.code).to eq("403") }
+          it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
         end
 
         context "for guests" do
           let(:user) { :staff }
-          it { expect(response.code).to eq("403") }
+          it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
         end
       end
     end
