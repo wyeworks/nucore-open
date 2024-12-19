@@ -11,7 +11,6 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
   let(:instrument) { create(:setup_instrument, :timer, facility: facility) }
 
   shared_examples "kiosk_actions" do |login_label, password|
-
     context "with an admin reservation" do
       let!(:admin_reservation) { create(:admin_reservation, reserve_start_at: 15.minutes.ago, product: instrument) }
       let!(:accessory) { create(:accessory, parent: instrument) }
@@ -283,7 +282,9 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
     let!(:reservation) { create(:purchased_reservation, reserve_start_at: 15.minutes.ago, product: instrument, user: user) }
 
     it "does not show the kiosk view" do
+      NUCore::PermissionDenied
       visit facility_kiosk_reservations_path(facility)
+
       expect(page).to have_content("Login")
       expect(page).not_to have_content("Begin Reservation")
       expect(page).not_to have_content("End Reservation")

@@ -7,11 +7,12 @@ RSpec.describe GlobalUserRolesController do
   describe "#index" do
     before(:each) do
       sign_in(user) if user.present?
-      get(:index)
     end
 
     context "when not logged in" do
       let(:user) { nil }
+
+      before { get(:index) }
 
       it_behaves_like "the user must log in"
     end
@@ -20,11 +21,13 @@ RSpec.describe GlobalUserRolesController do
       context "as an unprivileged user" do
         let(:user) { create(:user) }
 
-        it_behaves_like "the user is not allowed"
+        it { expect { get(:index) }.to raise_error(CanCan::AccessDenied) }
       end
 
       context "as a global administrator" do
         let(:user) { create(:user, :administrator) }
+
+        before { get(:index) }
 
         it { expect(response).to be_successful }
       end

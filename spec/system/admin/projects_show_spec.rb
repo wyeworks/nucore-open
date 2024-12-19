@@ -50,13 +50,8 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
     context "from another facility" do
       let!(:active_project2) { create(:project, facility: facility2) }
 
-      before do
-        visit facility_project_path(facility, active_project2)
-      end
-
       it "does not show the project" do
-        expect(page).not_to have_content(active_project2.name)
-        expect(page).to have_content("Sorry, you don't have permission to access this page.")
+        expect { visit facility_project_path(facility, active_project2) }.to raise_error(CanCan::AccessDenied)
       end
     end
   end
@@ -146,12 +141,8 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
 
     context "not involving current facility" do
       context "originating from another facility" do
-        before do
-          visit facility_project_path(facility, cross_core_project3)
-        end
-
         it "does not show the project" do
-          expect(page).to have_content("Sorry, you don't have permission to access this page.")
+          expect { visit facility_project_path(facility, cross_core_project3) }.to raise_error(CanCan::AccessDenied)
         end
       end
     end

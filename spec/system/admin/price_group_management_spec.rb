@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Managing Price Groups", :aggregate_failures do
-
   let(:facility) { FactoryBot.create(:facility) }
 
   describe "create" do
@@ -31,11 +30,10 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
       before do
         login_as user
-        visit new_facility_price_group_path(facility)
       end
 
       it "does not allow access" do
-        expect(page.status_code).to eq(403)
+        expect { visit new_facility_price_group_path(facility) }.to raise_error(CanCan::AccessDenied)
       end
     end
   end
@@ -122,7 +120,6 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
           expect(page).to_not have_content(user2.name)
         end
       end
-
     end
   end
 
@@ -153,10 +150,10 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
       before do
         login_as user
-        visit facility_price_groups_path(facility)
       end
 
       it "does not have a remove link present" do
+        expect { visit facility_price_groups_path(facility) }.to raise_error(CanCan::AccessDenied)
         expect(page).not_to have_link("Remove")
       end
     end
