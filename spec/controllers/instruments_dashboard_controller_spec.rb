@@ -23,15 +23,13 @@ RSpec.describe InstrumentsDashboardController do
 
     it "blocks staff from another facility" do
       sign_in create(:user, :staff, facility: create(:facility))
-      do_request
-      expect(response).to be_forbidden
+      expect { do_request }.to raise_error(CanCan::AccessDenied)
     end
   end
 
   describe "public dashboard" do
     it "does not allow access if it is not turned on" do
-      get :public_dashboard, params: { facility_id: facility.url_name, token: "" }
-      expect(response).to be_not_found
+      expect { get :public_dashboard, params: { facility_id: facility.url_name, token: "" } }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it "allows access with the token" do
@@ -42,8 +40,7 @@ RSpec.describe InstrumentsDashboardController do
 
     it "does not allow access if the token is wrong" do
       facility.update!(dashboard_enabled: true)
-      get :public_dashboard, params: { facility_id: facility.url_name, token: "invalidtoken" }
-      expect(response).to be_not_found
+      expect { get :public_dashboard, params: { facility_id: facility.url_name, token: "invalidtoken" } }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

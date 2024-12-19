@@ -17,9 +17,7 @@ RSpec.describe OrderDetailsController do
     before { sign_in user }
 
     context "when the order is not disputable" do
-      before { put :dispute, params: params }
-
-      it { expect(response.code).to eq("404") }
+      it { expect { put :dispute, params: params }.to raise_error(ActiveRecord::RecordNotFound) }
     end
 
     context "when the order is disputable" do
@@ -75,8 +73,7 @@ RSpec.describe OrderDetailsController do
       let(:user) { create(:user) }
 
       it "cannot access the page" do
-        perform
-        expect(response.code).to eq("403")
+        expect { perform }.to raise_error(CanCan::AccessDenied)
       end
     end
 
@@ -110,7 +107,7 @@ RSpec.describe OrderDetailsController do
         let(:user) { FactoryBot.create(:user) }
 
         it "does not see the dispute box" do
-          perform
+          expect { perform }.to raise_error(CanCan::AccessDenied)
           expect(response.body).not_to include("Dispute")
         end
       end
@@ -143,11 +140,12 @@ RSpec.describe OrderDetailsController do
           let(:user) { FactoryBot.create(:user) }
           before do
             FactoryBot.create(:account_user, :business_administrator, account: account, user: user)
-            put :cancel, params: { order_id: order.id, id: order_detail.id }
           end
 
-          it { expect(order_detail.reload).not_to be_canceled }
-          it { expect(response.code).to eq("403") }
+          it do
+            expect { put :cancel, params: { order_id: order.id, id: order_detail.id } }.to raise_error(CanCan::AccessDenied)
+            expect(order_detail.reload).not_to be_canceled
+          end
         end
 
         context "and I am just a purchaser on the account" do
@@ -165,11 +163,12 @@ RSpec.describe OrderDetailsController do
         context "and the reservation is not cancelable" do
           before do
             reservation.update(actual_start_at: Time.current)
-            put :cancel, params: { order_id: order.id, id: order_detail.id }
           end
 
-          it { expect(order_detail.reload).not_to be_canceled }
-          it { expect(response.code).to eq("404") }
+          it do
+            expect { put :cancel, params: { order_id: order.id, id: order_detail.id } }.to raise_error(ActiveRecord::RecordNotFound)
+            expect(order_detail.reload).not_to be_canceled
+          end
         end
       end
     end
@@ -204,11 +203,10 @@ RSpec.describe OrderDetailsController do
         before do
           FactoryBot.create(:account_user, :purchaser,
                             user: signed_in_user, account: order_detail.account)
-          perform
         end
 
         it "does not load" do
-          expect(response.code).to eq("403")
+          expect { perform }.to raise_error(CanCan::AccessDenied)
         end
       end
 
@@ -228,10 +226,9 @@ RSpec.describe OrderDetailsController do
 
       describe "as a random user" do
         let(:signed_in_user) { FactoryBot.create(:user) }
-        before { perform }
 
         it "does not load" do
-          expect(response.code).to eq("403")
+          expect { perform }.to raise_error(CanCan::AccessDenied)
         end
       end
     end
