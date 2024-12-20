@@ -20,6 +20,7 @@ RUN apt-get update && \
   nodejs \
   npm \
   vim \
+  cron \
   # Install ssl cert
   ssl-cert
 
