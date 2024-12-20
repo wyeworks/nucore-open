@@ -14,7 +14,7 @@ job_type :script, "cd :path && :task"
 
 set :output, "log/#{@environment}.log"
 
-if ENV["RUN_CRON"]
+if ENV.fecth("RUN_CRON", false)
 
   every :day, at: "4:17am", roles: [:db] do
     rake "order_details:remove_merge_orders"
