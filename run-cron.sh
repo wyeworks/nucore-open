@@ -4,4 +4,4 @@
 # Update crontab
 bundle exec whenever --update-crontab --set "environment=${RAILS_ENV}"
 # Start cron in foreground
-cron -foreground
+cron -f
