@@ -19,7 +19,7 @@ email:
       - txidigital.com
       - tablexi.com
 saml:
-  certificate_file: config/saml-certificate.p12
+  certificate_file: <%= ENV.fetch("SAML_CERTIFICATE_PATH", "config/saml-certificate.p12") %>
 
 # paperclip:
 #   storage: s3

@@ -5,7 +5,6 @@ tmp/
 .rvmrc
 .ruby-gemset
 sqlnet.log
-config/database.yml
 config/ldap.yml
 oracle/
 public/plugin_assets/
@@ -31,7 +30,6 @@ deprecations/
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
-config/secrets.yml
 
 public/images/bg-search-form.pxm
 public/uploads

@@ -3,6 +3,7 @@ defaults: &defaults
   host: <%= ENV.fetch("MYSQL_HOST", "127.0.0.1") %>
   username: <%= ENV.fetch("MYSQL_USER", "root") %>
   password: <%= ENV.fetch("MYSQL_PASSWORD", "root") %>
+  port: <%= ENV.fetch("MYSQL_PORT", "3306") %>
   encoding: utf8
   pool: 5
   timeout: 5000
