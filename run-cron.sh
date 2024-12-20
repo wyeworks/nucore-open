@@ -4,4 +4,4 @@
 # Update crontab
 bundle exec whenever --update-crontab
 # Start cron in foreground
-cron -foreground -user root
+cron -foreground
