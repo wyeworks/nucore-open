@@ -6,4 +6,5 @@ if [ -d /shared ]; then
   ln -nfs /shared/uploads /app/public/uploads
 fi
 
+printenv >> /etc/environment
 exec "$@"
