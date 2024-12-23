@@ -90,7 +90,7 @@ class ScheduleRulesController < ApplicationController
         price_group_discounts_attributes: [:discount_percent, :price_group_id, :id],
         product_access_group_ids: []
       ).tap do |schedule_rule_params|
-        if @product.fixed_start_time?
+        if @product.start_time_disabled?
           schedule_rule_params.merge! ScheduleRule.full_day_attributes
         end
       end
@@ -109,7 +109,7 @@ class ScheduleRulesController < ApplicationController
   end
 
   def build_schedule_rule
-    attrs = if @product.fixed_start_time?
+    attrs = if @product.start_time_disabled?
               ScheduleRule.full_day_attributes
             else
               {

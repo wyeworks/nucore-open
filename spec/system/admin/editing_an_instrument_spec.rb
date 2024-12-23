@@ -24,7 +24,7 @@ RSpec.describe "Editing an instrument" do
       expect(page).to have_content("Instrument was successfully updated")
     end
 
-    context "switching fixed_start_time on" do
+    context "switching start_time_disabled on" do
       let(:schedule_rule) do
         instrument.schedule_rules.destroy_all
         create(
@@ -38,10 +38,10 @@ RSpec.describe "Editing an instrument" do
         schedule_rule.reload.as_json(only: [:start_hour, :start_min, :end_hour, :end_min])
       end
 
-      it "update schedule rules if fixed_start_time is switched on" do
+      it "update schedule rules if start_time_disabled is switched on" do
         visit edit_facility_instrument_path(facility, instrument)
 
-        check("Fixed Start Time")
+        check("Start Time Disabled")
 
         expect { click_button("Save") }.to change {
           schedule_rule_times(schedule_rule.reload)

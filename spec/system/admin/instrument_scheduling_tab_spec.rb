@@ -167,9 +167,9 @@ RSpec.describe "Instrument Scheduling Tab" do
       end
     end
 
-    context "when instrument has fixed_start_time on" do
+    context "when instrument has start_time_disabled on" do
       before do
-        instrument.update(fixed_start_time: true)
+        instrument.update(start_time_disabled: true)
       end
 
       it "allows to select days but not time" do

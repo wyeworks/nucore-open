@@ -105,7 +105,7 @@ class InstrumentsController < ProductsCommonController
   end
 
   def update_schedule_rules
-    return unless @product.fixed_start_time? && @product.fixed_start_time_previously_changed?
+    return unless @product.start_time_disabled? && @product.start_time_disabled_previously_changed?
 
     @product.schedule_rules.update_all(ScheduleRule.full_day_attributes)
   end
