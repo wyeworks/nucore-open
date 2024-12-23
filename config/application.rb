@@ -55,9 +55,6 @@ module Nucore
     # config.autoload_paths += Dir["#{config.root}/lib"]
     # config.eager_load_paths += Dir["#{config.root}/lib"]
 
-    config.autoload_paths << Rails.root.join("lib/middlewares")
-    config.eager_load_paths << Rails.root.join("lib/middlewares")
-
     config.autoload_paths += Dir["#{config.root}/app/models/external_services"]
     config.eager_load_paths += Dir["#{config.root}/app/models/external_services"]
 
