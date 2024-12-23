@@ -37,7 +37,7 @@ window.FullCalendarConfig = class FullCalendarConfig {
   }
 
   baseOptions() {
-    var self = this;
+    let self = this;
 
     return {
       editable: false,
@@ -138,9 +138,11 @@ window.FullCalendarConfig = class FullCalendarConfig {
   }
 
   formattedEventPeriod(event) {
+    let format = (this.isDailyBooking() && event.end.isAfter(event.start, 'day')) ? "MM/DD/YY h:mmA" : "h:mmA";
+
     return [event.start, event.end].
-      map(date => $.fullCalendar.formatDate(date, "h:mmA")).
-      join("&ndash;");
+      map(date => $.fullCalendar.formatDate(date, format)).
+      join(" &ndash; ");
   }
 
   linkToEditOrder(event) {
@@ -153,6 +155,8 @@ window.FullCalendarConfig = class FullCalendarConfig {
    * from midnight.
    */
   adjustEvent(event, element, view) {
+    // Do nothing if not daily booking
+    if (!this.isDailyBooking()) { return; }
     // Don't apply changes unless monthly view
     if (view.name != 'month') { return; }
     // exclude allDay and background events
@@ -163,24 +167,24 @@ window.FullCalendarConfig = class FullCalendarConfig {
     // there's nothing to do
     if (!seg) { return; }
 
-    // Don't add margins if event last less than a day
-    if (event.end.diff(event.start, 'days', true) < 1.0) { return; }
-
     let startOfDay = event.start.clone();
     startOfDay.startOf('day');
-    let endOfDay = event.end.clone();
-    endOfDay.endOf('day');
 
-    let startOffsetDiff = event.start.diff(startOfDay, 'minutes');
-    let startOffset = startOffsetDiff;
+    let endOfDay = event.end.clone();
+    endOfDay.startOf('day');
+    // If event end is the start of the day it's already
+    // the follwoing day
+    if (endOfDay.diff(event.end) != 0) {
+      endOfDay.add(1, 'day')
+    }
+
+    let startOffset = event.start.diff(startOfDay, 'minutes');
     if (!seg.isStart) {
       // Event started some row above
       startOffset = 0;
     }
     let endOffset = endOfDay.diff(event.end, 'minutes');
-    // If startOffsetDiff is zero then reservation starts
-    // at begging of thay and it does not have end offset
-    if (!seg.isEnd || startOffsetDiff === 0) {
+    if (!seg.isEnd) {
       // Event ends some row below
       endOffset = 0;
     }
@@ -188,13 +192,33 @@ window.FullCalendarConfig = class FullCalendarConfig {
     let marginLeft = startOffset / 14.40; // 1440 minutes per day in percentage
     let marginRight = endOffset / 14.40;
 
+    // Normalize margins relative to the amount of slots
+    // in the segment
     let eventSegmentSlots = seg.rightCol - seg.leftCol + 1;
-
-    // A maximum of 7 days (calendar slots) in each row
     marginLeft /= eventSegmentSlots;
     marginRight /= eventSegmentSlots;
 
+    // Adjust margins to short hourly events that last less than a day
+    // and use a single slot so there's enough width to read the text.
+    let hourlyEvent = event.end.diff(event.start, 'hours') < 24;
+    if (hourlyEvent && eventSegmentSlots == 1) {
+      let minWidthPercent = 60;
+      let eventWidth = 100 - marginLeft - marginRight;
+      if (eventWidth < minWidthPercent) {
+        // Reduce margins so minWidthPercent is reached
+        let leftover = minWidthPercent - eventWidth;
+        marginLeft -= leftover / 2;
+        marginRight -= leftover / 2;
+      }
+      marginLeft = Math.max(0, marginLeft);
+      marginRight = Math.max(0, marginRight);
+    }
+
     $(element).css('margin-left', marginLeft + "%");
     $(element).css('margin-right', marginRight + "%");
+  }
+
+  isDailyBooking() {
+    return typeof dailyBooking !== 'undefined' && dailyBooking;
   }
 };

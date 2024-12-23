@@ -14,3 +14,4 @@
   var instrumentOnline = #{@instrument.online?};
   var initialDate = "#{@reservation&.reserve_start_at&.iso8601}";
   var reserveInterval = #{@instrument.reserve_interval || 1};
+  var dailyBooking = #{@instrument.daily_booking?};

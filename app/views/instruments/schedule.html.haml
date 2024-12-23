@@ -14,6 +14,7 @@
 :javascript
   var events_path = "#{calendar_events_path(current_facility, @product, with_details: true)}";
   var orders_path_base = "#{facility_orders_path(current_facility)}";
+  var dailyBooking = #{@product.daily_booking?};
 
 %h2= @product
 
