@@ -152,7 +152,7 @@ RSpec.describe OrdersController do
         context "and the product does not exist" do
           let(:added_item_id) { 0 }
 
-          it { expect { do_request }.to raise_error(ActiveRecord::RecordNotFound) }
+          it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
         end
       end
 

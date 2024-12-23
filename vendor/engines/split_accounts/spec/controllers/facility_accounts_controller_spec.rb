@@ -163,17 +163,13 @@ RSpec.describe FacilityAccountsController, :enable_split_accounts do
     describe "edit" do
       let(:split_account) { FactoryBot.create(:split_account) }
 
-      it "returns a 403" do
-        expect { get :edit, params: { facility_id: facility.url_name, id: split_account.id } }.to raise_error(CanCan::AccessDenied)
-      end
+      it_behaves_like "raises specified error", -> { get :edit, params: { facility_id: facility.url_name, id: split_account.id } }, CanCan::AccessDenied
     end
 
     describe "update" do
       let(:split_account) { FactoryBot.create(:split_account) }
 
-      it "returns a 403" do
-        expect { post :update, params: { facility_id: facility.url_name, id: split_account.id } }.to raise_error(CanCan::AccessDenied)
-      end
+      it_behaves_like "raises specified error", -> { post :update, params: { facility_id: facility.url_name, id: split_account.id } }, CanCan::AccessDenied
     end
   end
 end

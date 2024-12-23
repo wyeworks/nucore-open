@@ -138,12 +138,12 @@ RSpec.describe "ProductDisplayGroups" do
       expect(page).not_to have_link("Add Product Group")
     end
 
-    it "can't directly access the new page", :aggregate_failures do
-      expect { visit new_facility_product_display_group_path(facility) }.to raise_error(CanCan::AccessDenied)
+    context "when trying to access the new page" do
+      it_behaves_like "raises specified error", -> { visit new_facility_product_display_group_path(facility) }, CanCan::AccessDenied
     end
 
-    it "can't directly access the edit page", :aggregate_failures do
-      expect { visit edit_facility_product_display_group_path(facility, display_group) }.to raise_error(CanCan::AccessDenied)
+    context "when trying to access the edit page" do
+      it_behaves_like "raises specified error", -> { visit edit_facility_product_display_group_path(facility, display_group) }, CanCan::AccessDenied
     end
   end
 end

@@ -149,7 +149,7 @@ def it_should_allow_managers_only(response = :success, spec_desc = "", login = t
   if login
     it_should_require_login
   else
-    it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
+    it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
   end
 
   it_should_deny(:guest, spec_desc)

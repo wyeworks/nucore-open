@@ -18,32 +18,25 @@ RSpec.describe ProblemReservationsController do
     describe "when the product is not resolvable" do
       before { instrument.update(problems_resolvable_by_user: false) }
 
-      it "is a 404" do
-        expect { get :edit, params: { id: problem_reservation } }.to raise_error(ActiveRecord::RecordNotFound)
-      end
+      it_behaves_like "raises specified error", -> { get :edit, params: { id: problem_reservation } }, ActiveRecord::RecordNotFound
     end
   end
 
   describe "as a random user" do
     before { sign_in create(:user) }
-    it "is a 404" do
-      expect { get :edit, params: { id: problem_reservation } }.to raise_error(ActiveRecord::RecordNotFound)
-    end
+
+    it_behaves_like "raises specified error", -> { get :edit, params: { id: problem_reservation } }, ActiveRecord::RecordNotFound
   end
 
   describe "as a facility director" do
     before { sign_in create(:user, :facility_director, facility: facility) }
 
-    it "is a 404" do
-      expect { get :edit, params: { id: problem_reservation } }.to raise_error(ActiveRecord::RecordNotFound)
-    end
+    it_behaves_like "raises specified error", -> { get :edit, params: { id: problem_reservation } }, ActiveRecord::RecordNotFound
   end
 
   describe "as a global admin" do
     before { sign_in create(:user, :administrator) }
 
-    it "is a 404" do
-      expect { get :edit, params: { id: problem_reservation } }.to raise_error(ActiveRecord::RecordNotFound)
-    end
+    it_behaves_like "raises specified error", -> { get :edit, params: { id: problem_reservation } }, ActiveRecord::RecordNotFound
   end
 end

@@ -202,12 +202,10 @@ RSpec.describe Reports::GeneralReportsController do
     let(:user) { FactoryBot.create(:user, :administrator) }
     before { sign_in user }
 
-    it "returns a 404" do
-      expect { get :index, params: { report_by: "asdfasdf", facility_id: facility.url_name } }.to raise_error(ActionController::RoutingError)
-    end
+    it_behaves_like "raises specified error", -> { get :index, params: { report_by: "asdfasdf", facility_id: facility.url_name } }, ActionController::RoutingError
 
-    it "returns a 404 for a blank report_by" do
-      expect { get :index, params: { facility_id: facility.url_name, report_by: "" } }.to raise_error(ActionController::RoutingError)
+    context "when blank report_by" do
+      it_behaves_like "raises specified error", -> { get :index, params: { facility_id: facility.url_name, report_by: "" } }, ActionController::RoutingError
     end
   end
 

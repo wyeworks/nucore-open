@@ -32,9 +32,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
         login_as user
       end
 
-      it "does not allow access" do
-        expect { visit new_facility_price_group_path(facility) }.to raise_error(CanCan::AccessDenied)
-      end
+      it_behaves_like "raises specified error", -> { visit new_facility_price_group_path(facility) }, CanCan::AccessDenied
     end
   end
 

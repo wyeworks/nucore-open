@@ -71,27 +71,27 @@ RSpec.describe PriceGroupsController do
 
         context "for admins" do
           let(:user) { :admin }
-          it { expect { do_request }.to raise_error(ActiveRecord::RecordNotFound) }
+          it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
         end
 
         context "for directors" do
           let(:user) { :director }
-          it { expect { do_request }.to raise_error(ActiveRecord::RecordNotFound) }
+          it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
         end
 
         context "for senior staff" do
           let(:user) { :senior_staff }
-          it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
+          it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
         end
 
         context "for staff" do
           let(:user) { :staff }
-          it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
+          it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
         end
 
         context "for guests" do
           let(:user) { :staff }
-          it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
+          it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
         end
       end
     end

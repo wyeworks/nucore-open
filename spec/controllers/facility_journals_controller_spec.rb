@@ -345,9 +345,7 @@ RSpec.describe FacilityJournalsController do
         sign_in create(:user, :global_billing_administrator)
       end
 
-      it "renders a 404" do
-        expect { do_request }.to raise_error(ActiveRecord::RecordNotFound)
-      end
+      it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
     end
   end
 
@@ -409,9 +407,7 @@ RSpec.describe FacilityJournalsController do
         sign_in create(:user, :global_billing_administrator)
       end
 
-      it "renders a 404" do
-        expect { do_request }.to raise_error(ActiveRecord::RecordNotFound)
-      end
+      it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
     end
   end
 

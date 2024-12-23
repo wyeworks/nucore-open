@@ -11,9 +11,7 @@ RSpec.describe "Managing JournalCreationReminder" do
   describe "as a normal user" do
     let(:user) { FactoryBot.create(:user) }
 
-    it "does not give access to index" do
-      expect { visit journal_creation_reminders_path }.to raise_error(CanCan::AccessDenied)
-    end
+    it_behaves_like "raises specified error", -> { visit journal_creation_reminders_path }, CanCan::AccessDenied
   end
 
   describe "as a global admin" do

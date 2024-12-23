@@ -28,7 +28,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
 
     describe "when not logged in" do
-      it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
+      it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
     end
 
     describe "when logged in" do
@@ -60,7 +60,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
 
     describe "when not logged in" do
-      it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
+      it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
     end
 
     describe "when logged in" do
@@ -94,7 +94,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
 
     describe "when not logged in" do
-      it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
+      it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
     end
 
     describe "when logged in" do
@@ -132,7 +132,7 @@ RSpec.describe ProjectsController, type: :controller do
     let(:description) { "A project description" }
 
     describe "when not logged in" do
-      it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
+      it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
     end
 
     describe "when logged in" do

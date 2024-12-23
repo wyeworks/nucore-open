@@ -77,8 +77,6 @@ RSpec.describe "Instrument Schedule Display Order" do
       expect(page).not_to have_link("Edit")
     end
 
-    it "can't directly access the edit page" do
-      expect { visit edit_facility_instrument_schedule_position_path(facility) }.to raise_error(CanCan::AccessDenied)
-    end
+    it_behaves_like "raises specified error", -> { visit edit_facility_instrument_schedule_position_path(facility) }, CanCan::AccessDenied
   end
 end

@@ -50,9 +50,7 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
     context "from another facility" do
       let!(:active_project2) { create(:project, facility: facility2) }
 
-      it "does not show the project" do
-        expect { visit facility_project_path(facility, active_project2) }.to raise_error(CanCan::AccessDenied)
-      end
+      it_behaves_like "raises specified error", -> { visit facility_project_path(facility, active_project2) }, CanCan::AccessDenied
     end
   end
 
@@ -141,9 +139,7 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
 
     context "not involving current facility" do
       context "originating from another facility" do
-        it "does not show the project" do
-          expect { visit facility_project_path(facility, cross_core_project3) }.to raise_error(CanCan::AccessDenied)
-        end
+        it_behaves_like "raises specified error", -> { visit facility_project_path(facility, cross_core_project3) }, CanCan::AccessDenied
       end
     end
   end

@@ -21,7 +21,7 @@ RSpec.describe GlobalUserRolesController do
       context "as an unprivileged user" do
         let(:user) { create(:user) }
 
-        it { expect { get(:index) }.to raise_error(CanCan::AccessDenied) }
+        it_behaves_like "raises specified error", -> { get(:index) }, CanCan::AccessDenied
       end
 
       context "as a global administrator" do

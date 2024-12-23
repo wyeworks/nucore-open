@@ -17,7 +17,7 @@ RSpec.describe OrderDetailsController do
     before { sign_in user }
 
     context "when the order is not disputable" do
-      it { expect { put :dispute, params: params }.to raise_error(ActiveRecord::RecordNotFound) }
+      it_behaves_like "raises specified error", -> { put :dispute, params: params }, ActiveRecord::RecordNotFound
     end
 
     context "when the order is disputable" do
@@ -72,9 +72,7 @@ RSpec.describe OrderDetailsController do
     context "when logged in as a user that does not own the order" do
       let(:user) { create(:user) }
 
-      it "cannot access the page" do
-        expect { perform }.to raise_error(CanCan::AccessDenied)
-      end
+      it_behaves_like "raises specified error", :perform, CanCan::AccessDenied
     end
 
     describe "dispute box" do
@@ -142,7 +140,7 @@ RSpec.describe OrderDetailsController do
             FactoryBot.create(:account_user, :business_administrator, account: account, user: user)
           end
 
-          it do
+          it "does not cancel the order" do
             expect { put :cancel, params: { order_id: order.id, id: order_detail.id } }.to raise_error(CanCan::AccessDenied)
             expect(order_detail.reload).not_to be_canceled
           end
@@ -165,7 +163,7 @@ RSpec.describe OrderDetailsController do
             reservation.update(actual_start_at: Time.current)
           end
 
-          it do
+          it "does not cancel the order" do
             expect { put :cancel, params: { order_id: order.id, id: order_detail.id } }.to raise_error(ActiveRecord::RecordNotFound)
             expect(order_detail.reload).not_to be_canceled
           end
@@ -205,9 +203,7 @@ RSpec.describe OrderDetailsController do
                             user: signed_in_user, account: order_detail.account)
         end
 
-        it "does not load" do
-          expect { perform }.to raise_error(CanCan::AccessDenied)
-        end
+        it_behaves_like "raises specified error", :perform, CanCan::AccessDenied
       end
 
       describe "as the purchaser" do
@@ -227,9 +223,7 @@ RSpec.describe OrderDetailsController do
       describe "as a random user" do
         let(:signed_in_user) { FactoryBot.create(:user) }
 
-        it "does not load" do
-          expect { perform }.to raise_error(CanCan::AccessDenied)
-        end
+        it_behaves_like "raises specified error", :perform, CanCan::AccessDenied
       end
     end
 

@@ -538,7 +538,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
               @params[:id] = (price_policy.start_date + 1.day).to_s
             end
 
-            it { expect { do_request }.to raise_error(ActiveRecord::RecordNotFound) }
+            it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
           end
         end
       end

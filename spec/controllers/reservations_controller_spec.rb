@@ -1133,9 +1133,7 @@ RSpec.describe ReservationsController do
         @params[:reservation_id] = 999
       end
 
-      it "should return a 404" do
-        expect { do_request }.to raise_error(ActiveRecord::RecordNotFound)
-      end
+      it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
     end
   end
 

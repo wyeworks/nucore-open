@@ -44,24 +44,18 @@ RSpec.describe AccountFacilityJoinsController, feature_setting: { edit_accounts:
       expect(page).to have_content "can't remove"
     end
 
-    it "cannot visit a global account" do
-      expect { visit edit_facility_account_account_facility_joins_path(facility, global_account) }.to raise_error(ActiveRecord::RecordNotFound)
-    end
+    it_behaves_like "raises specified error", -> { visit edit_facility_account_account_facility_joins_path(facility, global_account) }, ActiveRecord::RecordNotFound
   end
 
   describe "as a facility admin" do
     before { login_as create(:user, :facility_administrator, facility: facility) }
 
-    it "cannot access the page" do
-      expect { visit edit_facility_account_account_facility_joins_path(facility, facility_specific_account) }.to raise_error(CanCan::AccessDenied)
-    end
+    it_behaves_like "raises specified error", -> { visit edit_facility_account_account_facility_joins_path(facility, facility_specific_account) }, CanCan::AccessDenied
   end
 
   describe "as an account manager" do
     before { login_as create(:user, :account_manager) }
 
-    it "cannot access the page" do
-      expect { visit edit_facility_account_account_facility_joins_path(facility, facility_specific_account) }.to raise_error(CanCan::AccessDenied)
-    end
+    it_behaves_like "raises specified error", -> { visit edit_facility_account_account_facility_joins_path(facility, facility_specific_account) }, CanCan::AccessDenied
   end
 end

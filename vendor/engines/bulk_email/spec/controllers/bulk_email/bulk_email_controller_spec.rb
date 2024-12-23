@@ -115,12 +115,12 @@ RSpec.describe BulkEmail::BulkEmailController do
 
       context "as an unprivileged user" do
         let(:user) { FactoryBot.create(:user) }
-        it { expect { post "search", params: params }.to raise_error(CanCan::AccessDenied) }
+        it_behaves_like "raises specified error", -> { post "search", params: params }, CanCan::AccessDenied
       end
 
       context "when logged in as facility staff" do
         let(:user) { FactoryBot.create(:user, :staff, facility: facility) }
-        it { expect { post "search", params: params }.to raise_error(CanCan::AccessDenied) }
+        it_behaves_like "raises specified error", -> { post "search", params: params }, CanCan::AccessDenied
       end
 
       context "when logged in as senior facility staff" do
@@ -136,7 +136,7 @@ RSpec.describe BulkEmail::BulkEmailController do
 
         context "in a cross-facility context" do
           let(:facility) { Facility.cross_facility }
-          it { expect { post "search", params: params }.to raise_error(CanCan::AccessDenied) }
+          it_behaves_like "raises specified error", -> { post "search", params: params }, CanCan::AccessDenied
         end
       end
 

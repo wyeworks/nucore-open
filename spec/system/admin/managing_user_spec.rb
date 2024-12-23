@@ -98,9 +98,7 @@ RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { 
         expect(page).not_to have_link "Edit"
       end
 
-      it "cannot access the page" do
-        expect { visit edit_facility_user_path(Facility.cross_facility, user) }.to raise_error(CanCan::AccessDenied)
-      end
+      it_behaves_like "raises specified error", -> { visit edit_facility_user_path(Facility.cross_facility, user) }, CanCan::AccessDenied
     end
   end
 end

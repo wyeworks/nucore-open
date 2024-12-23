@@ -156,8 +156,6 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
       click_button "Continue"
     end
 
-    it "is not found" do
-      expect { click_link "Complete Online Order Form" }.to raise_error(ActionController::RoutingError)
-    end
+    it_behaves_like "raises specified error", -> { click_link "Complete Online Order Form" }, ActionController::RoutingError
   end
 end

@@ -28,8 +28,8 @@ RSpec.describe InstrumentsDashboardController do
   end
 
   describe "public dashboard" do
-    it "does not allow access if it is not turned on" do
-      expect { get :public_dashboard, params: { facility_id: facility.url_name, token: "" } }.to raise_error(ActiveRecord::RecordNotFound)
+    context "when it is not turned on" do
+      it_behaves_like "raises specified error", -> { get :public_dashboard, params: { facility_id: facility.url_name, token: "" } }, ActiveRecord::RecordNotFound
     end
 
     it "allows access with the token" do
