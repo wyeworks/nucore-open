@@ -53,11 +53,11 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
         get :new, params: product_params
       end
 
-      it "shows default to 0-24" do
+      it "loads default with 00:00 - 00:01" do
         expect(assigns(:schedule_rule).start_hour).to eq(0)
         expect(assigns(:schedule_rule).start_min).to eq(0)
-        expect(assigns(:schedule_rule).end_hour).to eq(24)
-        expect(assigns(:schedule_rule).end_min).to eq(0)
+        expect(assigns(:schedule_rule).end_hour).to eq(0)
+        expect(assigns(:schedule_rule).end_min).to eq(1)
       end
     end
   end
@@ -103,14 +103,14 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
         )
       end
 
-      it "sets time range to 0-24" do
+      it "sets time range to 00:00 - 00:01" do
         do_request
 
         expect(assigns(:schedule_rule).id).to be_present
         expect(assigns(:schedule_rule).start_hour).to eq(0)
         expect(assigns(:schedule_rule).start_min).to eq(0)
-        expect(assigns(:schedule_rule).end_hour).to eq(24)
-        expect(assigns(:schedule_rule).end_min).to eq(0)
+        expect(assigns(:schedule_rule).end_hour).to eq(0)
+        expect(assigns(:schedule_rule).end_min).to eq(1)
       end
     end
   end
@@ -202,8 +202,8 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
             expect(rule.on_mon).to be true
             expect(rule.start_hour).to eq(0)
             expect(rule.start_min).to eq(0)
-            expect(rule.end_hour).to eq(24)
-            expect(rule.end_min).to eq(0)
+            expect(rule.end_hour).to eq(0)
+            expect(rule.end_min).to eq(1)
           end
         end
       end

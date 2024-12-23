@@ -185,14 +185,15 @@ RSpec.describe "Instrument Scheduling Tab" do
         check("Tue")
         check("Wed")
 
-        expect(page).to have_field("schedule_rule[start_hour]", disabled: true)
-        expect(page).to have_field("schedule_rule[start_min]", disabled: true)
-        expect(page).to have_field("schedule_rule[end_hour]", disabled: true)
-        expect(page).to have_field("schedule_rule[end_min]", disabled: true)
+        expect(page).to_not have_field("schedule_rule[start_hour]")
+        expect(page).to_not have_field("schedule_rule[start_min]")
+        expect(page).to_not have_field("schedule_rule[end_hour]")
+        expect(page).to_not have_field("schedule_rule[end_min]")
 
         click_button("Update")
 
         expect(page).to have_content(I18n.t("controllers.schedule_rules.update"))
+        expect(page).to_not have_css("#calendar")
       end
     end
   end
