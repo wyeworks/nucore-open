@@ -281,17 +281,12 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
     let(:facility) { create(:setup_facility, kiosk_enabled: false) }
     let!(:reservation) { create(:purchased_reservation, reserve_start_at: 15.minutes.ago, product: instrument, user: user) }
 
-    before do
-      Capybara.raise_server_errors = false
-    end
-
-    after do
-      Capybara.raise_server_errors = true
-    end
-
     it "does not show the kiosk view" do
       visit facility_kiosk_reservations_path(facility)
-      expect(page.status_code).to eq(403)
+      expect(page).to have_content("Login")
+      expect(page).not_to have_content("Begin Reservation")
+      expect(page).not_to have_content("End Reservation")
+      expect(page.current_path).to eq new_user_session_path
     end
   end
 end
