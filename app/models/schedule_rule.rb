@@ -52,7 +52,7 @@ class ScheduleRule < ApplicationRecord
   def self.full_day_attributes
     {
       start_hour: 0, start_min: 0,
-      end_hour: 24, end_min: 0
+      end_hour: 0, end_min: 1
     }
   end
 
