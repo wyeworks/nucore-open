@@ -163,9 +163,6 @@ window.FullCalendarConfig = class FullCalendarConfig {
     // there's nothing to do
     if (!seg) { return; }
 
-    // Don't add margins if event last less than a day
-    if (event.end.diff(event.start, 'days', true) < 1.0) { return; }
-
     let startOfDay = event.start.clone();
     startOfDay.startOf('day');
     let endOfDay = event.end.clone();
@@ -193,6 +190,18 @@ window.FullCalendarConfig = class FullCalendarConfig {
     // A maximum of 7 days (calendar slots) in each row
     marginLeft /= eventSegmentSlots;
     marginRight /= eventSegmentSlots;
+
+    // Might have issues adding margin to single slot events
+    // so limit margins.
+    let singleSlot = event.end.diff(event.start, 'days', true) < 1.0;
+    if (singleSlot) {
+      let eventWidth = 100 - marginLeft - marginRight;
+      if (eventWidth < 50) {
+        let leftover = 50 - eventWidth;
+        marginLeft -= leftover / 2;
+        marginRight -= leftover / 2;
+      }
+    }
 
     $(element).css('margin-left', marginLeft + "%");
     $(element).css('margin-right', marginRight + "%");
