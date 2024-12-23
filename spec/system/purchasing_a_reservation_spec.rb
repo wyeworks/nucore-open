@@ -236,7 +236,7 @@ RSpec.describe "Purchasing a reservation" do
           instrument.update(start_time_disabled: true)
         end
 
-        include_examples "new daily reservation with fixed start time"
+        include_examples "new daily reservation with start time disabled"
       end
     end
 
@@ -276,7 +276,7 @@ RSpec.describe "Purchasing a reservation" do
         end
 
         include_examples(
-          "new daily reservation with fixed start time",
+          "new daily reservation with start time disabled",
           before_submit: proc do
             fill_in("reservation[note]", with: note)
           end,

@@ -42,7 +42,7 @@ RSpec.describe "Creating an instrument", :js do
         expect(page).to have_field("Maximum (minutes)")
         expect(page).not_to have_field("Minimum (days)")
         expect(page).not_to have_field("Maximum (days)")
-        expect(page).not_to have_field("Fixed Start Time")
+        expect(page).not_to have_field("Start Time Disabled")
 
         expect(page).to have_content(Instrument::Pricing::SCHEDULE_DAILY)
 
@@ -53,7 +53,7 @@ RSpec.describe "Creating an instrument", :js do
         expect(page).not_to have_field("Maximum (minutes)")
         expect(page).to have_field("Maximum (days)")
         expect(page).to have_field("Minimum (days)")
-        expect(page).to have_field("Fixed Start Time")
+        expect(page).to have_field("Start Time Disabled")
 
         fill_in "Minimum (days)", with: "5"
         fill_in "Maximum (days)", with: "10"
@@ -65,7 +65,7 @@ RSpec.describe "Creating an instrument", :js do
         expect(page).to have_content("Schedule Rule (Daily Booking only)")
         expect(page).to have_content("Min reserve days")
         expect(page).to have_content("Max reserve days")
-        expect(page).to have_content("Fixed Start Time")
+        expect(page).to have_content("Start Time Disabled")
         expect(page).not_to have_content("Interval minutes")
         expect(page).not_to have_content("Min reserve minutes")
         expect(page).not_to have_content("Max reserve minutes")
@@ -85,13 +85,13 @@ RSpec.describe "Creating an instrument", :js do
 
         choose Instrument::Pricing::SCHEDULE_DAILY
 
-        check("Fixed Start Time")
+        check("Start Time Disabled")
 
         click_button "Create"
 
         expect(page).to have_content("Instrument was successfully created")
 
-        expect(instrument.fixed_start_time).to be true
+        expect(instrument.start_time_disabled).to be true
       end
     end
   end

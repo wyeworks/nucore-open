@@ -72,12 +72,12 @@ RSpec.shared_examples "new daily reservation" do |before_submit: nil, after_subm
 end
 
 # Examples that create a reservation with a daily booking
-# instrument with fixed start time.
+# instrument with start time disabled.
 #
 # See "new daily reservation" shared examples to
 # see requirements
 #
-RSpec.shared_examples "new daily reservation with fixed start time" do |before_submit: nil, after_submit: nil|
+RSpec.shared_examples "new daily reservation with start time disabled" do |before_submit: nil, after_submit: nil|
   it "creates a reservation" do
     expect(instrument.daily_booking?).to be true
     expect(instrument.start_time_disabled?).to be true
