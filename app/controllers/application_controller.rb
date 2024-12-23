@@ -119,7 +119,6 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from NUCore::NotPermittedWhileActingAs, with: :render_acting_error
-  rescue_from NUCore::PermissionDenied, with: :handle_permission_denied
 
   def after_sign_out_path_for(_)
     if current_facility.present?
@@ -181,14 +180,6 @@ class ApplicationController < ActionController::Base
 
   def render_acting_error
     render "error/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
-  end
-
-  def handle_permission_denied
-    if current_user
-      render "errors/forbidden", status: :forbidden
-    else
-      redirect_to new_user_session_path, alert: "You need to login to access this page." and return
-    end
   end
 
 end
