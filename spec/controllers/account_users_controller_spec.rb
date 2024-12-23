@@ -14,7 +14,6 @@ RSpec.describe AccountUsersController do
   end
 
   context "user_search" do
-
     before :each do
       @method = :get
       @action = :user_search
@@ -28,11 +27,9 @@ RSpec.describe AccountUsersController do
     it_should_allow :owner do
       is_expected.to render_template("user_search")
     end
-
   end
 
   context "new" do
-
     before :each do
       @method = :get
       @action = :new
@@ -49,11 +46,9 @@ RSpec.describe AccountUsersController do
       expect(assigns(:account_user)).to be_new_record
       is_expected.to render_template("new")
     end
-
   end
 
   context "create" do
-
     before :each do
       @method = :post
       @action = :create
@@ -81,7 +76,6 @@ RSpec.describe AccountUsersController do
       is_expected.to set_flash
       assert_redirected_to(account_account_users_path(@authable))
     end
-
   end
 
   context "destroy" do
@@ -100,8 +94,7 @@ RSpec.describe AccountUsersController do
 
     it "does not allow the purchaser" do
       sign_in purchaser
-      do_request
-      expect(response.status).to eq(403)
+      expect { do_request }.to raise_error(CanCan::AccessDenied)
       expect(account_user.reload).to be_present
     end
 
@@ -127,5 +120,4 @@ RSpec.describe AccountUsersController do
       end
     end
   end
-
 end

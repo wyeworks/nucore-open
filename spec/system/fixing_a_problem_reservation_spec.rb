@@ -80,8 +80,7 @@ RSpec.describe "Fixing a problem reservation" do
 
     it "cannot view the page" do
       expect(reservation.order_detail).not_to be_problem
-      visit edit_problem_reservation_path(reservation)
-      expect(page.status_code).to eq(404)
+      expect { visit edit_problem_reservation_path(reservation) }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     describe "but it was a problem" do
@@ -99,8 +98,7 @@ RSpec.describe "Fixing a problem reservation" do
 
     it "cannot view the page" do
       expect(reservation.order_detail).to be_problem
-      visit edit_problem_reservation_path(reservation)
-      expect(page.status_code).to eq(404)
+      expect { visit edit_problem_reservation_path(reservation) }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 end

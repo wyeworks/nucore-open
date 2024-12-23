@@ -116,9 +116,8 @@ RSpec.describe OfflineReservationsController do
       before { sign_in staff }
 
       it "may not bring the instrument online", :aggregate_failures do
-        expect { put :bring_online, params: params }
-          .not_to change { instrument.reload.online? }
-        expect(response.code).to eq("403")
+        expect { put :bring_online, params: params }.to raise_error(CanCan::AccessDenied)
+        expect(instrument.reload.online?).to eq(false)
       end
     end
   end
