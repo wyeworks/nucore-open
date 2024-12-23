@@ -3,17 +3,20 @@
   %ul.inline
     - ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].each do |day|
       %li= f.input "on_#{day.downcase}", label: day
+  - if @product.start_time_disabled?
+    %p.help-block= t("views.schedule_rules.start_time_disabled_help")
 
-.well
-  = f.hint :end_time
-  %ul.inline
-    %li
-      = f.label :start_time
-      = time_select24(f, :start, minute_step: @product.reserve_interval)
-  %ul.inline
-    %li
-      = f.label :end_time
-      = time_select24(f, :end, hours: (0..24), minute_step: @product.reserve_interval)
+- unless @product.start_time_disabled?
+  .well
+    = f.hint :end_time
+    %ul.inline
+      %li
+        = f.label :start_time
+        = time_select24(f, :start, minute_step: @product.reserve_interval)
+    %ul.inline
+      %li
+        = f.label :end_time
+        = time_select24(f, :end, hours: (0..24), minute_step: @product.reserve_interval)
 
 - if @product.can_apply_discounts?
   %h3= t("views.schedule_rules.discount")
