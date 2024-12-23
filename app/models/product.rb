@@ -26,6 +26,7 @@ class Product < ApplicationRecord
   after_create :create_default_price_group_products
   after_create :create_skip_review_price_policies, if: :skip_review_mode?
   after_create :create_nonbillable_price_policy, if: :nonbillable_mode?
+  before_save :start_time_disabled_daily_booking_only
 
   email_list_attribute :training_request_contacts
 
@@ -361,6 +362,10 @@ class Product < ApplicationRecord
 
   def product_user_exists?(user)
     find_product_user(user).present?
+  end
+
+  def start_time_disabled_daily_booking_only
+    self.start_time_disabled = start_time_disabled && daily_booking?
   end
 
 end
