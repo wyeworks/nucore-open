@@ -25,27 +25,33 @@
     collection: Instrument::RESERVE_INTERVALS,
     label: text("instruments.instrument_fields.reservation.label.reserve_interval"),
     hint: text("instruments.instrument_fields.reservation.instruct.reserve_interval"),
-    wrapper_html: { class: "js--reserve-interval", hidden: daily_booking }
+    wrapper_html: { class: "js--normal-booking", hidden: daily_booking }
 
   = f.input :min_reserve_mins,
     label: text("instruments.instrument_fields.reservation.label.min_reserve_mins"),
     hint: text("instruments.instrument_fields.reservation.instruct.min_reserve"),
-    wrapper_html: { class: "js--min-reserve-mins", hidden: daily_booking }
+    wrapper_html: { class: "js--normal-booking", hidden: daily_booking }
 
   = f.input :max_reserve_mins,
     label: text("instruments.instrument_fields.reservation.label.max_reserve_mins"),
     hint: text("instruments.instrument_fields.reservation.instruct.max_reserve"),
-    wrapper_html: { class: "js--max-reserve-mins", hidden: daily_booking }
+    wrapper_html: { class: "js--normal-booking", hidden: daily_booking }
+
+  = f.input :start_time_disabled, as: :boolean,
+    label: false,
+    inline_label: Instrument.human_attribute_name(:start_time_disabled),
+    hint: text("instruments.instrument_fields.reservation.instruct.start_time_disabled"),
+    wrapper_html: { class: "js--daily-booking", hidden: !daily_booking }
 
   = f.input :min_reserve_days,
     label: text("instruments.instrument_fields.reservation.label.min_reserve_days"),
     hint: text("instruments.instrument_fields.reservation.instruct.min_reserve"),
-    wrapper_html: { class: "js--min-reserve-days", hidden: !daily_booking }
+    wrapper_html: { class: "js--daily-booking", hidden: !daily_booking }
 
   = f.input :max_reserve_days,
     label: text("instruments.instrument_fields.reservation.label.max_reserve_days"),
     hint: text("instruments.instrument_fields.reservation.instruct.max_reserve"),
-    wrapper_html: { class: "js--max-reserve-days", hidden: !daily_booking }
+    wrapper_html: { class: "js--daily-booking", hidden: !daily_booking }
 
   = f.input :min_cancel_hours,
     label: text("instruments.instrument_fields.reservation.label.cancel_hours"),

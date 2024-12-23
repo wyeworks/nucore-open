@@ -51,36 +51,11 @@ $(function() {
 
     const dailyBooking = dailyBookingRadioButton.checked;
 
-    const reserveIntervalElement = document.querySelector(
-      ".js--reserve-interval"
-    );
-    const minReserveMinsElement = document.querySelector(
-      ".js--min-reserve-mins"
-    );
-    const maxReserveMinsElement = document.querySelector(
-      ".js--max-reserve-mins"
-    );
-    const minReserveDaysElement = document.querySelector(
-      ".js--min-reserve-days"
-    );
-    const maxReserveDaysElement = document.querySelector(
-      ".js--max-reserve-days"
-    );
-
-    [minReserveDaysElement, maxReserveDaysElement].forEach((element) => {
-      if (element) {
-        element.toggleAttribute("hidden", !dailyBooking);
-      }
-    });
-
-    [
-      reserveIntervalElement,
-      minReserveMinsElement,
-      maxReserveMinsElement,
-    ].forEach((element) => {
-      if (element) {
-        element.toggleAttribute("hidden", dailyBooking);
-      }
-    });
+    document
+      .querySelectorAll(".js--daily-booking")
+      .forEach((element) => element.toggleAttribute("hidden", !dailyBooking));
+    document
+      .querySelectorAll(".js--normal-booking")
+      .forEach((element) => element.toggleAttribute("hidden", dailyBooking));
   });
 });

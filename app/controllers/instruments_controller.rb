@@ -96,7 +96,9 @@ class InstrumentsController < ProductsCommonController
   def permitted_params
     params = super
 
-    (params += %i[min_reserve_days max_reserve_days]) if can?(:create_daily_booking, Instrument)
+    if can?(:create_daily_booking, Instrument)
+      params += %i[min_reserve_days max_reserve_days start_time_disabled]
+    end
 
     params
   end

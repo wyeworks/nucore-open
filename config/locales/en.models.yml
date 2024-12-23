@@ -300,6 +300,7 @@ en:
         product_ids: Products
         ungrouped_product_ids: Ungrouped
       instrument:
+        start_time_disabled: Start Time Disabled
         min_reserve_mins: Minimum Reservation Minutes
         max_reserve_mins: Maximum Reservation Minutes
         min_cancel_hours: Reservation Cost Window (hours)
