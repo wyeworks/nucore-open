@@ -53,6 +53,23 @@ RSpec.describe "Editing an instrument" do
 
         expect(page).to have_content("Instrument was successfully updated")
       end
+
+      it "enabling start_time_disabled does not affect old reservations" do
+        reservation = create(
+          :reservation,
+          :yesterday,
+          product: instrument,
+        )
+
+        visit edit_facility_instrument_path(facility, instrument)
+
+        check("Start Time Disabled")
+
+        expect { click_button("Save") }.to_not change {
+          reservation.reload.reserve_start_at
+        }
+        expect(page).to have_content("Instrument was successfully updated")
+      end
     end
   end
 end
