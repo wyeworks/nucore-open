@@ -18,17 +18,17 @@ RSpec.describe ErrorsController, type: :controller do
   end
 
   describe "GET #forbidden" do
-  context "when the exception is NUCore::NotPermittedWhileActingAs" do
-    before do
-      request.env["action_dispatch.exception"] = NUCore::NotPermittedWhileActingAs.new
-    end
+    context "when the exception is NUCore::NotPermittedWhileActingAs" do
+      before do
+        request.env["action_dispatch.exception"] = NUCore::NotPermittedWhileActingAs.new
+      end
 
-    it "renders the 'acting_error' template with a 403 status" do
-      get :forbidden
-      expect(response).to have_http_status(:forbidden)
-      expect(response).to render_template("acting_error")
+      it "renders the 'acting_error' template with a 403 status" do
+        get :forbidden
+        expect(response).to have_http_status(:forbidden)
+        expect(response).to render_template("acting_error")
+      end
     end
-  end
 
     context "when the user is logged in" do
       before do

@@ -183,7 +183,7 @@ def it_should_allow_operators_only(response = :success, spec_desc = "", login = 
   if login
     it_should_require_login
   else
-    it do
+    it "Rises a forbidden exception" do
       expect { do_request }.to raise_error do |error|
         expect(error).to be_a(CanCan::AccessDenied).or be_a(NUCore::PermissionDenied)
       end
@@ -204,7 +204,7 @@ def it_should_allow_admin_only(response = :success, spec_desc = "", login = true
   if login
     it_should_require_login
   else
-    it do
+    it "Rises a forbidden exception" do
       expect { do_request }.to raise_error do |error|
         expect(error).to be_a(CanCan::AccessDenied).or be_a(NUCore::PermissionDenied)
       end

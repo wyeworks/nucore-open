@@ -105,7 +105,7 @@ class KioskReservationsController < ApplicationController
     if current_user
       render "errors/forbidden", status: :forbidden
     else
-      redirect_to new_user_session_path, alert: "You need to login to access this page." and return
+      return redirect_to new_user_session_path, alert: "You need to login to access this page."
     end
   end
 
