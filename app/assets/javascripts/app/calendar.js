@@ -36,17 +36,22 @@ window.FullCalendarConfig = class FullCalendarConfig {
   }
 
   baseOptions() {
+    let self = this;
+
     return {
       editable: false,
       defaultView: "agendaWeek",
       allDaySlot: false,
+      nextDayThreshold: '00:00:00',
       events: events_path,
       height: 'auto',
-      loading: (isLoading, view) => {
+      loading: (isLoading, _view) => {
         return this.toggleOverlay(isLoading);
       },
-
-      eventAfterRender: this.buildTooltip,
+      eventAfterRender: function(event, element, view) {
+        self.buildTooltip(event, element, view);
+        self.adjustEvent(event, element, view);
+      },
       eventAfterAllRender: view => {
         this.$element.trigger("calendar:rendered");
         return this.toggleNextPrev(view);
@@ -133,12 +138,92 @@ window.FullCalendarConfig = class FullCalendarConfig {
   }
 
   formattedEventPeriod(event) {
+    let format = (this.isDailyBooking() && event.end.isAfter(event.start, 'day')) ? "MM/DD/YY h:mmA" : "h:mmA";
+
     return [event.start, event.end].
-      map(date => $.fullCalendar.formatDate(date, "h:mmA")).
-      join("&ndash;");
+      map(date => $.fullCalendar.formatDate(date, format)).
+      join(" &ndash; ");
   }
 
   linkToEditOrder(event) {
     if ((event.orderId != null) && (typeof orders_path_base !== 'undefined' && orders_path_base !== null)) { return `<a href='${orders_path_base}/${event.orderId}'>Edit</a>`; }
+  }
+
+  /*
+   * Render monthly view events with margins
+   * depending on the start and end offset
+   * from midnight.
+   *
+   * It's called once for each event segment:
+   * - Callback ref: https://fullcalendar.io/docs/v3/eventAfterRender
+   * - Segment object: https://fullcalendar.io/docs/v3/eventLimitClick#event-segment-object
+   */
+  adjustEvent(event, element, view) {
+    // Do nothing if not daily booking
+    if (!this.isDailyBooking()) { return; }
+    // Don't apply changes unless monthly view
+    if (view.name != 'month') { return; }
+    // exclude allDay and background events
+    if (event['rendering'] == 'background' || event['allDay']) { return; }
+
+    let seg = $(element).data('fc-seg');
+    // if there's no info about the drawn event segment
+    // there's nothing to do
+    if (!seg) { return; }
+
+    let startOfDay = event.start.clone();
+    startOfDay.startOf('day');
+
+    let endOfDay = event.end.clone();
+    endOfDay.startOf('day');
+    // If event end is the start of the day it's already
+    // the follwoing day
+    if (endOfDay.diff(event.end) != 0) {
+      endOfDay.add(1, 'day')
+    }
+
+    let startOffsetMins = event.start.diff(startOfDay, 'minutes');
+    if (!seg.isStart) {
+      // Event started some row above
+      startOffsetMins = 0;
+    }
+    let endOffsetMins = endOfDay.diff(event.end, 'minutes');
+    if (!seg.isEnd) {
+      // Event ends some row below
+      endOffsetMins = 0;
+    }
+
+    const minutesPerDay = 24 * 60;
+    let marginLeft = startOffsetMins / minutesPerDay * 100; // in percentage
+    let marginRight = endOffsetMins / minutesPerDay * 100;
+
+    // Normalize margins relative to the amount of slots
+    // in the segment
+    let eventSegmentSlots = seg.rightCol - seg.leftCol + 1;
+    marginLeft /= eventSegmentSlots;
+    marginRight /= eventSegmentSlots;
+
+    // Adjust margins to short hourly events that last less than a day
+    // and use a single slot so there's enough width to read the text.
+    let hourlyEvent = event.end.diff(event.start, 'hours') < 24;
+    if (hourlyEvent && eventSegmentSlots == 1) {
+      let minWidthPercent = 60;
+      let eventWidth = 100 - marginLeft - marginRight;
+      if (eventWidth < minWidthPercent) {
+        // Reduce margins so minWidthPercent is reached
+        let leftover = minWidthPercent - eventWidth;
+        marginLeft -= leftover / 2;
+        marginRight -= leftover / 2;
+      }
+      marginLeft = Math.max(0, marginLeft);
+      marginRight = Math.max(0, marginRight);
+    }
+
+    $(element).css('margin-left', marginLeft + "%");
+    $(element).css('margin-right', marginRight + "%");
+  }
+
+  isDailyBooking() {
+    return typeof dailyBooking !== 'undefined' && dailyBooking;
   }
 };
