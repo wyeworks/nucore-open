@@ -22,7 +22,7 @@ class CalendarEventsPresenter
   end
 
   def events
-    events ||= reservation_events + unavailable_events
+    @events ||= reservation_events + unavailable_events
   end
 
   private
