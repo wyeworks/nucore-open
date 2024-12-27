@@ -153,6 +153,10 @@ window.FullCalendarConfig = class FullCalendarConfig {
    * Render monthly view events with margins
    * depending on the start and end offset
    * from midnight.
+   *
+   * It's called once for each event segment:
+   * - Callback ref: https://fullcalendar.io/docs/v3/eventAfterRender
+   * - Segment object: https://fullcalendar.io/docs/v3/eventLimitClick#event-segment-object
    */
   adjustEvent(event, element, view) {
     // Do nothing if not daily booking
