@@ -182,19 +182,20 @@ window.FullCalendarConfig = class FullCalendarConfig {
       endOfDay.add(1, 'day')
     }
 
-    let startOffset = event.start.diff(startOfDay, 'minutes');
+    let startOffsetMins = event.start.diff(startOfDay, 'minutes');
     if (!seg.isStart) {
       // Event started some row above
-      startOffset = 0;
+      startOffsetMins = 0;
     }
-    let endOffset = endOfDay.diff(event.end, 'minutes');
+    let endOffsetMins = endOfDay.diff(event.end, 'minutes');
     if (!seg.isEnd) {
       // Event ends some row below
-      endOffset = 0;
+      endOffsetMins = 0;
     }
 
-    let marginLeft = startOffset / 14.40; // 1440 minutes per day in percentage
-    let marginRight = endOffset / 14.40;
+    const minutesPerDay = 24 * 60;
+    let marginLeft = startOffsetMins / minutesPerDay * 100; // in percentage
+    let marginRight = endOffsetMins / minutesPerDay * 100;
 
     // Normalize margins relative to the amount of slots
     // in the segment
