@@ -6,7 +6,7 @@ class InstrumentsController < ProductsCommonController
   admin_tab :create, :new, :edit, :index, :manage, :update, :manage, :schedule
   before_action :store_fullpath_in_session, only: [:index, :show]
   before_action :set_default_lock_window, only: [:create, :update]
-  after_action :update_schedule_rules, only: :update
+  after_action :start_time_disabled_changed_check, only: :update
 
   # public_schedule does not require login
   skip_before_action :authenticate_user!, only: [:public_schedule, :public_list]
@@ -104,10 +104,17 @@ class InstrumentsController < ProductsCommonController
     params
   end
 
-  def update_schedule_rules
-    return unless @product.start_time_disabled? && @product.start_time_disabled_previously_changed?
+  def start_time_disabled_changed_check
+    return unless @product.start_time_disabled_previously_changed?
 
-    @product.schedule_rules.update_all(ScheduleRule.full_day_attributes)
+    if @product.start_time_disabled?
+      @product.schedule_rules.update_all(
+        ScheduleRule.full_day_attributes
+      )
+      flash[:info] = t("controllers.instruments.create.schedule_rules_updated")
+    else
+      flash[:info] = t("controllers.instruments.create.schedule_rules_need_update")
+    end
   end
 
 end

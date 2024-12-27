@@ -83,6 +83,8 @@ en:
     instruments:
       create:
         daily_booking_not_authorized: "Not allowed to create daily booking instruments"
+        schedule_rules_updated: Start time disabled changed, Schedule Rules have been updated
+        schedule_rules_need_update: Start time disabled changed, please update schedule rules
 
     offline_reservations:
       bring_online:

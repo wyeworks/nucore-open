@@ -22,6 +22,8 @@ RSpec.describe "Editing an instrument" do
       click_button("Save")
 
       expect(page).to have_content("Instrument was successfully updated")
+      expect(page).not_to have_content("Start time disabled changed")
+      expect(page).not_to have_css(".alert-info")
     end
 
     context "switching start_time_disabled on" do
@@ -52,6 +54,24 @@ RSpec.describe "Editing an instrument" do
         )
 
         expect(page).to have_content("Instrument was successfully updated")
+        within(".alert-info") do
+          expect(page).to have_content(I18n.t("controllers.instruments.create.schedule_rules_updated"))
+        end
+      end
+
+      it "shows info when switching off start_time_disabled" do
+        instrument.update(start_time_disabled: true)
+
+        visit edit_facility_instrument_path(facility, instrument)
+
+        uncheck("Start Time Disabled")
+
+        click_button("Save")
+
+        expect(page).to have_content("Instrument was successfully updated")
+        within(".alert-info") do
+          expect(page).to have_content(I18n.t("controllers.instruments.create.schedule_rules_need_update"))
+        end
       end
 
       it "enabling start_time_disabled does not affect old reservations" do
