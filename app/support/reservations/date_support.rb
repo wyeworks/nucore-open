@@ -178,15 +178,23 @@ module Reservations::DateSupport
   end
 
   def assign_reserve_from_params(params)
-    reserve_attrs = params.slice(:reserve_start_date, :reserve_start_hour, :reserve_start_min, :reserve_start_meridian,
-                                 :duration_mins,
-                                 :reserve_start_at, :reserve_end_at)
+    reserve_attrs = params.slice(
+      :reserve_start_date, :reserve_start_hour, :reserve_start_min,
+      :reserve_start_meridian, :duration_mins, :duration_days,
+      :reserve_start_at, :reserve_end_at
+    )
 
     # need to be reset to nil so the individual pieces will
     # take precedence, but only reset them if we're going to overwrite them
 
-    self.reserve_start_at = nil if reserve_attrs.keys.any? { |k| k.to_s.start_with?("reserve_start") }
-    self.reserve_end_at   = nil if reserve_attrs.keys.any? { |k| k.to_s.start_with?("reserve_end") } || reserve_attrs.key?(:duration_mins)
+    if reserve_attrs.keys.any? { |k| k.to_s.start_with?("reserve_start") }
+      self.reserve_start_at = nil
+    end
+    if reserve_attrs.keys.any? { |k| k.to_s.start_with?("reserve_end") } ||
+       reserve_attrs.key?(:duration_mins) ||
+       reserve_attrs.key?(:duration_days)
+      self.reserve_end_at = nil
+    end
 
     assign_attributes reserve_attrs
   end

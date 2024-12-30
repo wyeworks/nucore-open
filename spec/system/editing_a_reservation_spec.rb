@@ -99,7 +99,7 @@ RSpec.describe "Editing your own reservation" do
     end
   end
 
-  describe "with a daily booking instrument" do
+  describe "moving a daily booking instrument" do
     let(:today) { Time.current.beginning_of_day }
     let(:unavailable_period_start) { today + 3.days }
     let(:instrument) do
@@ -257,6 +257,54 @@ RSpec.describe "Editing your own reservation" do
           )
         end
       end
+    end
+  end
+
+  describe "changing reservation" do
+    let(:reserve_start_at) { 10.days.from_now }
+    let(:instrument) do
+      create(
+        :setup_instrument,
+        :always_available,
+        :daily_booking,
+      )
+    end
+    let!(:reservation) do
+      create(
+        :purchased_reservation,
+        user:,
+        reserve_start_at:,
+        reserve_end_at: reserve_start_at + 1.day,
+        product: instrument,
+      )
+    end
+
+    before do
+      visit reservations_path
+      click_link reservation.to_s
+    end
+
+    it "allows to change duration and start date" do
+      new_duration_days = reservation.duration_days + 2
+      new_start_at = reserve_start_at + 1.hour
+
+      select(new_start_at.hour.to_s, from: "reservation[reserve_start_hour]")
+      fill_in("Duration Days", with: new_duration_days)
+
+      click_button("Save")
+
+      expect(page).to have_content("The reservation was successfully updated.")
+
+      expect(reservation.reload.reserve_start_at).to eq(new_start_at)
+      expect(reservation.reload.duration_days).to eq(new_duration_days)
+    end
+
+    it "cannot save a 0 day reservation" do
+      fill_in("Duration Days", with: 0)
+
+      click_button("Save")
+
+      expect(page).to have_content("Duration must be greater than zero")
     end
   end
 end

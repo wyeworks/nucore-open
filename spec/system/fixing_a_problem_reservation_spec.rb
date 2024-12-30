@@ -39,7 +39,7 @@ RSpec.describe "Fixing a problem reservation" do
       visit edit_problem_reservation_path(reservation)
       fill_in "Actual Duration", with: "0"
       click_button "Save"
-      expect(page).to have_content("at least 1 minute")
+      expect(page).to have_content("must be greater than zero")
     end
 
     describe "when the product has available accessories" do

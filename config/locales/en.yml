@@ -1237,6 +1237,7 @@ en:
             When blank or set to 0, the system will not cancel unstarted reservations.
           lock_window: "Window of time within which a customer may no longer move their reservation. Cancellations are permitted but may invoke a fee."
           cutoff_hours: "Minimum number of hours before instrument can be reserved."
+          start_time_disabled: Reservations always start at the beginning of the day
         label:
           restrict: "Reservation Restrictions"
           reserve_interval: "Interval (minutes)"

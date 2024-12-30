@@ -42,6 +42,24 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
       expect(assigns(:schedule_rule).end_hour).to eq(17)
       expect(assigns(:schedule_rule).end_min).to eq(0)
     end
+
+    context "when daily booking and start time disabled", if: product_sym == :instrument do
+      before do
+        product.update(
+          pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
+          start_time_disabled: true,
+        )
+
+        get :new, params: product_params
+      end
+
+      it "loads default with 00:00 - 00:01" do
+        expect(assigns(:schedule_rule).start_hour).to eq(0)
+        expect(assigns(:schedule_rule).start_min).to eq(0)
+        expect(assigns(:schedule_rule).end_hour).to eq(0)
+        expect(assigns(:schedule_rule).end_min).to eq(1)
+      end
+    end
   end
 
   describe "create" do
@@ -74,6 +92,25 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
           do_request
           expect(assigns(:schedule_rule).product_access_groups).to contain_exactly(product_access_groups[0], product_access_groups[2])
         end
+      end
+    end
+
+    context "when daily booking and start time disabled", if: product_sym == :instrument do
+      before do
+        product.update(
+          pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
+          start_time_disabled: true,
+        )
+      end
+
+      it "sets time range to 00:00 - 00:01" do
+        do_request
+
+        expect(assigns(:schedule_rule).id).to be_present
+        expect(assigns(:schedule_rule).start_hour).to eq(0)
+        expect(assigns(:schedule_rule).start_min).to eq(0)
+        expect(assigns(:schedule_rule).end_hour).to eq(0)
+        expect(assigns(:schedule_rule).end_min).to eq(1)
       end
     end
   end
@@ -135,6 +172,38 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
           it "should store the updated restriction_rules" do
             do_request
             expect(assigns[:schedule_rule].product_access_groups).to contain_exactly(product_access_groups[0], product_access_groups[2])
+          end
+        end
+
+        context "when daily booking and start time disabled", if: product_sym == :instrument do
+          before do
+            product.update(
+              pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
+              start_time_disabled: true,
+            )
+            rule.update(on_mon: false)
+          end
+          let(:rule_params) do
+            {
+              id: rule.id,
+              on_mon: true,
+              start_hour: 10,
+              start_min: 10,
+              end_hour: 17,
+              end_min: 17,
+            }
+          end
+
+          it "can update days but not times" do
+            do_request
+
+            rule.reload
+
+            expect(rule.on_mon).to be true
+            expect(rule.start_hour).to eq(0)
+            expect(rule.start_min).to eq(0)
+            expect(rule.end_hour).to eq(0)
+            expect(rule.end_min).to eq(1)
           end
         end
       end

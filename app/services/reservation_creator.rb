@@ -5,6 +5,7 @@ class ReservationCreator
   attr_reader :order, :order_detail, :params, :error
 
   delegate :merged_order?, :instrument_only_order?, to: :status_q
+  delegate :product, to: :order_detail
 
   def initialize(order, order_detail, params)
     @order = order
@@ -68,7 +69,7 @@ class ReservationCreator
   private
 
   def reservation_create_params
-    duration_field = if @order_detail.product.daily_booking?
+    duration_field = if order_detail.product.daily_booking?
                        :duration_days
                      else
                        :duration_mins
@@ -86,8 +87,16 @@ class ReservationCreator
         :project_id,
         duration_field,
       ).merge(
-        product: @order_detail.product,
-      )
+        product:,
+      ).tap do |reservation_params|
+        if product.start_time_disabled?
+          reservation_params.merge!(
+            reserve_start_hour: 0,
+            reserve_start_min: 0,
+            reserve_start_meridian: "AM"
+          )
+        end
+      end
   end
 
   def update_order_account

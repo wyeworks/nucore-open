@@ -89,6 +89,8 @@ en:
 
     errors:
       models:
+        secure_rooms/occupancy:
+          zero_minutes: must be at least 1 minute
         secure_rooms/card_reader:
           attributes:
             control_device_number:

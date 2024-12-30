@@ -33,7 +33,7 @@
               required: @order_detail.product.user_notes_field_mode.required?,
               hint: t("reservations.account_field.note_hint")
 
-  = render "reservation_fields", f: f, daily_booking: @instrument.daily_booking?
+  = render "reservation_fields", f: f
 
   %ul.inline
     %li= f.submit t('shared.save'), class: 'btn'
@@ -42,7 +42,7 @@
     - else
       %li= link_to t('shared.cancel'), cart_path
 
-- if @instrument.daily_booking?
+- if @instrument.daily_booking? && !@instrument.start_time_disabled?
   = render "reservations/open_hours"
 
 #overlay

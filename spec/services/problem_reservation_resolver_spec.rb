@@ -52,7 +52,7 @@ RSpec.describe ProblemReservationResolver do
     it "adds an error to the reservation if it is invalid" do
       # Reservations cannot be zero length
       expect(resolver.resolve(actual_end_at: problem_reservation.actual_start_at)).to be_falsy
-      expect(problem_reservation.errors).to be_added(:actual_duration_mins, :zero_minutes)
+      expect(problem_reservation.errors).to be_added(:actual_duration_mins, :zero_duration)
     end
 
   end

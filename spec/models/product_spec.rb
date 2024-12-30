@@ -745,4 +745,20 @@ RSpec.describe Product do
       it("returns false") { expect(subject.is_accessible_to_user?(user)).to be false }
     end
   end
+
+  describe "start_time_disabled" do
+    let(:product) { create(:setup_instrument) }
+
+    it "cannot set start_time_disabled on non daily booking instrument" do
+      product.update(start_time_disabled: true)
+
+      expect(product.start_time_disabled).to be false
+    end
+
+    it "can set start_time_disabled on daily booking instrument" do
+      product.update(start_time_disabled: true, pricing_mode: Instrument::Pricing::SCHEDULE_DAILY)
+
+      expect(product.start_time_disabled).to be true
+    end
+  end
 end
