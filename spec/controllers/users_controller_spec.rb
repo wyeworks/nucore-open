@@ -15,7 +15,6 @@ RSpec.describe UsersController do
   end
 
   context "index" do
-
     before :each do
       @method = :get
       @action = :index
@@ -35,7 +34,6 @@ RSpec.describe UsersController do
       expect(assigns[:users].size).to eq(1)
       expect(assigns[:users]).to include @active_user
     end
-
   end
 
   describe "GET #edit", feature_setting: { create_users: true, reload_routes: true } do
@@ -121,7 +119,6 @@ RSpec.describe UsersController do
 
   context "creating users" do
     context "enabled", feature_setting: { create_users: true, reload_routes: true } do
-
       it "routes", :aggregate_failures do
         expect(get: "/#{facilities_route}/url_name/users/new").to route_to(controller: "users", action: "new", facility_id: "url_name")
         expect(post: "/#{facilities_route}/url_name/users").to route_to(controller: "users", action: "create", facility_id: "url_name")
@@ -323,7 +320,6 @@ RSpec.describe UsersController do
 
       it_should_deny_all([:admin] + facility_operators)
     end
-
   end
 
   describe "unexpire", feature_setting: { create_users: true, reload_routes: true } do
@@ -335,8 +331,7 @@ RSpec.describe UsersController do
 
       it "cannot be accessed" do
         sign_in facility_admin
-        patch :unexpire, params: { facility_id: facility.url_name, id: expired_user.id }
-        expect(response.code).to eq("403")
+        expect { patch :unexpire, params: { facility_id: facility.url_name, id: expired_user.id } }.to raise_error(CanCan::AccessDenied)
         expect(expired_user.reload).to be_expired
       end
     end
@@ -365,5 +360,4 @@ RSpec.describe UsersController do
       expect(assigns(:order_details)).to be_kind_of ActiveRecord::Relation
     end
   end
-
 end

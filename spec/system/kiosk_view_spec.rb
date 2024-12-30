@@ -11,7 +11,6 @@ RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true,
   let(:instrument) { create(:setup_instrument, :timer, facility: facility) }
 
   shared_examples "kiosk_actions" do |login_label, password|
-
     context "with an admin reservation" do
       let!(:admin_reservation) { create(:admin_reservation, reserve_start_at: 15.minutes.ago, product: instrument) }
       let!(:accessory) { create(:accessory, parent: instrument) }

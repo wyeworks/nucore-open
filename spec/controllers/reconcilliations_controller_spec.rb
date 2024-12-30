@@ -37,11 +37,10 @@ RSpec.describe ReconcilliationsController do
 
       before :each do
         sign_in director
-        delete :destroy, params: { facility_id: facility.url_name, order_id: order_detail.order.id, order_detail_id: order_detail.id }
       end
 
       it "does not allow the action" do
-        expect(response.code).to eq("403")
+        expect { delete :destroy, params: { facility_id: facility.url_name, order_id: order_detail.order.id, order_detail_id: order_detail.id } }.to raise_error(CanCan::AccessDenied)
       end
     end
   end
