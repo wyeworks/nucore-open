@@ -271,13 +271,19 @@ class ReservationsController < ApplicationController
   private
 
   def reservation_params
+    duration_param = if @instrument.daily_booking?
+                       :duration_days
+                     else
+                       :duration_mins
+                     end
+
     reservation_params = params.require(:reservation)
                                .except(:reserve_end_date, :reserve_end_hour, :reserve_end_min, :reserve_end_meridian)
                                .permit(:reserve_start_date,
                                        :reserve_start_hour,
                                        :reserve_start_min,
                                        :reserve_start_meridian,
-                                       :duration_mins,
+                                       duration_param,
                                        :note)
 
     # Prevent overriding of start time params after purchase if start time is locked,

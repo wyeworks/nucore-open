@@ -46,4 +46,35 @@ RSpec.describe SecureRooms::Occupancy do
       end
     end
   end
+
+  describe "duration validation" do
+    context "when it's positive" do
+      before do
+        occupancy.entry_at = 5.minutes.ago
+        occupancy.exit_at = 1.minute.ago
+      end
+
+      it "is valid" do
+        expect(occupancy.entry_at).to be < occupancy.exit_at
+        expect(occupancy).to be_valid
+      end
+    end
+
+    context "when it's zero" do
+      before do
+        allow(occupancy).to receive(:editing_time_data).and_return(true)
+        now = Time.current
+        occupancy.entry_at = now
+        occupancy.exit_at = now
+        occupancy.valid?
+      end
+
+      it "adds duration error" do
+        expect(occupancy.errors).to be_added(:actual_duration_mins, :zero_minutes)
+        expect(occupancy.errors[:actual_duration_mins]).to(
+          include("must be at least 1 minute")
+        )
+      end
+    end
+  end
 end

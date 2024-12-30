@@ -9,6 +9,7 @@
 = f.input :pricing_mode
 
 - if daily_booking
+  = f.input :start_time_disabled
   = f.input :min_reserve_days, value_method: :to_i, default_value: "None"
   = f.input :max_reserve_days, value_method: :to_i, default_value: "None"
 - else

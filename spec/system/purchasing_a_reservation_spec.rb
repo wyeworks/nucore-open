@@ -230,6 +230,14 @@ RSpec.describe "Purchasing a reservation" do
       end
 
       include_examples "new daily reservation"
+
+      context "when start time is fixed" do
+        before do
+          instrument.update(start_time_disabled: true)
+        end
+
+        include_examples "new daily reservation with start time disabled"
+      end
     end
 
     context "as admin" do
@@ -261,6 +269,23 @@ RSpec.describe "Purchasing a reservation" do
           expect(user.reservations.count).to eq(1)
         end
       )
+
+      context "when start time is fixed" do
+        before do
+          instrument.update(start_time_disabled: true)
+        end
+
+        include_examples(
+          "new daily reservation with start time disabled",
+          before_submit: proc do
+            fill_in("reservation[note]", with: note)
+          end,
+          after_submit: proc do
+            expect(page).to have_content(note)
+            expect(user.reservations.count).to eq(1)
+          end
+        )
+      end
     end
 
     context "on unavailable day" do

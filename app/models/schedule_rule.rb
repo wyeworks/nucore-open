@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ScheduleRule < ApplicationRecord
-
   belongs_to :product
 
   # oracle has a maximum table name length of 30, so we have to abbreviate it down
@@ -48,6 +47,13 @@ class ScheduleRule < ApplicationRecord
   # Returns a single array of calendar objects representing the set of schedule_rules
   def self.as_calendar_objects(schedule_rules, options = {})
     ScheduleRules::CalendarPresenter.events(schedule_rules, options).as_json
+  end
+
+  def self.full_day_attributes
+    {
+      start_hour: 0, start_min: 0,
+      end_hour: 0, end_min: 1
+    }
   end
 
   def at_least_one_day_selected

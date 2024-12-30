@@ -26,12 +26,13 @@
         %th.actions
         %th Days of Week
         %th Start Time
-        %th End Time
-        - if @product.can_apply_discounts?
-          - PriceGroup.globals.each do |price_group|
-            %th.currency= "#{price_group.name} Discount (%)"
-          - if @product.product_access_groups.to_a.any?
-            %th Scheduling Groups
+        - unless @product.start_time_disabled?
+          %th End Time
+          - if @product.can_apply_discounts?
+            - PriceGroup.globals.each do |price_group|
+              %th.currency= "#{price_group.name} Discount (%)"
+            - if @product.product_access_groups.to_a.any?
+              %th Scheduling Groups
     %tbody
       - @schedule_rules.each do |schedule_rule|
         %tr{:class => cycle("odd", "even")}
@@ -46,20 +47,22 @@
                 method: :delete
           %td= schedule_rule.days_string
           %td= human_time(Time.zone.parse(schedule_rule.start_time))
-          %td= human_time(Time.zone.parse(schedule_rule.end_time))
-          - if @product.can_apply_discounts?
-            - PriceGroup.globals.each do |price_group|
-              - discount = schedule_rule.discount_for_price_group(price_group)
-              %td.currency= number_to_percentage(discount, strip_insignificant_zeros: true)
-            - if @product.product_access_groups.any?
-              %td= schedule_rule.product_access_groups.join(", ")
+          - unless @product.start_time_disabled?
+            %td= human_time(Time.zone.parse(schedule_rule.end_time))
+            - if @product.can_apply_discounts?
+              - PriceGroup.globals.each do |price_group|
+                - discount = schedule_rule.discount_for_price_group(price_group)
+                %td.currency= number_to_percentage(discount, strip_insignificant_zeros: true)
+              - if @product.product_access_groups.any?
+                %td= schedule_rule.product_access_groups.join(", ")
 - else
   %br
   %p.notice No Schedule Rules exist yet.
 
-%h3 Weekly Calendar
-%p This calendar shows instrument availability based on the scheduling rules.
-#overlay
-  #spinner
-    #hide
-      #calendar.fc-noheader
+- unless @product.start_time_disabled?
+  %h3 Weekly Calendar
+  %p This calendar shows instrument availability based on the scheduling rules.
+  #overlay
+    #spinner
+      #hide
+        #calendar.fc-noheader

@@ -67,7 +67,7 @@ en:
         bad_payment_source_format: "must be in format %{pattern_format}"
         subsidy_greater_than_cost: "cannot be greater than the Usage cost"
         already_in_queue: Only one file may be in process at a time
-        zero_minutes: must be at least 1 minute
+        zero_duration: must be greater than zero
         start_after_end: must be after Ending Date
         # Append your own errors here or at the model/attributes scope.
       full_messages:
@@ -300,6 +300,7 @@ en:
         product_ids: Products
         ungrouped_product_ids: Ungrouped
       instrument:
+        start_time_disabled: Start Time Disabled
         min_reserve_mins: Minimum Reservation Minutes
         max_reserve_mins: Maximum Reservation Minutes
         min_cancel_hours: Reservation Cost Window (hours)
@@ -402,6 +403,7 @@ en:
         reserve_start_at: Reserve Start
         reserve_end_at: Reserve End
         duration_mins: Duration
+        duration_days: Duration Days
         actuals_string: Actual Usage
         actual_start_date: Actual Start
         actual_duration_mins: Actual Duration

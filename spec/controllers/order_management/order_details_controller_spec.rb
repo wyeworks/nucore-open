@@ -283,7 +283,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
             it "renders an error", :aggregate_failures do
               expect(flash[:error]).to be_present
-              expect(assigns(:order_detail).errors.full_messages).to include("Duration must be at least 1 minute")
+              expect(assigns(:order_detail).errors.full_messages).to include("Duration must be greater than zero")
               expect(response).to render_template(:edit)
               expect(response.code).to eq("406")
             end
