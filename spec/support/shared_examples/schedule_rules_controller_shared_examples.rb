@@ -43,7 +43,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
       expect(assigns(:schedule_rule).end_min).to eq(0)
     end
 
-    context "when daily booking and start time disabled" do
+    context "when daily booking and start time disabled", if: product_sym == :instrument do
       before do
         product.update(
           pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
@@ -95,7 +95,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
       end
     end
 
-    context "when daily booking and start time disabled" do
+    context "when daily booking and start time disabled", if: product_sym == :instrument do
       before do
         product.update(
           pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
@@ -175,7 +175,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
           end
         end
 
-        context "when daily booking and start time disabled" do
+        context "when daily booking and start time disabled", if: product_sym == :instrument do
           before do
             product.update(
               pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
