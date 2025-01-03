@@ -4,9 +4,13 @@ $(document).ready(function() {
 
   const header = { left: 'title', center: '', right: '' };
 
+  let defaultRightHeader = 'prev,next today';
+
   if (defaultView != 'month') {
-    header.right = 'prev,next today agendaDay,agendaWeek,month';
+    defaultRightHeader = `${defaultRightHeader} agendaDay,agendaWeek,month`;
   }
+
+  header.right = defaultRightHeader;
 
   new FullCalendarConfig(
     calendar, { header }
