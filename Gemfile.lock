@@ -584,7 +584,7 @@ GEM
     ruby-vips (2.2.2)
       ffi (~> 1.12)
       logger
-    rubyzip (2.3.2)
+    rubyzip (2.4.1)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
     sass-listen (4.0.0)
