@@ -17,6 +17,11 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
+      # As for December 2024, the Heroku CLI is not pre-installed in ubuntu-latest.
+      # See https://github.com/AkhileshNS/heroku-deploy/issues/188.
+      - name: Install Heroku CLI
+        run: |
+          curl https://cli-assets.heroku.com/install.sh | sh
       - uses: actions/checkout@v4
       - uses: akhileshns/heroku-deploy@v3.13.15
         with:
