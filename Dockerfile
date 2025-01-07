@@ -44,9 +44,11 @@ COPY . /app
 EXPOSE 3000
 CMD ["bundle", "exec", "puma"]
 
+ENTRYPOINT ["./docker-entrypoint.sh"]
+
 FROM base as develop
 
-ENTRYPOINT ["./docker-entrypoint.sh"]
+# development requirements go here
 
 FROM base as deploy
 
