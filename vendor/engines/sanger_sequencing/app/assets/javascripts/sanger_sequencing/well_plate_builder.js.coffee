@@ -1,4 +1,5 @@
 #= require sanger_sequencing/odd_first_ordering_strategy
+#= require sanger_sequencing/sequential_ordering_strategy
 
 exports = exports ? @
 
@@ -11,6 +12,7 @@ class exports.SangerSequencing.WellPlateBuilder
     @allSubmissions = []
     @_reservedCells = ["A01", "A02"]
     @_orderingStrategy = new SangerSequencing.OddFirstOrderingStrategy
+    @_orderingStrategy = new SangerSequencing.SequentialOrderingStrategy
     @_render()
 
   addSubmission: (submission) ->
