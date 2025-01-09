@@ -41,7 +41,9 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
       end
 
       it "navigates to order" do
-        click_link active_project_order.id.to_s
+        within("table.js--transactions-table") do
+          click_link active_project_order.id.to_s
+        end
 
         expect(page).to have_content(active_project_order.id.to_s)
       end
@@ -95,7 +97,10 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
         end
 
         it "navigates to original order" do
-          click_link originating_order_facility1.id.to_s
+          within("table.js--transactions-table") do
+            click_link originating_order_facility1.id.to_s
+          end
+        
 
           expect(page).to have_content(originating_order_facility1.id.to_s)
           expect(page).to have_content(facility2.name)
@@ -135,7 +140,9 @@ RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true }
         end
 
         it "navigates to facility order" do
-          click_link cross_core_orders[2].id.to_s
+          within("table.js--transactions-table") do
+            click_link cross_core_orders[2].id.to_s
+          end
 
           expect(page).to have_content(cross_core_orders[2].id.to_s)
           expect(page).to have_content(facility2.name)
