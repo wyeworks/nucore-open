@@ -3,16 +3,30 @@
 class ServicesController < ProductsCommonController
   after_action :update_sanger_external_service, only: [:create, :update]
 
+  def sanger
+    authorize! :view_details, @product
+
+    if request.patch? && can?(:manage, current_facility)
+      if @product.update(sanger_params)
+        flash[:notice] = t("controllers.services.sanger_config_updated")
+      end
+    end
+  end
+
   private
 
   def permitted_params
     params = super
 
-    if @facility.sanger_sequencing_enabled?
-      params += %i[sanger_sequencing_enabled sanger_sequencing_primer]
+    if current_facility.sanger_sequencing_enabled?
+      params += %i[sanger_sequencing_enabled]
     end
 
     params
+  end
+
+  def sanger_params
+    params.require(:service).permit(:sanger_sequencing_primer)
   end
 
   def update_sanger_external_service
@@ -20,9 +34,9 @@ class ServicesController < ProductsCommonController
 
     if @product.sanger_sequencing_enabled?
       ensure_sanger_url_service
-      flash[:notice] = t("controllers.services.sanger_sequencing_enabled")
+      flash[:info] = t("controllers.services.sanger_sequencing_enabled")
     else
-      flash[:notice] = t("controllers.services.sanger_sequencing_disabled")
+      flash[:info] = t("controllers.services.sanger_sequencing_disabled")
     end
   end
 
@@ -33,7 +47,7 @@ class ServicesController < ProductsCommonController
     sanger_external_service =
       @product
       .external_services
-      .matching_location(new_sanger_sequencing_submissions_path)
+      .matching_location(new_sanger_sequencing_submission_path)
       .first
 
     if sanger_external_service.blank?

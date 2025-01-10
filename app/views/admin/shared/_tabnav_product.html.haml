@@ -28,5 +28,7 @@
   - unless @product.is_a?(Bundle)
     - if ResearchSafetyCertificate.any?
       = tab ProductResearchSafetyCertificationRequirement.model_name.human.pluralize, facility_product_product_research_safety_certification_requirements_path(current_facility, @product), secondary_tab == "certification_reqs"
+  - if @product.sanger_sequencing_enabled? && can?(:manage, @facility)
+    = tab t("views.admin.products.tabnav.sanger"), [:sanger, current_facility, @product], (secondary_tab == "sanger")
 
   = render_view_hook "additional_tabs", secondary_tab: secondary_tab

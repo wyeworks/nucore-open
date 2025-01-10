@@ -1,0 +1,17 @@
+= content_for :h1 do
+  = current_facility
+= content_for :sidebar do
+  = render "admin/shared/sidenav_product", sidenav_tab: @product.class.name.pluralize.underscore
+= content_for :tabnav do
+  = render "admin/shared/tabnav_product", secondary_tab: "sanger"
+
+%h2= t("views.admin.products.sanger.title")
+
+= simple_form_for [:sanger, current_facility, @product] do |f|
+  = f.input :sanger_sequencing_primer,
+    as: :boolean,
+    label: false,
+    inline_label: Service.human_attribute_name(:sanger_sequencing_primer),
+    hint: t("services.service_fields.sanger.instruct.sanger_sequencing_primer")
+
+  = f.submit text("shared.save"), class: "btn btn-primary"

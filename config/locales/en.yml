@@ -1263,7 +1263,7 @@ en:
       sanger:
         instruct:
           sanger_sequencing_enabled: Enable Sanger submissions for this service
-
+          sanger_sequencing_primer: Allow a Primer to be specified along a Submission
 
   notifications:
     index:

@@ -32,6 +32,8 @@ en:
             is_hidden: "Hide %{field} from end users; visible to staff when \"ordering on behalf\" of another user"
             billing_mode: "<b>Default</b>: Standard billing workflow, payment source required.<br><b>Skip Review</b>: Reconciled on completion, payment source required.<br><b>Nonbillable</b>: Reconciled on completion, NO payment source required."
             cross_core_ordering_available: "Available for Cross-Core Ordering?"
+        sanger:
+          title: Sanger Configuration
         tabnav:
           details: "Details"
           relays: "Timers & Relays"
@@ -46,6 +48,7 @@ en:
           accessories: "Accessories"
           surveys: "Order Forms"
           notifications: "Notifications"
+          sanger: "Sanger"
 
       services:
         index:

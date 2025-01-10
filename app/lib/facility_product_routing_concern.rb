@@ -4,6 +4,8 @@ module FacilityProductRoutingConcern
 
   def facility_product_routing_concern
     get :manage, on: :member
+    get :sanger, on: :member
+    patch :sanger, on: :member
     resources :users, controller: "product_users", except: [:show, :edit, :create] do
       get "search", on: :collection
     end

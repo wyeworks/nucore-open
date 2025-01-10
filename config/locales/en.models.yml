@@ -323,7 +323,8 @@ en:
         unit_adjustment: Unit Adjustment
         unit_net_cost: Unit Net Cost
       service:
-        sanger_sequencing_enabled: Sanger enabled
+        sanger_sequencing_enabled: Sanger Enabled
+        sanger_sequencing_primer: Primer Submission Enabled
       stored_file:
         file_file_size: File
       user_role:
