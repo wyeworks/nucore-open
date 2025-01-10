@@ -79,6 +79,8 @@ module Nucore
     # Prevent invalid (usually malicious) URLs from causing exceptions/issues
     config.middleware.insert 0, Rack::UTF8Sanitizer
 
+    config.action_dispatch.rescue_responses["NUCore::PermissionDenied"] = :forbidden
+
     config.exceptions_app = routes
 
     config.active_storage.variant_processor = :vips
