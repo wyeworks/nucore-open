@@ -62,4 +62,34 @@ RSpec.describe "Creating a service" do
   context "when billing mode is Skip Review" do
     include_examples "creates a product with billing mode", "service", "Skip Review"
   end
+
+  context "when sanger enable si checked" do
+    let(:service) { Service.last }
+
+    it "does not show the checkbox if facility is not sanger enabled" do
+      expect(facility.sanger_sequencing_enabled).to be false
+
+      visit new_facility_service_path(facility)
+
+      expect(page).to_not have_field "service[sanger_sequencing_enabled]"
+    end
+
+    it "can enable sanger on service if sanger is enabled for facility" do
+      facility.update(sanger_sequencing_enabled: true)
+
+      visit new_facility_service_path(facility)
+
+      fill_in "service[name]", with: "Sanger Sequencing"
+      fill_in "service[url_name]", with: "sanger-sequencing"
+
+      check "service[sanger_sequencing_enabled]"
+
+      click_button "Create"
+
+      expect(page).to have_content("Service was successfully created")
+      expect(page).to have_content("Sanger has been enabled")
+
+      expect(service.external_services.length).to eq(1)
+    end
+  end
 end
