@@ -79,6 +79,8 @@ It makes a few assumptions:
     bundle install
     ```
 
+    If you're facing issues with ruby-oci8 gem please take a look at the Oracle documentation linked in the [Learn more section](#Learn-more)
+
 3. Configure your databases
 
     ```
