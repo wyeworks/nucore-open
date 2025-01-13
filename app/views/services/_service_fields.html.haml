@@ -1,0 +1,6 @@
+- if current_facility.sanger_sequencing_enabled?
+  = f.input :sanger_sequencing_enabled,
+    as: :boolean,
+    label: false,
+    inline_label: Service.human_attribute_name(:sanger_sequencing_enabled),
+    hint: t("services.service_fields.sanger.instruct.sanger_sequencing_enabled")
