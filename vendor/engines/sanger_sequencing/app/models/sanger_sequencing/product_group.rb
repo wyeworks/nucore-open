@@ -2,6 +2,9 @@
 
 module SangerSequencing
 
+  ##
+  # Model that holds Sanger module configuration
+  # for a product
   class ProductGroup < ApplicationRecord
 
     # sanger_sequencing_product_groups is too long of a table name for Oracle
