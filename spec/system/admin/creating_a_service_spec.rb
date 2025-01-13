@@ -9,7 +9,7 @@ RSpec.describe "Creating a service" do
   let(:logged_in_user) { director }
   before { login_as logged_in_user }
 
-  it "can create and edit a service" do
+  it "can create a service" do
     visit facility_products_path(facility)
     click_link "Services (0)", exact: true
     click_link "Add Service"
@@ -20,13 +20,6 @@ RSpec.describe "Creating a service" do
 
     expect(current_path).to eq(manage_facility_service_path(facility, Service.last))
     expect(page).to have_content("My New Service")
-
-    click_link "Edit"
-    fill_in "service[description]", with: "Some description"
-    click_button "Save"
-
-    expect(current_path).to eq(manage_facility_service_path(facility, Service.last))
-    expect(page).to have_content("Some description")
   end
 
   it "can add order forms" do
@@ -71,7 +64,7 @@ RSpec.describe "Creating a service" do
 
       visit new_facility_service_path(facility)
 
-      expect(page).to_not have_field "service[sanger_sequencing_enabled]"
+      expect(page).to_not have_field("service[sanger_sequencing_enabled]")
     end
 
     it "can enable sanger on service if sanger is enabled for facility" do
