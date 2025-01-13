@@ -17,10 +17,6 @@ FactoryBot.define do
     trait :with_order_notification do
       sequence(:order_notification_recipient) { |n| "orders#{Facility.count + n}@example.com" }
     end
-
-    callback(:after_build) do |facility, builder|
-      # debugger
-    end
   end
 
   factory :setup_facility, class: Facility, parent: :facility do
