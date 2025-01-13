@@ -11,11 +11,15 @@ FactoryBot.define do
     sequence(:url_name) { |n| "facility#{Facility.count + (2 * n)}" }
 
     trait :with_image do
-      file { File.open("#{Rails.root}/spec/files/cern.jpeg") }
+      file { Rack::Test::UploadedFile.new("spec/files/cern.jpeg", "image/jpeg") }
     end
 
     trait :with_order_notification do
       sequence(:order_notification_recipient) { |n| "orders#{Facility.count + n}@example.com" }
+    end
+
+    callback(:after_build) do |facility, builder|
+      # debugger
     end
   end
 
