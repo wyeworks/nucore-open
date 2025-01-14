@@ -230,6 +230,15 @@ RSpec.configure do |config|
     Warden.test_reset!
   end
 
+  config.around(:each, :disable_requests_local) do |example|
+    Rails.application.config.tap do |app_config|
+      prev_val = app_config.consider_all_requests_local
+      app_config.consider_all_requests_local = false
+      example.run
+      app_config.consider_all_requests_local = prev_val
+    end
+  end
+
   require "rspec/active_job"
   config.include(RSpec::ActiveJob)
 end

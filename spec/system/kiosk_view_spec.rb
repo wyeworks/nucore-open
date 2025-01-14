@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Launching Kiosk View", :js, feature_setting: { kiosk_view: true, bypass_kiosk_auth: false } do
+RSpec.describe "Launching Kiosk View", :js, :disable_requests_local, feature_setting: { kiosk_view: true, bypass_kiosk_auth: false }  do
   let(:facility) { create(:setup_facility, kiosk_enabled: true) }
   let(:account) { create(:setup_account) }
   let!(:account_user) { FactoryBot.create(:account_user, :purchaser, account: account, user: user) }
