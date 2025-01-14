@@ -239,6 +239,15 @@ RSpec.configure do |config|
     end
   end
 
+  config.around(:each, :show_rescuable_exceptions) do |example|
+    Rails.application.config.tap do |app_config|
+      prev_val = app_config.action_dispatch.show_exceptions
+      app_config.action_dispatch.show_exceptions = :rescuable
+      example.run
+      app_config.action_dispatch.show_exceptions = prev_val
+    end
+  end
+
   require "rspec/active_job"
   config.include(RSpec::ActiveJob)
 end
