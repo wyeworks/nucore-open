@@ -82,7 +82,7 @@ module SangerSequencing
 
       def validate_product_group
         @product_group = params[:group].presence
-        raise ActiveRecord::RecordNotFound unless @product_group.blank? || ProductGroup::GROUPS.include?(@product_group)
+        raise ActiveRecord::RecordNotFound unless @product_group.blank? || SangerProduct::GROUPS.include?(@product_group)
       end
 
       def load_batch
