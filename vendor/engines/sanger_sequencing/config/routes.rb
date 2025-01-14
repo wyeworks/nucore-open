@@ -10,6 +10,11 @@ Rails.application.routes.draw do
   end
 
   resources :facilities, only: [] do
+    resources :services, only: [] do
+      namespace :sanger_sequencing do
+        resource :sanger_product, only: [:show, :edit, :update]
+      end
+    end
     namespace :sanger_sequencing do
       namespace :admin do
         resources :submissions, only: [:index, :show]

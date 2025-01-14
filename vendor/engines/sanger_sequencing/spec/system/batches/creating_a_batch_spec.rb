@@ -83,7 +83,7 @@ RSpec.describe "Creating a batch", :js do
 
     describe "when the service is mapped to the fragment group" do
       before do
-        SangerSequencing::ProductGroup.create!(product: service, group: "fragment")
+        SangerSequencing::SangerProduct.create!(product: service, group: "fragment")
         visit facility_sanger_sequencing_admin_batches_path(facility, group: "fragment")
         click_link "Create New Batch"
       end

@@ -1,0 +1,22 @@
+= content_for :h1 do
+  = current_facility
+= content_for :sidebar do
+  = render "admin/shared/sidenav_product", sidenav_tab: @product.class.name.pluralize.underscore
+= content_for :tabnav do
+  = render "admin/shared/tabnav_product", secondary_tab: "sanger"
+
+%h2= text("title")
+
+= simple_form_for @sanger_product, url: facility_service_sanger_sequencing_sanger_product_path(current_facility, @product) do |f|
+  = f.input :needs_primer,
+    as: :boolean,
+    label: false,
+    inline_label: SangerSequencing::SangerProduct.human_attribute_name(:needs_primer),
+    include_blank: false,
+    hint: text("needs_primer")
+
+  = f.input :group,
+    collection: sanger_product_groups,
+    hint: text("group")
+
+  = f.submit text("shared.save"), class: "btn btn-primary"
