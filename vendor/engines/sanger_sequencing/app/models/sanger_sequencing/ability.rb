@@ -9,7 +9,7 @@ module SangerSequencing
     def initialize(user, facility = nil)
       return unless user
 
-      can [:show, :create, :update, :create_sample], Submission, user: user
+      can [:show, :create, :update, :create_sample], Submission, user:
 
       if facility && user.operator_of?(facility)
         can [:index, :show], Submission

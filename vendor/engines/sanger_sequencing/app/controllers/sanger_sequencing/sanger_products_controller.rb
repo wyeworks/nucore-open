@@ -4,6 +4,8 @@ module SangerSequencing
 
   class SangerProductsController < BaseController
     before_action :set_resources
+    before_action { @active_tab = "admin_products" }
+    before_action { authorize! :manage, current_facility }
 
     layout "two_column"
     admin_tab :all
@@ -16,10 +18,14 @@ module SangerSequencing
 
     def update
       if @sanger_product.update(sanger_product_params)
-        redirect_to [current_facility, @product, :sanger_sequencing, :sanger_product]
+        redirect_to [current_facility, @product, :sanger_sequencing, :sanger_product], notice: text(".update.success")
       else
         render :edit
       end
+    end
+
+    def sanger_ability
+      Ability.new(current_user, current_facility)
     end
 
     private
@@ -40,8 +46,9 @@ module SangerSequencing
     end
 
     def set_resources
-      @active_tab = "admin_products"
-      @product = Product.find_by!(url_name: params[:service_id])
+      @product = current_facility.products.find_by!(
+        url_name: params[:service_id]
+      )
       @sanger_product = @product.sanger_product || @product.create_sanger_product(group: "default")
     end
   end
