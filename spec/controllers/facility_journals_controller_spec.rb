@@ -343,12 +343,9 @@ RSpec.describe FacilityJournalsController do
       before :each do
         @params[:facility_id] = "all"
         sign_in create(:user, :global_billing_administrator)
-        do_request
       end
 
-      it "renders a 404" do
-        expect(response.code).to eq("404")
-      end
+      it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
     end
   end
 
@@ -364,7 +361,7 @@ RSpec.describe FacilityJournalsController do
   end
 
   describe "#new" do
-    let(:expiry_date) { Time.zone.now - 1.year }
+    let(:expiry_date) { 1.year.ago }
     let(:user) { FactoryBot.create(:user) }
     let(:expired_payment_source) { create(:nufs_account, :with_account_owner, owner: user, expires_at: expiry_date) }
     let!(:problem_order_detail) { place_and_complete_item_order(user, facility, expired_payment_source, true) }
@@ -408,12 +405,9 @@ RSpec.describe FacilityJournalsController do
       before :each do
         @params[:facility_id] = "all"
         sign_in create(:user, :global_billing_administrator)
-        do_request
       end
 
-      it "renders a 404" do
-        expect(response.code).to eq("404")
-      end
+      it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
     end
   end
 
@@ -463,7 +457,7 @@ RSpec.describe FacilityJournalsController do
       end
 
       it "does not reconcile either" do
-        perform
+        expect { perform }.to raise_error(ActiveRecord::RecordNotFound)
         expect(@order_detail1.reload.state).to eq("complete")
         expect(@order_detail2.reload.state).to eq("complete")
       end
@@ -483,5 +477,4 @@ RSpec.describe FacilityJournalsController do
       end
     end
   end
-
 end

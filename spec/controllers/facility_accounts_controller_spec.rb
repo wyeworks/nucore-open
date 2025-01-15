@@ -4,7 +4,6 @@ require "rails_helper"
 require "controller_spec_helper"
 
 RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: true, suspend_accounts: true, reload_routes: true } do
-
   let(:facility) { FactoryBot.create(:facility) }
   let(:account) { create_nufs_account_with_owner }
   let(:admin) { @admin }
@@ -25,7 +24,6 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
   end
 
   context "index" do
-
     before(:each) do
       @method = :get
       @action = :index
@@ -42,11 +40,9 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
       expect(assigns(:accounts).first).to eq(@account)
       is_expected.to render_template("index")
     end
-
   end
 
   context "show" do
-
     before(:each) do
       @method = :get
       @action = :show
@@ -82,7 +78,6 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
 
   context "edit accounts" do
     context "new" do
-
       before(:each) do
         @method = :get
         @action = :new
@@ -98,11 +93,9 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
         expect(assigns(:account)).to be_new_record
         is_expected.to render_template("new")
       end
-
     end
 
     context "edit" do
-
       before(:each) do
         @method = :get
         @action = :edit
@@ -117,11 +110,9 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
         expect(assigns(:account)).to eq(@account)
         is_expected.to render_template("edit")
       end
-
     end
 
     context "update" do
-
       before(:each) do
         @method = :put
         @action = :update
@@ -146,7 +137,6 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
         is_expected.to set_flash
         assert_redirected_to facility_account_url
       end
-
     end
 
     context "create", if: Account.config.creation_enabled?(NufsAccount) do
@@ -184,11 +174,9 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
         is_expected.to set_flash
         expect(response).to redirect_to(facility_user_accounts_path(facility, owner_user))
       end
-
     end
 
     context "new_account_user_search" do
-
       before :each do
         @method = :get
         @action = :new_account_user_search
@@ -202,9 +190,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
       it_should_allow_all facility_managers do
         is_expected.to render_template "new_account_user_search"
       end
-
     end
-
   end
 
   context "search_results" do
@@ -215,8 +201,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
 
     it "denies senior staff" do
       sign_in create(:user, :senior_staff, facility: facility)
-      get :search_results, params: { facility_id: facility.url_name }
-      expect(response).to be_forbidden
+      expect { get :search_results, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
     end
 
     describe "as the director" do
@@ -256,7 +241,6 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
   end
 
   context "members" do
-
     before :each do
       @method = :get
       @action = :members
@@ -271,7 +255,6 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
       expect(assigns(:account)).to eq(@account)
       is_expected.to render_template("members")
     end
-
   end
 
   context "with statements", :time_travel, if: Account.config.statements_enabled? do
@@ -300,8 +283,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
       it "does not allow an account admin" do
         user = create(:user, :business_administrator, account: account)
         sign_in user
-        do_request
-        expect(response.code).to eq("403")
+        expect { do_request }.to raise_error(CanCan::AccessDenied)
       end
 
       it "allows global billing administrator to access the statement" do
@@ -347,7 +329,6 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
 
   context "suspension" do
     context "suspend" do
-
       before :each do
         @method = :get
         @action = :suspend
@@ -364,11 +345,9 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
         expect(assigns(:account)).to be_suspended
         assert_redirected_to facility_account_path(@authable, @account)
       end
-
     end
 
     context "unsuspend" do
-
       before :each do
         @method = :get
         @action = :unsuspend
@@ -385,8 +364,6 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
         expect(assigns(:account)).not_to be_suspended
         assert_redirected_to facility_account_path(@authable, @account)
       end
-
     end
   end
-
 end

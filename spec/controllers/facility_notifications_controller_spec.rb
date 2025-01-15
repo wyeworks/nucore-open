@@ -4,7 +4,6 @@ require "rails_helper"
 require "controller_spec_helper"
 
 RSpec.describe FacilityNotificationsController do
-
   before(:all) { create_users }
   render_views
 
@@ -25,10 +24,9 @@ RSpec.describe FacilityNotificationsController do
     context "with no review period", billing_review_period: 0.days do
       before(:each) do
         sign_in @admin
-        do_request
       end
 
-      it { expect(response.code).to eq("404") }
+      it { expect { do_request }.to raise_error(ActionController::RoutingError, /Notifications disabled with a zero-day review period/) }
     end
   end
 

@@ -28,8 +28,7 @@ RSpec.describe OrderStatusesController do
       expect(@root_status).not_to be_editable
       @params[:id] = @root_status.id
       maybe_grant_always_sign_in :director
-      do_request
-      expect(response.code).to eq("404")
+      expect { do_request }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 

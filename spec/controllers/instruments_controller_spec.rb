@@ -201,7 +201,7 @@ RSpec.describe InstrumentsController, type: :controller do
         end
       end
 
-      it_should_allow_operators_only(:redirect) do
+      it_should_allow_operators_only(:redirect, "", false) do
         expect(assigns[:add_to_cart]).to be(true)
       end
 

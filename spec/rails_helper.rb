@@ -19,7 +19,6 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 FactoryBot.use_parent_strategy = false
 
 RSpec.configure do |config|
-
   config.filter_rails_from_backtrace!
   config.filter_gems_from_backtrace("spring")
   # rspec-rails by default excludes stack traces from within vendor Lots of our
@@ -229,6 +228,24 @@ RSpec.configure do |config|
   config.include Warden::Test::Helpers, type: :system
   config.after type: :system do
     Warden.test_reset!
+  end
+
+  config.around(:each, :disable_requests_local) do |example|
+    Rails.application.config.tap do |app_config|
+      prev_val = app_config.consider_all_requests_local
+      app_config.consider_all_requests_local = false
+      example.run
+      app_config.consider_all_requests_local = prev_val
+    end
+  end
+
+  config.around(:each, :show_rescuable_exceptions) do |example|
+    Rails.application.config.tap do |app_config|
+      prev_val = app_config.action_dispatch.show_exceptions
+      app_config.action_dispatch.show_exceptions = :rescuable
+      example.run
+      app_config.action_dispatch.show_exceptions = prev_val
+    end
   end
 
   require "rspec/active_job"

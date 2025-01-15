@@ -60,7 +60,7 @@ module SangerSequencing
       if action_name == "show" && SangerSequencing::Ability.new(acting_user, current_facility).can?(:show, @submission)
         redirect_to facility_sanger_sequencing_admin_submission_path(current_facility, @submission)
       else
-        render_403(error)
+        render "errors/forbidden", status: :forbidden, formats: formats_with_html_fallback
       end
     end
 
