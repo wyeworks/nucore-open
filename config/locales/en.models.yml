@@ -322,6 +322,8 @@ en:
         unit_cost: Unit Cost
         unit_adjustment: Unit Adjustment
         unit_net_cost: Unit Net Cost
+      service:
+        sanger_sequencing_enabled: Sanger Enabled
       stored_file:
         file_file_size: File
       user_role:

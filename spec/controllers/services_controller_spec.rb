@@ -105,6 +105,33 @@ RSpec.describe ServicesController do
       is_expected.to set_flash
       assert_redirected_to manage_facility_service_url(@authable, assigns(:product))
     end
+
+    context "when sanger is enabled" do
+      before do
+        sign_in @admin
+        facility.update(sanger_sequencing_enabled: true)
+        @params[:service][:sanger_sequencing_enabled] = true
+      end
+
+      it "creates an external service" do
+        expect { do_request }.to change {
+          @service.reload.external_services.count
+        }.by(1)
+      end
+
+      it "does not create an external service if it already exists" do
+        ExternalServicePasser.create(
+          passer: @service,
+          external_service: UrlService.create(
+            location: new_sanger_sequencing_submission_path
+          )
+        )
+
+        expect { do_request }.to_not change {
+          @service.reload.external_services.count
+        }
+      end
+    end
   end
 
   context "destroy" do
