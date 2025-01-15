@@ -41,7 +41,7 @@ class ServicesController < ProductsCommonController
     if sanger_external_service.blank?
       Service.transaction do
         external_service = UrlService.find_or_create_by(
-          location: new_sanger_sequencing_submission_path
+          location: new_sanger_sequencing_submission_url
         )
         ExternalServicePasser.create!(
           external_service:,
