@@ -30,6 +30,8 @@ class ServicesController < ProductsCommonController
   # Ensures UrlService exists for the product
   # pointing to Sanger Submission
   def ensure_sanger_url_service
+    return unless defined? new_sanger_sequencing_submission_path
+
     sanger_external_service =
       @product
       .external_services
