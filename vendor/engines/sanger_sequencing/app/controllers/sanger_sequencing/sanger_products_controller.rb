@@ -49,7 +49,7 @@ module SangerSequencing
       @product = current_facility.products.find_by!(
         url_name: params[:service_id]
       )
-      @sanger_product = @product.sanger_product || @product.create_sanger_product(group: "default")
+      @sanger_product = @product.sanger_product || @product.create_sanger_product
     end
   end
 

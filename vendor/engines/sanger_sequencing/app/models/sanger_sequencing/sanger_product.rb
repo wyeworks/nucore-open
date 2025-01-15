@@ -13,6 +13,8 @@ module SangerSequencing
 
     belongs_to :product
 
+    attribute :group, default: 'default'
+
     validates :group, presence: true, inclusion: { in: GROUPS }
     validates :product, presence: true, uniqueness: { case_sensitive: false }
 
