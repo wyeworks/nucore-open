@@ -119,6 +119,23 @@ RSpec.configure do |config|
     end
   end
 
+  config.around(:each, :disable_requests_local) do |example|
+    Rails.application.config.tap do |app_config|
+      prev_val = app_config.consider_all_requests_local
+      app_config.consider_all_requests_local = false
+      example.run
+      app_config.consider_all_requests_local = prev_val
+    end
+  end
+
+  config.around(:each, :show_rescuable_exceptions) do |example|
+    Rails.application.config.tap do |app_config|
+      prev_val = app_config.action_dispatch.show_exceptions
+      app_config.action_dispatch.show_exceptions = :rescuable
+      example.run
+      app_config.action_dispatch.show_exceptions = prev_val
+    end
+  end
   # Setting this config option `false` removes rspec-core's monkey patching of the
   # top level methods like `describe`, `shared_examples_for` and `shared_context`
   # on `main` and `Module`. The methods are always available through the `RSpec`
