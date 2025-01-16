@@ -17,7 +17,7 @@ module SangerSequencing
       def index
         @batches = Batch.for_facility(current_facility)
                         .order(created_at: :desc)
-                        .for_product_group(params[:group])
+                        .for_product_group(group_param)
                         .paginate(page: params[:page])
       end
 
@@ -25,8 +25,8 @@ module SangerSequencing
         @submissions = Submission.ready_for_batch
                                  .includes(:samples, order_detail: :product)
                                  .for_facility(current_facility)
-                                 .for_product_group(params[:group])
-        @builder_config = WellPlateConfiguration.find(params[:group])
+                                 .for_product_group(group_param)
+        @builder_config = WellPlateConfiguration.find(group_param)
       end
 
       def create
@@ -78,11 +78,22 @@ module SangerSequencing
       class UploadError < StandardError
       end
 
+      def order_options
+        BatchForm::ORDER_OPTIONS.map do |order|
+          [text(".orders.#{order}"), order]
+        end
+      end
+
+      helper_method :order_options
+
       private
 
+      def group_param
+        params[:group]
+      end
+
       def validate_product_group
-        @product_group = params[:group].presence
-        raise ActiveRecord::RecordNotFound unless @product_group.blank? || SangerProduct::GROUPS.include?(@product_group)
+        raise ActiveRecord::RecordNotFound unless group_param.blank? || SangerProduct::GROUPS.include?(group_param)
       end
 
       def load_batch
@@ -90,7 +101,9 @@ module SangerSequencing
       end
 
       def load_batch_form
-        @batch = BatchForm.new(SangerSequencing::Batch.new(group: params[:group]))
+        @batch = BatchForm.new.tap do |batch_form|
+          batch_form.batch = SangerSequencing::Batch.new(group: group_param)
+        end
       end
 
     end

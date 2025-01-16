@@ -13,6 +13,11 @@
     %vue-sanger-sequencing-well-plate(v-for="plateIndex in builder.plateCount()"){":builder" => "builder", ":plate-index" => "$index" }
 
     - if @submissions.any?
+      = f.input :column_order,
+        collection: order_options,
+        include_blank: false,
+        label: SangerSequencing::BatchForm.human_attribute_name(:column_order)
+
       = f.submit text("submit"), class: "btn btn-primary"
 
   - if @submissions.any?

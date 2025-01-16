@@ -4,9 +4,17 @@ module SangerSequencing
 
   class BatchForm
 
+    include ActiveModel::Attributes
     include ActiveModel::Validations
+    extend ActiveModel::Translation
 
-    attr_reader :batch
+    ORDER_OPTIONS = %w[
+      sequential
+      odd_first
+    ].freeze
+
+    attribute :batch
+    attribute :column_order, default: "odd_first"
 
     delegate :submission_ids, :group, to: :batch
 
@@ -14,10 +22,7 @@ module SangerSequencing
     validate :samples_must_match_submissions
     validate :submission_part_of_other_batch
     validate :submissions_in_correct_facility
-
-    def initialize(batch = SangerSequencing::Batch.new)
-      @batch = batch
-    end
+    validates :column_order, inclusion: { in: ORDER_OPTIONS }
 
     def assign_attributes(params = {})
       batch.assign_attributes(
