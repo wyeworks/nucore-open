@@ -4,16 +4,17 @@ module SangerSequencing
 
   class BatchForm
 
+    extend ActiveModel::Translation
+
     include ActiveModel::Attributes
     include ActiveModel::Validations
-    extend ActiveModel::Translation
 
     ORDER_OPTIONS = %w[
       sequential
       odd_first
     ].freeze
 
-    attribute :batch
+    attribute :batch, default: SangerSequencing::Batch.new
     attribute :column_order, default: "odd_first"
 
     delegate :submission_ids, :group, to: :batch

@@ -8,8 +8,14 @@
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
 //= require sanger_sequencing/odd_first_ordering_strategy
+//= require sanger_sequencing/sequential_ordering_strategy
 
 var exports = exports != null ? exports : this;
+
+const ORDER_STRATEGIES = {
+  sequential: SangerSequencing.SequentialOrderingStrategy,
+  odd_first: SangerSequencing.OddFirstOrderingStrategy,
+};
 
 exports.SangerSequencing.WellPlateBuilder = class WellPlateBuilder {
 
@@ -20,6 +26,15 @@ exports.SangerSequencing.WellPlateBuilder = class WellPlateBuilder {
     this.allSubmissions = [];
     this._reservedCells = ["A01", "A02"];
     this._orderingStrategy = new SangerSequencing.OddFirstOrderingStrategy;
+    this._render();
+  }
+
+  changeOrderStrategy(order) {
+    const strategyClass = ORDER_STRATEGIES[order];
+
+    if (!strategyClass) { return; }
+
+    this._orderingStrategy = new strategyClass;
     this._render();
   }
 

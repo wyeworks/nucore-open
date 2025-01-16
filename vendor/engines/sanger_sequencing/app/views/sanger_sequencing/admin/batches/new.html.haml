@@ -16,7 +16,8 @@
       = f.input :column_order,
         collection: order_options,
         include_blank: false,
-        label: SangerSequencing::BatchForm.human_attribute_name(:column_order)
+        label: SangerSequencing::BatchForm.human_attribute_name(:column_order),
+        input_html: { "v-on:change": "changeOrder()", "v-model" => "columnOrder" }
 
       = f.submit text("submit"), class: "btn btn-primary"
 

@@ -7,7 +7,10 @@ window.vue_sanger_sequencing_well_plate_editor_app = {
   props: ["submissions", "builder_config"],
 
   data() {
-    return {builder: new SangerSequencing.WellPlateBuilder};
+    return {
+      builder: new SangerSequencing.WellPlateBuilder,
+      columnOrder: null
+    };
   },
 
   beforeCompile() {
@@ -20,6 +23,10 @@ window.vue_sanger_sequencing_well_plate_editor_app = {
   },
 
   methods: {
+    changeOrder() {
+      this.builder.changeOrderStrategy(this.columnOrder);
+    },
+
     addSubmission(submissionId) {
       return this.builder.addSubmission(this.findSubmission(submissionId));
     },
