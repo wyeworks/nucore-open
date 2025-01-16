@@ -231,20 +231,18 @@ RSpec.configure do |config|
   end
 
   config.around(:each, :disable_requests_local) do |example|
-    Rails.application.config.tap do |app_config|
-      prev_val = app_config.consider_all_requests_local
-      app_config.consider_all_requests_local = false
-      example.run
-      app_config.consider_all_requests_local = prev_val
-    end
-  end
+    Rails.application.env_config.tap do |app_config|
+      prev_show_exceptions = app_config['action_dispatch.show_exceptions']
+      prev_requests_local = app_config['consider_all_requests_local']
+      prev_detailed_exceptions = app_config['action_dispatch.show_detailed_exceptions']
+      app_config['action_dispatch.show_exceptions'] = :rescuable
+      app_config['consider_all_requests_local'] = false
+      app_config['action_dispatch.show_detailed_exceptions'] = false
 
-  config.around(:each, :show_rescuable_exceptions) do |example|
-    Rails.application.config.tap do |app_config|
-      prev_val = app_config.action_dispatch.show_exceptions
-      app_config.action_dispatch.show_exceptions = :rescuable
       example.run
-      app_config.action_dispatch.show_exceptions = prev_val
+      app_config['action_dispatch.show_exceptions'] = prev_show_exceptions
+      app_config['consider_all_requests_local'] = prev_requests_local
+      app_config['action_dispatch.show_detailed_exceptions'] = prev_detailed_exceptions
     end
   end
 
