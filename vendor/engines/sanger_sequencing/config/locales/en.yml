@@ -25,7 +25,7 @@ en:
         edit:
           title: Sanger Configuration
           needs_primer: Require submissions to include a primer
-          group: Submissions of the same type are batched
+          group: Submissions of the same type can be batched together
       submissions:
         form:
           submit: "Save Submission"
