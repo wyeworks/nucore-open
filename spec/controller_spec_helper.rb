@@ -71,8 +71,9 @@ end
 def it_should_deny(user_sym, spec_desc = "")
   it "should deny #{user_sym} " + spec_desc, auth: true do
     maybe_grant_always_sign_in(user_sym)
-    do_request
-    is_expected.to render_template("403")
+    expect { do_request }.to raise_error do |error|
+      expect(error).to be_a(CanCan::AccessDenied).or be_a(NUCore::PermissionDenied)
+    end
   end
 end
 
@@ -144,8 +145,12 @@ end
 # [_eval_]
 #   A block holding successful auth tests. If given will be passed the
 #   user whose auth is currently being tested. Not required.
-def it_should_allow_managers_only(response = :success, spec_desc = "", &eval)
-  it_should_require_login
+def it_should_allow_managers_only(response = :success, spec_desc = "", login = true, &eval)
+  if login
+    it_should_require_login
+  else
+    it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
+  end
 
   it_should_deny(:guest, spec_desc)
 
@@ -174,8 +179,16 @@ end
 
 #
 # Similar to #it_should_allow_managers_only, but for operators
-def it_should_allow_operators_only(response = :success, spec_desc = "", &eval)
-  it_should_require_login
+def it_should_allow_operators_only(response = :success, spec_desc = "", login = true, &eval)
+  if login
+    it_should_require_login
+  else
+    it "Rises a forbidden exception" do
+      expect { do_request }.to raise_error do |error|
+        expect(error).to be_a(CanCan::AccessDenied).or be_a(NUCore::PermissionDenied)
+      end
+    end
+  end
 
   it_should_deny(:guest, spec_desc)
 
@@ -187,8 +200,16 @@ end
 
 #
 # Similar to #it_should_allow_managers_only, but tests admin access
-def it_should_allow_admin_only(response = :success, spec_desc = "", &eval)
-  it_should_require_login
+def it_should_allow_admin_only(response = :success, spec_desc = "", login = true, &eval)
+  if login
+    it_should_require_login
+  else
+    it "Rises a forbidden exception" do
+      expect { do_request }.to raise_error do |error|
+        expect(error).to be_a(CanCan::AccessDenied).or be_a(NUCore::PermissionDenied)
+      end
+    end
+  end
 
   it_should_deny(:guest, spec_desc)
 
@@ -247,6 +268,6 @@ def grant_and_sign_in(user)
 end
 
 def maybe_grant_always_sign_in(user_sym)
-  user = instance_variable_get("@#{user_sym}")
+  user = instance_variable_get(:"@#{user_sym}")
   grant_and_sign_in(user)
 end
