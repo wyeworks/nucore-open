@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Sanger Products" do
+RSpec.describe "Sanger Products", feature_setting: { sanger_enabled_service: true } do
   let(:facility) { create(:setup_facility, sanger_sequencing_enabled: true) }
   let(:service) { create(:setup_service, facility:, sanger_sequencing_enabled: true) }
   let(:admin) { create(:user, :facility_administrator, facility:) }
