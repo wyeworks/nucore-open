@@ -13,12 +13,12 @@ en:
         success: "We have saved your batch"
       destroy:
         success: "Batch was successfully deleted"
-    sanger_sequencing/sanger_products:
-      update:
-        success: Sanger Configuration updated successfully
       orders:
         sequential: "Full Plate"
         odd_first: "Half Plate"
+    sanger_sequencing/sanger_products:
+      update:
+        success: Sanger Configuration updated successfully
 
   views:
     sanger_sequencing:

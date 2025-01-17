@@ -17,7 +17,7 @@ module SangerSequencing
       def index
         @batches = Batch.for_facility(current_facility)
                         .order(created_at: :desc)
-                        .for_product_group(group_param)
+                        .for_product_group(product_group)
                         .paginate(page: params[:page])
       end
 
@@ -25,8 +25,8 @@ module SangerSequencing
         @submissions = Submission.ready_for_batch
                                  .includes(:samples, order_detail: :product)
                                  .for_facility(current_facility)
-                                 .for_product_group(group_param)
-        @builder_config = WellPlateConfiguration.find(group_param)
+                                 .for_product_group(product_group)
+        @builder_config = WellPlateConfiguration.find(product_group)
       end
 
       def create
@@ -88,12 +88,14 @@ module SangerSequencing
 
       private
 
-      def group_param
+      def product_group
         params[:group]
       end
 
+      helper_method :product_group
+
       def validate_product_group
-        raise ActiveRecord::RecordNotFound unless group_param.blank? || SangerProduct::GROUPS.include?(group_param)
+        raise ActiveRecord::RecordNotFound unless product_group.blank? || SangerProduct::GROUPS.include?(product_group)
       end
 
       def load_batch
@@ -102,7 +104,7 @@ module SangerSequencing
 
       def load_batch_form
         @batch = BatchForm.new.tap do |batch_form|
-          batch_form.batch = SangerSequencing::Batch.new(group: group_param)
+          batch_form.batch = SangerSequencing::Batch.new(group: product_group)
         end
       end
 
