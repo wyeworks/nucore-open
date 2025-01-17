@@ -21,7 +21,7 @@ RSpec.describe "Editing a Service" do
     expect(page).to have_content("Some description")
   end
 
-  describe "sanger enable change" do
+  describe "sanger enable change", feature_setting: { sanger_enabled_service: true } do
     it "does not show sanger enable if facility is not sanger enabled" do
       facility.update(sanger_sequencing_enabled: false)
 

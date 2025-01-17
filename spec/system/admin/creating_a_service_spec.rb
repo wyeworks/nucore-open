@@ -56,7 +56,7 @@ RSpec.describe "Creating a service" do
     include_examples "creates a product with billing mode", "service", "Skip Review"
   end
 
-  context "when sanger enable is checked" do
+  context "when sanger enable is checked", feature_setting: { sanger_enabled_service: true } do
     let(:service) { Service.last }
 
     it "does not show the checkbox if facility is not sanger enabled" do
