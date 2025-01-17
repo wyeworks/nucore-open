@@ -24,10 +24,6 @@ module SangerSequencing
       end
     end
 
-    def sanger_ability
-      Ability.new(current_user, current_facility)
-    end
-
     private
 
     def sanger_product_groups
