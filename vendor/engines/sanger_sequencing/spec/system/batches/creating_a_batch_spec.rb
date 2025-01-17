@@ -6,18 +6,59 @@ require_relative "../../support/shared_contexts/setup_sanger_service"
 RSpec.describe "Creating a batch", :js do
   include_context "Setup Sanger Service"
 
-  let!(:purchased_order) { FactoryBot.create(:purchased_order, product: service, account: account) }
-  let!(:purchased_order2) { FactoryBot.create(:purchased_order, product: service, account: account) }
-  let!(:purchased_submission) { FactoryBot.create(:sanger_sequencing_submission, order_detail: purchased_order.order_details.first, sample_count: 50) }
-  let!(:purchased_submission2) { FactoryBot.create(:sanger_sequencing_submission, order_detail: purchased_order2.order_details.first, sample_count: 50) }
+  let!(:purchased_order) { create(:purchased_order, product: service, account: account) }
+  let!(:purchased_order2) { create(:purchased_order, product: service, account: account) }
+  let!(:purchased_submission) { create(:sanger_sequencing_submission, order_detail: purchased_order.order_details.first, sample_count: 50) }
+  let!(:purchased_submission2) { create(:sanger_sequencing_submission, order_detail: purchased_order2.order_details.first, sample_count: 50) }
 
-  let(:facility_staff) { FactoryBot.create(:user, :staff, facility: facility) }
+  let(:facility_staff) { create(:user, :staff, facility: facility) }
 
   before { login_as facility_staff }
 
   def click_add(submission_id)
     within("[data-submission-id='#{submission_id}']") do
       click_link "Add"
+    end
+  end
+
+  describe "plate column order" do
+    let!(:submission) do
+      create(
+        :sanger_sequencing_submission,
+        order_detail: purchased_order.order_details.first,
+        sample_count: 14
+      )
+    end
+    let(:batch) { submission.reload.batch }
+
+    before do
+      visit new_facility_sanger_sequencing_admin_batch_path(facility)
+    end
+
+    it "can select odd first order" do
+      select("Half Plate", from: "batch[column_order]")
+
+      click_add(submission.id)
+
+      click_button "Save Batch"
+
+      expect(batch.sample_at(0, "A01")).to be_reserved
+      expect(batch.sample_at(0, "B01")).to eq(submission.samples.first)
+      expect(batch.sample_at(0, "B02")).to be_blank
+      expect(batch.sample_at(0, "G03")).to eq(submission.samples.last)
+    end
+
+    it "can select sequential order" do
+      select("Full Plate", from: "batch[column_order]")
+
+      click_add(submission.id)
+
+      click_button "Save Batch"
+
+      expect(batch.sample_at(0, "A01")).to be_reserved
+      expect(batch.sample_at(0, "B01")).to eq(submission.samples.first)
+      expect(batch.sample_at(0, "H02")).to eq(submission.samples.last)
+      expect(batch.sample_at(0, "B03")).to be_blank
     end
   end
 
@@ -48,7 +89,7 @@ RSpec.describe "Creating a batch", :js do
   end
 
   describe "creating a batch with a previously completed submission" do
-    let!(:completed_submission) { FactoryBot.create(:sanger_sequencing_submission, order_detail: purchased_order2.order_details.first, sample_count: 50) }
+    let!(:completed_submission) { create(:sanger_sequencing_submission, order_detail: purchased_order2.order_details.first, sample_count: 50) }
 
     before do
       purchased_order.order_details.first.to_complete

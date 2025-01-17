@@ -5,7 +5,7 @@
   = stylesheet_link_tag "sanger_sequencing/application"
 
 = content_for :sidebar do
-  = render "sanger_sequencing/admin/shared/sidenav", sidenav_tab: [@product_group, "batches"].compact.join("_")
+  = render "sanger_sequencing/admin/shared/sidenav", sidenav_tab: [product_group, "batches"].compact.join("_")
 
 %h2= text(@product_group || :default, scope: "sanger_sequencing.product_groups")
 
