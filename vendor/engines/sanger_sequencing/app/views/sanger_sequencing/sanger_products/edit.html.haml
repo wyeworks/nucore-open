@@ -7,11 +7,11 @@
     as: :boolean,
     label: false,
     inline_label: SangerSequencing::SangerProduct.human_attribute_name(:needs_primer),
-    include_blank: false,
     hint: text("needs_primer")
 
   = f.input :group,
     collection: sanger_product_groups,
+    include_blank: false,
     hint: text("group")
 
   = f.submit text("shared.save"), class: "btn btn-primary"
