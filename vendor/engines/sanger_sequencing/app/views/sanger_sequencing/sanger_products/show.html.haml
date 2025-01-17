@@ -1,9 +1,4 @@
-= content_for :h1 do
-  = current_facility
-= content_for :sidebar do
-  = render "admin/shared/sidenav_product", sidenav_tab: @product.class.name.pluralize.underscore
-= content_for :tabnav do
-  = render "admin/shared/tabnav_product", secondary_tab: "sanger"
+= render "shared/nav/manage_product", secondary_tab: "sanger"
 
 %h2= text("title")
 
