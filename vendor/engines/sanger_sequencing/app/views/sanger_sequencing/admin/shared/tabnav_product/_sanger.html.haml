@@ -1,0 +1,4 @@
+- if @product.sanger_sequencing_enabled? && can?(:manage, current_facility)
+  = tab t("sanger_sequencing.tabnav_product"),
+    facility_service_sanger_sequencing_sanger_product_path(current_facility, @product),
+    (secondary_tab == "sanger")

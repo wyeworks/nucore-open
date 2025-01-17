@@ -5,6 +5,7 @@ en:
     product_groups:
       default: Sanger Sequencing
       fragment: Fragment Analysis
+    tabnav_product: Sanger
 
   controllers:
     sanger_sequencing/admin/batches:
@@ -12,9 +13,19 @@ en:
         success: "We have saved your batch"
       destroy:
         success: "Batch was successfully deleted"
+    sanger_sequencing/sanger_products:
+      update:
+        success: Sanger Configuration updated successfully
 
   views:
     sanger_sequencing:
+      sanger_products:
+        show:
+          title: Sanger Configuration
+        edit:
+          title: Sanger Configuration
+          needs_primer: Require submissions to include a primer
+          group: Submissions of the same type can be batched together
       submissions:
         form:
           submit: "Save Submission"
@@ -52,6 +63,12 @@ en:
       sanger_sequencing/batch:
         created_at: Created
         created_by: Created By
+      sanger_sequencing/sanger_product:
+        needs_primer: Needs a Primer
+        group: Plated Service Type
+      sanger_sequencing/sanger_product/group:
+          default: Sanger Sequencing
+          fragment: Fragment Analysis
 
     models:
       sanger_sequencing/submission:
