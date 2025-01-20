@@ -13,6 +13,9 @@ en:
         success: "We have saved your batch"
       destroy:
         success: "Batch was successfully deleted"
+      orders:
+        sequential: "Full Plate"
+        odd_first: "Half Plate"
     sanger_sequencing/sanger_products:
       update:
         success: Sanger Configuration updated successfully
@@ -86,6 +89,9 @@ en:
               too_short: You must have at least one sample.
 
   activemodel:
+    attributes:
+      sanger_sequencing/batch_form:
+        column_order: Column Order
     errors:
       models:
         sanger_sequencing/batch_form:
