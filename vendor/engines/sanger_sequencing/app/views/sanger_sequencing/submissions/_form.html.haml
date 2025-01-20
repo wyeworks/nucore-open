@@ -7,18 +7,19 @@
     %thead
       %tr
         %th= SangerSequencing::Sample.human_attribute_name(:customer_sample_id)
+        %th= SangerSequencing::Sample.human_attribute_name(:id)
         - if needs_primer
           %th= SangerSequencing::Sample.human_attribute_name(:primer_name)
-        %th= SangerSequencing::Sample.human_attribute_name(:id)
+        %th
     %tbody
       = f.nested_fields_for :samples, wrapper: false, class_name: "SangerSequencing::Sample", wrapper_tag: :tr do |sf|
         %td
           = sf.input :customer_sample_id, label: false, input_html: { class: "js--customerSampleId" }
           = sf.input :id, as: :hidden, input_html: { class: "js--sampleId" }
+        %td.js--sampleId= sf.object.id
         - if needs_primer
           %td
-            = sf.input :primer_name, label: false, input_html: { class: "js--primerName" }
-        %td.js--sampleId= sf.object.id
+            = sf.input :primer_name, label: false, input_html: { class: "js--primerName js--primerAutocomplete" }
         - if @submission.quantity_editable?
           %td
             = sf.remove_nested_fields_link text("remove"), tabindex: -1
@@ -27,8 +28,11 @@
     - if @submission.quantity_editable?
       %tfoot
         %tr
-          %td{colspan: 3}= f.add_nested_fields_link :samples, text("add"), class: "btn btn-success"
+          %td{colspan: 4}= f.add_nested_fields_link :samples, text("add"), class: "btn btn-success"
 
   %h4.js--print-warning= text("warning")
 
   = f.submit text("submit"), class: "btn btn-primary"
+
+:javascript
+  const corePrimers = #{SangerSequencing::Primer.default_list};

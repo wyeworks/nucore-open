@@ -1,0 +1,7 @@
+en:
+  sanger_sequencing:
+    primer:
+      default_list:
+        - M13FM13RT7
+        - PromoterT7
+        - Terminator

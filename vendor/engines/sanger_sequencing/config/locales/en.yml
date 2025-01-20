@@ -61,6 +61,7 @@ en:
         id: Core Sample
         customer_sample_id: Customer Sample
         results_files: Results Files
+        primer_name: Primer
       sanger_sequencing/submission:
         id: "Submission #"
       sanger_sequencing/batch:
