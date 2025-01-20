@@ -1,3 +1,5 @@
+- needs_primer = @submission.product.sanger_product&.needs_primer?
+
 = simple_form_for @submission, html: { data: { create_sample_url: create_sample_sanger_sequencing_submission_path(@submission) } } do |f|
   = hidden_field_tag :referer, params[:referer]
   = hidden_field_tag :success_url, params[:success_url]
@@ -5,17 +7,23 @@
     %thead
       %tr
         %th= SangerSequencing::Sample.human_attribute_name(:customer_sample_id)
+        - if needs_primer
+          %th= SangerSequencing::Sample.human_attribute_name(:primer_name)
         %th= SangerSequencing::Sample.human_attribute_name(:id)
     %tbody
       = f.nested_fields_for :samples, wrapper: false, class_name: "SangerSequencing::Sample", wrapper_tag: :tr do |sf|
         %td
           = sf.input :customer_sample_id, label: false, input_html: { class: "js--customerSampleId" }
           = sf.input :id, as: :hidden, input_html: { class: "js--sampleId" }
+        - if needs_primer
+          %td
+            = sf.input :primer_name, label: false, input_html: { class: "js--primerName" }
         %td.js--sampleId= sf.object.id
         - if @submission.quantity_editable?
           %td
             = sf.remove_nested_fields_link text("remove"), tabindex: -1
             = sf.input :_destroy, as: :hidden
+
     - if @submission.quantity_editable?
       %tfoot
         %tr

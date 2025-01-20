@@ -19,7 +19,7 @@ module SangerSequencing
     rescue_from CanCan::AccessDenied, with: :redirect_to_admin
 
     def self.permitted_sample_attributes
-      @permitted_sample_attributes ||= [:id, :customer_sample_id, :_destroy]
+      @permitted_sample_attributes ||= [:id, :customer_sample_id, :_destroy, :primer_name, :primer_name]
     end
 
     def self.permitted_submission_params
