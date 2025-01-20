@@ -58,8 +58,7 @@ RSpec.describe "Cloning account membership" do
       visit facility_user_accounts_path("all", new_user)
       expect(page).not_to have_content("Clone")
 
-      visit facility_user_clone_account_memberships_path("all", new_user)
-      expect(page.status_code).to eq(403)
+      expect { visit facility_user_clone_account_memberships_path("all", new_user) }.to raise_error(CanCan::AccessDenied)
     end
   end
 end

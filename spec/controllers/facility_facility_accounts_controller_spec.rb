@@ -8,7 +8,7 @@ RSpec.describe FacilityFacilityAccountsController do
 
   around(:each) do |example|
     old_form = described_class.form_class
-    described_class.form_class = ::FacilityAccountForm
+    described_class.form_class = FacilityAccountForm
     example.call
     described_class.form_class = old_form
   end
@@ -32,9 +32,8 @@ RSpec.describe FacilityFacilityAccountsController do
 
     it "denies senior staff" do
       sign_in senior_staff
-      get :index, params: params
 
-      expect(response).to be_forbidden
+      expect { get :index, params: params }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -49,9 +48,8 @@ RSpec.describe FacilityFacilityAccountsController do
 
     it "denies senior staff" do
       sign_in senior_staff
-      get :new, params: params
 
-      expect(response).to be_forbidden
+      expect { get :new, params: params }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -79,9 +77,8 @@ RSpec.describe FacilityFacilityAccountsController do
 
     it "denies senior staff" do
       sign_in senior_staff
-      post :create, params: params
 
-      expect(response).to be_forbidden
+      expect { get :create, params: params }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -99,9 +96,8 @@ RSpec.describe FacilityFacilityAccountsController do
 
     it "denies senior staff" do
       sign_in senior_staff
-      get :edit, params: params
 
-      expect(response).to be_forbidden
+      expect { get :edit, params: params }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -128,8 +124,7 @@ RSpec.describe FacilityFacilityAccountsController do
     it "denies senior staff" do
       sign_in senior_staff
 
-      put :update, params: params
-      expect(response).to be_forbidden
+      expect { put :update, params: params }.to raise_error(CanCan::AccessDenied)
     end
   end
 end
