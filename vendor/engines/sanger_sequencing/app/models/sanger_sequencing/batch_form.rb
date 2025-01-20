@@ -14,7 +14,7 @@ module SangerSequencing
       odd_first
     ].freeze
 
-    attribute :batch, default: SangerSequencing::Batch.new
+    attribute :batch
     attribute :column_order, default: "odd_first"
 
     delegate :submission_ids, :group, to: :batch
@@ -24,6 +24,11 @@ module SangerSequencing
     validate :submission_part_of_other_batch
     validate :submissions_in_correct_facility
     validates :column_order, inclusion: { in: ORDER_OPTIONS }
+
+    def initialize(batch = SangerSequencing::Batch.new)
+      super()
+      self.batch = batch
+    end
 
     def assign_attributes(params = {})
       batch.assign_attributes(
