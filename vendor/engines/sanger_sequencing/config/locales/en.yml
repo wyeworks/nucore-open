@@ -37,6 +37,7 @@ en:
           remove: Remove
           primer_name:
             copy_hint: Copy Primer to samples below
+            hint: Pick one of the Core Primers or specify your own
       orders:
         receipt:
           print: Please print this receipt to accompany your submission.
