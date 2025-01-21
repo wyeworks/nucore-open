@@ -19,8 +19,8 @@
         %td.js--sampleId= sf.object.id
         - if needs_primer
           %td.primer-input-row
-            %button.btn.btn-mini.js--copyPrimerNameDown{title: "Apply to samples below", type: "button"}
-              = fa_icon "arrow-down"
+            %button.btn.btn-mini.js--copyPrimerNameDown{title: text("primer_name.copy_hint"), type: "button"}
+              = fa_icon "arrow-down", alt: text("primer_name.copy_hint")
 
             = sf.input :primer_name, label: false, input_html: { class: "js--primerName js--primerAutocomplete" }
         - if @submission.quantity_editable?
