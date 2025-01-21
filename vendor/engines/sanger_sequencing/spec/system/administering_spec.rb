@@ -40,11 +40,7 @@ RSpec.describe "Sanger Sequencing Administration" do
       end
 
       describe "attempting to access an unpurchased submission" do
-        before { visit facility_sanger_sequencing_admin_submission_path(facility, unpurchased_submission) }
-
-        it "is not found" do
-          expect(page.status_code).to eq(404)
-        end
+        it_behaves_like "raises specified error", -> { visit facility_sanger_sequencing_admin_submission_path(facility, unpurchased_submission) }, ActiveRecord::RecordNotFound
       end
 
       describe "accessing via the 'View Order Form' link" do
@@ -74,12 +70,9 @@ RSpec.describe "Sanger Sequencing Administration" do
     describe "if the feature is disabled" do
       before do
         facility.update(sanger_sequencing_enabled: false)
-        visit facility_sanger_sequencing_admin_submissions_path(facility)
       end
 
-      it "renders a 404" do
-        expect(page.status_code).to eq(404)
-      end
+      it_behaves_like "raises specified error", -> { visit facility_sanger_sequencing_admin_submissions_path(facility) }, ActionController::RoutingError
     end
   end
 
@@ -89,9 +82,6 @@ RSpec.describe "Sanger Sequencing Administration" do
 
     before { login_as other_user }
 
-    it "does not have access" do
-      visit facility_sanger_sequencing_admin_submissions_path(facility)
-      expect(page.status_code).to eq(403)
-    end
+    it_behaves_like "raises specified error", -> { visit facility_sanger_sequencing_admin_submissions_path(facility) }, CanCan::AccessDenied
   end
 end

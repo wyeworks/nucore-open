@@ -29,7 +29,7 @@ RSpec.describe AccessoriesController do
       @action = :new
     end
 
-    it_should_allow_operators_only {}
+    it_should_allow_operators_only(:success, "", false) {}
 
     # facility admin specs cover the inner workings
     context "as the user who made the reservation" do
@@ -295,7 +295,6 @@ RSpec.describe AccessoriesController do
             expect(assigns(:order_details)).to be_blank
           end
         end
-
       end
     end
   end
