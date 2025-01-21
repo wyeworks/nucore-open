@@ -258,7 +258,7 @@ GEM
       coffee-script
       execjs
       json
-    concurrent-ruby (1.3.4)
+    concurrent-ruby (1.3.5)
     config (5.5.2)
       deep_merge (~> 1.2, >= 1.2.1)
       ostruct
@@ -343,7 +343,7 @@ GEM
     http-accept (1.7.0)
     http-cookie (1.0.8)
       domain_name (~> 0.5)
-    i18n (1.14.6)
+    i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     icalendar (2.10.3)
       ice_cube (~> 0.16)
@@ -443,7 +443,7 @@ GEM
     parallel (1.26.3)
     parallel_tests (4.9.0)
       parallel
-    paranoia (3.0.0)
+    paranoia (3.0.1)
       activerecord (>= 6, < 8.1)
     parser (3.3.7.0)
       ast (~> 2.4.1)
