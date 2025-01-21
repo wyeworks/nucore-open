@@ -18,7 +18,10 @@
           = sf.input :id, as: :hidden, input_html: { class: "js--sampleId" }
         %td.js--sampleId= sf.object.id
         - if needs_primer
-          %td
+          %td.primer-input-row
+            %button.btn.btn-mini.js--copyPrimerNameDown{title: "Apply to samples below", type: "button"}
+              = fa_icon "arrow-down"
+
             = sf.input :primer_name, label: false, input_html: { class: "js--primerName js--primerAutocomplete" }
         - if @submission.quantity_editable?
           %td
