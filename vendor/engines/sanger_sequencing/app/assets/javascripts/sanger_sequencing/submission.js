@@ -69,7 +69,7 @@ $(() => $(document).on("fields_added.nested_form_fields", function(event) {
   const customerSampleIdField = row.find(".js--customerSampleId");
   const prevSamplePrimerName = row.prevAll(":visible:first").find(".js--primerName").val();
 
-  SubmissionPrimer.setupCopyCallback(row);
+  SubmissionPrimer.setupCopyCallback(row.find(".js--copyPrimerNameDown"));
 
   customerSampleIdField.prop("disabled", true).val("Loading...");
   $.post(sangerSequencingForm.data("create-sample-url")).done(function(sample) {
