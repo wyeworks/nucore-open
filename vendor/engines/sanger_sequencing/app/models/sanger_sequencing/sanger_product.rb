@@ -19,6 +19,13 @@ module SangerSequencing
     validates :group, presence: true, inclusion: { in: GROUPS }
     validates :product, presence: true, uniqueness: { case_sensitive: false }
 
+    def self.by_group(group)
+      where(group:)
+    end
+
+    def self.excluding_group(group)
+      where.not(group:)
+    end
   end
 
 end
