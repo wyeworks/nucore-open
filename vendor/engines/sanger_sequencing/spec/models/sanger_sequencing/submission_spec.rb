@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe SangerSequencing::Submission do
-  context do
+  describe "create" do
     let(:order_detail) { build(:order_detail) }
     let(:subject) { described_class.create!(order_detail:) }
 
