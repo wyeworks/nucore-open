@@ -10,7 +10,7 @@ const SubmissionPrimer = {
   handleCopy(event) {
     const row = $(event.target).parents("tr");
 
-    if (row.length == 0) { return; }
+    if (!row.length) { return; }
     const primerName = row.find(".js--primerName").val()
 
     row.nextAll(":visible").find(".js--primerName").val(primerName);
