@@ -374,7 +374,6 @@ RSpec.describe ReservationsController do
           do_request
           expect(response.body).to_not include I18n.t("reservations.notices.upcoming", reservation: @upcoming)
         end
-
       end
 
       context "moving forward" do
@@ -641,7 +640,6 @@ RSpec.describe ReservationsController do
     end
 
     context "with new account" do
-
       before :each do
         @account2 = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @guest))
         define_open_account(@instrument.account, @account2.account_number)
@@ -683,7 +681,6 @@ RSpec.describe ReservationsController do
     end
 
     context "with other things in the cart (bundle or multi-add)" do
-
       before :each do
         @order.add(@instrument, 1)
       end
@@ -718,8 +715,8 @@ RSpec.describe ReservationsController do
     it_should_allow_all facility_operators do
       expect(assigns[:reservation_window].max_window).to eq(365)
       expect(assigns[:reservation_window].max_days_ago).to eq(-365)
-      expect(assigns[:reservation_window].min_date).to eq((Time.zone.now - 365.days).strftime("%Y%m%d"))
-      expect(assigns[:reservation_window].max_date).to eq((Time.zone.now + 365.days).strftime("%Y%m%d"))
+      expect(assigns[:reservation_window].min_date).to eq(365.days.ago.strftime("%Y%m%d"))
+      expect(assigns[:reservation_window].max_date).to eq(365.days.from_now.strftime("%Y%m%d"))
     end
 
     # guests should only be able to go the default reservation window into the future
@@ -1087,7 +1084,7 @@ RSpec.describe ReservationsController do
     context "valid short reservation" do
       before :each do
         @reservation = @instrument.reservations.create(
-          reserve_start_at: Time.zone.now + 1.day,
+          reserve_start_at: 1.day.from_now,
           order_detail: @order_detail,
           duration_mins: 60,
           split_times: true,
@@ -1113,7 +1110,7 @@ RSpec.describe ReservationsController do
         FactoryBot.create(:all_day_schedule_rule, product: @instrument)
 
         @reservation = @instrument.reservations.create!(
-          reserve_start_at: Time.zone.now + 1.day,
+          reserve_start_at: 1.day.from_now,
           order_detail: @order_detail,
           duration_mins: 24 * 60,
           split_times: true,
@@ -1134,12 +1131,9 @@ RSpec.describe ReservationsController do
     context "invalid reservation" do
       before :each do
         @params[:reservation_id] = 999
-        do_request
       end
 
-      it "should return a 404" do
-        expect(response.code).to eq("404")
-      end
+      it_behaves_like "raises specified error", :do_request, ActiveRecord::RecordNotFound
     end
   end
 
@@ -1175,7 +1169,7 @@ RSpec.describe ReservationsController do
   context "needs now reservation" do
     before :each do
       # create reservation for tomorrow @ 9 am for 60 minutes, with order detail reference
-      @start        = Time.zone.now + 1.second
+      @start        = 1.second.from_now
       @reservation  = @instrument.reservations.create(reserve_start_at: @start, order_detail: @order_detail,
                                                       duration_mins: 60, split_times: true)
       assert @reservation.valid?

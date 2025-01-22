@@ -9,6 +9,13 @@ module SangerSequencing
 
       ViewHook.add_hook "orders.receipt", "after_note", "sanger_sequencing/orders/samples_on_receipt"
       ViewHook.add_hook "purchase_notifier.order_receipt", "after_note", "sanger_sequencing/orders/samples_on_receipt"
+      ViewHook.add_hook(
+        "admin.shared.tabnav_product",
+        "additional_tabs",
+        "sanger_sequencing/admin/shared/tabnav_product/sanger"
+      )
+
+      Product.include SangerSequencing::SangerEnabledProduct
     end
 
     config.generators do |g|

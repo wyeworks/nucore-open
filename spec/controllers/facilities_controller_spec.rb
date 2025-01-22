@@ -250,8 +250,8 @@ RSpec.describe FacilitiesController do
 
     it "should 404 for invalid facility" do
       @params[:id] = "randomstringofcharacters"
-      do_request
-      expect(response.code).to eq("404")
+
+      expect { do_request }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 
@@ -343,5 +343,4 @@ RSpec.describe FacilitiesController do
 
     it_should_allow_managers_only
   end
-
 end

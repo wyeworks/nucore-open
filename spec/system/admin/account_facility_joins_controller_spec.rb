@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe AccountFacilityJoinsController, feature_setting: { edit_accounts: true, multi_facility_accounts: true, reload_routes: true } do
-
   # Not all implementations have facility-specific account types, so build our own for this
   # set of specs.
   class PerFacilityTestAccount < Account
@@ -45,27 +44,18 @@ RSpec.describe AccountFacilityJoinsController, feature_setting: { edit_accounts:
       expect(page).to have_content "can't remove"
     end
 
-    it "cannot visit a global account" do
-      visit edit_facility_account_account_facility_joins_path(facility, global_account)
-      expect(page).to have_content("Not Found")
-    end
+    it_behaves_like "raises specified error", -> { visit edit_facility_account_account_facility_joins_path(facility, global_account) }, ActiveRecord::RecordNotFound
   end
 
   describe "as a facility admin" do
     before { login_as create(:user, :facility_administrator, facility: facility) }
 
-    it "cannot access the page" do
-      visit edit_facility_account_account_facility_joins_path(facility, facility_specific_account)
-      expect(page).to have_content("Permission Denied")
-    end
+    it_behaves_like "raises specified error", -> { visit edit_facility_account_account_facility_joins_path(facility, facility_specific_account) }, CanCan::AccessDenied
   end
 
   describe "as an account manager" do
     before { login_as create(:user, :account_manager) }
 
-    it "cannot access the page" do
-      visit edit_facility_account_account_facility_joins_path(facility, facility_specific_account)
-      expect(page).to have_content("Permission Denied")
-    end
+    it_behaves_like "raises specified error", -> { visit edit_facility_account_account_facility_joins_path(facility, facility_specific_account) }, CanCan::AccessDenied
   end
 end
