@@ -54,7 +54,7 @@ RSpec.describe "Voucher Account Reconciliation" do
         expect(page).to have_content(order_number)
         expect(page).not_to have_content(other_order_number)
 
-        select statements.first.invoice_number, from: "Statements"
+        select statements.first.invoice_number, from: "Invoices"
         click_button "Filter"
         expect(page).to have_content(order_number)
         expect(page).not_to have_content(other_order_number)
@@ -119,7 +119,7 @@ RSpec.describe "Voucher Account Reconciliation" do
         expect(page).to have_content(order_number)
         expect(page).not_to have_content(other_order_number)
 
-        select statements.first.invoice_number, from: "Statements"
+        select statements.first.invoice_number, from: "Invoices"
         click_button "Filter"
         expect(page).to have_content(order_number)
         expect(page).not_to have_content(other_order_number)
