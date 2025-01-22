@@ -169,7 +169,7 @@ class FileUploadsController < ApplicationController
       begin
         url = params[survey_param][:location]
         ext = UrlService.find_or_create_by(location: url)
-        esp = ExternalServicePasser.where(passer_id: @product.id, external_service_id: ext.id).first
+        esp = ExternalServicePasser.where(passer: @product, external_service_id: ext.id).first
 
         if esp
           @flash_notice = "That Online Order Form already exists"

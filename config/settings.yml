@@ -160,6 +160,7 @@ feature:
   cross_core_order_view: <%= ENV.fetch("CROSS_CORE_ORDER_VIEW", true) %>
   show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
   show_daily_rate_option: <%= !Rails.env.production? %>
+  sanger_enabled_service: <%= ENV.fetch("SANGER_ENABLED_SERVICE", false) %>
 
 split_accounts:
   # Roles are allowed to create Split Accounts

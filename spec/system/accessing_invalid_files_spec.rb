@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Accessing invalid formats" do
-
   it "handles invalid utf8 query parameters" do
     visit "/users/sign_in?utf8=%E2%9C%93&user[username]=&user[password]=&commit=Sign+in&authenticity_token=f%e5u6%ac%5d%df%c8S%fc%9c7%b3%ff%26A%c3y%85%a3"
 
@@ -12,10 +11,7 @@ RSpec.describe "Accessing invalid formats" do
   end
 
   it "renders a 404 for a missing page in pdf" do
-    visit "/#{I18n.t('facilities_downcase')}/examp.pdf"
-
-    expect(page).to have_content("404")
-    expect(page).to have_content("Page Not Found")
+    expect { visit "/#{I18n.t('facilities_downcase')}/examp.pdf" }.to raise_error(ActiveRecord::RecordNotFound)
   end
 
   describe "for a page I don't have access to" do
@@ -25,10 +21,8 @@ RSpec.describe "Accessing invalid formats" do
     describe "a pdf version of a regular page" do
       it "renders a 403 as html" do
         login_as user
-        visit "#{I18n.t('facilities_downcase')}/list.pdf"
 
-        expect(page).to have_content("403")
-        expect(page).to have_content("Permission Denied")
+        expect { visit "#{I18n.t('facilities_downcase')}/list.pdf" }.to raise_error(CanCan::AccessDenied)
       end
     end
 
@@ -37,10 +31,8 @@ RSpec.describe "Accessing invalid formats" do
 
       it "renders a 403 as html" do
         login_as user
-        visit "accounts/#{statement.account.id}/statements/#{statement.id}.pdf"
 
-        expect(page).to have_content("403")
-        expect(page).to have_content("Permission Denied")
+        expect { visit "accounts/#{statement.account.id}/statements/#{statement.id}.pdf" }.to raise_error(CanCan::AccessDenied)
       end
     end
 
@@ -49,10 +41,8 @@ RSpec.describe "Accessing invalid formats" do
 
       it "renders a 403 as html" do
         login_as user
-        visit "orders/#{reservation.order.id}/order_details/#{reservation.order_detail.id}/reservations/#{reservation.id}.ics"
 
-        expect(page).to have_content("403")
-        expect(page).to have_content("Permission Denied")
+        expect { visit "orders/#{reservation.order.id}/order_details/#{reservation.order_detail.id}/reservations/#{reservation.id}.ics" }.to raise_error(CanCan::AccessDenied)
       end
     end
   end

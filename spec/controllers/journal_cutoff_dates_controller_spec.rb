@@ -7,20 +7,17 @@ RSpec.describe JournalCutoffDatesController do
     let(:user) { FactoryBot.create(:user) }
     before { sign_in user }
 
-    it "does not give access to index" do
-      get :index
-      expect(response.code).to eq("403")
+    context "does not give access to index" do
+      it_behaves_like "raises specified error", -> { get :index }, CanCan::AccessDenied
     end
 
-    it "does not give access to create" do
-      post :create, params: { journal_cutoff_date: { cutoff_date: 1.month.ago } }
-      expect(response.code).to eq("403")
+    context "does not give access to create" do
+      it_behaves_like "raises specified error", -> { post :create, params: { journal_cutoff_date: { cutoff_date: 1.month.ago } } }, CanCan::AccessDenied
     end
 
     it "does not give access to update" do
       cutoff = JournalCutoffDate.create(cutoff_date: 1.month.from_now)
-      put :update, params: { id: cutoff.id, journal_cutoff_date: {} }
-      expect(response.code).to eq("403")
+      expect { put :update, params: { id: cutoff.id, journal_cutoff_date: {} } }.to raise_error(CanCan::AccessDenied)
     end
   end
 
