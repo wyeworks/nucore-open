@@ -25,10 +25,12 @@ en:
       sanger_products:
         show:
           title: Sanger Configuration
+          primers: Core Primers
         edit:
           title: Sanger Configuration
           needs_primer: Require submissions to include a primer
           group: Submissions of the same type can be batched together
+          primers: Core Primers
       submissions:
         form:
           submit: "Save Submission"

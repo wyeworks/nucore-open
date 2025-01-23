@@ -7,6 +7,8 @@ module SangerSequencing
 
     belongs_to :sanger_product
 
+    validates :name, presence: true
+
     def self.default_list
       I18n.t("sanger_sequencing.primer.default_list")
     end

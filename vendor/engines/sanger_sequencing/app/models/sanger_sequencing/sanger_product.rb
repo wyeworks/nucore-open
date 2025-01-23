@@ -15,6 +15,8 @@ module SangerSequencing
     belongs_to :product
     has_many :primers, class_name: "SangerSequencing::Primer"
 
+    accepts_nested_attributes_for :primers, allow_destroy: true
+
     attribute :group, default: DEFAULT_GROUP
 
     validates :group, presence: true, inclusion: { in: GROUPS }
