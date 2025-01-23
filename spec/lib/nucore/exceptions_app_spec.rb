@@ -1,7 +1,7 @@
 require "rack/mock"
 require "rails_helper"
 
-RSpec.describe SanitizeHeadersMiddleware do
+RSpec.describe Nucore::ExceptionsApp do
   let(:app) { ->(env) { [200, env, "OK"] } }
   let(:middleware) { described_class.new(app) }
 
