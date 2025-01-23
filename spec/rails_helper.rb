@@ -89,6 +89,7 @@ RSpec.configure do |config|
   Capybara.enable_aria_label = true
 
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Devise::Test::IntegrationHelpers, type: :request
   config.include FactoryBot::Syntax::Methods
 
   config.around(:each, :feature_setting) do |example|
