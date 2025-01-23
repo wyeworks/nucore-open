@@ -17,7 +17,6 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
   end
 
   context "user_search" do
-
     before(:each) do
       @method = :get
       @action = :user_search
@@ -32,11 +31,9 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
       expect(assigns(:account)).to eq(@account)
       is_expected.to render_template("user_search")
     end
-
   end
 
   context "new" do
-
     before(:each) do
       @method = :get
       @action = :new
@@ -54,11 +51,9 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
       expect(assigns(:account_user)).to be_new_record
       is_expected.to render_template("new")
     end
-
   end
 
   context "create" do
-
     before(:each) do
       @method = :post
       @action = :create
@@ -90,7 +85,6 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
       end
 
       context "with an existing owner" do
-
         before :each do
           @params[:account_user][:user_role] = AccountUser::ACCOUNT_OWNER
           expect(@account.account_users.owners).to be_one
@@ -113,7 +107,6 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
       end
 
       context "with a missing owner" do
-
         before :each do
           @account_user = @account.owner
           @account_user.destroy!
@@ -248,8 +241,8 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
 
     it "does not allow the staff" do
       sign_in staff
-      do_request
-      expect(response).to be_forbidden
+
+      expect { do_request }.to raise_error(CanCan::AccessDenied)
       expect(account_user.reload).to be_present
     end
 
@@ -285,7 +278,5 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
         end
       end
     end
-
   end
-
 end

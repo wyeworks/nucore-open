@@ -12,7 +12,7 @@ def facility_operator_roles
     when :senior_staff, :staff
       role
     else
-      "facility_#{role}".to_sym
+      :"facility_#{role}"
     end
   end
 end
@@ -28,9 +28,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
 
     describe "when not logged in" do
-      before { do_request }
-
-      it { is_expected.to redirect_to new_user_session_path }
+      it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
     end
 
     describe "when logged in" do
@@ -62,9 +60,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
 
     describe "when not logged in" do
-      before { do_request }
-
-      it { is_expected.to redirect_to new_user_session_path }
+      it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
     end
 
     describe "when logged in" do
@@ -98,9 +94,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
 
     describe "when not logged in" do
-      before { do_request }
-
-      it { is_expected.to redirect_to new_user_session_path }
+      it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
     end
 
     describe "when logged in" do
@@ -138,9 +132,7 @@ RSpec.describe ProjectsController, type: :controller do
     let(:description) { "A project description" }
 
     describe "when not logged in" do
-      before { do_request }
-
-      it { is_expected.to redirect_to new_user_session_path }
+      it_behaves_like "raises specified error", :do_request, CanCan::AccessDenied
     end
 
     describe "when logged in" do
@@ -188,9 +180,7 @@ RSpec.describe ProjectsController, type: :controller do
     end
 
     describe "when not logged in" do
-      before { do_request }
-
-      it { is_expected.to redirect_to new_user_session_path }
+      it { expect { do_request }.to raise_error(CanCan::AccessDenied) }
     end
 
     describe "when logged in" do
@@ -218,7 +208,7 @@ RSpec.describe ProjectsController, type: :controller do
 
           it "sets the project inactive then redirects to its 'show' view" do
             expect(project).not_to be_active
-            is_expected .to redirect_to facility_project_path(facility, project)
+            is_expected.to redirect_to facility_project_path(facility, project)
           end
         end
 

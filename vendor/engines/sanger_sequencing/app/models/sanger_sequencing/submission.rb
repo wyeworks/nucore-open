@@ -32,10 +32,16 @@ module SangerSequencing
     }
 
     def self.for_product_group(product_group)
-      if product_group.present?
-        where(order_details: { product_id: SangerProduct.where(group: product_group).pluck(:product_id) })
+      product_group ||= SangerProduct::DEFAULT_GROUP
+
+      if product_group == SangerProduct::DEFAULT_GROUP
+        # Absence of SangerProduct is conceptually the same
+        # as having default group
+        skip_products = SangerProduct.excluding_group(product_group).pluck(:product_id)
+        where.not(order_details: { product_id: skip_products })
       else
-        where.not(order_details: { product_id: SangerProduct.pluck(:product_id) })
+        include_products = SangerProduct.by_group(product_group).pluck(:product_id)
+        where(order_details: { product_id: include_products })
       end
     end
 

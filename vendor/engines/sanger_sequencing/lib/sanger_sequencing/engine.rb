@@ -15,7 +15,7 @@ module SangerSequencing
         "sanger_sequencing/admin/shared/tabnav_product/sanger"
       )
 
-      Service.include SangerSequencing::SangerEnabledProduct
+      Product.include SangerSequencing::SangerEnabledProduct
     end
 
     config.generators do |g|

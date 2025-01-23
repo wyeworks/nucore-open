@@ -36,9 +36,6 @@ RSpec.describe ProductNotificationsController, feature_setting: { training_reque
       expect(page).not_to have_link("Edit")
     end
 
-    it "cannot access the edit view" do
-      visit edit_facility_product_notifications_path(facility, instrument)
-      expect(page).to have_content("Permission Denied")
-    end
+    it_behaves_like "raises specified error", -> { visit edit_facility_product_notifications_path(facility, instrument) }, CanCan::AccessDenied
   end
 end
