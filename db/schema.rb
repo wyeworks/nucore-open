@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_20_141340) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_23_154336) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -749,6 +749,14 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_141340) do
     t.index ["created_by_id"], name: "index_sanger_sequencing_batches_on_created_by_id"
     t.index ["facility_id"], name: "index_sanger_sequencing_batches_on_facility_id"
     t.index ["group"], name: "index_sanger_sequencing_batches_on_group"
+  end
+
+  create_table "sanger_sequencing_primers", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.integer "sanger_product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sanger_product_id"], name: "i_san_seq_primer_san_prod_idx"
   end
 
   create_table "sanger_sequencing_samples", id: :integer, charset: "utf8mb3", force: :cascade do |t|

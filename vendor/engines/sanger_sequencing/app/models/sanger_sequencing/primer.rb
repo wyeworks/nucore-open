@@ -2,7 +2,10 @@
 
 module SangerSequencing
 
-  class Primer
+  class Primer < ApplicationRecord
+    self.table_name = "sanger_sequencing_primers"
+
+    belongs_to :sanger_product
 
     def self.default_list
       I18n.t("sanger_sequencing.primer.default_list")
