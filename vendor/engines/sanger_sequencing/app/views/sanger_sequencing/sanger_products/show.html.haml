@@ -11,7 +11,7 @@
     .well
       %h4= text("primers")
       %ul
-        - @sanger_product.primers.each do |primer|
+        - @sanger_product.primers.by_name.each do |primer|
           %li= primer.name
 
 - if can? :edit, @product
