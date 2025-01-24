@@ -4,7 +4,7 @@ en:
       date_range_fields:
         ordered_at: Ordered
         fulfilled_at: Fulfilled
-        journal_or_statement_date: "Journaled/Statement"
+        journal_or_statement_date: "Journaled/!Statement!"
         reconciled_at: Reconciled
       actions:
         reassign_chart_strings: Reassign Chart Strings
