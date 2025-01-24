@@ -42,11 +42,11 @@ en:
   chart_string_downcase: account number
   chart_strings_downcase: account numbers
 
-  Statement: Invoice
-  Statements: Invoices
-  statement_downcase: invoice
-  statements_downcase: invoices
-  statemented_downcase: invoiced
+  Statement: Statement
+  Statements: Statements
+  statement_downcase: statement
+  statements_downcase: statements
+  statemented_downcase: statemented
 
   admin:
     shared:

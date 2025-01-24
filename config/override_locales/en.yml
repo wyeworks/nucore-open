@@ -2,6 +2,12 @@
 en:
   app_name: CORUM
   institution_name: University of Massachusetts
+  
+  Statement: Invoice
+  Statements: Invoices
+  statement_downcase: invoice
+  statements_downcase: invoices
+  statemented_downcase: invoiced
 
   views:
     facilities:
