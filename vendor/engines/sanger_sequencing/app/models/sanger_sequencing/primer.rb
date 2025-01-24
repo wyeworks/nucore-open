@@ -9,6 +9,8 @@ module SangerSequencing
 
     validates :name, presence: true
 
+    scope :by_name, -> { order(:name) }
+
     def self.default_list
       I18n.t("sanger_sequencing.primer.default_list")
     end

@@ -33,6 +33,10 @@ module SangerSequencing
     def create_default_primers
       primers.insert_all(Primer.default_list.map { |name| { name: } })
     end
+
+    def primers_list
+      primers.by_name.pluck(:name)
+    end
   end
 
 end

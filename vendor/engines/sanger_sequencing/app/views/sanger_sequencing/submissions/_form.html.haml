@@ -1,4 +1,5 @@
 - needs_primer = @submission.product.sanger_product&.needs_primer?
+- primers_list = @submission.product.sanger_product&.primers_list || []
 
 = simple_form_for @submission, html: { data: { create_sample_url: create_sample_sanger_sequencing_submission_path(@submission) } } do |f|
   = hidden_field_tag :referer, params[:referer]
@@ -44,4 +45,4 @@
   = f.submit text("submit"), class: "btn btn-primary"
 
 :javascript
-  const corePrimers = #{SangerSequencing::Primer.default_list};
+  const corePrimers = #{primers_list};

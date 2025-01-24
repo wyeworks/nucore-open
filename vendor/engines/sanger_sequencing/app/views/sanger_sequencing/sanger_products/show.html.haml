@@ -8,10 +8,11 @@
     input_html: { value: SangerSequencing::SangerProduct.human_attribute_name("group.#{@sanger_product.group}") }
 
   - if @sanger_product.needs_primer
-    %h4= text("primers")
-    %ul
-      - @sanger_product.primers.each do |primer|
-        %li= primer.name
+    .well
+      %h4= text("primers")
+      %ul
+        - @sanger_product.primers.each do |primer|
+          %li= primer.name
 
 - if can? :edit, @product
   %ul.inline

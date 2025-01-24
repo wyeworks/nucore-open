@@ -17,15 +17,15 @@
     inline_label: SangerSequencing::SangerProduct.human_attribute_name(:needs_primer),
     hint: text("needs_primer")
 
-  %h4= text("primers")
-  %table
-    = f.nested_fields_for :primers do |primer_form|
-      %div.primer-form
-        = primer_form.remove_nested_fields_link text("shared.remove")
-        = primer_form.input :id, as: :hidden
-        = primer_form.input :name, label: false
+  .well
+    %h4= text("primers")
+    %table
+      = f.nested_fields_for :primers do |primer_form|
+        %div.primer-form
+          = primer_form.remove_nested_fields_link text("shared.remove")
+          = primer_form.input :id, as: :hidden
+          = primer_form.input :name, label: false
 
-  = f.add_nested_fields_link(:primers, nil, class: "btn btn-mini")
+    = f.add_nested_fields_link(:primers, nil, class: "btn btn-mini")
 
-  %hr
-    = f.submit text("shared.save"), class: "btn btn-primary"
+  = f.submit text("shared.save"), class: "btn btn-primary"
