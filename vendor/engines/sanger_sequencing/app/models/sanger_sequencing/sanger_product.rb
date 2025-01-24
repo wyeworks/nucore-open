@@ -29,6 +29,10 @@ module SangerSequencing
     def self.excluding_group(group)
       where.not(group:)
     end
+
+    def create_default_primers
+      primers.insert_all(Primer.default_list.map { |name| { name: } })
+    end
   end
 
 end
