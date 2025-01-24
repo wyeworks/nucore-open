@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_13_205804) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_20_141340) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -756,6 +756,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_13_205804) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.string "customer_sample_id"
+    t.string "primer_name"
     t.index ["submission_id"], name: "index_sanger_sequencing_samples_on_submission_id"
   end
 

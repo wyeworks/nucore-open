@@ -20,6 +20,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
     let(:quantity) { 5 }
     let(:customer_id_selector) { ".nested_sanger_sequencing_submission_samples input[type=text]" }
     let(:cart_quantity_selector) { ".edit_order input[name^=quantity]" }
+
     before do
       visit facility_service_path(facility, service)
       click_link "Add to cart"
@@ -123,6 +124,85 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
         it "renders the sample ID on the receipt" do
           expect(page).to have_content "Receipt"
           expect(page).to have_content "TEST123"
+        end
+      end
+    end
+
+    describe "submissions and primers" do
+      let(:quantity) { 1 }
+      let(:submission) { SangerSequencing::Submission.last }
+
+      context "when submissions don't need a primer" do
+        before do
+          service.create_sanger_product(needs_primer: false)
+        end
+
+        it "does not show primer_name input" do
+          click_link "Complete Online Order Form"
+
+          expect(page).to have_field(
+            "sanger_sequencing_submission[samples_attributes][0][customer_sample_id]"
+          )
+          expect(page).to_not have_field(
+            "sanger_sequencing_submission[samples_attributes][0][primer_name]"
+          )
+        end
+      end
+
+      context "when submissions need a primer" do
+        before do
+          service.create_sanger_product(needs_primer: true)
+        end
+
+        it "allow to submit primer name", :js do
+          click_link "Complete Online Order Form"
+
+          expect(page).to have_field(
+            "sanger_sequencing_submission[samples_attributes][0][primer_name]"
+          )
+
+          fill_in("sanger_sequencing_submission[samples_attributes][0][primer_name]", with: "Water")
+
+          click_link("Add")
+
+          # The primer name is copied when adding a new sample row
+          expect(page).to have_field(
+            "sanger_sequencing_submission[samples_attributes][1][primer_name]",
+            with: "Water"
+          )
+
+          click_link("Add")
+
+          fill_in("sanger_sequencing_submission[samples_attributes][1][primer_name]", with: "Juice")
+          within(".nested_sanger_sequencing_submission_samples:nth-child(2)") do
+          end
+          # Click copy primer to rows below button
+          page.find(".nested_sanger_sequencing_submission_samples:nth-child(2) button").click
+
+          # Copy the primer name to samples below second sample
+          expect(page).to have_field(
+            "sanger_sequencing_submission[samples_attributes][2][primer_name]",
+            with: "Juice"
+          )
+
+          # First row, above second sample remains untouched
+          expect(page).to have_field(
+            "sanger_sequencing_submission[samples_attributes][0][primer_name]",
+            with: "Water"
+          )
+
+          click_link("Add")
+
+          # Allow empty primer name
+          fill_in("sanger_sequencing_submission[samples_attributes][3][primer_name]", with: "")
+
+          click_button("Save Submission")
+
+          expect(submission.samples.count).to be 4
+          expect(submission.samples[0].primer_name).to eq("Water")
+          expect(submission.samples[1].primer_name).to eq("Juice")
+          expect(submission.samples[2].primer_name).to eq("Juice")
+          expect(submission.samples[3].primer_name).to eq("")
         end
       end
     end

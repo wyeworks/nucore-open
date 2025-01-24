@@ -35,6 +35,10 @@ en:
           warning: "This order is not submitted. Please click Save Submission and move to the next step before printing your sample sheet."
           add: Add
           remove: Remove
+          primer_name:
+            copy_hint: Copy Primer to samples below
+            hint: Pick one of the Core Primers or specify your own
+            fill_below: Fill Below
       orders:
         receipt:
           print: Please print this receipt to accompany your submission.
@@ -61,6 +65,7 @@ en:
         id: Core Sample
         customer_sample_id: Customer Sample
         results_files: Results Files
+        primer_name: Primer
       sanger_sequencing/submission:
         id: "Submission #"
       sanger_sequencing/batch:
