@@ -14,4 +14,17 @@ RSpec.describe "error pages", :disable_requests_local do
 
     expect(response).to have_http_status(:not_acceptable)
   end
+
+  it "handles acting as error" do
+    allow_any_instance_of(FacilitiesController).to receive(:index).and_raise(
+      NUCore::NotPermittedWhileActingAs
+    )
+
+    get facilities_path
+
+    expect(response).to have_http_status(:forbidden)
+    expect(response.body).to include(
+      "This function is unavailable while you are acting as another user"
+    )
+  end
 end
