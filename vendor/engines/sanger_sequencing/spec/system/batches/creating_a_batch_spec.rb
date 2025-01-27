@@ -21,7 +21,7 @@ RSpec.describe "Creating a batch", :js do
     end
   end
 
-  describe "plate column order" do
+  describe "plate column order", feature_settings: { sanger_enabled_service: true } do
     let!(:submission) do
       create(
         :sanger_sequencing_submission,
