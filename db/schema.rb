@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_23_154336) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_27_145728) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -730,6 +730,11 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_23_154336) do
     t.index ["type", "deleted_at", "product_id", "reserve_start_at", "reserve_end_at"], name: "reservations_for_timeline"
   end
 
+  create_table "san_seq_sanger_products_primers", id: false, charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "sanger_product_id", null: false
+    t.bigint "primer_id", null: false
+  end
+
   create_table "sanger_seq_product_groups", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "product_id", null: false
     t.string "group", null: false
@@ -753,10 +758,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_23_154336) do
 
   create_table "sanger_sequencing_primers", charset: "utf8mb3", force: :cascade do |t|
     t.string "name"
-    t.integer "sanger_product_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["sanger_product_id"], name: "i_san_seq_primer_san_prod_idx"
   end
 
   create_table "sanger_sequencing_samples", id: :integer, charset: "utf8mb3", force: :cascade do |t|
