@@ -159,7 +159,7 @@ feature:
   cross_core_projects: true
   cross_core_order_view: <%= ENV.fetch("CROSS_CORE_ORDER_VIEW", true) %>
   show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
-  show_daily_rate_option: <%= !Rails.env.production? %>
+  show_daily_rate_option: true
   sanger_enabled_service: <%= ENV.fetch("SANGER_ENABLED_SERVICE", false) %>
 
 split_accounts:
