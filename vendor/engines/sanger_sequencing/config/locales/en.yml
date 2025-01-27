@@ -25,6 +25,7 @@ en:
       sanger_products:
         show:
           title: Sanger Configuration
+          primers_empty: No Primers Selected
         edit:
           title: Sanger Configuration
           needs_primer: Require submissions to include a primer
@@ -74,6 +75,7 @@ en:
       sanger_sequencing/sanger_product:
         needs_primer: Needs a Primer
         group: Plated Service Type
+        primers: Core Primers
       sanger_sequencing/sanger_product/group:
           default: Sanger Sequencing
           fragment: Fragment Analysis
