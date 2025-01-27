@@ -91,6 +91,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
       click_link("Edit")
 
       check("sanger_sequencing_sanger_product[needs_primer]")
+
       select("Fragment Analysis", from: "sanger_sequencing_sanger_product[group]")
 
       click_button("Save")
@@ -98,11 +99,15 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
       expect(page).to have_content("Sanger Configuration updated successfully")
     end
 
-    describe "primers show/edit" do
+    describe "primers change" do
       let(:sanger_product) { service.create_sanger_product }
+      let(:primers) do
+        SangerSequencing::Primer.insert_all([{ name: "Watermelon" }, { name: "Tomato" }])
+        SangerSequencing::Primer.all
+      end
 
       before do
-        sanger_product.primers.create(name: "Watermelon")
+        sanger_product.update(primers:)
       end
 
       it "show primers section when it's enabled" do
@@ -110,8 +115,8 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
 
         visit show_path
 
-        expect(page).to have_content("Core Primers")
         expect(page).to have_content("Watermelon")
+        expect(page).to have_content("Tomato")
       end
 
       it "does not show section when it's disabled" do
@@ -119,29 +124,23 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
 
         visit show_path
 
-        expect(page).to_not have_content("Core Primers")
         expect(page).to_not have_content("Watermelon")
+        expect(page).to_not have_content("Tomato")
       end
 
-      it "can edit/add/remove primers", :js do
-        sanger_product.primers.create(name: "Tomato")
+      it "can deselect primers" do
+        sanger_product.update(needs_primer: true)
+
         visit show_path
 
         click_link("Edit")
 
-        expect(page).to have_link("Remove", count: 2)
-        fill_in("sanger_sequencing_sanger_product[primers_attributes][0][name]", with: "Banana")
-
-        page.find_all("a", text: "Remove")[1].click
-
-        click_link("Add Primer")
-        fill_in("sanger_sequencing_sanger_product[primers_attributes][2][name]", with: "Cucumber")
+        unselect("Tomato", from: "sanger_sequencing_sanger_product[primer_ids][]")
 
         click_button("Save")
 
-        expect(page).to have_content("Sanger Configuration updated successfully")
-
-        expect(sanger_product.primers_list).to eq(["Banana", "Cucumber"])
+        expect(page).to have_content("Watermelon")
+        expect(page).to_not have_content("Tomato")
       end
     end
   end

@@ -9,7 +9,7 @@
 
   - if @sanger_product.needs_primer
     .well
-      %h4= text("primers")
+      %h4= SangerSequencing::SangerProduct.human_attribute_name(:primers)
       %ul
         - @sanger_product.primers.by_name.each do |primer|
           %li= primer.name

@@ -204,25 +204,27 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           expect(submission.samples[3].primer_name).to eq("")
         end
 
-        it "shows core primer options" do
-          service.sanger_product.primers.insert_all(
-            [
-              { name: "Watermelon" },
-              { name: "Tomato" },
-            ]
-          )
+        context "service primers" do
+          let(:primers) do
+            SangerSequencing::Primer.insert_all([{ name: "Watermelon" }, { name: "Tomato" }])
+            SangerSequencing::Primer.all
+          end
 
-          click_link "Complete Online Order Form"
+          before { service.sanger_product.update(primers:) }
 
-          expect(page).to_not have_css(".ui-autocomplete")
-          expect(page).to_not have_content("Watermelon")
-          expect(page).to_not have_content("Tomato")
+          it "shows core primer options" do
+            click_link "Complete Online Order Form"
 
-          page.find_field("sanger_sequencing_submission[samples_attributes][0][primer_name]").click
+            expect(page).to_not have_css(".ui-autocomplete")
+            expect(page).to_not have_content("Watermelon")
+            expect(page).to_not have_content("Tomato")
 
-          expect(page).to have_css(".ui-autocomplete")
-          expect(page).to have_content("Watermelon")
-          expect(page).to have_content("Tomato")
+            page.find_field("sanger_sequencing_submission[samples_attributes][0][primer_name]").click
+
+            expect(page).to have_css(".ui-autocomplete")
+            expect(page).to have_content("Watermelon")
+            expect(page).to have_content("Tomato")
+          end
         end
       end
     end

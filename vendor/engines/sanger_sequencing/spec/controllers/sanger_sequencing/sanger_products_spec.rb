@@ -22,14 +22,6 @@ RSpec.describe SangerSequencing::SangerProductsController do
         end.from(nil).to(SangerSequencing::SangerProduct)
       )
     end
-
-    it "creates default primers for the sanger product" do
-      expect_any_instance_of(SangerSequencing::SangerProduct).to(
-        receive(:create_default_primers)
-      )
-
-      do_request
-    end
   end
 
   describe "show" do

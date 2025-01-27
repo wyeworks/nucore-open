@@ -38,7 +38,7 @@ module SangerSequencing
       params.require(:sanger_sequencing_sanger_product).permit(
         :needs_primer,
         :group,
-        primers_attributes: [:id, :name, :_destroy]
+        primer_ids: [],
       )
     end
 
@@ -46,7 +46,7 @@ module SangerSequencing
       @product = current_facility.products.find_by!(
         url_name: params[:service_id]
       )
-      @sanger_product = @product.sanger_product || @product.create_sanger_product_with_default_primers
+      @sanger_product = @product.sanger_product || @product.create_sanger_product
     end
   end
 

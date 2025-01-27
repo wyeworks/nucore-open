@@ -1,6 +1,3 @@
-= content_for :head_content do
-  = stylesheet_link_tag "sanger_sequencing/sanger_product"
-
 = render "shared/nav/manage_product", secondary_tab: "sanger"
 
 %h2= text("title")
@@ -17,14 +14,7 @@
     inline_label: SangerSequencing::SangerProduct.human_attribute_name(:needs_primer),
     hint: text("needs_primer")
 
-  .well
-    %h4= text("primers")
-    = f.nested_fields_for :primers do |primer_form|
-      %div.primer-form
-        = primer_form.remove_nested_fields_link text("shared.remove")
-        = primer_form.input :id, as: :hidden
-        = primer_form.input :name, label: false
+  = f.association :primers
 
-    = f.add_nested_fields_link(:primers, nil, class: "btn btn-mini")
 
   = f.submit text("shared.save"), class: "btn btn-primary"

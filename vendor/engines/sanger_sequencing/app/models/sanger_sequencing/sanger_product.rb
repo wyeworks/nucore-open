@@ -13,7 +13,11 @@ module SangerSequencing
     DEFAULT_GROUP = "default"
 
     belongs_to :product
-    has_many :primers, class_name: "SangerSequencing::Primer"
+    has_and_belongs_to_many(
+      :primers,
+      class_name: "SangerSequencing::Primer",
+      join_table: "san_seq_sanger_products_primers"
+    )
 
     accepts_nested_attributes_for :primers, allow_destroy: true
 
@@ -28,10 +32,6 @@ module SangerSequencing
 
     def self.excluding_group(group)
       where.not(group:)
-    end
-
-    def create_default_primers
-      primers.insert_all(Primer.default_list.map { |name| { name: } })
     end
 
     def primers_list
