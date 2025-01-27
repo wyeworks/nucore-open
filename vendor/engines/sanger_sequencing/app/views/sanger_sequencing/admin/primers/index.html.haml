@@ -1,0 +1,11 @@
+%h1= text("facility_primers")
+
+- if current_facility.sanger_sequencing_primers.empty?
+  .well
+    = text("empty_primers")
+%ul
+  - current_facility.sanger_sequencing_primers.by_name.each do |primer|
+    %li= primer.name
+
+%div
+  = link_to text("shared.edit"), edit_facility_primers(current_facility), class: "btn"

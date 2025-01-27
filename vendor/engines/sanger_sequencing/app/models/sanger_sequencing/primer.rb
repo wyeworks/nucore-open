@@ -5,6 +5,8 @@ module SangerSequencing
   class Primer < ApplicationRecord
     self.table_name = "sanger_sequencing_primers"
 
+    belongs_to :facility
+
     validates :name, presence: true
 
     scope :by_name, -> { order(:name) }

@@ -6,6 +6,7 @@ en:
       default: Sanger Sequencing
       fragment: Fragment Analysis
     tabnav_product: Sanger
+    tabnav_manage_primers: Manage Core Primers
 
   controllers:
     sanger_sequencing/admin/batches:
@@ -59,6 +60,10 @@ en:
             none: There are currently no batches
             download_plate: "Download Plate %{index}"
             new_batch: Create New Batch
+        primers:
+          index:
+            facility_primers: Core Primers
+            empty_primers: No Primers have been added
 
   activerecord:
     attributes:

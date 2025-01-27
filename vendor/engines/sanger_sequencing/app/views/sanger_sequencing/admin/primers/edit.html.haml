@@ -1,5 +1,5 @@
+%h1= text("facility_primers")
 
-%h4= text("primers")
 = f.nested_fields_for :primers do |primer_form|
   %div.primer-form
     = primer_form.remove_nested_fields_link text("shared.remove")
