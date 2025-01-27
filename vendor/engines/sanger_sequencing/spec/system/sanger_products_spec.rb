@@ -11,7 +11,6 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
     facility_service_sanger_sequencing_sanger_product_path(facility, service)
   end
 
-
   describe "admin tab" do
     context "when not logged in" do
       it "redirects to login" do

@@ -5,15 +5,15 @@ require "rails_helper"
 RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
   include RSpec::Matchers.clone # Give RSpec's `all` precedence over Capybara's
 
-  let(:facility) { FactoryBot.create(:setup_facility, sanger_sequencing_enabled: true) }
-  let!(:service) { FactoryBot.create(:setup_service, facility: facility) }
-  let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user) }
-  let!(:price_policy) { FactoryBot.create(:service_price_policy, price_group: PriceGroup.base, product: service) }
-  let(:user) { FactoryBot.create(:user) }
+  let(:facility) { create(:setup_facility, sanger_sequencing_enabled: true) }
+  let!(:service) { create(:setup_service, facility:) }
+  let!(:account) { create(:nufs_account, :with_account_owner, owner: user) }
+  let!(:price_policy) { create(:service_price_policy, price_group: PriceGroup.base, product: service) }
+  let(:user) { create(:user) }
   let(:external_service) { create(:external_service, location: new_sanger_sequencing_submission_path) }
-  let!(:sanger_order_form) { create(:external_service_passer, external_service: external_service, active: true, passer: service) }
+  let!(:sanger_order_form) { create(:external_service_passer, external_service:, active: true, passer: service) }
   let!(:account_price_group_member) do
-    FactoryBot.create(:account_price_group_member, account: account, price_group: price_policy.price_group)
+    create(:account_price_group_member, account:, price_group: price_policy.price_group)
   end
 
   shared_examples_for "purchasing a sanger product and filling out the form" do
@@ -149,12 +149,12 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
         end
       end
 
-      context "when submissions need a primer" do
+      context "when submissions need a primer", :js do
         before do
           service.create_sanger_product(needs_primer: true)
         end
 
-        it "allow to submit primer name", :js do
+        it "allow to submit primer name" do
           click_link "Complete Online Order Form"
 
           expect(page).to have_field(
@@ -174,8 +174,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           click_link("Add")
 
           fill_in("sanger_sequencing_submission[samples_attributes][1][primer_name]", with: "Juice")
-          within(".nested_sanger_sequencing_submission_samples:nth-child(2)") do
-          end
+
           # Click copy primer to rows below button
           page.find(".nested_sanger_sequencing_submission_samples:nth-child(2) button").click
 
@@ -204,6 +203,27 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           expect(submission.samples[2].primer_name).to eq("Juice")
           expect(submission.samples[3].primer_name).to eq("")
         end
+
+        it "shows core primer options" do
+          service.sanger_product.primers.insert_all(
+            [
+              { name: "Watermelon" },
+              { name: "Tomato" },
+            ]
+          )
+
+          click_link "Complete Online Order Form"
+
+          expect(page).to_not have_css(".ui-autocomplete")
+          expect(page).to_not have_content("Watermelon")
+          expect(page).to_not have_content("Tomato")
+
+          page.find_field("sanger_sequencing_submission[samples_attributes][0][primer_name]").click
+
+          expect(page).to have_css(".ui-autocomplete")
+          expect(page).to have_content("Watermelon")
+          expect(page).to have_content("Tomato")
+        end
       end
     end
   end
@@ -217,7 +237,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
   end
 
   describe "while acting as another user" do
-    let(:admin) { FactoryBot.create(:user, :administrator) }
+    let(:admin) { create(:user, :administrator) }
     before do
       login_as admin
       visit facility_user_switch_to_path(facility, user)
