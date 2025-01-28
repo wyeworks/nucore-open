@@ -16,7 +16,7 @@ module SangerSequencing
     has_and_belongs_to_many(
       :primers,
       class_name: "SangerSequencing::Primer",
-      join_table: "san_seq_sanger_products_primers"
+      join_table: "san_seq_sanger_prods_primers"
     )
 
     accepts_nested_attributes_for :primers, allow_destroy: true

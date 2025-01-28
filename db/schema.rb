@@ -730,7 +730,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_27_145728) do
     t.index ["type", "deleted_at", "product_id", "reserve_start_at", "reserve_end_at"], name: "reservations_for_timeline"
   end
 
-  create_table "san_seq_sanger_products_primers", id: false, charset: "utf8mb3", force: :cascade do |t|
+  create_table "san_seq_sanger_prods_primers", id: false, charset: "utf8mb3", force: :cascade do |t|
     t.bigint "sanger_product_id", null: false
     t.bigint "primer_id", null: false
   end
