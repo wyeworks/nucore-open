@@ -20,7 +20,7 @@ module SangerSequencing
         if current_facility.update(primers_params)
           redirect_to facility_sanger_sequencing_admin_primers_path(current_facility)
         else
-          render :edit
+          render :edit, status: :unprocessable_entity
         end
       end
 
