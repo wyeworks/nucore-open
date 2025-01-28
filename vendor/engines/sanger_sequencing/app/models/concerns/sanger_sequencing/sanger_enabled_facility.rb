@@ -13,7 +13,7 @@ module SangerSequencing
         inverse_of: :facility
       )
 
-      accepts_nested_attributes_for :sanger_sequencing_primers
+      accepts_nested_attributes_for :sanger_sequencing_primers, allow_destroy: true
     end
 
   end

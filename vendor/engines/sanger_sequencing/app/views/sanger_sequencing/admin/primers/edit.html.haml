@@ -1,9 +1,25 @@
-%h1= text("facility_primers")
+= content_for :head_content do
+  = stylesheet_link_tag "sanger_sequencing/application"
 
-= f.nested_fields_for :primers do |primer_form|
-  %div.primer-form
-    = primer_form.remove_nested_fields_link text("shared.remove")
-    = primer_form.input :id, as: :hidden
-    = primer_form.input :name, label: false
+= content_for :h1 do
+  = current_facility
 
-    = f.add_nested_fields_link(:primers, nil, class: "btn btn-mini")
+%h2
+  = text("facility_primers")
+
+= content_for :sidebar do
+  = render "sanger_sequencing/admin/shared/sidenav", sidenav_tab: "manage_primers"
+
+= simple_form_for current_facility, url: facility_sanger_sequencing_admin_primers_path(current_facility), method: :put do |f|
+  = f.nested_fields_for :sanger_sequencing_primers do |primer_form|
+    %div.primer-form
+      = primer_form.remove_nested_fields_link text("shared.remove")
+      = primer_form.input :id, as: :hidden
+      = primer_form.input :name, label: false
+
+  = f.add_nested_fields_link(:sanger_sequencing_primers, text("add_primer"), class: "btn btn-mini")
+
+  %hr
+
+  %div
+    = f.submit text("shared.save"), class: "btn"

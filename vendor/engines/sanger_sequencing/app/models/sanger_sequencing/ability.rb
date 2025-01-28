@@ -13,7 +13,7 @@ module SangerSequencing
 
       if facility && user.operator_of?(facility)
         can [:index, :show], Submission
-        can :manage, [Batch, BatchForm]
+        can :manage, [Batch, BatchForm, Primer]
       end
     end
 

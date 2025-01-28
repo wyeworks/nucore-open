@@ -64,6 +64,9 @@ en:
           index:
             facility_primers: Core Primers
             empty_primers: No Primers have been added
+          edit:
+            facility_primers: Core Primers
+            add_primer: Add Primer
 
   activerecord:
     attributes:
