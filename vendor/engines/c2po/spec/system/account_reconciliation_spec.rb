@@ -72,7 +72,7 @@ RSpec.describe "Account Reconciliation", js: true do
       expect(order_detail.reconciled_at).to eq(1.day.ago.beginning_of_day)
 
       # ensure the closed by times show up on the statement history page
-      click_link "Statement History"
+      click_link "#{I18n.t('Statement')} History"
       expect(page).to have_content(statement.closed_by_times)
     end
 
