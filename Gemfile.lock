@@ -295,7 +295,6 @@ GEM
       devise (> 2.0.0)
       ruby-saml (~> 1.7)
     diff-lcs (1.5.1)
-    domain_name (0.6.20240107)
     dumb_delegator (1.1.0)
     dynamic_form (1.3.1)
       actionview (> 5.2.0)
@@ -320,6 +319,12 @@ GEM
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
+    faraday (2.12.2)
+      faraday-net_http (>= 2.0, < 3.5)
+      json
+      logger
+    faraday-net_http (3.4.0)
+      net-http (>= 0.5.0)
     ffi (1.17.1)
     ffi (1.17.1-aarch64-linux-gnu)
     ffi (1.17.1-x86_64-linux-gnu)
@@ -340,9 +345,6 @@ GEM
     hashdiff (1.1.2)
     health_check (3.1.0)
       railties (>= 5.0)
-    http-accept (1.7.0)
-    http-cookie (1.0.8)
-      domain_name (~> 0.5)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     icalendar (2.10.3)
@@ -387,8 +389,9 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mailgun-ruby (1.2.16)
-      rest-client (>= 2.0.2)
+    mailgun-ruby (1.3.1)
+      faraday (~> 2.1)
+      mime-types
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.1.0)
@@ -408,6 +411,8 @@ GEM
       coffee-rails (>= 3.2.1)
       jquery-rails
       rails (>= 3.2.0)
+    net-http (0.6.0)
+      uri
     net-imap (0.5.5)
       date
       net-protocol
@@ -423,7 +428,6 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     net-ssh (7.3.0)
-    netrc (0.11.0)
     nio4r (2.7.4)
     nokogiri (1.18.2)
       mini_portile2 (~> 2.8.2)
@@ -525,11 +529,6 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rest-client (2.1.0)
-      http-accept (>= 1.7.0, < 2.0)
-      http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 4.0)
-      netrc (~> 0.8)
     rexml (3.4.0)
     rollbar (3.6.0)
     rspec-activejob (0.6.1)
@@ -666,6 +665,7 @@ GEM
       kgio (~> 2.6)
       raindrops (~> 0.7)
     uniform_notifier (1.16.0)
+    uri (1.0.2)
     virtus (2.0.0)
       axiom-types (~> 0.1)
       coercible (~> 1.0)
@@ -752,7 +752,7 @@ DEPENDENCIES
   kt-paperclip
   ldap_authentication!
   letter_opener
-  mailgun-ruby (~> 1.2.16)
+  mailgun-ruby (~> 1.3.1)
   matrix
   mysql2
   nested_form_fields
