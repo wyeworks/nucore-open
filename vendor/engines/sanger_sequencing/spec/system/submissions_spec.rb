@@ -8,7 +8,7 @@ RSpec.describe "submissions" do
   let(:order_detail) { create(:purchased_order, product: service).order_details.first }
   let(:admin) { create(:user, :administrator) }
 
-  describe "submission show" do
+  describe "submission show", feature_setting: { sanger_enabled_service: true } do
     let(:submission) { create(:sanger_sequencing_submission, sample_count: 2, order_detail:) }
 
     before do
@@ -20,7 +20,9 @@ RSpec.describe "submissions" do
 
       expect(submission.product.sanger_product&.needs_primer).to be_falsy
       expect(page).to have_content("Submission ##{submission.id}")
-      expect(page).to_not have_content("Primer")
+      within("thead") do
+        expect(page).to_not have_content("Primer")
+      end
     end
 
     it "shows primer column if service needs primer" do

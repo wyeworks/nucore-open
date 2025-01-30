@@ -49,7 +49,7 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { sanger_enab
 
       it(
         "does not render mange primers link if ff is disabeld",
-        feature_setting: { sanger_eneabled_service: false }
+        feature_setting: { sanger_enabled_service: false }
       ) do
         action.call
 

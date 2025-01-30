@@ -741,7 +741,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_27_211156) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.boolean "needs_primer", default: false, null: false
-    t.integer "facility_id"
     t.index ["product_id"], name: "index_sanger_seq_product_groups_on_product_id", unique: true
   end
 
@@ -761,6 +760,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_27_211156) do
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "facility_id", null: false
   end
 
   create_table "sanger_sequencing_samples", id: :integer, charset: "utf8mb3", force: :cascade do |t|
