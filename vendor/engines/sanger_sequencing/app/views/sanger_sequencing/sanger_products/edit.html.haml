@@ -3,15 +3,17 @@
 %h2= text("title")
 
 = simple_form_for @sanger_product, url: facility_service_sanger_sequencing_sanger_product_path(current_facility, @product) do |f|
+  = f.input :group,
+    collection: sanger_product_groups,
+    include_blank: false,
+    hint: text("group")
+
   = f.input :needs_primer,
     as: :boolean,
     label: false,
     inline_label: SangerSequencing::SangerProduct.human_attribute_name(:needs_primer),
     hint: text("needs_primer")
 
-  = f.input :group,
-    collection: sanger_product_groups,
-    include_blank: false,
-    hint: text("group")
+  = f.association :primers, input_html: { class: "js--chosen" }
 
   = f.submit text("shared.save"), class: "btn btn-primary"

@@ -155,12 +155,12 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
         end
       end
 
-      context "when submissions need a primer" do
+      context "when submissions need a primer", :js do
         before do
           service.create_sanger_product(needs_primer: true)
         end
 
-        it "allow to submit primer name", :js do
+        it "allow to submit primer name" do
           click_link "Complete Online Order Form"
 
           expect(page).to have_field(
@@ -180,8 +180,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           click_link("Add")
 
           fill_in("sanger_sequencing_submission[samples_attributes][1][primer_name]", with: "Juice")
-          within(".nested_sanger_sequencing_submission_samples:nth-child(2)") do
-          end
+
           # Click copy primer to rows below button
           page.find(".nested_sanger_sequencing_submission_samples:nth-child(2) button").click
 
@@ -214,6 +213,29 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
 
           expect(page).to have_content("Order Receipt")
           expect(page).to have_content("Primer")
+        end
+
+        context "service primers" do
+          let(:primers) do
+            SangerSequencing::Primer.insert_all([{ name: "Watermelon" }, { name: "Tomato" }])
+            SangerSequencing::Primer.all
+          end
+
+          before { service.sanger_product.update(primers:) }
+
+          it "shows core primer options" do
+            click_link "Complete Online Order Form"
+
+            expect(page).to_not have_css(".ui-autocomplete")
+            expect(page).to_not have_content("Watermelon")
+            expect(page).to_not have_content("Tomato")
+
+            page.find_field("sanger_sequencing_submission[samples_attributes][0][primer_name]").click
+
+            expect(page).to have_css(".ui-autocomplete")
+            expect(page).to have_content("Watermelon")
+            expect(page).to have_content("Tomato")
+          end
         end
       end
     end

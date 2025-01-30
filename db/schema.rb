@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_20_141340) do
+ActiveRecord::Schema[7.0].define(version: 2025_01_27_145728) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -730,6 +730,11 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_141340) do
     t.index ["type", "deleted_at", "product_id", "reserve_start_at", "reserve_end_at"], name: "reservations_for_timeline"
   end
 
+  create_table "san_seq_sanger_prods_primers", id: false, charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "sanger_product_id", null: false
+    t.bigint "primer_id", null: false
+  end
+
   create_table "sanger_seq_product_groups", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "product_id", null: false
     t.string "group", null: false
@@ -749,6 +754,12 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_20_141340) do
     t.index ["created_by_id"], name: "index_sanger_sequencing_batches_on_created_by_id"
     t.index ["facility_id"], name: "index_sanger_sequencing_batches_on_facility_id"
     t.index ["group"], name: "index_sanger_sequencing_batches_on_group"
+  end
+
+  create_table "sanger_sequencing_primers", charset: "utf8mb3", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "sanger_sequencing_samples", id: :integer, charset: "utf8mb3", force: :cascade do |t|

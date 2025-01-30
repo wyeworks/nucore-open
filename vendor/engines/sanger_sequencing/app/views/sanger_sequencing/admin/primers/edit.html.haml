@@ -1,0 +1,9 @@
+
+%h4= text("primers")
+= f.nested_fields_for :primers do |primer_form|
+  %div.primer-form
+    = primer_form.remove_nested_fields_link text("shared.remove")
+    = primer_form.input :id, as: :hidden
+    = primer_form.input :name, label: false
+
+    = f.add_nested_fields_link(:primers, nil, class: "btn btn-mini")
