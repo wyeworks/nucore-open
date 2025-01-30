@@ -1,22 +1,18 @@
 # frozen_string_literal: true
 
 namespace :sanger_sequencing do
-  desc "Creates default Core Primers for a Facility"
-  task :create_default_primers, [:url_name] => :environment do |_task, args|
-    facility_url_name = args[:url_name]
+  desc "Creates default Core Primers for Sanger enabled facilities without primers"
+  task create_default_primers: :environment do
+    Facility.where(sanger_sequencing_enabled: true).find_each do |facility|
+      next unless facility.sanger_sequencing_primers.empty?
 
-    if facility_url_name.blank?
-      puts "Facility url_name is a required argument"
-      exit 1
+      puts "Creating default Primers for #{facility}"
+
+      SangerSequencing::Primer.insert_all(
+        SangerSequencing::Primer.default_list.map do |name|
+          { name:, facility_id: facility.id }
+        end
+      )
     end
-
-    facility_id = Facility.find_by!(url_name: facility_url_name).id
-
-    SangerSequencing::Primer.insert_all(
-      SangerSequencing::Primer.default_list.map do |name|
-        { name:, facility_id: }
-      end
-    )
-    puts "Created default Primers"
   end
 end
