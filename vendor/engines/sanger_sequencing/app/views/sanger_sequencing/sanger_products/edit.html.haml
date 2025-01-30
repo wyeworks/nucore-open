@@ -14,7 +14,6 @@
     inline_label: SangerSequencing::SangerProduct.human_attribute_name(:needs_primer),
     hint: text("needs_primer")
 
-  = f.association :primers
-
+  = f.association :primers, input_html: { class: "js--chosen" }
 
   = f.submit text("shared.save"), class: "btn btn-primary"
