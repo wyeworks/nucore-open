@@ -93,6 +93,18 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { sanger_enab
     describe "as admin" do
       before { login_as admin }
 
+      it "is successful" do
+        action.call
+
+        expect(response).to have_http_status(:found)
+        expect(response.location).to eq(
+          facility_sanger_sequencing_admin_primers_url(facility)
+        )
+
+        get response.location
+        expect(page).to have_content("Core Primers updated successfully")
+      end
+
       it "allows to create a primer" do
         expect { action.call([{ name: "Tomato" }]) }.to(
           change do
@@ -131,6 +143,7 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { sanger_enab
         action.call([{ name: "" }])
 
         expect(response).to have_http_status(:unprocessable_entity)
+        expect(page).to have_content("Please fix the errors below")
       end
     end
   end

@@ -17,6 +17,10 @@ en:
       orders:
         sequential: "Full Plate"
         odd_first: "Half Plate"
+    sanger_sequencing/admin/primers:
+      update:
+        success: Core Primers updated successfully
+        invalid: Please fix the errors below
     sanger_sequencing/sanger_products:
       update:
         success: Sanger Configuration updated successfully

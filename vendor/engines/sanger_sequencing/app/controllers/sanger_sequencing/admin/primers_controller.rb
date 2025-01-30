@@ -18,8 +18,12 @@ module SangerSequencing
 
       def update
         if current_facility.update(primers_params)
-          redirect_to facility_sanger_sequencing_admin_primers_path(current_facility)
+          redirect_to(
+            facility_sanger_sequencing_admin_primers_path(current_facility),
+            notice: text("update.success")
+          )
         else
+          flash[:error] = text("update.invalid")
           render :edit, status: :unprocessable_entity
         end
       end
