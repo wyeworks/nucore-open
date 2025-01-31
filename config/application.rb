@@ -2,6 +2,10 @@
 
 require_relative "boot"
 
+# Manually require logger,
+# see github.com/rails/rails/pull/54264
+require "logger"
+
 require "rails/all"
 require "will_paginate/array"
 require "active_storage/engine"
