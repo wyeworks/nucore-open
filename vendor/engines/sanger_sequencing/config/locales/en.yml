@@ -6,6 +6,7 @@ en:
       default: Sanger Sequencing
       fragment: Fragment Analysis
     tabnav_product: Sanger
+    tabnav_manage_primers: Manage Core Primers
 
   controllers:
     sanger_sequencing/admin/batches:
@@ -16,6 +17,10 @@ en:
       orders:
         sequential: "Full Plate"
         odd_first: "Half Plate"
+    sanger_sequencing/admin/primers:
+      update:
+        success: Core Primers updated successfully
+        invalid: Please fix the errors below
     sanger_sequencing/sanger_products:
       update:
         success: Sanger Configuration updated successfully
@@ -59,6 +64,13 @@ en:
             none: There are currently no batches
             download_plate: "Download Plate %{index}"
             new_batch: Create New Batch
+        primers:
+          index:
+            facility_primers: Core Primers
+            empty_primers: No Primers have been added
+          edit:
+            facility_primers: Core Primers
+            add_primer: Add Primer
 
   activerecord:
     attributes:

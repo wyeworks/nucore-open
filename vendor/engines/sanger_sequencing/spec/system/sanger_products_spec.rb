@@ -102,8 +102,8 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
     describe "primers change" do
       let(:sanger_product) { service.create_sanger_product }
       let(:primers) do
-        SangerSequencing::Primer.insert_all([{ name: "Watermelon" }, { name: "Tomato" }])
-        SangerSequencing::Primer.all
+        facility.sanger_sequencing_primers.insert_all([{ name: "Watermelon" }, { name: "Tomato" }])
+        facility.sanger_sequencing_primers.all
       end
 
       before do

@@ -217,8 +217,8 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
 
         context "service primers" do
           let(:primers) do
-            SangerSequencing::Primer.insert_all([{ name: "Watermelon" }, { name: "Tomato" }])
-            SangerSequencing::Primer.all
+            facility.sanger_sequencing_primers.insert_all([{ name: "Watermelon" }, { name: "Tomato" }])
+            facility.sanger_sequencing_primers.all
           end
 
           before { service.sanger_product.update(primers:) }
