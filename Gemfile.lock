@@ -724,6 +724,7 @@ DEPENDENCIES
   clockpunch
   coffee-rails
   coffeelint
+  concurrent-ruby (< 1.3.5)
   config
   daemons
   dataprobe!

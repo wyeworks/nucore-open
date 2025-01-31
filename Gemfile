@@ -18,6 +18,10 @@ gem "net-pop"
 gem "tzinfo-data"
 gem "webrick"
 
+# Remove once we upgrade to rails 7.2.X or greater
+# See: github.com/rails/rails/pull/54264
+gem "concurrent-ruby", "< 1.3.5"
+
 ## database
 gem "mysql2"
 # To use Oracle, remove the mysql2 gem above and uncomment these lines
