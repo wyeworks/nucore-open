@@ -4,7 +4,7 @@
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
 window.vue_sanger_sequencing_well_plate_editor_app = {
-  props: ["submissions"],
+  props: ["submissions", "defaultReservedCells"],
 
   data() {
     return {
@@ -19,6 +19,7 @@ window.vue_sanger_sequencing_well_plate_editor_app = {
   },
 
   compiled() {
+    this.updateReservedCells(this.defaultReservedCells);
     this.initReservedCellsInput();
   },
 
@@ -69,9 +70,12 @@ window.vue_sanger_sequencing_well_plate_editor_app = {
 
       setTimeout(function() {
         let comp = $(self.$els.reservedCells);
-        self.updateReservedCells(comp.val());
 
-        comp.chosen().on("change", () => self.updateReservedCells(comp.val()));
+        if (comp.length) {
+          self.updateReservedCells(comp.val());
+
+          comp.chosen().on("change", () => self.updateReservedCells(comp.val()));
+        }
       }, 0);
     }
   }

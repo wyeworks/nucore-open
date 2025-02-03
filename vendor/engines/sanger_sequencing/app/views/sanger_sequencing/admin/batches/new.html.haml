@@ -5,7 +5,7 @@
   = javascript_include_tag "sanger_sequencing/well_plate"
   = stylesheet_link_tag "sanger_sequencing/application"
 
-%vue-sanger-sequencing-well-plate-editor-app(inline-template){ ":submissions" => @submissions.to_json(include: :samples) }
+%vue-sanger-sequencing-well-plate-editor-app(inline-template){ ":submissions" => @submissions.to_json(include: :samples), ":default-reserved-cells" => @batch.reserved_cells }
 
   = simple_form_for :batch, url: facility_sanger_sequencing_admin_batches_path do |f|
     = f.input :group, as: :hidden
