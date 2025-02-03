@@ -3,7 +3,7 @@
 require "rails_helper"
 require_relative "../../support/shared_contexts/setup_sanger_service"
 
-RSpec.describe "Creating a batch", :js do
+RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_enabled: false } do
   include_context "Setup Sanger Service"
 
   let!(:purchased_order) { create(:purchased_order, product: service, account: account) }
@@ -59,6 +59,45 @@ RSpec.describe "Creating a batch", :js do
       expect(batch.sample_at(0, "B01")).to eq(submission.samples.first)
       expect(batch.sample_at(0, "H02")).to eq(submission.samples.last)
       expect(batch.sample_at(0, "B03")).to be_blank
+    end
+  end
+
+  describe "plate reserved cells selection", feature_setting: { sanger_enabled_service: true } do
+    let!(:submission) do
+      create(
+        :sanger_sequencing_submission,
+        order_detail: purchased_order.order_details.first,
+        sample_count: 14
+      )
+    end
+    let(:batch) { submission.reload.batch }
+
+    it "can select reserved cells" do
+      visit new_facility_sanger_sequencing_admin_batch_path(facility)
+
+      expect(page).to have_content("Reserved Cells")
+
+      select_from_chosen("A01", from: "batch[reserved_cells][]")
+
+      click_add(submission.id)
+
+      click_button("Save Batch")
+
+      expect(batch.sample_at(0, "A01")).to be_reserved
+    end
+
+    it "can unselect reserved cells" do
+      visit new_facility_sanger_sequencing_admin_batch_path(facility)
+
+      expect(page).to have_content("Reserved Cells")
+
+      unselect_from_chosen("A01", from: "batch[reserved_cells][]")
+
+      click_add(submission.id)
+
+      click_button "Save Batch"
+
+      expect(batch.sample_at(0, "A01")).to eq(submission.samples.first)
     end
   end
 
