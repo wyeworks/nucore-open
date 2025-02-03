@@ -12,4 +12,11 @@ module SelectFromChosen
     find("##{field[:id]}_chosen ul.chosen-results li", text: item_text).click
   end
 
+  def unselect_from_chosen(item_text, options)
+    page.scroll_to(options[:scroll_to]) if options[:scroll_to]
+
+    field = find_field(options[:from], visible: false)
+    find("##{field[:id]}_chosen li.search-choice", text: item_text).find(".search-choice-close").click
+  end
+
 end
