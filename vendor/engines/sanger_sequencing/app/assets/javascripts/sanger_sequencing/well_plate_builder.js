@@ -24,7 +24,7 @@ exports.SangerSequencing.WellPlateBuilder = class WellPlateBuilder {
     // This array maintains all of the submissions that have ever been added
     // in order to keep consistent colors when removing and adding samples.
     this.allSubmissions = [];
-    this._reservedCells = ["A01", "A02"];
+    this._reservedCells = [];
     this._orderingStrategy = new SangerSequencing.OddFirstOrderingStrategy;
     this._render();
   }
