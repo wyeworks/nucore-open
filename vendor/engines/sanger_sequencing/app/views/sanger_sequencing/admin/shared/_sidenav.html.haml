@@ -2,5 +2,5 @@
   - if SettingsHelper.feature_on?(:sanger_enabled_service)
     = tab text("sanger_sequencing.tabnav_manage_primers"), facility_sanger_sequencing_admin_primers_path(current_facility), sidenav_tab == "manage_primers"
   = tab SangerSequencing::Submission.model_name.human(count: 2), facility_sanger_sequencing_admin_submissions_path(current_facility), sidenav_tab == "submissions"
-  = tab text("sanger_sequencing.product_groups.default"), facility_sanger_sequencing_admin_batches_path(current_facility), sidenav_tab == "batches"
-  = tab text("sanger_sequencing.product_groups.fragment"), facility_sanger_sequencing_admin_batches_path(current_facility, group: "fragment"), sidenav_tab == "fragment_batches"
+  - SangerSequencing::SangerProduct::GROUPS.each do |product_group|
+    = tab text("sanger_sequencing.product_groups.#{product_group}"), facility_sanger_sequencing_admin_batches_path(current_facility, group: product_group), sidenav_tab == "#{product_group}_batches"
