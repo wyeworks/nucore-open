@@ -4,18 +4,23 @@
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
 window.vue_sanger_sequencing_well_plate_editor_app = {
-  props: ["submissions", "builder_config"],
+  props: ["submissions", "defaultReservedCells"],
 
   data() {
     return {
       builder: new SangerSequencing.WellPlateBuilder,
-      columnOrder: null
+      columnOrder: null,
+      reservedCells: [],
     };
   },
 
   beforeCompile() {
     this.colorBuilder = new SangerSequencing.WellPlateColors(this.builder);
-    return this.builder.setReservedCells(this.builder_config.reserved_cells);
+  },
+
+  compiled() {
+    this.updateReservedCells(this.defaultReservedCells);
+    this.initReservedCellsInput();
   },
 
   ready() {
@@ -25,6 +30,10 @@ window.vue_sanger_sequencing_well_plate_editor_app = {
   methods: {
     changeOrder() {
       this.builder.changeOrderStrategy(this.columnOrder);
+    },
+
+    updateReservedCells(values) {
+      this.builder.setReservedCells(values || []);
     },
 
     addSubmission(submissionId) {
@@ -55,6 +64,19 @@ window.vue_sanger_sequencing_well_plate_editor_app = {
 
     isNotInPlate(submissionId) {
       return !this.isInPlate(submissionId);
+    },
+    initReservedCellsInput() {
+      let self = this;
+
+      setTimeout(function() {
+        let comp = $(self.$els.reservedCells);
+
+        if (comp.length) {
+          self.updateReservedCells(comp.val());
+
+          comp.chosen().on("change", () => self.updateReservedCells(comp.val()));
+        }
+      }, 0);
     }
   }
 
