@@ -7,9 +7,9 @@ class PrnRenderer
   UPLOAD_FILENAME = "A100.UMGL7056.IAL.INPUT"
 
   def initialize(from_dir, to_dir = nil, date = Date.today)
-    # /shared/files/FTP-out/temp
+    # /home/corum/files/FTP-out/temp
     @from_dir = create_dir(from_dir)
-    # /shared/files/FTP-out/current
+    # /home/corum/files/FTP-out/current
     @to_dir = create_dir(to_dir)
     @date = date # handy for debugging
   end

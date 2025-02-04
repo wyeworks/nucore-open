@@ -34,7 +34,7 @@ if ENV.fetch("RUN_CRON", false)
 
   # Render journals to be sent to UMass for processing
   every :day, at: "5:15pm", roles: [:db] do
-    rake "umass_corum:render_and_move[/shared/files/FTP-out/temp,/shared/files/FTP-out/current]"
+    rake "umass_corum:render_and_move[$HOME/files/FTP-out/temp,$HOME/files/FTP-out/current]"
   end
 
   # Send the journals to the UMass financial system
