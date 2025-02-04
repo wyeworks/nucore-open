@@ -23,7 +23,8 @@ describe("SangerSequencing.WellPlateBuilder", function() {
   describe("addSubmission()", function() {
     beforeEach(function() {
       this.submission = { id: 542, samples: sampleList(2) };
-      return this.wellPlate = new SangerSequencing.WellPlateBuilder;
+      this.wellPlate = new SangerSequencing.WellPlateBuilder;
+      this.wellPlate.setReservedCells(["A01", "A02"]);
     });
 
     it("can add a submission", function() {
@@ -41,6 +42,7 @@ describe("SangerSequencing.WellPlateBuilder", function() {
   describe("removeSubmission()", function() {
     beforeEach(function() {
       this.wellPlate = new SangerSequencing.WellPlateBuilder;
+      this.wellPlate.setReservedCells(["A01", "A02"]);
       this.submission1 = { id: 542, samples: sampleList(2) };
       this.submission2 = { id: 543, samples: sampleList(3) };
       this.wellPlate.addSubmission(this.submission1);
@@ -56,6 +58,7 @@ describe("SangerSequencing.WellPlateBuilder", function() {
   describe("samples()", function() {
     beforeEach(function() {
       this.wellPlate = new SangerSequencing.WellPlateBuilder;
+      this.wellPlate.setReservedCells(["A01", "A02"]);
       this.submission1 = { id: 542, samples: sampleList(2) };
       this.submission2 = { id: 543, samples: sampleList(3) };
       this.wellPlate.addSubmission(this.submission1);
@@ -70,14 +73,20 @@ describe("SangerSequencing.WellPlateBuilder", function() {
   describe("sampleAtCell()", function() {
     beforeEach(function() {
       this.wellPlate = new SangerSequencing.WellPlateBuilder;
+      this.wellPlate.setReservedCells(["A01", "A02"]);
       this.submission1 = { id: 542, samples: sampleList(2) };
       this.submission2 = { id: 543, samples: sampleList(3) };
       this.wellPlate.addSubmission(this.submission1);
       return this.wellPlate.addSubmission(this.submission2);
     });
 
-    it("finds the first sample at B01 (because the A01 is blank", function() {
+    it("finds the first sample at B01 when A01 is reserved", function() {
       return expect(this.wellPlate.sampleAtCell("B01")).toEqual(this.submission1.samples[0]);
+    });
+
+    it("finds the first sample at B01 when A01 is not reserved", function() {
+      this.wellPlate.setReservedCells([]);
+      return expect(this.wellPlate.sampleAtCell("A01")).toEqual(this.submission1.samples[0]);
     });
 
     return describe("when it rolls over into a second plate", function() {
@@ -99,7 +108,8 @@ describe("SangerSequencing.WellPlateBuilder", function() {
 
   describe("plateCount()", function() {
     beforeEach(function() {
-      return this.wellPlate = new SangerSequencing.WellPlateBuilder;
+      this.wellPlate = new SangerSequencing.WellPlateBuilder;
+      this.wellPlate.setReservedCells(["A01", "A02"]);
     });
 
     it("has one plate when empty", function() {
@@ -134,6 +144,7 @@ describe("SangerSequencing.WellPlateBuilder", function() {
   return describe("plates", function() {
     beforeEach(function() {
       this.wellPlate = new SangerSequencing.WellPlateBuilder;
+      this.wellPlate.setReservedCells(["A01", "A02"]);
       this.submission = { id: 542, samples: sampleList(8) };
       return this.wellPlate.addSubmission(this.submission);
     });
