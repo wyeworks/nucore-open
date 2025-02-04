@@ -99,6 +99,15 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
 
       expect(batch.sample_at(0, "A01")).to eq(submission.samples.first)
     end
+
+    it(
+      "does not show the input when the flag is off",
+      feature_setting: { sanger_sequencing_enabled: false }
+    ) do
+      visit new_facility_sanger_sequencing_admin_batch_path(facility)
+
+      expect(page).to_not have_content("Reserved Cells")
+    end
   end
 
   describe "creating a well-plate" do
