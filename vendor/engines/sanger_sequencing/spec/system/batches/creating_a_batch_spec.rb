@@ -102,11 +102,20 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
 
     it(
       "does not show the input when the flag is off",
-      feature_setting: { sanger_sequencing_enabled: false }
+      feature_setting: { sanger_enabled_service: false }
     ) do
       visit new_facility_sanger_sequencing_admin_batch_path(facility)
 
-      expect(page).to_not have_content("Reserved Cells")
+      within("form.batch") do
+        expect(page).to_not have_content("Reserved Cells")
+      end
+
+      click_add(submission.id)
+
+      click_button "Save Batch"
+
+      expect(batch.sample_at(0, "A01")).to be_reserved
+      expect(batch.sample_at(0, "A02")).to be_blank
     end
   end
 
