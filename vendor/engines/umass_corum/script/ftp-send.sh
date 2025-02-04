@@ -8,7 +8,7 @@ touch $logfile
 
 # PRN files for open journals are rendered here in timestamped directories
 # by the umass_corum:render_and_move rake task
-journals_dir="/shared/files/FTP-out"
+journals_dir="$HOME/files/FTP-out"
 current_dir="$journals_dir/current"
 
 timeslot=`date +%F-%H-%M`
@@ -24,7 +24,7 @@ if [ -f $current_dir/*.INPUT ]; then
   mv $current_dir/*.INPUT $current_dir/A100.UMGL7056.IAL.INPUT >> $logfile 2>&1
   cd $current_dir >> $logfile 2>&1
 
-  sftp -o StrictHostKeyChecking=no -i /shared/config/id_rsa -b $script_dir/ftp-send.sftp $destination_server >> $logfile 2>&1
+  sftp -i /shared/config/id_rsa -b $script_dir/ftp-send.sftp $destination_server >> $logfile 2>&1
 
   mv $current_dir $journals_dir/$timeslot >> $logfile 2>&1
   mkdir $current_dir >> $logfile 2>&1
