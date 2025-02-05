@@ -26,7 +26,6 @@ module SangerSequencing
                                  .includes(:samples, order_detail: :product)
                                  .for_facility(current_facility)
                                  .for_product_group(product_group)
-        @builder_config = WellPlateConfiguration.find(product_group)
       end
 
       def create
@@ -85,6 +84,12 @@ module SangerSequencing
       end
 
       helper_method :order_options
+
+      def reserved_cells_options
+        ["A01", "A02"]
+      end
+
+      helper_method :reserved_cells_options
 
       private
 

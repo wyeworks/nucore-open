@@ -1,3 +1,6 @@
+- needs_primer = @submission.product.sanger_product&.needs_primer?
+- primers_list = @submission.product.sanger_product&.primers_list || []
+
 = simple_form_for @submission, html: { data: { create_sample_url: create_sample_sanger_sequencing_submission_path(@submission) } } do |f|
   = hidden_field_tag :referer, params[:referer]
   = hidden_field_tag :success_url, params[:success_url]
@@ -6,21 +9,40 @@
       %tr
         %th= SangerSequencing::Sample.human_attribute_name(:customer_sample_id)
         %th= SangerSequencing::Sample.human_attribute_name(:id)
+        - if needs_primer
+          %th
+            %div= SangerSequencing::Sample.human_attribute_name(:primer_name)
+        %th
     %tbody
       = f.nested_fields_for :samples, wrapper: false, class_name: "SangerSequencing::Sample", wrapper_tag: :tr do |sf|
         %td
           = sf.input :customer_sample_id, label: false, input_html: { class: "js--customerSampleId" }
           = sf.input :id, as: :hidden, input_html: { class: "js--sampleId" }
         %td.js--sampleId= sf.object.id
+        - if needs_primer
+          %td.primer-input-row
+            %button.btn.btn-mini.js--copyPrimerNameDown{title: text("primer_name.copy_hint"), type: "button"}
+              %small= text("primer_name.fill_below")
+
+            = sf.input :primer_name,
+              label: false,
+              input_html: { class: "js--primerName js--primerAutocomplete" }
+
         - if @submission.quantity_editable?
           %td
             = sf.remove_nested_fields_link text("remove"), tabindex: -1
             = sf.input :_destroy, as: :hidden
+
     - if @submission.quantity_editable?
       %tfoot
         %tr
-          %td{colspan: 3}= f.add_nested_fields_link :samples, text("add"), class: "btn btn-success"
+          %td{colspan: needs_primer ? 2 : 4}= f.add_nested_fields_link :samples, text("add"), class: "btn btn-success"
+          - if needs_primer
+            %td{colspan: 2}= text("primer_name.hint")
 
   %h4.js--print-warning= text("warning")
 
   = f.submit text("submit"), class: "btn btn-primary"
+
+:javascript
+  const corePrimers = #{primers_list};

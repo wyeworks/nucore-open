@@ -15,6 +15,7 @@ module SangerSequencing
         "sanger_sequencing/admin/shared/tabnav_product/sanger"
       )
 
+      Facility.include SangerSequencing::SangerEnabledFacility
       Product.include SangerSequencing::SangerEnabledProduct
     end
 

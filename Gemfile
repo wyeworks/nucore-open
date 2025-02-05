@@ -18,6 +18,10 @@ gem "net-pop"
 gem "tzinfo-data"
 gem "webrick"
 
+# Remove once we upgrade to rails 7.2.X or greater
+# See: github.com/rails/rails/pull/54264
+gem "concurrent-ruby", "< 1.3.5"
+
 ## database
 gem "mysql2"
 # To use Oracle, remove the mysql2 gem above and uncomment these lines
@@ -110,7 +114,7 @@ group :development do
   gem "ed25519", ">= 1.2", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
   gem "haml_lint", require: false
   gem "letter_opener"
-  gem "rubocop", "1.70.0", require: false
+  gem "rubocop", "1.71.2", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"

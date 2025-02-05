@@ -7,11 +7,14 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
   let(:service) { create(:setup_service, facility:, sanger_sequencing_enabled: true) }
   let(:admin) { create(:user, :facility_administrator, facility:) }
   let(:user) { create(:user) }
+  let(:show_path) do
+    facility_service_sanger_sequencing_sanger_product_path(facility, service)
+  end
 
   describe "admin tab" do
     context "when not logged in" do
       it "redirects to login" do
-        visit facility_service_sanger_sequencing_sanger_product_path(facility, service)
+        visit show_path
 
         expect(page).to have_content("Login")
         expect(page).to_not have_content("Sanger")
@@ -23,7 +26,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
       before { login_as user }
 
       it "renders permission denied" do
-        visit facility_service_sanger_sequencing_sanger_product_path(facility, service)
+        visit show_path
 
         expect(page).to have_content("Permission Denied")
       end
@@ -35,7 +38,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
       it "requires the facility to be sanger enabled" do
         facility.update(sanger_sequencing_enabled: false)
 
-        visit facility_service_sanger_sequencing_sanger_product_path(facility, service)
+        visit show_path
 
         expect(page).to have_content("Not Found")
       end
@@ -43,7 +46,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
       it "does not show the tab if service is sanger disabled" do
         service.update(sanger_sequencing_enabled: false)
 
-        visit facility_service_sanger_sequencing_sanger_product_path(facility, service)
+        visit show_path
 
         within(".nav-tabs") do
           expect(page).to_not have_content("Sanger")
@@ -51,7 +54,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
       end
 
       it "shows the tab if service is sanger enabled" do
-        visit facility_service_sanger_sequencing_sanger_product_path(facility, service)
+        visit show_path
 
         within(".nav-tabs") do
           expect(page).to have_content("Sanger")
@@ -74,7 +77,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
     end
 
     it "shows sanger product information" do
-      visit facility_service_sanger_sequencing_sanger_product_path(facility, service)
+      visit show_path
 
       expect(page).to have_content("Sanger Configuration")
       expect(page).to have_content("Needs a Primer")
@@ -83,16 +86,62 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
     end
 
     it "allows to edit sanger product" do
-      visit facility_service_sanger_sequencing_sanger_product_path(facility, service)
+      visit show_path
 
       click_link("Edit")
 
       check("sanger_sequencing_sanger_product[needs_primer]")
+
       select("Fragment Analysis", from: "sanger_sequencing_sanger_product[group]")
 
       click_button("Save")
 
       expect(page).to have_content("Sanger Configuration updated successfully")
+    end
+
+    describe "primers change" do
+      let(:sanger_product) { service.create_sanger_product }
+      let(:primers) do
+        facility.sanger_sequencing_primers.insert_all([{ name: "Watermelon" }, { name: "Tomato" }])
+        facility.sanger_sequencing_primers.all
+      end
+
+      before do
+        sanger_product.update(primers:)
+      end
+
+      it "show primers section when it's enabled" do
+        sanger_product.update(needs_primer: true)
+
+        visit show_path
+
+        expect(page).to have_content("Watermelon")
+        expect(page).to have_content("Tomato")
+      end
+
+      it "does not show section when it's disabled" do
+        sanger_product.update(needs_primer: false)
+
+        visit show_path
+
+        expect(page).to_not have_content("Watermelon")
+        expect(page).to_not have_content("Tomato")
+      end
+
+      it "can deselect primers" do
+        sanger_product.update(needs_primer: true)
+
+        visit show_path
+
+        click_link("Edit")
+
+        unselect("Tomato", from: "sanger_sequencing_sanger_product[primer_ids][]")
+
+        click_button("Save")
+
+        expect(page).to have_content("Watermelon")
+        expect(page).to_not have_content("Tomato")
+      end
     end
   end
 end

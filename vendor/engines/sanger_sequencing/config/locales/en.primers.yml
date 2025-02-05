@@ -1,0 +1,9 @@
+en:
+  sanger_sequencing:
+    primer:
+      default_list:
+        - M13F
+        - M13R
+        - Sp6
+        - T7-Promoter
+        - T7-Terminator
