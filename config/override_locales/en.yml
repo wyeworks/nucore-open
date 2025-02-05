@@ -27,15 +27,15 @@ en:
           A CORUM login account has been created for you. You may log in at <https://corum.umass.edu/>. Please be sure to click the
           "Sign in with NetID" button and use your NetID and password. To make reservations,
           you must have a SpeedType associated with your account. If you need to add a SpeedType
-          please [fill out this form](https://www.umass.edu/ials/core-facility-user-authorization-form).
+          please submit an [Ask IALS](https://umass.tfaforms.net/f/public-ask-ials) ticket.
         username_and_password: |
           A CORUM login account has been created for you. You may log in at <https://corum.umass.edu/> using your username and password.
 
           Username: %{username}<br/>
           Password: %{password}
         outro: |
-          If you have questions, please feel free to contact your core facility manager or email <it@umass.edu> with "CORUM" as
-          part of the subject line. Informational resources are available [here](https://www.umass.edu/ials/corum).
+          If you have questions, please feel free to contact your core facility manager or submit an [Ask IALS](https://umass.tfaforms.net/f/public-ask-ials) ticket. 
+          Informational resources are available [here](https://www.umass.edu/ials/corum).
 
           Thank you
 
