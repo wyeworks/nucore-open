@@ -19,6 +19,8 @@ const SubmissionPrimer = {
     $(element).on("click", this.handleCopy);
   },
   setupAutocomplete(element) {
+    if (typeof corePrimers === 'undefined') { return; }
+
     $(element).catcomplete({
       delay: 0,
       minLength: 0,
