@@ -8,7 +8,7 @@ on:
     types: [ completed ]
 
   # Allow manually triggering this workflow by visiting
-  # https://github.com/tablexi/nucore-open/actions/workflows/nucore-heroku-auto-deploy-staging.yml
+  # https://github.com/wyeworks/nucore-open/actions/workflows/nucore-heroku-auto-deploy-staging.yml
   # and clicking "Run Workflow"
   workflow_dispatch:
 
