@@ -13,7 +13,7 @@ module UmassCorum
     def primary_total(order_detail)
       primary_percent = order_detail.account.primary_split.percent
       primary_cost = percentage(primary_percent, order_detail.actual_total)
-      number_to_currency(primary_cost)
+      number_to_currency(primary_cost.floor(2))
     end
 
     def percentage(percent, total)
