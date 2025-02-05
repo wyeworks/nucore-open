@@ -5,7 +5,7 @@ require_relative "boot"
 require "rails/all"
 require "will_paginate/array"
 require "active_storage/engine"
-require_relative "../lib/middlewares/sanitize_headers_middleware"
+require_relative "../lib/nucore/exceptions_app"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -79,14 +79,13 @@ module Nucore
 
     # Prevent invalid (usually malicious) URLs from causing exceptions/issues
     config.middleware.insert 0, Rack::UTF8Sanitizer
-    config.middleware.insert_before Rack::UTF8Sanitizer, SanitizeHeadersMiddleware
 
     config.action_dispatch.rescue_responses.merge!(
       "NUCore::PermissionDenied" => :forbidden,
       "CanCan::AccessDenied" => :forbidden
     )
 
-    config.exceptions_app = routes
+    config.exceptions_app = Nucore::ExceptionsApp.new(routes)
 
     config.active_storage.variant_processor = :vips
 

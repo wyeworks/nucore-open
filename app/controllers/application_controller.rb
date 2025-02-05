@@ -179,7 +179,7 @@ class ApplicationController < ActionController::Base
   end
 
   def render_acting_error
-    render "error/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
+    render "errors/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
   end
 
 end

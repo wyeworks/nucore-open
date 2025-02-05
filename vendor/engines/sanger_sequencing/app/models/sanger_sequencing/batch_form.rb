@@ -17,6 +17,8 @@ module SangerSequencing
     attribute :batch
     attribute :column_order, default: "odd_first"
 
+    attr_writer :reserved_cells
+
     delegate :submission_ids, :group, to: :batch
 
     validates :submission_ids, presence: true
@@ -47,6 +49,12 @@ module SangerSequencing
 
     def save
       batch.save if valid?
+    end
+
+    def reserved_cells
+      return @reserved_cells if @reserved_cells.present?
+
+      WellPlateConfiguration.find(group).reserved_cells
     end
 
     private

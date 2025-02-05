@@ -5,7 +5,7 @@
   = javascript_include_tag "sanger_sequencing/well_plate"
   = stylesheet_link_tag "sanger_sequencing/application"
 
-%vue-sanger-sequencing-well-plate-editor-app(inline-template){ ":submissions" => @submissions.to_json(include: :samples), ":builder_config" => @builder_config.to_json }
+%vue-sanger-sequencing-well-plate-editor-app(inline-template){ ":submissions" => @submissions.to_json(include: :samples), ":default-reserved-cells" => @batch.reserved_cells }
 
   = simple_form_for :batch, url: facility_sanger_sequencing_admin_batches_path do |f|
     = f.input :group, as: :hidden
@@ -18,7 +18,12 @@
           collection: order_options,
           include_blank: false,
           label: SangerSequencing::BatchForm.human_attribute_name(:column_order),
-          input_html: { "v-on:change": "changeOrder()", "v-model" => "columnOrder" }
+          input_html: { "v-on:change": "changeOrder()", "v-model": "columnOrder" }
+
+        = f.input :reserved_cells,
+          collection: reserved_cells_options,
+          label: SangerSequencing::BatchForm.human_attribute_name(:reserved_cells),
+          input_html: { multiple: true, "v-el:reserved-cells": true }
 
       = f.submit text("submit"), class: "btn btn-primary"
 

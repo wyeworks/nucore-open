@@ -37,7 +37,8 @@ module SangerSequencing
     def sanger_product_params
       params.require(:sanger_sequencing_sanger_product).permit(
         :needs_primer,
-        :group
+        :group,
+        primer_ids: [],
       )
     end
 

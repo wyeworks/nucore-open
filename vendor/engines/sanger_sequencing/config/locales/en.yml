@@ -6,6 +6,7 @@ en:
       default: Sanger Sequencing
       fragment: Fragment Analysis
     tabnav_product: Sanger
+    tabnav_manage_primers: Manage Core Primers
 
   controllers:
     sanger_sequencing/admin/batches:
@@ -16,6 +17,10 @@ en:
       orders:
         sequential: "Full Plate"
         odd_first: "Half Plate"
+    sanger_sequencing/admin/primers:
+      update:
+        success: Core Primers updated successfully
+        invalid: Please fix the errors below
     sanger_sequencing/sanger_products:
       update:
         success: Sanger Configuration updated successfully
@@ -25,6 +30,7 @@ en:
       sanger_products:
         show:
           title: Sanger Configuration
+          primers_empty: No Primers Selected
         edit:
           title: Sanger Configuration
           needs_primer: Require submissions to include a primer
@@ -35,6 +41,10 @@ en:
           warning: "This order is not submitted. Please click Save Submission and move to the next step before printing your sample sheet."
           add: Add
           remove: Remove
+          primer_name:
+            copy_hint: Copy Primer to samples below
+            hint: Pick one of the Core Primers or specify your own
+            fill_below: Fill Below
       orders:
         receipt:
           print: Please print this receipt to accompany your submission.
@@ -54,6 +64,13 @@ en:
             none: There are currently no batches
             download_plate: "Download Plate %{index}"
             new_batch: Create New Batch
+        primers:
+          index:
+            facility_primers: Core Primers
+            empty_primers: No Primers have been added
+          edit:
+            facility_primers: Core Primers
+            add_primer: Add Primer
 
   activerecord:
     attributes:
@@ -61,6 +78,7 @@ en:
         id: Core Sample
         customer_sample_id: Customer Sample
         results_files: Results Files
+        primer_name: Primer
       sanger_sequencing/submission:
         id: "Submission #"
       sanger_sequencing/batch:
@@ -69,6 +87,7 @@ en:
       sanger_sequencing/sanger_product:
         needs_primer: Needs a Primer
         group: Plated Service Type
+        primers: Core Primers
       sanger_sequencing/sanger_product/group:
           default: Sanger Sequencing
           fragment: Fragment Analysis
@@ -92,6 +111,7 @@ en:
     attributes:
       sanger_sequencing/batch_form:
         column_order: Column Order
+        reserved_cells: Reserved Cells
     errors:
       models:
         sanger_sequencing/batch_form:

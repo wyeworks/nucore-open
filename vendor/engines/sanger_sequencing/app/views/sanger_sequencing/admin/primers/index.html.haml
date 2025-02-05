@@ -1,0 +1,18 @@
+= content_for :h1 do
+  = current_facility
+
+%h2
+  = text("facility_primers")
+
+= content_for :sidebar do
+  = render "sanger_sequencing/admin/shared/sidenav", sidenav_tab: "manage_primers"
+
+- if current_facility.sanger_sequencing_primers.empty?
+  .well
+    = text("empty_primers")
+%ul
+  - current_facility.sanger_sequencing_primers.by_name.each do |primer|
+    %li= primer.name
+
+%div
+  = link_to text("shared.edit"), edit_facility_sanger_sequencing_admin_primers_path(current_facility), class: "btn"

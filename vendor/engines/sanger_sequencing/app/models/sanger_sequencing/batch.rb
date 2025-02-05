@@ -16,16 +16,25 @@ module SangerSequencing
     serialize :well_plates_raw
 
     def self.for_facility(facility)
-      where(facility: facility)
+      where(facility:)
     end
 
     def self.for_product_group(product_group_name)
-      product_group_name = DEFAULT_PRODUCT_GROUP_NAME if product_group_name.blank?
-      where(group: product_group_name)
+      product_group_name = product_group_name.presence || SangerProduct::DEFAULT_GROUP
+
+      where(group: product_group_name).then do |relation|
+        # Absence of SangerProduct is conceptually the same
+        # as default group
+        if product_group_name == SangerProduct::DEFAULT_GROUP
+          relation.or(where(group: [nil, ""]))
+        else
+          relation
+        end
+      end
     end
 
     def well_plates
-      well_plates_raw.map { |well_plate| WellPlate.new(well_plate, samples: samples) }
+      well_plates_raw.map { |well_plate| WellPlate.new(well_plate, samples:) }
     end
 
     def sample_at(well_plate_index, cell_name)

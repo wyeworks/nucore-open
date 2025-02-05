@@ -7,6 +7,15 @@
   = f.input :group,
     input_html: { value: SangerSequencing::SangerProduct.human_attribute_name("group.#{@sanger_product.group}") }
 
+  - if @sanger_product.needs_primer
+    %strong= SangerSequencing::SangerProduct.human_attribute_name(:primers)
+    - if @sanger_product.primers.empty?
+      %p= text("primers_empty")
+    - else
+      %ul
+        - @sanger_product.primers.by_name.each do |primer|
+          %li= primer.name
+
 - if can? :edit, @product
   %ul.inline
     %li= link_to "Edit", edit_facility_service_sanger_sequencing_sanger_product_path(current_facility, @product), class: "btn"

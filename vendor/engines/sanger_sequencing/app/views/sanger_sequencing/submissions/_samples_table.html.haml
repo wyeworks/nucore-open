@@ -1,16 +1,22 @@
+- needs_primer = submission.product.sanger_product&.needs_primer
 %div
   %table.table.table-striped.table-tight
     %thead
       %tr
         %th= SangerSequencing::Sample.human_attribute_name(:customer_sample_id)
         %th= SangerSequencing::Sample.human_attribute_name(:id)
+        - if needs_primer
+          %th= SangerSequencing::Sample.human_attribute_name(:primer_name)
         - if submission.has_results_files?
           %th= SangerSequencing::Sample.human_attribute_name(:results_files)
+
     %tbody
       - submission.samples.each do |sample|
         %tr
           %td= sample.customer_sample_id
           %td= sample.id
+          - if needs_primer
+            %td= sample.primer_name
           - if submission.has_results_files?
             %td
               %ul.unstyled

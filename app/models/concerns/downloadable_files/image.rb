@@ -16,9 +16,9 @@ module DownloadableFiles
       before_validation { delete_file if remove_file }
 
       if SettingsHelper.feature_on?(:active_storage_for_images_only)
-        validates :file, content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"], processable_image: true
+        validates :file, content_type: ["image/jpeg", "image/png", "image/gif"], processable_file: true
       else
-        validates_attachment :file, content_type: { content_type: ["image/jpg", "image/jpeg", "image/png", "image/gif"] }
+        validates_attachment :file, content_type: { content_type: ["image/jpeg", "image/png", "image/gif"] }
       end
     end
 

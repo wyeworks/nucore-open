@@ -32,7 +32,7 @@ module SangerSequencing
     }
 
     def self.for_product_group(product_group)
-      product_group ||= SangerProduct::DEFAULT_GROUP
+      product_group = product_group.presence || SangerProduct::DEFAULT_GROUP
 
       if product_group == SangerProduct::DEFAULT_GROUP
         # Absence of SangerProduct is conceptually the same

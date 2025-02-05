@@ -4,6 +4,8 @@ module SangerSequencing
 
   class WellPlateConfiguration
 
+    attr_reader :reserved_cells
+
     def initialize(reserved_cells: [])
       @reserved_cells = reserved_cells
     end
@@ -16,13 +18,6 @@ module SangerSequencing
     def self.find(key)
       CONFIGS[key] || CONFIGS[:default]
     end
-
-    def to_json
-      {
-        reserved_cells: Array(@reserved_cells),
-      }.to_json
-    end
-
   end
 
 end
