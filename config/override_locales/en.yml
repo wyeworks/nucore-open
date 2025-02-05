@@ -52,7 +52,13 @@ en:
     users:
       edit:
         subhead: "Note: For external users without a NetID username, the email address and username must match."
-        
+    training_requests:
+      new:
+        requires_approval: |
+          The %{product} requires approval to reserve. Would you like to be
+          contacted by the !facility_downcase! for access or training?<br/>
+          NOTE: The Facility Staff work normal business hours and will generally respond to the request within three business days.
+
     devise:
       sessions:
         new:
