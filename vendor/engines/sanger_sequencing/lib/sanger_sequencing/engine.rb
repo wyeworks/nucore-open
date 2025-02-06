@@ -35,6 +35,10 @@ module SangerSequencing
       end
     end
 
+    initializer "sanger_sequencing.assets.precompile" do |app|
+      app.config.assets.precompile += %w(submissions.css)
+    end
+
   end
 
 end
