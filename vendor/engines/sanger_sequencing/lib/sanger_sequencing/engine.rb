@@ -36,7 +36,7 @@ module SangerSequencing
     end
 
     initializer "sanger_sequencing.assets.precompile" do |app|
-      app.config.assets.precompile += %w(submissions.css)
+      app.config.assets.precompile += %w(sanger_sequencing/submissions.css)
     end
 
   end
