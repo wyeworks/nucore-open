@@ -374,7 +374,7 @@ GEM
     minitest (5.25.4)
     momentjs-rails (2.29.4.1)
       railties (>= 3.1)
-    msgpack (1.7.5)
+    msgpack (1.8.0)
     mysql2 (0.5.6)
     nested_form_fields (0.8.4)
       coffee-rails (>= 3.2.1)
@@ -414,7 +414,7 @@ GEM
       parallel
     paranoia (3.0.1)
       activerecord (>= 6, < 8.1)
-    parser (3.3.7.0)
+    parser (3.3.7.1)
       ast (~> 2.4.1)
       racc
     pdf-core (0.10.0)
@@ -500,7 +500,7 @@ GEM
       rspec-mocks
     rspec-collection_matchers (1.2.1)
       rspec-expectations (>= 2.99.0.beta1)
-    rspec-core (3.13.2)
+    rspec-core (3.13.3)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.3)
       diff-lcs (>= 1.2.0, < 2.0)
@@ -546,7 +546,7 @@ GEM
     ruby-saml (1.17.0)
       nokogiri (>= 1.13.10)
       rexml
-    ruby-vips (2.2.2)
+    ruby-vips (2.2.3)
       ffi (~> 1.12)
       logger
     rubyzip (2.4.1)
@@ -642,7 +642,7 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
-    webmock (3.24.0)
+    webmock (3.25.0)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
