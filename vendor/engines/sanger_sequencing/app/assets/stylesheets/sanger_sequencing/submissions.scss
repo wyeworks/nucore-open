@@ -1,6 +1,14 @@
+table.samples-table thead th {
+  vertical-align: top;
+}
+
 .primer-input-row {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
+}
+
+.primer-name-hint {
+  font-weight: normal;
 }
