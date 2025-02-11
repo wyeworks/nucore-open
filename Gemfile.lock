@@ -362,7 +362,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-    json (2.9.1)
+    json (2.10.1)
     jwt (2.10.1)
       base64
     kgio (2.11.4)
