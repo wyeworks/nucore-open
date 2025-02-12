@@ -24,7 +24,7 @@ if [ -f $current_dir/*.INPUT ]; then
   mv $current_dir/*.INPUT $current_dir/A100.UMGL7056.IAL.INPUT >> $logfile 2>&1
   cd $current_dir >> $logfile 2>&1
 
-  sftp -i /shared/config/id_rsa -b $script_dir/ftp-send.sftp $destination_server >> $logfile 2>&1
+  sftp -b $script_dir/ftp-send.sftp $destination_server >> $logfile 2>&1
 
   mv $current_dir $journals_dir/$timeslot >> $logfile 2>&1
   mkdir $current_dir >> $logfile 2>&1
