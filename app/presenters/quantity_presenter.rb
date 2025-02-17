@@ -56,7 +56,7 @@ class QuantityPresenter
   private
 
   def display
-    @display ||= if @product.daily_booking?
+    @display ||= if @product.is_a?(Instrument) && @product.daily_booking?
                    DayQuantityDisplay.new(@quantity)
                  elsif @product.quantity_as_time?
                    TimeQuantityDisplay.new(@quantity)
