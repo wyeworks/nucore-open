@@ -31,6 +31,21 @@ class QuantityPresenter
     end
   end
 
+  DayQuantityDisplay = Struct.new(:value) do
+    include ActionView::Helpers::TagHelper
+
+    def csv
+      # equal sign and quotes prevent Excel from formatting as a date/time
+      %(="#{value}")
+    end
+
+    delegate :to_s, to: :value
+
+    def html
+      to_s
+    end
+  end
+
   delegate :to_s, :csv, :html, to: :display
 
   def initialize(product, quantity)
@@ -41,7 +56,9 @@ class QuantityPresenter
   private
 
   def display
-    @display ||= if @product.quantity_as_time?
+    @display ||= if @product.daily_booking?
+                   DayQuantityDisplay.new(@quantity)
+                 elsif @product.quantity_as_time?
                    TimeQuantityDisplay.new(@quantity)
                  else
                    QuantityDisplay.new(@quantity)

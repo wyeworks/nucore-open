@@ -94,6 +94,9 @@ module PriceDisplayment
                           else
                             quantity
                           end
+
+    quantity_to_display /= (24 * 60) if product.is_a?(Instrument) && product.daily_booking?
+
     QuantityPresenter.new(product, quantity_to_display)
   end
 
