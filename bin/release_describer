@@ -12,6 +12,8 @@
 
 require "set"
 
+TICKET_PATTERN = /[A-Z]+\-\d+/
+
 repos = ["nucore-open", "nucore-nu", "nucore-osu", "nucore-umass", "nucore-dartmouth"]
 repo_dir = `dirname $PWD`.chomp
 previous_release_tag =  ARGV.first || `git describe --tags --abbrev=0`
@@ -48,9 +50,10 @@ repos.each do |repo|
   `#{run_in_repo} git checkout master && git pull`
   git_log = `#{run_in_repo} bin/merge_describer #{previous_release_tag}`
   git_log.split("\n").each do |line|
-    ticket_number_match = line.match(/\[#(\d*)/)
+
+    ticket_number_match = line.match(/\[(#{TICKET_PATTERN})\]/)
     formatted_line = if ticket_number_match
-      line.gsub(/\[#(\d*)\]/, "[##{ticket_number_match[1]}](https://pm.tablexi.com/issues/#{ticket_number_match[1]})")
+      line.gsub(/\[(#{TICKET_PATTERN})\]/, "[#{ticket_number_match[1]}](https://universe-of-universities.atlassian.net/browse/#{ticket_number_match[1]})")
     else
       line
     end
@@ -94,4 +97,3 @@ data.each do |repo, value_hash|
   end
   puts "~~~~~~~~~~~~~~~~~~~~~"
 end
-
