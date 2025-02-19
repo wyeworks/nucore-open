@@ -11,7 +11,7 @@ local:
 # stored in a drive accessible by both of them
 production:
   service: Disk
-  root: <%= Rails.root.join("../shared/uploads/storage") %>
+  root: <%= Rails.root.join("../shared/storage") %>
 
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:
