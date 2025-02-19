@@ -29,7 +29,7 @@
         %td.order_date
           = od.ordered_at&.strftime("%m/%d/%Y")
 
-      - daily_booking_product = od.product.is_a?(Instrument) && od.product.daily_booking?
+      - daily_booking_product = od.product.try(:daily_booking?)
       - if daily_booking_product
         %td.currency
           = od.reservation.try(:duration_days)
