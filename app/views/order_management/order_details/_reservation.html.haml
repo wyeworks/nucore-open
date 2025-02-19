@@ -7,7 +7,10 @@
         .controls
           %label &nbsp;
           = time_select r, :reserve_start, minute_step: reservation.product.reserve_interval
-      = r.input :duration_mins, input_html: { class: "timeinput" }, error: false
+      - if reservation.product.daily_booking?
+        = r.input :duration_days, input_html: { value: r.object.duration_days || 1 }
+      - else
+        = r.input :duration_mins, input_html: { class: "timeinput" }, error: false
     - else
       = r.label :reserve_start_date
       = reservation.reserve_to_s
