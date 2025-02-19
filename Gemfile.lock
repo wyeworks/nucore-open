@@ -150,7 +150,7 @@ GEM
       thread_safe (~> 0.3, >= 0.3.1)
     base64 (0.2.0)
     bcrypt (3.1.20)
-    bcrypt_pbkdf (1.1.1-arm64-darwin)
+    bcrypt_pbkdf (1.1.1)
     benchmark (0.4.0)
     bigdecimal (3.1.9)
     bindex (0.8.1)
@@ -296,7 +296,10 @@ GEM
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
+    ffi (1.17.0-aarch64-linux-gnu)
     ffi (1.17.0-arm64-darwin)
+    ffi (1.17.0-x86_64-darwin)
+    ffi (1.17.0-x86_64-linux-gnu)
     font-awesome-rails (4.7.0.9)
       railties (>= 3.2, < 9.0)
     globalid (1.2.1)
@@ -378,6 +381,8 @@ GEM
       coffee-rails (>= 3.2.1)
       jquery-rails
       rails (>= 3.2.0)
+    net-http (0.6.0)
+      uri
     net-imap (0.5.6)
       date
       net-protocol
@@ -393,7 +398,8 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
-    nokogiri (1.18.2-arm64-darwin)
+    nokogiri (1.18.3)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     numerizer (0.1.1)
     oj (3.16.9)
