@@ -36,4 +36,15 @@ RSpec.describe "Order show" do
       expect(all("tbody tr").first.all("td")[3]).to have_text("0", exact: true)
     end
   end
+
+  describe "manage modal", :js do
+    before do
+      click_link(reservation_order.order_details.first.to_s)
+      wait_for_ajax
+    end
+
+    it "shows the duration days field" do
+      expect(page).to have_field("Duration Days", with: "3")
+    end
+  end
 end
