@@ -23,6 +23,7 @@ class OrderDetails::ParamUpdater
           :reserve_start_min,
           :reserve_start_meridian,
           :duration_mins,
+          :duration_days,
           :actual_start_date,
           :actual_start_hour,
           :actual_start_min,
