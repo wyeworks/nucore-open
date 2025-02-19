@@ -2,8 +2,8 @@
 rm -rf tmp/pids/server.pid
 
 if [ -d /shared ]; then
-  mkdir -p /shared/uploads
-  ln -nfs /shared/uploads /app/public/uploads
+  mkdir -p /shared
+  ln -nfs /shared /app/public/uploads
 fi
 
 printenv >> /etc/environment
