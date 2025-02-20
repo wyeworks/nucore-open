@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe SangerSequencing::WellPlatePresenter do
+RSpec.describe SangerSequencing::WellPlatePresenter, feature_setting: { alternative_csv_format: false } do
   let(:submission) { create(:sanger_sequencing_submission, order_detail:) }
   let(:samples) { FactoryBot.build_stubbed_list(:sanger_sequencing_sample, 10, submission:) }
   let(:order_detail) { create(:order_detail, order:, product:) }
@@ -66,26 +66,22 @@ RSpec.describe SangerSequencing::WellPlatePresenter do
 
     context "when alternative_csv_format is enabled", feature_setting: { alternative_csv_format: true } do
       before do
-        allow(SettingsHelper).to receive(:feature_on?).with(:expense_accounts).and_return(true) 
-        allow(SettingsHelper).to receive(:feature_on?).with(:limit_short_description).and_return(true) 
-        allow(SettingsHelper).to receive(:feature_on?).with(:product_specific_contacts).and_return(true) 
+        allow(SettingsHelper).to receive(:feature_on?).and_return(true) 
       end
 
       let(:presenter) { described_class.new(well_plate, "") }
-      let(:expected_results_group) { a_kind_of(String) }
-      let(:expected_instrument_protocol) { a_kind_of(String) }
-      let(:expected_analysis_protocol) { a_kind_of(String) }
+      let(:extra_columns) { ['Default_Results_Group', 'BigDyev3.1', 'NewKBbasecaller3730BDv3'] }
 
       it "renders using alternative_csv_columns" do
-        expect(sample_rows[0]).to match(["A01", "PGEM_F", "CQLS", expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
-        expect(sample_rows[1]).to match(["B01", samples[0].id.to_s, samples[0].customer_sample_id.to_s] + expected_alternative_columns)
-        expect(sample_rows[2]).to match(["C01", samples[1].id.to_s, samples[1].customer_sample_id.to_s] + expected_alternative_columns)
-        expect(sample_rows[3]).to match(["D01", samples[2].id.to_s, samples[2].customer_sample_id.to_s] + expected_alternative_columns)
-        expect(sample_rows[4]).to match(["E01", samples[3].id.to_s, samples[3].customer_sample_id.to_s] + expected_alternative_columns)
-        expect(sample_rows[5]).to match(["F01", samples[4].id.to_s, samples[4].customer_sample_id.to_s] + expected_alternative_columns)
-        expect(sample_rows[6]).to match(["G01", samples[5].id.to_s, samples[5].customer_sample_id.to_s] + expected_alternative_columns)
-        expect(sample_rows[7]).to match(["H01", samples[6].id.to_s, samples[6].customer_sample_id.to_s] + expected_alternative_columns)
-        expect(sample_rows[8]).to match(["A03", samples[7].id.to_s, samples[7].customer_sample_id.to_s] + expected_alternative_columns)
+        expect(sample_rows[0]).to match(["A01", "PGEM_F", "CQLS"] + extra_columns)
+        expect(sample_rows[1]).to match(["B01", samples[0].id.to_s, samples[0].submission.order_detail.user.username] + extra_columns)
+        expect(sample_rows[2]).to match(["C01", samples[1].id.to_s, samples[1].submission.order_detail.user.username] + extra_columns)
+        expect(sample_rows[3]).to match(["D01", samples[2].id.to_s, samples[2].submission.order_detail.user.username] + extra_columns)
+        expect(sample_rows[4]).to match(["E01", samples[3].id.to_s, samples[3].submission.order_detail.user.username] + extra_columns)
+        expect(sample_rows[5]).to match(["F01", samples[4].id.to_s, samples[4].submission.order_detail.user.username] + extra_columns)
+        expect(sample_rows[6]).to match(["G01", samples[5].id.to_s, samples[5].submission.order_detail.user.username] + extra_columns)
+        expect(sample_rows[7]).to match(["H01", samples[6].id.to_s, samples[6].submission.order_detail.user.username] + extra_columns)
+        expect(sample_rows[8]).to match(["A03", samples[7].id.to_s, samples[7].submission.order_detail.user.username] + extra_columns)
       end
     end
   end

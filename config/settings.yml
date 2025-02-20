@@ -163,6 +163,7 @@ feature:
   show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
   show_daily_rate_option: true
   sanger_enabled_service: <%= ENV.fetch("SANGER_ENABLED_SERVICE", false) %>
+  alternative_csv_format: <%= ENV.fetch("ALTERNATIVE_CSV_FORMAT", false) %>
 
 split_accounts:
   # Roles are allowed to create Split Accounts
