@@ -87,14 +87,27 @@ module PriceDisplayment
   end
 
   def build_quantity_presenter
-    quantity_to_display = if time_data.try(:actual_duration_mins) && time_data.actual_duration_mins.to_i > 0
+    quantity_to_display = if product.try(:daily_booking?)
+                            daily_booking_quantity
+                          elsif time_data.try(:actual_duration_mins) && time_data.actual_duration_mins.to_i > 0
                             time_data.actual_duration_mins
                           elsif time_data.try(:duration_mins)
                             time_data.duration_mins
                           else
                             quantity
                           end
+
     QuantityPresenter.new(product, quantity_to_display)
+  end
+
+  def daily_booking_quantity
+    if time_data.try(:actual_duration_days) && time_data.actual_duration_days.to_i > 0
+      time_data.actual_duration_days
+    elsif time_data.try(:duration_days)
+      time_data.duration_days
+    else
+      quantity
+    end
   end
 
   def empty_display

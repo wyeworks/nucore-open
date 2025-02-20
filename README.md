@@ -93,7 +93,7 @@ It makes a few assumptions:
 1. Download the project code from Github
 
     ```
-    git clone git@github.com:tablexi/nucore-umass.git nucore-umass
+    git clone git@github.com:wyeworks/nucore-open.git nucore
     ```
 
 2. Install dependencies
