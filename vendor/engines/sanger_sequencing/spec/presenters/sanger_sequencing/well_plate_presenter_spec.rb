@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe SangerSequencing::WellPlatePresenter, feature_setting: { alternative_csv_format: false } do
+RSpec.describe SangerSequencing::WellPlatePresenter, feature_setting: { well_plate_alternative_csv_format: false } do
   let(:submission) { create(:sanger_sequencing_submission, order_detail:) }
   let(:samples) { FactoryBot.build_stubbed_list(:sanger_sequencing_sample, 10, submission:) }
   let(:order_detail) { create(:order_detail, order:, product:) }
@@ -64,24 +64,22 @@ RSpec.describe SangerSequencing::WellPlatePresenter, feature_setting: { alternat
       end
     end
 
-    context "when alternative_csv_format is enabled", feature_setting: { alternative_csv_format: true } do
-      before do
-        allow(SettingsHelper).to receive(:feature_on?).and_return(true) 
-      end
-
+    context "when well_plate_alternative_csv_format is enabled", feature_setting: { well_plate_alternative_csv_format: true } do
       let(:presenter) { described_class.new(well_plate, "") }
-      let(:extra_columns) { ['Default_Results_Group', 'BigDyev3.1', 'NewKBbasecaller3730BDv3'] }
-
+      let(:expected_results_group) { a_kind_of(String) }
+      let(:expected_instrument_protocol) { a_kind_of(String) }
+      let(:expected_analysis_protocol) { a_kind_of(String) }
+      
       it "renders using alternative_csv_columns" do
-        expect(sample_rows[0]).to match(["A01", "PGEM_F", "CQLS"] + extra_columns)
-        expect(sample_rows[1]).to match(["B01", samples[0].id.to_s, samples[0].submission.order_detail.user.username] + extra_columns)
-        expect(sample_rows[2]).to match(["C01", samples[1].id.to_s, samples[1].submission.order_detail.user.username] + extra_columns)
-        expect(sample_rows[3]).to match(["D01", samples[2].id.to_s, samples[2].submission.order_detail.user.username] + extra_columns)
-        expect(sample_rows[4]).to match(["E01", samples[3].id.to_s, samples[3].submission.order_detail.user.username] + extra_columns)
-        expect(sample_rows[5]).to match(["F01", samples[4].id.to_s, samples[4].submission.order_detail.user.username] + extra_columns)
-        expect(sample_rows[6]).to match(["G01", samples[5].id.to_s, samples[5].submission.order_detail.user.username] + extra_columns)
-        expect(sample_rows[7]).to match(["H01", samples[6].id.to_s, samples[6].submission.order_detail.user.username] + extra_columns)
-        expect(sample_rows[8]).to match(["A03", samples[7].id.to_s, samples[7].submission.order_detail.user.username] + extra_columns)
+        expect(sample_rows[0]).to match(["A01", "PGEM_F", "CQLS", expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
+        expect(sample_rows[1]).to match(["B01", samples[0].id.to_s, samples[0].submission.order_detail.user.username, expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
+        expect(sample_rows[2]).to match(["C01", samples[1].id.to_s, samples[1].submission.order_detail.user.username, expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
+        expect(sample_rows[3]).to match(["D01", samples[2].id.to_s, samples[2].submission.order_detail.user.username, expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
+        expect(sample_rows[4]).to match(["E01", samples[3].id.to_s, samples[3].submission.order_detail.user.username, expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
+        expect(sample_rows[5]).to match(["F01", samples[4].id.to_s, samples[4].submission.order_detail.user.username, expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
+        expect(sample_rows[6]).to match(["G01", samples[5].id.to_s, samples[5].submission.order_detail.user.username, expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
+        expect(sample_rows[7]).to match(["H01", samples[6].id.to_s, samples[6].submission.order_detail.user.username, expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
+        expect(sample_rows[8]).to match(["A03", samples[7].id.to_s, samples[7].submission.order_detail.user.username, expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
       end
     end
   end

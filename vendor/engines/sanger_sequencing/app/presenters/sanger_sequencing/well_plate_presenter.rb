@@ -15,8 +15,8 @@ module SangerSequencing
     end
 
     def to_csv
-      owner = alternative_csv_format? ? "" : text("owner")
-      operator = alternative_csv_format? ? "" : text("operator")
+      owner = well_plate_alternative_csv_format? ? "" : text("owner")
+      operator = well_plate_alternative_csv_format? ? "" : text("operator")
 
       CSV.generate do |csv|
         csv << ["Container Name", "Plate ID", "Description", "ContainerType", "AppType", "Owner", "Operator", "PlateSealing", "SchedulingPref"]
@@ -62,7 +62,7 @@ module SangerSequencing
     end
 
     def sample_row(sample, position)
-      if alternative_csv_format?
+      if well_plate_alternative_csv_format?
         initial_columns = (position == "A01" && sample.reserved?) ? ["PGEM_F", "CQLS"] : [sample.id.to_s, sample.submission.order_detail.user.username]
         initial_columns + additional_columns.values
       else
@@ -78,12 +78,11 @@ module SangerSequencing
     #     Instrument Protocol 1: XLR_50POP7
     #     Analysis Protocol 1: XLR__50POP7_KBSeqAna
     def additional_columns
-      columns = alternative_csv_format? ? "alternative_csv_columns" : "columns"
-      I18n.t("#{translation_scope}.#{plate_mode}.#{columns}")
+      I18n.t("#{translation_scope}.#{plate_mode}.columns")
     end
 
-    def alternative_csv_format?
-      SettingsHelper.feature_on?(:alternative_csv_format)
+    def well_plate_alternative_csv_format?
+      SettingsHelper.feature_on?(:well_plate_alternative_csv_format)
     end
 
   end
