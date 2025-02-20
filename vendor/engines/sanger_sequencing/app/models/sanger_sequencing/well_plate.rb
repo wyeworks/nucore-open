@@ -30,7 +30,11 @@ module SangerSequencing
 
     class ReservedSample
 
-      attr_accessor :id
+      attr_accessor :id, :submission
+
+      def initialize(submission = nil)
+        @submission = submission
+      end
 
       def reserved?
         true
@@ -48,7 +52,11 @@ module SangerSequencing
 
     class BlankSample
 
-      attr_accessor :id
+      attr_accessor :id, :submission
+
+      def initialize(submission = nil)
+        @submission = submission
+      end
 
       def reserved?
         false

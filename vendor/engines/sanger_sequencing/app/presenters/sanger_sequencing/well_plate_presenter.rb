@@ -15,9 +15,12 @@ module SangerSequencing
     end
 
     def to_csv
+      owner = alternative_csv_format? ? "" : text("owner")
+      operator = alternative_csv_format? ? "" : text("operator")
+
       CSV.generate do |csv|
         csv << ["Container Name", "Plate ID", "Description", "ContainerType", "AppType", "Owner", "Operator", "PlateSealing", "SchedulingPref"]
-        csv << ["",               "",         "",            "96-Well",       "Regular", text("owner"), text("operator"), "Septa", "1234"]
+        csv << ["",               "",         "",            "96-Well",       "Regular", owner, operator, "Septa", "1234"]
         csv << %w(AppServer AppInstance)
         csv << [plate_text("app_server"), plate_text("app_instance")]
         csv << ["Well", "Sample Name", "Comment"] + additional_columns.keys
@@ -30,7 +33,7 @@ module SangerSequencing
 
     def sample_rows
       cleaned_cells.map do |position, sample|
-        [position] + sample_row(sample)
+        [position] + sample_row(sample, position)
       end
     end
 
@@ -58,8 +61,13 @@ module SangerSequencing
       end
     end
 
-    def sample_row(sample)
-      [sample.id.to_s, sample.customer_sample_id.to_s] + additional_columns.values
+    def sample_row(sample, position)
+      if position == "A1" && sample.reserved?
+        ["PGEM_F", "CQLS"] + additional_columns.values
+      else
+        comment =  alternative_csv_format? ? sample.submission.order_detail.user : sample.customer_sample_id.to_s
+        [sample.id.to_s, comment] + additional_columns.values
+      end
     end
 
     # Define your additional columns as a set of hashes under `columns`:
@@ -70,7 +78,12 @@ module SangerSequencing
     #     Instrument Protocol 1: XLR_50POP7
     #     Analysis Protocol 1: XLR__50POP7_KBSeqAna
     def additional_columns
-      I18n.t("#{translation_scope}.#{plate_mode}.columns")
+      columns = alternative_csv_format? ? "alternative_csv_columns" : "columns"
+      I18n.t("#{translation_scope}.#{plate_mode}.#{columns}")
+    end
+
+    def alternative_csv_format?
+      SettingsHelper.feature_on?(:alternative_csv_format)
     end
 
   end

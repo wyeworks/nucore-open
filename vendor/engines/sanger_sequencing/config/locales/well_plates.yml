@@ -11,6 +11,10 @@ en:
           Results Group 1: 50cm_POP7_BDv3
           Instrument Protocol 1: XLR_50POP7
           Analysis Protocol 1: XLR__50POP7_KBSeqAna
+        alternative_csv_columns:
+          Results Group 1: Default_Results_Group
+          Instrument Protocol 1: BigDyev3.1
+          Analysis Protocol 1: NewKBbasecaller3730BDv3
       fragment:
         app_server: GeneMapper
         app_instance: GeneMapper_bf14428eae5611dcbcc7001aa0ae4a62
