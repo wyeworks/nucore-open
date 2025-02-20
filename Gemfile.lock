@@ -398,13 +398,8 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
-    nokogiri (1.18.3-aarch64-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.3-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.3-x86_64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.3-x86_64-linux-gnu)
+    nokogiri (1.18.2)
+      mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     numerizer (0.1.1)
     oj (3.16.9)
@@ -598,8 +593,9 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    sshkit (1.23.2)
+    sshkit (1.24.0)
       base64
+      logger
       net-scp (>= 1.1.2)
       net-sftp (>= 2.1.2)
       net-ssh (>= 2.8.0)
