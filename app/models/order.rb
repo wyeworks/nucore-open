@@ -24,12 +24,6 @@ class Order < ApplicationRecord
 
   attr_reader :project_id
 
-  def cross_core_project
-    return nil unless SettingsHelper.feature_on?(:cross_core_projects)
-
-    super
-  end
-
   def self.created_by_user(user)
     where(created_by: user.id)
   end

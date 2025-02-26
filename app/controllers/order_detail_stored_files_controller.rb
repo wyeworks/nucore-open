@@ -84,7 +84,7 @@ class OrderDetailStoredFilesController < ApplicationController
   end
 
   def redirect_to_facility_order(consider_merge_order: false)
-    if SettingsHelper.feature_on?(:cross_core_projects) && @original_order_id.present?
+    if @original_order_id.present?
       original_order = Order.find(@original_order_id)
 
       order = consider_merge_order ? original_order.merge_order || original_order : original_order

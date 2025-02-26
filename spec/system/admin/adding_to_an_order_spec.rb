@@ -177,7 +177,7 @@ RSpec.describe "Adding to an existing order" do
       end
     end
 
-    describe "from same facility (with feature flag on)", :js, feature_setting: { cross_core_projects: true } do
+    describe "from same facility (with feature flag on)", :js do
       let(:product) { create(:setup_item, :with_facility_account) }
       let!(:instrument) { create(:setup_instrument, facility: facility) }
       let(:user) { create(:user, :facility_administrator, facility:) }

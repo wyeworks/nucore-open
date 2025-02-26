@@ -1,7 +1,7 @@
 - if @merge_orders.blank?
   .well
     = simple_form_for [current_facility, @add_to_order_form], url: facility_order_path(current_facility, @order), method: :put, html: { class: "js--edit-order" } do |f|
-      - enable_cross_core_changes = SettingsHelper.feature_on?(:cross_core_projects) && can?(:available_for_cross_core_ordering, Product)
+      - enable_cross_core_changes = can?(:available_for_cross_core_ordering, Product)
       - if enable_cross_core_changes
         = f.label :facility_id, Facility.model_name.human
         = f.input_field :facility_id,

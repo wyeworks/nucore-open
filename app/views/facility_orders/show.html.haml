@@ -8,15 +8,14 @@
     = banner_date_label @order, :ordered_at
     = banner_label @order, :user
     = banner_label @order, :created_by_user
-    - if SettingsHelper.feature_on?(:cross_core_projects)
-      - if @cross_core_project.present?
-        %dl.span2
-          %dt= t("views.facility_orders.show.cross_core_project_id")
-          %dd
-            = link_to @cross_core_project.name, facility_project_path(current_facility, @cross_core_project.id)
-        %dl.span2
-          %dt= t("views.facility_orders.show.cross_core_project_total")
-          %dd= number_to_currency @gross_order_value
+    - if @cross_core_project.present?
+      %dl.span2
+        %dt= t("views.facility_orders.show.cross_core_project_id")
+        %dd
+          = link_to @cross_core_project.name, facility_project_path(current_facility, @cross_core_project.id)
+      %dl.span2
+        %dt= t("views.facility_orders.show.cross_core_project_total")
+        %dd= number_to_currency @gross_order_value
     - if @merge_orders.blank? && current_ability.can?(:send_receipt, @order)
       .pull-right= render "send_receipt"
 
@@ -30,7 +29,7 @@
 - subheader_key = (@cross_core_project.present? ? "views.facility_orders.show.add_to_cross_core_order_header" : "views.facility_orders.show.add_to_order_header")
 
 %h2= t(subheader_key)
-- if SettingsHelper.feature_on?(:cross_core_projects) && @cross_core_data_by_facility_id.present?
+- if @cross_core_data_by_facility_id.present?
   #js--reportAnIssueModal.modal.hide.fade
 
   #accordion

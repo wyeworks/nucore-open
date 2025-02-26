@@ -426,7 +426,7 @@ class Ability
       can :available_for_cross_core_ordering, Product
     elsif controller.is_a?(FacilityAccountsController) && user.facility_staff_or_manager_of_any_facility?
       can [:accounts_available_for_order], Account
-    elsif controller.is_a?(FacilityOrderDetailsController) && resource.is_a?(Facility) && SettingsHelper.feature_on?(:cross_core_projects)
+    elsif controller.is_a?(FacilityOrderDetailsController) && resource.is_a?(Facility)
       can [:destroy], OrderDetail do |order_detail|
         project = order_detail.order.cross_core_project
 
@@ -440,7 +440,7 @@ class Ability
       end
     end
 
-    if resource.is_a?(OrderDetail) && SettingsHelper.feature_on?(:cross_core_projects)
+    if resource.is_a?(OrderDetail)
       project = resource.order.cross_core_project
 
       if project.present?
@@ -448,7 +448,7 @@ class Ability
       end
     end
 
-    if controller.is_a?(FileUploadsController) && resource.is_a?(Facility) && SettingsHelper.feature_on?(:cross_core_projects)
+    if controller.is_a?(FileUploadsController) && resource.is_a?(Facility)
       can [:upload_sample_results, :destroy], StoredFile do |fileupload|
         project = fileupload.order_detail.project
 

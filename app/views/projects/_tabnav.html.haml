@@ -5,7 +5,7 @@
         { action: :index },
         @active_tab == "index"
 
-    - if current_ability.can?(:cross_core_orders, Project) && SettingsHelper.feature_on?(:cross_core_order_view)
+    - if current_ability.can?(:cross_core_orders, Project)
       %li
         = tab t(".cross_core_orders"),
           { action: :cross_core_orders },

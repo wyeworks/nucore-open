@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Projects show", feature_setting: { cross_core_order_view: true } do
+RSpec.describe "Projects show" do
   # Defined in spec/support/contexts/cross_core_context.rb
   include_context "cross core orders"
 

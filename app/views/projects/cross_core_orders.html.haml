@@ -8,43 +8,41 @@
 .span12
   = render "shared/transactions/search"
 
-- cross_core_order_view_enabled = SettingsHelper.feature_on?(:cross_core_order_view)
-- if cross_core_order_view_enabled
-  .span12
-    - if @order_details.any?
-      %table.table.table-striped.table-hover.old-table
-        %thead
+.span12
+  - if @order_details.any?
+    %table.table.table-striped.table-hover.old-table
+      %thead
+        %tr
+          %th.nowrap= sortable "order_number", OrderDetail.model_name.human
+          %th.nowrap= t("views.facility_orders.index.ordered_by")
+          %th.nowrap= Order.human_attribute_name(:user)
+          %th.nowrap= sortable "ordered_at", Order.human_attribute_name(:ordered_at)
+          %th.nowrap= OrderDetail.human_attribute_name(:quantity)
+          %th.nowrap.order-note= OrderDetail.human_attribute_name(:product)
+          %th.nowrap= sortable "facility", Facility.model_name.human
+          %th.nowrap= Project.model_name.human
+          %th.nowrap= sortable "status"
+          %th.nowrap.currency= OrderDetail.human_attribute_name(:actual_cost)
+          %th.nowrap= PriceGroup.model_name.human
+      %tbody
+        - @order_details.each do |od|
           %tr
-            %th.nowrap= sortable "order_number", OrderDetail.model_name.human
-            %th.nowrap= t("views.facility_orders.index.ordered_by")
-            %th.nowrap= Order.human_attribute_name(:user)
-            %th.nowrap= sortable "ordered_at", Order.human_attribute_name(:ordered_at)
-            %th.nowrap= OrderDetail.human_attribute_name(:quantity)
-            %th.nowrap.order-note= OrderDetail.human_attribute_name(:product)
-            %th.nowrap= sortable "facility", Facility.model_name.human
-            %th.nowrap= Project.model_name.human
-            %th.nowrap= sortable "status"
-            %th.nowrap.currency= OrderDetail.human_attribute_name(:actual_cost)
-            %th.nowrap= PriceGroup.model_name.human
-        %tbody
-          - @order_details.each do |od|
-            %tr
-              - order_detail = OrderDetailPresenter.new(od)
-              %td= od
-              %td= od.order.created_by_user.full_name
-              %td= od.order.user.full_name
-              %td= format_usa_datetime(od.ordered_at)
-              %td.centered= order_detail.wrapped_quantity
-              = render partial: "shared/order_detail_cell", locals: { od: od }
-              %td= od.order.facility.abbreviation.truncate(6)
-              -# TODO: This should be a link when we have the project page
-              %td= od.order.cross_core_project&.name
-              %td= od.order_status
-              %td.currency
-                =  order_detail.wrapped_total
-              %td= order_detail.price_group_name
+            - order_detail = OrderDetailPresenter.new(od)
+            %td= od
+            %td= od.order.created_by_user.full_name
+            %td= od.order.user.full_name
+            %td= format_usa_datetime(od.ordered_at)
+            %td.centered= order_detail.wrapped_quantity
+            = render partial: "shared/order_detail_cell", locals: { od: od }
+            %td= od.order.facility.abbreviation.truncate(6)
+            -# TODO: This should be a link when we have the project page
+            %td= od.order.cross_core_project&.name
+            %td= od.order_status
+            %td.currency
+              =  order_detail.wrapped_total
+            %td= order_detail.price_group_name
 
-      = will_paginate(@order_details)
-      = render partial: "/price_display_footnote", locals: { admin: true }
-    - else
-      %p.notice= t(".no_orders")
+    = will_paginate(@order_details)
+    = render partial: "/price_display_footnote", locals: { admin: true }
+  - else
+    %p.notice= t(".no_orders")

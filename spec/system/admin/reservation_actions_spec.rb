@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Reservation actions", :js, feature_setting: { cross_core_projects: true } do
+RSpec.describe "Reservation actions", :js do
   include_context "cross core orders"
 
   let(:facility2_instrument) { create(:setup_instrument, facility: facility2) }
