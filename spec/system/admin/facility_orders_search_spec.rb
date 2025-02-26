@@ -56,7 +56,7 @@ RSpec.describe "Facility Orders Search" do
     end
   end
 
-  context "cross-core orders", :js, feature_setting: { cross_core_order_view: true } do
+  context "cross-core orders", :js do
     let!(:originating_cross_core_order) { create(:purchased_order, product: item, account: accounts.first) }
     let!(:order_for_facility) { create(:purchased_order, product: item, account: accounts.first) }
 
