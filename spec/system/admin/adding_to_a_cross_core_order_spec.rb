@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Adding to an existing order for cross core", :js, feature_setting: { cross_core_projects: true } do
+RSpec.describe "Adding to an existing order for cross core", :js do
   let(:facility) { product.facility }
   let(:order) { create(:purchased_order, product: product, ordered_at: 1.week.ago) }
   let(:user) { create(:user, :staff, facility: facility) }
@@ -96,7 +96,7 @@ RSpec.describe "Adding to an existing order for cross core", :js, feature_settin
   end
 
   describe "adding an instrument reservation" do
-    describe "from another facility", :js, feature_setting: { cross_core_projects: true } do
+    describe "from another facility", :js do
       let(:product) { create(:setup_item, :with_facility_account) }
       let!(:instrument) { create(:setup_instrument, facility: facility2, cross_core_ordering_available: true) }
       let(:user) { create(:user, :facility_administrator, facility:) }
