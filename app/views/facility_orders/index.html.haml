@@ -9,7 +9,6 @@
 .span12
   = render "shared/transactions/search"
 
-- cross_core_order_view_enabled = SettingsHelper.feature_on?(:cross_core_order_view)
 .span12
   - if @order_details.any?
     = link_to t("reports.account_transactions.export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
@@ -21,20 +20,17 @@
             %th
             %th.nowrap= sortable "order_number", Order.model_name.human
             %th.nowrap= OrderDetail.model_name.human
-            - if cross_core_order_view_enabled
-              %th.nowrap= t("views.facility_orders.index.ordered_by")
+            %th.nowrap= t("views.facility_orders.index.ordered_by")
             %th.nowrap= sortable "ordered_for", Order.human_attribute_name(:user)
             %th.nowrap= sortable "ordered_at", Order.human_attribute_name(:ordered_at)
             %th.nowrap= OrderDetail.human_attribute_name(:quantity)
             %th.nowrap.order-note= sortable "product_name", OrderDetail.human_attribute_name(:product)
-            - if cross_core_order_view_enabled
-              %th.nowrap= Facility.model_name.human
+            %th.nowrap= Facility.model_name.human
             %th.nowrap= sortable "assigned_to", OrderDetail.human_attribute_name(:assigned_user)
             %th.nowrap= sortable "status"
             - # OrderDetail.human_attribute_name(:actual_cost) returns "Price".  Despite the :actual_ prefix, these order details are new/in process, so most will have estimated costs, but could be actual or unassigned.
             %th.nowrap.currency= OrderDetail.human_attribute_name(:actual_cost)
-            - if cross_core_order_view_enabled
-              %th.nowrap= PriceGroup.model_name.human
+            %th.nowrap= PriceGroup.model_name.human
         %tbody
           - @order_details.each do |od|
             %tr
@@ -42,20 +38,17 @@
               %td.centered= check_box_tag("order_detail_ids[]", od.id, false, {class: "toggle", id: nil })
               %td.centered= link_to od.order_id, facility_order_path(current_facility, od.order)
               %td.centered= link_to od.id, manage_order_detail_path(od), class: "manage-order-detail"
-              - if cross_core_order_view_enabled
-                %td= od.order.created_by_user.full_name
+              %td= od.order.created_by_user.full_name
               %td= od.order.user.full_name
               %td= format_usa_datetime(od.ordered_at)
               %td.centered= order_detail.wrapped_quantity
               = render partial: "shared/order_detail_cell", locals: { od: od }
-              - if cross_core_order_view_enabled
-                %td= render "shared/cross_core_facility_abbreviation_order_details", order_detail: od, current_facility: current_facility
+              %td= render "shared/cross_core_facility_abbreviation_order_details", order_detail: od, current_facility: current_facility
               %td= od.assigned_user
               %td= od.order_status
               %td.currency
                 =  order_detail.wrapped_total
-              - if cross_core_order_view_enabled
-                %td= order_detail.price_group_name
+              %td= order_detail.price_group_name
         = render partial: "table_controls"
 
     = will_paginate(@order_details)

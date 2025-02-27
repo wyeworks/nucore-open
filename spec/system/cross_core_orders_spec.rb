@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Cross Core Orders", :js, feature_setting: { cross_core_order_view: true } do
+RSpec.describe "Cross Core Orders", :js do
   # Defined in spec/support/contexts/cross_core_context.rb
   include_context "cross core orders"
 

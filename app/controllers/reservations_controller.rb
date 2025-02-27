@@ -418,8 +418,6 @@ class ReservationsController < ApplicationController
   end
 
   def set_accounts_for_cross_core_project
-    return unless SettingsHelper.feature_on?(:cross_core_projects)
-
     return if @order.cross_core_project_id.nil?
 
     @accounts_for_cross_core_project = AvailableAccountsFinder.new(original_project_order.user, @order.facility)
@@ -436,8 +434,6 @@ class ReservationsController < ApplicationController
   end
 
   def set_cross_core_cancel_path
-    return unless SettingsHelper.feature_on?(:cross_core_projects)
-
     return if @order.cross_core_project_id.blank?
 
     current_user_facilities = current_user.facilities
