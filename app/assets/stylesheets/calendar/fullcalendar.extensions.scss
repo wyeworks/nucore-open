@@ -1,17 +1,42 @@
-.unavailable,
-.fc-agenda .unavailable .fc-event-time,
-.unavailable a {
-  background-color: #aaaaaa;
-  border-color: #DBDBDB;
-  color: #fff;
+// Colors taken from google calendar which presumably
+// follow accessibility good practices
+$event-color: #039be5;
+$event-color2: #DBDBDB;
+$event-color3: #F6BF26;
+$event-color4: #7CB342;
+
+.fc-event {
+  background-color: $event-color;
+  border-color: $event-color;
+  color: black;
+  transition: box-shadow 50ms linear;
+
+  &:hover {
+    color: black;
+    box-shadow: 0px 6px 10px 0px rgba(0,0,0,.14),0px 1px 18px 0px rgba(0,0,0,.12),0px 3px 5px -1px rgba(0,0,0,.2);
+  }
 }
 
+.fc-bgevent.unavailable, // Monthly view unavailable days
+.fc-agenda.fc-event-time.unavailable,
+.fc-event.unavailable {
+  background-color: $event-color2;
+  border-color: $event-color2;
+
+  &:hover {
+    box-shadow: none;
+  }
+}
+
+
 .fc-event.other-instrument {
-  background: #e29a78;
+  background-color: $event-color3;
+  border-color: $event-color3;
 }
 
 .fc-event.current-event {
-  background: #378006;
+  background-color: $event-color4;
+  border-color: $event-color4;
 }
 
 #overlay.on #spinner #hide  {
