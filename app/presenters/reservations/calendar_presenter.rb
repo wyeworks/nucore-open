@@ -39,11 +39,11 @@ module Reservations
     def as_calendar_object(options = {})
       ret = super
 
-      return ret if options[:with_details].blank?
-
-      if options[:with_details] && options[:instrument_id].present? && product_id != options[:instrument_id]
+      if options[:discriminate] && options[:instrument_id].present? && product_id != options[:instrument_id]
         ret[:className] = "other-instrument"
       end
+
+      return ret if options[:with_details].blank?
 
       ret.merge(
         title: order.user.full_name,
