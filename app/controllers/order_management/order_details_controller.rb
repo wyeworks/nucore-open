@@ -13,7 +13,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
   # We can't load through the facility because of cross-core orders
   before_action :init_order_detail, only: [:files, :template_results]
 
-  helper_method :edit_disabled?
+  helper_method :edit_disabled?, :actual_cost_edit_disabled?
 
   before_action :authorize_order_detail, except: %i(sample_results)
   before_action :load_accounts, only: [:edit, :update]
@@ -117,7 +117,19 @@ class OrderManagement::OrderDetailsController < ApplicationController
   end
 
   def edit_disabled?
-    @order_detail.in_open_journal? || @order_detail.reconciled?
+    in_open_journal_or_reconciled = @order_detail.in_open_journal? || @order_detail.reconciled?
+
+    if SettingsHelper.feature_on?(:allow_global_billing_admin_update_actual_prices)
+      in_open_journal_or_reconciled || (@order_detail.awaiting_payment? && !current_user.global_billing_administrator?)
+    else
+      in_open_journal_or_reconciled
+    end
+  end
+
+  def actual_cost_edit_disabled?
+    return true unless SettingsHelper.feature_on?(:allow_global_billing_admin_update_actual_prices)
+
+    @order_detail.awaiting_payment? && !current_user.global_billing_administrator?
   end
 
   def init_order_detail
