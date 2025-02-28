@@ -20,11 +20,15 @@ module ProductsHelper
   end
 
   def options_for_relay
-    {
-      RelaySynaccessRevA => RelaySynaccessRevA.name,
-      RelaySynaccessRevB => RelaySynaccessRevB.name,
-      RelayDataprobe => RelayDataprobe.name,
-    }
+    [
+      if SettingsHelper.feature_on?(:disable_relay_synaccess_rev_a)
+          nil
+      else
+        [RelaySynaccessRevA, RelaySynaccessRevA.name]
+      end,
+      [RelaySynaccessRevB, RelaySynaccessRevB.name],
+      [RelayDataprobe, RelayDataprobe.name],
+    ].compact
   end
 
   def instrument_pricing_modes
