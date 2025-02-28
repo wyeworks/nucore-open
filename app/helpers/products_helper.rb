@@ -21,9 +21,11 @@ module ProductsHelper
 
   def options_for_relay
     [
-      SettingsHelper.feature_on?(:disable_relay_synaccess_rev_a) ? nil : [
-        RelaySynaccessRevA, RelaySynaccessRevA.name
-      ],
+      if SettingsHelper.feature_on?(:disable_relay_synaccess_rev_a)
+          nil
+      else
+        [RelaySynaccessRevA, RelaySynaccessRevA.name]
+      end,
       [RelaySynaccessRevB, RelaySynaccessRevB.name],
       [RelayDataprobe, RelayDataprobe.name],
     ].compact
