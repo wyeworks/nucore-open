@@ -51,13 +51,7 @@ class CalendarEventsPresenter
 
   def reservation_events
     reservations.map do |reservation|
-      event_data = reservation.as_calendar_object(calendar_opts)
-
-      if params[:with_details] && reservation.product_id != instrument.id
-        event_data[:className] = "other-instrument"
-      end
-
-      event_data
+      reservation.as_calendar_object(calendar_opts)
     end
   end
 
@@ -66,6 +60,7 @@ class CalendarEventsPresenter
       start_at:,
       end_at:,
       with_details: params[:with_details],
+      instrument_id: instrument.id,
     }
   end
 

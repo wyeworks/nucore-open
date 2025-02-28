@@ -41,6 +41,10 @@ module Reservations
 
       return ret if options[:with_details].blank?
 
+      if options[:with_details] && options[:instrument_id].present? && product_id != options[:instrument_id]
+        ret[:className] = "other-instrument"
+      end
+
       ret.merge(
         title: order.user.full_name,
         email: order.user.email,
@@ -60,8 +64,10 @@ module Reservations
         if expires_mins_before.present?
           hash[:expiration] = "Expires #{MinutesToTimeFormatter.new(expires_mins_before)} prior"
         end
+
         hash[:className] = "unavailable" if __getobj__.is_a?(AdminReservation)
       end
     end
   end
+
 end
