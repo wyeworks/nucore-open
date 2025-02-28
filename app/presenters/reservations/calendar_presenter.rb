@@ -39,6 +39,10 @@ module Reservations
     def as_calendar_object(options = {})
       ret = super
 
+      if options[:discriminate] && options[:instrument_id].present? && product_id != options[:instrument_id]
+        ret[:className] = "other-instrument"
+      end
+
       return ret if options[:with_details].blank?
 
       ret.merge(
@@ -60,8 +64,10 @@ module Reservations
         if expires_mins_before.present?
           hash[:expiration] = "Expires #{MinutesToTimeFormatter.new(expires_mins_before)} prior"
         end
+
         hash[:className] = "unavailable" if __getobj__.is_a?(AdminReservation)
       end
     end
   end
+
 end

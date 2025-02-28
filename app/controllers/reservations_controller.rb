@@ -60,6 +60,8 @@ class ReservationsController < ApplicationController
 
     @show_details = params[:with_details] == "true" && (@instrument.show_details? || can?(:administer, Reservation))
 
+    discriminate = params[:discriminate] == "true" && can?(:administer, Reservation)
+
     respond_to do |format|
       format.js do
         render(
@@ -70,6 +72,7 @@ class ReservationsController < ApplicationController
             start_at: @start_at,
             end_at: @end_at,
             with_details: @show_details,
+            discriminate:,
             view: params[:view]
           ).to_json
         )
