@@ -4,7 +4,7 @@
 = simple_form_for @submission, html: { data: { create_sample_url: create_sample_sanger_sequencing_submission_path(@submission) } } do |f|
   = hidden_field_tag :referer, params[:referer]
   = hidden_field_tag :success_url, params[:success_url]
-  %table.table.table-striped.table-tight
+  %table.table.table-striped.table-tight.samples-table
     %thead
       %tr
         %th= SangerSequencing::Sample.human_attribute_name(:customer_sample_id)
@@ -12,6 +12,7 @@
         - if needs_primer
           %th
             %div= SangerSequencing::Sample.human_attribute_name(:primer_name)
+            %small.primer-name-hint= text("primer_name.hint")
         %th
     %tbody
       = f.nested_fields_for :samples, wrapper: false, class_name: "SangerSequencing::Sample", wrapper_tag: :tr do |sf|
@@ -36,9 +37,7 @@
     - if @submission.quantity_editable?
       %tfoot
         %tr
-          %td{colspan: needs_primer ? 2 : 4}= f.add_nested_fields_link :samples, text("add"), class: "btn btn-success"
-          - if needs_primer
-            %td{colspan: 2}= text("primer_name.hint")
+          %td{colspan: 4}= f.add_nested_fields_link :samples, text("add"), class: "btn btn-success"
 
   %h4.js--print-warning= text("warning")
 

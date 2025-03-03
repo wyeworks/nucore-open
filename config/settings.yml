@@ -158,11 +158,11 @@ feature:
   facility_tile_list_admin: false
   po_require_affiliate_account: true
   walkup_reservations: true
-  cross_core_projects: true
-  cross_core_order_view: <%= ENV.fetch("CROSS_CORE_ORDER_VIEW", true) %>
   show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
   show_daily_rate_option: true
   sanger_enabled_service: <%= ENV.fetch("SANGER_ENABLED_SERVICE", false) %>
+  well_plate_alternative_csv_format: <%= ENV.fetch("well_plate_alternative_csv_format", false) %>
+  disable_relay_synaccess_rev_a: false
   export_order_disputes: true
 
 split_accounts:

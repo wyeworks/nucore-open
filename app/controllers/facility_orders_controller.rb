@@ -108,7 +108,7 @@ class FacilityOrdersController < ApplicationController
   def load_merge_orders
     missing_reservation_order_ids = []
 
-    if SettingsHelper.feature_on?(:cross_core_projects) && @order.cross_core_project_id.present?
+    if @order.cross_core_project_id.present?
       project_order_ids = @order.cross_core_project.orders.pluck(:id)
       missing_reservation_order_ids = missing_reservation_order_ids(project_order_ids)
     else
@@ -138,8 +138,6 @@ class FacilityOrdersController < ApplicationController
   end
 
   def load_cross_core_order_details
-    return unless SettingsHelper.feature_on?(:cross_core_projects)
-
     @cross_core_project = @order.cross_core_project
 
     @cross_core_data_by_facility_id = {}

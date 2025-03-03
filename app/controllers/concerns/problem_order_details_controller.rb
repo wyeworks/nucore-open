@@ -20,11 +20,8 @@ module ProblemOrderDetailsController
       TransactionSearch::AccountSearcher,
       TransactionSearch::OrderedForSearcher,
       TransactionSearch::DateRangeSearcher,
+      TransactionSearch::CrossCoreSearcher,
     ]
-
-    if SettingsHelper.feature_on?(:cross_core_order_view)
-      searchers << TransactionSearch::CrossCoreSearcher
-    end
 
     @search = TransactionSearch::Searcher.new(*searchers).search(order_details, @search_form)
     @order_details = @search.order_details.preload(:order_status, :assigned_user)

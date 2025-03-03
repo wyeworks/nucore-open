@@ -29,9 +29,19 @@
         %td.order_date
           = od.ordered_at&.strftime("%m/%d/%Y")
 
-      %td.currency.timeinput= od.reservation.try(:duration_mins)
+      - daily_booking_product = od.product.try(:daily_booking?)
+      - if daily_booking_product
+        %td.currency
+          = od.reservation.try(:duration_days)
+      - else
+        %td.currency.timeinput= od.reservation.try(:duration_mins)
       - if od.time_data.present?
-        %td.currency{class: od.time_data.actual_duration_mins ? "timeinput" : ""}= od.time_data.actual_duration_mins || "???"
+        - if daily_booking_product
+          %td.currency
+            = od.time_data.actual_duration_days || "???"
+        - else
+          %td.currency{class: od.time_data.actual_duration_mins ? "timeinput" : ""}
+            = od.time_data.actual_duration_mins || "???"
       - elsif od.quantity_as_time?
         %td.currency.timeinput= od.quantity
       - else

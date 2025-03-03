@@ -15,9 +15,12 @@ module SangerSequencing
     end
 
     def to_csv
+      owner = well_plate_alternative_csv_format? ? "" : text("owner")
+      operator = well_plate_alternative_csv_format? ? "" : text("operator")
+
       CSV.generate do |csv|
         csv << ["Container Name", "Plate ID", "Description", "ContainerType", "AppType", "Owner", "Operator", "PlateSealing", "SchedulingPref"]
-        csv << ["",               "",         "",            "96-Well",       "Regular", text("owner"), text("operator"), "Septa", "1234"]
+        csv << ["",               "",         "",            "96-Well",       "Regular", owner, operator, "Septa", "1234"]
         csv << %w(AppServer AppInstance)
         csv << [plate_text("app_server"), plate_text("app_instance")]
         csv << ["Well", "Sample Name", "Comment"] + additional_columns.keys
@@ -30,7 +33,7 @@ module SangerSequencing
 
     def sample_rows
       cleaned_cells.map do |position, sample|
-        [position] + sample_row(sample)
+        [position] + sample_row(sample, position)
       end
     end
 
@@ -58,8 +61,13 @@ module SangerSequencing
       end
     end
 
-    def sample_row(sample)
-      [sample.id.to_s, sample.customer_sample_id.to_s] + additional_columns.values
+    def sample_row(sample, position)
+      if well_plate_alternative_csv_format?
+        initial_columns = (position == "A01" && sample.reserved?) ? ["PGEM_F", "CQLS"] : [sample.id.to_s, sample.submission.order_detail.user.username]
+        initial_columns + additional_columns.values
+      else
+        [sample.id.to_s,  sample.customer_sample_id.to_s] + additional_columns.values
+      end
     end
 
     # Define your additional columns as a set of hashes under `columns`:
@@ -71,6 +79,10 @@ module SangerSequencing
     #     Analysis Protocol 1: XLR__50POP7_KBSeqAna
     def additional_columns
       I18n.t("#{translation_scope}.#{plate_mode}.columns")
+    end
+
+    def well_plate_alternative_csv_format?
+      SettingsHelper.feature_on?(:well_plate_alternative_csv_format)
     end
 
   end

@@ -91,6 +91,16 @@ module Reservations::DateSupport
     end
   end
 
+  def actual_duration_days(actual_end_fallback: nil)
+    if @actual_duration_days
+      @actual_duration_days.to_i
+    elsif actual_start_at
+      TimeRange.new(actual_start_at, actual_end_at || actual_end_fallback).duration_days.ceil
+    else
+      0
+    end
+  end
+
   def actual_start_date
     date_field(:actual_start)
   end

@@ -18,10 +18,10 @@ git log $target_branch.. | egrep '\(#\d+\)$' | while read LINE; do
   # ... and the description is the rest (Move render to right td)
   desc=$(echo "$LINE" | sed -E 's/ *\(#[0-9]+\)$//' | sed -E 's/[*]//' | cut -d' ' -f1-)
   # Add a bullet point (*) and link to the PR, either in nucore-open or the current repo:
-  # * Move render to right td (https://github.com/tablexi/nucore-open/pull/4369)
+  # * Move render to right td (https://github.com/wyeworks/nucore-open/pull/4369)
   # If the PR number is greater than 4000, it's a nucore-open PR.
   if [[ $pr -gt 4000 ]]; then
-    echo "* $desc (https://github.com/tablexi/nucore-open/pull/$pr)"
+    echo "* $desc (https://github.com/wyeworks/nucore-open/pull/$pr)"
   else
     echo "* $desc (#$pr)"
   fi
