@@ -49,7 +49,7 @@ class Reports::AccountTransactionsReport
   private
 
   def headers
-    [
+    headers = [
       Order.model_name.human,
       OrderDetail.model_name.human,
       OrderDetail.human_attribute_name(@date_range_field),
@@ -73,6 +73,16 @@ class Reports::AccountTransactionsReport
       text(".cross_core_project_facility"),
       text(".order_detail_notices"),
     ]
+    # add dispute reason if needed
+    if SettingsHelper.feature_on?(:export_order_disputes)
+      headers.concat [
+        OrderDetail.human_attribute_name(:dispute_at),
+        OrderDetail.human_attribute_name(:dispute_reason),
+        OrderDetail.human_attribute_name(:dispute_resolved_at),
+        OrderDetail.human_attribute_name(:dispute_resolved_reason),
+      ]
+    end
+ 
   end
 
   def build_row(order_detail)
@@ -80,7 +90,7 @@ class Reports::AccountTransactionsReport
     reservation = order_detail.reservation || Reservation.new
     order_detail = OrderDetailPresenter.new(order_detail)
 
-    [
+    row = [
       order_detail.order.id,
       order_detail.id,
       format_usa_date(order_detail.send(:"#{@date_range_field}")),
@@ -104,6 +114,16 @@ class Reports::AccountTransactionsReport
       originating_cross_core_facility(order_detail),
       notices_for(order_detail),
     ]
+    # add dispute reason if needed
+    if SettingsHelper.feature_on?(:export_order_disputes)
+      row.concat [
+        order_detail.dispute_at,
+        order_detail.dispute_reason,
+        order_detail.dispute_resolved_at,
+        order_detail.dispute_resolved_reason,
+      ]
+    end
+
   end
 
   private
