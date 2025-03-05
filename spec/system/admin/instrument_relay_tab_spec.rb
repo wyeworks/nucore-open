@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Instrument Relay Tab" do
+RSpec.describe "Instrument Relay Tab", feature_setting: { disable_relay_synaccess_rev_a: false } do
   let(:facility) { FactoryBot.create(:setup_facility) }
   let(:user) { FactoryBot.create(:user, :administrator) }
 
