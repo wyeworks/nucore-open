@@ -106,7 +106,13 @@ class OrderDetails::ParamUpdater
   end
 
   def cost_params(params)
-    params.slice(:actual_cost, :actual_subsidy).permit!
+    return params.slice(:actual_cost, :actual_subsidy).permit! unless SettingsHelper.feature_on?(:allow_global_billing_admin_update_actual_prices)
+
+    if !@order_detail.awaiting_payment? || @editing_user.global_billing_administrator?
+      params.slice(:actual_cost, :actual_subsidy).permit!
+    else
+      {}
+    end
   end
 
   def permitted_params(params)
