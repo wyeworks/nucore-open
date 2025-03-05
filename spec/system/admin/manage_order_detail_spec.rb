@@ -363,4 +363,50 @@ RSpec.describe "Managing an order detail" do
       end
     end
   end
+
+  shared_examples "does not allow to update actual cost" do
+    it "does not allow to update actual cost" do
+      expect(page).to have_field("order_detail[actual_cost]", disabled: true)
+    end
+  end
+
+  describe "updating actual cost" do
+    let(:statement) { create(:statement, facility:, created_by: 1) }
+
+    before do
+      start_at = Time.zone.parse("#{Date.today} 10:00:00") - 1.day
+      end_at = start_at + 1.hour
+
+      reservation.update!(actual_start_at: start_at, actual_end_at: end_at)
+      order_detail.update!(reviewed_at: 5.days.ago, statement:, actual_cost: 10)
+
+      visit manage_facility_order_order_detail_path(facility, order, order_detail)
+    end
+
+    context "with feature flag ON", feature_setting: { allow_global_billing_admin_update_actual_prices: true } do
+      context "as a global admin" do
+        it_behaves_like "does not allow to update actual cost"
+      end
+
+      context "as a global billing admin" do
+        let(:logged_in_user) { create(:user, :global_billing_administrator) }
+
+        it "allows to update actual cost" do
+          expect(page).to have_field("order_detail[actual_cost]", disabled: false)
+        end
+      end
+    end
+
+    context "with feature flag OFF", feature_setting: { allow_global_billing_admin_update_actual_prices: false } do
+      context "as a global admin" do
+        it_behaves_like "does not allow to update actual cost"
+      end
+
+      context "as a global billing admin" do
+        let(:logged_in_user) { create(:user, :global_billing_administrator) }
+
+        it_behaves_like "does not allow to update actual cost"
+      end
+    end
+  end
 end
