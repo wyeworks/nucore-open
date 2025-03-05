@@ -1,1 +1,5 @@
 # use this file for school-specific settings overrides
+#
+# For these settings use SettingsHelper#feature_on?
+feature:
+  allow_global_billing_admin_update_actual_prices: true
