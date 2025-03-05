@@ -364,9 +364,9 @@ RSpec.describe "Managing an order detail" do
     end
   end
 
-  shared_examples "does not allow to update actual cost" do
-    it "does not allow to update actual cost" do
-      expect(page).to have_field("order_detail[actual_cost]", disabled: true)
+  shared_examples "allows to update actual cost" do
+    it "allows to update actual cost" do
+      expect(page).to have_field("order_detail[actual_cost]", disabled: false)
     end
   end
 
@@ -385,27 +385,27 @@ RSpec.describe "Managing an order detail" do
 
     context "with feature flag ON", feature_setting: { allow_global_billing_admin_update_actual_prices: true } do
       context "as a global admin" do
-        it_behaves_like "does not allow to update actual cost"
+        it "does not allow to update actual cost" do
+          expect(page).to have_field("order_detail[actual_cost]", disabled: true)
+        end
       end
 
       context "as a global billing admin" do
         let(:logged_in_user) { create(:user, :global_billing_administrator) }
 
-        it "allows to update actual cost" do
-          expect(page).to have_field("order_detail[actual_cost]", disabled: false)
-        end
+        it_behaves_like "allows to update actual cost"
       end
     end
 
     context "with feature flag OFF", feature_setting: { allow_global_billing_admin_update_actual_prices: false } do
       context "as a global admin" do
-        it_behaves_like "does not allow to update actual cost"
+        it_behaves_like "allows to update actual cost"
       end
 
       context "as a global billing admin" do
         let(:logged_in_user) { create(:user, :global_billing_administrator) }
 
-        it_behaves_like "does not allow to update actual cost"
+        it_behaves_like "allows to update actual cost"
       end
     end
   end
