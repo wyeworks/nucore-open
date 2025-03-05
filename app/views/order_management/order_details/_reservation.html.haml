@@ -23,9 +23,14 @@
         .controls
           %label &nbsp;
           = time_select r, :actual_start, :minute_step => 1
-      - options = { class: "timeinput", data: { allow_init_blank: true }  }
-      - options[:value] = "" if r.object.actual_duration_mins == 0
-      = r.input :actual_duration_mins, input_html: options, error: false
+      - options = { data: { allow_init_blank: true }  }
+      - if reservation.product.daily_booking?
+        - options[:value] = "" if r.object.actual_duration_days == 0
+        = r.input :actual_duration_days, input_html: options, error: false
+      - else
+        - options[:value] = "" if r.object.actual_duration_mins == 0
+        - options[:class] = "timeinput"
+        = r.input :actual_duration_mins, input_html: options, error: false
       = render "copy_actuals_from_reservation", reservation: reservation
 
     - else

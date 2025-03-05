@@ -1,5 +1,3 @@
-- cross_core_order_view_enabled = SettingsHelper.feature_on?(:cross_core_order_view)
-
 %table.table.table-striped.table-hover
   %thead
     %tr.borderless
@@ -12,14 +10,12 @@
     %tr
       %th= Order.model_name.human
       %th= OrderDetail.model_name.human
-      - if cross_core_order_view_enabled
-        %th.nowrap= t(".th.ordered_by")
+      %th.nowrap= t(".th.ordered_by")
       %th= problem_order_date_header(local_assigns[:show_reservation_start_at])
       %th= Order.human_attribute_name(:user)
       %th{ colspan: 2 }= t(".th.quantity_and_product")
       %th
-      - if cross_core_order_view_enabled
-        %th.nowrap= Facility.model_name.human
+      %th.nowrap= Facility.model_name.human
       %th= Account.model_name.human
       %th= t(".th.problem")
   %tbody
@@ -35,8 +31,7 @@
           %td.centered= link_to order_detail.id,
             manage_order_detail_path(order_detail),
             class: "manage-order-detail"
-        - if cross_core_order_view_enabled
-          %td= order_detail.order.created_by_user.full_name
+        %td= order_detail.order.created_by_user.full_name
         %td= problem_order_date(order_detail, local_assigns[:show_reservation_start_at])
         %td= order_detail.order.user
         %td.centered= order_detail.quantity
@@ -45,8 +40,7 @@
           - if order_detail.add_accessories?
             = link_to new_facility_order_order_detail_accessory_path(current_facility, order_detail.order, order_detail), class: ["has_accessories", "persistent", "undecorated"] do
               = tooltip_icon "fa fa-plus-square", t("product_accessories.pick_accessories.title")
-        - if cross_core_order_view_enabled
-          %td= render "shared/cross_core_facility_abbreviation_order_details", order_detail: order_detail, current_facility: current_facility
+        %td= render "shared/cross_core_facility_abbreviation_order_details", order_detail: order_detail, current_facility: current_facility
         %td= order_detail.account
         %td.centered
           = order_detail_badges(order_detail)
