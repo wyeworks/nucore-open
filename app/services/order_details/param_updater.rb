@@ -110,6 +110,8 @@ class OrderDetails::ParamUpdater
 
     if !@order_detail.awaiting_payment? || @editing_user.global_billing_administrator?
       params.slice(:actual_cost, :actual_subsidy).permit!
+    else
+      {}
     end
   end
 
