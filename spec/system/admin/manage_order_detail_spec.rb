@@ -383,6 +383,19 @@ RSpec.describe "Managing an order detail" do
       visit manage_facility_order_order_detail_path(facility, order, order_detail)
     end
 
+    context "as director" do
+      before { login_as director }
+
+      it "allow to change actual cost" do
+        fill_in("Price", with: "10")
+        fill_in("Pricing Note", with: "Some note about the price")
+
+        click_button "Save"
+
+        expect(page).to have_content("The order was successfully updated.")
+      end
+    end
+
     context "with feature flag ON", feature_setting: { allow_global_billing_admin_update_actual_prices: true } do
       context "as a global admin" do
         it_behaves_like "does not allow to update actual cost"

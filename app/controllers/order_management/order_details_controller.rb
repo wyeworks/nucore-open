@@ -127,7 +127,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
   end
 
   def actual_cost_edit_disabled?
-    return true unless SettingsHelper.feature_on?(:allow_global_billing_admin_update_actual_prices)
+    return false unless SettingsHelper.feature_on?(:allow_global_billing_admin_update_actual_prices)
 
     @order_detail.awaiting_payment? && !current_user.global_billing_administrator?
   end
