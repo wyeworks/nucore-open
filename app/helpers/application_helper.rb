@@ -50,7 +50,7 @@ module ApplicationHelper
   def warning_if_instrument_is_offline_or_partially_available(instrument)
     if instrument.offline?
       tooltip_icon "fa fa-exclamation-triangle icon-large", t("instruments.offline.note")
-    elsif instrument.alert
+    elsif instrument.alert.present?
       tooltip_icon "fa fa-exclamation-triangle partially-available-warning icon-large", instrument.alert.note
     end
   end
