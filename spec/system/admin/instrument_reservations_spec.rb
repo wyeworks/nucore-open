@@ -39,7 +39,7 @@ RSpec.describe "instrument reservations" do
       expect(page).not_to have_css(".fc-event.other-instrument")
     end
 
-    it "shows other instrument reservations with different color", :js do
+    it "shows other instrument reservations with different color" do
       create(
         :purchased_reservation,
         reserve_start_at: Time.zone.now,
@@ -48,8 +48,6 @@ RSpec.describe "instrument reservations" do
       )
 
       visit facility_instrument_schedule_path(facility, instrument)
-
-      save_and_open_screenshot
 
       expect(page).to have_css(".fc-event.other-instrument")
     end
