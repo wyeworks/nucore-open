@@ -26,8 +26,8 @@ RSpec.describe "instrument reservations" do
       login_as admin
       create(
         :purchased_reservation,
-        reserve_start_at: 1.hour.from_now,
-        reserve_end_at: 2.hours.from_now,
+        reserve_start_at: 2.hours.from_now,
+        reserve_end_at: 3.hours.from_now,
         product: instrument
       )
     end
