@@ -22,7 +22,10 @@ class ProductDisplayGroup < ApplicationRecord
 
   def self.fake_groups_by_type(products)
     Product.orderable_types.map do |type|
-      Fake.new(name: type.constantize.model_name.human(count: :many), products: products.where(type: type))
+      Fake.new(
+        name: type.constantize.model_name.human(count: :many),
+        products: products.where(type:)
+      )
     end
   end
 
