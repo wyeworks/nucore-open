@@ -53,7 +53,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   # GET /facilities/:facility_id/orders/:order_id/order_details/:id/pricing
   def pricing
-    checker = OrderDetails::PriceChecker.new(@order_detail)
+    checker = OrderDetails::PriceChecker.new(@order_detail, user: session_user)
     @prices = checker.prices_from_params(params[:order_detail] || empty_params)
 
     render json: @prices.to_json
