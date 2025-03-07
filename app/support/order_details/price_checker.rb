@@ -4,13 +4,14 @@ class OrderDetails::PriceChecker
 
   include ActionView::Helpers::NumberHelper
 
-  def initialize(order_detail)
+  def initialize(order_detail, options = {})
     @order_detail = order_detail.dup
     @order_detail.time_data = order_detail.time_data.dup
+    @editing_user = options[:user]
   end
 
   def prices_from_params(params)
-    updater = OrderDetails::ParamUpdater.new(@order_detail)
+    updater = OrderDetails::ParamUpdater.new(@order_detail, user: @editing_user)
     updater.assign_attributes(params)
     @order_detail.assign_price_policy
 
