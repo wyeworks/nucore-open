@@ -58,8 +58,12 @@ module PricePolicies
       hourly_usage_rate - hourly_usage_subsidy
     end
 
+    def has_daily_rate?
+      usage_rate_daily && usage_rate_daily > -1
+    end
+
     def subsidized_daily_usage_cost
-      usage_rate_daily - usage_subsidy_daily
+      usage_rate_daily - (usage_subsidy_daily || 0)
     end
 
     def minimum_cost_subsidy
