@@ -58,6 +58,38 @@ RSpec.describe ReservationsController do
       expect(assigns[:instrument]).to eq(instrument)
     end
 
+    context "when discriminate=true" do
+      before do
+        @params[:discriminate] = true
+      end
+
+      it "does not allow non admin user" do
+        sign_in create(:user)
+
+        expect(CalendarEventsPresenter).to receive(:new).with(
+          anything,
+          anything,
+          anything,
+          a_hash_including(discriminate: false)
+        )
+
+        do_request
+      end
+
+      it "allow admin user" do
+        sign_in create(:user, :administrator)
+
+        expect(CalendarEventsPresenter).to receive(:new).with(
+          anything,
+          anything,
+          anything,
+          a_hash_including(discriminate: true)
+        )
+
+        do_request
+      end
+    end
+
     describe "start/stop parameters" do
       let(:start_range) { Time.zone.local(2018, 5, 15, 12, 13) }
       let(:end_range) { start_range + 1.week }
