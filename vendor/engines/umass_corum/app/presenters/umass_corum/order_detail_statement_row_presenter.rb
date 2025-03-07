@@ -24,13 +24,15 @@ module UmassCorum
     end
 
     def quantity
-      if order_detail.time_data.present? && order_detail.time_data.respond_to?(:billable_minutes)
+      if order_detail.time_data.present? && order_detail.time_data.respond_to?(:billable_minutes) && !order_detail.product.daily_booking?
         minutes = if order_detail.canceled_reason && order_detail.complete?
                     nil
                   else
                     order_detail.time_data.billable_duration_mins
                   end
         QuantityPresenter.new(order_detail.product, minutes).to_s if minutes
+      elsif order_detail.product.daily_booking?
+        QuantityPresenter.new(order_detail.product, order_detail.reservation.duration_days).to_s
       else
         QuantityPresenter.new(order_detail.product, order_detail.quantity).to_s
       end
@@ -45,13 +47,19 @@ module UmassCorum
     end
 
     def unit_of_measure
-      order_detail.product.quantity_as_time? ? "hr" : ""
+      if order_detail.product.quantity_as_time?
+        order_detail.product.daily_booking? ? "day" : "hr"
+      else
+        ""
+      end
     end
 
     def hourly_rate
       price_policy = order_detail.price_policy
       if price_policy.try(:has_rate?)
         number_to_currency(price_policy.subsidized_hourly_usage_cost)
+      elsif price_policy.try(:has_daily_rate?)
+        number_to_currency(price_policy.subsidized_daily_usage_cost)
       else
         number_to_currency(price_policy.unit_total)
       end
