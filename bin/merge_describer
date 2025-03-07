@@ -9,20 +9,48 @@
 #
 # Compare your current branch to a tag:
 # bin/merge_describer v2024-06-18
+
+repo_url=https://github.com/wyeworks/nucore-open
+jira_base_url=https://universe-of-universities.atlassian.net/browse
 target_branch=${1:-master}
-git log $target_branch.. | egrep '\(#\d+\)$' | while read LINE; do
-  # $LINE looks like this:
-  # 4369    Move render to right td
-  # The PR number is the first part (4369)...
-  pr=$(echo $LINE | sed -E 's/^.+\(#//' | sed -E 's/\)$//' | cut -d' ' -f1)
-  # ... and the description is the rest (Move render to right td)
-  desc=$(echo "$LINE" | sed -E 's/ *\(#[0-9]+\)$//' | sed -E 's/[*]//' | cut -d' ' -f1-)
-  # Add a bullet point (*) and link to the PR, either in nucore-open or the current repo:
-  # * Move render to right td (https://github.com/wyeworks/nucore-open/pull/4369)
-  # If the PR number is greater than 4000, it's a nucore-open PR.
-  if [[ $pr -gt 4000 ]]; then
-    echo "* $desc (https://github.com/wyeworks/nucore-open/pull/$pr)"
-  else
-    echo "* $desc (#$pr)"
+
+pr_num() {
+  echo "$1" | grep -oE "\(#[0-9]+\)$" | tr -d "(#)"
+}
+
+jira_num() {
+  echo "$1" | grep -oE "\[[a-zA-Z]+-[0-9]+\]" | tr -d "[]"
+}
+
+commit_msg() {
+
+  echo "$1" | sed -E 's/ *\(#[0-9]+\)$//' | sed -E 's#^\[.*\]##' | sed 's/^ //'
+}
+
+git_log() {
+  # Only log the commit title
+  git log --pretty=format:"%s" $1..
+}
+
+git_log $target_branch | while read line; do
+  pr=$(pr_num "$line")
+
+  # If there's no matching PR number we skip the commit
+  if [ -z $pr ]; then
+    continue
   fi
-done | sort -n
+
+  ticket=$(jira_num "$line")
+
+  message=$(commit_msg "$line")
+
+  if [ ! -z $ticket ]; then
+    output="[[$ticket]]($jira_base_url/$ticket)"
+  else
+    output="*"
+  fi
+
+  output="$output $message [#$pr]($repo_url/pull/$pr)"
+
+  echo "$output"
+done | sort -r
