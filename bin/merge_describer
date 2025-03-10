@@ -45,7 +45,7 @@ git_log $target_branch | while read line; do
   message=$(commit_msg "$line")
 
   if [ ! -z $ticket ]; then
-    output="[[$ticket]]($jira_base_url/$ticket)"
+    output="* [[$ticket]]($jira_base_url/$ticket)"
   else
     output="*"
   fi
