@@ -10,8 +10,7 @@
 # Compare your current branch to a tag:
 # bin/merge_describer v2024-06-18
 
-repo_url=https://github.com/wyeworks/nucore-open
-jira_base_url=https://universe-of-universities.atlassian.net/browse
+open_repo_url=https://github.com/wyeworks/nucore-open
 target_branch=${1:-master}
 
 pr_num() {
@@ -23,7 +22,6 @@ jira_num() {
 }
 
 commit_msg() {
-
   echo "$1" | sed -E 's/ *\(#[0-9]+\)$//' | sed -E 's#^\[.*\]##' | sed 's/^ //'
 }
 
@@ -45,12 +43,20 @@ git_log $target_branch | while read line; do
   message=$(commit_msg "$line")
 
   if [ ! -z $ticket ]; then
-    output="* [[$ticket]]($jira_base_url/$ticket)"
+    prefix="* [$ticket]"
   else
-    output="*"
+    prefix="*"
   fi
 
-  output="$output $message [#$pr]($repo_url/pull/$pr)"
+  # Add a a link to the PR, either in nucore-open or the current repo:
+  # If the PR number is greater than 4000, it's a nucore-open PR.
+  if [[ $pr -gt 4000 ]]; then
+    pr_ref="$open_repo_url/pull/$pr)"
+  else
+    pr_ref="(#$pr)"
+  fi
+
+  output="$prefix $message $pr_ref"
 
   echo "$output"
-done | sort -r
+done | sort
