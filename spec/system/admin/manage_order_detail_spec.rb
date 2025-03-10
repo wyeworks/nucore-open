@@ -406,6 +406,12 @@ RSpec.describe "Managing an order detail" do
         let(:logged_in_user) { create(:user, :global_billing_administrator) }
 
         it_behaves_like "allows to update actual cost"
+
+        it "recalculates pricing", :js do
+          find("div.js--recalculate-pricing", text: "Recalculate pricing").click
+          wait_for_ajax
+          expect(page).not_to have_content("Calculating Price")
+        end
       end
     end
   end
