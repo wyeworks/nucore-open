@@ -2,12 +2,12 @@ require "rails_helper"
 
 RSpec.describe "Instrument Schedule Display Order" do
   let(:facility) { create(:setup_facility) }
-  let!(:instrument) { create(:instrument, name: "First", facility: facility) }
-  let!(:instrument2) { create(:instrument, name: "Second", facility: facility) }
-  let!(:instrument3) { create(:instrument, name: "Third", facility: facility, schedule: instrument2.schedule, is_hidden: true) }
-  let!(:instrument_z) { create(:instrument, name: "ZZZ New Instrument (no position)", facility: facility) }
-  let!(:instrument_a) { create(:instrument, name: "AAA New Instrument (no position)", facility: facility) }
-  let!(:instrument_c) { create(:instrument, name: "CCC New Instrument (no position)", facility: facility) }
+  let!(:instrument) { create(:instrument, name: "First", facility:) }
+  let!(:instrument2) { create(:instrument, name: "Second", facility:) }
+  let!(:instrument3) { create(:instrument, name: "Third", facility:, schedule: instrument2.schedule, is_hidden: true) }
+  let!(:instrument_z) { create(:instrument, name: "ZZZ New Instrument (no position)", facility:) }
+  let!(:instrument_a) { create(:instrument, name: "AAA New Instrument (no position)", facility:) }
+  let!(:instrument_c) { create(:instrument, name: "CCC New Instrument (no position)", facility:) }
 
   let!(:reservation) { create :reservation, :running, product: instrument }
   let!(:reservation2) { create :reservation, :running, product: instrument2 }
@@ -23,7 +23,7 @@ RSpec.describe "Instrument Schedule Display Order" do
   end
 
   describe "as a director" do
-    let(:user) { create(:user, :facility_director, facility: facility) }
+    let(:user) { create(:user, :facility_director, facility:) }
 
     # Some of these specs have been failing even though the arrays look the same in the error message.
     # I wasn't able to reproduce the failure locally.
@@ -68,7 +68,7 @@ RSpec.describe "Instrument Schedule Display Order" do
   end
 
   describe "as facility staff" do
-    let(:user) { create(:user, :staff, facility: facility) }
+    let(:user) { create(:user, :staff, facility:) }
 
     it "can view the show page, but not edit the display order" do
       visit facility_instrument_schedule_position_path(facility)
