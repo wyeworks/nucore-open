@@ -93,9 +93,10 @@ RSpec.describe "Projects show" do
           within("table.js--transactions-table") do
             click_link originating_order_facility1.id.to_s
           end
-        
 
-          expect(page).to have_content(originating_order_facility1.id.to_s)
+          within("table#order-management") do
+            expect(page).to have_content(originating_order_facility1.id.to_s)
+          end
           expect(page).to have_content(facility2.name)
           expect(page).to have_content(facility3.name)
         end
@@ -124,12 +125,14 @@ RSpec.describe "Projects show" do
           expect(page).not_to have_content(active_project_order.account.to_s)
         end
 
-        it "shows other facility's orders as text" do
-          expect(page).not_to have_link(originating_order_facility2.id.to_s)
-          expect(page).not_to have_link(cross_core_orders[3].id.to_s)
+        it "shows other facility's orders as text", :js do
+          within("table.js--transactions-table") do
+            expect(page).not_to have_link(originating_order_facility2.id.to_s)
+            expect(page).not_to have_link(cross_core_orders[3].id.to_s)
 
-          expect(page).to have_content(originating_order_facility2.id.to_s)
-          expect(page).to have_content(cross_core_orders[3].id.to_s)
+            expect(page).to have_content(originating_order_facility2.id.to_s)
+            expect(page).to have_content(cross_core_orders[3].id.to_s)
+          end
         end
 
         it "navigates to facility order" do
@@ -137,7 +140,10 @@ RSpec.describe "Projects show" do
             click_link cross_core_orders[2].id.to_s
           end
 
-          expect(page).to have_content(cross_core_orders[2].id.to_s)
+          within("table#order-management") do
+            expect(page).to have_content(cross_core_orders[2].id.to_s)
+          end
+
           expect(page).to have_content(facility2.name)
           expect(page).to have_content(facility3.name)
         end
