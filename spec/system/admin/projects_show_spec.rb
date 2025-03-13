@@ -42,7 +42,7 @@ RSpec.describe "Projects show" do
 
       it "navigates to order" do
         within("table.js--transactions-table") do
-          click_link active_project_order.id.to_s
+          find_link(href: facility_order_path(facility, active_project_order.id)).click
         end
 
         expect(page).to have_content(active_project_order.id.to_s)
@@ -91,7 +91,9 @@ RSpec.describe "Projects show" do
 
         it "navigates to original order" do
           within("table.js--transactions-table") do
-            click_link originating_order_facility1.id.to_s
+            find_link(
+              href: facility_order_path(facility, originating_order_facility1.id)
+            ).click
           end
 
           within("table#order-management") do
@@ -137,7 +139,7 @@ RSpec.describe "Projects show" do
 
         it "navigates to facility order" do
           within("table.js--transactions-table") do
-            click_link cross_core_orders[2].id.to_s
+            find_link(href: facility_order_path(facility, cross_core_orders[2].id)).click
           end
 
           within("table#order-management") do
