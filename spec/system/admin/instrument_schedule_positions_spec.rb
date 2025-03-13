@@ -30,9 +30,11 @@ RSpec.describe "Instrument Schedule Display Order" do
     it "can reorder the schedules", :js do
       # check starting display order
       visit dashboard_facility_instruments_path(facility)
+
       expect(["First", "Second", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       visit timeline_facility_reservations_path(facility)
+      wait_for { page.has_css?(".timeline_header") }
       expect(["First", "Second", "Third", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       visit facility_public_timeline_path(facility)
@@ -44,6 +46,7 @@ RSpec.describe "Instrument Schedule Display Order" do
       click_link "Edit"
       expect(["First", "Shared schedule: Second Schedule", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
       select "Second Schedule", from: "Instrument Schedules"
+
       find("[title='Move Up']").click
       click_button "Update Ordering"
 
@@ -57,6 +60,7 @@ RSpec.describe "Instrument Schedule Display Order" do
 
       # check the new display order
       visit timeline_facility_reservations_path(facility)
+      wait_for { page.has_css?(".timeline_header") }
       expect(["Second", "Third", "First", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
 
       visit facility_public_timeline_path(facility)
