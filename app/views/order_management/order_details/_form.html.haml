@@ -25,6 +25,7 @@
               placeholder: OrderDetail.human_attribute_name(:fulfilled_at),
               input_html: { class: "datepicker__data js--showOnCompleteStatus",
                 value: format_usa_date(f.object.fulfilled_at),
+                autocomplete: "off",
                 data: { min_date: ValidFulfilledAtDate.min.iso8601,
                   max_date: ValidFulfilledAtDate.max.iso8601,
                   complete_target: "#order_detail_order_status_id"}}
