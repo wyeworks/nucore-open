@@ -6,12 +6,10 @@ class ReconcilliationsController < ApplicationController
   load_resource :order_detail, through: :order
 
   def destroy
-    if current_user.administrator?
-      @order_detail.update!(state: "complete", order_status: OrderStatus.complete, reconciled_at: nil)
-      redirect_to facility_transactions_path(current_facility)
-    else
-      raise CanCan::AccessDenied
-    end
+    authorize! :unreconcile, @order_detail
+
+    @order_detail.update!(state: "complete", order_status: OrderStatus.complete, reconciled_at: nil)
+    redirect_to facility_transactions_path(current_facility)
   end
 
 end

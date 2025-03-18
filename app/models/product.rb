@@ -23,10 +23,20 @@ class Product < ApplicationRecord
   has_one :product_display_group_product
   has_one :product_display_group, through: :product_display_group_product
 
+  # Instrument specifc
+  has_one(
+    :alert,
+    dependent: :destroy,
+    class_name: "InstrumentAlert",
+    foreign_key: :instrument_id,
+    inverse_of: :instrument
+  )
+  has_many :current_offline_reservations, -> { current }, class_name: "OfflineReservation"
+
+  before_save :start_time_disabled_daily_booking_only
   after_create :create_default_price_group_products
   after_create :create_skip_review_price_policies, if: :skip_review_mode?
   after_create :create_nonbillable_price_policy, if: :nonbillable_mode?
-  before_save :start_time_disabled_daily_booking_only
 
   email_list_attribute :training_request_contacts
 
@@ -70,11 +80,9 @@ class Product < ApplicationRecord
   scope :mergeable_into_order, -> { not_archived.where(type: mergeable_types) }
   scope :cross_core_available, -> { where(cross_core_ordering_available: true) }
   scope :in_active_facility, -> { joins(:facility).where(facilities: { is_active: true }) }
-  scope :of_type, ->(type) { where(type: type) }
+  scope :of_type, ->(type) { where(type:) }
   scope :with_schedule, -> { where.not(schedule_id: nil) }
-  scope :without_display_group, -> {
-    left_outer_joins(:product_display_group_product).where(product_display_group_products: { id: nil })
-  }
+  scope :without_display_group, -> { where.missing(:product_display_group_product) }
 
   # All product types. This cannot be a cattr_accessor because the block is evaluated
   # at definition time (not lazily as I expected) and this causes a circular dependency
@@ -330,10 +338,6 @@ class Product < ApplicationRecord
   def is_accessible_to_user?(user)
     is_operator = user&.operator_of?(facility)
     !(is_archived? || (is_hidden? && !is_operator))
-  end
-
-  def alert
-    nil
   end
 
   def duration_pricing_mode?
