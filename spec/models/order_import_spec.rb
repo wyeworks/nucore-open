@@ -6,7 +6,6 @@ require "controller_spec_helper"
 require "stringio"
 
 RSpec.describe OrderImport, :time_travel do
-
   CSV_HEADERS = [
     I18n.t("order_row_importer.headers.user"),
     I18n.t("Chart_string"),
@@ -28,14 +27,14 @@ RSpec.describe OrderImport, :time_travel do
     OrderImport.create!(
       created_by: director.id,
       upload_file: stored_file,
-      facility: facility,
+      facility:,
     )
   end
 
   let(:account) do
     create(:nufs_account,
            description: "dummy account",
-           account_users_attributes: account_users_attributes,
+           account_users_attributes:,
           )
   end
 
@@ -54,7 +53,7 @@ RSpec.describe OrderImport, :time_travel do
     order_import.error_file.read_attached_file.split("\n").count
   end
   let(:facility) { create(:facility) }
-  let(:facility_account) { create(:facility_account, facility: facility) }
+  let(:facility_account) { create(:facility_account, facility:) }
   let(:fiscal_year_beginning) { SettingsHelper.fiscal_year_beginning }
   let(:guest) { @guest }
   let(:guest2) { create(:user, username: "guest2") }
@@ -85,8 +84,8 @@ RSpec.describe OrderImport, :time_travel do
   before :each do
     grant_role(director, facility)
 
-    price_group = FactoryBot.create(:price_group, facility: facility)
-    create(:account_price_group_member, account: account, price_group: price_group)
+    price_group = FactoryBot.create(:price_group, facility:)
+    create(:account_price_group_member, account:, price_group:)
     item.item_price_policies.create!(attributes_for(:item_price_policy,
                                                     price_group_id: price_group.id,
                                                     start_date: fiscal_year_beginning,
@@ -95,6 +94,12 @@ RSpec.describe OrderImport, :time_travel do
                                                           price_group_id: price_group.id,
                                                           start_date: fiscal_year_beginning,
                                                          ))
+  end
+
+  describe "#to_s" do
+    it "is the filename" do
+      expect(subject.to_s).to eq(stored_file.name)
+    end
   end
 
   shared_examples_for "it does not send notifications" do

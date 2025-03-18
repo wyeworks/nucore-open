@@ -46,13 +46,22 @@ class OrderImportsController < ApplicationController
   end
 
   def create_order_import!
-    OrderImport.create!(
-      create_params.merge(
-        created_by: session_user.id,
-        upload_file: stored_file,
-        facility: @current_facility,
-      ),
-    )
+    OrderImport.transaction do
+      order_import = OrderImport.create!(
+        create_params.merge(
+          created_by: session_user.id,
+          upload_file: stored_file,
+          facility: @current_facility,
+        ),
+      )
+      LogEvent.log(
+        order_import,
+        :created,
+        session_user,
+      )
+
+      order_import
+    end
   end
 
   def import_exception_alert(exception)

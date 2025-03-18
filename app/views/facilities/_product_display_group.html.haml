@@ -1,4 +1,4 @@
-- collection = product_display_group.products.merge(@product_scope)
+- collection = product_display_group.products.merge(@product_scope).includes(:alert, :current_offline_reservations)
 - if collection.present?
   .product_list{ class: classes }
     %h3= product_display_group

@@ -77,7 +77,11 @@ module Products::SchedulingSupport
   end
 
   def offline?
-    current_offline_reservations.present?
+    if current_offline_reservations.loaded?
+      current_offline_reservations.present?
+    else
+      current_offline_reservations.exists?
+    end
   end
 
   def offline_category

@@ -22,7 +22,7 @@ RSpec.describe OrderImportsController do
     @params = { facility_id: facility.url_name }
   end
 
-  context "starting an import" do
+  describe "new" do
     before :each do
       @action = :new
       @method = :get
@@ -34,17 +34,62 @@ RSpec.describe OrderImportsController do
     end
   end
 
-  context "importing orders" do
+  describe "create" do
     before :each do
       @action = :create
       @method = :post
       @params.merge!(
         order_import: {
-          upload_file: upload_file,
-          fail_on_error: fail_on_error,
-          send_receipts: send_receipts,
+          upload_file:,
+          fail_on_error:,
+          send_receipts:,
         },
       )
+    end
+
+    describe "log event creation" do
+      let(:user) { @admin }
+      let(:send_receipts) { false }
+      let(:fail_on_error) { false }
+
+      before { sign_in user }
+
+      context "on success" do
+        let(:upload_file) { fixture_file("blank.csv") }
+
+        it "creates an order import" do
+          expect { do_request }.to(
+            change { OrderImport.count }.by(1)
+          )
+        end
+
+        it "creates a log event on success" do
+          expect { do_request }.to(
+            change do
+              LogEvent.where(
+                user:,
+                event_type: :created,
+              ).count
+            end.by(1)
+          )
+        end
+      end
+
+      context "on error" do
+        let(:upload_file) { nil }
+
+        it "does not create an order import" do
+          expect { do_request }.to_not(
+            change { OrderImport.count }
+          )
+        end
+
+        it "does not create a log event" do
+          expect { do_request }.to_not(
+            change { LogEvent.count }
+          )
+        end
+      end
     end
 
     context "when the file is blank" do
