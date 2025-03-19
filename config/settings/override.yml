@@ -3,3 +3,4 @@
 # For these settings use SettingsHelper#feature_on?
 feature:
   allow_global_billing_admin_update_actual_prices: true
+  export_order_disputes: true
