@@ -42,7 +42,7 @@ RSpec.describe "Projects show" do
 
       it "navigates to order" do
         within("table.js--transactions-table") do
-          click_link active_project_order.id.to_s
+          find_link(href: facility_order_path(facility, active_project_order.id)).click
         end
 
         expect(page).to have_content(active_project_order.id.to_s)
@@ -74,11 +74,13 @@ RSpec.describe "Projects show" do
         end
 
         it "shows other facility's orders as text" do
-          expect(page).not_to have_link(cross_core_orders[0].id.to_s)
-          expect(page).not_to have_link(cross_core_orders[1].id.to_s)
+          expect(page).not_to have_link(facility_order_path(facility, cross_core_orders[0]))
+          expect(page).not_to have_link(facility_order_path(facility, cross_core_orders[1]))
 
-          expect(page).to have_content(cross_core_orders[0].id.to_s)
-          expect(page).to have_content(cross_core_orders[1].id.to_s)
+          within("table.js--transactions-table") do
+            expect(page).to have_content(cross_core_orders[0].id.to_s)
+            expect(page).to have_content(cross_core_orders[1].id.to_s)
+          end
         end
 
         it "shows Edit button" do
@@ -91,11 +93,14 @@ RSpec.describe "Projects show" do
 
         it "navigates to original order" do
           within("table.js--transactions-table") do
-            click_link originating_order_facility1.id.to_s
+            find_link(
+              href: facility_order_path(facility, originating_order_facility1.id)
+            ).click
           end
-        
 
-          expect(page).to have_content(originating_order_facility1.id.to_s)
+          within("table#order-management") do
+            expect(page).to have_content(originating_order_facility1.id.to_s)
+          end
           expect(page).to have_content(facility2.name)
           expect(page).to have_content(facility3.name)
         end
@@ -124,20 +129,25 @@ RSpec.describe "Projects show" do
           expect(page).not_to have_content(active_project_order.account.to_s)
         end
 
-        it "shows other facility's orders as text" do
-          expect(page).not_to have_link(originating_order_facility2.id.to_s)
-          expect(page).not_to have_link(cross_core_orders[3].id.to_s)
+        it "shows other facility's orders as text", :js do
+          expect(page).not_to have_link(facility_order_path(facility2, originating_order_facility2))
+          expect(page).not_to have_link(facility_order_path(facility, cross_core_orders[3]))
 
-          expect(page).to have_content(originating_order_facility2.id.to_s)
-          expect(page).to have_content(cross_core_orders[3].id.to_s)
+          within("table.js--transactions-table") do
+            expect(page).to have_content(originating_order_facility2.id.to_s)
+            expect(page).to have_content(cross_core_orders[3].id.to_s)
+          end
         end
 
         it "navigates to facility order" do
           within("table.js--transactions-table") do
-            click_link cross_core_orders[2].id.to_s
+            find_link(href: facility_order_path(facility, cross_core_orders[2].id)).click
           end
 
-          expect(page).to have_content(cross_core_orders[2].id.to_s)
+          within("table#order-management") do
+            expect(page).to have_content(cross_core_orders[2].id.to_s)
+          end
+
           expect(page).to have_content(facility2.name)
           expect(page).to have_content(facility3.name)
         end

@@ -163,6 +163,7 @@ feature:
   sanger_enabled_service: <%= ENV.fetch("SANGER_ENABLED_SERVICE", false) %>
   well_plate_alternative_csv_format: <%= ENV.fetch("well_plate_alternative_csv_format", false) %>
   disable_relay_synaccess_rev_a: false
+  allow_global_billing_admin_update_actual_prices: false
   export_order_disputes: false
 
 split_accounts:

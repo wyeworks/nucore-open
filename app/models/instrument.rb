@@ -24,13 +24,11 @@ class Instrument < Product
     end
   end.freeze
 
-  with_options foreign_key: "product_id" do |instrument|
-    instrument.has_many :admin_reservations
-    instrument.has_many :instrument_price_policies
-    instrument.has_many :offline_reservations
-    instrument.has_many :current_offline_reservations, -> { current }, class_name: "OfflineReservation"
+  with_options foreign_key: "product_id" do
+    has_many :admin_reservations
+    has_many :instrument_price_policies
+    has_many :offline_reservations
   end
-  has_one :alert, dependent: :destroy, class_name: "InstrumentAlert"
 
   email_list_attribute :cancellation_email_recipients
   email_list_attribute :issue_report_recipients

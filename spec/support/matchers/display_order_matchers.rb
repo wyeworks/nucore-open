@@ -9,13 +9,12 @@
 # expect(["First", "Second", "Third"]).to appear_in_order
 RSpec::Matchers.define :appear_in_order do
   match do |expected_order|
-    actual_order = actual_order_for(expected_order)
-    actual_order == expected_order
+    @actual_order = actual_order_for(expected_order)
+    @actual_order == expected_order
   end
 
   failure_message do |expected_order|
-    actual_order = actual_order_for(expected_order)
-    "expected #{expected_order}, but actual order was #{actual_order}"
+    "expected #{expected_order}, but actual order was #{@actual_order}"
   end
 
   def actual_order_for(expected_content)

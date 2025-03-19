@@ -68,11 +68,15 @@ class OrderImport < ApplicationRecord
     @in_error_mode
   end
 
+  def to_s
+    upload_file.name
+  end
+
   private
 
   def create_order_from_imported_row!(row_importer)
     Order.create!(
-      facility: facility,
+      facility:,
       account: row_importer.account,
       user: row_importer.user,
       created_by_user: creator,

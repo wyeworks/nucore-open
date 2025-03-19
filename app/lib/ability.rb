@@ -31,6 +31,8 @@ class Ability
       global_billing_administrator_abilities(user, resource)
 
       account_administrator_abilities(user, resource, controller)
+
+      cannot :unreconcile, OrderDetail
     end
 
     ability_extender.extend(user, resource)

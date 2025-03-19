@@ -25,6 +25,7 @@
               placeholder: OrderDetail.human_attribute_name(:fulfilled_at),
               input_html: { class: "datepicker__data js--showOnCompleteStatus",
                 value: format_usa_date(f.object.fulfilled_at),
+                autocomplete: "off",
                 data: { min_date: ValidFulfilledAtDate.min.iso8601,
                   max_date: ValidFulfilledAtDate.max.iso8601,
                   complete_target: "#order_detail_order_status_id"}}
@@ -32,7 +33,7 @@
         - else
           = f.label :order_status
           = @order_detail.order_status
-          - if f.object.reconciled? && current_user.administrator?
+          - if f.object.reconciled? && current_ability.can?(:unreconcile, @order_detail)
             = l(@order_detail.reconciled_at.to_date, format: :usa)
             = link_to t("facility_order_details.edit.label.unreconcile"), facility_order_order_detail_reconcilliation_path(current_facility, @order, @order_detail), method: :delete
 
