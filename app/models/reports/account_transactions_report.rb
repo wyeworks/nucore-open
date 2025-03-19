@@ -81,6 +81,8 @@ class Reports::AccountTransactionsReport
         OrderDetail.human_attribute_name(:dispute_resolved_at),
         OrderDetail.human_attribute_name(:dispute_resolved_reason),
       ]
+    else
+      headers
     end
  
   end
@@ -122,6 +124,8 @@ class Reports::AccountTransactionsReport
         order_detail.dispute_resolved_at,
         order_detail.dispute_resolved_reason,
       ]
+    else
+      row
     end
 
   end
