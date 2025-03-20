@@ -1,6 +1,6 @@
 # NUcore Open
 
-Open source version of Northwestern University Core Facility Management Software
+Open source version of Northwestern University Core Facility Management Software.
 
 ## NUCore Open Environment
 
