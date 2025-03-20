@@ -150,7 +150,7 @@ class User < ApplicationRecord
   end
 
   def account_price_groups
-    accounts.active.collect(&:price_groups).flatten.uniq
+    accounts.active.includes([:price_group_members, :owner_user, { owner: { user: :price_groups }}]).collect(&:price_groups).flatten.uniq
   end
 
   #

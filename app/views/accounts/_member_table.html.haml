@@ -17,7 +17,7 @@
       = render_view_hook("member_table_headers")
 
   %tbody
-    - @account.account_users.active.each do |au|
+    - @account.account_users.includes(:user).active.each do |au|
       %tr
         - if can_edit_accounts
           %td

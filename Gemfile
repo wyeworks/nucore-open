@@ -108,7 +108,6 @@ gem "synaccess_connect"
 
 group :development do
   gem "bcrypt_pbkdf", ">= 1.0", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
-  gem "bullet" # Detect N+1s and recommends eager loading
   gem "capistrano", require: false
   gem "capistrano-bundler", require: false
   gem "capistrano-rails", require: false
@@ -127,6 +126,7 @@ end
 group :development, :test do
   gem "amazing_print"
   gem "axe-core-rspec"
+  gem "bullet" # Detect N+1s and recommends eager loading
   gem "factory_bot_rails"
   gem "parallel_tests"
   gem "pry-rails"
