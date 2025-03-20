@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - "**"
+  pull_request_target:
+    types:
+      - opened
 
 jobs:
   run-rspec-engines:
