@@ -52,6 +52,28 @@ RSpec.describe Reports::AccountTransactionsReport do
           expect(report.to_csv.lines.first).to include("Price,Adjustment,Total")
         end
       end
+      
+      describe "excludes the order's dispute details if feature is OFF", feature_setting: { export_order_disputes: false } do
+        it "generates headers without Dispute details" do
+          expect(report.to_csv.lines.first).not_to include(
+            OrderDetail.human_attribute_name(:dispute_at), 
+            OrderDetail.human_attribute_name(:dispute_reason),
+            OrderDetail.human_attribute_name(:dispute_resolved_at),
+            OrderDetail.human_attribute_name(:dispute_resolved_reason)
+          )
+        end
+      end
+
+      describe "includes the order's dispute details if feature is ON", feature_setting: { export_order_disputes: true } do
+        it "generates headers with Dispute details" do
+          expect(report.to_csv.lines.first).to include(
+            OrderDetail.human_attribute_name(:dispute_at),
+            OrderDetail.human_attribute_name(:dispute_reason),
+            OrderDetail.human_attribute_name(:dispute_resolved_at),
+            OrderDetail.human_attribute_name(:dispute_resolved_reason)
+          )
+        end
+      end
     end
   end
 end
