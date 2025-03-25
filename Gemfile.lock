@@ -649,7 +649,7 @@ GEM
     teaspoon-jasmine (2.9.1)
       teaspoon (>= 1.0.0)
     temple (0.10.3)
-    terrapin (1.0.1)
+    terrapin (1.1.0)
       climate_control
     text_helpers (1.2.0)
       activesupport
