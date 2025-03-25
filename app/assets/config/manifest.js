@@ -9,3 +9,5 @@
 //= link responsive.css
 //= link print.css
 //= link jquery.qtip.css
+//
+//= link ckeditor_manifest

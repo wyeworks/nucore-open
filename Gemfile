@@ -54,8 +54,7 @@ gem "haml"
 gem "will_paginate"
 # TODO: Remove dynamic_form and use Rails to display errors
 gem "dynamic_form"
-# 5.0 has breaking changes based which need to be addressed before we can upgrade
-gem "ckeditor", "< 5"
+gem "ckeditor", "~> 5.1.3"
 gem "jquery-rails"
 gem "jquery-ui-rails", "~> 6.0"
 gem "vuejs-rails", "~> 1.0.26" # 2.0 introduces breaking changes

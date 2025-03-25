@@ -1,5 +1,14 @@
 $(document).ready(function() {
-  if (! CKEDITOR) return;
+  if (!CKEDITOR) return;
+
+  const config = {
+    resize_enabled: true,
+    // Prevents showing a prompt to upgrade
+    // ckeditor to a newer, comercial licenced
+    // version
+    versionCheck: false,
+  };
+
   $('textarea.editor').each(function(){
     CKEDITOR.replace(this.id, {
       toolbar:
@@ -16,7 +25,7 @@ $(document).ready(function() {
           ['Image','Table','HorizontalRule','SpecialChar'],
           ['TextColor']
         ],
-      resize_enabled: true
+      ...config
     });
   });
 
@@ -30,7 +39,8 @@ $(document).ready(function() {
           ['Undo','Redo','-','SelectAll','RemoveFormat'],
           ['ShowBlocks'],
         ],
-      resize_enabled: false
+      ...config
     });
   });
+
 });
