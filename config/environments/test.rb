@@ -3,6 +3,114 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+  config.after_initialize do
+    Bullet.enable                     = true
+    Bullet.bullet_logger              = true
+    Bullet.raise                      = true # raise an error if n+1 query occurs
+    Bullet.skip_user_in_notification  = true
+
+    # Skipped rules
+    Bullet.add_safelist type: :counter_cache, class_name: "Order", association: :order_details
+    Bullet.add_safelist type: :counter_cache, class_name: "OrderDetail", association: :child_order_details
+    Bullet.add_safelist type: :counter_cache, class_name: "PriceGroup", association: :account_price_group_members
+    Bullet.add_safelist type: :counter_cache, class_name: "PriceGroup", association: :user_price_group_members
+    Bullet.add_safelist type: :counter_cache, class_name: "SangerSequencing::Submission", association: :samples
+    Bullet.add_safelist type: :counter_cache, class_name: "Schedule", association: :products
+    Bullet.add_safelist type: :counter_cache, class_name: "Statement", association: :order_details
+
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "AccountUser", association: :account
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "AccountUser", association: :user
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "AccountPriceGroupMember", association: :price_group
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "AdminReservation", association: :order_detail
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "BundleProduct", association: :product
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Instrument", association: :facility
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Instrument", association: :alert
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "InstrumentPricePolicy", association: :duration_rates
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "InstrumentPricePolicy", association: :price_group
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Item", association: :alert
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Item", association: :current_offline_reservations
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Item", association: :facility
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Item", association: :price_policies
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "ItemPricePolicy", association: :price_group
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "NufsAccount", association: :owner
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "NufsAccount", association: :owner_user
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "NufsAccount", association: :price_group_members
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Order", association: :cross_core_project
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Order", association: :facility
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Order", association: :created_by_user
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Order", association: :merge_order
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Order", association: :order_details
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Order", association: :user
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :account
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :assigned_user
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :bundle
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :child_order_details
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :created_by_user
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :external_service_receiver
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :journal
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :occupancy
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :order
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :order_status
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :price_policy
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :product
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :product_accessory
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :project
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :reservation
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderDetail", association: :statement
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "OrderStatus", association: :parent
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "PriceGroup", association: :account_price_group_members
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "PriceGroup", association: :order_details
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "PriceGroup", association: :user_price_group_members
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "PriceGroupDiscount", association: :price_group
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "ProductDisplayGroup", association: :products
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Project", association: :facility
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Project", association: :orders
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "PurchaseOrderAccount", association: :facilities
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "PurchaseOrderAccount", association: :owner
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "PurchaseOrderAccount", association: :owner_user
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "PurchaseOrderAccount", association: :price_group_members
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Reservation", association: :product
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "SangerSequencing::Submission", association: :facility
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "SangerSequencing::Submission", association: :order
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "SangerSequencing::Submission", association: :order_detail
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "SangerSequencing::Submission", association: :samples
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Schedule", association: :facility
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Schedule", association: :products
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "ScheduleRule", association: :product_access_groups
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "ServicePricePolicy", association: :price_group
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Statement", association: :account
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Statement", association: :facility
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Statement", association: :order_details
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Statement", association: :statement_rows
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "TimedServicePricePolicy", association: :duration_rates
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "TimedServicePricePolicy", association: :price_group
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "User", association: :facilities
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "User", association: :price_groups
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "User", association: :user_roles
+
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Account", association: :owner
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Account", association: :owner_user
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Account", association: :user
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Instrument", association: :current_offline_reservations
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Instrument", association: :facility
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Instrument", association: :schedule_rules
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Item", association: :current_offline_reservations
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Journal", association: :journal_rows
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "NufsAccount", association: :owner
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "NufsAccount", association: :owner_user
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Order", association: :user
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :account
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :assigned_user
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :bundle
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :product
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :occupancy
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order_status
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :reservation
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Reservation", association: :order
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Service", association: :current_offline_reservations
+  end
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # The test environment is used exclusively to run your application's
