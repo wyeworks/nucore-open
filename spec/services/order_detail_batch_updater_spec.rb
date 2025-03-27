@@ -120,15 +120,15 @@ RSpec.describe OrderDetailBatchUpdater do
 
           context "when the assignment notifications are on", feature_setting: { order_assignment_notifications: true } do
             it "sends the assignee one notification" do
-              expect { updater.update! }
-                .to change(ActionMailer::Base.deliveries, :count).by(1)
+              expect { updater.update! }.to have_enqueued_mail(
+                OrderAssignmentMailer, :notify_assigned_user
+              )
             end
           end
 
           context "when the assignment notifications are off", feature_setting: { order_assignment_notifications: false } do
             it "sends no notifications" do
-              expect { updater.update! }
-                .not_to change(ActionMailer::Base.deliveries, :count)
+              expect { updater.update! }.not_to have_enqueued_mail
             end
           end
 

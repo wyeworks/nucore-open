@@ -30,15 +30,15 @@ RSpec.shared_examples_for "it supports order_detail POST #batch_update" do
 
       context "when assignment notifications are on", feature_setting: { order_assignment_notifications: true } do
         it "sends the assignee one notification" do
-          expect { do_request }
-            .to change(ActionMailer::Base.deliveries, :count).by(1)
+          expect { do_request }.to have_enqueued_mail(
+            OrderAssignmentMailer, :notify_assigned_user
+          )
         end
       end
 
       context "when assignment notifications are off", feature_setting: { order_assignment_notifications: false } do
         it "sends no notifications" do
-          expect { do_request }
-            .not_to change(ActionMailer::Base.deliveries, :count)
+          expect { do_request }.not_to have_enqueued_mail
         end
       end
     end

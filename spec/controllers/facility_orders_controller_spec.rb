@@ -44,10 +44,10 @@ RSpec.describe FacilityOrdersController do
     end
 
     context "when compatible price policies exist" do
-      let(:price_group) { create(:price_group, facility: facility) }
+      let(:price_group) { create(:price_group, facility:) }
 
       before :each do
-        create(:account_price_group_member, account: account, price_group: price_group)
+        create(:account_price_group_member, account:, price_group:)
 
         order_details.each do |order_detail|
           order_detail.update_attribute(:account_id, account.id)
@@ -105,7 +105,7 @@ RSpec.describe FacilityOrdersController do
         # setup_reservation overwrites @order_detail
         @order_detail_item = @order_detail
         @order_detail_reservation = setup_reservation(@authable, @account, @director)
-        @reservation = place_reservation(@authable, @order_detail_reservation, Time.zone.now + 1.hour)
+        @reservation = place_reservation(@authable, @order_detail_reservation, 1.hour.from_now)
 
         expect(@authable.reload.order_details).to contain_all [@order_detail_item, @order_detail_reservation]
         do_request
@@ -152,6 +152,8 @@ RSpec.describe FacilityOrdersController do
   end
 
   context "#send_receipt" do
+    include ActiveJob::TestHelper
+
     before :each do
       @method = :post
       @action = :send_receipt
@@ -161,6 +163,8 @@ RSpec.describe FacilityOrdersController do
     end
 
     it_should_allow_operators_only :redirect, "to send a receipt" do
+      perform_enqueued_jobs
+
       expect(flash[:notice]).to include("sent successfully")
       expect(ActionMailer::Base.deliveries.size).to eq(1)
       mail = ActionMailer::Base.deliveries.first
@@ -200,7 +204,7 @@ RSpec.describe FacilityOrdersController do
       end
 
       context "when adding an instrument" do
-        let(:instrument) { FactoryBot.create(:instrument, facility_account: facility_account) }
+        let(:instrument) { FactoryBot.create(:instrument, facility_account:) }
         let(:merge_order) { Order.find_by(merge_with_order_id: order.id) }
         let(:order_detail) { merge_order.order_details.last }
 
@@ -232,7 +236,7 @@ RSpec.describe FacilityOrdersController do
           context "of 'Complete'" do
             let(:order_status) { OrderStatus.complete }
             let(:director) do
-              FactoryBot.create(:user, :facility_director, facility: facility)
+              FactoryBot.create(:user, :facility_director, facility:)
             end
 
             before do
@@ -250,7 +254,7 @@ RSpec.describe FacilityOrdersController do
       end
 
       context "when adding an item" do
-        let(:item) { FactoryBot.create(:item, facility_account: facility_account) }
+        let(:item) { FactoryBot.create(:item, facility_account:) }
         let(:order_detail) { order.order_details.last }
 
         before { @params[:add_to_order_form][:product_id] = item.id }
@@ -372,7 +376,7 @@ RSpec.describe FacilityOrdersController do
       end
 
       context "when adding a service" do
-        let(:service) { FactoryBot.create(:service, facility_account: facility_account) }
+        let(:service) { FactoryBot.create(:service, facility_account:) }
 
         before do
           allow_any_instance_of(OrderDetail).to receive(:valid_service_meta?).and_return(false)
@@ -424,11 +428,11 @@ RSpec.describe FacilityOrdersController do
 
       context "when adding a bundle" do
         let(:bundle) do
-          FactoryBot.create(:bundle, bundle_products: bundle_products, facility_account: facility_account)
+          FactoryBot.create(:bundle, bundle_products:, facility_account:)
         end
         let(:bundle_products) { [product, additional_product] }
         let(:additional_product) do
-          FactoryBot.create(bundled_product_type, facility_account: facility_account)
+          FactoryBot.create(bundled_product_type, facility_account:)
         end
 
         before { @params[:add_to_order_form][:product_id] = bundle.id }
@@ -572,7 +576,7 @@ RSpec.describe FacilityOrdersController do
         @params[:tabs] = ["new_or_in_process_orders"]
         do_request
         expect(response).to be_successful
-        body = JSON.parse(response.body)
+        body = response.parsed_body
         expect(body.keys).to contain_all ["new_or_in_process_orders"]
         expect(body["new_or_in_process_orders"]).to eq(2)
       end
@@ -580,7 +584,7 @@ RSpec.describe FacilityOrdersController do
       it "should get everything if you ask for it" do
         do_request
         expect(response).to be_successful
-        body = JSON.parse(response.body)
+        body = response.parsed_body
         expect(body.keys).to contain_all %w(new_or_in_process_orders problem_order_details)
         expect(body["new_or_in_process_orders"]).to eq(2)
         expect(body["problem_order_details"]).to eq(3)

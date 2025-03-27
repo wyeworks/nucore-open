@@ -47,8 +47,9 @@ RSpec.describe AutoExpireReservation, :time_travel do
       end
 
       it "triggers an email with a link to fix it themselves" do
-        expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
-        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("click on the link below")
+        expect { action.perform}.to(
+          have_enqueued_mail(ProblemOrderMailer, :notify_user_with_resolution_option)
+        )
       end
     end
 
@@ -86,8 +87,9 @@ RSpec.describe AutoExpireReservation, :time_travel do
       end
 
       it "triggers an email with a link to fix it themselves" do
-        expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
-        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("click on the link below")
+        expect { action.perform }.to(
+          have_enqueued_mail(ProblemOrderMailer, :notify_user_with_resolution_option)
+        )
       end
     end
 
@@ -107,7 +109,7 @@ RSpec.describe AutoExpireReservation, :time_travel do
       end
 
       it "does not trigger an email" do
-        expect { action.perform }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { action.perform }.not_to have_enqueued_mail
       end
     end
 
@@ -223,8 +225,9 @@ RSpec.describe AutoExpireReservation, :time_travel do
       end
 
       it "triggers a notification asking them to contact the facility" do
-        expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
-        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("let them know")
+        expect { action.perform }.to(
+          have_enqueued_mail(ProblemOrderMailer, :notify_user)
+        )
       end
     end
 
