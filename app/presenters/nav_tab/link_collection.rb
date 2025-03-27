@@ -139,7 +139,7 @@ class NavTab::LinkCollection
   end
 
   def admin_estimates
-    if single_facility? && ability.can?(:index, Estimate)
+    if single_facility? && ability.can?(:index, Estimate) && SettingsHelper.feature_on?(:show_estimates_option)
       NavTab::Link.new(
         tab: :admin_estimates,
         text: Estimate.model_name.human(count: 2),
