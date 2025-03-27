@@ -67,5 +67,5 @@ Rails.application.configure do
   Rails.application.routes.default_url_options =
     config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 
-  Delayed::Worker.delay_jobs = false
+  config.active_job.queue_adapter = :test
 end
