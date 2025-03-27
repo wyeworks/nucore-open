@@ -58,13 +58,13 @@ class NotificationSender
     order_details_not_found = @order_detail_ids.map(&:to_i) - order_details.pluck(:id)
 
     order_details_not_found.each do |order_detail_id|
-      @errors << I18n.t("controllers.facility_notifications.send_notifications.order_error", order_detail_id: order_detail_id)
+      @errors << I18n.t("controllers.facility_notifications.send_notifications.order_error", order_detail_id:)
     end
   end
 
   def mark_order_details_as_reviewed
     order_details.each do |order_detail|
-      order_detail.update(reviewed_at: reviewed_at)
+      order_detail.update(reviewed_at:)
     end
   end
 
@@ -76,7 +76,7 @@ class NotificationSender
 
     def notify_accounts(account_ids_to_notify, facility)
       notifications_hash(account_ids_to_notify).each do |user, accounts|
-        Notifier.review_orders(user: user, accounts: accounts, facility: facility).deliver_now
+        Notifier.review_orders(user:, accounts:, facility:).deliver_later
       end
     end
 
@@ -98,7 +98,9 @@ class NotificationSender
   end
 
   def notify_accounts
-    AccountNotifier.new.delay.notify_accounts(account_ids_to_notify, current_facility)
+    # TODO: This used to be called usign delayed job's .delay method
+    # Create a Job for this
+    AccountNotifier.new.notify_accounts(account_ids_to_notify, current_facility)
   end
 
 end
