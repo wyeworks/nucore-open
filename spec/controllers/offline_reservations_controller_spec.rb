@@ -22,7 +22,7 @@ RSpec.describe OfflineReservationsController do
     end
 
     it "sets created_by" do
-      post :create, params: params
+      post(:create, params:)
 
       expect(assigns[:reservation].created_by).to eq administrator
     end
@@ -33,7 +33,7 @@ RSpec.describe OfflineReservationsController do
       end
 
       it "becomes a problem reservation" do
-        expect { post :create, params: params }
+        expect { post :create, params: }
           .to change { reservation.order_detail.reload.problem? }
           .from(false)
           .to(true)
@@ -42,14 +42,16 @@ RSpec.describe OfflineReservationsController do
       end
 
       it "logs the problem reservation" do
-        post :create, params: params
+        post(:create, params:)
         log_event = LogEvent.find_by(loggable: reservation.order_detail, event_type: :problem_queue)
         expect(log_event).to be_present
         expect(log_event.metadata).to eq("cause"=>"new_offline_reservation")
       end
 
       it "triggers an email" do
-        expect { post :create, params: params }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { post :create, params: }.to(
+          have_enqueued_mail(ProblemOrderMailer, :notify_user)
+        )
       end
     end
 
@@ -64,12 +66,12 @@ RSpec.describe OfflineReservationsController do
       end
 
       it "does not change the reservation" do
-        expect { post :create, params: params }
+        expect { post :create, params: }
           .not_to change { reservation.order_detail.reload.problem? }
       end
 
       it "does not triggers an email" do
-        expect { post :create, params: params }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { post :create, params: }.not_to change(ActionMailer::Base.deliveries, :count)
       end
     end
   end
@@ -84,11 +86,11 @@ RSpec.describe OfflineReservationsController do
     end
 
     shared_examples_for "it brings the instrument online" do |role|
-      let(:user) { FactoryBot.create(:user, role, facility: facility) }
+      let(:user) { FactoryBot.create(:user, role, facility:) }
       before { sign_in user }
 
       it "brings the instrument online", :aggregate_failures do
-        expect { put :bring_online, params: params }
+        expect { put :bring_online, params: }
           .to change { instrument.reload.online? }
           .from(false)
           .to(true)
@@ -111,12 +113,12 @@ RSpec.describe OfflineReservationsController do
     end
 
     context "as staff" do
-      let(:staff) { FactoryBot.create(:user, :staff, facility: facility) }
+      let(:staff) { FactoryBot.create(:user, :staff, facility:) }
 
       before { sign_in staff }
 
       it "may not bring the instrument online", :aggregate_failures do
-        expect { put :bring_online, params: params }.to raise_error(CanCan::AccessDenied)
+        expect { put :bring_online, params: }.to raise_error(CanCan::AccessDenied)
         expect(instrument.reload.online?).to eq(false)
       end
     end
