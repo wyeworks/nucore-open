@@ -453,6 +453,20 @@ RSpec.describe OrdersController do
           end
         end
 
+        context "when product has order_notification_recipients" do
+          let(:order_detail) { order.order_details.last }
+          let(:recipients) { ["u1@example.com", "u2@exmaple.com"] }
+
+          before do
+            @instrument.update(order_notification_recipients: recipients.join(", "))
+          end
+
+          it "sends notification to recipients" do
+            # Send one mail to purchaser and two to the product order notification recipients
+            expect { do_request }.to change(ActionMailer::Base.deliveries, :count).by(3)
+          end
+        end
+
         context "when ordering on behalf of (acting as)" do
           before { switch_to @staff }
 

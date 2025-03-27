@@ -761,4 +761,22 @@ RSpec.describe Product do
       expect(product.start_time_disabled).to be true
     end
   end
+
+  describe "order_notification_recipients" do
+    let(:product) { create(:setup_instrument) }
+
+    it "can provide a single email" do
+      email = "u1@example.com"
+      product.update(order_notification_recipients: email)
+
+      expect(product.order_notification_recipients.to_a).to eq([email])
+    end
+
+    it "can provide multiple emails" do
+      emails = ["u1@example.com", "u2@example.com"]
+      product.update(order_notification_recipients: emails.join(", "))
+
+      expect(product.order_notification_recipients.to_a).to eq(emails)
+    end
+  end
 end
