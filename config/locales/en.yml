@@ -514,6 +514,14 @@ en:
     update:
       success: Cutoff date successfully updated
 
+  facility_estimates:
+    index:
+      add: Add Estimate
+    new:
+      add: Add Estimate
+      create: Create an Estimate
+      cancel: Cancel
+      head: Add Estimate
 
   facility_order_details:
     edit:

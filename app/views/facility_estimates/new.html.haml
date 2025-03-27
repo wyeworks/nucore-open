@@ -1,0 +1,11 @@
+= content_for :h1 do
+  = @estimate.facility
+
+%h2= t(".create")
+
+= simple_form_for @estimate, url: facility_estimates_path(@estimate.facility), method: :post do |f|
+  .form-inputs
+
+  .form-actions
+    = f.button :submit, t(".add"), class: "btn-primary"
+    = link_to t("shared.cancel"), facility_estimates_path(@estimate.facility)
