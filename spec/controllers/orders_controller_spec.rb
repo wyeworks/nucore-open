@@ -453,6 +453,20 @@ RSpec.describe OrdersController do
           end
         end
 
+        context "when product has order_notification_recipients" do
+          let(:order_detail) { order.order_details.last }
+          let(:recipients) { ["u1@example.com", "u2@exmaple.com"] }
+
+          before do
+            @instrument.update(order_notification_recipients: recipients.join(", "))
+            @params[:send_notification] = "1"
+          end
+
+          it "sends notification to recipients" do
+            expect { do_request }.to have_enqueued_mail(PurchaseNotifier, :product_order_notification).twice
+          end
+        end
+
         context "when ordering on behalf of (acting as)" do
           before { switch_to @staff }
 
