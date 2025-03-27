@@ -320,6 +320,8 @@ Rails.application.routes.draw do
       resources :account_price_group_members, only: [:new, :destroy, :create]
     end
 
+    resources :estimates, controller: "facility_estimates", only: [:index]
+
     get "disputed_orders", to: "facilities#disputed_orders"
     get "notifications",       to: "facility_notifications#index"
     post "notifications/send", to: "facility_notifications#send_notifications", as: "send_notifications"
