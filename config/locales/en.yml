@@ -517,6 +517,8 @@ en:
   facility_estimates:
     index:
       add: Add Estimate
+    create:
+      success: Estimate successfully created
     new:
       add: Add Estimate
       create: Create an Estimate
