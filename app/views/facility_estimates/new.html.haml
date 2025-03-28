@@ -4,8 +4,15 @@
 %h2= t(".create")
 
 = simple_form_for @estimate, url: facility_estimates_path(@estimate.facility), method: :post do |f|
+  .inline-form-controls
+    = f.input :name
+    = f.input_field :user_id,
+      collection: User.all.map { |u| [u.full_name, u.id] },
+      class: "js--chosen",
+      include_blank: false
+    = f.input :expires_at, as: :date_picker
   .form-inputs
-
+    = f.input :note
   .form-actions
     = f.button :submit, t(".add"), class: "btn-primary"
     = link_to t("shared.cancel"), facility_estimates_path(@estimate.facility)
