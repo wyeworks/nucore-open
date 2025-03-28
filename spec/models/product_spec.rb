@@ -778,5 +778,17 @@ RSpec.describe Product do
 
       expect(product.order_notification_recipients.to_a).to eq(emails)
     end
+
+    it "validates a single email" do
+      product.order_notification_recipients = "user"
+      expect(product).to_not be_valid
+      expect(product.errors).to include("order_notification_recipients")
+    end
+
+    it "detects if any email is invalid" do
+      product.order_notification_recipients = "user1@example.com, user2@, user3@example.com"
+      expect(product).to_not be_valid
+      expect(product.errors).to include("order_notification_recipients")
+    end
   end
 end
