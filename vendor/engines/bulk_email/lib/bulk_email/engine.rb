@@ -22,6 +22,13 @@ module BulkEmail
       end
     end
 
+    initializer "bulk_email.assets.precompile" do |app|
+      app.config.assets.precompile += %w[
+        bulk_email/bulk_email.js
+        bulk_email/application.css
+      ]
+    end
+
   end
 
 end

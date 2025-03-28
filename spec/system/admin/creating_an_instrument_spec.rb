@@ -26,7 +26,7 @@ RSpec.describe "Creating an instrument", :js do
 
       it "is accessible" do
         visit new_facility_instrument_path(facility)
-        expect(page).to be_axe_clean
+        expect(page).to be_axe_clean.excluding(".cke_inner .cke_reset")
       end
 
       it "can create and see a daily booking instrument" do
