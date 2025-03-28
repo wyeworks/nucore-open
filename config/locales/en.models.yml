@@ -289,7 +289,7 @@ en:
         email_purchasers_on_order_status_changes: Email purchasers when the status of an order changes?
         user_notes_label: Label for Notes Field
         training_request_contacts: Training Request Recipients
-        order_notification_recipient: Order Notification Recipient
+        order_notification_recipients: Order Notification Recipients
         cancellation_email_recipients: Cancellation Notification Recipients
         issue_report_recipients: Alternate Issue Report Recipients
       product_access_group:
