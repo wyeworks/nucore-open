@@ -75,7 +75,7 @@ gem "prawn-rails"
 gem "matrix"
 
 ## Email
-gem "mailgun-ruby", "~>1.3.3"
+gem "mailgun-ruby", "~>1.3.4"
 
 ## other
 gem "delayed_job_active_record"

@@ -395,7 +395,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mailgun-ruby (1.3.3)
+    mailgun-ruby (1.3.4)
       faraday (~> 2.1)
       faraday-multipart (~> 1.1.0)
       mime-types
@@ -770,7 +770,7 @@ DEPENDENCIES
   kt-paperclip
   ldap_authentication!
   letter_opener
-  mailgun-ruby (~> 1.3.3)
+  mailgun-ruby (~> 1.3.4)
   matrix
   mysql2
   nested_form_fields
