@@ -9,8 +9,12 @@ class FacilityEstimatesController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
+  before_action :load_estimate, only: [:show]
 
   def index
+  end
+
+  def show
   end
 
   def new
@@ -23,6 +27,7 @@ class FacilityEstimatesController < ApplicationController
 
     if @estimate.save
       flash[:notice] = t(".success")
+      redirect_to facility_estimate_path(current_facility, @estimate)
     else
       render action: :new
     end
@@ -32,5 +37,9 @@ class FacilityEstimatesController < ApplicationController
 
   def facility_estimate_params
     params.require(:estimate).permit([:name, :user_id, :note, :expires_at])
+  end
+
+  def load_estimate
+    @estimate = current_facility.estimates.find(params[:id])
   end
 end

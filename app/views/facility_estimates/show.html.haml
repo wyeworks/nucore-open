@@ -1,0 +1,16 @@
+= content_for :h1 do
+  = current_facility
+
+- header = "#{Estimate.model_name.human} ##{@estimate.id}"
+- header = @estimate.name.present? ? "#{header} - #{@estimate.name}" : header
+
+%h2= header
+
+.container.banner-list
+  .row
+    = banner_date_label @estimate, :expires_at
+    = banner_label @estimate, :user
+    = banner_label @estimate, :created_by_user
+
+  .row
+    = banner_label @estimate, :note
