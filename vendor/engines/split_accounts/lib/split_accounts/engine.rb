@@ -53,6 +53,10 @@ module SplitAccounts
       end
     end
 
+    initializer "split_accounts.assets.precompile" do |app|
+      app.config.assets.precompile << "split_accounts/split_account_splits.js"
+    end
+
   end
 
 end

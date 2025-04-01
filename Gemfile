@@ -6,8 +6,8 @@ ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| 
 
 ## base
 gem "rails", "~> 7.0.8"
-gem "sprockets", "< 4" # Temporarily lock as we upgrade
-gem "sprockets-rails", "3.2.2" # downgrade to avoid a bug
+gem "sprockets"
+gem "sprockets-rails"
 gem "config"
 gem "bootsnap", require: false
 gem "puma"
@@ -54,8 +54,7 @@ gem "haml"
 gem "will_paginate"
 # TODO: Remove dynamic_form and use Rails to display errors
 gem "dynamic_form"
-# 5.0 has breaking changes based which need to be addressed before we can upgrade
-gem "ckeditor", "< 5"
+gem "ckeditor", "~> 5.1.3"
 gem "jquery-rails"
 gem "jquery-ui-rails", "~> 6.0"
 gem "vuejs-rails", "~> 1.0.26" # 2.0 introduces breaking changes
