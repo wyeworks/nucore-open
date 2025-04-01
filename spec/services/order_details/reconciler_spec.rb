@@ -31,8 +31,8 @@ RSpec.describe OrderDetails::Reconciler do
             params,
             Time.current,
             "reconciled",
-            "1",
-            bulk_reconcile_note: "this is a bulk note",
+            bulk_reconcile: true,
+            bulk_note: "this is a bulk note",
             bulk_deposit_number: "CRT1234567",
           )
         end
@@ -46,14 +46,14 @@ RSpec.describe OrderDetails::Reconciler do
         end
       end
 
-      context "bulk note checkbox UNchecked" do
+      context "bulk note when bulk_reconcile blank" do
         let(:reconciler) do
           described_class.new(
             OrderDetail.all,
             params,
             Time.current,
             "reconciled",
-            bulk_reconcile_note: "this is a bulk note",
+            bulk_note: "this is a bulk note",
             bulk_deposit_number: "CRT1234567"
           )
         end
@@ -143,23 +143,23 @@ RSpec.describe OrderDetails::Reconciler do
       end
     end
 
-    context "when bulk reconciled_note" do
+    context "when bulk_reconcile is true" do
       let(:reconciler) do
         described_class.new(
           OrderDetail.all,
           params,
           Time.current,
           "unrecoverable",
-          "1",
-          bulk_reconcile_note:,
+          bulk_reconcile: true,
+          bulk_note:,
         )
       end
-      let(:bulk_reconcile_note) { "Note about all orders" }
+      let(:bulk_note) { "Note about all orders" }
 
       it "set reconciled notes for all" do
         reconciler.reconcile_all
 
-        expect(order_details.all? { |od| od.reload.reconciled_note == bulk_reconcile_note }).to be true
+        expect(order_details.all? { |od| od.reload.unrecoverable_note == bulk_note }).to be true
       end
     end
   end

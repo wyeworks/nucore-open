@@ -86,7 +86,7 @@ RSpec.describe "Account Reconciliation", js: true do
         check "Use Bulk Note"
         expect(page).to have_button("Update Orders", disabled: true)
 
-        fill_in "Bulk Reconciliation Note", with: "this is the bulk note"
+        fill_in "Bulk Note", with: "this is the bulk note"
         check "order_detail_#{order_detail.id}_reconciled"
         expect(page).to have_button("Update Orders", disabled: false)
 
@@ -105,7 +105,7 @@ RSpec.describe "Account Reconciliation", js: true do
         click_link "Reconcile Credit Cards"
 
         check "Use Bulk Note"
-        fill_in "Bulk Reconciliation Note", with: "this is the bulk note"
+        fill_in "Bulk Note", with: "this is the bulk note"
         uncheck "Use Bulk Note"
         check "order_detail_#{order_detail.id}_reconciled"
         check "order_detail_#{orders.last.order_details.first.id}_reconciled"
@@ -156,7 +156,7 @@ RSpec.describe "Account Reconciliation", js: true do
       click_link "Reconcile Purchase Orders"
 
       check "Use Bulk Note"
-      fill_in "Bulk Reconciliation Note", with: "this is the bulk note"
+      fill_in "Bulk Note", with: "this is the bulk note"
       check "order_detail_#{order_detail.id}_reconciled"
       check "order_detail_#{orders.last.order_details.first.id}_reconciled"
       fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
