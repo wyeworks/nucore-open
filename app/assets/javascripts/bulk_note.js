@@ -1,16 +1,16 @@
 $(document).ready(function() {
-  var bulkNoteCheckbox = $("#bulk_note_checkbox");
+  var bulkNoteCheckbox = $('input[name="bulk_note_checkbox"]');
   var bulkNoteInput = $("#bulk-note-input");
-  bulkNoteInput.hide()
-  var rowNoteInputs = $(".row-note-input")
+  var rowNoteInputs = $(".row-note-input input")
 
-  bulkNoteCheckbox.change(function(e){
-    if (bulkNoteCheckbox[0].checked === true){
+  bulkNoteInput.hide();
+  bulkNoteCheckbox.change(function(event){
+    if (event.target.checked){
       bulkNoteInput.show();
-      rowNoteInputs.hide();
-    } else if (bulkNoteCheckbox[0].checked === false) {
+      rowNoteInputs.prop('disabled', true);
+    } else {
       bulkNoteInput.hide();
-      rowNoteInputs.show();
+      rowNoteInputs.prop('disabled', false);
     }
   })
 })

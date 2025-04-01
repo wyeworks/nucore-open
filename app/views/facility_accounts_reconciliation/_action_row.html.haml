@@ -4,7 +4,7 @@
 
 - if local_assigns[:show_order_status]
   .row.table-actions.form-horizontal
-    .span5.control-group.fields
+    .control-group.fields
       %label.control-label{ for: :order_status }= t("facility_accounts_reconciliation.index.order_status")
       .controls
         = select_tag :order_status,
@@ -13,24 +13,28 @@
 - if local_assigns[:date]
   .row.table-actions.form-horizontal
     .js--reconcileOrdersContainer
-      .span5.control-group.fields
+      .control-group.fields
         %label.control-label{ for: :reconciled_at }= OrderDetail.human_attribute_name(:reconciled_at)
         .controls
           = text_field_tag :reconciled_at, format_usa_date(Time.current), class: :datepicker__data, data: { min_date: unreconciled_order_details.map(&:journal_or_statement_date).min.iso8601, max_date: Time.current.iso8601 }
   .row.table-actions.form-horizontal
-    .span3.control-group.fields
+    .control-group.fields
       %label.control-label{ for: "bulk_note_checkbox" }= t("facility_accounts_reconciliation.index.bulk_note_checkbox")
       .controls
         = check_box_tag :bulk_note_checkbox
-    #bulk-note-input.span5.control-group.fields
-      %label.control-label{ for: :bulk_reconcile_note }= t("facility_accounts_reconciliation.index.bulk_note")
-      .controls
-        = text_field_tag :bulk_reconcile_note
 
-      - if show_reconciliation_deposit_number
-        .deposit-number-row
-          %label.inline{ for: :bulk_deposit_number, data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
-            = text("facility_accounts_reconciliation.index.bulk_deposit_number")
+  .row.table-actions.form-horizontal#bulk-note-input
+    .control-group.fields
+      %label.control-label{ for: "bulk_note" }= t("facility_accounts_reconciliation.index.bulk_note")
+      .controls
+        = text_field_tag :bulk_note
+
+  - if show_reconciliation_deposit_number
+    .row.table-actions.form-horizontal
+      .control-group.fields
+        %label.control-label{ for: :bulk_deposit_number, data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
+          = text("facility_accounts_reconciliation.index.bulk_deposit_number")
+        .controls
           %span
             = text("facility_accounts_reconciliation.index.bulk_deposit_number_prefix")
           = text_field_tag :bulk_deposit_number

@@ -37,9 +37,13 @@ class FacilityAccountsReconciliationController < ApplicationController
       unreconciled_details,
       params[:order_detail],
       reconciled_at,
-      params[:order_status],
-      params[:bulk_note_checkbox],
-      params.slice(:bulk_reconcile_note, :bulk_deposit_number),
+      update_params[:order_status],
+      bulk_reconcile: update_params[:bulk_note_checkbox] == "1",
+      **update_params.slice(
+        :bulk_note,
+        :bulk_deposit_number,
+        :bulk_unrecoverable_note,
+      ),
     )
 
     if reconciler.reconcile_all > 0
@@ -79,6 +83,16 @@ class FacilityAccountsReconciliationController < ApplicationController
 
   def unreconciled_details
     OrderDetail.complete.statemented(current_facility)
+  end
+
+  def update_params
+    params.permit(
+      :order_status,
+      :bulk_note_checkbox,
+      :bulk_note,
+      :bulk_deposit_number,
+      :bulk_unrecoverable_note,
+    )
   end
 
   def check_billing_access_to_mark_as_unrecoverable

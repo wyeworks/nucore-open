@@ -13,17 +13,26 @@ document.addEventListener("DOMContentLoaded", function () {
 
   orderStatusSelect.addEventListener("change", function (event) {
     const selectedValue = event.target.value;
-    const showNoteInput = showRecinciledNoteStatus.indexOf(selectedValue) != -1;
 
     document
       .querySelectorAll(".js--reconcileField")
       .forEach((reconcileTableField) => {
-        if (showNoteInput) {
+        if (selectedValue == RECONCILED) {
           reconcileTableField.classList.remove("hidden");
         } else {
           reconcileTableField.classList.add("hidden");
         }
       });
+
+    document
+      .querySelectorAll(".js--unrecoverableField")
+      .forEach((element) => {
+        if (selectedValue == UNRECOVERABLE) {
+          element.classList.remove("hidden");
+        } else {
+          element.classList.add("hidden");
+        }
+      })
 
     const reconcileOrdersActionRow = document.querySelector(".js--reconcileOrdersContainer");
 

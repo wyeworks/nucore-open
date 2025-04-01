@@ -2033,30 +2033,38 @@ RSpec.describe OrderDetail do
     end
   end
 
-  describe "#reconciled_note" do
+  shared_examples "note field" do |note_field|
     let(:subject) { order_detail }
 
     context "when short string" do
-      before { order_detail.reconciled_note = "Something" }
+      before { order_detail.send(:"#{note_field}=", "Something") }
 
       it { is_expected.to be_valid }
     end
 
     context "when empty" do
-      before { order_detail.reconciled_note = "" }
+      before { order_detail.send(:"#{note_field}=", "") }
 
       it { is_expected.to be_valid }
     end
 
     context "when too long" do
-      before { order_detail.reconciled_note = "a" * 500 }
+      before { order_detail.send(:"#{note_field}=", "a" * 500) }
 
       it "is invalid" do
         expect(subject).to_not be_valid
         expect(subject.errors.messages).to(
-          match(a_hash_including(reconciled_note: Array))
+          match(a_hash_including(note_field => Array))
         )
       end
     end
+  end
+
+  describe "#reconciled_note" do
+    include_examples "note field", :reconciled_note
+  end
+
+  describe "#unrecoverable_note" do
+    include_examples "note field", :unrecoverable_note
   end
 end

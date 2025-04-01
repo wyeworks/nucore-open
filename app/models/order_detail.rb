@@ -118,7 +118,7 @@ class OrderDetail < ApplicationRecord
   validates :price_change_reason, presence: true, length: { minimum: 10, allow_blank: true }, if: :pricing_note_required?
   validate :project_must_be_active, if: :project_id_changed?
 
-  validates :reconciled_note, length: { maximum: 250 }
+  validates :reconciled_note, :unrecoverable_note, length: { maximum: 250 }
 
   def actual_costs_match_calculated?
     dup_od = dup
