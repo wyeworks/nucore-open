@@ -13,14 +13,14 @@ module OrderDetails
     validate :all_journals_and_statements_must_be_before_reconciliation_date
 
     def initialize(
-        order_detail_scope,
-        params,
-        reconciled_at,
-        order_status,
-        bulk_reconcile_note = nil,
-        bulk_deposit_number = nil,
-        bulk_reconcile_checkbox = nil
-      )
+      order_detail_scope,
+      params,
+      reconciled_at,
+      order_status,
+      bulk_reconcile_note = nil,
+      bulk_deposit_number = nil,
+      bulk_reconcile_checkbox = nil
+    )
       @params = params || ActionController::Parameters.new
       @order_status = order_status || "reconciled"
       @order_details = order_detail_scope.readonly(false).find_ids(to_be_reconciled.keys)
@@ -77,7 +77,10 @@ module OrderDetails
     end
 
     def allowed(params)
-      params.except(:reconciled).permit(:reconciled_note, :deposit_number)
+      params.except(:reconciled).permit(
+        :reconciled_note,
+        :deposit_number,
+      )
     end
 
     def reconciliation_must_be_in_past

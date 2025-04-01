@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_26_131059) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_01_123335) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -368,7 +368,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_26_131059) do
     t.datetime "reviewed_at", precision: nil
     t.integer "statement_id"
     t.integer "journal_id"
-    t.string "reconciled_note"
+    t.string "reconcile_note"
     t.integer "created_by", null: false
     t.integer "product_accessory_id"
     t.boolean "problem", default: false, null: false
