@@ -55,15 +55,14 @@ module OrderDetails
 
     def update_status(order_detail, params)
       order_detail.assign_attributes(allowed(params))
+      order_detail.reconciled_note = @bulk_reconcile_note if @bulk_reconcile_note.present?
 
       if @order_status == "reconciled"
         order_detail.reconciled_at = @reconciled_at
-        order_detail.reconciled_note = @bulk_reconcile_note if @bulk_reconcile_note.present?
         order_detail.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
         order_detail.change_status!(OrderStatus.reconciled)
       else
         order_detail.reconciled_at = nil
-        order_detail.reconciled_note = nil
         order_detail.deposit_number = nil
         order_detail.change_status!(OrderStatus.unrecoverable)
       end

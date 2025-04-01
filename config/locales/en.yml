@@ -249,6 +249,7 @@ en:
     index:
       head: Reconcile %{model}
       none: There are no %{model} with completed orders to be reconciled at this time
+      order_status: Status
       submit: "Update Orders"
       instructions: "Please review the following orders. Check those that are paid, record any notes, and click 'Update Orders'."
       caption: Reconcilable Orders for %{model} payment sources
