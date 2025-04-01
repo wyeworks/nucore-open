@@ -17,16 +17,15 @@ module OrderDetails
       params,
       reconciled_at,
       order_status,
-      bulk_reconcile_note = nil,
-      bulk_deposit_number = nil,
-      bulk_reconcile_checkbox = nil
+      bulk_reconcile_checkbox = nil,
+      **kwargs
     )
       @params = params || ActionController::Parameters.new
       @order_status = order_status || "reconciled"
       @order_details = order_detail_scope.readonly(false).find_ids(to_be_reconciled.keys)
       @reconciled_at = reconciled_at
-      @bulk_reconcile_note = bulk_reconcile_note if bulk_reconcile_checkbox == "1"
-      @bulk_deposit_number = bulk_deposit_number if bulk_reconcile_checkbox == "1"
+      @bulk_reconcile_note = kwargs[:bulk_reconcile_note] if bulk_reconcile_checkbox == "1"
+      @bulk_deposit_number = kwargs[:bulk_deposit_number] if bulk_reconcile_checkbox == "1"
     end
 
     def reconcile_all
@@ -55,6 +54,7 @@ module OrderDetails
 
     def update_status(order_detail, params)
       order_detail.assign_attributes(allowed(params))
+
       order_detail.reconciled_note = @bulk_reconcile_note if @bulk_reconcile_note.present?
 
       if @order_status == "reconciled"
