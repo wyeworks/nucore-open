@@ -8,7 +8,7 @@ describe("TimeFormatter", function() {
   describe('fromString', function() {
     describe('date parsing', function() {
       beforeEach(function() {
-        return this.formatter = new TimeFormatter.fromString('4/17/2015', '3', '15', 'AM');
+        return this.formatter = TimeFormatter.fromString('4/17/2015', '3', '15', 'AM');
       });
 
       it('has the correct year', function() {
@@ -31,24 +31,24 @@ describe("TimeFormatter", function() {
 
     return describe('time parsing', function() {
       it('sets the right time for an AM', function() {
-        const formatter = new TimeFormatter.fromString('6/13/2015', '3', '15', 'AM');
+        const formatter = TimeFormatter.fromString('6/13/2015', '3', '15', 'AM');
         expect(formatter.hour24()).toEqual(3);
         return expect(formatter.minute()).toEqual(15);
       });
 
       it('sets the right time for PM', function() {
-        const formatter = new TimeFormatter.fromString('6/13/2015', '3', '15', 'PM');
+        const formatter = TimeFormatter.fromString('6/13/2015', '3', '15', 'PM');
         expect(formatter.hour24()).toEqual(15);
         return expect(formatter.minute()).toEqual(15);
       });
 
       it('sets the right hour for midnight', function() {
-        const formatter = new TimeFormatter.fromString('6/13/2015', '12', '00', 'AM');
+        const formatter = TimeFormatter.fromString('6/13/2015', '12', '00', 'AM');
         return expect(formatter.hour24()).toEqual(0);
       });
 
       return it('sets the right hour for noon', function() {
-        const formatter = new TimeFormatter.fromString('6/13/2015', '12', '00', 'PM');
+        const formatter = TimeFormatter.fromString('6/13/2015', '12', '00', 'PM');
         return expect(formatter.hour24()).toEqual(12);
       });
     });
