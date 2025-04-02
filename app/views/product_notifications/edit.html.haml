@@ -13,7 +13,7 @@
     - if SettingsHelper.feature_on?(:training_requests)
       = f.input :training_request_contacts, as: :string, hint: text("hints.training_request_contacts")
     - key = current_facility.order_notification_recipient.present? ? "hints.order_notification_with_facility" : "hints.order_notification"
-    = f.input :order_notification_recipient, as: :email, hint: text(key, email: current_facility.order_notification_recipient)
+    = f.input :order_notification_recipients, as: :string, hint: text(key, email: current_facility.order_notification_recipient)
     = f.input :cancellation_email_recipients, as: :string, hint: text("hints.cancellation_email_recipients") if @product.is_a?(Instrument)
     = f.input :issue_report_recipients, as: :string, hint: text("hints.issue_report_recipients") if @product.is_a?(Instrument)
 

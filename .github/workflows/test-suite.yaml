@@ -4,7 +4,8 @@ name: Run test suite
 on:
   push:
     branches:
-      - "**"
+      - "master"
+  pull_request:
 
 jobs:
   run-rspec-engines:
@@ -22,6 +23,7 @@ jobs:
       image: wyeworkshub/ruby-node-chrome-pack:3.3.0
     env:
       RAILS_ENV: test
+      RAILS_TEST_COMPILED_ASSETS: true
       MYSQL_HOST: mariadb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
@@ -43,6 +45,7 @@ jobs:
             vendor/engines/split_accounts/spec/**/*_spec.rb
             vendor/engines/umass_corum/spec/**/*_spec.rb
 
+      - run: bundle exec rails assets:precompile
       - run: bundle exec rspec ${{ steps.glob.outputs.paths }}
 
   run-rspec:
@@ -60,6 +63,7 @@ jobs:
       image: wyeworkshub/ruby-node-chrome-pack:3.3.0
     env:
       RAILS_ENV: test
+      RAILS_TEST_COMPILED_ASSETS: true
       MYSQL_HOST: mariadb
       MYSQL_USER: root
       MYSQL_PASSWORD: root
@@ -71,6 +75,7 @@ jobs:
       # - uses: mxschmitt/action-tmate@v3
       - run: bundle exec rails parallel:create
       - run: bundle exec rails parallel:load_schema
+      - run: bundle exec rails assets:precompile
       - run: bundle exec rails parallel:spec
 
   run-teaspoon:

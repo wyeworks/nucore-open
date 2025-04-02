@@ -6,8 +6,8 @@ ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| 
 
 ## base
 gem "rails", "~> 7.0.8"
-gem "sprockets", "< 4" # Temporarily lock as we upgrade
-gem "sprockets-rails", "3.2.2" # downgrade to avoid a bug
+gem "sprockets"
+gem "sprockets-rails"
 gem "config"
 gem "bootsnap", require: false
 gem "puma"
@@ -54,8 +54,7 @@ gem "haml"
 gem "will_paginate"
 # TODO: Remove dynamic_form and use Rails to display errors
 gem "dynamic_form"
-# 5.0 has breaking changes based which need to be addressed before we can upgrade
-gem "ckeditor", "< 5"
+gem "ckeditor", "~> 5.1.3"
 gem "jquery-rails"
 gem "jquery-ui-rails", "~> 6.0"
 gem "vuejs-rails", "~> 1.0.26" # 2.0 introduces breaking changes
@@ -105,7 +104,6 @@ gem "umass_corum", path: "vendor/engines/umass_corum"
 
 group :development do
   gem "bcrypt_pbkdf", ">= 1.0", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
-  gem "bullet" # Detect N+1s and recommends eager loading
   gem "capistrano", require: false
   gem "capistrano-bundler", require: false
   gem "capistrano-rails", require: false
@@ -114,7 +112,7 @@ group :development do
   gem "ed25519", ">= 1.2", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
   gem "haml_lint", require: false
   gem "letter_opener"
-  gem "rubocop", "1.74.0", require: false
+  gem "rubocop", "1.75.1", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"
@@ -124,6 +122,7 @@ end
 group :development, :test do
   gem "amazing_print"
   gem "axe-core-rspec"
+  gem "bullet" # Detect N+1s and recommends eager loading
   gem "factory_bot_rails"
   gem "parallel_tests"
   gem "pry-rails"

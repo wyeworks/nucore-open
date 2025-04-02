@@ -10,7 +10,7 @@ en:
         instructions: Leave blank to skip notifications for the event.
         hints:
           order_notification: |
-              This email address will be notified when an order is placed by a user.
+              Comma separated list of email addresses to be notified when an order is placed by a user.
           order_notification_with_facility: |
             !views.product_notifications.edit.hints.order_notification!
             !views.product_notifications.show.hints.already_configured!

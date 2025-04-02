@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_01_27_211156) do
+ActiveRecord::Schema[7.0].define(version: 2025_03_26_131059) do
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -670,7 +670,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_01_27_211156) do
     t.string "dashboard_token"
     t.string "user_notes_field_mode", default: "hidden", null: false
     t.string "user_notes_label"
-    t.string "order_notification_recipient"
+    t.string "order_notification_recipients", limit: 1000
     t.text "cancellation_email_recipients"
     t.text "issue_report_recipients"
     t.boolean "email_purchasers_on_order_status_changes", default: false, null: false

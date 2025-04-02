@@ -11,7 +11,7 @@
     - if SettingsHelper.feature_on?(:training_requests)
       = f.input :training_request_contacts, as: :string
     - hint = current_facility.order_notification_recipient.present? ? text("hints.already_configured", email: current_facility.order_notification_recipient) : nil
-    = f.input :order_notification_recipient, as: :email, hint: hint
+    = f.input :order_notification_recipients, as: :string, hint: hint
     - if @product.is_a?(Instrument)
       = f.input :cancellation_email_recipients, as: :string
 

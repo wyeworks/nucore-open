@@ -39,6 +39,7 @@ class Product < ApplicationRecord
   after_create :create_nonbillable_price_policy, if: :nonbillable_mode?
 
   email_list_attribute :training_request_contacts
+  email_list_attribute :order_notification_recipients
 
   # Allow us to use `product.hidden?`
   alias_attribute :hidden, :is_hidden
@@ -48,10 +49,6 @@ class Product < ApplicationRecord
   validate_url_name :url_name, :facility_id
   validates :user_notes_field_mode, presence: true, inclusion: Products::UserNoteMode.all
   validates :user_notes_label, length: { maximum: 255 }
-
-  validates :order_notification_recipient,
-            email_format: true,
-            allow_blank: true
 
   validates(
     :account,
