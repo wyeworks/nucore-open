@@ -130,7 +130,7 @@ RSpec.describe OrderDetails::Reconciler do
     context "when orders have reconciled_note" do
       before do
         params.values.each_with_index do |od_params, idx|
-          od_params["reconciled_note"] = "note #{idx}"
+          od_params["unrecoverable_note"] = "note #{idx}"
         end
       end
 
@@ -139,7 +139,7 @@ RSpec.describe OrderDetails::Reconciler do
 
         reconciler.reconcile_all
 
-        expect(order_details.map { |od| od.reload.reconciled_note }.all?(String)).to be true
+        expect(order_details.map { |od| od.reload.unrecoverable_note }.all?(String)).to be true
       end
     end
 

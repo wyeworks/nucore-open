@@ -57,9 +57,8 @@ module OrderDetails
 
       if @order_status == "reconciled"
         order_detail.reconciled_at = @reconciled_at
-        order_detail.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
         order_detail.reconciled_note = @bulk_note if @bulk_note.present?
-
+        order_detail.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
         order_detail.change_status!(OrderStatus.reconciled)
       else
         order_detail.reconciled_at = nil
@@ -79,6 +78,7 @@ module OrderDetails
     def allowed(params)
       params.except(:reconciled).permit(
         :reconciled_note,
+        :unrecoverable_note,
         :deposit_number,
       )
     end

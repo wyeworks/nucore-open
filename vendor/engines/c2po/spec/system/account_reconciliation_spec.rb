@@ -2,26 +2,26 @@
 
 require "rails_helper"
 
-RSpec.describe "Account Reconciliation", js: true do
+RSpec.describe "Account Reconciliation", :js do
   include C2poTestHelper
 
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:setup_item, facility: facility) }
+  let(:item) { create(:setup_item, facility:) }
   let(:orders) do
-    accounts.map { |account| create(:purchased_order, product: item, account: account) }
+    accounts.map { |account| create(:purchased_order, product: item, account:) }
   end
   let(:statements) do
-    accounts.map { |account| create(:statement, account: account, facility: facility, created_by_user: director, created_at: 2.days.ago) }
+    accounts.map { |account| create(:statement, account:, facility:, created_by_user: director, created_at: 2.days.ago) }
   end
 
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
   let(:statement) { StatementPresenter.new order_detail.statement }
 
   before do
     orders.zip(statements).each do |order, statement|
       order.order_details.each do |od|
         od.to_complete!
-        od.update!(statement: statement)
+        od.update!(statement:)
       end
     end
 
@@ -65,7 +65,10 @@ RSpec.describe "Account Reconciliation", js: true do
 
       fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
       fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
+
       click_button "Update Orders", match: :first
+
+      expect(page).to have_content("1 payment successfully updated")
 
       expect(order_detail.reload).to be_reconciled
       expect(order_detail.reconciled_note).to eq("this is a note!")
@@ -94,6 +97,8 @@ RSpec.describe "Account Reconciliation", js: true do
         fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
         click_button "Update Orders", match: :first
 
+        expect(page).to have_content("1 payment successfully updated")
+
         expect(order_detail.reload.reconciled_note).to eq("this is the bulk note")
         expect(orders.last.order_details.first.reload.reconciled_note).to eq("this is the bulk note")
       end
@@ -111,6 +116,8 @@ RSpec.describe "Account Reconciliation", js: true do
         check "order_detail_#{orders.last.order_details.first.id}_reconciled"
         fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
         click_button "Update Orders", match: :first
+
+        expect(page).to have_content("1 payment successfully updated")
 
         expect(order_detail.reload.reconciled_note).to eq("")
         expect(orders.last.order_details.first.reload.reconciled_note).to eq("")
@@ -141,6 +148,8 @@ RSpec.describe "Account Reconciliation", js: true do
       fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
       fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
       click_button "Update Orders", match: :first
+
+      expect(page).to have_content("1 payment successfully updated")
 
       expect(order_detail.reload).to be_reconciled
       expect(order_detail.reconciled_note).to eq("this is a note!")
