@@ -26,7 +26,6 @@ module OrderDetails
       @reconciled_at = reconciled_at
       @bulk_note = kwargs[:bulk_note] if bulk_reconcile
       @bulk_deposit_number = kwargs[:bulk_deposit_number] if bulk_reconcile
-      @bulk_unrecoverable_note = kwargs[:bulk_unrecoverable_note] if bulk_reconcile
     end
 
     def reconcile_all

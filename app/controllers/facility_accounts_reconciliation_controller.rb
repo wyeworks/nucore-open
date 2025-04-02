@@ -42,7 +42,6 @@ class FacilityAccountsReconciliationController < ApplicationController
       **update_params.slice(
         :bulk_note,
         :bulk_deposit_number,
-        :bulk_unrecoverable_note,
       ),
     )
 
@@ -91,7 +90,6 @@ class FacilityAccountsReconciliationController < ApplicationController
       :bulk_note_checkbox,
       :bulk_note,
       :bulk_deposit_number,
-      :bulk_unrecoverable_note,
     )
   end
 
