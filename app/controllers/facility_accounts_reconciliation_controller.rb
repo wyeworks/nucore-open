@@ -39,10 +39,8 @@ class FacilityAccountsReconciliationController < ApplicationController
       reconciled_at,
       update_params[:order_status],
       bulk_reconcile: update_params[:bulk_note_checkbox] == "1",
-      **update_params.slice(
-        :bulk_note,
-        :bulk_deposit_number,
-      ),
+      bulk_note: update_params[:bulk_note],
+      bulk_deposit_number: update_params[:bulk_deposit_number],
     )
 
     if reconciler.reconcile_all > 0
