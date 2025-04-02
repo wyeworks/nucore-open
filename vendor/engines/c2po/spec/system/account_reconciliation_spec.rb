@@ -134,10 +134,11 @@ RSpec.describe "Account Reconciliation", :js do
 
         visit credit_cards_facility_accounts_path(facility)
         click_link "Reconcile Credit Cards"
-        select "Unrecoverable", from: "order_status"
       end
 
       it "allows to add unrecoverable_note individually" do
+        select "Unrecoverable", from: "order_status"
+
         check "order_detail_#{order_detail1.id}_reconciled"
         fill_in "order_detail_#{order_detail1.id}_unrecoverable_note", with: "Unrecoverable note 1"
 
@@ -156,6 +157,8 @@ RSpec.describe "Account Reconciliation", :js do
       end
 
       it "allows to add a unrecoverable_note in bulk" do
+        select "Unrecoverable", from: "order_status"
+
         check "Use Bulk Note"
         check "order_detail_#{order_detail1.id}_reconciled"
         check "order_detail_#{order_detail2.id}_reconciled"
@@ -171,6 +174,24 @@ RSpec.describe "Account Reconciliation", :js do
 
         expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note"
         expect(order_detail2.unrecoverable_note).to eq "Unrecoverable note"
+      end
+
+      it "clears reconciled_note if then set as unrecoverable" do
+        select "Reconciled", from: "order_status"
+
+        check "order_detail_#{order_detail1.id}_reconciled"
+        fill_in "order_detail_#{order_detail1.id}_reconciled_note", with: "Reconciled note"
+
+        select "Unrecoverable", from: "order_status"
+        fill_in "order_detail_#{order_detail1.id}_unrecoverable_note", with: "Unrecoverable note"
+
+        click_button "Update Orders", match: :first
+
+        expect(page).to have_content("1 payment successfully updated")
+
+        expect(order_detail1.reload).to be_unrecoverable
+        expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note"
+        expect(order_detail1.reconciled_note).to be_blank
       end
     end
   end

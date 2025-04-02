@@ -17,21 +17,29 @@ document.addEventListener("DOMContentLoaded", function () {
     document
       .querySelectorAll(".js--reconcileField")
       .forEach((reconcileTableField) => {
-        if (selectedValue == RECONCILED) {
+        const reconcile = selectedValue == RECONCILED;
+        if (reconcile) {
           reconcileTableField.classList.remove("hidden");
         } else {
           reconcileTableField.classList.add("hidden");
         }
+        reconcileTableField.querySelectorAll("input").forEach((inputEl) => {
+          inputEl.disabled = !reconcile
+        });
       });
 
     document
       .querySelectorAll(".js--unrecoverableField")
       .forEach((element) => {
-        if (selectedValue == UNRECOVERABLE) {
+        const unrecoverable = selectedValue == UNRECOVERABLE;
+        if (unrecoverable) {
           element.classList.remove("hidden");
         } else {
           element.classList.add("hidden");
         }
+        element.querySelectorAll("input").forEach((inputEl) => {
+          inputEl.disabled = !unrecoverable
+        });
       })
 
     const reconcileOrdersActionRow = document.querySelector(".js--reconcileOrdersContainer");
