@@ -363,6 +363,7 @@ en:
         price_change_reason_option: Pricing Note
         quantity: Quantity
         reconciled_note: Reconciliation Note
+        unrecoverable_note: Unrecoverable Note
         reconciled_at: Reconciliation Date
         reference_id: Reference ID
         reviewed_at: Review Closes

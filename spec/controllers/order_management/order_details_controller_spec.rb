@@ -503,6 +503,21 @@ RSpec.describe OrderManagement::OrderDetailsController do
           end
         end
       end
+
+      context "#unrecoverable_note" do
+        before do
+          sign_in @admin
+          @params[:order_detail] = { unrecoverable_note: "Some note" }
+        end
+
+        it "can submit the unrecoverable_note" do
+          expect { do_request }.to(
+            change do
+              order_detail.reload.unrecoverable_note
+            end.from(nil).to("Some note")
+          )
+        end
+      end
     end
 
     describe "for a purchased item" do
