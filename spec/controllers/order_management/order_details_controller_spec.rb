@@ -24,17 +24,17 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
   before(:all) { create_users }
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:item) { FactoryBot.create(:setup_item, facility: facility) }
-  let(:instrument) { FactoryBot.create(:setup_instrument, :timer, facility: facility) }
+  let(:item) { FactoryBot.create(:setup_item, facility:) }
+  let(:instrument) { FactoryBot.create(:setup_instrument, :timer, facility:) }
   let(:order_detail) { reservation.order_detail }
   let(:original_account) { create(:setup_account, owner: order_detail.user) }
   let(:price_group) { facility.price_groups.find(&:is_not_global?) }
   let(:base_price_group) { PriceGroup.base }
   let(:reservation) { create(:purchased_reservation, product: instrument) }
-  let(:statement) { create(:statement, facility: facility, created_by: order_detail.user.id, account: original_account) }
+  let(:statement) { create(:statement, facility:, created_by: order_detail.user.id, account: original_account) }
   let(:new_account) do
     create(:setup_account, owner: order_detail.user).tap do |a|
-      AccountPriceGroupMember.create! price_group: price_group, account: a
+      AccountPriceGroupMember.create! price_group:, account: a
     end
   end
 
@@ -165,7 +165,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
       end
 
       context "order in open journal" do
-        let(:journal) { FactoryBot.create(:journal, facility: facility) }
+        let(:journal) { FactoryBot.create(:journal, facility:) }
         before :each do
           item_order_detail.change_status!(OrderStatus.complete)
           item_order_detail.update(reviewed_at: 1.day.ago)
@@ -378,7 +378,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
         end
 
         describe "when there are auto-scaled accessories" do
-          let!(:accessory) { create(:time_based_accessory, parent: instrument, facility: facility, scaling_type: "auto") }
+          let!(:accessory) { create(:time_based_accessory, parent: instrument, facility:, scaling_type: "auto") }
 
           before do
             allow_any_instance_of(OrderDetail).to receive(:updated_children).and_return([build_stubbed(:order_detail)])
@@ -407,7 +407,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
             before do
               AccountPriceGroupMember.create! price_group: base_price_group, account: original_account
               AccountPriceGroupMember.create! price_group: base_price_group, account: new_account
-              AccountPriceGroupMember.create! price_group: price_group, account: original_account
+              AccountPriceGroupMember.create! price_group:, account: original_account
               order_detail.account = original_account
               order_detail.save
               order_detail.update(statement_id: statement.id, price_policy_id: PricePolicy.first.id)
@@ -437,7 +437,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
             before do
               AccountPriceGroupMember.create! price_group: base_price_group, account: original_account
               AccountPriceGroupMember.create! price_group: base_price_group, account: new_account
-              AccountPriceGroupMember.create! price_group: price_group, account: original_account
+              AccountPriceGroupMember.create! price_group:, account: original_account
               order_detail.account = original_account
               order_detail.save
               order_detail.update(statement_id: statement.id, price_policy_id: PricePolicy.first.id)
@@ -580,7 +580,6 @@ RSpec.describe OrderManagement::OrderDetailsController do
                 expect(assigns[:order_detail].errors).not_to include :price_change_reason
               end
             end
-
           end
 
           describe "tracking price updates" do
@@ -712,7 +711,6 @@ RSpec.describe OrderManagement::OrderDetailsController do
                 end
               end
             end
-
           end
 
           it "updates the price manually" do
@@ -750,7 +748,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
           let!(:previous_price_policy) do
             FactoryBot.create(:item_price_policy,
                               product: item,
-                              price_group: price_group,
+                              price_group:,
                               unit_cost: 19,
                               start_date: 30.days.ago,
                               expire_date: 28.days.ago,
@@ -808,7 +806,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
         end
 
         describe "assigning to a user" do
-          let(:staff_user) { FactoryBot.create(:user, :staff, facility: facility) }
+          let(:staff_user) { FactoryBot.create(:user, :staff, facility:) }
 
           before do
             @params[:order_detail] = { assigned_user_id: staff_user.id.to_s }
@@ -836,7 +834,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
         end
 
         describe "resolving dispute" do
-          let(:dispute_by) { create(:user, :facility_director, facility: facility) }
+          let(:dispute_by) { create(:user, :facility_director, facility:) }
 
           before do
             order_detail.change_status!(OrderStatus.complete)
@@ -844,7 +842,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
               reviewed_at: Time.zone.now,
               dispute_at: Time.zone.now,
               dispute_reason: "silly reason",
-              dispute_by: dispute_by,
+              dispute_by:,
             )
             @params[:order_detail] = {}
           end
@@ -853,7 +851,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
             before do
               @params[:order_detail].merge!(
                 resolve_dispute: "1",
-                dispute_resolved_reason: dispute_resolved_reason,
+                dispute_resolved_reason:,
               )
             end
 
@@ -1033,7 +1031,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
       context "incomplete reservation" do
         let(:new_duration) { 73 }
-        let(:json_response) { JSON.parse(response.body) }
+        let(:json_response) { response.parsed_body }
         before :each do
           @params[:order_detail] = {
             reservation: reservation_params(reservation.reserve_start_at)
@@ -1066,7 +1064,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
       context "completed reservation" do
         let(:new_duration) { 73 }
-        let(:json_response) { JSON.parse(response.body) }
+        let(:json_response) { response.parsed_body }
 
         before :each do
           reservation.update(reserve_start_at: reservation.reserve_start_at - 2.days, reserve_end_at: reservation.reserve_end_at - 2.days)
@@ -1151,7 +1149,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
   context "#remove_from_journal" do
     let(:journal) do
-      create(:journal, facility: facility, updated_by: 1, reference: "xyz")
+      create(:journal, facility:, updated_by: 1, reference: "xyz")
     end
 
     before :each do
@@ -1164,7 +1162,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
       }
 
       order_detail.journal = journal
-      create(:journal_row, journal: journal, order_detail: order_detail)
+      create(:journal_row, journal:, order_detail:)
       order_detail.save!
     end
 
