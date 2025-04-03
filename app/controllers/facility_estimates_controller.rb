@@ -10,11 +10,20 @@ class FacilityEstimatesController < ApplicationController
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
   before_action :load_estimate, only: [:show]
+  before_action :set_users, only: [:search]
 
   def index
   end
 
   def show
+  end
+
+  def search
+    respond_to do |format|
+      format.json do
+        render json: @users
+      end
+    end
   end
 
   def new
@@ -41,5 +50,17 @@ class FacilityEstimatesController < ApplicationController
 
   def load_estimate
     @estimate = current_facility.estimates.find(params[:id])
+  end
+
+  def set_users
+    search_term = params[:query]&.strip
+
+    if search_term.present?
+      query = User.active.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: "%#{search_term.downcase}%")
+
+      @users = query.sort_last_first.limit(20).map { |u| { id: u.id, name: u.full_name } }
+    else
+      @users = []
+    end
   end
 end

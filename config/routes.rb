@@ -320,7 +320,11 @@ Rails.application.routes.draw do
       resources :account_price_group_members, only: [:new, :destroy, :create]
     end
 
-    resources :estimates, controller: "facility_estimates", only: [:index, :new, :create, :show]
+    resources :estimates, controller: "facility_estimates", only: [:index, :new, :create, :show] do
+      collection do
+        get "search"
+      end
+    end
 
     get "disputed_orders", to: "facilities#disputed_orders"
     get "notifications",       to: "facility_notifications#index"

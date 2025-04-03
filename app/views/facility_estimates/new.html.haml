@@ -9,9 +9,10 @@
     .span-4
       = f.label :user_id, Estimate.human_attribute_name(:user_id)
       = f.input_field :user_id,
-        collection: User.all.map { |u| [u.full_name, u.id] },
-        class: "js--chosen",
-        include_blank: false
+        collection: [current_user].map { |u| [u.full_name, u.id] },
+        class: "js--chosen js--estimate-form",
+        include_blank: false,
+        data: { search_url: search_facility_estimates_path }
     .span-4
       = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
   .form-inputs
