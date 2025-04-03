@@ -229,6 +229,10 @@ class OrderDetail < ApplicationRecord
     where.not(estimated_cost: nil)
   end
 
+  def self.joined_notes(note_field, join_by: "\n")
+    all.filter_map { |od| od.send(note_field) }.uniq.join(join_by)
+  end
+
   def can_be_viewed_by?(user)
     order.user_id == user.id || account.owner_user.id == user.id || account.business_admins.any? { |au| au.user_id == user.id }
   end

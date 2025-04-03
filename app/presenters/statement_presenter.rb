@@ -39,4 +39,12 @@ class StatementPresenter < SimpleDelegator
     @closed_events ||= LogEvent.where(loggable_type: "Statement", loggable_id: id, event_type: "closed")
   end
 
+  def reconcile_notes
+    @reconcile_note ||= if status == :reconcile_note
+                          order_notes(:reconciled_note)
+                        elsif status == :unrecoverable
+                          order_notes(:unrecoverable_note)
+                        end
+  end
+
 end

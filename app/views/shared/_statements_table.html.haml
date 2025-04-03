@@ -53,6 +53,15 @@
           %td.currency= number_to_currency(s.total_cost)
           %td= s.closed_by_times
           %td= s.closed_by_user_full_names
-          %td= s.status
+          %td
+            %div
+              %span= Statement.human_attribute_name("status.#{s.status}")
+            - if s.reconcile_notes.present?
+              %div
+                %small
+                  %strong
+                    Notes:
+              %div
+                %small= s.reconcile_notes
 
   = will_paginate(@statements)
