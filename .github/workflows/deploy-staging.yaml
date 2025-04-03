@@ -1,47 +1,47 @@
-name: Staging auto deployment
+# name: Staging auto deployment
 
-# When this action will be executed
-on:
-  workflow_run:
-    workflows: [ "Run test suite" ]
-    branches: [ master ]
-    types:
-      - completed
+# # When this action will be executed
+# on:
+#   workflow_run:
+#     workflows: [ "Run test suite" ]
+#     branches: [ master ]
+#     types:
+#       - completed
 
-  # Allow mannually triggering this workflow by visiting
-  # https://github.com/tablexi/nucore-dartmouth/actions/workflows/nucore-auto-deploy-staging.yml
-  # and clicking "Run Workflow"
-  workflow_dispatch:
+#   # Allow mannually triggering this workflow by visiting
+#   # https://github.com/tablexi/nucore-dartmouth/actions/workflows/nucore-auto-deploy-staging.yml
+#   # and clicking "Run Workflow"
+#   workflow_dispatch:
 
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    # run this job if it was manually started or the parent workflow succeeded
-    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+#     # run this job if it was manually started or the parent workflow succeeded
+#     if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
-    steps:
-      - name: Checkout to the branch
-        uses: actions/checkout@v3
+#     steps:
+#       - name: Checkout to the branch
+#         uses: actions/checkout@v3
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v2
 
-      - name: Log in to container registry
-        id: docker-login
-        uses: docker/login-action@v2
-        with:
-          registry: ${{ vars.AZURE_ECR_REGISTRY }}
-          username: ${{ secrets.AZURE_CONTAINER_REGISTRY_USERNAME }}
-          password: ${{ secrets.AZURE_CONTAINER_REGISTRY_PASSWORD }}
+#       - name: Log in to container registry
+#         id: docker-login
+#         uses: docker/login-action@v2
+#         with:
+#           registry: ${{ vars.AZURE_ECR_REGISTRY }}
+#           username: ${{ secrets.AZURE_CONTAINER_REGISTRY_USERNAME }}
+#           password: ${{ secrets.AZURE_CONTAINER_REGISTRY_PASSWORD }}
 
-      - name: Build and push container image to registry
-        uses: docker/build-push-action@v3
-        with:
-          push: true
-          tags: |
-            ${{ vars.AZURE_ECR_REGISTRY }}/corum/nucore-app:dev
-            ${{ vars.AZURE_ECR_REGISTRY }}/corum/nucore-app:${{ github.sha }}
-          file: ./Dockerfile
-          target: deploy
-          context: ./
-          build-args: RAILS_HOST=corum-dev.umass.edu
+#       - name: Build and push container image to registry
+#         uses: docker/build-push-action@v3
+#         with:
+#           push: true
+#           tags: |
+#             ${{ vars.AZURE_ECR_REGISTRY }}/corum/nucore-app:dev
+#             ${{ vars.AZURE_ECR_REGISTRY }}/corum/nucore-app:${{ github.sha }}
+#           file: ./Dockerfile
+#           target: deploy
+#           context: ./
+#           build-args: RAILS_HOST=corum-dev.umass.edu
