@@ -21,7 +21,7 @@ end
 
 guard :teaspoon do
   # Implementation files
-  watch(%r{^app/assets/javascripts/(.+)(\.js)?\.coffee$}) { |m| "#{m[1]}_spec#{m[2]}.coffee" }
+  watch(%r{^app/assets/javascripts/(.+)(\.js)?\.js$}) { |m| "#{m[1]}_spec#{m[2]}.js" }
 
   # Specs / Helpers
   watch(%r{^spec/javascripts/.+})

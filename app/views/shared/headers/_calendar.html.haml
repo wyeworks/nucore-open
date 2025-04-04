@@ -1,3 +1,9 @@
 = javascript_include_tag 'jquery.qtip'
-= javascript_include_tag 'fullcalendar.js'
+:javascript
+  // Provide a simple adapter for the require function that fullcalendar needs
+  window.require = function(module) {
+    if (module === 'moment') return window.moment;
+    if (module === 'jquery') return window.jQuery;
+  };
 = stylesheet_link_tag 'jquery.qtip'
+= stylesheet_link_tag 'fullcalendar'

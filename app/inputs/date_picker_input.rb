@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# For generating a datepicker widget (no time inputs) using datepicker-data.coffee
+# For generating a datepicker widget (no time inputs) using datepicker-data.js
 #
 # Usage:
 #   = f.input :starts_at, as: :date_picker
