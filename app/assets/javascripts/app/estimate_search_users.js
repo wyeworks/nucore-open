@@ -24,8 +24,6 @@ $(function () {
 
     clearTimeout(searchTimeout);
 
-    // TODO: Cancel previous requests?
-
     if (query.length < 3) return;
 
     searchTimeout = setTimeout(function() {
@@ -52,6 +50,6 @@ $(function () {
         .catch((error) => {
           console.error("Error fetching users:", error);
         });
-    });
+    }, 600);
   });
 });
