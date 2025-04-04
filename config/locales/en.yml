@@ -519,6 +519,7 @@ en:
       add: Add Estimate
     create:
       success: Estimate successfully created
+      error: There was an error creating the estimate
     new:
       add: Add Estimate
       create: Create an Estimate

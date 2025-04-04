@@ -38,6 +38,7 @@ class FacilityEstimatesController < ApplicationController
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, @estimate)
     else
+      flash[:error] = t(".error")
       render action: :new
     end
   end
