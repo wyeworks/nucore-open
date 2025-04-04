@@ -1,4 +1,8 @@
 $(function () {
+  const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
+
+  if (!csrfTokenElement) return;
+
   const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
   let usersField = $(".js--chosen.js--estimate-form");
