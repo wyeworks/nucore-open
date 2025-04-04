@@ -24,10 +24,10 @@ class FacilityStatementsController < ApplicationController
 
   # GET /facilities/:facility_id/statements
   def index
-    search_params = permitted_search_params.merge(current_facility: current_facility)
+    search_params = permitted_search_params.merge(current_facility:)
 
     @search_form = StatementSearchForm.new(search_params)
-    @statements = @search_form.search.order(created_at: :desc)
+    @statements = @search_form.search.order(created_at: :desc).includes(:closed_events, :order_details)
 
     respond_to do |format|
       format.html { @statements = @statements.paginate(page: params[:page]) }
@@ -49,7 +49,7 @@ class FacilityStatementsController < ApplicationController
     @order_detail_action = :create
 
     defaults = SettingsHelper.feature_on?(:set_statement_search_start_date) ? { date_range_start: format_usa_date(1.month.ago.beginning_of_month) } : {}
-    @search_form = TransactionSearch::SearchForm.new(params[:search], defaults: defaults)
+    @search_form = TransactionSearch::SearchForm.new(params[:search], defaults:)
     @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
     @date_range_field = @search_form.date_params[:field]
     @order_details = @search.order_details.reorder(sort_clause)
@@ -57,7 +57,7 @@ class FacilityStatementsController < ApplicationController
 
   # POST /facilities/:facility_id/statements
   def create
-    @statement_creator = StatementCreator.new(order_detail_ids: params[:order_detail_ids], session_user: session_user, current_facility: current_facility)
+    @statement_creator = StatementCreator.new(order_detail_ids: params[:order_detail_ids], session_user:, current_facility:)
 
     if @statement_creator.order_detail_ids.blank?
       flash[:error] = text("no_selection")
