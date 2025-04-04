@@ -134,7 +134,12 @@ class FacilityJournalsController < ApplicationController
   end
 
   def reconcile
-    reconciler = OrderDetails::Reconciler.new(@journal.order_details, params[:order_detail], @journal.journal_date, "reconciled")
+    reconciler = OrderDetails::Reconciler.new(
+      @journal.order_details,
+      params[:order_detail],
+      @journal.journal_date,
+      "reconciled"
+    )
 
     if reconciler.reconcile_all > 0
       count = reconciler.count
@@ -151,7 +156,7 @@ class FacilityJournalsController < ApplicationController
     @journal = Journal.new(
       created_by: session_user.id,
       journal_date: parse_usa_date(params[:journal_date]),
-      order_details_for_creation: order_details_for_creation,
+      order_details_for_creation:
     )
   end
 

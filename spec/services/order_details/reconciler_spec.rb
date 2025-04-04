@@ -25,7 +25,17 @@ RSpec.describe OrderDetails::Reconciler do
 
     context "with a bulk note" do
       context "bulk note checkbox checked" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled", "this is a bulk note", "CRT1234567", "1") }
+        let(:reconciler) do
+          described_class.new(
+            OrderDetail.all,
+            params,
+            Time.current,
+            "reconciled",
+            bulk_reconcile: true,
+            bulk_note: "this is a bulk note",
+            bulk_deposit_number: "CRT1234567",
+          )
+        end
 
         it "adds the note to all order details" do
           reconciler.reconcile_all
@@ -36,8 +46,17 @@ RSpec.describe OrderDetails::Reconciler do
         end
       end
 
-      context "bulk note checkbox UNchecked" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled", "this is a bulk note", "CRT1234567") }
+      context "bulk note when bulk_reconcile blank" do
+        let(:reconciler) do
+          described_class.new(
+            OrderDetail.all,
+            params,
+            Time.current,
+            "reconciled",
+            bulk_note: "this is a bulk note",
+            bulk_deposit_number: "CRT1234567"
+          )
+        end
 
         it "does NOT add the note to the order details" do
           reconciler.reconcile_all
@@ -51,7 +70,7 @@ RSpec.describe OrderDetails::Reconciler do
 
     context "with NO bulk note" do
       context "with reconciled note set" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled", "" ) }
+        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled") }
         let(:params) { order_details.each_with_object({}) { |od, h| h[od.id.to_s] = ActionController::Parameters.new(reconciled: "1", reconciled_note: "note #{od.id}") } }
 
         it "adds the note to the appropriate order details" do
@@ -63,7 +82,7 @@ RSpec.describe OrderDetails::Reconciler do
       end
 
       context "with NO reconciled note set" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled", "", "" ) }
+        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled") }
 
         it "does not set a value" do
           reconciler.reconcile_all
@@ -75,7 +94,7 @@ RSpec.describe OrderDetails::Reconciler do
       end
 
       context "with previous reconciled note value, no new value set" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled", "", "" ) }
+        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled") }
         before(:each) do
           order_details.each do |od|
             od.update!(reconciled_note: "rec note #{od.id}", deposit_number: "CRT0000123")
@@ -107,13 +126,41 @@ RSpec.describe OrderDetails::Reconciler do
       expect(updated_reconciled_count).to eq(previous_reconciled_count)
       expect(updated_unrecoverable_count).to eq(previous_unrecoverable_count + 5)
     end
+
+    context "when orders have reconciled_note" do
+      before do
+        params.values.each_with_index do |od_params, idx|
+          od_params["unrecoverable_note"] = "note #{idx}"
+        end
+      end
+
+      it "set individual reconcile notes" do
+        expect(order_details.map(&:reconciled_note).all?(nil)).to be true
+
+        reconciler.reconcile_all
+
+        expect(order_details.map { |od| od.reload.unrecoverable_note }.all?(String)).to be true
+      end
+    end
+
+    context "when bulk_reconcile is true" do
+      let(:reconciler) do
+        described_class.new(
+          OrderDetail.all,
+          params,
+          Time.current,
+          "unrecoverable",
+          bulk_reconcile: true,
+          bulk_note:,
+        )
+      end
+      let(:bulk_note) { "Note about all orders" }
+
+      it "set reconciled notes for all" do
+        reconciler.reconcile_all
+
+        expect(order_details.all? { |od| od.reload.unrecoverable_note == bulk_note }).to be true
+      end
+    end
   end
-
-  # describe "reconciling more than 1000 order details (because of oracle)" do
-  #   let(:number_of_order_details) { 1001 }
-
-  #   it "reconciles all the orders" do
-  #     expect { reconciler.reconcile_all }.to change { OrderDetail.reconciled.count }.from(0).to(1001)
-  #   end
-  # end
 end

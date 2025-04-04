@@ -36,6 +36,9 @@
       = banner_label @order_detail, :note
       - if @order_detail.reconciled_note.present?
         = banner_label @order_detail, :reconciled_note
+      - if @order_detail.unrecoverable_note.present? && @order_detail.unrecoverable?
+        = banner_label @order_detail, :unrecoverable_note
+
       %dl.span2
         %dt Assigned Staff
         = @order_detail.assigned_user ? @order_detail.assigned_user.full_name : 'Unassigned'

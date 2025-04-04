@@ -13,20 +13,19 @@ module OrderDetails
     validate :all_journals_and_statements_must_be_before_reconciliation_date
 
     def initialize(
-        order_detail_scope,
-        params,
-        reconciled_at,
-        order_status,
-        bulk_reconcile_note = nil,
-        bulk_deposit_number = nil,
-        bulk_reconcile_checkbox = nil
-      )
+      order_detail_scope,
+      params,
+      reconciled_at,
+      order_status,
+      bulk_reconcile: false,
+      **kwargs
+    )
       @params = params || ActionController::Parameters.new
       @order_status = order_status || "reconciled"
       @order_details = order_detail_scope.readonly(false).find_ids(to_be_reconciled.keys)
       @reconciled_at = reconciled_at
-      @bulk_reconcile_note = bulk_reconcile_note if bulk_reconcile_checkbox == "1"
-      @bulk_deposit_number = bulk_deposit_number if bulk_reconcile_checkbox == "1"
+      @bulk_note = kwargs[:bulk_note] if bulk_reconcile
+      @bulk_deposit_number = kwargs[:bulk_deposit_number] if bulk_reconcile
     end
 
     def reconcile_all
@@ -58,13 +57,13 @@ module OrderDetails
 
       if @order_status == "reconciled"
         order_detail.reconciled_at = @reconciled_at
-        order_detail.reconciled_note = @bulk_reconcile_note if @bulk_reconcile_note.present?
+        order_detail.reconciled_note = @bulk_note if @bulk_note.present?
         order_detail.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
         order_detail.change_status!(OrderStatus.reconciled)
       else
         order_detail.reconciled_at = nil
-        order_detail.reconciled_note = nil
         order_detail.deposit_number = nil
+        order_detail.unrecoverable_note = @bulk_note if @bulk_note.present?
         order_detail.change_status!(OrderStatus.unrecoverable)
       end
       @count += 1
@@ -77,7 +76,11 @@ module OrderDetails
     end
 
     def allowed(params)
-      params.except(:reconciled).permit(:reconciled_note, :deposit_number)
+      params.except(:reconciled).permit(
+        :reconciled_note,
+        :unrecoverable_note,
+        :deposit_number,
+      )
     end
 
     def reconciliation_must_be_in_past

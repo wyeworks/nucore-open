@@ -15,6 +15,7 @@ class OrderDetails::ParamUpdater
         :editing_time_data,
         :project_id,
         :reconciled_note,
+        :unrecoverable_note,
         :deposit_number,
         :reference_id,
         reservation: [
