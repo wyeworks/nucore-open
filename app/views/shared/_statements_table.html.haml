@@ -60,9 +60,15 @@
               %div
                 %small
                   %strong= "#{t('statements.notes')}:"
-              %ul.unstyled
+              %small= s.reconcile_notes.shift
+              %ul.unstyled.collapse{ id: "statement-notes-#{s.id}" }
                 - s.reconcile_notes.each do |note|
                   %li
                     %small= note
+              - if s.reconcile_notes.length > 0
+                %button{ type: "button", data: { toggle: "collapse", target: "#statement-notes-#{s.id}" } }
+                  %small
+                    Expand
+
 
   = will_paginate(@statements)
