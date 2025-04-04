@@ -5,15 +5,15 @@ $(function () {
 
   const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-  let usersField = $(".js--chosen.js--estimate-form");
+  let selectField = $(".js--chosen.js--select-with-search");
 
-  if (!usersField) return;
+  if (!selectField) return;
 
-  const searchUrl = usersField.data("searchUrl");
+  const searchUrl = selectField.data("searchUrl");
 
   if (!searchUrl) return;
 
-  const searchInput = usersField
+  const searchInput = selectField
     .next(".chosen-container")
     .find(".chosen-search input");
 
@@ -35,20 +35,20 @@ $(function () {
       })
         .then((response) => response.json())
         .then((data) => {
-          usersField.empty();
-          data.forEach(function (user) {
-            return usersField.append(
-              '<option value="' + user.id + '">' + user.name + "</option>"
+          selectField.empty();
+          data.forEach(function (option) {
+            return selectField.append(
+              '<option value="' + option.id + '">' + option.name + "</option>"
             );
           });
 
-          usersField.trigger("chosen:updated");
-          usersField.next(".chosen-container").trigger("mousedown");
+          selectField.trigger("chosen:updated");
+          selectField.next(".chosen-container").trigger("mousedown");
 
           searchInput.val(query);
         })
         .catch((error) => {
-          console.error("Error fetching users:", error);
+          console.error("Error fetching options:", error);
         });
     }, 600);
   });
