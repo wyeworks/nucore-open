@@ -160,6 +160,9 @@ en:
       bundle_product:
         one: Bundled Product
         other: Bundled Products
+      estimate:
+        one: Estimate
+        other: Estimates
       facility:
         one: Facility
         other: Facilities

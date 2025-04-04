@@ -31,6 +31,7 @@ class Facility < ApplicationRecord
   has_many :reservations, through: :instruments
   has_many :product_display_groups
   has_many :projects, inverse_of: :facility, dependent: :destroy # Though Facilities cannot be destroyed
+  has_many :estimates, inverse_of: :facility
 
   validates_presence_of :name, :short_description, :abbreviation
   validate_url_name :url_name
