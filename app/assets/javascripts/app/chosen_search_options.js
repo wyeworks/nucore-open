@@ -1,3 +1,16 @@
+const forceChosenInput = (select, data, query) => {
+  if (!select || !data || data.length) return;
+
+  const optionText = query
+    ? `No results found for: ${query}`
+    : "No results found";
+  select.append(
+    `<option value="" class="no-results-option"> ${optionText} </option>`
+  );
+
+  select.trigger("chosen:updated");
+};
+
 $(function () {
   const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
 
@@ -13,20 +26,21 @@ $(function () {
 
   if (!searchUrl) return;
 
-  const searchInput = selectField
-    .next(".chosen-container")
-    .find(".chosen-search input");
+  const chosenContainer = selectField.next(".chosen-container");
+  const searchInput = chosenContainer.find(".chosen-search input");
+
+  forceChosenInput(selectField, [], "");
 
   let searchTimeout;
 
-  searchInput.on('input', function() {
+  searchInput.on("input", function () {
     const query = this.value.trim();
 
     clearTimeout(searchTimeout);
 
     if (query.length < 3) return;
 
-    searchTimeout = setTimeout(function() {
+    searchTimeout = setTimeout(function () {
       fetch(`${searchUrl}?query=${query}`, {
         headers: {
           "X-CSRF-Token": csrfToken,
@@ -36,6 +50,11 @@ $(function () {
         .then((response) => response.json())
         .then((data) => {
           selectField.empty();
+
+          if (!data.length) {
+            forceChosenInput(usersField, data, query);
+          }
+
           data.forEach(function (option) {
             return selectField.append(
               '<option value="' + option.id + '">' + option.name + "</option>"
