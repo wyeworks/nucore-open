@@ -8,9 +8,9 @@
 
 .container.banner-list
   .row
-    = banner_date_label @estimate, :expires_at
-    = banner_label @estimate, :user
-    = banner_label @estimate, :created_by_user
+    = header_display_date @estimate, :expires_at
+    = header_display @estimate, :user
+    = header_display @estimate, :created_by_user
 
   .row
-    = banner_label @estimate, :note
+    = header_display @estimate, :note
