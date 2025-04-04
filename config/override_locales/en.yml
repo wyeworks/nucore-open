@@ -111,11 +111,11 @@ en:
         order_details/reconciler:
           after_all_journal_dates: "Reconciliation Date must be after all journal or invoice dates"
   #
-  admin:
-    transaction_search:
-      date_range_fields:
-        journal_or_statement_date: "Journal/Invoice"
-  #     actions:
+  # admin:
+  #  transaction_search:
+  #    date_range_fields:
+  #     journal_or_statement_date: "Journal/Invoice"
+  #   actions:
   #       reassign_chart_strings: "Reassign Chart Strings"
   #
   #  order_row_importer:
@@ -129,6 +129,8 @@ en:
 
   admin:
     transaction_search:
+      date_range_fields:
+        journal_or_statement_date: "Journal/Invoice"
       actions:
         reassign_chart_strings: "Reassign Account Numbers"
   testing: # DO NOT DELETE: these are used to verify proper file loading in the specs
