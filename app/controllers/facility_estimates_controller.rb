@@ -56,12 +56,10 @@ class FacilityEstimatesController < ApplicationController
   def set_users
     search_term = params[:query]&.strip
 
-    if search_term.present?
-      query = User.active.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: "%#{search_term.downcase}%")
-
-      @users = query.sort_last_first.limit(20).map { |u| { id: u.id, name: u.full_name } }
-    else
-      @users = []
-    end
+    @users = if search_term.present?
+               UserFinder.search(search_term, 20).map { |user| { id: user.id, name: user.full_name } }
+             else
+               []
+             end
   end
 end
