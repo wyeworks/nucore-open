@@ -59,9 +59,10 @@
             - if s.reconcile_notes.present?
               %div
                 %small
-                  %strong
-                    Notes:
-              %div
-                %small= s.reconcile_notes
+                  %strong= "#{t('statements.notes')}:"
+              %ul.unstyled
+                - s.reconcile_notes.each do |note|
+                  %li
+                    %small= note
 
   = will_paginate(@statements)

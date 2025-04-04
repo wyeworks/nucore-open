@@ -11,6 +11,11 @@ class Statement < ApplicationRecord
            class_name: "OrderDetail",
            foreign_key: :statement_id
 
+  has_many :closed_events,
+           -> { where(event_type: "closed") },
+           class_name: "LogEvent",
+           as: :loggable
+
   belongs_to :account
   belongs_to :facility
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
@@ -67,12 +72,12 @@ class Statement < ApplicationRecord
     include(:order_details_reconciliation_notes)
   end
 
-  def order_notes(note_field)
+  def order_details_notes(note_field)
     if order_details.loaded?
       order_details
     else
       order_details_reconciliation_notes
-    end.joined_notes(note_field)
+    end.filter_map { |od| od.send(note_field) }.uniq
   end
 
   def invoice_date

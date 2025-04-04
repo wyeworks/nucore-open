@@ -698,6 +698,7 @@ en:
     cancel: Cancel
     closed_at: Closed At
     closed_by: Closed By
+    notes: Notes
 
   orders:
     add_account:
