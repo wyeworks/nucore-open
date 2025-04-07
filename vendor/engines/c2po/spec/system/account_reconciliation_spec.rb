@@ -193,6 +193,7 @@ RSpec.describe "Account Reconciliation", :js, feature_setting: { show_unrecovera
       end
 
       it "does not show unrecoverable_note when flag is off", feature_setting: { show_unrecoverable_note: false } do
+        expect(page).to_not have_field("Bulk Note")
         expect(page).to have_field("order_detail_#{order_detail1.id}_reconciled")
         expect(page).to_not have_field("order_detail_#{order_detail1.id}_unrecoverable_note")
       end
