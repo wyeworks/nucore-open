@@ -24,8 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
       this.orderStatus.addEventListener("change", (event) => {
         const selectedStatus = event.target.value;
         this.toggleStatusNoteFiled(selectedStatus);
-        this.toggleReconcileDateField(selectedStatus == RECONCILED);
-        this.toggleBulkNoteField(selectedStatus == UNRECOVERABLE);
+        this.toggleReconcileDateField(selectedStatus === RECONCILED);
+        this.toggleBulkNoteField(selectedStatus === UNRECOVERABLE);
       });
     },
     initFormHandler() {
