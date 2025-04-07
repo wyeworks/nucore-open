@@ -25,10 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const selectedStatus = event.target.value;
         this.toggleStatusNoteFiled(selectedStatus);
         this.toggleReconcileDateField(selectedStatus == RECONCILED);
-
-        if (selectedStatus === RECONCILED) {
-          this.hideBulkNoteField();
-        }
+        this.toggleBulkNoteField(selectedStatus == UNRECOVERABLE);
       });
     },
     initFormHanlder() {
@@ -67,14 +64,13 @@ document.addEventListener("DOMContentLoaded", function () {
      * When showUnrecoverableNote is false we should hide bulk
      * reconcile inputs
      */
-    hideBulkNoteField() {
+    toggleBulkNoteField(isUnrecoverable) {
       const allowUnrecoverableNote = (
         typeof showUnrecoverableNote !== "undefined" &&
         showUnrecoverableNote
       );
 
-      if (!allowUnrecoverableNote &&
-        selectedValue === UNRECOVERABLE) {
+      if (!allowUnrecoverableNote && isUnrecoverable) {
         this.bulkReconcileContainer.classList.add("hidden");
       } else {
         this.bulkReconcileContainer.classList.remove("hidden");
