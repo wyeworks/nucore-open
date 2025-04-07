@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       if (this.form) {
-        this.initFormHanlder();
+        this.initFormHandler();
       }
 
     },
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
         this.toggleBulkNoteField(selectedStatus == UNRECOVERABLE);
       });
     },
-    initFormHanlder() {
+    initFormHandler() {
       this.form.addEventListener("submit", (_event) => {
         const selectedStatus = this.orderStatus.value;
         this.disableOtherNotesFields(selectedStatus);
