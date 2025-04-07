@@ -7,10 +7,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return;
   }
 
-  const showRecinciledNoteStatus = [
-    RECONCILED, UNRECOVERABLE
-  ];
-
   orderStatusSelect.addEventListener("change", function (event) {
     const selectedValue = event.target.value;
 
