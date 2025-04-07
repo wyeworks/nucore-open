@@ -249,12 +249,13 @@ en:
     index:
       head: Reconcile %{model}
       none: There are no %{model} with completed orders to be reconciled at this time
+      order_status: Status
       submit: "Update Orders"
       instructions: "Please review the following orders. Check those that are paid, record any notes, and click 'Update Orders'."
       caption: Reconcilable Orders for %{model} payment sources
       checkbox_label: select order %{order_number} to be reconciled
       bulk_note_checkbox: Use Bulk Note
-      bulk_note: Bulk Reconciliation Note
+      bulk_note: Bulk Note
       bulk_deposit_number: "Bulk !deposit_number_prefix! Number"
       bulk_deposit_number_prefix: "!deposit_number_prefix!"
       bulk_deposit_number_hint: "Please enter the !deposit_number_prefix! Number from your GL008"

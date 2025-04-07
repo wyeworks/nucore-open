@@ -1,33 +1,95 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const orderStatusSelect = document.querySelector(".js--orderStatusSelect");
+  const RECONCILED = "reconciled";
+  const UNRECOVERABLE = "unrecoverable";
 
-  if (!orderStatusSelect) {
-    return;
-  }
+  const formController = {
+    form: document.querySelector(".js--reconcileForm"),
+    orderStatus: document.querySelector(".js--orderStatusSelect"),
+    bulkReconcileContainer: document.querySelector(".js--bulkReconcileFields"),
+    reconcileDate: document.querySelector(".js--bulkReconcileDateField"),
+    /**
+     * Init form callbacks
+     */
+    init() {
+      if (this.orderStatus) {
+        this.initOrderStatusHandler();
+      }
 
-  orderStatusSelect.addEventListener("change", function (event) {
-    const selectedValue = event.target.value;
+      if (this.form) {
+        this.initFormHandler();
+      }
 
-    document
-      .querySelectorAll(".js--reconcileField")
-      .forEach((reconcileTableField) => {
-        if (selectedValue === "reconciled") {
-          reconcileTableField.classList.remove("hidden");
-        } else {
-          reconcileTableField.classList.add("hidden");
-        }
+    },
+    initOrderStatusHandler() {
+      this.orderStatus.addEventListener("change", (event) => {
+        const selectedStatus = event.target.value;
+        this.toggleStatusNoteFiled(selectedStatus);
+        this.toggleReconcileDateField(selectedStatus === RECONCILED);
+        this.toggleBulkNoteField(selectedStatus === UNRECOVERABLE);
       });
+    },
+    initFormHandler() {
+      this.form.addEventListener("submit", (_event) => {
+        const selectedStatus = this.orderStatus.value;
+        this.disableOtherNotesFields(selectedStatus);
+      });
+    },
+    getStatusNoteFields(status) {
+      return document.querySelectorAll(`.js--${status}Field`)
+    },
+    /**
+     * Show note fields according to the selected status
+     */
+    toggleStatusNoteFiled(selectedStatus) {
+      [RECONCILED, UNRECOVERABLE].forEach((status) => {
+        this.getStatusNoteFields(status).forEach((element) => {
+          if (selectedStatus === status) {
+            element.classList.remove("hidden");
+          } else {
+            element.classList.add("hidden");
+          } });
+      })
+    },
+    /**
+     * Show or hide reconcildeDate field
+     */
+    toggleReconcileDateField(show) {
+      if (show) {
+        this.reconcileDate.classList.remove("hidden");
+      } else {
+        this.reconcileDate.classList.add("hidden");
+      }
+    },
+    /**
+     * When showUnrecoverableNote is false we should hide bulk
+     * reconcile inputs
+     */
+    toggleBulkNoteField(isUnrecoverable) {
+      const allowUnrecoverableNote = (
+        typeof showUnrecoverableNote !== "undefined" &&
+        showUnrecoverableNote
+      );
 
-    const reconcileOrdersActionRow = document.querySelector(".js--reconcileOrdersContainer");
-
-    if (!reconcileOrdersActionRow) {
-      return;
+      if (!allowUnrecoverableNote && isUnrecoverable) {
+        this.bulkReconcileContainer.classList.add("hidden");
+      } else {
+        this.bulkReconcileContainer.classList.remove("hidden");
+      }
+    },
+    /**
+     * Disable other status' note fields so they are not submitted
+     */
+    disableOtherNotesFields(selectedStatus) {
+      [RECONCILED, UNRECOVERABLE].forEach((status) => {
+        this.getStatusNoteFields(status).forEach((element) => {
+          const inputEl = element.querySelector("input");
+          if (inputEl && status !== selectedStatus) {
+            inputEl.disabled = true;
+          }
+        })
+      })
     }
+  };
 
-    if (selectedValue === "reconciled") {
-      reconcileOrdersActionRow.classList.remove("hidden");
-    } else {
-      reconcileOrdersActionRow.classList.add("hidden");
-    }
-  });
+  formController.init();
 });
