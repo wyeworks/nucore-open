@@ -1,0 +1,6 @@
+
+= content_for :h1 do
+  = current_facility
+
+- if current_ability.can?(:create, Estimate)
+  %p= link_to t(".add"), new_facility_estimate_path, class: "btn-add"

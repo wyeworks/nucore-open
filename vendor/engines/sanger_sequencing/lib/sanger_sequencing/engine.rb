@@ -36,7 +36,13 @@ module SangerSequencing
     end
 
     initializer "sanger_sequencing.assets.precompile" do |app|
-      app.config.assets.precompile += %w(sanger_sequencing/submissions.css)
+      app.config.assets.precompile += %w[
+        sanger_sequencing/well_plate.js
+        sanger_sequencing/print_warning.js
+        sanger_sequencing/submission.js
+        sanger_sequencing/application.css
+        sanger_sequencing/submissions.css
+      ]
     end
 
   end

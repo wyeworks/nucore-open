@@ -176,4 +176,6 @@ Rails.application.configure do
     config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
 
   Delayed::Worker.delay_jobs = false
+
+  config.assets.compile = false if ENV["RAILS_TEST_COMPILED_ASSETS"].present?
 end
