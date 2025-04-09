@@ -2,7 +2,7 @@
 
 class FixProductColumnOnResultsFiles < ActiveRecord::Migration[4.2]
 
-  class StoredFile < ApplicationRecord
+  class StoredFile < ActiveRecord::Base
 
     belongs_to :order_detail
 

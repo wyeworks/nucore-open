@@ -2,7 +2,7 @@
 
 class AddCanceledToOrderDetail < ActiveRecord::Migration[4.2]
 
-  class Reservation < ApplicationRecord
+  class Reservation < ActiveRecord::Base
     belongs_to :order_detail
   end
 

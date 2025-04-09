@@ -36,6 +36,10 @@ Style/HashSyntax:
 Rails/HttpPositionalArguments:
   Enabled: false
 
+Rails/ApplicationRecord:
+  Exclude:
+    - "db/migrate/*.rb"
+    - "vendor/engines/*/db/migrate/*.rb"
 Metrics/BlockLength:
   # spec/ is excluded in txi, but we need to exclude from engines as well
   Exclude:
