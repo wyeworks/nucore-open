@@ -2,7 +2,7 @@
 
 class OptionalRequiredNotesField < ActiveRecord::Migration[4.2]
 
-  class Product < ActiveRecord::Base
+  class Product < ApplicationRecord
   end
 
   def up

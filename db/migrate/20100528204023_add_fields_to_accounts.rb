@@ -2,7 +2,7 @@
 
 class AddFieldsToAccounts < ActiveRecord::Migration[4.2]
 
-  class Account < ActiveRecord::Base
+  class Account < ApplicationRecord
   end
 
   def self.up

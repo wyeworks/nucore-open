@@ -2,7 +2,7 @@
 
 class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
 
-  class Reservation < ActiveRecord::Base
+  class Reservation < ApplicationRecord
   end
 
   def up
