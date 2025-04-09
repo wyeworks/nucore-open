@@ -130,7 +130,6 @@ RSpec.describe "Facility Statement Admin" do
 
       order_details.first.update(reconciled_note: "Some note #123")
       order_details.map do |od|
-        # od.touch(:reconciled_at)
         od.update(state: :reconciled)
       end
     end
