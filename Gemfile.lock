@@ -138,7 +138,7 @@ GEM
     amazing_print (1.7.2)
     ast (2.4.3)
     aws-eventstream (1.3.2)
-    aws-partitions (1.1082.0)
+    aws-partitions (1.1083.0)
     aws-sdk-core (3.222.1)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
@@ -321,7 +321,7 @@ GEM
     factory_bot_rails (6.4.4)
       factory_bot (~> 6.5)
       railties (>= 5.0.0)
-    faraday (2.12.2)
+    faraday (2.13.0)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -394,7 +394,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mailgun-ruby (1.3.4)
+    mailgun-ruby (1.3.5)
       faraday (~> 2.1)
       faraday-multipart (~> 1.1.0)
       mime-types
@@ -404,7 +404,7 @@ GEM
     mime-types (3.6.2)
       logger
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2025.0402)
+    mime-types-data (3.2025.0408)
     mini_magick (5.2.0)
       benchmark
       logger
@@ -616,7 +616,7 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
-    selenium-webdriver (4.30.1)
+    selenium-webdriver (4.31.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
@@ -770,7 +770,7 @@ DEPENDENCIES
   kt-paperclip
   ldap_authentication!
   letter_opener
-  mailgun-ruby (~> 1.3.4)
+  mailgun-ruby (~> 1.3.5)
   matrix
   mysql2
   nested_form_fields

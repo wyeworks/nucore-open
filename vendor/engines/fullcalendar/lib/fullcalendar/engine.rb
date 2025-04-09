@@ -6,8 +6,9 @@ module Fullcalendar
 
     require "momentjs-rails"
 
-    initializer "fine_uploader.assets.precompile" do |app|
-      app.config.assets.precompile += %w(fullcalendar.js)
+    initializer "fullcalendar.assets.precompile" do |app|
+      app.config.assets.paths << root.join("vendor", "assets", "stylesheets")
+      app.config.assets.precompile += %w[ fullcalendar.js fullcalendar.css ]
     end
 
   end
