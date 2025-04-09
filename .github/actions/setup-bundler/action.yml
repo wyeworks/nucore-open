@@ -1,0 +1,17 @@
+name: Setup bundle
+description: Install dependencies
+
+runs:
+  using: composite
+  steps:
+    - name: cache gems
+      uses: actions/cache@v3
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-bundle-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: ${{ runner.os }}-bundle-
+
+    - run: bundle config --local path vendor/bundle
+      shell: bash
+    - run: bundle install
+      shell: bash

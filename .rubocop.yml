@@ -9,11 +9,10 @@ AllCops:
   NewCops: enable
   DisplayCopNames: true
   Exclude:
-    # Rubocop does not seem to merge these from -txi in AllCops, so we need to
-    # reiterate them.
     - "db/schema.rb" # You can't touch this
     - ".bundle/**/*" # Auto-generated
     - "bin/**/*"     # Auto-generated
+    - "vendor/bundle/**/*"
     # Some forks have schema.rb files in their custom engines
     - "vendor/engines/*/db/schema.rb"
     - "public/**/*"
