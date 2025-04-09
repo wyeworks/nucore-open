@@ -6,6 +6,11 @@ class Statement < ApplicationRecord
   has_many :statement_rows, dependent: :destroy
   has_many :payments, inverse_of: :statement
 
+  has_many :closed_events,
+           -> { where(event_type: "closed") },
+           class_name: "LogEvent",
+           as: :loggable
+
   belongs_to :account
   belongs_to :facility
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
@@ -55,7 +60,11 @@ class Statement < ApplicationRecord
 
   def self.where_invoice_number(query)
     return none unless /\A(?<account_id>\d+)-(?<id>\d+)\z/ =~ query
-    where(id: id, account_id: account_id)
+    where(id:, account_id:)
+  end
+
+  def order_details_notes(note_field)
+    order_details.filter_map { |od| od.send(note_field) }.uniq
   end
 
   def invoice_date
