@@ -76,7 +76,7 @@ RSpec.describe "Account Reconciliation", :js, feature_setting: { show_unrecovera
 
       # ensure the closed by times show up on the statement history page
       click_link "#{I18n.t('Statement')} History"
-      expect(page).to have_content(statement.closed_by_times)
+      expect(page).to have_content(statement.closed_by_times.first)
     end
 
     context "with bulk reconciliation note" do
@@ -232,7 +232,7 @@ RSpec.describe "Account Reconciliation", :js, feature_setting: { show_unrecovera
 
       # ensure the closed by times show up on the statement history page
       click_link "#{I18n.t('Statement')} History"
-      expect(page).to have_content(statement.closed_by_times)
+      expect(page).to have_content(statement.closed_by_times.first)
     end
 
     it "can take a bulk reconciliation note" do

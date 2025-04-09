@@ -4,11 +4,11 @@ require "rails_helper"
 
 RSpec.describe "Facility Statement Admin" do
   let(:facility) { create(:setup_facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
-  let(:item) { create(:setup_item, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
+  let(:item) { create(:setup_item, facility:) }
   let(:accounts) { create_list(:account, 3, :with_account_owner, type: Account.config.statement_account_types.first) }
   let(:orders) do
-    accounts.map { |account| create(:complete_order, product: item, account: account) }
+    accounts.map { |account| create(:complete_order, product: item, account:) }
   end
 
   let(:order_details) { orders.map(&:order_details).flatten }
@@ -113,8 +113,76 @@ RSpec.describe "Facility Statement Admin" do
     end
   end
 
+  describe "statements table order notes" do
+    let(:account) { order_details.first.account }
+    let!(:statement) do
+      create(
+        :statement,
+        created_at: 9.days.ago,
+        order_details: order_details.slice(..3),
+        account:,
+        facility:
+      )
+    end
+
+    before do
+      login_as director
+
+      order_details.first.update(reconciled_note: "Some note #123")
+      order_details.map do |od|
+        # od.touch(:reconciled_at)
+        od.update(state: :reconciled)
+      end
+    end
+
+    context(
+      "when ff is on", :js,
+      feature_setting: { show_statement_reconcile_notes: true },
+    ) do
+      it "show order details notes if ff is on" do
+        visit facility_statements_path(facility)
+
+        within("table.table") do
+          expect(page).to have_content(account.description)
+          expect(page).to have_content("Some note #123")
+          expect(page).to_not have_element("a", text: "Expand")
+        end
+      end
+
+      it "shows expand button when more than one note" do
+        order_details.second.update(reconciled_note: "Other note #456")
+
+        visit facility_statements_path(facility)
+
+        within("table.table") do
+          expect(page).to have_content(account.description)
+          expect(page).to have_content("Some note #123")
+          expect(page).to_not have_content("Other note #456")
+          expect(page).to have_element("a", text: "Expand")
+          click_link("Expand")
+
+          expect(page).to have_content("Other note #456")
+        end
+      end
+    end
+
+    context(
+      "when ff is off",
+      { feature_setting: { show_statement_reconcile_notes: false } },
+    ) do
+      it "does not show order notes" do
+        visit facility_statements_path(facility)
+
+        within("table.table") do
+          expect(page).to have_content(account.description)
+          expect(page).to_not have_content("Some note #123")
+        end
+      end
+    end
+  end
+
   describe "resending statement emails", :js, feature_setting: { send_statement_emails: true } do
-    let!(:statement) { create(:statement, created_at: 3.days.ago, order_details: [order_details.first], account: order_details.first.account, facility: facility) }
+    let!(:statement) { create(:statement, created_at: 3.days.ago, order_details: [order_details.first], account: order_details.first.account, facility:) }
 
     before do
       login_as director
