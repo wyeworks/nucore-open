@@ -30,7 +30,7 @@ jobs:
       MYSQL_PASSWORD: root
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions
+      - uses: ./.github/actions/setup-rails
 
       - name: Glob match
         uses: tj-actions/glob@v22
@@ -71,7 +71,7 @@ jobs:
       PARALLEL_TEST_PROCESSORS: 4
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions
+      - uses: ./.github/actions/setup-rails
       # Uncomment below to open ssh tunnel for debugging
       # - uses: mxschmitt/action-tmate@v3
       - run: bundle exec rails parallel:create
@@ -109,5 +109,16 @@ jobs:
       TEST_APP_PORT: 3000
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions
+      - uses: ./.github/actions/setup-rails
       - run: bundle exec rake teaspoon
+
+  run-rubocop:
+    runs-on: ubuntu-latest
+    container:
+      image: wyeworkshub/ruby-node-chrome-pack:3.3.0
+    env:
+      RAILS_ENV: test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-bundler
+      - run: bundle exec rubocop
