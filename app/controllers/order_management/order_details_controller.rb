@@ -108,7 +108,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
         OrderStatus::RECONCILED
       ]).to_a
     
-      # should we add any missing custom status?
+      # Add potentially missing custom status
       @order_statuses |= [@order_detail.order_status]
       
       @order_statuses.reject! { |status| status.name == OrderStatus::RECONCILED } unless @order_detail.can_reconcile?
