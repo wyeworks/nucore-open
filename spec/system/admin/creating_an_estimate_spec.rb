@@ -2,9 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe "Creating an estimate" do
+RSpec.describe "Creating an estimate", :js do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
+  let!(:user) { create(:user) }
 
   before { login_as director }
 
@@ -19,8 +20,19 @@ RSpec.describe "Creating an estimate" do
 
     fill_in "Name", with: "Test Estimate"
     fill_in "Expires at", with: 1.month.from_now.strftime("%m/%d/%Y")
+
     fill_in "Note", with: "This is a test estimate"
-    select director.to_s, from: "User"
+
+    expect(page).to have_content("No results found")
+
+    page.execute_script("$('#estimate_user_id_chosen').trigger('mousedown')")
+    page.execute_script("$('.chosen-search input').val('#{user.first_name}').trigger('input')")
+
+    wait_for_ajax
+
+    # Make sure calendar is not open
+    find("#estimate_user_id_chosen").click
+    select_from_chosen user.full_name, from: "User"
 
     click_button "Add Estimate"
 
@@ -29,5 +41,6 @@ RSpec.describe "Creating an estimate" do
     expect(page).to have_content "This is a test estimate"
     expect(page).to have_content 1.month.from_now.strftime("%m/%d/%Y")
     expect(page).to have_content director.full_name
+    expect(page).to have_content user.full_name
   end
 end

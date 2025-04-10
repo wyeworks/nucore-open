@@ -11,13 +11,21 @@ const forceChosenInput = (select, data, query) => {
   select.trigger("chosen:updated");
 };
 
-$(function () {
+const csrfToken = (selectField) => {
+  const isTestEnv = selectField.data("testEnv");
+
+  if (isTestEnv) {
+    return "";
+  }
+
   const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
 
-  if (!csrfTokenElement) return;
+  if (!csrfTokenElement) return "";
 
-  const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
+  return csrfTokenElement.content;
+};
 
+$(function () {
   let selectField = $(".js--chosen.js--select-with-search");
 
   if (!selectField) return;
@@ -43,7 +51,7 @@ $(function () {
     searchTimeout = setTimeout(function () {
       fetch(`${searchUrl}?query=${query}`, {
         headers: {
-          "X-CSRF-Token": csrfToken,
+          "X-CSRF-Token": csrfToken(selectField),
           Accept: "application/json",
         },
       })

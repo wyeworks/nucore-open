@@ -12,7 +12,7 @@
         collection: [],
         class: "js--chosen js--select-with-search",
         include_blank: false,
-        data: { search_url: search_facility_estimates_path }
+        data: { search_url: search_facility_estimates_path, test_env: Rails.env.test? }
     .span-4
       = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
   .form-inputs
