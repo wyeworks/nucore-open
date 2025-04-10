@@ -69,15 +69,53 @@ RSpec.describe StatementPresenter do
 
     describe "#closed_by_user_full_names" do
       it "lists user full names" do
-        expect(subject.closed_by_user_full_names).to eq "#{user1.full_name}\n#{user2.full_name}"
+        expect(subject.closed_by_user_full_names).to eq [user1.full_name, user2.full_name]
       end
     end
 
     describe "#closed_by_times" do
       it "lists close times" do
-        time_string = "#{SpecDateHelper.format_usa_datetime(log_event1.event_time)}\n#{SpecDateHelper.format_usa_datetime(log_event2.event_time)}"
+        log_event_times = [
+          log_event1.event_time,
+          log_event2.event_time,
+        ].map { |dt| I18n.l(dt, format: :usa) }
 
-        expect(subject.closed_by_times).to eq time_string
+        expect(subject.closed_by_times).to eq log_event_times
+      end
+    end
+  end
+
+  describe "#reconcile_notes" do
+    let(:product) { create(:setup_instrument) }
+    let(:order) { create(:setup_order, product:) }
+
+    before do
+      create_list(:order_detail, 2, statement:, order:, product:)
+    end
+
+    context "when status is reconciled" do
+      before do
+        statement.order_details.update(
+          state: :reconciled,
+          reconciled_note: "some reconcile note",
+        )
+      end
+
+      it "returns reconciled note" do
+        expect(subject.reconcile_notes).to eq ["some reconcile note"]
+      end
+    end
+
+    context "when status is unrecoverable" do
+      before do
+        statement.order_details.update(
+          state: :unrecoverable,
+          unrecoverable_note: "some unrecoverable note",
+        )
+      end
+
+      it "returns unrecoverable note" do
+        expect(subject.reconcile_notes).to eq ["some unrecoverable note"]
       end
     end
   end

@@ -427,6 +427,11 @@ en:
         reconcile_note: Reconcile Note
         account_admins: Account Admins
         total_cost: Total
+      statement/status:
+        canceled: Canceled
+        reconciled: Reconciled
+        unrecoverable: Unrecoverable
+        unreconciled: Unreconciled
       account:
         account_number: Account Number
         display_status: Status

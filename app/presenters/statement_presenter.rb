@@ -28,15 +28,19 @@ class StatementPresenter < SimpleDelegator
   end
 
   def closed_by_user_full_names
-    closed_events.map { |event| event.user.full_name }.join("\n")
+    closed_events.map { |event| event.user.full_name }
   end
 
   def closed_by_times
-    closed_events.map { |event| format_usa_datetime(event.event_time) }.join("\n")
+    closed_events.map { |event| format_usa_datetime(event.event_time) }
   end
 
-  def closed_events
-    @closed_events ||= LogEvent.where(loggable_type: "Statement", loggable_id: id, event_type: "closed")
+  def reconcile_notes
+    @reconcile_notes ||= if status == :reconciled
+                           order_details_notes(:reconciled_note)
+                         elsif status == :unrecoverable
+                           order_details_notes(:unrecoverable_note)
+                         end
   end
 
 end
