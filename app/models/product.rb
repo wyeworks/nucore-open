@@ -90,12 +90,12 @@ class Product < ApplicationRecord
 
   # Those that can be added to an order by an administrator
   def self.mergeable_types
-    @mergeable_types ||= ["Instrument", "Item", "Service", "TimedService", "Bundle"]
+    @mergeable_types ||= %w[Instrument Item Service TimedService Bundle]
   end
 
   # Those that can be ordered via the NUcore homepage
   def self.orderable_types
-    @orderable_types ||= ["Instrument", "Item", "Service", "TimedService", "Bundle"]
+    @orderable_types ||= %w[Instrument Item Service TimedService Bundle]
   end
 
   # Products that can be used as accessories

@@ -1,0 +1,8 @@
+.statement {
+  &__nowrap-text {
+    white-space: nowrap;
+    max-width: 150px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
