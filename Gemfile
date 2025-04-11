@@ -48,8 +48,8 @@ gem "paranoia"
 ## views
 gem "sass-rails"
 gem "coffee-rails"
-gem "uglifier", "= 4.1.18" # 4.1.19 has an issue https://github.com/mishoo/UglifyJS2/issues/3245
 gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
+gem "terser", "~> 1.2"
 gem "haml"
 gem "will_paginate"
 # TODO: Remove dynamic_form and use Rails to display errors
