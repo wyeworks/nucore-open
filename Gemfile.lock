@@ -673,7 +673,7 @@ GEM
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2025.2)
       tzinfo (>= 1.0.0)
-    uglifier (4.1.18)
+    uglifier (4.2.1)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
@@ -817,7 +817,7 @@ DEPENDENCIES
   teaspoon-jasmine
   text_helpers
   tzinfo-data
-  uglifier (= 4.1.18)
+  uglifier
   unicorn
   vuejs-rails (~> 1.0.26)
   web-console
