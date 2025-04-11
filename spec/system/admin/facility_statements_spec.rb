@@ -134,31 +134,29 @@ RSpec.describe "Facility Statement Admin" do
       end
     end
 
-    context "when ff is on", :js do
-      it "show order details notes if ff is on" do
-        visit facility_statements_path(facility)
+    it "show order details notes if ff is on" do
+      visit facility_statements_path(facility)
 
-        within("table.table") do
-          expect(page).to have_content(account.description)
-          expect(page).to have_content("Some note #123")
-          expect(page).to_not have_element("a", text: "Expand")
-        end
+      within("table.table") do
+        expect(page).to have_content(account.description)
+        expect(page).to have_content("Some note #123")
+        expect(page).to_not have_element("a", text: "Expand")
       end
+    end
 
-      it "shows expand button when more than one note" do
-        order_details.second.update(reconciled_note: "Other note #456")
+    it "shows expand button when more than one note" do
+      order_details.second.update(reconciled_note: "Other note #456")
 
-        visit facility_statements_path(facility)
+      visit facility_statements_path(facility)
 
-        within("table.table") do
-          expect(page).to have_content(account.description)
-          expect(page).to have_content("Some note #123")
-          expect(page).to_not have_content("Other note #456")
-          expect(page).to have_element("a", text: "Expand")
-          click_link("Expand")
+      within("table.table") do
+        expect(page).to have_content(account.description)
+        expect(page).to have_content("Some note #123")
+        expect(page).to_not have_content("Other note #456")
+        expect(page).to have_element("a", text: "Expand")
+        click_link("Expand")
 
-          expect(page).to have_content("Other note #456")
-        end
+        expect(page).to have_content("Other note #456")
       end
     end
   end
