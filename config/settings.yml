@@ -165,7 +165,6 @@ feature:
   disable_relay_synaccess_rev_a: false
   allow_global_billing_admin_update_actual_prices: false
   export_order_disputes: false
-  show_unrecoverable_note: false
   show_estimates_option: <%= !Rails.env.production? %>
   show_statement_reconcile_notes: false
 

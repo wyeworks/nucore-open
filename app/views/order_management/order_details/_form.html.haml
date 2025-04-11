@@ -96,7 +96,7 @@
         = f.input :note, input_html: { class: "note", rows: 3 }
         - if @order_detail.can_reconcile? || @order_detail.reconciled?
           = f.input :reconciled_note, input_html: { class: "note" }
-        - if @order_detail.unrecoverable? && SettingsHelper.feature_on?(:show_unrecoverable_note)
+        - if @order_detail.unrecoverable?
           = f.input :unrecoverable_note, input_html: { class: "note" }
 
     - if @order_detail.dispute_at
