@@ -48,7 +48,6 @@ gem "paranoia"
 ## views
 gem "sass-rails"
 gem "coffee-rails"
-gem "uglifier"
 gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
 gem "haml"
 gem "will_paginate"
@@ -156,3 +155,5 @@ group :stage, :production do
   gem "unicorn", require: false
   gem "whenever", require: false
 end
+
+gem "terser", "~> 1.2"
