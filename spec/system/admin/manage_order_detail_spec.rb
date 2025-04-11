@@ -16,6 +16,30 @@ RSpec.describe "Managing an order detail" do
   before do
     login_as logged_in_user
   end
+  
+  describe "shows order detail with custom status" do
+    let!(:custom_status) do
+      OrderStatus.create!(
+        name: "Custom",
+        parent: OrderStatus.complete,
+      )
+    end
+
+    before do
+      order_detail.update!(order_status: custom_status)
+    end
+
+    it "shows the custom status in the select box" do
+      visit manage_facility_order_order_detail_path(
+        facility, order, order_detail,
+      )
+
+      expect(page).to have_select(
+        "order_detail[order_status_id]",
+        with_selected: "- Custom"
+      )
+    end
+  end
 
   describe "editing an order detail with a reservation" do
     before do
