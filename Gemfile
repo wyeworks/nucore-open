@@ -49,6 +49,7 @@ gem "paranoia"
 gem "sass-rails"
 gem "coffee-rails"
 gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
+gem "terser", "~> 1.2"
 gem "haml"
 gem "will_paginate"
 # TODO: Remove dynamic_form and use Rails to display errors
@@ -155,5 +156,3 @@ group :stage, :production do
   gem "unicorn", require: false
   gem "whenever", require: false
 end
-
-gem "terser", "~> 1.2"
