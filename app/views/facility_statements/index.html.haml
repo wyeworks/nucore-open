@@ -25,4 +25,4 @@
 - if @statements.any?
   = link_to t("reports.account_transactions.export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
 = render partial: "shared/statements_table",
-  locals: { show_cancel_button: true, show_reconcile_notes: SettingsHelper.feature_on?(:show_statement_reconcile_notes)  }
+  locals: { show_cancel_button: true, show_reconcile_notes: true }

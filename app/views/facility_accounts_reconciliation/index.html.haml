@@ -11,8 +11,6 @@
 
 = render "shared/transactions/search"
 
-- show_unrecoverable_note = SettingsHelper.feature_on?(:show_unrecoverable_note)
-
 - if @unreconciled_details.any?
   - show_reconciliation_deposit_number = SettingsHelper.feature_on?(:show_reconciliation_deposit_number)
   = form_tag([:update, account_route.to_sym, FacilityAccount], method: :post, class: "js--reconcileForm") do
@@ -21,13 +19,9 @@
       show_reconciliation_deposit_number: show_reconciliation_deposit_number,
       show_order_status: true
     = render "table",
-      show_reconciliation_deposit_number: show_reconciliation_deposit_number,
-      show_unrecoverable_note:
+      show_reconciliation_deposit_number: show_reconciliation_deposit_number
     = render "action_row", show_reconciliation_deposit_number: show_reconciliation_deposit_number, show_order_status: false
 
   %p= will_paginate(@unreconciled_details)
 - else
   %p.notice= t(".none", model: account_class.model_name.human(count: 2).downcase)
-
-:javascript
-  const showUnrecoverableNote = #{show_unrecoverable_note};

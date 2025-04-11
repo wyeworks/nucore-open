@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Account Reconciliation", :js, feature_setting: { show_unrecoverable_note: true } do
+RSpec.describe "Account Reconciliation", :js do
   include C2poTestHelper
 
   let(:facility) { create(:setup_facility) }
@@ -190,12 +190,6 @@ RSpec.describe "Account Reconciliation", :js, feature_setting: { show_unrecovera
         expect(order_detail1.reload).to be_unrecoverable
         expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note"
         expect(order_detail1.reconciled_note).to be_blank
-      end
-
-      it "does not show unrecoverable_note when flag is off", feature_setting: { show_unrecoverable_note: false } do
-        expect(page).to_not have_field("Bulk Note")
-        expect(page).to have_field("order_detail_#{order_detail1.id}_reconciled")
-        expect(page).to_not have_field("order_detail_#{order_detail1.id}_unrecoverable_note")
       end
     end
   end
