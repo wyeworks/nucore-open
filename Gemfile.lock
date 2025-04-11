@@ -658,6 +658,8 @@ GEM
     temple (0.10.3)
     terrapin (1.1.0)
       climate_control
+    terser (1.2.5)
+      execjs (>= 0.3.0, < 3)
     text_helpers (1.2.0)
       activesupport
       i18n (>= 0.6.8)
@@ -673,8 +675,6 @@ GEM
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2025.2)
       tzinfo (>= 1.0.0)
-    uglifier (4.1.18)
-      execjs (>= 0.3.0, < 3)
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
@@ -815,9 +815,9 @@ DEPENDENCIES
   sprockets-rails
   synaccess_connect
   teaspoon-jasmine
+  terser (~> 1.2)
   text_helpers
   tzinfo-data
-  uglifier (= 4.1.18)
   unicorn
   vuejs-rails (~> 1.0.26)
   web-console
