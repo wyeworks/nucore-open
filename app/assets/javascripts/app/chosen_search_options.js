@@ -11,13 +11,7 @@ const forceChosenInput = (select, data, query) => {
   select.trigger("chosen:updated");
 };
 
-const csrfToken = (selectField) => {
-  const isTestEnv = selectField.data("testEnv");
-
-  if (isTestEnv) {
-    return "";
-  }
-
+const csrfToken = () => {
   const csrfTokenElement = document.querySelector('meta[name="csrf-token"]');
 
   if (!csrfTokenElement) return "";
@@ -51,7 +45,7 @@ $(function () {
     searchTimeout = setTimeout(function () {
       fetch(`${searchUrl}?query=${query}`, {
         headers: {
-          "X-CSRF-Token": csrfToken(selectField),
+          "X-CSRF-Token": csrfToken(),
           Accept: "application/json",
         },
       })
