@@ -134,10 +134,7 @@ RSpec.describe "Facility Statement Admin" do
       end
     end
 
-    context(
-      "when ff is on", :js,
-      feature_setting: { show_statement_reconcile_notes: true },
-    ) do
+    context "when ff is on", :js do
       it "show order details notes if ff is on" do
         visit facility_statements_path(facility)
 
@@ -161,20 +158,6 @@ RSpec.describe "Facility Statement Admin" do
           click_link("Expand")
 
           expect(page).to have_content("Other note #456")
-        end
-      end
-    end
-
-    context(
-      "when ff is off",
-      { feature_setting: { show_statement_reconcile_notes: false } },
-    ) do
-      it "does not show order notes" do
-        visit facility_statements_path(facility)
-
-        within("table.table") do
-          expect(page).to have_content(account.description)
-          expect(page).to_not have_content("Some note #123")
         end
       end
     end
