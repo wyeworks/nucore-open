@@ -49,7 +49,10 @@ class FacilityEstimatesController < ApplicationController
   private
 
   def facility_estimate_params
-    params.require(:estimate).permit([:name, :user_id, :note, :expires_at])
+    params.require(:estimate).permit(
+      :name, :user_id, :note, :expires_at,
+      estimate_details_attributes: [:id, :product_id, :quantity, :_destroy]
+    )
   end
 
   def load_estimate

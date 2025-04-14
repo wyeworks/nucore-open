@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_01_180024) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_10_211418) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -154,6 +154,16 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_01_180024) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.index ["user_id", "key"], name: "index_email_events_on_user_id_and_key", unique: true
+  end
+
+  create_table "estimate_details", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "estimate_id", null: false
+    t.bigint "product_id", null: false
+    t.integer "quantity", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["estimate_id"], name: "index_estimate_details_on_estimate_id"
+    t.index ["product_id"], name: "index_estimate_details_on_product_id"
   end
 
   create_table "estimates", charset: "utf8mb3", force: :cascade do |t|
