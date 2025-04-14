@@ -22,6 +22,10 @@ class TimedServicePricePolicy < PricePolicy
     "minutes"
   end
 
+  def estimate_cost_from_estimate_detail(estimate_detail)
+    # TODO: NUOPEN-227
+  end
+
   private
 
   def calculate_for_time(duration)
