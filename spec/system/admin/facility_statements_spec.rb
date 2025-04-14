@@ -134,48 +134,29 @@ RSpec.describe "Facility Statement Admin" do
       end
     end
 
-    context(
-      "when ff is on", :js,
-      feature_setting: { show_statement_reconcile_notes: true },
-    ) do
-      it "show order details notes if ff is on" do
-        visit facility_statements_path(facility)
+    it "show order details notes if ff is on" do
+      visit facility_statements_path(facility)
 
-        within("table.table") do
-          expect(page).to have_content(account.description)
-          expect(page).to have_content("Some note #123")
-          expect(page).to_not have_element("a", text: "Expand")
-        end
-      end
-
-      it "shows expand button when more than one note" do
-        order_details.second.update(reconciled_note: "Other note #456")
-
-        visit facility_statements_path(facility)
-
-        within("table.table") do
-          expect(page).to have_content(account.description)
-          expect(page).to have_content("Some note #123")
-          expect(page).to_not have_content("Other note #456")
-          expect(page).to have_element("a", text: "Expand")
-          click_link("Expand")
-
-          expect(page).to have_content("Other note #456")
-        end
+      within("table.table") do
+        expect(page).to have_content(account.description)
+        expect(page).to have_content("Some note #123")
+        expect(page).to_not have_element("a", text: "Expand")
       end
     end
 
-    context(
-      "when ff is off",
-      { feature_setting: { show_statement_reconcile_notes: false } },
-    ) do
-      it "does not show order notes" do
-        visit facility_statements_path(facility)
+    it "shows expand button when more than one note", :js do
+      order_details.second.update(reconciled_note: "Other note #456")
 
-        within("table.table") do
-          expect(page).to have_content(account.description)
-          expect(page).to_not have_content("Some note #123")
-        end
+      visit facility_statements_path(facility)
+
+      within("table.table") do
+        expect(page).to have_content(account.description)
+        expect(page).to have_content("Some note #123")
+        expect(page).to_not have_content("Other note #456")
+        expect(page).to have_element("a", text: "Expand")
+        click_link("Expand")
+
+        expect(page).to have_content("Other note #456")
       end
     end
   end

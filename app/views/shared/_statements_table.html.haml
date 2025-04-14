@@ -67,7 +67,9 @@
               %div
                 %small
                   %strong= "#{t('statements.notes')}:"
-              %small= s.reconcile_notes.shift
+              %ul
+                %li
+                  %small= s.reconcile_notes.shift
               %ul.unstyled.collapse{ id: "statement-notes-#{s.id}" }
                 - s.reconcile_notes.each do |note|
                   %li
