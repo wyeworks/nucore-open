@@ -92,7 +92,7 @@ class OrderDetail < ApplicationRecord
   # consider changing in Rails 4 to
   # `has_many :current_journal_rows, -> { where(journal_id: journal_id) }`
   def current_journal_rows
-    journal_rows.where(journal_id: journal_id)
+    journal_rows.where(journal_id:)
   end
 
   def statement_date
@@ -118,6 +118,8 @@ class OrderDetail < ApplicationRecord
   validates :price_change_reason, presence: true, length: { minimum: 10, allow_blank: true }, if: :pricing_note_required?
   validate :project_must_be_active, if: :project_id_changed?
 
+  validates :reconciled_note, :unrecoverable_note, length: { maximum: 250 }
+
   def actual_costs_match_calculated?
     dup_od = dup
     dup_od.time_data = time_data.dup
@@ -135,7 +137,7 @@ class OrderDetail < ApplicationRecord
   scope :non_canceled, -> { where.not(state: "canceled") }
   scope :cross_core, lambda {
     joins(order: [:facility, :cross_core_project])
-    .where.not(orders: { cross_core_project_id: nil })
+      .where.not(orders: { cross_core_project_id: nil })
   }
 
   def cross_core?
@@ -195,7 +197,7 @@ class OrderDetail < ApplicationRecord
 
   def self.recently_reviewed
     where(state: %w(complete reconciled))
-      .where("order_details.reviewed_at < ?", Time.zone.now)
+      .where(order_details: { reviewed_at: ...Time.zone.now })
       .not_disputed
       .order(:reviewed_at).reverse_order
   end
@@ -238,7 +240,7 @@ class OrderDetail < ApplicationRecord
       .for_facility(facility)
       .joins(:product, :account)
       .where(problem: false)
-      .where("reviewed_at <= ?", Time.current)
+      .where(reviewed_at: ..Time.current)
       .where(statement_id: nil)
       .with_price_policy
       .where("accounts.type" => Account.config.statement_account_types)
@@ -249,7 +251,7 @@ class OrderDetail < ApplicationRecord
     complete
       .joins(:product, :account)
       .where(problem: false)
-      .where("reviewed_at <= ?", Time.current)
+      .where(reviewed_at: ..Time.current)
       .where("accounts.type" => Account.config.journal_account_types)
       .where(journal_id: nil)
       .with_price_policy
@@ -418,7 +420,7 @@ class OrderDetail < ApplicationRecord
   def change_status!(new_status, &block)
     new_state = new_status.state_name
     # don't try to change state if it's not a valid state or it's the same as it was before
-    send("to_#{new_state}") if OrderDetail.aasm.states.map(&:name).include?(new_state) && new_state != state.to_sym
+    send(:"to_#{new_state}") if OrderDetail.aasm.states.map(&:name).include?(new_state) && new_state != state.to_sym
     # don't try to change status if it's the same as before
     unless new_status == order_status
       self.order_status = new_status
@@ -429,7 +431,7 @@ class OrderDetail < ApplicationRecord
   end
 
   # This method is a replacement for change_status! that also will cancel the associated reservation when necessary
-  def update_order_status!(updated_by, order_status, options = {}, &block)
+  def update_order_status!(updated_by, order_status, options = {}, &)
     @order_status_updated_by = updated_by
     options.reverse_merge!(admin: false, apply_cancel_fee: false)
 
@@ -443,7 +445,7 @@ class OrderDetail < ApplicationRecord
         clear_statement
         assign_attributes(canceled_by_user: updated_by, canceled_at: Time.current)
       end
-      change_status! order_status, &block
+      change_status!(order_status, &)
     end
   end
 
@@ -544,8 +546,8 @@ class OrderDetail < ApplicationRecord
   end
 
   def account_usable_by_order_owner?
-    return unless order && account_id
-    return if product.nonbillable_mode? && account.is_a?(NonbillableAccount)
+    return false unless order && account_id
+    return false if product.nonbillable_mode? && account.is_a?(NonbillableAccount)
 
     errors.add("account_id", "is not valid for the orderer") unless AccountUser.find_by(user_id: order.user_id, account_id: account_id, deleted_at: nil)
   end
@@ -584,7 +586,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def valid_for_purchase?(fulfilled_time = Time.zone.now)
-    validate_for_purchase(fulfilled_time).nil? ? true : false
+    validate_for_purchase(fulfilled_time).nil?
   end
 
   def validate_reservation
@@ -595,7 +597,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def valid_reservation?
-    validate_reservation.nil? ? true : false
+    validate_reservation.nil?
   end
 
   def validate_service_meta
@@ -616,7 +618,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def valid_service_meta?
-    validate_service_meta.nil? ? true : false
+    validate_service_meta.nil?
   end
 
   def validate_uploaded_files
@@ -921,7 +923,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def time_data=(time_data)
-    public_send("#{product.time_data_field}=", time_data) if product.respond_to?(:time_data_field)
+    public_send(:"#{product.time_data_field}=", time_data) if product.respond_to?(:time_data_field)
   end
 
   def translation_scope

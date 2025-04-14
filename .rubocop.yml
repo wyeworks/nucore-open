@@ -1,24 +1,21 @@
-require:
+plugins:
   - rubocop-rails
   - rubocop-performance
 
 inherit_from:
-  - .rubocop-txi.yml
   - .rubocop_todo.yml
 
 AllCops:
   NewCops: enable
   DisplayCopNames: true
   Exclude:
-    # Rubocop does not seem to merge these from -txi in AllCops, so we need to
-    # reiterate them.
     - "db/schema.rb" # You can't touch this
     - ".bundle/**/*" # Auto-generated
     - "bin/**/*"     # Auto-generated
+    - "vendor/bundle/**/*"
     # Some forks have schema.rb files in their custom engines
     - "vendor/engines/*/db/schema.rb"
-    # Exclude any paperclip uploaded files
-    - "public/files/**/*"
+    - "public/**/*"
 
 # Project-specific overrides go here, but try to conform to TXI standards as
 # specified in .rubocop-txi.yml when possible.
@@ -33,9 +30,16 @@ Style/EmptyMethod:
 Style/WordArray:
   MinSize: 5
 
+Style/HashSyntax:
+  EnforcedShorthandSyntax: always
+
 Rails/HttpPositionalArguments:
   Enabled: false
 
+Rails/ApplicationRecord:
+  Exclude:
+    - "db/migrate/*.rb"
+    - "vendor/engines/*/db/migrate/*.rb"
 Metrics/BlockLength:
   # spec/ is excluded in txi, but we need to exclude from engines as well
   Exclude:

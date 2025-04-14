@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+# rubocop:disable Metrics/CyclomaticComplexity
 class Ability
 
   include CanCan::Ability
@@ -133,6 +133,10 @@ class Ability
     can :manage_users, Facility.cross_facility if SettingsHelper.feature_on?(:global_billing_administrator_users_tab)
     can :manage_billing, Facility.cross_facility
     can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility, &:cross_facility?
+
+    if SettingsHelper.feature_on?(:show_estimates_option)
+      can :manage, Estimate
+    end
   end
 
 
@@ -167,6 +171,10 @@ class Ability
         can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
       end
     end
+
+    if SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_director_of?(resource)
+      can :manage, Estimate
+    end
   end
 
 
@@ -186,6 +194,10 @@ class Ability
       manager_abilities_for_facility(user, resource, controller)
       can :manage, PriceGroup
       can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
+    end
+
+    if SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_administrator_of?(resource)
+      can :manage, Estimate
     end
   end
 
@@ -468,4 +480,4 @@ class Ability
   end
 
 end
-# rubocop:enable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity, Metrics/MethodLength
+# rubocop:enable Metrics/CyclomaticComplexity

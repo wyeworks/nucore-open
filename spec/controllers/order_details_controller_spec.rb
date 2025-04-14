@@ -17,13 +17,13 @@ RSpec.describe OrderDetailsController do
     before { sign_in user }
 
     context "when the order is not disputable" do
-      it_behaves_like "raises specified error", -> { put :dispute, params: params }, ActiveRecord::RecordNotFound
+      it_behaves_like "raises specified error", -> { put :dispute, params: }, ActiveRecord::RecordNotFound
     end
 
     context "when the order is disputable" do
       before(:each) do
         order_detail.update!(state: "complete", reviewed_at: 7.days.from_now)
-        put :dispute, params: params.merge(order_detail: { dispute_reason: dispute_reason })
+        put :dispute, params: params.merge(order_detail: { dispute_reason: })
       end
 
       context "with a blank dispute_reason" do
@@ -91,8 +91,8 @@ RSpec.describe OrderDetailsController do
       end
 
       describe "as a BA" do
-        let!(:account_user) { FactoryBot.create(:account_user, :business_administrator, account: order_detail.account, user: user) }
-        let(:user) { FactoryBot.create(:user) }
+        let!(:account_user) { create(:account_user, :business_administrator, account: order_detail.account, user:) }
+        let(:user) { create(:user) }
 
         it "sees the dispute box" do
           perform
@@ -101,8 +101,8 @@ RSpec.describe OrderDetailsController do
       end
 
       describe "as an account purchaser" do
-        let!(:account_user) { FactoryBot.create(:account_user, :purchaser, account: order_detail.account, user: user) }
-        let(:user) { FactoryBot.create(:user) }
+        let!(:account_user) { create(:account_user, :purchaser, account: order_detail.account, user:) }
+        let(:user) { create(:user) }
 
         it "does not see the dispute box" do
           expect { perform }.to raise_error(CanCan::AccessDenied)
@@ -135,9 +135,9 @@ RSpec.describe OrderDetailsController do
         end
 
         context "and I am an administrator on the account, but do not own the order" do
-          let(:user) { FactoryBot.create(:user) }
+          let(:user) { create(:user) }
           before do
-            FactoryBot.create(:account_user, :business_administrator, account: account, user: user)
+            create(:account_user, :business_administrator, account:, user:)
           end
 
           it "does not cancel the order" do
@@ -184,10 +184,10 @@ RSpec.describe OrderDetailsController do
       end
 
       describe "as a business admin" do
-        let(:signed_in_user) { FactoryBot.create(:user) }
+        let(:signed_in_user) { create(:user) }
         before do
-          FactoryBot.create(:account_user, :business_administrator,
-                            user: signed_in_user, account: order_detail.account)
+          create(:account_user, :business_administrator,
+                 user: signed_in_user, account: order_detail.account)
           perform
         end
 
@@ -197,20 +197,20 @@ RSpec.describe OrderDetailsController do
       end
 
       describe "as an account purchaser" do
-        let(:signed_in_user) { FactoryBot.create(:user) }
+        let(:signed_in_user) { create(:user) }
         before do
-          FactoryBot.create(:account_user, :purchaser,
-                            user: signed_in_user, account: order_detail.account)
+          create(:account_user, :purchaser,
+                 user: signed_in_user, account: order_detail.account)
         end
 
         it_behaves_like "raises specified error", :perform, CanCan::AccessDenied
       end
 
       describe "as the purchaser" do
-        let(:signed_in_user) { FactoryBot.create(:user) }
+        let(:signed_in_user) { create(:user) }
         before do
-          FactoryBot.create(:account_user, :purchaser,
-                            user: signed_in_user, account: order_detail.account)
+          create(:account_user, :purchaser,
+                 user: signed_in_user, account: order_detail.account)
           order.update(user: signed_in_user)
           perform
         end
@@ -221,7 +221,7 @@ RSpec.describe OrderDetailsController do
       end
 
       describe "as a random user" do
-        let(:signed_in_user) { FactoryBot.create(:user) }
+        let(:signed_in_user) { create(:user) }
 
         it_behaves_like "raises specified error", :perform, CanCan::AccessDenied
       end
@@ -260,7 +260,7 @@ RSpec.describe OrderDetailsController do
 
     describe "#show/edit/update based on state" do
       let(:signed_in_user) { user }
-      let(:account2) { FactoryBot.create(:setup_account, owner: user) }
+      let(:account2) { create(:setup_account, owner: user) }
       let(:params) { { account_id: account2.id } }
 
       def perform_show
@@ -321,7 +321,7 @@ RSpec.describe OrderDetailsController do
       end
 
       describe "after completion" do
-        let(:reservation) { FactoryBot.create(:completed_reservation) }
+        let(:reservation) { create(:completed_reservation) }
 
         describe "while in the review period" do
           before { order_detail.update!(reviewed_at: 7.days.from_now) }
@@ -346,9 +346,9 @@ RSpec.describe OrderDetailsController do
         describe "when the order is statemented" do
           before do
             statement = create(
-              :statement, account: account, facility: facility, created_by: user.id)
+              :statement, account:, facility:, created_by: user.id)
             order_detail.update!(
-              reviewed_at: 1.day.ago, statement: statement)
+              reviewed_at: 1.day.ago, statement:)
           end
           it_behaves_like "cannot modify the account"
         end
@@ -357,7 +357,7 @@ RSpec.describe OrderDetailsController do
           before do
             journal = create(:journal)
             order_detail.update!(
-              reviewed_at: 1.day.ago, journal: journal)
+              reviewed_at: 1.day.ago, journal:)
           end
           it_behaves_like "cannot modify the account"
         end

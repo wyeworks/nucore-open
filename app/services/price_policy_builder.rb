@@ -29,7 +29,7 @@ class PricePolicyBuilder
       create_price_policy_for(product, price_group)
     end
   end
-  
+
   def self.create_nonbillable_for(product)
     create_price_policy_for(product, PriceGroup.nonbillable)
   end

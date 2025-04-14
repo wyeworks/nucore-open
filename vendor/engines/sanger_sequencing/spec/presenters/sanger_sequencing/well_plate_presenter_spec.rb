@@ -69,7 +69,7 @@ RSpec.describe SangerSequencing::WellPlatePresenter, feature_setting: { well_pla
       let(:expected_results_group) { a_kind_of(String) }
       let(:expected_instrument_protocol) { a_kind_of(String) }
       let(:expected_analysis_protocol) { a_kind_of(String) }
-      
+
       it "renders using alternative_csv_columns" do
         expect(sample_rows[0]).to match(["A01", "PGEM_F", "CQLS", expected_results_group, expected_instrument_protocol, expected_analysis_protocol])
         expect(sample_rows[1]).to match(["B01", samples[0].id.to_s, samples[0].submission.order_detail.user.username, expected_results_group, expected_instrument_protocol, expected_analysis_protocol])

@@ -6,6 +6,11 @@ class Statement < ApplicationRecord
   has_many :statement_rows, dependent: :destroy
   has_many :payments, inverse_of: :statement
 
+  has_many :closed_events,
+           -> { where(event_type: "closed") },
+           class_name: "LogEvent",
+           as: :loggable
+
   belongs_to :account
   belongs_to :facility
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
@@ -32,7 +37,7 @@ class Statement < ApplicationRecord
   scope :unrecoverable, -> { where(canceled_at: nil).where(id: OrderDetail.unrecoverable.where.not(statement_id: nil).select(:statement_id)) }
 
   # Use this for restricting the the current facility
-  scope :for_facility, ->(facility) { where(facility: facility) if facility.single_facility? }
+  scope :for_facility, ->(facility) { where(facility:) if facility.single_facility? }
   # Use this for restricting based on search parameters
   scope :for_facilities, ->(facilities) { where(facility: facilities) if facilities.present? }
 
@@ -46,7 +51,7 @@ class Statement < ApplicationRecord
 
   def self.find_by_statement_id(query)
     return nil unless /\A(?<id>\d+)\z/ =~ query
-    find_by(id: id)
+    find_by(id:)
   end
 
   def self.find_by_invoice_number(query)
@@ -55,7 +60,11 @@ class Statement < ApplicationRecord
 
   def self.where_invoice_number(query)
     return none unless /\A(?<account_id>\d+)-(?<id>\d+)\z/ =~ query
-    where(id: id, account_id: account_id)
+    where(id:, account_id:)
+  end
+
+  def order_details_notes(note_field)
+    order_details.filter_map { |od| od.send(note_field) }.uniq
   end
 
   def invoice_date
@@ -77,13 +86,13 @@ class Statement < ApplicationRecord
 
   def status
     if canceled_at
-      "Canceled"
+      :canceled
     elsif reconciled?
-      "Reconciled"
+      :reconciled
     elsif unrecoverable?
-      "Unrecoverable"
+      :unrecoverable
     else
-      "Unreconciled"
+      :unreconciled
     end
   end
 
@@ -92,7 +101,7 @@ class Statement < ApplicationRecord
   end
 
   def add_order_detail(order_detail)
-    statement_rows << StatementRow.new(order_detail: order_detail)
+    statement_rows << StatementRow.new(order_detail:)
     order_details << order_detail
   end
 
@@ -117,9 +126,9 @@ class Statement < ApplicationRecord
   def send_emails
     account.notify_users.each do |user|
         Notifier.statement(
-          user: user,
-          facility: facility,
-          account: account,
+          user:,
+          facility:,
+          account:,
           statement: self
         ).deliver_later
     end
@@ -131,7 +140,7 @@ class Statement < ApplicationRecord
 
   def cross_core_order_details_from_other_facilities
     cross_core_order_details
-      .where.not(projects: { facility: facility})
+      .where.not(projects: { facility: })
   end
 
   def display_cross_core_messsage?

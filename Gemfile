@@ -48,8 +48,8 @@ gem "paranoia"
 ## views
 gem "sass-rails"
 gem "coffee-rails"
-gem "uglifier", "= 4.1.18" # 4.1.19 has an issue https://github.com/mishoo/UglifyJS2/issues/3245
 gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
+gem "terser", "~> 1.2"
 gem "haml"
 gem "will_paginate"
 # TODO: Remove dynamic_form and use Rails to display errors
@@ -112,7 +112,7 @@ group :development do
   gem "ed25519", ">= 1.2", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
   gem "haml_lint", require: false
   gem "letter_opener"
-  gem "rubocop", "1.75.1", require: false
+  gem "rubocop", "1.75.2", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"

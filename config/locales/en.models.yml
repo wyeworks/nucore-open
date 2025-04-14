@@ -160,6 +160,9 @@ en:
       bundle_product:
         one: Bundled Product
         other: Bundled Products
+      estimate:
+        one: Estimate
+        other: Estimates
       facility:
         one: Facility
         other: Facilities
@@ -363,6 +366,7 @@ en:
         price_change_reason_option: Pricing Note
         quantity: Quantity
         reconciled_note: Reconciliation Note
+        unrecoverable_note: Unrecoverable Note
         reconciled_at: Reconciliation Date
         reference_id: Reference ID
         reviewed_at: Review Closes
@@ -422,6 +426,11 @@ en:
         invoice_number: "Invoice #"
         account_admins: Account Admins
         total_cost: Total
+      statement/status:
+        canceled: Canceled
+        reconciled: Reconciled
+        unrecoverable: Unrecoverable
+        unreconciled: Unreconciled
       account:
         account_number: Account Number
         display_status: Status

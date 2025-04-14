@@ -249,12 +249,13 @@ en:
     index:
       head: Reconcile %{model}
       none: There are no %{model} with completed orders to be reconciled at this time
+      order_status: Status
       submit: "Update Orders"
       instructions: "Please review the following orders. Check those that are paid, record any notes, and click 'Update Orders'."
       caption: Reconcilable Orders for %{model} payment sources
       checkbox_label: select order %{order_number} to be reconciled
       bulk_note_checkbox: Use Bulk Note
-      bulk_note: Bulk Reconciliation Note
+      bulk_note: Bulk Note
       bulk_deposit_number: "Bulk !deposit_number_prefix! Number"
       bulk_deposit_number_prefix: "!deposit_number_prefix!"
       bulk_deposit_number_hint: "Please enter the !deposit_number_prefix! Number from your GL008"
@@ -514,6 +515,17 @@ en:
     update:
       success: Cutoff date successfully updated
 
+  facility_estimates:
+    index:
+      add: Add Estimate
+    create:
+      success: Estimate successfully created
+      error: There was an error creating the estimate
+    new:
+      add: Add Estimate
+      create: Create an Estimate
+      cancel: Cancel
+      head: Add Estimate
 
   facility_order_details:
     edit:
@@ -698,6 +710,8 @@ en:
     cancel: Cancel
     closed_at: Closed At
     closed_by: Closed By
+    notes: Notes
+    expand: Expand
 
   orders:
     add_account:
