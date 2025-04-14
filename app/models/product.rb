@@ -257,8 +257,8 @@ class Product < ApplicationRecord
     can_purchase? order_detail.price_groups.map(&:id)
   end
 
-  def cheapest_price_policy(order_detail, date = Time.zone.now)
-    groups = order_detail.price_groups
+  def cheapest_price_policy(detail, date = Time.zone.now)
+    groups = detail.price_groups
     return nil if groups.empty?
     price_policies = current_price_policies(date).newest.to_a.delete_if { |pp| pp.restrict_purchase? || groups.exclude?(pp.price_group) }
 
@@ -271,10 +271,23 @@ class Product < ApplicationRecord
     price_policies.sort! { |pp1, pp2| pp1.price_group.name <=> pp2.price_group.name }
     price_policies.unshift base if base
 
-    price_policies.min_by do |pp|
-      # default to very large number if the estimate returns a nil
-      costs = pp.estimate_cost_and_subsidy_from_order_detail(order_detail) || { cost: 999_999_999, subsidy: 0 }
-      costs[:cost] - costs[:subsidy]
+    if detail.is_a?(OrderDetail)
+      price_policies.min_by do |pp|
+        # default to very large number if the estimate returns a nil
+        costs = pp.estimate_cost_and_subsidy_from_order_detail(detail) || { cost: 999_999_999, subsidy: 0 }
+        costs[:cost] - costs[:subsidy]
+      end
+    elsif detail.is_a?(EstimateDetail) && SettingsHelper.feature_on?(:show_estimates_option)
+      price_policies.each_with_object({ cost: 999_999_999, price_policy: nil }) do |pp, memo|
+        cost = pp.estimate_cost_from_estimate_detail(detail)
+
+        if cost && cost < memo[:cost]
+          memo[:cost] = cost
+          memo[:price_policy] = pp
+        end
+
+        memo
+      end
     end
   end
 

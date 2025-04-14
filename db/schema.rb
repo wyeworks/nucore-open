@@ -159,10 +159,13 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_10_211418) do
   create_table "estimate_details", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "estimate_id", null: false
     t.bigint "product_id", null: false
+    t.bigint "price_policy_id", null: false
+    t.decimal "cost", precision: 10, scale: 2
     t.integer "quantity", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["estimate_id"], name: "index_estimate_details_on_estimate_id"
+    t.index ["price_policy_id"], name: "index_estimate_details_on_price_policy_id"
     t.index ["product_id"], name: "index_estimate_details_on_product_id"
   end
 
