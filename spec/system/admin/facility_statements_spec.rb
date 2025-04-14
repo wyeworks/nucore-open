@@ -144,7 +144,7 @@ RSpec.describe "Facility Statement Admin" do
       end
     end
 
-    it "shows expand button when more than one note" do
+    it "shows expand button when more than one note", :js do
       order_details.second.update(reconciled_note: "Other note #456")
 
       visit facility_statements_path(facility)
