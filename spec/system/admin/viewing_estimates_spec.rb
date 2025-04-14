@@ -10,7 +10,7 @@ RSpec.describe "Viewing estimates", :disable_requests_local do
   let(:senior_staff) { create(:user, :senior_staff, facility:) }
   let(:staff) { create(:user, :staff, facility:) }
   let(:regular_user) { create(:user) }
-  
+
   let!(:estimate1) { create(:estimate, facility:, name: "First Estimate", created_at: 2.days.ago) }
   let!(:estimate2) { create(:estimate, facility:, name: "Second Estimate", created_at: 1.day.ago) }
 
@@ -19,16 +19,16 @@ RSpec.describe "Viewing estimates", :disable_requests_local do
       shared_examples "can view the estimates index and details" do
         it "displays the list of estimates in order" do
           visit facility_estimates_path(facility)
-          
+
           expect(page).to have_selector("#admin_estimates_tab")
           expect(page).to have_content "Second Estimate"
           expect(page).to have_content "First Estimate"
-          
+
           # Newest first
           expect(page.body.index("Second Estimate")).to be < page.body.index("First Estimate")
 
           click_link estimate1.id
-          
+
           expect(page).to have_content "Estimate ##{estimate1.id}"
           expect(page).to have_content estimate1.name
           expect(page).to have_content estimate1.user.full_name
