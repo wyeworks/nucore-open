@@ -249,7 +249,7 @@ en:
         name: Name
         user: User
         created_by_user: Created By
-        expires_at: Expiration Date
+        expires_at: Expires at
         note: Notes
       schedule_rule:
         start_time: Start Time
