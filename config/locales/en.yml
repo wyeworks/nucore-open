@@ -524,9 +524,12 @@ en:
       error: There was an error creating the estimate
     new:
       add: Add Estimate
-      create: Create an Estimate
+      add_product: Add Product to Estimate
+      add_products_to_estimate: Add Products to Estimate
       cancel: Cancel
+      create: Create an Estimate
       head: Add Estimate
+      remove_products: Remove
 
   facility_order_details:
     edit:

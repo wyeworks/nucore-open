@@ -25,7 +25,9 @@
           %th Product
           %th Quantity
           %th
-      %tbody#new_estimate_estimate_details
+      %tbody#new_estimate_estimate_details{ data: { remove_button_text: t(".remove_products") } }
+
+  %h3= t(".add_products_to_estimate")
 
   .well
     .inline-form-controls
@@ -40,7 +42,7 @@
           class: "js--chosen",
           include_blank: false
 
-      %button#add_product_to_estimate.btn.btn-add{ type: "button" }= "Add Product"
-  .form-actions
-    = f.button :submit, t(".add"), class: "btn-primary"
-    = link_to t("shared.cancel"), facility_estimates_path(@estimate.facility)
+    %button#add_product_to_estimate.btn.btn-primary{ type: "button" }= t(".add_product")
+
+  = f.button :submit, t(".add"), class: "btn-primary"
+  = link_to t("shared.cancel"), facility_estimates_path(@estimate.facility)

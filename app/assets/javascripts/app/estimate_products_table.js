@@ -6,6 +6,12 @@ $(function () {
   );
   const productsTable = document.getElementById("new_estimate_products_table");
 
+  if (!addProductButton || !estimateDetailsContainer || !productsTable) {
+    return;
+  }
+
+  const removeButtonText = estimateDetailsContainer.dataset.removeButtonText;
+
   function toggleTable() {
     const rows = estimateDetailsContainer.querySelectorAll(".estimate_detail");
 
@@ -46,7 +52,8 @@ $(function () {
 
     const removeButton = document.createElement("button");
     removeButton.type = "button";
-    removeButton.textContent = "Remove";
+    removeButton.className = "btn";
+    removeButton.textContent = removeButtonText;
     removeButton.addEventListener("click", function () {
       row.remove();
       toggleTable();
