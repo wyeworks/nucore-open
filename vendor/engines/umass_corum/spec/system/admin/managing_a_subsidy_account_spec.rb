@@ -10,7 +10,7 @@ RSpec.describe "Managing a subsidy account" do
       :speed_type_account,
       :with_account_owner,
       :with_api_speed_type,
-      account_number: 173276,
+      account_number: 173_276,
       description: "Funding source"
     )
   end

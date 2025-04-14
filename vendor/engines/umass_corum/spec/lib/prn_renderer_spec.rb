@@ -33,14 +33,14 @@ RSpec.describe PrnRenderer do
       let(:now) { thursday }
       let!(:user) { create(:user) }
       let(:order_detail) { journal.journal_rows.first.order_detail }
-      let!(:journal) {
+      let!(:journal) do
         create(
           :journal,
           :with_completed_order,
           is_successful: nil,
           created_by: user.id,
         )
-      }
+      end
 
       it "renders" do
         from_dir = "/tmp"

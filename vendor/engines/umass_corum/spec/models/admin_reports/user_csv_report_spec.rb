@@ -29,7 +29,7 @@ RSpec.describe UmassCorum::AdminReports::UserCsvReport do
       it "generates a header line and 3 data lines", :aggregate_failures do
         expect(report).to receive(:cert_lookup_for_user).with(User)
                                                         .exactly(3).times
-                                                        .and_return({cert1 => true, cert2 => true})
+                                                        .and_return({ cert1 => true, cert2 => true })
 
         lines = report.to_csv.lines
         expect(lines.count).to eq(4)

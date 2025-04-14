@@ -22,6 +22,7 @@ module UmassCorum
     end
 
     attr_reader :pdf, :statement
+
     delegate :facility, to: :statement
 
     def options
@@ -100,28 +101,28 @@ module UmassCorum
         [normalize_whitespace(@account.remittance_information) || "\n\n\n\n"],
       ]
       pdf.table(data,
-        cell_style: CELL_STYLE,
-        width: grid(5),
-      )
+                cell_style: CELL_STYLE,
+                width: grid(5),
+               )
     end
 
     def draw_remit_box
       data = if @statement.display_cross_core_messsage?
-        [
-          [text("cross_core_message")],
-          [text("remit_box", address: @statement.facility.address)],
-        ]
-      else
-        [
-          [text("remit_box", address: @statement.facility.address)],
-        ]
-      end
+               [
+                 [text("cross_core_message")],
+                 [text("remit_box", address: @statement.facility.address)],
+               ]
+             else
+               [
+                 [text("remit_box", address: @statement.facility.address)],
+               ]
+             end
 
       pdf.table(data,
-        cell_style: CELL_STYLE.merge(align: :center),
-        position: :right,
-        width: grid(5),
-      )
+                cell_style: CELL_STYLE.merge(align: :center),
+                position: :right,
+                width: grid(5),
+               )
     end
 
     def draw_payment_desc_and_terms
@@ -169,12 +170,12 @@ module UmassCorum
 
     def draw_totals
       table_data = if @account.respond_to?(:mivp_percent)
-        [voucher_rows] + table_style_options
-      else
-        [actual_total_row] + table_style_options
-      end
+                     [voucher_rows] + table_style_options
+                   else
+                     [actual_total_row] + table_style_options
+                   end
       pdf.table(*table_data) do
-        column([5,6]).style(align: :right)
+        column([5, 6]).style(align: :right)
         row(-1).style(borders: [:bottom, :left, :right])
         column(0).style(align: :center, font_style: :bold)
         row(-1).column(-2).style(size: 14, font_style: :bold)
@@ -241,8 +242,8 @@ module UmassCorum
     def voucher_rows
       total_due_text = text("total_due", total: number_to_currency(total_due))
       [[{ content: "\n", colspan: 5 }, { content: actual_total_text, colspan: 2 }]] +
-      [[{ content: pay_by_card, colspan: 5, inline_format: true }, { content: mivp_percent_label, colspan: 2 }]] +
-      [[{ content: "\n", colspan: 5 }, { content: total_due_text, colspan: 2 }]]
+        [[{ content: pay_by_card, colspan: 5, inline_format: true }, { content: mivp_percent_label, colspan: 2 }]] +
+        [[{ content: "\n", colspan: 5 }, { content: total_due_text, colspan: 2 }]]
     end
 
     def pay_by_card
@@ -263,7 +264,7 @@ module UmassCorum
     end
 
     def mivp_total_amount
-      virtual_order_details.select { |od| od.account.type == "UmassCorum::VoucherAccount"}.map(&:actual_total).sum
+      virtual_order_details.select { |od| od.account.type == "UmassCorum::VoucherAccount" }.map(&:actual_total).sum
     end
 
     def total_due

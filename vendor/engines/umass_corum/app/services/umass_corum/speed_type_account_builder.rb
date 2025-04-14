@@ -16,7 +16,7 @@ module UmassCorum
       return unless api_account
 
       date_string = params[:speed_type_account][:api_speed_type_attributes][:date_added_admin_override]
-      api_account.date_added_admin_override = parse_usa_date(date_string) unless date_string.blank?
+      api_account.date_added_admin_override = parse_usa_date(date_string) if date_string.present?
       api_account.save!
     end
 

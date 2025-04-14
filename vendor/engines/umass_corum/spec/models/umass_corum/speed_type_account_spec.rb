@@ -7,7 +7,6 @@ RSpec.describe UmassCorum::SpeedTypeAccount do
   let(:account_number) { account.account_number }
   let!(:api_speed_type) { create(:api_speed_type, speed_type: account_number) }
 
-
   it { is_expected.to validate_uniqueness_of(:account_number).case_insensitive }
 
   # The invalid ones are based on real examples that got onto prod before we put
