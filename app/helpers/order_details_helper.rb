@@ -8,4 +8,11 @@ module OrderDetailsHelper
     order_detail.fulfilled_at.blank? || order_detail.fulfilled_at_changed?
   end
 
+  def reconcile_status
+    [
+      ["Reconciled", :reconciled],
+      can?(:mark_unrecoverable, OrderDetail) ? ["Unrecoverable", :unrecoverable] : nil
+    ].compact
+  end
+
 end

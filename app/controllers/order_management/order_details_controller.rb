@@ -16,6 +16,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
   helper_method :edit_disabled?, :actual_cost_edit_disabled?
 
   before_action :authorize_order_detail, except: %i(sample_results)
+  before_action :authorize_mark_unrecoverable, only: :update
   before_action :load_accounts, only: [:edit, :update]
   before_action :load_order_statuses, only: [:edit, :update]
 
@@ -31,9 +32,13 @@ class OrderManagement::OrderDetailsController < ApplicationController
   def update
     @active_tab = "admin_orders"
 
-    updater = OrderDetails::ParamUpdater.new(@order_detail, user: session_user, cancel_fee: params[:with_cancel_fee] == "1")
+    updater = OrderDetails::ParamUpdater.new(
+      @order_detail,
+      user: session_user,
+      cancel_fee: params[:with_cancel_fee] == "1"
+    )
 
-    if updater.update_param_attributes(params[:order_detail] || empty_params)
+    if updater.update_param_attributes(update_params)
       flash[:notice] = text("update.success")
       flash[:alert] = text("update.success_with_missing_actuals", order: @order_detail) if @order_detail.requires_but_missing_actuals?
       if @order_detail.updated_children.any?
@@ -105,7 +110,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
         OrderStatus::COMPLETE,
         OrderStatus::CANCELED,
         OrderStatus::UNRECOVERABLE,
-        OrderStatus::RECONCILED
+        OrderStatus::RECONCILED,
       ]).to_a
 
       # Add potentially missing custom status
@@ -116,6 +121,10 @@ class OrderManagement::OrderDetailsController < ApplicationController
       @order_statuses = OrderStatus.canceled_statuses_for_facility(current_facility)
     else
       @order_statuses = OrderStatus.non_protected_statuses(current_facility)
+    end
+
+    if !@order_detail.unrecoverable? && cannot?(:mark_unrecoverable, OrderDetail)
+      @order_statuses.reject! { |status| status.name == OrderStatus::UNRECOVERABLE }
     end
   end
 
@@ -138,6 +147,17 @@ class OrderManagement::OrderDetailsController < ApplicationController
   def init_order_detail
     @order = Order.find(params[:order_id])
     @order_detail = @order.order_details.find(params[:id])
+  end
+
+  def update_params
+    params[:order_detail] || empty_params
+  end
+
+  def authorize_mark_unrecoverable
+    return if @order_detail.unrecoverable? ||
+              update_params[:state] != OrderStatus.unrecoverable.id
+
+    authorize!(:mark_unrecoverable, OrderDetail)
   end
 
 end
