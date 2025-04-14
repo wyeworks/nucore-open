@@ -107,10 +107,10 @@ class OrderManagement::OrderDetailsController < ApplicationController
         OrderStatus::UNRECOVERABLE,
         OrderStatus::RECONCILED
       ]).to_a
-    
+
       # Add potentially missing custom status
       @order_statuses |= [@order_detail.order_status]
-      
+
       @order_statuses.reject! { |status| status.name == OrderStatus::RECONCILED } unless @order_detail.can_reconcile?
     elsif @order_detail.order_status.root == OrderStatus.canceled
       @order_statuses = OrderStatus.canceled_statuses_for_facility(current_facility)
