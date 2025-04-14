@@ -9,6 +9,16 @@ en:
   statements_downcase: invoices
   statemented_downcase: invoiced
 
+instruments:
+  instrument_fields:
+    reservation:
+      instruct:
+        auto_cancel: |
+          The number of minutes the system will wait before automatically
+          canceling an unstarted reservation.
+          Auto-cancelation feature is not currently compatible with Reservation Only Instruments.
+          When blank or set to 0, the system will not cancel unstarted reservations.
+
   views:
     facilities:
       index:
