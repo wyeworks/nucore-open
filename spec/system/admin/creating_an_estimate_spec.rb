@@ -6,6 +6,8 @@ RSpec.describe "Creating an estimate", :js do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let!(:user) { create(:user) }
+  let!(:product) { create(:setup_item, facility:) }
+  let!(:price_policy) { create(:item_price_policy, product:, price_group: user.price_groups.first) }
 
   before { login_as director }
 
@@ -26,13 +28,19 @@ RSpec.describe "Creating an estimate", :js do
     expect(page).to have_content("No results found")
 
     page.execute_script("$('#estimate_user_id_chosen').trigger('mousedown')")
-    page.execute_script("$('.chosen-search input').val('#{user.first_name}').trigger('input')")
+    page.execute_script("$('#estimate_user_id_chosen .chosen-search input').val('#{user.first_name}').trigger('input')")
 
     wait_for_ajax
 
     # Make sure calendar is not open
     find("#estimate_user_id_chosen").click
     select_from_chosen user.full_name, from: "User"
+
+    expect(page).to have_content "Add Products to Estimate"
+    select_from_chosen product.name, from: "Product"
+    click_button "Add Product to Estimate"
+
+    expect(page).to have_content "Remove"
 
     click_button "Add Estimate"
 
