@@ -4,3 +4,21 @@
 
 - if current_ability.can?(:create, Estimate)
   %p= link_to t(".add"), new_facility_estimate_path, class: "btn-add"
+
+- if @estimates.present?
+  %table.table.table-striped.table-hover
+    %thead
+      %tr
+        %th= Estimate.human_attribute_name(:id)
+        %th= Estimate.human_attribute_name(:name)
+        %th= Estimate.human_attribute_name(:user)
+        %th= Estimate.human_attribute_name(:expires_at)
+    %tbody
+      - @estimates.each do |estimate|
+        %tr
+          %td= link_to estimate.id, facility_estimate_path(current_facility, estimate)
+          %td= estimate.name
+          %td= estimate.user.full_name
+          %td= format_usa_date(estimate.expires_at)
+- else
+  %p.notice= t(".no_estimates")
