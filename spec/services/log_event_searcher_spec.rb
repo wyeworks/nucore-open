@@ -170,7 +170,7 @@ RSpec.describe LogEventSearcher do
     let(:product) { create(:setup_item) }
     let(:order_detail) { create(:order_detail, order: order, product: product) }
     let!(:log_event) { create(:log_event, loggable: order_detail, event_type: :resolve) }
-    
+
     it "finds the order detail" do
       results = described_class.new(query: "#{order.id}-#{order_detail.id}").search
       expect(results).to include(log_event)

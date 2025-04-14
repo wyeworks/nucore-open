@@ -34,7 +34,7 @@ class FacilityAccountUsersController < ApplicationController
   # POST /facilities/:facility_id/accounts/:account_id/account_users
   def create
     @user = User.find(params[:user_id])
-    
+
     if existing_member_becoming_owner?
       flash[:error] = text("create.existing_member_error", user: @user.full_name)
       redirect_to facility_account_members_path(current_facility, @account)

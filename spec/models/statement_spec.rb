@@ -207,7 +207,7 @@ RSpec.describe Statement do
             other_facility_statement = create(:statement, account: account, created_by: user.id, facility: facility3)
             other_facility_statement.add_order_detail(order_detail_from_unrelated_facility)
           end
-          
+
           it "does NOT display a message" do
             expect(statement).not_to be_display_cross_core_messsage
           end

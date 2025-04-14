@@ -21,5 +21,5 @@ class ProblemOrderMailer < ApplicationMailer
   def translation_scope
     "views.problem_order_mailer"
   end
-  
+
 end

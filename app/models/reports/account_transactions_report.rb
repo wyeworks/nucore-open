@@ -84,7 +84,7 @@ class Reports::AccountTransactionsReport
     else
       headers
     end
- 
+
   end
 
   def build_row(order_detail)

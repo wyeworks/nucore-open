@@ -16,7 +16,7 @@ RSpec.describe "Managing an order detail" do
   before do
     login_as logged_in_user
   end
-  
+
   describe "shows order detail with custom status" do
     let!(:custom_status) do
       OrderStatus.create!(

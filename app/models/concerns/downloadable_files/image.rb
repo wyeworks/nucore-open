@@ -4,7 +4,7 @@ module DownloadableFiles
 
     extend ActiveSupport::Concern
 
-    if SettingsHelper.feature_on?(:active_storage_for_images_only) 
+    if SettingsHelper.feature_on?(:active_storage_for_images_only)
       include ActiveStorageFile
     else
       include PaperclipFile

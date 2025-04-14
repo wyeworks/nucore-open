@@ -23,7 +23,7 @@ class OrderStatus < ApplicationRecord
   COMPLETE = "Complete".freeze
   RECONCILED = "Reconciled".freeze
   UNRECOVERABLE = "Unrecoverable".freeze
-  
+
   ROOT_STATUS_ORDER = [NEW, IN_PROCESS, CANCELED, COMPLETE, RECONCILED, UNRECOVERABLE].freeze
 
   # Needs to be overridable by engines
