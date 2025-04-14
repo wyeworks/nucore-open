@@ -11,8 +11,8 @@ class FacilityAccountsReconciliationController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   before_action :check_billing_access
-  before_action :check_billing_access_to_mark_as_unrecoverable
   before_action :set_billing_navigation
+  before_action :check_billing_access_to_mark_as_unrecoverable, only: :update
 
   def index
     order_details = unreconciled_details
@@ -32,6 +32,8 @@ class FacilityAccountsReconciliationController < ApplicationController
   end
 
   def update
+    return redirect_to([account_route.to_sym, :facility_accounts])
+
     reconciled_at = parse_usa_date(params[:reconciled_at])
     reconciler = OrderDetails::Reconciler.new(
       unreconciled_details,
@@ -92,9 +94,9 @@ class FacilityAccountsReconciliationController < ApplicationController
   end
 
   def check_billing_access_to_mark_as_unrecoverable
-    if params[:order_status] == "unrecoverable" && !(current_user.administrator? || current_user.global_billing_administrator?)
-      flash[:error] = t("controllers.facility_accounts_reconciliation.cannot_mark_as_unrecoverable")
-      redirect_to([account_route.to_sym, :facility_accounts])
-    end
+    return unless params[:order_status] == "unrecoverable" && cannot?(:mark_unrecoverable, OrderDetail)
+
+    flash[:error] = t("controllers.facility_accounts_reconciliation.cannot_mark_as_unrecoverable")
+    redirect_to([account_route.to_sym, :facility_accounts])
   end
 end
