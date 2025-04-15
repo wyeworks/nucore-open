@@ -11,7 +11,7 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2025_04_01_180024) do
-  create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
+  create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
     t.datetime "deleted_at", precision: nil
@@ -157,7 +157,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_01_180024) do
     t.index ["user_id", "key"], name: "index_email_events_on_user_id_and_key", unique: true
   end
 
-  create_table "estimates", charset: "utf8mb3", force: :cascade do |t|
+  create_table "estimates", charset: "utf8", force: :cascade do |t|
     t.string "name"
     t.text "note"
     t.datetime "expires_at"
