@@ -39,7 +39,7 @@ module Reports
 
     private
 
-    def default_report_hash # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+    def default_report_hash # rubocop:disable Metrics/AbcSize
       hash = {
         facility: :facility,
         order: :to_s,

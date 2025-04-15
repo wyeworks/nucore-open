@@ -163,6 +163,7 @@ feature:
   disable_relay_synaccess_rev_a: false
   allow_global_billing_admin_update_actual_prices: true
   export_order_disputes: false
+  show_estimates_option: <%= !Rails.env.production? %>
 
 split_accounts:
   # Roles are allowed to create Split Accounts

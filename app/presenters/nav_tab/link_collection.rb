@@ -24,6 +24,7 @@ class NavTab::LinkCollection
       admin_users
       admin_reports
       admin_projects
+      admin_estimates
       admin_facility
     )
   end
@@ -133,6 +134,16 @@ class NavTab::LinkCollection
         tab: :admin_projects,
         text: Project.model_name.human(count: 2),
         url: facility_projects_path(facility),
+      )
+    end
+  end
+
+  def admin_estimates
+    if single_facility? && ability.can?(:index, Estimate) && SettingsHelper.feature_on?(:show_estimates_option)
+      NavTab::Link.new(
+        tab: :admin_estimates,
+        text: Estimate.model_name.human(count: 2),
+        url: facility_estimates_path(facility),
       )
     end
   end

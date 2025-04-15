@@ -1,0 +1,10 @@
+name: Setup Rails
+description: Install dependencies and create the database
+
+runs:
+  using: composite
+  steps:
+    - uses: ./.github/actions/setup-bundler
+    - run: bundle exec rake db:create db:schema:load
+      shell: bash
+

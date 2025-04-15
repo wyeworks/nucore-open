@@ -9,9 +9,9 @@
       %th{ scope: "col" }= Statement.human_attribute_name(:total_cost)
       %th#reconcile-note.row-note-input.js--reconcileField{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
       - if show_reconciliation_deposit_number
-        %th#reconcile-deposit-number.row-note-input.js--reconcileField{ scope: "col", data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
+        %th#reconcile-deposit-number.row-note-input.js--reconciledField{ scope: "col", data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
           = OrderDetail.human_attribute_name(:deposit_number)
-
+      %th.js--unrecoverableField.hidden= OrderDetail.human_attribute_name(:unrecoverable_note)
   %tbody
     - @unreconciled_details.each do |order_detail|
       %tr
@@ -30,6 +30,8 @@
             - if order_detail.note.present?
               .order-detail-extra.order-detail-note= order_detail.note
         %td= show_actual_total(order_detail)
-        %td.row-note-input.js--reconcileField= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]", nil, aria: {labelledby: "reconcile-note"}
+        %td.row-note-input.js--reconciledField= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]", nil, aria: {labelledby: "reconcile-note"}
         - if show_reconciliation_deposit_number
-          %td.row-note-input.js--reconcileField= text_field_tag "order_detail[#{order_detail.id}][deposit_number]", nil, aria: {labelledby: "reconcile-deposit-number"}
+          %td.row-note-input.js--reconciledField= text_field_tag "order_detail[#{order_detail.id}][deposit_number]", nil, aria: {labelledby: "reconcile-deposit-number"}
+        %td.row-note-input.js--unrecoverableField.hidden
+          = text_field_tag "order_detail[#{order_detail.id}][unrecoverable_note]", nil, aria: {labelledby: "unrecoverable-note"}

@@ -6,9 +6,9 @@ RSpec.describe UmassCorum::ApiSpeedType do
 
   describe "loading from api" do
     before do
-      stub_request(:get, /.+\/SpeedType\/\d+/).
-        with(headers: {'Accept'=>'application/json', 'User-Agent'=>'Ruby'}).
-        to_return(status: 200, body: body, headers: {})
+      stub_request(:get, %r{.+/SpeedType/\d+})
+        .with(headers: { 'Accept' => 'application/json', 'User-Agent' => 'Ruby' })
+        .to_return(status: 200, body: body, headers: {})
     end
 
     describe "active" do

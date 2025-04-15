@@ -7,7 +7,6 @@ RSpec.describe "Managing a SpeedType" do
   let(:facility_admin) { create(:user, :facility_administrator, facility: facility) }
   let(:global_admin) { create(:user, :administrator) }
 
-
   describe "creating a speed type" do
     before do
       login_as(facility_admin)

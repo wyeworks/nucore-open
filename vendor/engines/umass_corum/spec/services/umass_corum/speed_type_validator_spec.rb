@@ -139,8 +139,8 @@ RSpec.describe UmassCorum::SpeedTypeValidator do
   end
 
   it "checks the date_added_admin_override, when it exists" do
-    create(:api_speed_type, speed_type: speed_type, date_added: date_added, date_added_admin_override: date_added - 1.years, project_id: nil)
-    expect(validator.account_is_open!(date_added - 1.years + 1.day)).to be true
+    create(:api_speed_type, speed_type: speed_type, date_added: date_added, date_added_admin_override: date_added - 1.year, project_id: nil)
+    expect(validator.account_is_open!(date_added - 1.year + 1.day)).to be true
   end
 
   it "checks the date_added, when the date_added_admin_override does not exist" do

@@ -6,13 +6,13 @@ RSpec.describe OrderDetail do
   let(:account) { @account }
   let(:facility) { @facility }
   let(:facility_account) { @facility_account }
-  let(:instrument) { create(:instrument, facility: facility) }
+  let(:instrument) { create(:instrument, facility:) }
   let(:item) { @item }
   let(:order) { @order }
   let(:order_detail) { @order_detail }
-  let(:price_group) { create(:price_group, facility: facility) }
+  let(:price_group) { create(:price_group, facility:) }
   let(:user) { @user }
-  let(:project) { create(:project, facility: facility) }
+  let(:project) { create(:project, facility:) }
 
   before(:each) do
     @facility = create(:facility)
@@ -31,14 +31,14 @@ RSpec.describe OrderDetail do
   end
 
   shared_context "define price policies" do
-    before { create(:account_price_group_member, account: account, price_group: price_group) }
+    before { create(:account_price_group_member, account:, price_group:) }
 
     let!(:previous_price_policy) do
       create(:item_price_policy,
              product: item,
              unit_cost: 10.00,
              unit_subsidy: 2.00,
-             price_group: price_group,
+             price_group:,
              start_date: 8.years.ago,
             )
     end
@@ -48,7 +48,7 @@ RSpec.describe OrderDetail do
              product: item,
              unit_cost: 20.00,
              unit_subsidy: 3.00,
-             price_group: price_group,
+             price_group:,
              start_date: 6.weeks.ago,
             )
     end
@@ -255,7 +255,7 @@ RSpec.describe OrderDetail do
                              facility_account_id: @facility_account.id)
         @price_group = create(:price_group, facility: @facility)
         create(:price_group_product, product: @instrument, price_group: @price_group)
-        create(:account_price_group_member, account: account, price_group: @price_group)
+        create(:account_price_group_member, account:, price_group: @price_group)
         @pp = create(:instrument_price_policy, product: @instrument, price_group: @price_group)
         @rule = FactoryBot.create(:schedule_rule, start_hour: 0, end_hour: 24, product: @instrument)
         @instrument.reload
@@ -290,7 +290,7 @@ RSpec.describe OrderDetail do
     before(:each) do
       @account        = create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @user))
       @price_group    = create(:price_group, facility: @facility)
-      create(:account_price_group_member, account: account, price_group: @price_group)
+      create(:account_price_group_member, account:, price_group: @price_group)
       @item_pp = @item.item_price_policies.create(attributes_for(:item_price_policy, price_group_id: @price_group.id))
       @order_detail.update(actual_cost: 20, actual_subsidy: 10, price_policy_id: @item_pp.id)
     end
@@ -335,7 +335,7 @@ RSpec.describe OrderDetail do
     before(:each) do
       @account = create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @user))
       @price_group = create(:price_group, facility: @facility)
-      create(:account_price_group_member, account: account, price_group: @price_group)
+      create(:account_price_group_member, account:, price_group: @price_group)
       @order          = @user.orders.create(attributes_for(:order, facility_id: @facility.id, account_id: @account.id, created_by: @user.id))
       @service        = @facility.services.create(attributes_for(:service, facility_account_id: @facility_account.id))
       @service_pp     = @service.service_price_policies.create(attributes_for(:service_price_policy, price_group_id: @price_group.id))
@@ -384,8 +384,8 @@ RSpec.describe OrderDetail do
       let(:order_detail) { reservation.order_detail }
       let(:price_group) { create(:price_group, facility: @facility) }
       before :each do
-        create(:price_group_product, product: order_detail.product, price_group: price_group)
-        create(:instrument_price_policy, product: order_detail.product, price_group: price_group)
+        create(:price_group_product, product: order_detail.product, price_group:)
+        create(:instrument_price_policy, product: order_detail.product, price_group:)
         allow(order_detail.user).to receive(:price_groups).and_return([])
         allow(order_detail.account).to receive(:price_groups).and_return([price_group])
       end
@@ -422,7 +422,7 @@ RSpec.describe OrderDetail do
 
     context "with instruments" do
       let(:instruments) do
-        create_list(:instrument, 5, facility_account: facility_account, facility: facility)
+        create_list(:instrument, 5, facility_account:, facility:)
       end
 
       let(:instrument_with_actuals) { instruments[0] }
@@ -433,16 +433,16 @@ RSpec.describe OrderDetail do
 
       let(:order) do
         create(:order,
-               facility: facility,
-               user: user,
+               facility:,
+               user:,
                created_by: user.id,
-               account: account,
+               account:,
               )
       end
 
       let(:order_details) do
         instruments.map do |instrument|
-          create(:order_detail, account: order.account, order: order, product: instrument)
+          create(:order_detail, account: order.account, order:, product: instrument)
         end
       end
 
@@ -472,7 +472,7 @@ RSpec.describe OrderDetail do
           instrument.reload
         end
 
-        create(:account_price_group_member, account: account, price_group: price_group)
+        create(:account_price_group_member, account:, price_group:)
         create_price_policy(product: instrument_without_actuals)
         create_price_policy(product: instrument_with_actuals, usage_rate: 1)
         create_price_policy(product: instrument_with_actuals_and_price_policy, usage_rate: 1)
@@ -551,7 +551,7 @@ RSpec.describe OrderDetail do
           end
 
           describe "when it has actuals" do
-            before { order_detail.reservation.update(actual_start_at: Time.current, actual_end_at: Time.current + 1.minute) }
+            before { order_detail.reservation.update(actual_start_at: Time.current, actual_end_at: 1.minute.from_now) }
             it do
               expect(order_detail.problem_description_key).to eq(:missing_price_policy)
             end
@@ -603,7 +603,6 @@ RSpec.describe OrderDetail do
                 expect(order_detail.fulfilled_at).to eq fulfilled_at
               end
             end
-
           end
         end
       end
@@ -611,7 +610,7 @@ RSpec.describe OrderDetail do
 
     shared_examples_for "a product without reservations" do
       subject(:order_detail) do
-        create(:order_detail, account: order.account, order: order, product: product)
+        create(:order_detail, account: order.account, order:, product:)
       end
 
       context "with no price policy" do
@@ -633,8 +632,8 @@ RSpec.describe OrderDetail do
 
         context "when adding a compatible price policy" do
           let!(:price_policy) do
-            create(:account_price_group_member, account: account, price_group: price_group)
-            create(price_policy_type, price_group: price_group, product: product)
+            create(:account_price_group_member, account:, price_group:)
+            create(price_policy_type, price_group:, product:)
           end
 
           def assign_price_policy
@@ -657,14 +656,14 @@ RSpec.describe OrderDetail do
     end
 
     context "with an item" do
-      let(:product) { create(:setup_item, facility: facility) }
+      let(:product) { create(:setup_item, facility:) }
       let(:price_policy_type) { :item_price_policy }
 
       it_behaves_like "a product without reservations"
     end
 
     context "with a service" do
-      let(:product) { create(:setup_service, facility: facility) }
+      let(:product) { create(:setup_service, facility:) }
       let(:price_policy_type) { :service_price_policy }
 
       it_behaves_like "a product without reservations"
@@ -689,10 +688,9 @@ RSpec.describe OrderDetail do
     end
 
     context "needs price policy" do
-
       before :each do
         @price_group3 = create(:price_group, facility: @facility)
-        create(:account_price_group_member, account: account, price_group: @price_group3)
+        create(:account_price_group_member, account:, price_group: @price_group3)
         create(:price_group_product, product: @item, price_group: @price_group3, reservation_window: nil)
         @order_detail.reload
       end
@@ -752,7 +750,7 @@ RSpec.describe OrderDetail do
       end
 
       context "transitioning to canceled when statemented" do
-        let(:statement) { create(:statement, facility: facility, created_by: user.id, account: account) }
+        let(:statement) { create(:statement, facility:, created_by: user.id, account:) }
 
         before :each do
           order_detail.update_attribute :statement_id, statement.id
@@ -801,7 +799,6 @@ RSpec.describe OrderDetail do
         expect(@order_detail.state).to eq("complete")
         expect(@order_detail.versions.size).to eq(3)
       end
-
     end
 
     describe "invalid quantity" do
@@ -860,7 +857,7 @@ RSpec.describe OrderDetail do
 
     it "should not be in dispute if dispute_resolved_at is not nil" do
       @order_detail.dispute_at = Time.zone.now
-      @order_detail.dispute_resolved_at = Time.zone.now + 1.day
+      @order_detail.dispute_resolved_at = 1.day.from_now
       expect(@order_detail).not_to be_in_dispute
     end
 
@@ -1172,7 +1169,7 @@ RSpec.describe OrderDetail do
     context "needs statement" do
       before :each do
         @statement = Statement.create(facility: @facility, created_by: 1, account: @account)
-        @order_detail.update(statement: @statement, reviewed_at: (Time.zone.now - 1.day))
+        @order_detail.update(statement: @statement, reviewed_at: 1.day.ago)
         @statement2 = Statement.create(facility: @facility2, created_by: 1, account: @account)
         @order_detail2.statement = @statement2
         assert @order_detail2.save
@@ -1241,10 +1238,10 @@ RSpec.describe OrderDetail do
 
     describe "all_movable" do
       let(:product) { Product.last }
-      let!(:unpurchased_order_detail) { create(:setup_order, product: product).order_details.first }
-      let!(:new_order_detail) { create(:purchased_order, product: product).order_details.first }
-      let!(:completed_order_detail) { create(:complete_order, product: product).order_details.first }
-      let!(:journaled_order)  { create(:complete_order, product: product).order_details.first }
+      let!(:unpurchased_order_detail) { create(:setup_order, product:).order_details.first }
+      let!(:new_order_detail) { create(:purchased_order, product:).order_details.first }
+      let!(:completed_order_detail) { create(:complete_order, product:).order_details.first }
+      let!(:journaled_order)  { create(:complete_order, product:).order_details.first }
       before { journaled_order.update!(journal: create(:journal)) }
 
       it "includes everything but the unpurchased and journaled" do
@@ -1287,8 +1284,8 @@ RSpec.describe OrderDetail do
                            max_reserve_mins: 60)
 
       # all reservations get purchased today
-      @reservation_yesterday = place_reservation_for_instrument(@user, @instrument, @account, Time.zone.now - 1.day, purchased: true)
-      @reservation_tomorrow = place_reservation_for_instrument(@user, @instrument, @account, Time.zone.now + 1.day, purchased: true)
+      @reservation_yesterday = place_reservation_for_instrument(@user, @instrument, @account, 1.day.ago, purchased: true)
+      @reservation_tomorrow = place_reservation_for_instrument(@user, @instrument, @account, 1.day.from_now, purchased: true)
       @reservation_today = place_reservation_for_instrument(@user, @instrument, @account, Time.zone.now, purchased: true)
     end
 
@@ -1309,13 +1306,13 @@ RSpec.describe OrderDetail do
   end
 
   context "#cancel_reservation" do
-    let(:statement) { create(:statement, facility: facility, created_by: user.id, account: account) }
+    let(:statement) { create(:statement, facility:, created_by: user.id, account:) }
 
     before :each do
       start_date = 1.day.from_now
       setup_reservation(facility, account, user)
       place_reservation(facility, order_detail, start_date)
-      FactoryBot.create(:account_price_group_member, account: account, price_group: @price_group)
+      FactoryBot.create(:account_price_group_member, account:, price_group: @price_group)
       order_detail.update_attribute(:statement_id, statement.id)
     end
 
@@ -1361,7 +1358,6 @@ RSpec.describe OrderDetail do
 
     context "with a cancellation fee" do
       shared_examples "a cancellation with fees applied" do
-
         it "should remain on its statement" do
           expect(order_detail.statement).to eq original_statement
         end
@@ -1544,7 +1540,7 @@ RSpec.describe OrderDetail do
     let(:instrument_overage_price_policy) do
       create(:instrument_overage_price_policy,
              cancellation_cost: 100,
-             price_group: price_group,
+             price_group:,
              product: instrument,
             )
     end
@@ -1552,7 +1548,7 @@ RSpec.describe OrderDetail do
     let(:instrument_reservation_price_policy) do
       create(:instrument_price_policy,
              cancellation_cost: 100,
-             price_group: price_group,
+             price_group:,
              product: instrument,
             )
     end
@@ -1560,7 +1556,7 @@ RSpec.describe OrderDetail do
     let(:instrument_usage_price_policy) do
       create(:instrument_usage_price_policy,
              cancellation_cost: 100,
-             price_group: price_group,
+             price_group:,
              product: instrument,
             )
     end
@@ -1576,7 +1572,7 @@ RSpec.describe OrderDetail do
     before :each do
       order_detail.update_attribute(:product_id, instrument.id)
       order_detail.reservation = reservation
-      create(:account_price_group_member, account: account, price_group: price_group)
+      create(:account_price_group_member, account:, price_group:)
       order_detail.reload
     end
 
@@ -1601,7 +1597,7 @@ RSpec.describe OrderDetail do
 
   context ".account_unreconciled" do
     context "where the account is a NufsAccount" do
-      let(:journal) { create(:journal, facility: facility, reference: "xyz", created_by: user.id, journal_date: Time.zone.now) }
+      let(:journal) { create(:journal, facility:, reference: "xyz", created_by: user.id, journal_date: Time.zone.now) }
       let(:unreconciled_order_details) { OrderDetail.account_unreconciled(facility, account) }
 
       before :each do
@@ -1622,13 +1618,12 @@ RSpec.describe OrderDetail do
 
   context "#update_order_status!" do
     context "when setting order status to Canceled" do
-
       def cancel_order_detail(options)
         order_detail.update_order_status!(user, OrderStatus.canceled, options)
       end
 
       context "is statemented" do
-        let(:statement) { create(:statement, facility: facility, created_by: user.id, account: account) }
+        let(:statement) { create(:statement, facility:, created_by: user.id, account:) }
 
         before :each do
           order_detail.update_attribute :statement_id, statement.id
@@ -1762,7 +1757,7 @@ RSpec.describe OrderDetail do
         end
 
         it "merges the order if it's a timed service" do
-          timed_service = FactoryBot.create(:timed_service, facility: facility)
+          timed_service = FactoryBot.create(:timed_service, facility:)
           @order_detail.update!(product: timed_service)
           expect { Order.find(order.id) }.to raise_error ActiveRecord::RecordNotFound
         end
@@ -1784,7 +1779,6 @@ RSpec.describe OrderDetail do
         end
 
         context "notifications" do
-
           it "should be a NotificationSubject" do
             expect(@order_detail).to be_is_a(NotificationSubject)
           end
@@ -1805,7 +1799,6 @@ RSpec.describe OrderDetail do
           it "should produce a notice" do
             expect(@order_detail.to_notice(MergeNotification)).not_to be_blank
           end
-
         end
       end
 
@@ -1914,7 +1907,7 @@ RSpec.describe OrderDetail do
   end
 
   def set_cancellation_cost_for_all_policies(cost)
-    PricePolicy.all.each do |price_policy|
+    PricePolicy.find_each do |price_policy|
       price_policy.update_attribute :cancellation_cost, cost
     end
   end
@@ -2001,7 +1994,6 @@ RSpec.describe OrderDetail do
   end
 
   describe "#order_number" do
-
     it "includes the merge_with_order_id when present" do
       merge_to_order = @order.dup
       merge_to_order.save
@@ -2016,7 +2008,6 @@ RSpec.describe OrderDetail do
       expect(@order_detail.order.merge_with_order_id).to be_blank
       expect(@order_detail.order_number).to eq "#{@order_detail.order.id}-#{@order_detail.id}"
     end
-
   end
 
   describe "#reconcile_if_skip_review" do
@@ -2040,5 +2031,40 @@ RSpec.describe OrderDetail do
       expect(order_detail.reconciled?).to be false
       expect(order_detail.state).to eq "complete"
     end
+  end
+
+  shared_examples "note field" do |note_field|
+    let(:subject) { order_detail }
+
+    context "when short string" do
+      before { order_detail.send(:"#{note_field}=", "Something") }
+
+      it { is_expected.to be_valid }
+    end
+
+    context "when empty" do
+      before { order_detail.send(:"#{note_field}=", "") }
+
+      it { is_expected.to be_valid }
+    end
+
+    context "when too long" do
+      before { order_detail.send(:"#{note_field}=", "a" * 500) }
+
+      it "is invalid" do
+        expect(subject).to_not be_valid
+        expect(subject.errors.messages).to(
+          match(a_hash_including(note_field => Array))
+        )
+      end
+    end
+  end
+
+  describe "#reconciled_note" do
+    include_examples "note field", :reconciled_note
+  end
+
+  describe "#unrecoverable_note" do
+    include_examples "note field", :unrecoverable_note
   end
 end

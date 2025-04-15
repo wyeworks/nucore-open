@@ -17,4 +17,5 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*", "README.md"]
+  s.metadata['rubygems_mfa_required'] = 'true'
 end

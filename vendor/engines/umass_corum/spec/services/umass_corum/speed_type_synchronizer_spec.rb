@@ -23,7 +23,7 @@ RSpec.describe UmassCorum::SpeedTypeSynchronizer, type: :service do
   describe "#run" do
     context "when speed_type_account expires_at and api date_removed don't match" do
       let!(:speed_type_acct) { create(:speed_type_account, :with_account_owner, expires_at: past_date) }
-      let!(:api_speed_type) { create(:api_speed_type, :expired, speed_type: speed_type_acct.account_number, project_id: project_id,  date_removed: now) }
+      let!(:api_speed_type) { create(:api_speed_type, :expired, speed_type: speed_type_acct.account_number, project_id: project_id, date_removed: now) }
 
       it "updates expires_at to match the api_speed_type" do
         expect { updater.run }.to(change { speed_type_acct.expires_at }.to(api_speed_type.date_removed))

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_03_26_131059) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_01_180024) do
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -155,6 +155,20 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_26_131059) do
     t.datetime "created_at", precision: nil
     t.datetime "updated_at", precision: nil
     t.index ["user_id", "key"], name: "index_email_events_on_user_id_and_key", unique: true
+  end
+
+  create_table "estimates", charset: "utf8", force: :cascade do |t|
+    t.string "name"
+    t.text "note"
+    t.datetime "expires_at"
+    t.bigint "facility_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "created_by_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_by_id"], name: "index_estimates_on_created_by_id"
+    t.index ["facility_id"], name: "index_estimates_on_facility_id"
+    t.index ["user_id"], name: "index_estimates_on_user_id"
   end
 
   create_table "external_service_passers", id: :integer, charset: "utf8", force: :cascade do |t|
@@ -410,6 +424,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_03_26_131059) do
     t.string "reference_id"
     t.boolean "skip_missing_form"
     t.string "deposit_number", limit: 256
+    t.string "unrecoverable_note"
     t.index ["account_id"], name: "fk_od_accounts"
     t.index ["assigned_user_id"], name: "index_order_details_on_assigned_user_id"
     t.index ["bundle_product_id"], name: "fk_bundle_prod_id"

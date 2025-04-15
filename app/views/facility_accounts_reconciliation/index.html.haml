@@ -13,9 +13,13 @@
 
 - if @unreconciled_details.any?
   - show_reconciliation_deposit_number = SettingsHelper.feature_on?(:show_reconciliation_deposit_number)
-  = form_tag([:update, account_route.to_sym, FacilityAccount], method: :post) do
-    = render "action_row", date: true, unreconciled_order_details: @unreconciled_details, show_reconciliation_deposit_number: show_reconciliation_deposit_number, show_order_status: true
-    = render "table", show_reconciliation_deposit_number: show_reconciliation_deposit_number
+  = form_tag([:update, account_route.to_sym, FacilityAccount], method: :post, class: "js--reconcileForm") do
+    = render "action_row", date: true,
+      unreconciled_order_details: @unreconciled_details,
+      show_reconciliation_deposit_number: show_reconciliation_deposit_number,
+      show_order_status: true
+    = render "table",
+      show_reconciliation_deposit_number: show_reconciliation_deposit_number
     = render "action_row", show_reconciliation_deposit_number: show_reconciliation_deposit_number, show_order_status: false
 
   %p= will_paginate(@unreconciled_details)

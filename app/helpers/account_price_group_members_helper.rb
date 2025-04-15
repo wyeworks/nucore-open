@@ -8,7 +8,7 @@ module AccountPriceGroupMembersHelper
   #
   # +limit+ The maximum number of accounts that will be displayed
   def additional_results_notice(count:, limit:)
-    # This ensures that count and limit exist before attemtping to use 
+    # This ensures that count and limit exist before attemtping to use
     # them, and will silently exit if they don't.
     #
     # This should never happen, so this method is mainly here to handle

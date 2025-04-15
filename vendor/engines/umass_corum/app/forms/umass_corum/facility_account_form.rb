@@ -12,8 +12,8 @@ module UmassCorum
     # Do this way as opposed to a normal validation to make sure that these validations
     # happen before the call to the API
     def validate_formats
-      errors.add(:account_number, :invalid) unless account_number =~ /\A\d{6}\z/
-      errors.add(:revenue_account, :invalid) unless revenue_account.to_s =~ /\A6\d{5}\z/
+      errors.add(:account_number, :invalid) unless /\A\d{6}\z/.match?(account_number)
+      errors.add(:revenue_account, :invalid) unless /\A6\d{5}\z/.match?(revenue_account.to_s)
     end
 
     def fetch_from_api

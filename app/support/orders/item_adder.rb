@@ -41,7 +41,7 @@ class Orders::ItemAdder
 
   def nonbillable_account?
     @order.account == NonbillableAccount.singleton_instance
-  end  
+  end
 
   # Raise an error if the Nonbillable billing mode is mixed with any other mode
   def check_for_mixed_billing_mode(product)

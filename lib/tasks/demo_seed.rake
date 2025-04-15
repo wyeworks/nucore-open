@@ -521,7 +521,7 @@ namespace :demo do
       )
     end
 
-    [173276, 173289, 181597].each_with_index do |speed_type, index|
+    [173_276, 173_289, 181_597].each_with_index do |speed_type, index|
       next if UmassCorum::SpeedTypeAccount.find_by(account_number: speed_type)
 
       FactoryBot.create(

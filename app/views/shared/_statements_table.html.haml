@@ -1,3 +1,4 @@
+- show_reconcile_notes = local_assigns[:show_reconcile_notes]
 - if @statements.empty?
   %p.notice= text("no_statements")
 - else
@@ -18,7 +19,7 @@
         %th= Statement.human_attribute_name(:status)
     %tbody
       - StatementPresenter.wrap(@statements).each do |s|
-        %tr
+        %tr.statement
           %td.centered
             = "##{s.invoice_number}"
             - unless s.canceled_at
@@ -51,8 +52,31 @@
             %td= s.facility.name
           %td.currency= s.order_details.count
           %td.currency= number_to_currency(s.total_cost)
-          %td= s.closed_by_times
-          %td= s.closed_by_user_full_names
-          %td= s.status
+          %td
+            %ul.unstyled
+              - s.closed_by_times.each do |closed_by_time|
+                %li.statement__nowrap-text= closed_by_time
+          %td
+            %ul.unstyled
+              - s.closed_by_user_full_names.each do |closed_by_name|
+                %li.statement__nowrap-text= closed_by_name
+          %td
+            %div
+              %span= Statement.human_attribute_name("status.#{s.status}")
+            - if show_reconcile_notes && s.reconcile_notes.present?
+              %div
+                %small
+                  %strong= "#{t('statements.notes')}:"
+              %ul
+                %li
+                  %small= s.reconcile_notes.shift
+              %ul.unstyled.collapse{ id: "statement-notes-#{s.id}" }
+                - s.reconcile_notes.each do |note|
+                  %li
+                    %small= note
+              - if s.reconcile_notes.length > 0
+                %a{ role: "button", href: "#statement-notes-#{s.id}", data: { toggle: "collapse", target: "#statement-notes-#{s.id}" } }
+                  %small= t("statements.expand")
+
 
   = will_paginate(@statements)

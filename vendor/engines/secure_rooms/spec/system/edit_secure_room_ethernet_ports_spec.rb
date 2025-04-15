@@ -26,7 +26,7 @@ RSpec.describe "Secure Room Ethernet Ports" do
       fill_in "secure_room_tablet_circuit_number", with: "2"
       fill_in "secure_room_tablet_port_number", with: "4000"
       fill_in "secure_room_tablet_location_description", with: "The tablet is near the card reader"
-    
+
       click_button "Save"
       room.reload
 
@@ -38,5 +38,5 @@ RSpec.describe "Secure Room Ethernet Ports" do
       expect(room.tablet_circuit_number).to eq("2")
       expect(room.tablet_port_number).to eq(4000)
       expect(room.tablet_location_description).to eq("The tablet is near the card reader")
-    end 
+    end
 end

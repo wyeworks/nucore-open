@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Formio
   class SubmissionsController < ApplicationController
 
@@ -5,14 +7,14 @@ module Formio
 
     layout "formio"
 
+    def show
+      @formio_url = params[:formio_url]
+    end
+
     def new
       @formio_url = params[:formio_url]
       @prefill_data = prefill_data
       @redirect_url = redirect_url
-    end
-
-    def show
-      @formio_url = params[:formio_url]
     end
 
     def edit

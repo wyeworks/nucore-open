@@ -11,13 +11,9 @@ module UmassCorum
       format_row(@headers, JournalDefinition::HEADER)
     end
 
-    def <<(row)
-      @row_data << row
-    end
+    delegate :<<, to: :@row_data
 
-    def concat(other)
-      @row_data.concat(other)
-    end
+    delegate :concat, to: :@row_data
 
     def rows
       @rows ||= @row_data.lazy.map do |row|
@@ -38,7 +34,7 @@ module UmassCorum
     def format_row(row, definition)
       definition.map do |c|
         format_data(row[c.name], c)
-      end.pack(definition.map { |c| "A#{c.width}"}.join)
+      end.pack(definition.map { |c| "A#{c.width}" }.join)
     end
 
     def format_data(data, column)
