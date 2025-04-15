@@ -8,7 +8,6 @@ RSpec.describe "Creating a Voucher Split Account" do
   let!(:purchase_order) { create(:purchase_order_account, :with_account_owner, facility: facility) }
   let!(:credit_card) { create(:credit_card_account, :with_account_owner, facility: facility) }
 
-
   context "creating an account" do
     before do
       login_as(admin)

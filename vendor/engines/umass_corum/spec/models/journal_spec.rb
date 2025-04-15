@@ -116,11 +116,11 @@ RSpec.describe Journal do
     it "creates 4 rows with the correct splits" do
       expect { journal.save! }.to change(JournalRow, :count).by(4)
       expect(journal.journal_rows.map(&:amount)).to eq([
-        order_detail.actual_cost / 2, # First split
-        - order_detail.actual_cost / 2, # First split recharge
-        order_detail.actual_cost / 2, # Second split
-        - order_detail.actual_cost / 2, # Second split recharge
-      ])
+                                                         order_detail.actual_cost / 2, # First split
+                                                         - order_detail.actual_cost / 2, # First split recharge
+                                                         order_detail.actual_cost / 2, # Second split
+                                                         - order_detail.actual_cost / 2, # Second split recharge
+                                                       ])
     end
 
     it "splits the accounts" do
@@ -132,10 +132,10 @@ RSpec.describe Journal do
   end
 
   describe "#als_number" do
-    let!(:old_journal_1) { create(:journal, :with_completed_order, facility: facility, journal_date: 1.month.ago, created_by: 0, ) }
-    let!(:old_journal_2) { create(:journal, :with_completed_order, facility: facility, journal_date: 2.months.ago, created_by: 0, ) }
-    let!(:old_journal_3) { create(:journal, :with_completed_order, facility: facility, journal_date: 3.months.ago, created_by: 0, ) }
-    let(:old_journal_4) { build(:journal, :with_completed_order, facility: facility, journal_date: 4.months.ago, created_by: 0, ) }
+    let!(:old_journal_1) { create(:journal, :with_completed_order, facility: facility, journal_date: 1.month.ago, created_by: 0,) }
+    let!(:old_journal_2) { create(:journal, :with_completed_order, facility: facility, journal_date: 2.months.ago, created_by: 0,) }
+    let!(:old_journal_3) { create(:journal, :with_completed_order, facility: facility, journal_date: 3.months.ago, created_by: 0,) }
+    let(:old_journal_4) { build(:journal, :with_completed_order, facility: facility, journal_date: 4.months.ago, created_by: 0,) }
     let!(:journal_1) { create(:journal, facility: facility, journal_date: journal_date, order_details_for_creation: order_details, created_by: 0) }
     let!(:journal_2) { create(:journal, facility: facility, journal_date: journal_date, order_details_for_creation: order_details, created_by: 0) }
     let!(:journal_3) { create(:journal, facility: facility, journal_date: journal_date, order_details_for_creation: order_details, created_by: 0) }
@@ -188,7 +188,7 @@ RSpec.describe Journal do
       end
 
       it "is rejected by the database" do
-        expect{ journal_3.update_attribute(:als_number, journal_2.als_number) }.to raise_error(ActiveRecord::RecordNotUnique)
+        expect { journal_3.update_attribute(:als_number, journal_2.als_number) }.to raise_error(ActiveRecord::RecordNotUnique)
       end
     end
 

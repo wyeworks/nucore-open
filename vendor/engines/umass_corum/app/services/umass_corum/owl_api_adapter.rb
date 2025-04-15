@@ -16,7 +16,7 @@ module UmassCorum
       }
     end
 
-    # Note: If you are not on the UMass VPN, both servers are inaccessible due to firewalling
+    # NOTE: If you are not on the UMass VPN, both servers are inaccessible due to firewalling
     def self.host
       Rails.env.production? ? "owl.umass.edu" : "owlstage.umass.edu"
     end

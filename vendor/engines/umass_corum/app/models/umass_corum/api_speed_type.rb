@@ -5,11 +5,11 @@ module UmassCorum
   # The columns of this class match the keys in the JSON response we get from
   # the API.
   class ApiSpeedType < ApplicationRecord
-    belongs_to :speed_type_account, 
-                foreign_key: :account_number, 
-                primary_key: :speed_type, 
-                required: false, 
-                inverse_of: :api_speed_type
+    belongs_to :speed_type_account,
+               foreign_key: :account_number,
+               primary_key: :speed_type,
+               optional: true,
+               inverse_of: :api_speed_type
 
     validates :speed_type, presence: true, uniqueness: { case_sensitive: false }
     validates :active, inclusion: [true, false]
@@ -52,8 +52,6 @@ module UmassCorum
     def class=(value)
       self.clazz = value
     end
-
-    private
 
     def self.credentials
       [

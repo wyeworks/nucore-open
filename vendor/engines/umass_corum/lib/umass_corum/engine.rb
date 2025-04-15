@@ -9,9 +9,9 @@ module UmassCorum
     isolate_namespace UmassCorum
 
     config.to_prepare do
-      User.send :include, UmassCorum::UserExtension
+      User.include UmassCorum::UserExtension
       UsersController.user_form_class = UmassCorum::UserForm
-      GlobalSearchController.send :include, UmassCorum::GlobalSearchControllerExtension
+      GlobalSearchController.include UmassCorum::GlobalSearchControllerExtension
       EngineManager.allow_view_overrides!("umass_corum")
       Account.config.account_types.concat(["UmassCorum::VoucherSplitAccount", "UmassCorum::SubsidyAccount"])
       Account.config.statement_account_types << "UmassCorum::VoucherSplitAccount"
@@ -23,8 +23,8 @@ module UmassCorum
       Account.config.creation_disabled_types << "NufsAccount"
       OrderStatus.ordered_root_statuses << "MIVP Pending"
       FacilityFacilityAccountsController.form_class = UmassCorum::FacilityAccountForm
-      Journal.send(:include, UmassCorum::JournalExtension)
-      NotificationSender.send(:prepend, UmassCorum::NotificationSenderExtension)
+      Journal.include UmassCorum::JournalExtension
+      NotificationSender.prepend UmassCorum::NotificationSenderExtension
       ::AbilityExtensionManager.extensions << "UmassCorum::AbilityExtension"
       ViewHook.add_hook("admin.shared.sidenav_global", "after", "umass_corum/shared/admin_reports_tab")
       ViewHook.add_hook("devise.sessions.new", "login_screen_announcement", "umass_corum/sessions/request_login")

@@ -93,7 +93,6 @@ module UmassCorum
         format_usa_datetime(user.orders.last&.created_at)
       end
 
-
       def certs_for_user(user)
         certs = cert_lookup_for_user(user).map { |cert, user_certified| cert.name if user_certified }
         certs.compact.join(";")

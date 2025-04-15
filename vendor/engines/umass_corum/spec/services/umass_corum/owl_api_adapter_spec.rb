@@ -11,7 +11,7 @@ RSpec.describe UmassCorum::OwlApiAdapter do
 
     before do
       stub_request(:get, "https://owlstage.umass.edu/owlj/servlet/OwlPreLogin")
-        .with(query: hash_including({"ID" => "anetid"}))
+        .with(query: hash_including({ "ID" => "anetid" }))
         .to_return(
           body: File.new(response),
           status: 200,
@@ -45,7 +45,7 @@ RSpec.describe UmassCorum::OwlApiAdapter do
     let(:response) { File.expand_path("../../fixtures/owl/ip_violation.json", __dir__) }
     before do
       stub_request(:get, "https://owlstage.umass.edu/owlj/servlet/OwlPreLogin")
-        .with(query: hash_including({"ID" => "anetid"}))
+        .with(query: hash_including({ "ID" => "anetid" }))
         .to_return(
           body: File.new(response),
           status: 200,
@@ -60,7 +60,7 @@ RSpec.describe UmassCorum::OwlApiAdapter do
   describe "unable to connect" do
     before do
       stub_request(:get, "https://owlstage.umass.edu/owlj/servlet/OwlPreLogin")
-        .with(query: hash_including({"ID" => "anetid"}))
+        .with(query: hash_including({ "ID" => "anetid" }))
         .to_timeout
     end
 
@@ -73,7 +73,7 @@ RSpec.describe UmassCorum::OwlApiAdapter do
     let(:response) { File.expand_path("../../fixtures/owl/user_not_found.json", __dir__) }
     before do
       stub_request(:get, "https://owlstage.umass.edu/owlj/servlet/OwlPreLogin")
-        .with(query: hash_including({"ID" => "anetid"}))
+        .with(query: hash_including({ "ID" => "anetid" }))
         .to_return(
           body: File.new(response),
           status: 200,
@@ -89,7 +89,7 @@ RSpec.describe UmassCorum::OwlApiAdapter do
     let(:response) { File.expand_path("../../fixtures/owl/error.json", __dir__) }
     before do
       stub_request(:get, "https://owlstage.umass.edu/owlj/servlet/OwlPreLogin")
-        .with(query: hash_including({"ID" => "anetid"}))
+        .with(query: hash_including({ "ID" => "anetid" }))
         .to_return(
           body: File.new(response),
           status: 200,

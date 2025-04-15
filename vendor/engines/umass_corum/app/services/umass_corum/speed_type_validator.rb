@@ -38,7 +38,7 @@ module UmassCorum
       if api_account.active?
         start_date.beginning_of_day <= fulfilled_date
       elsif api_account.date_removed.present?
-        start_date.beginning_of_day <= fulfilled_date && fulfilled_date <= api_account.date_removed.end_of_day
+        fulfilled_date.between?(start_date.beginning_of_day, api_account.date_removed.end_of_day)
       else
         # This should never happen - api_account should be active OR have date_removed set
         if defined?(Rollbar)
@@ -55,8 +55,8 @@ module UmassCorum
 
       raise AccountValidator::ValidatorError, "This account is suspended" if account_suspended_at?(fulfilled_at)
 
-      if api_account.project_id.present?
-        raise AccountValidator::ValidatorError, "Both project start and end dates are required for validation." unless api_account.project_start_date && api_account.project_end_date
+      if api_account.project_id.present? && !(api_account.project_start_date && api_account.project_end_date)
+        raise AccountValidator::ValidatorError, "Both project start and end dates are required for validation."
       end
 
       unless valid_at?(fulfilled_at)
