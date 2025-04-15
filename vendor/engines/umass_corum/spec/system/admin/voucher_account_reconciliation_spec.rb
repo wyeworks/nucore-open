@@ -135,11 +135,13 @@ RSpec.describe "Voucher Account Reconciliation" do
       describe "with bulk reconciliation note" do
         it "sets the note when checkbox is checked" do
           check "Use Bulk Note"
-          fill_in "Bulk Reconciliation Note", with: "this is the bulk note"
+          fill_in "Bulk Note", with: "this is the bulk note"
           check "order_detail_#{order_detail.id}_reconciled"
           check "order_detail_#{orders.last.order_details.first.id}_reconciled"
           fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
           click_button "Update Orders", match: :first
+
+          expect(page).to have_content("2 payments successfully reconciled")
 
           expect(order_detail.reload.reconciled_note).to eq("this is the bulk note")
           expect(orders.last.order_details.first.reload.reconciled_note).to eq("this is the bulk note")
@@ -147,12 +149,14 @@ RSpec.describe "Voucher Account Reconciliation" do
 
         it "does NOT set the note when checkbox is NOT checked" do
           check "Use Bulk Note"
-          fill_in "Bulk Reconciliation Note", with: "this is the bulk note"
+          fill_in "Bulk Note", with: "this is the bulk note"
           uncheck "Use Bulk Note"
           check "order_detail_#{order_detail.id}_reconciled"
           check "order_detail_#{orders.last.order_details.first.id}_reconciled"
           fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
           click_button "Update Orders", match: :first
+
+          expect(page).to have_content("2 payments successfully reconciled")
 
           expect(order_detail.reload.reconciled_note).to eq("")
           expect(orders.last.order_details.first.reload.reconciled_note).to eq("")
