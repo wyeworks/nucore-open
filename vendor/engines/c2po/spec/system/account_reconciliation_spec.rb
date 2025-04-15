@@ -123,6 +123,58 @@ RSpec.describe "Account Reconciliation", :js do
         expect(orders.last.order_details.first.reload.reconciled_note).to eq("")
       end
     end
+  end
+
+  describe "Purchase Orders" do
+    let(:accounts) { create_list(:purchase_order_account, 2, :with_account_owner) }
+    let(:order_detail) { orders.first.order_details.first }
+    # This is a page-specific format
+    let(:order_number) { "##{orders.first.id} - #{orders.first.order_details.first.id}" }
+    let(:other_order_number) { "##{orders.last.id} - #{orders.last.order_details.first.id}" }
+
+    it "can search and then reconcile a PO order" do
+      visit facility_notifications_path(facility)
+      click_link "Reconcile Purchase Orders"
+
+      expect(page).to have_content(order_number)
+      expect(page).to have_content(other_order_number)
+
+      select_from_chosen accounts.first.account_list_item, from: "Payment Sources"
+      click_button "Filter"
+      expect(page).to have_content(order_number)
+      expect(page).not_to have_content(other_order_number)
+
+      check "order_detail_#{order_detail.id}_reconciled"
+      fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
+      fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
+      click_button "Update Orders", match: :first
+
+      expect(page).to have_content("1 payment successfully updated")
+
+      expect(order_detail.reload).to be_reconciled
+      expect(order_detail.reconciled_note).to eq("this is a note!")
+      expect(order_detail.reconciled_at).to eq(1.day.ago.beginning_of_day)
+
+      # ensure the closed by times show up on the statement history page
+      click_link "#{I18n.t('Statement')} History"
+      expect(page).to have_content(statement.closed_by_times.first)
+    end
+
+    it "can take a bulk reconciliation note" do
+      visit facility_notifications_path(facility)
+      click_link "Reconcile Purchase Orders"
+
+      check "Use Bulk Note"
+      fill_in "Bulk Note", with: "this is the bulk note"
+      check "order_detail_#{order_detail.id}_reconciled"
+      check "order_detail_#{orders.last.order_details.first.id}_reconciled"
+      fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
+      click_button "Update Orders", match: :first
+
+      expect(page).to have_content("2 payments successfully updated")
+      expect(order_detail.reload.reconciled_note).to eq("this is the bulk note")
+      expect(orders.last.order_details.first.reload.reconciled_note).to eq("this is the bulk note")
+    end
 
     context "marking as unrecoverable" do
       let(:order_detail1) { order_detail }
@@ -132,8 +184,8 @@ RSpec.describe "Account Reconciliation", :js do
       before do
         login_as admin
 
-        visit credit_cards_facility_accounts_path(facility)
-        click_link "Reconcile Credit Cards"
+        visit purchase_orders_facility_accounts_path(facility)
+        click_link "Reconcile Purchase Orders"
 
         select "Unrecoverable", from: "order_status"
       end
@@ -191,58 +243,6 @@ RSpec.describe "Account Reconciliation", :js do
         expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note"
         expect(order_detail1.reconciled_note).to be_blank
       end
-    end
-  end
-
-  describe "Purchase Orders" do
-    let(:accounts) { create_list(:purchase_order_account, 2, :with_account_owner) }
-    let(:order_detail) { orders.first.order_details.first }
-    # This is a page-specific format
-    let(:order_number) { "##{orders.first.id} - #{orders.first.order_details.first.id}" }
-    let(:other_order_number) { "##{orders.last.id} - #{orders.last.order_details.first.id}" }
-
-    it "can search and then reconcile a PO order" do
-      visit facility_notifications_path(facility)
-      click_link "Reconcile Purchase Orders"
-
-      expect(page).to have_content(order_number)
-      expect(page).to have_content(other_order_number)
-
-      select_from_chosen accounts.first.account_list_item, from: "Payment Sources"
-      click_button "Filter"
-      expect(page).to have_content(order_number)
-      expect(page).not_to have_content(other_order_number)
-
-      check "order_detail_#{order_detail.id}_reconciled"
-      fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
-      fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
-      click_button "Update Orders", match: :first
-
-      expect(page).to have_content("1 payment successfully updated")
-
-      expect(order_detail.reload).to be_reconciled
-      expect(order_detail.reconciled_note).to eq("this is a note!")
-      expect(order_detail.reconciled_at).to eq(1.day.ago.beginning_of_day)
-
-      # ensure the closed by times show up on the statement history page
-      click_link "#{I18n.t('Statement')} History"
-      expect(page).to have_content(statement.closed_by_times.first)
-    end
-
-    it "can take a bulk reconciliation note" do
-      visit facility_notifications_path(facility)
-      click_link "Reconcile Purchase Orders"
-
-      check "Use Bulk Note"
-      fill_in "Bulk Note", with: "this is the bulk note"
-      check "order_detail_#{order_detail.id}_reconciled"
-      check "order_detail_#{orders.last.order_details.first.id}_reconciled"
-      fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
-      click_button "Update Orders", match: :first
-
-      expect(page).to have_content("2 payments successfully updated")
-      expect(order_detail.reload.reconciled_note).to eq("this is the bulk note")
-      expect(orders.last.order_details.first.reload.reconciled_note).to eq("this is the bulk note")
     end
   end
 end
