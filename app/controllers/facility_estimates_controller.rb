@@ -13,6 +13,9 @@ class FacilityEstimatesController < ApplicationController
   before_action :set_users, only: [:search]
 
   def index
+    @estimates = current_facility.estimates
+                                 .includes(:user)
+                                 .order(created_at: :desc)
   end
 
   def show

@@ -518,6 +518,7 @@ en:
   facility_estimates:
     index:
       add: Add Estimate
+      no_estimates: No estimates found
     create:
       success: Estimate successfully created
       error: There was an error creating the estimate
