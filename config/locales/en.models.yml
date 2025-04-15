@@ -245,6 +245,12 @@ en:
         user_role: Role
       affiliate:
         subaffiliates_enabled: Allows subaffiliates
+      estimate:
+        name: Name
+        user: User
+        created_by_user: Created By
+        expires_at: Expires at
+        note: Notes
       schedule_rule:
         start_time: Start Time
         end_time: End Time
