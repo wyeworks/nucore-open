@@ -74,6 +74,7 @@ en:
       copyright_html: "&copy; Copyright 2011&ndash;%{to_date} University of Massachusetts"
       logo_alt: "UMass Amherst Logo"
       logo_file: "logo-horizontal.svg"
+      logo_link_to: "http://www.umass.edu/ials/core-facilities"
 
   reservations:
     account_field:
