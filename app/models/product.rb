@@ -278,15 +278,9 @@ class Product < ApplicationRecord
         costs[:cost] - costs[:subsidy]
       end
     elsif detail.is_a?(EstimateDetail) && SettingsHelper.feature_on?(:show_estimates_option)
-      price_policies.each_with_object({ cost: 999_999_999, price_policy: nil }) do |pp, memo|
-        cost = pp.estimate_cost_from_estimate_detail(detail)
-
-        if cost && cost < memo[:cost]
-          memo[:cost] = cost
-          memo[:price_policy] = pp
-        end
-
-        memo
+      price_policies.min_by do |pp|
+        # default to very large number if the estimate returns a nil
+        pp.estimate_cost_from_estimate_detail(detail) || 999_999_999
       end
     end
   end

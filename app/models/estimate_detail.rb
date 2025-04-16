@@ -20,11 +20,13 @@ class EstimateDetail < ApplicationRecord
   private
 
   def assign_price_policy_and_cost
-    pp_and_cost = product.cheapest_price_policy(self, Time.current)
+    pp = product.cheapest_price_policy(self, Time.current)
 
-    return unless pp_and_cost[:price_policy]
+    return if pp.blank?
 
-    self.price_policy = pp_and_cost[:price_policy]
-    self.cost = pp_and_cost[:cost]
+    cost = pp.estimate_cost_from_estimate_detail(self)
+
+    self.price_policy = pp
+    self.cost = cost
   end
 end
