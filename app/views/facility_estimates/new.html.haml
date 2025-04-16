@@ -17,6 +17,32 @@
       = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
   .form-inputs
     = f.input :note
-  .form-actions
-    = f.button :submit, t(".add"), class: "btn-primary"
-    = link_to t("shared.cancel"), facility_estimates_path(@estimate.facility)
+
+  #new_estimate_products_table.hidden
+    %table.table
+      %thead
+        %tr
+          %th Product
+          %th Quantity
+          %th
+      %tbody#new_estimate_estimate_details{ data: { remove_button_text: t(".remove_products") } }
+
+  %h3= t(".add_products_to_estimate")
+
+  .well
+    .inline-form-controls
+      %div
+        = label_tag :quantity, EstimateDetail.human_attribute_name(:quantity)
+        = number_field_tag :quantity, 1, min: 1, style: "width: 3em;"
+
+      .margin_x
+        = label_tag :product_id, Product.model_name.human
+        = select_tag :product_id,
+          options_for_select(current_facility.products.where({ type: ["Item", "Service"] }).alphabetized.map { |p| [p.name, p.id] }),
+          class: "js--chosen",
+          include_blank: false
+
+    %button#add_product_to_estimate.btn.btn-primary{ type: "button" }= t(".add_product")
+
+  = f.button :submit, t(".add"), class: "btn-primary"
+  = link_to t("shared.cancel"), facility_estimates_path(@estimate.facility)

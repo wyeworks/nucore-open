@@ -52,6 +52,10 @@ module InstrumentPricePolicyCalculations
     end
   end
 
+  def estimate_cost_from_estimate_detail(estimate_detail)
+    # TODO: NUOPEN-227
+  end
+
   private
 
   # CHARGE_FOR[:reservation] uses reserve start and end time for calculation
