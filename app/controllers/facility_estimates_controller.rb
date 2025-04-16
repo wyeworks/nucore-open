@@ -63,7 +63,7 @@ class FacilityEstimatesController < ApplicationController
     search_term = params[:query]&.strip
 
     @users = if search_term.present?
-               UserFinder.search(search_term, 20).map { |user| { id: user.id, name: user.full_name } }
+               UserFinder.search(search_term, 20).map { |user| { id: user.id, name: "#{user.full_name} (#{user.username})" } }
              else
                []
              end
