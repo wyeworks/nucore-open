@@ -140,6 +140,36 @@ RSpec.describe Statement do
       it "is not in the unreconciled scope" do
         expect(described_class.unreconciled).not_to include(statement)
       end
+
+      describe "#order_details_notes" do
+        subject { statement.order_details_notes(:reconciled_note) }
+
+        let(:order_detail1) { statement.order_details.first }
+        let(:order_detail2) { statement.order_details.second }
+
+        before do
+          order_detail1.update(reconciled_note: "Some note")
+          order_detail2.update(reconciled_note: "Some other note")
+        end
+
+        it "includes reconcile notes" do
+          expect(subject).to(
+            match(["Some note", "Some other note"])
+          )
+        end
+
+        it "filters out nil notes" do
+          order_detail1.update(reconciled_note: nil)
+
+          expect(subject).to eq(["Some other note"])
+        end
+
+        it "filters out whitespace notes" do
+          order_detail1.update(reconciled_note: "        ")
+
+          expect(subject).to eq(["Some other note"])
+        end
+      end
     end
 
     context "#remove_order_detail" do
