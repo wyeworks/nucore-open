@@ -7,7 +7,7 @@
       %th{ scope: "col" }= Account.model_name.human
       %th{ scope: "col" }= Order.model_name.human
       %th{ scope: "col" }= Statement.human_attribute_name(:total_cost)
-      %th#reconcile-note.row-note-input.js--reconcileField{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
+      %th#reconcile-note.row-note-input.js--reconciledField{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
       - if show_reconciliation_deposit_number
         %th#reconcile-deposit-number.row-note-input.js--reconciledField{ scope: "col", data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
           = OrderDetail.human_attribute_name(:deposit_number)
