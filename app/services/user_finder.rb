@@ -15,22 +15,23 @@ class UserFinder
 
   def self.search_with_count(search_term, limit = nil)
     if search_term.present?
-      new(search_term, limit).result_with_count
+      new(search_term, limit:).result_with_count
     else
       [nil, nil]
     end
   end
 
-  def self.search(search_term, limit = nil)
+  def self.search(search_term, limit: nil, only_include_active: false)
     if search_term.present?
-      new(search_term, limit).result
+      new(search_term, only_include_active:, limit:).result
     else
       nil
     end
   end
 
-  def initialize(search_term, limit = nil)
+  def initialize(search_term, limit: nil, only_include_active: false)
     @search_term = generate_multipart_like_search_term(search_term)
+    @only_include_active = only_include_active
     @limit = limit
   end
 
@@ -50,7 +51,13 @@ class UserFinder
 
     conditions << concat_condition.matches(@search_term)
 
-    @relation ||= User.where(conditions.inject(&:or))
+    scope = User.where(conditions.inject(&:or))
+
+    if @only_include_active
+      scope = scope.active
+    end
+
+    @relation ||= scope
   end
 
   # This method is a little funky, but it allows us to search for "First Last"
