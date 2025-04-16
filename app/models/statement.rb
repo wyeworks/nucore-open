@@ -64,7 +64,9 @@ class Statement < ApplicationRecord
   end
 
   def order_details_notes(note_field)
-    order_details.filter_map { |od| od.send(note_field) }.uniq
+    order_details.filter_map do |od|
+      od.send(note_field)&.strip.presence
+    end.uniq
   end
 
   def invoice_date
