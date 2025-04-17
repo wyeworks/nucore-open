@@ -50,5 +50,7 @@ RSpec.describe "Creating an estimate", :js do
     expect(page).to have_content 1.month.from_now.strftime("%m/%d/%Y")
     expect(page).to have_content director.full_name
     expect(page).to have_content user.full_name
+    expect(page).to have_content product.name
+    expect(page).to have_content ActionController::Base.helpers.number_to_currency(price_policy.unit_cost)
   end
 end
