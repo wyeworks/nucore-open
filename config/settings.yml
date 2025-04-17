@@ -164,6 +164,7 @@ feature:
   allow_global_billing_admin_update_actual_prices: true
   export_order_disputes: false
   show_estimates_option: <%= !Rails.env.production? %>
+  show_account_opencontract_field: <%= ENV.fetch("ACCOUNT_OPENCONTRACT_FIELD", false) %>
 
 split_accounts:
   # Roles are allowed to create Split Accounts
