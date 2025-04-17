@@ -39,6 +39,9 @@ module UmassCorum
       ::Reports::ExportRaw.transformers << "UmassCorum::AdminReports::ExportRawTransformer"
       SpeedTypeAccountBuilder.common_permitted_account_params << :api_speed_type_attributes
       VoucherSplitAccountBuilder.common_permitted_account_params << :account_number
+      if SettingsHelper.feature_on? :show_account_opencontract_field
+        PurchaseOrderAccountBuilder.permitted_account_params << :open_contract
+      end
     end
 
     # Include migrations in main rails app
