@@ -7,21 +7,21 @@ RSpec.describe UserFinder do
     it "finds users by first_name" do
       first_name = SecureRandom.hex(8)
       user = FactoryBot.create(:user, first_name: first_name)
-      found_users = UserFinder.search(first_name, nil)
+      found_users = UserFinder.search(first_name)
       expect(found_users).to include(user)
     end
 
     it "finds users by last_name" do
       last_name = SecureRandom.hex(8)
       user = FactoryBot.create(:user, last_name: last_name)
-      found_users = UserFinder.search(last_name, nil)
+      found_users = UserFinder.search(last_name)
       expect(found_users).to include(user)
     end
 
     it "finds users by username" do
       username = SecureRandom.hex(8)
       user = FactoryBot.create(:user, username: username)
-      found_users = UserFinder.search(username, nil)
+      found_users = UserFinder.search(username)
       expect(found_users).to include(user)
     end
 
@@ -29,14 +29,14 @@ RSpec.describe UserFinder do
       first_name = SecureRandom.hex(8)
       last_name = SecureRandom.hex(8)
       user = FactoryBot.create(:user, first_name: first_name, last_name: last_name)
-      found_users = UserFinder.search([first_name, last_name].join, nil)
+      found_users = UserFinder.search([first_name, last_name].join)
       expect(found_users).to include(user)
     end
 
     it "finds users by email" do
       email = "#{SecureRandom.hex(8)}@example.com"
       user = FactoryBot.create(:user, email: email)
-      found_users = UserFinder.search(email, nil)
+      found_users = UserFinder.search(email)
       expect(found_users).to include(user)
     end
   end
@@ -45,14 +45,14 @@ RSpec.describe UserFinder do
     it "searches and returns a count" do
       first_name = SecureRandom.hex(8)
       user = FactoryBot.create(:user, first_name: first_name)
-      found_users, count = UserFinder.search_with_count(first_name, nil)
+      found_users, count = UserFinder.search_with_count(first_name)
       expect(found_users).to include(user)
       expect(count).to eq(1)
     end
 
     it "returns nothing and 0 if not found" do
       user = FactoryBot.create(:user)
-      found_users, count = UserFinder.search_with_count("something random", nil)
+      found_users, count = UserFinder.search_with_count("something random")
       expect(found_users).to be_empty
       expect(count).to eq(0)
     end
