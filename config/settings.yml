@@ -166,6 +166,7 @@ feature:
   allow_global_billing_admin_update_actual_prices: false
   export_order_disputes: false
   show_estimates_option: <%= !Rails.env.production? %>
+  email_log_events: true
 
 split_accounts:
   # Roles are allowed to create Split Accounts

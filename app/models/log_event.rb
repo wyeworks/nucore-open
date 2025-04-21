@@ -1,11 +1,17 @@
 # frozen_string_literal: true
 
 class LogEvent < ApplicationRecord
+  EMAIL_EVENT_TYPES = %w[
+    user.review_orders_email
+  ].freeze
 
   belongs_to :user # This is whodunnit
   belongs_to :loggable, -> { with_deleted if respond_to?(:with_deleted) }, polymorphic: true
   serialize :metadata, JSON
+
   scope :reverse_chronological, -> { order(event_time: :desc) }
+  scope :billing_email_type, -> { where(event_type: EMAIL_EVENT_TYPES) }
+  scope :non_billing_email_type, -> { where.not(event_type: EMAIL_EVENT_TYPES) }
 
   def self.log(loggable, event_type, user, event_time: Time.current, metadata: nil)
     create(
