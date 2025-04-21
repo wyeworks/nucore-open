@@ -154,8 +154,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
   end
 
   def authorize_mark_unrecoverable
-    return if @order_detail.unrecoverable? ||
-              update_params[:state] != OrderStatus.unrecoverable.id
+    return if @order_detail.unrecoverable? || update_params[:order_status_id].to_s != OrderStatus.unrecoverable.id.to_s
 
     authorize!(:mark_unrecoverable, OrderDetail)
   end
