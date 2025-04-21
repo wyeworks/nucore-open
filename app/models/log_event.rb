@@ -3,6 +3,7 @@
 class LogEvent < ApplicationRecord
   EMAIL_EVENT_TYPES = %w[
     user.review_orders_email
+    user.statement_email
   ].freeze
 
   belongs_to :user # This is whodunnit

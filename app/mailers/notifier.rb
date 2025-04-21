@@ -63,7 +63,12 @@ class Notifier < ActionMailer::Base
     @account = args[:account]
     @statement = args[:statement]
     attach_statement_pdf
-    send_nucore_mail args[:user].email, text("views.notifier.statement.subject", facility: @facility), nil, Settings.email.invoice_bcc
+    send_nucore_mail(
+      args[:user].email,
+      text("views.notifier.statement.subject", facility: @facility),
+      nil,
+      Settings.email.invoice_bcc
+    ).tap { log_statement_email }
   end
 
   def order_detail_status_changed(order_detail)
@@ -101,7 +106,23 @@ class Notifier < ActionMailer::Base
       :review_orders_email,
       nil,
       metadata: {
+        to: @user.email,
         accounts_ids: @accounts&.map(&:id),
+        facility_id: @facility&.id
+      }
+    )
+  end
+
+  def log_statement_email
+    return unless SettingsHelper.feature_on?(:email_log_events)
+
+    LogEvent.log(
+      @statement,
+      :statement_email,
+      nil,
+      metadata: {
+        to: @user.email,
+        account_id: @account.id,
         facility_id: @facility&.id
       }
     )
