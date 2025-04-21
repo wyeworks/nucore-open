@@ -282,6 +282,8 @@ RSpec.describe "Managing an order detail" do
         instrument.price_policies.update_all(cancellation_cost: 5)
         # reservation is set for tomorrow, we need min_cancel_hours to be longer than time to reserve_start_at
         instrument.update_attribute(:min_cancel_hours, 48)
+
+        visit manage_facility_order_order_detail_path(facility, order, order_detail)
       end
 
       it "cancels without a fee" do
@@ -318,6 +320,8 @@ RSpec.describe "Managing an order detail" do
         fill_in "Resolution Notes", with: "a resolution"
         click_button "Resolve Dispute"
 
+        expect(page).to have_content("The order was successfully updated")
+
         expect(order_detail.reload.dispute_resolved_at).to be_present
         expect(LogEvent).to be_exist(loggable: order_detail, event_type: :resolve)
       end
@@ -337,6 +341,8 @@ RSpec.describe "Managing an order detail" do
         visit manage_facility_order_order_detail_path(facility, order_detail.order, order_detail)
         fill_in "Resolution Notes", with: "a resolution"
         click_button "Resolve Dispute"
+
+        expect(page).to have_content("The order was successfully updated")
 
         expect(order_detail.reload.dispute_resolved_at).to be_present
         expect(LogEvent).to be_exist(loggable: order_detail, event_type: :resolve)
