@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_10_211418) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_21_145232) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -329,6 +329,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_10_211418) do
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "event_time", precision: nil
     t.text "metadata"
+    t.index ["event_type"], name: "index_log_events_on_event_type"
     t.index ["loggable_type", "loggable_id"], name: "index_log_events_loggable"
     t.index ["user_id"], name: "index_log_events_on_user_id"
   end
