@@ -21,17 +21,17 @@ class UserFinder
     end
   end
 
-  def self.search(search_term, limit: nil, only_include_active: false)
+  def self.search(search_term, limit: nil, actives_only: false)
     if search_term.present?
-      new(search_term, only_include_active:, limit:).result
+      new(search_term, actives_only:, limit:).result
     else
       nil
     end
   end
 
-  def initialize(search_term, limit: nil, only_include_active: false)
+  def initialize(search_term, limit: nil, actives_only: false)
     @search_term = generate_multipart_like_search_term(search_term)
-    @only_include_active = only_include_active
+    @actives_only = actives_only
     @limit = limit
   end
 
@@ -53,7 +53,7 @@ class UserFinder
 
     scope = User.where(conditions.inject(&:or))
 
-    if @only_include_active
+    if @actives_only
       scope = scope.active
     end
 
