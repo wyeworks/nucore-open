@@ -9,17 +9,20 @@ class LogEvent < ApplicationRecord
 
   def self.log(loggable, event_type, user, event_time: Time.current, metadata: nil)
     create(
-      loggable: loggable, event_type: event_type,
-      event_time: event_time, user_id: user.try(:id),
-      metadata: metadata)
+      loggable:,
+      event_type:,
+      event_time:,
+      metadata:,
+      user_id: user.try(:id),
+    )
   end
 
   def self.search(start_date: nil, end_date: nil, events: [], query: nil)
     LogEventSearcher.new(
-      start_date: start_date, end_date: end_date, events: events, query: query).search
+      start_date:, end_date:, events:, query:).search
   end
 
-# The reason that we are doing this is because in some case we can't add a default value to a text column
+  # The reason that we are doing this is because in some case we can't add a default value to a text column
   def metadata
     self[:metadata] || {}
   end
