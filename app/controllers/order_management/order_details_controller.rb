@@ -123,7 +123,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
       @order_statuses = OrderStatus.non_protected_statuses(current_facility)
     end
 
-    if !@order_detail.unrecoverable? && cannot?(:mark_unrecoverable, OrderDetail)
+    unless @order_detail.unrecoverable? || can?(:mark_unrecoverable, OrderDetail)
       @order_statuses.reject! { |status| status.name == OrderStatus::UNRECOVERABLE }
     end
   end
