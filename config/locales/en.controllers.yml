@@ -36,9 +36,6 @@ en:
         success: "Payment source activated successfully"
         failure: "Cannot activate. %{errors}"
 
-    facility_accounts_reconciliation:
-      cannot_mark_as_unrecoverable: "You do not have permission to mark payments as unrecoverable. Please contact your Global Administrator for help."
-
     facility_notifications:
       no_selection: No orders selected
       errors_html: We experienced the following errors. Please try again.<br/>%{errors}
