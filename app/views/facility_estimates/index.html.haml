@@ -5,6 +5,33 @@
 - if current_ability.can?(:create, Estimate)
   %p= link_to t(".add"), new_facility_estimate_path, class: "btn-add"
 
+.row
+  .span12
+    = form_tag facility_estimates_path, method: :get, class: "form-horizontal filter-form" do
+      .well
+        .control-group
+          %label.control-label= t(".search")
+          .controls
+            = text_field_tag :search, params[:search], placeholder: t(".search_placeholder"), class: "input-large", id: "estimate_search"
+
+        .control-group
+          %label.control-label= t(".filter_user")
+          .controls
+            = select_tag :user_id, 
+              options_for_select([[t(".all_users"), ""]] + Estimate.where(facility_id: current_facility.id).includes(:user).map { |e| [e.user.full_name, e.user_id] }.uniq, 
+              selected: params[:user_id]),
+              class: "input-large"
+
+        .control-group
+          %label.control-label= t(".hide_expired")
+          .controls
+            = check_box_tag :hide_expired, "1", params[:hide_expired] == "1"
+
+        .control-group
+          .controls
+            = submit_tag t("shared.filter"), class: "btn"
+            = link_to t(".clear_filter"), facility_estimates_path, class: "btn"
+
 - if @estimates.present?
   %table.table.table-striped.table-hover
     %thead
@@ -15,7 +42,7 @@
         %th= Estimate.human_attribute_name(:expires_at)
     %tbody
       - @estimates.each do |estimate|
-        %tr
+        %tr{class: estimate.expires_at < Time.current ? "text-error" : ""}
           %td= link_to estimate.id, facility_estimate_path(current_facility, estimate)
           %td= estimate.name
           %td= estimate.user.full_name
