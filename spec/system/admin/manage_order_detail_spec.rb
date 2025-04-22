@@ -365,6 +365,8 @@ RSpec.describe "Managing an order detail" do
       fill_in "Reconciliation Note", with: "adding a note"
       click_button "Save"
 
+      expect(page).to have_content("The order was successfully updated")
+
       expect(order_detail.reload).to be_reconciled
       expect(order_detail.reconciled_note).to eq("adding a note")
     end
