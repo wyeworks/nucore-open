@@ -37,7 +37,7 @@ class LogEventSearcher
   end
 
   def search
-    result = LogEvent.all
+    result = LogEvent.non_email_type
     result = result.merge(filter_date) if start_date || end_date
     result = result.merge(filter_event) if events.present?
     result = result.merge(filter_query) if query.present?
