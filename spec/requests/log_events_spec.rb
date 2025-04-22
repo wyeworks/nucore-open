@@ -34,6 +34,7 @@ RSpec.describe "log_events", type: :request do
         get log_events_path
 
         expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Event Log")
       end
 
       it "renders events" do

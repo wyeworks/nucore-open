@@ -24,6 +24,19 @@ class LogEvent < ApplicationRecord
     )
   end
 
+  def self.log_email(loggable, event_type, email, metadata: {})
+    create(
+      loggable:,
+      event_type:,
+      event_time: Time.current,
+      metadata: {
+        to: email.to,
+        subject: email.subject,
+        **metadata
+      }
+    )
+  end
+
   def self.search(start_date: nil, end_date: nil, events: [], query: nil)
     LogEventSearcher.new(
       start_date:, end_date:, events:, query:).search

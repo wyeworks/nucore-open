@@ -363,6 +363,7 @@ Rails.application.routes.draw do
   end
   resources :holidays, except: :show
   resources :log_events, only: :index
+  resources :email_log_events, only: :index
   resources :research_safety_certificates, except: :show
 
   # order process
