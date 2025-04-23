@@ -23,11 +23,9 @@ class FacilityEstimatesController < ApplicationController
 
     if params[:search].present?
       search_query = params[:search].strip
-      @estimates = if search_query.match?(/^\d+$/)
-                     @estimates.where(id: search_query)
-                   else
-                     @estimates.where("LOWER(name) LIKE ?", "%#{search_query.downcase}%")
-                   end
+      @estimates = @estimates.where("LOWER(name) LIKE ?", "%#{search_query.downcase}%")
+
+      @estimates = @estimates.or(Estimate.where(id: search_query)) if search_query.match?(/^\d+$/)
     end
   end
 

@@ -21,4 +21,10 @@ module FacilityEstimatesHelper
     end
   end
 
+  def estimate_user_options(current_facility)
+    users = Estimate.where(facility_id: current_facility.id)
+                    .includes(:user)
+                    .map { |e| [e.user.full_name, e.user_id] }
+                    .uniq
+  end
 end
