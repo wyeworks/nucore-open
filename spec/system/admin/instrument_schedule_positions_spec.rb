@@ -44,6 +44,9 @@ RSpec.describe "Instrument Schedule Display Order" do
       visit facility_instrument_schedule_position_path(facility)
       click_link "Instrument Display Order"
       click_link "Edit"
+
+      wait_for { page.has_css?("form.instrument_schedule_position") }
+
       expect(["First", "Shared schedule: Second Schedule", "AAA New", "CCC New", "ZZZ New"]).to appear_in_order
       select "Second Schedule", from: "Instrument Schedules"
 
