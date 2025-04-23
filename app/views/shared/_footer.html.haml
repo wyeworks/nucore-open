@@ -1,5 +1,9 @@
 .container.footer__container
   .row
     .span12
-      .footer__logo= link_to (image_tag t(".logo_file"), alt: t(".logo_alt")), t(".logo_link_to")
+      .footer__logo
+        - if Settings.footer_logo_link.present?
+          = link_to (image_tag t(".logo_file"), alt: t(".logo_alt")), Settings.footer_logo_link 
+        - else
+          = image_tag t(".logo_file"), alt: t(".logo_alt")
       .footer__copyright= t(".copyright_html", to_date: Date.today.year)
