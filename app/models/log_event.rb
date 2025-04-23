@@ -11,7 +11,7 @@ class LogEvent < ApplicationRecord
   serialize :metadata, JSON
 
   scope :reverse_chronological, -> { order(event_time: :desc) }
-  scope :email_type, -> { where(event_type: EMAIL_EVENT_TYPES) }
+  scope :with_email_type, -> { where(event_type: EMAIL_EVENT_TYPES) }
   scope :non_email_type, -> { where.not(event_type: EMAIL_EVENT_TYPES) }
 
   def self.log(loggable, event_type, user, event_time: Time.current, metadata: nil)
