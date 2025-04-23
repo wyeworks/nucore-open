@@ -11,8 +11,8 @@ RSpec.describe Notifier do
 
   if EngineManager.engine_loaded?(:c2po)
     describe ".statement" do
-      let(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner) }
-      let(:statement) { FactoryBot.create(:statement, facility:, account:) }
+      let(:account) { create(:purchase_order_account, :with_account_owner) }
+      let(:statement) { create(:statement, facility:, account:) }
       let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
       let(:email_text) { email.text_part.to_s }
 
@@ -61,7 +61,7 @@ RSpec.describe Notifier do
 
   describe ".review_orders" do
     let(:accounts) do
-      FactoryBot.create_list(:setup_account, 2, owner: user, facility:)
+      create_list(:setup_account, 2, owner: user, facility:)
     end
     let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
     let(:email_text) { email.text_part.to_s }
@@ -110,7 +110,7 @@ RSpec.describe Notifier do
 
   describe ".user_update" do
     let(:account) do
-      FactoryBot.create(:setup_account, owner: user, facility:)
+      create(:setup_account, owner: user, facility:)
     end
     let(:email_html) do
       email.html_part.to_s
@@ -118,7 +118,7 @@ RSpec.describe Notifier do
            .gsub(/&ldquo;/, "\"").gsub(/&rdquo;/, "\"") # Translate quotes
     end
     let(:email_text) { email.text_part.to_s }
-    let(:admin_user) { FactoryBot.create(:user) }
+    let(:admin_user) { create(:user) }
 
     before(:each) do
       Notifier.user_update(user:,
