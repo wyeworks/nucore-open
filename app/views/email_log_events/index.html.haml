@@ -8,12 +8,12 @@
 
 = will_paginate(@email_log_events)
 
-%table.table.table-striped.table-hover
+%table.table.table-striped.table-hover.email-logs
   %thead
     %tr
       %th= LogEvent.human_attribute_name(:event_time)
       %th= LogEvent.human_attribute_name(:event)
-      %th= LogEvent.human_attribute_name(:object)
+      %th.email-logs__object= LogEvent.human_attribute_name(:object)
       %th= LogEvent.human_attribute_name(:to)
       %th= LogEvent.human_attribute_name(:subject)
 
@@ -22,7 +22,7 @@
       %tr
         %td= I18n.l(log_event.event_time, format: :usa)
         %td= text(log_event.event_type)
-        %td= log_event.loggable_to_s
+        %td= email_object_tag(log_event.email_object, class: "email-logs__object")
         %td= log_event.email_to
         %td= log_event.email_subject
 

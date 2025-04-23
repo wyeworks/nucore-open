@@ -14,4 +14,8 @@ class EmailLogEventPresenter < SimpleDelegator
   def email_subject
     metadata["subject"]
   end
+
+  def email_object
+    metadata["object"] || loggable_to_s
+  end
 end
