@@ -1,6 +1,7 @@
 header_logo_path: ~
 email_logo_path: ~
 display_app_name_in_header: true
+footer_logo_link: "https://www.umass.edu/ials/core-facilities"
 stage_color: <%= ENV.fetch("STAGE_COLOR", nil) %>
 
 price_group:
