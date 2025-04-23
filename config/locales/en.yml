@@ -518,13 +518,13 @@ en:
   facility_estimates:
     index:
       add: Add Estimate
+      all_users: All Users
+      clear_filter: Clear Filters
+      filter_user: Filter by User
+      hide_expired: Hide expired estimates
       no_estimates: No estimates found
       search: Search
       search_placeholder: Search by name or ID
-      filter_user: Filter by User
-      all_users: All Users
-      hide_expired: Hide expired estimates
-      clear_filter: Clear Filters
     create:
       success: Estimate successfully created
       error: There was an error creating the estimate
