@@ -56,12 +56,10 @@ class TransactionsController < ApplicationController
       display?: proc { |order_detail| order_detail.can_dispute? },
       proc: proc { |order_detail| order_order_detail_path(order_detail.order, order_detail) },
     }
-    
     respond_to do |format|
       format.html { @order_details = @order_details.paginate(page: params[:page]) }
       format.csv { handle_csv_search }
     end
-
   end
 
   def mark_as_reviewed
