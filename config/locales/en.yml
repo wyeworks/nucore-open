@@ -537,6 +537,8 @@ en:
       create: Create an Estimate
       head: Add Estimate
       remove_products: Remove
+    show:
+      days: days
 
   facility_order_details:
     edit:

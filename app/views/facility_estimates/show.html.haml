@@ -20,10 +20,16 @@
     %tr
       %th= Product.model_name.human
       %th= EstimateDetail.human_attribute_name(:quantity)
+      %th= EstimateDetail.human_attribute_name(:duration)
       %th= EstimateDetail.human_attribute_name(:cost)
   %tbody
     - @estimate.estimate_details.each do |estimate_detail|
       %tr
         %td= estimate_detail.product
         %td= estimate_detail.quantity
+        %td{class: estimate_detail.duration_mins ? "timeinput" : ""}
+          - if estimate_detail.duration_days
+            = "#{estimate_detail.duration_days} #{t(".days")}"
+          - elsif estimate_detail.duration_mins
+            = estimate_detail.duration_mins
         %td.currency= number_to_currency(estimate_detail.cost)
