@@ -5,6 +5,7 @@ class EstimateDetail < ApplicationRecord
   belongs_to :product
   belongs_to :price_policy
 
+  before_save :clear_duration_fields
   before_save :assign_price_policy_and_cost
 
   validates :quantity, presence: true, numericality: { greater_than: 0 }
@@ -18,6 +19,17 @@ class EstimateDetail < ApplicationRecord
   end
 
   private
+
+  def clear_duration_fields
+    if product.daily_booking?
+      self.duration_mins = nil
+    elsif product.order_quantity_as_time?
+      self.duration_days = nil
+    else
+      self.duration_mins = nil
+      self.duration_days = nil
+    end
+  end
 
   def assign_price_policy_and_cost
     pp = product.cheapest_price_policy(self, Time.current)

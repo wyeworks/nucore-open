@@ -53,7 +53,9 @@ module InstrumentPricePolicyCalculations
   end
 
   def estimate_cost_from_estimate_detail(estimate_detail)
-    # TODO: NUOPEN-227
+    duration = estimate_detail.product.daily_booking? ? estimate_detail.duration_days : estimate_detail.duration_mins
+
+    calculate_for_estimated_time(duration)
   end
 
   private
@@ -81,6 +83,10 @@ module InstrumentPricePolicyCalculations
 
   def calculate_for_time(start_at, end_at)
     PricePolicies::TimeBasedPriceCalculator.new(self).calculate(start_at, end_at)
+  end
+
+  def calculate_for_estimated_time(duration)
+    PricePolicies::TimeBasedPriceCalculator.new(self).calculate(nil, nil, duration)
   end
 
 end
