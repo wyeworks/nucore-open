@@ -42,6 +42,9 @@ class FacilityEstimatesController < ApplicationController
 
   def new
     @estimate = current_facility.estimates.new
+    @products = current_facility.products.where({ type: ["Item", "Service", "Instrument", "TimedService"] }).alphabetized.map do |p|
+      [p.name, p.id, { "data-time-unit" => p.time_unit }]
+    end
   end
 
   def create
@@ -62,7 +65,7 @@ class FacilityEstimatesController < ApplicationController
   def facility_estimate_params
     params.require(:estimate).permit(
       :name, :user_id, :note, :expires_at,
-      estimate_details_attributes: [:id, :product_id, :quantity, :_destroy]
+      estimate_details_attributes: [:id, :product_id, :quantity, :duration_days, :duration_mins, :_destroy]
     )
   end
 
