@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_21_145232) do
+ActiveRecord::Schema[7.0].define(version: 2025_04_21_214236) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -164,6 +164,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_21_145232) do
     t.integer "quantity", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "duration_mins"
+    t.integer "duration_days"
     t.index ["estimate_id"], name: "index_estimate_details_on_estimate_id"
     t.index ["price_policy_id"], name: "index_estimate_details_on_price_policy_id"
     t.index ["product_id"], name: "index_estimate_details_on_product_id"
