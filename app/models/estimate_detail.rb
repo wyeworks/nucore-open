@@ -25,7 +25,7 @@ class EstimateDetail < ApplicationRecord
   private
 
   def clear_duration_fields
-    unless product.order_quantity_as_time? || product.daily_booking?
+    unless product.order_quantity_as_time? || product.is_a?(Instrument)
       self.duration = nil
       self.duration_unit = nil
     end

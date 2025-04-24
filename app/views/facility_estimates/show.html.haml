@@ -31,6 +31,6 @@
         %td{class: displayTime ? "timeinput" : ""}
           - if displayTime
             = estimate_detail.duration
-          - else
+          - elsif estimate_detail.duration_unit.present?
             = "#{estimate_detail.duration} #{t(".days")}"
         %td.currency= number_to_currency(estimate_detail.cost)
