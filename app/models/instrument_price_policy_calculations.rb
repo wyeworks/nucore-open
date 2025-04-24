@@ -53,9 +53,7 @@ module InstrumentPricePolicyCalculations
   end
 
   def estimate_cost_from_estimate_detail(estimate_detail)
-    duration = estimate_detail.product.daily_booking? ? estimate_detail.duration_days : estimate_detail.duration_mins
-
-    calculate_for_estimated_time(duration)
+    calculate_for_estimated_time(estimate_detail.duration)
   end
 
   private

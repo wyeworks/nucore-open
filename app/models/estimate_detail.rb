@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class EstimateDetail < ApplicationRecord
+  TIME_UNITS = %w[mins days].freeze
+
   belongs_to :estimate, inverse_of: :estimate_details
   belongs_to :product
   belongs_to :price_policy
@@ -9,6 +11,8 @@ class EstimateDetail < ApplicationRecord
   before_save :assign_price_policy_and_cost
 
   validates :quantity, presence: true, numericality: { greater_than: 0 }
+  validates :duration, numericality: { greater_than: 0 }, allow_nil: true
+  validates :duration_unit, inclusion: { in: TIME_UNITS }, allow_nil: true
 
   delegate :user, to: :estimate
 
@@ -21,13 +25,9 @@ class EstimateDetail < ApplicationRecord
   private
 
   def clear_duration_fields
-    if product.daily_booking?
-      self.duration_mins = nil
-    elsif product.order_quantity_as_time?
-      self.duration_days = nil
-    else
-      self.duration_mins = nil
-      self.duration_days = nil
+    unless product.order_quantity_as_time? || product.daily_booking?
+      self.duration = nil
+      self.duration_unit = nil
     end
   end
 

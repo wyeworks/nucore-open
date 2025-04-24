@@ -23,7 +23,7 @@ class TimedServicePricePolicy < PricePolicy
   end
 
   def estimate_cost_from_estimate_detail(estimate_detail)
-    calculate_for_time(estimate_detail.duration_mins)[:cost]
+    calculate_for_time(estimate_detail.duration)[:cost]
   end
 
   private

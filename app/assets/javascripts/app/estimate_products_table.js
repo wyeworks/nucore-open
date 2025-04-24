@@ -22,7 +22,15 @@ $(function () {
     }
   }
 
-  function createEstimateDetailRow(productId, productName, quantity, durationMins, durationMinsDisplay, durationDays, index) {
+  function createEstimateDetailRow(
+    productId,
+    productName,
+    quantity,
+    duration,
+    durationUnit,
+    durationMinsDisplay,
+    index
+  ) {
     const row = document.createElement("tr");
     row.className = "estimate_detail";
     row.dataset.index = index;
@@ -40,7 +48,7 @@ $(function () {
     quantityField.value = quantity;
     quantityField.name = `estimate[estimate_details_attributes][${index}][quantity]`;
 
-    if (durationMins || durationDays) {
+    if (duration) {
       quantityCell.textContent = 1;
 
       quantityField.type = "hidden";
@@ -53,9 +61,9 @@ $(function () {
 
     const durationCell = document.createElement("td");
 
-    if (durationDays) {
-      durationCell.textContent = durationDays;
-    } else if (durationMins) {
+    if (durationUnit === "days") {
+      durationCell.textContent = duration;
+    } else if (durationUnit === "mins") {
       durationCell.textContent = durationMinsDisplay;
     }
 
@@ -67,17 +75,17 @@ $(function () {
     productIdField.value = productId;
     dummyCell.appendChild(productIdField);
 
-    const durationDaysField = document.createElement("input");
-    durationDaysField.type = "hidden";
-    durationDaysField.name = `estimate[estimate_details_attributes][${index}][duration_days]`;
-    durationDaysField.value = durationDays;
-    dummyCell.appendChild(durationDaysField);
+    const durationField = document.createElement("input");
+    durationField.type = "hidden";
+    durationField.name = `estimate[estimate_details_attributes][${index}][duration]`;
+    durationField.value = duration;
+    dummyCell.appendChild(durationField);
 
-    const durationMinsField = document.createElement("input");
-    durationMinsField.type = "hidden";
-    durationMinsField.name = `estimate[estimate_details_attributes][${index}][duration_mins]`;
-    durationMinsField.value = durationMins;
-    dummyCell.appendChild(durationMinsField);
+    const durationUnitField = document.createElement("input");
+    durationUnitField.type = "hidden";
+    durationUnitField.name = `estimate[estimate_details_attributes][${index}][duration_unit]`;
+    durationUnitField.value = durationUnit;
+    dummyCell.appendChild(durationUnitField);
 
     const removeButton = document.createElement("button");
     removeButton.type = "button";
@@ -98,8 +106,8 @@ $(function () {
     addProductButton.addEventListener("click", function () {
       const productSelect = document.getElementById("product_id");
       const quantityInput = document.getElementById("quantity");
-      const durationMinsInput = document.getElementsByName("duration_mins")[0];
-      const durationMinsDisplayInput = document.getElementById("duration_mins");
+      const durationMinsInput = document.getElementsByName("duration")[0];
+      const durationMinsDisplayInput = document.getElementById("duration");
       const durationDaysInput = document.getElementById("duration_days");
 
       const productId = productSelect.value;
@@ -114,13 +122,16 @@ $(function () {
         return;
       }
 
+      const duration = durationMins || durationDays;
+      const durationUnit = durationMins ? "mins" : "days";
+
       const row = createEstimateDetailRow(
         productId,
         productName,
         quantity,
-        durationMins,
+        duration,
+        durationUnit,
         durationMinsDisplay,
-        durationDays,
         productCounter
       );
       estimateDetailsContainer.appendChild(row);

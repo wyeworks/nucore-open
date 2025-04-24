@@ -164,8 +164,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_21_214236) do
     t.integer "quantity", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "duration_mins"
-    t.integer "duration_days"
+    t.integer "duration"
+    t.string "duration_unit"
     t.index ["estimate_id"], name: "index_estimate_details_on_estimate_id"
     t.index ["price_policy_id"], name: "index_estimate_details_on_price_policy_id"
     t.index ["product_id"], name: "index_estimate_details_on_product_id"

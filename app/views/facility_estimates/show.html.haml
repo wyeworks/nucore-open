@@ -24,12 +24,13 @@
       %th= EstimateDetail.human_attribute_name(:cost)
   %tbody
     - @estimate.estimate_details.each do |estimate_detail|
+      - displayTime = estimate_detail.duration_unit == "mins"
       %tr
         %td= estimate_detail.product
         %td= estimate_detail.quantity
-        %td{class: estimate_detail.duration_mins ? "timeinput" : ""}
-          - if estimate_detail.duration_days
-            = "#{estimate_detail.duration_days} #{t(".days")}"
-          - elsif estimate_detail.duration_mins
-            = estimate_detail.duration_mins
+        %td{class: displayTime ? "timeinput" : ""}
+          - if displayTime
+            = estimate_detail.duration
+          - else
+            = "#{estimate_detail.duration} #{t(".days")}"
         %td.currency= number_to_currency(estimate_detail.cost)
