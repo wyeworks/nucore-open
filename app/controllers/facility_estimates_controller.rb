@@ -16,6 +16,17 @@ class FacilityEstimatesController < ApplicationController
     @estimates = current_facility.estimates
                                  .includes(:user)
                                  .order(created_at: :desc)
+
+    @estimates = @estimates.where(user_id: params[:user_id]) if params[:user_id].present?
+
+    @estimates = @estimates.where(expires_at: Time.current..) if params[:hide_expired] == "1"
+
+    if params[:search].present?
+      search_query = params[:search].strip
+      @estimates = @estimates.where("LOWER(name) LIKE ?", "%#{search_query.downcase}%")
+
+      @estimates = @estimates.or(Estimate.where(id: search_query)) if search_query.match?(/^\d+$/)
+    end
   end
 
   def show
