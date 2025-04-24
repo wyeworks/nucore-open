@@ -83,6 +83,7 @@ en:
     cart: Cart
     create: Create %{model}
     event_log: Event Log
+    email_event_log: Email Log
     general_reports: General
     global_billing: Billing
     global_settings: Global Settings
