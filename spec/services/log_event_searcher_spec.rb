@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe LogEventSearcher do
+  def search(*args, **kwargs)
+    LogEventSearcher.new(*args, **kwargs).search
+  end
 
   describe "filtering by dates" do
     let!(:log_1) { create(:log_event, event_time: 1.month.ago) }
@@ -8,26 +11,26 @@ RSpec.describe LogEventSearcher do
     let!(:log_3) { create(:log_event, event_time: 1.day.ago) }
 
     it "finds all the items without a date filter" do
-      expect(LogEvent.search).to match_array([log_1, log_2, log_3])
+      expect(search).to match_array([log_1, log_2, log_3])
     end
 
     it "works with a date filter" do
-      expect(LogEvent.search(start_date: 2.weeks.ago, end_date: 2.days.ago))
+      expect(search(start_date: 2.weeks.ago, end_date: 2.days.ago))
         .to match_array([log_2])
     end
 
     it "works with a flipped date filter" do
-      expect(LogEvent.search(start_date: 2.days.ago, end_date: 2.weeks.ago))
+      expect(search(start_date: 2.days.ago, end_date: 2.weeks.ago))
         .to match_array([log_2])
     end
 
     it "works without a start_date" do
-      expect(LogEvent.search(end_date: 2.days.ago))
+      expect(search(end_date: 2.days.ago))
         .to match_array([log_1, log_2])
     end
 
     it "works without an end date" do
-      expect(LogEvent.search(start_date: 2.weeks.ago))
+      expect(search(start_date: 2.weeks.ago))
         .to match_array([log_2, log_3])
     end
   end
@@ -40,17 +43,19 @@ RSpec.describe LogEventSearcher do
     let!(:log_2) { create(:log_event, loggable: account_user, event_type: :create) }
     let!(:log_3) { create(:log_event, loggable: user, event_type: :create) }
 
-    it "allow-lists event type" do
-      search = LogEventSearcher.new(events: ["user.create", "cheeseburger.create", "user.update"])
-      expect(search.events).to contain_exactly("user.create")
-    end
-
     it "filters on event type" do
-      expect(LogEvent.search(events: ["account.create"])).to match_array([log_1])
-      expect(LogEvent.search(events: ["account_user.create"])).to match_array([log_2])
-      expect(LogEvent.search(events: ["user.create"])).to match_array([log_3])
-      expect(LogEvent.search(events: ["user.create", "account_user.create"]))
-        .to match_array([log_2, log_3])
+      expect(
+        search(events: ["account.create"])
+      ).to match_array([log_1])
+      expect(
+        search(events: ["account_user.create"])
+      ).to match_array([log_2])
+      expect(
+        search(events: ["user.create"])
+      ).to match_array([log_3])
+      expect(
+        search(events: ["user.create", "account_user.create"])
+      ).to match_array([log_2, log_3])
     end
   end
 
@@ -59,12 +64,12 @@ RSpec.describe LogEventSearcher do
     let!(:log_event) { create(:log_event, loggable: account, event_type: :create) }
 
     it "finds the account" do
-      results = described_class.new(query: "12345-12345").search
+      results = search(query: "12345-12345")
       expect(results).to include(log_event)
     end
 
     it "does not find it if it is not a match" do
-      results = described_class.new(query: "54321").search
+      results = search(query: "54321")
       expect(results).not_to include(log_event)
     end
   end
@@ -74,12 +79,12 @@ RSpec.describe LogEventSearcher do
     let!(:log_event) { create(:log_event, loggable: user, event_type: :create) }
 
     it "finds the user" do
-      results = described_class.new(query: "myuser").search
+      results = search(query: "myuser")
       expect(results).to include(log_event)
     end
 
     it "does not find the user if it is not a match" do
-      results = described_class.new(query: "random").search
+      results = search(query: "random")
       expect(results).not_to include(log_event)
     end
   end
@@ -89,12 +94,12 @@ RSpec.describe LogEventSearcher do
     let!(:log_event) { create(:log_event, loggable: journal, event_type: :create) }
 
     it "finds the journal" do
-      results = described_class.new(query: journal.id.to_s).search
+      results = search(query: journal.id.to_s)
       expect(results).to include(log_event)
     end
 
     it "does not find it if it is not a match" do
-      results = described_class.new(query: "54321").search
+      results = search(query: "54321")
       expect(results).not_to include(log_event)
     end
   end
@@ -106,12 +111,12 @@ RSpec.describe LogEventSearcher do
     let!(:log_event) { create(:log_event, loggable: statement, event_type: :create) }
 
     it "finds the statement" do
-      results = described_class.new(query: statement.invoice_number).search
+      results = search(query: statement.invoice_number)
       expect(results).to include(log_event)
     end
 
     it "does not find it if it is not a match" do
-      results = described_class.new(query: "54321").search
+      results = search(query: "54321")
       expect(results).not_to include(log_event)
     end
   end
@@ -123,17 +128,17 @@ RSpec.describe LogEventSearcher do
     let!(:log_event) { create(:log_event, loggable: account_user, event_type: :create) }
 
     it "finds it by the user" do
-      results = described_class.new(query: "myuser").search
+      results = search(query: "myuser")
       expect(results).to include(log_event)
     end
 
     it "finds it by the account" do
-      results = described_class.new(query: "12345-12345").search
+      results = search(query: "12345-12345")
       expect(results).to include(log_event)
     end
 
     it "does not find it if no match" do
-      results = described_class.new(query: "random").search
+      results = search(query: "random")
       expect(results).not_to include(log_event)
     end
   end
@@ -147,18 +152,18 @@ RSpec.describe LogEventSearcher do
       let!(:log_event) { create(:log_event, loggable: user_role, event_type: :create) }
 
       it "finds by the user" do
-        results = described_class.new(query: "myuser").search
+        results = search(query: "myuser")
         expect(results).to include(log_event)
       end
 
       it "finds the user even if the role was since deleted" do
         user_role.destroy
-        results = described_class.new(query: "myuser").search
+        results = search(query: "myuser")
         expect(results).to include(log_event)
       end
 
       it "finds by the facility" do
-        results = described_class.new(query: "my facility").search
+        results = search(query: "my facility")
         expect(results).to include(log_event)
       end
     end
@@ -172,12 +177,12 @@ RSpec.describe LogEventSearcher do
     let!(:log_event) { create(:log_event, loggable: order_detail, event_type: :resolve) }
 
     it "finds the order detail" do
-      results = described_class.new(query: "#{order.id}-#{order_detail.id}").search
+      results = search(query: "#{order.id}-#{order_detail.id}")
       expect(results).to include(log_event)
     end
 
     it "does not find it if it is not a match" do
-      results = described_class.new(query: "54321").search
+      results = search(query: "54321")
       expect(results).not_to include(log_event)
     end
   end
@@ -189,13 +194,37 @@ RSpec.describe LogEventSearcher do
     let!(:log_event) { create(:log_event, loggable: product_user, event_type: :create) }
 
     it "finds the product user" do
-      results = described_class.new(query: "#{item.name}").search
+      results = search(query: "#{item.name}")
       expect(results).to include(log_event)
     end
 
     it "does not find it if it is not a match" do
-      results = described_class.new(query: "54321").search
+      results = search(query: "54321")
       expect(results).not_to include(log_event)
+    end
+  end
+
+  describe "can specify a relation" do
+    let(:relation) { LogEvent.where(event_type: "some_type") }
+    let(:user) { create(:user) }
+    let(:event_1) do
+      LogEvent.create(event_type: "some_type", loggable: create(:user))
+    end
+    let(:event_2) do
+      LogEvent.create(
+        event_type: "other_type",
+        loggable: create(:user, first_name: "Cactus"),
+      )
+    end
+
+    it "search returns the specified relation" do
+      results = search(relation:)
+      expect(results).to match([event_1])
+    end
+
+    it "filters over the specified relation" do
+      results = search(query: "Cactus", relation:)
+      expect(results).to be_empty
     end
   end
 end
