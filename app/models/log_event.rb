@@ -37,11 +37,6 @@ class LogEvent < ApplicationRecord
     )
   end
 
-  def self.search(start_date: nil, end_date: nil, events: [], query: nil)
-    LogEventSearcher.new(
-      start_date:, end_date:, events:, query:).search
-  end
-
   # The reason that we are doing this is because in some case we can't add a default value to a text column
   def metadata
     self[:metadata] || {}
@@ -52,7 +47,7 @@ class LogEvent < ApplicationRecord
   end
 
   def locale_tag
-    "#{loggable_type.underscore.downcase}.#{event_type}"
+    "log_event/event_type.#{loggable_type.underscore.downcase}.#{event_type}"
   end
 
   def loggable_to_s
