@@ -2,43 +2,29 @@
 
 class LogEventSearcher
 
-  ALLOWED_EVENTS = ["account.create", "account.update",
-                    "account_user.create", "account_user.delete",
-                    "user.create", "user.suspended", "user.unsuspended",
-                    "user.default_price_group_changed",
-                    "account.suspended", "account.unsuspended",
-                    "journal.create", "statement.create",
-                    "user_role.create", "user_role.delete",
-                    "order_detail.dispute", "order_detail.resolve",
-                    "order_detail.notify", "order_detail.review",
-                    "order_detail.problem_queue", "order_detail.price_change",
-                    "order_detail.resolve_from_problem_queue",
-                    "product_user.create", "product_user.delete",
-                    "price_group_member.create", "price_group_member.delete",
-                    "facility.activate", "facility.deactivate",
-                    "price_group.create", "price_group.delete",
-                    ].freeze
-
   def self.beginning_of_time
     10.years.ago
   end
 
-  attr_accessor :start_date, :end_date, :events, :query
+  attr_accessor :relation, :start_date, :end_date, :events, :query
 
-  def initialize(start_date: nil, end_date: nil, events: [], query: nil)
+  def initialize(
+    relation: LogEvent.all,
+    start_date: nil,
+    end_date: nil,
+    events: [],
+    query: nil
+  )
+    @relation = relation
     @start_date = start_date
     @end_date = end_date
-    @events = filter_events(events)
+    @events = events
     @query = query
   end
 
-  def filter_events(events)
-    Array(events).select { |event| event.in?(ALLOWED_EVENTS) }
-  end
-
   def search
-    result = LogEvent.non_email_type
-    result = result.merge(filter_date) if start_date || end_date
+    result = relation
+    result = relation.merge(filter_date) if start_date || end_date
     result = result.merge(filter_event) if events.present?
     result = result.merge(filter_query) if query.present?
     result
@@ -54,9 +40,14 @@ class LogEventSearcher
 
   # The event name comes in as <loggable_type>.<event_type>
   def filter_event
-    events.flatten.map do |event|
-      loggable_type, event_type = event.split(".")
-      LogEvent.where(loggable_type: loggable_type.camelize, event_type: event_type)
+    events.flatten.map do |event_type|
+      parts = event_type.split(".")
+      if parts.length > 1
+        loggable_type, event_type = parts
+        LogEvent.where(loggable_type: loggable_type.camelize, event_type:)
+      else
+        LogEvent.where(event_type:)
+      end
     end.inject(&:or)
   end
 

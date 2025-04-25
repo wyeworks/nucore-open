@@ -3,6 +3,12 @@
 module EmailLogEventsHelper
   EMAIL_OBJECT_THRESHOLD = 50
 
+  def email_log_events_options
+    LogEvent::EMAIL_EVENT_TYPES.map do |event_type|
+      [text("log_event/event_type.#{event_type}"), event_type]
+    end
+  end
+
   def decorated_log_events(events)
     events.map { |event| EmailLogEventPresenter.new(event) }
   end

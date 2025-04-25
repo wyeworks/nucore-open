@@ -6,6 +6,10 @@
 
 %h2= text("pages.email_event_log")
 
+= render "log_events/filter_form",
+  event_type_options: email_log_events_options,
+  exclude_query_field: true
+
 = will_paginate(@email_log_events)
 
 %table.table.table-striped.table-hover.email-logs
