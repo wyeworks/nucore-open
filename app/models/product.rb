@@ -356,6 +356,10 @@ class Product < ApplicationRecord
     true
   end
 
+  def time_unit
+    nil
+  end
+
   protected
 
   def translation_scope

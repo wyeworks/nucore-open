@@ -5,14 +5,15 @@ module PricePolicies
   module Strategy
 
     class BaseStrategy
-      attr_reader :price_policy, :start_at, :end_at
+      attr_reader :price_policy, :start_at, :end_at, :duration
 
       delegate :product, to: :price_policy
 
-      def initialize(price_policy, start_at, end_at)
+      def initialize(price_policy, start_at, end_at, duration: nil)
         @price_policy = price_policy
         @start_at = start_at
         @end_at = end_at
+        @duration = duration
       end
 
       # Calculate cost and subsidy based on price policy
@@ -58,6 +59,10 @@ module PricePolicies
 
         1 - (discount / 100)
       end
+
+      def calculate_estimate
+        duration * usage_rate
+      end
     end
 
     # Charge usage per day
@@ -83,6 +88,11 @@ module PricePolicies
       def duration_days
         time_range.duration_days.ceil
       end
+
+      def calculate_estimate
+        duration * usage_rate_daily
+      end
+
     end
 
     # Charge usage per minute with a stepped (or tiered) rate
