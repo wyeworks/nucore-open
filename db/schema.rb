@@ -331,10 +331,9 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_28_161852) do
     t.datetime "updated_at", precision: nil, null: false
     t.datetime "event_time", precision: nil
     t.text "metadata"
-    t.boolean "billing_event", default: false, null: false
-    t.index ["billing_event"], name: "index_log_events_on_billing_event"
     t.index ["event_time"], name: "index_log_events_on_event_time"
     t.index ["event_type"], name: "index_log_events_on_event_type"
+    t.index ["loggable_type", "event_type"], name: "index_log_events_on_loggable_type_and_event_type"
     t.index ["loggable_type", "loggable_id"], name: "index_log_events_loggable"
     t.index ["user_id"], name: "index_log_events_on_user_id"
   end

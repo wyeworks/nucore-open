@@ -73,7 +73,6 @@ class FacilityJournalsController < ApplicationController
         @pending_journal,
         :closed,
         session_user,
-        billing_event: true,
       )
       redirect_to facility_journals_path(current_facility)
     else
@@ -149,7 +148,6 @@ class FacilityJournalsController < ApplicationController
     if reconciler.reconcile_all > 0
       count = reconciler.count
       flash[:notice] = "#{count} payment#{count == 1 ? '' : 's'} successfully reconciled" if count > 0
-      LogEvent.log(@journal, :reconciled, current_user, billing_event: true)
     else
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
     end

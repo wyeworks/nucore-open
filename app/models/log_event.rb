@@ -5,9 +5,16 @@ class LogEvent < ApplicationRecord
   belongs_to :loggable, -> { with_deleted if respond_to?(:with_deleted) }, polymorphic: true
   serialize :metadata, JSON
 
+  BILLING_EVENT_TYPES = %w[
+    user.review_orders_email
+    statement.statement_email
+    statement.closed
+    journal.closed
+  ].freeze
+
   scope :reverse_chronological, -> { order(event_time: :desc) }
-  scope :with_billing_type, -> { where(billing_event: true) }
-  scope :non_billing_type, -> { where.not(billing_event: false) }
+  scope :with_billing_type, -> { with_events(BILLING_EVENT_TYPES) }
+  scope :non_billing_type, -> { with_events(BILLING_EVENT_TYPES).invert_where }
 
   def self.log(
     loggable,
@@ -37,6 +44,15 @@ class LogEvent < ApplicationRecord
       },
       **
     )
+  end
+
+  def self.with_events(events)
+    events
+      .map { |event| event.rpartition('.') }
+      .map { |loggable_type, _, event_type| { loggable_type:, event_type: } }
+      .map(&:compact_blank)
+      .map { |cond| where(cond) }
+      .inject(:or)
   end
 
   # The reason that we are doing this is because in some case we can't add a default value to a text column
