@@ -42,7 +42,7 @@ class LogEvent < ApplicationRecord
   def self.with_events(events)
     events
       .map { |event| event.rpartition('.') }
-      .map { |loggable_type, _, event_type| { loggable_type:, event_type: } }
+      .map { |type, _, event_type| { loggable_type: type&.camelize, event_type: } }
       .map(&:compact_blank)
       .map { |cond| where(cond) }
       .inject(:or)
