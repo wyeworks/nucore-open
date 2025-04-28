@@ -50,7 +50,7 @@ class TransactionsController < ApplicationController
     @order_details = @search.order_details.reorder(sort_clause)
     
     if @order_details.size < 1000
-      @grand_total = @order_details.map { |od| od.actual_total || od.estimated_total }.compact.sum
+      @grand_total = @order_details.filter_map { |od| od.actual_total || od.estimated_total }.sum
     else
       @too_many_results = true
     end
