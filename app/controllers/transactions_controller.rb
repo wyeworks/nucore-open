@@ -54,7 +54,6 @@ class TransactionsController < ApplicationController
     else
       @too_many_results = true
     end
-    
     @extra_date_column = :reviewed_at
     @order_detail_action = :mark_as_reviewed
     @order_detail_link = {
