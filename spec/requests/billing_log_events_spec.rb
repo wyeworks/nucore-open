@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe "email_log_events", type: :request do
+RSpec.describe "billing_log_events", type: :request do
   let(:some_user) { create(:user, first_name: "Socrates") }
   let(:facility) { create(:setup_facility) }
   let(:product) { create(:setup_service, facility:) }
@@ -34,7 +34,7 @@ RSpec.describe "email_log_events", type: :request do
     end
 
     it "requires login" do
-      get email_log_events_url
+      get billing_log_events_url
 
       expect(response.location).to eq new_user_session_url
     end
@@ -43,14 +43,14 @@ RSpec.describe "email_log_events", type: :request do
       before { login_as admin }
 
       it "returns ok" do
-        get email_log_events_url
+        get billing_log_events_url
 
         expect(response).to have_http_status(:ok)
-        expect(page).to have_content("Email Log")
+        expect(page).to have_content("Billing Log")
       end
 
       it "renders email events" do
-        get email_log_events_url
+        get billing_log_events_url
 
         expect(page).to have_content(email.to)
         expect(page).to have_content(email.subject)

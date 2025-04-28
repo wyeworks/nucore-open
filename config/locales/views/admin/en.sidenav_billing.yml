@@ -13,3 +13,4 @@ en:
           external_billing: External Billing
           statement_history: "!views.facility_statements.index.head!"
           reconcile: "!facility_accounts_reconciliation.index.head!"
+          billing_log_event: Billing Log

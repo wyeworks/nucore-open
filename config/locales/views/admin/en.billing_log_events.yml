@@ -1,6 +1,6 @@
 en:
   views:
-    email_log_events:
-      index:
+    billing_log_events:
+      table:
         statement_email: "!Statement! Email"
         review_orders_email: Review Orders Email

@@ -1,8 +1,8 @@
 %ul.sidebar-nav
   = tab t("pages.affiliates"), affiliates_path, sidenav_tab == "affiliates"
   = tab t("pages.event_log"), log_events_path, sidenav_tab == "log_events"
-  - if SettingsHelper.feature_on?(:email_log_events)
-    = tab t("pages.email_event_log"), email_log_events_path, sidenav_tab == "email_log_events"
+  - if SettingsHelper.feature_on?(:billing_log_events)
+    = tab t("pages.billing_log_event"), billing_log_events_path, sidenav_tab == "billing_log_events"
   = tab t("pages.global_user_roles"), global_user_roles_path, sidenav_tab == "global_user_roles"
   = tab JournalCutoffDate.model_name.human(count: 2), journal_cutoff_dates_path, sidenav_tab == "journal_cutoff_dates"
   = tab JournalCreationReminder.model_name.human(count: 2), journal_creation_reminders_path, sidenav_tab == "journal_creation_reminders"

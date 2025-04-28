@@ -38,7 +38,7 @@ RSpec.describe Notifier do
       end
 
       describe "email log event" do
-        context "when ff is off", feature_setting: { email_log_events: false } do
+        context "when ff is off", feature_setting: { billing_log_events: false } do
           it "does not create a log event" do
             expect { action.call }.to_not(
               change { LogEvent.count }
@@ -46,7 +46,7 @@ RSpec.describe Notifier do
           end
         end
 
-        context "when ff is on", feature_setting: { email_log_events: true } do
+        context "when ff is on", feature_setting: { billing_log_events: true } do
           it "creates a log event" do
             expect { action.call }.to(
               change do
@@ -88,7 +88,7 @@ RSpec.describe Notifier do
     end
 
     describe "log event creation" do
-      context "when ff is on", feature_setting: { email_log_events: false } do
+      context "when ff is on", feature_setting: { billing_log_events: false } do
         it "does not create a log event" do
           expect { action.call }.to_not(
             change { LogEvent.count }
@@ -96,7 +96,7 @@ RSpec.describe Notifier do
         end
       end
 
-      context "when ff is off", feature_setting: { email_log_events: true } do
+      context "when ff is off", feature_setting: { billing_log_events: true } do
         it "creates a log event" do
           expect { action.call }.to(
             change do

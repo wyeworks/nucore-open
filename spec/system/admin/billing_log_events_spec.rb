@@ -36,7 +36,7 @@ RSpec.describe "email log_events page" do
     before { login_as create(:user, :administrator) }
 
     it "filter events by type" do
-      visit email_log_events_path
+      visit billing_log_events_path
 
       select(
         "#{I18n.t('Statement')} Email",
@@ -60,7 +60,7 @@ RSpec.describe "email log_events page" do
       end
 
       it "filter events by date" do
-        visit email_log_events_path
+        visit billing_log_events_path
 
         fill_in("End Date", with: I18n.l(1.day.ago.to_date, format: :usa))
 
