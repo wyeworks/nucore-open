@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class EmailLogEventPresenter < SimpleDelegator
+class BillingLogEventPresenter < SimpleDelegator
   def email_to
     email_to = metadata["to"] || []
 
@@ -15,7 +15,7 @@ class EmailLogEventPresenter < SimpleDelegator
     metadata["subject"]
   end
 
-  def email_object
+  def object
     metadata["object"] || loggable_to_s
   end
 end

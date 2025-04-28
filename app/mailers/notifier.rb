@@ -99,7 +99,7 @@ class Notifier < ActionMailer::Base
   end
 
   def log_review_orders_email(email)
-    return unless SettingsHelper.feature_on?(:email_log_events)
+    return unless SettingsHelper.feature_on?(:billing_log_events)
 
     accounts = @accounts.map(&:description).join(", ")
 
@@ -116,7 +116,7 @@ class Notifier < ActionMailer::Base
   end
 
   def log_statement_email(email)
-    return unless SettingsHelper.feature_on?(:email_log_events)
+    return unless SettingsHelper.feature_on?(:billing_log_events)
 
     LogEvent.log_email(
       @statement,

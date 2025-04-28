@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class EmailLogEventsController < GlobalSettingsController
+class BillingLogEventsController < GlobalSettingsController
 
   def index
-    @email_log_events = LogEventSearcher.new(
-      relation: LogEvent.with_email_type,
+    @billing_log_events = LogEventSearcher.new(
+      relation: LogEvent.with_billing_type,
       start_date: parse_usa_date(index_params[:start_date]),
       end_date: parse_usa_date(index_params[:end_date]),
       events: index_params[:events],

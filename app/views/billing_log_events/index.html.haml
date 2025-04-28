@@ -2,32 +2,32 @@
   = text("pages.global_settings")
 
 = content_for :sidebar do
-  = render("admin/shared/sidenav_global", sidenav_tab: "email_log_events")
+  = render("admin/shared/sidenav_global", sidenav_tab: "billing_log_events")
 
-%h2= text("pages.email_event_log")
+%h2= text("pages.billing_log_event")
 
 = render "log_events/filter_form",
-  event_type_options: email_log_events_options,
+  event_type_options: billing_log_events_options,
   exclude_query_field: true
 
-= will_paginate(@email_log_events)
+= will_paginate(@billing_log_events)
 
-%table.table.table-striped.table-hover.email-logs
+%table.table.table-striped.table-hover.billing-logs
   %thead
     %tr
       %th= LogEvent.human_attribute_name(:event_time)
       %th= LogEvent.human_attribute_name(:event)
-      %th.email-logs__object= LogEvent.human_attribute_name(:object)
+      %th.billing-logs__object= LogEvent.human_attribute_name(:object)
       %th= LogEvent.human_attribute_name(:to)
       %th= LogEvent.human_attribute_name(:subject)
 
   %tbody
-    - decorated_log_events(@email_log_events).each do |log_event|
+    - decorated_log_events(@billing_log_events).each do |log_event|
       %tr
         %td= I18n.l(log_event.event_time, format: :usa)
         %td= text(log_event.event_type)
-        %td= email_object_tag(log_event.email_object, class: "email-logs__object")
+        %td= object_tag(log_event.object, class: "billing-logs__object")
         %td= log_event.email_to
         %td= log_event.email_subject
 
-= will_paginate(@email_log_events)
+= will_paginate(@billing_log_events)

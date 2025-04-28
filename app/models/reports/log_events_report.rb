@@ -43,7 +43,7 @@ module Reports
 
     def log_events
       LogEventSearcher.new(
-        relation: LogEvent.non_email_type,
+        relation: LogEvent.non_billing_type,
         start_date: @start_date,
         end_date: @end_date,
         events: @events,

@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-module EmailLogEventsHelper
-  EMAIL_OBJECT_THRESHOLD = 50
+module BillingLogEventsHelper
+  OBJECT_LENGTH_THRESHOLD = 50
 
-  def email_log_events_options
-    LogEvent::EMAIL_EVENT_TYPES.map do |event_type|
+  def billing_log_events_options
+    LogEvent::BILLING_EVENT_TYPES.map do |event_type|
       [text("log_event/event_type.#{event_type}"), event_type]
     end
   end
 
   def decorated_log_events(events)
-    events.map { |event| EmailLogEventPresenter.new(event) }
+    events.map { |event| BillingLogEventPresenter.new(event) }
   end
 
-  def email_object_tag(email_object, **kwargs)
-    if email_object.length > EMAIL_OBJECT_THRESHOLD
-      content = truncate(email_object, length: EMAIL_OBJECT_THRESHOLD)
+  def object_tag(log_event_object, **kwargs)
+    if log_event_object.length > OBJECT_LENGTH_THRESHOLD
+      content = truncate(log_event_object, length: OBJECT_LENGTH_THRESHOLD)
       kwargs[:data] = { toggle: "tooltip" }
-      kwargs[:title] = email_object
+      kwargs[:title] = log_event_object
     else
-      content = email_object
+      content = log_event_object
     end
 
     content_tag("span", content, **kwargs)
