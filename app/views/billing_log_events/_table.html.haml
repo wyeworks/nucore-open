@@ -16,7 +16,7 @@
     - decorated_log_events(@billing_log_events).each do |log_event|
       %tr
         %td= I18n.l(log_event.event_time, format: :usa)
-        %td= text(log_event.event_type)
+        %td= text(log_event.locale_tag)
         %td= object_tag(log_event.object, class: "billing-logs__object")
         %td.billing-logs__email-notification
           - if log_event.email_notification?

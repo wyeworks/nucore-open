@@ -69,7 +69,12 @@ class FacilityJournalsController < ApplicationController
 
     if action.perform params[:journal_status]
       flash[:notice] = I18n.t "controllers.facility_journals.update.notice"
-      LogEvent.log(@pending_journal, :closed, session_user)
+      LogEvent.log(
+        @pending_journal,
+        :closed,
+        session_user,
+        billing_event: true,
+      )
       redirect_to facility_journals_path(current_facility)
     else
       @order_details = OrderDetail.for_facility(current_facility).need_journal
@@ -103,7 +108,7 @@ class FacilityJournalsController < ApplicationController
     if @journal.errors.blank? && @journal.save
       @journal.create_spreadsheet if Journals::JournalFormat.exists?(:xls)
       flash[:notice] = I18n.t("controllers.facility_journals.create.notice")
-      LogEvent.log(@journal, :create, current_user, billing_event: true)
+      LogEvent.log(@journal, :create, current_user)
       redirect_to facility_journals_path(current_facility)
     else
       flash_error_messages
@@ -144,7 +149,7 @@ class FacilityJournalsController < ApplicationController
     if reconciler.reconcile_all > 0
       count = reconciler.count
       flash[:notice] = "#{count} payment#{count == 1 ? '' : 's'} successfully reconciled" if count > 0
-      LogEvent.log(@journal, :reconciled, current_user)
+      LogEvent.log(@journal, :reconciled, current_user, billing_event: true)
     else
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
     end
