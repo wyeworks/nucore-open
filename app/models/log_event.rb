@@ -1,30 +1,31 @@
 # frozen_string_literal: true
 
 class LogEvent < ApplicationRecord
-  BILLING_EVENT_TYPES = %w[
-    review_orders_email
-    statement_email
-  ].freeze
-
   belongs_to :user # This is whodunnit
   belongs_to :loggable, -> { with_deleted if respond_to?(:with_deleted) }, polymorphic: true
   serialize :metadata, JSON
 
   scope :reverse_chronological, -> { order(event_time: :desc) }
-  scope :with_billing_type, -> { where(event_type: BILLING_EVENT_TYPES) }
-  scope :non_billing_type, -> { where.not(event_type: BILLING_EVENT_TYPES) }
+  scope :with_billing_type, -> { where(billing_event: true) }
+  scope :non_billing_type, -> { where.not(billing_event: false) }
 
-  def self.log(loggable, event_type, user, event_time: Time.current, metadata: nil)
+  def self.log(
+    loggable,
+    event_type,
+    user,
+    event_time: Time.current,
+    **
+  )
     create(
       loggable:,
       event_type:,
       event_time:,
-      metadata:,
       user_id: user.try(:id),
+      **
     )
   end
 
-  def self.log_email(loggable, event_type, email, metadata: {})
+  def self.log_email(loggable, event_type, email, metadata: {}, **)
     create(
       loggable:,
       event_type:,
@@ -33,7 +34,8 @@ class LogEvent < ApplicationRecord
         to: email.to,
         subject: email.subject,
         **metadata
-      }
+      },
+      **
     )
   end
 

@@ -2,9 +2,14 @@
 
 module BillingLogEventsHelper
   OBJECT_LENGTH_THRESHOLD = 50
+  BILLING_EVENT_TYPES = %w[
+    review_orders_email
+    statement_email
+    statement.closed
+  ].freeze
 
   def billing_log_events_options
-    LogEvent::BILLING_EVENT_TYPES.map do |event_type|
+    BILLING_EVENT_TYPES.map do |event_type|
       [text("log_event/event_type.#{event_type}"), event_type]
     end
   end

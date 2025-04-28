@@ -2,4 +2,9 @@
   &__object {
     max-width: 200px;
   }
+
+  &__email-notification {
+    display: flex;
+    flex-direction: column;
+  }
 }

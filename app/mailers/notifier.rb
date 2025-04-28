@@ -107,11 +107,12 @@ class Notifier < ActionMailer::Base
       @user,
       :review_orders_email,
       email,
+      billing_event: true,
       metadata: {
         object: accounts,
         accounts_ids: @accounts.map(&:id),
         facility_id: @facility.id,
-      }
+      },
     )
   end
 
@@ -122,9 +123,10 @@ class Notifier < ActionMailer::Base
       @statement,
       :statement_email,
       email,
+      billing_event: true,
       metadata: {
         facility_id: @facility&.id
-      }
+      },
     )
   end
 

@@ -10,8 +10,7 @@
       %th= LogEvent.human_attribute_name(:event_time)
       %th= LogEvent.human_attribute_name(:event)
       %th.billing-logs__object= LogEvent.human_attribute_name(:object)
-      %th= LogEvent.human_attribute_name(:to)
-      %th= LogEvent.human_attribute_name(:subject)
+      %th= LogEvent.human_attribute_name(:notification)
 
   %tbody
     - decorated_log_events(@billing_log_events).each do |log_event|
@@ -19,7 +18,11 @@
         %td= I18n.l(log_event.event_time, format: :usa)
         %td= text(log_event.event_type)
         %td= object_tag(log_event.object, class: "billing-logs__object")
-        %td= log_event.email_to
-        %td= log_event.email_subject
+        %td.billing-logs__email-notification
+          - if log_event.email_notification?
+            %span= log_event.email_subject
+            %small= log_event.email_to
+          - else
+            –
 
 = will_paginate(@billing_log_events)

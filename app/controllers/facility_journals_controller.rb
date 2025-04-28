@@ -103,7 +103,7 @@ class FacilityJournalsController < ApplicationController
     if @journal.errors.blank? && @journal.save
       @journal.create_spreadsheet if Journals::JournalFormat.exists?(:xls)
       flash[:notice] = I18n.t("controllers.facility_journals.create.notice")
-      LogEvent.log(@journal, :create, current_user)
+      LogEvent.log(@journal, :create, current_user, billing_event: true)
       redirect_to facility_journals_path(current_facility)
     else
       flash_error_messages
