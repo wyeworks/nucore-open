@@ -69,11 +69,7 @@ class FacilityJournalsController < ApplicationController
 
     if action.perform params[:journal_status]
       flash[:notice] = I18n.t "controllers.facility_journals.update.notice"
-      LogEvent.log(
-        @pending_journal,
-        :closed,
-        session_user,
-      )
+      LogEvent.log(@pending_journal, :closed, session_user)
       redirect_to facility_journals_path(current_facility)
     else
       @order_details = OrderDetail.for_facility(current_facility).need_journal
