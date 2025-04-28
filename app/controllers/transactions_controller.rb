@@ -48,7 +48,7 @@ class TransactionsController < ApplicationController
     @date_range_field = @search_form.date_params[:field]
     params[:sort] = "date_range_field" if params[:sort].nil? # set default sort column
     @order_details = @search.order_details.reorder(sort_clause)
-    
+
     if @order_details.size < 1000
       @grand_total = @order_details.filter_map { |od| od.actual_total || od.estimated_total }.sum
     else
