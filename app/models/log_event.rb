@@ -16,23 +16,17 @@ class LogEvent < ApplicationRecord
   scope :with_billing_type, -> { with_events(BILLING_EVENT_TYPES) }
   scope :non_billing_type, -> { with_events(BILLING_EVENT_TYPES).invert_where }
 
-  def self.log(
-    loggable,
-    event_type,
-    user,
-    event_time: Time.current,
-    **
-  )
+  def self.log(loggable, event_type, user, event_time: Time.current, metadata: nil)
     create(
       loggable:,
       event_type:,
       event_time:,
+      metadata:,
       user_id: user.try(:id),
-      **
     )
   end
 
-  def self.log_email(loggable, event_type, email, metadata: {}, **)
+  def self.log_email(loggable, event_type, email, metadata: {})
     create(
       loggable:,
       event_type:,
@@ -41,8 +35,7 @@ class LogEvent < ApplicationRecord
         to: email.to,
         subject: email.subject,
         **metadata
-      },
-      **
+      }
     )
   end
 
