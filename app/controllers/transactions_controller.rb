@@ -48,7 +48,13 @@ class TransactionsController < ApplicationController
     @date_range_field = @search_form.date_params[:field]
     params[:sort] = "date_range_field" if params[:sort].nil? # set default sort column
     @order_details = @search.order_details.reorder(sort_clause)
-
+    
+    if @order_details.size < 1000
+      @grand_total = @order_details.map { |od| od.actual_total || od.estimated_total }.compact.sum
+    else
+      @too_many_results = true
+    end
+    
     @extra_date_column = :reviewed_at
     @order_detail_action = :mark_as_reviewed
     @order_detail_link = {
