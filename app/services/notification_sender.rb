@@ -75,9 +75,11 @@ class NotificationSender
   end
 
   def notify_accounts
+    args = current_facility.cross_facility? ? {} : { facility: current_facility }
+
     accounts_by_user.each do |user, accounts|
       Notifier.review_orders(
-        user:, accounts:, facility: current_facility,
+        user:, accounts:, **args
       ).deliver_later
     end
   end
