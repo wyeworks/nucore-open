@@ -34,7 +34,7 @@
     .inline-form-controls
       %div
         = label_tag :quantity, EstimateDetail.human_attribute_name(:quantity)
-        = number_field_tag :quantity, 1, min: 1, style: "width: 3em;", class: "js--estimate-quantity"
+        = number_field_tag :quantity, 1, min: 1, style: "width: 3em;"
 
       .margin_x
         = label_tag :product_id, Product.model_name.human

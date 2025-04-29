@@ -47,15 +47,7 @@ $(function () {
     quantityField.min = "1";
     quantityField.value = quantity;
     quantityField.name = `estimate[estimate_details_attributes][${index}][quantity]`;
-
-    if (duration) {
-      quantityCell.textContent = 1;
-
-      quantityField.type = "hidden";
-      dummyCell.appendChild(quantityField);
-    } else {
-      quantityCell.appendChild(quantityField);
-    }
+    quantityCell.appendChild(quantityField);
 
     row.appendChild(quantityCell);
 
@@ -149,7 +141,6 @@ $(function () {
 
 $(function () {
   const estimateProductInput = $(".js--estimate-product");
-  const estimateQuantityInput = $(".js--estimate-quantity");
   const estimateDurationDaysContainer = $(
     ".js--estimate-duration-days-container"
   );
@@ -161,7 +152,6 @@ $(function () {
 
   if (
     !estimateProductInput.length ||
-    !estimateQuantityInput.length ||
     !estimateDurationDaysContainer.length ||
     !estimateDurationMinsContainer.length ||
     !estimateDurationDaysInput.length ||
@@ -196,24 +186,19 @@ $(function () {
       estimateDurationMinsInput.prop("disabled", true);
       estimateDurationMinsInputHidden.prop("disabled", true);
     }
-
-    if (isTimed) {
-      estimateQuantityInput.val(1);
-    }
-
-    estimateQuantityInput.prop("disabled", isTimed);
   };
 
   const initializeTimedFields = () => {
-    const initialSelectedOpetion = estimateProductInput.find(":selected");
-    const initialTimeUnit = initialSelectedOpetion.data("time-unit");
+    const initialSelectedOption = estimateProductInput.find(":selected");
+    const initialTimeUnit = initialSelectedOption.data("time-unit");
     updateTimedFields(initialTimeUnit);
   };
 
   initializeTimedFields();
 
   estimateProductInput.on("change", function (event) {
-    const timeUnit = $(event.target).find(":selected").data("time-unit");
+    const selectedOption = $(event.target).find(":selected");
+    const timeUnit = selectedOption.data("time-unit");
 
     updateTimedFields(timeUnit);
   });
