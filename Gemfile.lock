@@ -368,7 +368,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
-    json (2.10.2)
+    json (2.11.3)
     jwt (2.10.1)
       base64
     kgio (2.11.4)
@@ -567,7 +567,7 @@ GEM
     rspec-support (3.13.2)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.75.2)
+    rubocop (1.75.4)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -799,7 +799,7 @@ DEPENDENCIES
   rspec-collection_matchers
   rspec-rails
   rspec_junit_formatter
-  rubocop (= 1.75.2)
+  rubocop (= 1.75.4)
   rubocop-performance
   rubocop-rails
   rubocop-rspec
