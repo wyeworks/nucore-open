@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityEstimatesController < ApplicationController
-  include DateHelper
-
   admin_tab :all
   before_action { @active_tab = "admin_estimates" }
   before_action :authenticate_user!
@@ -42,16 +40,15 @@ class FacilityEstimatesController < ApplicationController
 
   def new
     @estimate = current_facility.estimates.new
-    @products = current_facility.products.where({ type: ["Item", "Service", "Instrument", "TimedService"] }).alphabetized.map do |p|
+    @products = current_facility.products.where({ type: %w[Item Service Instrument TimedService Bundle] }).alphabetized.map do |p|
       [p.name, p.id, { "data-time-unit" => p.time_unit }]
     end
   end
 
   def create
-    expires_at = parse_usa_date(facility_estimate_params[:expires_at])
-    @estimate = current_facility.estimates.new(facility_estimate_params.merge(created_by_id: current_user.id, expires_at:))
+    @estimate = EstimateBuilder.new(current_facility, current_user).build_estimate(facility_estimate_params)
 
-    if @estimate.save
+    if @estimate.persisted?
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, @estimate)
     else
