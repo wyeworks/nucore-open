@@ -18,6 +18,7 @@
     - @order_detail_link = nil
     - @order_detail_action = nil
     - @extra_date_column_header = :reviewed_at_past
+    - @export_enabled = false
 
     %h2= text("transactions.recently_reviewed")
     = render "shared/transactions/table", order_details: @recently_reviewed
