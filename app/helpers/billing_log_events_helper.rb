@@ -5,8 +5,12 @@ module BillingLogEventsHelper
 
   def billing_log_events_options
     LogEvent::BILLING_EVENT_TYPES.map do |event_type|
-      [text("log_event/event_type.#{event_type}"), event_type]
+      [event_type_label(event_type), event_type]
     end
+  end
+
+  def event_type_label(event_type)
+    text("log_event/event_type.#{event_type}")
   end
 
   def decorated_log_events(events)

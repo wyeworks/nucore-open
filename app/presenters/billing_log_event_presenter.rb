@@ -15,6 +15,10 @@ class BillingLogEventPresenter < SimpleDelegator
     metadata["subject"]
   end
 
+  def email_notification?
+    email_subject && email_to
+  end
+
   def object
     metadata["object"] || loggable_to_s
   end

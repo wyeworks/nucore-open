@@ -40,15 +40,7 @@ class LogEventSearcher
 
   # The event name comes in as <loggable_type>.<event_type>
   def filter_event
-    events.flatten.map do |event_type|
-      parts = event_type.split(".")
-      if parts.length > 1
-        loggable_type, event_type = parts
-        LogEvent.where(loggable_type: loggable_type.camelize, event_type:)
-      else
-        LogEvent.where(event_type:)
-      end
-    end.inject(&:or)
+    LogEvent.with_events(events)
   end
 
   def filter_query

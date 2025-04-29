@@ -14,6 +14,7 @@ en:
     statement:
       create: "!Statement! created"
       closed: "!Statement! closed"
+      statement_email: "!Statement! Email"
     order_detail:
       dispute: Order disputed
       resolve: Order dispute resolved
@@ -43,8 +44,7 @@ en:
       suspended: User suspended
       unsuspended: User unsuspended
       default_price_group_changed: User price group changed to %{price_group_rate}
+      review_orders_email: "Review Orders Email"
     user_role:
       create: Role added
       delete: Role removed
-    review_orders_email: "Review Orders Email"
-    statement_email: "!Statement! Email"
