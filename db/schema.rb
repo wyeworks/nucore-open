@@ -333,7 +333,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_28_161852) do
     t.text "metadata"
     t.index ["event_time"], name: "index_log_events_on_event_time"
     t.index ["event_type"], name: "index_log_events_on_event_type"
-    t.index ["loggable_type", "event_type"], name: "index_log_events_on_loggable_type_and_event_type"
+    t.index ["loggable_type", "event_type"], name: "i_log_events_log_type_evnt_type"
     t.index ["loggable_type", "loggable_id"], name: "index_log_events_loggable"
     t.index ["user_id"], name: "index_log_events_on_user_id"
   end
