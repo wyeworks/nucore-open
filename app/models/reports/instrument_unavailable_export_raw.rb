@@ -33,7 +33,7 @@ module Reports
         .new(reservation, start_time: date_start.beginning_of_day, end_time: date_end.end_of_day)
         .duration_in_seconds
 
-      format("%.2f", (duration_in_seconds / 60.0))
+      format("%.2f", duration_in_seconds / 60.0)
     end
 
     def default_report_hash
