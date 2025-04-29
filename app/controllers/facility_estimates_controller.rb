@@ -40,8 +40,10 @@ class FacilityEstimatesController < ApplicationController
 
   def new
     @estimate = current_facility.estimates.new
-    @products = current_facility.products.where({ type: %w[Item Service Instrument TimedService Bundle] }).alphabetized.map do |p|
-      [p.name, p.id, { "data-time-unit" => p.time_unit }]
+    @products = current_facility.products.where({ type: %w[Item Service Instrument TimedService Bundle] }).alphabetized.filter_map do |p|
+      time_unit = p.time_unit
+
+      [p.name, p.id, { "data-time-unit" => time_unit }] if time_unit != "mixed"
     end
   end
 

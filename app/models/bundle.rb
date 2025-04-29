@@ -39,8 +39,7 @@ class Bundle < Product
 
     return nil if time_units.empty?
 
-    # TODO: check what's the behavior if a bundle has different time units
-    time_units.size == 1 ? time_units.first : "mins"
+    time_units.size == 1 ? time_units.first : "mixed"
   end
 
   private
