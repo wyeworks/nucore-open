@@ -49,11 +49,6 @@ class TransactionsController < ApplicationController
     params[:sort] = "date_range_field" if params[:sort].nil? # set default sort column
     @order_details = @search.order_details.reorder(sort_clause)
 
-    if @order_details.size < 1000
-      @grand_total = @order_details.filter_map { |od| od.actual_total || od.estimated_total }.sum
-    else
-      @too_many_results = true
-    end
     @extra_date_column = :reviewed_at
     @order_detail_action = :mark_as_reviewed
     @order_detail_link = {
@@ -62,7 +57,7 @@ class TransactionsController < ApplicationController
       proc: proc { |order_detail| order_order_detail_path(order_detail.order, order_detail) },
     }
     respond_to do |format|
-      format.html { @order_details = @order_details.paginate(page: params[:page]) }
+      format.html { @order_details }
       format.csv { handle_csv_search }
     end
   end
