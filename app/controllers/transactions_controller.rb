@@ -57,7 +57,7 @@ class TransactionsController < ApplicationController
       proc: proc { |order_detail| order_order_detail_path(order_detail.order, order_detail) },
     }
     respond_to do |format|
-      format.html { @order_details }
+      format.html
       format.csv { handle_csv_search }
     end
   end
