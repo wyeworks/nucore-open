@@ -16,6 +16,17 @@ class FacilityEstimatesController < ApplicationController
     @estimates = current_facility.estimates
                                  .includes(:user)
                                  .order(created_at: :desc)
+
+    @estimates = @estimates.where(user_id: params[:user_id]) if params[:user_id].present?
+
+    @estimates = @estimates.where(expires_at: Time.current..) if params[:hide_expired] == "1"
+
+    if params[:search].present?
+      search_query = params[:search].strip
+      @estimates = @estimates.where("LOWER(name) LIKE ?", "%#{search_query.downcase}%")
+
+      @estimates = @estimates.or(Estimate.where(id: search_query)) if search_query.match?(/^\d+$/)
+    end
   end
 
   def show
@@ -31,6 +42,9 @@ class FacilityEstimatesController < ApplicationController
 
   def new
     @estimate = current_facility.estimates.new
+    @products = current_facility.products.where({ type: ["Item", "Service", "Instrument", "TimedService"] }).alphabetized.map do |p|
+      [p.name, p.id, { "data-time-unit" => p.time_unit }]
+    end
   end
 
   def create
@@ -51,12 +65,12 @@ class FacilityEstimatesController < ApplicationController
   def facility_estimate_params
     params.require(:estimate).permit(
       :name, :user_id, :note, :expires_at,
-      estimate_details_attributes: [:id, :product_id, :quantity, :_destroy]
+      estimate_details_attributes: [:id, :product_id, :quantity, :duration, :duration_unit, :_destroy]
     )
   end
 
   def load_estimate
-    @estimate = current_facility.estimates.find(params[:id])
+    @estimate = current_facility.estimates.includes(estimate_details: :product).find(params[:id])
   end
 
   def set_users

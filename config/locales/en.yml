@@ -83,6 +83,7 @@ en:
     cart: Cart
     create: Create %{model}
     event_log: Event Log
+    billing_log_event: Billing Log
     general_reports: General
     global_billing: Billing
     global_settings: Global Settings
@@ -518,7 +519,13 @@ en:
   facility_estimates:
     index:
       add: Add Estimate
+      all_users: All Users
+      clear_filter: Clear Filters
+      filter_user: Filter by User
+      hide_expired: Hide expired estimates
       no_estimates: No estimates found
+      search: Search
+      search_placeholder: Search by name or ID
     create:
       success: Estimate successfully created
       error: There was an error creating the estimate
@@ -530,6 +537,8 @@ en:
       create: Create an Estimate
       head: Add Estimate
       remove_products: Remove
+    show:
+      days: days
 
   facility_order_details:
     edit:

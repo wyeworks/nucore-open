@@ -5,27 +5,28 @@ require "rails_helper"
 RSpec.describe Notifier do
   let(:email) { ActionMailer::Base.deliveries.last }
   let(:facility) { create(:setup_facility) }
-  let(:order) { create(:purchased_order, product: product) }
-  let(:product) { create(:setup_instrument, facility: facility) }
+  let(:order) { create(:purchased_order, product:) }
+  let(:product) { create(:setup_instrument, facility:) }
   let(:user) { order.user }
 
   if EngineManager.engine_loaded?(:c2po)
     describe ".statement" do
-      let(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner) }
-      let(:statement) { FactoryBot.create(:statement, facility: facility, account: account) }
+      let(:account) { create(:purchase_order_account, :with_account_owner) }
+      let(:statement) { create(:statement, facility:, account:) }
       let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
       let(:email_text) { email.text_part.to_s }
 
-      before do
-        Notifier.statement(
-          user: user,
-          facility: facility,
-          account: account,
-          statement: statement,
-        ).deliver_now
+      let(:action) do
+        lambda do
+          Notifier.statement(
+            user:, facility:, account:, statement:,
+          ).deliver_now
+        end
       end
 
       it "generates a statement email", :aggregate_failures do
+        action.call
+
         expect(email.to).to eq [user.email]
         expect(email.subject).to include(I18n.t(".Statement"))
         expect(email_html).to include(statement.account.to_s)
@@ -35,23 +36,46 @@ RSpec.describe Notifier do
           expect(email.bcc).to eq [Settings.email.invoice_bcc]
         end
       end
+
+      describe "email log event" do
+        context "when ff is off", feature_setting: { billing_log_events: false } do
+          it "does not create a log event" do
+            expect { action.call }.to_not(
+              change { LogEvent.count }
+            )
+          end
+        end
+
+        context "when ff is on", feature_setting: { billing_log_events: true } do
+          it "creates a log event" do
+            expect { action.call }.to(
+              change do
+                LogEvent.where(event_type: :statement_email).count
+              end.by(1)
+            )
+          end
+        end
+      end
     end
   end
 
   describe ".review_orders" do
     let(:accounts) do
-      FactoryBot.create_list(:setup_account, 2, owner: user, facility: facility)
+      create_list(:setup_account, 2, owner: user, facility:)
     end
     let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
     let(:email_text) { email.text_part.to_s }
-
-    before(:each) do
-      Notifier.review_orders(user: user,
-                             facility: facility,
-                             accounts: accounts).deliver_now
+    let(:action) do
+      lambda do
+        Notifier.review_orders(
+          user:, facility:, accounts:
+        ).deliver_now
+      end
     end
 
     it "generates a review_orders notification", :aggregate_failures do
+      action.call
+
       expect(email.to).to eq [user.email]
       expect(email.subject).to include("Orders For Review: #{facility.abbreviation}")
 
@@ -62,11 +86,31 @@ RSpec.describe Notifier do
           .and include(accounts.last.description)
       end
     end
+
+    describe "log event creation" do
+      context "when ff is on", feature_setting: { billing_log_events: false } do
+        it "does not create a log event" do
+          expect { action.call }.to_not(
+            change { LogEvent.count }
+          )
+        end
+      end
+
+      context "when ff is off", feature_setting: { billing_log_events: true } do
+        it "creates a log event" do
+          expect { action.call }.to(
+            change do
+              LogEvent.where(event_type: :review_orders_email).count
+            end.by(1)
+          )
+        end
+      end
+    end
   end
 
   describe ".user_update" do
     let(:account) do
-      FactoryBot.create(:setup_account, owner: user, facility: facility)
+      create(:setup_account, owner: user, facility:)
     end
     let(:email_html) do
       email.html_part.to_s
@@ -74,14 +118,14 @@ RSpec.describe Notifier do
            .gsub(/&ldquo;/, "\"").gsub(/&rdquo;/, "\"") # Translate quotes
     end
     let(:email_text) { email.text_part.to_s }
-    let(:admin_user) { FactoryBot.create(:user) }
+    let(:admin_user) { create(:user) }
 
     before(:each) do
-      Notifier.user_update(user: user,
+      Notifier.user_update(user:,
                            created_by: admin_user,
                            role: AccountUser::ACCOUNT_PURCHASER,
                            send_to: "john@example.com",
-                           account: account).deliver_now
+                           account:).deliver_now
     end
 
     it "generates a user_update notification", :aggregate_failures do

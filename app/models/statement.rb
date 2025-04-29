@@ -116,7 +116,7 @@ class Statement < ApplicationRecord
   end
 
   def to_log_s
-    "Statement: #{invoice_number}"
+    "#{I18n.t('Statement')}: #{invoice_number}"
   end
 
   def users_to_notify
