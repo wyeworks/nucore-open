@@ -22,6 +22,7 @@ Rails.application.configure do
     Bullet.add_safelist type: :n_plus_one_query, class_name: "AccountUser", association: :user
     Bullet.add_safelist type: :n_plus_one_query, class_name: "AccountPriceGroupMember", association: :price_group
     Bullet.add_safelist type: :n_plus_one_query, class_name: "AdminReservation", association: :order_detail
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Bundle", association: :products
     Bullet.add_safelist type: :n_plus_one_query, class_name: "BundleProduct", association: :product
     Bullet.add_safelist type: :n_plus_one_query, class_name: "Instrument", association: :facility
     Bullet.add_safelist type: :n_plus_one_query, class_name: "Instrument", association: :alert
