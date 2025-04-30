@@ -15,9 +15,9 @@ class EstimateBuilder
     estimate = @facility.estimates.new(estimate_params.merge({ created_by_id: current_user.id, expires_at: }).except(:estimate_details_attributes))
 
     estimate_params[:estimate_details_attributes].each_value do |detail_params|
-      product = Product.find(detail_params[:product_id])
+      product_id = detail_params[:product_id]
 
-      next if product.blank?
+      product = Product.find(product_id) if product_id.present?
 
       unless product.is_a?(Bundle)
         estimate.estimate_details.new(detail_params)
