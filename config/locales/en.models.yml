@@ -251,6 +251,9 @@ en:
         created_by_user: Created By
         expires_at: Expires at
         note: Notes
+      estimate_detail:
+        duration: Duration
+        duration_mins: Duration (hh:mm)
       schedule_rule:
         start_time: Start Time
         end_time: End Time

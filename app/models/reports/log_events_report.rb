@@ -1,4 +1,4 @@
-## frozen_string_literal: true
+# frozen_string_literal: true
 
 module Reports
 
@@ -6,10 +6,28 @@ module Reports
 
     include Reports::CsvExporter
 
+    ALLOWED_EVENTS = [
+      "account.create", "account.update",
+      "account_user.create", "account_user.delete",
+      "user.create", "user.suspended", "user.unsuspended",
+      "user.default_price_group_changed",
+      "account.suspended", "account.unsuspended",
+      "journal.create", "statement.create",
+      "user_role.create", "user_role.delete",
+      "order_detail.dispute", "order_detail.resolve",
+      "order_detail.notify", "order_detail.review",
+      "order_detail.problem_queue", "order_detail.price_change",
+      "order_detail.resolve_from_problem_queue",
+      "product_user.create", "product_user.delete",
+      "price_group_member.create", "price_group_member.delete",
+      "facility.activate", "facility.deactivate",
+      "price_group.create", "price_group.delete",
+    ].freeze
+
     def initialize(start_date:, end_date:, events:, query:)
       @start_date = start_date
       @end_date = end_date
-      @events = events
+      @events = whitelist_events(events)
       @query = query
     end
 
@@ -24,12 +42,13 @@ module Reports
     end
 
     def log_events
-      LogEvent.search(
+      LogEventSearcher.new(
+        relation: LogEvent.non_billing_type,
         start_date: @start_date,
         end_date: @end_date,
         events: @events,
         query: @query,
-      ).includes(:user, :loggable).reverse_chronological
+      ).search.includes(:user, :loggable).reverse_chronological
     end
 
     def report_data_query
@@ -48,6 +67,10 @@ module Reports
 
     def translation_scope
       "views.log_events.index"
+    end
+
+    def whitelist_events(events)
+      Array(events).select { |event| event.in?(ALLOWED_EVENTS) }
     end
 
   end

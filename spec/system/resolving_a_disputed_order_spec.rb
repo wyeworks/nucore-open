@@ -29,7 +29,10 @@ RSpec.describe "Resolving a disputed order" do
     allow_any_instance_of(OrderDetailNoticePresenter).to receive(:global_admin_must_resolve?).and_return(true)
     login_as logged_in_user
     visit facility_disputed_orders_path facility
-    click_link order_detail.id.to_s
+    click_link(
+      order_detail.id.to_s,
+      href: manage_facility_order_order_detail_path(facility, order, order_detail)
+    )
   end
 
   context "logged in as global administrator" do

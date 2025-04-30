@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :api_speed_type, class: UmassCorum::ApiSpeedType do
     # If we build more than 1 million over the course of the test suite, ensure
     # that we still only use six characters so the format is valid
-    sequence(:speed_type) { |n| format('%06d', (n % 1_000_000)) }
+    sequence(:speed_type) { |n| format('%06d', n % 1_000_000) }
 
     # These attributes are based on an actual response from the API
     active { true }
