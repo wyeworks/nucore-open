@@ -3,3 +3,5 @@
 - elsif account.is_a?(PurchaseOrderAccount)
   = f.input :outside_contact_info
   = f.input :ar_number
+  - if SettingsHelper.feature_on?(:show_account_opencontract_field)
+    = f.input :open_contract

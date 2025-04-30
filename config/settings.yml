@@ -168,6 +168,7 @@ feature:
   export_order_disputes: false
   show_estimates_option: <%= !Rails.env.production? %>
   billing_log_events: false
+  show_account_opencontract_field: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts
