@@ -193,15 +193,14 @@ RSpec.describe "Managing an order detail" do
   end
 
   describe "canceling order details" do
-    before do
-      visit manage_facility_order_order_detail_path(facility, order, order_detail)
-    end
     context "canceling an item" do
       let(:item) { create(:setup_item, facility: facility) }
       let(:order) { create(:purchased_order, product: item) }
       let(:order_detail) { order.order_details.first }
 
       it "cancels the item" do
+        visit manage_facility_order_order_detail_path(facility, order, order_detail)
+
         select "Canceled", from: "Status"
         click_button "Save"
 
@@ -225,25 +224,56 @@ RSpec.describe "Managing an order detail" do
 
       let(:statement) { create(:statement, facility:, created_by: 1) }
 
-      before do
-        visit manage_facility_order_order_detail_path(facility, order, order_detail)
+      context "when user does not have permissions" do
+        before { login_as director }
+
+        it "does not show unrecoverable option" do
+          visit manage_facility_order_order_detail_path(facility, order, order_detail)
+
+          expect(page).to(
+            have_select("Status", options: ["Complete", "Canceled"])
+          )
+        end
+
+        it "does show unrecoverable option if it's already unrecoverable" do
+          order_detail.update!(
+            order_status: OrderStatus.unrecoverable,
+            state: :unrecoverable,
+          )
+
+          visit manage_facility_order_order_detail_path(facility, order, order_detail)
+
+          expect(page).to(
+            have_select("Status", selected: "Unrecoverable")
+          )
+
+          click_button "Save"
+
+          expect(page).to have_content("The order was successfully updated")
+        end
       end
 
-      it "allows admins to update order status to unrecoverable" do
-        select "Unrecoverable", from: "Status"
-        click_button "Save"
+      context "when user has permissions" do
+        before { login_as administrator }
 
-        expect(page).to have_content("Unrecoverable")
-        click_link order_detail.to_s
+        it "allows admins to update order status to unrecoverable" do
+          visit manage_facility_order_order_detail_path(facility, order, order_detail)
 
-        expect(page).to have_content("Unrecoverable")
-        select "Complete", from: "Status"
-        expect(page).to have_button("Save")
-        click_button "Save"
+          select "Unrecoverable", from: "Status"
+          click_button "Save"
 
-        expect(page).to have_content("Complete")
-        click_link order_detail.to_s
-        expect(page).to have_content("Complete")
+          expect(page).to have_content("Unrecoverable")
+          click_link order_detail.to_s
+
+          expect(page).to have_content("Unrecoverable")
+          select "Complete", from: "Status"
+          expect(page).to have_button("Save")
+          click_button "Save"
+
+          expect(page).to have_content("Complete")
+          click_link order_detail.to_s
+          expect(page).to have_content("Complete")
+        end
       end
     end
 
@@ -252,6 +282,8 @@ RSpec.describe "Managing an order detail" do
         instrument.price_policies.update_all(cancellation_cost: 5)
         # reservation is set for tomorrow, we need min_cancel_hours to be longer than time to reserve_start_at
         instrument.update_attribute(:min_cancel_hours, 48)
+
+        visit manage_facility_order_order_detail_path(facility, order, order_detail)
       end
 
       it "cancels without a fee" do
@@ -288,6 +320,8 @@ RSpec.describe "Managing an order detail" do
         fill_in "Resolution Notes", with: "a resolution"
         click_button "Resolve Dispute"
 
+        expect(page).to have_content("The order was successfully updated")
+
         expect(order_detail.reload.dispute_resolved_at).to be_present
         expect(LogEvent).to be_exist(loggable: order_detail, event_type: :resolve)
       end
@@ -307,6 +341,8 @@ RSpec.describe "Managing an order detail" do
         visit manage_facility_order_order_detail_path(facility, order_detail.order, order_detail)
         fill_in "Resolution Notes", with: "a resolution"
         click_button "Resolve Dispute"
+
+        expect(page).to have_content("The order was successfully updated")
 
         expect(order_detail.reload.dispute_resolved_at).to be_present
         expect(LogEvent).to be_exist(loggable: order_detail, event_type: :resolve)
@@ -328,6 +364,8 @@ RSpec.describe "Managing an order detail" do
       select "Reconciled", from: "Status"
       fill_in "Reconciliation Note", with: "adding a note"
       click_button "Save"
+
+      expect(page).to have_content("The order was successfully updated")
 
       expect(order_detail.reload).to be_reconciled
       expect(order_detail.reconciled_note).to eq("adding a note")

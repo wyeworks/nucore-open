@@ -42,7 +42,7 @@ module Reports
     private
 
     def as_hours(seconds)
-      format("%.2f", (seconds / 3600.0))
+      format("%.2f", seconds / 3600.0)
     end
 
     def grouped_query

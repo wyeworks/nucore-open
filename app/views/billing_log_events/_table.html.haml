@@ -1,0 +1,28 @@
+= render "log_events/filter_form",
+  event_type_options: billing_log_events_options,
+  exclude_query_field: true
+
+= will_paginate(@billing_log_events)
+
+%table.table.table-striped.table-hover.billing-logs
+  %thead
+    %tr
+      %th= LogEvent.human_attribute_name(:event_time)
+      %th= LogEvent.human_attribute_name(:event)
+      %th.billing-logs__object= LogEvent.human_attribute_name(:object)
+      %th= LogEvent.human_attribute_name(:notification)
+
+  %tbody
+    - decorated_log_events(@billing_log_events).each do |log_event|
+      %tr
+        %td= I18n.l(log_event.event_time, format: :usa)
+        %td= text(log_event.locale_tag)
+        %td= object_tag(log_event.object, class: "billing-logs__object")
+        %td.billing-logs__email-notification
+          - if log_event.email_notification?
+            %span= log_event.email_subject
+            %small= log_event.email_to
+          - else
+            –
+
+= will_paginate(@billing_log_events)

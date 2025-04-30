@@ -48,7 +48,10 @@ class Notifier < ActionMailer::Base
                        end
 
     @accounts_grouped_by_owner = accounts.group_by(&:owner_user)
-    send_nucore_mail @user.email, text("views.notifier.review_orders.subject", abbreviation: @facility.abbreviation)
+    send_nucore_mail(
+      @user.email,
+      text("views.notifier.review_orders.subject", abbreviation: @facility.abbreviation)
+    ).tap { |email| log_review_orders_email(email) }
   end
 
   # Billing sends out the statement for the month. Appropriate users get
@@ -60,7 +63,12 @@ class Notifier < ActionMailer::Base
     @account = args[:account]
     @statement = args[:statement]
     attach_statement_pdf
-    send_nucore_mail args[:user].email, text("views.notifier.statement.subject", facility: @facility), nil, Settings.email.invoice_bcc
+    send_nucore_mail(
+      args[:user].email,
+      text("views.notifier.statement.subject", facility: @facility),
+      nil,
+      Settings.email.invoice_bcc
+    ).tap { |email| log_statement_email(email) }
   end
 
   def order_detail_status_changed(order_detail)
@@ -88,6 +96,36 @@ class Notifier < ActionMailer::Base
 
   def send_nucore_mail(to, subject, template_name = nil, bcc = nil)
     mail(subject: subject, to: to, template_name: template_name, bcc: bcc)
+  end
+
+  def log_review_orders_email(email)
+    return unless SettingsHelper.feature_on?(:billing_log_events)
+
+    accounts = @accounts.map(&:description).join(", ")
+
+    LogEvent.log_email(
+      @user,
+      :review_orders_email,
+      email,
+      metadata: {
+        object: accounts,
+        accounts_ids: @accounts.map(&:id),
+        facility_id: @facility.id,
+      }
+    )
+  end
+
+  def log_statement_email(email)
+    return unless SettingsHelper.feature_on?(:billing_log_events)
+
+    LogEvent.log_email(
+      @statement,
+      :statement_email,
+      email,
+      metadata: {
+        facility_id: @facility&.id
+      }
+    )
   end
 
 end

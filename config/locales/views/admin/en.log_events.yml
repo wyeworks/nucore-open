@@ -2,6 +2,10 @@ en:
   views:
     log_events:
       index:
+        event_time: Event Time
+        event: Event
+        object: Object
+        user: User
         dropdown_titles:
           order_detail:
             problem_queue: Order added to problem queue
@@ -10,59 +14,10 @@ en:
           price_group_member:
             create: "User or account added to price group"
             delete: "User or account removed from price group"
-        account:
-          create: Payment Source created
-          update: Payment Source updated
-          suspended: Payment Source suspended
-          unsuspended: Payment Source unsuspended
-        account_user:
-          create: Payment Source User added
-          delete: Payment Source User removed
-        journal:
-          create: Journal created
-          closed: Journal closed
-        statement:
-          create: "!Statement! created"
-          closed: "!Statement! closed"
-        order_detail:
-          dispute: Order disputed
-          resolve: Order dispute resolved
-          notify: Billing notified
-          review: Order reviewed
-          problem_queue: Order added to problem queue %{cause}
-          price_change: Order's price was manually changed
-          resolve_from_problem_queue: Problem order resolved
-          updated_fulfilled_at: Fulfilled date updated on completed order
-        order_import:
-          created: Bulk Order Import
-        product_user:
-          create: User added to access list
-          delete: User removed from access list
-        price_group_member:
-          create: "%{member_type} added to price group"
-          delete: "%{member_type} removed from price group"
-        facility:
-          activate: Turned on all relays
-          deactivate: Turned off all relays
-        price_group:
-          create: Price Group created
-          delete: Price Group deleted
+      filter_form:
         end_date: End Date
         event_filter: Event
         event_placeholder: Filter on one or more events
-        event_time: Event Time
-        event: Event
-        filter: Filter
-        object: Object
+        submit: Filter
         query: Query
         start_date: Start Date
-        user:
-          access_locked: User access locked due to too many login attempts
-          create: User added
-          suspended: User suspended
-          unsuspended: User unsuspended
-          default_price_group_changed: User price group changed to %{price_group_rate}
-        user_role:
-          create: Role added
-          delete: Role removed
-        user_label: User

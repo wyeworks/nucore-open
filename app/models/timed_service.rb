@@ -14,4 +14,8 @@ class TimedService < Product
     true
   end
 
+  def time_unit
+    "mins"
+  end
+
 end

@@ -40,6 +40,8 @@ class TransactionsController < ApplicationController
     @recently_reviewed = current_user.administered_order_details.recently_reviewed.paginate(page: params[:page])
     order_details = current_user.administered_order_details.in_review
 
+    @export_enabled = true
+
     @search_form = TransactionSearch::SearchForm.new(params[:search])
     @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: true)
 
@@ -54,6 +56,10 @@ class TransactionsController < ApplicationController
       display?: proc { |order_detail| order_detail.can_dispute? },
       proc: proc { |order_detail| order_order_detail_path(order_detail.order, order_detail) },
     }
+    respond_to do |format|
+      format.html
+      format.csv { handle_csv_search }
+    end
   end
 
   def mark_as_reviewed
