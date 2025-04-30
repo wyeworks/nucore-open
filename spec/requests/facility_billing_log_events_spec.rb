@@ -1,0 +1,67 @@
+# frozen_string_literal: true
+
+require 'rails_helper'
+
+RSpec.describe "facility_billing_log_events", type: :request do
+  let(:some_user) { create(:user, first_name: "Socrates") }
+  let(:facility) { create(:setup_facility) }
+  let(:product) { create(:setup_service, facility:) }
+  let(:order) { create(:setup_order, product:) }
+  let(:order_detail) { order.order_details.first }
+  let(:global_billing_admin) { create(:user, :global_billing_administrator) }
+  let(:statement) { create(:statement, order_details: [order_detail]) }
+
+  describe "index" do
+    let(:email) do
+      double(
+        "Email",
+        to: "random@example.com",
+        subject: "Some Subject"
+      )
+    end
+
+    def get_index
+      get facility_billing_log_events_path(Facility.cross_facility)
+    end
+
+    before do
+      [
+        [some_user, :review_orders_email],
+        [statement, :statement_email],
+      ].each do |loggable, event_type|
+        LogEvent.log_email(
+          loggable,
+          event_type,
+          email
+        )
+      end
+    end
+
+    it "requires login" do
+      get_index
+
+      expect(response.location).to eq new_user_session_url
+    end
+
+    describe "as admin" do
+      before { login_as global_billing_admin }
+
+      it "returns ok" do
+        get_index
+
+        expect(response).to have_http_status(:ok)
+        expect(page).to have_content("Billing Log")
+      end
+
+      it "renders email events" do
+        get_index
+
+        expect(page).to have_content(email.to)
+        expect(page).to have_content(email.subject)
+        expect(page).to have_content(statement.to_log_s)
+        expect(page).to have_content(some_user.first_name)
+      end
+    end
+  end
+
+end

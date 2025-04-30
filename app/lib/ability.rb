@@ -28,6 +28,8 @@ class Ability
       facility_administrator_abilities(user, resource, controller)
       facility_director_abilities(user, resource, controller)
       account_manager_abilities(user, resource)
+      cannot :mark_unrecoverable, OrderDetail
+
       global_billing_administrator_abilities(user, resource)
 
       account_administrator_abilities(user, resource, controller)
@@ -124,6 +126,7 @@ class Ability
   def global_billing_administrator_abilities(user, resource)
     return unless user.global_billing_administrator?
 
+    can :mark_unrecoverable, OrderDetail
     can :manage, [Account, Journal, OrderDetail]
     can :manage, Statement if resource.is_a?(Facility)
     can [:send_receipt, :show], Order

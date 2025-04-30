@@ -1,0 +1,10 @@
+= content_for :h1 do
+  = current_facility
+
+= content_for :h2 do
+  = text("pages.billing_log_event")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_billing", sidenav_tab: "billing_log"
+
+= render "billing_log_events/table"

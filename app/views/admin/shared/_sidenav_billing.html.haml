@@ -28,3 +28,8 @@
       = tab text("reconcile", model: account_type.constantize.model_name.human(count: 2)),
         [route_name.to_sym, FacilityAccount], (sidenav_tab == route_name)
   = render_view_hook("custom_reconcilable_account_types", sidenav_tab: sidenav_tab)
+
+  - billing_log_events_ff = SettingsHelper.feature_on?(:billing_log_events)
+  - if billing_log_events_ff && current_facility.cross_facility? && can?(:manage_billing, current_facility)
+    %li.divider
+    = tab text("billing_log_event"), facility_billing_log_events_path(current_facility), (sidenav_tab == "billing_log")

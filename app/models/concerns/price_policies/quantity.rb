@@ -39,6 +39,10 @@ module PricePolicies
       unit_cost - unit_subsidy
     end
 
+    def estimate_cost_from_estimate_detail(estimate_detail)
+      unit_cost * estimate_detail.quantity
+    end
+
     private
 
     def rate_field

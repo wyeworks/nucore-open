@@ -6,6 +6,10 @@ RSpec.describe "Creating an estimate", :js do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let!(:user) { create(:user) }
+  let!(:product) { create(:setup_item, facility:) }
+  let!(:price_policy) { create(:item_price_policy, product:, price_group: user.price_groups.first) }
+  let!(:instrument) { create(:setup_instrument, facility:) }
+  let!(:instrument_price_policy) { create(:instrument_price_policy, product: instrument, price_group: user.price_groups.first) }
 
   before { login_as director }
 
@@ -26,13 +30,22 @@ RSpec.describe "Creating an estimate", :js do
     expect(page).to have_content("No results found")
 
     page.execute_script("$('#estimate_user_id_chosen').trigger('mousedown')")
-    page.execute_script("$('.chosen-search input').val('#{user.first_name}').trigger('input')")
+    page.execute_script("$('#estimate_user_id_chosen .chosen-search input').val('#{user.first_name}').trigger('input')")
 
     wait_for_ajax
 
     # Make sure calendar is not open
     find("#estimate_user_id_chosen").click
     select_from_chosen user.full_name, from: "User"
+
+    expect(page).to have_content "Add Products to Estimate"
+    select_from_chosen product.name, from: "Product"
+    click_button "Add Product to Estimate"
+    expect(page).to have_content "Remove"
+
+    select_from_chosen instrument.name, from: "Product"
+    fill_in "Duration", with: "1:30"
+    click_button "Add Product to Estimate"
 
     click_button "Add Estimate"
 
@@ -42,5 +55,9 @@ RSpec.describe "Creating an estimate", :js do
     expect(page).to have_content 1.month.from_now.strftime("%m/%d/%Y")
     expect(page).to have_content director.full_name
     expect(page).to have_content user.full_name
+    expect(page).to have_content product.name
+    expect(page).to have_content ActionController::Base.helpers.number_to_currency(price_policy.unit_cost)
+    expect(page).to have_content instrument.name
+    expect(page).to have_content ActionController::Base.helpers.number_to_currency(instrument_price_policy.usage_rate * 90) # 1.5 hours
   end
 end

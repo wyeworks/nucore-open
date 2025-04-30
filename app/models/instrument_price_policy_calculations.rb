@@ -52,6 +52,10 @@ module InstrumentPricePolicyCalculations
     end
   end
 
+  def estimate_cost_from_estimate_detail(estimate_detail)
+    calculate_for_estimated_time(estimate_detail.duration)
+  end
+
   private
 
   # CHARGE_FOR[:reservation] uses reserve start and end time for calculation
@@ -77,6 +81,10 @@ module InstrumentPricePolicyCalculations
 
   def calculate_for_time(start_at, end_at)
     PricePolicies::TimeBasedPriceCalculator.new(self).calculate(start_at, end_at)
+  end
+
+  def calculate_for_estimated_time(duration)
+    PricePolicies::TimeBasedPriceCalculator.new(self).calculate(nil, nil, duration)
   end
 
 end

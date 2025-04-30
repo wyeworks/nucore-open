@@ -179,69 +179,109 @@ RSpec.describe "Account Reconciliation", :js do
     context "marking as unrecoverable" do
       let(:order_detail1) { order_detail }
       let(:order_detail2) { orders.last.order_details.first }
-      let(:admin) { create(:user, :administrator) }
 
-      before do
-        login_as admin
+      shared_examples "unrecoverable disallowed user" do
+        before { login_as user }
 
-        visit purchase_orders_facility_accounts_path(facility)
-        click_link "Reconcile Purchase Orders"
+        it "does not render unrecoverable option" do
+          visit purchase_orders_facility_accounts_path(facility)
 
-        select "Unrecoverable", from: "order_status"
+          expect(page).to have_select(
+            "order_status",
+            options: ["Reconciled"]
+          )
+        end
       end
 
-      it "allows to add unrecoverable_note individually" do
-        check "order_detail_#{order_detail1.id}_reconciled"
-        fill_in "order_detail_#{order_detail1.id}_unrecoverable_note", with: "Unrecoverable note 1"
+      context "as facility billing administrator" do
+        let(:user) do
+          create(:user, :facility_billing_administrator, facility:)
+        end
 
-        check "order_detail_#{order_detail2.id}_reconciled"
-        fill_in "order_detail_#{order_detail2.id}_unrecoverable_note", with: "Unrecoverable note 2"
-
-        click_button "Update Orders", match: :first
-
-        expect(page).to have_content("2 payments successfully updated")
-
-        expect(order_detail1.reload).to be_unrecoverable
-        expect(order_detail2.reload).to be_unrecoverable
-
-        expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note 1"
-        expect(order_detail2.unrecoverable_note).to eq "Unrecoverable note 2"
+        include_examples "unrecoverable disallowed user"
       end
 
-      it "allows to add a unrecoverable_note in bulk" do
-        check "Use Bulk Note"
-        check "order_detail_#{order_detail1.id}_reconciled"
-        check "order_detail_#{order_detail2.id}_reconciled"
+      context "as facility director" do
+        let(:user) do
+          create(:user, :facility_director, facility:)
+        end
 
-        fill_in "Bulk Note", with: "Unrecoverable note"
-
-        click_button "Update Orders", match: :first
-
-        expect(page).to have_content("2 payments successfully updated")
-
-        expect(order_detail1.reload).to be_unrecoverable
-        expect(order_detail2.reload).to be_unrecoverable
-
-        expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note"
-        expect(order_detail2.unrecoverable_note).to eq "Unrecoverable note"
+        include_examples "unrecoverable disallowed user"
       end
 
-      it "clears reconciled_note if then set as unrecoverable" do
-        select "Reconciled", from: "order_status"
+      context "as facility administrator" do
+        let(:user) do
+          create(:user, :facility_administrator, facility:)
+        end
 
-        check "order_detail_#{order_detail1.id}_reconciled"
-        fill_in "order_detail_#{order_detail1.id}_reconciled_note", with: "Reconciled note"
+        include_examples "unrecoverable disallowed user"
+      end
 
-        select "Unrecoverable", from: "order_status"
-        fill_in "order_detail_#{order_detail1.id}_unrecoverable_note", with: "Unrecoverable note"
+      context "as administrator" do
+        let(:admin) { create(:user, :administrator) }
 
-        click_button "Update Orders", match: :first
+        before do
+          login_as admin
 
-        expect(page).to have_content("1 payment successfully updated")
+          visit purchase_orders_facility_accounts_path(facility)
+          click_link "Reconcile Purchase Orders"
 
-        expect(order_detail1.reload).to be_unrecoverable
-        expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note"
-        expect(order_detail1.reconciled_note).to be_blank
+          select "Unrecoverable", from: "order_status"
+        end
+
+        it "allows to add unrecoverable_note individually" do
+          check "order_detail_#{order_detail1.id}_reconciled"
+          fill_in "order_detail_#{order_detail1.id}_unrecoverable_note", with: "Unrecoverable note 1"
+
+          check "order_detail_#{order_detail2.id}_reconciled"
+          fill_in "order_detail_#{order_detail2.id}_unrecoverable_note", with: "Unrecoverable note 2"
+
+          click_button "Update Orders", match: :first
+
+          expect(page).to have_content("2 payments successfully updated")
+
+          expect(order_detail1.reload).to be_unrecoverable
+          expect(order_detail2.reload).to be_unrecoverable
+
+          expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note 1"
+          expect(order_detail2.unrecoverable_note).to eq "Unrecoverable note 2"
+        end
+
+        it "allows to add a unrecoverable_note in bulk" do
+          check "Use Bulk Note"
+          check "order_detail_#{order_detail1.id}_reconciled"
+          check "order_detail_#{order_detail2.id}_reconciled"
+
+          fill_in "Bulk Note", with: "Unrecoverable note"
+
+          click_button "Update Orders", match: :first
+
+          expect(page).to have_content("2 payments successfully updated")
+
+          expect(order_detail1.reload).to be_unrecoverable
+          expect(order_detail2.reload).to be_unrecoverable
+
+          expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note"
+          expect(order_detail2.unrecoverable_note).to eq "Unrecoverable note"
+        end
+
+        it "clears reconciled_note if then set as unrecoverable" do
+          select "Reconciled", from: "order_status"
+
+          check "order_detail_#{order_detail1.id}_reconciled"
+          fill_in "order_detail_#{order_detail1.id}_reconciled_note", with: "Reconciled note"
+
+          select "Unrecoverable", from: "order_status"
+          fill_in "order_detail_#{order_detail1.id}_unrecoverable_note", with: "Unrecoverable note"
+
+          click_button "Update Orders", match: :first
+
+          expect(page).to have_content("1 payment successfully updated")
+
+          expect(order_detail1.reload).to be_unrecoverable
+          expect(order_detail1.unrecoverable_note).to eq "Unrecoverable note"
+          expect(order_detail1.reconciled_note).to be_blank
+        end
       end
     end
   end
