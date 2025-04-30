@@ -135,7 +135,7 @@ GEM
       sshkit (>= 1.6.1, != 1.7.0)
     amazing_print (1.7.2)
     ast (2.4.3)
-    axe-core-api (4.10.2)
+    axe-core-api (4.10.3)
       dumb_delegator
       ostruct
       virtus
