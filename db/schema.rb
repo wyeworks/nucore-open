@@ -51,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_28_161852) do
     t.string "affiliate_other"
     t.string "outside_contact_info"
     t.string "ar_number"
+    t.string "open_contract"
     t.index ["affiliate_id"], name: "index_accounts_on_affiliate_id"
   end
 
