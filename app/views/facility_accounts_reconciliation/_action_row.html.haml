@@ -8,7 +8,7 @@
       = label_tag :order_status, t("facility_accounts_reconciliation.index.order_status"), class: "control-label"
       .controls
         = select_tag :order_status,
-          options_for_select([["Reconciled", "reconciled"], ["Unrecoverable", "unrecoverable"]]),
+          options_for_select(reconcile_statuses),
           class: "js--orderStatusSelect"
 - if local_assigns[:date]
   .js--bulkReconcileFields

@@ -125,6 +125,10 @@ class Instrument < Product
     !(duration_pricing_mode? || daily_booking?)
   end
 
+  def time_unit
+    daily_booking? ? "days" : "mins"
+  end
+
   private
 
   def minimum_reservation_is_multiple_of_interval

@@ -336,6 +336,7 @@ Rails.application.routes.draw do
     post "movable_transactions/reassign_chart_strings", to: "facilities#reassign_chart_strings"
     post "movable_transactions/confirm", to: "facilities#confirm_transactions"
     post "movable_transactions/move", to: "facilities#move_transactions"
+    get :billing_log_events, to: "facility_billing_log_events#index"
 
     resources :statements, controller: "facility_statements", only: [:index, :new, :show, :create] do
       post "resend_emails", on: :member
@@ -363,6 +364,7 @@ Rails.application.routes.draw do
   end
   resources :holidays, except: :show
   resources :log_events, only: :index
+  resources :billing_log_events, only: :index
   resources :research_safety_certificates, except: :show
 
   # order process

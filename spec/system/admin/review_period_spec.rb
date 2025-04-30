@@ -5,11 +5,11 @@ require "rails_helper"
 RSpec.describe "Review period - Sending notifications and marking as reviewed", billing_review_period: 7.days do
 
   let(:facility) { create(:setup_facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
-  let(:item) { create(:setup_item, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
+  let(:item) { create(:setup_item, facility:) }
   let(:accounts) { create_list(:setup_account, 2) }
   let(:orders) do
-    accounts.map { |account| create(:complete_order, product: item, account: account) }
+    accounts.map { |account| create(:complete_order, product: item, account:) }
   end
   let!(:order_details) { orders.flat_map(&:order_details) }
 
@@ -146,6 +146,27 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
 
       expect(page).to have_content("OD ##{order_details.first.order_number}")
       expect(page).to have_content("OD ##{order_details.second.order_number}")
+    end
+  end
+
+  describe(
+    "as global billing administrator",
+    feature_setting: { global_billing_administrator: true },
+  ) do
+    let(:user) { create(:user, :global_billing_administrator) }
+    let(:order_detail) { order_details.first }
+
+    before { login_as user }
+
+    it "can send notifications" do
+      visit facility_notifications_path(Facility.cross_facility)
+
+      check("order_detail_ids[]", option: order_detail.id)
+
+      click_button "Send Notifications"
+
+      expect(page).to have_content("Notifications sent successfully")
+      expect(ActionMailer::Base.deliveries.count).to eq 1
     end
   end
 
