@@ -5,7 +5,7 @@ FactoryBot.define do
   # that we still only use six characters so the format is valid.
   # This is shared with FacilityAccount so that we don't have conflicting
   # Api records in the database coming from two different factories..
-  sequence(:speed_type_account_number) { |n| format('%06d', (n % 1_000_000)) }
+  sequence(:speed_type_account_number) { |n| format('%06d', n % 1_000_000) }
 
   factory :speed_type_account, parent: :account, class: UmassCorum::SpeedTypeAccount do
     type { "UmassCorum::SpeedTypeAccount" }
