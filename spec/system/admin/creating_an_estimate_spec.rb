@@ -2,12 +2,15 @@
 
 require "rails_helper"
 
-RSpec.describe "Creating an estimate", :js do
+RSpec.describe(
+  "Creating an estimate", :js,
+  feature_setting: { user_based_price_groups: true },
+) do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let!(:user) { create(:user) }
   let!(:product) { create(:setup_item, facility:) }
-  let(:price_group) { PriceGroup.globals.first }
+  let(:price_group) { user.price_groups.first }
   let!(:price_policy) { create(:item_price_policy, product:, price_group:) }
   let!(:instrument) { create(:setup_instrument, facility:) }
   let!(:instrument_price_policy) { create(:instrument_price_policy, product: instrument, price_group:) }
