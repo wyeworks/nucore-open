@@ -690,6 +690,9 @@ en:
       notice: "You have no completed orders for any facility with this payment source."
       th:
         total: "Unreconciled Total"
+    download_selected: Download Selected
+    no_statements_selected: No statements were selected for download.
+    downloading: Downloading statements...
     list:
       head:
         h1: "Payment Source Transactions"

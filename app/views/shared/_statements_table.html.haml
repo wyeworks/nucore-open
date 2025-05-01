@@ -2,6 +2,13 @@
 - if @statements.empty?
   %p.notice= text("no_statements")
 - else
+  - form_url = @account ? download_selected_account_statements_path(@account, format: :js) : download_selected_facility_statements_path(current_facility, format: :js)
+  = form_tag form_url, method: :post, id: "statements-form", remote: true do
+    .pull-right.mb-3
+      = submit_tag t("statements.download_selected"), class: "btn btn-primary js--download-selected-statements", disabled: true
+      %span.js--download-spinner.ml-2{style: "display: none;"}
+        %i.fa.fa-spinner.fa-spin
+        %span.ml-1= t("statements.downloading")
   %table.table.table-striped.table-hover
     %thead
       %tr
@@ -20,6 +27,9 @@
     %tbody
       - StatementPresenter.wrap(@statements).each do |s|
         %tr.statement
+          - if !s.canceled_at
+            %td.centered
+              = check_box_tag "statement_ids[]", s.id, false, class: "js--statement-checkbox", data: { invoice_number: s.invoice_number }
           %td.centered
             = "##{s.invoice_number}"
             - unless s.canceled_at
@@ -83,3 +93,42 @@
 
 
   = will_paginate(@statements)
+
+  :javascript
+    document.addEventListener('DOMContentLoaded', function() {
+      const checkboxes = document.querySelectorAll('.js--statement-checkbox');
+      const selectAllCheckbox = document.querySelector('.js--select-all-statements');
+      const downloadButton = document.querySelector('.js--download-selected-statements');
+      const downloadSpinner = document.querySelector('.js--download-spinner');
+      const form = document.getElementById('statements-form');
+
+      // Function to update button state
+      function updateButtonState() {
+        const checkedCount = document.querySelectorAll('.js--statement-checkbox:checked').length;
+        downloadButton.disabled = checkedCount === 0;
+      }
+
+      // Add event listener to each checkbox
+      checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', updateButtonState);
+      });
+
+      // Add event listener to select all checkbox
+      if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+          checkboxes.forEach(function(checkbox) {
+            checkbox.checked = selectAllCheckbox.checked;
+          });
+          updateButtonState();
+        });
+      }
+
+      // Show spinner when form is submitted
+      if (form) {
+        form.addEventListener('submit', function() {
+          downloadButton.disabled = true;
+          downloadSpinner.style.display = 'inline-block';
+        });
+      }
+    });
+

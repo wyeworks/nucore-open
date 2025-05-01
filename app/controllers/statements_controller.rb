@@ -33,7 +33,52 @@ class StatementsController < ApplicationController
     end
   end
 
+  # POST /accounts/:account_id/statements/download_selected
+  def download_selected
+    if params[:statement_ids].blank?
+      flash[:error] = I18n.t("statements.no_statements_selected")
+      redirect_to account_statements_path(@account)
+      return
+    end
+
+    statement_ids = params[:statement_ids]
+    @statements = @account.statements.where(id: statement_ids)
+
+    pdfs = StatementPdfDownloader.new(@statements).download_all
+
+    respond_to do |format|
+      format.js do
+        render js: generate_download_js(pdfs)
+      end
+    end
+  end
+
   private
+
+  def generate_download_js(pdfs)
+    js_code = ""
+    pdfs.each_with_index do |pdf, index|
+      # Create a Base64 encoded data URL for each PDF
+      data_url = "data:application/pdf;base64,#{Base64.strict_encode64(pdf[:data])}"
+
+      # Add JavaScript to create and click a download link for each PDF
+      js_code += <<-JS
+        (function(index) {
+          setTimeout(function() {
+            var link = document.createElement('a');
+            link.href = '#{data_url}';
+            link.download = '#{pdf[:filename]}';
+            link.style.display = 'none';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }, index * 500); // Delay each download by 500ms
+        })(#{index});
+      JS
+    end
+
+    js_code
+  end
 
   def ability_resource
     @account
