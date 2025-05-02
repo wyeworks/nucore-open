@@ -43,42 +43,38 @@ class StatementsController < ApplicationController
 
     statement_ids = params[:statement_ids]
     @statements = @account.statements.where(id: statement_ids)
+    @pdfs = StatementPdfDownloader.new(@statements).download_all
 
-    pdfs = StatementPdfDownloader.new(@statements).download_all
+    # Direct download for single PDF
+    if @pdfs.length == 1 && request.format != :js
+      send_data @pdfs.first[:data],
+                filename: @pdfs.first[:filename],
+                type: 'application/pdf',
+                disposition: 'attachment'
+      return
+    end
 
     respond_to do |format|
-      format.js do
-        render js: generate_download_js(pdfs)
+      format.js # Renders download_selected.js.erb
+
+      format.html do
+        flash[:notice] = I18n.t("statements.downloading_multiple", count: @pdfs.length)
+        redirect_back(fallback_location: account_statements_path(@account))
+      end
+
+      format.json do
+        simplified_pdfs = @pdfs.map do |pdf|
+          {
+            filename: pdf[:filename],
+            data: Base64.strict_encode64(pdf[:data])
+          }
+        end
+        render json: { pdfs: simplified_pdfs }
       end
     end
   end
 
   private
-
-  def generate_download_js(pdfs)
-    js_code = ""
-    pdfs.each_with_index do |pdf, index|
-      # Create a Base64 encoded data URL for each PDF
-      data_url = "data:application/pdf;base64,#{Base64.strict_encode64(pdf[:data])}"
-
-      # Add JavaScript to create and click a download link for each PDF
-      js_code += <<-JS
-        (function(index) {
-          setTimeout(function() {
-            var link = document.createElement('a');
-            link.href = '#{data_url}';
-            link.download = '#{pdf[:filename]}';
-            link.style.display = 'none';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-          }, index * 500); // Delay each download by 500ms
-        })(#{index});
-      JS
-    end
-
-    js_code
-  end
 
   def ability_resource
     @account

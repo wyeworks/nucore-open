@@ -47,6 +47,14 @@ en:
   statement_downcase: statement
   statements_downcase: statements
   statemented_downcase: statemented
+  
+  statements:
+    download_selected: Download Selected
+    no_statements_selected: No statements were selected for download.
+    downloading: Downloading statements...
+    downloading_multiple: "Downloading %{count} statements..."
+    pdf:
+      download: Download
 
   admin:
     shared:

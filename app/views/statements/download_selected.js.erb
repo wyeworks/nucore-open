@@ -1,3 +1,52 @@
-// Hide the spinner after downloads start
+<%# Create container for PDF data %>
+if (!document.getElementById('pdf-data-container')) {
+  const container = document.createElement('div');
+  container.id = 'pdf-data-container';
+  container.style.display = 'none';
+  document.body.appendChild(container);
+} else {
+  document.getElementById('pdf-data-container').innerHTML = '';
+}
+
+<% if @pdfs && @pdfs.any? %>
+  <%# Add each PDF to the container %>
+  <% @pdfs.each_with_index do |pdf, index| %>
+    const dataDiv<%= index %> = document.createElement('div');
+    dataDiv<%= index %>.setAttribute('data-filename', '<%= pdf[:filename] %>');
+    dataDiv<%= index %>.setAttribute('data-index', '<%= index %>');
+    dataDiv<%= index %>.className = 'pdf-data';
+    dataDiv<%= index %>.textContent = `<%= Base64.strict_encode64(pdf[:data]) %>`;
+    document.getElementById('pdf-data-container').appendChild(dataDiv<%= index %>);
+  <% end %>
+  
+  <%# Process downloads with delay %>
+  function processDownloads() {
+    const elements = document.querySelectorAll('#pdf-data-container .pdf-data');
+    
+    elements.forEach(function(element, index) {
+      setTimeout(function() {
+        try {
+          const filename = element.getAttribute('data-filename');
+          const base64Data = element.textContent;
+          
+          const dataUrl = "data:application/pdf;base64," + base64Data;
+          const link = document.createElement('a');
+          link.href = dataUrl;
+          link.download = filename;
+          link.style.display = 'none';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        } catch(e) {
+          console.error("Error downloading file at index " + index, e);
+        }
+      }, index * 1000); // 1 second delay between each download
+    });
+  }
+  
+  processDownloads();
+<% end %>
+
+<%# Reset UI elements %>
 document.querySelector('.js--download-spinner').style.display = 'none';
 document.querySelector('.js--download-selected-statements').disabled = false;
