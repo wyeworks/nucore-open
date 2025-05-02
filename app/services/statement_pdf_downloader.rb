@@ -27,10 +27,10 @@ class StatementPdfDownloader
 
     # Direct download for single PDF
     if pdfs.length == 1 && controller.request.format != :js
-      controller.send_data pdfs.first[:data], 
-                filename: pdfs.first[:filename], 
-                type: 'application/pdf', 
-                disposition: 'attachment'
+      controller.send_data pdfs.first[:data],
+                           filename: pdfs.first[:filename],
+                           type: 'application/pdf',
+                           disposition: 'attachment'
       return true
     end
 
@@ -42,7 +42,7 @@ class StatementPdfDownloader
         controller.flash[:notice] = I18n.t("statements.downloading_multiple", count: pdfs.length)
         controller.redirect_back(fallback_location: fallback_path)
       end
-      
+
       format.json do
         simplified_pdfs = pdfs.map do |pdf|
           {

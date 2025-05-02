@@ -39,7 +39,7 @@ class StatementsController < ApplicationController
       redirect_to account_statements_path(@account)
       return
     end
-    
+
     if params[:statement_ids].blank?
       flash[:error] = I18n.t("statements.no_statements_selected")
       redirect_to account_statements_path(@account)
@@ -48,9 +48,9 @@ class StatementsController < ApplicationController
 
     statement_ids = params[:statement_ids]
     statements = @account.statements.where(id: statement_ids)
-    
+
     StatementPdfDownloader.new(statements).handle_download_response(
-      self, 
+      self,
       account_statements_path(@account)
     )
   end
