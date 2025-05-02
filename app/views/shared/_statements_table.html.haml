@@ -2,18 +2,20 @@
 - if @statements.empty?
   %p.notice= text("no_statements")
 - else
-  - form_url = @account ? download_selected_account_statements_path(@account) : download_selected_facility_statements_path(current_facility)
-  = form_tag form_url, method: :post, id: "statements-form" do
-    .pull-right.mb-3
-      = submit_tag t("statements.download_selected"), class: "btn btn-primary js--download-selected-statements", disabled: true
-      %span.js--download-spinner.ml-2{style: "display: none;"}
-        %i.fa.fa-spinner.fa-spin
-        %span.ml-1= t("statements.downloading")
+  - if SettingsHelper.feature_on?(:multiple_statements_download)
+    - form_url = @account ? download_selected_account_statements_path(@account) : download_selected_facility_statements_path(current_facility)
+    = form_tag form_url, method: :post, id: "statements-form" do
+      .pull-right.mb-3
+        = submit_tag t("statements.download_selected"), class: "btn btn-primary js--download-selected-statements", disabled: true
+        %span.js--download-spinner.ml-2{style: "display: none;"}
+          %i.fa.fa-spinner.fa-spin
+          %span.ml-1= t("statements.downloading")
   %table.table.table-striped.table-hover
     %thead
       %tr
-        %th
-          %input{type: "checkbox", class: "js--select-all-statements"}
+        - if SettingsHelper.feature_on?(:multiple_statements_download)
+          %th
+            %input{type: "checkbox", class: "js--select-all-statements"}
         %th= Statement.human_attribute_name(:invoice_number)
         %th= Statement.human_attribute_name(:created_at)
         %th= Statement.human_attribute_name(:account_admins)
@@ -29,9 +31,10 @@
     %tbody
       - StatementPresenter.wrap(@statements).each do |s|
         %tr.statement
-          %td.centered
-            - if !s.canceled_at
-              = check_box_tag "statement_ids[]", s.id, false, class: "js--statement-checkbox", data: { invoice_number: s.invoice_number }
+          - if SettingsHelper.feature_on?(:multiple_statements_download)
+            %td.centered
+              - if !s.canceled_at
+                = check_box_tag "statement_ids[]", s.id, false, class: "js--statement-checkbox", data: { invoice_number: s.invoice_number }
           %td.centered
             = "##{s.invoice_number}"
             - unless s.canceled_at
@@ -96,142 +99,161 @@
 
   = will_paginate(@statements)
 
-  :javascript
-    document.addEventListener('DOMContentLoaded', function() {
-      const checkboxes = document.querySelectorAll('.js--statement-checkbox');
-      const selectAllCheckbox = document.querySelector('.js--select-all-statements');
-      const downloadButton = document.querySelector('.js--download-selected-statements');
-      const downloadSpinner = document.querySelector('.js--download-spinner');
-      const form = document.getElementById('statements-form');
+  - if SettingsHelper.feature_on?(:multiple_statements_download)
+    = javascript_tag do
+      :plain
+        document.addEventListener('DOMContentLoaded', function() {
+          var checkboxes = document.querySelectorAll('.js--statement-checkbox');
+          var selectAllCheckbox = document.querySelector('.js--select-all-statements');
+          var downloadButton = document.querySelector('.js--download-selected-statements');
+          var downloadSpinner = document.querySelector('.js--download-spinner');
+          var form = document.getElementById('statements-form');
 
-      // Function to update button state
-      function updateButtonState() {
-        const checkedCount = document.querySelectorAll('.js--statement-checkbox:checked').length;
-        downloadButton.disabled = checkedCount === 0;
-      }
+          // Function to update button state
+          function updateButtonState() {
+            var checkedCount = document.querySelectorAll('.js--statement-checkbox:checked').length;
+            if(downloadButton) {
+              downloadButton.disabled = checkedCount === 0;
+            }
+          }
 
-      // Add event listener to each checkbox
-      checkboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', updateButtonState);
-      });
+          // Add event listener to each checkbox
+          if(checkboxes && checkboxes.length > 0) {
+            checkboxes.forEach(function(checkbox) {
+              checkbox.addEventListener('change', updateButtonState);
+            });
+          }
 
-      // Add event listener to select all checkbox
-      if (selectAllCheckbox) {
-        selectAllCheckbox.addEventListener('change', function() {
-          checkboxes.forEach(function(checkbox) {
-            checkbox.checked = selectAllCheckbox.checked;
-          });
+          // Add event listener to select all checkbox
+          if(selectAllCheckbox) {
+            selectAllCheckbox.addEventListener('change', function() {
+              checkboxes.forEach(function(checkbox) {
+                checkbox.checked = selectAllCheckbox.checked;
+              });
+              updateButtonState();
+            });
+          }
+
+          // Form submission handler
+          if(form) {
+            form.addEventListener('submit', function(event) {
+              var selectedIds = Array.from(document.querySelectorAll('.js--statement-checkbox:checked'))
+                .map(function(cb) { return cb.value; });
+              
+              if(selectedIds.length === 0) {
+                event.preventDefault();
+                alert("Please select at least one statement to download.");
+                return;
+              }
+              
+              // Show spinner
+              downloadButton.disabled = true;
+              downloadSpinner.style.display = 'inline-block';
+              
+              // For single statement, use a different approach
+              if(selectedIds.length === 1) {
+                // Use fetch directly with no return type specified
+                fetch(form.action, {
+                  method: 'POST',
+                  body: formData,
+                  headers: {
+                    'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                  }
+                })
+                .then(function(response) {
+                  if(response.ok) {
+                    // For a PDF response, create a blob and download it
+                    response.blob().then(function(blob) {
+                      var url = window.URL.createObjectURL(blob);
+                      var a = document.createElement('a');
+                      a.href = url;
+                      // Try to get filename from response headers or use default
+                      var filename = "statement.pdf";
+                      var contentDisposition = response.headers.get('content-disposition');
+                      if (contentDisposition) {
+                        var filenameMatch = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/.exec(contentDisposition);
+                        if (filenameMatch && filenameMatch[1]) {
+                          filename = filenameMatch[1].replace(/['"]/g, '');
+                        }
+                      }
+                      a.download = filename;
+                      a.style.display = 'none';
+                      document.body.appendChild(a);
+                      a.click();
+                      window.URL.revokeObjectURL(url);
+                      document.body.removeChild(a);
+                      
+                      // Reset UI
+                      downloadButton.disabled = false;
+                      downloadSpinner.style.display = 'none';
+                    });
+                  } else {
+                    throw new Error('Failed to download PDF');
+                  }
+                })
+                .catch(function(error) {
+                  console.error('Error downloading statement:', error);
+                  alert('Error downloading the statement. Please try again.');
+                  downloadButton.disabled = false;
+                  downloadSpinner.style.display = 'none';
+                });
+                
+                event.preventDefault();
+                return;
+              }
+              
+              // For multiple statements, handle with AJAX
+              event.preventDefault();
+              
+              // Build form data
+              var formData = new FormData();
+              selectedIds.forEach(function(id) {
+                formData.append('statement_ids[]', id);
+              });
+              
+              // Send AJAX request for JSON response
+              fetch(form.action + '.json', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                  'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
+                }
+              })
+              .then(function(response) {
+                if(!response.ok) throw new Error('Network response was not ok');
+                return response.json();
+              })
+              .then(function(data) {
+                if(data.pdfs && data.pdfs.length > 0) {
+                  data.pdfs.forEach(function(pdf, index) {
+                    setTimeout(function() {
+                      var dataUrl = 'data:application/pdf;base64,' + pdf.data;
+                      var link = document.createElement('a');
+                      link.href = dataUrl;
+                      link.download = pdf.filename;
+                      link.style.display = 'none';
+                      document.body.appendChild(link);
+                      link.click();
+                      document.body.removeChild(link);
+                    }, index * 1000);
+                  });
+                }
+                
+                // Reset UI
+                downloadButton.disabled = false;
+                downloadSpinner.style.display = 'none';
+              })
+              .catch(function(error) {
+                console.error('Error downloading statements:', error);
+                alert('There was an error downloading the statements. Please try again.');
+                downloadButton.disabled = false;
+                downloadSpinner.style.display = 'none';
+              });
+            });
+          }
+          
+          // Initialize button state on page load
           updateButtonState();
         });
-      }
-
-      // Form submission handler
-      if (form) {
-        form.addEventListener('submit', function(event) {
-          const selectedIds = Array.from(document.querySelectorAll('.js--statement-checkbox:checked'))
-            .map(cb => cb.value);
-          
-          if (selectedIds.length === 0) {
-            event.preventDefault();
-            alert("Please select at least one statement to download.");
-            return;
-          }
-          
-          // Show spinner
-          downloadButton.disabled = true;
-          downloadSpinner.style.display = 'inline-block';
-          
-          // Prevent default form submission and handle it with AJAX
-          event.preventDefault();
-          
-          // Build form data
-          const formData = new FormData();
-          selectedIds.forEach(id => formData.append('statement_ids[]', id));
-          
-          // For one statement, use iframe approach for proper file download
-          if (selectedIds.length === 1) {
-            // Create a hidden iframe for downloading
-            const iframe = document.createElement('iframe');
-            iframe.style.display = 'none';
-            document.body.appendChild(iframe);
-            
-            // Create a form inside the iframe
-            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
-            const iframeForm = iframeDoc.createElement('form');
-            iframeForm.method = 'POST';
-            iframeForm.action = form.action;
-            
-            // Add CSRF token
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
-            const csrfField = iframeDoc.createElement('input');
-            csrfField.type = 'hidden';
-            csrfField.name = 'authenticity_token';
-            csrfField.value = csrfToken;
-            iframeForm.appendChild(csrfField);
-            
-            // Add statement ID
-            const idField = iframeDoc.createElement('input');
-            idField.type = 'hidden';
-            idField.name = 'statement_ids[]';
-            idField.value = selectedIds[0];
-            iframeForm.appendChild(idField);
-            
-            // Submit the form
-            iframeDoc.body.appendChild(iframeForm);
-            iframeForm.submit();
-            
-            // Reset UI after appropriate delay
-            setTimeout(() => {
-              downloadButton.disabled = false;
-              downloadSpinner.style.display = 'none';
-              setTimeout(() => document.body.removeChild(iframe), 5000);
-            }, 2000);
-            
-            return;
-          }
-          
-          // For multiple statements, use JSON approach
-          fetch(form.action + '.json', {
-            method: 'POST',
-            body: formData,
-            headers: {
-              'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content
-            }
-          })
-          .then(response => {
-            if (!response.ok) throw new Error(response.statusText);
-            return response.json();
-          })
-          .then(data => {
-            if (data.pdfs && data.pdfs.length > 0) {
-              data.pdfs.forEach((pdf, index) => {
-                setTimeout(() => {
-                  const dataUrl = 'data:application/pdf;base64,' + pdf.data;
-                  const link = document.createElement('a');
-                  link.href = dataUrl;
-                  link.download = pdf.filename;
-                  link.style.display = 'none';
-                  document.body.appendChild(link);
-                  link.click();
-                  document.body.removeChild(link);
-                }, index * 1000);
-              });
-            }
-            
-            // Reset UI
-            downloadButton.disabled = false;
-            downloadSpinner.style.display = 'none';
-          })
-          .catch(error => {
-            console.error('Error downloading statements:', error);
-            alert('There was an error downloading the statements. Please try again.');
-            downloadButton.disabled = false;
-            downloadSpinner.style.display = 'none';
-          });
-        });
-      }
-      
-      // Initialize button state
-      updateButtonState();
-    });
+  
 

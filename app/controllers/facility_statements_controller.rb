@@ -106,6 +106,11 @@ class FacilityStatementsController < ApplicationController
 
   # POST /facilities/:facility_id/statements/download_selected
   def download_selected
+    unless SettingsHelper.feature_on?(:multiple_statements_download)
+      redirect_to facility_statements_path(@facility)
+      return
+    end
+    
     if params[:statement_ids].blank?
       flash[:error] = I18n.t("statements.no_statements_selected")
       redirect_to facility_statements_path(@facility)
@@ -113,36 +118,12 @@ class FacilityStatementsController < ApplicationController
     end
 
     statement_ids = params[:statement_ids]
-    @statements = Statement.where(id: statement_ids)
-    @pdfs = StatementPdfDownloader.new(@statements).download_all
-
-    # Direct download for single PDF
-    if @pdfs.length == 1 && request.format != :js
-      send_data @pdfs.first[:data],
-                filename: @pdfs.first[:filename],
-                type: 'application/pdf',
-                disposition: 'attachment'
-      return
-    end
-
-    respond_to do |format|
-      format.js { render template: "statements/download_selected" }
-
-      format.html do
-        flash[:notice] = I18n.t("statements.downloading_multiple", count: @pdfs.length)
-        redirect_back(fallback_location: facility_statements_path(@facility))
-      end
-
-      format.json do
-        simplified_pdfs = @pdfs.map do |pdf|
-          {
-            filename: pdf[:filename],
-            data: Base64.strict_encode64(pdf[:data])
-          }
-        end
-        render json: { pdfs: simplified_pdfs }
-      end
-    end
+    statements = Statement.where(id: statement_ids)
+    
+    StatementPdfDownloader.new(statements).handle_download_response(
+      self, 
+      facility_statements_path(@facility)
+    )
   end
 
   private

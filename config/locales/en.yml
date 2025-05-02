@@ -49,10 +49,6 @@ en:
   statemented_downcase: statemented
   
   statements:
-    download_selected: Download Selected
-    no_statements_selected: No statements were selected for download.
-    downloading: Downloading statements...
-    downloading_multiple: "Downloading %{count} statements..."
     pdf:
       download: Download
 
@@ -701,6 +697,7 @@ en:
     download_selected: Download Selected
     no_statements_selected: No statements were selected for download.
     downloading: Downloading statements...
+    downloading_multiple: "Downloading %{count} statements..."
     list:
       head:
         h1: "Payment Source Transactions"
