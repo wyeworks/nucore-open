@@ -5,8 +5,6 @@ class StatementPdfDownloader
     @statements = statements
   end
 
-  # Generate PDFs for all statements and return as array of hashes
-  # Each hash contains the filename and binary PDF data
   def download_all
     @statements.filter_map do |statement|
       statement_pdf = StatementPdfFactory.instance(statement, download: true)
@@ -21,11 +19,9 @@ class StatementPdfDownloader
     end
   end
 
-  # Handle controller response for downloading one or multiple statements
   def handle_download_response(controller, fallback_path)
     pdfs = download_all
 
-    # Direct download for single PDF
     if pdfs.length == 1 && controller.request.format != :js
       controller.send_data pdfs.first[:data],
                            filename: pdfs.first[:filename],
@@ -34,7 +30,6 @@ class StatementPdfDownloader
       return true
     end
 
-    # Store PDFs for template rendering
     controller.instance_variable_set(:@pdfs, pdfs)
 
     controller.respond_to do |format|

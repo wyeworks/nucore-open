@@ -696,7 +696,6 @@ en:
         total: "Unreconciled Total"
     download_selected: Download Selected
     no_statements_selected: No statements were selected for download.
-    downloading: Downloading statements...
     downloading_multiple: "Downloading %{count} statements..."
     list:
       head:
