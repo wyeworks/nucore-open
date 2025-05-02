@@ -56,7 +56,7 @@ gem "will_paginate"
 gem "dynamic_form"
 gem "ckeditor", "~> 5.1.3"
 gem "jquery-rails"
-gem "jquery-ui-rails", "~> 8.0"
+gem "jquery-ui-rails", "~> 6.0"
 gem "vuejs-rails", "~> 1.0.26" # 2.0 introduces breaking changes
 gem "clockpunch"
 gem "simple_form"
