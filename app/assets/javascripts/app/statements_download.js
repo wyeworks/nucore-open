@@ -4,6 +4,10 @@ document.addEventListener('DOMContentLoaded', function() {
   var downloadButton = document.querySelector('.js--download-selected-statements');
   var form = document.getElementById('statements-form');
 
+  if (!checkboxes || checkboxes.length === 0) {
+    return;
+  }
+
   function updateButtonState() {
     var checkedCount = document.querySelectorAll('.js--statement-checkbox:checked').length;
     if (downloadButton) {
