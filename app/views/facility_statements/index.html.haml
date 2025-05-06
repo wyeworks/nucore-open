@@ -22,7 +22,13 @@
       = hidden_field_tag :format, params[:format], disabled: true
       = f.submit t("shared.filter"), class: "btn float-left"
 
-- if @statements.any?
-  = link_to t("reports.account_transactions.export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
+.clearfix
+  - if @statements.any?
+    .pull-right.mb-3
+      - if SettingsHelper.feature_on?(:multiple_statements_download)
+        = submit_tag t("statements.download_selected"), form: "statements-form", class: "btn btn-primary js--download-selected-statements ml-2", disabled: true, style: "margin-left: 10px;"
+      = link_to t("reports.account_transactions.export"), url_for(format: :csv), class: "btn btn-secondary js--exportSearchResults", data: { form: ".search_form" }
+      
+
 = render partial: "shared/statements_table",
   locals: { show_cancel_button: true, show_reconcile_notes: true }

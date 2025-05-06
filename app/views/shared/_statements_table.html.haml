@@ -5,8 +5,9 @@
   - if SettingsHelper.feature_on?(:multiple_statements_download)
     - form_url = @account ? download_selected_account_statements_path(@account) : download_selected_facility_statements_path(current_facility)
     = form_tag form_url, method: :post, id: "statements-form" do
-      .pull-right.mb-3
-        = submit_tag t("statements.download_selected"), class: "btn btn-primary js--download-selected-statements", disabled: true
+      - if @account
+        .pull-right.mb-3
+          = submit_tag t("statements.download_selected"), class: "btn btn-primary js--download-selected-statements", disabled: true
   %table.table.table-striped.table-hover
     %thead
       %tr

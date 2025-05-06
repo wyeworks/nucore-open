@@ -21,15 +21,6 @@ class StatementPdfDownloader
 
   def handle_download_response(controller, fallback_path)
     pdfs = download_all
-
-    if pdfs.length == 1 && controller.request.format != :js
-      controller.send_data pdfs.first[:data],
-                           filename: pdfs.first[:filename],
-                           type: 'application/pdf',
-                           disposition: 'attachment'
-      return true
-    end
-
     controller.instance_variable_set(:@pdfs, pdfs)
 
     controller.respond_to do |format|
@@ -47,8 +38,13 @@ class StatementPdfDownloader
         end
         controller.render json: { pdfs: simplified_pdfs }
       end
-    end
 
-    true
+      format.pdf do
+        controller.send_data pdfs.first[:data],
+                            filename: pdfs.first[:filename],
+                            type: 'application/pdf',
+                            disposition: 'attachment'
+      end
+    end
   end
 end
