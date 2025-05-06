@@ -1,205 +1,71 @@
 $(function () {
-  let productCounter = 0;
   const addProductButton = document.getElementById("add_product_to_estimate");
-  const estimateDetailsContainer = document.getElementById(
-    "new_estimate_estimate_details"
-  );
-  const productsTable = document.getElementById("new_estimate_products_table");
 
-  if (!addProductButton || !estimateDetailsContainer || !productsTable) {
+  if (!addProductButton) {
     return;
-  }
-
-  const removeButtonText = estimateDetailsContainer.dataset.removeButtonText;
-
-  function toggleTable() {
-    const rows = estimateDetailsContainer.querySelectorAll(".estimate_detail");
-
-    if (rows.length > 0) {
-      productsTable.classList.remove("hidden");
-    } else {
-      productsTable.classList.add("hidden");
-    }
-  }
-
-  function createEstimateDetailRow(
-    productId,
-    productName,
-    quantity,
-    duration,
-    durationUnit,
-    durationMinsDisplay,
-    index
-  ) {
-    const row = document.createElement("tr");
-    row.className = "estimate_detail";
-    row.dataset.index = index;
-
-    const dummyCell = document.createElement("td");
-
-    const productNameCell = document.createElement("td");
-    productNameCell.textContent = productName;
-    row.appendChild(productNameCell);
-
-    const quantityCell = document.createElement("td");
-    const quantityField = document.createElement("input");
-    quantityField.type = "number";
-    quantityField.min = "1";
-    quantityField.value = quantity;
-    quantityField.name = `estimate[estimate_details_attributes][${index}][quantity]`;
-    quantityCell.appendChild(quantityField);
-
-    row.appendChild(quantityCell);
-
-    const durationCell = document.createElement("td");
-
-    if (durationUnit === "days") {
-      durationCell.textContent = duration;
-    } else if (durationUnit === "mins") {
-      durationCell.textContent = durationMinsDisplay;
-    }
-
-    row.appendChild(durationCell);
-
-    const productIdField = document.createElement("input");
-    productIdField.type = "hidden";
-    productIdField.name = `estimate[estimate_details_attributes][${index}][product_id]`;
-    productIdField.value = productId;
-    dummyCell.appendChild(productIdField);
-
-    const durationField = document.createElement("input");
-    durationField.type = "hidden";
-    durationField.name = `estimate[estimate_details_attributes][${index}][duration]`;
-    durationField.value = duration;
-    dummyCell.appendChild(durationField);
-
-    const durationUnitField = document.createElement("input");
-    durationUnitField.type = "hidden";
-    durationUnitField.name = `estimate[estimate_details_attributes][${index}][duration_unit]`;
-    durationUnitField.value = durationUnit;
-    dummyCell.appendChild(durationUnitField);
-
-    const removeButton = document.createElement("button");
-    removeButton.type = "button";
-    removeButton.className = "btn";
-    removeButton.textContent = removeButtonText;
-    removeButton.addEventListener("click", function () {
-      row.remove();
-      toggleTable();
-    });
-    dummyCell.appendChild(removeButton);
-
-    row.appendChild(dummyCell);
-
-    return row;
   }
 
   if (addProductButton) {
+    const productSelect = document.getElementById("product_id");
+
+    if (!productSelect) {
+      return;
+    }
+
+    const productUrl = productSelect.dataset["productUrl"];
+
+    if (!productUrl) {
+      return;
+    }
+
     addProductButton.addEventListener("click", function () {
-      const productSelect = document.getElementById("product_id");
-      const quantityInput = document.getElementById("quantity");
-      const durationMinsInput = document.getElementsByName("duration")[0];
-      const durationMinsDisplayInput = document.getElementById("duration");
-      const durationDaysInput = document.getElementById("duration_days");
-
       const productId = productSelect.value;
-      const quantity = quantityInput.value;
-      const durationMins = durationMinsInput.disabled ? null : durationMinsInput.value;
-      const durationMinsDisplay = durationMinsDisplayInput.value;
-      const durationDays = durationDaysInput.disabled ? null : durationDaysInput.value;
-      const productName =
-        productSelect.options[productSelect.selectedIndex].text;
 
-      if (!productId || !productId.length || quantity < 1) {
+      if (!productId || !productId.length) {
         return;
       }
 
-      const duration = durationMins || durationDays;
-      const durationUnit = durationMins ? "mins" : "days";
-
-      const row = createEstimateDetailRow(
-        productId,
-        productName,
-        quantity,
-        duration,
-        durationUnit,
-        durationMinsDisplay,
-        productCounter
-      );
-      estimateDetailsContainer.appendChild(row);
-
-      productCounter++;
-
-      quantityInput.value = 1;
-
-      toggleTable();
+      $.ajax({
+        url: `${productUrl}?product_id=${productId}`,
+        type: "GET",
+        dataType: "script",
+      });
     });
   }
 
-  toggleTable();
-});
-
-$(function () {
-  const estimateProductInput = $(".js--estimate-product");
-  const estimateDurationDaysContainer = $(
-    ".js--estimate-duration-days-container"
-  );
-  const estimateDurationMinsContainer = $(
-    ".js--estimate-duration-mins-container"
-  );
-  const estimateDurationDaysInput = $(".js--estimate-duration-days");
-  const estimateDurationMinsInput = $(".js--estimate-duration-mins");
-
-  if (
-    !estimateProductInput.length ||
-    !estimateDurationDaysContainer.length ||
-    !estimateDurationMinsContainer.length ||
-    !estimateDurationDaysInput.length ||
-    !estimateDurationMinsInput.length
-  ) {
-    return;
+  const toggleEstimateProductsTable = () => {
+    if ($("#new_estimate_estimate_details tr:visible").length === 0) {
+      $("#new_estimate_products_table").hide();
+    } else {
+      $("#new_estimate_products_table").show();
+    }
   }
 
-  estimateDurationMinsInput.timeinput();
-  const estimateDurationMinsInputHidden = estimateDurationMinsInput.data("timeparser").$hidden_field;
-
-  const updateTimedFields = (timeUnit) => {
-    const isTimed = timeUnit?.length > 0;
-
-    if (isTimed) {
-      const dailyTimed = timeUnit === "days";
-      estimateDurationDaysInput.prop("disabled", !dailyTimed);
-      estimateDurationMinsInput.prop("disabled", dailyTimed);
-      estimateDurationMinsInputHidden.prop("disabled", dailyTimed);
-
-      if (dailyTimed) {
-        estimateDurationDaysContainer.removeClass("hidden");
-        estimateDurationMinsContainer.addClass("hidden");
-      } else {
-        estimateDurationMinsContainer.removeClass("hidden");
-        estimateDurationDaysContainer.addClass("hidden");
-      }
-    } else {
-      estimateDurationDaysContainer.addClass("hidden");
-      estimateDurationMinsContainer.addClass("hidden");
-      estimateDurationDaysInput.prop("disabled", true);
-      estimateDurationMinsInput.prop("disabled", true);
-      estimateDurationMinsInputHidden.prop("disabled", true);
-    }
-  };
-
   const initializeTimedFields = () => {
-    const initialSelectedOption = estimateProductInput.find(":selected");
-    const initialTimeUnit = initialSelectedOption.data("time-unit");
-    updateTimedFields(initialTimeUnit);
-  };
+    const estimateDurationMinsInputs = $(".js--estimate-duration-mins");
 
+    estimateDurationMinsInputs.timeinput();
+  }
+
+  toggleEstimateProductsTable();
   initializeTimedFields();
 
-  estimateProductInput.on("change", function (event) {
-    const selectedOption = $(event.target).find(":selected");
-    const timeUnit = selectedOption.data("time-unit");
+  $("#new_estimate_products_table").on(
+    "click",
+    ".remove-estimate-detail",
+    function (e) {
+      e.preventDefault();
+      var row = $(this).closest("tr");
+      var destroyField = row.find(".destroy-field");
 
-    updateTimedFields(timeUnit);
-  });
+      if (row.data("estimate_detail_id")) {
+        destroyField.val("1");
+        row.hide();
+      } else {
+        row.remove();
+      }
+
+      toggleEstimateProductsTable();
+    }
+  );
 });

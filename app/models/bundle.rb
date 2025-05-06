@@ -39,7 +39,7 @@ class Bundle < Product
 
     return nil if time_units.empty?
 
-    time_units.size == 1 ? time_units.first : "mixed"
+    time_units.size == 1 ? time_units.first : ""
   end
 
   private

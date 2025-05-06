@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class FacilityEstimatesController < ApplicationController
+  include DateHelper
+
   admin_tab :all
   before_action { @active_tab = "admin_estimates" }
   before_action :authenticate_user!
@@ -40,22 +42,40 @@ class FacilityEstimatesController < ApplicationController
 
   def new
     @estimate = current_facility.estimates.new
-    @products = current_facility.products.where({ type: %w[Item Service Instrument TimedService Bundle] }).alphabetized.filter_map do |p|
-      time_unit = p.time_unit
+    @estimate.estimate_details.build
 
-      [p.name, p.id, { "data-time-unit" => time_unit }] if time_unit != "mixed"
-    end
+    set_products
   end
 
   def create
-    @estimate = EstimateBuilder.new(current_facility, current_user).build_estimate(facility_estimate_params)
+    expires_at = parse_usa_date(facility_estimate_params[:expires_at])
+    @estimate = current_facility.estimates.new(facility_estimate_params.merge(created_by_id: current_user.id, expires_at:))
 
-    if @estimate.persisted?
+    if @estimate.save
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, @estimate)
     else
-      flash[:error] = t(".error")
+      set_products
+      flash.now[:error] = t(".error")
       render action: :new
+    end
+  end
+
+  def add_product_to_estimate
+    product_id = params[:product_id]
+
+    product = current_facility.products.find(product_id)
+
+    @estimate_detail_products = if product.is_a?(Bundle)
+                                  product.products
+                                elsif product.present?
+                                  [product]
+                                else
+                                  []
+                                end
+
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -70,6 +90,12 @@ class FacilityEstimatesController < ApplicationController
 
   def load_estimate
     @estimate = current_facility.estimates.includes(estimate_details: :product).find(params[:id])
+  end
+
+  def set_products
+    @products = current_facility.products.where({ type: %w[Item Service Instrument TimedService Bundle] }).not_archived.alphabetized.filter_map do |p|
+      [p.name, p.id, { "data-time-unit" => p.time_unit }]
+    end
   end
 
   def set_users

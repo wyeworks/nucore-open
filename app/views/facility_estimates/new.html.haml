@@ -18,7 +18,7 @@
   .form-inputs
     = f.input :note
 
-  #new_estimate_products_table.hidden
+  #new_estimate_products_table
     %table.table
       %thead
         %tr
@@ -26,30 +26,22 @@
           %th= EstimateDetail.human_attribute_name(:quantity)
           %th= EstimateDetail.human_attribute_name(:duration)
           %th
-      %tbody#new_estimate_estimate_details{ data: { remove_button_text: t(".remove_products") } }
+      %tbody#new_estimate_estimate_details
+        - @estimate.estimate_details.each_with_index do |estimate_detail, index|
+          - temp_id = estimate_detail.id || "#{product.id}#{index}#{Time.now.to_i}"
+          = render partial: "estimate_detail", locals: { estimate_detail: estimate_detail, temp_id: temp_id }
 
   %h3= t(".add_products_to_estimate")
 
   .well
     .inline-form-controls
-      %div
-        = label_tag :quantity, EstimateDetail.human_attribute_name(:quantity)
-        = number_field_tag :quantity, 1, min: 1, style: "width: 3em;"
-
       .margin_x
         = label_tag :product_id, Product.model_name.human
         = select_tag :product_id,
           options_for_select(@products),
           class: "js--estimate-product js--chosen",
+          data: { product_url: add_product_to_estimate_facility_estimates_url(@estimate.facility) },
           include_blank: false
-
-      .js--estimate-duration-days-container.hidden
-        = label_tag :duration, EstimateDetail.human_attribute_name(:duration)
-        = number_field_tag :duration, 1, min: 1, class: "js--estimate-duration-days", name: "estimate_duration_days", id: "duration_days"
-
-      .js--estimate-duration-mins-container.hidden
-        = label_tag :duration, EstimateDetail.human_attribute_name(:duration)
-        = text_field_tag :duration, "0:01", class: "js--estimate-duration-mins"
 
     %button#add_product_to_estimate.btn.btn-primary{ type: "button" }= t(".add_product")
 
