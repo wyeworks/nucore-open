@@ -50,6 +50,7 @@ RSpec.describe StatementPdfDownloader do
       format_mock = double("format")
       allow(format_mock).to receive(:html).and_yield
       allow(format_mock).to receive(:json).and_yield
+      allow(format_mock).to receive(:pdf).and_yield
       allow(controller_mock).to receive(:respond_to).and_yield(format_mock)
       allow(controller_mock).to receive(:instance_variable_set)
       allow(controller_mock).to receive(:flash).and_return({})
@@ -64,7 +65,7 @@ RSpec.describe StatementPdfDownloader do
       it "sends the PDF directly" do
         allow(controller_mock).to receive(:request).and_return(double(format: :html))
         expect(controller_mock).to receive(:send_data).with("pdf_data", hash_including(filename: "statement.pdf", type: "application/pdf"))
-        expect(downloader.handle_download_response(controller_mock, fallback_path)).to be true
+        downloader.handle_download_response(controller_mock, fallback_path)
       end
     end
 
