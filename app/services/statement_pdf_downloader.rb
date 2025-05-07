@@ -41,9 +41,9 @@ class StatementPdfDownloader
 
       format.pdf do
         controller.send_data pdfs.first[:data],
-                            filename: pdfs.first[:filename],
-                            type: 'application/pdf',
-                            disposition: 'attachment'
+                             filename: pdfs.first[:filename],
+                             type: 'application/pdf',
+                             disposition: 'attachment'
       end
     end
   end
