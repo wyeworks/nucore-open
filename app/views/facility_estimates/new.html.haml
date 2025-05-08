@@ -28,8 +28,9 @@
           %th
       %tbody#new_estimate_estimate_details
         - @estimate.estimate_details.each_with_index do |estimate_detail, index|
-          - temp_id = estimate_detail.id || "#{product.id}#{index}#{Time.now.to_i}"
-          = render partial: "estimate_detail", locals: { estimate_detail: estimate_detail, temp_id: temp_id }
+          - if estimate_detail.product_id.present?
+            - temp_id = estimate_detail.id || "#{estimate_detail.product_id}#{index}#{Time.now.to_i}"
+            = render partial: "estimate_detail", locals: { estimate_detail: estimate_detail, temp_id: temp_id }
 
   %h3= t(".add_products_to_estimate")
 
