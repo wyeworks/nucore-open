@@ -5,33 +5,31 @@ $(function () {
     return;
   }
 
-  if (addProductButton) {
-    const productSelect = document.getElementById("product_id");
+  const productSelect = document.getElementById("product_id");
 
-    if (!productSelect) {
-      return;
-    }
-
-    const productUrl = productSelect.dataset["productUrl"];
-
-    if (!productUrl) {
-      return;
-    }
-
-    addProductButton.addEventListener("click", function () {
-      const productId = productSelect.value;
-
-      if (!productId || !productId.length) {
-        return;
-      }
-
-      $.ajax({
-        url: `${productUrl}?product_id=${productId}`,
-        type: "GET",
-        dataType: "script",
-      });
-    });
+  if (!productSelect) {
+    return;
   }
+
+  const productUrl = productSelect.dataset["productUrl"];
+
+  if (!productUrl) {
+    return;
+  }
+
+  addProductButton.addEventListener("click", function () {
+    const productId = productSelect.value;
+
+    if (!productId || !productId.length) {
+      return;
+    }
+
+    $.ajax({
+      url: `${productUrl}?product_id=${productId}`,
+      type: "GET",
+      dataType: "script",
+    });
+  });
 
   const toggleEstimateProductsTable = () => {
     if ($("#new_estimate_estimate_details tr:visible").length === 0) {
