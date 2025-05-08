@@ -7,4 +7,14 @@ class Estimate < ApplicationRecord
   has_many :estimate_details, dependent: :destroy
 
   accepts_nested_attributes_for :estimate_details, allow_destroy: true, reject_if: :all_blank
+
+  validate :expires_at_cannot_be_in_the_past
+
+  private
+
+  def expires_at_cannot_be_in_the_past
+    if expires_at.blank? || expires_at < Time.zone.now
+      errors.add(:expires_at, I18n.t("activerecord.errors.models.estimate.attributes.expires_at.in_the_past"))
+    end
+  end
 end
