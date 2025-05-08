@@ -93,9 +93,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def set_products
-    @products = current_facility.products.where({ type: %w[Item Service Instrument TimedService Bundle] }).not_archived.alphabetized.filter_map do |p|
-      [p.name, p.id, { "data-time-unit" => p.time_unit }]
-    end
+    @products = current_facility.products.where({ type: %w[Item Service Instrument TimedService Bundle] }).not_archived.alphabetized.map { |p| [p.name, p.id] }
   end
 
   def set_users

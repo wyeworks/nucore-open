@@ -34,14 +34,6 @@ class Bundle < Product
     products.select { |p| p.current_price_policies.none? }
   end
 
-  def time_unit
-    time_units = products.filter_map(&:time_unit).uniq
-
-    return nil if time_units.empty?
-
-    time_units.size == 1 ? time_units.first : ""
-  end
-
   private
 
   def requires_account?
