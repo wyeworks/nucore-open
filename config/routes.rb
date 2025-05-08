@@ -323,6 +323,7 @@ Rails.application.routes.draw do
     resources :estimates, controller: "facility_estimates", only: [:index, :new, :create, :show] do
       collection do
         get "search"
+        get "add_product_to_estimate"
       end
     end
 

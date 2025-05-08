@@ -9,11 +9,12 @@ RSpec.describe(
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let!(:user) { create(:user) }
-  let!(:product) { create(:setup_item, facility:) }
   let(:price_group) { user.price_groups.first }
-  let!(:price_policy) { create(:item_price_policy, product:, price_group:) }
+  let!(:item) { create(:setup_item, facility:) }
+  let!(:item_price_policy) { create(:item_price_policy, product: item, price_group:) }
   let!(:instrument) { create(:setup_instrument, facility:) }
   let!(:instrument_price_policy) { create(:instrument_price_policy, product: instrument, price_group:) }
+  let!(:bundle) { create(:bundle, facility:, bundle_products: [item, instrument]) }
 
   before { login_as director }
 
@@ -43,13 +44,29 @@ RSpec.describe(
     select_from_chosen user.full_name, from: "User"
 
     expect(page).to have_content "Add Products to Estimate"
-    select_from_chosen product.name, from: "Product"
+    select_from_chosen bundle.name, from: "Product"
     click_button "Add Product to Estimate"
-    expect(page).to have_content "Remove"
 
-    select_from_chosen instrument.name, from: "Product"
-    fill_in "Duration", with: "1:30"
-    click_button "Add Product to Estimate"
+    wait_for_ajax
+
+    within '#new_estimate_estimate_details' do
+      all('tr').each do |row|
+        columns = row.all('td')
+        first_column_text = columns[0].text
+        product = bundle.products.find { |p| p.name == first_column_text }
+
+        # Quantity
+        second_column_field = columns[1].find('input')
+        second_column_field.fill_in with: "2"
+
+        if product.is_a?(Instrument)
+          third_column_field = columns[2].find('input')
+          third_column_field.fill_in with: "1:30"
+        end
+      end
+    end
+
+    expect(page).to have_content("Remove", count: 2)
 
     click_button "Add Estimate"
 
@@ -59,9 +76,9 @@ RSpec.describe(
     expect(page).to have_content 1.month.from_now.strftime("%m/%d/%Y")
     expect(page).to have_content director.full_name
     expect(page).to have_content user.full_name
-    expect(page).to have_content product.name
-    expect(page).to have_content ActionController::Base.helpers.number_to_currency(price_policy.unit_cost)
+    expect(page).to have_content item.name
+    expect(page).to have_content ActionController::Base.helpers.number_to_currency(item_price_policy.unit_cost * 2) # 2 items
     expect(page).to have_content instrument.name
-    expect(page).to have_content ActionController::Base.helpers.number_to_currency(instrument_price_policy.usage_rate * 90) # 1.5 hours
+    expect(page).to have_content ActionController::Base.helpers.number_to_currency(instrument_price_policy.usage_rate * 180) # 1.5 hours * 2 = 3 hours
   end
 end

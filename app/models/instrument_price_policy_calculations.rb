@@ -53,7 +53,7 @@ module InstrumentPricePolicyCalculations
   end
 
   def estimate_cost_from_estimate_detail(estimate_detail)
-    calculate_for_estimated_time(estimate_detail.duration)
+    calculate_for_estimated_time(estimate_detail.duration, estimate_detail.quantity)
   end
 
   private
@@ -83,8 +83,10 @@ module InstrumentPricePolicyCalculations
     PricePolicies::TimeBasedPriceCalculator.new(self).calculate(start_at, end_at)
   end
 
-  def calculate_for_estimated_time(duration)
-    PricePolicies::TimeBasedPriceCalculator.new(self).calculate(nil, nil, duration)
+  def calculate_for_estimated_time(duration, quantity = 1)
+    cost_for_one = PricePolicies::TimeBasedPriceCalculator.new(self).calculate(nil, nil, duration)
+
+    cost_for_one * quantity
   end
 
 end
