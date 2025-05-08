@@ -106,11 +106,6 @@ class FacilityStatementsController < ApplicationController
 
   # POST /facilities/:facility_id/statements/download_selected
   def download_selected
-    unless SettingsHelper.feature_on?(:multiple_statements_download)
-      redirect_to facility_statements_path(@facility)
-      return
-    end
-
     if params[:statement_ids].blank?
       flash[:error] = I18n.t("statements.no_statements_selected")
       redirect_to facility_statements_path(@facility)

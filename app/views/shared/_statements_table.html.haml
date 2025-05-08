@@ -2,18 +2,16 @@
 - if @statements.empty?
   %p.notice= text("no_statements")
 - else
-  - if SettingsHelper.feature_on?(:multiple_statements_download)
-    - form_url = @account ? download_selected_account_statements_path(@account) : download_selected_facility_statements_path(current_facility)
-    = form_tag form_url, method: :post, id: "statements-form" do
-      - if @account
-        .pull-right.mb-3
-          = submit_tag t("statements.download_selected"), class: "btn btn-primary js--download-selected-statements", disabled: true
+  - form_url = @account ? download_selected_account_statements_path(@account) : download_selected_facility_statements_path(current_facility)
+  = form_tag form_url, method: :post, id: "statements-form" do
+    - if @account
+      .pull-right.mb-3
+        = submit_tag t("statements.download_selected"), class: "btn btn-primary js--download-selected-statements", disabled: true
   %table.table.table-striped.table-hover
     %thead
       %tr
-        - if SettingsHelper.feature_on?(:multiple_statements_download)
-          %th
-            %input{type: "checkbox", class: "js--select-all-statements"}
+        %th
+          %input{type: "checkbox", class: "js--select-all-statements"}
         %th= Statement.human_attribute_name(:invoice_number)
         %th= Statement.human_attribute_name(:created_at)
         %th= Statement.human_attribute_name(:account_admins)
@@ -29,10 +27,9 @@
     %tbody
       - StatementPresenter.wrap(@statements).each do |s|
         %tr.statement
-          - if SettingsHelper.feature_on?(:multiple_statements_download)
-            %td.centered
-              - if !s.canceled_at
-                = check_box_tag "statement_ids[]", s.id, false, class: "js--statement-checkbox", data: { invoice_number: s.invoice_number }
+          %td.centered
+            - if !s.canceled_at
+              = check_box_tag "statement_ids[]", s.id, false, class: "js--statement-checkbox", data: { invoice_number: s.invoice_number }
           %td.centered
             = "##{s.invoice_number}"
             - unless s.canceled_at

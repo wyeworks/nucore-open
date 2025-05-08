@@ -25,8 +25,7 @@
 .clearfix
   - if @statements.any?
     .pull-right.mb-3
-      - if SettingsHelper.feature_on?(:multiple_statements_download)
-        = submit_tag t("statements.download_selected"), form: "statements-form", class: "btn btn-primary js--download-selected-statements ml-2", disabled: true, style: "margin-left: 10px;"
+      = submit_tag t("statements.download_selected"), form: "statements-form", class: "btn btn-primary js--download-selected-statements ml-2", disabled: true, style: "margin-left: 10px;"
       = link_to t("reports.account_transactions.export"), url_for(format: :csv), class: "btn btn-secondary js--exportSearchResults", data: { form: ".search_form" }
       
 

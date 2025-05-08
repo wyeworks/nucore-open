@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', function() {
-  var checkboxes = document.querySelectorAll('.js--statement-checkbox');
-  var selectAllCheckbox = document.querySelector('.js--select-all-statements');
-  var downloadButton = document.querySelector('.js--download-selected-statements');
-  var form = document.getElementById('statements-form');
+  const checkboxes = document.querySelectorAll('.js--statement-checkbox');
+  const selectAllCheckbox = document.querySelector('.js--select-all-statements');
+  const downloadButton = document.querySelector('.js--download-selected-statements');
+  const form = document.getElementById('statements-form');
 
   if (!checkboxes || checkboxes.length === 0) {
     return;
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
   updateButtonState();
 
   function updateButtonState() {
-    var checkedCount = document.querySelectorAll('.js--statement-checkbox:checked').length;
+    const checkedCount = document.querySelectorAll('.js--statement-checkbox:checked').length;
     if (downloadButton) {
       downloadButton.disabled = checkedCount === 0;
     }
@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const selectedCheckboxes = getSelectedCheckboxes();
 
     if (selectedCheckboxes.length === 0) {
-      alert("Please select at least one statement to download.");
       return;
     }
 
@@ -94,13 +93,12 @@ document.addEventListener('DOMContentLoaded', function() {
         a.download = true;
         document.body.appendChild(a);
         a.click();
-      }, index * 1000);
+      }, index * 200);
     });
   }
 
   function handleError(error) {
     console.error('Error:', error);
-    alert('There was an error downloading the statements. Please try again.');
     downloadButton.disabled = false;
   }
 });
