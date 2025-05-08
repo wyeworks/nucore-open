@@ -47,6 +47,10 @@ en:
   statement_downcase: statement
   statements_downcase: statements
   statemented_downcase: statemented
+  
+  statements:
+    pdf:
+      download: Download
 
   admin:
     shared:
@@ -690,6 +694,9 @@ en:
       notice: "You have no completed orders for any facility with this payment source."
       th:
         total: "Unreconciled Total"
+    download_selected: Download Selected
+    no_statements_selected: No statements were selected for download.
+    downloading_multiple: "Downloading %{count} statements..."
     list:
       head:
         h1: "Payment Source Transactions"
