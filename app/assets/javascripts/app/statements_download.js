@@ -42,55 +42,51 @@ document.addEventListener('DOMContentLoaded', function() {
 
   function handleFormSubmit(event) {
     event.preventDefault();
-    
-    const selectedIds = getSelectedStatementIds();
-    
-    if (selectedIds.length === 0) {
+
+    const selectedCheckboxes = getSelectedCheckboxes();
+
+    if (selectedCheckboxes.length === 0) {
       alert("Please select at least one statement to download.");
       return;
     }
 
     downloadButton.disabled = true;
-    const formData = createFormData(selectedIds);
-    
-    fetchStatements(formData)
-      .then(data => {
-        if (data.pdfs && data.pdfs.length > 0) {
-          downloadPdfs(data.pdfs);
-        }
+
+    try {
+      const pdfUrls = getPdfUrls(selectedCheckboxes);
+      downloadStatementPdfs(pdfUrls);
+
+      setTimeout(() => {
         downloadButton.disabled = false;
-      })
-      .catch(handleError);
+      }, selectedCheckboxes.length * 1000);
+    } catch (error) {
+      handleError(error);
+    }
   }
 
-  function getSelectedStatementIds() {
-    return Array.from(document.querySelectorAll('.js--statement-checkbox:checked'))
-      .map(checkbox => checkbox.value);
+  function getSelectedCheckboxes() {
+    return Array.from(document.querySelectorAll('.js--statement-checkbox:checked'));
   }
 
-  function createFormData(selectedIds) {
-    const formData = new FormData();
-    selectedIds.forEach(id => formData.append('statement_ids[]', id));
-    return formData;
-  }
+  function getPdfUrls(selectedCheckboxes) {
+    return selectedCheckboxes.map(checkbox => {
+      const statementRow = checkbox.closest('tr.statement');
+      const pdfLink = statementRow.querySelector('a[href*=".pdf"]') || 
+                      statementRow.querySelector('a[href*="statements"]');
 
-  function fetchStatements(formData) {
-    return fetch(form.action + '.json', {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-        'Accept': 'application/json'
+      if (!pdfLink) {
+        throw new Error('Could not find PDF link for one or more selected statements');
       }
-    })
-    .then(response => {
-      if (!response.ok) throw new Error('Network response was not ok');
-      return response.json();
+
+      return {
+        url: pdfLink.href,
+        invoiceNumber: checkbox.dataset.invoiceNumber || 'statement'
+      };
     });
   }
 
-  function downloadPdfs(pdfs) {
-    pdfs.forEach((pdf, index) => {
+  function downloadStatementPdfs(pdfUrls) {
+    pdfUrls.forEach((pdf, index) => {
       setTimeout(() => {
         const a = document.createElement('a');
         a.style.display = 'none';
