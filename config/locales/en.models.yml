@@ -141,7 +141,10 @@ en:
           month_taken: There is already a cutoff date for %{month}
         nufs_account:
           missing_expires_at: "The chart string appears to be invalid. Either the fund, department, project, or activity could not be found."
-
+        estimate:
+          attributes:
+            expires_at:
+              in_the_past: "must be a future date"
     # Model Names
     models:
       account:

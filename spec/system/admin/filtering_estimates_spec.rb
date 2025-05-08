@@ -10,10 +10,14 @@ RSpec.describe "Filtering estimates" do
 
   let!(:estimate1) { create(:estimate, facility:, name: "First Estimate", user: user1, created_at: 3.days.ago) }
   let!(:estimate2) { create(:estimate, facility:, name: "Second Estimate", user: user2, created_at: 2.days.ago) }
-  let!(:expired_estimate) { create(:estimate, facility:, name: "Expired Estimate", user: user1, expires_at: 1.day.ago, created_at: 1.day.ago) }
+  let!(:expired_estimate) { create(:estimate, facility:, name: "Expired Estimate", user: user1, created_at: 5.days.ago) }
 
   before(:each) do
     login_as director
+
+    travel_to_and_return(4.days.ago) do
+      expired_estimate.update(expires_at: Time.zone.now)
+    end
   end
 
   it "can filter estimates by user" do
