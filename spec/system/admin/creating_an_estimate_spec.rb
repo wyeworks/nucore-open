@@ -45,10 +45,28 @@ RSpec.describe(
 
     expect(page).to have_content "Add Products to Estimate"
     select_from_chosen bundle.name, from: "Product"
-    fill_in "Duration", with: "1:30"
-    fill_in "Quantity", with: "2"
     click_button "Add Product to Estimate"
-    expect(page).to have_content "Remove"
+
+    wait_for_ajax
+
+    within '#new_estimate_estimate_details' do
+      all('tr').each do |row|
+        columns = row.all('td')
+        first_column_text = columns[0].text
+        product = bundle.products.find { |p| p.name == first_column_text }
+
+        # Quantity
+        second_column_field = columns[1].find('input')
+        second_column_field.fill_in with: "2"
+
+        if product.is_a?(Instrument)
+          third_column_field = columns[2].find('input')
+          third_column_field.fill_in with: "1:30"
+        end
+      end
+    end
+
+    expect(page).to have_content("Remove", count: 2)
 
     click_button "Add Estimate"
 
