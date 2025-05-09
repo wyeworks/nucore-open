@@ -31,7 +31,7 @@
           %td= account.type_string
           %td= account.per_facility? ? account.facilities.join(", ") :  content_tag(:i, t("shared.all"))
           %td{ class: account.expired? ? "expired" : "" }
-            = human_date(account.expires_at)
+            = account_expiration(account.expires_at)
 - else
   %p.notice= t('.notice', user_name: @user.full_name)
   - if current_facility.cross_facility? && current_ability.can?(:clone_accounts, current_facility)

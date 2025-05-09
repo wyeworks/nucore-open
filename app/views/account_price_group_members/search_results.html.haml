@@ -19,7 +19,7 @@
           %tr
             %td= link_to account, facility_price_group_account_price_group_members_path(current_facility, @price_group, account_id: account.id), method: :post
             %td= account.owner_user.full_name if account.owner_user
-            %td= human_date(account.expires_at)
+            %td= account_expiration(account.expires_at)
     = additional_results_notice(count: @count, limit: @limit)
 - else
   %p.error= t(".error.noterm")

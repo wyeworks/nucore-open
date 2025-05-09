@@ -25,7 +25,7 @@
             %td= account.account_number_to_s
           %td= account.description_to_s
           %td= account.type_string
-          %td= human_date(account.expires_at)
+          %td= account_expiration(account.expires_at)
           %td= account.per_facility? ? account.facilities.alphabetized.join(", ") : html("all", inline: true)
           - if au.can_administer? || session_user.administrator?
             - show_th = true
