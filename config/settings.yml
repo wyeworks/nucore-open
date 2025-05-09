@@ -169,6 +169,7 @@ feature:
   show_estimates_option: <%= !Rails.env.production? %>
   billing_log_events: false
   show_account_opencontract_field: false
+  hide_account_long_future_expiration: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts
