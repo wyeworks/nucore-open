@@ -125,11 +125,11 @@ module UmassCorum
       def product_status(product)
         product.is_archived? ? "Inactive" : "Active"
       end
-      
+
       def cancellation_charge(price_policy)
         price_policy.full_price_cancellation ? "Yes" : nil
       end
-      
+
       def duration_rate_step_value(price_policy, field, step)
         return nil unless price_policy.product.duration_pricing_mode?
         return nil unless price_policy.duration_rates.count > step
