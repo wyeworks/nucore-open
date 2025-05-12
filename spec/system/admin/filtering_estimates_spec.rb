@@ -15,9 +15,7 @@ RSpec.describe "Filtering estimates" do
   before(:each) do
     login_as director
 
-    travel_to_and_return(4.days.ago) do
-      expired_estimate.update(expires_at: Time.zone.now)
-    end
+    expired_estimate.update_columns(expires_at: 4.days.ago)
   end
 
   it "can filter estimates by user" do
