@@ -119,7 +119,7 @@ RSpec.describe UmassCorum::AdminReports::FacilityRatesCsvReport do
         lines = report.to_csv.lines
         expect(lines.count).to eq(1)
         expect(lines[0].chomp!).to eq(expected_headers)
-       end
+      end
 
       it "sets the filename based on the passed in report name" do
         expect(report.filename).to eq("facility_rates_data.csv")
