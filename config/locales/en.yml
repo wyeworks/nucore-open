@@ -1130,6 +1130,7 @@ en:
       training_requested: Training Requested
       update_approvals:
         submit: "Update Access List"
+      hide_inactive: Hide inactive Products
 
     new_external:
       head: "Add User"
