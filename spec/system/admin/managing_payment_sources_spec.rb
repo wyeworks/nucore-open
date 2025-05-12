@@ -93,7 +93,19 @@ RSpec.describe "Managing accounts" do
         )
       end
 
-      it "shows expiration date" do
+      it(
+        "shows expiration date when ff is off",
+        feature_setting: { hide_account_far_future_expiration: false },
+      ) do
+        within("table") do
+          expect(page).to have_content(account.human_date(account.expires_at))
+        end
+      end
+
+      it(
+        "shows expiration date when ff is on",
+        feature_setting: { hide_account_far_future_expiration: true },
+      ) do
         within("table") do
           expect(page).to have_content(account.human_date(account.expires_at))
         end
@@ -113,7 +125,7 @@ RSpec.describe "Managing accounts" do
 
       it(
         "does not show expiration date when ff is on",
-        { feature_setting: { hide_account_far_future_expiration: true } },
+        feature_setting: { hide_account_far_future_expiration: true },
       ) do
         within("table") do
           expect(page).not_to have_content(account.human_date(account.expires_at))
@@ -122,7 +134,7 @@ RSpec.describe "Managing accounts" do
 
       it(
         "shows expiration date when ff is off",
-        { feature_setting: { hide_account_far_future_expiration: false } },
+        feature_setting: { hide_account_far_future_expiration: false },
       ) do
         within("table") do
           expect(page).to have_content(account.human_date(account.expires_at))
