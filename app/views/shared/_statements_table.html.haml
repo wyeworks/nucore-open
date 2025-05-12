@@ -2,8 +2,7 @@
 - if @statements.empty?
   %p.notice= text("no_statements")
 - else
-  - form_url = @account ? download_selected_account_statements_path(@account) : download_selected_facility_statements_path(current_facility)
-  = form_tag form_url, method: :post, id: "statements-form" do
+  = form_tag "#", method: :post, id: "statements-form" do
     - if @account
       .pull-right.mb-3
         = submit_tag t("statements.download_selected"), class: "btn btn-primary js--download-selected-statements", disabled: true

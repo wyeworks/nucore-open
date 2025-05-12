@@ -104,23 +104,6 @@ class FacilityStatementsController < ApplicationController
     @statement = Statement.find(params[:id])
   end
 
-  # POST /facilities/:facility_id/statements/download_selected
-  def download_selected
-    if params[:statement_ids].blank?
-      flash[:error] = I18n.t("statements.no_statements_selected")
-      redirect_to facility_statements_path(@facility)
-      return
-    end
-
-    statement_ids = params[:statement_ids]
-    statements = Statement.where(id: statement_ids)
-
-    StatementPdfDownloader.new(statements).handle_download_response(
-      self,
-      facility_statements_path(@facility)
-    )
-  end
-
   private
 
   def success_message

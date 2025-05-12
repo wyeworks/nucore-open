@@ -33,23 +33,6 @@ class StatementsController < ApplicationController
     end
   end
 
-  # POST /accounts/:account_id/statements/download_selected
-  def download_selected
-    if params[:statement_ids].blank?
-      flash[:error] = I18n.t("statements.no_statements_selected")
-      redirect_to account_statements_path(@account)
-      return
-    end
-
-    statement_ids = params[:statement_ids]
-    statements = @account.statements.where(id: statement_ids)
-
-    StatementPdfDownloader.new(statements).handle_download_response(
-      self,
-      account_statements_path(@account)
-    )
-  end
-
   private
 
   def ability_resource

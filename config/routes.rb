@@ -30,11 +30,7 @@ Rails.application.routes.draw do
 
   # front-end accounts
   resources :accounts, only: [:index, :show] do
-    resources :statements, only: [:show, :index] do
-      collection do
-        post "download_selected", to: "statements#download_selected"
-      end
-    end
+    resources :statements, only: [:show, :index]
 
     member do
       get "user_search"
@@ -345,9 +341,6 @@ Rails.application.routes.draw do
     resources :statements, controller: "facility_statements", only: [:index, :new, :show, :create] do
       post "resend_emails", on: :member
       post "cancel", on: :member
-      collection do
-        post "download_selected", to: "facility_statements#download_selected"
-      end
     end
 
     get "general_reports/raw", to: "reports/export_raw_reports#export_all", as: "export_raw_reports"

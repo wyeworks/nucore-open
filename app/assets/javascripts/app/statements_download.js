@@ -35,14 +35,12 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     }
 
-    if (form) {
-      form.addEventListener('submit', handleFormSubmit);
+    if (downloadButton) {
+      downloadButton.addEventListener('click', handleDownload);
     }
   }
 
-  function handleFormSubmit(event) {
-    event.preventDefault();
-
+  function handleDownload() {
     const selectedCheckboxes = getSelectedCheckboxes();
 
     if (selectedCheckboxes.length === 0) {
@@ -57,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       setTimeout(() => {
         downloadButton.disabled = false;
-      }, selectedCheckboxes.length * 1000);
+      }, selectedCheckboxes.length * 200);
     } catch (error) {
       handleError(error);
     }
