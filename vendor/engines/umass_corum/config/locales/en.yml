@@ -108,7 +108,7 @@ en:
             email: Email
             account_role: Account Role
         facility_rates:
-          subject: "!app_name! Facility Rates Data Export FIXME"
+          subject: "!app_name! Facility Rates Data Export"
           body: Your export is ready. Please see the attached file.
           title: Download Facility Rates Data (CSV)
           facility_name: Facility Name
