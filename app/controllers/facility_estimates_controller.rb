@@ -41,7 +41,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def new
-    @estimate = current_facility.estimates.new
+    @estimate = current_facility.estimates.new(expires_at: 1.month.from_now)
     @estimate.estimate_details.build
 
     set_products
