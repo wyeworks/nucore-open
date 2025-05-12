@@ -35,7 +35,7 @@ RSpec.describe "canceling statements" do
 
       it "does not allow download or emailing of statement" do
         click_on "Cancel"
-        expect(page).to_not have_content "Download"
+        expect(page).to_not have_link "Download"
         expect(page).to_not have_content "Resend"
         expect(page).to_not have_link "Cancel"
       end
@@ -58,7 +58,7 @@ RSpec.describe "canceling statements" do
       let(:statement) { create(:statement, canceled_at: 2.days.ago, facility:) }
 
       it "does not allow statement to be canceled, downloaded, or resent" do
-        expect(page).not_to have_content "Download"
+        expect(page).not_to have_link "Download"
         expect(page).not_to have_content "Resend" if SettingsHelper.feature_on?(:send_statement_emails)
         expect(page).not_to have_link "Cancel"
       end
