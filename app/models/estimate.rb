@@ -9,6 +9,7 @@ class Estimate < ApplicationRecord
   accepts_nested_attributes_for :estimate_details, allow_destroy: true, reject_if: :all_blank
 
   validate :expires_at_cannot_be_in_the_past
+  validates :expires_at, presence: true
 
   private
 
