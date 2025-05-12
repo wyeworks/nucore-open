@@ -41,10 +41,10 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def new
-    @estimate = current_facility.estimates.new
-    @products = current_facility.products.where({ type: ["Item", "Service", "Instrument", "TimedService"] }).alphabetized.map do |p|
-      [p.name, p.id, { "data-time-unit" => p.time_unit }]
-    end
+    @estimate = current_facility.estimates.new(expires_at: 1.month.from_now)
+    @estimate.estimate_details.build
+
+    set_products
   end
 
   def create
@@ -55,8 +55,27 @@ class FacilityEstimatesController < ApplicationController
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, @estimate)
     else
-      flash[:error] = t(".error")
+      set_products
+      flash.now[:error] = t(".error")
       render action: :new
+    end
+  end
+
+  def add_product_to_estimate
+    product_id = params[:product_id]
+
+    product = current_facility.products.find(product_id)
+
+    @estimate_detail_products = if product.is_a?(Bundle)
+                                  product.products
+                                elsif product.present?
+                                  [product]
+                                else
+                                  []
+                                end
+
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -71,6 +90,10 @@ class FacilityEstimatesController < ApplicationController
 
   def load_estimate
     @estimate = current_facility.estimates.includes(estimate_details: :product).find(params[:id])
+  end
+
+  def set_products
+    @products = current_facility.products.where({ type: %w[Item Service Instrument TimedService Bundle] }).not_archived.alphabetized.map { |p| [p.name, p.id] }
   end
 
   def set_users
