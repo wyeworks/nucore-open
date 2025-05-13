@@ -4,12 +4,12 @@ require "rails_helper"
 
 RSpec.describe "User access list" do
   describe "as facility director" do
-    let(:facility) { FactoryBot.create(:setup_facility) }
-    let(:admin) { create(:user, :facility_administrator, facility: facility) }
+    let(:facility) { create(:setup_facility) }
+    let(:admin) { create(:user, :facility_administrator, facility:) }
     let(:user) { create(:user) }
-    let!(:product1) { create(:item, facility: facility, requires_approval: true) }
-    let!(:product2) { create(:item, facility: facility, requires_approval: true) }
-    let!(:product_user) { create(:product_user, user: user, product: product1)}
+    let!(:product1) { create(:item, facility:, requires_approval: true) }
+    let!(:product2) { create(:item, facility:, requires_approval: true) }
+    let!(:product_user) { create(:product_user, user:, product: product1)}
 
     it "can approve access to a product and logs it" do
       expect(user.reload.products).to contain_exactly(product1)
@@ -26,7 +26,7 @@ RSpec.describe "User access list" do
       expect(user.reload.products).to contain_exactly(product2)
 
       expect(LogEvent.find_by(loggable: product_user, event_type: :delete, user: admin)).to be_present
-      product_user2 = ProductUser.find_by(product: product2, user: user)
+      product_user2 = ProductUser.find_by(product: product2, user:)
       expect(LogEvent.find_by(loggable: product_user2, event_type: :create, user: admin)).to be_present
     end
 
@@ -39,6 +39,37 @@ RSpec.describe "User access list" do
         click_button "Update Access List"
       end.not_to change(LogEvent, :count)
     end
-  end
 
+    context "describe inactive product filter" do
+      before do
+        login_as admin
+
+        product1.update(is_archived: true)
+      end
+
+      it "can hide inactive products", :js do
+        visit facility_user_access_list_path(facility, user)
+
+        within("table") do
+          expect(page).to have_content("#{product1.name} (inactive)")
+          expect(page).to have_content(product2.name)
+        end
+
+        # Toggle hide inactive
+        check("Hide inactive Products")
+
+        within("table") do
+          expect(page).not_to have_content("#{product1.name} (inactive)")
+          expect(page).to have_content(product2.name)
+        end
+
+        # Toggle hide again
+        uncheck("Hide inactive Products")
+
+        within("table") do
+          expect(page).to have_content("#{product1.name} (inactive)")
+        end
+      end
+    end
+  end
 end
