@@ -100,5 +100,9 @@ RSpec.describe(
     expect(page).to have_content ActionController::Base.helpers.number_to_currency(instrument_price_policy.usage_rate * 180) # 1.5 hours * 2 = 3 hours
     expect(page).to have_content "#{other_item.name} (#{other_facility.name})"
     expect(page).to have_content ActionController::Base.helpers.number_to_currency(other_item_price_policy.unit_cost) # 1 item
+    total = other_item_price_policy.unit_cost +
+            item_price_policy.unit_cost * 2 +
+            instrument_price_policy.usage_rate * 180
+    expect(page).to have_content ActionController::Base.helpers.number_to_currency(total)
   end
 end
