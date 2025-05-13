@@ -73,6 +73,7 @@ class Product < ApplicationRecord
   scope :active, -> { where(is_archived: false, is_hidden: false) }
   scope :alphabetized, -> { order(Arel.sql("LOWER(products.name)")) }
   scope :archived, -> { where(is_archived: true) }
+  scope :available_for_estimates, -> { where({ type: %w[Item Service Instrument TimedService Bundle] }).not_archived }
   scope :not_archived, -> { where(is_archived: false) }
   scope :mergeable_into_order, -> { not_archived.where(type: mergeable_types) }
   scope :cross_core_available, -> { where(cross_core_ordering_available: true) }

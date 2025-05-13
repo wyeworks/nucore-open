@@ -39,12 +39,24 @@ class ProductsController < ApplicationController
   end
 
   def set_facility_products
-    original_order_facility = params[:original_order_facility]&.to_i
+    is_estimate = params[:is_estimate] == 'true'
+    original_facility = params[:original_facility]&.to_i
+    query = current_facility.products
 
-    query = current_facility.products.mergeable_into_order
-    adding_to_original_order = current_facility.id == original_order_facility
-    query = query.cross_core_available unless adding_to_original_order
+    if is_estimate
+      query = query.available_for_estimates
+    else
+      query = query.mergeable_into_order
+    end
 
-    @facility_products = query.alphabetized.map { |p| { id: p.id, name: p.name, time_based: p.order_quantity_as_time? } }
+    query = query.cross_core_available unless current_facility.id == original_facility
+
+    @facility_products = query.alphabetized.map do |p|
+      {
+        id: p.id,
+        name: p.name,
+        time_based: p.order_quantity_as_time?
+      }
+    end
   end
 end

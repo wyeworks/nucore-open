@@ -68,7 +68,7 @@ window.MergeOrder = class MergeOrder {
 
       $.ajax({
         type: "get",
-        data: { facility_id, original_order_facility: originalOrderFacility },
+        data: { facility_id, original_facility: originalOrderFacility },
         url: productsUrl,
         success(data) {
           // Populate dropdown
