@@ -43,11 +43,11 @@ class ProductsController < ApplicationController
     original_facility = params[:original_facility]&.to_i
     query = current_facility.products
 
-    if is_estimate
-      query = query.available_for_estimates
-    else
-      query = query.mergeable_into_order
-    end
+    query = if is_estimate
+              query.available_for_estimates
+            else
+              query.mergeable_into_order
+            end
 
     query = query.cross_core_available unless current_facility.id == original_facility
 
