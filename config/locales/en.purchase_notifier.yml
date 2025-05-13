@@ -5,7 +5,9 @@ en:
         subject: "%{product} Order Notification"
         order_for: Order For
       order_notification:
-        subject: "!app_name! Order Notification"
+        subject:
+          one: "%{facility} Order Received for %{product}"
+          other: "%{facility} Order Received for Multiple Items"
       order_receipt:
         subject: "!app_name! Order Receipt"
         intro: "Thank you for your order on the !app_name! website."

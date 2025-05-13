@@ -22,7 +22,14 @@ class PurchaseNotifier < ApplicationMailer
   def order_notification(order, recipient)
     @order = order
     attach_all_icals_from_order(@order)
-    subject = text("views.purchase_notifier.order_notification.subject")
+    product_count = order.products.count
+
+    subject = text(
+      "views.purchase_notifier.order_notification.subject",
+      product: product_count == 1 ? order.products.pick(:name) : nil,
+      count: product_count,
+      facility: order.facility.name,
+    )
     send_nucore_mail to: recipient, subject:, reply_to: @order.created_by_user.email, template_name: "order_receipt"
   end
 
