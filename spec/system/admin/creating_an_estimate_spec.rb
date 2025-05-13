@@ -15,6 +15,9 @@ RSpec.describe(
   let!(:instrument) { create(:setup_instrument, facility:) }
   let!(:instrument_price_policy) { create(:instrument_price_policy, product: instrument, price_group:) }
   let!(:bundle) { create(:bundle, facility:, bundle_products: [item, instrument]) }
+  let(:other_facility) { create(:setup_facility) }
+  let!(:other_item) { create(:setup_item, facility: other_facility, cross_core_ordering_available: true) }
+  let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group: price_group) }
 
   before { login_as director }
 
@@ -68,6 +71,21 @@ RSpec.describe(
 
     expect(page).to have_content("Remove", count: 2)
 
+    select_from_chosen other_facility.name, from: "Facility", scroll_to: :center
+    select_from_chosen other_item.name, from: "Product"
+    click_button "Add Product to Estimate"
+
+    wait_for_ajax
+
+    within '#new_estimate_estimate_details' do
+      other_item_row = all('tr').last
+      columns = other_item_row.all('td')
+      first_column_text = columns[0].text
+      expect(first_column_text).to eq "#{other_item.name} (#{other_facility.name})"
+    end
+
+    expect(page).to have_content("Remove", count: 3)
+
     click_button "Add Estimate"
 
     expect(page).to have_content "Estimate successfully created"
@@ -80,5 +98,7 @@ RSpec.describe(
     expect(page).to have_content ActionController::Base.helpers.number_to_currency(item_price_policy.unit_cost * 2) # 2 items
     expect(page).to have_content instrument.name
     expect(page).to have_content ActionController::Base.helpers.number_to_currency(instrument_price_policy.usage_rate * 180) # 1.5 hours * 2 = 3 hours
+    expect(page).to have_content other_item.name
+    expect(page).to have_content ActionController::Base.helpers.number_to_currency(other_item_price_policy.unit_cost) # 1 item
   end
 end
