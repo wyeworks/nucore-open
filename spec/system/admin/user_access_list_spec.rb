@@ -55,7 +55,7 @@ RSpec.describe "User access list" do
           expect(page).to have_content(product2.name)
         end
 
-        # Toggle hidde inactive
+        # Toggle hide inactive
         check("Hide inactive Products")
 
         within("table") do
