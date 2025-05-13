@@ -50,7 +50,7 @@ RSpec.describe PurchaseNotifier do
       before do
         order_details = order.add(product2)
         order_details.each do |od|
-          od.ordered_at ||= Time.now
+          od.ordered_at ||= Time.zone.now
           od.order_status ||= OrderStatus.new_status
         end
         order.save!
