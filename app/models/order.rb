@@ -10,6 +10,7 @@ class Order < ApplicationRecord
   belongs_to :order_import
   belongs_to :cross_core_project, class_name: "Project"
   has_many   :order_details, inverse_of: :order, dependent: :destroy
+  has_many :products, through: :order_details
 
   validates_presence_of :user_id, :created_by
 
