@@ -6,13 +6,13 @@
   = hidden_field_tag "#{id_prefix}[_destroy]", false, class: 'destroy-field'
 
   %td
-    - product_name = estimate_detail.product.try(:name)
-    - if estimate_detail.product.try(:facility) && estimate_detail.product.facility != current_facility
+    - product_name = estimate_detail.product.name
+    - if estimate_detail.product.facility != current_facility
       - product_name = "#{product_name} (#{estimate_detail.product.facility.name})"
     = product_name
   %td= number_field_tag "#{id_prefix}[quantity]", 1, min: 1, style: "width: 3em;"
   %td
-    - time_unit = estimate_detail.product.try(:time_unit)
+    - time_unit = estimate_detail.product.time_unit
     - if time_unit == "days"
       = number_field_tag "#{id_prefix}[duration]", 1, min: 1
     - elsif time_unit == "mins"

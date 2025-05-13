@@ -28,8 +28,8 @@
       %tr
         %td
           - product = estimate_detail.product
-          - product_name = product.try(:name)
-          - if product.try(:facility) && product.facility != current_facility
+          - product_name = product.name
+          - if product.facility != current_facility
             - product_name = "#{product_name} (#{product.facility.name})"
           = product_name
         %td= estimate_detail.quantity
