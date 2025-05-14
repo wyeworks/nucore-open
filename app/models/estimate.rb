@@ -18,7 +18,9 @@ class Estimate < ApplicationRecord
   private
 
   def expires_at_cannot_be_in_the_past
-    if expires_at.blank? || expires_at < Time.zone.now
+    return if expires_at.blank?
+
+    if expires_at < Time.zone.now
       errors.add(:expires_at, I18n.t("activerecord.errors.models.estimate.attributes.expires_at.in_the_past"))
     end
   end
