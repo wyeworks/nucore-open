@@ -6,6 +6,9 @@
 
 %h2= header
 
+.pull-right
+  = link_to t(".download_csv"), facility_estimate_path(current_facility, @estimate, format: :csv), class: "btn btn-primary"
+
 .container.banner-list
   .row
     = header_display_date @estimate, :expires_at
@@ -26,7 +29,12 @@
     - @estimate.estimate_details.each do |estimate_detail|
       - displayTime = estimate_detail.duration_unit == "mins"
       %tr
-        %td= estimate_detail.product
+        %td
+          - product = estimate_detail.product
+          - product_name = product.name
+          - if product.facility != current_facility
+            - product_name = "#{product_name} (#{product.facility.name})"
+          = product_name
         %td= estimate_detail.quantity
         %td{class: displayTime ? "timeinput" : ""}
           - if displayTime
@@ -34,3 +42,8 @@
           - elsif estimate_detail.duration_unit.present?
             = "#{estimate_detail.duration} #{t(".days")}"
         %td.currency= number_to_currency(estimate_detail.cost)
+  %tfoot
+    %tr
+      %td{colspan: 3}
+      %td.currency
+        %strong=number_to_currency(@estimate.total_cost)

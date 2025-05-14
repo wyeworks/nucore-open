@@ -84,16 +84,12 @@ class OrderImportsController < ApplicationController
   def process_order_import!
     raise "Please upload a valid import file" if upload_file.blank?
     @order_import = create_order_import!
-    report.delay.deliver!(report_recipient)
-    flash[:notice] = t("controllers.order_imports.create.job_is_queued", email: @report_recipient)
+    OrderImportJob.perform_later(@order_import, report_recipient)
+    flash[:notice] = t("controllers.order_imports.create.job_is_queued", email: report_recipient)
   end
 
   def report_recipient
     @report_recipient ||= params[:report_recipient].presence || @order_import.creator.email
-  end
-
-  def report
-    @report ||= Reports::OrderImport.new(@order_import)
   end
 
   def stored_file

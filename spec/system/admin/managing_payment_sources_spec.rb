@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Managing accounts" do
   let(:facility) { create(:facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
   let(:owner) { create(:user) }
 
   before { login_as director }
@@ -14,7 +14,7 @@ RSpec.describe "Managing accounts" do
 
   describe "editing" do
     let(:account_factory) { Account.config.account_types.first.demodulize.underscore }
-    let!(:account) { create(account_factory, :with_account_owner, owner: owner) }
+    let!(:account) { create(account_factory, :with_account_owner, owner:) }
 
     it "can edit a payment source's description" do
       visit facility_accounts_path(facility)
@@ -30,12 +30,12 @@ RSpec.describe "Managing accounts" do
 
   describe "changing a user's role" do
     let(:account_factory) { Account.config.account_types.first.demodulize.underscore }
-    let!(:account) { create(account_factory, :with_account_owner, owner: owner) }
+    let!(:account) { create(account_factory, :with_account_owner, owner:) }
 
     context "from anything to owner" do
       let(:other_user) { create(:user) }
       let!(:user_role) do
-        create(:account_user, account: account, user: other_user, user_role: AccountUser::ACCOUNT_PURCHASER)
+        create(:account_user, account:, user: other_user, user_role: AccountUser::ACCOUNT_PURCHASER)
       end
 
       it "fails gracefully" do
@@ -56,7 +56,7 @@ RSpec.describe "Managing accounts" do
   end
 
   describe "editing credit cards" do
-    let!(:account) { FactoryBot.create(:credit_card_account, :with_account_owner, owner: owner, facility: facility) }
+    let!(:account) { create(:credit_card_account, :with_account_owner, owner:, facility:) }
 
     it "can edit a credit_cards expiration date", :aggregate_failures do
       visit facility_accounts_path(facility)
@@ -70,6 +70,76 @@ RSpec.describe "Managing accounts" do
       select "#{Time.zone.today.year + 5}", from: "Expiration year"
       click_on "Save"
       expect(page).to have_content("Expiration\n05/31/#{Time.zone.today.year + 5}")
+    end
+  end
+
+  describe(
+    "hide far future expiration dates",
+  ) do
+    before do
+      visit facility_accounts_path(facility)
+      fill_in "search_term", with: account.account_number
+      click_on "Search"
+    end
+
+    context "when expiration is less than 75 years from now" do
+      let(:account) do
+        create(
+          :credit_card_account,
+          :with_account_owner,
+          owner:,
+          facility:,
+          expires_at: 75.years.from_now - 1.day
+        )
+      end
+
+      it(
+        "shows expiration date when ff is off",
+        feature_setting: { hide_account_far_future_expiration: false },
+      ) do
+        within("table") do
+          expect(page).to have_content(account.human_date(account.expires_at))
+        end
+      end
+
+      it(
+        "shows expiration date when ff is on",
+        feature_setting: { hide_account_far_future_expiration: true },
+      ) do
+        within("table") do
+          expect(page).to have_content(account.human_date(account.expires_at))
+        end
+      end
+    end
+
+    context "when expiration is more than 75 years from now" do
+      let(:account) do
+        create(
+          :credit_card_account,
+          :with_account_owner,
+          owner:,
+          facility:,
+          expires_at: 75.years.from_now + 1.day
+        )
+      end
+
+      it(
+        "does not show expiration date when ff is on",
+        feature_setting: { hide_account_far_future_expiration: true },
+      ) do
+        within("table") do
+          expect(page).not_to have_content(account.human_date(account.expires_at))
+        end
+      end
+
+      it(
+        "shows expiration date when ff is off",
+        feature_setting: { hide_account_far_future_expiration: false },
+      ) do
+        within("table") do
+          expect(page).to have_content(account.human_date(account.expires_at))
+        end
+      end
     end
   end
 end

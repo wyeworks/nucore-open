@@ -2,9 +2,15 @@
 - if @statements.empty?
   %p.notice= text("no_statements")
 - else
+  = form_tag "#", method: :post, id: "statements-form" do
+    - if @account
+      .pull-right.mb-3
+        = submit_tag t("statements.download_selected"), class: "btn btn-primary js--download-selected-statements", disabled: true
   %table.table.table-striped.table-hover
     %thead
       %tr
+        %th
+          %input{type: "checkbox", class: "js--select-all-statements"}
         %th= Statement.human_attribute_name(:invoice_number)
         %th= Statement.human_attribute_name(:created_at)
         %th= Statement.human_attribute_name(:account_admins)
@@ -20,6 +26,9 @@
     %tbody
       - StatementPresenter.wrap(@statements).each do |s|
         %tr.statement
+          %td.centered
+            - if !s.canceled_at
+              = check_box_tag "statement_ids[]", s.id, false, class: "js--statement-checkbox", data: { invoice_number: s.invoice_number }
           %td.centered
             = "##{s.invoice_number}"
             - unless s.canceled_at
@@ -83,3 +92,5 @@
 
 
   = will_paginate(@statements)
+  
+

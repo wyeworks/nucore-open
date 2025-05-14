@@ -45,4 +45,14 @@ module AccountsHelper
     end
   end
 
+  def account_expiration(expires_at)
+    hide_future_expiration = SettingsHelper.feature_on?(:hide_account_far_future_expiration)
+
+    if hide_future_expiration && expires_at > 75.years.from_now
+      "—"
+    else
+      human_date(expires_at)
+    end
+  end
+
 end

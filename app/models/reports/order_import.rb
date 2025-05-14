@@ -29,11 +29,6 @@ class Reports::OrderImport
     @order_import.error_file_content
   end
 
-  def deliver!(recipient)
-    @order_import.process_upload!
-    CsvReportMailer.csv_report_email(recipient, self).deliver_now
-  end
-
   def has_attachment?
     @order_import.error_file_present?
   end

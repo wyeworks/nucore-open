@@ -18,7 +18,7 @@
           %td= account.type_string
           %td= account.owner_user.full_name if account.owner_user
           %td{ class: account.expired? ? "expired" : "" }
-            = human_date(account.expires_at)
+            = account_expiration(account.expires_at)
           - if current_facility.cross_facility?
             %td= account.per_facility? ? account.facilities.alphabetized.join(", ") : html("all", inline: true)
 

@@ -47,6 +47,10 @@ en:
   statement_downcase: statement
   statements_downcase: statements
   statemented_downcase: statemented
+  
+  statements:
+    pdf:
+      download: Download
 
   admin:
     shared:
@@ -529,6 +533,8 @@ en:
     create:
       success: Estimate successfully created
       error: There was an error creating the estimate
+    estimate_detail:
+      remove: Remove
     new:
       add: Add Estimate
       add_product: Add Product to Estimate
@@ -536,9 +542,9 @@ en:
       cancel: Cancel
       create: Create an Estimate
       head: Add Estimate
-      remove_products: Remove
     show:
       days: days
+      download_csv: Download CSV
 
   facility_order_details:
     edit:
@@ -690,6 +696,9 @@ en:
       notice: "You have no completed orders for any facility with this payment source."
       th:
         total: "Unreconciled Total"
+    download_selected: Download Selected
+    no_statements_selected: No statements were selected for download.
+    downloading_multiple: "Downloading %{count} statements..."
     list:
       head:
         h1: "Payment Source Transactions"
@@ -1130,6 +1139,7 @@ en:
       training_requested: Training Requested
       update_approvals:
         submit: "Update Access List"
+      hide_inactive: Hide inactive Products
 
     new_external:
       head: "Add User"
