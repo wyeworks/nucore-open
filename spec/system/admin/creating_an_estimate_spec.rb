@@ -18,6 +18,7 @@ RSpec.describe(
   let(:other_facility) { create(:setup_facility) }
   let!(:other_item) { create(:setup_item, facility: other_facility, cross_core_ordering_available: true) }
   let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group: price_group) }
+  let!(:item_without_price_policy) { create(:setup_item, facility:) }
 
   before { login_as director }
 
@@ -37,14 +38,7 @@ RSpec.describe(
 
     expect(page).to have_content("No results found")
 
-    page.execute_script("$('#estimate_user_id_chosen').trigger('mousedown')")
-    page.execute_script("$('#estimate_user_id_chosen .chosen-search input').val('#{user.first_name}').trigger('input')")
-
-    wait_for_ajax
-
-    # Make sure calendar is not open
-    find("#estimate_user_id_chosen").click
-    select_from_chosen user.full_name, from: "User"
+    select_user(user)
 
     expect(page).to have_content "Add Products to Estimate"
     select_from_chosen bundle.name, from: "Product"
@@ -86,7 +80,39 @@ RSpec.describe(
 
     expect(page).to have_content("Remove", count: 3)
 
+    select_from_chosen facility.name, from: "Facility", scroll_to: :center
+    select_from_chosen item_without_price_policy.name, from: "Product"
+    click_button "Add Product to Estimate"
+
+    wait_for_ajax
+
+    within '#new_estimate_estimate_details' do
+      item_without_price_policy_row = all('tr').last
+      columns = item_without_price_policy_row.all('td')
+      first_column_text = columns[0].text
+      expect(first_column_text).to have_content(item_without_price_policy.name)
+    end
+
     click_button "Add Estimate"
+
+    expect(page).not_to have_content "Estimate successfully created"
+
+    within '#new_estimate_estimate_details' do
+      item_without_price_policy_row = all('tr').last
+      columns = item_without_price_policy_row.all('td')
+      first_column_text = columns[0].text
+      expect(first_column_text).to have_content(item_without_price_policy.name)
+      expect(first_column_text).to have_content("No price policy found.")
+
+      remove_button = columns[3].find('.remove-estimate-detail')
+      remove_button.click
+    end
+
+    select_user(user)
+
+    click_button "Add Estimate"
+
+    expect(page).to have_content "Estimate successfully created"
 
     expect(page).to have_content "Estimate successfully created"
     expect(page).to have_content "Estimate ##{Estimate.last.id} - Test Estimate"
