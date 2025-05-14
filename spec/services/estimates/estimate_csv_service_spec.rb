@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Estimates::EstimateCsvService do
+RSpec.describe Estimates::EstimateCsvService, feature_setting: { user_based_price_groups: true } do
   include DateHelper
 
   subject(:csv_string) { described_class.new(estimate).to_csv }
