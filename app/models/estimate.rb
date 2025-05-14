@@ -10,6 +10,7 @@ class Estimate < ApplicationRecord
 
   validate :expires_at_cannot_be_in_the_past
   validates :expires_at, presence: true
+  validate :validate_estimate_details
 
   def total_cost
     estimate_details.sum(&:cost)
@@ -22,6 +23,18 @@ class Estimate < ApplicationRecord
 
     if expires_at < Time.zone.now
       errors.add(:expires_at, I18n.t("activerecord.errors.models.estimate.attributes.expires_at.in_the_past"))
+    end
+  end
+
+  def validate_estimate_details
+    estimate_details.each do |estimate_detail|
+      next if estimate_detail.marked_for_destruction?
+      next if estimate_detail.valid?
+
+      errors.delete(:"estimate_details.base")
+      estimate_detail.errors.each do |error|
+        errors.add(:base, "#{estimate_detail.product.name}: #{error.message}")
+      end
     end
   end
 end

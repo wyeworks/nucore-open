@@ -13,11 +13,14 @@ class EstimateDetail < ApplicationRecord
   validates :quantity, presence: true, numericality: { greater_than: 0 }
   validates :duration, numericality: { greater_than: 0 }, allow_nil: true
   validates :duration_unit, inclusion: { in: TIME_UNITS }, allow_nil: true
+  validate :price_policy_exists
 
   delegate :user, to: :estimate
 
   def price_groups
     return [PriceGroup.nonbillable] if product.nonbillable_mode?
+
+    return [] if user.blank?
 
     user.price_groups.uniq
   end
@@ -40,5 +43,12 @@ class EstimateDetail < ApplicationRecord
 
     self.price_policy = pp
     self.cost = cost
+  end
+
+  def price_policy_exists
+    pp = product.cheapest_price_policy(self, Time.current)
+    if pp.blank?
+      errors.add(:base, I18n.t("activerecord.errors.models.estimate_detail.no_price_policy"))
+    end
   end
 end
