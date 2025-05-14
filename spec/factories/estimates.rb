@@ -9,4 +9,10 @@ FactoryBot.define do
     note { "This is a test estimate" }
     expires_at { 30.days.from_now }
   end
+
+  factory :estimate_detail do
+    estimate
+    product
+    quantity { 1 }
+  end
 end
