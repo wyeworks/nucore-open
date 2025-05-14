@@ -46,6 +46,8 @@ class EstimateDetail < ApplicationRecord
   end
 
   def price_policy_exists
+    return if product.blank? || user.blank?
+
     pp = product.cheapest_price_policy(self, Time.current)
     if pp.blank?
       errors.add(:base, I18n.t("activerecord.errors.models.estimate_detail.no_price_policy"))
