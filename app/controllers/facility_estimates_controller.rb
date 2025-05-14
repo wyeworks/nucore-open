@@ -30,6 +30,16 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def show
+    respond_to do |format|
+      format.html
+      format.csv do
+        filename = "#{@estimate.facility.abbreviation}_estimate_#{@estimate.id}.csv"
+        send_data Estimates::EstimateCsvService.new(@estimate).to_csv,
+                  filename:,
+                  type: "text/csv",
+                  disposition: "attachment"
+      end
+    end
   end
 
   def search
@@ -64,7 +74,7 @@ class FacilityEstimatesController < ApplicationController
   def add_product_to_estimate
     product_id = params[:product_id]
 
-    product = current_facility.products.find(product_id)
+    product = Product.find(product_id)
 
     @estimate_detail_products = if product.is_a?(Bundle)
                                   product.products
@@ -93,7 +103,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def set_products
-    @products = current_facility.products.where({ type: %w[Item Service Instrument TimedService Bundle] }).not_archived.alphabetized.map { |p| [p.name, p.id] }
+    @products = current_facility.products.available_for_estimates.alphabetized.map { |p| [p.name, p.id] }
   end
 
   def set_users

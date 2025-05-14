@@ -11,6 +11,10 @@ class Estimate < ApplicationRecord
   validate :expires_at_cannot_be_in_the_past
   validates :expires_at, presence: true
 
+  def total_cost
+    estimate_details.sum(&:cost)
+  end
+
   private
 
   def expires_at_cannot_be_in_the_past

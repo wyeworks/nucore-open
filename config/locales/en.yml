@@ -544,6 +544,7 @@ en:
       head: Add Estimate
     show:
       days: days
+      download_csv: Download CSV
 
   facility_order_details:
     edit:

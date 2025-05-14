@@ -1,21 +1,43 @@
 $(function () {
-  const addProductButton = document.getElementById("add_product_to_estimate");
-
-  if (!addProductButton) {
-    return;
-  }
-
+  const facilitySelect = $("#facility_id");
   const productSelect = document.getElementById("product_id");
-
-  if (!productSelect) {
+  const addProductButton = document.getElementById("add_product_to_estimate");
+  if (!facilitySelect || !productSelect || !addProductButton) {
     return;
   }
 
   const productUrl = productSelect.dataset["productUrl"];
+  const originalFacility = facilitySelect.data("originalFacility");
 
   if (!productUrl) {
     return;
   }
+
+  facilitySelect.on("change", (event) => {
+    const selectedOption = $(event.target).find(":selected");
+    const productsPath = selectedOption.data("products-path");
+
+    if (!productsPath) {
+      return;
+    }
+
+    $.ajax({
+      url: productsPath,
+      type: "GET",
+      dataType: "json",
+      data: { is_estimate: true, original_facility: originalFacility },
+      success: function(data) {
+        $(productSelect).empty();
+
+        data.forEach(function(product) {
+          const option = new Option(product.name, product.id);
+          $(productSelect).append(option);
+        });
+
+        $(productSelect).trigger('chosen:updated');
+      }
+    });
+  });
 
   addProductButton.addEventListener("click", function () {
     const productId = productSelect.value;

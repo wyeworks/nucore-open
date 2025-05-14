@@ -36,6 +36,14 @@
 
   .well
     .inline-form-controls
+      %div
+        = label_tag :facility_id, Facility.model_name.human
+        = select_tag :facility_id,
+          options_for_select(Facility.alphabetized.map { |f| [f.name, f.id, {"data-products-path": available_for_cross_core_ordering_facility_products_path(f, format: :js)}] }, current_facility.id),
+          class: "js--estimate-facility js--chosen",
+          data: { original_facility: current_facility.id },
+          include_blank: false
+
       .margin_x
         = label_tag :product_id, Product.model_name.human
         = select_tag :product_id,
