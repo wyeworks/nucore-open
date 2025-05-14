@@ -35,7 +35,7 @@ class FacilityEstimatesController < ApplicationController
       format.csv do
         filename = "#{@estimate.facility.abbreviation}_estimate_#{@estimate.id}.csv"
         send_data Estimates::EstimateCsvService.new(@estimate).to_csv,
-                  filename: filename,
+                  filename:,
                   type: "text/csv",
                   disposition: "attachment"
       end

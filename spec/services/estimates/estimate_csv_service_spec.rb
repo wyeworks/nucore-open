@@ -5,11 +5,14 @@ require "rails_helper"
 RSpec.describe Estimates::EstimateCsvService do
   include DateHelper
 
+  subject(:csv_string) { described_class.new(estimate).to_csv }
+
   let(:facility) { create(:setup_facility) }
   let(:other_facility) { create(:setup_facility) }
   let(:user) { create(:user) }
   let(:creator) { create(:user) }
   let(:price_group) { user.price_groups.first }
+  let(:csv_rows) { CSV.parse(csv_string) }
 
   let(:item) { create(:setup_item, facility:) }
   let!(:item_price_policy) do
@@ -45,9 +48,6 @@ RSpec.describe Estimates::EstimateCsvService do
            expires_at: 1.week.from_now)
   end
 
-  subject(:csv_string) { described_class.new(estimate).to_csv }
-  let(:csv_rows) { CSV.parse(csv_string) }
-
   describe "#to_csv" do
     context "with a basic estimate" do
       before do
@@ -55,27 +55,31 @@ RSpec.describe Estimates::EstimateCsvService do
       end
 
       it "generates the header section correctly" do
-        expect(csv_rows[0]).to eq(%w[Estimate Information])
-        expect(csv_rows[1]).to eq(%w[ID Name Created\ By User Expiration\ Date])
-        expect(csv_rows[2]).to eq([
-          estimate.id.to_s,
-          "Test Estimate",
-          creator.full_name,
-          user.full_name,
-          format_usa_date(estimate.expires_at)
-        ])
+        expect(csv_rows[0]).to eq(["Estimate Information"])
+        expect(csv_rows[1]).to eq(["ID", "Name", "Created By", "User", "Expiration Date"])
+        expect(csv_rows[2]).to eq(
+          [
+            estimate.id.to_s,
+            "Test Estimate",
+            creator.full_name,
+            user.full_name,
+            format_usa_date(estimate.expires_at)
+          ]
+        )
       end
 
       it "generates the products section correctly" do
         expect(csv_rows[4]).to eq(%w[Products])
         expect(csv_rows[5]).to eq(%w[Facility Product Quantity Duration Price])
-        expect(csv_rows[6]).to eq([
-          facility.name,
-          item.name,
-          "2",
-          nil,
-          "$200.00"
-        ])
+        expect(csv_rows[6]).to eq(
+          [
+            facility.name,
+            item.name,
+            "2",
+            nil,
+            "$200.00"
+          ]
+        )
       end
 
       it "includes the total" do
