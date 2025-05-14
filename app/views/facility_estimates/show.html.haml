@@ -39,3 +39,8 @@
           - elsif estimate_detail.duration_unit.present?
             = "#{estimate_detail.duration} #{t(".days")}"
         %td.currency= number_to_currency(estimate_detail.cost)
+  %tfoot
+    %tr
+      %td{colspan: 3}
+      %td.currency
+        %strong=number_to_currency(@estimate.total_cost)
