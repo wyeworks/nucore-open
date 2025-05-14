@@ -16,7 +16,7 @@ module Estimates
         csv << []
 
         csv << ["Products"]
-        csv << ["Facility", "Product", "Quantity", "Duration", "Price"]
+        csv << %w[Facility Product Quantity Duration Price]
 
         @estimate.estimate_details.includes(:product).each do |estimate_detail|
           csv << [

@@ -12,16 +12,30 @@ RSpec.describe Estimates::EstimateCsvService do
   let(:price_group) { user.price_groups.first }
 
   let(:item) { create(:setup_item, facility:) }
-  let!(:item_price_policy) { create(:item_price_policy, product: item, price_group:, unit_cost: 100) }
+  let!(:item_price_policy) do
+    create(:item_price_policy, product: item, price_group:, unit_cost: 100)
+  end
 
   let(:timed_product) { create(:setup_timed_service, facility:) }
-  let!(:service_price_policy) { create(:timed_service_price_policy, product: timed_product, price_group:) }
+  let!(:service_price_policy) do
+    create(:timed_service_price_policy, product: timed_product, price_group:)
+  end
 
   let(:other_facility_product) { create(:setup_item, facility: other_facility) }
-  let!(:other_facility_price_policy) { create(:item_price_policy, product: other_facility_product, price_group:, unit_cost: 80) }
+  let!(:other_facility_price_policy) do
+    create(:item_price_policy,
+           product: other_facility_product,
+           price_group:,
+           unit_cost: 80)
+  end
 
   let(:instrument) { create(:setup_instrument, :daily_booking, facility:) }
-  let!(:instrument_price_policy) { create(:instrument_price_policy, product: instrument, price_group:, usage_rate_daily: 50) }
+  let!(:instrument_price_policy) do
+    create(:instrument_price_policy,
+           product: instrument,
+           price_group:,
+           usage_rate_daily: 50)
+  end
 
   let(:estimate) do
     create(:estimate,
@@ -32,40 +46,36 @@ RSpec.describe Estimates::EstimateCsvService do
   end
 
   subject(:csv_string) { described_class.new(estimate).to_csv }
-
   let(:csv_rows) { CSV.parse(csv_string) }
 
   describe "#to_csv" do
     context "with a basic estimate" do
       before do
-        create(:estimate_detail,
-               estimate:,
-               product: item,
-               quantity: 2)
+        create(:estimate_detail, estimate:, product: item, quantity: 2)
       end
 
       it "generates the header section correctly" do
-        expect(csv_rows[0]).to eq(["Estimate Information"])
-        expect(csv_rows[1]).to eq(["ID", "Name", "Created By", "User", "Expiration Date"])
+        expect(csv_rows[0]).to eq(%w[Estimate Information])
+        expect(csv_rows[1]).to eq(%w[ID Name Created\ By User Expiration\ Date])
         expect(csv_rows[2]).to eq([
-                                  estimate.id.to_s,
-                                  "Test Estimate",
-                                  creator.full_name,
-                                  user.full_name,
-                                  format_usa_date(estimate.expires_at)
-                                ])
+          estimate.id.to_s,
+          "Test Estimate",
+          creator.full_name,
+          user.full_name,
+          format_usa_date(estimate.expires_at)
+        ])
       end
 
       it "generates the products section correctly" do
-        expect(csv_rows[4]).to eq(["Products"])
-        expect(csv_rows[5]).to eq(["Facility", "Product", "Quantity", "Duration", "Price"])
+        expect(csv_rows[4]).to eq(%w[Products])
+        expect(csv_rows[5]).to eq(%w[Facility Product Quantity Duration Price])
         expect(csv_rows[6]).to eq([
-                                  facility.name,
-                                  item.name,
-                                  "2",
-                                  nil,
-                                  "$200.00"
-                                ])
+          facility.name,
+          item.name,
+          "2",
+          nil,
+          "$200.00"
+        ])
       end
 
       it "includes the total" do
@@ -113,10 +123,7 @@ RSpec.describe Estimates::EstimateCsvService do
 
     context "with products from multiple facilities" do
       before do
-        create(:estimate_detail,
-               estimate:,
-               product: item,
-               quantity: 2)
+        create(:estimate_detail, estimate:, product: item, quantity: 2)
         create(:estimate_detail,
                estimate:,
                product: other_facility_product,
@@ -135,10 +142,7 @@ RSpec.describe Estimates::EstimateCsvService do
 
     context "with multiple products" do
       before do
-        create(:estimate_detail,
-               estimate:,
-               product: item,
-               quantity: 2)
+        create(:estimate_detail, estimate:, product: item, quantity: 2)
         create(:estimate_detail,
                estimate:,
                product: timed_product,
