@@ -1,0 +1,16 @@
+%tr{ data: { estimate_detail_id: estimate_detail.id } }
+  - id_prefix = "estimate[estimate_details_attributes][#{temp_id}]"
+  = hidden_field_tag "#{id_prefix}[product_id]", estimate_detail.product_id
+  - if estimate_detail.duration_unit.present?
+    = hidden_field_tag "#{id_prefix}[duration_unit]", estimate_detail.duration_unit
+  = hidden_field_tag "#{id_prefix}[_destroy]", false, class: 'destroy-field'
+
+  %td= estimate_detail.product.try(:name)
+  %td= number_field_tag "#{id_prefix}[quantity]", 1, min: 1, style: "width: 3em;"
+  %td
+    - time_unit = estimate_detail.product.try(:time_unit)
+    - if time_unit == "days"
+      = number_field_tag "#{id_prefix}[duration]", 1, min: 1
+    - elsif time_unit == "mins"
+      = text_field_tag "#{id_prefix}[duration]", "0:01", class: "js--estimate-duration-mins"
+  %td.btn.remove-estimate-detail= t('.remove')

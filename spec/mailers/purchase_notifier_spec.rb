@@ -19,7 +19,7 @@ RSpec.describe PurchaseNotifier do
 
       it "generates an order notification", :aggregate_failures do
         expect(email.to).to eq [recipient]
-        expect(email.subject).to include("Order Notification")
+        expect(email.subject).to eq("#{facility.name} Order Received for #{product.name}")
         expect(email.html_part.to_s).to match(/Ordered By.+#{user.full_name}/m)
         expect(email.reply_to).to eq [order.created_by_user.email]
         expect(email.text_part.to_s).to include("Ordered By: #{user.full_name}")
@@ -41,6 +41,25 @@ RSpec.describe PurchaseNotifier do
       it "does include order for" do
         expect(email.html_part.to_s).to include("Order For")
         expect(email.text_part.to_s).to include("Order For")
+      end
+    end
+
+    context "when there're multiple products" do
+      let(:product2) { create(:setup_item, facility:) }
+
+      before do
+        order_details = order.add(product2)
+        order_details.each do |od|
+          od.ordered_at ||= Time.zone.now
+          od.order_status ||= OrderStatus.new_status
+        end
+        order.save!
+
+        deliver_mail
+      end
+
+      it "sets the subject correctly" do
+        expect(email.subject).to eq("#{facility.name} Order Received for Multiple Items")
       end
     end
   end

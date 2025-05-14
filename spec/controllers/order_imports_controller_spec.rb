@@ -47,7 +47,7 @@ RSpec.describe OrderImportsController do
       )
     end
 
-    describe "log event creation" do
+    describe "log event creation", active_job: :test do
       let(:user) { @admin }
       let(:send_receipts) { false }
       let(:fail_on_error) { false }
@@ -72,6 +72,10 @@ RSpec.describe OrderImportsController do
               ).count
             end.by(1)
           )
+        end
+
+        it "enqueues an OrderImportJob" do
+          expect { do_request }.to have_enqueued_job(OrderImportJob)
         end
       end
 

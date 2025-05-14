@@ -15,6 +15,14 @@
   %p.notice= text("users.access_list.no_products", name: @user.full_name)
 
 - else
+  .row
+    .pull-right
+      = form_with(url: facility_user_access_list_path(current_facility),
+        method: :get, class: "js--submit-on-change") do |f|
+        .checkbox
+          = f.check_box :hide_inactive, checked: params[:hide_inactive] == "1"
+          = f.label :hide_inactive, t(".hide_inactive")
+
   = form_for :user, url: facility_user_access_list_approvals_path(@facility, @user) do |form|
     - @products_by_type.each_pair do |product_type, products|
       %h3= product_type.pluralize
@@ -40,7 +48,7 @@
                 - if training_requested_for?(product)
                   %span.label.label-important
                     = text("users.access_list.training_requested")
-                = link_to product, [product.facility, product, :users]
+                = link_to product.to_s_with_status, [product.facility, product, :users]
               %td.product-column
                 - if access_granted_at.present?
                   = month_day_year(access_granted_at)
