@@ -6,6 +6,9 @@
 
 %h2= header
 
+.pull-right
+  = link_to t(".download_csv"), facility_estimate_path(current_facility, @estimate, format: :csv), class: "btn btn-primary"
+
 .container.banner-list
   .row
     = header_display_date @estimate, :expires_at

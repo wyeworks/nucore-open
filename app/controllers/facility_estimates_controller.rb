@@ -30,6 +30,16 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def show
+    respond_to do |format|
+      format.html
+      format.csv do
+        filename = "#{@estimate.facility.abbreviation}_estimate_#{@estimate.id}.csv"
+        send_data Estimates::EstimateCsvService.new(@estimate).to_csv,
+                  filename:,
+                  type: "text/csv",
+                  disposition: "attachment"
+      end
+    end
   end
 
   def search
