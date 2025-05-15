@@ -7,7 +7,7 @@ module UserSelect
 
     wait_for_ajax
 
-    find("#{selector}").click
+    find(selector).click
     select_from_chosen user.full_name, from: "User"
   end
 end
