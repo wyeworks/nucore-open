@@ -38,7 +38,7 @@ RSpec.describe(
 
     expect(page).to have_content("No results found")
 
-    select_user(user)
+    select_user("#estimate_user_id_chosen", user)
 
     expect(page).to have_content "Add Products to Estimate"
     select_from_chosen bundle.name, from: "Product"
@@ -108,7 +108,7 @@ RSpec.describe(
       remove_button.click
     end
 
-    select_user(user)
+    select_user("#estimate_user_id_chosen", user)
 
     click_button "Add Estimate"
 
