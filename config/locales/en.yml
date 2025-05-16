@@ -545,6 +545,10 @@ en:
     show:
       days: days
       download_csv: Download CSV
+      recalculate: Recalculate
+    recalculate:
+      success: Estimate successfully recalculated
+      error: There was an error recalculating the estimate
 
   facility_order_details:
     edit:

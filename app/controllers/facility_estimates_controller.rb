@@ -9,7 +9,7 @@ class FacilityEstimatesController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
-  before_action :load_estimate, only: [:show]
+  before_action :load_estimate, only: [:show, :recalculate]
   before_action :set_users, only: [:search]
 
   def index
@@ -87,6 +87,16 @@ class FacilityEstimatesController < ApplicationController
     respond_to do |format|
       format.js
     end
+  end
+
+  def recalculate
+    if @estimate.recalculate
+      flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".error")
+    end
+
+    redirect_to facility_estimate_path(current_facility, @estimate)
   end
 
   private

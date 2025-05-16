@@ -25,15 +25,6 @@ class EstimateDetail < ApplicationRecord
     user.price_groups.uniq
   end
 
-  private
-
-  def clear_duration_fields
-    unless product.order_quantity_as_time? || product.is_a?(Instrument)
-      self.duration = nil
-      self.duration_unit = nil
-    end
-  end
-
   def assign_price_policy_and_cost
     pp = product.cheapest_price_policy(self, Time.current)
 
@@ -43,6 +34,15 @@ class EstimateDetail < ApplicationRecord
 
     self.price_policy = pp
     self.cost = cost
+  end
+
+  private
+
+  def clear_duration_fields
+    unless product.order_quantity_as_time? || product.is_a?(Instrument)
+      self.duration = nil
+      self.duration_unit = nil
+    end
   end
 
   def price_policy_exists
