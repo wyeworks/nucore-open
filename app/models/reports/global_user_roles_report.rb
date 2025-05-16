@@ -8,8 +8,8 @@ module Reports
 
     attr_reader :users
 
-    def initialize(users:)
-      @users = users
+    def initialize(users: nil)
+      @users = users || User.with_global_roles.sort_last_first
     end
 
     def default_report_hash

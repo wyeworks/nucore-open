@@ -21,11 +21,11 @@ module CsvEmailAction
     end
   end
 
-  def queue_csv_report_email(report)
+  def queue_csv_report_email(report_class, **report_args)
     yield_email_and_respond_for_report do |email|
-      # TODO: in order to use ActiveJob's `deliver_later`, the report needs to be
-      # specifically serializable, which many of our reports are not.
-      CsvReportMailer.delay.csv_report_email(email, report)
+      CsvReportEmailJob.perform_later(
+        report_class.to_s, email, **report_args
+      )
     end
   end
 

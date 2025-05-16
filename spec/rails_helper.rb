@@ -175,7 +175,7 @@ RSpec.configure do |config|
 
   config.after(:all) { travel_back }
 
-  config.around(:each, :active_job) do |example|
+  config.around(:each, active_job: :test) do |example|
     old_value = ActiveJob::Base.queue_adapter
     ActiveJob::Base.queue_adapter = :test
     example.call

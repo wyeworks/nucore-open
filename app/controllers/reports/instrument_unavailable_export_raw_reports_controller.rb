@@ -6,12 +6,16 @@ module Reports
 
     private
 
-    def raw_report
-      Reports::InstrumentUnavailableExportRaw.new(
+    def report_class
+      Reports::InstrumentUnavailableExportRaw
+    end
+
+    def report_args
+      {
         facility: current_facility,
         date_start: @date_start,
         date_end: @date_end,
-      )
+      }
     end
 
     def success_redirect_path

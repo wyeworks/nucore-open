@@ -45,6 +45,12 @@ RSpec.describe "log_events", type: :request do
         expect(page).to have_content(order_detail.order_number)
       end
 
+      context "when csv email report is requested" do
+        let(:action) { -> { get log_events_path(format: :csv) } }
+        let(:report_class) { Reports::LogEventsReport }
+
+        include_examples "csv email action"
+      end
     end
 
     context "email events" do
