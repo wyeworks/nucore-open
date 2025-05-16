@@ -47,27 +47,27 @@ RSpec.describe "User access list" do
         product1.update(is_archived: true)
       end
 
-      it "can hide inactive products", :js do
+      it "can show inactive products", :js do
         visit facility_user_access_list_path(facility, user)
 
         within("table") do
+          expect(page).to_not have_content("#{product1.name} (inactive)")
+          expect(page).to have_content(product2.name)
+        end
+
+        # Toggle show inactive
+        check("Show inactive Products")
+
+        within("table") do
           expect(page).to have_content("#{product1.name} (inactive)")
           expect(page).to have_content(product2.name)
         end
 
-        # Toggle hide inactive
-        check("Hide inactive Products")
+        # Toggle show again
+        uncheck("Show inactive Products")
 
         within("table") do
-          expect(page).not_to have_content("#{product1.name} (inactive)")
-          expect(page).to have_content(product2.name)
-        end
-
-        # Toggle hide again
-        uncheck("Hide inactive Products")
-
-        within("table") do
-          expect(page).to have_content("#{product1.name} (inactive)")
+          expect(page).to_not have_content("#{product1.name} (inactive)")
         end
       end
     end
