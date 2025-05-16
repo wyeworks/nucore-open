@@ -325,6 +325,10 @@ Rails.application.routes.draw do
         get "search"
         get "add_product_to_estimate"
       end
+
+      member do
+        post "recalculate"
+      end
     end
 
     get "disputed_orders", to: "facilities#disputed_orders"

@@ -15,6 +15,13 @@ class Estimate < ApplicationRecord
     estimate_details.sum(&:cost)
   end
 
+  def recalculate
+    transaction do
+      estimate_details.each(&:assign_price_policy_and_cost)
+      save
+    end
+  end
+
   private
 
   def expires_at_cannot_be_in_the_past
