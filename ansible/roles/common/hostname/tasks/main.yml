@@ -1,6 +1,0 @@
-- debug:
-    msg: Inventory {{ inventory_hostname }} | fqdm {{ ansible_fqdn }}
-- hostname:
-    name: "{{ inventory_hostname }}"
-  when: inventory_hostname != ansible_fqdn
-  become: yes

@@ -1,9 +1,0 @@
----
-- yum:
-    name: '{{ dependencies }}'
-    state: latest
-  become: yes
-- yum:
-    name: '{{ additional_libraries }}'
-    state: latest
-  become: yes
