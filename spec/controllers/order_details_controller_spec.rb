@@ -130,7 +130,9 @@ RSpec.describe OrderDetailsController do
           before { reservation.product.update(cancellation_email_recipients: "cancel@example.com") }
 
           it "triggers an email" do
-            expect { put :cancel, params: { order_id: order.id, id: order_detail.id } }.to change(ActionMailer::Base.deliveries, :count).by(1)
+            expect { put :cancel, params: { order_id: order.id, id: order_detail.id } }.to(
+              have_enqueued_mail(CancellationMailer, :notify_facility)
+            )
           end
         end
 

@@ -57,19 +57,22 @@ RSpec.describe FacilityNotificationsController do
 
   describe "POST #send_notifications" do
     before :each do
-      Notifier.deliveries.clear
       @method = :post
       @action = :send_notifications
       @params.merge!(order_detail_ids: [@order_detail1.id, @order_detail2.id])
     end
 
     context "with a 1 week review period", billing_review_period: 7.days do
+      include ActionMailer::TestHelper
+
       it_should_deny_all [:staff, :senior_staff]
 
       it_should_allow_managers_only :redirect do
         expect(assigns(:errors)).to be_empty
         expect(assigns(:accounts_to_notify)).to contain_exactly(@account.id)
         expect([@order_detail1, @order_detail2]).to be_all { |od| od.reload.reviewed_at > 6.days.from_now }
+
+        perform_enqueued_jobs
 
         expect(Notifier.deliveries.count).to eq(1)
       end
@@ -103,7 +106,7 @@ RSpec.describe FacilityNotificationsController do
           end
 
           it "sends one email for the two accounts" do
-            expect { do_request }.to change { Notifier.deliveries.count }.by(1)
+            expect { do_request }.to have_enqueued_mail(Notifier, :review_orders)
           end
 
           context "with fewer than 10 accounts" do
