@@ -20,8 +20,8 @@
       = form_with(url: facility_user_access_list_path(current_facility),
         method: :get, class: "js--submit-on-change") do |f|
         .checkbox
-          = f.check_box :hide_inactive, checked: params[:hide_inactive] == "1"
-          = f.label :hide_inactive, t(".hide_inactive")
+          = f.check_box :show_inactive, checked: params[:show_inactive] == "1"
+          = f.label :show_inactive, t(".show_inactive")
 
   = form_for :user, url: facility_user_access_list_approvals_path(@facility, @user) do |form|
     - @products_by_type.each_pair do |product_type, products|

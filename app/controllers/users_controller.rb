@@ -99,7 +99,7 @@ class UsersController < ApplicationController
 
     @facility = current_facility
     product_relation = Product.for_facility(@facility)
-    product_relation = product_relation.active if params[:hide_inactive] == "1"
+    product_relation = product_relation.active unless params[:show_inactive] == "1"
 
     @products_by_type = product_relation.requiring_approval_by_type
     @training_requested_product_ids = @user.training_requests.pluck(:product_id)
