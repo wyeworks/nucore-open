@@ -5,9 +5,26 @@
     #{
       js_rows = ""
       @estimate_detail_products.each_with_index do |product, index|
-        temp_id = "#{product.id}#{index}#{Time.now.to_i}"
-        estimate_detail = EstimateDetail.new(product: product, duration_unit: product.time_unit)
-        html = render(partial: 'facility_estimates/estimate_detail', locals: { estimate_detail: estimate_detail, temp_id: temp_id })
+        # Generate a truly unique ID with microseconds and a random component
+        temp_id = "new_#{product.id}_#{index}_#{Time.now.to_i}_#{Time.now.nsec}_#{rand(1000)}"
+        default_policy = product.current_price_policies.first || PricePolicy.first
+        
+        estimate_detail = EstimateDetail.new(
+          product: product, 
+          duration_unit: product.time_unit,
+          price_policy_id: default_policy&.id,
+          quantity: 1,
+          cost: 0
+        )
+        
+        if default_policy && product.respond_to?(:time_unit)
+          if product.time_unit == "mins"
+            estimate_detail.duration = 60
+          elsif product.time_unit == "days"
+            estimate_detail.duration = 1
+          end
+        end
+        html = render(partial: 'facility_estimates/estimate_detail', locals: { estimate_detail: estimate_detail, temp_id: temp_id, edit_mode: true })
         js_rows += "$('#new_estimate_estimate_details').append(\"#{j html}\");"
       end
       js_rows

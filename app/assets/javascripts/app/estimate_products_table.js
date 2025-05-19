@@ -75,10 +75,11 @@ $(function () {
     ".remove-estimate-detail",
     function (e) {
       e.preventDefault();
+      
       var row = $(this).closest("tr");
       var destroyField = row.find(".destroy-field");
 
-      if (row.data("estimate_detail_id")) {
+      if (destroyField.length) {
         destroyField.val("1");
         row.hide();
       } else {
