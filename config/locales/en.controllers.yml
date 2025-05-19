@@ -212,8 +212,8 @@ en:
         job_is_queued: "The bulk import is being processed. A report will be sent to %{email} when complete."
 
     services:
-      sanger_sequencing_enabled: Sanger has been enabled, make sure the Order Form is inactive.
-      sanger_sequencing_disabled: Sanger has been disabled, make sure the Order Form is active.
+      sanger_sequencing_enabled: Sanger has been enabled, make sure the Order Form is active.
+      sanger_sequencing_disabled: Sanger has been disabled, make sure the Order Form is inactive.
 
     schedule_rules:
       create: Schedule Rule was successfully created.
