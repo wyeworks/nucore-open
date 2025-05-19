@@ -35,6 +35,6 @@ RSpec.describe(
     expect(page).to_not have_content ActionController::Base.helpers.number_to_currency(previous_price * 2)
     updated_at = estimate.reload.estimate_details.maximum(:updated_at)
     expect(updated_at).to be > 3.hours.ago
-    expect(page).to have_content "Prices last updated: #{updated_at.strftime('%m/%d/%Y %H:%M')}"
+    expect(page).to have_content "Prices last updated: #{I18n.l(updated_at, format: :usa)}"
   end
 end
