@@ -3,6 +3,7 @@
 class Estimate < ApplicationRecord
   belongs_to :facility, inverse_of: :estimates
   belongs_to :user
+  belongs_to :price_group
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by_id
   has_many :estimate_details, dependent: :destroy
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_04_28_161852) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_19_201017) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -181,8 +181,10 @@ ActiveRecord::Schema[7.0].define(version: 2025_04_28_161852) do
     t.bigint "created_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "price_group_id", null: false
     t.index ["created_by_id"], name: "index_estimates_on_created_by_id"
     t.index ["facility_id"], name: "index_estimates_on_facility_id"
+    t.index ["price_group_id"], name: "index_estimates_on_price_group_id"
     t.index ["user_id"], name: "index_estimates_on_user_id"
   end
 

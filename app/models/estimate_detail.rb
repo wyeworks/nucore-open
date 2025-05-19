@@ -18,11 +18,11 @@ class EstimateDetail < ApplicationRecord
   delegate :user, to: :estimate
 
   def price_groups
-    return [PriceGroup.nonbillable] if product.nonbillable_mode?
-
-    return [] if user.blank?
-
-    user.price_groups.uniq
+    if product.nonbillable_mode?
+      [PriceGroup.nonbillable]
+    else
+      [estimate.price_group].compact
+    end
   end
 
   def assign_price_policy_and_cost
