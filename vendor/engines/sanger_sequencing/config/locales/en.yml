@@ -45,9 +45,6 @@ en:
             copy_hint: Copy Primer to samples below
             hint: Pick one of the Core Primers or specify your own
             fill_below: Fill Below
-      orders:
-        receipt:
-          print: Please print this receipt to accompany your submission.
       admin:
         submissions:
           index:
