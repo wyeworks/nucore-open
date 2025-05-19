@@ -59,7 +59,9 @@ RSpec.describe TrainingRequestsController, feature_setting: { training_requests:
         end
 
         it "sends an email" do
-          expect { do_request }.to change(ActionMailer::Base.deliveries, :count).by(1)
+          expect { do_request }.to(
+            have_enqueued_mail(TrainingRequestMailer, :notify_facility_staff)
+          )
         end
 
         describe "no contacts are assigned" do

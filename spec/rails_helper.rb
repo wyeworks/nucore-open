@@ -22,6 +22,8 @@ FactoryBot.use_parent_strategy = false
 FactoryBot::Strategy::Stub.next_id = 100_000
 
 RSpec.configure do |config|
+  include ActiveJob::TestHelper
+
   config.filter_rails_from_backtrace!
   config.filter_gems_from_backtrace("spring")
   # rspec-rails by default excludes stack traces from within vendor Lots of our
@@ -107,6 +109,12 @@ RSpec.configure do |config|
 
     Settings.reload!
     Nucore::Application.reload_routes! if example.metadata[:feature_setting][:reload_routes]
+  end
+
+  config.around(:each, :perform_enqueued_jobs) do |example|
+    perform_enqueued_jobs do
+      example.run
+    end
   end
 
   config.around(:each, :ldap) do |example|

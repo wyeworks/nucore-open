@@ -856,8 +856,6 @@ RSpec.describe OrderManagement::OrderDetailsController do
             end
 
             context "with a resolved dispute reason" do
-              include ActiveJob::TestHelper
-
               let(:dispute_resolved_reason) { "dispute resolved" }
 
               it "resolves the dispute", :aggregate_failures do
@@ -869,17 +867,15 @@ RSpec.describe OrderManagement::OrderDetailsController do
                   .to eq(dispute_resolved_reason)
               end
 
-              it "triggers an email to the dispute by and the account owner" do
-                perform_enqueued_jobs do
-                  expect { do_request }.to(
-                    change do
-                      ActionMailer::Base.deliveries.map(&:to)
-                    end.from([]).to([
-                        [dispute_by.email],
-                        [order_detail.account.owner_user.email],
-                    ])
-                  )
-                end
+              it "triggers an email to the dispute by and the account owner", :perform_enqueued_jobs do
+                expect { do_request }.to(
+                  change do
+                    ActionMailer::Base.deliveries.map(&:to)
+                  end.from([]).to([
+                      [dispute_by.email],
+                      [order_detail.account.owner_user.email],
+                  ])
+                )
               end
 
               context "the dispute by is the same as the account owner" do

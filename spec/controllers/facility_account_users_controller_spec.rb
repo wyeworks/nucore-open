@@ -124,7 +124,7 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:e
         end
       end
 
-      context "changing a user's role" do
+      context "changing a user's role", :perform_enqueued_jobs do
         context "from business admin to purchaser" do
           before :each do
             Notifier.deliveries.clear
