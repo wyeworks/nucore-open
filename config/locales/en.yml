@@ -535,11 +535,15 @@ en:
       error: There was an error creating the estimate
     estimate_detail:
       remove: Remove
-    new:
-      add: Add Estimate
+    form:
       add_product: Add Product to Estimate
       add_products_to_estimate: Add Products to Estimate
-      cancel: Cancel
+      delete: Remove
+    edit:
+      edit: Edit Estimate
+      update: Update
+    new:
+      add: Add Estimate
       create: Create an Estimate
       custom_name_placeholder: "Enter custom username"
       head: Add Estimate
@@ -549,6 +553,9 @@ en:
       download_csv: Download CSV
       recalculate: Recalculate
       updated_at_notice: "Prices last updated: %{updated_at}"
+      edit: Edit
+      remove: Remove
+      confirm_remove: Are you sure you want to remove this product from the estimate?
     recalculate:
       success: Estimate successfully recalculated
       error: There was an error recalculating the estimate

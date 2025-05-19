@@ -20,7 +20,7 @@ class Estimate < ApplicationRecord
   end
 
   def total_cost
-    estimate_details.sum(&:cost)
+    estimate_details.sum { |detail| detail.cost.to_f }
   end
 
   def recalculate

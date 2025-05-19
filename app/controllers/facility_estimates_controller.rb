@@ -9,8 +9,9 @@ class FacilityEstimatesController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
-  before_action :load_estimate, only: [:show, :recalculate]
+  before_action :load_estimate, only: [:show, :edit, :recalculate, :update]
   before_action :set_users, only: [:search]
+  before_action :set_products, only: [:new, :edit]
 
   def index
     @estimates = current_facility.estimates
@@ -71,6 +72,22 @@ class FacilityEstimatesController < ApplicationController
     end
   end
 
+  def edit
+  end
+
+  def update
+    expires_at = parse_usa_date(facility_estimate_params[:expires_at])
+    
+    if @estimate.update(facility_estimate_params.merge(expires_at:))
+      flash[:notice] = t("controllers.facility_estimates.update.success")
+      redirect_to facility_estimate_path(current_facility, @estimate)
+    else
+      flash.now[:error] = t("controllers.facility_estimates.update.error")
+      set_products
+      render action: :edit
+    end
+  end
+
   def add_product_to_estimate
     product_id = params[:product_id]
 
@@ -106,6 +123,18 @@ class FacilityEstimatesController < ApplicationController
       :description, :price_group_id, :user_id, :custom_name, :note, :expires_at,
       estimate_details_attributes: [:id, :product_id, :quantity, :duration, :duration_unit, :_destroy]
     )
+    
+    if params[:estimate][:estimate_details_attributes].present?
+      estimate_details_attrs = {}
+      
+      params[:estimate][:estimate_details_attributes].each do |key, values|
+        estimate_details_attrs[key] = values.permit(:id, :product_id, :price_policy_id, :quantity, :duration, :duration_unit, :_destroy)
+      end
+      
+      estimate_params[:estimate_details_attributes] = estimate_details_attrs
+    end
+    
+    estimate_params
   end
 
   def load_estimate

@@ -1,27 +1,30 @@
 %tr{ data: { estimate_detail_id: estimate_detail.id } }
-  - id_prefix = "estimate[estimate_details_attributes][#{temp_id}]"
+  - index_to_use = estimate_detail.id.present? ? estimate_detail.id : temp_id
+  - id_prefix = "estimate[estimate_details_attributes][#{index_to_use}]"
+  - if estimate_detail.id.present?
+    = hidden_field_tag "#{id_prefix}[id]", estimate_detail.id
   = hidden_field_tag "#{id_prefix}[product_id]", estimate_detail.product_id
   - if estimate_detail.duration_unit.present?
     = hidden_field_tag "#{id_prefix}[duration_unit]", estimate_detail.duration_unit
-  = hidden_field_tag "#{id_prefix}[_destroy]", false, class: 'destroy-field'
+  
+  - price_policy_id = estimate_detail.price_policy_id || PricePolicy.first&.id
+  = hidden_field_tag "#{id_prefix}[price_policy_id]", price_policy_id
+  
+  = hidden_field_tag "#{id_prefix}[_destroy]", "0", class: 'destroy-field', id: "destroy_#{index_to_use}"
 
   %td
-    %div
-      - product_name = estimate_detail.product.name
-      - if estimate_detail.product.facility != current_facility
-        - product_name = "#{product_name} (#{estimate_detail.product.facility.name})"
-      = product_name
-    - if estimate_detail.errors.any?
-      .error-inline= estimate_detail.errors.full_messages.join(", ")
-  - quantity_default_value = estimate_detail.quantity.present? ? estimate_detail.quantity : 1
-  %td= number_field_tag "#{id_prefix}[quantity]", quantity_default_value, min: 1, style: "width: 3em;"
+    - product_name = estimate_detail.product.name
+    - if estimate_detail.product.facility != current_facility
+      - product_name = "#{product_name} (#{estimate_detail.product.facility.name})"
+    = product_name
+  %td= number_field_tag "#{id_prefix}[quantity]", estimate_detail.quantity || 1, min: 1, style: "width: 3em;"
   %td
     - time_unit = estimate_detail.product.time_unit
     - if time_unit == "days"
-      - duration_default_value = estimate_detail.duration.present? ? estimate_detail.duration : 1
-      = number_field_tag "#{id_prefix}[duration]", duration_default_value, min: 1
+      = number_field_tag "#{id_prefix}[duration]", estimate_detail.duration || 1, min: 1
     - elsif time_unit == "mins"
-      - duration_default_value = estimate_detail.duration.present? ? estimate_detail.duration : "0:01"
-      = text_field_tag "#{id_prefix}[duration]", duration_default_value, class: "js--estimate-duration-mins"
-  %td
-    .btn.remove-estimate-detail= t('.remove')
+      - mins_value = estimate_detail.duration.present? ? estimate_detail.duration : "0:01"
+      = text_field_tag "#{id_prefix}[duration]", mins_value, class: "js--estimate-duration-mins"
+  %td.text-center
+    %button.btn.btn-danger.btn-sm.remove-estimate-detail{type: "button", title: t("facility_estimates.show.remove")}
+      = t("facility_estimates.show.remove")
