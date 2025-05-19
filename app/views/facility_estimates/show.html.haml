@@ -48,3 +48,7 @@
       %td{colspan: 3}
       %td.currency
         %strong=number_to_currency(@estimate.total_cost)
+
+- if @estimate.estimate_details.any?
+  %p
+    = t(".updated_at_notice", updated_at: @estimate.estimate_details.maximum(:updated_at).strftime('%m/%d/%Y %H:%M'))
