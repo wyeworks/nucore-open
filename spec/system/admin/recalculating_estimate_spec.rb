@@ -3,18 +3,21 @@
 require "rails_helper"
 
 RSpec.describe(
-  "Recalculating an estimate", :js,
-  feature_setting: { user_based_price_groups: true },
+  "Recalculating an estimate", :js
 ) do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let!(:user) { create(:user) }
-  let(:price_group) { user.price_groups.first }
+  let(:price_group) { facility.price_groups.first }
   let!(:item) { create(:setup_item, facility:) }
   let!(:item_price_policy) { create(:item_price_policy, product: item, price_group:) }
-  let!(:estimate) { create(:estimate, created_at: 3.hours.ago, updated_at: 3.hours.ago, user:, facility:, estimate_details: [create(:estimate_detail, product: item, quantity: 2, created_at: 3.hours.ago, updated_at: 3.hours.ago)]) }
+  let!(:estimate) { create(:estimate, price_group:, created_at: 3.hours.ago, updated_at: 3.hours.ago, user:, facility:) }
 
-  before { login_as director }
+  before do
+    estimate.estimate_details.create(product: item, quantity: 2, created_at: 3.hours.ago, updated_at: 3.hours.ago)
+
+    login_as director
+  end
 
   it "can recalculate an estimate" do
     visit facility_estimate_path(facility, estimate)
@@ -23,6 +26,7 @@ RSpec.describe(
 
     expect(page).to have_content "Estimate ##{estimate.id} - Test Estimate"
     expect(page).to have_content item.name
+    expect(page).to have_content price_group.name
     expect(page).to have_content ActionController::Base.helpers.number_to_currency(previous_price * 2) # 2 items
 
     new_price = 50

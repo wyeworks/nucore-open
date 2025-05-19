@@ -3,13 +3,12 @@
 require "rails_helper"
 
 RSpec.describe(
-  "Creating an estimate", :js,
-  feature_setting: { user_based_price_groups: true },
+  "Creating an estimate", :js
 ) do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let!(:user) { create(:user) }
-  let(:price_group) { user.price_groups.first }
+  let(:price_group) { facility.price_groups.first }
   let!(:item) { create(:setup_item, facility:) }
   let!(:item_price_policy) { create(:item_price_policy, product: item, price_group:) }
   let!(:instrument) { create(:setup_instrument, facility:) }
@@ -33,6 +32,7 @@ RSpec.describe(
 
     fill_in "Name", with: "Test Estimate"
     fill_in "Expires at", with: 1.month.from_now.strftime("%m/%d/%Y")
+    select_from_chosen price_group.name, from: "Price group"
 
     fill_in "Note", with: "This is a test estimate"
 
