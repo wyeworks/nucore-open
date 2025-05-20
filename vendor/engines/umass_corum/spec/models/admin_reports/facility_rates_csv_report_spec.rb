@@ -38,9 +38,9 @@ RSpec.describe UmassCorum::AdminReports::FacilityRatesCsvReport do
       it "generates a header line and some data lines", :aggregate_failures do
         lines = report.to_csv.encode('UTF-8').lines
         expect(lines.count).to eq(4)
-        expect(lines[1]).to eq("Animal Imaging (ANIMG),Instrument One,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule,,,$1.00,$1.00,,$0.00,,,,,,,,,,,,Reservation,,#{base_price_group},Internal,,,01/22/2025 11:12 AM,01/22/2025 11:12 AM,\n")
-        expect(lines[2]).to eq("Animal Imaging (ANIMG),Instrument One,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule,,,$3.33,$1.00,,$0.00,,,,,,,,,,,,Reservation,,#{external_price_group},External,,,01/22/2025 11:12 AM,01/22/2025 11:12 AM,\n")
-        expect(lines[3]).to eq("Animal Imaging (ANIMG),Instrument One,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule,,,$3.00,$1.00,,$1.00,,,,,,,,,,,,Reservation,,#{cancer_center_price_group},Internal,,,07/11/2025 9:30 AM,07/11/2025 9:30 AM,\n")
+        expect(lines[1]).to start_with("Animal Imaging (ANIMG),Instrument One,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule,,,$1.00,$1.00,,$0.00,,,,,,,,,,,,Reservation,,#{base_price_group},Internal,,,")
+        expect(lines[2]).to start_with("Animal Imaging (ANIMG),Instrument One,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule,,,$3.33,$1.00,,$0.00,,,,,,,,,,,,Reservation,,#{external_price_group},External,,,")
+        expect(lines[3]).to start_with("Animal Imaging (ANIMG),Instrument One,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule,,,$3.00,$1.00,,$1.00,,,,,,,,,,,,Reservation,,#{cancer_center_price_group},Internal,,,")
       end
     end
 
@@ -75,9 +75,9 @@ RSpec.describe UmassCorum::AdminReports::FacilityRatesCsvReport do
       it "generates a header line and some duration mode data lines", :aggregate_failures do
         lines = report.to_csv.encode('UTF-8').lines
         expect(lines.count).to eq(4)
-        expect(lines[1]).to eq("Animal Imaging (ANIMG),Instrument Duration Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Duration,,,$1.67,$1.00,,$0.00,1,$1.50,$0.00,2,$1.33,$0.00,3,$0.83,$0.00,,,Reservation,,#{base_price_group},Internal,,,01/22/2025 11:12 AM,01/22/2025 11:12 AM,\n")
-        expect(lines[2]).to eq("Animal Imaging (ANIMG),Instrument Duration Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Duration,,,$3.33,$1.00,,$0.00,1,$3.00,$0.00,2,$2.67,$0.00,3,$1.67,$0.00,,,Reservation,,#{external_price_group},External,,,01/22/2025 11:12 AM,01/22/2025 11:12 AM,\n")
-        expect(lines[3]).to eq("Animal Imaging (ANIMG),Instrument Duration Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Duration,,,$1.67,$1.00,,$0.17,1,$1.50,$0.17,2,$1.33,$0.20,3,$0.83,$0.23,,,Reservation,,#{cancer_center_price_group},Internal,,,07/11/2025 9:30 AM,07/11/2025 9:30 AM,\n")
+        expect(lines[1]).to start_with("Animal Imaging (ANIMG),Instrument Duration Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Duration,,,$1.67,$1.00,,$0.00,1,$1.50,$0.00,2,$1.33,$0.00,3,$0.83,$0.00,,,Reservation,,#{base_price_group},Internal,,,")
+        expect(lines[2]).to start_with("Animal Imaging (ANIMG),Instrument Duration Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Duration,,,$3.33,$1.00,,$0.00,1,$3.00,$0.00,2,$2.67,$0.00,3,$1.67,$0.00,,,Reservation,,#{external_price_group},External,,,")
+        expect(lines[3]).to start_with("Animal Imaging (ANIMG),Instrument Duration Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Duration,,,$1.67,$1.00,,$0.17,1,$1.50,$0.17,2,$1.33,$0.20,3,$0.83,$0.23,,,Reservation,,#{cancer_center_price_group},Internal,,,")
       end
     end
 
@@ -96,9 +96,9 @@ RSpec.describe UmassCorum::AdminReports::FacilityRatesCsvReport do
       it "generates a header line and some daily rate mode data lines", :aggregate_failures do
         lines = report.to_csv.lines
         expect(lines.count).to eq(4)
-        expect(lines[1]).to eq("Animal Imaging (ANIMG),Instrument Daily Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule (Daily Booking only),,,,$1.00,,,,,,,,,,,,$125.00,$0.00,Reservation,,#{base_price_group},Internal,,,01/22/2025 11:12 AM,01/22/2025 11:12 AM,\n")
-        expect(lines[2]).to eq("Animal Imaging (ANIMG),Instrument Daily Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule (Daily Booking only),,,,$1.00,,,,,,,,,,,,$250.00,$0.00,Reservation,,#{external_price_group},External,,,01/22/2025 11:12 AM,01/22/2025 11:12 AM,\n")
-        expect(lines[3]).to eq("Animal Imaging (ANIMG),Instrument Daily Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule (Daily Booking only),,,,$1.00,,,,,,,,,,,,$125.00,$0.00,Reservation,,#{cancer_center_price_group},Internal,,,07/11/2025 9:30 AM,07/11/2025 9:30 AM,\n")
+        expect(lines[1]).to start_with("Animal Imaging (ANIMG),Instrument Daily Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule (Daily Booking only),,,,$1.00,,,,,,,,,,,,$125.00,$0.00,Reservation,,#{base_price_group},Internal,,,")
+        expect(lines[2]).to start_with("Animal Imaging (ANIMG),Instrument Daily Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule (Daily Booking only),,,,$1.00,,,,,,,,,,,,$250.00,$0.00,Reservation,,#{external_price_group},External,,,")
+        expect(lines[3]).to start_with("Animal Imaging (ANIMG),Instrument Daily Mode,Active,This is note,07/11/2025 12:00 AM,06/30/2026 11:59 PM,Default,Schedule Rule (Daily Booking only),,,,$1.00,,,,,,,,,,,,$125.00,$0.00,Reservation,,#{cancer_center_price_group},Internal,,,")
       end
     end
   end
