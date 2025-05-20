@@ -31,23 +31,19 @@ RSpec.describe OrderDetails::DisputeResolvedNotifier do
     expect(log_event).not_to be_present
   end
 
-  context "with a business business_administrator" do
-    include ActiveJob::TestHelper
-
+  context "with a business business_administrator", :perform_enqueued_jobs do
     let!(:business_administrator) { create(:user, :business_administrator, email: "ba@example.com", account: order_detail.account) }
 
     it "triggers an email to the dispute_by and the account administrators" do
-      perform_enqueued_jobs do
-        expect { resolve_dispute_and_notify }.to(
-          change do
-            ActionMailer::Base.deliveries.map(&:to)
-          end.from([]).to([
-            [order_detail.dispute_by.email],
-            [order_detail.account.owner_user.email],
-            [business_administrator.email],
-          ])
-        )
-      end
+      expect { resolve_dispute_and_notify }.to(
+        change do
+          ActionMailer::Base.deliveries.map(&:to)
+        end.from([]).to([
+          [order_detail.dispute_by.email],
+          [order_detail.account.owner_user.email],
+          [business_administrator.email],
+        ])
+      )
     end
   end
 
