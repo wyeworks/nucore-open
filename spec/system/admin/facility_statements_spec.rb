@@ -109,7 +109,7 @@ RSpec.describe "Facility Statement Admin" do
     end
 
     it "sends a csv in an email" do
-      expect { click_link "Export as CSV" }.to change(ActionMailer::Base.deliveries, :count)
+      expect { click_link "Export as CSV" }.to enqueue_mail(StatementSearchResultMailer, :search_result)
     end
   end
 
@@ -169,11 +169,12 @@ RSpec.describe "Facility Statement Admin" do
       visit facility_statements_path(facility)
     end
 
-    it "resends the statement email" do
+    it "resends the statement email", :perform_enqueued_jobs do
       accept_confirm { click_link "Resend" }
 
       # sometimes takes longer to load and causes failures in CI
       expect(page).to have_content("Notifications sent successfully to", wait: 4)
+
       expect(ActionMailer::Base.deliveries.count).to eq 1
     end
   end
