@@ -78,9 +78,9 @@ class FacilityEstimatesController < ApplicationController
 
   def update
     expires_at = parse_usa_date(facility_estimate_params[:expires_at])
-    
+
     update_params = facility_estimate_params.merge(expires_at:)
-    
+
     if @estimate.update(update_params)
       flash[:notice] = t("controllers.facility_estimates.update.success")
       redirect_to facility_estimate_path(current_facility, @estimate)
@@ -125,25 +125,25 @@ class FacilityEstimatesController < ApplicationController
       :description, :price_group_id, :user_id, :custom_name, :note, :expires_at,
       estimate_details_attributes: [:id, :product_id, :quantity, :duration, :duration_unit, :_destroy]
     )
-    
+
     if params[:estimate][:estimate_details_attributes].present?
       estimate_details_attrs = {}
-      
+
       params[:estimate][:estimate_details_attributes].each do |key, values|
         estimate_details_attrs[key] = values.permit(
-          :id, 
-          :product_id, 
-          :price_policy_id, 
-          :quantity, 
-          :duration, 
-          :duration_unit, 
+          :id,
+          :product_id,
+          :price_policy_id,
+          :quantity,
+          :duration,
+          :duration_unit,
           :_destroy
         )
       end
-      
+
       estimate_params[:estimate_details_attributes] = estimate_details_attrs
     end
-    
+
     estimate_params
   end
 
