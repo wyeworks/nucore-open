@@ -538,6 +538,7 @@ en:
     form:
       add_product: Add Product to Estimate
       add_products_to_estimate: Add Products to Estimate
+      current_products: Current Products
       delete: Remove
     edit:
       edit: Edit Estimate
