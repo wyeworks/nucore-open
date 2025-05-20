@@ -1156,7 +1156,7 @@ RSpec.describe Reservation do
       end
 
       it "triggers an email" do
-        expect { perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { perform }.to enqueue_mail(ProblemOrderMailer, :notify_user)
       end
     end
 
@@ -1189,7 +1189,7 @@ RSpec.describe Reservation do
       end
 
       it "triggers an email" do
-        expect { perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { perform }.to enqueue_mail(ProblemOrderMailer, :notify_user)
       end
     end
 
