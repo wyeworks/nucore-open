@@ -25,7 +25,9 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   def warnings
     warnings = []
 
-    warnings << Notice.new(problem_description_key, :warning) if problem?
+    problem_description_key.then do |problem_keys|
+      warnings << Notice.new(problem_keys, :warning) if problem_keys.present? && problem?
+    end
 
     warnings
   end
