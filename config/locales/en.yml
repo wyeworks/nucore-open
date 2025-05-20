@@ -541,7 +541,9 @@ en:
       add_products_to_estimate: Add Products to Estimate
       cancel: Cancel
       create: Create an Estimate
+      custom_name_placeholder: "Enter custom name"
       head: Add Estimate
+      or: "or"
     show:
       days: days
       download_csv: Download CSV
