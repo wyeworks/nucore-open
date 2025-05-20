@@ -26,5 +26,5 @@
       - mins_value = estimate_detail.duration.present? ? estimate_detail.duration : "0:01"
       = text_field_tag "#{id_prefix}[duration]", mins_value, class: "js--estimate-duration-mins"
   %td.text-center
-    %button.btn.btn-danger.btn-sm.remove-estimate-detail{type: "button", title: t("facility_estimates.show.remove")}
+    %button.btn.remove-estimate-detail{type: "button", title: t("facility_estimates.show.remove")}
       = t("facility_estimates.show.remove")

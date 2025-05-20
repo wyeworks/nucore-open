@@ -11,7 +11,6 @@ class FacilityEstimatesController < ApplicationController
   load_and_authorize_resource class: Estimate
   before_action :load_estimate, only: [:show, :edit, :recalculate, :update]
   before_action :set_users, only: [:search]
-  before_action :set_products, only: [:new, :edit]
 
   def index
     @estimates = current_facility.estimates
