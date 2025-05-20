@@ -872,9 +872,9 @@ RSpec.describe OrderManagement::OrderDetailsController do
                   change do
                     ActionMailer::Base.deliveries.map(&:to)
                   end.from([]).to([
-                      [dispute_by.email],
-                      [order_detail.account.owner_user.email],
-                  ])
+                                    [dispute_by.email],
+                                    [order_detail.account.owner_user.email],
+                                  ])
                 )
               end
 

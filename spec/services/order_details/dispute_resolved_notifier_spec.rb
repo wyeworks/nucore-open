@@ -39,10 +39,10 @@ RSpec.describe OrderDetails::DisputeResolvedNotifier do
         change do
           ActionMailer::Base.deliveries.map(&:to)
         end.from([]).to([
-          [order_detail.dispute_by.email],
-          [order_detail.account.owner_user.email],
-          [business_administrator.email],
-        ])
+                          [order_detail.dispute_by.email],
+                          [order_detail.account.owner_user.email],
+                          [business_administrator.email],
+                        ])
       )
     end
   end
