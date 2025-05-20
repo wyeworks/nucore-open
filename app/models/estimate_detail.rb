@@ -26,34 +26,14 @@ class EstimateDetail < ApplicationRecord
   end
 
   def assign_price_policy_and_cost
-    if price_policy_id.present? && !price_policy
-      self.price_policy = PricePolicy.find_by(id: price_policy_id)
-    end
-    
-    pp = product.cheapest_price_policy(self, Time.current) if product.present?
-    
-    if pp.present?
-      self.price_policy = pp
-      
-      if quantity.present?
-        if product.is_a?(Instrument)
-          if duration.present?
-            pricing_params = { duration: duration }
-            cost = pp.estimate_cost_and_subsidy_from_params(pricing_params)[:cost]
-          end
-        elsif product.respond_to?(:time_unit) && product.time_unit.present? && duration.present?
-          cost_and_subsidy = pp.estimate_cost_and_subsidy(duration)
-          cost = cost_and_subsidy[:cost] if cost_and_subsidy
-        else
-          cost_and_subsidy = pp.estimate_cost_and_subsidy(quantity)
-          cost = cost_and_subsidy[:cost] if cost_and_subsidy
-        end
-        
-        self.cost = cost || 0
-      end
-    end
-    
-    self.cost ||= 0
+    pp = product.cheapest_price_policy(self, Time.current)
+
+    return if pp.blank?
+
+    cost = pp.estimate_cost_from_estimate_detail(self)
+
+    self.price_policy = pp
+    self.cost = cost
   end
 
   private
