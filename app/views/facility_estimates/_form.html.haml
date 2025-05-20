@@ -7,13 +7,15 @@
         collection: user_collection,
         class: "js--chosen js--select-with-search",
         include_blank: false,
-        data: { search_url: search_facility_estimates_path }
+        data: { search_url: search_facility_estimates_path },
+        disabled: f.object.persisted?
     .span-4
       = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
   .form-inputs
     = f.input :note
 
   #new_estimate_products_table
+    %h3= t("facility_estimates.form.current_products")
     %table.table
       %thead
         %tr
@@ -49,5 +51,6 @@
 
     %button#add_product_to_estimate.btn.btn-primary{ type: "button" }= t("facility_estimates.form.add_product")
 
-  = f.button :submit, submit_text, class: "btn-primary"
-  = link_to t("shared.cancel"), cancel_url
+  .actions.margin_top
+    = f.button :submit, submit_text, class: "btn-primary"
+    = link_to t("shared.cancel"), cancel_url, class: "btn"

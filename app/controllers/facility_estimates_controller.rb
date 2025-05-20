@@ -73,24 +73,26 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def edit
+    set_products
   end
 
   def update
     expires_at = parse_usa_date(facility_estimate_params[:expires_at])
     
-    if @estimate.update(facility_estimate_params.merge(expires_at:))
+    update_params = facility_estimate_params.merge(expires_at:)
+    
+    if @estimate.update(update_params)
       flash[:notice] = t("controllers.facility_estimates.update.success")
       redirect_to facility_estimate_path(current_facility, @estimate)
     else
-      flash.now[:error] = t("controllers.facility_estimates.update.error")
       set_products
-      render action: :edit
+      flash.now[:error] = t("controllers.facility_estimates.update.error")
+      render :edit
     end
   end
 
   def add_product_to_estimate
     product_id = params[:product_id]
-
     product = Product.find(product_id)
 
     @estimate_detail_products = if product.is_a?(Bundle)
@@ -128,7 +130,15 @@ class FacilityEstimatesController < ApplicationController
       estimate_details_attrs = {}
       
       params[:estimate][:estimate_details_attributes].each do |key, values|
-        estimate_details_attrs[key] = values.permit(:id, :product_id, :price_policy_id, :quantity, :duration, :duration_unit, :_destroy)
+        estimate_details_attrs[key] = values.permit(
+          :id, 
+          :product_id, 
+          :price_policy_id, 
+          :quantity, 
+          :duration, 
+          :duration_unit, 
+          :_destroy
+        )
       end
       
       estimate_params[:estimate_details_attributes] = estimate_details_attrs
