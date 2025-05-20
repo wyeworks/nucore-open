@@ -7,7 +7,7 @@ class AddPriceGroupToEstimates < ActiveRecord::Migration[7.0]
   end
 
   def change
-    add_reference :estimates, :price_group, null: false
+    add_reference :estimates, :price_group
 
     # Populate the Price group for each existing Estimate.
     # Just using the first price group for the facility, as we don't have any estimates in prod yet, so we don't need to worry about the price group.
