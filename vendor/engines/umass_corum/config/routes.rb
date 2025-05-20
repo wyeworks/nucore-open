@@ -10,6 +10,7 @@ Rails.application.routes.draw do
       post "relay_data"
       post "user_data"
       post "account_user_data"
+      post "facility_rates_data"
     end
   end
 end

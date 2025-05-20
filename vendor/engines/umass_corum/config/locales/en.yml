@@ -107,6 +107,45 @@ en:
             full_name: Full Name
             email: Email
             account_role: Account Role
+        facility_rates:
+          subject: "!app_name! Facility Rates Data Export"
+          body: Your export is ready. Please see the attached file.
+          title: Download Facility Rates Data (CSV)
+          facility_name: Facility Name
+          instrument_name: Instrument Name
+          instrument_active: Active/Inactive
+          note: Note
+          start_date: "Start Date"
+          expire_date: "Expire Date"
+          billing_mode: "Billing Mode"
+          pricing_mode: "Pricing Mode"
+          unit_cost: "Unit Cost"
+          unit_subsidy: "Unit Subsidy"
+          usage_rate: "Usage Rate"
+          minimum_cost: "Minimum Cost"
+          cancellation_cost: "Reservation Cost"
+          usage_subsidy: "Usage Subsidy"
+          usage_rate_daily: "Daily Usage Rate"
+          usage_subsidy_daily: "Daily Usage Subsidy Rate"
+          duration_step_1: "Duration Step 1"
+          duration_rate_1: "Duration Rate 1"
+          duration_subsidy_1: "Duration Subsidy 1"
+          duration_step_2: "Duration Step 2"
+          duration_rate_2: "Duration Rate 2"
+          duration_subsidy_2: "Duration Subsidy 2"
+          duration_step_3: "Duration Step 3"
+          duration_rate_3: "Duration Rate 3"
+          duration_subsidy_3: "Duration Subsidy 3"
+          charge_for: "Charge For"
+          full_price_cancellation: "Full Price Cancellation"
+          price_group_name: "Price Group"
+          price_group_type: "Internal/External"
+          price_group_facility: "Custom Price Group Facility"
+          creator: "Created By"
+          created_at: "Created"
+          updated_at: "Updated"
+          deleted_at: "Deleted"
+
       sessions:
         request_login:
           request_login_link: |

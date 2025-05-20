@@ -18,4 +18,9 @@ class AdminReportsController < GlobalSettingsController
     queue_csv_report_email(report)
   end
 
+  def facility_rates_data
+    report = UmassCorum::AdminReports::FacilityRatesCsvReport.new
+    queue_csv_report_email(report)
+  end
+
 end
