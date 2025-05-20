@@ -24,7 +24,7 @@ module FacilityEstimatesHelper
   def estimate_user_options(current_facility)
     users = Estimate.where(facility_id: current_facility.id)
                     .includes(:user)
-                    .map { |e| [e.user.full_name, e.user_id] }
+                    .map { |e| [e.user_display_name, e.user_id] }
                     .uniq
     [[t(".all_users"), ""]] + users
   end
