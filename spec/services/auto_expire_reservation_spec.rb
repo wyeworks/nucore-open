@@ -46,9 +46,8 @@ RSpec.describe AutoExpireReservation, :time_travel do
         expect { action.perform }.to change { order_detail.reload.fulfilled_at }.to(reservation.reserve_end_at)
       end
 
-      it "triggers an email with a link to fix it themselves" do
-        expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
-        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("click on the link below")
+      it "triggers an email with resolution options" do
+        expect { action.perform }.to enqueue_mail(ProblemOrderMailer, :notify_user_with_resolution_option)
       end
     end
 
@@ -85,9 +84,8 @@ RSpec.describe AutoExpireReservation, :time_travel do
         expect { action.perform }.to change { order_detail.reload.fulfilled_at }.to(reservation.reserve_end_at)
       end
 
-      it "triggers an email with a link to fix it themselves" do
-        expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
-        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("click on the link below")
+      it "triggers an email with resolution options" do
+        expect { action.perform }.to enqueue_mail(ProblemOrderMailer, :notify_user_with_resolution_option)
       end
     end
 
@@ -107,7 +105,7 @@ RSpec.describe AutoExpireReservation, :time_travel do
       end
 
       it "does not trigger an email" do
-        expect { action.perform }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { action.perform }.not_to enqueue_mail
       end
     end
 
@@ -222,9 +220,8 @@ RSpec.describe AutoExpireReservation, :time_travel do
         expect { action.perform }.to change { order_detail.reload.fulfilled_at }.to(reservation.reserve_end_at)
       end
 
-      it "triggers a notification asking them to contact the facility" do
-        expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
-        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("let them know")
+      it "triggers a notification email" do
+        expect { action.perform }.to enqueue_mail(ProblemOrderMailer, :notify_user)
       end
     end
 

@@ -149,7 +149,9 @@ if Account.config.statements_enabled?
         it "sends statements" do
           grant_and_sign_in(@user)
 
-          expect { do_request }.to change(ActionMailer::Base.deliveries, :count).by(2)
+          expect { do_request }.to(
+            have_enqueued_mail(Notifier, :statement).twice
+          )
         end
       end
 
@@ -159,7 +161,7 @@ if Account.config.statements_enabled?
         it "does not send statements" do
           grant_and_sign_in(@user)
 
-          expect { do_request }.not_to change(ActionMailer::Base.deliveries, :count)
+          expect { do_request }.not_to have_enqueued_mail
         end
       end
 

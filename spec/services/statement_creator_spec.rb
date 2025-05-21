@@ -67,7 +67,7 @@ RSpec.describe StatementCreator do
 
     context "when statement emailing is on", feature_setting: { send_statement_emails: true } do
       it "sends statements" do
-        expect { creator.send_statement_emails }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { creator.send_statement_emails }.to enqueue_mail(Notifier, :statement)
       end
     end
 

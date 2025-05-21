@@ -459,9 +459,17 @@ RSpec.describe OrdersController do
           end
 
           shared_examples "send notifications to recipients" do
-            it "sends notifications to all recipients" do
-              # Send one mail to purchaser and recipients.length to the product order notification recipients
-              expect { do_request }.to change(ActionMailer::Base.deliveries, :count).by(recipients.length + 1)
+            it "sends notifications to the purchaser" do
+              expect { do_request }.to have_enqueued_email(PurchaseNotifier, :order_receipt)
+            end
+
+            it "sends notification to order recipients" do
+              expect { do_request }.to(
+                have_enqueued_email(
+                  PurchaseNotifier,
+                  :product_order_notification,
+                ).exactly(recipients.length)
+              )
             end
           end
 

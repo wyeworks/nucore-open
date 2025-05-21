@@ -151,7 +151,7 @@ RSpec.describe FacilityOrdersController do
     it_should_allow_managers_and_senior_staff_only
   end
 
-  context "#send_receipt" do
+  context "#send_receipt", :perform_enqueued_jobs do
     before :each do
       @method = :post
       @action = :send_receipt

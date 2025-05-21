@@ -46,9 +46,7 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
       find("input[value='#{order_details.first.id}']").click
       find("input[value='#{order_details.second.id}']").click
 
-      click_button "Send Notifications"
-
-      expect(ActionMailer::Base.deliveries.count).to eq 1
+      expect { click_button "Send Notifications" }.to enqueue_mail(Notifier, :review_orders)
 
       within(".notice") do
         expect(page).to have_content(accounts.first.account_list_item)
@@ -74,9 +72,9 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
       find("input[value='#{order_details.second.id}']").click
 
       check "Send $0 Notifications?"
-      click_button "Send Notifications"
-
-      expect(ActionMailer::Base.deliveries.count).to eq 2
+      expect { click_button "Send Notifications" }.to(
+        enqueue_mail(Notifier, :review_orders).twice
+      )
 
       within(".notice") do
         expect(page).to have_content(accounts.first.account_list_item)
@@ -163,10 +161,11 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
 
       check("order_detail_ids[]", option: order_detail.id)
 
-      click_button "Send Notifications"
+      expect { click_button "Send Notifications" }.to(
+        enqueue_mail(Notifier, :review_orders)
+      )
 
       expect(page).to have_content("Notifications sent successfully")
-      expect(ActionMailer::Base.deliveries.count).to eq 1
     end
   end
 
