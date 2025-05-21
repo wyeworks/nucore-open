@@ -36,9 +36,8 @@ RSpec.describe(
 
     fill_in "Note", with: "This is a test estimate"
 
-    expect(page).to have_content("No results found")
-
-    select_user("#estimate_user_id_chosen", user)
+    fill_in "User", with: user.first_name
+    find(".ui-autocomplete li", text: user.full_name).click
 
     expect(page).to have_content "Add Products to Estimate"
     select_from_chosen bundle.name, from: "Product"
@@ -93,6 +92,9 @@ RSpec.describe(
       expect(first_column_text).to have_content(item_without_price_policy.name)
     end
 
+    fill_in "User", with: user.first_name
+    find(".ui-autocomplete li", text: user.full_name).click
+
     click_button "Add Estimate"
 
     expect(page).not_to have_content "Estimate successfully created"
@@ -108,7 +110,8 @@ RSpec.describe(
       remove_button.click
     end
 
-    select_user("#estimate_user_id_chosen", user)
+    fill_in "User", with: user.first_name
+    find(".ui-autocomplete li", text: user.full_name).click
 
     click_button "Add Estimate"
 
@@ -130,5 +133,37 @@ RSpec.describe(
             (item_price_policy.unit_cost * 2) +
             (instrument_price_policy.usage_rate * 180)
     expect(page).to have_content ActionController::Base.helpers.number_to_currency(total)
+  end
+
+  it "can create an estimate with a new username" do
+    visit facility_estimates_path(facility)
+
+    expect(page).to have_selector("#admin_estimates_tab")
+    expect(page).to have_content facility.to_s
+
+    click_link "Add Estimate"
+    expect(page).to have_content "Create an Estimate"
+
+    fill_in "Name", with: "New User Estimate"
+    select_from_chosen price_group.name, from: "Price group"
+
+    fill_in "User", with: "Michael Smith"
+
+    expect(page).to have_content "Add Products to Estimate"
+    select_from_chosen item.name, from: "Product"
+    click_button "Add Product to Estimate"
+
+    wait_for_ajax
+
+    within '#new_estimate_estimate_details' do
+      expect(page).to have_content item.name
+    end
+
+    click_button "Add Estimate"
+
+    expect(page).to have_content "Estimate successfully created"
+    expect(page).to have_content "Estimate ##{Estimate.last.id} - New User Estimate"
+    expect(page).to have_content "Michael Smith"
+    expect(page).to have_content item.name
   end
 end
