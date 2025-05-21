@@ -23,11 +23,11 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   end
 
   def warnings
-    warnings = []
-
-    warnings << Notice.new(problem_description_key, :warning) if problem?
-
-    warnings
+    if problem?
+      [Notice.new(problem_description_key || :problem_out_of_sync, :warning)]
+    else
+      []
+    end
   end
 
   def notices

@@ -845,6 +845,9 @@ en:
       awaiting_payment:
         alert: This order has been !statemented_downcase!, but is not yet reconciled
         badge: Awaiting Payment
+      problem_out_of_sync:
+        alert: The problem has been resolved, please save this order to remove the alert
+        badge: Problem out of sync
     note: "Note: %{note}"
 
   product_accessories:
