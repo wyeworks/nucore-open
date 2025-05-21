@@ -15,14 +15,9 @@ module SangerSequencing
     def to_s
       return "" unless submission
       render("sanger_sequencing/purchase_notifier/samples_table", submission: submission, caption: caption)
-        .safe_concat(render(body: print_me_text))
     end
 
     private
-
-    def print_me_text
-      I18n.t("views.sanger_sequencing.orders.receipt.print")
-    end
 
     def caption
       text = "#{SangerSequencing::Submission.human_attribute_name(:id)}#{submission.id}"

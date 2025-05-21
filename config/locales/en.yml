@@ -47,7 +47,7 @@ en:
   statement_downcase: statement
   statements_downcase: statements
   statemented_downcase: statemented
-  
+
   statements:
     pdf:
       download: Download
@@ -1395,6 +1395,8 @@ en:
         training_request:
           product:
             requires_no_approval: This product does not require approval
+        estimate_detail:
+          no_price_policy: "No price policy found."
 
   devise:
     failure:
