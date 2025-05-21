@@ -9,7 +9,7 @@ class Estimate < ApplicationRecord
 
   accepts_nested_attributes_for :estimate_details, allow_destroy: true, reject_if: :all_blank
 
-  before_save :clear_user_values
+  before_save :clear_custom_name_field
 
   validate :expires_at_cannot_be_in_the_past
   validates :expires_at, presence: true
@@ -46,11 +46,7 @@ class Estimate < ApplicationRecord
     end
   end
 
-  def clear_user_values
-    if user_id.present?
-      self.custom_name = nil
-    else
-      self.user_id = nil
-    end
+  def clear_custom_name_field
+    self.custom_name = nil if user_id.present?
   end
 end
