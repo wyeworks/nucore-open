@@ -12,7 +12,7 @@ class Estimate < ApplicationRecord
   validates :expires_at, presence: true
 
   def total_cost
-    estimate_details.sum { |detail| detail.cost.to_f }
+    estimate_details.sum(&:cost)
   end
 
   def recalculate

@@ -1,7 +1,7 @@
 - if @estimate_detail_products.present?
   :plain
     $('#new_estimate_products_table').show();
-    
+
     #{
       js_rows = ""
       @estimate_detail_products.each_with_index do |product, index|
@@ -12,6 +12,6 @@
       end
       js_rows
     }
-    
+
     const estimateDurationMinsInputs = $(".js--estimate-duration-mins");
     estimateDurationMinsInputs.timeinput();

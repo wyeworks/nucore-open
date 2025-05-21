@@ -2,10 +2,6 @@
 # Messages that come from controllers
 en:
   controllers:
-    facility_estimates:
-      update:
-        success: "Estimate was successfully updated."
-        error: "There was a problem updating the estimate."
     accessories:
       create:
         success: "%{accessories} added"
