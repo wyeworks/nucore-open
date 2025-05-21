@@ -47,7 +47,7 @@ RSpec.describe OrderImportsController do
       )
     end
 
-    describe "log event creation", active_job: :test do
+    describe "log event creation" do
       let(:user) { @admin }
       let(:send_receipts) { false }
       let(:fail_on_error) { false }

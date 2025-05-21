@@ -10,7 +10,7 @@ RSpec.describe InstrumentIssue do
     it { is_expected.to validate_presence_of(:product) }
   end
 
-  describe "send_notification", active_job: :test do
+  describe "send_notification" do
     let(:valid_issue) do
       user = create(:user)
       product = create(:setup_instrument)

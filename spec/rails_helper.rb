@@ -183,13 +183,6 @@ RSpec.configure do |config|
 
   config.after(:all) { travel_back }
 
-  config.around(:each, :active_job) do |example|
-    old_value = ActiveJob::Base.queue_adapter
-    ActiveJob::Base.queue_adapter = :test
-    example.call
-    ActiveJob::Base.queue_adapter = old_value
-  end
-
   # Javascript specs need to be able to talk to localhost
   config.around(:each, :js) do |example|
     if ENV["DOCKER_LOCAL_DEV"]
