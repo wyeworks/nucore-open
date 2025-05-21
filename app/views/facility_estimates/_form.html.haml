@@ -26,8 +26,7 @@
       %tbody#new_estimate_estimate_details
         - @estimate.estimate_details.each_with_index do |estimate_detail, index|
           - if estimate_detail.product_id.present?
-            - temp_id = estimate_detail.id.present? ? estimate_detail.id : "new_#{estimate_detail.product_id}_#{index}_#{Time.now.to_i}_#{Time.now.nsec}_#{rand(1000)}"
-            = render partial: "estimate_detail", locals: { estimate_detail: estimate_detail, temp_id: temp_id, edit_mode: true }
+            = render partial: "estimate_detail", locals: { estimate_detail: estimate_detail, index: index, edit_mode: true }
 
   %h3= t("facility_estimates.form.add_products_to_estimate")
 

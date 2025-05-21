@@ -80,7 +80,7 @@ $(function () {
       var destroyField = row.find(".destroy-field");
 
       if (destroyField.length) {
-        destroyField.val("1");
+        destroyField.val(true);
         row.hide();
       } else {
         row.remove();

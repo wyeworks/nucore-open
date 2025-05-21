@@ -7,7 +7,7 @@
       @estimate_detail_products.each_with_index do |product, index|
         temp_id = "#{product.id}#{index}#{Time.now.to_i}"
         estimate_detail = EstimateDetail.new(product: product, duration_unit: product.time_unit)
-        html = render(partial: 'facility_estimates/estimate_detail', locals: { estimate_detail: estimate_detail, temp_id: temp_id })
+        html = render(partial: 'facility_estimates/estimate_detail', locals: { estimate_detail: estimate_detail, index: temp_id })
         js_rows += "$('#new_estimate_estimate_details').append(\"#{j html}\");"
       end
       js_rows
