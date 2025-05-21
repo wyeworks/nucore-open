@@ -7,14 +7,13 @@
         collection: user_collection,
         class: "js--chosen js--select-with-search",
         include_blank: false,
-        data: { search_url: search_facility_estimates_path },
-        disabled: f.object.persisted?
+        data: { search_url: search_facility_estimates_path }
     .span-4
       = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
   .form-inputs
     = f.input :note
 
-  #new_estimate_products_table
+  #estimate_products_table
     %h3= t("facility_estimates.form.current_products")
     %table.table
       %thead
@@ -22,8 +21,8 @@
           %th= EstimateDetail.human_attribute_name(:product)
           %th= EstimateDetail.human_attribute_name(:quantity)
           %th= EstimateDetail.human_attribute_name(:duration)
-          %th.text-center= t("shared.remove")
-      %tbody#new_estimate_estimate_details
+          %th
+      %tbody#estimate_estimate_details
         - @estimate.estimate_details.each_with_index do |estimate_detail, index|
           - if estimate_detail.product_id.present?
             = render partial: "estimate_detail", locals: { estimate_detail: estimate_detail, index: index, edit_mode: true }

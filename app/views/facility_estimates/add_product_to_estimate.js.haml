@@ -1,6 +1,6 @@
 - if @estimate_detail_products.present?
   :plain
-    $('#new_estimate_products_table').show();
+    $('#estimate_products_table').show();
 
     #{
       js_rows = ""
@@ -8,7 +8,7 @@
         temp_id = "#{product.id}#{index}#{Time.now.to_i}"
         estimate_detail = EstimateDetail.new(product: product, duration_unit: product.time_unit)
         html = render(partial: 'facility_estimates/estimate_detail', locals: { estimate_detail: estimate_detail, index: temp_id })
-        js_rows += "$('#new_estimate_estimate_details').append(\"#{j html}\");"
+        js_rows += "$('#estimate_estimate_details').append(\"#{j html}\");"
       end
       js_rows
     }

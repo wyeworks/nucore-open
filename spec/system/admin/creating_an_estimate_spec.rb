@@ -45,7 +45,7 @@ RSpec.describe(
 
     wait_for_ajax
 
-    within '#new_estimate_estimate_details' do
+    within '#estimate_estimate_details' do
       all('tr').each do |row|
         columns = row.all('td')
         first_column_text = columns[0].text
@@ -62,7 +62,7 @@ RSpec.describe(
       end
     end
 
-    expect(page).to have_content("Remove", count: 3)
+    expect(page).to have_content("Remove", count: 2)
 
     select_from_chosen other_facility.name, from: Facility.model_name.human, scroll_to: :center
     select_from_chosen other_item.name, from: "Product"
@@ -70,14 +70,14 @@ RSpec.describe(
 
     wait_for_ajax
 
-    within '#new_estimate_estimate_details' do
+    within '#estimate_estimate_details' do
       other_item_row = all('tr').last
       columns = other_item_row.all('td')
       first_column_text = columns[0].text
       expect(first_column_text).to eq "#{other_item.name} (#{other_facility.name})"
     end
 
-    expect(page).to have_content("Remove", count: 4)
+    expect(page).to have_content("Remove", count: 3)
 
     select_from_chosen facility.name, from: Facility.model_name.human, scroll_to: :center
     select_from_chosen item_without_price_policy.name, from: "Product"
@@ -85,7 +85,7 @@ RSpec.describe(
 
     wait_for_ajax
 
-    within '#new_estimate_estimate_details' do
+    within '#estimate_estimate_details' do
       item_without_price_policy_row = all('tr').last
       columns = item_without_price_policy_row.all('td')
       first_column_text = columns[0].text
@@ -99,7 +99,7 @@ RSpec.describe(
 
     expect(page).not_to have_content "Estimate successfully created"
 
-    within '#new_estimate_estimate_details' do
+    within '#estimate_estimate_details' do
       item_without_price_policy_row = all('tr').last
       columns = item_without_price_policy_row.all('td')
       first_column_text = columns[0].text

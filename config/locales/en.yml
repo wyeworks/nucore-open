@@ -555,7 +555,6 @@ en:
       updated_at_notice: "Prices last updated: %{updated_at}"
       edit: Edit
       remove: Remove
-      confirm_remove: Are you sure you want to remove this product from the estimate?
     recalculate:
       success: Estimate successfully recalculated
       error: There was an error recalculating the estimate
