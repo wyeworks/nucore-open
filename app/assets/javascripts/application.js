@@ -21,4 +21,3 @@
 //= require clockpunch
 //= require fine-uploader/jquery.fine-uploader
 //= require polyfills
-//= require facility_estimates

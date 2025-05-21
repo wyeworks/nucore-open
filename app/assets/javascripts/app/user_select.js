@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const userInput = document.querySelector('.js--user-autocomplete');
   if (!userInput) return;
 
-  const userIdInput = document.getElementById('estimate_user_id');
+  const userIdInput = document.getElementById(userInput.dataset.userInputId);
 
   if (!userInput || !userIdInput) {
     return;
