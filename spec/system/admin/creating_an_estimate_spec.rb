@@ -62,7 +62,7 @@ RSpec.describe(
       end
     end
 
-    expect(page).to have_content("Remove", count: 2)
+    expect(page).to have_content("Remove", count: 3)
 
     select_from_chosen other_facility.name, from: Facility.model_name.human, scroll_to: :center
     select_from_chosen other_item.name, from: "Product"
@@ -77,7 +77,7 @@ RSpec.describe(
       expect(first_column_text).to eq "#{other_item.name} (#{other_facility.name})"
     end
 
-    expect(page).to have_content("Remove", count: 3)
+    expect(page).to have_content("Remove", count: 4)
 
     select_from_chosen facility.name, from: Facility.model_name.human, scroll_to: :center
     select_from_chosen item_without_price_policy.name, from: "Product"

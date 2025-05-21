@@ -2,7 +2,7 @@ $(function () {
   const facilitySelect = $("#facility_id");
   const productSelect = document.getElementById("product_id");
   const addProductButton = document.getElementById("add_product_to_estimate");
-  
+
   if (!facilitySelect || !productSelect || !addProductButton) {
     return;
   }
@@ -64,6 +64,7 @@ $(function () {
 
   const initializeTimedFields = () => {
     const estimateDurationMinsInputs = $(".js--estimate-duration-mins");
+
     estimateDurationMinsInputs.timeinput();
   }
 
@@ -75,7 +76,6 @@ $(function () {
     ".remove-estimate-detail",
     function (e) {
       e.preventDefault();
-      
       var row = $(this).closest("tr");
       var destroyField = row.find(".destroy-field");
 

@@ -539,7 +539,6 @@ en:
       add_product: Add Product to Estimate
       add_products_to_estimate: Add Products to Estimate
       current_products: Current Products
-      delete: Remove
     edit:
       edit: Edit Estimate
       update: Update
@@ -560,6 +559,9 @@ en:
     recalculate:
       success: Estimate successfully recalculated
       error: There was an error recalculating the estimate
+    update:
+      success: Estimate was successfully updated
+      error: There was a problem updating the estimate
 
   facility_order_details:
     edit:
