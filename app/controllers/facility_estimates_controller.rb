@@ -123,7 +123,7 @@ class FacilityEstimatesController < ApplicationController
     params.require(:estimate).permit(
       :name, :user_id, :note, :expires_at,
       estimate_details_attributes: [
-        :id, :product_id, :price_policy_id, :quantity, :duration, :duration_unit, :_destroy
+        :id, :product_id, :quantity, :duration, :duration_unit, :_destroy
       ]
     )
   end

@@ -1,14 +1,11 @@
 %tr{ data: { estimate_detail_id: estimate_detail.id } }
-  - numeric_id = defined?(index) ? index : rand(100000)
+  - numeric_id = index
   - id_prefix = "estimate[estimate_details_attributes][#{numeric_id}]"
   - if estimate_detail.id.present?
     = hidden_field_tag "#{id_prefix}[id]", estimate_detail.id
   = hidden_field_tag "#{id_prefix}[product_id]", estimate_detail.product_id
   - if estimate_detail.duration_unit.present?
     = hidden_field_tag "#{id_prefix}[duration_unit]", estimate_detail.duration_unit
-  
-  - if estimate_detail.price_policy_id.present?
-    = hidden_field_tag "#{id_prefix}[price_policy_id]", estimate_detail.price_policy_id
   
   = hidden_field_tag "#{id_prefix}[_destroy]", false, class: 'destroy-field', id: "destroy_#{numeric_id}"
 

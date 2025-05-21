@@ -55,10 +55,10 @@ $(function () {
   });
 
   const toggleEstimateProductsTable = () => {
-    if ($("#new_estimate_estimate_details tr:visible").length === 0) {
-      $("#new_estimate_products_table").hide();
+    if ($("#estimate_estimate_details tr:visible").length === 0) {
+      $("#estimate_products_table").hide();
     } else {
-      $("#new_estimate_products_table").show();
+      $("#estimate_products_table").show();
     }
   }
 
@@ -71,15 +71,16 @@ $(function () {
   toggleEstimateProductsTable();
   initializeTimedFields();
 
-  $("#new_estimate_products_table").on(
+  $("#estimate_products_table").on(
     "click",
     ".remove-estimate-detail",
     function (e) {
       e.preventDefault();
       var row = $(this).closest("tr");
-      var destroyField = row.find(".destroy-field");
-
-      if (destroyField.length) {
+      var detailId = row.data("estimate-detail-id");
+      
+      if (detailId) {
+        var destroyField = row.find(".destroy-field");
         destroyField.val(true);
         row.hide();
       } else {

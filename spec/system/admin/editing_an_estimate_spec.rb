@@ -40,8 +40,8 @@ RSpec.describe(
     click_link "Edit"
     expect(page).to have_content "Edit Estimate"
 
-    # The column title + 2 items already added
-    expect(page).to have_content("Remove", count: 3)
+    # The 2 items already added
+    expect(page).to have_content("Remove", count: 2)
 
     fill_in "Name", with: "Updated Estimate Title"
     fill_in "Note", with: "Updated note text"
@@ -55,20 +55,21 @@ RSpec.describe(
     wait_for_ajax
 
     # 1 more remove button for the new item
-    expect(page).to have_content("Remove", count: 4)
+    expect(page).to have_content("Remove", count: 3)
 
-    within '#new_estimate_estimate_details' do
+    within '#estimate_estimate_details' do
       other_item_row = all('tr').last
       columns = other_item_row.all('td')
       first_column_text = columns[0].text
       expect(first_column_text).to eq other_item.name
     end
 
-    within '#new_estimate_estimate_details' do
+    within '#estimate_estimate_details' do
       first_row = all('tr').first
       columns = first_row.all('td')
       remove_button = columns[3].find('.remove-estimate-detail')
       remove_button.click
+
       first_row = all('tr').first
       columns = first_row.all('td')
       remove_button = columns[3].find('.remove-estimate-detail')
@@ -76,7 +77,7 @@ RSpec.describe(
     end
 
     # we deleted 2 items so there are 2 remove button less
-    expect(page).to have_content("Remove", count: 2)
+    expect(page).to have_content("Remove", count: 1)
 
     click_button "Update"
 
