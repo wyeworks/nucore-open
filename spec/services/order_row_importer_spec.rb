@@ -201,7 +201,7 @@ RSpec.describe OrderRowImporter do
       it_behaves_like "an order was created"
 
       it "does not trigger any emails" do
-        expect { subject.import }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { subject.import }.not_to enqueue_mail
       end
 
       it "puts the order detail into Completed status" do

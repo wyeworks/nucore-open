@@ -38,7 +38,7 @@ RSpec.describe ResultsFileNotifier do
 
   describe "with notifications disabled", feature_setting: { results_file_notifications: false } do
     it "does not send a notification" do
-      expect { notifier.notify }.not_to change(ActionMailer::Base.deliveries, :count)
+      expect { notifier.notify }.not_to enqueue_mail
     end
   end
 

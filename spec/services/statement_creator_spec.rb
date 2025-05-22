@@ -73,7 +73,7 @@ RSpec.describe StatementCreator do
 
     context "when statement emailing is off", feature_setting: { send_statement_emails: false } do
       it "does not send statements" do
-        expect { creator.send_statement_emails }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { creator.send_statement_emails }.not_to enqueue_mail
       end
     end
   end
