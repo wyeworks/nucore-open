@@ -55,7 +55,7 @@ RSpec.describe SecureRooms::AutoOrphanOccupancy, :time_travel do
       end
 
       it "triggers an email" do
-        expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { action.perform }.to enqueue_mail(ProblemOrderMailer, :notify_user)
       end
     end
 
@@ -87,7 +87,7 @@ RSpec.describe SecureRooms::AutoOrphanOccupancy, :time_travel do
       end
 
       it "does not trigger an email" do
-        expect { action.perform }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { action.perform }.not_to enqueue_mail
       end
     end
 
