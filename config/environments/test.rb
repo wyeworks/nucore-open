@@ -109,6 +109,8 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :reservation
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Reservation", association: :order
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Service", association: :current_offline_reservations
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "SecureRoomPricePolicy", association: :price_group
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "SecureRoomPricePolicy", association: :duration_rates
   end
 
   # Settings specified here will take precedence over those in config/application.rb.
