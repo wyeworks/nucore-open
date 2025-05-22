@@ -9,7 +9,7 @@ class FacilityEstimatesController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
-  before_action :load_estimate, only: [:show, :edit, :recalculate, :update]
+  before_action :load_estimate, only: [:show, :edit, :recalculate, :update, :duplicate]
   before_action :set_users, only: [:search]
 
   def index
@@ -111,6 +111,40 @@ class FacilityEstimatesController < ApplicationController
     end
 
     redirect_to facility_estimate_path(current_facility, @estimate)
+  end
+
+  def duplicate
+    duplicated_estimate = nil
+
+    Estimate.transaction do
+
+      duplicated_estimate = @estimate.dup
+      duplicated_estimate.created_by_id = current_user.id
+      duplicated_estimate.expires_at = 1.month.from_now
+
+      duplicated_estimate.save!
+
+      @estimate.estimate_details.each do |detail|
+        duplicated_detail = detail.dup
+        duplicated_detail.estimate = duplicated_estimate
+        duplicated_detail.save!
+      end
+
+      duplicated_estimate.recalculate
+    rescue StandardError
+      duplicated_estimate = nil
+
+      raise ActiveRecord::Rollback
+
+    end
+
+    if duplicated_estimate.present?
+      flash[:notice] = t(".success")
+      redirect_to facility_estimate_path(current_facility, duplicated_estimate)
+    else
+      flash[:error] = t(".error")
+      redirect_to facility_estimate_path(current_facility, @estimate)
+    end
   end
 
   private
