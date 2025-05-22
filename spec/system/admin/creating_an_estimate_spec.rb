@@ -80,7 +80,7 @@ RSpec.describe(
 
     expect(page).to have_content("Remove", count: 3)
 
-    select_from_chosen facility.name, from: "Facility", scroll_to: :center
+    select_from_chosen facility.name, from: Facility.model_name.human, scroll_to: :center
     select_from_chosen item_without_price_policy.name, from: "Product"
     click_button "Add Product to Estimate"
 
