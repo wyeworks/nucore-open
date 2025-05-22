@@ -9,7 +9,7 @@ class FacilityEstimatesController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
-  before_action :load_estimate, only: [:show, :recalculate]
+  before_action :load_estimate, only: [:show, :edit, :recalculate, :update]
   before_action :set_users, only: [:search]
 
   def index
@@ -71,9 +71,27 @@ class FacilityEstimatesController < ApplicationController
     end
   end
 
+  def edit
+    set_products
+  end
+
+  def update
+    expires_at = parse_usa_date(facility_estimate_params[:expires_at])
+
+    update_params = facility_estimate_params.merge(expires_at:)
+
+    if @estimate.update(update_params)
+      flash[:notice] = t(".success")
+      redirect_to facility_estimate_path(current_facility, @estimate)
+    else
+      set_products
+      flash.now[:error] = t(".error")
+      render :edit
+    end
+  end
+
   def add_product_to_estimate
     product_id = params[:product_id]
-
     product = Product.find(product_id)
 
     @estimate_detail_products = if product.is_a?(Bundle)
@@ -104,12 +122,14 @@ class FacilityEstimatesController < ApplicationController
   def facility_estimate_params
     params.require(:estimate).permit(
       :name, :user_id, :note, :expires_at,
-      estimate_details_attributes: [:id, :product_id, :quantity, :duration, :duration_unit, :_destroy]
+      estimate_details_attributes: [
+        :id, :product_id, :quantity, :duration, :duration_unit, :_destroy
+      ]
     )
   end
 
   def load_estimate
-    @estimate = current_facility.estimates.includes(estimate_details: :product).find(params[:id])
+    @estimate = current_facility.estimates.find(params[:id])
   end
 
   def set_products

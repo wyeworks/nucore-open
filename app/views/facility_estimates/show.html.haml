@@ -9,6 +9,7 @@
 .pull-right
   = link_to t(".recalculate"), recalculate_facility_estimate_path(current_facility, @estimate), method: :post, class: "btn btn-primary"
   = link_to t(".download_csv"), facility_estimate_path(current_facility, @estimate, format: :csv), class: "btn btn-primary"
+  = link_to t(".edit"), edit_facility_estimate_path(current_facility, @estimate), class: "btn btn-secondary margin_left"
 
 .container.banner-list
   .row
