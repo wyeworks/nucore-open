@@ -8,6 +8,7 @@
 
 .pull-right
   = link_to t(".download_csv"), facility_estimate_path(current_facility, @estimate, format: :csv)
+  = link_to t(".duplicate"), duplicate_facility_estimate_path(current_facility, @estimate), method: :post, class: "btn btn-primary"
 
 .container.banner-list
   .row
