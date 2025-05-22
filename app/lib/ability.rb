@@ -139,6 +139,7 @@ class Ability
 
     if SettingsHelper.feature_on?(:show_estimates_option)
       can :manage, Estimate
+      can :duplicate, Estimate
     end
   end
 
@@ -177,6 +178,7 @@ class Ability
 
     if SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_director_of?(resource)
       can :manage, Estimate
+      can :duplicate, Estimate
     end
   end
 
@@ -201,6 +203,7 @@ class Ability
 
     if SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_administrator_of?(resource)
       can :manage, Estimate
+      can :duplicate, Estimate
     end
   end
 

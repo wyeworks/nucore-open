@@ -327,7 +327,8 @@ Rails.application.routes.draw do
       end
 
       member do
-        post "recalculate"
+        post :recalculate
+        post :duplicate
       end
     end
 
