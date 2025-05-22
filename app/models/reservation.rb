@@ -36,7 +36,7 @@ class Reservation < ApplicationRecord
 
   # Delegations
   #####
-  delegate :note, :note=, :ordered_on_behalf_of?, :complete?, :account, :order,
+  delegate :note, :note=, :ordered_on_behalf_of?, :complete?, :order,
            :complete!, :price_policy, :reference_id, :reference_id=, to: :order_detail, allow_nil: true
 
   delegate :account, :in_cart?, :user, to: :order, allow_nil: true
