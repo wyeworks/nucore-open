@@ -115,8 +115,6 @@ class FacilityEstimatesController < ApplicationController
         duplicated_detail.estimate = duplicated_estimate
         duplicated_detail.save!
       end
-
-      duplicated_estimate.recalculate
     rescue StandardError
       duplicated_estimate = nil
 
