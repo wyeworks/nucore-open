@@ -37,13 +37,7 @@ jobs:
         id: glob
         with:
           files: |
-            vendor/engines/bulk_email/spec/**/*_spec.rb
-            vendor/engines/c2po/spec/**/*_spec.rb
-            vendor/engines/dataprobe/spec/**/*_spec.rb
-            vendor/engines/projects/spec/**/*_spec.rb
-            vendor/engines/saml_authentication/spec/**/*_spec.rb
-            vendor/engines/sanger_sequencing/spec/**/*_spec.rb
-            vendor/engines/split_accounts/spec/**/*_spec.rb
+            vendor/engines/*/spec/**/*_spec.rb
 
       - run: bundle exec rails assets:precompile
       - run: bundle exec rspec ${{ steps.glob.outputs.paths }}
