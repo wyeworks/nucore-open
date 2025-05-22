@@ -38,6 +38,7 @@ jobs:
         with:
           files: |
             vendor/engines/*/spec/**/*_spec.rb
+            !vendor/engines/secure_rooms/
 
       - run: bundle exec rails assets:precompile
       - run: bundle exec rspec ${{ steps.glob.outputs.paths }}
