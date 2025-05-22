@@ -7,9 +7,7 @@
 %h2= header
 
 .pull-right
-  = link_to t(".recalculate"), recalculate_facility_estimate_path(current_facility, @estimate), method: :post, class: "btn btn-primary"
-  = link_to t(".download_csv"), facility_estimate_path(current_facility, @estimate, format: :csv), class: "btn btn-primary"
-  = link_to t(".edit"), edit_facility_estimate_path(current_facility, @estimate), class: "btn btn-secondary margin_left"
+  = link_to t(".download_csv"), facility_estimate_path(current_facility, @estimate, format: :csv)
 
 .container.banner-list
   .row
@@ -49,7 +47,11 @@
       %td{colspan: 3}
       %td.currency
         %strong=number_to_currency(@estimate.total_cost)
+.pull-right
+  = link_to t(".recalculate"), recalculate_facility_estimate_path(current_facility, @estimate), method: :post, class: "btn btn-primary"
 
 - if @estimate.estimate_details.any?
   %p
     = t(".updated_at_notice", updated_at: I18n.l(@estimate.estimate_details.maximum(:updated_at), format: :usa))
+.pull-right
+  = link_to t(".edit"), edit_facility_estimate_path(current_facility, @estimate), class: "btn btn-secondary"
