@@ -117,10 +117,10 @@ class FacilityEstimatesController < ApplicationController
     duplicated_estimate = nil
 
     Estimate.transaction do
-
       duplicated_estimate = @estimate.dup
       duplicated_estimate.created_by_id = current_user.id
       duplicated_estimate.expires_at = 1.month.from_now
+      duplicated_estimate.name = "Copy of #{@estimate.name}"
 
       duplicated_estimate.save!
 
