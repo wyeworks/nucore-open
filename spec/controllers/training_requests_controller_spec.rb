@@ -66,7 +66,7 @@ RSpec.describe TrainingRequestsController, feature_setting: { training_requests:
 
         describe "no contacts are assigned" do
           let(:training_request_contacts) { "" }
-          it "does not send an email" do
+          it "does not send an email", :perform_enqueued_jobs do
             expect { do_request }.not_to change(ActionMailer::Base.deliveries, :count)
           end
         end
@@ -80,7 +80,7 @@ RSpec.describe TrainingRequestsController, feature_setting: { training_requests:
         end
 
         it "does not send an email" do
-          expect { do_request }.not_to change(ActionMailer::Base.deliveries, :count)
+          expect { do_request }.not_to enqueue_mail
         end
       end
     end

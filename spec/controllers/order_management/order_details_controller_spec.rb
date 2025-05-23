@@ -899,7 +899,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
               end
 
               it "does not trigger an email" do
-                expect { do_request }.not_to change(ActionMailer::Base.deliveries, :count)
+                expect { do_request }.not_to enqueue_mail
               end
             end
           end
@@ -916,7 +916,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
             end
 
             it "does not trigger an email" do
-              expect { do_request }.not_to change(ActionMailer::Base.deliveries, :count)
+              expect { do_request }.not_to enqueue_mail
             end
           end
         end
