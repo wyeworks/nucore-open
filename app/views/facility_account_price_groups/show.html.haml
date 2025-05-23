@@ -1,0 +1,26 @@
+= render "account_admin_nav"
+
+- if @price_groups.empty?
+  .notice= t(".no_price_groups")
+
+- else
+  %table.table.table-stripped
+    %thead
+      %tr
+        %th= PriceGroup.human_attribute_name(:name)
+        %th= PriceGroup.human_attribute_name(:facility)
+        %th= PriceGroup.human_attribute_name(:type)
+        %th= PriceGroup.human_attribute_name(:global)
+    %tbody
+      - @price_groups.each do |price_group|
+        %tr
+          %td= link_to(price_group.name, facility_price_group_path(price_group.facility || current_facility, price_group))
+          %td= price_group.facility || current_facility
+          %td= price_group.type_string
+          %td= t(".global.#{price_group.global.to_s}")
+
+.row
+  .pull-right
+    = link_to(@price_groups.empty? ? t(".add") : t(".edit"),
+      edit_facility_account_price_groups_path(current_facility, @account),
+      class: "btn")

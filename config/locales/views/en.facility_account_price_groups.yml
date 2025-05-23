@@ -1,0 +1,9 @@
+en:
+  facility_account_price_groups:
+    show:
+      no_price_groups: No Price Groups assigned
+      edit: Edit
+      add: Add
+      global:
+        true: "Yes"
+        false: "No"
