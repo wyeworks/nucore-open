@@ -6,7 +6,7 @@ FactoryBot.define do
     user
     price_group
     association :created_by_user, factory: :user
-    name { "Test Estimate" }
+    description { "Test Estimate" }
     note { "This is a test estimate" }
     expires_at { 30.days.from_now }
   end

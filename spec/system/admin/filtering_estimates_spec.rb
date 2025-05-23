@@ -8,9 +8,9 @@ RSpec.describe "Filtering estimates" do
   let(:user1) { create(:user, first_name: "First", last_name: "User") }
   let(:user2) { create(:user, first_name: "Second", last_name: "User") }
 
-  let!(:estimate1) { create(:estimate, facility:, name: "First Estimate", user: user1, created_at: 3.days.ago) }
-  let!(:estimate2) { create(:estimate, facility:, name: "Second Estimate", user: user2, created_at: 2.days.ago) }
-  let!(:expired_estimate) { create(:estimate, facility:, name: "Expired Estimate", user: user1, created_at: 5.days.ago) }
+  let!(:estimate1) { create(:estimate, facility:, description: "First Estimate", user: user1, created_at: 3.days.ago) }
+  let!(:estimate2) { create(:estimate, facility:, description: "Second Estimate", user: user2, created_at: 2.days.ago) }
+  let!(:expired_estimate) { create(:estimate, facility:, description: "Expired Estimate", user: user1, created_at: 5.days.ago) }
 
   before(:each) do
     login_as director

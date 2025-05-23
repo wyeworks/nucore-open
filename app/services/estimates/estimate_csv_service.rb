@@ -11,8 +11,8 @@ module Estimates
     def to_csv
       CSV.generate do |csv|
         csv << ["Estimate Information"]
-        csv << ["ID", "Name", "Created By", "User", "Expiration Date"]
-        csv << [@estimate.id, @estimate.name, @estimate.created_by_user.full_name, @estimate.user_display_name, format_usa_date(@estimate.expires_at)]
+        csv << ["ID", "Description", "Created By", "Username", "Expiration Date"]
+        csv << [@estimate.id, @estimate.description, @estimate.created_by_user.full_name, @estimate.user_display_name, format_usa_date(@estimate.expires_at)]
         csv << []
 
         csv << ["Products"]

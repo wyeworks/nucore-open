@@ -35,14 +35,14 @@
     %thead
       %tr
         %th= Estimate.human_attribute_name(:id)
-        %th= Estimate.human_attribute_name(:name)
+        %th= Estimate.human_attribute_name(:description)
         %th= Estimate.human_attribute_name(:user)
         %th= Estimate.human_attribute_name(:expires_at)
     %tbody
       - @estimates.each do |estimate|
         %tr{class: ("row-warning" if estimate.expires_at < Time.current)}
           %td= link_to estimate.id, facility_estimate_path(current_facility, estimate)
-          %td= estimate.name
+          %td= estimate.description
           %td= estimate.user_display_name
           %td= format_usa_date(estimate.expires_at)
 - else

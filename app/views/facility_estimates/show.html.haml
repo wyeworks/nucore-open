@@ -2,7 +2,7 @@
   = current_facility
 
 - header = "#{Estimate.model_name.human} ##{@estimate.id}"
-- header = @estimate.name.present? ? "#{header} - #{@estimate.name}" : header
+- header = @estimate.description.present? ? "#{header} - #{@estimate.description}" : header
 
 %h2= header
 

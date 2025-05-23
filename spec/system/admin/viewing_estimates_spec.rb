@@ -11,8 +11,8 @@ RSpec.describe "Viewing estimates", :disable_requests_local do
   let(:staff) { create(:user, :staff, facility:) }
   let(:regular_user) { create(:user) }
 
-  let!(:estimate1) { create(:estimate, facility:, name: "First Estimate", created_at: 2.days.ago) }
-  let!(:estimate2) { create(:estimate, facility:, name: "Second Estimate", created_at: 1.day.ago) }
+  let!(:estimate1) { create(:estimate, facility:, description: "First Estimate", created_at: 2.days.ago) }
+  let!(:estimate2) { create(:estimate, facility:, description: "Second Estimate", created_at: 1.day.ago) }
 
   context "viewing index page" do
     context "as authorized roles" do
@@ -30,7 +30,7 @@ RSpec.describe "Viewing estimates", :disable_requests_local do
           click_link estimate1.id
 
           expect(page).to have_content "Estimate ##{estimate1.id}"
-          expect(page).to have_content estimate1.name
+          expect(page).to have_content estimate1.description
           expect(page).to have_content estimate1.user.full_name
           expect(page).to have_content estimate1.created_by_user.full_name
           expect(page).to have_content estimate1.note
