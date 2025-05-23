@@ -13,12 +13,11 @@
         class: "js--chosen",
         include_blank: false
     .span-4
-      = f.label :user_id, Estimate.human_attribute_name(:user_id)
-      = f.input_field :user_id,
-        collection: [],
-        class: "js--chosen js--select-with-search",
-        include_blank: false,
-        data: { search_url: search_facility_estimates_path }
+      = f.label :custom_name, Estimate.human_attribute_name(:user)
+      = f.input_field :custom_name,
+        class: "js--user-autocomplete",
+        data: { search_url: search_facility_estimates_path, user_input_id: "estimate_user_id" }
+      = f.hidden_field :user_id
     .span-4
       = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
   .form-inputs
