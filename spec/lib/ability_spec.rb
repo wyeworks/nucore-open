@@ -40,6 +40,14 @@ RSpec.describe Ability do
     end
   end
 
+  shared_examples_for "it has estimate abilities" do
+    it_is_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+  end
+
+  shared_examples_for "it does not have estimate abilities" do
+    it_is_not_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+  end
+
   shared_examples_for "it allows switch_to on active, but not deactivated users" do
     let(:stub_controller) { UsersController.new }
     let(:active_user) { FactoryBot.build(:user) }
@@ -205,6 +213,14 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
       it { is_expected.not_to be_allowed_to(:transactions, facility) }
       it { is_expected.not_to be_allowed_to(:manage, Reservation) }
+
+      context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
+        it_behaves_like "it has estimate abilities"
+      end
+
+      context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+        it_behaves_like "it does not have estimate abilities"
+      end
     end
 
     context "in cross-facility" do
@@ -265,6 +281,14 @@ RSpec.describe Ability do
 
     it_behaves_like "it can destroy admistrative reservations"
     it_behaves_like "it allows switch_to on active, but not deactivated users"
+
+    context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
+      it_behaves_like "it has estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
+    end
   end
 
   describe "facility director" do
@@ -327,6 +351,14 @@ RSpec.describe Ability do
       it_is_not_allowed_to([:create, :edit, :update, :destroy], ItemPricePolicy)
       it_is_allowed_to([:show, :index], ServicePricePolicy)
       it_is_not_allowed_to([:create, :edit, :update, :destroy], ServicePricePolicy)
+    end
+
+    context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
+      it_behaves_like "it has estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
     end
   end
 
@@ -391,6 +423,14 @@ RSpec.describe Ability do
         it { is_expected.not_to be_allowed_to(action, facility) }
       end
     end
+
+    context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
+      it_behaves_like "it does not have estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
+    end
   end
 
   shared_examples_for "it has common staff abilities" do
@@ -437,6 +477,14 @@ RSpec.describe Ability do
     it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
     it { is_expected.to be_allowed_to(:manage, ProductAccessGroup) }
     it_behaves_like "it can manage training requests"
+
+    context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
+      it_behaves_like "it does not have estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
+    end
   end
 
   describe "staff" do
@@ -449,6 +497,14 @@ RSpec.describe Ability do
     it_behaves_like "it can not manage training requests"
     it_is_not_allowed_to([:create, :update, :destroy], ScheduleRule)
     it_is_not_allowed_to([:create, :update, :destroy], ProductAccessGroup)
+
+    context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
+      it_behaves_like "it does not have estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
+    end
   end
 
   describe "unprivileged user" do
@@ -516,6 +572,14 @@ RSpec.describe Ability do
     it { is_expected.not_to be_allowed_to(:show_problems, Reservation) }
     it { is_expected.not_to be_allowed_to(:disputed, Order) }
     it { is_expected.not_to be_allowed_to(:manage, User) }
+
+    context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
+      it_behaves_like "it does not have estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
+    end
   end
 
   describe "account administrator" do
