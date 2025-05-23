@@ -57,7 +57,7 @@ RSpec.describe Estimates::EstimateCsvService do
 
       it "generates the header section correctly" do
         expect(csv_rows[0]).to eq(["Estimate Information"])
-        expect(csv_rows[1]).to eq(["ID", "Description", "Created By", "User", "Expiration Date"])
+        expect(csv_rows[1]).to eq(["ID", "Description", "Created By", "Username", "Expiration Date"])
         expect(csv_rows[2]).to eq(
           [
             estimate.id.to_s,

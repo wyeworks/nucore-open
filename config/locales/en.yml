@@ -525,7 +525,7 @@ en:
       add: Add Estimate
       all_users: All Users
       clear_filter: Clear Filters
-      filter_user: Filter by User
+      filter_user: Filter by Username
       hide_expired: Hide expired estimates
       no_estimates: No estimates found
       search: Search
@@ -541,7 +541,7 @@ en:
       add_products_to_estimate: Add Products to Estimate
       cancel: Cancel
       create: Create an Estimate
-      custom_name_placeholder: "Enter custom name"
+      custom_name_placeholder: "Enter custom username"
       head: Add Estimate
       or: "or"
     show:

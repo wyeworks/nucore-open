@@ -252,9 +252,9 @@ en:
         subaffiliates_enabled: Allows subaffiliates
       estimate:
         description: Description
-        user: User
-        user_display_name: User
-        custom_name: Custom Name
+        user: Username
+        user_display_name: Username
+        custom_name: Custom Username
         created_by_user: Created By
         expires_at: Expires at
         note: Notes

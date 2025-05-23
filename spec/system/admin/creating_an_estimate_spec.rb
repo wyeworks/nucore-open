@@ -36,7 +36,7 @@ RSpec.describe(
 
     fill_in "Note", with: "This is a test estimate"
 
-    fill_in "User", with: user.first_name
+    fill_in "Username", with: user.first_name
     find(".ui-autocomplete li", text: user.full_name).click
 
     expect(page).to have_content "Add Products to Estimate"
@@ -110,7 +110,7 @@ RSpec.describe(
       remove_button.click
     end
 
-    fill_in "User", with: user.first_name
+    fill_in "Username", with: user.first_name
     find(".ui-autocomplete li", text: user.full_name).click
 
     click_button "Add Estimate"
@@ -147,7 +147,7 @@ RSpec.describe(
     fill_in "Description", with: "New User Estimate"
     select_from_chosen price_group.name, from: "Price group"
 
-    fill_in "User", with: "Michael Smith"
+    fill_in "Username", with: "Michael Smith"
 
     expect(page).to have_content "Add Products to Estimate"
     select_from_chosen item.name, from: "Product"
