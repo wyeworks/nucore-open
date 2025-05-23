@@ -40,6 +40,14 @@ RSpec.describe Ability do
     end
   end
 
+  shared_examples_for "it has estimate abilities" do
+    it_is_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+  end
+
+  shared_examples_for "it does not have estimate abilities" do
+    it_is_not_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+  end
+
   shared_examples_for "it allows switch_to on active, but not deactivated users" do
     let(:stub_controller) { UsersController.new }
     let(:active_user) { FactoryBot.build(:user) }
@@ -207,11 +215,11 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:manage, Reservation) }
 
       context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
-        it_is_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+        it_behaves_like "it has estimate abilities"
       end
 
       context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
-        it_is_not_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+        it_behaves_like "it does not have estimate abilities"
       end
     end
 
@@ -275,11 +283,11 @@ RSpec.describe Ability do
     it_behaves_like "it allows switch_to on active, but not deactivated users"
 
     context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
-      it_is_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+      it_behaves_like "it has estimate abilities"
     end
 
     context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
-      it_is_not_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+      it_behaves_like "it does not have estimate abilities"
     end
   end
 
@@ -346,11 +354,11 @@ RSpec.describe Ability do
     end
 
     context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
-      it_is_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+      it_behaves_like "it has estimate abilities"
     end
 
     context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
-      it_is_not_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+      it_behaves_like "it does not have estimate abilities"
     end
   end
 
@@ -417,7 +425,11 @@ RSpec.describe Ability do
     end
 
     context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
-      it_is_not_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+      it_behaves_like "it does not have estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
     end
   end
 
@@ -467,7 +479,11 @@ RSpec.describe Ability do
     it_behaves_like "it can manage training requests"
 
     context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
-      it_is_not_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+      it_behaves_like "it does not have estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
     end
   end
 
@@ -483,7 +499,11 @@ RSpec.describe Ability do
     it_is_not_allowed_to([:create, :update, :destroy], ProductAccessGroup)
 
     context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
-      it_is_not_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+      it_behaves_like "it does not have estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
     end
   end
 
@@ -554,7 +574,11 @@ RSpec.describe Ability do
     it { is_expected.not_to be_allowed_to(:manage, User) }
 
     context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
-      it_is_not_allowed_to([:manage, :duplicate, :recalculate], Estimate)
+      it_behaves_like "it does not have estimate abilities"
+    end
+
+    context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+      it_behaves_like "it does not have estimate abilities"
     end
   end
 
