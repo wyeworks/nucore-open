@@ -529,7 +529,7 @@ en:
       hide_expired: Hide expired estimates
       no_estimates: No estimates found
       search: Search
-      search_placeholder: Search by name or ID
+      search_placeholder: Search by description or ID
     create:
       success: Estimate successfully created
       error: There was an error creating the estimate

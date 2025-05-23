@@ -30,7 +30,7 @@ RSpec.describe(
     click_link "Add Estimate"
     expect(page).to have_content "Create an Estimate"
 
-    fill_in "Name", with: "Test Estimate"
+    fill_in "Description", with: "Test Estimate"
     fill_in "Expires at", with: 1.month.from_now.strftime("%m/%d/%Y")
     select_from_chosen price_group.name, from: "Price group"
 
@@ -144,7 +144,7 @@ RSpec.describe(
     click_link "Add Estimate"
     expect(page).to have_content "Create an Estimate"
 
-    fill_in "Name", with: "New User Estimate"
+    fill_in "Description", with: "New User Estimate"
     select_from_chosen price_group.name, from: "Price group"
 
     fill_in "User", with: "Michael Smith"

@@ -251,7 +251,7 @@ en:
       affiliate:
         subaffiliates_enabled: Allows subaffiliates
       estimate:
-        name: Name
+        description: Description
         user: User
         user_display_name: User
         custom_name: Custom Name
