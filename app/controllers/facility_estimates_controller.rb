@@ -127,7 +127,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def load_estimate
-    @estimate = current_facility.estimates.find(params[:id])
+    @estimate = current_facility.estimates.includes(estimate_details: :product).find(params[:id])
   end
 
   def set_products

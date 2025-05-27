@@ -17,25 +17,16 @@ RSpec.describe(
   let!(:instrument) { create(:setup_instrument, facility:) }
   let!(:instrument_price_policy) { create(:instrument_price_policy, product: instrument, price_group:) }
 
-  let!(:estimate) do
-    est = create(:estimate,
-                 facility:,
-                 user: user,
-                 created_by_user: director,
-                 name: "Original Estimate",
-                 note: "Original note",
-                 expires_at: 1.month.from_now)
-
-    create(:estimate_detail, estimate: est, product: item, quantity: 1, price_policy: item_price_policy)
-    create(:estimate_detail, estimate: est, product: instrument, quantity: 1, duration: 90, price_policy: instrument_price_policy)
-    est
-  end
+  let(:estimate) { create(:estimate, facility:, user: user, created_by_user: director, name: "Original Estimate", note: "Original note") }
+  let!(:estimate_detail1) { create(:estimate_detail, estimate:, product: item, price_policy: item_price_policy) }
+  let!(:estimate_detail2) { create(:estimate_detail, estimate:, product: instrument, duration: 90, price_policy: instrument_price_policy) }
 
   before { login_as director }
 
   it "can edit an estimate" do
     visit facility_estimate_path(facility, estimate)
     expect(page).to have_content facility.to_s
+    expect(page).to have_content estimate.name
 
     click_link "Edit"
     expect(page).to have_content "Edit Estimate"
@@ -62,18 +53,13 @@ RSpec.describe(
       columns = other_item_row.all('td')
       first_column_text = columns[0].text
       expect(first_column_text).to eq other_item.name
-    end
 
-    within '#estimate_estimate_details' do
-      first_row = all('tr').first
-      columns = first_row.all('td')
-      remove_button = columns[3].find('.remove-estimate-detail')
-      remove_button.click
-
-      first_row = all('tr').first
-      columns = first_row.all('td')
-      remove_button = columns[3].find('.remove-estimate-detail')
-      remove_button.click
+      2.times do
+        first_row = all('tr').first
+        columns = first_row.all('td')
+        remove_button = columns[3].find('.remove-estimate-detail')
+        remove_button.click
+      end
     end
 
     # we deleted 2 items so there are 2 remove button less
