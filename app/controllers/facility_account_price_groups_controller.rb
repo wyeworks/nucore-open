@@ -16,6 +16,17 @@ class FacilityAccountPriceGroupsController < ApplicationController
   def edit
   end
 
+  def update
+    if @account.update(update_params)
+      redirect_to(
+        facility_account_price_groups_path(current_facility, @account),
+        notice: t(".update.success"),
+      )
+    else
+      render :edit, error: t(".update.error")
+    end
+  end
+
   private
 
   def load_resources
@@ -29,5 +40,11 @@ class FacilityAccountPriceGroupsController < ApplicationController
 
   def authorize_account
     authorize! :index, @account
+  end
+
+  def update_params
+    params.require(
+      @account.class.name.underscore,
+    ).permit(price_groups_relation_ids: [])
   end
 end

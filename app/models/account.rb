@@ -32,7 +32,9 @@ class Account < ApplicationRecord
   has_many :notify_user_roles, -> { where(user_role: AccountUser.admin_user_roles, deleted_at: nil) }, class_name: "AccountUser"
   has_many :notify_users, through: :notify_user_roles, source: :user
 
-  has_many :price_group_members
+  # set the scope is needed to set the type in the STI table
+  # when used with has many through
+  has_many :price_group_members, -> { AccountPriceGroupMember.all }
   has_many :price_groups_relation,
            through: :price_group_members,
            source: :price_group
