@@ -1,15 +1,24 @@
 = simple_form_for @estimate, url: form_url, method: form_method do |f|
   .inline-form-controls
     = f.input :name
+
     .span-4
-      = f.label :user_id, Estimate.human_attribute_name(:user_id)
-      = f.input_field :user_id,
-        collection: user_collection,
-        class: "js--chosen js--select-with-search",
-        include_blank: false,
-        data: { search_url: search_facility_estimates_path }
+      = f.label :price_group_id, EstimateDetail.human_attribute_name(:price_group_id)
+      = f.input_field :price_group_id,
+        collection: @price_groups,
+        class: "js--chosen",
+        include_blank: false
+
+    .span-4
+      = f.label :custom_name, Estimate.human_attribute_name(:user)
+      = f.input_field :custom_name,
+        class: "js--user-autocomplete",
+        data: { search_url: search_facility_estimates_path, user_input_id: "estimate_user_id" }
+      = f.hidden_field :user_id
+
     .span-4
       = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
+
   .form-inputs
     = f.input :note
 
@@ -25,7 +34,12 @@
       %tbody#estimate_estimate_details
         - @estimate.estimate_details.each_with_index do |estimate_detail, index|
           - if estimate_detail.product_id.present?
-            = render partial: "estimate_detail", locals: { estimate_detail: estimate_detail, index: index, edit_mode: true }
+            - temp_id = estimate_detail.id || "#{estimate_detail.product_id}#{index}#{Time.now.to_i}"
+            = render partial: "estimate_detail", locals: {
+                estimate_detail: estimate_detail,
+                temp_id: temp_id,
+                edit_mode: true
+              }
 
   %h3= t("facility_estimates.form.add_products_to_estimate")
 
@@ -50,5 +64,5 @@
     %button#add_product_to_estimate.btn.btn-primary{ type: "button" }= t("facility_estimates.form.add_product")
 
   .actions.margin_top
-    = f.button :submit, submit_text, class: "btn-primary"
+    = f.button :submit, submit_text || t(".add"), class: "btn-primary"
     = link_to t("shared.cancel"), cancel_url, class: "btn"
