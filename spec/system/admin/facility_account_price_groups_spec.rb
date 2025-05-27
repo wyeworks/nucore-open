@@ -3,6 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "Account Price Group tab" do
+  let(:facility) { Facility.cross_facility }
   let(:account) { create(:account, :with_account_owner) }
 
   describe "show" do
@@ -11,10 +12,8 @@ RSpec.describe "Account Price Group tab" do
       create(:price_group, facility:, is_internal: true)
     end
     let(:global_price_group) { PriceGroup.globals.first }
-    let(:action) do
-      lambda do
-        visit facility_account_price_groups_path(Facility.cross_facility, account)
-      end
+    let(:visit_page) do
+      visit facility_account_price_groups_path(facility, account)
     end
 
     before do
@@ -29,7 +28,7 @@ RSpec.describe "Account Price Group tab" do
     end
 
     it "requires login" do
-      action.call
+      visit_page
 
       expect(page.current_path).to eq(new_user_session_path)
     end
@@ -38,7 +37,7 @@ RSpec.describe "Account Price Group tab" do
       before { login_as create(:user) }
 
       it "shows forbidden page" do
-        action.call
+        visit_page
 
         expect(page).to have_content("Sorry, you don't have permission to access this page")
       end
@@ -52,7 +51,7 @@ RSpec.describe "Account Price Group tab" do
       before { login_as create(:user, :administrator) }
 
       it "shows account price groups" do
-        action.call
+        visit_page
 
         within("table.table") do
           expect(page).to have_content(global_price_group.name)
@@ -60,6 +59,47 @@ RSpec.describe "Account Price Group tab" do
           expect(page).not_to have_content(other_price_group.name)
         end
       end
+    end
+  end
+
+  describe "edit/update" do
+    let(:unselected_price_groups) do
+      PriceGroup.where.not(
+        id: account.price_groups_relation.pluck(:id),
+      )
+    end
+    let(:visit_page) do
+      visit edit_facility_account_price_groups_path(facility, account)
+    end
+
+    before { login_as create(:user, :administrator) }
+    before { account.price_groups_relation << PriceGroup.globals.first }
+
+    it "allows admins to update price groups" do
+      visit_page
+
+      expect(page).to have_select(
+        "account[price_groups_relation_ids][]",
+        options: PriceGroup.all.map(&:name),
+        selected: account.price_groups_relation.map(&:name),
+      )
+
+      unselected_price_groups.each do |price_group|
+        select(
+          price_group.name,
+          from: "account[price_groups_relation_ids][]",
+        )
+      end
+
+      click_button "Save"
+
+      expect(page).to have_content(
+        "Price Groups assigned successfully",
+      )
+
+      expect(account.reload.price_groups_relation.count).to(
+        eq(PriceGroup.count),
+      )
     end
   end
 end

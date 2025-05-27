@@ -19,8 +19,9 @@
           %td= price_group.type_string
           %td= t(".global.#{price_group.global.to_s}")
 
-.row
-  .pull-right
-    = link_to(@price_groups.empty? ? t(".add") : t(".edit"),
-      edit_facility_account_price_groups_path(current_facility, @account),
-      class: "btn")
+- if can?(:manage, @account)
+  .row
+    .pull-right
+      = link_to(@price_groups.empty? ? t(".add") : t(".edit"),
+        edit_facility_account_price_groups_path(current_facility, @account),
+        class: "btn")
