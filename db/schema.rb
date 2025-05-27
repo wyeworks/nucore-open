@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_20_161459) do
+ActiveRecord::Schema[7.0].define(version: 2025_05_23_193939) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -173,7 +173,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_20_161459) do
   end
 
   create_table "estimates", charset: "utf8mb3", force: :cascade do |t|
-    t.string "name"
+    t.string "description"
     t.text "note"
     t.datetime "expires_at"
     t.bigint "facility_id", null: false

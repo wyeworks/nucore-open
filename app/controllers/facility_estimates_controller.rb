@@ -23,7 +23,7 @@ class FacilityEstimatesController < ApplicationController
 
     if params[:search].present?
       search_query = params[:search].strip
-      @estimates = @estimates.where("LOWER(name) LIKE ?", "%#{search_query.downcase}%")
+      @estimates = @estimates.where("LOWER(description) LIKE ?", "%#{search_query.downcase}%")
 
       @estimates = @estimates.or(Estimate.where(id: search_query)) if search_query.match?(/^\d+$/)
     end
@@ -103,7 +103,7 @@ class FacilityEstimatesController < ApplicationController
 
   def facility_estimate_params
     params.require(:estimate).permit(
-      :name, :price_group_id, :user_id, :custom_name, :note, :expires_at,
+      :description, :price_group_id, :user_id, :custom_name, :note, :expires_at,
       estimate_details_attributes: [:id, :product_id, :quantity, :duration, :duration_unit, :_destroy]
     )
   end

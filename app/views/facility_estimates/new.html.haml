@@ -5,7 +5,7 @@
 
 = simple_form_for @estimate, url: facility_estimates_path(@estimate.facility), method: :post do |f|
   .inline-form-controls
-    = f.input :name
+    = f.input :description
     .span-4
       = f.label :price_group_id, EstimateDetail.human_attribute_name(:price_group_id)
       = f.input_field :price_group_id,
