@@ -6,6 +6,7 @@ class FacilityAccountPriceGroupsController < ApplicationController
   before_action :authenticate_user!
   before_action { @active_tab = "admin_users" }
   before_action :load_resources
+  before_action :authorize_account
 
   layout "two_column"
 
@@ -19,5 +20,9 @@ class FacilityAccountPriceGroupsController < ApplicationController
       .price_groups_relation
       .includes(:facility)
       .order(:global, :is_internal, :name)
+  end
+
+  def authorize_account
+    authorize! :index, @account
   end
 end
