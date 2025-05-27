@@ -72,7 +72,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def edit
-    set_products
+    set_collections_for_select
   end
 
   def update
@@ -84,7 +84,8 @@ class FacilityEstimatesController < ApplicationController
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, @estimate)
     else
-      set_products
+      set_collections_for_select
+
       flash.now[:error] = t(".error")
       render :edit
     end

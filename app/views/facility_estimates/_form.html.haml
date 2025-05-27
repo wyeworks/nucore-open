@@ -1,6 +1,6 @@
 = simple_form_for @estimate, url: form_url, method: form_method do |f|
   .inline-form-controls
-    = f.input :name
+    = f.input :description
 
     .span-4
       = f.label :price_group_id, EstimateDetail.human_attribute_name(:price_group_id)
@@ -35,11 +35,7 @@
         - @estimate.estimate_details.each_with_index do |estimate_detail, index|
           - if estimate_detail.product_id.present?
             - temp_id = estimate_detail.id || "#{estimate_detail.product_id}#{index}#{Time.now.to_i}"
-            = render partial: "estimate_detail", locals: {
-                estimate_detail: estimate_detail,
-                temp_id: temp_id,
-                edit_mode: true
-              }
+            = render partial: "estimate_detail", locals: { estimate_detail: estimate_detail, index: temp_id, edit_mode: true }
 
   %h3= t("facility_estimates.form.add_products_to_estimate")
 
