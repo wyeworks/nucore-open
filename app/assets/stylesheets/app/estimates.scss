@@ -1,0 +1,10 @@
+#new_estimate_estimate_details {
+  td {
+    .error-inline {
+      color: $errorText;
+      display: block;
+      margin-top: 5px;
+      font-size: 0.9em;
+    }
+  }
+}

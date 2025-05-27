@@ -3,13 +3,12 @@
 require "rails_helper"
 
 RSpec.describe(
-  "Creating an estimate", :js,
-  feature_setting: { user_based_price_groups: true },
+  "Creating an estimate", :js
 ) do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let!(:user) { create(:user) }
-  let(:price_group) { user.price_groups.first }
+  let(:price_group) { facility.price_groups.first }
   let!(:item) { create(:setup_item, facility:) }
   let!(:item_price_policy) { create(:item_price_policy, product: item, price_group:) }
   let!(:instrument) { create(:setup_instrument, facility:) }
@@ -18,6 +17,7 @@ RSpec.describe(
   let(:other_facility) { create(:setup_facility) }
   let!(:other_item) { create(:setup_item, facility: other_facility, cross_core_ordering_available: true) }
   let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group: price_group) }
+  let!(:item_without_price_policy) { create(:setup_item, facility:) }
 
   before { login_as director }
 
@@ -32,19 +32,12 @@ RSpec.describe(
 
     fill_in "Name", with: "Test Estimate"
     fill_in "Expires at", with: 1.month.from_now.strftime("%m/%d/%Y")
+    select_from_chosen price_group.name, from: "Price group"
 
     fill_in "Note", with: "This is a test estimate"
 
-    expect(page).to have_content("No results found")
-
-    page.execute_script("$('#estimate_user_id_chosen').trigger('mousedown')")
-    page.execute_script("$('#estimate_user_id_chosen .chosen-search input').val('#{user.first_name}').trigger('input')")
-
-    wait_for_ajax
-
-    # Make sure calendar is not open
-    find("#estimate_user_id_chosen").click
-    select_from_chosen user.full_name, from: "User"
+    fill_in "User", with: user.first_name
+    find(".ui-autocomplete li", text: user.full_name).click
 
     expect(page).to have_content "Add Products to Estimate"
     select_from_chosen bundle.name, from: "Product"
@@ -86,7 +79,43 @@ RSpec.describe(
 
     expect(page).to have_content("Remove", count: 3)
 
+    select_from_chosen facility.name, from: Facility.model_name.human, scroll_to: :center
+    select_from_chosen item_without_price_policy.name, from: "Product"
+    click_button "Add Product to Estimate"
+
+    wait_for_ajax
+
+    within '#new_estimate_estimate_details' do
+      item_without_price_policy_row = all('tr').last
+      columns = item_without_price_policy_row.all('td')
+      first_column_text = columns[0].text
+      expect(first_column_text).to have_content(item_without_price_policy.name)
+    end
+
+    fill_in "User", with: user.first_name
+    find(".ui-autocomplete li", text: user.full_name).click
+
     click_button "Add Estimate"
+
+    expect(page).not_to have_content "Estimate successfully created"
+
+    within '#new_estimate_estimate_details' do
+      item_without_price_policy_row = all('tr').last
+      columns = item_without_price_policy_row.all('td')
+      first_column_text = columns[0].text
+      expect(first_column_text).to have_content(item_without_price_policy.name)
+      expect(first_column_text).to have_content("No price policy found.")
+
+      remove_button = columns[3].find('.remove-estimate-detail')
+      remove_button.click
+    end
+
+    fill_in "User", with: user.first_name
+    find(".ui-autocomplete li", text: user.full_name).click
+
+    click_button "Add Estimate"
+
+    expect(page).to have_content "Estimate successfully created"
 
     expect(page).to have_content "Estimate successfully created"
     expect(page).to have_content "Estimate ##{Estimate.last.id} - Test Estimate"
@@ -104,5 +133,37 @@ RSpec.describe(
             (item_price_policy.unit_cost * 2) +
             (instrument_price_policy.usage_rate * 180)
     expect(page).to have_content ActionController::Base.helpers.number_to_currency(total)
+  end
+
+  it "can create an estimate with a new username" do
+    visit facility_estimates_path(facility)
+
+    expect(page).to have_selector("#admin_estimates_tab")
+    expect(page).to have_content facility.to_s
+
+    click_link "Add Estimate"
+    expect(page).to have_content "Create an Estimate"
+
+    fill_in "Name", with: "New User Estimate"
+    select_from_chosen price_group.name, from: "Price group"
+
+    fill_in "User", with: "Michael Smith"
+
+    expect(page).to have_content "Add Products to Estimate"
+    select_from_chosen item.name, from: "Product"
+    click_button "Add Product to Estimate"
+
+    wait_for_ajax
+
+    within '#new_estimate_estimate_details' do
+      expect(page).to have_content item.name
+    end
+
+    click_button "Add Estimate"
+
+    expect(page).to have_content "Estimate successfully created"
+    expect(page).to have_content "Estimate ##{Estimate.last.id} - New User Estimate"
+    expect(page).to have_content "Michael Smith"
+    expect(page).to have_content item.name
   end
 end

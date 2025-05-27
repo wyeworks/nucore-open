@@ -111,7 +111,9 @@ RSpec.describe SecureRooms::AccessHandlers::OrderHandler, type: :service do
         it { is_expected.to be_problem }
 
         it "triggers an email" do
-          expect { described_class.process(occupancy) }.to change(ActionMailer::Base.deliveries, :count).by(1)
+          expect { described_class.process(occupancy) }.to(
+            enqueue_mail(ProblemOrderMailer, :notify_user)
+          )
         end
       end
     end

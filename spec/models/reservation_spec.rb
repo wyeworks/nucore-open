@@ -1156,7 +1156,7 @@ RSpec.describe Reservation do
       end
 
       it "triggers an email" do
-        expect { perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { perform }.to enqueue_mail(ProblemOrderMailer, :notify_user)
       end
     end
 
@@ -1189,7 +1189,7 @@ RSpec.describe Reservation do
       end
 
       it "triggers an email" do
-        expect { perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { perform }.to enqueue_mail(ProblemOrderMailer, :notify_user)
       end
     end
 
@@ -1208,7 +1208,7 @@ RSpec.describe Reservation do
       end
 
       it "does not trigger an email" do
-        expect { reservation.start_reservation! }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { reservation.start_reservation! }.not_to enqueue_mail
       end
     end
 
@@ -1229,7 +1229,7 @@ RSpec.describe Reservation do
       end
 
       it "does not trigger an email" do
-        expect { reservation.start_reservation! }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { reservation.start_reservation! }.not_to enqueue_mail
       end
     end
 
@@ -1247,7 +1247,7 @@ RSpec.describe Reservation do
       end
 
       it "does not trigger an email" do
-        expect { reservation.start_reservation! }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { reservation.start_reservation! }.not_to enqueue_mail
       end
     end
   end

@@ -4,6 +4,7 @@ FactoryBot.define do
   factory :estimate do
     facility
     user
+    price_group
     association :created_by_user, factory: :user
     name { "Test Estimate" }
     note { "This is a test estimate" }

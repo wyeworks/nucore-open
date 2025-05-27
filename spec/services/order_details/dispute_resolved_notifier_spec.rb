@@ -19,28 +19,31 @@ RSpec.describe OrderDetails::DisputeResolvedNotifier do
   end
 
   it "triggers an email and log the order detail if the dispute is resolved" do
-    expect { resolve_dispute_and_notify }.to change(ActionMailer::Base, :deliveries)
+    expect { resolve_dispute_and_notify }.to have_enqueued_mail(OrderDetailDisputeMailer, :dispute_resolved).twice
     log_event = LogEvent.find_by(loggable: order_detail, event_type: :resolve)
-     expect(log_event).to be_present
+    expect(log_event).to be_present
   end
 
   it " doesn't triggers an email and log the order detail if the dispute isn't resolved" do
     order_detail.update!(resolve_dispute: "0")
-    expect { notifier.notify }.not_to change(ActionMailer::Base, :deliveries)
+    expect { notifier.notify }.not_to have_enqueued_mail
     log_event = LogEvent.find_by(loggable: order_detail, event_type: :resolve)
-     expect(log_event).not_to be_present
+    expect(log_event).not_to be_present
   end
 
-  context "with a business business_administrator" do
+  context "with a business business_administrator", :perform_enqueued_jobs do
     let!(:business_administrator) { create(:user, :business_administrator, email: "ba@example.com", account: order_detail.account) }
 
     it "triggers an email to the dispute_by and the account administrators" do
-      expect { resolve_dispute_and_notify }.to change { ActionMailer::Base.deliveries.map(&:to) }
-        .by(containing_exactly(
-              [order_detail.dispute_by.email],
-              [order_detail.account.owner_user.email],
-              [business_administrator.email],
-            ))
+      expect { resolve_dispute_and_notify }.to(
+        change do
+          ActionMailer::Base.deliveries.map(&:to)
+        end.from([]).to([
+                          [order_detail.dispute_by.email],
+                          [order_detail.account.owner_user.email],
+                          [business_administrator.email],
+                        ])
+      )
     end
   end
 

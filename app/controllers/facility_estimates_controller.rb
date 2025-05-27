@@ -9,7 +9,7 @@ class FacilityEstimatesController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
-  before_action :load_estimate, only: [:show]
+  before_action :load_estimate, only: [:show, :recalculate]
   before_action :set_users, only: [:search]
 
   def index
@@ -54,7 +54,7 @@ class FacilityEstimatesController < ApplicationController
     @estimate = current_facility.estimates.new(expires_at: 1.month.from_now)
     @estimate.estimate_details.build
 
-    set_products
+    set_collections_for_select
   end
 
   def create
@@ -65,7 +65,7 @@ class FacilityEstimatesController < ApplicationController
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, @estimate)
     else
-      set_products
+      set_collections_for_select
       flash.now[:error] = t(".error")
       render action: :new
     end
@@ -89,11 +89,21 @@ class FacilityEstimatesController < ApplicationController
     end
   end
 
+  def recalculate
+    if @estimate.recalculate
+      flash[:notice] = t(".success")
+    else
+      flash[:error] = t(".error")
+    end
+
+    redirect_to facility_estimate_path(current_facility, @estimate)
+  end
+
   private
 
   def facility_estimate_params
     params.require(:estimate).permit(
-      :name, :user_id, :note, :expires_at,
+      :name, :price_group_id, :user_id, :custom_name, :note, :expires_at,
       estimate_details_attributes: [:id, :product_id, :quantity, :duration, :duration_unit, :_destroy]
     )
   end
@@ -114,5 +124,14 @@ class FacilityEstimatesController < ApplicationController
              else
                []
              end
+  end
+
+  def set_price_groups
+    @price_groups = current_facility.price_groups.map { |pg| [pg.name, pg.id] }
+  end
+
+  def set_collections_for_select
+    set_products
+    set_price_groups
   end
 end

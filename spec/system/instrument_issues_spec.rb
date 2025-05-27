@@ -16,14 +16,14 @@ RSpec.describe do
       visit new_facility_order_order_detail_issue_path(facility, order, order.order_details.first)
       fill_in "Message", with: "A problem"
 
-      expect { click_button "Report Issue" }.to change(ActionMailer::Base.deliveries, :count).by(1)
+      expect { click_button "Report Issue" }.to enqueue_mail(InstrumentIssueMailer, :create)
       expect(page).to have_content("My Reservations")
     end
 
     it "does not send the email if missing a field" do
       visit new_facility_order_order_detail_issue_path(facility, order, order.order_details.first)
 
-      expect { click_button "Report Issue" }.not_to change(ActionMailer::Base.deliveries, :count)
+      expect { click_button "Report Issue" }.not_to enqueue_mail
       expect(page).to have_content("can't be blank")
     end
   end

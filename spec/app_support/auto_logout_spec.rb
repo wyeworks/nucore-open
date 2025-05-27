@@ -50,7 +50,7 @@ RSpec.describe AutoLogout, :time_travel do
     end
 
     it "triggers an email" do
-      expect { action.perform }.to change(ActionMailer::Base.deliveries, :count).by(1)
+      expect { action.perform }.to enqueue_mail(ProblemOrderMailer, :notify_user)
     end
   end
 

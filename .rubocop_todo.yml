@@ -1161,6 +1161,7 @@ Rails/HasAndBelongsToMany:
   Exclude:
     - 'app/models/product_access_group.rb'
     - 'app/models/schedule_rule.rb'
+    - 'vendor/engines/sanger_sequencing/app/models/sanger_sequencing/sanger_product.rb'
 
 # Offense count: 74
 # Configuration parameters: Include.
@@ -1253,6 +1254,7 @@ Rails/LexicallyScopedActionFilter:
     - 'app/controllers/services_controller.rb'
     - 'app/controllers/user_password_controller.rb'
     - 'app/controllers/users_controller.rb'
+    - 'vendor/engines/saml_authentication/app/controllers/saml_authentication/sessions_controller.rb'
 
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).

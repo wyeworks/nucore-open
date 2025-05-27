@@ -23,4 +23,10 @@ RSpec.describe Reports::GlobalUserRolesReport do
     end
   end
 
+  it "set users relation if not provided" do
+    report = described_class.new
+
+    expect(report.users.to_a).to eq(User.sort_last_first.to_a)
+  end
+
 end

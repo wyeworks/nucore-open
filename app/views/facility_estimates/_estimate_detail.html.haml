@@ -6,15 +6,22 @@
   = hidden_field_tag "#{id_prefix}[_destroy]", false, class: 'destroy-field'
 
   %td
-    - product_name = estimate_detail.product.name
-    - if estimate_detail.product.facility != current_facility
-      - product_name = "#{product_name} (#{estimate_detail.product.facility.name})"
-    = product_name
-  %td= number_field_tag "#{id_prefix}[quantity]", 1, min: 1, style: "width: 3em;"
+    %div
+      - product_name = estimate_detail.product.name
+      - if estimate_detail.product.facility != current_facility
+        - product_name = "#{product_name} (#{estimate_detail.product.facility.name})"
+      = product_name
+    - if estimate_detail.errors.any?
+      .error-inline= estimate_detail.errors.full_messages.join(", ")
+  - quantity_default_value = estimate_detail.quantity.present? ? estimate_detail.quantity : 1
+  %td= number_field_tag "#{id_prefix}[quantity]", quantity_default_value, min: 1, style: "width: 3em;"
   %td
     - time_unit = estimate_detail.product.time_unit
     - if time_unit == "days"
-      = number_field_tag "#{id_prefix}[duration]", 1, min: 1
+      - duration_default_value = estimate_detail.duration.present? ? estimate_detail.duration : 1
+      = number_field_tag "#{id_prefix}[duration]", duration_default_value, min: 1
     - elsif time_unit == "mins"
-      = text_field_tag "#{id_prefix}[duration]", "0:01", class: "js--estimate-duration-mins"
-  %td.btn.remove-estimate-detail= t('.remove')
+      - duration_default_value = estimate_detail.duration.present? ? estimate_detail.duration : "0:01"
+      = text_field_tag "#{id_prefix}[duration]", duration_default_value, class: "js--estimate-duration-mins"
+  %td
+    .btn.remove-estimate-detail= t('.remove')

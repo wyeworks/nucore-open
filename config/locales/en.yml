@@ -47,7 +47,7 @@ en:
   statement_downcase: statement
   statements_downcase: statements
   statemented_downcase: statemented
-  
+
   statements:
     pdf:
       download: Download
@@ -541,10 +541,17 @@ en:
       add_products_to_estimate: Add Products to Estimate
       cancel: Cancel
       create: Create an Estimate
+      custom_name_placeholder: "Enter custom name"
       head: Add Estimate
+      or: "or"
     show:
       days: days
       download_csv: Download CSV
+      recalculate: Recalculate
+      updated_at_notice: "Prices last updated: %{updated_at}"
+    recalculate:
+      success: Estimate successfully recalculated
+      error: There was an error recalculating the estimate
 
   facility_order_details:
     edit:
@@ -840,6 +847,9 @@ en:
       awaiting_payment:
         alert: This order has been !statemented_downcase!, but is not yet reconciled
         badge: Awaiting Payment
+      problem_out_of_sync:
+        alert: The problem has been resolved, please save this order to remove the alert
+        badge: Problem out of sync
     note: "Note: %{note}"
 
   product_accessories:
@@ -1395,6 +1405,8 @@ en:
         training_request:
           product:
             requires_no_approval: This product does not require approval
+        estimate_detail:
+          no_price_policy: "No price policy found."
 
   devise:
     failure:

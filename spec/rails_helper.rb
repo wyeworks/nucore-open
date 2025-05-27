@@ -22,6 +22,8 @@ FactoryBot.use_parent_strategy = false
 FactoryBot::Strategy::Stub.next_id = 100_000
 
 RSpec.configure do |config|
+  include ActiveJob::TestHelper
+
   config.filter_rails_from_backtrace!
   config.filter_gems_from_backtrace("spring")
   # rspec-rails by default excludes stack traces from within vendor Lots of our
@@ -109,6 +111,12 @@ RSpec.configure do |config|
     Nucore::Application.reload_routes! if example.metadata[:feature_setting][:reload_routes]
   end
 
+  config.around(:each, :perform_enqueued_jobs) do |example|
+    perform_enqueued_jobs do
+      example.run
+    end
+  end
+
   config.around(:each, :ldap) do |example|
     User.define_method(:valid_ldap_authentication?) { |password| password == "netidpassword" }
 
@@ -174,13 +182,6 @@ RSpec.configure do |config|
   end
 
   config.after(:all) { travel_back }
-
-  config.around(:each, :active_job) do |example|
-    old_value = ActiveJob::Base.queue_adapter
-    ActiveJob::Base.queue_adapter = :test
-    example.call
-    ActiveJob::Base.queue_adapter = old_value
-  end
 
   # Javascript specs need to be able to talk to localhost
   config.around(:each, :js) do |example|
