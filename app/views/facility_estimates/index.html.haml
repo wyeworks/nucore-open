@@ -5,20 +5,19 @@
   %p= link_to t(".add"), new_facility_estimate_path, class: "btn-add"
 
 .row
-  .span12
+  .form-horizontal
     = form_tag facility_estimates_path, method: :get, class: "form-horizontal filter-form" do
       .control-group
         %label.control-label= t(".search")
         .controls
-          = text_field_tag :search, params[:search], placeholder: t(".search_placeholder"), class: "input-large", id: "estimate_search"
+          = text_field_tag :search, params[:search], placeholder: t(".search_placeholder"), id: "estimate_search"
 
-        .control-group
-          %label.control-label= t(".filter_user")
-          .controls
-            = select_tag :user_id,
-              options_for_select(estimate_user_options(current_facility),
-              selected: params[:user_id]),
-              class: "input-large"
+      .control-group
+        %label.control-label= t(".filter_user")
+        .controls
+          = select_tag :user_id,
+            options_for_select(estimate_user_options(current_facility),
+            selected: params[:user_id])
 
       .control-group
         %label.control-label= t(".hide_expired")
