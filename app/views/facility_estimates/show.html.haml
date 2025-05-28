@@ -54,5 +54,5 @@
 - if @estimate.estimate_details.any?
   %p
     = t(".updated_at_notice", updated_at: I18n.l(@estimate.estimate_details.maximum(:updated_at), format: :usa))
-.pull-right
+.pull-right.edit_estimate_button
   = link_to t(".edit"), edit_facility_estimate_path(current_facility, @estimate), class: "btn btn-secondary"
