@@ -30,7 +30,7 @@ class Estimate < ApplicationRecord
       duplicated_estimate = dup
       duplicated_estimate.created_by_id = created_by_user.id
       duplicated_estimate.expires_at = 1.month.from_now
-      duplicated_estimate.name = "Copy of #{name}"
+      duplicated_estimate.description = "Copy of #{description}"
 
       duplicated_estimate.save!
 

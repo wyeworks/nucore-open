@@ -33,7 +33,7 @@ RSpec.describe "Estimate Duplication", :js do
     estimate_detail = estimate.estimate_details.first
 
     expect(new_estimate.id).not_to eq(estimate.id)
-    expect(new_estimate.name).to eq("Copy of #{estimate.name}")
+    expect(new_estimate.description).to eq("Copy of #{estimate.description}")
     expect(new_estimate.note).to eq(estimate.note)
     expect(new_estimate.user).to eq(estimate.user)
     expect(new_estimate.price_group).to eq(estimate.price_group)
