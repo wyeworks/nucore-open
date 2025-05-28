@@ -58,8 +58,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def create
-    expires_at = parse_usa_date(facility_estimate_params[:expires_at])
-    @estimate = current_facility.estimates.new(facility_estimate_params.merge(created_by_id: current_user.id, expires_at:))
+    @estimate = current_facility.estimates.new(facility_estimate_params.merge(created_by_id: current_user.id))
 
     if @estimate.save
       flash[:notice] = t(".success")
@@ -76,11 +75,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def update
-    expires_at = parse_usa_date(facility_estimate_params[:expires_at])
-
-    update_params = facility_estimate_params.merge(expires_at:)
-
-    if @estimate.update(update_params)
+    if @estimate.update(facility_estimate_params)
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, @estimate)
     else
@@ -121,10 +116,14 @@ class FacilityEstimatesController < ApplicationController
   private
 
   def facility_estimate_params
-    params.require(:estimate).permit(
+    raw_params = params.require(:estimate).permit(
       :description, :price_group_id, :user_id, :custom_name, :note, :expires_at,
       estimate_details_attributes: [:id, :product_id, :quantity, :duration, :duration_unit, :_destroy]
     )
+    if raw_params[:expires_at].present?
+      raw_params[:expires_at] = parse_usa_date(raw_params[:expires_at])
+    end
+    raw_params
   end
 
   def load_estimate
