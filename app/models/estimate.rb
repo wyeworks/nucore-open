@@ -23,6 +23,30 @@ class Estimate < ApplicationRecord
     estimate_details.sum(&:cost)
   end
 
+  def duplicate(created_by_user)
+    duplicated_estimate = nil
+
+    transaction do
+      duplicated_estimate = dup
+      duplicated_estimate.created_by_id = created_by_user.id
+      duplicated_estimate.expires_at = 1.month.from_now
+      duplicated_estimate.name = "Copy of #{name}"
+
+      duplicated_estimate.save!
+
+      estimate_details.each do |detail|
+        duplicated_detail = detail.dup
+        duplicated_detail.estimate = duplicated_estimate
+        duplicated_detail.save!
+      end
+    rescue StandardError
+      duplicated_estimate = nil
+      raise ActiveRecord::Rollback
+    end
+
+    duplicated_estimate
+  end
+
   def recalculate
     transaction do
       estimate_details.each(&:assign_price_policy_and_cost)

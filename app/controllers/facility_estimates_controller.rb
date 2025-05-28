@@ -114,27 +114,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def duplicate
-    duplicated_estimate = nil
-
-    Estimate.transaction do
-      duplicated_estimate = @estimate.dup
-      duplicated_estimate.created_by_id = current_user.id
-      duplicated_estimate.expires_at = 1.month.from_now
-      duplicated_estimate.name = "Copy of #{@estimate.name}"
-
-      duplicated_estimate.save!
-
-      @estimate.estimate_details.each do |detail|
-        duplicated_detail = detail.dup
-        duplicated_detail.estimate = duplicated_estimate
-        duplicated_detail.save!
-      end
-    rescue StandardError
-      duplicated_estimate = nil
-
-      raise ActiveRecord::Rollback
-
-    end
+    duplicated_estimate = @estimate.duplicate(current_user)
 
     if duplicated_estimate.present?
       flash[:notice] = t(".success")
