@@ -11,7 +11,7 @@ RSpec.describe(
   let(:price_group) { facility.price_groups.first }
   let!(:item) { create(:setup_item, facility:) }
   let!(:item_price_policy) { create(:item_price_policy, product: item, price_group:) }
-  let!(:estimate) { create(:estimate, price_group:, created_at: 3.hours.ago, updated_at: 3.hours.ago, user:, facility:) }
+  let!(:estimate) { create(:estimate, created_at: 1.week.ago, updated_at: 1.week.ago, user:, created_by_user: director, price_group:, facility:) }
 
   before do
     estimate.estimate_details.create(product: item, quantity: 2, created_at: 3.hours.ago, updated_at: 3.hours.ago)

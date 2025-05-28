@@ -552,6 +552,7 @@ en:
       days: days
       download_csv: Download CSV
       recalculate: Recalculate
+      duplicate: Duplicate Estimate
       updated_at_notice: "Prices last updated: %{updated_at}"
       edit: Edit
       remove: Remove
@@ -561,6 +562,9 @@ en:
     update:
       success: Estimate was successfully updated
       error: There was a problem updating the estimate
+    duplicate:
+      success: Estimate successfully duplicated
+      error: There was an error duplicating the estimate
 
   facility_order_details:
     edit:

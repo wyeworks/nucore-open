@@ -9,7 +9,7 @@ class FacilityEstimatesController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
-  before_action :load_estimate, only: [:show, :edit, :recalculate, :update]
+  before_action :load_estimate, only: [:show, :edit, :recalculate, :update, :duplicate]
   before_action :set_users, only: [:search]
 
   def index
@@ -113,6 +113,18 @@ class FacilityEstimatesController < ApplicationController
     redirect_to facility_estimate_path(current_facility, @estimate)
   end
 
+  def duplicate
+    duplicated_estimate = @estimate.duplicate(current_user)
+
+    if duplicated_estimate.present?
+      flash[:notice] = t(".success")
+      redirect_to facility_estimate_path(current_facility, duplicated_estimate)
+    else
+      flash[:error] = t(".error")
+      redirect_to facility_estimate_path(current_facility, @estimate)
+    end
+  end
+
   private
 
   def facility_estimate_params
@@ -130,7 +142,13 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def load_estimate
-    @estimate = current_facility.estimates.includes(estimate_details: :product).find(params[:id])
+    base_scope = current_facility.estimates
+
+    unless params[:action].in?(%w[duplicate])
+      base_scope = base_scope.includes(estimate_details: :product)
+    end
+
+    @estimate = base_scope.find(params[:id])
   end
 
   def set_products
