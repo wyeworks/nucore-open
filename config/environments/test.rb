@@ -91,6 +91,8 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Account", association: :owner
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Account", association: :owner_user
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Account", association: :user
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Estimate", association: :estimate_details
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "EstimateDetail", association: :product
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Instrument", association: :current_offline_reservations
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Instrument", association: :facility
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Instrument", association: :schedule_rules
