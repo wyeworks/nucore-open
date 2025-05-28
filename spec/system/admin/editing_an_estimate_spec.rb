@@ -77,4 +77,25 @@ RSpec.describe "Editing an estimate", :js do
 
     expect(page).to have_content ActionController::Base.helpers.number_to_currency(other_item_price_policy.unit_cost)
   end
+
+  it "can replace a user with a custom name" do
+    visit facility_estimate_path(facility, estimate)
+    expect(page).to have_content user.full_name
+
+    click_link "Edit"
+    expect(page).to have_content "Edit Estimate"
+
+    fill_in "User", with: "Custom Name"
+
+    click_button "Update"
+
+    expect(page).to have_content "Estimate was successfully updated"
+    expect(page).to have_content "Custom Name"
+
+    expect(page).not_to have_content user.full_name
+
+    estimate.reload
+    expect(estimate.user_id).to be_nil
+    expect(estimate.custom_name).to eq("Custom Name")
+  end
 end
