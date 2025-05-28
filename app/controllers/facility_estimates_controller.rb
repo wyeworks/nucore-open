@@ -123,6 +123,9 @@ class FacilityEstimatesController < ApplicationController
     if raw_params[:expires_at].present?
       raw_params[:expires_at] = parse_usa_date(raw_params[:expires_at])
     end
+    if raw_params[:custom_name].present? && raw_params[:user_id].blank?
+      raw_params[:user_id] = nil
+    end
     raw_params
   end
 
