@@ -155,7 +155,7 @@ RSpec.describe(
 
     wait_for_ajax
 
-    within '#new_estimate_estimate_details' do
+    within '#estimate_estimate_details' do
       expect(page).to have_content item.name
     end
 
