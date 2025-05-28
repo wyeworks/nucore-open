@@ -13,6 +13,7 @@
       = f.label :custom_name, Estimate.human_attribute_name(:user)
       = f.input_field :custom_name,
         class: "js--user-autocomplete",
+        value: (@estimate.user_display_name),
         data: { search_url: search_facility_estimates_path, user_input_id: "estimate_user_id" }
       = f.hidden_field :user_id
 
