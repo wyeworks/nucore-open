@@ -85,6 +85,9 @@ RSpec.describe "Editing an estimate", :js do
     click_link "Edit"
     expect(page).to have_content "Edit Estimate"
 
+    user_input = find_field("User")
+    expect(user_input.value).to eq user.full_name
+
     fill_in "User", with: "Custom Name"
 
     click_button "Update"
