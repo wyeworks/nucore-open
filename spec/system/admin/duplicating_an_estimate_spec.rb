@@ -6,7 +6,7 @@ RSpec.describe "Estimate Duplication", :js do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let!(:user) { create(:user) }
-  let(:price_group) { user.price_groups.first }
+  let(:price_group) { facility.price_groups.first }
   let!(:item) { create(:setup_item, facility:) }
   let!(:item_price_policy) { create(:item_price_policy, product: item, price_group:) }
   let!(:estimate) { create(:estimate, created_at: 1.week.ago, updated_at: 1.week.ago, user:, created_by_user: director, price_group:, facility:) }
