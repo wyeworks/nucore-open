@@ -47,6 +47,7 @@ class EstimateDetail < ApplicationRecord
 
   def price_policy_exists
     return if product.blank? || user.blank?
+    return if marked_for_destruction?
 
     pp = product.cheapest_price_policy(self, Time.current)
     if pp.blank?

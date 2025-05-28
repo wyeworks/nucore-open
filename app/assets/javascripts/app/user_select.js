@@ -27,4 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .append(`<div>${item.name}</div>`)
       .appendTo(ul);
   };
+
+  userInput.addEventListener("input", function() {
+    userIdInput.value = "";
+  });
 });

@@ -1,0 +1,64 @@
+= simple_form_for @estimate, url: form_url, method: form_method do |f|
+  .inline-form-controls
+    = f.input :description
+
+    .span-4
+      = f.label :price_group_id, EstimateDetail.human_attribute_name(:price_group_id)
+      = f.input_field :price_group_id,
+        collection: @price_groups,
+        class: "js--chosen",
+        include_blank: false
+
+    .span-4
+      = f.label :custom_name, Estimate.human_attribute_name(:user)
+      = f.input_field :custom_name,
+        class: "js--user-autocomplete",
+        data: { search_url: search_facility_estimates_path, user_input_id: "estimate_user_id" }
+      = f.hidden_field :user_id
+
+    .span-4
+      = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
+
+  .form-inputs
+    = f.input :note
+
+  #estimate_products_table
+    %h3= t("facility_estimates.form.current_products")
+    %table.table
+      %thead
+        %tr
+          %th= EstimateDetail.human_attribute_name(:product)
+          %th= EstimateDetail.human_attribute_name(:quantity)
+          %th= EstimateDetail.human_attribute_name(:duration)
+          %th
+      %tbody#estimate_estimate_details
+        - @estimate.estimate_details.each_with_index do |estimate_detail, index|
+          - if estimate_detail.product_id.present?
+            - temp_id = estimate_detail.id || "#{estimate_detail.product_id}#{index}#{Time.now.to_i}"
+            = render partial: "estimate_detail", locals: { estimate_detail: estimate_detail, index: temp_id, edit_mode: true }
+
+  %h3= t("facility_estimates.form.add_products_to_estimate")
+
+  .well
+    .inline-form-controls
+      %div
+        = label_tag :facility_id, Facility.model_name.human
+        = select_tag :facility_id,
+          options_for_select(Facility.alphabetized.map { |f| [f.name, f.id, {"data-products-path": available_for_cross_core_ordering_facility_products_path(f, format: :js)}] }, current_facility.id),
+          class: "js--estimate-facility js--chosen",
+          data: { original_facility: current_facility.id },
+          include_blank: false
+
+      .margin_x
+        = label_tag :product_id, Product.model_name.human
+        = select_tag :product_id,
+          options_for_select(@products),
+          class: "js--estimate-product js--chosen",
+          data: { product_url: add_product_to_estimate_facility_estimates_url(@estimate.facility) },
+          include_blank: false
+
+    %button#add_product_to_estimate.btn.btn-primary{ type: "button" }= t("facility_estimates.form.add_product")
+
+  .actions.margin_top
+    = f.button :submit, submit_text || t(".add"), class: "btn-primary"
+    = link_to t("shared.cancel"), cancel_url, class: "btn"

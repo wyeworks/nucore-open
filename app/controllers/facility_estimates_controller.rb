@@ -9,7 +9,7 @@ class FacilityEstimatesController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
-  before_action :load_estimate, only: [:show, :recalculate]
+  before_action :load_estimate, only: [:show, :edit, :recalculate, :update, :duplicate]
   before_action :set_users, only: [:search]
 
   def index
@@ -23,7 +23,7 @@ class FacilityEstimatesController < ApplicationController
 
     if params[:search].present?
       search_query = params[:search].strip
-      @estimates = @estimates.where("LOWER(name) LIKE ?", "%#{search_query.downcase}%")
+      @estimates = @estimates.where("LOWER(description) LIKE ?", "%#{search_query.downcase}%")
 
       @estimates = @estimates.or(Estimate.where(id: search_query)) if search_query.match?(/^\d+$/)
     end
@@ -58,8 +58,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def create
-    expires_at = parse_usa_date(facility_estimate_params[:expires_at])
-    @estimate = current_facility.estimates.new(facility_estimate_params.merge(created_by_id: current_user.id, expires_at:))
+    @estimate = current_facility.estimates.new(facility_estimate_params.merge(created_by_id: current_user.id))
 
     if @estimate.save
       flash[:notice] = t(".success")
@@ -71,9 +70,24 @@ class FacilityEstimatesController < ApplicationController
     end
   end
 
+  def edit
+    set_collections_for_select
+  end
+
+  def update
+    if @estimate.update(facility_estimate_params)
+      flash[:notice] = t(".success")
+      redirect_to facility_estimate_path(current_facility, @estimate)
+    else
+      set_collections_for_select
+
+      flash.now[:error] = t(".error")
+      render :edit
+    end
+  end
+
   def add_product_to_estimate
     product_id = params[:product_id]
-
     product = Product.find(product_id)
 
     @estimate_detail_products = if product.is_a?(Bundle)
@@ -99,17 +113,42 @@ class FacilityEstimatesController < ApplicationController
     redirect_to facility_estimate_path(current_facility, @estimate)
   end
 
+  def duplicate
+    duplicated_estimate = @estimate.duplicate(current_user)
+
+    if duplicated_estimate.present?
+      flash[:notice] = t(".success")
+      redirect_to facility_estimate_path(current_facility, duplicated_estimate)
+    else
+      flash[:error] = t(".error")
+      redirect_to facility_estimate_path(current_facility, @estimate)
+    end
+  end
+
   private
 
   def facility_estimate_params
-    params.require(:estimate).permit(
-      :name, :price_group_id, :user_id, :custom_name, :note, :expires_at,
+    raw_params = params.require(:estimate).permit(
+      :description, :price_group_id, :user_id, :custom_name, :note, :expires_at,
       estimate_details_attributes: [:id, :product_id, :quantity, :duration, :duration_unit, :_destroy]
     )
+    if raw_params[:expires_at].present?
+      raw_params[:expires_at] = parse_usa_date(raw_params[:expires_at])
+    end
+    if raw_params[:custom_name].present? && raw_params[:user_id].blank?
+      raw_params[:user_id] = nil
+    end
+    raw_params
   end
 
   def load_estimate
-    @estimate = current_facility.estimates.includes(estimate_details: :product).find(params[:id])
+    base_scope = current_facility.estimates
+
+    unless params[:action].in?(%w[duplicate])
+      base_scope = base_scope.includes(estimate_details: :product)
+    end
+
+    @estimate = base_scope.find(params[:id])
   end
 
   def set_products

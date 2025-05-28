@@ -1,4 +1,4 @@
-#new_estimate_estimate_details {
+#estimate_estimate_details {
   td {
     .error-inline {
       color: $errorText;
@@ -7,4 +7,8 @@
       font-size: 0.9em;
     }
   }
+}
+
+.edit_estimate_button {
+  margin-top: 3em;
 }
