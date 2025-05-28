@@ -820,15 +820,15 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
           context "when assignment notifications are on", feature_setting: { order_assignment_notifications: true } do
             it "sends a notification to the assigned user" do
-              expect { do_request }
-                .to change(ActionMailer::Base.deliveries, :count).by(1)
+              expect { do_request }.to(
+                have_enqueued_mail(OrderAssignmentMailer, :notify_assigned_user)
+              )
             end
           end
 
           context "when assignment notifications are off", feature_setting: { order_assignment_notifications: false } do
             it "sends no notifications" do
-              expect { do_request }
-                .not_to change(ActionMailer::Base.deliveries, :count)
+              expect { do_request }.not_to have_enqueued_mail
             end
           end
         end
@@ -867,19 +867,22 @@ RSpec.describe OrderManagement::OrderDetailsController do
                   .to eq(dispute_resolved_reason)
               end
 
-              it "triggers an email to the dispute by and the account owner" do
-                expect { do_request }.to change { ActionMailer::Base.deliveries.map(&:to) }
-                  .by(containing_exactly(
-                        [dispute_by.email],
-                        [order_detail.account.owner_user.email],
-                      ))
+              it "triggers an email to the dispute by and the account owner", :perform_enqueued_jobs do
+                expect { do_request }.to(
+                  change do
+                    ActionMailer::Base.deliveries.map(&:to)
+                  end.from([]).to([
+                                    [dispute_by.email],
+                                    [order_detail.account.owner_user.email],
+                                  ])
+                )
               end
 
               context "the dispute by is the same as the account owner" do
                 let(:dispute_by) { order_detail.account.owner_user }
 
                 it "only triggers one email" do
-                  expect { do_request }.to change(ActionMailer::Base.deliveries, :count).by(1)
+                  expect { do_request }.to have_enqueued_mail(OrderDetailDisputeMailer, :dispute_resolved)
                 end
               end
             end
@@ -896,7 +899,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
               end
 
               it "does not trigger an email" do
-                expect { do_request }.not_to change(ActionMailer::Base.deliveries, :count)
+                expect { do_request }.not_to enqueue_mail
               end
             end
           end
@@ -913,7 +916,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
             end
 
             it "does not trigger an email" do
-              expect { do_request }.not_to change(ActionMailer::Base.deliveries, :count)
+              expect { do_request }.not_to enqueue_mail
             end
           end
         end

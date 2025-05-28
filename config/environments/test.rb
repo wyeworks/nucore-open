@@ -91,6 +91,8 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Account", association: :owner
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Account", association: :owner_user
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Account", association: :user
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "Estimate", association: :estimate_details
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "EstimateDetail", association: :product
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Instrument", association: :current_offline_reservations
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Instrument", association: :facility
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Instrument", association: :schedule_rules
@@ -185,6 +187,8 @@ Rails.application.configure do
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
+
+  config.active_job.queue_adapter = :test
 
   Rails.application.routes.default_url_options =
     config.action_mailer.default_url_options = { host: "localhost", port: 3000 }

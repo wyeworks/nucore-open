@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Estimates::EstimateCsvService, feature_setting: { user_based_price_groups: true } do
+RSpec.describe Estimates::EstimateCsvService do
   include DateHelper
 
   subject(:csv_string) { described_class.new(estimate).to_csv }
@@ -11,7 +11,7 @@ RSpec.describe Estimates::EstimateCsvService, feature_setting: { user_based_pric
   let(:other_facility) { create(:setup_facility) }
   let(:user) { create(:user) }
   let(:creator) { create(:user) }
-  let(:price_group) { user.price_groups.first }
+  let(:price_group) { facility.price_groups.first }
   let(:csv_rows) { CSV.parse(csv_string) }
 
   let(:item) { create(:setup_item, facility:) }
@@ -44,7 +44,8 @@ RSpec.describe Estimates::EstimateCsvService, feature_setting: { user_based_pric
     create(:estimate,
            user:,
            created_by_user: creator,
-           name: "Test Estimate",
+           description: "Test Estimate",
+           price_group:,
            expires_at: 1.week.from_now)
   end
 
@@ -56,7 +57,7 @@ RSpec.describe Estimates::EstimateCsvService, feature_setting: { user_based_pric
 
       it "generates the header section correctly" do
         expect(csv_rows[0]).to eq(["Estimate Information"])
-        expect(csv_rows[1]).to eq(["ID", "Name", "Created By", "User", "Expiration Date"])
+        expect(csv_rows[1]).to eq(["ID", "Description", "Created By", "Username", "Expiration Date"])
         expect(csv_rows[2]).to eq(
           [
             estimate.id.to_s,

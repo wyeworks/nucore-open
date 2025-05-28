@@ -2,19 +2,20 @@
   = current_facility
 
 - header = "#{Estimate.model_name.human} ##{@estimate.id}"
-- header = @estimate.name.present? ? "#{header} - #{@estimate.name}" : header
+- header = @estimate.description.present? ? "#{header} - #{@estimate.description}" : header
 
 %h2= header
 
 .pull-right
-  = link_to t(".download_csv"), facility_estimate_path(current_facility, @estimate, format: :csv), class: "btn btn-primary"
+  = link_to t(".download_csv"), facility_estimate_path(current_facility, @estimate, format: :csv)
+  = link_to t(".duplicate"), duplicate_facility_estimate_path(current_facility, @estimate), method: :post, class: "btn btn-primary"
 
 .container.banner-list
   .row
     = header_display_date @estimate, :expires_at
-    = header_display @estimate, :user
+    = header_display @estimate, :user_display_name
+    = header_display @estimate, :price_group
     = header_display @estimate, :created_by_user
-
   .row
     = header_display @estimate, :note
 
@@ -47,3 +48,11 @@
       %td{colspan: 3}
       %td.currency
         %strong=number_to_currency(@estimate.total_cost)
+.pull-right
+  = link_to t(".recalculate"), recalculate_facility_estimate_path(current_facility, @estimate), method: :post, class: "btn btn-primary"
+
+- if @estimate.estimate_details.any?
+  %p
+    = t(".updated_at_notice", updated_at: I18n.l(@estimate.estimate_details.maximum(:updated_at), format: :usa))
+.pull-right.edit_estimate_button
+  = link_to t(".edit"), edit_facility_estimate_path(current_facility, @estimate), class: "btn btn-secondary"

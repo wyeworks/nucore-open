@@ -40,6 +40,23 @@ RSpec.describe "User access list" do
       end.not_to change(LogEvent, :count)
     end
 
+    context "when there's a hidden product" do
+      before do
+        product1.update(is_archived: false, is_hidden: true)
+
+        login_as admin
+      end
+
+      it "shows them" do
+        visit facility_user_access_list_path(facility, user)
+
+        within("table") do
+          expect(page).to have_content(product1.name)
+          expect(page).to have_content(product2.name)
+        end
+      end
+    end
+
     context "describe inactive product filter" do
       before do
         login_as admin

@@ -138,7 +138,7 @@ class Ability
     can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility, &:cross_facility?
 
     if SettingsHelper.feature_on?(:show_estimates_option)
-      can :manage, Estimate
+      can [:manage, :duplicate, :recalculate], Estimate
     end
   end
 
@@ -176,7 +176,7 @@ class Ability
     end
 
     if SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_director_of?(resource)
-      can :manage, Estimate
+      can [:manage, :duplicate, :recalculate], Estimate
     end
   end
 
@@ -200,7 +200,7 @@ class Ability
     end
 
     if SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_administrator_of?(resource)
-      can :manage, Estimate
+      can [:manage, :duplicate, :recalculate], Estimate
     end
   end
 

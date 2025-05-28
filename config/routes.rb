@@ -320,10 +320,15 @@ Rails.application.routes.draw do
       resources :account_price_group_members, only: [:new, :destroy, :create]
     end
 
-    resources :estimates, controller: "facility_estimates", only: [:index, :new, :create, :show] do
+    resources :estimates, controller: "facility_estimates", only: [:index, :new, :create, :show, :edit, :update] do
       collection do
         get "search"
         get "add_product_to_estimate"
+      end
+
+      member do
+        post :recalculate
+        post :duplicate
       end
     end
 

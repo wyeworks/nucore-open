@@ -10,7 +10,7 @@ RSpec.describe do
 
   describe "CREATE" do
     describe "internal user creation" do
-      it "can successfully create a user" do
+      it "can successfully create a user", :perform_enqueued_jobs do
         visit new_facility_user_path(facility)
         fill_in "First name", with: "Testing"
         fill_in "Last name", with: "Testerson"
@@ -21,7 +21,7 @@ RSpec.describe do
 
         expect(page).to have_content("You just created a new user, Testing Testerson (ttesterson)")
 
-        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("A CORUM login account has been created for you")
+        expect(Notifier.deliveries.last.body.encoded).to include("A CORUM login account has been created for you")
           .and include("use your NetID and password")
 
         expect(User.find_by!(username: "ttesterson")).to have_attributes(
@@ -60,7 +60,7 @@ RSpec.describe do
     end
 
     describe "external user creation" do
-      it "can successfully create a user" do
+      it "can successfully create a user", :perform_enqueued_jobs do
         visit new_facility_user_path(facility)
         fill_in "First name", with: "Testing"
         fill_in "Last name", with: "Testerson"
@@ -71,7 +71,7 @@ RSpec.describe do
 
         expect(page).to have_content("You just created a new user, Testing Testerson (email@example.org)")
 
-        expect(ActionMailer::Base.deliveries.last.body.encoded).to include("A CORUM login account has been created for you")
+        expect(Notifier.deliveries.last.body.encoded).to include("A CORUM login account has been created for you")
           .and include("using your username and password")
 
         expect(User.find_by!(username: "email@example.org")).to have_attributes(

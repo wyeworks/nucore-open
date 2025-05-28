@@ -66,8 +66,6 @@ module Nucore
       config.i18n.load_path += Dir[Rails.root.join("config", "override_locales", "*.{rb,yml}").to_s]
     end
 
-    config.active_job.queue_adapter = :delayed_job
-
     config.time_zone = Settings.time_zone
 
     config.active_record.observers = :order_detail_observer

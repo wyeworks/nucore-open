@@ -32,6 +32,14 @@ RSpec.describe GlobalUserRolesController do
         it { expect(response).to be_successful }
       end
     end
+
+    context "email report" do
+      let(:user) { create(:user, :administrator) }
+      let(:report_class) { Reports::GlobalUserRolesReport }
+      let(:action) { -> { get(:index, format: :csv) } }
+
+      include_examples "csv email action"
+    end
   end
 
   describe "#destroy" do

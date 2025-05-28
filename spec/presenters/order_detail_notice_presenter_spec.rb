@@ -76,6 +76,11 @@ RSpec.describe OrderDetailNoticePresenter do
       expect(presenter.badges_to_html).to have_badge("Missing Price Policy").with_level(:important)
     end
 
+    it "detects problem flag without problem description" do
+      allow(order_detail).to receive_messages(problem?: true, problem_description_key: nil)
+      expect(presenter.badges_to_html).to have_badge("Problem out of sync").with_level(:important)
+    end
+
     it "can have multiple badges" do
       # These examples are technically mutually exclusive, but this validates the
       # presenter can handle it.

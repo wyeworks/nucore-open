@@ -6,6 +6,7 @@
 //= require jquery-ui/widgets/accordion
 //= require jquery-ui/widgets/datepicker
 //= require jquery-ui/widgets/tabs
+//= require jquery-ui/widgets/autocomplete
 //= require jquery-ui/effect
 //= require nested_form_fields
 //= require bootstrap

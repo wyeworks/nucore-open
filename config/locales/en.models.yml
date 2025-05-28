@@ -145,6 +145,8 @@ en:
           attributes:
             expires_at:
               in_the_past: "must be a future date"
+            base:
+              user_or_custom_name_required: "Either a user must be selected or a custom name must be entered"
     # Model Names
     models:
       account:
@@ -249,8 +251,10 @@ en:
       affiliate:
         subaffiliates_enabled: Allows subaffiliates
       estimate:
-        name: Name
-        user: User
+        description: Description
+        user: Username
+        user_display_name: Username
+        custom_name: Custom Username
         created_by_user: Created By
         expires_at: Expires at
         note: Notes

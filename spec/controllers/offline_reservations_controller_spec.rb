@@ -49,7 +49,7 @@ RSpec.describe OfflineReservationsController do
       end
 
       it "triggers an email" do
-        expect { post :create, params: params }.to change(ActionMailer::Base.deliveries, :count).by(1)
+        expect { post :create, params: params }.to have_enqueued_mail(ProblemOrderMailer, :notify_user)
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe OfflineReservationsController do
       end
 
       it "does not triggers an email" do
-        expect { post :create, params: params }.not_to change(ActionMailer::Base.deliveries, :count)
+        expect { post :create, params: params }.not_to enqueue_mail
       end
     end
   end
