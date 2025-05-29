@@ -75,7 +75,7 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def update
-    if @estimate.update(facility_estimate_params)
+    if @estimate.update(facility_estimate_params) && @estimate.recalculate
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, @estimate)
     else
