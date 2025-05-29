@@ -106,11 +106,14 @@ class FacilityEstimatesController < ApplicationController
   def recalculate
     if @estimate.recalculate
       flash[:notice] = t(".success")
+      redirect_to facility_estimate_path(current_facility, @estimate)
     else
-      flash[:error] = t(".error")
+      set_collections_for_select
+
+      flash.now[:error] = t(".error")
+      render :edit
     end
 
-    redirect_to facility_estimate_path(current_facility, @estimate)
   end
 
   def duplicate

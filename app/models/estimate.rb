@@ -48,10 +48,20 @@ class Estimate < ApplicationRecord
   end
 
   def recalculate
+    success = true
+
     transaction do
-      estimate_details.each(&:assign_price_policy_and_cost)
-      save
+      if estimate_details.all?(&:assign_price_policy_and_cost)
+        save!
+      else
+        success = false
+      end
+    rescue StandardError
+      success = false
+      raise ActiveRecord::Rollback
     end
+
+    success
   end
 
   private
