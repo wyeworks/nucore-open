@@ -113,13 +113,12 @@ class FacilityEstimatesController < ApplicationController
       flash.now[:error] = t(".error")
       render :edit
     end
-
   end
 
   def duplicate
     duplicated_estimate = @estimate.duplicate(current_user)
 
-    if duplicated_estimate.pesisted?
+    if duplicated_estimate.persisted?
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, duplicated_estimate)
     else
