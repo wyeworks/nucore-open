@@ -64,15 +64,26 @@ RSpec.describe Estimates::EstimateCsvService do
             "Test Estimate",
             creator.full_name,
             user.full_name,
-            format_usa_date(estimate.expires_at)
+            format_usa_date(estimate.expires_at),
           ]
         )
       end
 
+      it "generates notes if present" do
+        expect(csv_rows[4]).to eq(["Notes"])
+        expect(csv_rows[5]).to eq([estimate.note])
+      end
+
+      it "does not add note if blank" do
+        estimate.note = ""
+
+        expect(csv_rows[4]).to eq(["Products"])
+      end
+
       it "generates the products section correctly" do
-        expect(csv_rows[4]).to eq(%w[Products])
-        expect(csv_rows[5]).to eq(%w[Facility Product Quantity Duration Price])
-        expect(csv_rows[6]).to eq(
+        expect(csv_rows[7]).to eq(%w[Products])
+        expect(csv_rows[8]).to eq(%w[Facility Product Quantity Duration Price])
+        expect(csv_rows[9]).to eq(
           [
             facility.name,
             item.name,
@@ -99,11 +110,11 @@ RSpec.describe Estimates::EstimateCsvService do
       end
 
       it "formats the duration in HH:MM format" do
-        expect(csv_rows[6][3]).to eq("3:00")
+        expect(csv_rows[9][3]).to eq("3:00")
       end
 
       it "calculates the right price" do
-        expect(csv_rows[6][4]).to eq("$180.00")
+        expect(csv_rows[9][4]).to eq("$180.00")
       end
     end
 
@@ -118,11 +129,11 @@ RSpec.describe Estimates::EstimateCsvService do
       end
 
       it "formats the duration in days" do
-        expect(csv_rows[6][3]).to eq("3 days")
+        expect(csv_rows[9][3]).to eq("3 days")
       end
 
       it "calculates the right price" do
-        expect(csv_rows[6][4]).to eq("$150.00")
+        expect(csv_rows[9][4]).to eq("$150.00")
       end
     end
 
@@ -136,8 +147,8 @@ RSpec.describe Estimates::EstimateCsvService do
       end
 
       it "includes facility names with products" do
-        expect(csv_rows[6][0..1]).to eq([facility.name, item.name])
-        expect(csv_rows[7][0..1]).to eq([other_facility.name, other_facility_product.name])
+        expect(csv_rows[9][0..1]).to eq([facility.name, item.name])
+        expect(csv_rows[10][0..1]).to eq([other_facility.name, other_facility_product.name])
       end
 
       it "calculates the total correctly across facilities" do
@@ -157,8 +168,8 @@ RSpec.describe Estimates::EstimateCsvService do
       end
 
       it "includes the facility name with the product" do
-        expect(csv_rows[6][0..1]).to eq([facility.name, item.name])
-        expect(csv_rows[7][0..1]).to eq([facility.name, timed_product.name])
+        expect(csv_rows[9][0..1]).to eq([facility.name, item.name])
+        expect(csv_rows[10][0..1]).to eq([facility.name, timed_product.name])
       end
 
       it "calculates the total correctly" do
