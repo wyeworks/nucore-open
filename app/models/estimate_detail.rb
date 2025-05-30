@@ -8,7 +8,8 @@ class EstimateDetail < ApplicationRecord
   belongs_to :price_policy
 
   before_save :clear_duration_fields
-  before_save :assign_price_policy_and_cost
+  before_create :assign_price_policy_and_cost
+  before_update :assign_price_policy_and_cost, if: :recalculate
 
   validates :quantity, presence: true, numericality: { greater_than: 0 }
   validates :duration, numericality: { greater_than: 0 }, allow_nil: true
@@ -16,6 +17,9 @@ class EstimateDetail < ApplicationRecord
   validate :price_policy_exists
 
   delegate :user, to: :estimate
+
+  # Used to trigger before_update callback
+  attribute :recalculate
 
   def price_groups
     if product.nonbillable_mode?
@@ -28,12 +32,17 @@ class EstimateDetail < ApplicationRecord
   def assign_price_policy_and_cost
     pp = product.cheapest_price_policy(self, Time.current)
 
-    return if pp.blank?
+    if pp.blank?
+      errors.add(:base, I18n.t("activerecord.errors.models.estimate_detail.no_price_policy"))
+      return false
+    end
 
     cost = pp.estimate_cost_from_estimate_detail(self)
 
     self.price_policy = pp
     self.cost = cost
+
+    true
   end
 
   private

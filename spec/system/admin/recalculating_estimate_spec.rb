@@ -41,4 +41,21 @@ RSpec.describe(
     expect(updated_at).to be > 3.hours.ago
     expect(page).to have_content "Prices last updated: #{I18n.l(updated_at, format: :usa)}"
   end
+
+  context "when recalculating fails" do
+    let(:another_price_group) { create(:price_group, facility:) }
+
+    before do
+      estimate.update_columns(price_group_id: another_price_group.id)
+
+      visit facility_estimate_path(facility, estimate)
+    end
+
+    it "redirects to edit page" do
+      click_link "Recalculate"
+
+      expect(page).to have_content "Edit Estimate"
+      expect(page).to have_content "No price policy found."
+    end
+  end
 end

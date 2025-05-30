@@ -58,7 +58,9 @@ class FacilityEstimatesController < ApplicationController
   end
 
   def create
-    @estimate = current_facility.estimates.new(facility_estimate_params.merge(created_by_id: current_user.id))
+    @estimate = current_facility.estimates.new(
+      facility_estimate_params.merge(created_by_id: current_user.id)
+    )
 
     if @estimate.save
       flash[:notice] = t(".success")
@@ -82,6 +84,7 @@ class FacilityEstimatesController < ApplicationController
       set_collections_for_select
 
       flash.now[:error] = t(".error")
+
       render :edit
     end
   end
@@ -106,22 +109,27 @@ class FacilityEstimatesController < ApplicationController
   def recalculate
     if @estimate.recalculate
       flash[:notice] = t(".success")
+      redirect_to facility_estimate_path(current_facility, @estimate)
     else
-      flash[:error] = t(".error")
-    end
+      set_collections_for_select
 
-    redirect_to facility_estimate_path(current_facility, @estimate)
+      flash.now[:error] = t(".error")
+      render :edit
+    end
   end
 
   def duplicate
     duplicated_estimate = @estimate.duplicate(current_user)
 
-    if duplicated_estimate.present?
+    if duplicated_estimate.persisted?
       flash[:notice] = t(".success")
       redirect_to facility_estimate_path(current_facility, duplicated_estimate)
     else
+      @estimate = duplicated_estimate
+      set_collections_for_select
+
       flash[:error] = t(".error")
-      redirect_to facility_estimate_path(current_facility, @estimate)
+      render :new
     end
   end
 
@@ -129,8 +137,12 @@ class FacilityEstimatesController < ApplicationController
 
   def facility_estimate_params
     raw_params = params.require(:estimate).permit(
-      :description, :price_group_id, :user_id, :custom_name, :note, :expires_at,
-      estimate_details_attributes: [:id, :product_id, :quantity, :duration, :duration_unit, :_destroy]
+      :description, :price_group_id, :user_id,
+      :custom_name, :note, :expires_at,
+      estimate_details_attributes: [
+        :id, :product_id, :quantity, :duration,
+        :duration_unit, :_destroy, :recalculate,
+      ]
     )
     if raw_params[:expires_at].present?
       raw_params[:expires_at] = parse_usa_date(raw_params[:expires_at])
