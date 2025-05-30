@@ -8,7 +8,8 @@ class EstimateDetail < ApplicationRecord
   belongs_to :price_policy
 
   before_save :clear_duration_fields
-  before_save :assign_price_policy_and_cost
+  before_create :assign_price_policy_and_cost
+  before_update :assign_price_policy_and_cost, if: :recalculate
 
   validates :quantity, presence: true, numericality: { greater_than: 0 }
   validates :duration, numericality: { greater_than: 0 }, allow_nil: true
@@ -16,6 +17,10 @@ class EstimateDetail < ApplicationRecord
   validate :price_policy_exists
 
   delegate :user, to: :estimate
+
+  # Used to trigger before_save callback and
+  # perform a recalculation on save
+  attribute :recalculate
 
   def price_groups
     if product.nonbillable_mode?
