@@ -48,15 +48,27 @@ RSpec.describe "Estimate Duplication", :js do
 
   context "when duplication fails" do
     before do
-      allow_any_instance_of(EstimateDetail).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+      # Force duplicated estimate to be invalid
+      item_price_policy.destroy!
     end
 
-    it "shows an error message and stays on the original estimate" do
+    it "redirects to the new estimate form and shows an error" do
       visit facility_estimate_path(facility, estimate)
       click_link "Duplicate Estimate"
 
-      expect(page).to have_current_path(facility_estimate_path(facility, estimate))
       expect(page).to have_content("There was an error duplicating the estimate")
+
+      expect(page).to have_css("form.new_estimate")
+
+      expect(page).to have_field("Description", with: "Copy of #{estimate.description}")
+      expect(page).to have_field("Expires at", with: I18n.l(estimate.expires_at.to_date, format: :usa))
+      expect(page).to have_field("Notes", with: estimate.note)
+
+      within("#estimate_products_table") do
+        estimate.estimate_details.each do |estimate_detail|
+          expect(page).to have_content(estimate_detail.product.name)
+        end
+      end
     end
   end
 end
