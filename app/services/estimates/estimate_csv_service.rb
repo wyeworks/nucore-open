@@ -15,6 +15,12 @@ module Estimates
         csv << [@estimate.id, @estimate.description, @estimate.created_by_user.full_name, @estimate.user_display_name, format_usa_date(@estimate.expires_at)]
         csv << []
 
+        if @estimate.note.present?
+          csv << ["Notes"]
+          csv << [@estimate.note.strip]
+          csv << []
+        end
+
         csv << ["Products"]
         csv << %w[Facility Product Quantity Duration Price]
 
