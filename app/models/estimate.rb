@@ -27,7 +27,8 @@ class Estimate < ApplicationRecord
     duplicated_estimate = dup
     duplicated_estimate.created_by_id = created_by_user.id
     duplicated_estimate.expires_at = 1.month.from_now
-    duplicated_estimate.description = "Copy of #{description}"
+
+    duplicated_estimate.description = "Copy of #{description.presence || id}"
 
     details_to_copy = estimate_details.map(&:dup)
 
@@ -49,7 +50,7 @@ class Estimate < ApplicationRecord
       else
         success = false
       end
-    rescue StandardError
+    rescue ActiveRecord::RecordInvalid
       success = false
       raise ActiveRecord::Rollback
     end
