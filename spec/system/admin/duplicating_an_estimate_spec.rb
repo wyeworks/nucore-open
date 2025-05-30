@@ -67,6 +67,7 @@ RSpec.describe "Estimate Duplication", :js do
       within("#estimate_products_table") do
         estimate.estimate_details.each do |estimate_detail|
           expect(page).to have_content(estimate_detail.product.name)
+          expect(page).to have_css(".error-inline", text: "No price policy found.")
         end
       end
     end
