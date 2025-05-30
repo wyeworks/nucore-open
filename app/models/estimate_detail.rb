@@ -18,8 +18,7 @@ class EstimateDetail < ApplicationRecord
 
   delegate :user, to: :estimate
 
-  # Used to trigger before_save callback and
-  # perform a recalculation on save
+  # Used to trigger before_update callback
   attribute :recalculate
 
   def price_groups
