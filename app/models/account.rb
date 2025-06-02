@@ -32,11 +32,16 @@ class Account < ApplicationRecord
   has_many :notify_user_roles, -> { where(user_role: AccountUser.admin_user_roles, deleted_at: nil) }, class_name: "AccountUser"
   has_many :notify_users, through: :notify_user_roles, source: :user
 
-  has_many   :price_group_members
-  has_many   :order_details
-  has_many   :orders
-  has_many   :statements, through: :order_details
-  has_many   :payments, inverse_of: :account
+  # set the scope is needed to set the type in the STI table
+  # when used with has many through
+  has_many :price_group_members, -> { AccountPriceGroupMember.all }
+  has_many :price_groups_relation,
+           through: :price_group_members,
+           source: :price_group
+  has_many :order_details
+  has_many :orders
+  has_many :statements, through: :order_details
+  has_many :payments, inverse_of: :account
   belongs_to :affiliate
   accepts_nested_attributes_for :account_users
   has_many :log_events, as: :loggable
