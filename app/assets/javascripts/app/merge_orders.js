@@ -32,7 +32,7 @@ window.MergeOrder = class MergeOrder {
       this.$duration_display_field.prop("disabled", !is_timed);
       this.$duration_hidden_field.prop("disabled", !is_timed);
 
-      this.$duration_display_container.toggle(is_timed);
+      this.$duration_display_container.toggle(!!is_timed);
 
       if (is_timed) { this.$quantity_field.val(1); }
       return this.$quantity_field.prop("disabled", is_timed);
@@ -54,8 +54,6 @@ window.MergeOrder = class MergeOrder {
     const originalFacilityId = button.data("original-facility");
     const defaultButtonText = button.data("default-button-text");
     const crossCoreButtonText = button.data("cross-core-button-text");
-
-    const mergeOrders = this;
 
     return facilityField.on("change", (event) => {
       const selectedElement = $(event.target).find(":selected");
@@ -91,7 +89,6 @@ window.MergeOrder = class MergeOrder {
             );
           });
 
-          mergeOrders.initTimeBasedServices()
           productField.trigger("chosen:updated");
 
           // Update button text
