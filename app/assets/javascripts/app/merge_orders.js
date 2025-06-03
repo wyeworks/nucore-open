@@ -55,6 +55,8 @@ window.MergeOrder = class MergeOrder {
     const defaultButtonText = button.data("default-button-text");
     const crossCoreButtonText = button.data("cross-core-button-text");
 
+    const mergeOrders = this;
+
     return facilityField.on("change", (event) => {
       const selectedElement = $(event.target).find(":selected");
       const productsUrl = selectedElement.data("products-path");
@@ -62,9 +64,6 @@ window.MergeOrder = class MergeOrder {
       const originalOrderFacility = selectedElement.data("original-order-facility");
       const originalOrder = selectedElement.data("original-order");
       const facility_id = $(event.target).val();
-      const includeBlank = JSON.parse(
-        accountField.data("include-blank")
-      );
 
       $.ajax({
         type: "get",
@@ -73,6 +72,12 @@ window.MergeOrder = class MergeOrder {
         success(data) {
           // Populate dropdown
           productField.empty();
+
+          const rawIncludeBlank = productField.attr("include_blank")
+          if (rawIncludeBlank && JSON.parse(rawIncludeBlank)) {
+            productField.append('<option value=""></option>');
+          }
+
           data = JSON.parse(data);
           data.forEach(function (product) {
             return productField.append(
@@ -86,6 +91,7 @@ window.MergeOrder = class MergeOrder {
             );
           });
 
+          mergeOrders.initTimeBasedServices()
           productField.trigger("chosen:updated");
 
           // Update button text
@@ -109,7 +115,8 @@ window.MergeOrder = class MergeOrder {
           accountField.empty();
           data = JSON.parse(data);
 
-          if (includeBlank) {
+          const rawIncludeBlank = accountField.attr("include_blank");
+          if (rawIncludeBlank && JSON.parse(rawIncludeBlank)) {
             accountField.append('<option value=""></option>');
           }
 

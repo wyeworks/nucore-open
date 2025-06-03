@@ -17,9 +17,9 @@
         .margin_x
           = f.label :product_id, Product.model_name.human
           = f.input_field :product_id,
-            collection: current_facility.products.mergeable_into_order.alphabetized.map { |p| [p.name, p.id, {"data-timed-product" => p.order_quantity_as_time?}] },
+            collection: @merge_order_form_facility.products.mergeable_into_order.alphabetized.map { |p| [p.name, p.id, {"data-timed-product" => p.order_quantity_as_time?}] },
             class: "js--edit-order__product js--chosen",
-            include_blank: false
+            include_blank: true
 
         .js--edit-order__duration-container
           = f.label :duration, Product.human_attribute_name(:duration)
