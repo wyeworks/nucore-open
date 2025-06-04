@@ -1,5 +1,5 @@
 = content_for :head_content do
-  = javascript_include_tag 'fullcalendar.js'
+  = render "shared/headers/calendar"
   :javascript
     var events_path     = "#{calendar_events_path(current_facility, @instrument)}";
     var orders_path_base = "#{facility_orders_path(current_facility)}";
