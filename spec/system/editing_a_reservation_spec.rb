@@ -5,23 +5,43 @@ require "rails_helper"
 # TODO: Capybara deprecation
 RSpec.describe "Editing your own reservation" do
   let!(:instrument) do
-    FactoryBot.create(:setup_instrument, user_notes_field_mode: "optional", lock_window: 12, min_reserve_mins: nil)
+    create(:setup_instrument, user_notes_field_mode: "optional", lock_window: 12, min_reserve_mins: nil)
   end
   let!(:facility) { instrument.facility }
-  let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user) }
-  let!(:price_policy) { FactoryBot.create(:instrument_price_policy, price_group: PriceGroup.base, product: instrument) }
-  let(:user) { FactoryBot.create(:user) }
+  let!(:account) { create(:nufs_account, :with_account_owner, owner: user) }
+  let!(:price_policy) { create(:instrument_price_policy, price_group: PriceGroup.base, product: instrument) }
+  let(:user) { create(:user) }
   let!(:account_price_group_member) do
-    FactoryBot.create(:account_price_group_member, account: account, price_group: price_policy.price_group)
+    create(:account_price_group_member, account:, price_group: price_policy.price_group)
   end
 
   before do
     login_as user
   end
 
+  describe "validates empty start date correctly" do
+    let(:order) { order_detail.order }
+    let(:order_detail) { reservation.order_detail }
+    let!(:reservation) do
+      create(:purchased_reservation, :tomorrow, product: instrument, user:)
+    end
+
+    it "renders an error when user submits an empty start date" do
+      visit edit_order_order_detail_reservation_path(
+        order, order_detail, reservation,
+      )
+
+      fill_in("Reserve Start", with: "")
+
+      click_button("Save")
+
+      expect(page).to have_content("Reserve Start may not be blank")
+    end
+  end
+
   describe "a future reservation outside the lock windown" do
     # 9:30-10:30am
-    let!(:reservation) { create(:purchased_reservation, :tomorrow, product: instrument, user: user) }
+    let!(:reservation) { create(:purchased_reservation, :tomorrow, product: instrument, user:) }
 
     it "shows current reservation", :js do
       visit reservations_path
@@ -56,7 +76,7 @@ RSpec.describe "Editing your own reservation" do
 
   describe "a reservation inside the lock window" do
     # Two hours from now
-    let!(:reservation) { create(:purchased_reservation, :later_today, product: instrument, user: user) }
+    let!(:reservation) { create(:purchased_reservation, :later_today, product: instrument, user:) }
 
     it "prevents me from changing the start date, allows me to extend the reservation, but not shorten it" do
       visit reservations_path
@@ -78,7 +98,7 @@ RSpec.describe "Editing your own reservation" do
   end
 
   describe "a started reservation" do
-    let!(:reservation) { create(:purchased_reservation, :running, product: instrument, user: user) }
+    let!(:reservation) { create(:purchased_reservation, :running, product: instrument, user:) }
 
     it "prevents me from changing the start date, allows me to extend the reservation, but not shorten it" do
       visit reservations_path

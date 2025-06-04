@@ -33,7 +33,8 @@ module Reservations::Validations
     validate :does_not_conflict_with_admin_reservation, on: [:user_purchase, :walkup_available]
     validate :in_window,
              :in_the_future,
-             on: :user_purchase
+             on: :user_purchase,
+             if: ->(r) { r.reserve_start_at }
     validate :starts_before_cutoff,
              on: :user_purchase,
              if: :requires_cutoff_validation?
