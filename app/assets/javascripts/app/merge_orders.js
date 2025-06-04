@@ -32,7 +32,7 @@ window.MergeOrder = class MergeOrder {
       this.$duration_display_field.prop("disabled", !is_timed);
       this.$duration_hidden_field.prop("disabled", !is_timed);
 
-      this.$duration_display_container.toggle(is_timed);
+      this.$duration_display_container.toggle(!!is_timed);
 
       if (is_timed) { this.$quantity_field.val(1); }
       return this.$quantity_field.prop("disabled", is_timed);
@@ -62,9 +62,6 @@ window.MergeOrder = class MergeOrder {
       const originalOrderFacility = selectedElement.data("original-order-facility");
       const originalOrder = selectedElement.data("original-order");
       const facility_id = $(event.target).val();
-      const includeBlank = JSON.parse(
-        accountField.data("include-blank")
-      );
 
       $.ajax({
         type: "get",
@@ -73,6 +70,12 @@ window.MergeOrder = class MergeOrder {
         success(data) {
           // Populate dropdown
           productField.empty();
+
+          const rawIncludeBlank = productField.attr("include_blank")
+          if (rawIncludeBlank && JSON.parse(rawIncludeBlank)) {
+            productField.append('<option value=""></option>');
+          }
+
           data = JSON.parse(data);
           data.forEach(function (product) {
             return productField.append(
@@ -109,7 +112,8 @@ window.MergeOrder = class MergeOrder {
           accountField.empty();
           data = JSON.parse(data);
 
-          if (includeBlank) {
+          const rawIncludeBlank = accountField.attr("include_blank");
+          if (rawIncludeBlank && JSON.parse(rawIncludeBlank)) {
             accountField.append('<option value=""></option>');
           }
 

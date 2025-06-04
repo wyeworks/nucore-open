@@ -155,6 +155,13 @@ class FacilityOrdersController < ApplicationController
         }
       end
     end
+
+    @merge_order_form_facility =
+      if (param_facility_id = params.dig(:add_to_order_form, :facility_id))
+        Facility.find(param_facility_id)
+      else
+        current_facility
+      end
   end
 
   def missing_reservation_order_ids(project_order_ids)
