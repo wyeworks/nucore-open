@@ -8,7 +8,7 @@ class ErrorsController < ApplicationController
   end
 
   def internal_server_error
-    render_error(nil, :internal_server_error)
+    send_static_error_page
   end
 
   def forbidden
@@ -26,22 +26,14 @@ class ErrorsController < ApplicationController
   private
 
   def render_error(template, status)
-    if status == :internal_server_error
-      send_static_error_page
-    else
-      render template, status:, formats: formats_with_html_fallback
-    end
+    render template, status:, formats: formats_with_html_fallback
   rescue ActionController::UnknownFormat
     head status
   end
 
   def send_static_error_page
     static_file_path = Rails.public_path.join("500.html")
-    if File.exist?(static_file_path)
-      send_file static_file_path, status: :internal_server_error, type: "text/html"
-    else
-      head :internal_server_error
-    end
+    send_file static_file_path, status: :internal_server_error, type: "text/html"
   end
 
 end
