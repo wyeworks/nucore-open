@@ -21,7 +21,6 @@ module SortableBillingTable
   end
 
   def default_sort_lookup_hash
-
     {
       "date_range_field" => "order_details.#{order_detail_date_range_field}",
       "order_number" => ["order_details.order_id", "order_details.id"],
