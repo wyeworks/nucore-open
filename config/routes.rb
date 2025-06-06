@@ -296,6 +296,7 @@ Rails.application.routes.draw do
       end
 
       resources :orders, controller: "facility_account_orders", only: [:index]
+      resource :price_groups, controller: "facility_account_price_groups", only: [:show, :edit, :update]
 
       collection do
         get :accounts_available_for_order
