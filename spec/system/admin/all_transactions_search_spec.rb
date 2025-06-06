@@ -19,6 +19,60 @@ RSpec.describe "All Transactions Search", :js do
     end
   end
 
+  describe "date field order" do
+    let(:order_detail_ids) do
+      page.all("a.manage-order-detail").map(&:text)
+    end
+    let(:order_details) do
+      OrderDetail.where(id: order_detail_ids)
+    end
+
+    before do
+      login_as director
+
+      OrderDetail.all.each_with_index do |order_detail, index|
+        order_detail.update_column(:fulfilled_at, index.days.from_now)
+        order_detail.update_column(:ordered_at, (20 - index).days.from_now)
+      end
+    end
+
+    context "when filter by fulfiled status" do
+      let(:sorted_order_details) do
+        order_details.order(fulfilled_at: :desc)
+      end
+
+      it "can order by fulfilled_at" do
+        visit facility_transactions_path(facility)
+
+        expect(
+          sorted_order_details.map do |od|
+            I18n.l(od.fulfilled_at.to_date, format: :usa)
+          end
+        ).to appear_in_order
+      end
+    end
+
+    context "when filter by ordered_at" do
+      let(:sorted_order_details) do
+        order_details.order(ordered_at: :desc)
+      end
+
+      it "can order by ordered_at" do
+        visit facility_transactions_path(facility)
+
+        select("Ordered", from: "search[date_range_field]")
+
+        click_button("Filter")
+
+        expect(
+          sorted_order_details.map do |od|
+            I18n.l(od.ordered_at.to_date, format: :usa)
+          end
+        ).to appear_in_order
+      end
+    end
+  end
+
   it "can do a basic search" do
     login_as director
     visit facility_transactions_path(facility)

@@ -22,7 +22,7 @@ module SortableBillingTable
 
   def default_sort_lookup_hash
     {
-      "date_range_field" => "order_details.fulfilled_at",
+      "date_range_field" => "order_details.#{order_detail_date_range_field}",
       "order_number" => ["order_details.order_id", "order_details.id"],
       "order_detail_number" => "order_details.id",
       "ordered_for" => ["users.last_name", "order_details.fulfilled_at"],
@@ -33,6 +33,10 @@ module SortableBillingTable
 
   def enable_sorting
     @sorting_enabled = true
+  end
+
+  def order_detail_date_range_field
+    @date_range_field || "fulfilled_at"
   end
 
 end
