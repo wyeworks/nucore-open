@@ -5,10 +5,11 @@
     var minDaysFromNow  = #{@max_days_ago};
     var minTime         = #{@instrument.first_available_hour};
     var maxTime         = #{@instrument.last_available_hour+1};
+    var currentReservationId = #{@reservation.id};
   - unless @order_detail.complete?
     :javascript
       var initialDate = "#{@reservation.reserve_start_at.strftime('%Y-%m-%d')}";
-  = javascript_include_tag "fullcalendar.js"
+  = render "shared/headers/calendar"
   = javascript_include_tag "reservations.js"
 
 = content_for :h1 do

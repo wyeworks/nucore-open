@@ -51,6 +51,7 @@ window.FullCalendarConfig = class FullCalendarConfig {
       eventAfterRender: function(event, element, view) {
         self.buildTooltip(event, element, view);
         self.adjustEvent(event, element, view);
+        self.setCurrentEvent(event, element, view);
       },
       eventAfterAllRender: view => {
         this.$element.trigger("calendar:rendered");
@@ -129,6 +130,21 @@ window.FullCalendarConfig = class FullCalendarConfig {
           }
         });
       }
+    }
+  }
+
+  /**
+    * If currentReservationId is defined, set
+    * current-event css class to the event with
+    * that id.
+    */
+  setCurrentEvent(event, element) {
+    if (typeof currentReservationId === "undefined" || !currentReservationId) {
+      return;
+    }
+
+    if (currentReservationId === event.id) {
+      element.addClass("current-event")
     }
   }
 

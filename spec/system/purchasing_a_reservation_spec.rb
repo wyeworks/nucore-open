@@ -352,4 +352,22 @@ RSpec.describe "Purchasing a reservation" do
       expect(page).to have_content "Reserve Start must be at least 2 hours in the future"
     end
   end
+
+  context "when there's no price group product for the user price group" do
+    let(:other_price_group) do
+      PriceGroup.where.not(id: user.price_groups.map(&:id)).first
+    end
+
+    before do
+      instrument.price_group_products.where.not(
+        price_group: other_price_group.id
+      ).destroy_all
+    end
+
+    it "can navigate to the reservation page" do
+      visit new_facility_instrument_single_reservation_path(facility, instrument)
+
+      expect(page).to have_content("Create Reservation")
+    end
+  end
 end
