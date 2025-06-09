@@ -13,6 +13,8 @@ class FacilityAccountPriceGroupsController < ApplicationController
   def show
   end
 
+  private
+
   def load_resources
     @account = Account.find(params[:account_id])
     @price_groups =
