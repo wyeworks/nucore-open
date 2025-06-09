@@ -6,7 +6,8 @@ class FacilityAccountPriceGroupsController < ApplicationController
   before_action :authenticate_user!
   before_action { @active_tab = "admin_users" }
   before_action :load_resources
-  before_action :authorize_account
+  before_action :authorize_show
+  before_action :authorize_edit, except: :show
 
   layout "two_column"
 
@@ -38,8 +39,12 @@ class FacilityAccountPriceGroupsController < ApplicationController
       .order(:global, :is_internal, :name)
   end
 
-  def authorize_account
+  def authorize_show
     authorize! :index, @account
+  end
+
+  def authorize_edit
+    authorize! :manage, @account
   end
 
   def update_params

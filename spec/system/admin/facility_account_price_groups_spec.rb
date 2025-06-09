@@ -72,34 +72,49 @@ RSpec.describe "Account Price Group tab" do
       visit edit_facility_account_price_groups_path(facility, account)
     end
 
-    before { login_as create(:user, :administrator) }
-    before { account.price_groups_relation << PriceGroup.globals.first }
-
-    it "allows admins to update price groups" do
-      visit_page
-
-      expect(page).to have_select(
-        "account[price_groups_relation_ids][]",
-        options: PriceGroup.all.map(&:name),
-        selected: account.price_groups_relation.map(&:name),
-      )
-
-      unselected_price_groups.each do |price_group|
-        select(
-          price_group.name,
-          from: "account[price_groups_relation_ids][]",
-        )
+    context "with non authorized user" do
+      before do
+        login_as(create(:user, :account_manager))
       end
 
-      click_button "Save"
+      it "is not allow to access edit page", :disable_requests_local do
+        visit edit_facility_account_price_groups_path(facility, account)
 
-      expect(page).to have_content(
-        "Price Groups assigned successfully",
-      )
+        expect(page).to have_content("Sorry, you don't have permission to access this page")
+      end
 
-      expect(account.reload.price_groups_relation.count).to(
-        eq(PriceGroup.count),
-      )
+    end
+
+    context "with authorized user" do
+      before { login_as create(:user, :administrator) }
+      before { account.price_groups_relation << PriceGroup.globals.first }
+
+      it "allows admins to update price groups" do
+        visit_page
+
+        expect(page).to have_select(
+          "account[price_groups_relation_ids][]",
+          options: PriceGroup.all.map(&:name),
+          selected: account.price_groups_relation.map(&:name),
+        )
+
+        unselected_price_groups.each do |price_group|
+          select(
+            price_group.name,
+            from: "account[price_groups_relation_ids][]",
+          )
+        end
+
+        click_button "Save"
+
+        expect(page).to have_content(
+          "Price Groups assigned successfully",
+        )
+
+        expect(account.reload.price_groups_relation.count).to(
+          eq(PriceGroup.count),
+        )
+      end
     end
   end
 end
