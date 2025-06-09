@@ -2,7 +2,6 @@
 
 = form_with(model: @account, url: facility_account_price_groups_path(current_facility, @account)) do |form|
   = form.collection_select(:price_groups_relation_ids,
-    PriceGroup.all, :id, :name, {}, { multiple: true, class: "js--chosen" })
-
+    PriceGroup.all.includes(:facility).map(&:presenter), :id, :long_name, {}, { multiple: true, class: "js--chosen" })
   %div
     = form.submit t(".submit"), class: "btn"
