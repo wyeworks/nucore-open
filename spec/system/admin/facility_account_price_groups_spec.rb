@@ -2,7 +2,10 @@
 
 require "rails_helper"
 
-RSpec.describe "Account Price Group tab" do
+RSpec.describe(
+  "Account Price Group tab",
+  feature_setting: { show_account_price_groups_tab: true }
+) do
   let(:facility) { Facility.cross_facility }
   let(:account) { create(:account, :with_account_owner) }
 
@@ -115,6 +118,17 @@ RSpec.describe "Account Price Group tab" do
           eq(PriceGroup.count),
         )
       end
+    end
+  end
+
+  context "when the ff is disabled", feature_setting: { show_account_price_groups_tab: false } do
+    it "does not show the price groups tab" do
+      login_as create(:user, :administrator)
+
+      visit facility_account_path(facility, account)
+
+      expect(page).to have_content(account.to_s)
+      expect(page).not_to have_content("Price Groups")
     end
   end
 end
