@@ -423,4 +423,14 @@ RSpec.describe Account do
       end
     end
   end
+
+  describe "price_group_relation" do
+    let(:account) { create(:account, :with_account_owner) }
+
+    it "can assign price groups to the relation" do
+      expect { account.price_groups_relation << PriceGroup.last }.to(
+        change(AccountPriceGroupMember, :count)
+      )
+    end
+  end
 end

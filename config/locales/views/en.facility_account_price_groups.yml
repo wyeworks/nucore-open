@@ -7,3 +7,8 @@ en:
       global:
         true: "Yes"
         false: "No"
+    edit:
+      submit: Save
+    update:
+      success: Price Groups assigned successfully
+      error: There was an error assigning price groups
