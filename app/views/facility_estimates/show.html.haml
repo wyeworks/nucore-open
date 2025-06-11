@@ -8,7 +8,9 @@
 
 .pull-right
   = link_to t(".download_csv"), facility_estimate_path(current_facility, @estimate, format: :csv)
-  = link_to t(".duplicate"), duplicate_facility_estimate_path(current_facility, @estimate), method: :post, class: "btn btn-primary"
+  = link_to t(".duplicate"),
+    duplicate_facility_estimate_path(current_facility, @estimate),
+    method: :post, class: "btn btn-primary margin_x"
 
 .container.banner-list
   .row
@@ -19,39 +21,42 @@
   .row
     = header_display @estimate, :note
 
-%table.table.table-striped.table-hover
-  %thead
-    %tr
-      %th= Product.model_name.human
-      %th= EstimateDetail.human_attribute_name(:quantity)
-      %th= EstimateDetail.human_attribute_name(:duration)
-      %th= EstimateDetail.human_attribute_name(:cost)
-  %tbody
-    - @estimate.estimate_details.each do |estimate_detail|
-      - displayTime = estimate_detail.duration_unit == "mins"
+- if @estimate.estimate_details.empty?
+  .notice= t(".estimate_details_empty")
+- else
+  %table.table.table-striped.table-hover
+    %thead
       %tr
-        %td
-          - product = estimate_detail.product
-          - product_name = product.name
-          - if product.facility != current_facility
-            - product_name = "#{product_name} (#{product.facility.name})"
-          = product_name
-        %td= estimate_detail.quantity
-        %td{class: displayTime ? "timeinput" : ""}
-          - if displayTime
-            = estimate_detail.duration
-          - elsif estimate_detail.duration_unit.present?
-            = "#{estimate_detail.duration} #{t(".days")}"
-        %td.currency= number_to_currency(estimate_detail.cost)
-  %tfoot
-    %tr
-      %td{colspan: 3}
-      %td.currency
-        %strong=number_to_currency(@estimate.total_cost)
-.pull-right
-  = link_to t(".recalculate"), recalculate_facility_estimate_path(current_facility, @estimate), method: :post, class: "btn btn-primary"
+        %th= Product.model_name.human
+        %th= EstimateDetail.human_attribute_name(:quantity)
+        %th= EstimateDetail.human_attribute_name(:duration)
+        %th.pull-right= EstimateDetail.human_attribute_name(:cost)
+    %tbody
+      - @estimate.estimate_details.each do |estimate_detail|
+        - displayTime = estimate_detail.duration_unit == "mins"
+        %tr
+          %td
+            - product = estimate_detail.product
+            - product_name = product.name
+            - if product.facility != current_facility
+              - product_name = "#{product_name} (#{product.facility.name})"
+            = product_name
+          %td= estimate_detail.quantity
+          %td{class: displayTime ? "timeinput" : ""}
+            - if displayTime
+              = estimate_detail.duration
+            - elsif estimate_detail.duration_unit.present?
+              = "#{estimate_detail.duration} #{t(".days")}"
+          %td.currency= number_to_currency(estimate_detail.cost)
+    %tfoot
+      %tr
+        %td{colspan: 3}
+        %td.currency
+          %strong=number_to_currency(@estimate.total_cost)
 
-- if @estimate.estimate_details.any?
+  .pull-right
+    = link_to t(".recalculate"), recalculate_facility_estimate_path(current_facility, @estimate), method: :post, class: "btn btn-primary"
+
   %p
     = t(".updated_at_notice", updated_at: I18n.l(@estimate.estimate_details.maximum(:updated_at), format: :usa))
 .pull-right.edit_estimate_button

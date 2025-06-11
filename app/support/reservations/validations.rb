@@ -33,7 +33,8 @@ module Reservations::Validations
     validate :does_not_conflict_with_admin_reservation, on: [:user_purchase, :walkup_available]
     validate :in_window,
              :in_the_future,
-             on: :user_purchase
+             on: :user_purchase,
+             if: ->(r) { r.reserve_start_at }
     validate :starts_before_cutoff,
              on: :user_purchase,
              if: :requires_cutoff_validation?
@@ -202,11 +203,12 @@ module Reservations::Validations
   # return the longest available reservation window for the groups
   def longest_reservation_window(groups = [])
     return default_reservation_window if groups.empty?
+
     product
       .price_group_products
       .where(price_group_id: groups.map(&:id))
       .pluck(:reservation_window)
-      .max
+      .max || default_reservation_window
   end
 
   def holiday_access

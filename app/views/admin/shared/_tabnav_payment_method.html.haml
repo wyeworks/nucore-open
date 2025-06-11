@@ -8,3 +8,7 @@
     = tab t(".orders"), facility_account_orders_path(current_facility, @account), (secondary_tab == "orders")
   - if show_account_facilities_tab?(current_ability, @account)
     = tab Facility.model_name.human(count: :other), edit_facility_account_account_facility_joins_path(current_facility, @account), (secondary_tab == "facilities")
+  - if SettingsHelper.feature_on?(:show_account_price_groups_tab)
+    = tab t(".price_groups"),
+      facility_account_price_groups_path(current_facility, @account),
+      (secondary_tab == "price_groups")

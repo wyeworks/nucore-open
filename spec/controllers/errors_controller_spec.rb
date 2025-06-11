@@ -10,10 +10,10 @@ RSpec.describe ErrorsController, type: :controller do
   end
 
   describe "GET #internal_server_error" do
-    it "renders the 'internal_server_error' template with a 500 status" do
+    it "serves the static 500.html file with a 500 status" do
       get :internal_server_error
       expect(response).to have_http_status(:internal_server_error)
-      expect(response).to render_template("internal_server_error")
+      expect(response.body).to include("We're sorry, but something went wrong.")
     end
   end
 
