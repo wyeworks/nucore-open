@@ -46,6 +46,7 @@ en:
       purchase_order_account:
         account_number: Payment Source
         ar_number: Account Receivable Number
+        monetary_cap: Monetary Cap
       credit_card_account:
         account_number: Payment Source
         name_on_card: Name On Card

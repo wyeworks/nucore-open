@@ -169,6 +169,7 @@ feature:
   show_account_opencontract_field: false
   hide_account_far_future_expiration: false
   show_account_price_groups_tab: false
+  purchase_order_monetary_cap: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts
