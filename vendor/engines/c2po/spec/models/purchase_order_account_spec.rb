@@ -32,4 +32,24 @@ RSpec.describe PurchaseOrderAccount do
     account.facilities << facility2
     expect(account.to_s).to include "2 #{Facility.model_name.human.pluralize}"
   end
+
+  describe "monetary_cap validation" do
+    context "when feature flag is enabled", feature_setting: { purchase_order_monetary_cap: true } do
+      it "is valid with a positive monetary_cap" do
+        account.monetary_cap = 1000.50
+        expect(account).to be_valid
+      end
+
+      it "is valid with nil monetary_cap" do
+        account.monetary_cap = nil
+        expect(account).to be_valid
+      end
+
+      it "is invalid with negative monetary_cap" do
+        account.monetary_cap = -100
+        expect(account).not_to be_valid
+        expect(account.errors[:monetary_cap]).to include("must be greater than 0")
+      end
+    end
+  end
 end

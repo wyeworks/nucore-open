@@ -7,6 +7,7 @@ class PurchaseOrderAccount < Account
   include AffiliateAccount
 
   validates_presence_of :account_number
+  validates :monetary_cap, numericality: { greater_than: 0, allow_blank: true }, if: -> { SettingsHelper.feature_on?(:purchase_order_monetary_cap) }
 
   def to_s(with_owner = false, flag_suspended = true, with_facility: true)
     desc = super(with_owner, false)

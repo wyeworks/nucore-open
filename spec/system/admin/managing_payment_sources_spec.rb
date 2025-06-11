@@ -28,6 +28,43 @@ RSpec.describe "Managing accounts" do
     end
   end
 
+  describe "editing purchase order accounts" do
+    let!(:account) { create(:purchase_order_account, :with_account_owner, owner:, facility:) }
+
+    context "monetary_cap field visibility" do
+      before do
+        visit facility_accounts_path(facility)
+        fill_in "search_term", with: owner.first_name
+        click_on "Search"
+        click_on account.to_s
+        click_on "Edit"
+      end
+
+      context "when feature flag is enabled", feature_setting: { purchase_order_monetary_cap: true } do
+        it "shows the monetary cap field", :aggregate_failures do
+          expect(page).to have_field("Monetary Cap")
+          expect(page).to have_content("Optional monetary cap for this purchase order account")
+        end
+
+        it "can set and save monetary cap value" do
+          fill_in "Monetary Cap", with: "1500.75"
+          click_on "Save"
+
+          expect(page).to have_content("The payment source was successfully updated")
+          account.reload
+          expect(account.monetary_cap).to eq(1500.75)
+        end
+      end
+
+      context "when feature flag is disabled", feature_setting: { purchase_order_monetary_cap: false } do
+        it "does not show the monetary cap field" do
+          expect(page).not_to have_field("Monetary Cap")
+          expect(page).not_to have_content("Optional monetary cap for this purchase order account")
+        end
+      end
+    end
+  end
+
   describe "changing a user's role" do
     let(:account_factory) { Account.config.account_types.first.demodulize.underscore }
     let!(:account) { create(account_factory, :with_account_owner, owner:) }
