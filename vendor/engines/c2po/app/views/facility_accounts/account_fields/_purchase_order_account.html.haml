@@ -6,7 +6,7 @@
 = f.input :description, required: true
 
 - if SettingsHelper.feature_on?(:purchase_order_monetary_cap)
-  = f.input :monetary_cap, label: "Monetary Cap", 
+  = f.input :monetary_cap, label: Account.human_attribute_name(:monetary_cap), 
     input_html: { step: 0.01 }, 
     hint: "Optional monetary cap for this purchase order account",
     hint_html: { class: "help-inline" }
