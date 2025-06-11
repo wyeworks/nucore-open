@@ -20,7 +20,7 @@ class PurchaseOrderAccountBuilder < AccountBuilder
       :formatted_expires_at,
       :outside_contact_info,
       :ar_number,
-    ] + permitted_account_params
+    ] + (SettingsHelper.feature_on?(:purchase_order_monetary_cap) ? [:monetary_cap] : []) + permitted_account_params
   end
 
   # Override strong_params for `update` account.
@@ -34,7 +34,7 @@ class PurchaseOrderAccountBuilder < AccountBuilder
       :formatted_expires_at,
       :outside_contact_info,
       :ar_number,
-    ] + permitted_account_params
+    ] + (SettingsHelper.feature_on?(:purchase_order_monetary_cap) ? [:monetary_cap] : []) + permitted_account_params
   end
 
   # Hooks into superclass's `build` method.

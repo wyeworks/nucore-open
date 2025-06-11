@@ -101,4 +101,21 @@ RSpec.describe "Editing an estimate", :js do
     expect(estimate.user_id).to be_nil
     expect(estimate.custom_name).to eq("Custom Name")
   end
+
+  it "recalculates the cost when updating" do
+    old_cost = item_price_policy.unit_cost
+    new_cost = 100
+    item_price_policy.update(unit_cost: new_cost)
+
+    visit facility_estimate_path(facility, estimate)
+    expect(page).to have_content ActionController::Base.helpers.number_to_currency(old_cost)
+
+    click_link "Edit"
+    expect(page).to have_content "Edit Estimate"
+
+    click_button "Update"
+
+    expect(page).to have_content "Estimate was successfully updated"
+    expect(page).to have_content ActionController::Base.helpers.number_to_currency(new_cost)
+  end
 end

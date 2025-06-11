@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_05_23_193939) do
+ActiveRecord::Schema[7.0].define(version: 2025_06_11_145625) do
   create_table "account_facility_joins", id: :integer, charset: "utf8", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -52,6 +52,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_05_23_193939) do
     t.string "outside_contact_info"
     t.string "ar_number"
     t.string "open_contract"
+    t.decimal "monetary_cap", precision: 10, scale: 2
     t.index ["account_number"], name: "index_accounts_on_account_number"
     t.index ["affiliate_id"], name: "index_accounts_on_affiliate_id"
   end

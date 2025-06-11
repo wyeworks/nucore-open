@@ -72,6 +72,7 @@ en:
         members: Members
         orders: Orders
         statements: "!Statements!"
+        price_groups: Price Groups
 
   pages:
     home: Home
@@ -554,6 +555,7 @@ en:
       recalculate: Recalculate
       duplicate: Duplicate Estimate
       updated_at_notice: "Prices last updated: %{updated_at}"
+      estimate_details_empty: No products have been added
       edit: Edit
       remove: Remove
     recalculate:

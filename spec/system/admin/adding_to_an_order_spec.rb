@@ -4,12 +4,34 @@ require "rails_helper"
 
 RSpec.describe "Adding to an existing order" do
   let(:facility) { product.facility }
-  let(:order) { create(:purchased_order, product: product, ordered_at: 1.week.ago) }
-  let(:user) { create(:user, :staff, facility: facility) }
+  let(:order) { create(:purchased_order, product:, ordered_at: 1.week.ago) }
+  let(:user) { create(:user, :staff, facility:) }
   let!(:other_account) { create(:nufs_account, :with_account_owner, owner: order.user, description: "Other Account") }
 
   before do
     login_as user
+  end
+
+  describe "submitting blank product" do
+    let(:product) { create(:setup_item, :with_facility_account) }
+    let(:second_facility) { cross_product.facility }
+    let!(:cross_product) { create(:setup_item, :with_facility_account) }
+
+    it "renders errors and populates products select correctly" do
+      visit facility_order_path(facility, order)
+
+      expect(page).to(
+        have_select("Product", options: ["", product.name])
+      )
+
+      select second_facility.name, from: Facility.model_name.human
+      click_button "Add To Order"
+
+      expect(page).to have_content("Product can't be blank")
+      expect(page).to(
+        have_select("Product", options: ["", cross_product.name])
+      )
+    end
   end
 
   describe "adding an item" do
@@ -145,7 +167,7 @@ RSpec.describe "Adding to an existing order" do
   describe "adding an instrument reservation" do
     describe "from same facility" do
       let(:product) { create(:setup_item, :with_facility_account) }
-      let!(:instrument) { create(:setup_instrument, facility: facility) }
+      let!(:instrument) { create(:setup_instrument, facility:) }
 
       before do
         visit facility_order_path(facility, order)
@@ -179,7 +201,7 @@ RSpec.describe "Adding to an existing order" do
 
     describe "from same facility (with feature flag on)", :js do
       let(:product) { create(:setup_item, :with_facility_account) }
-      let!(:instrument) { create(:setup_instrument, facility: facility) }
+      let!(:instrument) { create(:setup_instrument, facility:) }
       let(:user) { create(:user, :facility_administrator, facility:) }
 
       before do

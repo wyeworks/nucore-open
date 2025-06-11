@@ -117,6 +117,10 @@ class PriceGroup < ApplicationRecord
     end
   end
 
+  def presenter
+    PriceGroupPresenter.new(self)
+  end
+
   private
 
   def update_hidden_price_group_policies
