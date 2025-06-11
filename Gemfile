@@ -115,7 +115,7 @@ group :development do
   gem "ed25519", ">= 1.2", "< 2.0", require: false # Required to support ed25519 SSH keys for capistrano. https://github.com/net-ssh/net-ssh/issues/565
   gem "haml_lint", require: false
   gem "letter_opener"
-  gem "rack-mini-profiler", "~> 3.3"
+  gem "rack-mini-profiler", "~> 4.0"
   gem "rubocop", "1.75.8", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
