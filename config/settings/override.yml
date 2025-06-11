@@ -7,3 +7,4 @@ feature:
   billing_log_events: true
   show_account_opencontract_field: true
   hide_account_far_future_expiration: true
+  show_account_price_groups_tab: true
