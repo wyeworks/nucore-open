@@ -42,12 +42,12 @@ RSpec.describe "Managing accounts" do
 
       context "when feature flag is enabled", feature_setting: { purchase_order_monetary_cap: true } do
         it "shows the monetary cap field", :aggregate_failures do
-          expect(page).to have_field("Monetary Cap")
+          expect(page).to have_field("purchase_order_account_monetary_cap")
           expect(page).to have_content("Optional monetary cap for this purchase order account")
         end
 
         it "can set and save monetary cap value" do
-          fill_in "Monetary Cap", with: "1500.75"
+          fill_in "purchase_order_account_monetary_cap", with: "1500.75"
           click_on "Save"
 
           expect(page).to have_content("The payment source was successfully updated")
@@ -58,7 +58,7 @@ RSpec.describe "Managing accounts" do
 
       context "when feature flag is disabled", feature_setting: { purchase_order_monetary_cap: false } do
         it "does not show the monetary cap field" do
-          expect(page).not_to have_field("Monetary Cap")
+          expect(page).not_to have_field("purchase_order_account_monetary_cap")
           expect(page).not_to have_content("Optional monetary cap for this purchase order account")
         end
       end
