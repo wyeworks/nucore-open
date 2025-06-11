@@ -24,7 +24,7 @@ RSpec.describe "Adding to an existing order" do
         have_select("Product", options: ["", product.name])
       )
 
-      select second_facility.name, from: "Facility"
+      select second_facility.name, from: Facility.model_name.human
       click_button "Add To Order"
 
       expect(page).to have_content("Product can't be blank")
