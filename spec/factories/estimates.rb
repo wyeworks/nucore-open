@@ -8,7 +8,7 @@ FactoryBot.define do
     association :created_by_user, factory: :user
     description { "Test Estimate" }
     note { "This is a test estimate" }
-    expires_at { 30.days.from_now }
+    expires_at { 1.month.from_now }
   end
 
   factory :estimate_detail do
