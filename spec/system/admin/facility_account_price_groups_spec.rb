@@ -127,7 +127,7 @@ RSpec.describe(
 
       visit facility_account_path(facility, account)
 
-      expect(page).to have_content(account.to_s)
+      expect(page).to have_content(account.description)
       expect(page).not_to have_content("Price Groups")
     end
   end
