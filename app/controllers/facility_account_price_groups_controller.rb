@@ -48,8 +48,13 @@ class FacilityAccountPriceGroupsController < ApplicationController
   end
 
   def update_params
+    account_builder = AccountBuilder.for(@account.class).new(
+      account: @account,
+      account_type: @account.class.to_s,
+    )
+
     params.require(
-      @account.class.name.underscore,
+      account_builder.account_params_key,
     ).permit(price_groups_relation_ids: [])
   end
 end
