@@ -245,4 +245,25 @@ RSpec.describe AccountBuilder, type: :service do
     end
   end
 
+  describe "#account_params_key" do
+    let(:account) do
+      build_stubbed(:nufs_account,
+                    account_number: "1234",
+                    description: "foobar",
+                   )
+    end
+
+    let(:subject) do
+      described_class.for(account.class).new(account:, account_type: account.class)
+    end
+
+    it "can call account_params_key for all available account types" do
+      Account.config.account_types.each do |account_type|
+        builder = described_class.for(account_type).new(account_type:)
+
+        expect(builder.account_params_key).to be_a(String)
+      end
+    end
+  end
+
 end
