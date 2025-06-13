@@ -6,8 +6,6 @@ module UmassCorum
   # Dynamically called via the `AccountBuilder.for()` factory.
   class VoucherSplitAccountBuilder < AccountBuilder
 
-    protected
-
     # Override strong_params for `build` account.
     def account_params_for_build
       [
