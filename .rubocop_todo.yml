@@ -893,6 +893,9 @@ Naming/MethodParameterName:
 # ForbiddenPrefixes: is_, has_, have_, does_
 # AllowedMethods: is_a?
 # MethodDefinitionMacros: define_method, define_singleton_method
+Naming/PredicatePrefix:
+  Enabled: false
+
 Naming/PredicateMethod:
   Enabled: false
 
