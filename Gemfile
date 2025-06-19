@@ -70,8 +70,6 @@ gem "rubyzip"
 
 ## PDF generation
 gem "prawn-rails"
-# https://github.com/prawnpdf/prawn/issues/1195
-gem "matrix"
 
 ## Email
 gem "mailgun-ruby", "~>1.3.6"
