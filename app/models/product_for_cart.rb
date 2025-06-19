@@ -117,7 +117,7 @@ class ProductForCart
 
   def acting_as?(acting_user, session_user)
     return false if session_user.nil?
-    acting_user.object_id != session_user.object_id
+    !acting_user.equal?(session_user)
   end
 
 end

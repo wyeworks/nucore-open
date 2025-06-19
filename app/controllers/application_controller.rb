@@ -115,7 +115,7 @@ class ApplicationController < ActionController::Base
 
   def acting_as?
     return false if session_user.nil?
-    acting_user.object_id != session_user.object_id
+    !acting_user.equal?(session_user)
   end
 
   rescue_from NUCore::NotPermittedWhileActingAs, with: :render_acting_error
