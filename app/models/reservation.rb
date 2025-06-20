@@ -178,6 +178,11 @@ class Reservation < ApplicationRecord
   end
 
   def start_reservation!
+    # Auto-end functionality: automatically end previous reservations when feature is enabled
+    if SettingsHelper.feature_on?(:auto_end_reservations_on_next_start)
+      AutoEndPreviousReservation.new(product, user).end_previous_reservations!
+    end
+
     # If there are any reservations running over their time on the shared schedule,
     # kick them over to the problem queue.
     product.schedule.products.flat_map(&:started_reservations).each do |reservation|

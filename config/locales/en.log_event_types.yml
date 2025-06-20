@@ -24,6 +24,7 @@ en:
       price_change: Order's price was manually changed
       resolve_from_problem_queue: Problem order resolved
       updated_fulfilled_at: Fulfilled date updated on completed order
+      auto_ended_by_next_reservation: Reservation automatically ended when another user started a new reservation
     order_import:
       created: Bulk Order Import
     product_user:
