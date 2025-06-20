@@ -143,7 +143,7 @@ class FacilityJournalsController < ApplicationController
 
     if reconciler.reconcile_all > 0
       count = reconciler.count
-      flash[:notice] = "#{count} payment#{count == 1 ? '' : 's'} successfully reconciled" if count > 0
+      flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully reconciled" if count > 0
     else
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
     end

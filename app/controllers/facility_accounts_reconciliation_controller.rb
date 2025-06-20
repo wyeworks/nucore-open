@@ -52,7 +52,7 @@ class FacilityAccountsReconciliationController < ApplicationController
         LogEvent.log(statement, :closed, current_user)
       end
 
-      flash[:notice] = "#{count} payment#{count == 1 ? '' : 's'} successfully updated" if count > 0
+      flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully updated" if count > 0
     else
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
     end
