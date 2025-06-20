@@ -33,6 +33,14 @@
       = r.input :ethernet_port_number, label: text("instruments.instrument_fields.relay.label.ethernet_port_number")
 -else
   %p UNKNOWN RELAY TYPE
+
+- if SettingsHelper.feature_on?(:auto_end_reservations_on_next_start)
+  .well
+    %h3= "Auto-end Reservations"
+    %p
+      %strong Status:
+      %span.label.label-success Enabled
+      %small Automatically ends previous reservations when another user starts their reservation (applies to all timer/relay instruments)
 - if can? :edit, @product
   %ul.inline
     - if @product.relay.present?

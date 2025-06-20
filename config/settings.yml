@@ -172,6 +172,7 @@ feature:
   hide_account_far_future_expiration: false
   show_account_price_groups_tab: false
   purchase_order_monetary_cap: false
+  auto_end_reservations_on_next_start: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts
