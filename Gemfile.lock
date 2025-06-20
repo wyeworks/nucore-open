@@ -424,7 +424,7 @@ GEM
       rails (>= 3.2.0)
     net-http (0.6.0)
       uri
-    net-imap (0.5.8)
+    net-imap (0.5.9)
       date
       net-protocol
     net-ldap (0.19.0)
@@ -776,7 +776,6 @@ DEPENDENCIES
   ldap_authentication!
   letter_opener
   mailgun-ruby (~> 1.3.6)
-  matrix
   mysql2
   nested_form_fields
   net-imap
