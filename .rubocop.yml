@@ -33,6 +33,9 @@ Style/WordArray:
 Style/HashSyntax:
   EnforcedShorthandSyntax: always
 
+Style/CollectionQuerying:
+  Enabled: false
+
 Rails/HttpPositionalArguments:
   Enabled: false
 
