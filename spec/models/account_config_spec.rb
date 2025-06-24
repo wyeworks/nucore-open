@@ -145,11 +145,33 @@ RSpec.describe AccountConfig, type: :model do
     end
   end
 
+  describe "#creation_disabled_types" do
+    it "includes CreditCardAccount by default" do
+      expect(instance.creation_disabled_types).to include("CreditCardAccount")
+    end
+  end
+
   describe "#creation_enabled_types" do
     it "does not included disabled account types" do
       expect(instance.creation_enabled_types).to include("NufsAccount")
       instance.creation_disabled_types << "NufsAccount"
       expect(instance.creation_enabled_types).not_to include("NufsAccount")
+    end
+  end
+
+  describe "#account_types_for_facility" do
+    let(:facility) { double("facility") }
+
+    context "when action is :create" do
+      it "excludes CreditCardAccount from available types" do
+        allow(instance).to receive(:account_types).and_return(["NufsAccount", "CreditCardAccount"])
+        allow(facility).to receive(:try).with(:cross_facility?).and_return(false)
+
+        result = instance.account_types_for_facility(facility, :create)
+
+        expect(result).to include("NufsAccount")
+        expect(result).not_to include("CreditCardAccount")
+      end
     end
   end
 
