@@ -12,6 +12,7 @@ class ReservationInstrumentSwitcher
     raise relay_error_msg unless reservation.can_switch_instrument_on?
 
     if switch_relay_on
+      auto_end_previous_reservations
       @reservation.start_reservation!
     else
       raise relay_error_msg
@@ -64,6 +65,14 @@ class ReservationInstrumentSwitcher
 
   def relay_error_msg
     "An error was encountered while attempting to toggle the instrument. Please try again."
+  end
+
+  def auto_end_previous_reservations
+    return unless SettingsHelper.feature_on?(:auto_end_reservations_on_next_start)
+
+    AutoEndPreviousReservation.new(instrument, reservation.user).end_previous_reservations!
+  rescue => e
+    Rails.logger.error "AutoEndPreviousReservation failed: #{e.message}"
   end
 
 end
