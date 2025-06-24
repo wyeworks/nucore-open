@@ -28,7 +28,10 @@ module SortableBillingTable
       "ordered_for" => ["users.last_name", "order_details.fulfilled_at"],
       "payment_source" => "order_details.account_id",
       "order_status" => "order_details.order_status_id",
-    }
+    }.tap do |hash|
+      # journal_or_statement_date sorting is handled in DateRangeSearcher
+      hash.delete "date_range_field" if order_detail_date_range_field == "journal_or_statement_date"
+    end
   end
 
   def enable_sorting

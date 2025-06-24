@@ -71,6 +71,47 @@ RSpec.describe "All Transactions Search", :js do
         ).to appear_in_order
       end
     end
+
+    context "when statemented/journaled" do
+      include TextHelpers::Translation
+
+      def translation_scope
+        ""
+      end
+
+      let(:account) { create(:account, :with_account_owner) }
+      let(:sorted_order_details) do
+        order_details
+      end
+      let(:statemented_order_detail) { facility.order_details.complete.last }
+
+      before do
+        statement = Statement.create!(facility:, account:, created_by: director.id)
+        StatementRow.create!(
+          statement:,
+          order_detail: statemented_order_detail,
+        )
+        statemented_order_detail.update_columns(statement_id: statement.id)
+
+      end
+
+      it "can filter orders" do
+        visit facility_transactions_path(facility)
+
+        select(
+          text("admin.transaction_search.date_range_fields.journal_or_statement_date"),
+          from: "search[date_range_field]",
+        )
+
+        click_button("Filter")
+
+        expect(
+          sorted_order_details.map do |od|
+            I18n.l(od.journal_or_statement_date.to_date, format: :usa)
+          end
+        ).to appear_in_order
+      end
+    end
   end
 
   it "can do a basic search" do
