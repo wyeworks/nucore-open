@@ -98,7 +98,7 @@ class PricePolicyBuilder
       price_group_id: price_group.id,
       product_id: product.id,
       can_purchase: false,
-      usage_rate: product.daily_booking? ? nil : usage_rate_for(product),
+      usage_rate: product.daily_booking? ? nil : self.class.usage_rate_for(product),
       usage_rate_daily: product.daily_booking? ? 0 : nil,
       usage_subsidy_daily: product.daily_booking? ? 0 : nil,
     )
