@@ -47,7 +47,7 @@ class AccountConfig
 
   # An array of account types where creation should be disabled
   def creation_disabled_types
-    @creation_disabled_types ||= []
+    @creation_disabled_types ||= ["CreditCardAccount"]
   end
 
   def creation_enabled_types
