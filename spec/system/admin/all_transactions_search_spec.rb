@@ -71,6 +71,29 @@ RSpec.describe "All Transactions Search", :js do
         ).to appear_in_order
       end
     end
+
+    context "when statemented/journaled" do
+      let(:sorted_order_details) do
+        order_details.ordered_by_action_date(:journal_or_statement_date)
+      end
+
+      it "can filter orders" do
+        visit facility_transactions_path(facility)
+
+        select(
+          I18n.t("admin.transaction_search.date_range_fields.journal_or_statement_date"),
+          from: "search[date_range_field]",
+        )
+
+        click_button("Filter")
+
+        expect(
+          sorted_order_details.map do |od|
+            I18n.l(od.ordered_at.to_date, format: :usa)
+          end
+        ).to appear_in_order
+      end
+    end
   end
 
   it "can do a basic search" do
