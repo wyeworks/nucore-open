@@ -94,10 +94,14 @@ class PricePolicyBuilder
   end
 
   def new_price_policy(price_group)
+    attributes = self.class.usage_rate_attributes(product)
     model_class.new(
       price_group_id: price_group.id,
       product_id: product.id,
       can_purchase: false,
+      usage_rate: attributes[:usage_rate],
+      usage_rate_daily: attributes[:usage_rate_daily],
+      usage_subsidy_daily: attributes[:usage_subsidy_daily],
     )
   end
 
@@ -125,13 +129,17 @@ class PricePolicyBuilder
   end
 
   def self.create_price_policy_for(product, price_group)
+    attributes = usage_rate_attributes(product)
+
     PricePolicy.create(
       type: "#{product.type}PricePolicy",
       product:,
       start_date: 1.month.ago,
       expire_date: 75.years.from_now,
       price_group:,
-      usage_rate: usage_rate_for(product),
+      usage_rate: attributes[:usage_rate],
+      usage_rate_daily: attributes[:usage_rate_daily],
+      usage_subsidy_daily: attributes[:usage_subsidy_daily],
       minimum_cost: 0,
       cancellation_cost: 0,
       usage_subsidy: 0,
@@ -145,6 +153,14 @@ class PricePolicyBuilder
 
   def self.usage_rate_for(product)
     ["Service", "Item"].include?(product.type) ? nil : 0
+  end
+
+  def self.usage_rate_attributes(product)
+    {
+      usage_rate: product.daily_booking? ? nil : usage_rate_for(product),
+      usage_rate_daily: product.daily_booking? ? 0 : nil,
+      usage_subsidy_daily: product.daily_booking? ? 0 : nil,
+    }
   end
 
 end
