@@ -98,6 +98,9 @@ class PricePolicyBuilder
       price_group_id: price_group.id,
       product_id: product.id,
       can_purchase: false,
+      usage_rate: product.daily_booking? ? nil : usage_rate_for(product),
+      usage_rate_daily: product.daily_booking? ? 0 : nil,
+      usage_subsidy_daily: product.daily_booking? ? 0 : nil,
     )
   end
 
@@ -131,7 +134,9 @@ class PricePolicyBuilder
       start_date: 1.month.ago,
       expire_date: 75.years.from_now,
       price_group:,
-      usage_rate: usage_rate_for(product),
+      usage_rate: product.daily_booking? ? nil : usage_rate_for(product),
+      usage_rate_daily: product.daily_booking? ? 0 : nil,
+      usage_subsidy_daily: product.daily_booking? ? 0 : nil,
       minimum_cost: 0,
       cancellation_cost: 0,
       usage_subsidy: 0,

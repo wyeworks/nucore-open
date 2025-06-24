@@ -51,6 +51,34 @@ RSpec.describe PricePolicyBuilder do
 
       it_behaves_like "a correctly created PricePolicy"
     end
+
+    context "when product is an Instrument with Daily Booking pricing mode" do
+      let(:product) do
+        create(:instrument,
+               facility: facility,
+               billing_mode: "Skip Review",
+               pricing_mode: Instrument::Pricing::SCHEDULE_DAILY)
+      end
+      let!(:price_groups) { create_list(:price_group, 2) }
+      let!(:usage_rate) { nil }
+
+      before do
+        subject
+      end
+
+      it "creates PricePolicy with daily rate fields for all price groups" do
+        price_groups.each do |pg|
+          policy = product.price_policies.find_by(price_group: pg)
+          expect(policy).to be_present
+          expect(policy.type).to eq("InstrumentPricePolicy")
+          expect(policy.usage_rate).to be_nil
+          expect(policy.usage_rate_daily).to eq(0)
+          expect(policy.usage_subsidy_daily).to eq(0)
+          expect(policy.can_purchase?).to be(true)
+          expect(policy.note).to eq("Price rule automatically created because of billing mode")
+        end
+      end
+    end
   end
 
   describe ".create_nonbillable_for" do
