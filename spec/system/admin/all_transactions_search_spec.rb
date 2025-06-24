@@ -73,8 +73,20 @@ RSpec.describe "All Transactions Search", :js do
     end
 
     context "when statemented/journaled" do
+      let(:account) { create(:account, :with_account_owner) }
       let(:sorted_order_details) do
-        order_details.ordered_by_action_date(:journal_or_statement_date)
+        order_details
+      end
+      let(:statemented_order_detail) { facility.order_details.complete.last }
+
+      before do
+        statement = Statement.create!(facility:, account:, created_by: director.id)
+        StatementRow.create!(
+          statement:,
+          order_detail: statemented_order_detail,
+        )
+        statemented_order_detail.update_columns(statement_id: statement.id)
+
       end
 
       it "can filter orders" do
@@ -89,7 +101,7 @@ RSpec.describe "All Transactions Search", :js do
 
         expect(
           sorted_order_details.map do |od|
-            I18n.l(od.ordered_at.to_date, format: :usa)
+            I18n.l(od.journal_or_statement_date.to_date, format: :usa)
           end
         ).to appear_in_order
       end
