@@ -4,14 +4,13 @@ module TransactionSearch
 
   class DateRangeSearcher < BaseSearcher
     include DateHelper
+    extend TextHelpers::Translation
 
     FIELDS = %w(ordered_at fulfilled_at journal_or_statement_date reconciled_at).freeze
 
     attr_reader :date_range_field
 
     class << self
-      include TextHelpers::Translation
-
       def options(only: FIELDS)
         FIELDS
           .map { |field| [text(field), field] }

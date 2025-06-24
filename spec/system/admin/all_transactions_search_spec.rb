@@ -73,6 +73,12 @@ RSpec.describe "All Transactions Search", :js do
     end
 
     context "when statemented/journaled" do
+      include TextHelpers::Translation
+
+      def translation_scope
+        ""
+      end
+
       let(:account) { create(:account, :with_account_owner) }
       let(:sorted_order_details) do
         order_details
@@ -93,7 +99,7 @@ RSpec.describe "All Transactions Search", :js do
         visit facility_transactions_path(facility)
 
         select(
-          I18n.t("admin.transaction_search.date_range_fields.journal_or_statement_date"),
+          text("admin.transaction_search.date_range_fields.journal_or_statement_date"),
           from: "search[date_range_field]",
         )
 
