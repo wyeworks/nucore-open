@@ -3,7 +3,7 @@
 require "rails_helper"
 require "controller_spec_helper"
 
-RSpec.describe ReservationsController do
+RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_on_next_start: false } do
   let(:facility) { @authable }
   let(:instrument) { @instrument }
   let(:order) { @order }
