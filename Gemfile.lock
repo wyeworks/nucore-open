@@ -369,7 +369,7 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.12.2)
-    jwt (2.10.1)
+    jwt (3.1.1)
       base64
     kgio (2.11.4)
     kostya-sigar (2.0.11)
