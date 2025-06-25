@@ -93,17 +93,6 @@ RSpec.describe AutoEndPreviousReservation do
         end
       end
 
-      context "with a manual instrument" do
-        let(:manual_instrument) { create(:instrument, facility: facility, no_relay: true) }
-        subject { described_class.new(manual_instrument, current_user).end_previous_reservations! }
-
-        it "does not end reservations for manual instruments" do
-          expect do
-            subject
-          end.not_to enqueue_mail
-        end
-      end
-
       context "when feature flag is disabled", feature_setting: { auto_end_reservations_on_next_start: false } do
         it "does not end previous reservations" do
           expect do

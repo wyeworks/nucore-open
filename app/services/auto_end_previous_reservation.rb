@@ -9,7 +9,6 @@ class AutoEndPreviousReservation
 
   def end_previous_reservations!
     return unless SettingsHelper.feature_on?(:auto_end_reservations_on_next_start)
-    return unless timer_based_instrument?
 
     reservations_to_end = previous_reservations
 
@@ -19,11 +18,6 @@ class AutoEndPreviousReservation
   end
 
   private
-
-  def timer_based_instrument?
-    @product.control_mechanism == Relay::CONTROL_MECHANISMS[:timer] ||
-      @product.control_mechanism == Relay::CONTROL_MECHANISMS[:relay]
-  end
 
   def previous_reservations
     @product.reservations.joins(:order_detail)
