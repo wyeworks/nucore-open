@@ -1,0 +1,23 @@
+en:
+  views:
+    auto_end_reservation_mailer:
+      notify_auto_ended:
+        subject: "%{facility} - Your %{product} reservation has been automatically ended"
+        body: |
+          Hello %{user},
+
+          Your reservation for %{product} at %{facility} has been automatically ended 
+          because another user started their reservation.
+
+          **Reservation Details:**
+          - **Instrument:** %{product}
+          - **Time:** %{reservation_time}
+          - **Order:** [#%{order_detail}](%{order_detail_link})
+          - **Total Cost:** %{total_cost}
+
+          You have been charged for the actual time used. If you believe there is an error
+          with the timing or charges, please [contact the facility](mailto:%{facility_email}).
+
+          Thank you,
+
+          %{facility} 

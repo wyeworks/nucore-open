@@ -58,7 +58,11 @@ class QuickReservationsController < ApplicationController
       end
 
       if order_purchaser.success?
-        if @reservation.can_switch_instrument_on? && @reservation.start_reservation!
+        if @reservation.can_switch_instrument_on?
+          @reservation.start_reservation!
+        end
+
+        if @reservation.started?
           flash[:notice] = "Reservation started"
         else
           # failed to start
@@ -82,7 +86,11 @@ class QuickReservationsController < ApplicationController
 
   # POST /facilities/:facility_id/instruments/:instrument_id/quick_reservations/start
   def start
-    if @reservation&.movable_to_now? && @reservation&.move_to_earliest && @reservation&.start_reservation!
+    if @reservation&.movable_to_now? && @reservation&.move_to_earliest
+      @reservation&.start_reservation!
+    end
+
+    if @reservation&.started?
       flash[:notice] = "Reservation started"
       redirect_to facility_instrument_quick_reservation_path(@facility, @instrument, @reservation)
     else

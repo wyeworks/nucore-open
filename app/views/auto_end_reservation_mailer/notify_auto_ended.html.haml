@@ -1,0 +1,9 @@
+= html("body",
+  user: @user,
+  facility: @facility.name,
+  facility_email: @facility.email,
+  product: @product.name,
+  reservation_time: l(@reservation.reserve_start_at, format: :usa) + " - " + l(@reservation.actual_end_at, format: :usa),
+  order_detail: @order_detail,
+  order_detail_link: order_order_detail_url(@order_detail.order, @order_detail),
+  total_cost: @order_detail.total)
