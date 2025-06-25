@@ -75,6 +75,22 @@ RSpec.describe AutoEndPreviousReservation do
             end.not_to change { previous_reservation.reload.actual_end_at }
           end
         end
+
+        context "when previous reservation started more than 12 hours ago" do
+          before { previous_reservation.update_column(:actual_start_at, 13.hours.ago) }
+
+          it "does not modify the reservation" do
+            expect do
+              subject
+            end.not_to change { previous_reservation.reload.actual_end_at }
+          end
+
+          it "does not send notification email" do
+            expect do
+              subject
+            end.not_to enqueue_mail
+          end
+        end
       end
 
       context "with a manual instrument" do

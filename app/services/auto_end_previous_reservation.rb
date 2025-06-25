@@ -31,6 +31,7 @@ class AutoEndPreviousReservation
             .where(reserve_end_at: ...Time.current)
             .where(order_details: { canceled_at: nil })
             .where.not(actual_start_at: nil)
+            .where(actual_start_at: 12.hours.ago..)
   end
 
   def auto_end_reservation(reservation)
