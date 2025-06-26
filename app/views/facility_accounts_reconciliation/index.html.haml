@@ -14,6 +14,15 @@
 - if @unreconciled_details.any?
   - show_reconciliation_deposit_number = SettingsHelper.feature_on?(:show_reconciliation_deposit_number)
   = form_tag([:update, account_route.to_sym, FacilityAccount], method: :post, class: "js--reconcileForm") do
+    - if params[:search].present?
+      - params[:search].each do |key, value|
+        - if value.is_a?(Array)
+          - value.each do |v|
+            = hidden_field_tag "search[#{key}][]", v
+        - else
+          = hidden_field_tag "search[#{key}]", value
+    - if params[:page].present?
+      = hidden_field_tag :page, params[:page]
     = render "action_row", date: true,
       unreconciled_order_details: @unreconciled_details,
       show_reconciliation_deposit_number: show_reconciliation_deposit_number,
