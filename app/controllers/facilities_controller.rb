@@ -144,7 +144,7 @@ class FacilitiesController < ApplicationController
     @order_details = @search.order_details.joins(order: :user).reorder(sort_clause)
 
     if @order_details.size < 1000
-      @grand_total = @order_details.map { |od| od.actual_total || od.estimated_total }.compact.sum
+      @grand_total = @order_details.sum { |od| od.actual_total || od.estimated_total }
     else
       @too_many_results = true
     end
