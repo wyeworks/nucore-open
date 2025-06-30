@@ -56,6 +56,32 @@ RSpec.describe FacilityAccountsReconciliationController do
                               } }
     end
 
+    describe "when there is an error" do
+      let(:reconciled_at) { 1.day.from_now } # This will cause an error
+      let(:search_params) { { accounts: [account.id], page: 2 } }
+
+      it "preserves search parameters in the redirect" do
+        post :update, params: {
+          facility_id: facility.url_name,
+          account_type: "ReconciliationTestAccount",
+          reconciled_at: formatted_reconciled_at,
+          search: search_params,
+          page: 2,
+          order_detail: {
+            order_detail.id.to_s => {
+              reconciled: "1",
+              reconciled_note: "A note",
+            },
+          }
+        }
+
+        location = response.redirect_url
+        expect(location).to include("/facilities/#{facility.url_name}/accounts/reconciliation_tests")
+        expect(location).to include("search%5Baccounts%5D%5B%5D=#{account.id}")
+        expect(location).to include("page=2")
+      end
+    end
+
     describe "reconciliation date", :time_travel do
       describe "with a reconciliation date of today" do
         let(:reconciled_at) { Time.current }
