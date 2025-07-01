@@ -106,7 +106,7 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :bundle
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :product
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :occupancy
-    # Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order_status
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :reservation
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Reservation", association: :order
