@@ -5,11 +5,9 @@ module TransactionSearch
   class NPlusOneOptimizer < BaseOptimizer
 
     def optimize
-      order_details.includes(order: [:user, :facility])
-                   .includes(:account, :product, :order_status, :statement)
+      order_details.includes(order: :user)
                    .includes(:reservation)
-                   .includes(:bundle)
-                   .preload(account: :owner_user)
+                   .preload(:bundle)
     end
 
   end
