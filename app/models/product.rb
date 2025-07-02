@@ -33,6 +33,9 @@ class Product < ApplicationRecord
   )
   has_many :current_offline_reservations, -> { current }, class_name: "OfflineReservation"
 
+  has_many :external_service_passers, as: :passer
+  has_many :external_services, through: :external_service_passers
+
   before_save :start_time_disabled_daily_booking_only
   after_create :create_default_price_group_products
   after_create :create_skip_review_price_policies, if: :skip_review_mode?
