@@ -143,8 +143,9 @@ class FacilitiesController < ApplicationController
     @date_range_field = @search_form.date_params[:field]
     @order_details = @search.order_details.joins(order: :user)
                             .includes(order: [:user, :facility])
-                            .includes(:account, :product, :order_status)
+                            .includes(:account, :product, :order_status, :created_by_user, :statement, :price_policy, :journal, :external_service_receiver, :bundle, :project)
                             .includes(:reservation)
+                            .includes(product: [:stored_files, { external_service_passers: :external_service }])
                             .preload(account: :owner_user)
                             .reorder(sort_clause)
 
