@@ -10,7 +10,7 @@
 # Example usage:
 # build . -f Dockerfile.github-actions --build-arg NODE_VERSION=setup_18.x --build-arg BUNDLER_VERSION
 
-FROM --platform=linux/amd64 ruby:3.3.0 as base
+FROM --platform=linux/amd64 ruby:3.4.4 as base
 
 # Install NodeJS based on https://github.com/nodesource/distributions#installation-instructions
 ARG NODE_VERSION=setup_16.x

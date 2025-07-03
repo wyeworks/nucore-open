@@ -1,8 +1,8 @@
 require "rails_helper"
 
 RSpec.describe LogEventSearcher do
-  def search(*args, **kwargs)
-    LogEventSearcher.new(*args, **kwargs).search
+  def search(*, **)
+    LogEventSearcher.new(*, **).search
   end
 
   describe "filtering by dates" do

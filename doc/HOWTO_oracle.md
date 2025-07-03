@@ -285,10 +285,10 @@ After saving this, every time you open a new terminal it should print the curren
 * If you had the arm64 ruby version already installed it won't allow you to install Ruby x86 with the plain rvm install command as it will detect that version is already installed.
 
 * We need to call it a different name and make sure it uses the desired architecture.
-  - Run `rvm install ruby-3.3.0 --name ruby-3.3.0-x86_64 --with-architecture=x86_64`
+  - Run `rvm install ruby-3.4.4 --name ruby-3.4.4-x86_64 --with-architecture=x86_64`
 
 * Once installed make sure to use this ruby instance
-  - Run `rvm use ruby-3.3.0-x86_64`
+  - Run `rvm use ruby-3.4.4-x86_64`
 
 5. If ruby-oci8 doesn't find Oracle instant client installed you can install it manually and specifying the route where Oracle instant client is located.
 As the Oracle instant client was installed before setting the x86 Homebrew path, it will be located at the arm64 Homebrew path.
