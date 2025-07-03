@@ -53,11 +53,11 @@ class FacilityAccountsReconciliationController < ApplicationController
       end
 
       flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully updated" if count > 0
+      redirect_to([account_route.to_sym, :facility_accounts])
     else
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
+      redirect_to([account_route.to_sym, :facility_accounts, redirect_params])
     end
-
-    redirect_to([account_route.to_sym, :facility_accounts])
   end
 
   private
@@ -95,5 +95,12 @@ class FacilityAccountsReconciliationController < ApplicationController
     return unless params[:order_status] == "unrecoverable"
 
     authorize!(:mark_unrecoverable, OrderDetail)
+  end
+
+  def redirect_params
+    {
+      search: params[:search]&.permit!,
+      page: params[:page]
+    }
   end
 end
