@@ -23,11 +23,11 @@ end
 
 #
 # Allows overriding of factories by engines, etc.
-def overridable_factory(factory_name, *args, &block)
+def overridable_factory(factory_name, *, &)
   return if FactoryBot.factories.registered? factory_name
   FactoryBot.define do
-    factory factory_name, *args do
-      instance_eval(&block)
+    factory(factory_name, *) do
+      instance_eval(&)
     end
   end
 end
