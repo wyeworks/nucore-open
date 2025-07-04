@@ -12,6 +12,7 @@ module ProblemOrderDetailsController
   end
 
   def send_problem_notifications
+    authorize! :show_problems, Order
     order_detail_ids, notification_groups = notification_params
 
     if order_detail_ids.empty?
@@ -34,6 +35,7 @@ module ProblemOrderDetailsController
   end
 
   def notification_count
+    authorize! :show_problems, Order
     order_detail_ids, notification_groups = notification_params
 
     if order_detail_ids.empty? || notification_groups.empty?

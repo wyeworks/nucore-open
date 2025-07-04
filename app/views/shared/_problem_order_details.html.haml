@@ -1,4 +1,4 @@
-= form_tag send_problem_notifications_path, method: :post, class: "form-horizontal" do
+= form_tag local_assigns[:send_problem_notifications_path], method: :post, class: "form-horizontal" do
   .row.table-actions
     .span1.select_all_none= select_all_link
     .span9
@@ -13,15 +13,7 @@
             = check_box_tag "notification_groups[]", "non_resolvable", false, id: "notification_groups_non_resolvable"
             = t("views.shared.problem_order_details.notification_groups.non_resolvable")
         .submit
-          = submit_tag t("views.shared.problem_order_details.send_reminders"),
-            class: ["btn", "btn-primary", "js--requireValueForSubmit"],
-            data: {
-              confirm_template: t("controllers.problem_order_details.js_alerts.confirm_template"),
-              select_order_alert: t("controllers.problem_order_details.js_alerts.select_order_alert"),
-              select_group_alert: t("controllers.problem_order_details.js_alerts.select_group_alert"),
-              notification_count_error: t("controllers.problem_order_details.js_alerts.notification_count_error"),
-              disable_with: t("views.shared.problem_order_details.send_reminders")
-            }
+          = submit_tag t("views.shared.problem_order_details.send_reminders"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { confirm_template: t("controllers.problem_order_details.js_alerts.confirm_template"), select_order_alert: t("controllers.problem_order_details.js_alerts.select_order_alert"), select_group_alert: t("controllers.problem_order_details.js_alerts.select_group_alert"), notification_count_error: t("controllers.problem_order_details.js_alerts.notification_count_error"), disable_with: t("views.shared.problem_order_details.send_reminders") }
 
 %table.table.table-striped.table-hover
   %thead
@@ -29,7 +21,7 @@
       %td{colspan: 10}
         .text-right
           = link_to t("views.shared.problem_order_details.assign_price_policies"),
-            assign_price_policies_path,
+            local_assigns[:assign_price_policies_path],
             method: :post,
             class: %w(btn btn-primary)
     %tr
@@ -50,28 +42,23 @@
         %td
           = check_box_tag "order_detail_ids[]", order_detail.id, false, class: "toggle", id: "order_detail_#{order_detail.id}"
         - if order_detail.missing_form? && order_detail.order.merge_with_order_id
-          %td.centered= link_to order_detail.order.merge_with_order_id,
-            facility_order_path(current_facility, order_detail.order.merge_order)
-          %td.centered= order_detail.id
+          %td.centered= link_to order_detail.order.merge_with_order_id, facility_order_path(current_facility, order_detail.order.merge_order)
         - else
-          %td.centered= link_to order_detail.order_id,
-            facility_order_path(current_facility, order_detail.order)
-          %td.centered= link_to order_detail.id,
-            manage_order_detail_path(order_detail),
-            class: "manage-order-detail"
-        %td= order_detail.order.created_by_user.full_name
-        %td= problem_order_date(order_detail, local_assigns[:show_reservation_start_at])
-        %td= order_detail.order.user
+          %td.centered= link_to order_detail.order_id, facility_order_path(current_facility, order_detail.order)
+        %td.centered= link_to order_detail.id, manage_order_detail_path(order_detail), class: "manage-order-detail"
+        %td.nowrap= order_detail.order.created_by_user&.full_name || order_detail.order.user.full_name
+        %td.nowrap= (order_detail.ordered_at || order_detail.order.created_at)&.strftime("%m/%d/%Y") || "-"
+        %td.nowrap= order_detail.order.user.full_name
         %td.centered= order_detail.quantity
-        %td= OrderDetailPresenter.new(order_detail).description_as_html
-        %td
-          - if order_detail.add_accessories?
-            = link_to new_facility_order_order_detail_accessory_path(current_facility, order_detail.order, order_detail), class: ["has_accessories", "persistent", "undecorated"] do
-              = tooltip_icon "fa fa-plus-square", t("product_accessories.pick_accessories.title")
-        %td= render "shared/cross_core_facility_abbreviation_order_details", order_detail: order_detail, current_facility: current_facility
-        %td= order_detail.account
-        %td.centered
-          = order_detail_badges(order_detail)
+        %td= order_detail.product.name
+        %td.centered= order_detail.total
+        %td.nowrap
+          = order_detail.product.facility.name
+          = render "shared/cross_core_facility_abbreviation_order_details", order_detail: order_detail, current_facility: current_facility
+        %td.nowrap= order_detail.account.to_s
+        %td.nowrap
+          - problem_key = order_detail.problem_description_key_was.presence || order_detail.problem_description_key
+          = problem_key ? I18n.t("order_details.notices.#{problem_key}.badge") : ""
           - if order_detail.missing_form? && order_detail.order.merge_with_order_id
             = link_to text("shared.update"), facility_order_path(current_facility, order_detail.order.merge_order)
           - else

@@ -50,8 +50,6 @@ $(document).ready(function() {
       return response;
     }).fail(function(error) {
       return { emails: 0, users: 0 };
-    }).then(function(response) {
-      return response;
     });
   }
 

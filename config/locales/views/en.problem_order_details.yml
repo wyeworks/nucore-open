@@ -6,8 +6,8 @@ en:
         send_reminders: "Send Reminders"
         send_reminders_confirmation: "Are you sure you want to send {count} reminder emails distributed among {users} users?"
         notification_groups:
-          resolvable: "Users who can resolve problems"
-          non_resolvable: "Users who need to contact facility"
+          resolvable: "Resolvable users"
+          non_resolvable: "Non-resolvable users"
         th:
           ordered_by: "Ordered By"
           quantity_and_product: "Quantity & Product"
