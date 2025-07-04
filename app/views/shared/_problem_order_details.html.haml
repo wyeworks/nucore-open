@@ -1,26 +1,54 @@
+= form_tag send_problem_notifications_path, method: :post, class: "form-horizontal" do
+  .row.table-actions
+    .span1.select_all_none= select_all_link
+    .span9
+      &nbsp;
+    .span2
+      .pull-right
+        .notification-groups
+          = label_tag :notification_groups_resolvable, class: "checkbox inline" do
+            = check_box_tag "notification_groups[]", "resolvable", false, id: "notification_groups_resolvable"
+            = t("views.shared.problem_order_details.notification_groups.resolvable")
+          = label_tag :notification_groups_non_resolvable, class: "checkbox inline" do
+            = check_box_tag "notification_groups[]", "non_resolvable", false, id: "notification_groups_non_resolvable"
+            = t("views.shared.problem_order_details.notification_groups.non_resolvable")
+        .submit
+          = submit_tag t("views.shared.problem_order_details.send_reminders"),
+            class: ["btn", "btn-primary", "js--requireValueForSubmit"],
+            data: {
+              confirm_template: t("controllers.problem_order_details.js_alerts.confirm_template"),
+              select_order_alert: t("controllers.problem_order_details.js_alerts.select_order_alert"),
+              select_group_alert: t("controllers.problem_order_details.js_alerts.select_group_alert"),
+              notification_count_error: t("controllers.problem_order_details.js_alerts.notification_count_error"),
+              disable_with: t("views.shared.problem_order_details.send_reminders")
+            }
+
 %table.table.table-striped.table-hover
   %thead
     %tr.borderless
-      %td{colspan: 9}
+      %td{colspan: 10}
         .text-right
-          = link_to t(".assign_price_policies"),
+          = link_to t("views.shared.problem_order_details.assign_price_policies"),
             assign_price_policies_path,
             method: :post,
             class: %w(btn btn-primary)
     %tr
+      %th
       %th= Order.model_name.human
       %th= OrderDetail.model_name.human
-      %th.nowrap= t(".th.ordered_by")
+      %th.nowrap= t("views.shared.problem_order_details.th.ordered_by")
       %th= problem_order_date_header(local_assigns[:show_reservation_start_at])
       %th= Order.human_attribute_name(:user)
-      %th{ colspan: 2 }= t(".th.quantity_and_product")
+      %th{ colspan: 2 }= t("views.shared.problem_order_details.th.quantity_and_product")
       %th
       %th.nowrap= Facility.model_name.human
       %th= Account.model_name.human
-      %th= t(".th.problem")
+      %th= t("views.shared.problem_order_details.th.problem")
   %tbody
     - @order_details.each do |order_detail|
       %tr{ class: row_class(order_detail) }
+        %td
+          = check_box_tag "order_detail_ids[]", order_detail.id, false, class: "toggle", id: "order_detail_#{order_detail.id}"
         - if order_detail.missing_form? && order_detail.order.merge_with_order_id
           %td.centered= link_to order_detail.order.merge_with_order_id,
             facility_order_path(current_facility, order_detail.order.merge_order)

@@ -1,0 +1,14 @@
+en:
+  views:
+    shared:
+      problem_order_details:
+        assign_price_policies: "Assign Price Policies"
+        send_reminders: "Send Reminders"
+        send_reminders_confirmation: "Are you sure you want to send {count} reminder emails distributed among {users} users?"
+        notification_groups:
+          resolvable: "Users who can resolve problems"
+          non_resolvable: "Users who need to contact facility"
+        th:
+          ordered_by: "Ordered By"
+          quantity_and_product: "Quantity & Product"
+          problem: "Problem"
