@@ -42,6 +42,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
 
       click_button "Save Batch"
 
+      expect(page).to have_content("We have saved your batch")
       expect(batch.sample_at(0, "A01")).to be_reserved
       expect(batch.sample_at(0, "B01")).to eq(submission.samples.first)
       expect(batch.sample_at(0, "B02")).to be_blank
@@ -55,6 +56,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
 
       click_button "Save Batch"
 
+      expect(page).to have_content("We have saved your batch")
       expect(batch.sample_at(0, "A01")).to be_reserved
       expect(batch.sample_at(0, "B01")).to eq(submission.samples.first)
       expect(batch.sample_at(0, "H02")).to eq(submission.samples.last)
@@ -83,6 +85,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
 
       click_button("Save Batch")
 
+      expect(page).to have_content("We have saved your batch")
       expect(batch.sample_at(0, "A01")).to be_reserved
     end
 
@@ -97,6 +100,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
 
       click_button "Save Batch"
 
+      expect(page).to have_content("We have saved your batch")
       expect(batch.sample_at(0, "A01")).to eq(submission.samples.first)
     end
 
@@ -114,6 +118,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
 
       click_button "Save Batch"
 
+      expect(page).to have_content("We have saved your batch")
       expect(batch.sample_at(0, "A01")).to be_reserved
       expect(batch.sample_at(0, "A02")).to be_blank
     end
@@ -133,6 +138,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
       end
 
       it "Saves the batch and takes you to the batches index", :aggregate_failures do
+        expect(page).to have_content("We have saved your batch")
         expect(purchased_submission.reload.batch_id).to be_present
         expect(purchased_submission2.reload.batch_id).to be_present
 
@@ -158,6 +164,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
     end
 
     it "Saves the batch and takes you to the batches index", :aggregate_failures do
+      expect(page).to have_content("We have saved your batch")
       expect(completed_submission.reload.batch_id).to be_present
 
       expect(SangerSequencing::Batch.last.sample_at(0, "A01")).to be_reserved
@@ -199,6 +206,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
         end
 
         it "Saves the batch with no reserved cells", :aggregate_failures do
+          expect(page).to have_content("We have saved your batch")
           expect(purchased_submission.reload.batch_id).to be_present
 
           expect(SangerSequencing::Batch.last.sample_at(0, "A01")).to eq(purchased_submission.samples.first)
