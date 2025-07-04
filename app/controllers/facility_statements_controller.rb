@@ -24,17 +24,20 @@ class FacilityStatementsController < ApplicationController
 
   # GET /facilities/:facility_id/statements
   def index
-    search_params = permitted_search_params.merge(current_facility:)
-
-    @search_form = StatementSearchForm.new(search_params)
-    @statements = @search_form.search.order(created_at: :desc).includes(:closed_events, :order_details)
-
     respond_to do |format|
-      format.html { @statements = @statements.paginate(page: params[:page]) }
+      format.html do
+        search_params = permitted_search_params.merge(current_facility:)
+        @search_form = StatementSearchForm.new(search_params)
+        @statements = @search_form.search.order(created_at: :desc).includes(:closed_events, :order_details)
+
+        @statements = @statements.paginate(page: params[:page])
+      end
+
       format.csv do
-        yield_email_and_respond_for_report do |email|
-          StatementSearchResultMailer.search_result(email, search_params.to_h).deliver_later
-        end
+        search_params = permitted_search_params.to_h
+        search_params[:current_facility] = current_facility.url_name
+
+        queue_csv_report_email(Reports::StatementSearchReport, search_params:)
       end
     end
   end

@@ -68,6 +68,14 @@ class Facility < ApplicationRecord
       new(url_name: "all", name: "Cross-Facility", abbreviation: "ALL", is_active: true)
   end
 
+  def self.by_url_name(url_name)
+    if url_name == Facility.cross_facility.url_name
+      Facility.cross_facility
+    else
+      Facility.find_by(url_name:)
+    end
+  end
+
   def destroy
     # TODO: can you ever delete a facility? Currently no.
     # super

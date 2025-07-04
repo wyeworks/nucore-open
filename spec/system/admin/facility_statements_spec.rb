@@ -109,7 +109,16 @@ RSpec.describe "Facility Statement Admin" do
     end
 
     it "sends a csv in an email" do
-      expect { click_link "Export as CSV" }.to enqueue_mail(StatementSearchResultMailer, :search_result)
+      expect { click_link "Export as CSV" }.to(
+        enqueue_job(CsvReportEmailJob).with(
+          Reports::StatementSearchReport.to_s, director.email, Hash,
+        )
+      )
+
+      perform_enqueued_jobs
+      mail = ActionMailer::Base.deliveries.last
+
+      expect(mail.subject).to eq("#{I18n.t('Statement')} Export")
     end
   end
 
