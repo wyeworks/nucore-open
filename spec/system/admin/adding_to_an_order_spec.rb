@@ -172,7 +172,7 @@ RSpec.describe "Adding to an existing order" do
       before do
         visit facility_order_path(facility, order)
         fill_in "add_to_order_form[quantity]", with: "1"
-        select instrument.name, from: "add_to_order_form[product_id]"
+        select_from_chosen instrument.name, from: "add_to_order_form[product_id]", scroll_to: :center
         click_button "Add To Order"
       end
 
