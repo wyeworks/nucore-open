@@ -28,7 +28,7 @@ RSpec.describe "Adding to an existing order for cross core", :js do
       visit facility_order_path(facility, order)
 
       select_from_chosen facility2.name, from: "add_to_order_form[facility_id]", scroll_to: :center
-      select_from_chosen cross_core_product_facility2.name, from: "add_to_order_form[product_id]"
+      select_from_chosen cross_core_product_facility2.name, from: "add_to_order_form[product_id]", scroll_to: :center
       select_from_chosen facility2_account.to_s, from: "Payment Source", scroll_to: :center
       fill_in "add_to_order_form[quantity]", with: "1"
       select_from_chosen "Complete", from: "Order Status"
@@ -158,7 +158,7 @@ RSpec.describe "Adding to an existing order for cross core", :js do
           )
           visit facility_order_path(facility, order)
           select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
-          select_from_chosen product2.name, from: "add_to_order_form[product_id]"
+          select_from_chosen product2.name, from: "add_to_order_form[product_id]", scroll_to: :center
           select_from_chosen facility2_account.to_s, from: "Payment Source", scroll_to: :center
           fill_in "add_to_order_form[quantity]", with: "1"
           click_button "Add to Cross-Core Order"
