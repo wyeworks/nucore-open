@@ -17,7 +17,7 @@ or just a few commits with a cherry-picked branch.
 1. Open a new branch (for more details see the sections on creating a [latest_from_open](#creating-a-latest_from_open_mmddyyyy-branch) or [cherry-picked](#creating-a-branch-with-cherry-picked-commits) branch below)
 1. Merge the PR (not squash) once it has been approved and CI is green [(see below)](#squash-vs-merge)
 1. For a production release, create a Github release [(see below)](#creating-a-github-release)
-1. Deploy the new code using capistrano or Github Actions [(see below)](#deploy)
+1. Deploy the new code using Github Actions [(see below)](#deploy)
 1. Perform any release/deployment related tasks (e.g. add new env variables, run one-off rake task, etc.)
 1. Check the site in a browser and confirm new functionality is there
 
@@ -94,7 +94,6 @@ git cherry-pick XXXXX
 
 Deploy process will vary depending on the hosting setup.
 Github Actions is used to trigger deploys for cloud-hosting setups (ECS and Azure).
-Capistrano is used for legacy-hosting setups.
 
 ## Github Actions deploy steps
 
@@ -105,24 +104,3 @@ Merging to `master` will trigger a stage deployment.
 ### To production:
 
 Create a Github Release with a tag starting with `v` to trigger a production deployment.
-
-## Capistrano deploy steps
-
-### To staging:
-
-From the root of your school-specific repo:
-
-- `bundle exec cap [staging_name] deploy`
-
-`staging_name` should be `stage`, `staging`, or `development`.  Check the name of the `.rb` files in `config/deploy/[staging_name].rb`.
-
-### To production:
-
-Prod releases need to be scheduled ahead of time with each school, and are typically done after hours.
-
-From the root of your school-specific repo:
-
-- `REVISION=[tag_to_release] bundle exec cap [prod_name] deploy`
-
-`prod_name` should be `prod` or `production`. check the name of the `.rb` files in `config/deploy/[prod_name].rb`.
-`tag_to_release` should be created in Github, for example `v2021-03-01`.
