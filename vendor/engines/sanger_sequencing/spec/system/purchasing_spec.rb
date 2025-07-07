@@ -77,10 +77,11 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           expect(page).to have_css(customer_id_selector, count: 4)
           click_button "Save Submission"
 
-          expect(SangerSequencing::Sample.count).to eq(4)
 
           # back on the cart
           expect(page.find(cart_quantity_selector).value).to eq("4")
+
+          expect(SangerSequencing::Sample.count).to eq(4)
         end
       end
 
@@ -202,6 +203,9 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           fill_in("sanger_sequencing_submission[samples_attributes][3][primer_name]", with: "")
 
           click_button("Save Submission")
+
+          # back on the cart
+          expect(SangerSequencing::Sample.count).to eq(4)
 
           expect(submission.samples.count).to be 4
           expect(submission.samples[0].primer_name).to eq("Water")
