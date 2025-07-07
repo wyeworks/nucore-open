@@ -127,6 +127,8 @@ RSpec.describe "Adding to an existing order for cross core", :js do
           select facility2_account.to_s, from: "Payment Source"
           click_button "Create"
 
+          expect(page).to have_content("The reservation was successfully created")
+
           expect(order.reload.order_details.count).to be(1)
           project = order.cross_core_project
           expect(project).to be_present
@@ -165,6 +167,8 @@ RSpec.describe "Adding to an existing order for cross core", :js do
         end
 
         it "sets the merge_with_order_id until the reservation is created" do
+          expect(page).to have_content("was successfully added to this order")
+
           project = order.reload.cross_core_project
           second_facility_order = project.orders.last
 
@@ -173,6 +177,8 @@ RSpec.describe "Adding to an existing order for cross core", :js do
           select_from_chosen facility2_account.to_s, from: "Payment Source", scroll_to: :center
           fill_in "add_to_order_form[quantity]", with: "1"
           click_button "Add to Cross-Core Order"
+
+          expect(page).to have_content("Your order includes one or more incomplete items")
 
           # This is the second order for this facility so it has a merge_order set
           expect(project.reload.orders.last.merge_with_order_id).to eq(second_facility_order.id)
