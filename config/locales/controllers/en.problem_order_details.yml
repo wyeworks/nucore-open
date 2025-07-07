@@ -5,8 +5,7 @@ en:
         success: "Successfully sent %{count} reminder emails."
         no_selection: "Please select at least one order to send notifications."
         no_groups: "Please select at least one notification group." 
-      js_alerts:
+      js:
         select_order_alert: "Please select at least one order to send notifications."
         select_group_alert: "Please select notification groups first, then try again."
         notification_count_error: "Error getting notification count. Please try again."
-        confirm_template: "Are you sure you want to send {count} reminder emails distributed among {users} users?" 

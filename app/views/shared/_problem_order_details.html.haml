@@ -1,41 +1,36 @@
-= form_tag local_assigns[:send_problem_notifications_path], method: :post, class: "form-horizontal" do
+= form_tag local_assigns[:send_problem_notifications_path], method: :post, class: "form-horizontal problem-notifications-form" do
   .row.table-actions
     .span1.select_all_none= select_all_link
-    .span9
+    .span4
       &nbsp;
+    .span4
+      = link_to t(".assign_price_policies"), local_assigns[:assign_price_policies_path], method: :post, class: %w(btn btn-primary)
+    .span1
+              = submit_tag t(".send_reminders"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { confirm_template: t(".send_reminders_confirmation"), select_order_alert: t("controllers.problem_order_details.js.select_order_alert"), select_group_alert: t("controllers.problem_order_details.js.select_group_alert"), notification_count_error: t("controllers.problem_order_details.js.notification_count_error"), disable_with: t(".send_reminders") }   
     .span2
       .pull-right
-        .notification-groups
+        .inline-checkbox-list
           = label_tag :notification_groups_resolvable, class: "checkbox inline" do
             = check_box_tag "notification_groups[]", "resolvable", false, id: "notification_groups_resolvable"
-            = t("views.shared.problem_order_details.notification_groups.resolvable")
+            = t(".notification_groups.resolvable")
           = label_tag :notification_groups_non_resolvable, class: "checkbox inline" do
             = check_box_tag "notification_groups[]", "non_resolvable", false, id: "notification_groups_non_resolvable"
-            = t("views.shared.problem_order_details.notification_groups.non_resolvable")
-        .submit
-          = submit_tag t("views.shared.problem_order_details.send_reminders"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { confirm_template: t("controllers.problem_order_details.js_alerts.confirm_template"), select_order_alert: t("controllers.problem_order_details.js_alerts.select_order_alert"), select_group_alert: t("controllers.problem_order_details.js_alerts.select_group_alert"), notification_count_error: t("controllers.problem_order_details.js_alerts.notification_count_error"), disable_with: t("views.shared.problem_order_details.send_reminders") }
-
+            = t(".notification_groups.non_resolvable")
+    
 %table.table.table-striped.table-hover
   %thead
-    %tr.borderless
-      %td{colspan: 10}
-        .text-right
-          = link_to t("views.shared.problem_order_details.assign_price_policies"),
-            local_assigns[:assign_price_policies_path],
-            method: :post,
-            class: %w(btn btn-primary)
     %tr
       %th
       %th= Order.model_name.human
       %th= OrderDetail.model_name.human
-      %th.nowrap= t("views.shared.problem_order_details.th.ordered_by")
+      %th.nowrap= t(".th.ordered_by")
       %th= problem_order_date_header(local_assigns[:show_reservation_start_at])
       %th= Order.human_attribute_name(:user)
-      %th{ colspan: 2 }= t("views.shared.problem_order_details.th.quantity_and_product")
+      %th{ colspan: 2 }= t(".th.quantity_and_product")
       %th
       %th.nowrap= Facility.model_name.human
       %th= Account.model_name.human
-      %th= t("views.shared.problem_order_details.th.problem")
+      %th= t(".th.problem")
   %tbody
     - @order_details.each do |order_detail|
       %tr{ class: row_class(order_detail) }
