@@ -37,6 +37,8 @@ RSpec.describe "Adding to an existing order for cross core", :js do
     end
 
     it "does not have an ordered_at yet" do
+      expect(page).to have_content("Your order includes one or more incomplete item")
+
       expect(order.reload.order_details.count).to be(1)
       expect(OrderDetail.order(:id).last.ordered_at).to be_blank
     end
