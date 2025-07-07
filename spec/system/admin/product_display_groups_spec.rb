@@ -76,6 +76,8 @@ RSpec.describe "ProductDisplayGroups" do
 
         click_button "Update Product Group"
 
+        expect(page).to have_content("The Product Group was successfully updated!")
+
         expect(display_group.reload.products).to eq([items.second])
       end
 
