@@ -6,7 +6,7 @@
     .span4
       = link_to t(".assign_price_policies"), local_assigns[:assign_price_policies_path], method: :post, class: %w(btn btn-primary)
     .span1
-      = submit_tag t(".send_reminders"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { confirm_template: t(".send_reminders_confirmation"), select_order_alert: t("controllers.problem_order_details.js.select_order_alert"), select_group_alert: t("controllers.problem_order_details.js.select_group_alert"), notification_count_error: t("controllers.problem_order_details.js.notification_count_error"), disable_with: t(".send_reminders") }   
+      = submit_tag t(".send_reminders"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { confirm_template: t(".send_reminders_confirmation"), select_order_alert: t(".js.select_order_alert"), select_group_alert: t(".js.select_group_alert"), notification_count_error: t(".js.notification_count_error"), disable_with: t(".send_reminders") }   
     .span2
       .pull-right
         .inline-checkbox-list
