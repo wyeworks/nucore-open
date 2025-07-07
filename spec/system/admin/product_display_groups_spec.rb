@@ -120,6 +120,8 @@ RSpec.describe "ProductDisplayGroups" do
         find("[title='Move Up']").click
         click_button "Update Ordering"
 
+        expect(page).to have_content("The Product Groups have been reordered")
+
         expect(facility.reload.product_display_groups.sorted).to eq([display_group2, display_group])
       end
     end
