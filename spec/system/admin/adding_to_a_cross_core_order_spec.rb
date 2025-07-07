@@ -58,6 +58,8 @@ RSpec.describe "Adding to an existing order for cross core", :js do
       end
 
       it "sets the expected attributes", :aggregate_failures do
+        expect(page).to have_content("Order File uploaded successfully.")
+
         project = order.reload.cross_core_project
 
         expect(project).to be_present

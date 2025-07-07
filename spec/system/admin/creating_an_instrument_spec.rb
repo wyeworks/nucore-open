@@ -60,6 +60,7 @@ RSpec.describe "Creating an instrument", :js do
 
         click_button "Create"
 
+        expect(page).to have_content("Instrument was successfully created")
         expect(current_path).to eq(manage_facility_instrument_path(facility, Instrument.last))
         expect(page).to have_content("Daily Booking Instrument")
         expect(page).to have_content("Schedule Rule (Daily Booking only)")
