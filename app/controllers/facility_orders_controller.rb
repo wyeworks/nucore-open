@@ -17,7 +17,7 @@ class FacilityOrdersController < ApplicationController
   before_action :load_add_to_order_form, only: [:show, :update]
   before_action :load_cross_core_order_details, only: [:show]
 
-  load_and_authorize_resource class: Order, except: [:send_problem_notifications, :notification_count]
+  load_and_authorize_resource class: Order
 
   def initialize
     @active_tab = "admin_orders"
