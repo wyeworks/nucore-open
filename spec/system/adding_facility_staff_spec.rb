@@ -29,8 +29,8 @@ RSpec.describe "Adding/Removing Facility Staff" do
 
       click_button "Create"
 
-      expect(current_path).to eq(facility_facility_users_path(facility))
       expect(page).to have_content(normal_user.full_name)
+      expect(current_path).to eq(facility_facility_users_path(facility))
     end
   end
 

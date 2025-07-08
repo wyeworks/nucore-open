@@ -92,14 +92,14 @@ module Reports
               end
     end
 
-    def render_report(tab_index, &report_on)
+    def render_report(tab_index, &)
       @selected_index = tab_index
       init_report_headers
 
       respond_to do |format|
         format.html do
           if request.xhr?
-            init_report(&report_on)
+            init_report(&)
             render template: xhr_html_template, layout: false
           else
             render template: html_template
@@ -107,7 +107,7 @@ module Reports
         end
 
         format.csv do
-          init_report(&report_on)
+          init_report(&)
           render_csv("#{@report_by}_report")
         end
       end

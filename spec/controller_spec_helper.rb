@@ -87,11 +87,11 @@ end
 # [_eval_]
 #   block of tests to be evaluated after roles are
 #   granted and the user is signed in
-def it_should_allow(user_sym, spec_desc = "", &eval)
+def it_should_allow(user_sym, spec_desc = "", &)
   it "should allow #{user_sym} " + spec_desc, auth: true do
     maybe_grant_always_sign_in(user_sym)
     do_request
-    instance_eval(&eval)
+    instance_eval(&)
   end
 end
 
@@ -107,12 +107,12 @@ def it_should_deny_all(user_syms, spec_desc = "")
   user_syms.each { |user_sym| it_should_deny user_sym, spec_desc }
 end
 
-def it_should_allow_all(user_syms, spec_desc = "", &eval)
+def it_should_allow_all(user_syms, spec_desc = "", &)
   user_syms.each do |user_sym|
     it "should allow #{user_sym} " + spec_desc, auth: true do
       user = maybe_grant_always_sign_in(user_sym)
       do_request
-      instance_exec(user, &eval)
+      instance_exec(user, &)
     end
   end
 end

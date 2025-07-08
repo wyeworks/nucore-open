@@ -164,7 +164,7 @@ RSpec.describe "Adding to an existing order" do
     end
   end
 
-  describe "adding an instrument reservation" do
+  describe "adding an instrument reservation", :js do
     describe "from same facility" do
       let(:product) { create(:setup_item, :with_facility_account) }
       let!(:instrument) { create(:setup_instrument, facility:) }
@@ -172,7 +172,7 @@ RSpec.describe "Adding to an existing order" do
       before do
         visit facility_order_path(facility, order)
         fill_in "add_to_order_form[quantity]", with: "1"
-        select instrument.name, from: "add_to_order_form[product_id]"
+        select_from_chosen instrument.name, from: "add_to_order_form[product_id]", scroll_to: :center
         click_button "Add To Order"
       end
 
@@ -184,6 +184,7 @@ RSpec.describe "Adding to an existing order" do
         end
         click_button "Create"
 
+        expect(page).to have_content("The reservation was successfully created")
         expect(order.reload.order_details.count).to be(2)
         expect(order.order_details.last.product).to eq(instrument)
       end
@@ -207,7 +208,7 @@ RSpec.describe "Adding to an existing order" do
       before do
         visit facility_order_path(facility, order)
         fill_in "add_to_order_form[quantity]", with: "1"
-        select_from_chosen instrument.name, from: "add_to_order_form[product_id]"
+        select_from_chosen instrument.name, from: "add_to_order_form[product_id]", scroll_to: :center
         click_button "Add To Order"
       end
 
@@ -222,6 +223,7 @@ RSpec.describe "Adding to an existing order" do
         end
         click_button "Create"
 
+        expect(page).to have_content("The reservation was successfully created")
         expect(order.reload.order_details.count).to be(2)
         expect(order.order_details.last.product).to eq(instrument)
       end
