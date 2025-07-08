@@ -22,11 +22,7 @@ module Reports
     end
 
     def facility
-      @facility ||= if facility_url_name == Facility.cross_facility.url_name
-                      Facility.cross_facility
-                    else
-                      Facility.find_by(url_name: facility_url_name)
-                    end
+      @facility ||= Facility.by_url_name(facility_url_name)
     end
 
     def description
