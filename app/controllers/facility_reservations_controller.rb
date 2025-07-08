@@ -13,7 +13,7 @@ class FacilityReservationsController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
 
-  load_and_authorize_resource class: Reservation
+  load_and_authorize_resource class: Reservation, except: [:send_problem_notifications, :notification_count]
 
   def initialize
     super
