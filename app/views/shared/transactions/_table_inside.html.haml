@@ -82,7 +82,7 @@
     %tfoot
       %tr
         %th.total{ colspan: colspan_for_total, scope: "row" }= t(".page_subtotal")
-        %td.currency= number_to_currency(order_details.map(&:actual_or_estimated_total).compact.sum)
+        %td.currency= number_to_currency(order_details.sum { |od| od.actual_or_estimated_total || 0 })
         %td{ colspan: local_assigns[:show_statements] ? 2 : 1 }
       %tr
         %th.total{ colspan: colspan_for_total, scope: "row" }= t(".grand_total")
@@ -96,6 +96,6 @@
   - else
     %tfoot
       %th.total{ colspan: colspan_for_total, scope: "row" }= t(".total")
-      %td.currency= number_to_currency(order_details.map(&:actual_or_estimated_total).compact.sum)
+      %td.currency= number_to_currency(order_details.sum { |od| od.actual_or_estimated_total || 0 })
       %td{ colspan: local_assigns[:show_statements] ? 2 : 1 }
 = will_paginate(order_details) if order_details_are_paginated

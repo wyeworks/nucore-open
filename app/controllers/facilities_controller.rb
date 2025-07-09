@@ -141,10 +141,16 @@ class FacilitiesController < ApplicationController
 
     @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details.joins(order: :user).reorder(sort_clause)
+    @order_details = @search.order_details.joins(order: :user)
+                            .includes(order: [:user, :facility])
+                            .includes(:account, :product, :order_status, :created_by_user, :statement, :price_policy, :journal, :external_service_receiver, :bundle, :project)
+                            .includes(:reservation)
+                            .includes(product: [:stored_files, { external_service_passers: :external_service }])
+                            .preload(account: :owner_user)
+                            .reorder(sort_clause)
 
     if @order_details.size < 1000
-      @grand_total = @order_details.map { |od| od.actual_total || od.estimated_total }.compact.sum
+      @grand_total = @order_details.sum { |od| (od.actual_total || od.estimated_total) || 0 }
     else
       @too_many_results = true
     end
