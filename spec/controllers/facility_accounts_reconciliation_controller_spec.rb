@@ -59,6 +59,7 @@ RSpec.describe FacilityAccountsReconciliationController do
     describe "when there is an error" do
       let(:reconciled_at) { 1.day.from_now } # This will cause an error
       let(:search_params) { { accounts: [account.id], page: 2 } }
+      let(:url_helpers) { Rails.application.routes.url_helpers }
 
       it "preserves search parameters in the redirect" do
         post :update, params: {
@@ -76,7 +77,9 @@ RSpec.describe FacilityAccountsReconciliationController do
         }
 
         location = response.redirect_url
-        expect(location).to include("/facilities/#{facility.url_name}/accounts/reconciliation_tests")
+        expect(location).to include(
+          url_helpers.reconciliation_tests_facility_accounts_path(facility)
+        )
         expect(location).to include("search%5Baccounts%5D%5B%5D=#{account.id}")
         expect(location).to include("page=2")
       end
