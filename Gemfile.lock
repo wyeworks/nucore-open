@@ -282,7 +282,7 @@ GEM
       devise (> 2.0.0)
       ruby-saml (~> 1.18)
     diff-lcs (1.6.2)
-    drb (2.2.1)
+    drb (2.2.3)
     dumb_delegator (1.1.0)
     dynamic_form (1.2.0)
     erubi (1.13.1)
