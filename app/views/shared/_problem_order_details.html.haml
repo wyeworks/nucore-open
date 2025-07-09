@@ -35,11 +35,15 @@
         %td
           = check_box_tag "order_detail_ids[]", order_detail.id, false, class: "toggle", id: "order_detail_#{order_detail.id}"
         - if order_detail.missing_form? && order_detail.order.merge_with_order_id
-          %td.centered= link_to order_detail.order.merge_with_order_id, facility_order_path(current_facility, order_detail.order.merge_order)
+          %td.centered= link_to order_detail.order.merge_with_order_id,
+            facility_order_path(current_facility, order_detail.order.merge_order)
           %td.centered= order_detail.id
         - else
-          %td.centered= link_to order_detail.order_id, facility_order_path(current_facility, order_detail.order)
-          %td.centered= link_to order_detail.id, manage_order_detail_path(order_detail), class: "manage-order-detail"
+          %td.centered= link_to order_detail.order_id,
+            facility_order_path(current_facility, order_detail.order)
+          %td.centered= link_to order_detail.id,
+            manage_order_detail_path(order_detail),
+            class: "manage-order-detail"
         %td= order_detail.order.created_by_user.full_name
         %td= problem_order_date(order_detail, local_assigns[:show_reservation_start_at])
         %td= order_detail.order.user
