@@ -16,7 +16,6 @@ gem "net-smtp"
 gem "net-imap"
 gem "net-pop"
 gem "tzinfo-data"
-gem "webrick"
 
 # Ruby 3.4 not longer includes these gems
 gem 'mutex_m'
@@ -140,6 +139,7 @@ group :development, :test do
   gem "rspec-activejob"
   gem "selenium-webdriver"
   gem "teaspoon-jasmine"
+  gem "webrick"
 end
 
 group :test do
