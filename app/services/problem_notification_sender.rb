@@ -21,7 +21,7 @@ class ProblemNotificationSender
       next unless group_details.any?
 
       group_details.each do |order_detail|
-        send_notification_for_order_detail(order_detail)
+        send_notification_for_order_detail(order_detail, group)
         sent_count += 1
       end
     end
@@ -61,10 +61,8 @@ class ProblemNotificationSender
     end
   end
 
-  def send_notification_for_order_detail(order_detail)
-    policy = OrderDetails::ProblemResolutionPolicy.new(order_detail)
-
-    if policy.user_can_resolve?
+  def send_notification_for_order_detail(order_detail, group)
+    if group.to_sym == :resolvable
       ProblemOrderMailer.notify_user_with_resolution_option(order_detail).deliver_later
     else
       ProblemOrderMailer.notify_user(order_detail).deliver_later

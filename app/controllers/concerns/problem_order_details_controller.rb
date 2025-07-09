@@ -6,13 +6,16 @@ module ProblemOrderDetailsController
 
   extend ActiveSupport::Concern
 
+  included do
+    before_action :authorize_show_problems, only: [:send_problem_notifications, :notification_count]
+  end
+
   def assign_price_policies_to_problem_orders
     assign_missing_price_policies(problem_order_details.readonly(false))
     redirect_to show_problems_path
   end
 
   def send_problem_notifications
-    authorize! :show_problems, Order
     order_detail_ids, notification_groups = notification_params
 
     if order_detail_ids.empty?
@@ -35,17 +38,16 @@ module ProblemOrderDetailsController
   end
 
   def notification_count
-    authorize! :show_problems, Order
     order_detail_ids, notification_groups = notification_params
 
     if order_detail_ids.empty? || notification_groups.empty?
       render json: { emails: 0, users: 0 }
-      return
+      nil
+    else
+      sender = build_sender(order_detail_ids, notification_groups)
+      counts = sender.detailed_notification_count
+      render json: counts
     end
-
-    sender = build_sender(order_detail_ids, notification_groups)
-    counts = sender.detailed_notification_count
-    render json: counts
   end
 
   def show_problems
@@ -84,9 +86,10 @@ module ProblemOrderDetailsController
   end
 
   def notification_params
+    permitted_params = params.permit(order_detail_ids: [], notification_groups: [])
     [
-      params[:order_detail_ids] || [],
-      params[:notification_groups] || []
+      permitted_params[:order_detail_ids] || [],
+      permitted_params[:notification_groups] || []
     ]
   end
 
@@ -97,6 +100,10 @@ module ProblemOrderDetailsController
       current_user,
       notification_groups: notification_groups.map(&:to_sym)
     )
+  end
+
+  def authorize_show_problems
+    authorize! :show_problems, Order
   end
 
 end
