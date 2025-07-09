@@ -69,18 +69,29 @@ class ProblemNotificationSender
     end
   end
 
-  def log_bulk_notification_event(sent_count)
-    LogEvent.log(
-      order_details.first,
-      :bulk_problem_notification,
-      current_user,
-      metadata: {
-        sent_count: sent_count,
-        total_order_details: order_details.count,
-        notification_groups: notification_groups,
-        facility_id: order_details.first.facility.id
-      }
-    )
-  end
+  def log_bulk_notification_event(_sent_count)
+    grouped_order_details = group_order_details_by_resolution_capability
 
+    notified_users_data = {}
+
+    notification_groups.each do |group|
+      group_details = grouped_order_details[group.to_sym] || []
+      group_details.each do |order_detail|
+        user = order_detail.user
+        notified_users_data[user] ||= { order_detail_ids: [] }
+        notified_users_data[user][:order_detail_ids] << order_detail.id
+      end
+    end
+
+    notified_users_data.each do |user, data|
+      LogEvent.log(
+        user,
+        :bulk_problem_notification,
+        current_user,
+        metadata: {
+          order_detail_ids: data[:order_detail_ids].join(", ")
+        }
+      )
+    end
+  end
 end

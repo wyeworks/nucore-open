@@ -25,7 +25,6 @@ en:
       resolve_from_problem_queue: Problem order resolved
       updated_fulfilled_at: Fulfilled date updated on completed order
       auto_ended_by_next_reservation: Reservation automatically ended when another user started a new reservation
-      bulk_problem_notification: Bulk problem notification sent (%{sent_count} of %{total_order_details} orders)
     order_import:
       created: Bulk Order Import
     product_user:
@@ -47,6 +46,7 @@ en:
       unsuspended: User unsuspended
       default_price_group_changed: User price group changed to %{price_group_rate}
       review_orders_email: "Review Orders Email"
+      bulk_problem_notification: "Notified about problem orders: %{order_detail_ids}"
     user_role:
       create: Role added
       delete: Role removed
