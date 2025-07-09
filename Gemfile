@@ -18,6 +18,13 @@ gem "net-pop"
 gem "tzinfo-data"
 gem "webrick"
 
+# Ruby 3.4 not longer includes these gems
+gem 'mutex_m'
+gem 'csv'
+
+# Ruby 3.4 warns it won't be included in the future
+gem 'reline'
+
 # Remove once we upgrade to rails 7.2.X or greater
 # See: github.com/rails/rails/pull/54264
 gem "concurrent-ruby", "< 1.3.5"
@@ -132,6 +139,7 @@ end
 group :test do
   gem "capybara"
   gem "capybara-email"
+  gem "drb" # Ruby 3.4 no longer includes this gem
   gem "rails-controller-testing"
   gem "rspec-collection_matchers"
   gem "rspec_junit_formatter"

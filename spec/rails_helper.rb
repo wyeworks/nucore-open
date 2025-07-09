@@ -236,6 +236,10 @@ RSpec.configure do |config|
     Warden.test_reset!
   end
 
+  config.before type: :system do
+    clear_enqueued_jobs
+  end
+
   config.around(:each, :disable_requests_local) do |example|
     Rails.application.env_config.tap do |app_config|
       prev_show_exceptions = app_config['action_dispatch.show_exceptions']

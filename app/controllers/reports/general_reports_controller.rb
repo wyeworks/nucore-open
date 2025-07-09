@@ -37,13 +37,13 @@ module Reports
       @report_data = report_data
     end
 
-    def init_report(&block)
+    def init_report(&)
       sums = {}
       rows = []
       @total_quantity = 0
       @total_cost = 0.0
       report_data.each do |od|
-        key = instance_exec(od, &block)
+        key = instance_exec(od, &)
 
         key = "Undefined" if key.blank?
 

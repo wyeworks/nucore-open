@@ -451,14 +451,15 @@ RSpec.describe InstrumentPricePoliciesController do
 
       expect(page).to_not have_content("/ minute")
 
-      expect { click_button("Add Pricing Rules") }.to(
-        change { instrument.price_policies.reload.count }.by(3)
-      )
+      initial_count = instrument.price_policies.count
+      click_button("Add Pricing Rules")
 
       expect(page).to(
         have_current_path(facility_instrument_price_policies_path(facility, instrument))
       )
       expect(page).to have_content("Price Rules were successfully created.")
+
+      expect(instrument.price_policies.reload.count).to eq(initial_count + 3)
     end
 
     describe "already created price policies" do

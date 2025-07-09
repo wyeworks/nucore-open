@@ -76,6 +76,8 @@ RSpec.describe "ProductDisplayGroups" do
 
         click_button "Update Product Group"
 
+        expect(page).to have_content("The Product Group was successfully updated!")
+
         expect(display_group.reload.products).to eq([items.second])
       end
 
@@ -117,6 +119,8 @@ RSpec.describe "ProductDisplayGroups" do
         select "Second", from: "Product Groups"
         find("[title='Move Up']").click
         click_button "Update Ordering"
+
+        expect(page).to have_content("The Product Groups have been reordered")
 
         expect(facility.reload.product_display_groups.sorted).to eq([display_group2, display_group])
       end

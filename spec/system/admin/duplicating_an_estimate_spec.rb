@@ -26,8 +26,8 @@ RSpec.describe "Estimate Duplication", :js do
 
     click_link "Duplicate Estimate"
 
-    expect(page).to have_current_path(facility_estimate_path(facility, Estimate.last))
     expect(page).to have_content("Estimate successfully duplicated")
+    expect(page).to have_current_path(facility_estimate_path(facility, Estimate.last))
 
     new_estimate = Estimate.last
     estimate_detail = estimate.estimate_details.first
