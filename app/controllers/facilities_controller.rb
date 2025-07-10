@@ -145,7 +145,6 @@ class FacilitiesController < ApplicationController
                             .includes(order: [:user, :facility])
                             .includes(:account, :product, :order_status, :created_by_user, :statement, :price_policy, :journal, :external_service_receiver, :bundle, :project)
                             .includes(:reservation)
-                            .includes(product: [:stored_files, { external_service_passers: :external_service }])
                             .preload(account: :owner_user)
                             .reorder(sort_clause)
 
