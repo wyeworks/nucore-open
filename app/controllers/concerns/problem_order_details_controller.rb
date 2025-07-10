@@ -20,20 +20,14 @@ module ProblemOrderDetailsController
 
     if order_detail_ids.empty?
       flash[:error] = t("shared.problem_order_details.send_notifications.no_selection")
-      redirect_to show_problems_path
-      return
-    end
-
-    if notification_groups.empty?
+    elsif notification_groups.empty?
       flash[:error] = t("shared.problem_order_details.send_notifications.no_groups")
-      redirect_to show_problems_path
-      return
+    else
+      sender = build_sender(order_detail_ids, notification_groups)
+      sent_count = sender.send_notifications
+      flash[:notice] = t("shared.problem_order_details.send_notifications.success", count: sent_count)
     end
 
-    sender = build_sender(order_detail_ids, notification_groups)
-    sent_count = sender.send_notifications
-
-    flash[:notice] = t("shared.problem_order_details.send_notifications.success", count: sent_count)
     redirect_to show_problems_path
   end
 

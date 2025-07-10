@@ -31,18 +31,23 @@ RSpec.describe "Problem Notifications", :js do
       submit_button = find("input[value='Send Reminders']")
       expect(submit_button).to be_disabled
 
+      # Select a notification group
+      check "Resolvable users"
+      expect(submit_button).to be_disabled
+
+      uncheck "Resolvable users"
+
       # Select an order
       first("input[name='order_detail_ids[]']").check
       expect(submit_button).to be_disabled
 
-      # Select a notification group
-      first("input[name='notification_groups[]']").check
+      check "Resolvable users"
       expect(submit_button).not_to be_disabled
     end
 
     it "shows confirmation dialog when submitting" do
       first("input[name='order_detail_ids[]']").check
-      first("input[name='notification_groups[]']").check
+      check "Resolvable users"
 
       accept_confirm do
         click_button "Send Reminders"
@@ -58,27 +63,14 @@ RSpec.describe "Problem Notifications", :js do
       visit show_problems_facility_orders_path(facility)
 
       all("input[name='order_detail_ids[]']").each(&:check)
-      all("input[name='notification_groups[]']").each(&:check)
+      check "Resolvable users"
+      check "Non-resolvable users"
 
       accept_confirm do
         click_button "Send Reminders"
       end
 
       expect(page).to have_content("Successfully sent")
-    end
-
-    it "keeps submit button disabled when no orders are selected" do
-      submit_button = find("input[value='Send Reminders']")
-      first("input[name='notification_groups[]']").check
-
-      expect(submit_button).to be_disabled
-    end
-
-    it "keeps submit button disabled when no notification groups are selected" do
-      submit_button = find("input[value='Send Reminders']")
-      first("input[name='order_detail_ids[]']").check
-
-      expect(submit_button).to be_disabled
     end
   end
 end

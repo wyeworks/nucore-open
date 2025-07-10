@@ -12,7 +12,7 @@ module OrderDetails
       [
         order_detail.problem?,
         order_detail.requires_but_missing_actuals?,
-        order_detail.reservation&.actual_start_at.present?,
+        order_detail.time_data.respond_to?(:actual_start_at) && order_detail.time_data.actual_start_at.present?,
         order_detail.product.problems_resolvable_by_user?,
       ].all?
     end
