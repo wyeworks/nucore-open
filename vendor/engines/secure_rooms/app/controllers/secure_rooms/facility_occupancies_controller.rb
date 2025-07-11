@@ -15,7 +15,7 @@ module SecureRooms
     before_action :check_acting_as
     before_action :init_current_facility
 
-    load_and_authorize_resource class: Occupancy
+    load_and_authorize_resource class: Occupancy, except: [:send_problem_notifications, :notification_count]
 
     def initialize
       super
@@ -60,6 +60,7 @@ module SecureRooms
       current_facility
         .complete_problem_order_details
         .joins(:occupancy)
+        .includes(:account, :order, product: :facility)
     end
 
     def sort_lookup_hash
