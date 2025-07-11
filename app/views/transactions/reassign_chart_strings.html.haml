@@ -1,0 +1,16 @@
+= render "shared/transactions/headers"
+
+- content_for :h1 do
+  = t(".head")
+
+= simple_form_for @chart_string_reassignment_form, url: confirm_transactions_transactions_path do |form|
+  - @chart_string_reassignment_form.order_details.each do |order_detail|
+    = hidden_field_tag :"order_detail_ids[]", order_detail.id
+  = available_account_select_tag(form, @chart_string_reassignment_form.available_accounts)
+  %p= text("facilities.reassign_chart_strings.account_select.explanation")
+  = submit_tag text("facilities.reassign_chart_strings.submit"), class: "btn btn-primary"
+  = link_to t("shared.cancel"), movable_transactions_transactions_path, class: "btn"
+
+.row
+  .span9
+    = render "shared/transactions/table_inside", order_details: @order_details

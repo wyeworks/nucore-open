@@ -1352,6 +1352,14 @@ en:
     movable_transactions:
       head: "My Movable Transactions"
       no_transactions: "You have no movable transactions."
+    reassign_chart_strings:
+      head: "Move Transactions"
+    confirm_transactions:
+      head: "Confirm Transaction Moves"
+      movable_transactions:
+        label: "Transactions that will be moved:"
+      unmovable_transactions:
+        label: "Transactions that will not be moved:"
 
   journal_creation_reminders:
     index:
