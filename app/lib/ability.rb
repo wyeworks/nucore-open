@@ -309,8 +309,8 @@ class Ability
       can [:show, :suspend, :unsuspend, :user_search, :user_accounts, :statements, :show_statement, :index], Statement
     end
 
-    if controller.is_a?(TransactionsController) && Account.administered_by(user).any?
-      can :movable_transactions, TransactionsController
+    if SettingsHelper.feature_on?(:move_transactions_account_roles) && Account.administered_by(user).any?
+      can [:movable_transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], TransactionsController
     end
   end
 
