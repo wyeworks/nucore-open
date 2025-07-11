@@ -81,21 +81,21 @@
   - if order_details_are_paginated && order_details.total_pages > 1
     %tfoot
       %tr
-        %th.total{ colspan: colspan_for_total, scope: "row" }= t(".page_subtotal")
+        %th.total{ colspan: colspan_for_total, scope: "row" }= t("shared.transactions.table_inside.page_subtotal")
         %td.currency= number_to_currency(order_details.sum { |od| od.actual_or_estimated_total || 0 })
         %td{ colspan: local_assigns[:show_statements] ? 2 : 1 }
       %tr
-        %th.total{ colspan: colspan_for_total, scope: "row" }= t(".grand_total")
+        %th.total{ colspan: colspan_for_total, scope: "row" }= t("shared.transactions.table_inside.grand_total")
         - if @grand_total
           %td.currency= number_to_currency(@grand_total)
         - elsif @too_many_results
           %td.currency
-            = t(".too_many_results")
-            = tooltip_icon "fa fa-info-circle icon-large", t(".too_many_results_tooltip")
+            = t("shared.transactions.table_inside.too_many_results")
+            = tooltip_icon "fa fa-info-circle icon-large", t("shared.transactions.table_inside.too_many_results_tooltip")
         %td{ colspan: local_assigns[:show_statements] ? 2 : 1 }
   - else
     %tfoot
-      %th.total{ colspan: colspan_for_total, scope: "row" }= t(".total")
+      %th.total{ colspan: colspan_for_total, scope: "row" }= t("shared.transactions.table_inside.total")
       %td.currency= number_to_currency(order_details.sum { |od| od.actual_or_estimated_total || 0 })
       %td{ colspan: local_assigns[:show_statements] ? 2 : 1 }
 = will_paginate(order_details) if order_details_are_paginated

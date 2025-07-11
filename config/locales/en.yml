@@ -102,6 +102,7 @@ en:
     my_tab: My %{model}
     transactions: My Transactions
     transactions_in_review: My Transactions In Review (%{count})
+    movable_transactions: My Movable Transactions
     notices: Notices
     support: Support
 
@@ -1348,6 +1349,9 @@ en:
     in_review: Transactions in Review
     none_in_review_found: No transactions in review were found.
     recently_reviewed: Recently Reviewed
+    movable_transactions:
+      head: "My Movable Transactions"
+      no_transactions: "You have no movable transactions."
 
   journal_creation_reminders:
     index:

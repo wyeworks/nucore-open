@@ -308,6 +308,10 @@ class Ability
       can :manage, AccountUser
       can [:show, :suspend, :unsuspend, :user_search, :user_accounts, :statements, :show_statement, :index], Statement
     end
+
+    if controller.is_a?(TransactionsController) && Account.administered_by(user).any?
+      can :movable_transactions, TransactionsController
+    end
   end
 
 
