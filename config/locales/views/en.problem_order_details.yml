@@ -19,3 +19,4 @@ en:
         select_order_alert: "Please select at least one order to send notifications."
         select_group_alert: "Please select notification groups first, then try again."
         notification_count_error: "Error getting notification count. Please try again."
+        no_users_to_notify: "There are no users to notify for the selected orders and groups."

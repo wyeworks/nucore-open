@@ -11,6 +11,8 @@ $(document).ready(function() {
 
   const originalTemplate = submitButton.data('confirm-template');
   const notificationCountError = submitButton.data('notification-count-error');
+  const noUsersToNotifyMessage = submitButton.data('no-users-to-notify');
+  
   submitButton.removeAttr('data-confirm');
 
   function updateSubmitButton() {
@@ -62,6 +64,9 @@ $(document).ready(function() {
     getNotificationCount().done(function(result) {
       let message;
       if (result === 'no_groups') {
+        return;
+      } else if (result.emails === 0 || result.users === 0) {
+        $("#js--flash").html('<div class="alert alert-danger">' + noUsersToNotifyMessage + '</div>');
         return;
       } else {
         message = originalTemplate.replace('{count}', result.emails).replace('{users}', result.users);
