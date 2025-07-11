@@ -6,6 +6,7 @@ class TransactionsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_acting_as
   before_action :enable_sorting, only: [:index, :in_review]
+  before_action :authorize_movable_transactions, only: [:movable_transactions]
 
   include OrderDetailsCsvExport
   include SortableBillingTable
@@ -62,6 +63,23 @@ class TransactionsController < ApplicationController
     end
   end
 
+  def movable_transactions
+    @search_form = TransactionSearch::SearchForm.new(params[:search])
+    @search = TransactionSearch::Searcher.billing_search(
+      order_details = current_user.administered_order_details.all_movable,
+      @search_form,
+      include_facilities: true,
+    )
+    @date_range_field = @search_form.date_params[:field]
+    @order_details = @search.order_details.reorder(sort_clause).paginate(page: params[:page], per_page: 100)
+
+    @order_detail_action = :reassign_chart_strings
+  end
+
+  def reassign_chart_strings
+    # TODO
+  end
+
   def mark_as_reviewed
     if params[:order_detail_ids].nil? || params[:order_detail_ids].empty?
       flash[:error] = I18n.t "controllers.facility_notifications.no_selection"
@@ -84,6 +102,12 @@ class TransactionsController < ApplicationController
       flash[:error] = I18n.t("controllers.facility_notifications.mark_as_reviewed.errors", errors: @errors.join(", ")) if @errors.any?
     end
     redirect_to action: :in_review
+  end
+
+  private
+
+  def authorize_movable_transactions
+    authorize! :movable_transactions, TransactionsController
   end
 
 end
