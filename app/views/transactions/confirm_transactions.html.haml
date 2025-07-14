@@ -1,24 +1,8 @@
 = render "shared/transactions/headers"
 
 - content_for :h1 do
-  = t(".head")
+  = t("shared.transactions.confirm_transactions.head")
 
-%h3= @selected_account
-
-%h3= t(".movable_transactions.label")
-.row
-  .span9
-    = render "shared/transactions/table_inside", order_details: @movable_transactions
-
-= simple_form_for @chart_string_reassignment_form, url: move_transactions_transactions_path do |form|
-  = hidden_field_tag :account_id, @selected_account.id
-  - @movable_transactions.each do |order_detail|
-    = hidden_field_tag :"order_detail_ids[]", order_detail.id
-  = submit_tag text("facilities.reassign_chart_strings.submit"), class: "btn btn-primary"
-  = link_to t("shared.cancel"), movable_transactions_transactions_path, class: "btn"
-
-- if @unmovable_transactions.present?
-  %h3= t(".unmovable_transactions.label")
-  .row
-    .span9
-      = render "shared/transactions/table_inside", order_details: @unmovable_transactions
+= render "shared/transactions/confirm_transactions_content",
+  form_url: move_transactions_transactions_path,
+  cancel_path: movable_transactions_transactions_path
