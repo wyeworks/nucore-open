@@ -38,6 +38,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
     describe "without needing JS" do
       before do
         click_button "Update"
+        expect(page).to have_link("Complete Online Order Form")
         click_link "Complete Online Order Form"
       end
 

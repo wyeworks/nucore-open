@@ -45,15 +45,14 @@ RSpec.describe "Problem Notifications", :js do
       expect(submit_button).not_to be_disabled
     end
 
-    it "shows confirmation dialog when submitting" do
+    it "shows alert when no emails are sent" do
       first("input[name='order_detail_ids[]']").check
       check "Resolvable users"
 
-      accept_confirm do
-        click_button "Send Reminders"
-      end
+      click_button "Send Reminders"
 
-      expect(page).to have_content("Successfully sent")
+      expect(page).to have_css(".alert-danger")
+      expect(page).not_to have_content("Successfully sent")
     end
 
     it "allows selecting multiple orders and groups" do
