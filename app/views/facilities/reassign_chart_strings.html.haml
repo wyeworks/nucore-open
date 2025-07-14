@@ -2,19 +2,11 @@
 = content_for :h1 do
   = current_facility
 = content_for :h2 do
-  = t(".head")
+  = t("shared.transactions.reassign_chart_strings.head")
 
 = content_for :sidebar do
   = render "admin/shared/sidenav_billing", sidenav_tab: "movable_transactions"
 
-= simple_form_for @chart_string_reassignment_form, url: facility_movable_transactions_confirm_path do |form|
-  - @chart_string_reassignment_form.order_details.each do |order_detail|
-    = hidden_field_tag :"order_detail_ids[]", order_detail.id
-  = available_account_select_tag(form, @chart_string_reassignment_form.available_accounts)
-  %p= text("facilities.reassign_chart_strings.account_select.explanation")
-  = submit_tag text("facilities.reassign_chart_strings.submit"), class: "btn btn-primary"
-  = link_to t("shared.cancel"), facility_movable_transactions_path(current_facility), class: "btn"
-
-.row
-  .span9
-    = render "shared/transactions/table_inside", order_details: @order_details
+= render "shared/transactions/reassign_chart_strings_form",
+  form_url: facility_movable_transactions_confirm_path,
+  cancel_path: facility_movable_transactions_path(current_facility)
