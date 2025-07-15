@@ -25,7 +25,7 @@ module MovableTransactions
     rescue ActiveRecord::RecordInvalid => e
       bulk_reassignment_failure(e)
     end
-    redirect_to movable_transactions_transactions_path
+    redirect_to_movable_transactions
   end
 
   def get_movable_transactions(account)
@@ -52,7 +52,7 @@ module MovableTransactions
   def ensure_order_details_selected
     if @order_details.count < 1
       flash[:alert] = I18n.t("controllers.facilities.bulk_reassignment.no_transactions_selected")
-      redirect_to movable_transactions_transactions_path
+      redirect_to_movable_transactions
     end
   end
 
@@ -82,6 +82,10 @@ module MovableTransactions
   end
 
   def movable_transactions_order_details
+    raise NotImplementedError
+  end
+
+  def redirect_to_movable_transactions
     raise NotImplementedError
   end
 
