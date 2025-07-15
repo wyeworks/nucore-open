@@ -106,4 +106,8 @@ class TransactionsController < ApplicationController
   def include_facilities?
     true
   end
+
+  def redirect_to_movable_transactions
+    redirect_to movable_transactions_transactions_path
+  end
 end

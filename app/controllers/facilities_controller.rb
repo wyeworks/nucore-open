@@ -182,6 +182,10 @@ class FacilitiesController < ApplicationController
     OrderDetail.all_movable.for_facility(current_facility)
   end
 
+  def redirect_to_movable_transactions
+    redirect_to facility_movable_transactions_path(current_facility)
+  end
+
   def facility_params
     params.require(:facility).permit(*self.class.permitted_facility_params)
   end
