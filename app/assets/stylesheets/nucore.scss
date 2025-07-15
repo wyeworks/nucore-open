@@ -287,6 +287,30 @@ td.daily_rate {
   }
 }
 
+.problem-notifications-form {
+  .table-actions {
+    .span2 .inline-checkbox-list {
+      margin-left: 2em;
+      margin-top: -1em;
+    }
+    
+    @media (max-width: 1200px) {
+      .span1, .span2 {
+        clear: left;
+      }
+      
+      .span2 .inline-checkbox-list {
+        margin-top: 0;
+        margin-left: -0.1em;
+      }
+    }
+  }
+
+  .inline-checkbox-list label.checkbox.inline {
+    margin-left: 0 !important;
+  }
+}
+
 .half-width {
   width: 50%;
 }

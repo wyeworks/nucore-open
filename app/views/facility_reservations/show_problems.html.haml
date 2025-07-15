@@ -1,4 +1,4 @@
-= render "shared/transactions/headers"
+= render partial: "shared/transactions/headers"
 
 = content_for :h1 do
   = current_facility
@@ -15,9 +15,7 @@
     = link_to t("reports.account_transactions.export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
   .span12
     %p.notice= t(".instructions")
-    = render partial: "shared/problem_order_details",
-      locals: { assign_price_policies_path: assign_price_policies_to_problem_orders_facility_reservations_path,
-      show_reservation_start_at: true }
+    = render partial: "shared/problem_order_details", locals: { assign_price_policies_path: assign_price_policies_to_problem_orders_facility_reservations_path, show_reservation_start_at: true, send_problem_notifications_path: send_problem_notifications_facility_reservations_path }
 - else
   .span12
     %p.notice= t(".no_problem_reservations")

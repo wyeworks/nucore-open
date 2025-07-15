@@ -1,0 +1,22 @@
+en:
+  shared:
+    problem_order_details:
+      assign_price_policies: "Assign Price Policies"
+      send_reminders: "Send Reminders"
+      send_reminders_confirmation: "Are you sure you want to send {count} reminder emails distributed among {users} users?"
+      send_notifications:
+        success: "Successfully sent %{count} reminder emails."
+        no_selection: "Please select at least one order to send notifications."
+        no_groups: "Please select at least one notification group."
+      notification_groups:
+        resolvable: "Resolvable users"
+        non_resolvable: "Non-resolvable users"
+      th:
+        ordered_by: "Ordered By"
+        quantity_and_product: "Quantity & Product"
+        problem: "Problem"
+      js:
+        select_order_alert: "Please select at least one order to send notifications."
+        select_group_alert: "Please select notification groups first, then try again."
+        notification_count_error: "Error getting notification count. Please try again."
+        no_users_to_notify: "There are no users to notify for the selected orders and groups."

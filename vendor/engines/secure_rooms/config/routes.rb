@@ -27,6 +27,8 @@ Rails.application.routes.draw do
       collection do
         post "assign_price_policies_to_problem_orders"
         post "batch_update"
+        post "send_problem_notifications"
+        get "notification_count"
         get "show_problems"
         get "tab_counts"
         get "dashboard"
