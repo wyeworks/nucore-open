@@ -996,10 +996,6 @@ en:
       head: "Move Transactions"
       no_orders: There are no movable orders
 
-
-
-
-
     transactions:
       no_orders: There are no orders in this !facility_downcase! matching the search parameters
 
@@ -1354,7 +1350,6 @@ en:
     movable_transactions:
       head: "My Movable Transactions"
       no_transactions: "You have no movable transactions."
-
 
   journal_creation_reminders:
     index:
