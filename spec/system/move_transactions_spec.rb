@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "Move Transactions", :js, feature_setting: { move_transactions_account_roles: true } do
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:setup_item, facility: facility) }
+  let(:item) { create(:setup_item, facility:) }
   let(:account_owner) { create(:user) }
   let(:business_admin) { create(:user) }
   let(:regular_user) { create(:user) }
@@ -33,7 +33,7 @@ RSpec.describe "Move Transactions", :js, feature_setting: { move_transactions_ac
     create(:account_user, :purchaser, user: regular_user, account: source_account, created_by: account_owner.id)
 
     [source_account, target_account].each do |account|
-      create(:account_price_group_member, account: account, price_group: PriceGroup.base)
+      create(:account_price_group_member, account:, price_group: PriceGroup.base)
     end
   end
 
