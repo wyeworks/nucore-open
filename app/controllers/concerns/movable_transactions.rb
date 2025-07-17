@@ -74,11 +74,6 @@ module MovableTransactions
 
   def reassign_account_from_params!
     account = Account.find(params[:account_id])
-
-    unless current_user.account_administrator_of?(account)
-      raise ActiveRecord::RecordNotFound
-    end
-
     OrderDetail.reassign_account!(account, @order_details)
   end
 

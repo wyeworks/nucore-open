@@ -7,6 +7,7 @@ class TransactionsController < ApplicationController
   before_action :check_acting_as
   before_action :enable_sorting, only: [:index, :in_review]
   before_action :authorize_movable_transactions, only: [:movable_transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
+  before_action :authorize_account, only: [:move_transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
 
   include MovableTransactions
   include OrderDetailsCsvExport
@@ -92,6 +93,12 @@ class TransactionsController < ApplicationController
 
   def authorize_movable_transactions
     authorize! :movable_transactions, TransactionsController
+  end
+
+  def authorize_account
+    unless current_user.account_administrator_of?(Account.find(params[:account_id]))
+      raise ActiveRecord::RecordNotFound
+    end
   end
 
   def initialize_chart_string_reassignment_form
