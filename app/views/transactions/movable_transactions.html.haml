@@ -1,0 +1,11 @@
+= render "shared/transactions/headers"
+
+- content_for :h1 do
+  = t(".head")
+
+= render "shared/transactions/search"
+
+- if @order_details.any?
+  = render "shared/transactions/table", order_details: @order_details
+- else
+  %p.alert.alert-info= t(".no_transactions")

@@ -308,6 +308,10 @@ class Ability
       can :manage, AccountUser
       can [:show, :suspend, :unsuspend, :user_search, :user_accounts, :statements, :show_statement, :index], Statement
     end
+
+    if SettingsHelper.feature_on?(:move_transactions_account_roles) && Account.administered_by(user).any?
+      can :reassign_transactions, TransactionsController
+    end
   end
 
 

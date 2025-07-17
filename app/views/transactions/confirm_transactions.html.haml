@@ -1,0 +1,8 @@
+= render "shared/transactions/headers"
+
+- content_for :h1 do
+  = t("shared.transactions.confirm_transactions.head")
+
+= render "shared/transactions/confirm_transactions_content",
+  form_url: move_transactions_transactions_path,
+  cancel_path: movable_transactions_transactions_path

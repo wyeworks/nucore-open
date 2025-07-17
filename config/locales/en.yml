@@ -102,6 +102,7 @@ en:
     my_tab: My %{model}
     transactions: My Transactions
     transactions_in_review: My Transactions In Review (%{count})
+    movable_transactions: My Movable Transactions
     notices: Notices
     support: Support
 
@@ -182,6 +183,18 @@ en:
         page_subtotal: Page Subtotal
         too_many_results: Unavailable
         too_many_results_tooltip: "There are more than 1,000 transactions results.  You can use the 'Export as CSV' link to generate a CSV, then use the CSV to calculate the grand total."
+      confirm_transactions:
+        head: "Confirm Transaction Moves"
+        movable_transactions:
+          label: "Transactions that will be moved:"
+        unmovable_transactions:
+          label: "Transactions that will not be moved:"
+      reassign_chart_strings:
+        head: "Move Transactions"
+        account_select:
+          placeholder: "Select a !chart_string_downcase!"
+          explanation: "All !chart_strings_downcase! listed above are available to reassign to at least one of the selected transactions below."
+        submit: Reassign !Chart_string!
     update: Update
 
   global_search:
@@ -983,20 +996,6 @@ en:
       head: "Move Transactions"
       no_orders: There are no movable orders
 
-    confirm_transactions:
-      head: "Confirm Transaction Moves"
-      movable_transactions:
-        label: "Transactions that will be moved:"
-      unmovable_transactions:
-        label: "Transactions that will not be moved:"
-
-    reassign_chart_strings:
-      account_select:
-        placeholder: "Select a !chart_string_downcase!"
-        explanation: "All !chart_strings_downcase! listed above are available to reassign to at least one of the selected transactions below."
-      head: "Move Transactions"
-      submit: Reassign !Chart_string!
-
     transactions:
       no_orders: There are no orders in this !facility_downcase! matching the search parameters
 
@@ -1348,6 +1347,9 @@ en:
     in_review: Transactions in Review
     none_in_review_found: No transactions in review were found.
     recently_reviewed: Recently Reviewed
+    movable_transactions:
+      head: "My Movable Transactions"
+      no_transactions: "You have no movable transactions."
 
   journal_creation_reminders:
     index:

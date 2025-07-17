@@ -11,7 +11,7 @@ module ReassignChartStringsHelper
                input_html: {
                  class: "account_selection",
                  data: {
-                   placeholder: I18n.t("facilities.reassign_chart_strings.account_select.placeholder"),
+                   placeholder: text("shared.transactions.reassign_chart_strings.account_select.placeholder"),
                  },
                }
   end
