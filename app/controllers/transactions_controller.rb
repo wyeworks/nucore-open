@@ -26,7 +26,11 @@ class TransactionsController < ApplicationController
       },
     )
 
-    @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: true)
+    @search =
+      TransactionSearch::Searcher
+      .new(facilities: true)
+      .search(order_details, @search_form)
+
     @date_range_field = @search_form.date_params[:field]
     @order_details = @search.order_details.reorder(sort_clause)
 
@@ -43,7 +47,10 @@ class TransactionsController < ApplicationController
     @export_enabled = true
 
     @search_form = TransactionSearch::SearchForm.new(params[:search])
-    @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: true)
+    @search =
+      TransactionSearch::Searcher
+      .new(facility: true)
+      .search(order_details, @search_form)
 
     @date_range_field = @search_form.date_params[:field]
     params[:sort] = "date_range_field" if params[:sort].nil? # set default sort column

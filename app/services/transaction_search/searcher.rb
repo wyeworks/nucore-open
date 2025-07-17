@@ -9,6 +9,7 @@ module TransactionSearch
     # to SearchForm) that `register` handles.
     cattr_accessor(:default_searchers) do
       [
+        TransactionSearch::FacilitySearcher,
         TransactionSearch::AccountSearcher,
         TransactionSearch::AccountTypeSearcher,
         TransactionSearch::ProductSearcher,
@@ -29,29 +30,40 @@ module TransactionSearch
       ]
     end
 
+    # Initially all searchers in default_searchers
+    # are enabled
+    cattr_accessor(:default_enabled) do
+      {
+        facilities: false,
+      }
+    end
+
     # Shorthand method if you only want the default searchers
     def self.search(order_details, params)
       new.search(order_details, params)
     end
 
-    # Shorthand method for searchers used on the billing page
-    def self.billing_search(order_details, params, include_facilities: false)
-      searchers = default_searchers.dup
-      searchers.unshift(TransactionSearch::FacilitySearcher) if include_facilities
-      new(*searchers).search(order_details, params)
-    end
-
     # Expects an array of `TransactionSearch::BaseSearcher`s
-    def initialize(*searchers)
-      searchers = self.class.default_searchers if searchers.blank?
-      @searchers = Array(searchers)
+    def initialize(*searchers, searchers_opts: {}, **kwargs)
+      searchers_enabled = default_enabled.merge(kwargs)
+
+      @searchers_opts = searchers_opts
+      @searchers =
+        searchers.presence ||
+        default_searchers.filter do |searcher_class|
+          searchers_enabled.fetch(searcher_class.key.to_sym, true)
+        end
     end
 
     def search(order_details, params)
       order_details = add_global_optimizations(order_details)
 
       @searchers.reduce(Results.new(order_details)) do |results, searcher_class|
-        searcher = searcher_class.new(results.order_details, params[:current_facility_id])
+        searcher = searcher_class.new(
+          results.order_details,
+          params[:current_facility_id],
+          **@searchers_opts,
+        )
         search_params = params[searcher_class.key.to_sym]
         search_params = Array(search_params).reject(&:blank?) unless searcher.multipart?
 
