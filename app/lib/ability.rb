@@ -310,7 +310,7 @@ class Ability
     end
 
     if SettingsHelper.feature_on?(:move_transactions_account_roles) && Account.administered_by(user).any?
-      can [:movable_transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], TransactionsController
+      can :reassign_transactions, TransactionsController
     end
   end
 

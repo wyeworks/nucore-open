@@ -69,7 +69,7 @@ class NavTab::LinkCollection
   end
 
   def movable_transactions
-    return unless ability.can?(:movable_transactions, TransactionsController)
+    return unless ability.can?(:reassign_transactions, TransactionsController)
 
     NavTab::Link.new(tab: :movable_transactions, text: I18n.t("pages.movable_transactions"), url: movable_transactions_transactions_path)
   end
