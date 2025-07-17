@@ -30,7 +30,11 @@ class FacilityNotificationsController < ApplicationController
     order_details = OrderDetail.need_notification.for_facility(current_facility)
 
     @search_form = TransactionSearch::SearchForm.new(params[:search])
-    @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
+    @search =
+      TransactionSearch::Searcher
+      .new(facilities: current_facility.cross_facility?)
+      .search(order_details, @search_form)
+
     @date_range_field = @search_form.date_params[:field]
     @order_details = @search.order_details.reorder(sort_clause)
 
@@ -66,7 +70,11 @@ class FacilityNotificationsController < ApplicationController
     order_details = OrderDetail.in_review.for_facility(current_facility)
 
     @search_form = TransactionSearch::SearchForm.new(params[:search])
-    @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
+    @search =
+      TransactionSearch::Searcher
+      .new(facilities: current_facility.cross_facility?)
+      .search(order_details, @search_form)
+
     @date_range_field = @search_form.date_params[:field]
 
     @order_detail_action = :mark_as_reviewed

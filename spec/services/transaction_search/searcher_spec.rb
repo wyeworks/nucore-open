@@ -3,13 +3,19 @@
 require "rails_helper"
 
 RSpec.describe TransactionSearch::Searcher, type: :service do
-
   describe "a basic searcher" do
     let(:item) { create(:setup_item) }
     let(:order) { create(:purchased_order, product: item) }
     let(:order_detail) { order.order_details.first }
     let(:account) { order.account }
-    let(:searcher) { described_class.new(TransactionSearch::AccountSearcher, TransactionSearch::DateRangeSearcher, TransactionSearch::AccountTypeSearcher) }
+    let(:searcher) { described_class.new(*searchers) }
+    let(:searchers) do
+      [
+        TransactionSearch::AccountSearcher,
+        TransactionSearch::DateRangeSearcher,
+        TransactionSearch::AccountTypeSearcher,
+      ]
+    end
     let(:scope) { OrderDetail.all.joins(:order) }
     before do
       order_detail.to_complete!
@@ -98,6 +104,36 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       end
     end
 
+  end
+
+  describe "can toggle default searchers by key" do
+    it "can disable some searcher" do
+      searcher_key = described_class.default_searchers.sample.key
+
+      searcher = described_class.new(searcher_key.to_sym => false)
+
+      expect(searcher.instance_eval { @searchers.map(&:key) }).not_to(
+        include(searcher_key)
+      )
+    end
+
+    it "can enable some other searcher" do
+      searcher_key = described_class.default_searchers.sample.key
+
+      searcher = described_class.new(searcher_key.to_sym => true)
+
+      expect(searcher.instance_eval { @searchers.map(&:key) }).to(
+        include(searcher_key)
+      )
+    end
+
+    it "disables facility searcher by default" do
+      searcher = described_class.new
+
+      expect(searcher.instance_eval { @searchers.map(&:key) }).not_to(
+        include("facilities")
+      )
+    end
   end
 
 end
