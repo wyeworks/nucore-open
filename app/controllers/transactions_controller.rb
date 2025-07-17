@@ -26,9 +26,10 @@ class TransactionsController < ApplicationController
       },
     )
 
+    account_ids = params.dig(:search, :accounts)
     @search =
       TransactionSearch::Searcher
-      .new(facilities: true)
+      .new(facilities: true, accounts: { account_ids: })
       .search(order_details, @search_form)
 
     @date_range_field = @search_form.date_params[:field]

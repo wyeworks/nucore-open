@@ -32,7 +32,7 @@ module TransactionSearch
 
     # Initially all searchers in default_searchers
     # are enabled
-    cattr_accessor(:default_enabled) do
+    cattr_accessor(:default_config) do
       {
         facilities: false,
       }
@@ -44,14 +44,14 @@ module TransactionSearch
     end
 
     # Expects an array of `TransactionSearch::BaseSearcher`s
-    def initialize(*searchers, searchers_opts: {}, **kwargs)
-      searchers_enabled = default_enabled.merge(kwargs)
+    def initialize(*searchers, **kwargs)
+      searchers_config = default_config.merge(kwargs)
 
-      @searchers_opts = searchers_opts
+      @searchers_config = searchers_config
       @searchers =
         searchers.presence ||
         default_searchers.filter do |searcher_class|
-          searchers_enabled.fetch(searcher_class.key.to_sym, true)
+          searchers_config.fetch(searcher_class.key.to_sym, true)
         end
     end
 
@@ -59,16 +59,17 @@ module TransactionSearch
       order_details = add_global_optimizations(order_details)
 
       @searchers.reduce(Results.new(order_details)) do |results, searcher_class|
+        searcher_config = searcher_config(searcher_class.key.to_sym)
         searcher = searcher_class.new(
           results.order_details,
           params[:current_facility_id],
-          **@searchers_opts,
+          **searcher_config,
         )
         search_params = params[searcher_class.key.to_sym]
         search_params = Array(search_params).reject(&:blank?) unless searcher.multipart?
 
         # Options should not be restricted, they should search over the full order details
-        option_searcher = searcher_class.new(order_details)
+        option_searcher = searcher_class.new(order_details, **searcher_config)
 
         Results.new(
           searcher.search(search_params),
@@ -82,6 +83,15 @@ module TransactionSearch
     def add_global_optimizations(order_details)
       optimizers.reduce(order_details) do |current, optimizer|
         optimizer.new(current).optimize
+      end
+    end
+
+    def searcher_config(searcher_key)
+      value = @searchers_config[searcher_key]
+      if value.is_a?(Hash)
+        value
+      else
+        {}
       end
     end
 
