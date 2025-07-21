@@ -146,7 +146,7 @@ RSpec.describe FacilityAccountsController do
         let(:account_type) { "CreditCardAccount" }
 
         it "loads the account" do
-          skip_if_credit_card_unreconcilable
+          skip_if_credit_card_cannot_be_created
 
           expect(response).to be_successful
           expect(assigns(:account)).to be_a(CreditCardAccount)
@@ -241,7 +241,7 @@ RSpec.describe FacilityAccountsController do
       end
 
       it_should_allow :director do
-        skip_if_credit_card_unreconcilable
+        skip_if_credit_card_cannot_be_created
 
         expect(assigns(:account)).to be_persisted
         expect(assigns(:account).expires_at)
