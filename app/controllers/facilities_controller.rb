@@ -8,15 +8,15 @@ class FacilitiesController < ApplicationController
             :confirm_transactions, :move_transactions, :disputed_orders
   before_action :authenticate_user!, except: [:index, :show] # public pages do not require authentication
   before_action :check_acting_as, except: [:index, :show]
-  before_action :load_order_details, only: [:confirm_transactions, :move_transactions, :reassign_chart_strings]
-  before_action :set_admin_billing_tab, only: [:confirm_transactions, :disputed_orders, :movable_transactions, :transactions]
+  before_action :set_admin_billing_tab, only: [:confirm_transactions, :disputed_orders, :movable_transactions, :transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :store_fullpath_in_session, only: [:index, :show]
-  before_action :enable_sorting, only: [:disputed_orders, :movable_transactions, :transactions]
+  before_action :enable_sorting, only: [:disputed_orders, :movable_transactions, :transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
 
   load_and_authorize_resource find_by: :url_name
   skip_load_and_authorize_resource only: [:index, :show]
 
   include AZHelper
+  include MovableTransactions
   include OrderDetailsCsvExport
   include SortableBillingTable
 
@@ -172,50 +172,19 @@ class FacilitiesController < ApplicationController
     @order_details = @search.order_details.reorder(sort_clause).paginate(page: params[:page])
   end
 
-  # GET /facilities/:facility_id/movable_transactions
-  def movable_transactions
-    @search_form = TransactionSearch::SearchForm.new(params[:search])
-    @search = TransactionSearch::Searcher.billing_search(
-      OrderDetail.all_movable.for_facility(current_facility),
-      @search_form,
-      include_facilities: current_facility.cross_facility?,
-    )
-    @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details.reorder(sort_clause).paginate(page: params[:page], per_page: 100)
-
-    @order_detail_action = :reassign_chart_strings
-  end
-
-  # POST /facilities/:facility_id/movable_transactions/reassign_chart_strings
-  def reassign_chart_strings
-    ensure_order_details_selected
-    initialize_chart_string_reassignment_form
-  end
-
-  # POST /facilities/:facility_id/movable_transactions/confirm
-  def confirm_transactions
-    load_transactions
-    initialize_chart_string_reassignment_form
-  end
-
-  # POST /facilities/:facility_id/movable_transactions/move
-  def move_transactions
-    begin
-      reassign_account_from_params!
-      bulk_reassignment_success
-    rescue ActiveRecord::RecordInvalid => reassignment_error
-      bulk_reassignment_failure(reassignment_error)
-    end
-    redirect_to facility_movable_transactions_path
-  end
-
-  def get_movable_transactions(account)
-    @order_details.find_all do |order_detail|
-      order_detail.can_be_assigned_to_account?(account)
-    end
-  end
-
   private
+
+  def include_facilities?
+    current_facility.cross_facility?
+  end
+
+  def movable_transactions_order_details
+    OrderDetail.all_movable.for_facility(current_facility)
+  end
+
+  def redirect_to_movable_transactions
+    redirect_to facility_movable_transactions_path(current_facility)
+  end
 
   def facility_params
     params.require(:facility).permit(*self.class.permitted_facility_params)
@@ -246,42 +215,9 @@ class FacilitiesController < ApplicationController
     )
   end
 
-  def ensure_order_details_selected
-    if @order_details.count < 1
-      flash[:alert] = I18n.t("controllers.facilities.bulk_reassignment.no_transactions_selected")
-      redirect_to facility_movable_transactions_path(params[:facility_id])
-    end
-  end
-
   def initialize_chart_string_reassignment_form
     @chart_string_reassignment_form = ChartStringReassignmentForm.new(@order_details)
     @date_range_field = "journal_or_statement_date"
-  end
-
-  def load_order_details
-    @order_details = OrderDetail.where(id: params[:order_detail_ids])
-  end
-
-  def load_transactions
-    @selected_account = Account.find(params[:chart_string_reassignment_form][:account_id])
-    @movable_transactions = get_movable_transactions(@selected_account)
-    @unmovable_transactions = @order_details - @movable_transactions
-  end
-
-  def bulk_reassignment_success
-    flash[:notice] = I18n.t("controllers.facilities.bulk_reassignment.move.success",
-                            count: @order_details.count)
-  end
-
-  def bulk_reassignment_failure(reassignment_error)
-    flash[:alert] = I18n.t "controllers.facilities.bulk_reassignment.move.failure",
-                           reassignment_error: reassignment_error,
-                           order_detail_id: reassignment_error.record.id
-  end
-
-  def reassign_account_from_params!
-    account = Account.find(params[:account_id])
-    OrderDetail.reassign_account!(account, @order_details)
   end
 
   def set_admin_billing_tab

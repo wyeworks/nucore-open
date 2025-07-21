@@ -439,6 +439,10 @@ Rails.application.routes.draw do
     collection do
       get :in_review
       post :mark_as_reviewed
+      get :movable_transactions
+      post :reassign_chart_strings
+      post :confirm_transactions
+      post :move_transactions
     end
   end
 

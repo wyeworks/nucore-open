@@ -6,7 +6,10 @@ class TransactionsController < ApplicationController
   before_action :authenticate_user!
   before_action :check_acting_as
   before_action :enable_sorting, only: [:index, :in_review]
+  before_action :authorize_reassign_transactions, only: [:movable_transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
+  before_action :authorize_account, only: [:move_transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
 
+  include MovableTransactions
   include OrderDetailsCsvExport
   include SortableBillingTable
 
@@ -86,4 +89,32 @@ class TransactionsController < ApplicationController
     redirect_to action: :in_review
   end
 
+  private
+
+  def authorize_reassign_transactions
+    authorize! :reassign_transactions, TransactionsController
+  end
+
+  def authorize_account
+    unless current_user.account_administrator_of?(Account.find(params[:account_id]))
+      raise ActiveRecord::RecordNotFound
+    end
+  end
+
+  def initialize_chart_string_reassignment_form
+    @chart_string_reassignment_form = ChartStringReassignmentForm.new(@order_details, current_user)
+    @date_range_field = "journal_or_statement_date"
+  end
+
+  def movable_transactions_order_details
+    current_user.administered_order_details.all_movable
+  end
+
+  def include_facilities?
+    true
+  end
+
+  def redirect_to_movable_transactions
+    redirect_to movable_transactions_transactions_path
+  end
 end

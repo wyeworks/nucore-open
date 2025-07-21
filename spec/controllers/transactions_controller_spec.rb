@@ -91,4 +91,47 @@ RSpec.describe TransactionsController do
       end
     end
   end
+
+  context "MovableTransactions concern", feature_setting: { move_transactions_account_roles: true } do
+    let(:user_a) { create(:user) }
+    let(:user_b) { create(:user) }
+    let!(:account_a) { create(:setup_account, :with_account_owner, owner: user_a) }
+    let!(:account_b) { create(:setup_account, :with_account_owner, owner: user_a) }
+    let!(:order_detail) { create(:complete_order, product: create(:setup_item), account: account_a).order_details.first }
+    let!(:account_user) { create(:account_user, :business_administrator, user: user_b, account: account_a, created_by: user_a.id) }
+
+    context "when User A tries to reassign from account A to account B" do
+      before(:each) do
+        sign_in user_a
+      end
+
+      it "succeeds because User A administers both accounts" do
+        post :move_transactions, params: {
+          order_detail_ids: [order_detail.id],
+          account_id: account_b.id
+        }
+
+        expect(response).to redirect_to(movable_transactions_transactions_path)
+        expect(flash[:notice]).to include("1 transactions were reassigned")
+        expect(order_detail.reload.account).to eq(account_b)
+      end
+    end
+
+    context "when User B tries to reassign from account A to account B" do
+      before(:each) do
+        sign_in user_b
+      end
+
+      it "raises ActiveRecord::RecordNotFound because User B doesn't administer account B" do
+        expect do
+          post :move_transactions, params: {
+            order_detail_ids: [order_detail.id],
+            account_id: account_b.id
+          }
+        end.to raise_error(ActiveRecord::RecordNotFound)
+
+        expect(order_detail.reload.account).to eq(account_a) # Account should remain unchanged
+      end
+    end
+  end
 end
