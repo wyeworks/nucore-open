@@ -117,13 +117,11 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       )
     end
 
-    it "can enable some other searcher" do
-      searcher_key = described_class.default_searchers.sample.key
-
-      searcher = described_class.new(searcher_key.to_sym => true)
+    it "can enable facilities searcher" do
+      searcher = described_class.new(facilities: true)
 
       expect(searcher.instance_eval { @searchers.map(&:key) }).to(
-        include(searcher_key)
+        include("facilities")
       )
     end
 
