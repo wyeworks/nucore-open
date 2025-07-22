@@ -71,7 +71,7 @@ jobs:
       - run: bundle exec rails parallel:create
       - run: bundle exec rails parallel:load_schema
       - run: bundle exec rails assets:precompile
-      - run: bundle exec rails parallel:spec
+      - run: bundle exec rails parallel:spec[4]
 
   run-teaspoon:
     runs-on: ubuntu-latest
