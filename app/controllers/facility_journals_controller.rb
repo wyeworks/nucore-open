@@ -35,7 +35,11 @@ class FacilityJournalsController < ApplicationController
 
     order_details = OrderDetail.for_facility(current_facility).need_journal
     @search_form = TransactionSearch::SearchForm.new(params[:search])
-    @search = TransactionSearch::Searcher.billing_search(order_details, @search_form, include_facilities: current_facility.cross_facility?)
+    @search =
+      TransactionSearch::Searcher
+      .new(facilities: current_facility.cross_facility?)
+      .search(order_details, @search_form)
+
     @date_range_field = @search_form.date_params[:field]
     @order_details = @search.order_details.reorder(sort_clause)
     @journal_creation_reminder = JournalCreationReminder.current.first

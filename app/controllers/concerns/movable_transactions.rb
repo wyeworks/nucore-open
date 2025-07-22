@@ -36,11 +36,11 @@ module MovableTransactions
 
   def movable_transactions
     @search_form = TransactionSearch::SearchForm.new(params[:search])
-    @search = TransactionSearch::Searcher.billing_search(
-      movable_transactions_order_details,
-      @search_form,
-      include_facilities: include_facilities?,
-    )
+    @search =
+      TransactionSearch::Searcher
+      .new(facilities: include_facilities?)
+      .search(movable_transactions_order_details, @search_form)
+
     @date_range_field = @search_form.date_params[:field]
     @order_details = @search.order_details.reorder(sort_clause).paginate(page: params[:page], per_page: 100)
 
