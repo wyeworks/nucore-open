@@ -52,10 +52,19 @@ module PowerRelay
   # boolean - The current on/off status of the outlet (and secondary outlet, if configured).
   def query_status
     log_power_relay_connection(:status) do
-      relay_status = relay_connection.status(outlet)
-      if secondary_outlet
-        secondary_outlet_status = relay_connection.status(secondary_outlet)
+      relay_status = nil
+      max_retries = 2
+
+      retry_on_error(max_retries, NetBooter::Error) do
+        relay_status = relay_connection.status(outlet)
       end
+
+      if secondary_outlet
+        retry_on_error(max_retries, NetBooter::Error) do
+          relay_connection.status(secondary_outlet)
+        end
+      end
+
       relay_status
     end
   end
@@ -109,6 +118,20 @@ module PowerRelay
         secondary_outlet: secondary_outlet,
       }.merge(connection_options.except(:username, :password))
     }
+  end
+
+  def retry_on_error(max_retries, error_class)
+    retries = 0
+    begin
+      yield
+    rescue error_class => e
+      retries += 1
+      if retries < max_retries
+        retry
+      else
+        raise e
+      end
+    end
   end
 
 end

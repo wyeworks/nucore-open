@@ -8,6 +8,10 @@ class SomeRelay < Relay
 
 end
 
+module NetBooter
+  class Error < StandardError; end
+end
+
 RSpec.describe SomeRelay do
 
   it { is_expected.to validate_presence_of :ip }
@@ -70,5 +74,30 @@ RSpec.describe SomeRelay do
   context "with auto logout" do
     before { subject.auto_logout = true }
     it { is_expected.to validate_presence_of :auto_logout_minutes }
+  end
+
+  describe "retries to query status" do
+    let(:relay) { SomeRelay.new(ip: "123", username: "nucore", password: "password", outlet: 1, instrument_id: 1) }
+    let(:relay_connection) { double("RelayConnection") }
+
+    before do
+      allow(relay).to receive(:relay_connection).and_return(relay_connection)
+    end
+
+    it "retries once if NetBooter::Error is raised, then succeeds" do
+      call_count = 0
+      allow(relay_connection).to receive(:status) do
+        call_count += 1
+        raise NetBooter::Error if call_count == 1
+        true
+      end
+      expect(relay.query_status).to eq(true)
+      expect(call_count).to eq(2)
+    end
+
+    it "raises if NetBooter::Error is raised twice" do
+      allow(relay_connection).to receive(:status).and_raise(NetBooter::Error)
+      expect { relay.query_status }.to raise_error(NetBooter::Error)
+    end
   end
 end
