@@ -173,6 +173,8 @@ feature:
   show_account_price_groups_tab: false
   purchase_order_monetary_cap: false
   auto_end_reservations_on_next_start: false
+  show_reconcile_credit_cards: false
+  move_transactions_account_roles: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts

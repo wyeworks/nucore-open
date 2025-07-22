@@ -51,7 +51,7 @@ class NavTab::LinkCollection
     NavTab::Link.new(
       tab: :payment_sources,
       text: t_my(Account),
-      subnav: [accounts, transactions, transactions_in_review],
+      subnav: [accounts, transactions, transactions_in_review, movable_transactions].compact,
     )
   end
 
@@ -66,6 +66,12 @@ class NavTab::LinkCollection
   def transactions_in_review
     count = user.administered_order_details.in_review.count
     NavTab::Link.new(tab: :transactions_in_review, text: I18n.t("pages.transactions_in_review", count: count), url: in_review_transactions_path)
+  end
+
+  def movable_transactions
+    return unless ability.can?(:reassign_transactions, TransactionsController)
+
+    NavTab::Link.new(tab: :movable_transactions, text: I18n.t("pages.movable_transactions"), url: movable_transactions_transactions_path)
   end
 
   def files
