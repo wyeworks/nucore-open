@@ -11,3 +11,5 @@
 //= link jquery.qtip.css
 //
 //= link ckeditor_manifest
+//= link_tree ../../javascript .js
+//= link_tree ../../../vendor/javascript .js

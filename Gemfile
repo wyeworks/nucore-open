@@ -55,6 +55,7 @@ gem "paranoia"
 gem "sass-rails"
 gem "coffee-rails"
 gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
+gem "importmap-rails", "~> 2.2"
 gem "terser", "~> 1.2"
 gem "haml"
 gem "will_paginate"
