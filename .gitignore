@@ -1,5 +1,6 @@
 log/
 tmp/
+!tmp/parallel_runtime_rspec.log
 .bundle/
 .idea/
 .rvmrc
