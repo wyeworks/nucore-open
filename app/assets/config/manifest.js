@@ -1,7 +1,7 @@
 //= link_tree ../images
 //= link_tree ../../../vendor/assets/images
-//= link_tree ../javascripts .js
-//= link_tree ../../../vendor/assets/javascripts .js
+//= link_tree ../../javascripts .js
+//= link_tree ../../../vendor/javascript .js
 //
 //= link_directory ../fonts .ttf
 //
@@ -11,5 +11,3 @@
 //= link jquery.qtip.css
 //
 //= link ckeditor_manifest
-//= link_tree ../../javascript .js
-//= link_tree ../../../vendor/javascript .js
