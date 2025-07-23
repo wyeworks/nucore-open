@@ -8,10 +8,6 @@ class SomeRelay < Relay
 
 end
 
-module NetBooter
-  class Error < StandardError; end
-end
-
 RSpec.describe SomeRelay do
 
   it { is_expected.to validate_presence_of :ip }

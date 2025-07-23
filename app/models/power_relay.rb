@@ -124,12 +124,12 @@ module PowerRelay
     retries = 0
     begin
       yield
-    rescue error_class => e
+    rescue error_class
       retries += 1
       if retries < max_retries
         retry
       else
-        raise e
+        raise
       end
     end
   end
