@@ -46,7 +46,7 @@
       - if @order.has_valid_payment?
         %li
           = f.submit t("shared.update"),
-            class: "btn"
+            class: "btn btn-default"
         - if order.validated?
           %li
             = f.submit t("shared.purchase"),

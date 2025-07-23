@@ -7,27 +7,27 @@
 .row
   .form-horizontal
     = form_tag facility_estimates_path, method: :get, class: "form-horizontal filter-form" do
-      .control-group
+      .form-group
         %label.control-label= t(".search")
         .controls
           = text_field_tag :search, params[:search], placeholder: t(".search_placeholder"), id: "estimate_search"
 
-      .control-group
+      .form-group
         %label.control-label= t(".filter_user")
         .controls
           = select_tag :user_id,
             options_for_select(estimate_user_options(current_facility),
             selected: params[:user_id])
 
-      .control-group
+      .form-group
         %label.control-label= t(".hide_expired")
         .controls
           = check_box_tag :hide_expired, "1", params[:hide_expired] == "1"
 
-      .control-group
+      .form-group
         .controls
-          = submit_tag t("shared.filter"), class: "btn"
-          = link_to t(".clear_filter"), facility_estimates_path, class: "btn"
+          = submit_tag t("shared.filter"), class: "btn btn-default"
+          = link_to t(".clear_filter"), facility_estimates_path, class: "btn btn-default"
 
 - if @estimates.present?
   %table.table.table-striped.table-hover

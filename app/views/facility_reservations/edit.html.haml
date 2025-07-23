@@ -23,7 +23,7 @@
   - if @reservation.admin_editable?
     .datetime-block
       = f.input :reserve_start_date, input_html: { class: "datepicker" }
-      .control-group
+      .form-group
         .controls
           .string.optional.control-label &nbsp;
           = time_select f, :reserve_start
@@ -36,7 +36,7 @@
   - if @reservation.can_edit_actuals?
     .datetime-block
       = f.input :actual_start_date, input_html: { class: "datepicker" }
-      .control-group
+      .form-group
         .controls
           .string.optional.control-label &nbsp;
           = time_select f, :actual_start
@@ -53,7 +53,7 @@
 
   .clearfix
   %ul.inline
-    %li= f.submit "Save", class: "btn"
+    %li= f.submit "Save", class: "btn btn-default"
     - if @order_detail.complete?
       %li= link_to "Cancel", show_problems_facility_reservations_path
     - elsif @order_detail.new? || @order_detail.inprocess?

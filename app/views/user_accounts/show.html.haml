@@ -13,7 +13,7 @@
   - if current_facility.cross_facility? && current_ability.can?(:manage_users, current_facility)
     = link_to t(".edit"), edit_facility_user_accounts_path(current_facility, @user), class: "btn btn-primary"
   - if current_facility.cross_facility? && current_ability.can?(:clone_accounts, current_facility)
-    = link_to text("views.clone_account_memberships.index.header"), facility_user_clone_account_memberships_path(current_facility, @user), class: "btn"
+    = link_to text("views.clone_account_memberships.index.header"), facility_user_clone_account_memberships_path(current_facility, @user), class: "btn btn-default"
 
   %p.toggle_expired_accts_btn--js.toggle_expired_btn.btn.btn-primary= t("views.facility_accounts.account_table.hide_text")
 
@@ -35,4 +35,4 @@
 - else
   %p.notice= t('.notice', user_name: @user.full_name)
   - if current_facility.cross_facility? && current_ability.can?(:clone_accounts, current_facility)
-    = link_to text("views.clone_account_memberships.index.header"), facility_user_clone_account_memberships_path(current_facility, @user), class: "btn"
+    = link_to text("views.clone_account_memberships.index.header"), facility_user_clone_account_memberships_path(current_facility, @user), class: "btn btn-default"

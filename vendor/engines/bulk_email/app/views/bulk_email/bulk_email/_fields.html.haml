@@ -36,7 +36,7 @@
 
   .row.bulk_email_search_actions
     .col-md-8
-      = f.submit text("shared.search"), class: "btn"
+      = f.submit text("shared.search"), class: "btn btn-default"
       - if params[:return_path].present?
         = link_to t("shared.cancel"), params[:return_path]
         = hidden_field_tag "return_path", params[:return_path]

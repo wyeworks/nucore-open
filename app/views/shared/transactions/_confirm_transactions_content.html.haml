@@ -10,7 +10,7 @@
   - @movable_transactions.each do |order_detail|
     = hidden_field_tag :"order_detail_ids[]", order_detail.id
   = submit_tag text("shared.transactions.reassign_chart_strings.submit"), class: "btn btn-primary"
-  = link_to t("shared.cancel"), cancel_path, class: "btn"
+  = link_to t("shared.cancel"), cancel_path, class: "btn btn-default"
 
 - if @unmovable_transactions.present?
   %h3= t("shared.transactions.confirm_transactions.unmovable_transactions.label")

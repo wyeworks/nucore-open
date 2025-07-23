@@ -15,10 +15,10 @@
       = f.input :description
       = f.input :status_string
     - if @log_event
-      %div.control-group
+      %div.form-group
         %label= t(".label.closed_at")
         %div #{format_usa_datetime(@log_event.event_time)}
-      %div.control-group
+      %div.form-group
         %label= t(".label.closed_by")
         %div #{@log_event.user.full_name}
   .col-md-4

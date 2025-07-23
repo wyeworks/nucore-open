@@ -10,7 +10,7 @@
   = f.input :url_name, input_html: { value: link_to(polymorphic_url([current_facility, @product]), [current_facility, @product]) }
 
   - if @product.is_a?(Instrument) && SettingsHelper.feature_on?(:walkup_reservations)
-    .control-group
+    .form-group
       %label= t("views.products_common.manage.quick_reservation_label")
       = link_to nil, new_facility_instrument_quick_reservation_url(current_facility, @product)
   - if SettingsHelper::feature_on? :product_specific_contacts
@@ -42,4 +42,4 @@
   = render_if_exists "#{@product.class.name.underscore}_manage_fields", f: f
 - if can? :edit, @product
   %ul.inline
-    %li= link_to "Edit", [:edit, current_facility, @product], class: "btn"
+    %li= link_to "Edit", [:edit, current_facility, @product], class: "btn btn-default"

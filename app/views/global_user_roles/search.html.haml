@@ -12,7 +12,7 @@
       = t(".instructions.add_user")
 
   = text_field_tag :search_term, nil, size: 30, class: "search-query"
-  = submit_tag "Search", class: "btn"
+  = submit_tag "Search", class: "btn btn-default"
   = hidden_field_tag :search_type, "global_user_role"
   = hidden_field_tag :create_link, can_create_users?
 #result

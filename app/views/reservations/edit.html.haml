@@ -36,7 +36,7 @@
   = render "reservation_fields", f: f
 
   %ul.inline
-    %li= f.submit t('shared.save'), class: 'btn'
+    %li= f.submit t('shared.save'), class: 'btn btn-default'
     - if @order.purchased?
       %li= link_to t('shared.cancel'), reservations_path
     - else

@@ -11,7 +11,7 @@
         .col-md-1.select_all_none= select_all_link
         .col-md-9
           - if @action_date_field
-            .control-group.fields
+            .form-group.fields
               %label.control-label{ for: @action_date_field.keys.first }= @action_date_field.keys.first.to_s.titleize
               .controls
                 = text_field_tag @action_date_field.keys.first, @action_date_field.values.first.strftime("%m/%d/%Y"), class: :datepicker

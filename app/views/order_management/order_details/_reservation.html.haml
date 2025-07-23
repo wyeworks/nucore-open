@@ -3,7 +3,7 @@
   .datetime-block.js--pricingUpdate
     - if reservation.admin_editable?
       = r.input :reserve_start_date, input_html: { class: "datepicker" }
-      .control-group
+      .form-group
         .controls
           %label &nbsp;
           = time_select r, :reserve_start, minute_step: reservation.product.reserve_interval
@@ -19,7 +19,7 @@
     - if reservation.can_edit_actuals? && !reservation.canceled?
       = f.input :editing_time_data, as: :hidden, input_html: { value: true }
       = r.input :actual_start_date, input_html: { class: "datepicker" }
-      .control-group
+      .form-group
         .controls
           %label &nbsp;
           = time_select r, :actual_start, :minute_step => 1
