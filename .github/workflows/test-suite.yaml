@@ -62,7 +62,7 @@ jobs:
       MYSQL_HOST: mysql
       MYSQL_USER: root
       MYSQL_PASSWORD: root
-      PARALLEL_TEST_PROCESSORS: 4
+      PARALLEL_TEST_PROCESSORS: 6
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-rails
@@ -71,7 +71,7 @@ jobs:
       - run: bundle exec rails parallel:create
       - run: bundle exec rails parallel:load_schema
       - run: bundle exec rails assets:precompile
-      - run: bundle exec rails parallel:spec[4]
+      - run: bundle exec rails parallel:spec
 
   run-teaspoon:
     runs-on: ubuntu-latest

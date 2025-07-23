@@ -1,5 +1,5 @@
 log/
-tmp/
+tmp/**
 !tmp/parallel_runtime_rspec.log
 .bundle/
 .idea/
