@@ -15,7 +15,7 @@
 //= require _common
 //= require date
 //= require moment
-//= require jquery.qtip
+//= require qtip2
 //= require fullcalendar
 //= require_tree ./app
 //= require clockpunch
