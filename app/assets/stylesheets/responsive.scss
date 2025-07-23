@@ -7,7 +7,7 @@ $navbarActiveBorderColor: #595959;
 /* 979px - 980px is where nav-collapse gets triggered */
 @media screen and (max-width: 979px) {
 
-  .navbar .btn-navbar {
+  .navbar .navbar-toggle {
     padding: 5px 15px;
 
     .fa-bars {
@@ -21,29 +21,29 @@ $navbarActiveBorderColor: #595959;
   .visible-with-nav {
     display: none !important;
   }
-  .nav-collapse {
+  .navbar-collapse {
     background-color: $navCollapseBackgroundColor;
     position: relative;
     width: 100%;
     z-index: 1;
   }
-  .nav-collapse .nav {
+  .navbar-collapse .nav {
     margin: 0;
     border-top: 1px solid #ddd;
     &:empty {
       border-top: 0;
     }
   }
-  header .navbar .nav > li > a, .nav-collapse .dropdown-menu a {
+  header .navbar .nav > li > a, .navbar-collapse .dropdown-menu a {
     padding: 10px;
     border-radius: 0;
   }
-  /* this selector has to override specificity of bootstrap-responsive's
+  /* this selector has to override specificity of bootstrap's
       `header .navbar .nav > li > a` and `!important` as well as target
-      only the .nav-collapse links
+      only the .navbar-collapse links
   */
-  header .navbar .nav-collapse .nav > li > a,
-  .nav-collapse .dropdown-menu a {
+  header .navbar .navbar-collapse .nav > li > a,
+  .navbar-collapse .dropdown-menu a {
     color: $navCollapseColor !important;
     background: $navCollapseBackgroundColor;
 
@@ -52,7 +52,7 @@ $navbarActiveBorderColor: #595959;
       background: $navbarLinkColorActive;
     }
   }
-  header .navbar .nav-collapse .nav > li.active > a {
+  header .navbar .navbar-collapse .nav > li.active > a {
     background: $navbarLinkColorActive;
   }
   header .navbar .nav > li.navbar-text {
@@ -60,7 +60,7 @@ $navbarActiveBorderColor: #595959;
     line-height: 20px;
     color: $navCollapseColor !important;
   }
-  .nav-collapse .navbar-form, .nav-collapse .navbar-search {
+  .navbar-collapse .navbar-form, .navbar-collapse .navbar-search {
     margin: 0;
     padding: 10px;
     border-bottom: 0;

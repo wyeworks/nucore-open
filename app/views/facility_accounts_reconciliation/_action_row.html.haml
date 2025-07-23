@@ -1,6 +1,6 @@
 .row.table-actions.form-horizontal
-  .span1.select_all_none= select_all_link
-  .span1.pull-right= submit_tag t("facility_accounts_reconciliation.index.submit"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { disable_with: t("facility_accounts_reconciliation.index.submit") }
+  .col-md-1.select_all_none= select_all_link
+  .col-md-1.pull-right= submit_tag t("facility_accounts_reconciliation.index.submit"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { disable_with: t("facility_accounts_reconciliation.index.submit") }
 
 - if local_assigns[:show_order_status]
   .row.table-actions.form-horizontal

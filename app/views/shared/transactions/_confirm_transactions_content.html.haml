@@ -2,7 +2,7 @@
 
 %h3= t("shared.transactions.confirm_transactions.movable_transactions.label")
 .row
-  .span9
+  .col-md-9
     = render "shared/transactions/table_inside", order_details: @movable_transactions
 
 = simple_form_for @chart_string_reassignment_form, url: form_url do |form|
@@ -15,5 +15,5 @@
 - if @unmovable_transactions.present?
   %h3= t("shared.transactions.confirm_transactions.unmovable_transactions.label")
   .row
-    .span9
+    .col-md-9
       = render "shared/transactions/table_inside", order_details: @unmovable_transactions

@@ -1,47 +1,50 @@
-.navbar.navbar-static-top
-  .navbar-inner{ style: staging_header_styles }
-    .container
-      = link_to :root, class: "brand" do
+.navbar.navbar-default.navbar-static-top{ style: staging_header_styles }
+  .container
+    .navbar-header
+      - if responsive? && !session_user.nil?
+        %button.navbar-toggle.collapsed.hide-from-print{ type: "button", data: { target: "#navbar-collapse", toggle: "collapse" } }
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+          %span.icon-bar
+      = link_to :root, class: "navbar-brand" do
         - if Settings.header_logo_path.present?
           = image_tag Settings.header_logo_path, class: "img__brand", alt: t("pages.logo_alt_text")
         - if Settings.display_app_name_in_header
           %span= app_name
-      - if session_user.nil?
-        %ul.nav.pull-right.hide-from-print
-          = render "/shared/support"
-          %li= link_to t("pages.login"), :new_user_session
-      - else
+    - if session_user.nil?
+      %ul.nav.navbar-nav.navbar-right.hide-from-print
+        = render "/shared/support"
+        %li= link_to t("pages.login"), :new_user_session
+    - else
+      -# collapsed at < 979px
+      .navbar-collapse.collapse.hide-from-print{ id: "navbar-collapse" }
         - if responsive?
-          %a.btn.btn-navbar.hide-from-print{ data: { target: ".nav-collapse", toggle: "collapse" } }
-            %span.fa.fa-lg.fa-bars
-        -# collapsed at < 979px
-        .hide-from-print{ class: ("nav-collapse collapse" if responsive?) }
-          - if responsive?
-            -# .hidden-with-nav is hidden > 979px
-            .hidden-with-nav
-              = render "/shared/nav/nav_links"
-          %ul.nav.pull-right.hide-from-print
-            - if acting_as?
-              %li.navbar-text= "#{acting_user.full_name} (#{acting_user.username})"
-              %li.divider-vertical
-              = render "/shared/support"
-              %li= link_to t("pages.cart"), :cart, class: "js--cart_count", data: { url: orders_cart_count_url }
+          -# .hidden-with-nav is hidden > 979px
+          .hidden-with-nav
+            = render "/shared/nav/nav_links"
+        %ul.nav.navbar-nav.navbar-right.hide-from-print
+          - if acting_as?
+            %li.navbar-text= "#{acting_user.full_name} (#{acting_user.username})"
+            %li.divider-vertical
+            = render "/shared/support"
+            %li= link_to t("pages.cart"), :cart, class: "js--cart_count", data: { url: orders_cart_count_url }
+          - else
+            - if UserPreference.options_for(current_user).any?
+              %li.visible-with-link= link_to "#{current_user.full_name} (#{current_user.username})", user_user_preferences_path(current_user)
             - else
-              - if UserPreference.options_for(current_user).any?
-                %li.visible-with-link= link_to "#{current_user.full_name} (#{current_user.username})", user_user_preferences_path(current_user)
-              - else
-                %li.navbar-text= "#{acting_user.full_name} (#{acting_user.username})"
+              %li.navbar-text= "#{acting_user.full_name} (#{acting_user.username})"
+            %li.divider-vertical
+            - if current_user.password_updatable? && SettingsHelper.feature_on?(:password_update)
+              %li= link_to t("user_password.edit.head"), :edit_current_password
               %li.divider-vertical
-              - if current_user.password_updatable? && SettingsHelper.feature_on?(:password_update)
-                %li= link_to t("user_password.edit.head"), :edit_current_password
-                %li.divider-vertical
-              -# .visible-with-nav is visible > 979px
-              = render "/shared/support"
-              %li.visible-with-nav= link_to t("pages.cart"), :cart, class: "js--cart_count", data: { url: orders_cart_count_url }
-              %li.divider-vertical
-              = render "shared/message_summary"
-              %li= link_to t('pages.logout'), sign_out_user_path
-              - if responsive? && !acting_as? && current_user
-                %li
-                  = form_tag global_search_path, class: "navbar-search pull-right hidden-with-nav" do
-                    = text_field_tag :search, nil, placeholder: t("global_search.search"), class: "search-query span2", aria: { label: t("global_search.search") }
+            -# .visible-with-nav is visible > 979px
+            = render "/shared/support"
+            %li.visible-with-nav= link_to t("pages.cart"), :cart, class: "js--cart_count", data: { url: orders_cart_count_url }
+            %li.divider-vertical
+            = render "shared/message_summary"
+            %li= link_to t('pages.logout'), sign_out_user_path
+            - if responsive? && !acting_as? && current_user
+              %li
+                = form_tag global_search_path, class: "navbar-search pull-right hidden-with-nav" do
+                  = text_field_tag :search, nil, placeholder: t("global_search.search"), class: "search-query col-md-2", aria: { label: t("global_search.search") }

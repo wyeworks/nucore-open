@@ -48,9 +48,9 @@
 
       .container
         .row
-          .span8
+          .col-md-8
             = f.input :note, as: :text, input_html: { class: "wide", maxlength: 1000 }
-          .span4
+          .col-md-4
             = f.input :reference_id
 
       = submit_tag text("admin.shared.add_to", model: @order.class),

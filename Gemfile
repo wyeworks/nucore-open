@@ -53,8 +53,9 @@ gem "paranoia"
 
 ## views
 gem "sass-rails"
+gem "sassc-rails", ">= 2.1.0"
 gem "coffee-rails"
-gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
+gem "bootstrap-sass", "~> 3.4.1"
 gem "terser", "~> 1.2"
 gem "haml"
 gem "will_paginate"

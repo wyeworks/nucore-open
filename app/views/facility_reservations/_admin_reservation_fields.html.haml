@@ -18,8 +18,8 @@
 
 .clearfix
 
-= f.input :admin_note, input_html: { class: "span6" } unless @order_detail
-= f.input :user_note, input_html: { class: "span6" } unless @order_detail
+= f.input :admin_note, input_html: { class: "col-md-6" } unless @order_detail
+= f.input :user_note, input_html: { class: "col-md-6" } unless @order_detail
 
 .checkboxControl
   = f.input :expires?, as: :boolean, label: t('activemodel.attributes.admin_reservation_form.expires?'), input_html: { data: { disables: ".admin_reservation_expires_mins_before" } }, wrapper_html: { class: "checkboxControl__checkbox" }

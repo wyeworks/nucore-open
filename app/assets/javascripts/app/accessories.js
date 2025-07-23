@@ -62,7 +62,7 @@ class AccessoryPickerDialog {
     this.dialog.on('ajax:complete', 'form', (evt, xhr, status) => self.handle_response(evt, xhr, status));
 
     if (this.$link.data('refresh-on-cancel')) {
-      this.dialog.on('hidden', () => window.location.reload());
+      this.dialog.on('hidden.bs.modal', () => window.location.reload());
     }
 
     return this.dialog.on('submit', 'form', () => self.toggle_buttons(false));

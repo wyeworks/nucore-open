@@ -91,7 +91,7 @@
     }
     .subsidy {
       .help-block {
-        @extend .muted;
+        @extend .text-muted;
       }
     }
   }
@@ -133,7 +133,7 @@ table.order-list {
   }
 
   tr.status-canceled {
-    @extend .muted;
+    @extend .text-muted;
   }
 
   th {
@@ -196,7 +196,7 @@ table.order-list {
   }
 
   &.status-canceled {
-    @extend .label-important;
+    @extend .label-danger;
   }
 
 }

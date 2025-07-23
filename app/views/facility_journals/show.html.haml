@@ -6,7 +6,7 @@
 
 %h2= t(".head.h2", journal: @journal)
 .row
-  .span5
+  .col-md-5
     = readonly_form_for :journal do |f|
       = f.input :created_at
       = f.input :created_by_user
@@ -21,7 +21,7 @@
       %div.control-group
         %label= t(".label.closed_by")
         %div #{@log_event.user.full_name}
-  .span4
+  .col-md-4
     .well
       = render "downloads", facility: current_facility, journal: @journal, label_size: :long
 

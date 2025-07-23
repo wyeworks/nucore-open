@@ -1,11 +1,11 @@
 = form_tag local_assigns[:send_problem_notifications_path], method: :post, class: "form-horizontal problem-notifications-form" do
   .row.table-actions
-    .span5.select_all_none= select_all_link
-    .span4
+    .col-md-5.select_all_none= select_all_link
+    .col-md-4
       = link_to t(".assign_price_policies"), local_assigns[:assign_price_policies_path], method: :post, class: %w(btn btn-primary)
-    .span1
+    .col-md-1
       = submit_tag t(".send_reminders"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { confirm_template: t(".send_reminders_confirmation"), select_order_alert: t(".js.select_order_alert"), select_group_alert: t(".js.select_group_alert"), notification_count_error: t(".js.notification_count_error"), no_users_to_notify: t(".js.no_users_to_notify"), disable_with: t(".send_reminders") }   
-    .span2
+    .col-md-2
       .pull-right
         .inline-checkbox-list
           = label_tag :notification_groups_resolvable, class: "checkbox inline" do

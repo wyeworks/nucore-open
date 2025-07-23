@@ -11,16 +11,16 @@ $reservationLabelColor: $secondaryColor;
 $reservationLinkColor: $secondaryColor;
 
 /* Login, Cart, etc Links */
-$usernavColor: darken($navbarLinkColor, 3%);
-$usernavColorHover: $navbarLinkColorHover;
-$usernavDividerColor: transparentize($grayDark, 0.95);
+$usernavColor: #777;
+$usernavColorHover: #333;
+$usernavDividerColor: transparentize(#333, 0.95);
 
 /* Primary Navbar */
 $navbarActiveBorderHeight: 5px;
 $navbarActiveBorderColor: #595959;
 
 /* Sidebar Colors */
-$sidebarActiveBackgroundColor: $linkColor;
+$sidebarActiveBackgroundColor: $secondaryColor;
 $sidebarActiveBackgroundColorHighlight: darken($sidebarActiveBackgroundColor, 5%);
 
 $imageBrandHeight: 1em;
@@ -29,4 +29,4 @@ $brandPadding: 17px 20px 16px;
 
 $headerContainerHeight: 60px;
 
-$sidebarActiveColor: $white;
+$sidebarActiveColor: #fff;

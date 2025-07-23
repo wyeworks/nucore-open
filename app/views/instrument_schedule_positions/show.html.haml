@@ -8,11 +8,11 @@
 .container
   - if can?(:update, Schedule)
     .row
-      .span12
+      .col-md-12
         %p= link_to text("shared.edit"), edit_facility_instrument_schedule_position_path, class: "btn"
 
   .row
-    .span7
+    .col-md-7
       %p= text("hint")
       %ul
         - @schedules.each do |schedule|

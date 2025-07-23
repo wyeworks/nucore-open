@@ -5,14 +5,23 @@
 header {
 
   .navbar {
-    .brand {
+    .navbar-header {
+      height: $headerContainerHeight;
+      float: left;
+    }
+    
+    .navbar-brand {
       font-family: $headerFont;
       text-decoration: none;
       text-shadow: none;
       font-size: 27px;
       color: $headerColor;
-
       padding: $brandPadding;
+      height: $headerContainerHeight;
+
+      &:hover, &:focus {
+        color: $headerColor;
+      }
 
       .img__brand {
         height: $imageBrandHeight;
@@ -23,23 +32,107 @@ header {
         line-height: 1;
       }
     }
+    
+    .navbar-toggle {
+      .icon-bar {
+        background-color: #888;
+      }
+    }
   }
 
-  .navbar-inner, .dropdown-toggle {
+  .navbar {
+    @include gradient-vertical($headerBackgroundColorHighLight, $headerBackgroundColor);
+    border: none;
+    min-height: $headerContainerHeight;
+    margin-bottom: 0;
+    border-radius: 0;
+  }
+  
+  .navbar-default {
+    background-image: linear-gradient(to bottom, $headerBackgroundColorHighLight 0%, $headerBackgroundColor 100%);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($headerBackgroundColorHighLight)}', endColorstr='#{ie-hex-str($headerBackgroundColor)}', GradientType=0);
+  }
+  
+  .dropdown-toggle {
     @include gradient-vertical($headerBackgroundColorHighLight, $headerBackgroundColor);
   }
 
   .container {
-    height: $headerContainerHeight;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    flex-flow: wrap;
+    position: relative;
+    > .navbar-header,
+    > .navbar-collapse {
+      margin-right: 0;
+      margin-left: 0;
+    }
   }
+  
+  // Override Bootstrap's container clearfix for navbar
+  .navbar > .container {
+    &:before, &:after {
+      display: table;
+      content: " ";
+    }
+    &:after {
+      clear: both;
+    }
+  }
+  
+  // Bootstrap 3 navbar styles
+  .navbar-nav {
+    margin: 0;
+    float: right;
+    
+    .divider-vertical {
+      float: left;
+      width: 1px;
+      height: $headerContainerHeight;
+      margin: 0 9px;
+      background-color: $usernavDividerColor;
+    }
+    
+    > li {
+      float: left;
+      
+      > a {
+        color: $usernavColor !important;
+        text-shadow: none;
+        padding: 20px 10px;
+        line-height: 20px;
 
-  .container:before, .container:after {
-    content: none;
+        &:hover, &:focus {
+          color: $usernavColorHover !important;
+          background-color: transparent !important;
+        }
+      }
+      
+      &.navbar-text {
+        color: $usernavColor;
+        margin: 0;
+        padding: 20px 10px;
+        line-height: 20px;
+        float: left;
+      }
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .navbar-right {
+      float: right !important;
+      margin-right: -15px;
+    }
+  }
+  
+  .navbar-collapse {
+    padding-right: 0;
+    padding-left: 0;
+    border-top: 0;
+    box-shadow: none;
+    float: right;
+    
+    &.in {
+      overflow-y: visible;
+    }
   }
 
   .navbar .nav {

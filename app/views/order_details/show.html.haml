@@ -9,7 +9,7 @@
 
 - res = @order_detail.reservation
 .row
-  .span6
+  .col-md-6
     %p= link_to t(".link.receipt"), receipt_order_path(@order)
 
     = readonly_form_for :order do |f|
@@ -25,7 +25,7 @@
       = f.input :user
       = f.input :created_by_user
 
-  .span6
+  .col-md-6
     - if current_ability.can?(:dispute, @order_detail)
       - if @order_detail.can_dispute?
         .well
@@ -41,10 +41,10 @@
           = readonly_form_for :order_detail do |f|
             .container
               .row
-                .span3
+                .col-md-3
                   = f.input :dispute_at
                   = f.input :dispute_reason
-                .span3
+                .col-md-3
                   = f.input :dispute_resolved_at if @order_detail.dispute_resolved_at
                   = f.input :dispute_resolved_reason if @order_detail.dispute_resolved_reason.present?
 
@@ -58,7 +58,7 @@
             = t(".link.view.zip")
 
 .row
-  .span12
+  .col-md-12
     %table.table.table-striped.table-hover.old-table.old-table.js--responsive_table
       %thead
         %tr

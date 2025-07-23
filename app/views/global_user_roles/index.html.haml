@@ -15,7 +15,7 @@
   = link_to t(".export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
   = form_tag(global_user_roles_path, method: :get, class: "search_form") do
     .row
-      .span3
+      .col-md-3
         = hidden_field_tag :email, current_user.email, disabled: true
         = hidden_field_tag :format, params[:format], disabled: true
   %table.table.table-striped.table-hover

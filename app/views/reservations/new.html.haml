@@ -32,11 +32,11 @@
 
   - if acting_as?
     .row
-      .span4
+      .col-md-4
         = f.input :reference_id
     .row
       - if @order.order_details.size == 1
-        .span6.send-notification
+        .col-md-6.send-notification
           = label_tag :send_notification, class: "checkbox" do
             = check_box_tag :send_notification, 1, params[:send_notification] == "1"
             = t(".notify")

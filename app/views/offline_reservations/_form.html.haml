@@ -13,12 +13,12 @@
   = f.error_messages
 
   %ul.inline
-    %li= f.input :admin_note, input_html: { class: "span4" }
+    %li= f.input :admin_note, input_html: { class: "col-md-4" }
     %li
       = f.input :category,
         collection: offline_category_collection,
         include_blank: false,
-        input_html: { class: "span2" }
+        input_html: { class: "col-md-2" }
 
   .clearfix
   %ul.inline

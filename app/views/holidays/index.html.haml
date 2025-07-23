@@ -11,8 +11,8 @@
 %table.table
   %caption= t(".caption")
   %thead
-    %th.span1{scope: "col"}= t(".date")
-    %th.span11{scope: "col"}= t(".actions")
+    %th.col-md-1{scope: "col"}= t(".date")
+    %th.col-md-11{scope: "col"}= t(".actions")
   %tbody
     - @holidays.each do |holiday|
       %tr

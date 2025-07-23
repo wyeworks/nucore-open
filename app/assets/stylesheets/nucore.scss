@@ -15,6 +15,25 @@
  nav
 */
 
+nav .navbar {
+  margin-bottom: 0;
+  min-height: auto;
+  border-radius: 0;
+  
+  .navbar-nav > li {
+    > a {
+      padding: 10px 15px;
+    }
+    
+    &.active > a,
+    &:hover > a {
+      border-top: $navbarActiveBorderHeight solid $navbarActiveBorderColor;
+      margin-top: -$navbarActiveBorderHeight;
+      padding-top: 10px - $navbarActiveBorderHeight;
+    }
+  }
+}
+
 nav ul.nav > li.active,
 nav ul.nav > li:hover {
   border-top: $navbarActiveBorderHeight solid $navbarActiveBorderColor;
@@ -47,9 +66,10 @@ nav ul.nav > li:hover {
 */
 .sidebar-nav {
   @extend .well;
-  @extend .well-small;
+  @extend .well-sm;
   @extend .nav;
-  @extend .nav-list;
+  @extend .nav-pills;
+  @extend .nav-stacked;
 
   margin-bottom: 10px;
 
@@ -123,8 +143,7 @@ li.nav-spacer {
 */
 .errorExplanation {
   @extend .alert;
-  @extend .alert-error;
-  @extend .alert-block;
+  @extend .alert-danger;
   h2 {
     font-size: 16px;
     line-height: 1em;
@@ -332,7 +351,7 @@ td.daily_rate {
 
 p.per-minute {
   font-style: italic;
-  @extend .muted;
+  @extend .text-muted;
   font-size: 85%;
   margin-top: -0.75em;
 }
