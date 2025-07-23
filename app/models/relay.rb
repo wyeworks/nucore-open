@@ -11,6 +11,8 @@ class Relay < ApplicationRecord
 
   alias_attribute :host, :ip
 
+  delegate :facility, to: :instrument
+
   CONTROL_MECHANISMS = {
     manual: nil,
     timer: "timer",
@@ -35,6 +37,10 @@ class Relay < ApplicationRecord
 
   def networked_relay?
     control_mechanism == CONTROL_MECHANISMS[:relay]
+  end
+
+  def to_log_s
+    instrument.name
   end
 
   private

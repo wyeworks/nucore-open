@@ -39,6 +39,9 @@ class InstrumentRelaysController < ApplicationController
     @relay = @product.replace_relay(relay_params, params[:relay][:control_mechanism])
     if @relay.valid?
       @relay.try(:activate_secondary_outlet) if @relay.secondary_outlet.present?
+
+      LogEvent.log(@relay, :update, current_user, metadata: { instrument_name: @product.name }) if action_string == "edit"
+
       flash[:notice] = "Relay was successfully updated."
       redirect_to facility_instrument_relays_path(current_facility, @product)
     else
