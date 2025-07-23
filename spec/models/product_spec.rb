@@ -791,4 +791,44 @@ RSpec.describe Product do
       expect(product.errors).to include("order_notification_recipients")
     end
   end
+
+  describe "#activation_change_action" do
+    it "returns :deactivate when is_archived changes from false to true" do
+      product = create(:setup_item, is_archived: false, is_hidden: false)
+      product.is_archived = true
+      product.save!
+      expect(product.activation_change_action).to eq(:deactivate)
+    end
+
+    it "returns :activate when is_hidden changes from true to false" do
+      product = create(:setup_item, is_archived: false, is_hidden: true)
+      product.is_hidden = false
+      product.save!
+      expect(product.activation_change_action).to eq(:activate)
+    end
+
+    it "returns nil when is_archived and is_hidden remain false" do
+      product = create(:setup_item, is_archived: false, is_hidden: false)
+      product.is_archived = false
+      product.is_hidden = false
+      product.save!
+      expect(product.activation_change_action).to be_nil
+    end
+
+    it "returns nil when is_archived changes from true to false and is_hidden changes from false to true" do
+      product = create(:setup_item, is_archived: true, is_hidden: false)
+      product.is_archived = false
+      product.is_hidden = true
+      product.save!
+      expect(product.activation_change_action).to be_nil
+    end
+
+    it "returns :deactivate when both is_archived and is_hidden change from false to true" do
+      product = create(:setup_item, is_archived: false, is_hidden: false)
+      product.is_archived = true
+      product.is_hidden = true
+      product.save!
+      expect(product.activation_change_action).to eq(:deactivate)
+    end
+  end
 end

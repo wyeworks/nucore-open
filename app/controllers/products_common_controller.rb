@@ -64,6 +64,7 @@ class ProductsCommonController < ApplicationController
     @product.initial_order_status_id = OrderStatus.default_order_status.id
 
     if @product.save
+      LogEvent.log(@product, :create, current_user, metadata: { product_name: @product.name, product_type: @product.class.name })
       flash[:notice] = "#{@product.class.name} was successfully created."
       redirect_to([:manage, current_facility, @product])
     else
@@ -75,6 +76,13 @@ class ProductsCommonController < ApplicationController
   def update
     respond_to do |format|
       if @product.update(resource_params)
+        case @product.activation_change_action
+        when :deactivate
+          LogEvent.log(@product, :deactivate, current_user, metadata: { product_name: @product.name, product_type: @product.class.name })
+        when :activate
+          LogEvent.log(@product, :activate, current_user, metadata: { product_name: @product.name, product_type: @product.class.name })
+        end
+
         flash[:notice] = "#{@product.class.name.capitalize} was successfully updated."
         format.html { redirect_to([:manage, current_facility, @product]) }
       else
