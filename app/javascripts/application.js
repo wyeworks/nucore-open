@@ -13,11 +13,8 @@
 //= require chosen-jquery
 //= require activate_chosen
 //= require _common
-//= require date
 //= require moment
-//= require qtip2
 //= require fullcalendar
 //= require_tree ./app
 //= require clockpunch
 //= require fine-uploader/jquery.fine-uploader
-//= require polyfills
