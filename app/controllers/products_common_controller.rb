@@ -76,12 +76,8 @@ class ProductsCommonController < ApplicationController
   def update
     respond_to do |format|
       if @product.update(resource_params)
-        case @product.activation_change_action
-        when :deactivate
-          LogEvent.log(@product, :deactivate, current_user, metadata: { product_name: @product.name, product_type: @product.class.name })
-        when :activate
-          LogEvent.log(@product, :activate, current_user, metadata: { product_name: @product.name, product_type: @product.class.name })
-        end
+        activation_change = @product.activation_change_action
+        LogEvent.log(@product, activation_change, current_user, metadata: { product_name: @product.name, product_type: @product.class.name }) if activation_change
 
         flash[:notice] = "#{@product.class.name.capitalize} was successfully updated."
         format.html { redirect_to([:manage, current_facility, @product]) }
