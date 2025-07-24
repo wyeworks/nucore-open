@@ -4,7 +4,7 @@
     = render "/shared/head"
   %body.quick_reservation
     %header
-      .navbar-inner
+      .navbar
         - if Settings.header_logo_path.present?
           = image_tag Settings.header_logo_path, class: "img__brand", alt: t("pages.logo_alt_text")
         - else

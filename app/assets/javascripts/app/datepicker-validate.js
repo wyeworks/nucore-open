@@ -34,12 +34,12 @@ window.DatePickerValidate = class DatePickerValidate {
         throw new Error(`cannot be before ${this._formatDate(minDate)}`);
       }
 
-      $input.closest(".control-group").removeClass("error");
-      return $input.siblings(".help-inline").remove();
+      $input.closest(".form-group").removeClass("has-error");
+      return $input.siblings(".help-block").remove();
     } catch (error) {
       e = error;
-      $input.closest(".control-group").addClass("error");
-      return $input.after(`<span class='help-inline'>${e.message}</span>`);
+      $input.closest(".form-group").addClass("has-error");
+      return $input.after(`<span class='help-block'>${e.message}</span>`);
     }
   }
 

@@ -1,6 +1,6 @@
 .row
   .col-md-12
-    %p.alert.alert-error= t("facility_journals.new.expired_payment")
+    %p.alert.alert-danger= t("facility_journals.new.expired_payment")
 .row
   .col-md-12
     %p= link_to t("facility_journals.new.download_unjournalable"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }

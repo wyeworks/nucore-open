@@ -152,8 +152,8 @@ table.order-list {
   th.time,
   td.currency,
   td.time {
-    border-left: 1px solid $tableBorder;
-    border-right: 1px solid $tableBorder;
+    border-left: 1px solid $table-border-color;
+    border-right: 1px solid $table-border-color;
     width: 70px;
   }
 
@@ -189,7 +189,7 @@ table.order-list {
 .label {
   font-size: 1.0em;
   font-weight: 300;
-  background-color: $grayDark;
+  background-color: $gray-dark;
   &.status-complete,
   &.status-reconciled {
     @extend .label-success;

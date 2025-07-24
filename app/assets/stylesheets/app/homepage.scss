@@ -23,7 +23,7 @@ li.facility_listing {
   }
   a.fa-calendar {
     text-decoration: none;
-    color: $textColor;
+    color: $text-color;
     &.available {
       color: $successText;
     }

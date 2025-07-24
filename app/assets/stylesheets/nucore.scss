@@ -41,9 +41,7 @@ nav ul.nav > li:hover {
 }
 
 .dropdown-menu > li > a:hover,
-.dropdown-menu > li > a:focus,
-.dropdown-submenu:hover > a,
-.dropdown-submenu:focus > a {
+.dropdown-menu > li > a:focus {
   @extend .highlighted;
 }
 
@@ -167,7 +165,7 @@ li.nav-spacer {
 .order-statuses-table {
   .action-column {
     width: 5em;
-    border-right: 1px solid $tableBorder;
+    border-right: 1px solid $table-border-color;
   }
   .child {
     padding-left: 3em;
@@ -327,7 +325,7 @@ td.daily_rate {
     }
   }
 
-  .inline-checkbox-list label.checkbox.inline {
+  .inline-checkbox-list label.checkbox-inline {
     margin-left: 0 !important;
   }
 }
@@ -411,6 +409,21 @@ ul.inline > li, ol.inline > li {
 textarea.wide {
   width: 99%;
   height: 4em;
+}
+
+/* Devise forms (login, password reset, etc) */
+.simple_form.new_user,
+.simple_form.edit_user {
+  max-width: 350px;
+  margin: 0 auto;
+  
+  .form-inputs {
+    margin-bottom: 15px;
+  }
+  
+  .btn {
+    min-width: 100px;
+  }
 }
 
 select.tall {

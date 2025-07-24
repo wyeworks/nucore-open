@@ -16,8 +16,8 @@
   @media screen and (max-width: 767px) {
     & {
       font-size: 1em;
-      margin-left: -$gridGutterWidth;
-      margin-right: -$gridGutterWidth;
+      margin-left: -$grid-gutter-width;
+      margin-right: -$grid-gutter-width;
     }
   }
 }

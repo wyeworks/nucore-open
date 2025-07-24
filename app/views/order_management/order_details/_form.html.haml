@@ -65,7 +65,7 @@
     - else
       .row
         .col-md-3.js--pricingUpdate
-          = f.input :quantity, as: :order_detail_quantity, hint_html: { class: "help-inline" }
+          = f.input :quantity, as: :order_detail_quantity, hint_html: { class: "help-block" }
         .col-md-7= render "costs", f: f
 
     .row
