@@ -11,3 +11,4 @@
 //= link jquery.qtip.css
 //
 //= link ckeditor_manifest
+//= link_tree ../builds
