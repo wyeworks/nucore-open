@@ -39,6 +39,12 @@ en:
     price_group:
       create: Price Group created
       delete: Price Group deleted
+    product:
+      create: Product created
+      activate: Product activated
+      deactivate: Product deactivated
+    relay:
+      update: Relay updated
     user:
       access_locked: User access locked due to too many login attempts
       create: User added

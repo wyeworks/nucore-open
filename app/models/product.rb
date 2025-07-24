@@ -364,6 +364,25 @@ class Product < ApplicationRecord
     nil
   end
 
+  def activation_change_action
+    archived_changed = saved_change_to_is_archived?
+
+    return unless archived_changed
+    old_archived, new_archived = archived_changed ? saved_change_to_is_archived : [is_archived, is_archived]
+
+    return if old_archived == new_archived
+
+    if old_archived && !new_archived
+      :activate
+    elsif !old_archived && new_archived
+      :deactivate
+    end
+  end
+
+  def to_log_s
+    "#{name} (#{type})"
+  end
+
   protected
 
   def translation_scope
