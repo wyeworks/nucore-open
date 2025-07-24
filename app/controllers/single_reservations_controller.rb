@@ -19,7 +19,7 @@ class SingleReservationsController < ApplicationController
     authorize! :new, @reservation
 
     unless @instrument.can_be_used_by?(acting_user)
-      flash[:notice] = text("controllers.reservations.acting_as_not_on_approval_list")
+      flash.now[:notice] = text("controllers.reservations.acting_as_not_on_approval_list")
     end
     set_windows
     render "reservations/new"

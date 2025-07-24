@@ -128,7 +128,7 @@ class FacilityEstimatesController < ApplicationController
       @estimate = duplicated_estimate
       set_collections_for_select
 
-      flash[:error] = t(".error")
+      flash.now[:error] = t(".error")
       render :new
     end
   end
