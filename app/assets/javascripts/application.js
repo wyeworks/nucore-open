@@ -20,4 +20,3 @@
 //= require_tree ./app
 //= require clockpunch
 //= require fine-uploader/jquery.fine-uploader
-//= require polyfills
