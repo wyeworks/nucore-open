@@ -2,13 +2,13 @@ $baseFontSize: 12px; // Default is 14px
 $primaryColor: white;
 $secondaryColor: #005B8A;
 
-@import "nucore-variables";
 @import "bootstrap-accessibility";
 @import "bootstrap-variables";
 @import "bootstrap";
 @import "font-awesome";
 @import "chosen-base";
 
+@import "nucore-variables";
 @import "nucore-overrides";
 @import "nucore";
 

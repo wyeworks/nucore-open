@@ -1,6 +1,6 @@
 td.expired {
-  background-color: $errorBackground !important;
-  color: $errorText;
+  background-color: $state-danger-bg !important;
+  color: $state-danger-text;
 }
 
 .toggle_expired_btn {

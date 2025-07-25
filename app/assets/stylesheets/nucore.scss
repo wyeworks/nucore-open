@@ -40,6 +40,29 @@ nav ul.nav > li:hover {
   margin-top: -$navbarActiveBorderHeight;
 }
 
+// Remove Bootstrap 3 default padding-left on lists
+ul, ol {
+  padding-left: 0;
+  
+  // But keep padding for actual content lists
+  &.list-disc,
+  &.list-decimal,
+  .content & {
+    padding-left: 20px;
+  }
+}
+
+// Specifically target facility lists and other content
+.facilities-list,
+.recently-used-facilities,
+.recently-purchased-products,
+.all-facilities {
+  ul, ol {
+    padding-left: 0;
+    margin-left: 0;
+  }
+}
+
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
   @extend .highlighted;
@@ -261,11 +284,11 @@ td.daily_rate {
 .old-table,
 .footnote {
   .estimated_cost {
-    color: $warningText;
+    color: $state-warning-text;
   }
 
   .actual_cost {
-    color: $successText;
+    color: $state-success-text;
   }
 
   .reconcile-note {
@@ -273,7 +296,7 @@ td.daily_rate {
   }
 
   tr.reconcile-warning td {
-    background-color: $errorBackground !important;
+    background-color: $state-danger-bg !important;
   }
 
   tfoot {
@@ -287,7 +310,7 @@ td.daily_rate {
 
 .table tr.row-warning {
    td, th {
-    background-color: $errorBackground;
+    background-color: $state-danger-bg;
   }
 }
 
@@ -297,7 +320,7 @@ td.daily_rate {
 
 /* Schedule Rules */
 .inline-checkbox-list {
-  .controls label {
+  label {
     display: inline-block;
     font-weight: normal;
     margin-right: 1em;
@@ -439,9 +462,6 @@ select.tall {
 .input-inline {
   display: inline-block;
   margin-right: 1em;
-  .controls {
-    display: inherit;
-  }
 }
 
 .inline-block {

@@ -41,17 +41,15 @@ header {
   }
 
   .navbar {
-    @include gradient-vertical($headerBackgroundColorHighLight, $headerBackgroundColor);
     border: none;
+    border-bottom: 1px solid #e7e7e7;
     min-height: $headerContainerHeight;
     margin-bottom: 0;
     border-radius: 0;
   }
   
   .navbar-default {
-    background-image: linear-gradient(to bottom, $headerBackgroundColorHighLight 0%, $headerBackgroundColor 100%);
-    background-repeat: repeat-x;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($headerBackgroundColorHighLight)}', endColorstr='#{ie-hex-str($headerBackgroundColor)}', GradientType=0);
+    @include gradient-vertical($headerBackgroundColorHighLight, $headerBackgroundColor);
   }
   
   .dropdown-toggle {
@@ -83,21 +81,13 @@ header {
     margin: 0;
     float: right;
     
-    .divider-vertical {
-      float: left;
-      width: 1px;
-      height: $headerContainerHeight;
-      margin: 0 9px;
-      background-color: $usernavDividerColor;
-    }
-    
     > li {
       float: left;
       
       > a {
         color: $usernavColor !important;
         text-shadow: none;
-        padding: 20px 10px;
+        padding: 20px 15px;
         line-height: 20px;
 
         &:hover, &:focus {
@@ -106,13 +96,22 @@ header {
         }
       }
       
-      &.navbar-text {
-        color: $usernavColor;
-        margin: 0;
-        padding: 20px 10px;
-        line-height: 20px;
+      &.divider-vertical {
         float: left;
+        width: 1px;
+        height: $headerContainerHeight;
+        margin: 0 9px;
+        background-color: $usernavDividerColor;
+        padding: 0;
       }
+    }
+    
+    .navbar-text {
+      color: $usernavColor;
+      margin: 0;
+      padding: 20px 15px;
+      line-height: 20px;
+      float: left;
     }
   }
   
@@ -132,26 +131,6 @@ header {
     
     &.in {
       overflow-y: visible;
-    }
-  }
-
-  .navbar .nav {
-    .divider-vertical {
-      border-right: none;
-      border-left: 1px solid $usernavDividerColor;
-    }
-    > li > a {
-      color: $usernavColor !important;
-      text-shadow: none;
-      padding: 10px 0;
-
-      &:hover {
-        color: $usernavColorHover !important;
-      }
-    }
-
-    > .navbar-text {
-      color: $usernavColor;
     }
   }
 

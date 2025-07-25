@@ -5,8 +5,8 @@
   padding: 0.5em;
   box-sizing: border-box;
 
-  color: $errorText;
-  background-color: $errorBackground;
+  color: $state-danger-text;
+  background-color: $state-danger-bg;
 
   p {
     line-height: 1.8em;
