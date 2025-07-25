@@ -11,13 +11,9 @@
 //= require nested_form_fields
 //= require bootstrap
 //= require chosen-jquery
-//= require activate_chosen
-//= require _common
-//= require date
 //= require moment
 //= require jquery.qtip
 //= require fullcalendar
-//= require_tree ./app
 //= require clockpunch
 //= require fine-uploader/jquery.fine-uploader
-//= require polyfills
+//= require user_accounts
