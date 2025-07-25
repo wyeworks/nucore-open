@@ -88,7 +88,7 @@ class KioskReservationsController < ApplicationController
 
   def respond_error(message)
     @switch = params[:switch]
-    flash[:error] = message
+    flash.now[:error] = message
     template = if @switch == "off"
                  :stop
                elsif @switch == "on"

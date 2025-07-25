@@ -79,7 +79,7 @@ class QuickReservationsController < ApplicationController
       )
     else
       # failed to save reservation
-      flash[:error] = creator.error.html_safe
+      flash.now[:error] = creator.error.html_safe
       render(:new)
     end
   end

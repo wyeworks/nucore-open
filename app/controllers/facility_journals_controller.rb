@@ -82,7 +82,7 @@ class FacilityJournalsController < ApplicationController
 
       # move error messages for pending journal into the flash
       if @pending_journal.errors.any?
-        flash[:error] = @journal.errors.full_messages.join("<br/>").html_safe
+        flash.now[:error] = @journal.errors.full_messages.join("<br/>").html_safe
       end
 
       @earliest_journal_date = params[:journal_date] || @earliest_journal_date
