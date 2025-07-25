@@ -111,9 +111,9 @@ class InstrumentsController < ProductsCommonController
       @product.schedule_rules.update_all(
         ScheduleRule.full_day_attributes
       )
-      flash.now[:info] = t("controllers.instruments.create.schedule_rules_updated")
+      flash[:info] = t("controllers.instruments.create.schedule_rules_updated")
     else
-      flash.now[:info] = t("controllers.instruments.create.schedule_rules_need_update")
+      flash[:info] = t("controllers.instruments.create.schedule_rules_need_update")
     end
   end
 
