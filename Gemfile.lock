@@ -633,7 +633,7 @@ GEM
       railties (>= 5.0)
     teaspoon-jasmine (2.9.1)
       teaspoon (>= 1.0.0)
-    temple (0.10.3)
+    temple (0.10.4)
     terrapin (1.1.1)
       climate_control
     terser (1.2.6)
