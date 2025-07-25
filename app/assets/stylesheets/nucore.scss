@@ -1,3 +1,8 @@
+// Fix rem unit size - Bootstrap 3 sets html font-size to 10px
+html {
+  font-size: 16px; // Reset to browser default so 1rem = 16px
+}
+
 .nowrap {
   white-space: nowrap;
 }
