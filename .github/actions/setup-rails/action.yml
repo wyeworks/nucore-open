@@ -4,11 +4,14 @@ description: Install dependencies and create the database
 runs:
   using: composite
   steps:
+    - uses: ./.github/actions/setup-node
     - uses: ./.github/actions/setup-bundler
     - run: cp config/database.yml.mysql.template config/database.yml
       shell: bash
     - run: cp config/secrets.yml.template config/secrets.yml
       shell: bash
     - run: bundle exec rake db:create db:schema:load
+      shell: bash
+    - run: yarn build
       shell: bash
 
