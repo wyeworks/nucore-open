@@ -236,25 +236,21 @@ NUcore uses [Rspec](http://rspec.info) to run tests. Try any of the following fr
 
 To use Github Actions for CI testing you may need to maintain a testing image with specific versions of dependencies set.  To do this:
 ```
-# Set your desired version of node and bundler
-export NODE_VERSION=setup_16.x
-export BUNDLER_VERSION=2.3.11
-
 # Build the image
-docker build . -f Dockerfile.github-actions --build-arg NODE_VERSION=$NODE_VERSION --build-arg BUNDLER_VERSION
+docker build . -f Dockerfile.github-actions --build-arg NODE_MAJOR=22 --build-arg BUNDLER_VERSION=2.3.11
 
 # Check the IMAGE ID
 docker image ls
 
 # Tag the image with the appropriate ruby version
-docker tag {IMAGE ID} wyeworkshub/ruby-node-chrome-pack:3.4.4
+docker tag {IMAGE ID} wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
 
 # Check the image was tagged correctly
 docker image ls
 
 # login and push the new tag
 docker login
-docker push wyeworkshub/ruby-node-chrome-pack:3.4.4
+docker push wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
 ```
 
 #### Parallel Tests

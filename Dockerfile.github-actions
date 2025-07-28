@@ -1,16 +1,6 @@
 # More info: https://hub.docker.com/repository/docker/wyeworkshub/ruby-node-chrome-pack/general
-#
-# To build with specific versions of bundler or node, pass in a build arg.
-# You can set these explicitly:
-# `--build-arg NODE_VERSION=setup_18.x`
-# Also, if the variable is already set in your local environment, you can just pass in:
-# `--build-arg BUNDLER_VERSION`
-# ... and `docker build` will pick up the local value.
-#
-# Example usage:
-# build . -f Dockerfile.github-actions --build-arg NODE_VERSION=setup_18.x --build-arg BUNDLER_VERSION
 
-FROM --platform=linux/amd64 ruby:3.4.4 as base
+FROM --platform=linux/amd64 ruby:3.4.4 AS base
 
 # Install NodeJS based on https://github.com/nodesource/distributions#installation-instructions
 ARG NODE_MAJOR=22
