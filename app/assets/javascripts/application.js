@@ -17,4 +17,6 @@
 //= require fullcalendar
 //= require clockpunch
 //= require fine-uploader/jquery.fine-uploader
+//
+// ERB js
 //= require user_accounts

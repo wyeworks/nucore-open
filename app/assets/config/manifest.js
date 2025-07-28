@@ -5,7 +5,7 @@
 //
 //= link_directory ../fonts .ttf
 //
-//= link gems_application.js
+//= link application.js
 //
 //= link application.css
 //= link responsive.css
