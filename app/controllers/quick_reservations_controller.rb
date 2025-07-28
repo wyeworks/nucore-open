@@ -3,7 +3,6 @@
 class QuickReservationsController < ApplicationController
   layout "quick_reservation"
 
-  before_action :authenticate_user!
   load_resource :facility, find_by: :url_name
   load_resource :instrument, through: :facility, find_by: :url_name
   before_action :set_actionable_reservation, only: [:start, :new]

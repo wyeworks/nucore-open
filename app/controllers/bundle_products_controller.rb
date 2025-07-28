@@ -4,7 +4,7 @@ class BundleProductsController < ApplicationController
 
   customer_tab  :show
   admin_tab     :create, :destroy, :new, :edit, :index, :update, :manage
-  before_action :authenticate_user!, except: :show
+  skip_before_action :authenticate_user!, only: :show
   before_action :check_acting_as
   before_action :init_current_facility
   before_action :init_bundle
