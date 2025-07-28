@@ -15,3 +15,5 @@ const MultiSelectHelper = {
     });
   }
 }
+
+export { MultiSelectHelper };
