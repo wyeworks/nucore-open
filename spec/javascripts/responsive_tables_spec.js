@@ -3,7 +3,7 @@
  * DS102: Remove unnecessary code created because of implicit returns
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
-//= require jquery
+
 //= require helpers/jasmine-jquery
 
 describe("Responsive table support", function() {
