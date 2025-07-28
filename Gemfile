@@ -22,7 +22,9 @@ gem 'mutex_m'
 gem 'csv'
 
 # Ruby 3.4 warns it won't be included in the future
-gem 'reline'
+gem "benchmark"
+gem "reline"
+gem "irb"
 
 # Remove once we upgrade to rails 7.2.X or greater
 # See: github.com/rails/rails/pull/54264
