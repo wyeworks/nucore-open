@@ -89,14 +89,67 @@ nav ul.nav > li:hover {
   text-decoration: none !important;
 }
 
-ul, ol {
-  padding-left: 0;
+input[type="checkbox"].form-control,
+input[type="radio"].form-control {
+  width: auto;
+  height: auto;
+  display: inline-block;
+  margin: 0 5px 0 0;
+  position: static;
+}
+
+legend {
+  margin-bottom: 15px;
   
-  &.list-disc,
-  &.list-decimal,
-  .content & {
-    padding-left: 20px;
+  .pull-right {
+    margin-top: -5px;
   }
+}
+
+// Fix Event Log form alignment
+.search_form {
+  .row {
+    margin-bottom: 15px;
+  }
+  
+  input[type="text"]:not(.chosen-search-input),
+  select {
+    @extend .form-control;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+}
+
+ul, ol {
+  &.nav,
+  &.navbar-nav,
+  &.list-unstyled,
+  &.list-inline,
+  &.unstyled,
+  &.inline {
+    padding-left: 0;
+  }
+}
+
+ul.inline {
+  list-style: none;
+  margin: 0;
+  
+  li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+}
+
+.facilities-list ul,
+.recently-used-facilities ul,
+.recently-purchased-products ul,
+.product_list ul,
+.facility_list_container {
+  padding-left: 0;
 }
 
 .facilities-list,
@@ -108,7 +161,6 @@ ul, ol {
     margin-left: 0;
   }
 }
-
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
   @extend .highlighted;
@@ -149,6 +201,10 @@ ul, ol {
     }
     &.divider {
       margin: 0.5em 1px;
+    }
+    
+    > a {
+      padding: 3px 15px;
     }
   }
 

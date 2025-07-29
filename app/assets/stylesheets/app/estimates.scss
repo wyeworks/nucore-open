@@ -12,3 +12,17 @@
 .edit_estimate_button {
   margin-top: 3em;
 }
+
+.row {
+  &:has(.form-horizontal) {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.filter-form {
+  .form-group {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
