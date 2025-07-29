@@ -30,6 +30,6 @@
           %p
             %b Upload the completed order form
           %p= f.file_field :file
-  %ul.inline
+  %ul.list-inline
     %li= f.submit('Upload', disable_with: "Uploading...", class: 'btn btn-default')
     %li= link_to('Cancel', order_path(@order))

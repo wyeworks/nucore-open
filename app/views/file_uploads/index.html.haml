@@ -20,7 +20,7 @@
     = f.input :file, required: true
     = f.input :name, hint: t(".filename_hint"), hint_html: { class: "help-block" }
 
-    %ul.inline
+    %ul.list-inline
       %li
         = f.submit t(".submit"),
           data: { disable_with: t(".submitted") },

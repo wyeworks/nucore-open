@@ -41,5 +41,5 @@
 
   = render_if_exists "#{@product.class.name.underscore}_manage_fields", f: f
 - if can? :edit, @product
-  %ul.inline
+  %ul.list-inline
     %li= link_to "Edit", [:edit, current_facility, @product], class: "btn btn-default"

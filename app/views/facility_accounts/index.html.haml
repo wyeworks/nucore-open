@@ -15,7 +15,7 @@
 
 %hr
 
-%ul.inline
+%ul.list-inline
   - if SettingsHelper.feature_on?(:edit_accounts) && current_ability.can?(:create, Account)
     %li= link_to t(".add_account"), new_account_user_search_facility_accounts_path, class: "btn-add"
   - if !@accounts.blank?

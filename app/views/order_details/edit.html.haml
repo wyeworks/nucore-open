@@ -12,6 +12,6 @@
 
   = f.input :account_id, collection: @accounts, include_blank: false, label: Account.model_name.human
 
-  %ul.inline
+  %ul.list-inline
     %li= f.submit t("shared.save"), class: ["btn", "btn-primary"]
     %li= link_to t("shared.cancel"), [@order, @order_detail]

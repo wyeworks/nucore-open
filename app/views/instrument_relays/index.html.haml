@@ -34,7 +34,7 @@
 -else
   %p UNKNOWN RELAY TYPE
 - if can? :edit, @product
-  %ul.inline
+  %ul.list-inline
     - if @product.relay.present?
       %li= link_to "Edit", edit_facility_instrument_relay_path(current_facility, @product, @product.relay.id), class: "btn btn-default"
     - else

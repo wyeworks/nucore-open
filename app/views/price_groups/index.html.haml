@@ -7,7 +7,7 @@
 
 %p= t('.intro')
 
-%ul.inline
+%ul.list-inline
   - if current_ability.can?(:create, PriceGroup)
     %li= link_to t('.link.add'), new_facility_price_group_path, :class => 'btn-add'
 

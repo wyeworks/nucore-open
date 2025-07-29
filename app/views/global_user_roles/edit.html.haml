@@ -32,6 +32,6 @@
       data: { placeholder: t(".select_role_placeholder") },
       multiple: true
 
-  %ul.inline
+  %ul.list-inline
     %li= form.submit t(".submit"), class: "btn btn-default"
     %li= link_to t(".cancel"), global_user_roles_path

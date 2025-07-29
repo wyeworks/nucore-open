@@ -12,11 +12,11 @@
 = simple_form_for @instrument_alert, url: facility_instrument_alert_path do |f|
   = f.error_messages
 
-  %ul.inline
+  %ul.list-inline
     %li= f.input :note, as: :text, input_html: { class: "col-md-4", rows: 6 }
 
   .clearfix
 
-  %ul.inline
+  %ul.list-inline
     %li= f.submit t("instruments.schedule.setup_instrument_alert"), class: "btn btn-warning"
     %li= link_to t("shared.cancel"), facility_instrument_schedule_path

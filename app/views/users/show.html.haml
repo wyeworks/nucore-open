@@ -23,7 +23,7 @@
 
   = render_view_hook "additional_user_fields", f: f
 
-%ul.inline
+%ul.list-inline
   - if can?(:edit, @user)
     %li= link_to text("shared.edit"), edit_facility_user_path(current_facility, @user), class: "btn btn-default"
     - if can?(:unexpire, @user) && @user.expired?

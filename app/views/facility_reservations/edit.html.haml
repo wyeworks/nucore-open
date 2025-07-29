@@ -52,7 +52,7 @@
     = f.input :actual_start_date, as: :readonly, input_html: { value: @reservation.actuals_string }
 
   .clearfix
-  %ul.inline
+  %ul.list-inline
     %li= f.submit "Save", class: "btn btn-default"
     - if @order_detail.complete?
       %li= link_to "Cancel", show_problems_facility_reservations_path
