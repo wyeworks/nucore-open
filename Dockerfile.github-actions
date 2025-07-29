@@ -1,36 +1,14 @@
 # More info: https://hub.docker.com/repository/docker/wyeworkshub/ruby-node-chrome-pack/general
-#
-# To build with specific versions of bundler or node, pass in a build arg.
-# You can set these explicitly:
-# `--build-arg NODE_VERSION=setup_18.x`
-# Also, if the variable is already set in your local environment, you can just pass in:
-# `--build-arg BUNDLER_VERSION`
-# ... and `docker build` will pick up the local value.
-#
-# Example usage:
-# build . -f Dockerfile.github-actions --build-arg NODE_VERSION=setup_18.x --build-arg BUNDLER_VERSION
 
-FROM --platform=linux/amd64 ruby:3.4.4 as base
+FROM --platform=linux/amd64 ruby:3.4.4 AS base
 
 # Install NodeJS based on https://github.com/nodesource/distributions#installation-instructions
-ARG NODE_VERSION=setup_16.x
-ENV NODE_VERISON ${NODE_VERSION}
-RUN apt-get update && \
- # Installs the node repository
-  apt-get install -y ca-certificates curl gnupg && \
-  mkdir -p /etc/apt/keyrings && \
-  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-  NODE_MAJOR=16 && \
-  echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-  apt-get update && \
-  apt-get install nodejs -y && \
- # Installs libvips and the node repository
-  apt-get install --yes libvips42 nodejs && \
-  apt-get install npm -y
-RUN npm install --global yarn && \
- apt-get autoremove -y
+ARG NODE_MAJOR=22
+RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash -
+RUN apt-get update && apt-get install --yes libvips42 nodejs
+RUN npm install --global yarn
 
-ARG BUNDLER_VERSION=2.3.11
+ARG BUNDLER_VERSION=2.5.8
 ENV BUNDLER_VERSION=${BUNDLER_VERSION}
 RUN gem install bundler -v $BUNDLER_VERSION --no-document
 
