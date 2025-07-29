@@ -11,6 +11,16 @@ html {
 .well {
   padding: 19px;
   margin-bottom: 20px;
+  
+  // Use darker colors for better accessibility contrast
+  a {
+    color: darken($secondaryColor, 10%);
+    
+    &:hover,
+    &:focus {
+      color: darken($secondaryColor, 20%);
+    }
+  }
 }
 
 h1, h2, h3, h4, h5, h6 {

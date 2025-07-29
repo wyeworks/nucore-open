@@ -11,7 +11,7 @@ $reservationLabelColor: $secondaryColor;
 $reservationLinkColor: $secondaryColor;
 
 /* Login, Cart, etc Links */
-$usernavColor: #777;
+$usernavColor: #555; // Changed from #777 to #555 to meet WCAG AA contrast ratio (4.65:1)
 $usernavColorHover: $gray-dark;
 $usernavDividerColor: transparentize($gray-dark, 0.95);
 

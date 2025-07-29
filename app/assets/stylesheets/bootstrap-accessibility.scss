@@ -2,8 +2,9 @@
  * Override some of Bootstrap's defaults to address accessibility issues like
  * color contrast.
  ***/
-
-$linkColor: $secondaryColor;
+ 
+$link-color: $secondaryColor;
+$brand-primary: $secondaryColor;
 
 /***
  * Alerts
