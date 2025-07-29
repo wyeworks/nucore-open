@@ -1,27 +1,29 @@
 = simple_form_for @estimate, url: form_url, method: form_method do |f|
-  .inline-form-controls
-    = f.input :description
-
-    .col-md-4
+  .row
+    .col-md-3
+      = f.input :description
+    
+    .col-md-3
       = f.label :price_group_id, EstimateDetail.human_attribute_name(:price_group_id)
       = f.input_field :price_group_id,
         collection: @price_groups,
-        class: "js--chosen",
+        class: "form-control js--chosen",
         include_blank: false
 
-    .col-md-4
+    .col-md-3
       = f.label :custom_name, Estimate.human_attribute_name(:user)
       = f.input_field :custom_name,
-        class: "js--user-autocomplete",
+        class: "form-control js--user-autocomplete",
         value: (@estimate.user_display_name),
         data: { search_url: search_facility_estimates_path, user_input_id: "estimate_user_id" }
       = f.hidden_field :user_id
 
-    .col-md-4
+    .col-md-3
       = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
 
-  .form-inputs
-    = f.input :note
+  .row
+    .col-md-3
+      = f.input :note
 
   #estimate_products_table
     %h3= t("facility_estimates.form.current_products")
