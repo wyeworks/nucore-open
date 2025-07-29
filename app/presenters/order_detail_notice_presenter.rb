@@ -1,25 +1,13 @@
 # frozen_string_literal: true
 
 class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
-
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::OutputSafetyHelper
 
   def statuses
     return [] if canceled?
-    statuses = []
 
-    statuses << Notice.new(:in_review) if in_review?
-    statuses << Notice.new(:in_dispute) if in_dispute? && !global_admin_must_resolve?
-    statuses << Notice.new(:global_admin_must_resolve) if in_dispute? && global_admin_must_resolve?
-    statuses << Notice.new(:missing_form) if missing_form? && !problem?
-    statuses << Notice.new(:can_reconcile) if can_reconcile_journaled?
-    statuses << Notice.new(:in_open_journal) if in_open_journal?
-    statuses << Notice.new(:ready_for_statement) if ready_for_statement?
-    statuses << Notice.new(:ready_for_journal) if ready_for_journal? && SettingsHelper.feature_on?(:ready_for_journal_notice)
-    statuses << Notice.new(:awaiting_payment) if awaiting_payment?
-
-    statuses
+    notices.map { |s| Notice.new(s) }
   end
 
   def warnings

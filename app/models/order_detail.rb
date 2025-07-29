@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class OrderDetail < ApplicationRecord
-
   include Nucore::Database::SortHelper
   include TranslationHelper
   include NotificationSubject
   include OrderDetail::Accessorized
+  include OrderDetail::Notices
   include Nucore::Database::WhereIdsIn
 
   has_paper_trail
@@ -931,10 +931,14 @@ class OrderDetail < ApplicationRecord
   end
 
   def problem_description_key
-    Array(problem_description_keys).first
+    problems.first
   end
 
   def problem_description_keys
+    problems
+  end
+
+  def build_problem_keys
     return [] unless complete?
 
     time_data_problem_key = time_data.problem_description_key
