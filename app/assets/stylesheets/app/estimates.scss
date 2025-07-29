@@ -25,3 +25,22 @@
     margin-right: 0;
   }
 }
+
+// Fix inline form controls for estimates
+.inline-form-controls {
+  @extend .row;
+  margin-bottom: 15px;
+  
+  .col-md-4 {
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    
+    input[type="text"],
+    select {
+      @extend .form-control;
+    }
+  }
+}
