@@ -123,6 +123,15 @@ legend {
   }
 }
 
+// Fix time dropdown alignment for journal cutoff dates
+.time_dropdown {
+  select {
+    display: inline-block;
+    width: auto;
+    margin-right: 5px;
+  }
+}
+
 ul, ol {
   &.nav,
   &.navbar-nav,
