@@ -65,7 +65,6 @@ header {
     }
   }
   
-  // Override Bootstrap's container clearfix for navbar
   .navbar > .container {
     &:before, &:after {
       display: table;

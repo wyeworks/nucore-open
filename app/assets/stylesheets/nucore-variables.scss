@@ -12,8 +12,8 @@ $reservationLinkColor: $secondaryColor;
 
 /* Login, Cart, etc Links */
 $usernavColor: #777;
-$usernavColorHover: #333;
-$usernavDividerColor: transparentize(#333, 0.95);
+$usernavColorHover: $gray-dark;
+$usernavDividerColor: transparentize($gray-dark, 0.95);
 
 /* Primary Navbar */
 $navbarActiveBorderHeight: 5px;
