@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class OrderDetail < ApplicationRecord
-
   include Nucore::Database::SortHelper
   include TranslationHelper
   include NotificationSubject
   include OrderDetail::Accessorized
+  include OrderDetail::StatusBadges
   include Nucore::Database::WhereIdsIn
 
   has_paper_trail

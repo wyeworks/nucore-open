@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_06_11_145625) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_29_132443) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -425,6 +425,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_06_11_145625) do
     t.boolean "skip_missing_form"
     t.string "deposit_number", limit: 256
     t.string "unrecoverable_note"
+    t.string "status_badges"
     t.index ["account_id"], name: "fk_od_accounts"
     t.index ["assigned_user_id"], name: "index_order_details_on_assigned_user_id"
     t.index ["bundle_product_id"], name: "fk_bundle_prod_id"
