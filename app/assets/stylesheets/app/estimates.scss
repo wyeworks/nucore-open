@@ -13,11 +13,10 @@
   margin-top: 3em;
 }
 
-.row {
-  &:has(.form-horizontal) {
-    margin-left: 0;
-    margin-right: 0;
-  }
+.row.form-horizontal,
+.row.table-actions {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .filter-form {
