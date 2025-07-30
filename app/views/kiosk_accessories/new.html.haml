@@ -1,39 +1,40 @@
-.modal
-  .modal-header
-    = modal_close_button
-    - if @switch == "off"
-      %h2= text("end_title", user: @order_detail.reservation.user)
-    - else
-      %h2= text("title", user: @order_detail.reservation.user)
-    %h3= @order_detail.reservation.instrument
-  = simple_form_for :kiosk_accessories, url: url_for(action: :create, switch: @switch), remote: true, html: { "data-type" => "html", id: "accessory-form", class: :pick_accessories_form } do |f|
-    .modal-body
-      = render partial: "shared/flashes"
-      - if @order_detail.reservation.ongoing? && @order_detail.reservation.actual_duration_mins.present?
-        %p= t("product_accessories.pick_accessories.actual_time_ongoing_html", time: @order_detail.reservation.actual_duration_mins)
-      - elsif @order_detail.reservation.actual_duration_mins.present?
-        %p= t("product_accessories.pick_accessories.actual_time_html", time: @order_detail.reservation.actual_duration_mins)
+.modal-dialog
+  .modal-content
+    .modal-header
+      = modal_close_button
+      - if @switch == "off"
+        %h2= text("end_title", user: @order_detail.reservation.user)
+      - else
+        %h2= text("title", user: @order_detail.reservation.user)
+      %h3= @order_detail.reservation.instrument
+    = simple_form_for :kiosk_accessories, url: url_for(action: :create, switch: @switch), remote: true, html: { "data-type" => "html", id: "accessory-form", class: :pick_accessories_form } do |f|
+      .modal-body
+        = render partial: "shared/flashes"
+        - if @order_detail.reservation.ongoing? && @order_detail.reservation.actual_duration_mins.present?
+          %p= t("product_accessories.pick_accessories.actual_time_ongoing_html", time: @order_detail.reservation.actual_duration_mins)
+        - elsif @order_detail.reservation.actual_duration_mins.present?
+          %p= t("product_accessories.pick_accessories.actual_time_html", time: @order_detail.reservation.actual_duration_mins)
 
-      %fieldset.well.kiosk-modal
-        %h4= text("accessories")
-        %table.table
-          - @order_details.each do |od|
-            = f.simple_fields_for od.product.id.to_s, od do |p|
-              %tr{class: ["accessory-row", "scaling-#{od.class.name.demodulize.underscore}"]}
-                %td
-                  = p.input :enabled, as: :boolean, label: false, inline_label:  "#{od.product.to_s} (#{t("product_accessories.type.#{od.scaling_type}")})", checked_value: "true", unchecked_value: "false"
+        %fieldset.well.kiosk-modal
+          %h4= text("accessories")
+          %table.table
+            - @order_details.each do |od|
+              = f.simple_fields_for od.product.id.to_s, od do |p|
+                %tr{class: ["accessory-row", "scaling-#{od.class.name.demodulize.underscore}"]}
+                  %td
+                    = p.input :enabled, as: :boolean, label: false, inline_label:  "#{od.product.to_s} (#{t("product_accessories.type.#{od.scaling_type}")})", checked_value: "true", unchecked_value: "false"
 
-                %td= p.input :quantity,
-                    disabled: !od.quantity_editable?,
-                    label: false,
-                    input_html: { value: od.quantity,
-                                  class: od.quantity_as_time? ? "timeinput" : "",
-                                  data: { always_disabled: !od.quantity_editable? } }
-    - if SettingsHelper.feature_off?(:bypass_kiosk_auth)
-      .kiosk-login
-        %fieldset.well
-          %h4= text("confirm")
-          = f.input :password, required: false
-    .modal-footer
-      = f.submit text("submit"), class: "btn btn-primary"
-      = modal_cancel_button text: text("cancel")
+                  %td= p.input :quantity,
+                      disabled: !od.quantity_editable?,
+                      label: false,
+                      input_html: { value: od.quantity,
+                                    class: od.quantity_as_time? ? "timeinput" : "",
+                                    data: { always_disabled: !od.quantity_editable? } }
+      - if SettingsHelper.feature_off?(:bypass_kiosk_auth)
+        .kiosk-login
+          %fieldset.well
+            %h4= text("confirm")
+            = f.input :password, required: false
+      .modal-footer
+        = f.submit text("submit"), class: "btn btn-primary"
+        = modal_cancel_button text: text("cancel")

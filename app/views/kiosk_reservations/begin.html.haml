@@ -1,17 +1,16 @@
-.modal
-  .modal-dialog
-    .modal-content
-      .modal-header
-        = modal_close_button
-        %h2= text("title", user: @reservation.user)
-        %h3= @reservation.instrument
-      = simple_form_for :kiosk_reservations, method: :get, url: url_for(action: :switch_instrument, switch: @switch), remote: true do |f|
-        .modal-body
-          = render partial: "shared/flashes"
-          - if SettingsHelper.feature_off?(:bypass_kiosk_auth)
-            %fieldset.well
-              %h4= text("confirm")
-              = f.input :password, required: false
-        .modal-footer
-          = f.submit text("submit"), class: "btn btn-primary"
-          = modal_cancel_button text: text("cancel")
+.modal-dialog
+  .modal-content
+    .modal-header
+      = modal_close_button
+      %h2= text("title", user: @reservation.user)
+      %h3= @reservation.instrument
+    = simple_form_for :kiosk_reservations, method: :get, url: url_for(action: :switch_instrument, switch: @switch), remote: true do |f|
+      .modal-body
+        = render partial: "shared/flashes"
+        - if SettingsHelper.feature_off?(:bypass_kiosk_auth)
+          %fieldset.well
+            %h4= text("confirm")
+            = f.input :password, required: false
+      .modal-footer
+        = f.submit text("submit"), class: "btn btn-primary"
+        = modal_cancel_button text: text("cancel")

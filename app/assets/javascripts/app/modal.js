@@ -68,7 +68,7 @@ window.AjaxModal = class AjaxModal {
   }
 
   build_new_modal() {
-    const modal = $('<div class="modal hide fade" data-backdrop="static"></div>');
+    const modal = $('<div class="modal fade" data-backdrop="static"></div>');
     modal.attr('id', this.modal_selector.replace('#', ''));
     return modal.appendTo('body');
   }

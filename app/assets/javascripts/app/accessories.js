@@ -54,8 +54,7 @@ class AccessoryPickerDialog {
 
     // build dialog if necessary
     if (this.dialog.length === 0) {
-      this.dialog = $('<div id="pick_accessories_dialog" class="modal hide fade" data-backdrop="static" role="dialog"/>');
-      this.dialog.hide();
+      this.dialog = $('<div id="pick_accessories_dialog" class="modal fade" data-backdrop="static" role="dialog"/>');
       $("body").append(this.dialog);
     }
 
