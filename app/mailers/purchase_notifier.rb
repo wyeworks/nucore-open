@@ -3,6 +3,7 @@
 class PurchaseNotifier < ApplicationMailer
 
   include DateHelper
+
   helper ApplicationHelper
   helper OrdersHelper
   helper ViewHookHelper

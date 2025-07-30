@@ -3,6 +3,7 @@
 class JournalCutoffDate < ApplicationRecord
 
   include DateTimeInput::Model
+
   date_time_inputable :cutoff_date
 
   validates :cutoff_date, presence: true

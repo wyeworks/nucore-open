@@ -5,6 +5,7 @@
 class Recurrence
 
   include Enumerable
+
   delegate :each, to: :to_enum
 
   def initialize(start_at, end_at, until_time: nil)

@@ -3,6 +3,7 @@
 class Notifier < ActionMailer::Base
 
   include DateHelper
+
   helper ApplicationHelper
   helper ViewHookHelper
 

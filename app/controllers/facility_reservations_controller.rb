@@ -6,6 +6,7 @@ class FacilityReservationsController < ApplicationController
   include NewInprocessController
   include ProblemOrderDetailsController
   include TabCountHelper
+
   helper TimelineHelper
 
   admin_tab     :all

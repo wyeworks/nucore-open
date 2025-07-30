@@ -7,9 +7,11 @@ RSpec.describe EmailListAttribute do
   class TestEmailListAttribute
 
     include ActiveModel::Validations
+
     attr_accessor :emails
 
     include EmailListAttribute
+
     email_list_attribute :emails
 
     # Mimic ActiveRecord's [] methods
