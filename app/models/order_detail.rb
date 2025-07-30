@@ -36,13 +36,6 @@ class OrderDetail < ApplicationRecord
   before_save :reassign_price, if: :auto_reassign_pricing?
   before_save :update_journal_row_amounts, if: :actual_cost_changed?
 
-  before_save :set_problem_order
-  def set_problem_order
-    self.problem = problem_description_key.present?
-    update_fulfilled_at_on_resolve if time_data.present?
-    true # problem might be false; we need the callback chain to continue
-  end
-
   after_save :update_billable_minutes_on_reservation, if: :reservation
 
   belongs_to :product
@@ -1086,12 +1079,6 @@ class OrderDetail < ApplicationRecord
     if statement.present?
       statement.remove_order_detail(self)
       self.statement = nil
-    end
-  end
-
-  def update_fulfilled_at_on_resolve
-    if problem_changed? && !problem_order?
-      self.fulfilled_at = time_data.actual_end_at if time_data.actual_end_at
     end
   end
 

@@ -6,13 +6,22 @@ module OrderDetail::Notices
   included do
     serialize :notices, Array
     serialize :problems, Array
+
+    before_save :set_problem_and_notices
   end
 
-  def update_notices
-    OrderDetailNoticesUpdater.perform_now(self)
+  def set_problem_and_notices
+    notice_service = OrderDetails::NoticesService.new(self)
+    self.problems = notice_service.problems
+    self.notices = notice_service.notices
+
+    self.problem = problems.present?
+    update_fulfilled_at_on_resolve if time_data.present?
   end
 
-  def update_notices_later
-    OrderDetailNoticesUpdater.perform_later(self)
+  def update_fulfilled_at_on_resolve
+    if problem_changed? && !problem_order? && time_data.actual_end_at
+      self.fulfilled_at = time_data.actual_end_at
+    end
   end
 end
