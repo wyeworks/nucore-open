@@ -14,6 +14,7 @@ RSpec.describe DateTimeInput::Model do
   let(:clazz) do
     Class.new(ar_faker_clazz) do
       include DateTimeInput::Model
+
       date_time_inputable :datetime
     end
   end

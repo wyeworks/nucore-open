@@ -5,6 +5,7 @@ module Reports
   class InstrumentDayReportsController < ReportsController
 
     include InstrumentReporter
+
     helper_method :export_csv_report_path
     helper_method :report_data_row
 
