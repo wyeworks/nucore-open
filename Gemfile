@@ -80,7 +80,7 @@ gem "rubyzip"
 gem "prawn-rails"
 
 ## Email
-gem "mailgun-ruby", "~>1.3.7"
+gem "mailgun-ruby", "~>1.3.9"
 
 ## other
 gem "delayed_job_active_record"
