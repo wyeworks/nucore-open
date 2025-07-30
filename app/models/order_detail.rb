@@ -834,7 +834,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def can_reconcile?
-    complete? && !in_dispute? && account.can_reconcile?(self)
+    complete? && !in_dispute? && account&.can_reconcile?(self)
   end
 
   def can_reconcile_journaled?

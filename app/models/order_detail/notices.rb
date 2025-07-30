@@ -12,10 +12,11 @@ module OrderDetail::Notices
 
   def set_problem_and_notices
     notice_service = OrderDetails::NoticesService.new(self)
+
     self.problem_keys = notice_service.problems
     self.notice_keys = notice_service.notices
-
     self.problem = problem_keys.present?
+
     update_fulfilled_at_on_resolve if time_data.present?
   end
 
