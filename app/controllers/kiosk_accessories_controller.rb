@@ -2,6 +2,7 @@
 
 class KioskAccessoriesController < ApplicationController
 
+  skip_before_action :authenticate_user!
   load_resource :order
   load_resource :order_detail, through: :order
 
