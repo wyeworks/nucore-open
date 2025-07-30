@@ -63,12 +63,13 @@ window.AjaxModal = class AjaxModal {
   }
 
   form_error(evt, xhr) {
-    this.$modal.html(xhr.responseText);
+    const $content = this.$modal.find('.modal-content').length > 0 ? this.$modal.find('.modal-content') : this.$modal;
+    $content.html(xhr.responseText);
     return this.form_prepare();
   }
 
   build_new_modal() {
-    const modal = $('<div class="modal fade" data-backdrop="static"></div>');
+    const modal = $('<div class="modal fade" data-backdrop="static"><div class="modal-dialog"><div class="modal-content"></div></div></div>');
     modal.attr('id', this.modal_selector.replace('#', ''));
     return modal.appendTo('body');
   }
@@ -78,12 +79,13 @@ window.AjaxModal = class AjaxModal {
       $modal
     } = this;
     const self = this;
-    $modal.html(`<div class='modal-body'><h3>${this.loading_text}</h3></div>`);
+    const $content = $modal.find('.modal-content').length > 0 ? $modal.find('.modal-content') : $modal;
+    $content.html(`<div class='modal-body'><h3>${this.loading_text}</h3></div>`);
     return $.ajax({
       url: $modal.data('href'),
       dataType: 'html',
       success(body) {
-        $modal.html(body);
+        $content.html(body);
         return self.form_prepare();
       }
     });

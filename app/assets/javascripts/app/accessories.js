@@ -54,7 +54,7 @@ class AccessoryPickerDialog {
 
     // build dialog if necessary
     if (this.dialog.length === 0) {
-      this.dialog = $('<div id="pick_accessories_dialog" class="modal fade" data-backdrop="static" role="dialog"/>');
+      this.dialog = $('<div id="pick_accessories_dialog" class="modal fade" data-backdrop="static" role="dialog"><div class="modal-dialog"><div class="modal-content"></div></div></div>');
       $("body").append(this.dialog);
     }
 
@@ -79,7 +79,9 @@ class AccessoryPickerDialog {
   }
 
   load_dialog(body) {
-    this.dialog.html(body).modal('show');
+    const $content = this.dialog.find('.modal-content');
+    $content.html(body);
+    this.dialog.modal('show');
     this.picker = new AccessoryPicker($('#accessory-form'));
     return this.toggle_buttons(true);
   }

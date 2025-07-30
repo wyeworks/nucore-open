@@ -3,9 +3,10 @@
 }
 
 #order-detail-modal {
-  width: 1000px;
-  /* must be half of the width, minus scrollbar on the left (30px) */
-  margin-left: -500px;
+    .modal-dialog {
+      width: 90%;
+      max-width: 1000px;
+    }
 }
 
 .banner-list {
@@ -55,11 +56,7 @@
   .note {
     width: 80%;
   }
-}
-
-#order-detail-modal {
-  top: 5%;
-}
+} 
 
 /* Specific Form Overrides */
 .manage_order_detail {
