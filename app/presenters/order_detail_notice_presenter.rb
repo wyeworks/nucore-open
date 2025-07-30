@@ -5,8 +5,6 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   include ActionView::Helpers::OutputSafetyHelper
 
   def statuses
-    return [] if canceled?
-
     notices.map { |s| Notice.new(s) }
   end
 

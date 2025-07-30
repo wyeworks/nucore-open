@@ -85,6 +85,8 @@ class OrderDetail < ApplicationRecord
   delegate :reference, to: :journal, prefix: true, allow_nil: true
   delegate :projects, to: :facility, prefix: true
 
+  alias_attribute :problem_description_keys, :problems
+
   def estimated_price_group
     estimated_price_policy.try(:price_group)
   end
@@ -934,10 +936,6 @@ class OrderDetail < ApplicationRecord
     problems.first
   end
 
-  def problem_description_keys
-    problems
-  end
-
   def build_problem_keys
     return [] unless complete?
 
@@ -949,7 +947,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def requires_but_missing_actuals?
-    Array(problem_description_keys).include?(:missing_actuals)
+    problem_description_keys.include?(:missing_actuals)
   end
 
   def price_change_reason_option
