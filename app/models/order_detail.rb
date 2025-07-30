@@ -78,7 +78,7 @@ class OrderDetail < ApplicationRecord
   delegate :reference, to: :journal, prefix: true, allow_nil: true
   delegate :projects, to: :facility, prefix: true
 
-  alias_attribute :problem_description_keys, :problems
+  alias_attribute :problem_description_keys, :problem_keys
 
   def estimated_price_group
     estimated_price_policy.try(:price_group)
@@ -926,7 +926,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def problem_description_key
-    problems.first
+    problem_keys.first
   end
 
   def build_problem_keys

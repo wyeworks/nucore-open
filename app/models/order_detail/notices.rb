@@ -4,18 +4,18 @@ module OrderDetail::Notices
   extend ActiveSupport::Concern
 
   included do
-    serialize :notices, Array
-    serialize :problems, Array
+    serialize :notice_keys, Array
+    serialize :problem_keys, Array
 
     before_save :set_problem_and_notices
   end
 
   def set_problem_and_notices
     notice_service = OrderDetails::NoticesService.new(self)
-    self.problems = notice_service.problems
-    self.notices = notice_service.notices
+    self.problem_keys = notice_service.problems
+    self.notice_keys = notice_service.notices
 
-    self.problem = problems.present?
+    self.problem = problem_keys.present?
     update_fulfilled_at_on_resolve if time_data.present?
   end
 

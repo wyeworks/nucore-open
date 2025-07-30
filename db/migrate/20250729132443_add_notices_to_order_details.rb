@@ -2,7 +2,7 @@
 
 class AddNoticesToOrderDetails < ActiveRecord::Migration[7.0]
   def change
-    add_column :order_details, :notices, :string
-    add_column :order_details, :problems, :string
+    add_column :order_details, :notice_keys, :string
+    add_column :order_details, :problem_keys, :string
   end
 end

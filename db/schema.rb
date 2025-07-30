@@ -425,8 +425,8 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_29_132443) do
     t.boolean "skip_missing_form"
     t.string "deposit_number", limit: 256
     t.string "unrecoverable_note"
-    t.string "notices"
-    t.string "problems"
+    t.string "notice_keys"
+    t.string "problem_keys"
     t.index ["account_id"], name: "fk_od_accounts"
     t.index ["assigned_user_id"], name: "index_order_details_on_assigned_user_id"
     t.index ["bundle_product_id"], name: "fk_bundle_prod_id"

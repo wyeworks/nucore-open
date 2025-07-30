@@ -5,7 +5,7 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   include ActionView::Helpers::OutputSafetyHelper
 
   def statuses
-    notices.map { |s| Notice.new(s) }
+    notice_keys.map { |s| Notice.new(s) }
   end
 
   def warnings
