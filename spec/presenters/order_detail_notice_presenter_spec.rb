@@ -9,9 +9,14 @@ RSpec.describe OrderDetailNoticePresenter do
   describe "badges_to_html" do
     matcher :have_badge do |expected_text|
       match do |string|
-        level = @level || "info"
+        level_class = case @level
+                      when :important
+                        "danger"
+                      else
+                        @level || "info"
+                      end
         html = Nokogiri::HTML(string)
-        @element = html.css(".label.label-#{level}").any? { |node| node.text == expected_text }
+        @element = html.css(".label.label-#{level_class}").any? { |node| node.text == expected_text }
       end
 
       chain :with_level do |level|
