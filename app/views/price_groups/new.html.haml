@@ -8,6 +8,6 @@
   = simple_form_for([current_facility, @price_group]) do |f|
     = f.error_messages
     = render :partial => 'price_group_fields', :locals => {:f => f}
-    %ul.inline
+    %ul.list-inline
       %li= f.submit 'Create', :class => ['btn', 'btn-primary']
       %li= link_to 'Cancel', facility_price_groups_path

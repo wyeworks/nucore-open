@@ -3,9 +3,10 @@
 }
 
 #order-detail-modal {
-  width: 1000px;
-  /* must be half of the width, minus scrollbar on the left (30px) */
-  margin-left: -500px;
+    .modal-dialog {
+      width: 90%;
+      max-width: 1000px;
+    }
 }
 
 .banner-list {
@@ -31,11 +32,11 @@
 /* Generic Form Overrides */
 .manage_order_detail {
   input[type=text],
-  .input-prepend .add-on {
+  .input-group-addon {
     padding: 1px 6px !important;
   }
 
-  .input-prepend .add-on {
+  .input-group-addon {
     padding: 1px 3px !important;
   }
 
@@ -55,11 +56,7 @@
   .note {
     width: 80%;
   }
-}
-
-#order-detail-modal {
-  top: 5%;
-}
+} 
 
 /* Specific Form Overrides */
 .manage_order_detail {
@@ -91,7 +88,7 @@
     }
     .subsidy {
       .help-block {
-        @extend .muted;
+        @extend .text-muted;
       }
     }
   }
@@ -133,7 +130,7 @@ table.order-list {
   }
 
   tr.status-canceled {
-    @extend .muted;
+    @extend .text-muted;
   }
 
   th {
@@ -152,8 +149,8 @@ table.order-list {
   th.time,
   td.currency,
   td.time {
-    border-left: 1px solid $tableBorder;
-    border-right: 1px solid $tableBorder;
+    border-left: 1px solid $table-border-color;
+    border-right: 1px solid $table-border-color;
     width: 70px;
   }
 
@@ -189,20 +186,20 @@ table.order-list {
 .label {
   font-size: 1.0em;
   font-weight: 300;
-  background-color: $grayDark;
+  background-color: $gray-dark;
   &.status-complete,
   &.status-reconciled {
     @extend .label-success;
   }
 
   &.status-canceled {
-    @extend .label-important;
+    @extend .label-danger;
   }
 
 }
 
 .label-warning {
-  background-color: $errorText;
+  background-color: $state-danger-text;
 }
 
 .updating-message {

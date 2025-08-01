@@ -1,6 +1,6 @@
 = simple_form_for @search_form, url: url_for, method: :get, html: { class: "search_form" }, defaults: { required: false } do |f|
   .row
-    %fieldset.span6#search
+    %fieldset.col-md-6#search
       - @search.options.each do |searcher|
         - html_class = searcher.input_type == :select ? "quarter-width" : ""
         = f.input searcher.key,
@@ -11,6 +11,6 @@
           input_html: { id: searcher.key, class: html_class },
           include_blank: false
 
-    .submit_button.span12
+    .submit_button.col-md-12
       = hidden_field_tag :format, params[:format], disabled: true
       = f.submit t("shared.filter"), class: "btn float-left"

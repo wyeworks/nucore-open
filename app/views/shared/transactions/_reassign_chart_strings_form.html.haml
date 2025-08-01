@@ -4,8 +4,8 @@
   = available_account_select_tag(form, @chart_string_reassignment_form.available_accounts)
   %p= text("shared.transactions.reassign_chart_strings.account_select.explanation")
   = submit_tag text("shared.transactions.reassign_chart_strings.submit"), class: "btn btn-primary"
-  = link_to t("shared.cancel"), cancel_path, class: "btn"
+  = link_to t("shared.cancel"), cancel_path, class: "btn btn-default"
 
 .row
-  .span9
+  .col-md-9
     = render "shared/transactions/table_inside", order_details: @order_details

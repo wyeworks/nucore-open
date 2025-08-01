@@ -8,7 +8,7 @@
 describe("DatePickerValidate", function() {
   describe("with no constraints on the picker", function() {
     fixture.set(`\
-<div class="control-group"> \
+<div class="form-group"> \
 <input id="picker1" class="datepicker__data" value="06/22/2017" /> \
 </div>\
 `
@@ -18,19 +18,19 @@ describe("DatePickerValidate", function() {
 
     it("has an error if the date is invalid", function() {
       $("#picker1").val("06/22/17").trigger("change");
-      expect($(".control-group")).toHaveClass("error");
-      return expect($(".help-inline")).toHaveText("invalid date format");
+      expect($(".form-group")).toHaveClass("has-error");
+      return expect($(".help-block")).toHaveText("invalid date format");
     });
 
     return it("is changed to something valid", function() {
       $("#picker1").val("07/23/2016").trigger("change");
-      return expect($(".control-group")).not.toHaveClass("error");
+      return expect($(".form-group")).not.toHaveClass("has-error");
     });
   });
 
   describe("with min and maxDate constraints on the picker", function() {
     fixture.set(`\
-<div class="control-group"> \
+<div class="form-group"> \
 <input id="picker1" class="datepicker__data" value="06/22/2017" \
 data-min-date="2017-01-01" data-max-date="2017-12-31" /> \
 </div>\
@@ -41,29 +41,29 @@ data-min-date="2017-01-01" data-max-date="2017-12-31" /> \
 
     it("does not have an error if in the range", function() {
       $("#picker1").val("06/22/2017").trigger("change");
-      return expect($(".control-group")).not.toHaveClass("error");
+      return expect($(".form-group")).not.toHaveClass("has-error");
     });
 
     it("has an error if the date is before the min date", function() {
       $("#picker1").val("06/22/2016").trigger("change");
-      expect($(".control-group")).toHaveClass("error");
-      return expect($(".help-inline")).toHaveText(/cannot be before/);
+      expect($(".form-group")).toHaveClass("has-error");
+      return expect($(".help-block")).toHaveText(/cannot be before/);
     });
 
     return it("has an error if the date is after the max date", function() {
       $("#picker1").val("07/23/2018").trigger("change");
-      expect($(".control-group")).toHaveClass("error");
-      return expect($(".help-inline")).toHaveText(/cannot be after/);
+      expect($(".form-group")).toHaveClass("has-error");
+      return expect($(".help-block")).toHaveText(/cannot be after/);
     });
   });
 
   return describe("with two pickers with different options", function() {
     fixture.set(`\
-<div id="control1" class="control-group"> \
+<div id="control1" class="form-group"> \
 <input id="picker1" class="datepicker__data" value="06/22/2017" \
 data-min-date="2017-01-01" data-max-date="2017-12-31" /> \
 </div> \
-<div id="control2" class="control-group"> \
+<div id="control2" class="form-group"> \
 <input id="picker2" class="datepicker__data" value="04/13/2016" \
 data-min-date="2016-01-01" data-max-date="2016-12-31" /> \
 </div>\
@@ -75,24 +75,24 @@ data-min-date="2016-01-01" data-max-date="2016-12-31" /> \
     describe("picker1", function() {
       it("does not have an error if in its own range", function() {
         $("#picker1").val("06/22/2017").trigger("change");
-        return expect($("#control1")).not.toHaveClass("error");
+        return expect($("#control1")).not.toHaveClass("has-error");
       });
 
       return it("has an error if it is within the others range, but not its own", function() {
         $("#picker1").val("06/22/2016").trigger("change");
-        return expect($("#control1")).toHaveClass("error");
+        return expect($("#control1")).toHaveClass("has-error");
       });
     });
 
     return describe("picker2", function() {
       it("does not have an error if in its own range", function() {
         $("#picker2").val("06/22/2016").trigger("change");
-        return expect($("#control2")).not.toHaveClass("error");
+        return expect($("#control2")).not.toHaveClass("has-error");
       });
 
       return it("has an error if it is within the others range, but not its own", function() {
         $("#picker2").val("06/22/2017").trigger("change");
-        return expect($("#control2")).toHaveClass("error");
+        return expect($("#control2")).toHaveClass("has-error");
       });
     });
   });

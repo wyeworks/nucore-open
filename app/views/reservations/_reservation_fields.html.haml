@@ -4,40 +4,40 @@
 .well.js--reservationValidations
   .container
     .row
-      .span7
+      .col-md-7
         = label_tag :reservation_reserve_start_date, "Reserve Start", class: "string optional control-label"
         .row
-          .span3
-            = text_field_tag "reservation[reserve_start_date]", f.object.reserve_start_date, class: "datepicker string optional span3", disabled: start_disabled
+          .col-md-3
+            = text_field_tag "reservation[reserve_start_date]", f.object.reserve_start_date, class: "datepicker string optional col-md-3", disabled: start_disabled
             - if f.object.actual_start_at?
               .started-at= "Started: #{l(f.object.actual_start_at, format: :usa)}"
           - if instrument.start_time_disabled?
             = time_select f, :reserve_start, { minute_step: 60 }, disabled: true, hidden: true
           - else
-            .span4
+            .col-md-4
               = time_select f, :reserve_start, { minute_step: instrument.reserve_interval }, disabled: start_disabled
         = label_tag :reservation_reserve_end_date, "Reserve End", class: "string optional control-label"
         .row
           - if instrument.daily_booking?
-            .span3
+            .col-md-3
               = f.text_field :reserve_end_date,
-                class: "datepicker string optional span3",
+                class: "datepicker string optional col-md-3",
                 disabled: true
             - if instrument.start_time_disabled?
               = time_select f, :reserve_end, { minute_step: 60 }, disabled: true, hidden: true
             - else
-              .span4
+              .col-md-4
                 = time_select f, :reserve_end,
                   { minute_step: instrument.reserve_interval },
                   disabled: true
           - else
-            .span3
+            .col-md-3
               = text_field_tag "reservation[reserve_end_date]", f.object.reserve_end_date,
-                class: "datepicker string optional span3"
-            .span4
+                class: "datepicker string optional col-md-3"
+            .col-md-4
               = time_select f, :reserve_end, { minute_step: instrument.reserve_interval }
 
-      .span5
+      .col-md-5
         - if instrument.daily_booking?
           = f.input :duration_days, input_html: { value: f.object.duration_days || 1 }
         - else

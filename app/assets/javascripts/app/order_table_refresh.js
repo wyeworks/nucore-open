@@ -42,6 +42,6 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   setResultsFileUploadModals();
-  $("#results-file-upload-modal").on("hidden", fetchAndRefresh);
+  $("#results-file-upload-modal").on("hidden.bs.modal", fetchAndRefresh);
 
 });

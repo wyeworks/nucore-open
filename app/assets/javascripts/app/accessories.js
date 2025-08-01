@@ -54,15 +54,14 @@ class AccessoryPickerDialog {
 
     // build dialog if necessary
     if (this.dialog.length === 0) {
-      this.dialog = $('<div id="pick_accessories_dialog" class="modal hide fade" data-backdrop="static" role="dialog"/>');
-      this.dialog.hide();
+      this.dialog = $('<div id="pick_accessories_dialog" class="modal fade" data-backdrop="static" role="dialog"><div class="modal-dialog"><div class="modal-content"></div></div></div>');
       $("body").append(this.dialog);
     }
 
     this.dialog.on('ajax:complete', 'form', (evt, xhr, status) => self.handle_response(evt, xhr, status));
 
     if (this.$link.data('refresh-on-cancel')) {
-      this.dialog.on('hidden', () => window.location.reload());
+      this.dialog.on('hidden.bs.modal', () => window.location.reload());
     }
 
     return this.dialog.on('submit', 'form', () => self.toggle_buttons(false));
@@ -80,7 +79,9 @@ class AccessoryPickerDialog {
   }
 
   load_dialog(body) {
-    this.dialog.html(body).modal('show');
+    const $content = this.dialog.find('.modal-content');
+    $content.html(body);
+    this.dialog.modal('show');
     this.picker = new AccessoryPicker($('#accessory-form'));
     return this.toggle_buttons(true);
   }

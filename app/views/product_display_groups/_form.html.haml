@@ -7,7 +7,7 @@
   = f.input :name
   .container
     .row.moveBetweenSelects.js--moveBetweenSelects
-      .span4
+      .col-md-4
         -# Include both so the page still works without JS. The JS will clear anything in
         -# the excluded list from this. Uniq is to prevent duplicates in the case of validation
         -# errors and a product might be in both places.
@@ -17,14 +17,14 @@
             = content_tag :i, "", class: "fa fa-arrow-up"
           = link_to "#", class: "btn js--multiSelectReorder__moveDown ", data: { target: "#product_display_group_product_ids" }, title: text("shared.reorder.move_down") do
             = content_tag :i, "", class: "fa fa-arrow-down"
-      .span2.centered.moveBetweenSelects__buttons
+      .col-md-2.centered.moveBetweenSelects__buttons
         = link_to "#", class: "btn moveBetweenSelects__btn js--include" do
           = content_tag :i, "", class: "fa fa-arrow-left"
           = text("include")
         = link_to "#", class: "btn moveBetweenSelects__btn js--exclude" do
           = content_tag :i, "", class: "fa fa-arrow-right"
           = text("exclude")
-      .span4
+      .col-md-4
         = simple_fields_for :ungrouped do |u|
           -# In the case of validation errors, ensure this collection does not include those added in the previous POST/PATCH
           = u.input :product_ids, collection: @ungrouped_products - @product_display_group.products, input_html: { multiple: true, class: "tall js--excluded" }, required: false, label: ProductDisplayGroup.human_attribute_name(:ungrouped_product_ids), label_method: ->(product) { ProductPresenter.new(product) }

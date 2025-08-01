@@ -14,7 +14,7 @@
 - if can? :create, ProductResearchSafetyCertificationRequirement
   - if @available_certificates.count > 0
     = simple_form_for @product_research_safety_certification_requirement, url: facility_product_product_research_safety_certification_requirements_path(current_facility, @product, @product_research_safety_certification_requirement), defaults: { required: false } do |f|
-      %ul.inline
+      %ul.list-inline
         %li= f.association :research_safety_certificate, collection: @available_certificates, include_blank: false, label: ProductResearchSafetyCertificationRequirement.model_name.human
         %li= f.submit text("add"), class: ["btn", "btn-primary", "btn-inline"]
 

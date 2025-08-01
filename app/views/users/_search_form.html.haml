@@ -3,7 +3,7 @@
   = label_tag :search_term, text("users.search_form.label.search_term")
   %br
   = text_field_tag :search_term, nil, size: 30, class: "search-query"
-  = submit_tag "Search", class: "btn"
+  = submit_tag "Search", class: "btn btn-default"
   = hidden_field_tag :facility_id, current_facility.id
   = hidden_field_tag :search_type, "manage_user"
   = hidden_field_tag :create_link, can_create_users?

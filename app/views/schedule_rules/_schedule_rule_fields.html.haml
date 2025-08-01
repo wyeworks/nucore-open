@@ -1,6 +1,6 @@
 .well
   %h4 Effective Days of Week
-  %ul.inline
+  %ul.list-inline
     - ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].each do |day|
       %li= f.input "on_#{day.downcase}", label: day
   - if @product.start_time_disabled?
@@ -9,11 +9,11 @@
 - unless @product.start_time_disabled?
   .well
     = f.hint :end_time
-    %ul.inline
+    %ul.list-inline
       %li
         = f.label :start_time
         = time_select24(f, :start, minute_step: @product.reserve_interval)
-    %ul.inline
+    %ul.list-inline
       %li
         = f.label :end_time
         = time_select24(f, :end, hours: (0..24), minute_step: @product.reserve_interval)

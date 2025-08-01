@@ -12,6 +12,6 @@
   = f.error_messages
   .form-inputs
     = f.input :quantity, required: true
-  %ul.inline
+  %ul.list-inline
     %li= f.submit text("shared.save"), class: "btn btn-primary"
     %li= link_to text("shared.cancel"), facility_bundle_bundle_products_path

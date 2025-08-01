@@ -6,6 +6,6 @@
   - hint = html(".holiday_hint", scope: "product_access_groups.fields", url: edit_url)
   = f.input :allow_holiday_access, as: :string, readonly: true, hint: hint, input_html: { value: t_boolean(f.object.allow_holiday_access) }
 
-%ul.inline
+%ul.list-inline
   %li= f.submit :class => ['btn', 'btn-primary']
   %li= link_to 'Cancel', [current_facility, @product, ProductAccessGroup]

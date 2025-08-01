@@ -23,13 +23,13 @@
 
   = render_view_hook "additional_user_fields", f: f
 
-%ul.inline
+%ul.list-inline
   - if can?(:edit, @user)
-    %li= link_to text("shared.edit"), edit_facility_user_path(current_facility, @user), class: "btn"
+    %li= link_to text("shared.edit"), edit_facility_user_path(current_facility, @user), class: "btn btn-default"
     - if can?(:unexpire, @user) && @user.expired?
-      %li= link_to text("unexpire"), unexpire_facility_user_path(current_facility, @user), class: "btn", method: :patch
+      %li= link_to text("unexpire"), unexpire_facility_user_path(current_facility, @user), class: "btn btn-default", method: :patch
     - elsif can?(:deactivate, @user) && @user.suspended?
-      = link_to t("shared.activate"), facility_user_suspension_path(current_facility, @user), class: "btn", method: :delete
+      = link_to t("shared.activate"), facility_user_suspension_path(current_facility, @user), class: "btn btn-default", method: :delete
   - if current_ability.can?(:switch_to, @user) && @user.active? && current_facility.single_facility?
     %li= link_to text("search.results_table.order_for"), facility_user_switch_to_path(current_facility, @user), class: "btn btn-primary"
 - if can?(:edit, @user) && @user.active?

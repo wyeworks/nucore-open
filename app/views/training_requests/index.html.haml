@@ -31,6 +31,6 @@
           %td= l(requested_at)
           %td
             = form_for([current_facility, training_request], method: :delete, html: { class: "compact" }) do
-              = submit_tag t("training_requests.delete"), class: "btn"
+              = submit_tag t("training_requests.delete"), class: "btn btn-default"
 - else
   %p.notice= t("training_requests.no_requests")

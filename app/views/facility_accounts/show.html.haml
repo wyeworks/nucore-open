@@ -33,7 +33,7 @@
   = render_view_hook("end_of_readonly_form", f: f, account: @account)
   = render_view_hook("after_end_of_form", f: f, account: @account)
 
-%ul.inline
+%ul.list-inline
   - if SettingsHelper.feature_on?(:edit_accounts) && can?(:edit, @account)
     = link_to t(".link.edit"), edit_facility_account_path(current_facility, @account), class: "btn btn-primary"
 

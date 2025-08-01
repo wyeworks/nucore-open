@@ -6,10 +6,10 @@
 = content_for :tabnav do
   = render partial: "admin/shared/tabnav_reservation"
 
-.span12
+.col-md-12
   = render "shared/transactions/search"
 
-.span12
+.col-md-12
   - if @order_details.any?
     = link_to t("reports.account_transactions.export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
     = form_tag(batch_update_facility_reservations_path, method: :post) do

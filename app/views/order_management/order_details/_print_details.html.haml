@@ -1,7 +1,7 @@
 %div.manage_order_detail
   .banner-list
     .row
-      %dl.span8
+      %dl.col-md-8
         %dt= @order_detail.class.human_attribute_name(:account)
         %dd= @order_detail.account
     = render "projects/shared/project", order_detail: @order_detail
@@ -13,13 +13,13 @@
     - if @order_detail.reservation
       .row
         = banner_date_label @order_detail.reservation, :reserve_start_at, OrderDetail.human_attribute_name(:reserve_start_date).titleize
-        %dl.span2
+        %dl.col-md-2
           %dt= t("activerecord.attributes.reservation.duration_mins")
           %dd.timeinput= @order_detail.reservation.try(:duration_mins)
       - if @order_detail.reservation.actual_start_at
         .row
           = banner_date_label @order_detail.reservation, :actual_start_at, t("activerecord.attributes.reservation.actual_start_date")
-          %dl.span2
+          %dl.col-md-2
             %dt= t("activerecord.attributes.reservation.actual_duration_mins")
             %dd.timeinput= @order_detail.reservation.try(:actual_duration_mins)
     - else
@@ -39,6 +39,6 @@
       - if @order_detail.unrecoverable_note.present? && @order_detail.unrecoverable?
         = banner_label @order_detail, :unrecoverable_note
 
-      %dl.span2
+      %dl.col-md-2
         %dt Assigned Staff
         = @order_detail.assigned_user ? @order_detail.assigned_user.full_name : 'Unassigned'

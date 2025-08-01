@@ -224,7 +224,7 @@ class OrderDetailManagement {
   initAccountOwnerUpdate() {
     return $('#order_detail_account_id').change(function() {
       const owner_name = $(this).find(':selected').data('account-owner');
-      return $(this).closest('.control-group').find('.account-owner').text(owner_name);
+      return $(this).closest('.form-group').find('.account-owner').text(owner_name);
     });
   }
 

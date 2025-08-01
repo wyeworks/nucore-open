@@ -1,4 +1,4 @@
-.hidden-phone
+.hidden-xs
   %table.open-hours.table.table-striped.table-bordered
     %tbody
       %tr
@@ -10,7 +10,7 @@
         - ScheduleRules::OpenHours.weekdays.each do |weekday|
           %td= weekday_opening_times[weekday] || '-'
 
-.hidden-desktop.hidden-tablet
+.visible-xs-block
   %table.open-hours.table.table-striped.table-bordered
     %tbody
       %tr

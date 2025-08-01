@@ -20,7 +20,7 @@
     = f.error_messages
     = f.input :location, label: "Service URL", required: true, input_html: { size: 60 }
 
-    = f.submit "Add", data: { disable_with: "Adding..." }, class: "btn"
+    = f.submit "Add", data: { disable_with: "Adding..." }, class: "btn btn-default"
 
   %br
 
@@ -75,8 +75,8 @@
     = f.label :file, "File", class: "required"
     = f.file_field :file
 
-    %ul.inline
-      %li= f.submit text("shared.upload"), data: { disable_with: "Uploading..." }, class: "btn"
+    %ul.list-inline
+      %li= f.submit text("shared.upload"), data: { disable_with: "Uploading..." }, class: "btn btn-default"
 
   %br
 

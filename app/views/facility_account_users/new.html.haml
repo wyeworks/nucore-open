@@ -30,7 +30,7 @@
     selected: @account_user.user_role,
     disabled: current_owner?
 
-  %ul.inline
+  %ul.list-inline
     - unless current_owner?
       %li= f.submit t("shared.create"), class: "btn btn-primary"
     %li= link_to t("shared.cancel"), facility_account_path(current_facility, @account)

@@ -32,11 +32,11 @@
 
   - if acting_as?
     .row
-      .span4
+      .col-md-4
         = f.input :reference_id
     .row
       - if @order.order_details.size == 1
-        .span6.send-notification
+        .col-md-6.send-notification
           = label_tag :send_notification, class: "checkbox" do
             = check_box_tag :send_notification, 1, params[:send_notification] == "1"
             = t(".notify")
@@ -46,10 +46,10 @@
   - if @instrument.offline?
     %p.alert.alert-danger= text("instruments.offline.notice")
 
-  %ul.inline
+  %ul.list-inline
     %li
       = f.submit t("shared.create"),
-        class: "btn",
+        class: "btn btn-default",
         id: "reservation_submit",
         data: { disable_with: t("shared.create") }
 

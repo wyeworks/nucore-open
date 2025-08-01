@@ -14,7 +14,7 @@
 
 #admin-subnav
   - if can? :create, BundleProduct
-    %ul.inline
+    %ul.list-inline
       %li= link_to text("add"), new_facility_bundle_bundle_product_path, class: "btn-add"
 
 - if @bundle_products.empty?

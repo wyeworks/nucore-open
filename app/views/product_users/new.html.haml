@@ -12,7 +12,7 @@
     = label_tag :search_term, text("product_users.new.label.search_term")
     %br
     = text_field_tag :search_term, nil, size: 30, class: "search-query"
-    = submit_tag text("shared.search"), class: "btn"
+    = submit_tag text("shared.search"), class: "btn btn-default"
     = hidden_field_tag :facility_id, current_facility.id
     = hidden_field_tag :product_id, @product.id
     = hidden_field_tag :search_type, "user_product_approval"

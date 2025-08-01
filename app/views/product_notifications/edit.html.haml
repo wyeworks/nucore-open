@@ -17,6 +17,6 @@
     = f.input :cancellation_email_recipients, as: :string, hint: text("hints.cancellation_email_recipients") if @product.is_a?(Instrument)
     = f.input :issue_report_recipients, as: :string, hint: text("hints.issue_report_recipients") if @product.is_a?(Instrument)
 
-  %ul.inline
+  %ul.list-inline
     %li= f.submit text("shared.save"), class: ["btn", "btn-primary"]
     %li= link_to text("shared.cancel"), facility_product_notifications_path(current_facility, @product)

@@ -42,11 +42,11 @@
       = render_view_hook "acting_as", f: f, order_detail: order.order_details.first
       .backdate_fields= render "edit_date", f: f
 
-    %ul.inline{ style: "float: left" }
+    %ul.list-inline{ style: "float: left" }
       - if @order.has_valid_payment?
         %li
           = f.submit t("shared.update"),
-            class: "btn"
+            class: "btn btn-default"
         - if order.validated?
           %li
             = f.submit t("shared.purchase"),

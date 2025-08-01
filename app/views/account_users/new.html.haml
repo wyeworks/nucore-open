@@ -18,6 +18,6 @@
 
   = f.input :user_role, collection: AccountUserPresenter.selectable_user_roles(current_user, current_facility), selected: "Purchaser"
 
-  %ul.inline
+  %ul.list-inline
     %li= f.submit t("shared.create"), class: "btn btn-primary"
     %li= link_to t("shared.cancel"), account_account_users_path(@account)

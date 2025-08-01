@@ -10,5 +10,5 @@
   = render partial: "reservations_table", locals: { reservations: @actionable_reservations }
 
 .row
-  .span12.timeline-wrapper
+  .col-md-12.timeline-wrapper
     = render partial: "schedule", collection: @schedules, as: :schedule

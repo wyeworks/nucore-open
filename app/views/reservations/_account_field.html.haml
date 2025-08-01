@@ -1,7 +1,7 @@
 .well
   .container
     .row
-      .span6
+      .col-md-6
         = simple_fields_for @order do |order_fields|
           - accounts = @accounts_for_cross_core_project || @order.user.accounts_for_product(@instrument)
 
@@ -21,7 +21,7 @@
           = render_view_hook "after_account", f: f, order_detail: @order_detail
 
       - if show_note_input_to_user?(@order_detail)
-        .span6
+        .col-md-6
           = f.input :note,
             label: @order_detail.product.user_notes_label.presence,
             required: @order_detail.product.user_notes_field_mode.required?,

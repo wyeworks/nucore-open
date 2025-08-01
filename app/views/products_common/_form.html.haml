@@ -3,7 +3,7 @@
   .form-inputs
     = render "product_fields", f: f
     = render_if_exists "#{@product.class.name.underscore}_fields", f: f
-  %ul.inline
+  %ul.list-inline
     - if @product.new_record?
       %li= f.submit text("shared.create"), class: ["btn", "btn-primary"]
       %li= link_to text("shared.cancel"), [current_facility, @product]

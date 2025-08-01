@@ -1,7 +1,9 @@
-#merge-order-missing-order-info-reminder.modal.hide.fade{ data: { backdrop: "static" } }
-  .modal-header
-    - # We're skipping the modal_close_button here to force users to read the message and take action
-    %h3= text("facility_orders.edit.missing_merge_order_info.header")
-  .modal-body
-    = render partial: "merge_order_table", locals: { modal: true }
+#merge-order-missing-order-info-reminder.modal.fade{ data: { backdrop: "static" } }
+  .modal-dialog
+    .modal-content
+      .modal-header
+        - # We're skipping the modal_close_button here to force users to read the message and take action
+        %h3= text("facility_orders.edit.missing_merge_order_info.header")
+      .modal-body
+        = render partial: "merge_order_table", locals: { modal: true }
 = javascript_tag "$('#merge-order-missing-order-info-reminder').modal('show');"

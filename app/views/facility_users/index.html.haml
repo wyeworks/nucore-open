@@ -5,7 +5,7 @@
 
 %h2= text(".head")
 
-%ul.inline
+%ul.list-inline
   %li= link_to text("admin.shared.add", model: text("facility_users.title")), search_facility_facility_users_path, class: "btn-add"
 
 - if @users.empty?

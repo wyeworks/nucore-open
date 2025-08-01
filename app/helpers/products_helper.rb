@@ -8,7 +8,7 @@ module ProductsHelper
     elsif product.current_price_policies.none?
       error_msg = t("price_policies.errors.none_exist")
     end
-    content_tag :span, error_msg, class: ["label", "label-important", "pull-right"] if error_msg
+    content_tag :span, error_msg, class: ["label", "label-danger", "pull-right"] if error_msg
   end
 
   def options_for_control_mechanism

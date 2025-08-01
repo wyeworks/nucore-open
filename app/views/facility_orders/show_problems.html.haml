@@ -7,15 +7,15 @@
   = render partial: "admin/shared/tabnav_order",
     locals: { secondary_tab: "problem" }
 
-.span12
+.col-md-12
   = render "shared/transactions/search"
 
 - if @order_details.any?
-  .span12
+  .col-md-12
     = link_to t("reports.account_transactions.export"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
-  .span12
+  .col-md-12
     %p.notice= t(".instructions")
     = render partial: "shared/problem_order_details", locals: { assign_price_policies_path: assign_price_policies_to_problem_orders_facility_orders_path, show_reservation_start_at: false, send_problem_notifications_path: send_problem_notifications_facility_orders_path }
 - else
-  .span12
+  .col-md-12
     %p.notice= t(".no_problem_orders")

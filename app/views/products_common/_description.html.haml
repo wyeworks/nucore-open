@@ -2,8 +2,8 @@
 .container
   .row
     - if docs.any?
-      .wysiwyg.span8= product.description
-      .span4
+      .wysiwyg.col-md-8= product.description
+      .col-md-4
         .well
           %h3= text("documentation")
           %ul.unstyled
@@ -11,4 +11,4 @@
               %li.document
                 = link_to stored_file.name, product_file_path(stored_file)
     - else
-      .wysiwyg.span12= product.description
+      .wysiwyg.col-md-12= product.description

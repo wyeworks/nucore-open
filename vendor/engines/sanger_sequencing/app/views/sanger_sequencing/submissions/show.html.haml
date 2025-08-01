@@ -11,7 +11,7 @@
 
 .banner-list
   .row
-    %dl.span2
+    %dl.col-md-2
       %dt= Order.model_name.human
       %dd= link_to @submission.order_detail, [@submission.order, @submission.order_detail]
     = banner_date_label @submission.order, :ordered_at

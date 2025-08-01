@@ -50,7 +50,7 @@
           = number_field :default_min_duration, "default", value: 0, readonly: true, disabled:true, class: "half-width"
         - @min_durations.each_with_index do |min_duration, column_index|
           %th{ scope: "col" }
-            .control-group
+            .form-group
               = label :min_duration, t(".rate_start"), class: "normal-weight"
               = number_field :min_duration, column_index, min: 1, value: min_duration, class: "half-width js--minDuration", data: { index: column_index }
     - @price_policies.each_with_index do |price_policy, index|

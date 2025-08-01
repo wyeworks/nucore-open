@@ -11,13 +11,13 @@
     #content{role: "main"}
       .container
         .row
-          .span12
+          .col-md-12
             %h1= yield :h1
             %h2= yield :h2
             = render partial: 'shared/flashes'
         = yield :top_block
         .row
-          .span12
+          .col-md-12
             = yield
     %footer
       = render :partial => '/shared/footer'

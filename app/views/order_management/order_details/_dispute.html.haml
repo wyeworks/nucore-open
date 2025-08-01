@@ -6,18 +6,18 @@
     = banner_date_label @order_detail, :dispute_resolved_at
     = banner_label      @order_detail, :dispute_resolved_reason
 - elsif !@order_detail.global_admin_must_resolve? || current_ability.can?(:manage, :all)
-  .span10
+  .col-md-10
     .well.well-small
       %h4= t('facility_order_details.edit.head.resolve_dispute')
       = f.input :resolve_dispute, as: :hidden
       .row
-        .span2
+        .col-md-2
           = f.input :dispute_by,
                     as: :readonly,
                     value_method: ->(user) { user.present? ? "#{user.name} (#{user.email})" : "" }
-        .span3
+        .col-md-3
           = f.input :dispute_reason, as: :readonly
-        .span4
+        .col-md-4
           = f.input :dispute_resolved_reason, input_html: { class: 'note' }
 - else
   = t("order_details.notices.global_admin_must_resolve.alert")

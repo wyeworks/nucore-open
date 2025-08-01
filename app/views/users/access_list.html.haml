@@ -46,7 +46,7 @@
                   aria: {label: product.name}
               %td.product-column
                 - if training_requested_for?(product)
-                  %span.label.label-important
+                  %span.label.label-danger
                     = text("users.access_list.training_requested")
                 = link_to product.to_s_with_status, [product.facility, product, :users]
               %td.product-column

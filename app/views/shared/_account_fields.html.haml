@@ -1,5 +1,5 @@
 = f.fields_for :account_number_parts, f.object.account_number_parts do |p|
-  %ul.inline
+  %ul.list-inline
     - fields = account_class.new.account_number_fields
     - fields.each_with_index do |(section, options), i|
       %li.account_number_field

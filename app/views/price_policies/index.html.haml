@@ -10,10 +10,10 @@
 %p= text("description")
 
 - if can?(:create, PricePolicy) && !@product.skip_order_review?
-  %ul.inline
+  %ul.list-inline
     %li= link_to text("add"), [:new, current_facility, @product, :price_policy], class: "btn-add"
 - elsif @product.skip_order_review?
-  %ul.inline
+  %ul.list-inline
     %b= text("skip_review_message", type: @product.type.downcase, billing_mode: @product.billing_mode)
 
 - if @current_price_policies.empty?
