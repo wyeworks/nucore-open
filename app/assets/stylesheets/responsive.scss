@@ -9,10 +9,15 @@ $navbarActiveBorderColor: #595959;
 
   .navbar .navbar-toggle {
     padding: 5px 15px;
+    margin-top: 15px;
 
     .fa-bars {
       transform: scaleX(1.5); // Widen it
     }
+  }
+
+  .navbar-header {
+    width: 100%;
   }
 
   .hidden-with-nav {
@@ -49,7 +54,7 @@ $navbarActiveBorderColor: #595959;
 
     &:hover, &:focus {
       color: $navCollapseColor !important;
-      background: $navbarLinkColorActive;
+      background: $navbarLinkColorActive !important;
     }
   }
   header .navbar .navbar-collapse .nav > li.active > a {
@@ -60,16 +65,34 @@ $navbarActiveBorderColor: #595959;
     line-height: 20px;
     color: $navCollapseColor !important;
   }
+  
+  .navbar-collapse .divider-vertical {
+    display: none !important;
+  }
+  
   .navbar-collapse .navbar-form, .navbar-collapse .navbar-search {
     margin: 0;
     padding: 10px;
     border-bottom: 0;
   }
+  
+  .navbar-collapse {
+    .navbar-nav {
+      float: none !important;
+      width: 100%;
+    }
+    
+    .nav > li {
+      float: none;
+      width: 100%;
+    }
+  }
+
   .timeline-wrapper {
     overflow-x: scroll;
   }
 
-  // Responsive table behvavior inspired by
+  // Responsive table behavior inspired by
   // https://css-tricks.com/responsive-data-tables/
   .js--responsive_table {
 
