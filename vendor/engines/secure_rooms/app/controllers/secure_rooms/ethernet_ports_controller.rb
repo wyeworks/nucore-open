@@ -10,7 +10,6 @@ module SecureRooms
 
     before_action :init_current_facility
     before_action :init_product
-    before_action :authenticate_user!
     before_action :check_acting_as
 
     layout "two_column"

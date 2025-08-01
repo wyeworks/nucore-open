@@ -2,7 +2,6 @@ class ProductDisplayGroupsController < ApplicationController
   layout "two_column"
 
   admin_tab :all
-  before_action :authenticate_user!
   before_action :init_current_facility
   load_and_authorize_resource through: :current_facility
   before_action :load_ungrouped_products

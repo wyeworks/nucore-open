@@ -3,7 +3,6 @@
 class AccountsController < ApplicationController
 
   customer_tab  :all
-  before_action :authenticate_user!
   before_action :check_acting_as
   before_action :init_account, only: [:show, :user_search, :transactions, :suspend, :unsuspend]
 

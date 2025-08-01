@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class GlobalSearchController < ApplicationController
+  skip_before_action :authenticate_user!
 
   customer_tab :all
 

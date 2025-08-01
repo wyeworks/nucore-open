@@ -6,7 +6,6 @@ class OrderDetailStoredFilesController < ApplicationController
 
   customer_tab  :all
 
-  before_action :authenticate_user!
   before_action :init_order_detail
   authorize_resource class: OrderDetail
 

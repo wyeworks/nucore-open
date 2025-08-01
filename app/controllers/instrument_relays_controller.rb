@@ -3,7 +3,6 @@
 class InstrumentRelaysController < ApplicationController
 
   admin_tab :all
-  before_action :authenticate_user!
   before_action :check_acting_as
   before_action :init_instrument
   before_action :manage

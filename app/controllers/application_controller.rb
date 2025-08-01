@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
   helper_method :open_or_facility_path
 
   before_action :set_paper_trail_whodunnit
+  before_action :authenticate_user!
 
   # Navigation tabs configuration
   attr_accessor :active_tab

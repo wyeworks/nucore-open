@@ -4,7 +4,6 @@ class ProblemReservationsController < ApplicationController
 
   customer_tab :all
 
-  before_action :authenticate_user!
   before_action :load_and_authorize_reservation
   before_action :prevent_double_update, only: :update
   before_action { @active_tab = "reservations" }

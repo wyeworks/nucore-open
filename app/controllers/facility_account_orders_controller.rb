@@ -4,7 +4,6 @@ class FacilityAccountOrdersController < ApplicationController
 
   admin_tab :all
 
-  before_action :authenticate_user!
   before_action { @active_tab = "admin_users" }
 
   layout "two_column"

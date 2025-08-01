@@ -2,6 +2,8 @@
 
 class Api::OrderDetailsController < ApplicationController
 
+  skip_before_action :authenticate_user!
+
   respond_to :json
   rescue_from ActiveRecord::RecordNotFound, with: :order_detail_not_found
 

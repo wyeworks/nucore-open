@@ -2,7 +2,6 @@
 
 class HolidaysController < ApplicationController
 
-  before_action :authenticate_user!
   load_and_authorize_resource
 
   layout "two_column"

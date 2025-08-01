@@ -3,7 +3,6 @@
 class StatementsController < ApplicationController
 
   customer_tab  :all
-  before_action :authenticate_user!
   before_action :check_acting_as
   before_action :init_account
   before_action :init_statement, only: [:show]

@@ -8,7 +8,6 @@ module Reports
     include CSVHelper
 
     admin_tab     :all
-    before_action :authenticate_user!
     before_action :check_acting_as
     before_action :init_current_facility
     before_action :init_report_params

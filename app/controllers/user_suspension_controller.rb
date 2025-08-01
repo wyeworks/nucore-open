@@ -4,7 +4,6 @@ class UserSuspensionController < ApplicationController
 
   admin_tab     :all
   before_action :init_current_facility
-  before_action :authenticate_user!
   load_and_authorize_resource :user, id_param: :user_id
 
   # POST /facilities/facility_id/users/:id/suspension

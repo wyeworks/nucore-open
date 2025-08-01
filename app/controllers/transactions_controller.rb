@@ -3,7 +3,6 @@
 class TransactionsController < ApplicationController
 
   customer_tab :all
-  before_action :authenticate_user!
   before_action :check_acting_as
   before_action :enable_sorting, only: [:index, :in_review]
   before_action :authorize_reassign_transactions, only: [:movable_transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions] # rubocop:disable Rails/LexicallyScopedActionFilter

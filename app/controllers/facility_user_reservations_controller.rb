@@ -4,7 +4,6 @@ class FacilityUserReservationsController < ApplicationController
 
   admin_tab :all
   before_action :init_current_facility
-  before_action :authenticate_user!
   before_action :check_acting_as
   before_action :load_user
   before_action :load_order_detail, only: :cancel

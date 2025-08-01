@@ -7,6 +7,7 @@ module SecureRooms
     layout "plain"
 
     before_action :load_secure_room
+    skip_before_action :authenticate_user!
 
     def index
       @refresh_url = refresh_facility_secure_room_occupancies_url(current_facility, @secure_room.dashboard_token)

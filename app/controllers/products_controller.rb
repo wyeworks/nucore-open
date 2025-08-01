@@ -3,7 +3,6 @@
 class ProductsController < ApplicationController
 
   admin_tab     :all
-  before_action :authenticate_user!
   before_action :check_acting_as, except: [:index]
   before_action :init_current_facility
   before_action :set_facility_products, only: [:available_for_cross_core_ordering]
