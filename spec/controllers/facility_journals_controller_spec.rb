@@ -82,6 +82,7 @@ RSpec.describe FacilityJournalsController do
 
       it "shows an error if journal_status is blank" do
         do_request
+
         expect(flash[:error]).to include "Please select a journal status"
       end
 
