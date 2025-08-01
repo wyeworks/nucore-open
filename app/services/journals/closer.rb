@@ -12,17 +12,22 @@ class Journals::Closer
 
   def perform(status)
     rollback_on_fail do
-      case status
-      when "failed"
-        mark_as_failed
-      when "succeeded_errors"
-        mark_as_succeeded_with_errors
-      when "succeeded"
-        mark_as_succeeded
-      else
-        journal.errors.add(:base, I18n.t("controllers.facility_journals.update.error.status"))
-        false
-      end
+      ret =
+        case status
+        when "failed"
+          mark_as_failed
+        when "succeeded_errors"
+          mark_as_succeeded_with_errors
+        when "succeeded"
+          mark_as_succeeded
+        else
+          journal.errors.add(:base, I18n.t("controllers.facility_journals.update.error.status"))
+          false
+        end
+
+      enqueue_order_detail_notice_update if journal.errors.blank?
+
+      ret
     end
   end
 
@@ -70,6 +75,12 @@ class Journals::Closer
 
   def reconciled_at
     @journal.journal_date
+  end
+
+  def enqueue_order_detail_notice_update
+    journal.order_details.map do |order_detail|
+      OrderDetailNoticesUpdateJob.perform_later(order_detail)
+    end
   end
 
 end

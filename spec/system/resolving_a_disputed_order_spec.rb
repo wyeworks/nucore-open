@@ -26,7 +26,7 @@ RSpec.describe "Resolving a disputed order" do
   end
 
   before do
-    allow_any_instance_of(OrderDetailNoticePresenter).to receive(:global_admin_must_resolve?).and_return(true)
+    allow_any_instance_of(OrderDetail).to receive(:global_admin_must_resolve?).and_return(true)
     login_as logged_in_user
     visit facility_disputed_orders_path facility
     click_link(

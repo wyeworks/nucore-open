@@ -32,7 +32,7 @@ RSpec.describe MessageSummarizer do
 
   def set_problem_order
     order_detail.update_attribute(:state, :complete)
-    order_detail.set_problem_order
+    order_detail.set_problem_and_notices
   end
 
   shared_examples_for "there are no messages" do
