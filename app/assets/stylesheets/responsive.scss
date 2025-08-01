@@ -4,6 +4,41 @@ $navbarLinkColorActive: #e6e6e6;
 $navCollapseColor: #545454; // maximim lightness for WCAG AAA compliance (accessibility).
 $navbarActiveBorderColor: #595959;
 
+/* Override Bootstrap 3's default 768px breakpoint to extend collapse to 979px */
+@media screen and (min-width: 768px) and (max-width: 979px) {
+  .navbar-header {
+    float: none;
+  }
+  .navbar-toggle {
+    display: block !important;
+    float: right;
+    margin-right: 15px;
+    padding: 5px 15px;
+    margin-top: 15px;
+  }
+  .navbar-collapse {
+    border-top: 1px solid transparent;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+  }
+  .navbar-collapse.collapse {
+    display: none !important;
+  }
+  .navbar-nav {
+    float: none !important;
+    margin: 0;
+  }
+  .navbar-nav > li {
+    float: none;
+  }
+  .navbar-nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  .navbar-collapse.in {
+    display: block !important;
+  }
+}
+
 /* 979px - 980px is where nav-collapse gets triggered */
 @media screen and (max-width: 979px) {
 
