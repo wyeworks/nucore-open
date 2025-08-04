@@ -5,7 +5,7 @@ $navCollapseColor: #545454; // maximim lightness for WCAG AAA compliance (access
 $navbarActiveBorderColor: #595959;
 
 /* Override Bootstrap 3's default 768px breakpoint to extend collapse to 979px */
-@media screen and (min-width: 769px) and (max-width: 979px) {
+@media screen and (min-width: 768px) and (max-width: 979px) {
   .navbar-header {
     float: none;
   }
