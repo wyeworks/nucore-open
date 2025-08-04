@@ -4,3 +4,11 @@ en:
       table:
         statement_email: "!Statement! Email"
         review_orders_email: Review Orders Email
+      filter_form:
+        invoice_number: "Invoice Number"
+        payment_source: "Payment Source"
+        event_filter: "Event Filter"
+        event_placeholder: "Filter on one or more events"
+        start_date: "Start Date"
+        end_date: "End Date"
+        submit: "Filter"

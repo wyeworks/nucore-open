@@ -6,20 +6,24 @@ class LogEventSearcher
     10.years.ago
   end
 
-  attr_accessor :relation, :start_date, :end_date, :events, :query
+  attr_accessor :relation, :start_date, :end_date, :events, :query, :invoice_number, :payment_source
 
   def initialize(
     relation: LogEvent.all,
     start_date: nil,
     end_date: nil,
     events: [],
-    query: nil
+    query: nil,
+    invoice_number: nil,
+    payment_source: nil
   )
     @relation = relation
     @start_date = start_date
     @end_date = end_date
     @events = events
     @query = query
+    @invoice_number = invoice_number
+    @payment_source = payment_source
   end
 
   def search
@@ -27,6 +31,11 @@ class LogEventSearcher
     result = relation.merge(filter_date) if start_date || end_date
     result = result.merge(filter_event) if events.present?
     result = result.merge(filter_query) if query.present?
+    
+    if invoice_number.present? || payment_source.present?
+      result = result.merge(filter_statements)
+    end
+    
     result
   end
 
@@ -67,6 +76,20 @@ class LogEventSearcher
     ].compact.map do |filter|
       LogEvent.where(loggable_type: filter.model.name, loggable_id: filter)
     end.inject(&:or)
+  end
+
+  def filter_statements
+    statements = Statement.all
+    
+    if invoice_number.present?
+      statements = statements.where_invoice_number(invoice_number)
+    end
+    
+    if payment_source.present?
+      statements = statements.joins(:payments).where(Payment.arel_table[:source].lower.matches("%#{payment_source.downcase}%"))
+    end
+    
+    LogEvent.where(loggable_type: "Statement", loggable_id: statements.unscope(:order))
   end
 
 end
