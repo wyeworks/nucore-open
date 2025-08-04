@@ -69,19 +69,12 @@ nav .navbar {
       padding: 12px 15px;
     }
     
-    &.active > a,
-    &:hover > a {
+    &.active,
+    &:hover {
       border-top: $navbarActiveBorderHeight solid $navbarActiveBorderColor;
       margin-top: -$navbarActiveBorderHeight;
-      padding-top: 18px - $navbarActiveBorderHeight;
     }
   }
-}
-
-nav ul.nav > li.active,
-nav ul.nav > li:hover {
-  border-top: $navbarActiveBorderHeight solid $navbarActiveBorderColor;
-  margin-top: -$navbarActiveBorderHeight;
 }
 
 .navbar-form .form-group .form-control {
