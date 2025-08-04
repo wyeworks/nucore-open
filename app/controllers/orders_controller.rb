@@ -62,7 +62,7 @@ class OrdersController < ApplicationController
 
     @order.errors.add(:base, invalid_for_orderer_message)
 
-    flash[:error] = "There are errors in your order:<br>#{@order.errors.full_messages.join('<br>')}".html_safe
+    flash.now[:error] = "There are errors in your order:<br>#{@order.errors.full_messages.join('<br>')}".html_safe
   end
 
   # PUT /orders/:id/clear

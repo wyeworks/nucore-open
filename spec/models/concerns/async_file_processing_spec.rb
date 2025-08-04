@@ -4,6 +4,7 @@ require "rails_helper"
 
 RSpec.describe AsyncFileProcessing do
   include ActiveJob::TestHelper
+
   class TestClass
 
     include ActiveModel::Model

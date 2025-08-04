@@ -14,6 +14,7 @@ class ReservationsController < ApplicationController
   include TranslationHelper
   include FacilityReservationsHelper
   include ReservationSwitch
+
   helper TimelineHelper
 
   MAX_RESERVATIONS_PERIOD = 45.days

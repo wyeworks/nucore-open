@@ -8,6 +8,7 @@ class AccountsController < ApplicationController
   before_action :init_account, only: [:show, :user_search, :transactions, :suspend, :unsuspend]
 
   include AccountSuspendActions
+
   load_and_authorize_resource only: [:show, :user_search, :transactions, :suspend, :unsuspend]
 
   def initialize

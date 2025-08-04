@@ -14,7 +14,6 @@ updates:
       update-types:
         - patch
         - minor
-
       patterns:
         - rails
         - railties
@@ -28,6 +27,12 @@ updates:
         - activemodel
         - activerecord
         - activestorage
+    aws:
+      update-types:
+        - patch
+        - minor
+      patterns:
+        - aws-*
 
 # Check for updates to GitHub Actions every week
 - package-ecosystem: "github-actions"

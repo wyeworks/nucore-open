@@ -49,7 +49,7 @@ class OfflineReservationsController < ApplicationController
       flash[:notice] = text("update.success")
       redirect_to facility_instrument_schedule_path
     else
-      flash[:error] = text("update.error")
+      flash.now[:error] = text("update.error")
       render action: "edit"
     end
   end

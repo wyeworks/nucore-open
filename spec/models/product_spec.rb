@@ -791,4 +791,20 @@ RSpec.describe Product do
       expect(product.errors).to include("order_notification_recipients")
     end
   end
+
+  describe "#activation_change_action" do
+    it "returns :activate when is_archived changes from true to false" do
+      product = create(:setup_item, is_archived: true)
+      product.is_archived = false
+      product.save!
+      expect(product.activation_change_action).to eq(:activate)
+    end
+
+    it "returns :deactivate when is_archived changes from false to true" do
+      product = create(:setup_item, is_archived: false)
+      product.is_archived = true
+      product.save!
+      expect(product.activation_change_action).to eq(:deactivate)
+    end
+  end
 end

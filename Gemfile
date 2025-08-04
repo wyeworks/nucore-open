@@ -23,7 +23,9 @@ gem 'mutex_m'
 gem 'csv'
 
 # Ruby 3.4 warns it won't be included in the future
-gem 'reline'
+gem "benchmark"
+gem "reline"
+gem "irb"
 
 # Remove once we upgrade to rails 7.2.X or greater
 # See: github.com/rails/rails/pull/54264
@@ -79,7 +81,7 @@ gem "rubyzip"
 gem "prawn-rails"
 
 ## Email
-gem "mailgun-ruby", "~>1.3.7"
+gem "mailgun-ruby", "~>1.3.9"
 
 ## other
 gem "delayed_job_active_record"
@@ -115,7 +117,7 @@ group :development do
   gem "haml_lint", require: false
   gem "letter_opener"
   gem "rack-mini-profiler", "~> 4.0"
-  gem "rubocop", "1.78.0", require: false
+  gem "rubocop", "1.79.1", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"

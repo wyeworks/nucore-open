@@ -132,7 +132,7 @@ class UsersController < ApplicationController
       flash[:notice] = text("update.success")
       redirect_to facility_user_path(current_facility, @user)
     else
-      flash[:error] = text("update.error", message: @user_form.errors.full_messages.to_sentence)
+      flash.now[:error] = text("update.error", message: @user_form.errors.full_messages.to_sentence)
       render action: "edit"
     end
   end
