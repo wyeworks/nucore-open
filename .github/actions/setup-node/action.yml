@@ -1,0 +1,14 @@
+name: Setup Node
+description: Install JS dependencies
+
+runs:
+  using: composite
+  steps:
+    - name: node-cache
+      uses: actions/cache@v3
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-bundle-${{ hashFiles('yarn.lock') }}
+        restore-keys: ${{ runner.os }}-yarn-
+    - run: yarn install
+      shell: bash
