@@ -8,7 +8,6 @@ module BulkEmail
     layout "two_column"
 
     before_action { @active_tab = "admin_users" }
-    before_action :authenticate_user!
     before_action :check_acting_as
     before_action :init_current_facility
     before_action { authorize! :send_bulk_emails, current_facility }
