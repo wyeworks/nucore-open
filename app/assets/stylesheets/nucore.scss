@@ -92,6 +92,10 @@ form:not(.form-horizontal) input[type="text"].form-control[name="search_term"] {
   text-decoration: none !important;
 }
 
+.nav-tabs {
+  margin-bottom: 20px;
+}
+
 input[type="checkbox"].form-control,
 input[type="radio"].form-control {
   width: auto;
