@@ -32,7 +32,7 @@ RSpec.describe OrderDetails::NoticesService do
       is_expected.to eq([:in_dispute])
     end
 
-    it "shows in dispute" do
+    it "shows global admin must resolve" do
       allow(order_detail).to receive(:in_dispute?).and_return(true)
       allow(order_detail).to receive(:global_admin_must_resolve?).and_return(true)
 
