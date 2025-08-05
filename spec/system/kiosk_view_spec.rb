@@ -141,6 +141,8 @@ RSpec.describe "Launching Kiosk View", :js, :disable_requests_local, feature_set
         click_link "End Reservation"
         wait_for_ajax
         check accessory.name
+        wait_for_ajax
+        expect(page).to have_field("kiosk_accessories_#{accessory.id}_quantity", wait: 5)
         fill_in "kiosk_accessories_#{accessory.id}_quantity", with: "3"
         fill_in "Password", with: password
         click_button "Save Changes"
@@ -155,7 +157,10 @@ RSpec.describe "Launching Kiosk View", :js, :disable_requests_local, feature_set
         visit facility_kiosk_reservations_path(facility)
         expect(page).to have_content(login_label)
         click_link "End Reservation"
+        wait_for_ajax
         check accessory.name
+        wait_for_ajax
+        expect(page).to have_field("kiosk_accessories_#{accessory.id}_quantity", wait: 5)
         fill_in "kiosk_accessories_#{accessory.id}_quantity", with: "3"
         fill_in "Password", with: "not-the-password"
         click_button "Save Changes"
