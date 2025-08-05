@@ -10,7 +10,7 @@
   = hidden_field_tag :email, current_user.email, disabled: true
   = hidden_field_tag :format, params[:format], disabled: true
   %br
-  = text_field_tag :search_term, nil, size: 30, class: "search-query"
+  = text_field_tag :search_term, nil, size: 30, class: "form-control"
   = submit_tag t(".search"), class: "btn btn-default"
 
 %hr

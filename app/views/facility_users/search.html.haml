@@ -6,7 +6,7 @@
 %h2 Add a User
 = form_tag user_search_results_path, id: "ajax_form", method: "get" do
   %p.instructions= text("facility_users.search.instruct")
-  = text_field_tag :search_term, nil, size: 30, class: "search-query"
+  = text_field_tag :search_term, nil, size: 30, class: "form-control"
   = submit_tag "Search", class: "btn btn-default"
   = hidden_field_tag :facility_id, current_facility.id
   = hidden_field_tag :search_type, "map_user"

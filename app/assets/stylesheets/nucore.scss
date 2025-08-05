@@ -77,9 +77,12 @@ nav .navbar {
   }
 }
 
-.navbar-form .form-group .form-control {
+input[type="text"].form-control[name="search"],
+input[type="text"].form-control[name="search_term"] {
   border-radius: 15px;
   height: 28px;
+  display: inline-block;
+  max-width: 250px;
 }
 
 .navbar a,

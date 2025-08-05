@@ -4,7 +4,7 @@
 
 = form_tag users_search_facility_price_group_path, id: "ajax_form", method: :get do
   = label_tag :price_group_user_search, text("price_groups.show.users.search_form.label")
-  = text_field_tag :search, nil, size: 50, class: "search-query", id: "price_group_user_search"
+  = text_field_tag :search, nil, size: 50, class: "form-control", id: "price_group_user_search"
   = submit_tag text("price_groups.show.users.search_form.button"), class: "btn btn-default"
 
 = render "users_results"

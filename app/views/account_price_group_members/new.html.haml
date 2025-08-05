@@ -10,7 +10,7 @@
   = form_tag url_for(action: "search_results"), id: "ajax_form", method: :get do
     = label_tag :search_term, text("account_price_group_members.new.label.search_term")
     %br
-    = text_field_tag :search_term, nil, size: 30, class: "search-query"
+    = text_field_tag :search_term, nil, size: 30, class: "form-control"
     = submit_tag "Search", class: "btn btn-default"
 %br
 #result
