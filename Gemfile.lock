@@ -785,7 +785,6 @@ DEPENDENCIES
   saml_authentication!
   sanger_sequencing!
   sass-rails
-  sassc-rails (>= 2.1.0)
   secure_rooms!
   selenium-webdriver
   shoulda-matchers
