@@ -135,4 +135,18 @@ namespace :order_details do
 
     OrderDetailCleaner.remove_orders("lib/tasks/orders_to_remove.txt")
   end
+
+  desc "Backfill order detail notice_keys and problem_keys"
+  task :backfill_notices, [:days_ago] => :environment do |_task, args|
+    days_value = args.days_ago.to_i
+    days_value = 90 if days_value.zero?
+
+    order_details = OrderDetail.where(created_at: days_value.days.ago...)
+
+    puts "Updating #{order_details.count} order details from the last #{days_value} days ago"
+
+    order_details.find_each do |order_detail|
+      OrderDetailNoticesUpdateJob.perform_now(order_detail)
+    end
+  end
 end
