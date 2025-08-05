@@ -77,8 +77,9 @@ nav .navbar {
   }
 }
 
-input[type="text"].form-control[name="search"],
-input[type="text"].form-control[name="search_term"] {
+.navbar-form input[type="text"].form-control,
+form:not(.form-horizontal) input[type="text"].form-control[name="search"],
+form:not(.form-horizontal) input[type="text"].form-control[name="search_term"] {
   border-radius: 15px;
   height: 28px;
   display: inline-block;
