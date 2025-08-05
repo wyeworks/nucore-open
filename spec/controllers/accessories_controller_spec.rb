@@ -29,7 +29,7 @@ RSpec.describe AccessoriesController do
       @action = :new
     end
 
-    it_should_allow_operators_only(:success, "", false) {}
+    it_should_allow_operators_only(:success, "", true) {}
 
     # facility admin specs cover the inner workings
     context "as the user who made the reservation" do

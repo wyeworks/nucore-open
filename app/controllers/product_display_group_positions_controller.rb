@@ -3,7 +3,6 @@ class ProductDisplayGroupPositionsController < ApplicationController
   layout "two_column"
 
   admin_tab :all
-  before_action :authenticate_user!
   before_action :init_current_facility
   before_action { authorize! :edit, ProductDisplayGroup }
   before_action :load_product_display_groups

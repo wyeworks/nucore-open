@@ -8,6 +8,7 @@
 # then logged out and redirected back to the Kiosk View.
 class KioskReservationsController < ApplicationController
 
+  skip_before_action :authenticate_user!
   before_action :check_kiosk_enabled, only: :index
   before_action :check_acting_as, only: [:switch_instrument]
   before_action :load_and_check_resources, except: [:index]
