@@ -1,28 +1,27 @@
 .well
-  .container
-    .row
+  .row
+    .col-md-6
+      = simple_fields_for @order do |order_fields|
+        - accounts = @accounts_for_cross_core_project || @order.user.accounts_for_product(@instrument)
+
+        - selected_account_id = @order.account_id || params[:order_account]
+        - if selected_account_id.blank? && accounts.count == 1
+          - selected_account_id = accounts.first.id
+
+        = order_fields.input :account,
+          collection: accounts,
+          input_html: { name: "order_account" },
+          prompt: t(".prompt"),
+          selected: selected_account_id
+
+      - if acting_as?
+        = render "projects/shared/select_project", f: f, order_detail: @order_detail
+        - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
+        = render_view_hook "after_account", f: f, order_detail: @order_detail
+
+    - if show_note_input_to_user?(@order_detail)
       .col-md-6
-        = simple_fields_for @order do |order_fields|
-          - accounts = @accounts_for_cross_core_project || @order.user.accounts_for_product(@instrument)
-
-          - selected_account_id = @order.account_id || params[:order_account]
-          - if selected_account_id.blank? && accounts.count == 1
-            - selected_account_id = accounts.first.id
-
-          = order_fields.input :account,
-            collection: accounts,
-            input_html: { name: "order_account" },
-            prompt: t(".prompt"),
-            selected: selected_account_id
-
-        - if acting_as?
-          = render "projects/shared/select_project", f: f, order_detail: @order_detail
-          - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
-          = render_view_hook "after_account", f: f, order_detail: @order_detail
-
-      - if show_note_input_to_user?(@order_detail)
-        .col-md-6
-          = f.input :note,
-            label: @order_detail.product.user_notes_label.presence,
-            required: @order_detail.product.user_notes_field_mode.required?,
-            hint: t(".note_hint")
+        = f.input :note,
+          label: @order_detail.product.user_notes_label.presence,
+          required: @order_detail.product.user_notes_field_mode.required?,
+          hint: t(".note_hint")

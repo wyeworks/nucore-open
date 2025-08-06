@@ -10,7 +10,6 @@ html {
 
 .well {
   padding: 19px;
-  margin-bottom: 20px;
   
   // Use darker colors for better accessibility contrast
   a {
@@ -319,13 +318,6 @@ form.compact { margin: 0 }
 .modal form,
 .well form {
   margin-bottom: 0;
-}
-
-.well {
-  padding: 8px 19px;
-  h2, h3 {
-    margin-top: 0;
-  }
 }
 
 td.order-note,
