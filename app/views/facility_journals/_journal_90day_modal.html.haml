@@ -1,15 +1,17 @@
-#journal-date-popup.modal.hide.fade
-  .modal-header
-    = modal_close_button
-    %h3= text("facility_journals.journal_90day_modal.header")
+#journal-date-popup.modal.fade
+  .modal-dialog
+    .modal-content
+      .modal-header
+        = modal_close_button
+        %h3= text("facility_journals.journal_90day_modal.header")
 
-  .modal-body= text("facility_journals.journal_90day_modal.body")
-    
-  .modal-footer
-    %button.btn{ type: "button", data: { dismiss: "modal" } }
-      = text("facility_journals.journal_90day_modal.cancel_button") 
-    - if @journal_creation_reminder
-      = link_to text("facility_journals.journal_90day_modal.submit_button"), "#journal-creation-reminder", class: "btn btn-primary", data: { toggle: "modal", dismiss: "modal" }
-    - else
-      - submit_form = "event.preventDefault();document.getElementById('journals_create_form').submit();"
-      = submit_tag text("facility_journals.journal_90day_modal.submit_button"), class: "btn btn-primary", onclick: submit_form
+      .modal-body= text("facility_journals.journal_90day_modal.body")
+        
+      .modal-footer
+        %button.btn{ type: "button", data: { dismiss: "modal" } }
+          = text("facility_journals.journal_90day_modal.cancel_button") 
+        - if @journal_creation_reminder
+          = link_to text("facility_journals.journal_90day_modal.submit_button"), "#journal-creation-reminder", class: "btn btn-primary", data: { toggle: "modal", dismiss: "modal" }
+        - else
+          - submit_form = "event.preventDefault();document.getElementById('journals_create_form').submit();"
+          = submit_tag text("facility_journals.journal_90day_modal.submit_button"), class: "btn btn-primary", onclick: submit_form

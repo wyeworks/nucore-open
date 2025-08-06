@@ -6,27 +6,27 @@
 
     = form_tag url_for(controller: params[:controller], action: @order_detail_action), id: "journals_create_form", name: "journals_create_form", method: :post, class: "form-horizontal" do
       .row
-        .span12= yield :action_instructions
+        .col-md-12= yield :action_instructions
       .row.table-actions
-        .span1.select_all_none= select_all_link
-        .span9
+        .col-md-1.select_all_none= select_all_link
+        .col-md-9
           - if @action_date_field
-            .control-group.fields
+            .form-group.fields
               %label.control-label{ for: @action_date_field.keys.first }= @action_date_field.keys.first.to_s.titleize
               .controls
                 = text_field_tag @action_date_field.keys.first, @action_date_field.values.first.strftime("%m/%d/%Y"), class: :datepicker
           - else
             &nbsp;
-        .span2
+        .col-md-2
           .submit
             = submit_tag text(@order_detail_action, scope: "admin.transaction_search.actions"), class: "btn btn-primary"
       .row
-        .span12= render "shared/transactions/table_inside", order_details: order_details
+        .col-md-12= render "shared/transactions/table_inside", order_details: order_details
   - else
     .row
-      .span12= yield :action_instructions
+      .col-md-12= yield :action_instructions
     .row
-      .span12
+      .col-md-12
         = render "shared/transactions/table_inside",
           order_details: order_details,
           show_statements: local_assigns[:show_statements]

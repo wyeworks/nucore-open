@@ -8,8 +8,8 @@
     -# There are users to search for or the search action was performed
     = form_tag polymorphic_path([:search, current_facility, @product, :users]), id: "ajax_form", class: "inline", method: :get do
       = label_tag :access_list_search, text("search_form.label")
-      = text_field_tag :search, nil, size: 50, class: "search-query", id: "access_list_search", value: @search_term
-      = submit_tag text("search_form.button"), class: "btn"
+      = text_field_tag :search, nil, size: 50, class: "form-control", id: "access_list_search", value: @search_term
+      = submit_tag text("search_form.button"), class: "btn btn-default"
 
   - if @product_users.nil?
     - # Access list not required for this product

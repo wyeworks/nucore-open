@@ -5,9 +5,9 @@
   = hidden_field_tag :product_id, params[:product_id]
 
   .results_header
-    .span1.select_all_none= select_all_link(start_none: true)
+    .col-md-1.select_all_none= select_all_link(start_none: true)
 
-    .bulk_email_buttons.span3.pull-right
+    .bulk_email_buttons.col-md-3.pull-right
       - if current_ability.can?(:send_bulk_emails, current_facility)
         = safe_join(@searcher.search_params_as_hidden_fields)
 

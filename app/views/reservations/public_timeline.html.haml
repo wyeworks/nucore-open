@@ -17,5 +17,5 @@
         facility_public_timeline_path(current_facility, date: format_usa_date(@display_datetime + 1.day)), id: "reservation_right"
 
 .row
-  .span12.timeline-wrapper
+  .col-md-12.timeline-wrapper
     = render partial: "schedule", collection: @schedules, as: :schedule

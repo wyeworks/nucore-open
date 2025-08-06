@@ -9,11 +9,11 @@
     = banner_label @order, :user
     = banner_label @order, :created_by_user
     - if @cross_core_project.present?
-      %dl.span2
+      %dl.col-md-2
         %dt= t("views.facility_orders.show.cross_core_project_id")
         %dd
           = link_to @cross_core_project.name, facility_project_path(current_facility, @cross_core_project.id)
-      %dl.span2
+      %dl.col-md-2
         %dt= t("views.facility_orders.show.cross_core_project_total")
         %dd= number_to_currency @gross_order_value
     - if @merge_orders.blank? && current_ability.can?(:send_receipt, @order)
@@ -30,7 +30,7 @@
 
 %h2= t(subheader_key)
 - if @cross_core_data_by_facility_id.present?
-  #js--reportAnIssueModal.modal.hide.fade
+  #js--reportAnIssueModal.modal.fade
 
   #accordion
     - @cross_core_data_by_facility_id.each do |facility_id, data|
@@ -43,4 +43,4 @@
 - if current_ability.can?(:update, Order)
   = render "merge_order_form"
 
-#order-detail-modal.modal.hide.fade{ data: { backdrop: "static" } }
+#order-detail-modal.modal.fade{ data: { backdrop: "static" } }

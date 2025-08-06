@@ -9,7 +9,7 @@
   .order-action
     - if order_detail.survey_completed?
       = link_to t("orders.show.order_form.edit"),
-        survey.edit_url(order_detail, request), class: "btn"
+        survey.edit_url(order_detail, request), class: "btn btn-default"
     - else
       = link_to t("orders.show.order_form.new"),
         survey.new_url(order_detail, request), class: "btn js--cartLinkTrackQuantity", data: { quantity_field: "quantity#{order_detail.id}" }
@@ -17,7 +17,7 @@
 - if order_detail.product.stored_files.template.count > 0
   .order-action
     - if order_detail.stored_files.template_result.empty?
-      = link_to "Upload Order Form", order_order_detail_order_file_path(order_detail.order, order_detail, original_order_id: @order.id), class: "btn"
+      = link_to "Upload Order Form", order_order_detail_order_file_path(order_detail.order, order_detail, original_order_id: @order.id), class: "btn btn-default"
     - else
       = link_to "Uploaded Order Form", order_detail_first_template_result_path(order_detail)
       = " (#{link_to("Delete", order_order_detail_remove_order_file_path(order_detail.order, order_detail))})".html_safe

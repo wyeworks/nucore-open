@@ -135,6 +135,8 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     amazing_print (1.8.1)
     ast (2.4.3)
+    autoprefixer-rails (10.4.21.0)
+      execjs (~> 2)
     aws-eventstream (1.4.0)
     aws-partitions (1.1141.0)
     aws-sdk-core (3.229.0)
@@ -174,8 +176,9 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
-    bootstrap-sass (2.3.2.2)
-      sass (~> 3.2)
+    bootstrap-sass (3.4.1)
+      autoprefixer-rails (>= 5.2.1)
+      sassc (>= 2.0.0)
     builder (3.3.0)
     bullet (8.0.8)
       activesupport (>= 3.0.0)
@@ -720,7 +723,7 @@ DEPENDENCIES
   axe-core-rspec
   benchmark
   bootsnap
-  bootstrap-sass (~> 2.3.2)
+  bootstrap-sass (~> 3.4.1)
   bulk_email!
   bullet
   c2po!

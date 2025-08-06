@@ -22,7 +22,7 @@
         %td.js--sampleId= sf.object.id
         - if needs_primer
           %td.primer-input-row
-            %button.btn.btn-mini.js--copyPrimerNameDown{title: text("primer_name.copy_hint"), type: "button"}
+            %button.btn.btn-xs.js--copyPrimerNameDown{title: text("primer_name.copy_hint"), type: "button"}
               %small= text("primer_name.fill_below")
 
             = sf.input :primer_name,

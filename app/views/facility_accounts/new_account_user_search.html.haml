@@ -9,8 +9,8 @@
 = form_tag user_search_results_path, id: "ajax_form", method: :get do
   = label_tag :search_term, text("facility_accounts.new_account_user_search.label.search_term")
   %br
-  = text_field_tag :search_term, nil, size: 30, class: "search-query"
-  = submit_tag "Search", class: "btn"
+  = text_field_tag :search_term, nil, size: 30, class: "form-control"
+  = submit_tag "Search", class: "btn btn-default"
   = hidden_field_tag :facility_id, current_facility.id
   = hidden_field_tag :search_type, "user_new_account"
   = hidden_field_tag :create_link, "true"

@@ -13,6 +13,6 @@
 - if @certificates
   %ul.unstyled
     - @certificates.each do |certificate, active|
-      %li{ class: active ? "" : "muted" }
+      %li{ class: active ? "" : "text-muted" }
         = active ? fa_icon("check", class: "text-success") : fa_icon("ban")
         = certificate.name

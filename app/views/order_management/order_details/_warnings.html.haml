@@ -5,5 +5,5 @@
     = f.submit t(".missing_form_button"), class: ["btn", "btn-danger"]
 
 - if @order_detail.errors.any?
-  .alert.alert-error
+  .alert.alert-danger
     = @order_detail.errors.full_messages.join("<br/>").html_safe

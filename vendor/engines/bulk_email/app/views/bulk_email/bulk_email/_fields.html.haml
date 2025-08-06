@@ -1,7 +1,7 @@
 = simple_form_for :bulk_email, url: facility_bulk_email_path, method: :get, html: { class: "search_form", id: "bulk_email" }, defaults: { required: false } do |f|
 
   .row
-    .span3
+    .col-md-3
       - @user_types.each do |user_type, label_text|
         = label_tag(nil, class: "checkbox") do
           = check_box_tag "bulk_email[user_types][]",
@@ -11,20 +11,20 @@
             class: "bulk_email_user_type"
           = label_text
 
-    .span4.full-width
+    .col-md-4.full-width
       - if @search_options[:facilities].present?
         = f.input :facilities, as: :transaction_chosen_old
       = f.input :products, as: :transaction_chosen_old, data_method: :product_options, hint: t("bulk_email.search_hint")
 
   .row
-    %h4.span8= t("bulk_email.dates.label")
+    %h4.col-md-8= t("bulk_email.dates.label")
 
   #dates_between.row
-    .span3= datepicker_field_input(f, :start_date)
-    .span3= datepicker_field_input(f, :end_date)
+    .col-md-3= datepicker_field_input(f, :start_date)
+    .col-md-3= datepicker_field_input(f, :end_date)
 
   .row
-    .span8
+    .col-md-8
       = text("bulk_email.dates.select_range")
       = date_range_selection_link :last_90_days, params, start_date: 90.days.ago
       ,
@@ -35,8 +35,8 @@
         end_date: 1.month.from_now.end_of_month
 
   .row.bulk_email_search_actions
-    .span8
-      = f.submit text("shared.search"), class: "btn"
+    .col-md-8
+      = f.submit text("shared.search"), class: "btn btn-default"
       - if params[:return_path].present?
         = link_to t("shared.cancel"), params[:return_path]
         = hidden_field_tag "return_path", params[:return_path]

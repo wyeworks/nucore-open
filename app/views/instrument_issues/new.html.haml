@@ -12,25 +12,26 @@
 - url = facility_order_order_detail_issues_path(current_facility, @order_detail.order, @order_detail, redirect_to_order_id: @redirect_to_order_id)
 
 - if @modal_view
-  .modal
-    .modal-header
-      = modal_close_button
-      %h2= text("title")
-      %p= text("instructions")
-    .modal-body
-      = simple_form_for @instrument_issue, url: url, method: :post do |f|
-        = f.input :message, as: :text, input_html: { class: "input-xxlarge" }
-        = f.submit text("submit"), class: "btn btn-primary"
-    .modal-footer
-      = modal_cancel_button text: text("shared.cancel")
+  .modal-dialog
+    .modal-content
+      .modal-header
+        = modal_close_button
+        %h2= text("title")
+        %p= text("instructions")
+      .modal-body
+        = simple_form_for @instrument_issue, url: url, method: :post do |f|
+          = f.input :message, as: :text, input_html: { class: "form-control" }
+          = f.submit text("submit"), class: "btn btn-primary"
+      .modal-footer
+        = modal_cancel_button text: text("shared.cancel")
 - else
   .row
-    .span12
+    .col-md-12
       %h2= text("title")
       %p= text("instructions")
 
   .row
-    .span6
+    .col-md-6
       = simple_form_for @instrument_issue, url: url, method: :post do |f|
-        = f.input :message, as: :text, input_html: { class: "input-xxlarge", rows: 6 }
+        = f.input :message, as: :text, input_html: { class: "form-control", rows: 6 }
         = f.submit text("submit"), class: "btn btn-primary"
