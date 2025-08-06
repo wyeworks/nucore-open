@@ -627,3 +627,7 @@ select:focus:invalid {
 .margin_x {
   margin: 0 1em;
 }
+
+.datetime-block select.form-control {
+  display: inline-block;
+}
