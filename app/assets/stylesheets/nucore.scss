@@ -120,7 +120,7 @@ legend {
 }
 
 ul, ol {
-  &.nav,
+  &.nav:not(.sidebar-nav),
   &.navbar-nav,
   &.list-unstyled,
   &.list-inline,
