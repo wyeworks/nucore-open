@@ -96,6 +96,43 @@ RSpec.describe "Purchasing a reservation" do
         end
       end
 
+      describe "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
+        let!(:accessory) { create(:accessory, parent: instrument) }
+
+        it "shows accessories section and allows selection" do
+          click_link instrument.name
+          select user.accounts.first.description, from: "Payment Source"
+
+          expect(page).to have_content "Add Accessories"
+          expect(page).to have_content accessory.name
+
+          check accessory.name
+
+          quantity_field = find_field("accessories_#{accessory.id}_quantity")
+          expect(quantity_field).not_to be_disabled
+          expect(quantity_field.value).to eq "1"
+
+          fill_in "accessories_#{accessory.id}_quantity", with: "3"
+
+          click_button "Create"
+
+          expect(page).to have_content "My Reservations"
+          expect(Reservation.last.order_detail.child_order_details.first.product).to eq(accessory)
+        end
+
+        it "creates reservation without accessories when none selected" do
+          click_link instrument.name
+          select user.accounts.first.description, from: "Payment Source"
+
+          expect(page).to have_content "Add Accessories"
+
+          click_button "Create"
+
+          expect(page).to have_content "My Reservations"
+          expect(Reservation.last.order_detail.child_order_details.count).to eq(0)
+        end
+      end
+
       context "admin hold is expired" do
         let!(:admin_reservation) { create(:admin_reservation, product: instrument, reserve_start_at: 30.minutes.from_now, duration: 1.hour, deleted_at: 1.hour.ago) }
 
