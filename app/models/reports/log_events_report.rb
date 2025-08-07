@@ -22,6 +22,7 @@ module Reports
       "price_group_member.create", "price_group_member.delete",
       "facility.activate", "facility.deactivate",
       "price_group.create", "price_group.delete",
+      "product.activate", "product.deactivate",
     ].freeze
 
     def initialize(start_date:, end_date:, events:, query:)
