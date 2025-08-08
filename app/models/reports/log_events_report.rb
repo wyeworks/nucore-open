@@ -23,6 +23,7 @@ module Reports
       "facility.activate", "facility.deactivate",
       "price_group.create", "price_group.delete",
       "product.activate", "product.deactivate",
+      "product.create", "relay.update",
     ].freeze
 
     def initialize(start_date:, end_date:, events:, query:)
