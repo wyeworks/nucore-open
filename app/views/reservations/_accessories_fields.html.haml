@@ -1,0 +1,19 @@
+- if SettingsHelper.feature_on?(:add_accessories_before_reservation_starts) && @order_detail.product.accessories.any?
+  .well
+    %h3= t("product_accessories.pick_accessories.title")
+    %p= t("product_accessories.pick_accessories.instruct")
+
+    - accessorizer = Accessories::Accessorizer.new(@order_detail)
+    - accessory_order_details = accessorizer.accessory_order_details
+
+    - if accessory_order_details.any?
+      %table.table
+        %thead
+          %tr
+            %th= t("product_accessories.pick_accessories.accessory")
+            %th= t("product_accessories.pick_accessories.quantity")
+        %tbody
+          = fields_for :accessories do |accessories_form|
+            = render "accessories/accessory_table", f: accessories_form, order_details: accessory_order_details
+    - else
+      %p.text-muted= t("product_accessories.pick_accessories.no_accessories")

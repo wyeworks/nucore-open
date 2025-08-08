@@ -95,6 +95,23 @@ body.quick_reservation {
       pointer-events: none;
     }
 
+    .well {
+      background-color: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0;
+      margin-bottom: 0;
+
+      h3 {
+        font-size: 1.5em;
+        margin-bottom: 0.5em;
+      }
+
+      p {
+        margin-bottom: 1em;
+      }
+    }
+
     form {
       margin-top: 1em;
       width: 100%;

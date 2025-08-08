@@ -35,6 +35,52 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
       expect(page).to have_content("End Reservation")
       expect(page).to have_content("Report an Issue")
     end
+
+    context "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
+      let!(:accessory) { create(:accessory, parent: instrument) }
+
+      before do
+        instrument.reload
+        visit new_facility_instrument_quick_reservation_path(facility, instrument)
+      end
+
+      it "shows accessories section and allows selection" do
+        expect(page).to have_content "Add Accessories"
+        expect(page).to have_content accessory.name
+
+        check accessory.name
+
+        quantity_field = find_field("accessories_#{accessory.id}_quantity")
+        expect(quantity_field).not_to be_disabled
+        expect(quantity_field.value).to eq "1"
+
+        fill_in "accessories_#{accessory.id}_quantity", with: "3"
+
+        choose "30 mins"
+        click_button "Create Reservation"
+
+        expect(page).to have_content("9:31 AM - 10:01 AM")
+        expect(page).to have_content("End Reservation")
+        expect(Reservation.last.order_detail.child_order_details.first.product).to eq(accessory)
+        expect(Reservation.last.order_detail.child_order_details.first.quantity).to eq(3)
+      end
+    end
+
+    context "with accessories feature disabled", feature_setting: { add_accessories_before_reservation_starts: false } do
+      let!(:accessory) { create(:accessory, parent: instrument) }
+
+      it "does not show accessories section" do
+        expect(page).not_to have_content "Add Accessories"
+        expect(page).not_to have_content accessory.name
+
+        choose "30 mins"
+        click_button "Create Reservation"
+
+        expect(page).to have_content("9:31 AM - 10:01 AM")
+        expect(page).to have_content("End Reservation")
+        expect(Reservation.last.order_detail.child_order_details.count).to eq(0)
+      end
+    end
   end
 
   context "when the user has a future reservation" do

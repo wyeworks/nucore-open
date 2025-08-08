@@ -885,6 +885,9 @@ en:
       title: Add Accessories
       link: Add Accessories to order...
       instruct: "Please check the box for each accessory used during the reservation, and update the quantity to the total amount used so far. Please check each quantity for accuracy at the end of the reservation."
+      accessory: Accessory
+      quantity: Quantity
+      no_accessories: No accessories available for this product
       actual_time_html: The actual usage for this reservation was <span class="timeinput" data-format="long">%{time}</span>.
       actual_time_ongoing_html: The current usage for this reservation is <span class="timeinput" data-format="long">%{time}</span>.
     index:

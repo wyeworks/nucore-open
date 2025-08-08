@@ -35,5 +35,6 @@
           %legend= @order_detail.product.user_notes_label.presence || OrderDetail.human_attribute_name(:note)
           = f.text_field "reservation[note]", { required: @order_detail.product.user_notes_field_mode.required?, "aria-label": "note" }
           %span= t(".note_hint")
+      = render "reservations/accessories_fields", f: f
       %br
       = f.submit t(".create_reservation")

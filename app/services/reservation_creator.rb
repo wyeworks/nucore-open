@@ -99,6 +99,17 @@ class ReservationCreator
       end
   end
 
+  def accessory_params
+    return {} unless SettingsHelper.feature_on?(:add_accessories_before_reservation_starts)
+
+    permitted_params = {}
+    @order_detail.product.accessories.each do |accessory|
+      permitted_params[accessory.id.to_s] = [:enabled, :quantity]
+    end
+
+    params.permit(accessories: permitted_params)[:accessories] || {}
+  end
+
   def update_order_account
     return if params[:order_account].blank?
 
@@ -126,6 +137,8 @@ class ReservationCreator
     reservation.save_as_user!(session_user)
     order_detail.assign_estimated_price(reservation.reserve_end_at)
     order_detail.save_as_user!(session_user)
+
+    process_accessories if SettingsHelper.feature_on?(:add_accessories_before_reservation_starts)
   end
 
   def status_q
@@ -145,6 +158,13 @@ class ReservationCreator
       )
       order_purchaser.purchase_cross_core!
     end
+  end
+
+  def process_accessories
+    return if accessory_params.empty?
+
+    accessorizer = Accessories::Accessorizer.new(@order_detail)
+    accessorizer.update_accessorizer_attributes(accessory_params)
   end
 
 end

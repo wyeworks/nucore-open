@@ -17,19 +17,7 @@
 
         %fieldset.well.kiosk-modal
           %h4= text("accessories")
-          %table.table
-            - @order_details.each do |od|
-              = f.simple_fields_for od.product.id.to_s, od do |p|
-                %tr{class: ["accessory-row", "scaling-#{od.class.name.demodulize.underscore}"]}
-                  %td
-                    = p.input :enabled, as: :boolean, label: false, inline_label:  "#{od.product.to_s} (#{t("product_accessories.type.#{od.scaling_type}")})", checked_value: "true", unchecked_value: "false"
-
-                  %td= p.input :quantity,
-                      disabled: !od.quantity_editable?,
-                      label: false,
-                      input_html: { value: od.quantity,
-                                    class: od.quantity_as_time? ? "timeinput" : "",
-                                    data: { always_disabled: !od.quantity_editable? } }
+          = render "accessories/accessory_table", f: f, order_details: @order_details
       - if SettingsHelper.feature_off?(:bypass_kiosk_auth)
         .kiosk-login
           %fieldset.well
