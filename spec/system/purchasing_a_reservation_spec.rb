@@ -96,43 +96,6 @@ RSpec.describe "Purchasing a reservation" do
         end
       end
 
-      describe "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
-        let!(:accessory) { create(:accessory, parent: instrument) }
-
-        it "shows accessories section and allows selection" do
-          click_link instrument.name
-          select user.accounts.first.description, from: "Payment Source"
-
-          expect(page).to have_content "Add Accessories"
-          expect(page).to have_content accessory.name
-
-          check accessory.name
-
-          quantity_field = find_field("accessories_#{accessory.id}_quantity")
-          expect(quantity_field).not_to be_disabled
-          expect(quantity_field.value).to eq "1"
-
-          fill_in "accessories_#{accessory.id}_quantity", with: "3"
-
-          click_button "Create"
-
-          expect(page).to have_content "My Reservations"
-          expect(Reservation.last.order_detail.child_order_details.first.product).to eq(accessory)
-        end
-
-        it "creates reservation without accessories when none selected" do
-          click_link instrument.name
-          select user.accounts.first.description, from: "Payment Source"
-
-          expect(page).to have_content "Add Accessories"
-
-          click_button "Create"
-
-          expect(page).to have_content "My Reservations"
-          expect(Reservation.last.order_detail.child_order_details.count).to eq(0)
-        end
-      end
-
       context "admin hold is expired" do
         let!(:admin_reservation) { create(:admin_reservation, product: instrument, reserve_start_at: 30.minutes.from_now, duration: 1.hour, deleted_at: 1.hour.ago) }
 
@@ -405,6 +368,74 @@ RSpec.describe "Purchasing a reservation" do
       visit new_facility_instrument_single_reservation_path(facility, instrument)
 
       expect(page).to have_content("Create Reservation")
+    end
+  end
+
+  describe "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
+    let!(:accessory) { create(:accessory, parent: instrument) }
+
+    it "shows accessories section and allows selection" do
+      click_link instrument.name
+      select user.accounts.first.description, from: "Payment Source"
+
+      expect(page).to have_content "Add Accessories"
+      expect(page).to have_content accessory.name
+
+      check accessory.name
+
+      quantity_field = find_field("accessories_#{accessory.id}_quantity")
+      expect(quantity_field).not_to be_disabled
+      expect(quantity_field.value).to eq "1"
+
+      fill_in "accessories_#{accessory.id}_quantity", with: "3"
+
+      click_button "Create"
+
+      expect(page).to have_content "My Reservations"
+      expect(Reservation.last.order_detail.child_order_details.first.product).to eq(accessory)
+    end
+
+    it "creates reservation without accessories when none selected" do
+      click_link instrument.name
+      select user.accounts.first.description, from: "Payment Source"
+
+      expect(page).to have_content "Add Accessories"
+
+      click_button "Create"
+
+      expect(page).to have_content "My Reservations"
+      expect(Reservation.last.order_detail.child_order_details.count).to eq(0)
+    end
+
+    describe "when acting as another user" do
+      let(:admin) { create(:user, :facility_director, facility:) }
+
+      before do
+        login_as admin
+        visit facility_users_path(facility)
+        fill_in "search_term", with: user.email
+        click_button "Search"
+        click_link "Order For"
+      end
+
+      it "shows accessories section when acting as another user" do
+        click_link instrument.name
+        select user.accounts.first.description, from: "Payment Source"
+
+        expect(page).to have_content "Add Accessories"
+        expect(page).to have_content accessory.name
+        expect(page).to have_content "You are ordering for #{user.full_name}"
+
+        check accessory.name
+
+        fill_in "accessories_#{accessory.id}_quantity", with: "3"
+
+        click_button "Create"
+
+        expect(page).to have_content "The reservation was successfully created"
+        expect(Reservation.last.order_detail.child_order_details.first.product).to eq(accessory)
+        expect(Reservation.last.order_detail.child_order_details.first.quantity).to eq(3)
+      end
     end
   end
 end
