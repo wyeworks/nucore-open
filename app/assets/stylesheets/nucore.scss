@@ -459,13 +459,14 @@ p.per-minute {
   margin-top: -0.25em;
 }
 
-p.per-minute-show {
-  @extend .per-minute;
-  margin-top: 0;
-}
+.price-policy-table {
+  input[type="text"] {
+    width: 80%;
+  }
 
-.price-policy-table input[type=text] {
-  width: 80%;
+  .negative-number {
+    display: block;
+  }
 }
 
 /* Account Fields */
