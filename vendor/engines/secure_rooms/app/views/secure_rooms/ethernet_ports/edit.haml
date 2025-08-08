@@ -30,6 +30,6 @@
   = f.input :tablet_location_description,
     label: text("views.admin.secure_rooms.card_readers.ethernet_port_fields.location_description")
 
-  %ul.inline
+  %ul.list-inline
     %li= f.submit text("shared.save"), class: ["btn", "btn-primary"]
     %li= link_to text("shared.cancel"), facility_secure_room_card_readers_path(@current_facility, @product)
