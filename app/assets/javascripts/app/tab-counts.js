@@ -10,7 +10,7 @@ $(function() {
 
   // Look at the main navigation bar to see if we're in orders or reservations
   const currentSection = function() {
-    const active_tab = $('.navbar-static-top .active').attr('id');
+    const active_tab = $('.navbar-nav .active').attr('id');
     if (active_tab == null) { return; }
 
     if (active_tab.indexOf('reservations') > -1) {
