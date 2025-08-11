@@ -107,8 +107,8 @@ RSpec.describe LogEventSearcher do
       expect(results).to match_array([log_1])
     end
 
-    it "works with partial matches" do
-      results = search(payment_source: "credit")
+    it "finds statements by creditcard payment source" do
+      results = search(payment_source: "creditcard")
       expect(results).to match_array([log_2])
     end
 

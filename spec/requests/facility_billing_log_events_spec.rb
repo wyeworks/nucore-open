@@ -104,8 +104,8 @@ RSpec.describe "facility_billing_log_events", type: :request do
         expect(page).not_to have_content(statement2.to_log_s)
       end
 
-      it "filters by partial payment_source match" do
-        get_index_with_params(payment_source: "credit")
+      it "filters by creditcard payment_source" do
+        get_index_with_params(payment_source: "creditcard")
 
         expect(page).to have_content(statement2.to_log_s)
         expect(page).not_to have_content(statement1.to_log_s)

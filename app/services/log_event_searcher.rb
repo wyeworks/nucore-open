@@ -78,7 +78,7 @@ class LogEventSearcher
     end
 
     if payment_source.present?
-      statements = statements.joins(:payments).where(Payment.arel_table[:source].lower.matches("%#{payment_source.downcase}%"))
+      statements = statements.joins(:payments).where(payments: { source: payment_source })
     end
 
     LogEvent.where(loggable_type: "Statement", loggable_id: statements.unscope(:order))
