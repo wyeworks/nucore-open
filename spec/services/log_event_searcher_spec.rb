@@ -59,6 +59,65 @@ RSpec.describe LogEventSearcher do
     end
   end
 
+  describe "filtering by invoice number" do
+    let(:account_1) { create(:account, :with_account_owner) }
+    let(:account_2) { create(:account, :with_account_owner) }
+    let(:facility) { create(:setup_facility) }
+    let(:statement_1) { create(:statement, account: account_1, facility: facility) }
+    let(:statement_2) { create(:statement, account: account_2, facility: facility) }
+    let!(:log_1) { create(:log_event, loggable: statement_1, event_type: :create) }
+    let!(:log_2) { create(:log_event, loggable: statement_2, event_type: :create) }
+
+    it "finds the statement by invoice number" do
+      results = search(invoice_number: statement_1.invoice_number)
+      expect(results).to match_array([log_1])
+    end
+
+    it "finds nothing when invoice number doesn't match" do
+      results = search(invoice_number: "99999")
+      expect(results).to be_empty
+    end
+  end
+
+  describe "filtering by payment source" do
+    let(:account_1) { create(:account, :with_account_owner) }
+    let(:account_2) { create(:account, :with_account_owner) }
+    let(:facility) { create(:setup_facility) }
+    let(:user) { create(:user) }
+    let(:statement_1) { create(:statement, account: account_1, facility: facility) }
+    let(:statement_2) { create(:statement, account: account_2, facility: facility) }
+    let!(:payment_1) { create(:payment, statement: statement_1, account: account_1, source: "check", amount: 100.0, processing_fee: 0.0, paid_by: user) }
+    let!(:payment_2) { create(:payment, statement: statement_2, account: account_2, source: "check", amount: 200.0, processing_fee: 0.0, paid_by: user) }
+    let!(:log_1) { create(:log_event, loggable: statement_1, event_type: :create) }
+    let!(:log_2) { create(:log_event, loggable: statement_2, event_type: :create) }
+
+    before do
+      # Add creditcard as a valid payment source for these tests
+      Payment.valid_sources << :creditcard unless Payment.valid_sources.include?(:creditcard)
+      payment_2.update!(source: "creditcard")
+    end
+
+    after do
+      # Clean up the added source
+      Payment.valid_sources.delete(:creditcard)
+    end
+
+    it "finds statements by payment source" do
+      results = search(payment_source: "check")
+      expect(results).to match_array([log_1])
+    end
+
+    it "works with partial matches" do
+      results = search(payment_source: "credit")
+      expect(results).to match_array([log_2])
+    end
+
+    it "finds nothing when payment source doesn't match" do
+      results = search(payment_source: "bitcoin")
+      expect(results).to be_empty
+    end
+  end
+
   describe "finding accounts" do
     let(:account) { create(:account, :with_account_owner, account_number: "12345-12345") }
     let!(:log_event) { create(:log_event, loggable: account, event_type: :create) }
