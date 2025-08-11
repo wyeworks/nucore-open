@@ -1,29 +1,45 @@
-.form-group
-  = f.input :category do
-    = f.select :category, options_for_select(admin_category_collection, f.object.category), include_blank: "Select a Category"
-.js--timeFieldAdjustor
-  .datetime-block
-    = f.input :reserve_start_date, input_html: { class: "datepicker__data" }
+.row
+  .col-md-12
     .form-group
-      .controls
-        .string.optional.control-label &nbsp;
-        = time_select f, :reserve_start
-    = f.input :duration_mins, input_html: { class: "timeinput" }
+      = f.input :category do
+        = f.select :category, options_for_select(admin_category_collection, f.object.category), { include_blank: "Select a Category" }, { class: "form-control" }
 
-    = f.input :reserve_end_date, input_html: { class: "datepicker__data" }
-    .form-group
-      .controls
-        .string.optional.control-label &nbsp;
-        = time_select f, :reserve_end, minute_step: 1
+.js--timeFieldAdjustor
+  .row
+    .col-md-12
+      = label_tag :admin_reservation_reserve_start_date, "Reserve start date", class: "string optional control-label"
+      .datetime-block
+        .form-group
+          = f.text_field :reserve_start_date, class: "form-control datepicker__data"
+        .form-group
+          = time_select f, :reserve_start
+        .form-group{style: "margin-top: -25px;"}
+          %label.string.optional.control-label{style: "display: block; margin-bottom: 5px;"} Duration mins
+          = f.text_field :duration_mins, class: "form-control timeinput"
+  
+  .row
+    .col-md-12
+      = label_tag :admin_reservation_reserve_end_date, "Reserve end date", class: "string optional control-label"
+      .datetime-block
+        .form-group
+          = f.text_field :reserve_end_date, class: "form-control datepicker__data"
+        .form-group
+          = time_select f, :reserve_end, minute_step: 1
 
 .clearfix
 
-= f.input :admin_note, input_html: { class: "col-md-6" } unless @order_detail
-= f.input :user_note, input_html: { class: "col-md-6" } unless @order_detail
+.row
+  .col-md-12
+    = f.input :admin_note unless @order_detail
+.row
+  .col-md-12
+    = f.input :user_note unless @order_detail
 
-.checkboxControl
-  = f.input :expires?, as: :boolean, label: t('activemodel.attributes.admin_reservation_form.expires?'), input_html: { data: { disables: ".admin_reservation_expires_mins_before" } }, wrapper_html: { class: "checkboxControl__checkbox" }
-  = f.input :expires_mins_before, label: t('activemodel.attributes.admin_reservation_form.expires_mins_before'), input_html: { class: "timeinput" }
+.row
+  .col-md-12
+    .checkboxControl
+      = f.input :expires?, as: :boolean, label: t('activemodel.attributes.admin_reservation_form.expires?'), input_html: { data: { disables: ".admin_reservation_expires_mins_before" } }, wrapper_html: { class: "checkboxControl__checkbox" }
+      = f.input :expires_mins_before, label: t('activemodel.attributes.admin_reservation_form.expires_mins_before'), input_html: { class: "timeinput" }
 
 .clearfix
 

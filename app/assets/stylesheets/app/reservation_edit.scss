@@ -12,8 +12,10 @@
 }
 
 .time-select {
+  display: inline-block;
   select {
-    width: 5em;
+    display: inline-block;
+    width: auto;
     margin-right: 0.5em;
   }
 }
