@@ -1,5 +1,6 @@
 - if SettingsHelper.feature_on?(:add_accessories_before_reservation_starts) && @order_detail.product.accessories.any?
-  .well
+  - className = local_assigns[:class].present? ? local_assigns[:class] : ""
+  %div{class: className}
     %h3= t("product_accessories.pick_accessories.title")
     %p= t("product_accessories.pick_accessories.instruct")
 
