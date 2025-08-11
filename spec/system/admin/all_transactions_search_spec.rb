@@ -25,7 +25,7 @@ RSpec.describe "All Transactions Search", :js do
     before { login_as director }
 
     it "can sort by order number while filtering by account owner and type" do
-      # use random string to ease matching
+      # use custom string to ease matching
       allow_any_instance_of(Order).to receive(:id).and_wrap_original do |method|
         "test_prefix_#{method.call}"
       end
