@@ -2,11 +2,11 @@
 = f.simple_fields_for reservation do |r|
   .datetime-block.js--pricingUpdate
     - if reservation.admin_editable?
-      = r.input :reserve_start_date, input_html: { class: "datepicker" }
-      .control-group
+      = r.input :reserve_start_date, input_html: { class: "form-control datepicker" }
+      .form-group
         .controls
           %label &nbsp;
-          = time_select r, :reserve_start, minute_step: reservation.product.reserve_interval
+          = time_select r, :reserve_start, { minute_step: reservation.product.reserve_interval }, { class: "form-control" }
       - if reservation.product.daily_booking?
         = r.input :duration_days, input_html: { value: r.object.duration_days || 1 }
       - else
@@ -18,11 +18,11 @@
   .datetime-block.js--pricingUpdate
     - if reservation.can_edit_actuals? && !reservation.canceled?
       = f.input :editing_time_data, as: :hidden, input_html: { value: true }
-      = r.input :actual_start_date, input_html: { class: "datepicker" }
-      .control-group
+      = r.input :actual_start_date, input_html: { class: "form-control datepicker" }
+      .form-group
         .controls
           %label &nbsp;
-          = time_select r, :actual_start, :minute_step => 1
+          = time_select r, :actual_start, { minute_step: 1 }, { class: "form-control" }
       - options = { data: { allow_init_blank: true }  }
       - if reservation.product.daily_booking?
         - options[:value] = "" if r.object.actual_duration_days == 0

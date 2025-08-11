@@ -13,7 +13,7 @@ li.facility_listing {
 
 .product_list {
   ul {
-    @extend .unstyled;
+    @extend .list-unstyled;
   }
   input {
     width: 2em;
@@ -23,12 +23,12 @@ li.facility_listing {
   }
   a.fa-calendar {
     text-decoration: none;
-    color: $textColor;
+    color: $text-color;
     &.available {
-      color: $successText;
+      color: $state-success-text;
     }
     &.in-use {
-      color: $errorText;
+      color: $state-danger-text;
     }
   }
 }

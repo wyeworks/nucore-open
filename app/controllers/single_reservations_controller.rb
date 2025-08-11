@@ -3,7 +3,6 @@
 class SingleReservationsController < ApplicationController
 
   customer_tab  :all
-  before_action :authenticate_user!
   load_resource :facility, find_by: :url_name
   load_resource :instrument, through: :facility, find_by: :url_name
   before_action :build_order

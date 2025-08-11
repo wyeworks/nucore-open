@@ -7,7 +7,6 @@ class FacilityAccountsReconciliationController < ApplicationController
   admin_tab :all
   layout "two_column"
 
-  before_action :authenticate_user!
   before_action :check_acting_as
   before_action :init_current_facility
   before_action :check_billing_access

@@ -15,11 +15,11 @@
   = f.input :file
   = f.input :name
 
-  %ul.inline
+  %ul.list-inline
     %li
       = f.submit t(".submit"),
         data: { disabled_with: t(".submitted") },
-        class: "btn"
+        class: "btn btn-default"
 
 - if @files.empty?
   %p.notice= t(".no_uploads")

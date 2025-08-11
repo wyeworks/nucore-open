@@ -5,7 +5,6 @@ class InstrumentAlertsController < ApplicationController
   admin_tab :all
   layout "two_column"
 
-  before_action :authenticate_user!
   before_action :check_acting_as
   before_action :load_instrument
 

@@ -135,20 +135,23 @@ GEM
       public_suffix (>= 2.0.2, < 7.0)
     amazing_print (1.8.1)
     ast (2.4.3)
+    autoprefixer-rails (10.4.21.0)
+      execjs (~> 2)
     aws-eventstream (1.4.0)
-    aws-partitions (1.1137.0)
-    aws-sdk-core (3.227.0)
+    aws-partitions (1.1144.0)
+    aws-sdk-core (3.229.0)
       aws-eventstream (~> 1, >= 1.3.0)
       aws-partitions (~> 1, >= 1.992.0)
       aws-sigv4 (~> 1.9)
       base64
+      bigdecimal
       jmespath (~> 1, >= 1.6.1)
       logger
-    aws-sdk-kms (1.108.0)
-      aws-sdk-core (~> 3, >= 3.227.0)
+    aws-sdk-kms (1.110.0)
+      aws-sdk-core (~> 3, >= 3.228.0)
       aws-sigv4 (~> 1.5)
-    aws-sdk-s3 (1.194.0)
-      aws-sdk-core (~> 3, >= 3.227.0)
+    aws-sdk-s3 (1.196.1)
+      aws-sdk-core (~> 3, >= 3.228.0)
       aws-sdk-kms (~> 1)
       aws-sigv4 (~> 1.5)
     aws-sigv4 (1.12.1)
@@ -173,8 +176,9 @@ GEM
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
-    bootstrap-sass (2.3.2.2)
-      sass (~> 3.2)
+    bootstrap-sass (3.4.1)
+      autoprefixer-rails (>= 5.2.1)
+      sassc (>= 2.0.0)
     builder (3.3.0)
     bullet (8.0.8)
       activesupport (>= 3.0.0)
@@ -324,7 +328,7 @@ GEM
       temple (>= 0.8.2)
       thor
       tilt
-    haml_lint (0.65.1)
+    haml_lint (0.66.0)
       haml (>= 5.0)
       parallel (~> 1.10)
       rainbow
@@ -395,7 +399,7 @@ GEM
     mime-types (3.7.0)
       logger
       mime-types-data (~> 3.2025, >= 3.2025.0507)
-    mime-types-data (3.2025.0729)
+    mime-types-data (3.2025.0805)
     mini_magick (5.3.0)
       logger
     mini_mime (1.1.5)
@@ -441,7 +445,7 @@ GEM
       activerecord (>= 6.1)
       request_store (~> 1.4)
     parallel (1.27.0)
-    parallel_tests (5.3.1)
+    parallel_tests (5.4.0)
       parallel
     paranoia (3.0.1)
       activerecord (>= 6, < 8.1)
@@ -476,11 +480,11 @@ GEM
       date
       stringio
     public_suffix (6.0.2)
-    puma (6.6.0)
+    puma (6.6.1)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.17)
-    rack-mini-profiler (4.0.0)
+    rack-mini-profiler (4.0.1)
       rack (>= 1.2.0)
     rack-test (2.2.0)
       rack (>= 1.3)
@@ -530,7 +534,7 @@ GEM
       erb
       psych (>= 4.0.0)
     redcarpet (3.6.1)
-    regexp_parser (2.10.0)
+    regexp_parser (2.11.0)
     reline (0.6.2)
       io-console (~> 0.5)
     request_store (1.7.0)
@@ -564,7 +568,7 @@ GEM
     rspec-support (3.13.4)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
-    rubocop (1.79.0)
+    rubocop (1.79.2)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -574,7 +578,6 @@ GEM
       regexp_parser (>= 2.9.3, < 3.0)
       rubocop-ast (>= 1.46.0, < 2.0)
       ruby-progressbar (~> 1.7)
-      tsort (>= 0.2.0)
       unicode-display_width (>= 2.4.0, < 4.0)
     rubocop-ast (1.46.0)
       parser (>= 3.3.7.2)
@@ -664,7 +667,6 @@ GEM
     tilt (2.6.1)
     timeout (0.4.3)
     timers (4.4.0)
-    tsort (0.2.0)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
     tzinfo (2.0.6)
@@ -721,7 +723,7 @@ DEPENDENCIES
   axe-core-rspec
   benchmark
   bootsnap
-  bootstrap-sass (~> 2.3.2)
+  bootstrap-sass (~> 3.4.1)
   bulk_email!
   bullet
   c2po!
@@ -792,7 +794,7 @@ DEPENDENCIES
   rspec-collection_matchers
   rspec-rails
   rspec_junit_formatter
-  rubocop (= 1.79.0)
+  rubocop (= 1.79.2)
   rubocop-performance
   rubocop-rails
   rubocop-rspec

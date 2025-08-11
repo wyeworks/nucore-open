@@ -4,7 +4,6 @@ class ProductNotificationsController < ApplicationController
 
   admin_tab :all
   before_action { @active_tab = "admin_products" }
-  before_action :authenticate_user!
   before_action :init_current_facility
   load_resource :product, through: :current_facility, find_by: :url_name
 

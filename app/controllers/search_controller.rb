@@ -2,7 +2,6 @@
 
 class SearchController < ApplicationController
 
-  before_action :authenticate_user!
   before_action :check_acting_as
 
   ## return users of portal 'nucore'

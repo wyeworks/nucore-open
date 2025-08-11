@@ -8,10 +8,10 @@
 %p.error#error-msg
 
 = modelless_form_for url: request.fullpath, remote: true, html: { id: "refresh-form", class: "reports-form" }, defaults: { required: false } do |f|
-  %ul.inline.options#filter
+  %ul.list-inline.options#filter
     = render "report_controls", form: f
 
-  %ul#control.reportForm.inline.reportForm__downloads
+  %ul#control.reportForm.list-inline.reportForm__downloads
     %li
       = link_to t("reports.export.export"), "#", id: "export"
     %li

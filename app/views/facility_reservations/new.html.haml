@@ -22,8 +22,8 @@
   = render "admin_reservation_fields", f: f
   = render "admin_reservation_repeat_fields", f: f
   .clearfix
-  %ul.inline
-    %li= f.submit t("shared.create"), class: "btn"
+  %ul.list-inline
+    %li= f.submit t("shared.create"), class: "btn btn-default"
     %li= link_to t("shared.cancel"), facility_instrument_schedule_path
 
 #overlay

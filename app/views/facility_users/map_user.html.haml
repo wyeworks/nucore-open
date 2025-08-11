@@ -21,6 +21,6 @@
     = form.label :role, nil, class: "require"
     = form.select :role, options_for_select(UserRole.facility_roles, selected: UserRole::FACILITY_STAFF.to_s)
 
-  %ul.inline
-    %li= form.submit text("shared.create"), class: "btn"
+  %ul.list-inline
+    %li= form.submit text("shared.create"), class: "btn btn-default"
     %li= link_to text("shared.cancel"), facility_facility_users_path

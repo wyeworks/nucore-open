@@ -31,14 +31,17 @@
             %td= format_usa_datetime(pending_journal.created_at)
             - if cross_facility?
               %td= facility_abbreviations.join("<br>").html_safe
-            %td= f.input :reference, label: false, input_html: { class: 'input-medium' }
-            %td= f.input :description, label: false, input_html: { class: 'input-medium' }
+            %td= f.input :reference, label: false, input_html: { class: 'form-control' }
+            %td= f.input :description, label: false, input_html: { class: 'form-control' }
             %td
-              = select_tag :journal_status, options_for_select([[' ', nil], ['Succeeded, no errors', 'succeeded'], ['Succeeded, with errors', 'succeeded_errors'], ['Failed', 'failed']], params[:journal_status]), class: 'input-medium'
-              = submit_tag t(".journal.close"),
-                data: { confirm: t(".journal.confirm") },
-                class: ["btn", "btn-primary"]
-            %td= number_to_currency(pending_journal.amount)
+              .form-group
+                = select_tag :journal_status, options_for_select([[' ', nil], ['Succeeded, no errors', 'succeeded'], ['Succeeded, with errors', 'succeeded_errors'], ['Failed', 'failed']], params[:journal_status]), class: 'form-control'
+              .form-group
+                = submit_tag t(".journal.close"),
+                  data: { confirm: t(".journal.confirm") },
+                  class: ["btn", "btn-primary", "btn-block"]
+            %td.text-right
+              = number_to_currency(pending_journal.amount)
 
 %h2= t(".head.closed")
 - if @journals.blank?

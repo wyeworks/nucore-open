@@ -15,8 +15,8 @@
   = simple_form_for :product_user_import, url: facility_product_product_user_imports_path(current_facility, @product), html: { multipart: true } do |f|
     %p= text("import_hint", product_type: @product.model_name.human.downcase)
     .row
-      %p.span2= link_to text("add"), [:new, current_facility, @product, :user], class: "btn-add"
-      %label.span2.btn.btn-primary
+      %p.col-md-2= link_to text("add"), [:new, current_facility, @product, :user], class: "btn-add"
+      %label.col-md-2.btn.btn-primary
         = text("import_button")
         %span{ style:"display:none" }= f.file_field :file, onchange: "form.submit()"
 

@@ -5,10 +5,10 @@
 
 = render "tabnav", all_projects: @all_projects
 
-.span12
+.col-md-12
   = render "shared/transactions/search"
 
-.span12
+.col-md-12
   - if @order_details.any?
     %table.table.table-striped.table-hover.old-table
       %thead

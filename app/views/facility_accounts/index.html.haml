@@ -10,12 +10,12 @@
   = hidden_field_tag :email, current_user.email, disabled: true
   = hidden_field_tag :format, params[:format], disabled: true
   %br
-  = text_field_tag :search_term, nil, size: 30, class: "search-query"
-  = submit_tag t(".search"), class: "btn"
+  = text_field_tag :search_term, nil, size: 30, class: "form-control"
+  = submit_tag t(".search"), class: "btn btn-default"
 
 %hr
 
-%ul.inline
+%ul.list-inline
   - if SettingsHelper.feature_on?(:edit_accounts) && current_ability.can?(:create, Account)
     %li= link_to t(".add_account"), new_account_user_search_facility_accounts_path, class: "btn-add"
   - if !@accounts.blank?

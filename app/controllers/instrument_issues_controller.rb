@@ -3,7 +3,6 @@
 class InstrumentIssuesController < ApplicationController
 
   customer_tab :all
-  before_action :authenticate_user!
   before_action :init_current_facility
   before_action :init_order_detail
   before_action :init_product

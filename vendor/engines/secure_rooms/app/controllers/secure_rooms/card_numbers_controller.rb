@@ -12,7 +12,6 @@ module SecureRooms
     layout "two_column"
 
     before_action :init_current_facility
-    before_action :authenticate_user!
     before_action :load_and_authorize_user_with_card_number
     before_action :check_acting_as
 

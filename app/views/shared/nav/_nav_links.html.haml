@@ -1,4 +1,4 @@
-%ul.nav
+%ul.nav.navbar-nav
   %li{class: [home_button.tab_class(controller), "useButton"], id: home_button.tab_id }
     = home_button.to_html
   - if SettingsHelper.feature_on?(:use_manage)
@@ -22,11 +22,12 @@
 
 
 -# .visible-with-nav is visible > 979px
-= form_tag global_search_path, class: "navbar-search pull-right visible-with-nav" do
-  = text_field_tag :search, nil, placeholder: t("global_search.search"), class: "search-query span2", aria: { label: t("global_search.search") }
+= form_tag global_search_path, class: "navbar-form navbar-right visible-with-nav" do
+  .form-group
+    = text_field_tag :search, nil, placeholder: t("global_search.search"), class: "form-control", aria: { label: t("global_search.search") }
 
--# trailing "<" enables use of .nav-collapse .nav:empty in boostrap-responsive-overrides.scss
-%ul.nav.pull-right<
+-# trailing "<" enables use of .navbar-collapse .nav:empty in bootstrap responsive styles
+%ul.nav.navbar-nav.navbar-right<
   - if !SettingsHelper.feature_on?(:use_manage)
     = render "shared/nav/manage_facilities"
   - global_navigation_links.each do |link|

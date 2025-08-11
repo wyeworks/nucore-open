@@ -14,7 +14,7 @@
 - if can? :edit, ProductAccessory
   - if @available_accessories.count > 0
     = simple_form_for @product_accessory, url: facility_product_product_accessories_path(current_facility, @product, @product_accessory), defaults: { required: false } do |f|
-      %ul.inline
+      %ul.list-inline
         %li= f.association :accessory, collection: @available_accessories, include_blank: false, label: ProductAccessory.model_name.human
         %li= f.input :scaling_type, collection: ProductAccessory.scaling_types, label_method: ->(type) { t(type, scope: "product_accessories.type.") }, include_blank: false
         %li= f.submit t(".add"), class: ["btn", "btn-primary", "btn-inline"]

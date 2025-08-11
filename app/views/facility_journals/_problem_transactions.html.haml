@@ -1,11 +1,11 @@
 .row
-  .span12
-    %p.alert.alert-error= t("facility_journals.new.expired_payment")
+  .col-md-12
+    %p.alert.alert-danger= t("facility_journals.new.expired_payment")
 .row
-  .span12
+  .col-md-12
     %p= link_to t("facility_journals.new.download_unjournalable"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".search_form" }
 .row
-  .span12
+  .col-md-12
     %table.table.table-striped.table-hover.dense.old-table
       %thead
         %tr

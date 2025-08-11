@@ -3,7 +3,7 @@ class InstrumentsDashboardController < ApplicationController
   layout "plain", only: :public_dashboard
 
   admin_tab :all
-  before_action :authenticate_user!, except: :public_dashboard
+  skip_before_action :authenticate_user!, only: :public_dashboard
   before_action :authenticate_token, only: :public_dashboard
   before_action :init_reservations
   # This sets "Reservations" as the active tab
