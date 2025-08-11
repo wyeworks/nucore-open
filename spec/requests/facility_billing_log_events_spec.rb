@@ -64,13 +64,13 @@ RSpec.describe "facility_billing_log_events", type: :request do
     end
 
     describe "filtering" do
-      let(:account_1) { create(:account, :with_account_owner) }
-      let(:account_2) { create(:account, :with_account_owner) }
-      let(:statement_1) { create(:statement, account: account_1, facility: facility) }
-      let(:statement_2) { create(:statement, account: account_2, facility: facility) }
-      let!(:payment_1) { create(:payment, statement: statement_1, account: account_1, source: "check", amount: 100.0, processing_fee: 0.0, paid_by: some_user) }
-      let!(:payment_2) { create(:payment, statement: statement_2, account: account_2, source: "check", amount: 200.0, processing_fee: 0.0, paid_by: some_user) }
-      
+      let(:account1) { create(:account, :with_account_owner) }
+      let(:account2) { create(:account, :with_account_owner) }
+      let(:statement1) { create(:statement, account: account1, facility: facility) }
+      let(:statement2) { create(:statement, account: account2, facility: facility) }
+      let!(:payment1) { create(:payment, statement: statement1, account: account1, source: "check", amount: 100.0, processing_fee: 0.0, paid_by: some_user) }
+      let!(:payment2) { create(:payment, statement: statement2, account: account2, source: "check", amount: 200.0, processing_fee: 0.0, paid_by: some_user) }
+
       def get_index_with_params(params = {})
         get facility_billing_log_events_path(Facility.cross_facility), params: params
       end
@@ -78,10 +78,10 @@ RSpec.describe "facility_billing_log_events", type: :request do
       before do
         # Add creditcard as a valid payment source for these tests
         Payment.valid_sources << :creditcard unless Payment.valid_sources.include?(:creditcard)
-        payment_2.update!(source: "creditcard")
-        
-        LogEvent.log_email(statement_1, :statement_email, email)
-        LogEvent.log_email(statement_2, :statement_email, email)
+        payment2.update!(source: "creditcard")
+
+        LogEvent.log_email(statement1, :statement_email, email)
+        LogEvent.log_email(statement2, :statement_email, email)
         login_as global_billing_admin
       end
 
@@ -91,24 +91,24 @@ RSpec.describe "facility_billing_log_events", type: :request do
       end
 
       it "filters by invoice_number" do
-        get_index_with_params(invoice_number: statement_1.invoice_number)
-        
-        expect(page).to have_content(statement_1.to_log_s)
-        expect(page).not_to have_content(statement_2.to_log_s)
+        get_index_with_params(invoice_number: statement1.invoice_number)
+
+        expect(page).to have_content(statement1.to_log_s)
+        expect(page).not_to have_content(statement2.to_log_s)
       end
 
       it "filters by payment_source" do
         get_index_with_params(payment_source: "check")
-        
-        expect(page).to have_content(statement_1.to_log_s)
-        expect(page).not_to have_content(statement_2.to_log_s)
+
+        expect(page).to have_content(statement1.to_log_s)
+        expect(page).not_to have_content(statement2.to_log_s)
       end
 
       it "filters by partial payment_source match" do
         get_index_with_params(payment_source: "credit")
-        
-        expect(page).to have_content(statement_2.to_log_s)
-        expect(page).not_to have_content(statement_1.to_log_s)
+
+        expect(page).to have_content(statement2.to_log_s)
+        expect(page).not_to have_content(statement1.to_log_s)
       end
     end
   end
