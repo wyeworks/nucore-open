@@ -2,3 +2,18 @@
   color: red;
   text-transform: uppercase;
 }
+
+// Account number fields layout
+.account-number-fields-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  
+  .field-separator {
+    margin-bottom: 6px;
+  }
+}
+
+.simple_form .form-control {
+  max-width: 240px;
+}
