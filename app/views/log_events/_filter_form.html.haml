@@ -14,10 +14,21 @@
         multiple: true,
         class: "js--chosen",
         data: { placeholder: text(:event_placeholder) })
-    - unless local_assigns[:exclude_query_field]
+    - if local_assigns[:exclude_query_field]
+      .span3
+        = label_tag(:invoice_number, text(:invoice_number))
+        = text_field_tag(:invoice_number, params[:invoice_number])
+    - else
       .span3
         = label_tag(:query, text(:query))
         = text_field_tag(:query, params[:query])
+  - if local_assigns[:exclude_query_field]
+    .row
+      .span3
+        = label_tag(:payment_source, text(:payment_source))
+        = select_tag(:payment_source,
+          options_for_select([["", ""]] + Payment.valid_sources.map { |s| [s.to_s.humanize, s.to_s] }, params[:payment_source]),
+          class: "form-control")
   .row
     .span6
       = submit_tag(text(:submit), class: "btn")

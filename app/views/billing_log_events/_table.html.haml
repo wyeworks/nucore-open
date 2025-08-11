@@ -1,4 +1,6 @@
-= render "billing_log_events/filter_form", event_type_options: billing_log_events_options
+= render "log_events/filter_form",
+  event_type_options: billing_log_events_options,
+  exclude_query_field: true
 
 = will_paginate(@billing_log_events)
 
