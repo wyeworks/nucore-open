@@ -57,7 +57,7 @@ gem "paranoia"
 ## views
 gem "sass-rails"
 gem "coffee-rails"
-gem "bootstrap-sass", "~> 2.3.2" # will not upgrade
+gem "bootstrap-sass", "~> 3.4.1"
 gem "terser", "~> 1.2"
 gem "haml"
 gem "will_paginate"
@@ -117,7 +117,7 @@ group :development do
   gem "haml_lint", require: false
   gem "letter_opener"
   gem "rack-mini-profiler", "~> 4.0"
-  gem "rubocop", "1.79.1", require: false
+  gem "rubocop", "1.79.2", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"

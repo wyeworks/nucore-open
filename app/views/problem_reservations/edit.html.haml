@@ -13,25 +13,25 @@
   .well.js--problemReservationForm
     .container
       .row
-        .span12= f.input :reserve_to_s, as: :readonly, label: text("reservation")
+        .col-md-12= f.input :reserve_to_s, as: :readonly, label: text("reservation")
       .row
-        .span7
+        .col-md-7
           = f.label :actual_start_date
           .row
-            .span3
+            .col-md-3
               = f.input :actual_start_date, label: false, disabled: true
-            .span4
+            .col-md-4
               = time_select f, :actual_start, { minute_step: 1 }, disabled: true
           = f.label :actual_end_date
           .row
-            .span3
+            .col-md-3
               = f.input :actual_end_date, input_html: { class: "datepicker__data", data: { min_date: f.object.actual_start_at&.beginning_of_day&.iso8601 } }, label: false
-            .span4
+            .col-md-4
               = time_select f, :actual_end, { minute_step: 1 }
 
-        .span5
+        .col-md-5
           = f.input :actual_duration_mins, hint: text("views.reservations.reservation_fields.duration_hint"), input_html: { class: "timeinput", autofocus: true }
 
-  %ul.inline
-    %li= f.submit t("shared.save"), class: 'btn'
+  %ul.list-inline
+    %li= f.submit t("shared.save"), class: 'btn btn-default'
     %li= link_to t("shared.cancel"), reservations_path

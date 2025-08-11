@@ -3,7 +3,6 @@
 class FacilityStatementsController < ApplicationController
 
   admin_tab     :all
-  before_action :authenticate_user!
   before_action :check_acting_as
   before_action { @facility = current_facility }
   before_action :enable_sorting, only: [:new]

@@ -21,7 +21,7 @@
   = f.error_messages
   = render "admin_reservation_fields", f: f
   .clearfix
-  %ul.inline
+  %ul.list-inline
     %li= f.submit "Save", :class => "btn"
     %li= link_to "Cancel", facility_instrument_schedule_path
 

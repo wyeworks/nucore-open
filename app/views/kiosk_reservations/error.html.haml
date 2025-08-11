@@ -1,8 +1,9 @@
-.modal
-  .modal-header
-    = modal_close_button
-    %h2= text("title", user: @reservation.user)
-    %h3= @reservation.instrument
+.modal-dialog
+  .modal-content
+    .modal-header
+      = modal_close_button
+      %h2= text("title", user: @reservation.user)
+      %h3= @reservation.instrument
     .modal-body
       = render partial: "shared/flashes"
     .modal-footer

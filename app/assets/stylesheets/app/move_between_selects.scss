@@ -10,10 +10,18 @@
 
   .multiSelectReorder__buttons {
     margin-top: 7rem;
+
+    .btn {
+      @extend .btn-default;
+      margin-bottom: 5px;
+    }
   }
 
   .moveBetweenSelects__btn {
+    @extend .btn-default;
     width: 75%;
+    display: block;
+    margin-bottom: 10px;
   }
 
   .moveBetweenSelects__buttons {

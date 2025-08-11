@@ -2,8 +2,9 @@
  * Override some of Bootstrap's defaults to address accessibility issues like
  * color contrast.
  ***/
-
-$linkColor: $secondaryColor;
+ 
+$link-color: $secondaryColor;
+$brand-primary: $secondaryColor;
 
 /***
  * Alerts
@@ -11,18 +12,18 @@ $linkColor: $secondaryColor;
  * The raw colors represent Bootstrap's default colors. The darken/lighten
  * percentages were largely trial and error to reach a 4.5:1 contrast;
  ***/
-$warningText: darken(#c09853, 16%);
-$warningBackground: lighten(#fcf8e3, 3%);
+$state-warning-text: darken(#c09853, 16%);
+$state-warning-bg: lighten(#fcf8e3, 3%);
 
-$errorText: darken(#b94a48, 3.5%);
-$errorBackground: lighten(#f2dede, 1%);
+$state-danger-text: darken(#b94a48, 3.5%);
+$state-danger-bg: lighten(#f2dede, 1%);
 
 // green
-$successText: darken(#468847, 6.1%);
-$successBackground: lighten(#dff0d8, 3%);
+$state-success-text: darken(#468847, 6.1%);
+$state-success-bg: lighten(#dff0d8, 3%);
 
-$infoText: darken(#3a87ad, 6.7%);
-$infoBackground: lighten(#d9edf7, 2.2%);
+$state-info-text: darken(#3a87ad, 6.7%);
+$state-info-bg: lighten(#d9edf7, 2.2%);
 
 /***
  * Badges/Labels

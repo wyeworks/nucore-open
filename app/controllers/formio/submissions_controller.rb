@@ -3,8 +3,6 @@
 module Formio
   class SubmissionsController < ApplicationController
 
-    before_action :authenticate_user!
-
     layout "formio"
 
     def show

@@ -6,7 +6,7 @@ class FacilitiesController < ApplicationController
   admin_tab :edit, :manage, :update, :transactions,
             :reassign_chart_strings, :movable_transactions,
             :confirm_transactions, :move_transactions, :disputed_orders
-  before_action :authenticate_user!, except: [:index, :show] # public pages do not require authentication
+  skip_before_action :authenticate_user!, only: [:index, :show] # public pages do not require authentication
   before_action :check_acting_as, except: [:index, :show]
   before_action :set_admin_billing_tab, only: [:confirm_transactions, :disputed_orders, :movable_transactions, :transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
   before_action :store_fullpath_in_session, only: [:index, :show]

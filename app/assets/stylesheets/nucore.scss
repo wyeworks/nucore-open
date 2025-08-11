@@ -1,3 +1,27 @@
+// Fix rem unit size - Bootstrap 3 sets html font-size to 10px
+html {
+  font-size: 16px; // Reset to browser default so 1rem = 16px
+}
+
+.alert {
+  padding: 8px 35px 8px 14px;
+  margin-bottom: 20px;
+}
+
+.well {
+  padding: 19px;
+  
+  // Use darker colors for better accessibility contrast
+  a {
+    color: darken($secondaryColor, 10%);
+    
+    &:hover,
+    &:focus {
+      color: darken($secondaryColor, 20%);
+    }
+  }
+}
+
 .nowrap {
   white-space: nowrap;
 }
@@ -15,16 +39,115 @@
  nav
 */
 
-nav ul.nav > li.active,
-nav ul.nav > li:hover {
-  border-top: $navbarActiveBorderHeight solid $navbarActiveBorderColor;
-  margin-top: -$navbarActiveBorderHeight;
+nav .navbar {
+  margin-bottom: 0;
+  min-height: auto;
+  border-radius: 0;
+  
+  .navbar-nav > li {
+    > a {
+      padding: 12px 15px;
+    }
+    
+    &.active,
+    &:hover {
+      border-top: $navbarActiveBorderHeight solid $navbarActiveBorderColor;
+      margin-top: -$navbarActiveBorderHeight;
+    }
+  }
 }
 
+.navbar-form input[type="text"].form-control,
+form:not(.form-horizontal) input[type="text"].form-control[name="search"],
+form:not(.form-horizontal) input[type="text"].form-control[name="search_term"] {
+  border-radius: 15px;
+  height: 28px;
+  display: inline-block;
+  max-width: 250px;
+}
+
+.navbar a,
+.navbar-nav a,
+.navbar-brand {
+  text-decoration: none !important;
+}
+
+.nav-tabs {
+  margin-bottom: 20px;
+}
+
+input[type="checkbox"].form-control,
+input[type="radio"].form-control {
+  width: auto;
+  height: auto;
+  display: inline-block;
+  margin: 0 5px 0 0;
+  position: static;
+}
+
+legend {
+  margin-bottom: 15px;
+  
+  .pull-right {
+    margin-top: -5px;
+  }
+}
+
+// Fix Event Log form alignment
+.search_form {
+  .row {
+    margin-bottom: 15px;
+  }
+  
+  input[type="text"]:not(.chosen-search-input),
+  select {
+    @extend .form-control;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 5px;
+  }
+}
+
+// Fix time dropdown alignment for journal cutoff dates
+.time_dropdown {
+  select {
+    display: inline-block;
+    width: auto;
+    margin-right: 5px;
+  }
+}
+
+ul, ol {
+  &.nav:not(.sidebar-nav),
+  &.navbar-nav,
+  &.list-unstyled,
+  &.list-inline,
+  &.unstyled {
+    padding-left: 0;
+  }
+}
+
+.facilities-list ul,
+.recently-used-facilities ul,
+.recently-purchased-products ul,
+.product_list ul,
+.facility_list_container {
+  padding-left: 0;
+}
+
+.facilities-list,
+.recently-used-facilities,
+.recently-purchased-products,
+.all-facilities {
+  ul, ol {
+    padding-left: 0;
+    margin-left: 0;
+  }
+}
 .dropdown-menu > li > a:hover,
-.dropdown-menu > li > a:focus,
-.dropdown-submenu:hover > a,
-.dropdown-submenu:focus > a {
+.dropdown-menu > li > a:focus {
   @extend .highlighted;
 }
 
@@ -47,9 +170,10 @@ nav ul.nav > li:hover {
 */
 .sidebar-nav {
   @extend .well;
-  @extend .well-small;
+  @extend .well-sm;
   @extend .nav;
-  @extend .nav-list;
+  @extend .nav-pills;
+  @extend .nav-stacked;
 
   margin-bottom: 10px;
 
@@ -62,6 +186,10 @@ nav ul.nav > li:hover {
     }
     &.divider {
       margin: 0.5em 1px;
+    }
+    
+    > a {
+      padding: 3px 15px;
     }
   }
 
@@ -123,8 +251,7 @@ li.nav-spacer {
 */
 .errorExplanation {
   @extend .alert;
-  @extend .alert-error;
-  @extend .alert-block;
+  @extend .alert-danger;
   h2 {
     font-size: 16px;
     line-height: 1em;
@@ -148,7 +275,7 @@ li.nav-spacer {
 .order-statuses-table {
   .action-column {
     width: 5em;
-    border-right: 1px solid $tableBorder;
+    border-right: 1px solid $table-border-color;
   }
   .child {
     padding-left: 3em;
@@ -191,13 +318,6 @@ form.compact { margin: 0 }
 .modal form,
 .well form {
   margin-bottom: 0;
-}
-
-.well {
-  padding: 8px 19px;
-  h2, h3 {
-    margin-top: 0;
-  }
 }
 
 td.order-note,
@@ -244,11 +364,11 @@ td.daily_rate {
 .old-table,
 .footnote {
   .estimated_cost {
-    color: $warningText;
+    color: $state-warning-text;
   }
 
   .actual_cost {
-    color: $successText;
+    color: $state-success-text;
   }
 
   .reconcile-note {
@@ -256,7 +376,7 @@ td.daily_rate {
   }
 
   tr.reconcile-warning td {
-    background-color: $errorBackground !important;
+    background-color: $state-danger-bg !important;
   }
 
   tfoot {
@@ -270,7 +390,7 @@ td.daily_rate {
 
 .table tr.row-warning {
    td, th {
-    background-color: $errorBackground;
+    background-color: $state-danger-bg;
   }
 }
 
@@ -280,7 +400,7 @@ td.daily_rate {
 
 /* Schedule Rules */
 .inline-checkbox-list {
-  .controls label {
+  label {
     display: inline-block;
     font-weight: normal;
     margin-right: 1em;
@@ -289,24 +409,26 @@ td.daily_rate {
 
 .problem-notifications-form {
   .table-actions {
-    .span2 .inline-checkbox-list {
+    .col-md-2 .inline-checkbox-list,
+    .col-md-4 .inline-checkbox-list {
       margin-left: 2em;
       margin-top: -1em;
     }
     
     @media (max-width: 1200px) {
-      .span1, .span2 {
+      .col-md-2, .col-md-3, .col-md-4 {
         clear: left;
       }
       
-      .span2 .inline-checkbox-list {
+      .col-md-2 .inline-checkbox-list,
+      .col-md-4 .inline-checkbox-list {
         margin-top: 0;
         margin-left: -0.1em;
       }
     }
   }
 
-  .inline-checkbox-list label.checkbox.inline {
+  .inline-checkbox-list label.checkbox-inline {
     margin-left: 0 !important;
   }
 }
@@ -332,18 +454,19 @@ td.daily_rate {
 
 p.per-minute {
   font-style: italic;
-  @extend .muted;
+  @extend .text-muted;
   font-size: 85%;
-  margin-top: -0.75em;
+  margin-top: -0.25em;
 }
 
-p.per-minute-show {
-  @extend .per-minute;
-  margin-top: 0;
-}
+.price-policy-table {
+  input[type="text"] {
+    width: 80%;
+  }
 
-.price-policy-table input[type=text] {
-  width: 80%;
+  .negative-number {
+    display: block;
+  }
 }
 
 /* Account Fields */
@@ -377,7 +500,7 @@ ul.inline > li, ol.inline > li {
 
 /* Accessories Form */
 .pick_accessories_form {
-  .control-group, input {
+  .form-group, input {
     margin-bottom: 0;
   }
 }
@@ -390,6 +513,20 @@ ul.inline > li, ol.inline > li {
 textarea.wide {
   width: 99%;
   height: 4em;
+}
+
+/* Devise forms */
+.simple_form.new_user,
+.simple_form.edit_user {
+  max-width: 350px;
+  
+  .form-inputs {
+    margin-bottom: 15px;
+  }
+  
+  .btn {
+    min-width: 100px;
+  }
 }
 
 select.tall {
@@ -405,9 +542,6 @@ select.tall {
 .input-inline {
   display: inline-block;
   margin-right: 1em;
-  .controls {
-    display: inherit;
-  }
 }
 
 .inline-block {
@@ -444,7 +578,7 @@ select:focus:invalid {
   display: flex;
   flex-wrap: wrap;
 
-  .control-group {
+  .form-group {
     margin-right: 3rem;
   }
 }
@@ -485,4 +619,8 @@ select:focus:invalid {
 
 .margin_x {
   margin: 0 1em;
+}
+
+.datetime-block select.form-control {
+  display: inline-block;
 }

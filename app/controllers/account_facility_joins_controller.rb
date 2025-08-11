@@ -3,7 +3,6 @@
 class AccountFacilityJoinsController < ApplicationController
 
   admin_tab     :all
-  before_action :authenticate_user!
   before_action :check_acting_as
   before_action :init_account
   authorize_resource # Only global admins should have access

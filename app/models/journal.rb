@@ -133,7 +133,7 @@ class Journal < ApplicationRecord
   def status_string
     if is_successful.nil?
       "Pending"
-    elsif is_successful? == false
+    elsif !is_successful?
       "Failed"
     else
       reconciled? ? "Successful, reconciled" : "Successful, not reconciled"

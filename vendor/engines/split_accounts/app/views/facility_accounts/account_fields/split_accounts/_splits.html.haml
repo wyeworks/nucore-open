@@ -10,7 +10,7 @@
       = ff.input :subaccount_id, collection: available_subaccounts, wrapper_html: {class: "input-inline"}, input_html: {class: "js--chosen"}
       = ff.input :percent, input_html: {min: 0, max: 100, data: {percent: true}}, wrapper_html: {class: "input-inline"}
       = ff.input :apply_remainder, wrapper_html: {class: "input-inline"}
-      = ff.remove_nested_fields_link "Remove", class: "btn", wrapper_html: {class: "input-inline"}
+      = ff.remove_nested_fields_link "Remove", class: "btn btn-default", wrapper_html: {class: "input-inline"}
 
 %p
   = f.add_nested_fields_link :splits, "Add another subaccount", class: "btn btn-success"

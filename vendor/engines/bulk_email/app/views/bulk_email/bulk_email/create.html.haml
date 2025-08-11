@@ -18,24 +18,24 @@
   = hidden_field_tag "bulk_email_delivery_form[search_criteria]",
     bulk_email_recipient_search_params.to_json
 
-  .row.span6
+  .row.col-md-6
     %div
       = label_tag text("bulk_email.recipients")
       = text_area_tag text("bulk_email.recipients"),
         @users.map(&:email).join(", "),
         disabled: true,
-        class: "input-xxlarge"
+        class: "form-control"
 
     = f.input :custom_subject,
       as: "bulk_email/subject",
       prefix: bulk_email_content_generator.subject_prefix,
-      input_html: { class: "input-xlarge" }
+      input_html: { class: "form-control" }
 
     %div
       = f.input :custom_message,
         as: "bulk_email/body",
         greeting: bulk_email_content_generator.greeting,
-        input_html: { class: "input-xxlarge", rows: 6 }
+        input_html: { class: "form-control", rows: 6 }
 
     %div
       = f.submit text("bulk_email.send_mail"),

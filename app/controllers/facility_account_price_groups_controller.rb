@@ -3,7 +3,6 @@
 class FacilityAccountPriceGroupsController < ApplicationController
   admin_tab :all
 
-  before_action :authenticate_user!
   before_action { @active_tab = "admin_users" }
   before_action :load_resources
   before_action :authorize_show

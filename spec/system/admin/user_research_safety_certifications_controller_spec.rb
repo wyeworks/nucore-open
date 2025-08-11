@@ -20,8 +20,8 @@ RSpec.describe "Viewing a user's safety certifications" do
     it "can see the user's certifications" do
       visit facility_user_path(facility, user)
       click_link "Certifications"
-      expect(page).to have_selector("li.muted", text: certificate_b.name)
-      expect(page).to have_selector("li:not(.muted)", text: certificate_a.name)
+      expect(page).to have_selector("li.text-muted", text: certificate_b.name)
+      expect(page).to have_selector("li:not(.text-muted)", text: certificate_a.name)
     end
   end
 

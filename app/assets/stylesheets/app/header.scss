@@ -5,14 +5,23 @@
 header {
 
   .navbar {
-    .brand {
+    .navbar-header {
+      height: $headerContainerHeight;
+      float: left;
+    }
+    
+    .navbar-brand {
       font-family: $headerFont;
       text-decoration: none;
       text-shadow: none;
       font-size: 27px;
       color: $headerColor;
-
       padding: $brandPadding;
+      height: $headerContainerHeight;
+
+      &:hover, &:focus {
+        color: $headerColor;
+      }
 
       .img__brand {
         height: $imageBrandHeight;
@@ -23,42 +32,103 @@ header {
         line-height: 1;
       }
     }
+    
+    .navbar-toggle {
+      .icon-bar {
+        background-color: $gray-light;
+      }
+    }
   }
 
-  .navbar-inner, .dropdown-toggle {
+  .navbar {
+    border: none;
+    border-bottom: 1px solid $headerBackgroundColorHighLight;
+    min-height: $headerContainerHeight;
+    margin-bottom: 0;
+    border-radius: 0;
+  }
+  
+  .navbar-default {
+    @include gradient-vertical($headerBackgroundColorHighLight, $headerBackgroundColor);
+  }
+  
+  .dropdown-toggle {
     @include gradient-vertical($headerBackgroundColorHighLight, $headerBackgroundColor);
   }
 
   .container {
-    height: $headerContainerHeight;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    flex-flow: wrap;
-  }
-
-  .container:before, .container:after {
-    content: none;
-  }
-
-  .navbar .nav {
-    .divider-vertical {
-      border-right: none;
-      border-left: 1px solid $usernavDividerColor;
+    position: relative;
+    > .navbar-header,
+    > .navbar-collapse {
+      margin-right: 0;
+      margin-left: 0;
     }
-    > li > a {
-      color: $usernavColor !important;
-      text-shadow: none;
-      padding: 10px 0;
+  }
+  
+  .navbar > .container {
+    &:before, &:after {
+      display: table;
+      content: " ";
+    }
+    &:after {
+      clear: both;
+    }
+  }
+  
+  // Bootstrap 3 navbar styles
+  .navbar-nav {
+    margin: 0;
+    float: right;
+    
+    > li {
+      float: left;
+      
+      > a {
+        color: $usernavColor !important;
+        text-shadow: none;
+        padding: 20px 15px;
+        line-height: 20px;
 
-      &:hover {
-        color: $usernavColorHover !important;
+        &:hover, &:focus {
+          color: $usernavColorHover !important;
+          background-color: transparent !important;
+        }
+      }
+      
+      &.divider-vertical {
+        float: left;
+        width: 1px;
+        height: $headerContainerHeight;
+        margin: 0 9px;
+        background-color: $usernavDividerColor;
+        padding: 0;
       }
     }
-
-    > .navbar-text {
+    
+    .navbar-text {
       color: $usernavColor;
+      margin: 0;
+      padding: 20px 15px;
+      line-height: 20px;
+      float: left;
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .navbar-right {
+      float: right !important;
+    }
+  }
+  
+  .navbar-collapse {
+    padding-right: 0;
+    padding-left: 0;
+    border-top: 0;
+    box-shadow: none;
+    float: right;
+    
+    &.in {
+      overflow-y: visible;
     }
   }
 

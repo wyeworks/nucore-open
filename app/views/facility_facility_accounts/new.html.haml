@@ -11,6 +11,6 @@
 = simple_form_for @facility_account, url: facility_facility_accounts_path(current_facility) do |f|
   = f.error_messages
   = render "facility_account_fields", f: f
-  %ul.inline
-    %li= f.submit t("shared.create"), class: "btn"
+  %ul.list-inline
+    %li= f.submit t("shared.create"), class: "btn btn-default"
     %li= link_to t("shared.cancel"), facility_facility_accounts_path

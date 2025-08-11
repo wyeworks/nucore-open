@@ -16,6 +16,6 @@
     = error_messages_for price_policy
 
   = render "price_policy_fields", f: f
-  %ul.inline
+  %ul.list-inline
     %li= submit_tag text("views.price_policies.index.add"), class: "btn btn-primary"
     %li= link_to text("shared.cancel"), price_policies_path

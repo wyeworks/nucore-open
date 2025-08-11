@@ -2,7 +2,6 @@
 
 class RelaysActivationsController < ApplicationController
 
-  before_action :authenticate_user!
   before_action :init_current_facility
   authorize_resource :facility
 

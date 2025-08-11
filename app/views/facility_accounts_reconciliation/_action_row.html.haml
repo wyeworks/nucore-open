@@ -1,47 +1,47 @@
 .row.table-actions.form-horizontal
-  .span1.select_all_none= select_all_link
-  .span1.pull-right= submit_tag t("facility_accounts_reconciliation.index.submit"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { disable_with: t("facility_accounts_reconciliation.index.submit") }
+  .col-md-3.select_all_none= select_all_link
+  .col-md-9.text-right= submit_tag t("facility_accounts_reconciliation.index.submit"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { disable_with: t("facility_accounts_reconciliation.index.submit") }
 
 - if local_assigns[:show_order_status]
   .row.table-actions.form-horizontal
-    .control-group.fields
-      = label_tag :order_status, t("facility_accounts_reconciliation.index.order_status"), class: "control-label"
-      .controls
+    .form-group
+      = label_tag :order_status, t("facility_accounts_reconciliation.index.order_status"), class: "control-label col-md-2"
+      .col-md-4
         = select_tag :order_status,
           options_for_select(reconcile_statuses),
-          class: "js--orderStatusSelect"
+          class: "js--orderStatusSelect form-control"
 - if local_assigns[:date]
   .js--bulkReconcileFields
     .row.table-actions.form-horizontal
       .js--bulkReconcileDateField
-        .control-group.fields
-          = label_tag :reconciled_at, OrderDetail.human_attribute_name(:reconciled_at), class: "control-label"
-          .controls
+        .form-group
+          = label_tag :reconciled_at, OrderDetail.human_attribute_name(:reconciled_at), class: "control-label col-md-2"
+          .col-md-4
             = text_field_tag :reconciled_at,
               format_usa_date(Time.current),
-              class: :datepicker__data,
+              class: "datepicker__data form-control",
               data: { min_date: unreconciled_order_details.map(&:journal_or_statement_date).min.iso8601, max_date: Time.current.iso8601 }
     .row.table-actions.form-horizontal
-      .control-group.fields
-        = label_tag :bulk_note_checkbox, t("facility_accounts_reconciliation.index.bulk_note_checkbox"), class: "control-label"
-        .controls
+      .form-group
+        = label_tag :bulk_note_checkbox, t("facility_accounts_reconciliation.index.bulk_note_checkbox"), class: "control-label col-md-2"
+        .col-md-10
           = check_box_tag :bulk_note_checkbox
 
     .row.table-actions.form-horizontal.js--bulkNoteInput
-      .control-group.fields
-        = label_tag :bulk_note, t("facility_accounts_reconciliation.index.bulk_note"), class: "control-label"
-        .controls
-          = text_field_tag :bulk_note
+      .form-group
+        = label_tag :bulk_note, t("facility_accounts_reconciliation.index.bulk_note"), class: "control-label col-md-2"
+        .col-md-6
+          = text_field_tag :bulk_note, nil, class: "form-control"
 
     - if show_reconciliation_deposit_number
       .row.table-actions.form-horizontal.js--bulkNoteInput
-        .control-group.fields
+        .form-group
           = label_tag :bulk_deposit_number,
             text("facility_accounts_reconciliation.index.bulk_deposit_number"),
-            class: "control-label",
+            class: "control-label col-md-2",
             title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint"),
             data: { toggle: "tooltip" }
-          .controls
+          .col-md-4
             %span
               = text("facility_accounts_reconciliation.index.bulk_deposit_number_prefix")
-            = text_field_tag :bulk_deposit_number
+            = text_field_tag :bulk_deposit_number, nil, class: "form-control"

@@ -14,8 +14,8 @@
 
 = form_tag url_for(action: :search), id: "ajax_form", method: :get do
   = label_tag :search_term, text("views.clone_account_memberships.index.search_term")
-  = text_field_tag :search_term, nil, size: 30, class: "search-query"
-  = submit_tag text("shared.search"), class: "btn"
+  = text_field_tag :search_term, nil, size: 30, class: "form-control"
+  = submit_tag text("shared.search"), class: "btn btn-default"
   = hidden_field_tag :user_id, @user.id
 %br
 #result

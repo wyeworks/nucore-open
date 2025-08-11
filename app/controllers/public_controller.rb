@@ -2,6 +2,8 @@
 
 class PublicController < ApplicationController
 
+  skip_before_action :authenticate_user!
+
   def index
     flash.keep
     redirect_to(controller: "facilities", action: "index")

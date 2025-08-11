@@ -36,6 +36,6 @@
       = f.input :building_room_number
       = f.input :circuit_number
       = f.input :ethernet_port_number, label: text("instruments.instrument_fields.relay.label.ethernet_port_number")
-  %ul.inline
+  %ul.list-inline
     %li= f.submit text("shared.save"), class: ["btn", "btn-primary"]
     %li= link_to text("shared.cancel"), [current_facility, @product, Relay]

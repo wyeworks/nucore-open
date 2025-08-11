@@ -10,17 +10,17 @@
     #content{role: "main"}
       .container
         .row
-          .span12
+          .col-md-12
             - if content_for?(:h1)
               %h1= yield(:h1)
             - if content_for?(:h2)
               %h2= yield(:h2)
         .row
-          .span9.pull-right
+          .col-md-9.pull-right
             = render partial: "shared/flashes"
             = yield :tabnav
             = yield
-          .span3.pull-left
+          .col-md-3.pull-left
             #sidebar
               = yield :sidebar
     %footer

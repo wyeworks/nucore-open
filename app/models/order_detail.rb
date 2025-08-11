@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class OrderDetail < ApplicationRecord
-
   include Nucore::Database::SortHelper
   include TranslationHelper
   include NotificationSubject
   include OrderDetail::Accessorized
+  include OrderDetail::Notices
   include Nucore::Database::WhereIdsIn
 
   has_paper_trail
@@ -35,13 +35,6 @@ class OrderDetail < ApplicationRecord
   before_save :clear_statement, if: :account_id_changed?
   before_save :reassign_price, if: :auto_reassign_pricing?
   before_save :update_journal_row_amounts, if: :actual_cost_changed?
-
-  before_save :set_problem_order
-  def set_problem_order
-    self.problem = problem_description_key.present?
-    update_fulfilled_at_on_resolve if time_data.present?
-    true # problem might be false; we need the callback chain to continue
-  end
 
   after_save :update_billable_minutes_on_reservation, if: :reservation
 
@@ -84,6 +77,8 @@ class OrderDetail < ApplicationRecord
   delegate :price_group, to: :price_policy, allow_nil: true
   delegate :reference, to: :journal, prefix: true, allow_nil: true
   delegate :projects, to: :facility, prefix: true
+
+  alias_attribute :problem_description_keys, :problem_keys
 
   def estimated_price_group
     estimated_price_policy.try(:price_group)
@@ -839,7 +834,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def can_reconcile?
-    complete? && !in_dispute? && account.can_reconcile?(self)
+    complete? && !in_dispute? && account&.can_reconcile?(self)
   end
 
   def can_reconcile_journaled?
@@ -931,10 +926,10 @@ class OrderDetail < ApplicationRecord
   end
 
   def problem_description_key
-    Array(problem_description_keys).first
+    problem_keys.first
   end
 
-  def problem_description_keys
+  def build_problem_keys
     return [] unless complete?
 
     time_data_problem_key = time_data.problem_description_key
@@ -945,7 +940,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def requires_but_missing_actuals?
-    Array(problem_description_keys).include?(:missing_actuals)
+    problem_description_keys.include?(:missing_actuals)
   end
 
   def price_change_reason_option
@@ -1084,12 +1079,6 @@ class OrderDetail < ApplicationRecord
     if statement.present?
       statement.remove_order_detail(self)
       self.statement = nil
-    end
-  end
-
-  def update_fulfilled_at_on_resolve
-    if problem_changed? && !problem_order?
-      self.fulfilled_at = time_data.actual_end_at if time_data.actual_end_at
     end
   end
 
