@@ -45,10 +45,10 @@ RSpec.describe "All Transactions Search", :js do
 
       order_ids =
         facility
-          .order_details
-          .complete
-          .for_accounts(some_account)
-          .pluck(:order_id)
+        .order_details
+        .complete
+        .for_accounts(some_account)
+        .pluck(:order_id)
 
       expect(order_ids.map { |odid| "test_prefix_#{odid}" }).to appear_in_order
     end
