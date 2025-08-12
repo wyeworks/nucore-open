@@ -195,6 +195,25 @@ RSpec.describe FacilityJournalsController do
           expect(@order_detail3.reload.journal_id).to be_nil
         end
       end
+
+      describe "log event creation", feature_setting: { billing_log_events: true } do
+        it "creates a log event when journal is closed" do
+          @params[:journal_status] = "succeeded"
+          expect { do_request }.to change {
+            LogEvent.where(loggable: @journal, event_type: :closed).count
+          }.by(1)
+        end
+
+        it "does not include metadata for journal events" do
+          @params[:journal_status] = "succeeded"
+          @params[:journal][:reference] = "REF123"
+          @params[:journal][:description] = "Test journal description"
+          do_request
+
+          log_event = LogEvent.where(loggable: @journal, event_type: :closed).last
+          expect(log_event.metadata).to be_nil
+        end
+      end
     end
   end
 

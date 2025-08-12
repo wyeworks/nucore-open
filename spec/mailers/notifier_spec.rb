@@ -104,6 +104,27 @@ RSpec.describe Notifier do
             end.by(1)
           )
         end
+
+        it "includes metadata fields in the log event" do
+          action.call
+          
+          log_event = LogEvent.where(event_type: :review_orders_email).last
+          expect(log_event.metadata["accounts_ids"]).to contain_exactly(accounts.first.id, accounts.last.id)
+          expect(log_event.metadata["facility_id"]).to eq(facility.id)
+          expect(log_event.metadata["object"]).to include(accounts.first.description)
+          expect(log_event.metadata["object"]).to include(accounts.last.description)
+          # order_ids will be an array (possibly empty if no orders need notification)
+          expect(log_event.metadata["order_ids"]).to be_an(Array)
+        end
+
+        context "with no orders needing notification" do
+          it "includes empty order_ids array in metadata" do
+            action.call
+            
+            log_event = LogEvent.where(event_type: :review_orders_email).last
+            expect(log_event.metadata["order_ids"]).to eq([])
+          end
+        end
       end
     end
   end

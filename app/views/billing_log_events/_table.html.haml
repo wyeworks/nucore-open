@@ -17,7 +17,16 @@
       %tr
         %td= I18n.l(log_event.event_time, format: :usa)
         %td= text(log_event.locale_tag)
-        %td= object_tag(log_event.object, class: "billing-logs__object")
+        %td.billing-logs__object
+          = object_tag(log_event.object, class: "billing-logs__object")
+          - if log_event.event_type == "review_orders_email" && log_event.has_orders?
+            %br
+            %small.text-muted
+              Orders: #{log_event.order_ids_display}
+          - if log_event.has_reconciliation_data?
+            - log_event.all_reconciliation_notes.each do |note|
+              %br
+              %small.text-muted= note
         %td.billing-logs__email-notification
           - if log_event.email_notification?
             %span= log_event.email_subject

@@ -104,6 +104,12 @@ class Notifier < ActionMailer::Base
 
     accounts = @accounts.map(&:description).join(", ")
 
+    order_ids = OrderDetail
+                .where(account_id: @accounts.map(&:id))
+                .need_notification
+                .distinct
+                .pluck(:order_id)
+
     LogEvent.log_email(
       @user,
       :review_orders_email,
@@ -112,6 +118,7 @@ class Notifier < ActionMailer::Base
         object: accounts,
         accounts_ids: @accounts.map(&:id),
         facility_id: @facility.id,
+        order_ids: order_ids,
       }
     )
   end

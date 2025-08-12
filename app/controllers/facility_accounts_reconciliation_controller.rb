@@ -44,11 +44,25 @@ class FacilityAccountsReconciliationController < ApplicationController
 
     if reconciler.reconcile_all > 0
       count = reconciler.count
-      statements = Set.new
-      reconciler.order_details.each { |od| statements << od.statement }
-
-      statements.each do |statement|
-        LogEvent.log(statement, :closed, current_user)
+      
+      order_details_by_statement = reconciler.order_details.group_by(&:statement)
+      
+      order_details_by_statement.each do |statement, order_details|
+        reconciled_notes = order_details
+          .select { |od| od.order_status.name == "Reconciled" }
+          .filter_map(&:reconciled_note)
+          .uniq
+          
+        unrecoverable_notes = order_details
+          .select { |od| od.order_status.name == "Unrecoverable" }
+          .filter_map(&:unrecoverable_note)
+          .uniq
+        
+        metadata = {}
+        metadata[:reconciled_notes] = reconciled_notes if reconciled_notes.any?
+        metadata[:unrecoverable_notes] = unrecoverable_notes if unrecoverable_notes.any?
+        
+        LogEvent.log(statement, :closed, current_user, metadata: metadata)
       end
 
       flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully updated" if count > 0

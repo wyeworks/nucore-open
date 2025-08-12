@@ -173,6 +173,55 @@ RSpec.describe FacilityAccountsReconciliationController do
         end
       end
     end
+
+    describe "log event creation", feature_setting: { billing_log_events: true } do
+      let(:reconciled_at) { Time.current }
+
+      it "creates a log event for the statement" do
+        expect { perform }.to change {
+          LogEvent.where(loggable: statement, event_type: :closed).count
+        }.by(1)
+      end
+
+      it "includes reconciled notes in metadata" do
+        perform
+        log_event = LogEvent.where(loggable: statement, event_type: :closed).last
+        expect(log_event.metadata["reconciled_notes"]).to eq(["A note"])
+      end
+
+      context "when marking as unrecoverable" do
+        before { sign_in FactoryBot.create(:user, :administrator) }
+
+        it "includes unrecoverable notes in metadata" do
+          post :update, params: {
+            facility_id: facility.url_name,
+            account_type: "ReconciliationTestAccount",
+            reconciled_at: formatted_reconciled_at,
+            order_status: "unrecoverable",
+            order_detail: {
+              order_detail.id.to_s => {
+                unrecoverable: "1",
+                unrecoverable_note: "Cannot recover",
+              }
+            }
+          }
+          
+          log_event = LogEvent.where(loggable: statement, event_type: :closed).last
+          expect(log_event.metadata["unrecoverable_notes"]).to eq(["Cannot recover"])
+        end
+      end
+
+      it "does not include extra metadata fields" do
+        perform
+        log_event = LogEvent.where(loggable: statement, event_type: :closed).last
+        
+        expect(log_event.metadata).not_to have_key("order_ids")
+        expect(log_event.metadata).not_to have_key("reconciled_count")
+        expect(log_event.metadata).not_to have_key("unrecoverable_count")
+        expect(log_event.metadata).not_to have_key("bulk_note")
+        expect(log_event.metadata).not_to have_key("deposit_number")
+      end
+    end
   end
 
 end
