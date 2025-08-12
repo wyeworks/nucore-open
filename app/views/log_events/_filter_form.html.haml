@@ -22,7 +22,6 @@
       .col-md-3
         = label_tag(:query, text(:query))
         = text_field_tag(:query, params[:query])
-  - if local_assigns[:exclude_query_field]
     .row
       .col-md-3
         = label_tag(:payment_source, text(:payment_source))
