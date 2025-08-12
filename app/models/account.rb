@@ -187,7 +187,7 @@ class Account < ApplicationRecord
   end
 
   def expired?
-    expires_at && expires_at.beginning_of_day <= Time.zone.now.beginning_of_day
+    expires_at && expires_at.beginning_of_day < Time.zone.now.beginning_of_day
   end
 
   def formatted_expires_at

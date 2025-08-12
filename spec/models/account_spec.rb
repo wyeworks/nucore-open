@@ -433,4 +433,30 @@ RSpec.describe Account do
       )
     end
   end
+
+  describe "#expired?" do
+    it "returns true if the account is expired" do
+      account.expires_at = 1.day.ago
+      account.save!
+      account.reload
+
+      expect(account).to be_expired
+    end
+
+    it "returns false if the account is not expired" do
+      account.expires_at = 1.day.from_now
+      account.save!
+      account.reload
+
+      expect(account).not_to be_expired
+    end
+
+    it "returns false if the account expires today" do
+      account.expires_at = Time.zone.now.beginning_of_day
+      account.save!
+      account.reload
+
+      expect(account).not_to be_expired
+    end
+  end
 end
