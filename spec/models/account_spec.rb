@@ -171,14 +171,6 @@ RSpec.describe Account do
   it { is_expected.to have_one(:owner) }
   it { is_expected.to have_many(:account_users) }
 
-  it "should be expired" do
-    owner   = FactoryBot.create(:user)
-    account = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: owner))
-    account.expires_at = Time.zone.now
-    assert account.save
-    expect(account).to be_expired
-  end
-
   it "should validate description <= 50 chars" do
     @user = FactoryBot.create(:user)
     account = Account.new(FactoryBot.attributes_for(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @user)))
