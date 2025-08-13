@@ -32,6 +32,11 @@ body.quick_reservation {
       font-size: 1.5em;
     }
 
+    h3 {
+      font-size: 1.5em;
+      color: $gray-dark;
+    }
+
     div.reservation_notice {
       width: 100%;
       display: flex;
