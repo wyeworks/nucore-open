@@ -60,16 +60,13 @@ RSpec.describe LogEventSearcher do
   end
 
   describe "filtering by invoice number" do
-    let(:account_1) { create(:account, :with_account_owner) }
-    let(:account_2) { create(:account, :with_account_owner) }
     let(:facility) { create(:setup_facility) }
-    let(:statement_1) { create(:statement, account: account_1, facility: facility) }
-    let(:statement_2) { create(:statement, account: account_2, facility: facility) }
-    let!(:log_1) { create(:log_event, loggable: statement_1, event_type: :create) }
-    let!(:log_2) { create(:log_event, loggable: statement_2, event_type: :create) }
+    include_context "billing statements"
+    let!(:log_1) { create(:log_event, loggable: statement1, event_type: :create) }
+    let!(:log_2) { create(:log_event, loggable: statement2, event_type: :create) }
 
     it "finds the statement by invoice number" do
-      results = search(invoice_number: statement_1.invoice_number)
+      results = search(invoice_number: statement1.invoice_number)
       expect(results).to match_array([log_1])
     end
 
@@ -80,27 +77,10 @@ RSpec.describe LogEventSearcher do
   end
 
   describe "filtering by payment source" do
-    let(:account_1) { create(:account, :with_account_owner) }
-    let(:account_2) { create(:account, :with_account_owner) }
     let(:facility) { create(:setup_facility) }
-    let(:user) { create(:user) }
-    let(:statement_1) { create(:statement, account: account_1, facility: facility) }
-    let(:statement_2) { create(:statement, account: account_2, facility: facility) }
-    let!(:payment_1) { create(:payment, statement: statement_1, account: account_1, source: "check", amount: 100.0, processing_fee: 0.0, paid_by: user) }
-    let!(:payment_2) { create(:payment, statement: statement_2, account: account_2, source: "check", amount: 200.0, processing_fee: 0.0, paid_by: user) }
-    let!(:log_1) { create(:log_event, loggable: statement_1, event_type: :create) }
-    let!(:log_2) { create(:log_event, loggable: statement_2, event_type: :create) }
-
-    before do
-      # Add creditcard as a valid payment source for these tests
-      Payment.valid_sources << :creditcard unless Payment.valid_sources.include?(:creditcard)
-      payment_2.update!(source: "creditcard")
-    end
-
-    after do
-      # Clean up the added source
-      Payment.valid_sources.delete(:creditcard)
-    end
+    include_context "billing statements with payments and creditcard"
+    let!(:log_1) { create(:log_event, loggable: statement1, event_type: :create) }
+    let!(:log_2) { create(:log_event, loggable: statement2, event_type: :create) }
 
     it "finds statements by payment source" do
       results = search(payment_source: "check")
@@ -166,7 +146,7 @@ RSpec.describe LogEventSearcher do
   describe "finding statement" do
     let(:account) { create(:account, :with_account_owner, account_number: "12345") }
     let(:facility) { create(:setup_facility) }
-    let(:statement) { create(:statement, facility: facility, account: account)}
+    let(:statement) { create(:statement, facility:, account:)}
     let!(:log_event) { create(:log_event, loggable: statement, event_type: :create) }
 
     it "finds the statement" do
@@ -183,7 +163,7 @@ RSpec.describe LogEventSearcher do
   describe "finds account user memberships" do
     let(:user) { create(:user, username: "myuser") }
     let(:account) { create(:account, :with_account_owner, account_number: "12345-12345") }
-    let(:account_user) { create(:account_user, :purchaser, user: user, account: account) }
+    let(:account_user) { create(:account_user, :purchaser, user:, account:) }
     let!(:log_event) { create(:log_event, loggable: account_user, event_type: :create) }
 
     it "finds it by the user" do
@@ -207,7 +187,7 @@ RSpec.describe LogEventSearcher do
     let(:facility) { create(:facility, name: "My Facility") }
 
     describe "facility role" do
-      let!(:user_role) { create(:user_role, :facility_staff, user: user, facility: facility) }
+      let!(:user_role) { create(:user_role, :facility_staff, user:, facility:) }
       let!(:log_event) { create(:log_event, loggable: user_role, event_type: :create) }
 
       it "finds by the user" do
@@ -230,9 +210,9 @@ RSpec.describe LogEventSearcher do
 
   describe "finding order details" do
     let!(:user) { FactoryBot.create(:user) }
-    let(:order) { create(:order, created_by_user: user, user: user) }
+    let(:order) { create(:order, created_by_user: user, user:) }
     let(:product) { create(:setup_item) }
-    let(:order_detail) { create(:order_detail, order: order, product: product) }
+    let(:order_detail) { create(:order_detail, order:, product:) }
     let!(:log_event) { create(:log_event, loggable: order_detail, event_type: :resolve) }
 
     it "finds the order detail" do
@@ -249,7 +229,7 @@ RSpec.describe LogEventSearcher do
   describe "finding product user" do
     let(:user) { create(:user) }
     let(:item) { FactoryBot.create(:setup_item) }
-    let(:product_user) { ProductUser.create(product: item, user: user, approved_by: user.id) }
+    let(:product_user) { ProductUser.create(product: item, user:, approved_by: user.id) }
     let!(:log_event) { create(:log_event, loggable: product_user, event_type: :create) }
 
     it "finds the product user" do
