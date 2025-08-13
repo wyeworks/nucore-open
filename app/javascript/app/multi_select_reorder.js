@@ -1,3 +1,5 @@
+import { MultiSelectHelper } from './multi_select_helper';
+
 document.addEventListener("DOMContentLoaded", function() {
   function moveSelectedUp(select) {
     // Prevent movement if all the selected are at the beginning
