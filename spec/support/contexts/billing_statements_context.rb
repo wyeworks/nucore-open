@@ -35,7 +35,6 @@ RSpec.shared_context "billing statements with deposit numbers" do
           )
   end
 
-  # Create some order details without deposit numbers for negative testing
   let!(:order_detail_no_deposit) do
     create(:order_detail,
            order: order1,
