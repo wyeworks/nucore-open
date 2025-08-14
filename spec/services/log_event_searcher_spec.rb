@@ -78,23 +78,29 @@ RSpec.describe LogEventSearcher do
 
   describe "filtering by payment source" do
     let(:facility) { create(:setup_facility) }
-    include_context "billing statements with payments and creditcard"
+    include_context "billing statements with deposit numbers"
+
     let!(:log_1) { create(:log_event, loggable: statement1, event_type: :create) }
     let!(:log_2) { create(:log_event, loggable: statement2, event_type: :create) }
 
-    it "finds statements by payment source" do
-      results = search(payment_source: "check")
+    it "finds statements by payment source in deposit_number" do
+      results = search(payment_source: "CHECK")
       expect(results).to match_array([log_1])
     end
 
-    it "finds statements by creditcard payment source" do
-      results = search(payment_source: "creditcard")
+    it "finds statements by partial match in deposit_number" do
+      results = search(payment_source: "WIRE")
       expect(results).to match_array([log_2])
     end
 
     it "finds nothing when payment source doesn't match" do
       results = search(payment_source: "bitcoin")
       expect(results).to be_empty
+    end
+
+    it "is case-insensitive" do
+      results = search(payment_source: "check")
+      expect(results).to match_array([log_1])
     end
   end
 

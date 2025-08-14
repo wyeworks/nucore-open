@@ -78,7 +78,11 @@ class LogEventSearcher
     end
 
     if payment_source.present?
-      statements = statements.joins(:payments).where(payments: { source: payment_source })
+      order_details_with_matching_deposit = OrderDetail
+        .where(OrderDetail.arel_table[:deposit_number].matches("%#{payment_source}%"))
+        .where.not(statement_id: nil)
+        
+      statements = statements.where(id: order_details_with_matching_deposit.select(:statement_id))
     end
 
     LogEvent.where(loggable_type: "Statement", loggable_id: statements.unscope(:order))

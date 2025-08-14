@@ -9,41 +9,39 @@ RSpec.shared_context "billing statements" do
   let(:statement2) { create(:statement, account: account2, facility:) }
 end
 
-RSpec.shared_context "billing statements with payments and creditcard" do
+RSpec.shared_context "billing statements with deposit numbers" do
   include_context "billing statements"
 
-  let(:paid_by_user) { create(:user) }
+  # Expects `facility` to be defined in the including context
+  let!(:order1) { create(:order, facility:, user: account1.owner_user, created_by_user: account1.owner_user) }
+  let!(:order2) { create(:order, facility:, user: account2.owner_user, created_by_user: account2.owner_user) }
+  let!(:product) { create(:setup_item, facility:) }
 
-  let!(:payment1) do
-    create(
-      :payment,
-      statement: statement1,
-      account: account1,
-      source: "check",
-      amount: 100.0,
-      processing_fee: 0.0,
-      paid_by: paid_by_user,
-    )
+  let!(:order_detail1) do
+    create(:order_detail,
+           order: order1,
+           product:,
+           statement: statement1,
+           deposit_number: "CHECK-001"
+          )
   end
 
-  let!(:payment2) do
-    create(
-      :payment,
-      statement: statement2,
-      account: account2,
-      source: "check",
-      amount: 200.0,
-      processing_fee: 0.0,
-      paid_by: paid_by_user,
-    )
+  let!(:order_detail2) do
+    create(:order_detail,
+           order: order2,
+           product:,
+           statement: statement2,
+           deposit_number: "WIRE-002"
+          )
   end
 
-  before do
-    Payment.valid_sources << :creditcard unless Payment.valid_sources.include?(:creditcard)
-    payment2.update!(source: "creditcard")
-  end
-
-  after do
-    Payment.valid_sources.delete(:creditcard)
+  # Create some order details without deposit numbers for negative testing
+  let!(:order_detail_no_deposit) do
+    create(:order_detail,
+           order: order1,
+           product:,
+           statement: statement1,
+           deposit_number: nil
+          )
   end
 end

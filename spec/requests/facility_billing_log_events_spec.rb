@@ -64,9 +64,7 @@ RSpec.describe "facility_billing_log_events", type: :request do
     end
 
     describe "filtering" do
-      include_context "billing statements with payments and creditcard"
-      # Override paid_by_user from shared context to use `some_user` in this request spec
-      let(:paid_by_user) { some_user }
+      include_context "billing statements with deposit numbers"
 
       def get_index_with_params(params = {})
         get facility_billing_log_events_path(Facility.cross_facility), params: params
@@ -85,18 +83,25 @@ RSpec.describe "facility_billing_log_events", type: :request do
         expect(page).not_to have_content(statement2.to_log_s)
       end
 
-      it "filters by payment_source" do
+      it "filters by payment_source in deposit_number" do
         get_index_with_params(payment_source: "check")
 
         expect(page).to have_content(statement1.to_log_s)
         expect(page).not_to have_content(statement2.to_log_s)
       end
 
-      it "filters by creditcard payment_source" do
-        get_index_with_params(payment_source: "creditcard")
+      it "filters by payment_source with partial match in deposit_number" do
+        get_index_with_params(payment_source: "wire")
 
         expect(page).to have_content(statement2.to_log_s)
         expect(page).not_to have_content(statement1.to_log_s)
+      end
+
+      it "filters case-insensitively by payment_source" do
+        get_index_with_params(payment_source: "CHECK")
+
+        expect(page).to have_content(statement1.to_log_s)
+        expect(page).not_to have_content(statement2.to_log_s)
       end
     end
   end

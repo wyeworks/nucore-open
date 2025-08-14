@@ -18,16 +18,13 @@
       .col-md-3
         = label_tag(:invoice_number, text(:invoice_number))
         = text_field_tag(:invoice_number, params[:invoice_number])
+      .col-md-3
+        = label_tag(:payment_source, text(:payment_source))
+        = text_field_tag(:payment_source, params[:payment_source], class: "form-control")
     - else
       .col-md-3
         = label_tag(:query, text(:query))
         = text_field_tag(:query, params[:query])
-    .row
-      .col-md-3
-        = label_tag(:payment_source, text(:payment_source))
-        = select_tag(:payment_source,
-          options_for_select([["", ""]] + Payment.valid_sources.map { |s| [s.to_s.humanize, s.to_s] }, params[:payment_source]),
-          class: "form-control")
   .row
     .col-md-6
       = submit_tag(text(:submit), class: "btn btn-default")
