@@ -230,7 +230,7 @@ RSpec.describe SplitAccounts::SplitAccount, :enable_split_accounts, type: :model
     end
 
     context "when any subaccount is expired" do
-      let(:expired_subaccount) { build(:setup_account, expires_at: Time.current) }
+      let(:expired_subaccount) { build(:setup_account, expires_at: 1.day.ago) }
 
       let(:split_account) do
         build(:split_account, without_splits: true).tap do |split_account|

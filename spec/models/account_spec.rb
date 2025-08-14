@@ -171,14 +171,6 @@ RSpec.describe Account do
   it { is_expected.to have_one(:owner) }
   it { is_expected.to have_many(:account_users) }
 
-  it "should be expired" do
-    owner   = FactoryBot.create(:user)
-    account = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: owner))
-    account.expires_at = Time.zone.now
-    assert account.save
-    expect(account).to be_expired
-  end
-
   it "should validate description <= 50 chars" do
     @user = FactoryBot.create(:user)
     account = Account.new(FactoryBot.attributes_for(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @user)))
@@ -431,6 +423,32 @@ RSpec.describe Account do
       expect { account.price_groups_relation << PriceGroup.last }.to(
         change(AccountPriceGroupMember, :count)
       )
+    end
+  end
+
+  describe "#expired?" do
+    it "returns true if the account is expired" do
+      account.expires_at = 1.day.ago
+      account.save!
+      account.reload
+
+      expect(account).to be_expired
+    end
+
+    it "returns false if the account is not expired" do
+      account.expires_at = 1.day.from_now
+      account.save!
+      account.reload
+
+      expect(account).not_to be_expired
+    end
+
+    it "returns false if the account expires today" do
+      account.expires_at = Time.zone.now.beginning_of_day
+      account.save!
+      account.reload
+
+      expect(account).not_to be_expired
     end
   end
 end
