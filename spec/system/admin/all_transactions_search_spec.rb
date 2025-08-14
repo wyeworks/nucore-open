@@ -19,6 +19,41 @@ RSpec.describe "All Transactions Search", :js do
     end
   end
 
+  describe "sorting by columns" do
+    let(:some_account) { facility.order_details.complete.last.account }
+
+    before { login_as director }
+
+    it "can sort by order number while filtering by account owner and type" do
+      # use custom string to ease matching
+      allow_any_instance_of(Order).to receive(:id).and_wrap_original do |method|
+        "test_prefix_#{method.call}"
+      end
+
+      visit facility_transactions_path(facility)
+
+      select_from_chosen(some_account.model_name.human, from: "Payment Source Type")
+      select_from_chosen(some_account.owner_user.full_name, from: "Owners")
+
+      click_button "Filter"
+
+      expect(page).to have_content("Transaction History")
+
+      within("#table_billing") do
+        first("a", text: "Order").click
+      end
+
+      order_ids =
+        facility
+        .order_details
+        .complete
+        .for_accounts(some_account)
+        .pluck(:order_id)
+
+      expect(order_ids.map { |odid| "test_prefix_#{odid}" }).to appear_in_order
+    end
+  end
+
   describe "date field order" do
     let(:order_detail_ids) do
       page.all("a.manage-order-detail").map(&:text)
