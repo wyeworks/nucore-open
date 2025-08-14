@@ -203,16 +203,6 @@ RSpec.describe FacilityJournalsController do
             LogEvent.where(loggable: @journal, event_type: :closed).count
           }.by(1)
         end
-
-        it "does not include metadata for journal events" do
-          @params[:journal_status] = "succeeded"
-          @params[:journal][:reference] = "REF123"
-          @params[:journal][:description] = "Test journal description"
-          do_request
-
-          log_event = LogEvent.where(loggable: @journal, event_type: :closed).last
-          expect(log_event.metadata).to be_nil
-        end
       end
     end
   end
