@@ -74,14 +74,16 @@ class LogEventSearcher
     statements = Statement.all
 
     if invoice_number.present?
-      statements = statements.where_invoice_number(invoice_number)
+      statements = statements.where(
+        "CAST(statements.id AS CHAR) LIKE ? OR CONCAT(account_id, '-', id) LIKE ?", "%#{invoice_number}%", "%#{invoice_number}%"
+      )
     end
 
     if payment_source.present?
       order_details_with_matching_deposit = OrderDetail
-        .where(OrderDetail.arel_table[:deposit_number].matches("%#{payment_source}%"))
-        .where.not(statement_id: nil)
-        
+                                            .where(OrderDetail.arel_table[:deposit_number].matches("%#{payment_source}%"))
+                                            .where.not(statement_id: nil)
+
       statements = statements.where(id: order_details_with_matching_deposit.select(:statement_id))
     end
 
