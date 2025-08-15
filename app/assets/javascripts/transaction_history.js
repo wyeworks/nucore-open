@@ -1,5 +1,5 @@
 $(function() {
-	$("select[multiple]").chosen();
+	$("select[multiple]").chosen({ width: "100%" });
 
   $(".datepicker").each(function() {
     var datepickerParams = {};

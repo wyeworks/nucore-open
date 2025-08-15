@@ -1,9 +1,9 @@
 = simple_form_for :bulk_email, url: facility_bulk_email_path, method: :get, html: { class: "search_form", id: "bulk_email" }, defaults: { required: false } do |f|
 
-  .row
-    .col-md-3
-      - @user_types.each do |user_type, label_text|
-        = label_tag(nil, class: "checkbox") do
+  %div
+    - @user_types.each do |user_type, label_text|
+      %div.checkbox
+        = label_tag(nil) do
           = check_box_tag "bulk_email[user_types][]",
             user_type,
             user_type_selected?(user_type),
@@ -11,28 +11,29 @@
             class: "bulk_email_user_type"
           = label_text
 
-    .col-md-4.full-width
-      - if @search_options[:facilities].present?
-        = f.input :facilities, as: :transaction_chosen_old
-      = f.input :products, as: :transaction_chosen_old, data_method: :product_options, hint: t("bulk_email.search_hint")
+  %div
+    - if @search_options[:facilities].present?
+      = f.input :facilities, as: :transaction_chosen_old
+    = f.input :products, as: :transaction_chosen_old, data_method: :product_options, hint: t("bulk_email.search_hint")
 
-  .row
-    %h4.col-md-8= t("bulk_email.dates.label")
 
-  #dates_between.row
-    .col-md-3= datepicker_field_input(f, :start_date)
-    .col-md-3= datepicker_field_input(f, :end_date)
+  %div.clearfix
+    %h4= t("bulk_email.dates.label")
+    #dates_between
+      .col-md-3
+        = datepicker_field_input(f, :start_date)
+      .col-md-3
+        = datepicker_field_input(f, :end_date)
 
-  .row
-    .col-md-8
-      = text("bulk_email.dates.select_range")
-      = date_range_selection_link :last_90_days, params, start_date: 90.days.ago
-      ,
-      = date_range_selection_link :in_the_last_year, params, start_date: 1.year.ago
-      ,
-      = date_range_selection_link :next_month, params,
-        start_date: 1.month.from_now.beginning_of_month,
-        end_date: 1.month.from_now.end_of_month
+  .row.row-no-gutters
+    = text("bulk_email.dates.select_range")
+    = date_range_selection_link :last_90_days, params, start_date: 90.days.ago
+    ,
+    = date_range_selection_link :in_the_last_year, params, start_date: 1.year.ago
+    ,
+    = date_range_selection_link :next_month, params,
+      start_date: 1.month.from_now.beginning_of_month,
+      end_date: 1.month.from_now.end_of_month
 
   .row.bulk_email_search_actions
     .col-md-8
