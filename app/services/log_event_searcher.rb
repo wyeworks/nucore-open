@@ -87,7 +87,7 @@ class LogEventSearcher
 
     if payment_source.present?
       order_details_with_matching_deposit = OrderDetail
-                                            .where(OrderDetail.arel_table[:deposit_number].matches("%#{payment_source}%"))
+                                            .where("deposit_number LIKE ?", "%#{payment_source}%")
                                             .where.not(statement_id: nil)
 
       statements = statements.where(id: order_details_with_matching_deposit.select(:statement_id))
