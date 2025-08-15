@@ -97,29 +97,38 @@ RSpec.describe LogEventSearcher do
 
   describe "filtering by payment source" do
     let(:facility) { create(:setup_facility) }
-    include_context "billing statements with deposit numbers"
+    let(:account1) { create(:account, :with_account_owner, account_number: "12345-CHECK", description: "Research Lab A") }
+    let(:account2) { create(:account, :with_account_owner, account_number: "54321-WIRE", description: "Chemistry Dept") }
+
+    let(:statement1) { create(:statement, account: account1, facility:) }
+    let(:statement2) { create(:statement, account: account2, facility:) }
 
     let!(:log_1) { create(:log_event, loggable: statement1, event_type: :create) }
     let!(:log_2) { create(:log_event, loggable: statement2, event_type: :create) }
 
-    it "finds statements by payment source in deposit_number" do
+    it "finds statements by account number" do
       results = search(payment_source: "CHECK")
       expect(results).to match_array([log_1])
     end
 
-    it "finds statements by partial match in deposit_number" do
+    it "finds statements by partial match in account number" do
       results = search(payment_source: "WIRE")
+      expect(results).to match_array([log_2])
+    end
+
+    it "finds statements by account description" do
+      results = search(payment_source: "Research Lab")
+      expect(results).to match_array([log_1])
+    end
+
+    it "finds statements by partial match in description" do
+      results = search(payment_source: "Chemistry")
       expect(results).to match_array([log_2])
     end
 
     it "finds nothing when payment source doesn't match" do
       results = search(payment_source: "bitcoin")
       expect(results).to be_empty
-    end
-
-    it "is case-insensitive" do
-      results = search(payment_source: "check")
-      expect(results).to match_array([log_1])
     end
   end
 

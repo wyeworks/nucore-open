@@ -83,15 +83,15 @@ RSpec.describe "facility_billing_log_events", type: :request do
         expect(page).not_to have_content(statement2.to_log_s)
       end
 
-      it "filters by payment_source in deposit_number" do
+      it "filters by payment_source in account number" do
         get_index_with_params(payment_source: "check")
 
         expect(page).to have_content(statement1.to_log_s)
         expect(page).not_to have_content(statement2.to_log_s)
       end
 
-      it "filters by payment_source with partial match in deposit_number" do
-        get_index_with_params(payment_source: "wire")
+      it "filters by payment_source with partial match in account description" do
+        get_index_with_params(payment_source: "Chemistry")
 
         expect(page).to have_content(statement2.to_log_s)
         expect(page).not_to have_content(statement1.to_log_s)
