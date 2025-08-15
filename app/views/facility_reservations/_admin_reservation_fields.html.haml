@@ -14,7 +14,7 @@
         .form-group
           = time_select f, :reserve_start
         .form-group{style: "margin-top: -25px;"}
-          %label.string.optional.control-label{style: "display: block; margin-bottom: 5px;"} Duration mins
+          = f.label :duration_mins, "Duration mins", class: "string optional control-label", style: "display: block; margin-bottom: 5px;"
           = f.text_field :duration_mins, class: "form-control timeinput"
   
   .row
