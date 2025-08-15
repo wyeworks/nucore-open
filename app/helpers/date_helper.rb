@@ -82,9 +82,10 @@ module DateHelper
 
   # This is to DRY up many of the legacy places where hour/min/meridian is used in forms
   def time_select(f, field, options_tag = {}, html_options = {})
-    output =  f.select(:"#{field}_hour", (1..12).to_a, {}, html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_hour")))
-    output.safe_concat f.select(:"#{field}_min", minute_options(options_tag[:minute_step]), {}, html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_min")))
-    output.safe_concat f.select(:"#{field}_meridian", %w(AM PM), {}, html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_meridian")))
+    merged_html_options = html_options.reverse_merge(class: "form-control")
+    output =  f.select(:"#{field}_hour", (1..12).to_a, {}, merged_html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_hour")))
+    output.safe_concat f.select(:"#{field}_min", minute_options(options_tag[:minute_step]), {}, merged_html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_min")))
+    output.safe_concat f.select(:"#{field}_meridian", %w(AM PM), {}, merged_html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_meridian")))
     content_tag :div, output, class: "time-select"
   end
 
