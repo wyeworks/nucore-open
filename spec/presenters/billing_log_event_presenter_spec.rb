@@ -7,7 +7,7 @@ RSpec.describe BillingLogEventPresenter do
   let(:event_type) { nil }
   let(:loggable_type) { nil }
   let(:metadata) { {} }
-  
+
   subject { described_class.new(log_event) }
 
   describe "#email_to" do
@@ -31,10 +31,10 @@ RSpec.describe BillingLogEventPresenter do
   describe "#object" do
     context "for review_orders_email events with order_ids" do
       let(:event_type) { "review_orders_email" }
-      let(:metadata) { { "order_ids" => [100, 200, 300] } }
+      let(:metadata) { { "order_ids" => [100, 200, 300], "object" => "Test Account" } }
 
-      it "includes order numbers in the object description" do
-        expect(subject.object).to include("Orders: 100, 200, 300")
+      it "returns the object from metadata" do
+        expect(subject.object).to eq("Test Account")
       end
     end
 
@@ -47,16 +47,16 @@ RSpec.describe BillingLogEventPresenter do
     end
   end
 
-  describe "#order_ids_display" do
+  describe "#order_ids" do
     let(:metadata) { { "order_ids" => [100, 200, 300, 400, 500, 600, 700] } }
 
-    it "shows first 5 and indicates more when over 5" do
-      expect(subject.order_ids_display).to eq("100, 200, 300, 400, 500, and 2 more")
+    it "returns order IDs from metadata" do
+      expect(subject.order_ids).to eq([100, 200, 300, 400, 500, 600, 700])
     end
 
-    it "shows all when 5 or fewer" do
-      log_event.metadata["order_ids"] = [100, 200, 300]
-      expect(subject.order_ids_display).to eq("100, 200, 300")
+    it "returns empty array when no order_ids" do
+      log_event.metadata.delete("order_ids")
+      expect(subject.order_ids).to eq([])
     end
   end
 

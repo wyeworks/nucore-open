@@ -20,9 +20,21 @@
         %td.billing-logs__object
           = object_tag(log_event.object, class: "billing-logs__object")
           - if log_event.event_type == "review_orders_email" && log_event.has_orders?
+            - order_ids = log_event.order_ids
             %br
-            %small.text-muted
-              Orders: #{log_event.order_ids_display}
+            - if order_ids.size > 5
+              %small.text-muted
+                Orders: #{order_ids.first(5).join(', ')}
+              - collapse_id = "log-event-orders-#{log_event.id}"
+              %span.collapse{ id: collapse_id }
+                %small.text-muted
+                  , #{order_ids[5..-1].join(', ')}
+              %a{ href: "##{collapse_id}", data: { toggle: "collapse" }, aria: { expanded: false, controls: collapse_id } }
+                %small.text-muted
+                  = " (+#{order_ids.size - 5} more)"
+            - else
+              %small.text-muted
+                Orders: #{order_ids.join(', ')}
           - if log_event.has_reconciliation_data?
             - notes = log_event.all_reconciliation_notes
             %br

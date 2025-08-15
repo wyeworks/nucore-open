@@ -20,25 +20,11 @@ class BillingLogEventPresenter < SimpleDelegator
   end
 
   def object
-    if event_type == "review_orders_email" && order_ids.present?
-      "#{metadata['object'] || loggable_to_s} (Orders: #{order_ids_display})"
-    else
-      metadata["object"] || loggable_to_s
-    end
+    metadata["object"] || loggable_to_s
   end
 
   def order_ids
     metadata["order_ids"] || []
-  end
-
-  def order_ids_display
-    return nil if order_ids.blank?
-
-    if order_ids.length > 5
-      "#{order_ids.first(5).join(', ')}, and #{order_ids.length - 5} more"
-    else
-      order_ids.join(", ")
-    end
   end
 
   def has_orders?
