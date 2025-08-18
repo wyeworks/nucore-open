@@ -1,4 +1,6 @@
-.checkboxControl
-  = f.input :repeats, as: :boolean, input_html: { data: { disables: ".admin_reservation_repeat_frequency, .admin_reservation_repeat_end_date" } }, wrapper_html: { class: "checkboxControl__checkbox" }
-  = f.input :repeat_frequency, collection: AdminReservationForm::REPEAT_OPTIONS.map { |option| [option.titleize, option] }, include_blank: false
-  = f.input :repeat_end_date, input_html: { class: "datepicker__data", value: format_usa_date(f.object.repeat_end_date) }
+.row
+  .col-md-12
+    .checkboxControl
+      = f.input :repeats, as: :boolean, input_html: { data: { disables: ".admin_reservation_repeat_frequency, .admin_reservation_repeat_end_date" } }, wrapper_html: { class: "checkboxControl__checkbox" }
+      = f.input :repeat_frequency, collection: AdminReservationForm::REPEAT_OPTIONS.map { |option| [option.titleize, option] }, include_blank: false
+      = f.input :repeat_end_date, input_html: { class: "datepicker__data", value: format_usa_date(f.object.repeat_end_date) }
