@@ -25,13 +25,10 @@
 
   - if show_note_input_to_user?(@order_detail)
     .well
-      .container
-        .row
-          .span
-            = f.input :note,
-              label: @order_detail.product.user_notes_label.presence,
-              required: @order_detail.product.user_notes_field_mode.required?,
-              hint: t("reservations.account_field.note_hint")
+      = f.input :note,
+        label: @order_detail.product.user_notes_label.presence,
+        required: @order_detail.product.user_notes_field_mode.required?,
+        hint: t("reservations.account_field.note_hint")
 
   = render "reservation_fields", f: f
 
