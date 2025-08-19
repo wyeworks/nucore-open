@@ -163,7 +163,7 @@ _Known issue: if you run `db:setup` or all three in one rake command, the next t
 8. Start your server
 
     ```
-    bin/rails s
+    bin/dev
     ```
 
 9. Log in

@@ -27,7 +27,7 @@ RUN cp config/database.yml.mysql.template config/database.yml && \
   cp config/secrets.yml.template config/secrets.yml
 
 EXPOSE 3000
-CMD ["bundle", "exec", "puma", "-p", "3000"]
+CMD ["bin/dev"]
 
 FROM base AS develop
 
