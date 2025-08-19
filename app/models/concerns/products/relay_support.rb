@@ -17,7 +17,7 @@ module Products::RelaySupport
   end
 
   def current_instrument_status
-    instrument_statuses.order("created_at DESC").first
+    instrument_statuses.order(created_at: :desc).first
   end
 
   def has_real_relay?

@@ -36,7 +36,7 @@ RSpec.describe Reports::ExportRaw, :time_travel do
   let(:lines) { report.to_csv.split("\n") }
   let(:cells) { lines.map { |line| line.split(",") } }
   let(:cells_without_headers) { cells[1..-1] }
-  let(:column_values) { cells_without_headers.map { |line| line[column_index] } }
+  let(:column_values) { cells_without_headers.pluck(column_index) }
   let(:column_index) { headers.index(column_header) }
 
   describe "normal accounts" do

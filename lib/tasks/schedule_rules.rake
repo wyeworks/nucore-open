@@ -51,7 +51,7 @@ namespace :schedule_rule do
         end
       end
       puts "Missing Price Groups:"
-      puts missing.values.map { |data| data[:price_groups] }.flatten.uniq
+      puts missing.values.pluck(:price_groups).flatten.uniq
       changes = missing.map do |key, data|
         data[:previous].present? ? "#{key}: #{data[:previous].compact.join(", ")}" : nil
       end
