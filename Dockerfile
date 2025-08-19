@@ -20,6 +20,8 @@ RUN gem install bundler --version=$(cat Gemfile.lock | tail -1 | tr -d " ")
 # Build bundle
 RUN bundle install
 
+RUN yarn install
+
 # Copy application code base into image
 COPY . /app
 
@@ -37,6 +39,5 @@ FROM base AS deploy
 
 ENV RAILS_ENV=production
 RUN bundle install --without=development test
-RUN yarn install
 # asset compile
 RUN SECRET_KEY_BASE=fake bundle exec rake assets:precompile
