@@ -502,10 +502,8 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
   end
 
   describe "POST #create" do
-    before :each do
-      @method = :post
-      @action = :create
-      @params.merge!(
+    let(:default_params) do
+      {
         order_account: @account.id,
         reservation: {
           reserve_start_date: SpecDateHelper.format_usa_date(Time.zone.now.to_date + 1.day),
@@ -513,8 +511,16 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
           reserve_start_min: "0",
           reserve_start_meridian: "am",
           duration_mins: "60",
-        },
-      )
+        }
+      }
+    end
+
+    let(:params) { default_params }
+
+    before :each do
+      @method = :post
+      @action = :create
+      @params.merge!(params)
     end
 
     it_should_allow_all facility_users, "to create reservation for tomorrow @ 8 am for 60 minutes, set order detail price estimates" do
@@ -612,6 +618,30 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
           expect(assigns(:order_detail).state).to eq("new")
           expect(response).to redirect_to facility_order_path(@authable, @merge_to_order)
         end
+      end
+    end
+
+    context "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
+      let!(:accessory) { create(:accessory, parent: @instrument) }
+      let(:params) { default_params.merge(accessories: { accessory.id.to_s => { enabled: "true", quantity: "2" } }) }
+
+      it_should_allow :director, "to create a reservation with accessories" do
+        expect(assigns(:reservation).errors).to be_empty
+        expect(assigns(:order_detail).child_order_details.count).to eq(1)
+        expect(assigns(:order_detail).child_order_details.first.product).to eq(accessory)
+        expect(assigns(:order_detail).child_order_details.first.quantity).to eq(2)
+        assert_redirected_to purchase_order_path(@order)
+      end
+    end
+
+    context "with accessories feature disabled", feature_setting: { add_accessories_before_reservation_starts: false } do
+      let!(:accessory) { create(:accessory, parent: @instrument) }
+      let(:params) { default_params.merge(accessories: { accessory.id.to_s => { enabled: "true", quantity: "2" } }) }
+
+      it_should_allow :director, "to ignore accessory parameters" do
+        expect(assigns(:reservation).errors).to be_empty
+        expect(assigns(:order_detail).child_order_details.count).to eq(0)
+        assert_redirected_to purchase_order_path(@order)
       end
     end
 

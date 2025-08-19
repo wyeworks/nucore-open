@@ -10,10 +10,10 @@
   - assigned_user_options = @facility_users.map { |u| [u.full_name, u.id] }.unshift(["Assign to...", nil], ["Unassign", "unassign"])
 
   = select_tag :assigned_user_id,
-    options_for_select(assigned_user_options), class: "sync_select", id: nil
+    options_for_select(assigned_user_options), class: "sync_select form-control", id: nil
 
 %td.action-form{ colspan: 2 }
-  %select{ name: "order_status_id", class: "sync_select status_dropdown", id: nil }
+  %select{ name: "order_status_id", class: "sync_select status_dropdown form-control", id: nil }
     = options_for_select([["Status...", nil]])
     - OrderStatus.non_protected_statuses(current_facility).each do |order_status|
       = options_for_select([[order_status.name_with_level, order_status.id]])
