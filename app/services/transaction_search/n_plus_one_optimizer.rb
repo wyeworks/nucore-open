@@ -7,6 +7,7 @@ module TransactionSearch
     def optimize
       order_details.includes(order: :user)
                    .includes(:reservation)
+                   .includes(account: :price_groups)
                    .preload(:bundle)
     end
 

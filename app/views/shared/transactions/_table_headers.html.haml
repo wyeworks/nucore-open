@@ -11,8 +11,9 @@
 - if controller_name == "projects"
   %th.nowrap= OrderDetail.human_attribute_name(:ordered_by)
 - elsif @account.nil?
-  %th=  Account.model_name.human
   %th= Account.human_attribute_name("owner")
+  %th=  Account.model_name.human
+  %th= Account.human_attribute_name("pricing_group")
 %th.currency= OrderDetail.human_attribute_name("cost")
 %th=  OrderDetail.human_attribute_name("order_status")
 - if local_assigns[:show_statements]

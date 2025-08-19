@@ -62,9 +62,15 @@
           %td= order_detail.created_by_user.full_name
           - colspan_for_total += 1
         - if @account.nil? && controller_name != "projects"
-          %td= order_detail.account
           %td= order_detail.account.owner_user
-          - colspan_for_total += 2
+          %td= order_detail.account
+          %td
+            - price_groups = order_detail.account.price_groups
+            - if price_groups.present?
+              = safe_join(price_groups.map { |pg| h(pg.name) }, ", ")
+            - else
+              = "—"
+          - colspan_for_total += 3
         %td.currency
           - order_detail_presenter = OrderDetailPresenter.new(order_detail)
           = order_detail_presenter.wrapped_total

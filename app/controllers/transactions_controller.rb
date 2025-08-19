@@ -35,7 +35,7 @@ class TransactionsController < ApplicationController
       .search(order_details, @search_form)
 
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details.reorder(sort_clause)
+    @order_details = apply_sort_joins(@search.order_details).reorder(sort_clause)
 
     respond_to do |format|
       format.html { @order_details = @order_details.paginate(page: params[:page]) }
@@ -57,7 +57,7 @@ class TransactionsController < ApplicationController
 
     @date_range_field = @search_form.date_params[:field]
     params[:sort] = "date_range_field" if params[:sort].nil? # set default sort column
-    @order_details = @search.order_details.reorder(sort_clause)
+    @order_details = apply_sort_joins(@search.order_details).reorder(sort_clause)
 
     @extra_date_column = :reviewed_at
     @order_detail_action = :mark_as_reviewed

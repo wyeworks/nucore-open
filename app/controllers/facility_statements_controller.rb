@@ -58,7 +58,7 @@ class FacilityStatementsController < ApplicationController
       .search(order_details, @search_form)
 
     @date_range_field = @search_form.date_params[:field]
-    @order_details = @search.order_details.reorder(sort_clause)
+    @order_details = apply_sort_joins(@search.order_details).reorder(sort_clause)
   end
 
   # POST /facilities/:facility_id/statements
