@@ -65,7 +65,7 @@ class ExampleStatementPdf < StatementPdf
   end
 
   def order_detail_rows
-    @statement.order_details.includes(:product).order("fulfilled_at DESC").map do |order_detail|
+    @statement.order_details.includes(:product).order(fulfilled_at: :desc).map do |order_detail|
       [
         format_usa_datetime(order_detail.fulfilled_at),
         "##{order_detail}: #{order_detail.product}" + (order_detail.note.blank? ? "" : "\n#{normalize_whitespace(order_detail.note)}"),

@@ -160,7 +160,7 @@ class Product < ApplicationRecord
   end
 
   def past_price_policies_grouped_by_start_date
-    past_price_policies.order("start_date DESC").group_by(&:start_date)
+    past_price_policies.order(start_date: :desc).group_by(&:start_date)
   end
 
   def upcoming_price_policies
@@ -168,7 +168,7 @@ class Product < ApplicationRecord
   end
 
   def upcoming_price_policies_grouped_by_start_date
-    upcoming_price_policies.order("start_date ASC").group_by(&:start_date)
+    upcoming_price_policies.order(:start_date).group_by(&:start_date)
   end
 
   # TODO: favor the alphabetized scope over relying on Array#sort

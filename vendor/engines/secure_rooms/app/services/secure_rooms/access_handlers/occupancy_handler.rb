@@ -42,7 +42,9 @@ module SecureRooms
       end
 
       def existing_occupancy
-        @existing_occupancy ||= Occupancy.current.find_by(
+        return @existing_occupancy if defined?(@existing_occupancy)
+
+        @existing_occupancy = Occupancy.current.find_by(
           user: event.user,
           secure_room: event.secure_room,
         )

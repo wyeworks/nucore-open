@@ -53,7 +53,7 @@ class Cart
   def all_carts
     @user.orders
          .created_by_user(@created_by_user)
-         .carts.order("updated_at DESC")
+         .carts.order(updated_at: :desc)
   end
 
 end
