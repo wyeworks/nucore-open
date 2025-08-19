@@ -47,7 +47,7 @@ class Account < ApplicationRecord
   has_many :log_events, as: :loggable
 
   scope :active, -> { where("expires_at > ?", Time.current.beginning_of_day).where(suspended_at: nil) }
-  scope :active_at, ->(time) { where("expires_at >= ?", time.beginning_of_day).where(suspended_at: nil) }
+  scope :active_at, ->(time) { where("expires_at >= ?", time&.beginning_of_day).where(suspended_at: nil) }
 
   scope :administered_by, lambda { |user|
     for_user(user).where("account_users.user_role" => AccountUser.admin_user_roles)
