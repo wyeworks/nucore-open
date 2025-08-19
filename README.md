@@ -55,14 +55,12 @@ We use [mailcatcher](https://mailcatcher.me/) as an SMTP server and web client. 
 
 It makes a few assumptions:
 
-1. You write code on a Mac.
-2. You have a running Oracle or MySQL instance with two brand new databases. (Oracle setup instructions [here](doc/HOWTO_oracle.md).)
-3. You have the following installed:
+1. You have a running Oracle or MySQL instance. (Oracle setup instructions [here](doc/HOWTO_oracle.md).)
+1. You have the following installed:
     * [Ruby](http://www.ruby-lang.org/en)
     * [NodeJS](https://nodejs.org/en/)
     * [Bundler](http://gembundler.com)
-    * [Git](http://git-scm.com)
-    * [PhantomJS](http://phantomjs.org/)
+    * [YarnJS](https://yarnpkg.com/)
 
 ### Spin it up
 
@@ -74,9 +72,12 @@ It makes a few assumptions:
 
 2. Install dependencies
 
-    ```
-    cd nucore
+    ```bash
     bundle install
+    ```
+
+    ```bash
+    yarn install
     ```
 
     If you're facing issues with ruby-oci8 gem please take a look at the Oracle documentation linked in the [Learn more section](#Learn-more)
