@@ -1,5 +1,5 @@
-name: Setup bundle
-description: Install dependencies
+name: Setup Bundle
+description: Install Ruby dependencies
 
 runs:
   using: composite
