@@ -13,6 +13,13 @@
   }
 }
 
-.simple_form .form-control {
+.account_number_field {
+  flex: 1;
   max-width: 240px;
+}
+
+.account-form {
+  input {
+    max-width: 240px;
+  }
 }
