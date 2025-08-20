@@ -22,6 +22,15 @@ RSpec.describe "All Transactions Search", :js do
   describe "sorting by columns" do
     let(:some_account) { facility.order_details.complete.last.account }
 
+    before do
+      # Can only select creation enabled types in the filter
+      allow_any_instance_of(AccountConfig).to(
+        receive(:creation_enabled_types).and_wrap_original do |method|
+          (method.call + [some_account.type.to_s]).uniq
+        end
+      )
+    end
+
     before { login_as director }
 
     it "can sort by order number while filtering by account owner and type" do
