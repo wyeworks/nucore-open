@@ -103,6 +103,13 @@ RSpec.describe "facility_billing_log_events", type: :request do
         expect(page).to have_content(statement1.to_log_s)
         expect(page).not_to have_content(statement2.to_log_s)
       end
+
+      it "displays payment source column with account info" do
+        get_index
+
+        expect(page).to have_content("#{account1.account_number} - #{account1.description}")
+        expect(page).to have_content("#{account2.account_number} - #{account2.description}")
+      end
     end
   end
 

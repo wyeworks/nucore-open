@@ -26,7 +26,7 @@ class BillingLogEventPresenter < SimpleDelegator
   def payment_source
     account = loggable&.account
     return nil unless account
-    
+
     "#{account.account_number} - #{account.description}"
   end
 end
