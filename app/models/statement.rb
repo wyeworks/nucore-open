@@ -14,8 +14,11 @@ class Statement < ApplicationRecord
   belongs_to :account
   belongs_to :facility
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
+  belongs_to :parent_statement, class_name: "Statement", optional: true
+  has_many :child_statements, class_name: "Statement", foreign_key: :parent_statement_id
 
   validates_numericality_of :account_id, :facility_id, :created_by, only_integer: true
+  validate :parent_statement_exists_and_valid, if: :parent_statement_id?
 
   default_scope -> { order(created_at: :desc) }
 
@@ -147,6 +150,16 @@ class Statement < ApplicationRecord
 
   def display_cross_core_messsage?
     cross_core_order_details_from_other_facilities.any?
+  end
+
+  private
+
+  def parent_statement_exists_and_valid
+    parent = Statement.find_by(id: parent_statement_id)
+
+    unless parent
+      errors.add(:parent_statement_id, "does not exist")
+    end
   end
 
 end
