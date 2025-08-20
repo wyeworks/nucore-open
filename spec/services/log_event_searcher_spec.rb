@@ -60,7 +60,6 @@ RSpec.describe LogEventSearcher do
   end
 
   describe "filtering by invoice number" do
-    let(:facility) { create(:setup_facility) }
     include_context "billing statements"
     let!(:log_1) { create(:log_event, loggable: statement1, event_type: :create) }
     let!(:log_2) { create(:log_event, loggable: statement2, event_type: :create) }
@@ -96,12 +95,7 @@ RSpec.describe LogEventSearcher do
   end
 
   describe "filtering by payment source" do
-    let(:facility) { create(:setup_facility) }
-    let(:account1) { create(:account, :with_account_owner, account_number: "12345-CHECK", description: "Research Lab A") }
-    let(:account2) { create(:account, :with_account_owner, account_number: "54321-WIRE", description: "Chemistry Dept") }
-
-    let(:statement1) { create(:statement, account: account1, facility:) }
-    let(:statement2) { create(:statement, account: account2, facility:) }
+    include_context "billing statements with deposit numbers"
 
     let!(:log_1) { create(:log_event, loggable: statement1, event_type: :create) }
     let!(:log_2) { create(:log_event, loggable: statement2, event_type: :create) }
