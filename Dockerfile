@@ -20,7 +20,7 @@ RUN gem install bundler --version=$(cat Gemfile.lock | tail -1 | tr -d " ")
 # Build bundle
 RUN bundle install
 
-RUN yarn install
+RUN yarn install --non-interactive
 
 # Copy application code base into image
 COPY . /app
@@ -29,11 +29,12 @@ RUN cp config/database.yml.mysql.template config/database.yml && \
   cp config/secrets.yml.template config/secrets.yml
 
 EXPOSE 3000
-CMD ["bin/dev"]
+CMD ["bundle", "exec", "puma", "-p", "3000"]
 
 FROM base AS develop
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
+CMD ["bin/dev"]
 
 FROM base AS deploy
 
