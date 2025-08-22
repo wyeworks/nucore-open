@@ -14,7 +14,7 @@ module SortableBillingTable
   def apply_sort_joins(order_details)
     if SettingsHelper.feature_on?(:billing_table_price_groups) && sort_column == "pricing_group"
       order_details.joins(account: :price_group_members)
-                   .joins("LEFT JOIN price_groups ON price_groups.id = account_price_group_members.price_group_id")
+                   .joins("LEFT JOIN price_groups ON price_groups.id = price_group_members.price_group_id")
     else
       order_details
     end
