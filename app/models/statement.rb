@@ -20,6 +20,8 @@ class Statement < ApplicationRecord
   validates_numericality_of :account_id, :facility_id, :created_by, only_integer: true
   validate :parent_statement_exists_and_valid, if: :parent_statement_id?
 
+  after_save :set_invoice_number
+
   default_scope -> { order(created_at: :desc) }
 
   scope :for_accounts, ->(accounts) { where(account_id: accounts) if accounts.present? }
@@ -48,10 +50,6 @@ class Statement < ApplicationRecord
     statement_rows.inject(0) { |sum, row| sum += row.amount }
   end
 
-  def invoice_number
-    "#{account_id}-#{id}"
-  end
-
   def self.find_by_statement_id(query)
     return nil unless /\A(?<id>\d+)\z/ =~ query
     find_by(id:)
@@ -64,6 +62,16 @@ class Statement < ApplicationRecord
   def self.where_invoice_number(query)
     return none unless /\A(?<account_id>\d+)-(?<id>\d+)\z/ =~ query
     where(id:, account_id:)
+  end
+
+  def next_sequence_number_for_parent
+    highest_invoice_number = Statement.where(parent_statement_id:).order(invoice_number: :desc).first&.invoice_number
+
+    if highest_invoice_number.blank?
+      return 2
+    end
+
+    highest_invoice_number.split("-").last.to_i + 1
   end
 
   def order_details_notes(note_field)
@@ -160,6 +168,19 @@ class Statement < ApplicationRecord
     unless parent
       errors.add(:parent_statement_id, "does not exist")
     end
+  end
+
+  def set_invoice_number
+    return if invoice_number.present?
+
+    if parent_statement_id?
+      sequence_number = next_sequence_number_for_parent
+      self.invoice_number = "#{parent_statement.invoice_number}-#{sequence_number}"
+    else
+      self.invoice_number = "#{account_id}-#{id}"
+    end
+
+    save!
   end
 
 end
