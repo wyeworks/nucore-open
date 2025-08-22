@@ -281,6 +281,12 @@ class OrderDetail < ApplicationRecord
   scope :with_in_progress_reservation, -> { new_or_inprocess.with_reservation.merge(Reservation.relay_in_progress) }
 
   scope :for_accounts, ->(accounts) { where("order_details.account_id in (?)", accounts) unless accounts.blank? }
+  scope :for_price_groups, lambda { |price_group_ids|
+    return if price_group_ids.blank?
+    joins(account: :price_group_members)
+      .where(price_group_members: { price_group_id: price_group_ids })
+      .distinct
+  }
   scope :for_account_types, ->(account_types) { where("accounts.type in (?)", account_types) unless account_types.blank? }
   scope :for_facilities, ->(facilities) { joins(:order).where("orders.facility_id in (?)", facilities) unless facilities.blank? }
   scope :for_products, ->(products) { where("order_details.product_id in (?)", products) unless products.blank? }

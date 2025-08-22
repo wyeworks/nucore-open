@@ -19,6 +19,7 @@ module TransactionSearch
         TransactionSearch::DateRangeSearcher,
         TransactionSearch::CrossCoreSearcher,
         ProjectsSearch::ProjectSearcher,
+        TransactionSearch::PriceGroupSearcher,
       ]
     end
 
