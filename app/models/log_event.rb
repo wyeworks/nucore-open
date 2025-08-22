@@ -3,6 +3,7 @@
 class LogEvent < ApplicationRecord
   belongs_to :user # This is whodunnit
   belongs_to :loggable, -> { with_deleted if respond_to?(:with_deleted) }, polymorphic: true
+  has_one :archived_email, dependent: :destroy
   serialize :metadata, JSON
 
   BILLING_EVENT_TYPES = %w[

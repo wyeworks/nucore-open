@@ -15,6 +15,10 @@ en:
       create: "!Statement! created"
       closed: "!Statement! closed"
       statement_email: "!Statement! Email"
+      notification:
+        sent: "Notification sent"
+      reminder:
+        sent:  "Reminder sent"
     order_detail:
       dispute: Order disputed
       resolve: Order dispute resolved
