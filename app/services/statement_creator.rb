@@ -77,10 +77,10 @@ class StatementCreator
           if parent_statement.present? && parent_statement.account_id == account_id
             statement_attrs[:parent_statement_id] = statement_id
           else
-            @errors << "Parent statement with invoice number #{parent_invoice_number} not found"
+            @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
           end
         else
-          @errors << "Invalid invoice number format. Expected format: 'account_id-statement_id' (e.g., '123-456')"
+          @errors << I18n.t("services.statement_creator.invalid_invoice_format")
         end
       end
 
