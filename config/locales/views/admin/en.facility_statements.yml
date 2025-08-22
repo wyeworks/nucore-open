@@ -9,3 +9,10 @@ en:
       index:
         head: "!Statement! History"
         account_admins_hint: Account owners and business admins receive !statements_downcase! by email.
+      statement_modal:
+        title: "Create New !Statement!"
+        description: "You can optionally associate this !statement! with an existing !statement! by entering its !statement! number. If provided, the new !statement! will be numbered as <NUMBER>-2, <NUMBER>-3, etc."
+        parent_invoice_number_label: "Parent !Statement! Number (Optional)"
+        parent_invoice_number_placeholder: "Enter !statement! number (e.g., 123-456)"
+        cancel: "Cancel"
+        save: "Save"

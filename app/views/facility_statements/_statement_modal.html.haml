@@ -1,0 +1,17 @@
+#statement-modal.modal.fade{tabindex: "-1", role: "dialog"}
+  .modal-dialog{role: "document"}
+    .modal-content
+      .modal-header
+        %h4.modal-title#statementModalLabel= text("views.facility_statements.statement_modal.title")
+        %button.close{type: "button", "data-dismiss" => "modal"}
+          %span{"aria-hidden" => "true"} &times;
+
+      .modal-body
+        %p= text("views.facility_statements.statement_modal.description")
+        .form-group
+          %label.control-label{for: "parent_invoice_number"}= text("views.facility_statements.statement_modal.parent_invoice_number_label")
+          %input.form-control#parent_invoice_number{type: "text", name: "parent_invoice_number", placeholder: text("views.facility_statements.statement_modal.parent_invoice_number_placeholder")}
+
+      .modal-footer
+        %button.btn.btn-default{type: "button", "data-dismiss" => "modal"}= text("views.facility_statements.statement_modal.cancel")
+        %button.btn.btn-primary#proceed-statement{type: "button"}= text("views.facility_statements.statement_modal.save")

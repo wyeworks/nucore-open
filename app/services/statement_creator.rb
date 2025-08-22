@@ -2,12 +2,13 @@
 
 class StatementCreator
 
-  attr_accessor :order_detail_ids, :errors, :to_statement, :account_statements, :session_user, :current_facility
+  attr_accessor :order_detail_ids, :errors, :to_statement, :account_statements, :session_user, :current_facility, :parent_invoice_number
 
   def initialize(params)
     @order_detail_ids = params[:order_detail_ids]
     @session_user = params[:session_user]
     @current_facility = params[:current_facility]
+    @parent_invoice_number = params[:parent_invoice_number]
     @errors = []
     @to_statement = {}
   end
@@ -59,7 +60,31 @@ class StatementCreator
   def setup_statement_from_details
     @account_statements = {}
     to_statement.each do |account, order_details|
-      statement = Statement.create!(facility: order_details.first.facility, account_id: account.id, created_by: session_user.id)
+      statement_attrs = {
+        facility: order_details.first.facility,
+        account_id: account.id,
+        created_by: session_user.id
+      }
+
+      if parent_invoice_number.present?
+        # Parse invoice number format: "account_id-statement_id"
+        if parent_invoice_number =~ /\A(?<account_id>\d+)-(?<statement_id>\d+)\z/
+          account_id = Regexp.last_match[:account_id]
+          statement_id = Regexp.last_match[:statement_id]
+
+          parent_statement = Statement.find_by(id: statement_id)
+
+          if parent_statement.present? && parent_statement.account_id == account_id
+            statement_attrs[:parent_statement_id] = statement_id
+          else
+            @errors << "Parent statement with invoice number #{parent_invoice_number} not found"
+          end
+        else
+          @errors << "Invalid invoice number format. Expected format: 'account_id-statement_id' (e.g., '123-456')"
+        end
+      end
+
+      statement = Statement.create!(statement_attrs)
       LogEvent.log(statement, :create, session_user)
       order_details.each do |od|
         StatementRow.create!(statement_id: statement.id, order_detail_id: od.id)

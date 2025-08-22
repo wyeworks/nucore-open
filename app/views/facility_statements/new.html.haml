@@ -18,5 +18,7 @@
 
   = render "shared/transactions/table", order_details: @order_details
   = render "shared/reconcile_footnote"
+
+  = render "statement_modal"
 - else
   %p.alert.alert-info= text(".no_transactions")
