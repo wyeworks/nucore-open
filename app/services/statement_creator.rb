@@ -66,7 +66,7 @@ class StatementCreator
         created_by: session_user.id
       }
 
-      if parent_invoice_number.present?
+      if parent_invoice_number.present? && SettingsHelper.feature_on?(:reference_statement_invoice_number)
         # Parse invoice number format: "account_id-statement_id"
         if parent_invoice_number =~ /\A(?<account_id>\d+)-(?<statement_id>\d+)\z/
           account_id = Regexp.last_match[:account_id]
