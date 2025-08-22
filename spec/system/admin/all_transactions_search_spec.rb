@@ -184,4 +184,64 @@ RSpec.describe "All Transactions Search", :js do
     expect(page).to have_content("Transaction History")
     expect(page).not_to have_content("Participating Facilities")
   end
+
+  describe "price group column and filtering", feature_setting: { billing_table_price_groups: true } do
+    let(:price_group1) { create(:price_group, facility: facility, name: "Research Group") }
+    let(:price_group2) { create(:price_group, facility: facility, name: "External Group") }
+
+    before do
+      AccountPriceGroupMember.create!(account: accounts.first, price_group: price_group1)
+      AccountPriceGroupMember.create!(account: accounts.second, price_group: price_group2)
+      login_as director
+    end
+
+    it "shows Pricing Group column with correct values" do
+      visit facility_transactions_path(facility)
+
+      within("#table_billing") do
+        expect(page).to have_content("Pricing Group")
+      end
+
+      expect(page).to have_content("Research Group")
+      expect(page).to have_content("External Group")
+    end
+
+    it "can sort by pricing group" do
+      visit facility_transactions_path(facility)
+
+      within("#table_billing") do
+        click_link "Pricing Group"
+      end
+
+      expect(page).to have_current_path(/sort=pricing_group/)
+    end
+
+    it "can filter by price groups" do
+      visit facility_transactions_path(facility)
+
+      select_from_chosen price_group1.name, from: "Price Groups"
+      click_button "Filter"
+
+      expect(page).to have_content(accounts.first.description)
+      expect(page).not_to have_content(accounts.second.description)
+    end
+  end
+
+  context "when price groups feature is disabled", feature_setting: { billing_table_price_groups: false } do
+    before { login_as director }
+
+    it "does not show Pricing Group column" do
+      visit facility_transactions_path(facility)
+
+      within("#table_billing") do
+        expect(page).not_to have_content("Pricing Group")
+      end
+    end
+
+    it "does not show Price Groups filter" do
+      visit facility_transactions_path(facility)
+
+      expect(page).not_to have_select("Price Groups")
+    end
+  end
 end
