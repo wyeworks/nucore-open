@@ -20,34 +20,20 @@
         %td.billing-logs__object
           = object_tag(log_event.object, class: "billing-logs__object")
           - if log_event.event_type == "review_orders_email" && log_event.has_orders?
-            - order_ids = log_event.order_ids
             %br
-            - if order_ids.size > 5
-              %small.text-muted
-                Orders: #{order_ids.first(5).join(', ')}
-              - collapse_id = "log-event-orders-#{log_event.id}"
-              %span.collapse{ id: collapse_id }
-                %small.text-muted
-                  , #{order_ids[5..-1].join(', ')}
-              %a{ href: "##{collapse_id}", data: { toggle: "collapse" }, aria: { expanded: false, controls: collapse_id } }
-                %small.text-muted
-                  = " (+#{order_ids.size - 5} more)"
-            - else
-              %small.text-muted
-                Orders: #{order_ids.join(', ')}
+            = render "billing_log_events/collapsible_list",
+              items: log_event.order_ids,
+              visible_count: 5,
+              prefix: "Orders: ",
+              separator: ", ",
+              id_prefix: "log-event-orders",
+              unique_id: log_event.id
           - if log_event.has_reconciliation_data?
-            - notes = log_event.all_reconciliation_notes
             %br
-            %small.text-muted= notes.first
-            - if notes.size > 1
-              - collapse_id = "log-event-notes-#{log_event.id}"
-              %div.collapse{ id: collapse_id }
-                - notes[1..-1].each do |note|
-                  %br
-                  %small.text-muted= note
-              %a{ href: "##{collapse_id}", data: { toggle: "collapse" }, aria: { expanded: false, controls: collapse_id } }
-                %small.text-muted
-                  = "(+#{notes.size - 1} more)"
+            = render "billing_log_events/collapsible_notes",
+              notes: log_event.all_reconciliation_notes,
+              id_prefix: "log-event-notes",
+              unique_id: log_event.id
         %td.billing-logs__email-notification
           - if log_event.email_notification?
             %span= log_event.email_subject

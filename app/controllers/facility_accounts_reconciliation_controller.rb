@@ -44,7 +44,7 @@ class FacilityAccountsReconciliationController < ApplicationController
 
     if reconciler.reconcile_all > 0
       count = reconciler.count
-      log_reconciliation_events(reconciler.order_details)
+      ReconciliationLogService.new(reconciler.order_details, current_user).log_events
       flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully updated" if count > 0
       redirect_to([account_route.to_sym, :facility_accounts])
     else
@@ -54,51 +54,6 @@ class FacilityAccountsReconciliationController < ApplicationController
   end
 
   private
-
-  def log_reconciliation_events(order_details)
-    if SettingsHelper.feature_on?(:billing_log_events)
-      log_events_with_notes(order_details)
-    else
-      log_events_without_notes(order_details)
-    end
-  end
-
-  def log_events_with_notes(order_details)
-    order_details_by_statement = order_details.group_by(&:statement)
-
-    order_details_by_statement.each do |statement, statement_order_details|
-      metadata = build_reconciliation_metadata(statement_order_details)
-      LogEvent.log(statement, :closed, current_user, metadata: metadata)
-    end
-  end
-
-  def log_events_without_notes(order_details)
-    statements = Set.new
-    order_details.each { |od| statements << od.statement }
-
-    statements.each do |statement|
-      LogEvent.log(statement, :closed, current_user)
-    end
-  end
-
-  def build_reconciliation_metadata(order_details)
-    metadata = {}
-
-    reconciled_notes = extract_notes(order_details, "Reconciled", :reconciled_note)
-    unrecoverable_notes = extract_notes(order_details, "Unrecoverable", :unrecoverable_note)
-
-    metadata[:reconciled_notes] = reconciled_notes if reconciled_notes.any?
-    metadata[:unrecoverable_notes] = unrecoverable_notes if unrecoverable_notes.any?
-
-    metadata
-  end
-
-  def extract_notes(order_details, status_name, note_field)
-    order_details
-      .select { |od| od.order_status.name == status_name }
-      .filter_map { |od| od.send(note_field) }
-      .uniq
-  end
 
   def set_billing_navigation
     @subnav = "billing_nav"
