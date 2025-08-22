@@ -64,13 +64,16 @@
         - if @account.nil? && controller_name != "projects"
           %td= order_detail.account.owner_user
           %td= order_detail.account
-          %td
-            - price_groups = order_detail.account.price_groups
-            - if price_groups.present?
-              = safe_join(price_groups.map { |pg| h(pg.name) }, ", ")
-            - else
-              = "—"
-          - colspan_for_total += 3
+          - if SettingsHelper.feature_on?(:billing_table_price_groups)
+            %td
+              - price_groups = order_detail.account.price_groups
+              - if price_groups.present?
+                = safe_join(price_groups.map { |pg| h(pg.name) }, ", ")
+              - else
+                = "—"
+            - colspan_for_total += 3
+          - else
+            - colspan_for_total += 2
         %td.currency
           - order_detail_presenter = OrderDetailPresenter.new(order_detail)
           = order_detail_presenter.wrapped_total

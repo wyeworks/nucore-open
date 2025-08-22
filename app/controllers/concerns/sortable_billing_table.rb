@@ -12,8 +12,9 @@ module SortableBillingTable
   end
 
   def apply_sort_joins(order_details)
-    if sort_column == "pricing_group"
-      order_details.joins(account: :price_group_members).joins("LEFT JOIN price_groups ON price_groups.id = price_group_members.price_group_id")
+    if SettingsHelper.feature_on?(:billing_table_price_groups) && sort_column == "pricing_group"
+      order_details.joins(account: :price_group_members)
+                   .joins("LEFT JOIN price_groups ON price_groups.id = account_price_group_members.price_group_id")
     else
       order_details
     end
@@ -29,17 +30,20 @@ module SortableBillingTable
   end
 
   def default_sort_lookup_hash
-    {
+    hash = {
       "date_range_field" => "order_details.#{order_detail_date_range_field}",
       "order_number" => ["order_details.order_id", "order_details.id"],
       "order_detail_number" => "order_details.id",
       "ordered_for" => ["users.last_name", "order_details.fulfilled_at"],
       "payment_source" => "order_details.account_id",
-      "pricing_group" => "price_groups.name",
       "order_status" => "order_details.order_status_id",
-    }.tap do |hash|
+    }
+
+    hash["pricing_group"] = "price_groups.name" if SettingsHelper.feature_on?(:billing_table_price_groups)
+
+    hash.tap do |h|
       # journal_or_statement_date sorting is handled in DateRangeSearcher
-      hash.delete "date_range_field" if order_detail_date_range_field == "journal_or_statement_date"
+      h.delete "date_range_field" if order_detail_date_range_field == "journal_or_statement_date"
     end
   end
 

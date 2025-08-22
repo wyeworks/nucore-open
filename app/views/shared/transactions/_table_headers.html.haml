@@ -13,7 +13,8 @@
 - elsif @account.nil?
   %th= Account.human_attribute_name("owner")
   %th=  Account.model_name.human
-  %th= Account.human_attribute_name("pricing_group")
+  - if SettingsHelper.feature_on?(:billing_table_price_groups)
+    %th= Account.human_attribute_name("pricing_group")
 %th.currency= OrderDetail.human_attribute_name("cost")
 %th=  OrderDetail.human_attribute_name("order_status")
 - if local_assigns[:show_statements]
