@@ -1,0 +1,80 @@
+<%= content_for :h1 do %>
+  Archived Email Preview
+<% end %>
+
+<div class="archived-email-preview">
+  <div class="email-actions" style="margin-bottom: 20px;">
+    <%= link_to "Download Email (.eml)", 
+        download_billing_log_event_archived_email_path(@log_event),
+        class: "btn btn-primary",
+        data: { turbo: false } %>
+    <%= link_to "Back", :back, class: "btn btn-default" %>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Email Details</h3>
+    </div>
+    <div class="panel-body">
+      <dl class="dl-horizontal">
+        <dt>Subject:</dt>
+        <dd><%= @email_subject %></dd>
+        
+        <dt>From:</dt>
+        <dd><%= @email_from %></dd>
+        
+        <dt>To:</dt>
+        <dd><%= @email_to %></dd>
+        
+        <% if @email_cc.present? %>
+          <dt>Cc:</dt>
+          <dd><%= @email_cc %></dd>
+        <% end %>
+        
+        <% if @email_bcc.present? %>
+          <dt>Bcc:</dt>
+          <dd><%= @email_bcc %></dd>
+        <% end %>
+        
+        <dt>Date:</dt>
+        <dd><%= @email_date ? l(@email_date, format: :usa) : "N/A" %></dd>
+        
+        <% if @attachments.present? %>
+          <dt>Attachments:</dt>
+          <dd>
+            <ul class="list-unstyled">
+              <% @attachments.each_with_index do |attachment, index| %>
+                <li>
+                  <i class="fa fa-paperclip"></i>
+                  <%= link_to attachment[:filename], 
+                      download_attachment_billing_log_event_archived_email_path(@log_event, index: index),
+                      data: { turbo: false } %>
+                  <span class="text-muted">(<%= number_to_human_size(attachment[:size]) %>)</span>
+                </li>
+              <% end %>
+            </ul>
+          </dd>
+        <% end %>
+      </dl>
+    </div>
+  </div>
+
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h3 class="panel-title">Email Content</h3>
+    </div>
+    <div class="panel-body">
+      <div class="email-content" style="border: 1px solid #ddd; padding: 20px; background-color: #fff;">
+        <%= @email_body %>
+      </div>
+    </div>
+  </div>
+
+  <div class="email-metadata text-muted" style="margin-top: 20px;">
+    <small>
+      <strong>Log Event ID:</strong> <%= @log_event.id %> |
+      <strong>Event Type:</strong> <%= @log_event.event_type %> |
+      <strong>Archived:</strong> <%= l(@log_event.created_at, format: :usa) %>
+    </small>
+  </div>
+</div>

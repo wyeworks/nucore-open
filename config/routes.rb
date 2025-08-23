@@ -375,7 +375,16 @@ Rails.application.routes.draw do
   end
   resources :holidays, except: :show
   resources :log_events, only: :index
-  resources :billing_log_events, only: :index
+
+  resources :billing_log_events, only: :index do
+    resource :archived_email, only: [:show] do
+      member do
+        get :download
+        get "download_attachment/:index", action: :download_attachment, as: :download_attachment
+      end
+    end
+  end
+
   resources :research_safety_certificates, except: :show
 
   # order process
