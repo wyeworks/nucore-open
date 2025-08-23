@@ -219,7 +219,7 @@ RSpec.describe "All Transactions Search", :js do
     it "can filter by price groups" do
       visit facility_transactions_path(facility)
 
-      select_from_chosen price_group1.name, from: "Price Groups"
+      select_from_chosen price_group1.name, from: "Price Group"
       click_button "Filter"
 
       expect(page).to have_content(accounts.first.description)
@@ -238,10 +238,10 @@ RSpec.describe "All Transactions Search", :js do
       end
     end
 
-    it "does not show Price Groups filter" do
+    it "does not show Price Group filter" do
       visit facility_transactions_path(facility)
 
-      expect(page).not_to have_select("Price Groups")
+      expect(page).not_to have_select("Price Group")
     end
   end
 end

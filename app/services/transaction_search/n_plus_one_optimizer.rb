@@ -12,7 +12,6 @@ module TransactionSearch
       if SettingsHelper.feature_on?(:billing_table_price_groups)
         result = result.includes(account: [:price_group_members, :owner_user])
                        .preload(account: { price_group_members: :price_group })
-                       .preload(account: { owner_user: :price_groups })
       end
 
       result
