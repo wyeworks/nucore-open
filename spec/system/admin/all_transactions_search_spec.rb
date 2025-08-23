@@ -64,10 +64,11 @@ RSpec.describe "All Transactions Search", :js do
   end
 
   describe "date field order" do
-    let(:order_detail_ids) do
+    def order_detail_ids
       page.all("a.manage-order-detail").map(&:text)
     end
-    let(:order_details) do
+
+    def order_details
       OrderDetail.where(id: order_detail_ids)
     end
 
@@ -81,12 +82,10 @@ RSpec.describe "All Transactions Search", :js do
     end
 
     context "when filter by fulfiled status" do
-      let(:sorted_order_details) do
-        order_details.order(fulfilled_at: :desc)
-      end
-
       it "can order by fulfilled_at" do
         visit facility_transactions_path(facility)
+
+        sorted_order_details = order_details.order(fulfilled_at: :desc)
 
         expect(
           sorted_order_details.map do |od|
@@ -97,16 +96,14 @@ RSpec.describe "All Transactions Search", :js do
     end
 
     context "when filter by ordered_at" do
-      let(:sorted_order_details) do
-        order_details.order(ordered_at: :desc)
-      end
-
       it "can order by ordered_at" do
         visit facility_transactions_path(facility)
 
         select("Ordered", from: "search[date_range_field]")
 
         click_button("Filter")
+
+        sorted_order_details = order_details.order(ordered_at: :desc)
 
         expect(
           sorted_order_details.map do |od|
@@ -124,9 +121,6 @@ RSpec.describe "All Transactions Search", :js do
       end
 
       let(:account) { create(:account, :with_account_owner) }
-      let(:sorted_order_details) do
-        order_details
-      end
       let(:statemented_order_detail) { facility.order_details.complete.last }
 
       before do
@@ -148,6 +142,8 @@ RSpec.describe "All Transactions Search", :js do
         )
 
         click_button("Filter")
+
+        sorted_order_details = order_details
 
         expect(
           sorted_order_details.map do |od|
@@ -192,5 +188,65 @@ RSpec.describe "All Transactions Search", :js do
 
     expect(page).to have_content("Transaction History")
     expect(page).not_to have_content("Participating Facilities")
+  end
+
+  describe "price group column and filtering", feature_setting: { billing_table_price_groups: true } do
+    let(:price_group1) { create(:price_group, facility: facility, name: "Research Group") }
+    let(:price_group2) { create(:price_group, facility: facility, name: "External Group") }
+
+    before do
+      AccountPriceGroupMember.create!(account: accounts.first, price_group: price_group1)
+      AccountPriceGroupMember.create!(account: accounts.second, price_group: price_group2)
+      login_as director
+    end
+
+    it "shows Pricing Group column with correct values" do
+      visit facility_transactions_path(facility)
+
+      within("#table_billing") do
+        expect(page).to have_content("Pricing Group")
+      end
+
+      expect(page).to have_content("Research Group")
+      expect(page).to have_content("External Group")
+    end
+
+    it "can sort by pricing group" do
+      visit facility_transactions_path(facility)
+
+      within("#table_billing") do
+        click_link "Pricing Group"
+      end
+
+      expect(page).to have_current_path(/sort=pricing_group/)
+    end
+
+    it "can filter by price groups" do
+      visit facility_transactions_path(facility)
+
+      select_from_chosen price_group1.name, from: "Price Group"
+      click_button "Filter"
+
+      expect(page).to have_content(accounts.first.description)
+      expect(page).not_to have_content(accounts.second.description)
+    end
+  end
+
+  context "when price groups feature is disabled", feature_setting: { billing_table_price_groups: false } do
+    before { login_as director }
+
+    it "does not show Pricing Group column" do
+      visit facility_transactions_path(facility)
+
+      within("#table_billing") do
+        expect(page).not_to have_content("Pricing Group")
+      end
+    end
+
+    it "does not show Price Group filter" do
+      visit facility_transactions_path(facility)
+
+      expect(page).not_to have_select("Price Group")
+    end
   end
 end

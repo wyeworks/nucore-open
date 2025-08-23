@@ -150,7 +150,7 @@ class FacilitiesController < ApplicationController
                             .includes(:account, :product, :order_status, :created_by_user, :statement, :price_policy, :journal, :external_service_receiver, :bundle, :project)
                             .includes(:reservation)
                             .preload(account: :owner_user)
-                            .reorder(sort_clause)
+    @order_details = apply_sort_joins(@order_details).reorder(sort_clause)
 
     if @order_details.size < 1000
       @grand_total = @order_details.sum { |od| (od.actual_total || od.estimated_total) || 0 }
@@ -177,7 +177,7 @@ class FacilitiesController < ApplicationController
     @date_range_field = @search_form.date_params[:field]
     @extra_date_column = :dispute_at
     params[:dir] = "asc" if params[:dir].nil? # default to "asc"
-    @order_details = @search.order_details.reorder(sort_clause).paginate(page: params[:page])
+    @order_details = apply_sort_joins(@search.order_details).reorder(sort_clause).paginate(page: params[:page])
   end
 
   private
