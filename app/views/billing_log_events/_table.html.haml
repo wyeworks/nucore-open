@@ -10,6 +10,7 @@
       %th= LogEvent.human_attribute_name(:event_time)
       %th= LogEvent.human_attribute_name(:event)
       %th.billing-logs__object= LogEvent.human_attribute_name(:object)
+      %th= text("payment_source")
       %th= LogEvent.human_attribute_name(:notification)
 
   %tbody
@@ -34,6 +35,7 @@
               notes: log_event.all_reconciliation_notes,
               id_prefix: "log-event-notes",
               unique_id: log_event.id
+        %td= object_tag(log_event.payment_source || "–", class: "billing-logs__payment-source")
         %td.billing-logs__email-notification
           - if log_event.email_notification?
             %span= log_event.email_subject

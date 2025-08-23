@@ -1,3 +1,13 @@
-%li= form.input :date_range_field, collection: TransactionSearch::DateRangeSearcher.options, selected: @date_range_field, label: '&nbsp;'.html_safe
+%li= form.input :date_range_field,
+  collection: TransactionSearch::DateRangeSearcher.options,
+  selected: @date_range_field,
+  label: '&nbsp;'.html_safe
 = render partial: 'reports/date_range_fields', locals: { form: form }
-%li= form.input 'status_filter[]', collection: OrderStatus.root_statuses, selected: @status_ids, label_method: :name_with_level, input_html: { id: 'status_filter', data: { placeholder: 'Choose...'}, multiple: true }, label: OrderStatus.model_name.human
+%li= form.input 'status_filter[]',
+  collection: OrderStatus.root_statuses,
+  selected: @status_ids, label_method: :name_with_level,
+  input_html: { id: 'status_filter',
+    data: { placeholder: 'Choose...'},
+    multiple: true, class: "status-field js--chosen",
+  },
+  label: OrderStatus.model_name.human

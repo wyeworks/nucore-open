@@ -73,7 +73,7 @@ class OrderImportsController < ApplicationController
   end
 
   def get_order_imports
-    @current_facility.order_imports.order("created_at DESC")
+    @current_facility.order_imports.order(created_at: :desc)
   end
 
   def order_import

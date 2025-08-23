@@ -57,6 +57,13 @@ RSpec.describe "billing_log_events", type: :request do
         expect(page).to have_content(statement.to_log_s)
         expect(page).to have_content(some_user.first_name)
       end
+
+      it "displays payment source for statement events" do
+        get billing_log_events_url
+
+        expect(page).to have_content("Payment Source")
+        expect(page).to have_content("#{statement.account.account_number} - #{statement.account.description}")
+      end
     end
   end
 

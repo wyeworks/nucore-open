@@ -21,3 +21,5 @@ en:
         submit: Filter
         query: Query
         start_date: Start Date
+        invoice_number: Invoice Number
+        payment_source: Payment Source

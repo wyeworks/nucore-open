@@ -14,7 +14,7 @@ class Accessories::Accessorizer
   end
 
   def unpurchased_accessories
-    accessories = @order_detail.product.accessories.reject { |a| current_accessories.include? a }
+    @order_detail.product.accessories.not_archived.reject { |a| current_accessories.include? a }
   end
 
   # Returns the accessories for the product, but excludes all the accessories that
@@ -24,7 +24,7 @@ class Accessories::Accessorizer
   end
 
   def accessory_order_details
-    @order_detail.product.accessories.map { |a| find_or_build_accessory_order_detail(a) }
+    @order_detail.product.accessories.not_archived.map { |a| find_or_build_accessory_order_detail(a) }
   end
 
   def build_accessory_order_detail(accessory, options = {})

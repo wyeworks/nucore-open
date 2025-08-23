@@ -55,14 +55,12 @@ We use [mailcatcher](https://mailcatcher.me/) as an SMTP server and web client. 
 
 It makes a few assumptions:
 
-1. You write code on a Mac.
-2. You have a running Oracle or MySQL instance with two brand new databases. (Oracle setup instructions [here](doc/HOWTO_oracle.md).)
-3. You have the following installed:
+1. You have a running Oracle or MySQL instance. (Oracle setup instructions [here](doc/HOWTO_oracle.md).)
+1. You have the following installed:
     * [Ruby](http://www.ruby-lang.org/en)
     * [NodeJS](https://nodejs.org/en/)
     * [Bundler](http://gembundler.com)
-    * [Git](http://git-scm.com)
-    * [PhantomJS](http://phantomjs.org/)
+    * [YarnJS](https://yarnpkg.com/)
 
 ### Spin it up
 
@@ -74,9 +72,12 @@ It makes a few assumptions:
 
 2. Install dependencies
 
-    ```
-    cd nucore
+    ```bash
     bundle install
+    ```
+
+    ```bash
+    yarn install
     ```
 
     If you're facing issues with ruby-oci8 gem please take a look at the Oracle documentation linked in the [Learn more section](#Learn-more)
@@ -163,7 +164,7 @@ _Known issue: if you run `db:setup` or all three in one rake command, the next t
 8. Start your server
 
     ```
-    bin/rails s
+    bin/dev
     ```
 
 9. Log in
@@ -236,25 +237,21 @@ NUcore uses [Rspec](http://rspec.info) to run tests. Try any of the following fr
 
 To use Github Actions for CI testing you may need to maintain a testing image with specific versions of dependencies set.  To do this:
 ```
-# Set your desired version of node and bundler
-export NODE_VERSION=setup_16.x
-export BUNDLER_VERSION=2.3.11
-
 # Build the image
-docker build . -f Dockerfile.github-actions --build-arg NODE_VERSION=$NODE_VERSION --build-arg BUNDLER_VERSION
+docker build . -f Dockerfile.github-actions --build-arg NODE_MAJOR=22 --build-arg BUNDLER_VERSION=2.3.11
 
 # Check the IMAGE ID
 docker image ls
 
 # Tag the image with the appropriate ruby version
-docker tag {IMAGE ID} wyeworkshub/ruby-node-chrome-pack:3.4.4
+docker tag {IMAGE ID} wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
 
 # Check the image was tagged correctly
 docker image ls
 
 # login and push the new tag
 docker login
-docker push wyeworkshub/ruby-node-chrome-pack:3.4.4
+docker push wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
 ```
 
 #### Parallel Tests

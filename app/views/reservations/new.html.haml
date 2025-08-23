@@ -29,6 +29,7 @@
   = f.error_messages
   = render "reservations/account_field", f: f unless @order_detail.bundled?
   = render "reservations/reservation_fields", f: f
+  = render "reservations/accessories_fields", f: f, class: "well"
 
   - if acting_as?
     .row
