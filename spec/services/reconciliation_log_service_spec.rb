@@ -4,16 +4,18 @@ require "rails_helper"
 
 RSpec.describe ReconciliationLogService do
   let(:user) { create(:user) }
-  let(:facility) { create(:facility) }
-  let(:statement) { create(:statement, facility: facility) }
+  let(:facility) { create(:setup_facility) }
+  let(:statement) { create(:statement, facility:) }
   let(:order_status_reconciled) { OrderStatus.find_or_create_by(name: "Reconciled") }
   let(:order_status_unrecoverable) { OrderStatus.find_or_create_by(name: "Unrecoverable") }
+  let(:product) { create(:setup_item, facility:) }
+  let(:order) { create(:order, user: user, created_by: user.id, facility:) }
 
   let(:order_details) do
     [
-      create(:order_detail, statement: statement, order_status: order_status_reconciled, reconciled_note: "Note 1"),
-      create(:order_detail, statement: statement, order_status: order_status_reconciled, reconciled_note: "Note 2"),
-      create(:order_detail, statement: statement, order_status: order_status_unrecoverable, unrecoverable_note: "Unrecoverable 1"),
+      create(:order_detail, statement:, order_status: order_status_reconciled, reconciled_note: "Note 1", product:, order:),
+      create(:order_detail, statement:, order_status: order_status_reconciled, reconciled_note: "Note 2", product:, order:),
+      create(:order_detail, statement:, order_status: order_status_unrecoverable, unrecoverable_note: "Unrecoverable 1", product:, order:),
     ]
   end
 
