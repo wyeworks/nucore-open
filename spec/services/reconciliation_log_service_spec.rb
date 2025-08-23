@@ -8,7 +8,7 @@ RSpec.describe ReconciliationLogService do
   let(:statement) { create(:statement, facility: facility) }
   let(:order_status_reconciled) { OrderStatus.find_or_create_by(name: "Reconciled") }
   let(:order_status_unrecoverable) { OrderStatus.find_or_create_by(name: "Unrecoverable") }
-  
+
   let(:order_details) do
     [
       create(:order_detail, statement: statement, order_status: order_status_reconciled, reconciled_note: "Note 1"),
