@@ -44,13 +44,7 @@ class FacilityAccountsReconciliationController < ApplicationController
 
     if reconciler.reconcile_all > 0
       count = reconciler.count
-      statements = Set.new
-      reconciler.order_details.each { |od| statements << od.statement }
-
-      statements.each do |statement|
-        LogEvent.log(statement, :closed, current_user)
-      end
-
+      ReconciliationLogService.new(reconciler.order_details, current_user).log_events
       flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully updated" if count > 0
       redirect_to([account_route.to_sym, :facility_accounts])
     else
