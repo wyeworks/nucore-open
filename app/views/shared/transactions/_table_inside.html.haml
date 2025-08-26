@@ -65,12 +65,7 @@
           - if SettingsHelper.feature_on?(:billing_table_price_groups)
             %td= order_detail.account.owner_user
             %td= order_detail.account
-            %td
-              - price_groups = order_detail.account.price_groups
-              - if price_groups.present?
-                = safe_join(price_groups.map { |pg| h(pg.name) }, ", ")
-              - else
-                = "—"
+            %td= order_detail.price_policy&.price_group&.name
             - colspan_for_total += 3
           - else
             %td= order_detail.account

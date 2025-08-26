@@ -35,7 +35,7 @@ class FacilityNotificationsController < ApplicationController
       .search(order_details, @search_form)
 
     @date_range_field = @search_form.date_params[:field]
-    @order_details = apply_sort_joins(@search.order_details).reorder(sort_clause)
+    @order_details = @search.order_details.reorder(sort_clause)
 
     @order_detail_action = :send_notifications
   end
@@ -80,7 +80,7 @@ class FacilityNotificationsController < ApplicationController
     @extra_date_column = :reviewed_at
 
     params[:dir] = "asc" if params[:dir].nil? # default to "asc"
-    @order_details = apply_sort_joins(@search.order_details).reorder(sort_clause)
+    @order_details = @search.order_details.reorder(sort_clause)
   end
 
   # GET /facilities/:facility_id/in_review/mark

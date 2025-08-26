@@ -40,7 +40,7 @@ class FacilityJournalsController < ApplicationController
       .search(order_details, @search_form)
 
     @date_range_field = @search_form.date_params[:field]
-    @order_details = apply_sort_joins(@search.order_details).reorder(sort_clause)
+    @order_details = @search.order_details.reorder(sort_clause)
     @journal_creation_reminder = JournalCreationReminder.current.first
 
     set_earliest_journal_date

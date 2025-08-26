@@ -14,24 +14,13 @@ module TransactionSearch
         TransactionSearch::AccountTypeSearcher,
         TransactionSearch::ProductSearcher,
         TransactionSearch::AccountOwnerSearcher,
+        TransactionSearch::PriceGroupSearcher,
         TransactionSearch::OrderedForSearcher,
         TransactionSearch::OrderStatusSearcher,
         TransactionSearch::DateRangeSearcher,
         TransactionSearch::CrossCoreSearcher,
         ProjectsSearch::ProjectSearcher,
       ]
-    end
-
-    # Returns searchers including feature-flagged ones
-    def self.enabled_searchers
-      searchers = default_searchers.dup
-
-      # Conditionally add PriceGroupSearcher based on feature flag
-      if SettingsHelper.feature_on?(:billing_table_price_groups)
-        searchers << TransactionSearch::PriceGroupSearcher
-      end
-
-      searchers
     end
 
     # Prefer `TransactionSearch.register_optimizer` rather than modifying this
@@ -47,6 +36,7 @@ module TransactionSearch
     cattr_accessor(:default_config) do
       {
         facilities: false,
+        price_groups: SettingsHelper.feature_on?(:billing_table_price_groups),
       }
     end
 
@@ -62,7 +52,7 @@ module TransactionSearch
       @searchers_config = searchers_config
       @searchers =
         searchers.presence ||
-        self.class.enabled_searchers.filter do |searcher_class|
+        self.class.default_searchers.filter do |searcher_class|
           searchers_config.fetch(searcher_class.key.to_sym, true)
         end
     end
