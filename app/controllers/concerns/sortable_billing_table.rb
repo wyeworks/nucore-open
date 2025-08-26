@@ -12,7 +12,7 @@ module SortableBillingTable
   end
 
   def apply_sort_joins(order_details)
-    if SettingsHelper.feature_on?(:billing_table_price_groups) && sort_column == "pricing_group"
+    if SettingsHelper.feature_on?(:billing_table_price_groups) && sort_column == "price_group"
       order_details.joins(account: :price_group_members)
                    .joins("LEFT JOIN price_groups ON price_groups.id = price_group_members.price_group_id")
     else
@@ -39,7 +39,7 @@ module SortableBillingTable
       "order_status" => "order_details.order_status_id",
     }
 
-    hash["pricing_group"] = "price_groups.name" if SettingsHelper.feature_on?(:billing_table_price_groups)
+    hash["price_group"] = "price_groups.name" if SettingsHelper.feature_on?(:billing_table_price_groups)
 
     hash.tap do |h|
       # journal_or_statement_date sorting is handled in DateRangeSearcher

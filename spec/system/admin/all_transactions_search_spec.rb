@@ -64,7 +64,7 @@ RSpec.describe "All Transactions Search", :js do
   end
 
   describe "date field order" do
-    def order_detail_ids
+    let(:order_detail_ids) do
       page.all("a.manage-order-detail").map(&:text)
     end
 
@@ -200,25 +200,25 @@ RSpec.describe "All Transactions Search", :js do
       login_as director
     end
 
-    it "shows Pricing Group column with correct values" do
+    it "shows Price Group column with correct values" do
       visit facility_transactions_path(facility)
 
       within("#table_billing") do
-        expect(page).to have_content("Pricing Group")
+        expect(page).to have_content("Price Group")
       end
 
       expect(page).to have_content("Research Group")
       expect(page).to have_content("External Group")
     end
 
-    it "can sort by pricing group" do
+    it "can sort by price group" do
       visit facility_transactions_path(facility)
 
       within("#table_billing") do
-        click_link "Pricing Group"
+        click_link "Price Group"
       end
 
-      expect(page).to have_current_path(/sort=pricing_group/)
+      expect(page).to have_current_path(/sort=price_group/)
     end
 
     it "can filter by price groups" do
@@ -235,11 +235,11 @@ RSpec.describe "All Transactions Search", :js do
   context "when price groups feature is disabled", feature_setting: { billing_table_price_groups: false } do
     before { login_as director }
 
-    it "does not show Pricing Group column" do
+    it "does not show Price Group column" do
       visit facility_transactions_path(facility)
 
       within("#table_billing") do
-        expect(page).not_to have_content("Pricing Group")
+        expect(page).not_to have_content("Price Group")
       end
     end
 

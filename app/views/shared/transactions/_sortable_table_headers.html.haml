@@ -11,7 +11,7 @@
   - if SettingsHelper.feature_on?(:billing_table_price_groups)
     %th= Account.human_attribute_name("owner")
     %th= sortable "payment_source", Account.model_name.human
-    %th= sortable "pricing_group", Account.human_attribute_name("pricing_group")
+    %th= sortable "price_group", Account.human_attribute_name("price_group")
   - else
     %th= sortable "payment_source", Account.model_name.human
     %th= Account.human_attribute_name("owner")

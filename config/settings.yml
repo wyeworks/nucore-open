@@ -147,7 +147,6 @@ feature:
   price_policy_requires_note: true
   multi_facility_accounts: true
   facility_directors_can_manage_price_groups: true
-  billing_table_price_groups: false
   account_reference_field: false
   facility_payment_urls: false
   uses_ldap_authentication: false
@@ -177,6 +176,7 @@ feature:
   show_reconcile_credit_cards: false
   move_transactions_account_roles: false
   add_accessories_before_reservation_starts: false
+  billing_table_price_groups: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts
