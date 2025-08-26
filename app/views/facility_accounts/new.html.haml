@@ -8,7 +8,9 @@
 
 %h2= t(".head")
 
-= simple_form_for(@account, url: facility_accounts_path(current_facility)) do |f|
+= simple_form_for(@account,
+  url: facility_accounts_path(current_facility),
+  html: { class: "account-form" }) do |f|
   = f.error_messages
 
   = hidden_field_tag :owner_user_id, @owner_user.id

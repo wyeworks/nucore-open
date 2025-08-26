@@ -22,4 +22,13 @@ class BillingLogEventPresenter < SimpleDelegator
   def object
     metadata["object"] || loggable_to_s
   end
+
+  def payment_source
+    return unless loggable.respond_to?(:account)
+
+    account = loggable.account
+    return unless account
+
+    "#{account.account_number} - #{account.description}"
+  end
 end

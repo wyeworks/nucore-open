@@ -24,7 +24,7 @@ module ReportsHelper
 
   def report_attribute_values(*records)
     combine_attributes(*records) do |ar|
-      order_and_filter_attributes(ar).collect { |attr| attr[1] }
+      order_and_filter_attributes(ar).pluck(1)
     end
   end
 

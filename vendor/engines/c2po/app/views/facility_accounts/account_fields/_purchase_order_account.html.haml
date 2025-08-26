@@ -27,6 +27,6 @@
   hint: text("ar_number_hint"),
   hint_html: { class: "help-inline" }
 - if SettingsHelper.feature_on?(:show_account_opencontract_field)
-  = f.input :open_contract
+  = f.input :open_contract, as: :text, input_html: { rows: 4 }
 
 = render_view_hook "additional_fields", f: f

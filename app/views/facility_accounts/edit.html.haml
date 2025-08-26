@@ -7,7 +7,9 @@
 = render "sidebar"
 
 %h2= t(".head", account: @account)
-= simple_form_for([current_facility, @account], url: facility_account_path(current_facility, @account)) do |f|
+= simple_form_for([current_facility, @account],
+  url: facility_account_path(current_facility, @account),
+  html: { class: "account-form" }) do |f|
   = f.error_messages
 
   = render "facility_accounts/account_fields/#{@account.class.name.underscore}", f: f
