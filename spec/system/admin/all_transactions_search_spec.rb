@@ -214,6 +214,18 @@ RSpec.describe "All Transactions Search", :js do
       login_as director
     end
 
+    around do |example|
+      # Setting is not dynamically read
+      TransactionSearch::Searcher.default_config.tap do |config|
+        pp_config = config[:price_groups]
+        config[:price_groups] = true
+
+        example.run
+
+        config[:price_groups] = pp_config
+      end
+    end
+
     it "shows Price Group column with correct values" do
       visit facility_transactions_path(facility)
 
