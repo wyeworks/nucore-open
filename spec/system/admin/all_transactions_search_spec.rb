@@ -67,8 +67,7 @@ RSpec.describe "All Transactions Search", :js do
     let(:order_detail_ids) do
       page.all("a.manage-order-detail").map(&:text)
     end
-
-    def order_details
+    let(:order_details) do
       OrderDetail.where(id: order_detail_ids)
     end
 
@@ -82,10 +81,12 @@ RSpec.describe "All Transactions Search", :js do
     end
 
     context "when filter by fulfiled status" do
+      let(:sorted_order_details) do
+        order_details.order(fulfilled_at: :desc)
+      end
+
       it "can order by fulfilled_at" do
         visit facility_transactions_path(facility)
-
-        sorted_order_details = order_details.order(fulfilled_at: :desc)
 
         expect(
           sorted_order_details.map do |od|
@@ -96,14 +97,16 @@ RSpec.describe "All Transactions Search", :js do
     end
 
     context "when filter by ordered_at" do
+      let(:sorted_order_details) do
+        order_details.order(ordered_at: :desc)
+      end
+
       it "can order by ordered_at" do
         visit facility_transactions_path(facility)
 
         select("Ordered", from: "search[date_range_field]")
 
         click_button("Filter")
-
-        sorted_order_details = order_details.order(ordered_at: :desc)
 
         expect(
           sorted_order_details.map do |od|
@@ -121,6 +124,9 @@ RSpec.describe "All Transactions Search", :js do
       end
 
       let(:account) { create(:account, :with_account_owner) }
+      let(:sorted_order_details) do
+        order_details
+      end
       let(:statemented_order_detail) { facility.order_details.complete.last }
 
       before do
@@ -142,8 +148,6 @@ RSpec.describe "All Transactions Search", :js do
         )
 
         click_button("Filter")
-
-        sorted_order_details = order_details
 
         expect(
           sorted_order_details.map do |od|
