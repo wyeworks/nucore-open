@@ -52,7 +52,7 @@ module TransactionSearch
       @searchers_config = searchers_config
       @searchers =
         searchers.presence ||
-        self.class.default_searchers.filter do |searcher_class|
+        default_searchers.filter do |searcher_class|
           searchers_config.fetch(searcher_class.key.to_sym, true)
         end
     end
