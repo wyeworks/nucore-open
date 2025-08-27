@@ -93,20 +93,9 @@ class ArchivedEmailsController < ApplicationController
 
   def extract_body(mail)
     if mail.multipart?
-      html_part = mail.parts.find { |p| p.content_type.include?("text/html") }
-      text_part = mail.parts.find { |p| p.content_type.include?("text/plain") }
-
-      if html_part
-        html_part.decoded.html_safe
-      elsif text_part
-        simple_format(text_part.decoded)
-      else
-        simple_format(mail.body.decoded)
-      end
-    elsif mail.content_type&.include?("text/html")
-      mail.body.decoded.html_safe
+      mail.html_part.body.decoded.html_safe
     else
-      simple_format(mail.body.decoded)
+      mail.body.decoded.html_safe
     end
   end
 
