@@ -74,11 +74,7 @@ class LogEventSearcher
     statements = Statement.all
 
     if invoice_number.present?
-      query = if Nucore::Database.oracle?
-                "TO_CHAR(statements.id) LIKE :invoice_number OR account_id || '-' || id LIKE :invoice_number"
-              else
-                "CAST(statements.id AS CHAR) LIKE :invoice_number OR CONCAT(account_id, '-', id) LIKE :invoice_number"
-              end
+      query = "invoice_number LIKE :invoice_number"
       statements = statements.where(query, invoice_number: "%#{invoice_number}%")
     end
 
