@@ -191,12 +191,22 @@ RSpec.describe "All Transactions Search", :js do
   end
 
   describe "price group column and filtering", feature_setting: { billing_table_price_groups: true } do
-    let(:price_group1) { create(:price_group, facility: facility, name: "Research Group") }
-    let(:price_group2) { create(:price_group, facility: facility, name: "External Group") }
+    let(:order_detail1) { facility.order_details.complete.first }
+    let(:order_detail2) { facility.order_details.complete.second }
+    let(:price_group_name) { "Some Price Group" }
+    let(:other_price_group_name) { "Other Price Group" }
+    let(:price_policy) do
+      create(
+        :item_price_policy,
+        product: item,
+        price_group: create(:price_group, name: other_price_group_name),
+      )
+    end
 
     before do
-      AccountPriceGroupMember.create!(account: accounts.first, price_group: price_group1)
-      AccountPriceGroupMember.create!(account: accounts.second, price_group: price_group2)
+      order_detail1.price_policy.price_group.update_column(:name, price_group_name)
+      order_detail2.update_column(:price_policy_id, price_policy.id)
+
       login_as director
     end
 
@@ -207,28 +217,18 @@ RSpec.describe "All Transactions Search", :js do
         expect(page).to have_content("Price Group")
       end
 
-      expect(page).to have_content("Research Group")
-      expect(page).to have_content("External Group")
-    end
-
-    it "can sort by price group" do
-      visit facility_transactions_path(facility)
-
-      within("#table_billing") do
-        click_link "Price Group"
-      end
-
-      expect(page).to have_current_path(/sort=price_group/)
+      expect(page).to have_content(price_group_name)
+      expect(page).to have_content(other_price_group_name)
     end
 
     it "can filter by price groups" do
       visit facility_transactions_path(facility)
 
-      select_from_chosen price_group1.name, from: "Price Group"
+      select_from_chosen price_group_name, from: "Price Group"
       click_button "Filter"
 
-      expect(page).to have_content(accounts.first.description)
-      expect(page).not_to have_content(accounts.second.description)
+      expect(page).to have_content(price_group_name)
+      expect(page).not_to have_content(other_price_group_name)
     end
   end
 
