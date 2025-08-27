@@ -74,7 +74,7 @@ class StatementCreator
 
           parent_statement = Statement.find_by(id: statement_id)
 
-          if parent_statement.present? && parent_statement.account_id == account_id
+          if parent_statement.present? && parent_statement.account_id == account_id.to_i
             statement_attrs[:parent_statement_id] = statement_id
           else
             @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
