@@ -25,8 +25,6 @@
             = render "billing_log_events/collapsible_list",
               items: log_event.order_ids,
               visible_count: 5,
-              prefix: "Orders: ",
-              separator: ", ",
               id_prefix: "log-event-orders",
               unique_id: log_event.id
           - if log_event.has_reconciliation_data?

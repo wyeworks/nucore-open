@@ -45,18 +45,12 @@ class BillingLogEventPresenter < SimpleDelegator
   end
 
   def all_reconciliation_notes
-    notes = []
-
-    if reconciled_notes.present?
-      reconciled_notes.each do |note|
-        notes << "Reconciled: #{note}"
-      end
+    notes = reconciled_notes.map do |note|
+      "Reconciled: #{note}"
     end
 
-    if unrecoverable_notes.present?
-      unrecoverable_notes.each do |note|
-        notes << "Unrecoverable: #{note}"
-      end
+    unrecoverable_notes.each do |note|
+      notes << "Unrecoverable: #{note}"
     end
 
     notes

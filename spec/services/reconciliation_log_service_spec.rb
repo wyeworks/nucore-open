@@ -6,10 +6,10 @@ RSpec.describe ReconciliationLogService do
   let(:user) { create(:user) }
   let(:facility) { create(:setup_facility) }
   let(:statement) { create(:statement, facility:) }
-  let(:order_status_reconciled) { OrderStatus.find_or_create_by(name: "Reconciled") }
-  let(:order_status_unrecoverable) { OrderStatus.find_or_create_by(name: "Unrecoverable") }
+  let(:order_status_reconciled) { OrderStatus.reconciled }
+  let(:order_status_unrecoverable) { OrderStatus.unrecoverable }
   let(:product) { create(:setup_item, facility:) }
-  let(:order) { create(:order, user: user, created_by: user.id, facility:) }
+  let(:order) { create(:order, user:, created_by: user.id, facility:) }
 
   let(:order_details) do
     [
