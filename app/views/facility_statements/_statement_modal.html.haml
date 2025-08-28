@@ -1,8 +1,8 @@
-#statement-modal.modal.fade{tabindex: "-1", role: "dialog"}
+.js--statementModal.modal.fade{tabindex: "-1", role: "dialog"}
   .modal-dialog{role: "document"}
     .modal-content
       .modal-header
-        %h4.modal-title#statementModalLabel= text("views.facility_statements.statement_modal.title")
+        %h4.modal-title= text("views.facility_statements.statement_modal.title")
         %button.close{type: "button", "data-dismiss" => "modal"}
           %span{"aria-hidden" => "true"} &times;
 
@@ -13,4 +13,4 @@
 
       .modal-footer
         %button.btn.btn-default{type: "button", "data-dismiss" => "modal"}= text("views.facility_statements.statement_modal.cancel")
-        %button.btn.btn-primary#proceed-statement{type: "button"}= text("views.facility_statements.statement_modal.save")
+        %button.btn.btn-primary.js--saveStatementButton{type: "button"}= text("views.facility_statements.statement_modal.save")

@@ -1,27 +1,21 @@
 document.addEventListener("DOMContentLoaded", function() {
   const createBtn = document.getElementById('create_statement_btn');
-  const modal = document.getElementById('statement-modal');
-  const proceedBtn = document.getElementById("proceed-statement");
+  const modal = document.getElementsByClassName('js--statementModal')[0];
+  const saveBtn = document.getElementsByClassName('js--saveStatementButton')[0];
   const parentInput = document.getElementById("parent_invoice_number");
   const hiddenInput = document.getElementById("parent_invoice_number_hidden");
 
-  if (!createBtn || !modal || !proceedBtn || !parentInput || !hiddenInput) {
+  if (!createBtn || !modal || !saveBtn || !parentInput || !hiddenInput) {
     return;
   }
 
   createBtn.addEventListener('click', function(e) {
     e.preventDefault();
 
-    const selectedCheckboxes = document.querySelectorAll('table input[type="checkbox"]:checked');
-    if (selectedCheckboxes.length === 0) {
-      alert('Please select at least one order detail.');
-      return;
-    }
-
     $(modal).modal('show');
   });
 
-  proceedBtn.addEventListener('click', function() {
+  saveBtn.addEventListener('click', function() {
     hiddenInput.value = parentInput.value.trim();
 
     $(modal).modal('hide');
