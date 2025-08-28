@@ -8,8 +8,13 @@
 %th.order-note= OrderDetail.human_attribute_name("description")
 %th.nowrap= sortable "ordered_for", OrderDetail.human_attribute_name("user")
 - unless @account
-  %th= sortable "payment_source", Account.model_name.human
-  %th= Account.human_attribute_name("owner")
+  - if SettingsHelper.feature_on?(:billing_table_price_groups)
+    %th= Account.human_attribute_name("owner")
+    %th= sortable "payment_source", Account.model_name.human
+    %th= Account.human_attribute_name("price_group")
+  - else
+    %th= sortable "payment_source", Account.model_name.human
+    %th= Account.human_attribute_name("owner")
 %th.currency= OrderDetail.human_attribute_name("cost")
 %th= sortable "order_status", OrderDetail.human_attribute_name("order_status")
 - if local_assigns[:show_statements]

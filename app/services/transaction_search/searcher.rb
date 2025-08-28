@@ -14,6 +14,7 @@ module TransactionSearch
         TransactionSearch::AccountTypeSearcher,
         TransactionSearch::ProductSearcher,
         TransactionSearch::AccountOwnerSearcher,
+        TransactionSearch::PriceGroupSearcher,
         TransactionSearch::OrderedForSearcher,
         TransactionSearch::OrderStatusSearcher,
         TransactionSearch::DateRangeSearcher,
@@ -35,6 +36,7 @@ module TransactionSearch
     cattr_accessor(:default_config) do
       {
         facilities: false,
+        price_groups: SettingsHelper.feature_on?(:billing_table_price_groups),
       }
     end
 
