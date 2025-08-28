@@ -40,8 +40,7 @@ class BillingLogEventPresenter < SimpleDelegator
   end
 
   def has_reconciliation_data?
-    event_type == "closed" && loggable_type == "Statement" &&
-      (reconciled_notes.present? || unrecoverable_notes.present?)
+    reconciled_notes.present? || unrecoverable_notes.present?
   end
 
   def all_reconciliation_notes

@@ -20,19 +20,7 @@
         %td= text(log_event.locale_tag)
         %td.billing-logs__object
           = object_tag(log_event.object, class: "billing-logs__object")
-          - if log_event.event_type == "review_orders_email" && log_event.has_orders?
-            %br
-            = render "billing_log_events/collapsible_list",
-              items: log_event.order_ids,
-              visible_count: 5,
-              id_prefix: "log-event-orders",
-              unique_id: log_event.id
-          - if log_event.has_reconciliation_data?
-            %br
-            = render "billing_log_events/collapsible_notes",
-              notes: log_event.all_reconciliation_notes,
-              id_prefix: "log-event-notes",
-              unique_id: log_event.id
+          = render_if_exist "billing_log_events/#{log_event.loggable_type.downcase.underscore}_#{log_event.event_type}", log_event: log_event
         %td= object_tag(log_event.payment_source || "–", class: "billing-logs__payment-source")
         %td.billing-logs__email-notification
           - if log_event.email_notification?

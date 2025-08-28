@@ -1,0 +1,7 @@
+- if log_event.has_orders?
+  %br
+  = render "billing_log_events/collapsible_list",
+    items: log_event.order_ids,
+    visible_count: 5,
+    id_prefix: "log-event-orders",
+    unique_id: log_event.id
