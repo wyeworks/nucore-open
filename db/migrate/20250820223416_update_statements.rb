@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class Statement < ApplicationRecord
-end
-
 class UpdateStatements < ActiveRecord::Migration[7.0]
+  class Statement < ApplicationRecord
+  end
+
   def change
     add_column :statements, :parent_statement_id, :integer
     add_foreign_key :statements, :statements, column: :parent_statement_id
