@@ -23,6 +23,14 @@ RSpec.describe StatementCreator do
       expect(creator.session_user).to eq(user)
       expect(creator.current_facility).to eq(facility)
     end
+
+    context "with parent invoice number" do
+      let(:creator_with_parent) { described_class.new(order_detail_ids: [order_detail_1.id], session_user: user, current_facility: facility, parent_invoice_number: "123-456") }
+
+      it "sets parent_invoice_number" do
+        expect(creator_with_parent.parent_invoice_number).to eq("123-456")
+      end
+    end
   end
 
   describe "#create" do
@@ -50,6 +58,78 @@ RSpec.describe StatementCreator do
 
       it "does not create statements" do
         expect { creator.create }.not_to change(Statement.all, :count)
+      end
+    end
+
+    context "with parent statement functionality" do
+      let(:parent_statement) { create(:statement, account:, facility:, created_by: user.id) }
+      let(:parent_invoice_number) { parent_statement.invoice_number }
+      let(:creator_with_parent) do
+        described_class.new(
+          order_detail_ids: [order_detail_1.id],
+          session_user: user,
+          current_facility: facility,
+          parent_invoice_number:,
+        )
+      end
+
+      context "when reference_statement_invoice_number feature is on", feature_setting: { reference_statement_invoice_number: true } do
+        it "creates statement with parent_statement_id" do
+          creator_with_parent.create
+          expect(creator_with_parent.errors).to be_empty
+
+          # Just Statement.last was not reliable. It returned the parent statement instead of the child statement.
+          statement = Statement.order(invoice_number: :asc).last
+          expect(statement.parent_statement_id).to eq(parent_statement.id)
+          expect(statement.invoice_number).to eq("#{parent_statement.invoice_number}-2")
+        end
+
+        context "with invalid invoice number format" do
+          let(:invalid_invoice_number) { "invalid-format" }
+          let(:creator_with_invalid) do
+            described_class.new(
+              order_detail_ids: [order_detail_1.id],
+              session_user: user,
+              current_facility: facility,
+              parent_invoice_number: invalid_invoice_number,
+            )
+          end
+
+          it "adds error for invalid format" do
+            creator_with_invalid.create
+            expect(creator_with_invalid.errors).to include(I18n.t("services.statement_creator.invalid_invoice_format"))
+          end
+        end
+
+        context "with non-existent parent statement" do
+          let(:non_existent_invoice) { "999-999" }
+          let(:creator_with_nonexistent) do
+            described_class.new(
+              order_detail_ids: [order_detail_1.id],
+              session_user: user,
+              current_facility: facility,
+              parent_invoice_number: non_existent_invoice,
+            )
+          end
+
+          it "adds error for non-existent parent statement" do
+            creator_with_nonexistent.create
+            expect(creator_with_nonexistent.errors).to include(
+              I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: non_existent_invoice)
+            )
+          end
+        end
+      end
+
+      context "when reference_statement_invoice_number feature is off", feature_setting: { reference_statement_invoice_number: false } do
+        it "ignores parent invoice number and creates standard statement" do
+          creator_with_parent.create
+          expect(creator_with_parent.errors).to be_empty
+
+          statement = Statement.last
+          expect(statement.parent_statement_id).to be_nil
+          expect(statement.invoice_number).to eq("#{account.id}-#{statement.id}")
+        end
       end
     end
   end

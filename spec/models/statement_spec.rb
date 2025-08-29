@@ -36,6 +36,40 @@ RSpec.describe Statement do
     end
   end
 
+  context "with parent statement functionality" do
+    let(:parent_statement) { create(:statement, account:, facility:, created_by: user.id) }
+    let(:child_statement) { build(:statement, account:, facility:, created_by: user.id, parent_statement:) }
+
+    describe "invoice number generation" do
+      context "when reference_statement_invoice_number feature is on", feature_setting: { reference_statement_invoice_number: true } do
+        it "generates standard invoice number for statements without parent" do
+          statement.save!
+          expect(statement.invoice_number).to eq("#{account.id}-#{statement.id}")
+        end
+
+        it "generates sequential invoice numbers for child statements" do
+          child_statement.save!
+          expect(child_statement.invoice_number).to eq("#{parent_statement.invoice_number}-2")
+        end
+
+        it "increments sequence number for multiple children" do
+          child_statement1 = create(:statement, account:, facility:, created_by: user.id, parent_statement:)
+          child_statement2 = create(:statement, account:, facility:, created_by: user.id, parent_statement:)
+
+          expect(child_statement1.invoice_number).to eq("#{parent_statement.invoice_number}-2")
+          expect(child_statement2.invoice_number).to eq("#{parent_statement.invoice_number}-3")
+        end
+      end
+
+      context "when reference_statement_invoice_number feature is off", feature_setting: { reference_statement_invoice_number: false } do
+        it "generates standard invoice numbers even for child statements" do
+          child_statement.save!
+          expect(child_statement.invoice_number).to eq("#{account.id}-#{child_statement.id}")
+        end
+      end
+    end
+  end
+
   context "when canceled" do
     subject(:statement) { create(:statement, account: account, created_by: user.id, facility: facility, canceled_at: Time.current) }
 

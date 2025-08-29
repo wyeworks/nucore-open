@@ -2,12 +2,13 @@
 
 class StatementCreator
 
-  attr_accessor :order_detail_ids, :errors, :to_statement, :account_statements, :session_user, :current_facility
+  attr_accessor :order_detail_ids, :errors, :to_statement, :account_statements, :session_user, :current_facility, :parent_invoice_number
 
   def initialize(params)
     @order_detail_ids = params[:order_detail_ids]
     @session_user = params[:session_user]
     @current_facility = params[:current_facility]
+    @parent_invoice_number = params[:parent_invoice_number]
     @errors = []
     @to_statement = {}
   end
@@ -59,7 +60,16 @@ class StatementCreator
   def setup_statement_from_details
     @account_statements = {}
     to_statement.each do |account, order_details|
-      statement = Statement.create!(facility: order_details.first.facility, account_id: account.id, created_by: session_user.id)
+      statement_attrs = {
+        facility: order_details.first.facility,
+        account_id: account.id,
+        created_by: session_user.id
+      }
+
+      statement_id = validate_parent_statement
+      statement_attrs[:parent_statement_id] = statement_id if statement_id.present?
+
+      statement = Statement.create!(statement_attrs)
       LogEvent.log(statement, :create, session_user)
       order_details.each do |od|
         StatementRow.create!(statement_id: statement.id, order_detail_id: od.id)
@@ -70,4 +80,20 @@ class StatementCreator
     end
   end
 
+  def validate_parent_statement
+    if parent_invoice_number.present? && SettingsHelper.feature_on?(:reference_statement_invoice_number)
+      # Parse invoice number format: "account_id-statement_id"
+      if /\A(?<account_id>\d+)-(?<statement_id>\d+)\z/ =~ parent_invoice_number
+        parent_statement = Statement.find_by(id: statement_id)
+
+        if parent_statement.present? && parent_statement.account_id == account_id.to_i
+          statement_id
+        else
+          @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
+        end
+      else
+        @errors << I18n.t("services.statement_creator.invalid_invoice_format")
+      end
+    end
+  end
 end

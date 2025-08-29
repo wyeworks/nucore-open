@@ -63,7 +63,12 @@ class FacilityStatementsController < ApplicationController
 
   # POST /facilities/:facility_id/statements
   def create
-    @statement_creator = StatementCreator.new(order_detail_ids: params[:order_detail_ids], session_user:, current_facility:)
+    @statement_creator = StatementCreator.new(
+      order_detail_ids: params[:order_detail_ids],
+      session_user:,
+      current_facility:,
+      parent_invoice_number: params[:parent_invoice_number]
+    )
 
     if @statement_creator.order_detail_ids.blank?
       flash[:error] = text("no_selection")
