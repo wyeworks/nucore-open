@@ -116,8 +116,9 @@ RSpec.describe BillingLogEventPresenter do
       expect(subject.has_reconciliation_data?).to be true
     end
 
-    it "returns false for non-statement events" do
-      log_event.loggable_type = "Journal"
+    it "returns false without notes" do
+      log_event.metadata.delete("reconciled_notes")
+      log_event.metadata.delete("unrecoverable_notes")
       expect(subject.has_reconciliation_data?).to be false
     end
   end
