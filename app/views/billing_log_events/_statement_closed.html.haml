@@ -1,0 +1,6 @@
+- if log_event.has_reconciliation_data?
+  %br
+  = render "billing_log_events/collapsible_notes",
+    notes: log_event.all_reconciliation_notes,
+    id_prefix: "log-event-notes",
+    unique_id: log_event.id
