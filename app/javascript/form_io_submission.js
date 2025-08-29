@@ -8,7 +8,7 @@
  * prefillData - only be set for new form submissions (not editing)
 ***/
 
-function handleFormioSubmission(form, surveyUrl, surveyCompleteUrl, prefillData) {
+window.handleFormioSubmission = (form, surveyUrl, surveyCompleteUrl, prefillData) => {
   if (prefillData) {
     form.submission = { data: prefillData };
   }

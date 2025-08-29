@@ -456,6 +456,7 @@ en:
         description: Description
         type_string: Payment Source Type
         owner_user: Owner
+        price_group: Price Group
         remittance_information: Bill To
         suspended_at: Suspended
       nufs_account:
