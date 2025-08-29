@@ -18,7 +18,7 @@ class Statement < ApplicationRecord
   has_many :child_statements, class_name: "Statement", foreign_key: :parent_statement_id
 
   validates_numericality_of :account_id, :facility_id, :created_by, only_integer: true
-  validate :parent_statement_exists_and_valid, if: :parent_statement_id?
+  validates :parent_statement, presence: true, if: :parent_statement_id
 
   after_save :set_invoice_number
 
@@ -161,14 +161,6 @@ class Statement < ApplicationRecord
   end
 
   private
-
-  def parent_statement_exists_and_valid
-    parent = Statement.find_by(id: parent_statement_id)
-
-    unless parent
-      errors.add(:parent_statement_id, "does not exist")
-    end
-  end
 
   def set_invoice_number
     return if invoice_number.present?
