@@ -66,23 +66,8 @@ class StatementCreator
         created_by: session_user.id
       }
 
-      if parent_invoice_number.present? && SettingsHelper.feature_on?(:reference_statement_invoice_number)
-        # Parse invoice number format: "account_id-statement_id"
-        if parent_invoice_number =~ /\A(?<account_id>\d+)-(?<statement_id>\d+)\z/
-          account_id = Regexp.last_match[:account_id]
-          statement_id = Regexp.last_match[:statement_id]
-
-          parent_statement = Statement.find_by(id: statement_id)
-
-          if parent_statement.present? && parent_statement.account_id == account_id.to_i
-            statement_attrs[:parent_statement_id] = statement_id
-          else
-            @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
-          end
-        else
-          @errors << I18n.t("services.statement_creator.invalid_invoice_format")
-        end
-      end
+      statement_id = validate_parent_statement
+      statement_attrs[:parent_statement_id] = statement_id if statement_id.present?
 
       statement = Statement.create!(statement_attrs)
       LogEvent.log(statement, :create, session_user)
@@ -95,4 +80,20 @@ class StatementCreator
     end
   end
 
+  def validate_parent_statement
+    if parent_invoice_number.present? && SettingsHelper.feature_on?(:reference_statement_invoice_number)
+      # Parse invoice number format: "account_id-statement_id"
+      if /\A(?<account_id>\d+)-(?<statement_id>\d+)\z/ =~ parent_invoice_number
+        parent_statement = Statement.find_by(id: statement_id)
+
+        if parent_statement.present? && parent_statement.account_id == account_id.to_i
+          statement_id
+        else
+          @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
+        end
+      else
+        @errors << I18n.t("services.statement_creator.invalid_invoice_format")
+      end
+    end
+  end
 end
