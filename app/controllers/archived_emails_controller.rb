@@ -5,14 +5,12 @@ class ArchivedEmailsController < ApplicationController
 
   before_action :authenticate_user!
   before_action :load_resources
-  before_action :authorize_access
+  before_action :check_billing_access
 
   def show
     mail = Mail.new(@archived_email.email_content)
     prepare_email_data(mail)
     render :show
-  rescue StandardError
-    redirect_with_error("show.error")
   end
 
   def download
@@ -22,8 +20,6 @@ class ArchivedEmailsController < ApplicationController
       type: "message/rfc822",
       disposition: "attachment"
     )
-  rescue StandardError
-    redirect_with_error("download.error")
   end
 
   def download_attachment
@@ -41,8 +37,6 @@ class ArchivedEmailsController < ApplicationController
     else
       redirect_with_error("attachment_not_found")
     end
-  rescue StandardError
-    redirect_with_error("download.error")
   end
 
   private
@@ -51,22 +45,11 @@ class ArchivedEmailsController < ApplicationController
     @log_event = LogEvent.find(params[:billing_log_event_id])
     @archived_email = @log_event.archived_email
 
-    redirect_with_error("not_found") unless @archived_email&.email_file_present?
-  rescue ActiveRecord::RecordNotFound
-    redirect_with_error("log_event_not_found")
+    raise ActiveRecord::RecordNotFound unless @archived_email&.email_file_present?
   end
 
-  def authorize_access
-    return unless @log_event && @archived_email
-
-    facility = @log_event.facility
-    ability = Ability.new(current_user, facility || Facility.cross_facility, self)
-
-    authorized = current_user.administrator? ||
-                 current_user.global_billing_administrator? ||
-                 (facility && ability.can?(:manage_billing, facility))
-
-    redirect_with_error("unauthorized") unless authorized
+  def current_facility
+    @current_facility ||= @log_event&.facility || Facility.cross_facility
   end
 
   def redirect_with_error(error_key)

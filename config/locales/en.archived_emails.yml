@@ -1,11 +1,5 @@
 en:
   controllers:
     archived_emails:
-      not_found: "Archived email file not found"
-      log_event_not_found: "Log event not found"
-      unauthorized: "You are not authorized to view this archived email"
       attachment_not_found: "Attachment not found"
-      show:
-        error: "Unable to display email content"
-      download:
-        error: "Unable to download email"
+      show_error: "Unable to display email content"
