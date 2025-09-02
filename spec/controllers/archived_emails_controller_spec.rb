@@ -28,19 +28,20 @@ RSpec.describe ArchivedEmailsController do
     context "unauthorized user" do
       before { sign_in create(:user) }
 
-      it "redirects with error" do
-        get :show, params: { billing_log_event_id: log_event.id }
-        expect(flash[:error]).to include("not authorized")
-        expect(response).to redirect_to(billing_log_events_path)
+      it "raises access denied" do
+        expect {
+          get :show, params: { billing_log_event_id: log_event.id }
+        }.to raise_error(CanCan::AccessDenied)
       end
     end
 
     context "no archived email" do
       before { sign_in create(:user, :administrator) }
 
-      it "redirects with error" do
-        get :show, params: { billing_log_event_id: LogEvent.log(statement, :other, nil).id }
-        expect(flash[:error]).to include("not found")
+      it "raises record not found" do
+        expect {
+          get :show, params: { billing_log_event_id: LogEvent.log(statement, :other, nil).id }
+        }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end
