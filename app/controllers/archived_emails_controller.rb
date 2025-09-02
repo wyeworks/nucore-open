@@ -8,14 +8,16 @@ class ArchivedEmailsController < ApplicationController
   before_action :check_billing_access
 
   def show
-    mail = Mail.new(@archived_email.email_content)
+    mail = Mail.new(@log_event.email_content)
     prepare_email_data(mail)
     render :show
+  rescue StandardError
+    redirect_with_error("show_error")
   end
 
   def download
     send_data(
-      @archived_email.email_content,
+      @log_event.email_content,
       filename: download_filename,
       type: "message/rfc822",
       disposition: "attachment"
@@ -23,7 +25,7 @@ class ArchivedEmailsController < ApplicationController
   end
 
   def download_attachment
-    mail = Mail.new(@archived_email.email_content)
+    mail = Mail.new(@log_event.email_content)
     attachment_index = params[:index].to_i
     attachment = mail.attachments[attachment_index]
 
@@ -43,9 +45,8 @@ class ArchivedEmailsController < ApplicationController
 
   def load_resources
     @log_event = LogEvent.find(params[:billing_log_event_id])
-    @archived_email = @log_event.archived_email
 
-    raise ActiveRecord::RecordNotFound unless @archived_email&.email_file_present?
+    raise ActiveRecord::RecordNotFound unless @log_event.email_file_present?
   end
 
   def current_facility

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_21_144556) do
+ActiveRecord::Schema[7.0].define(version: 2025_07_29_132443) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -89,13 +89,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_21_144556) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "subaffiliates_enabled", default: false, null: false
-  end
-
-  create_table "archived_emails", charset: "utf8mb3", force: :cascade do |t|
-    t.integer "log_event_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["log_event_id"], name: "index_archived_emails_on_log_event_id"
   end
 
   create_table "budgeted_chart_strings", id: :integer, charset: "utf8mb3", force: :cascade do |t|
@@ -1074,7 +1067,6 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_21_144556) do
   add_foreign_key "account_users", "users"
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "archived_emails", "log_events"
   add_foreign_key "bulk_email_jobs", "facilities"
   add_foreign_key "bulk_email_jobs", "users"
   add_foreign_key "bundle_products", "products", column: "bundle_product_id", name: "fk_bundle_prod_prod"

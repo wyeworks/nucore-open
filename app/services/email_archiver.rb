@@ -13,12 +13,9 @@ class EmailArchiver
     return unless valid?
 
     ActiveRecord::Base.transaction do
-      archived_email = log_event.build_archived_email
-      archived_email.save!(validate: false)
-
       email_content = mail_message.to_s
       filename = "email_#{Time.current.to_i}.eml"
-      archived_email.attach_email(email_content, filename: filename)
+      log_event.attach_email(email_content, filename: filename)
     end
   rescue StandardError
     nil
@@ -29,7 +26,7 @@ class EmailArchiver
   def valid?
     mail_message.present? &&
       log_event&.persisted? &&
-      log_event.archived_email.blank?
+      !log_event.email_file_present?
   end
 
 end

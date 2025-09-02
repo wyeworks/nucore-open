@@ -7,11 +7,8 @@ RSpec.describe ArchivedEmailsController do
   let(:statement) { create(:statement, facility:) }
   let(:log_event) { LogEvent.log(statement, :statement_email, nil) }
 
-  let!(:archived_email) do
-    email = log_event.build_archived_email
-    email.attach_email("From: test@example.com\r\nTo: user@example.com\r\nSubject: Test\r\n\r\nTest body")
-    email.save!
-    email
+  before do
+    log_event.attach_email("From: test@example.com\r\nTo: user@example.com\r\nSubject: Test\r\n\r\nTest body")
   end
 
   describe "GET #show" do
@@ -29,9 +26,9 @@ RSpec.describe ArchivedEmailsController do
       before { sign_in create(:user) }
 
       it "raises access denied" do
-        expect {
+        expect do
           get :show, params: { billing_log_event_id: log_event.id }
-        }.to raise_error(CanCan::AccessDenied)
+        end.to raise_error(CanCan::AccessDenied)
       end
     end
 
@@ -39,9 +36,9 @@ RSpec.describe ArchivedEmailsController do
       before { sign_in create(:user, :administrator) }
 
       it "raises record not found" do
-        expect {
+        expect do
           get :show, params: { billing_log_event_id: LogEvent.log(statement, :other, nil).id }
-        }.to raise_error(ActiveRecord::RecordNotFound)
+        end.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
   end

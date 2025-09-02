@@ -18,18 +18,14 @@ RSpec.describe EmailArchiver do
   let(:archiver) { described_class.new(mail_message:, log_event:) }
 
   describe "#archive!" do
-    it "creates archived email" do
-      expect { archiver.archive! }.to change(ArchivedEmail, :count).by(1)
-    end
-
-    it "associates with log event" do
+    it "attaches email file to log event" do
       archiver.archive!
-      expect(log_event.reload.archived_email).to be_present
+      expect(log_event.reload.email_file_present?).to be true
     end
 
     it "stores complete email" do
       archiver.archive!
-      content = log_event.reload.archived_email.email_content
+      content = log_event.reload.email_content
       expect(content).to include("From: sender@example.com")
       expect(content).to include("To: recipient@example.com")
       expect(content).to include("Subject: Test Email")
@@ -39,18 +35,24 @@ RSpec.describe EmailArchiver do
     context "invalid inputs" do
       it "does nothing without mail message" do
         archiver = described_class.new(mail_message: nil, log_event:)
-        expect { archiver.archive! }.not_to change(ArchivedEmail, :count)
+        result = archiver.archive!
+        expect(result).to be_nil
+        expect(log_event.reload.email_file_present?).to be false
       end
 
       it "does nothing without log event" do
         archiver = described_class.new(mail_message:, log_event: nil)
-        expect { archiver.archive! }.not_to change(ArchivedEmail, :count)
+        result = archiver.archive!
+        expect(result).to be_nil
       end
 
       it "does nothing with duplicate archive" do
         archiver.archive!
+        expect(log_event.reload.email_file_present?).to be true
+
         new_archiver = described_class.new(mail_message:, log_event:)
-        expect { new_archiver.archive! }.not_to change(ArchivedEmail, :count)
+        result = new_archiver.archive!
+        expect(result).to be_nil
       end
     end
 
