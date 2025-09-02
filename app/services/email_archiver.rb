@@ -15,7 +15,7 @@ class EmailArchiver
     ActiveRecord::Base.transaction do
       email_content = mail_message.to_s
       filename = "email_#{Time.current.to_i}.eml"
-      log_event.attach_email(email_content, filename: filename)
+      log_event.attach_email(email_content, filename:)
     end
   rescue StandardError
     nil

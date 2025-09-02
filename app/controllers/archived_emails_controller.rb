@@ -11,8 +11,6 @@ class ArchivedEmailsController < ApplicationController
     mail = Mail.new(@log_event.email_content)
     prepare_email_data(mail)
     render :show
-  rescue StandardError
-    redirect_with_error("show_error")
   end
 
   def download
@@ -41,16 +39,16 @@ class ArchivedEmailsController < ApplicationController
     end
   end
 
+  def current_facility
+    @current_facility ||= @log_event&.facility || Facility.cross_facility
+  end
+
   private
 
   def load_resources
     @log_event = LogEvent.find(params[:billing_log_event_id])
 
     raise ActiveRecord::RecordNotFound unless @log_event.email_file_present?
-  end
-
-  def current_facility
-    @current_facility ||= @log_event&.facility || Facility.cross_facility
   end
 
   def redirect_with_error(error_key)
