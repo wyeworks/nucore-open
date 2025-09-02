@@ -1,0 +1,18 @@
+- separator = ", "
+- prefix = I18n.t("views.billing_log_events.table.collapsible_list.prefix")
+- if items.size > visible_count
+  %small.text-muted
+    = prefix
+    = items.first(visible_count).join(separator)
+  - collapse_id = "#{id_prefix}-#{unique_id}"
+  %span.collapse{ id: collapse_id }
+    %small.text-muted
+      = separator
+      = items[visible_count..-1].join(separator)
+  %a{ href: "##{collapse_id}", data: { toggle: "collapse" }, aria: { expanded: false, controls: collapse_id } }
+    %small.text-muted
+      = " (+#{items.size - visible_count} more)"
+- else
+  %small.text-muted
+    = prefix
+    = items.join(separator)

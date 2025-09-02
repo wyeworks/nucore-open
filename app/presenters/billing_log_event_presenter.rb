@@ -23,6 +23,38 @@ class BillingLogEventPresenter < SimpleDelegator
     metadata["object"] || loggable_to_s
   end
 
+  def order_ids
+    metadata["order_ids"] || []
+  end
+
+  def has_orders?
+    order_ids.present?
+  end
+
+  def reconciled_notes
+    metadata["reconciled_notes"] || []
+  end
+
+  def unrecoverable_notes
+    metadata["unrecoverable_notes"] || []
+  end
+
+  def has_reconciliation_data?
+    reconciled_notes.present? || unrecoverable_notes.present?
+  end
+
+  def all_reconciliation_notes
+    notes = reconciled_notes.map do |note|
+      "Reconciled: #{note}"
+    end
+
+    unrecoverable_notes.each do |note|
+      notes << "Unrecoverable: #{note}"
+    end
+
+    notes
+  end
+
   def payment_source
     return unless loggable.respond_to?(:account)
 

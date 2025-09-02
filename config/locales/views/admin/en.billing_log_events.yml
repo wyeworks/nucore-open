@@ -5,3 +5,5 @@ en:
         payment_source: Payment Source
         statement_email: "!Statement! Email"
         review_orders_email: Review Orders Email
+        collapsible_list:
+          prefix: "Orders: "

@@ -18,7 +18,9 @@
       %tr
         %td= I18n.l(log_event.event_time, format: :usa)
         %td= text(log_event.locale_tag)
-        %td= object_tag(log_event.object, class: "billing-logs__object")
+        %td.billing-logs__object
+          = object_tag(log_event.object, class: "billing-logs__object")
+          = render_if_exists "billing_log_events/#{log_event.loggable_type.downcase.underscore}_#{log_event.event_type}", log_event: log_event
         %td= object_tag(log_event.payment_source || "–", class: "billing-logs__payment-source")
         %td.billing-logs__email-notification
           - if log_event.email_notification?
