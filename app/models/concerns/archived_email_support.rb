@@ -8,7 +8,7 @@ module ArchivedEmailSupport
   end
 
   def attach_email(email_content, filename: nil)
-    filename ||= "email_#{Time.current.to_i}.eml"
+    filename ||= "email_#{Time.current.strftime('%Y%m%d_%H%M%S')}.eml"
 
     email_file.attach(
       io: StringIO.new(email_content),
