@@ -65,7 +65,8 @@ class Statement < ApplicationRecord
   end
 
   def next_sequence_number_for_parent
-    highest_invoice_number = Statement
+    highest_invoice_number =
+      Statement
       .where(parent_statement_id:)
       .where.not(invoice_number: nil)
       .order(invoice_number: :desc)
