@@ -7,7 +7,7 @@ module ListBillingLogEvents
       start_date: parse_usa_date(index_params[:start_date]),
       end_date: parse_usa_date(index_params[:end_date]),
       events: index_params[:events],
-    ).search.includes(:loggable).reverse_chronological.paginate(
+    ).search.includes(:loggable, :email_file_attachment).reverse_chronological.paginate(
       per_page: 50, page: index_params[:page]
     )
   end
