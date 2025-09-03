@@ -26,6 +26,13 @@
           - if log_event.email_notification?
             %span= log_event.email_subject
             %small= log_event.email_to
+            - if log_event.email_file_present?
+              %br
+              = link_to billing_log_event_archived_email_path(log_event),
+                class: "btn btn-xs btn-default", 
+                title: "View archived email" do
+                %i.fa.fa-envelope
+                View Email
           - else
             –
 

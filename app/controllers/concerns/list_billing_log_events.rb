@@ -9,7 +9,7 @@ module ListBillingLogEvents
       events: index_params[:events],
       invoice_number: index_params[:invoice_number],
       payment_source: index_params[:payment_source],
-    ).search.includes(:loggable).reverse_chronological.paginate(
+    ).search.includes(:loggable, :email_file_attachment).reverse_chronological.paginate(
       per_page: 50, page: index_params[:page]
     )
   end

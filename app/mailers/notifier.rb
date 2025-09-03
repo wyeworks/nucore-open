@@ -126,7 +126,7 @@ class Notifier < ActionMailer::Base
   def log_statement_email(email)
     return unless SettingsHelper.feature_on?(:billing_log_events)
 
-    LogEvent.log_email(
+    log_event = LogEvent.log_email(
       @statement,
       :statement_email,
       email,
@@ -134,6 +134,17 @@ class Notifier < ActionMailer::Base
         facility_id: @facility&.id
       }
     )
+
+    archive_statement_email(email, log_event)
+
+    log_event
+  end
+
+  def archive_statement_email(email, log_event)
+    return if log_event.blank?
+
+    archiver = EmailArchiver.new(mail_message: email, log_event:)
+    archiver.archive!
   end
 
 end

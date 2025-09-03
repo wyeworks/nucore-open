@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class LogEvent < ApplicationRecord
+  include ArchivedEmailSupport
+
   belongs_to :user # This is whodunnit
   belongs_to :loggable, -> { with_deleted if respond_to?(:with_deleted) }, polymorphic: true
   serialize :metadata, JSON

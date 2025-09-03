@@ -1,0 +1,4 @@
+en:
+  controllers:
+    archived_emails:
+      attachment_not_found: "Attachment not found"
