@@ -89,7 +89,6 @@ class TabbableReports {
   }
 
   init_form() {
-    if ($('#status_filter').length) { $('#status_filter').chosen(); }
     $('.datepicker').datepicker();
     return this.$element.find(':input').change(() => this.update_parameters());
   }

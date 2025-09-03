@@ -11,6 +11,7 @@ gem "sprockets-rails"
 gem "config"
 gem "bootsnap", require: false
 gem "puma"
+gem "jsbundling-rails", "~> 1.3"
 gem "rack-utf8_sanitizer"
 gem "net-smtp"
 gem "net-imap"
@@ -80,7 +81,7 @@ gem "rubyzip"
 gem "prawn-rails"
 
 ## Email
-gem "mailgun-ruby", "~>1.3.9"
+gem "mailgun-ruby", "~>1.3.10"
 
 ## other
 gem "delayed_job_active_record"
@@ -116,7 +117,7 @@ group :development do
   gem "haml_lint", require: false
   gem "letter_opener"
   gem "rack-mini-profiler", "~> 4.0"
-  gem "rubocop", "1.79.2", require: false
+  gem "rubocop", "1.80.1", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"

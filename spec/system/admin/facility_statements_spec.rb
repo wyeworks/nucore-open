@@ -31,6 +31,88 @@ RSpec.describe "Facility Statement Admin" do
     end
   end
 
+  describe "parent statement functionality", :js do
+    let(:account) { accounts.first }
+    let(:order_detail) { order_details.first }
+    let!(:parent_statement) do
+      create(:statement, account: account, facility: facility, created_by: director.id)
+    end
+
+    before do
+      login_as director
+    end
+
+    context "when reference_statement_invoice_number feature is on", feature_setting: { reference_statement_invoice_number: true } do
+      it "creates child statement with parent reference" do
+        visit new_facility_statement_path(facility)
+
+        click_link "Select All"
+
+        click_button "Create"
+
+        expect(page).to have_content("Create New Statement")
+
+        fill_in "parent_invoice_number", with: parent_statement.invoice_number
+
+        click_button "Save"
+
+        expect(page).to have_current_path(new_facility_statement_path(facility))
+        expect(page).to have_content("Notifications sent successfully")
+
+        child_statement = Statement.find_by(invoice_number: "#{parent_statement.invoice_number}-2")
+        expect(child_statement).to be_present
+        expect(child_statement.parent_statement_id).to eq(parent_statement.id)
+      end
+
+      it "shows error for invalid parent invoice number format" do
+        visit new_facility_statement_path(facility)
+
+        click_link "Select All"
+
+        click_button "Create"
+
+        fill_in "parent_invoice_number", with: "invalid-format"
+        click_button "Save"
+
+        expect(page).to have_content("Invalid invoice number format")
+      end
+
+      it "creates standard statement when parent invoice number is left blank" do
+        visit new_facility_statement_path(facility)
+
+        click_link "Select All"
+
+        click_button "Create"
+
+        click_button "Save"
+
+        expect(page).to have_current_path(new_facility_statement_path(facility))
+        expect(page).to have_content("Notifications sent successfully")
+
+        standard_statement = Statement.last
+        expect(standard_statement.parent_statement_id).to be_nil
+        expect(standard_statement.invoice_number).to eq("#{account.id}-#{standard_statement.id}")
+      end
+    end
+
+    context "when reference_statement_invoice_number feature is off", feature_setting: { reference_statement_invoice_number: false } do
+      it "does not show parent statement modal" do
+        visit new_facility_statement_path(facility)
+
+        click_link "Select All"
+
+        click_button "Create"
+
+        expect(page).to have_current_path(new_facility_statement_path(facility))
+        expect(page).to have_content("Notifications sent successfully")
+
+        standard_statement = Statement.last
+        expect(standard_statement.parent_statement_id).to be_nil
+        expect(standard_statement.invoice_number).to eq("#{account.id}-#{standard_statement.id}")
+      end
+    end
+  end
+
   describe "searching statements" do
     let!(:statement1) { create(:statement, created_at: 9.days.ago, order_details: [order_details.first], account: order_details.first.account, facility:) }
     let!(:statement2) { create(:statement, created_at: 6.days.ago, order_details: [order_details.second], account: order_details.second.account, facility:) }

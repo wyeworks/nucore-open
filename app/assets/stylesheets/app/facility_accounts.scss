@@ -2,3 +2,24 @@
   color: red;
   text-transform: uppercase;
 }
+
+.account-number-fields-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  
+  .field-separator {
+    margin-bottom: 6px;
+  }
+}
+
+.account_number_field {
+  flex: 1;
+  max-width: 240px;
+}
+
+.account-form {
+  input {
+    max-width: 240px;
+  }
+}

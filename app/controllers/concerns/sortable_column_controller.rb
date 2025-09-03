@@ -11,7 +11,7 @@ module SortableColumnController
   def sort_clause
     Array(sort_lookup_hash[sort_column]).map do |clause|
       [clause, sort_direction].join(" ")
-    end.join(", ")
+    end
   end
 
   private

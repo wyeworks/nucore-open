@@ -19,7 +19,8 @@
             &nbsp;
         .col-md-2
           .submit
-            = submit_tag text(@order_detail_action, scope: "admin.transaction_search.actions"), class: "btn btn-primary"
+            = hidden_field_tag :parent_invoice_number, "", id: "parent_invoice_number_hidden"
+            = submit_tag text(@order_detail_action, scope: "admin.transaction_search.actions"), class: "btn btn-primary", id: "create_statement_btn"
       .row
         .col-md-12= render "shared/transactions/table_inside", order_details: order_details
   - else

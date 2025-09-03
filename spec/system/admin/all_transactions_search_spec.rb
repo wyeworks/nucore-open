@@ -19,6 +19,50 @@ RSpec.describe "All Transactions Search", :js do
     end
   end
 
+  describe "sorting by columns" do
+    let(:some_account) { facility.order_details.complete.last.account }
+
+    before do
+      # Can only select creation enabled types in the filter
+      allow_any_instance_of(AccountConfig).to(
+        receive(:creation_enabled_types).and_wrap_original do |method|
+          (method.call + [some_account.type.to_s]).uniq
+        end
+      )
+    end
+
+    before { login_as director }
+
+    it "can sort by order number while filtering by account owner and type" do
+      # use custom string to ease matching
+      allow_any_instance_of(Order).to receive(:id).and_wrap_original do |method|
+        "test_prefix_#{method.call}"
+      end
+
+      visit facility_transactions_path(facility)
+
+      select_from_chosen(some_account.model_name.human, from: "Payment Source Type")
+      select_from_chosen(some_account.owner_user.full_name, from: "Owners")
+
+      click_button "Filter"
+
+      expect(page).to have_content("Transaction History")
+
+      within("#table_billing") do
+        first("a", text: "Order").click
+      end
+
+      order_ids =
+        facility
+        .order_details
+        .complete
+        .for_accounts(some_account)
+        .pluck(:order_id)
+
+      expect(order_ids.map { |odid| "test_prefix_#{odid}" }).to appear_in_order
+    end
+  end
+
   describe "date field order" do
     let(:order_detail_ids) do
       page.all("a.manage-order-detail").map(&:text)
@@ -148,5 +192,77 @@ RSpec.describe "All Transactions Search", :js do
 
     expect(page).to have_content("Transaction History")
     expect(page).not_to have_content("Participating Facilities")
+  end
+
+  describe "price group column and filtering", feature_setting: { billing_table_price_groups: true } do
+    let(:order_detail1) { facility.order_details.complete.first }
+    let(:order_detail2) { facility.order_details.complete.second }
+    let(:price_group_name) { "Some Price Group" }
+    let(:other_price_group_name) { "Other Price Group" }
+    let(:price_policy) do
+      create(
+        :item_price_policy,
+        product: item,
+        price_group: create(:price_group, name: other_price_group_name),
+      )
+    end
+
+    before do
+      order_detail1.price_policy.price_group.update_column(:name, price_group_name)
+      order_detail2.update_column(:price_policy_id, price_policy.id)
+
+      login_as director
+    end
+
+    around do |example|
+      # Setting is not dynamically read
+      TransactionSearch::Searcher.default_config.tap do |config|
+        pp_config = config[:price_groups]
+        config[:price_groups] = true
+
+        example.run
+
+        config[:price_groups] = pp_config
+      end
+    end
+
+    it "shows Price Group column with correct values" do
+      visit facility_transactions_path(facility)
+
+      within("#table_billing") do
+        expect(page).to have_content("Price Group")
+      end
+
+      expect(page).to have_content(price_group_name)
+      expect(page).to have_content(other_price_group_name)
+    end
+
+    it "can filter by price groups" do
+      visit facility_transactions_path(facility)
+
+      select_from_chosen price_group_name, from: "Price Group"
+      click_button "Filter"
+
+      expect(page).to have_content(price_group_name)
+      expect(page).not_to have_content(other_price_group_name)
+    end
+  end
+
+  context "when price groups feature is disabled", feature_setting: { billing_table_price_groups: false } do
+    before { login_as director }
+
+    it "does not show Price Group column" do
+      visit facility_transactions_path(facility)
+
+      within("#table_billing") do
+        expect(page).not_to have_content("Price Group")
+      end
+    end
+
+    it "does not show Price Group filter" do
+      visit facility_transactions_path(facility)
+
+      expect(page).not_to have_select("Price Group")
+    end
   end
 end

@@ -12,7 +12,7 @@ module TransactionSearch
                   :account_types, :cross_cores, :cross_core_facilties,
                   :current_facility_id,
                   :projects,
-                  :cross_core_facilties
+                  :price_groups
 
     def self.model_name
       ActiveModel::Name.new(self, nil, "Search")

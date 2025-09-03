@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_07_29_132443) do
+ActiveRecord::Schema[7.0].define(version: 2025_08_20_223416) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -944,8 +944,11 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_29_132443) do
     t.datetime "created_at", precision: nil, null: false
     t.integer "account_id", null: false
     t.datetime "canceled_at", precision: nil
+    t.integer "parent_statement_id"
+    t.string "invoice_number"
     t.index ["account_id"], name: "index_statements_on_account_id"
     t.index ["facility_id"], name: "fk_statement_facilities"
+    t.index ["parent_statement_id"], name: "fk_rails_ba4bd3df86"
   end
 
   create_table "stored_files", id: :integer, charset: "utf8mb3", force: :cascade do |t|
@@ -1143,6 +1146,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_07_29_132443) do
   add_foreign_key "statement_rows", "statements"
   add_foreign_key "statements", "accounts"
   add_foreign_key "statements", "facilities", name: "fk_statement_facilities"
+  add_foreign_key "statements", "statements", column: "parent_statement_id"
   add_foreign_key "stored_files", "order_details", name: "fk_files_od"
   add_foreign_key "stored_files", "products", name: "fk_files_product"
   add_foreign_key "user_preferences", "users"

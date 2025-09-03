@@ -116,12 +116,13 @@ class OrderRowImporter
   end
 
   def product
-    @product ||=
-      @order_import
-      .facility
-      .products
-      .not_archived
-      .find_by(name: field(:product_name))
+    return @product if defined?(@product)
+
+    @product = @order_import
+               .facility
+               .products
+               .not_archived
+               .find_by(name: field(:product_name))
   end
 
   def add_error(message, options = {})

@@ -1,5 +1,5 @@
 - if facility.projects.active.any?
   = select_tag :project_id,
     project_id_assignment_options(facility.projects.active.display_order),
-    class: "sync_select",
+    class: "sync_select form-control",
     include_blank: false

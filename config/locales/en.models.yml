@@ -443,6 +443,9 @@ en:
         reconcile_note: Reconcile Note
         account_admins: Account Admins
         total_cost: Total
+        attributes:
+          parent_statement:
+            blank: "does not exist"
       statement/status:
         canceled: Canceled
         reconciled: Reconciled
@@ -456,6 +459,7 @@ en:
         description: Description
         type_string: Payment Source Type
         owner_user: Owner
+        price_group: Price Group
         remittance_information: Bill To
         suspended_at: Suspended
       nufs_account:

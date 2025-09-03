@@ -1,3 +1,5 @@
+import { MultiSelectHelper } from './multi_select_helper';
+
 document.addEventListener("DOMContentLoaded", function() {
   function moveSelected(fromSelect, toSelect) {
     MultiSelectHelper.selectNone(toSelect);

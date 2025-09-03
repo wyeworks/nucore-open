@@ -18,5 +18,8 @@
 
   = render "shared/transactions/table", order_details: @order_details
   = render "shared/reconcile_footnote"
+
+  - if SettingsHelper.feature_on?(:reference_statement_invoice_number)
+    = render "statement_modal"
 - else
   %p.alert.alert-info= text(".no_transactions")

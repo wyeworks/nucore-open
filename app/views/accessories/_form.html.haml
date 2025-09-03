@@ -7,19 +7,7 @@
     - else
       %p= t("product_accessories.pick_accessories.actual_time_html", time: @order_detail.reservation.actual_duration_mins)
 
-    %table.table
-      - @order_details.each do |od|
-        = f.simple_fields_for od.product.id.to_s, od do |p|
-          %tr{class: ["accessory-row", "scaling-#{od.class.name.demodulize.underscore}"]}
-            %td
-              = p.input :enabled, as: :boolean, label: false, inline_label:  "#{od.product.to_s} (#{t("product_accessories.type.#{od.scaling_type}")})", checked_value: "true", unchecked_value: "false"
-
-            %td= p.input :quantity,
-                disabled: !od.quantity_editable?,
-                label: false,
-                input_html: { value: od.quantity,
-                              class: od.quantity_as_time? ? "timeinput" : "",
-                              data: { always_disabled: !od.quantity_editable? } }
+    = render "accessories/accessory_table", f: f, order_details: @order_details
 
   .modal-footer
     = f.submit t("product_accessories.button.submit"), class: "btn btn-primary"

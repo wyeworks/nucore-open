@@ -173,6 +173,31 @@ RSpec.describe FacilityAccountsReconciliationController do
         end
       end
     end
-  end
 
+    describe "log event creation" do
+      let(:reconciled_at) { Time.current }
+
+      context "when billing_log_events is enabled", feature_setting: { billing_log_events: true } do
+        it "creates a log event for the statement" do
+          expect { perform }.to change {
+            LogEvent.where(loggable: statement, event_type: :closed).count
+          }.by(1)
+        end
+
+        it "includes reconciled notes in metadata" do
+          perform
+          log_event = LogEvent.where(loggable: statement, event_type: :closed).last
+          expect(log_event.metadata["reconciled_notes"]).to eq(["A note"])
+        end
+      end
+
+      context "when billing_log_events is disabled", feature_setting: { billing_log_events: false } do
+        it "does not create a log event" do
+          expect { perform }.not_to change {
+            LogEvent.where(loggable: statement, event_type: :closed).count
+          }
+        end
+      end
+    end
+  end
 end

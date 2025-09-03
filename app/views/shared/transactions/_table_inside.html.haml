@@ -62,9 +62,15 @@
           %td= order_detail.created_by_user.full_name
           - colspan_for_total += 1
         - if @account.nil? && controller_name != "projects"
-          %td= order_detail.account
-          %td= order_detail.account.owner_user
-          - colspan_for_total += 2
+          - if SettingsHelper.feature_on?(:billing_table_price_groups)
+            %td= order_detail.account.owner_user
+            %td= order_detail.account
+            %td= order_detail.price_policy&.price_group&.name
+            - colspan_for_total += 3
+          - else
+            %td= order_detail.account
+            %td= order_detail.account.owner_user
+            - colspan_for_total += 2
         %td.currency
           - order_detail_presenter = OrderDetailPresenter.new(order_detail)
           = order_detail_presenter.wrapped_total
