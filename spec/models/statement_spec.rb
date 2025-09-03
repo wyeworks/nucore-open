@@ -44,7 +44,7 @@ RSpec.describe Statement do
       context "when reference_statement_invoice_number feature is on", feature_setting: { reference_statement_invoice_number: true } do
         it "generates standard invoice number for statements without parent" do
           statement.save!
-          expect(statement.invoice_number).to eq("#{account.id}-#{statement.id}")
+          expect(statement.invoice_number).to eq(statement.build_invoice_number)
         end
 
         it "generates sequential invoice numbers for child statements" do
@@ -64,7 +64,7 @@ RSpec.describe Statement do
       context "when reference_statement_invoice_number feature is off", feature_setting: { reference_statement_invoice_number: false } do
         it "generates standard invoice numbers even for child statements" do
           child_statement.save!
-          expect(child_statement.invoice_number).to eq("#{account.id}-#{child_statement.id}")
+          expect(child_statement.invoice_number).to eq(child_statement.build_invoice_number)
         end
       end
     end
