@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_08_20_223416) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_03_124148) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -948,6 +948,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_08_20_223416) do
     t.string "invoice_number"
     t.index ["account_id"], name: "index_statements_on_account_id"
     t.index ["facility_id"], name: "fk_statement_facilities"
+    t.index ["invoice_number"], name: "index_stmt_invoice_number", unique: true
     t.index ["parent_statement_id"], name: "fk_rails_ba4bd3df86"
   end
 
