@@ -4,13 +4,27 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::OutputSafetyHelper
 
+  def notices_service
+    @notices_service ||= OrderDetails::NoticesService.new(self)
+  end
+
   def statuses
-    notice_keys.map { |s| Notice.new(s) }
+    values = if SettingsHelper.feature_on?(:stored_order_notices)
+               notice_keys
+             else
+               notices_service.notices
+             end
+    values.map { |s| Notice.new(s) }
   end
 
   def warnings
     if problem?
-      [Notice.new(problem_description_key || :problem_out_of_sync, :warning)]
+      problem_key = if SettingsHelper.feature_on?(:stored_order_notices)
+                      problem_description_key
+                    else
+                      notices_service.problems.first
+                    end
+      [Notice.new(problem_key || :problem_out_of_sync, :warning)]
     else
       []
     end

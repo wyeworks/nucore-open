@@ -6,7 +6,7 @@ RSpec.describe OrderDetailNoticePresenter do
   let(:order_detail) { OrderDetail.new(note: "Treat me like a double") }
   let(:presenter) { described_class.new(order_detail) }
 
-  describe "badges_to_html" do
+  describe "badges_to_html", feature_setting: { stored_order_notices: true } do
     matcher :have_html_badge do |expected_text|
       match do |string|
         level_class = case @level
