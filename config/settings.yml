@@ -176,7 +176,6 @@ feature:
   show_reconcile_credit_cards: false
   move_transactions_account_roles: false
   add_accessories_before_reservation_starts: false
-  reference_statement_invoice_number: false
   billing_table_price_groups: false
   reference_statement_invoice_number: false
   stored_order_notices: false
