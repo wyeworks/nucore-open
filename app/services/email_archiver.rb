@@ -12,11 +12,9 @@ class EmailArchiver
   def archive!
     return unless valid?
 
-    ActiveRecord::Base.transaction do
-      email_content = mail_message.to_s
-      filename = "email_#{Time.current.strftime('%Y%m%d_%H%M%S')}.eml"
-      log_event.attach_email(email_content, filename:)
-    end
+    email_content = mail_message.to_s
+    filename = "email_#{Time.current.strftime('%Y%m%d_%H%M%S')}.eml"
+    log_event.attach_email(email_content, filename:)
   rescue StandardError
     nil
   end
