@@ -50,7 +50,7 @@ RSpec.describe "Facility Statement Admin" do
 
         click_button "Create"
 
-        expect(page).to have_content("Create New Statement")
+        expect(page).to have_content("Create New #{I18n.t('Statement')}")
 
         fill_in "parent_invoice_number", with: parent_statement.invoice_number
 
@@ -89,9 +89,9 @@ RSpec.describe "Facility Statement Admin" do
         expect(page).to have_current_path(new_facility_statement_path(facility))
         expect(page).to have_content("Notifications sent successfully")
 
-        standard_statement = Statement.last
+        standard_statement = Statement.order(invoice_number: :asc).last
         expect(standard_statement.parent_statement_id).to be_nil
-        expect(standard_statement.invoice_number).to eq("#{account.id}-#{standard_statement.id}")
+        expect(standard_statement.invoice_number).to eq(standard_statement.build_invoice_number)
       end
     end
 
@@ -106,9 +106,9 @@ RSpec.describe "Facility Statement Admin" do
         expect(page).to have_current_path(new_facility_statement_path(facility))
         expect(page).to have_content("Notifications sent successfully")
 
-        standard_statement = Statement.last
+        standard_statement = Statement.order(invoice_number: :asc).last
         expect(standard_statement.parent_statement_id).to be_nil
-        expect(standard_statement.invoice_number).to eq("#{account.id}-#{standard_statement.id}")
+        expect(standard_statement.invoice_number).to eq(standard_statement.build_invoice_number)
       end
     end
   end

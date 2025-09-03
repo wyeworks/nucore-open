@@ -128,7 +128,7 @@ RSpec.describe StatementCreator do
 
           statement = Statement.last
           expect(statement.parent_statement_id).to be_nil
-          expect(statement.invoice_number).to eq("#{account.id}-#{statement.id}")
+          expect(statement.invoice_number).to eq(statement.build_invoice_number)
         end
       end
     end

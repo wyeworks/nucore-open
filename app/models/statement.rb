@@ -165,6 +165,10 @@ class Statement < ApplicationRecord
     cross_core_order_details_from_other_facilities.any?
   end
 
+  def build_invoice_number
+    "#{account_id}-#{id}"
+  end
+
   private
 
   def set_invoice_number
@@ -174,7 +178,7 @@ class Statement < ApplicationRecord
       sequence_number = next_sequence_number_for_parent
       self.invoice_number = "#{parent_statement.invoice_number}-#{sequence_number}"
     else
-      self.invoice_number = "#{account_id}-#{id}"
+      self.invoice_number = build_invoice_number
     end
 
     save!
