@@ -128,7 +128,7 @@ class Notifier < ActionMailer::Base
       }
     )
 
-    archive_statement_email(email, log_event) if SettingsHelper.feature_on?(:email_archiving)
+    archive_statement_email(email, log_event)
 
     log_event
   end
