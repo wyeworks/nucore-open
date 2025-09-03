@@ -5,12 +5,18 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   include ActionView::Helpers::OutputSafetyHelper
 
   def statuses
-    notice_keys.map { |s| Notice.new(s) }
+    # TODO: Use self.notice_keys
+    notice_service.notices.map { |s| Notice.new(s) }
+  end
+
+  def notice_service
+    @notice_service ||= OrderDetails::NoticesService.new(self)
   end
 
   def warnings
     if problem?
-      [Notice.new(problem_description_key || :problem_out_of_sync, :warning)]
+      # TODO: Use self.problem_description_key
+      [Notice.new(notice_service.problems.first || :problem_out_of_sync, :warning)]
     else
       []
     end
