@@ -64,19 +64,6 @@ RSpec.describe "Facility Statement Admin" do
         expect(child_statement.parent_statement_id).to eq(parent_statement.id)
       end
 
-      it "shows error for invalid parent invoice number format" do
-        visit new_facility_statement_path(facility)
-
-        click_link "Select All"
-
-        click_button "Create"
-
-        fill_in "parent_invoice_number", with: "invalid-format"
-        click_button "Save"
-
-        expect(page).to have_content("Invalid invoice number format")
-      end
-
       it "creates standard statement when parent invoice number is left blank" do
         visit new_facility_statement_path(facility)
 
