@@ -94,11 +94,6 @@ RSpec.describe StatementCreator do
               parent_invoice_number: invalid_invoice_number,
             )
           end
-
-          it "adds error for invalid format" do
-            creator_with_invalid.create
-            expect(creator_with_invalid.errors).to include(I18n.t("services.statement_creator.invalid_invoice_format"))
-          end
         end
 
         context "with non-existent parent statement" do

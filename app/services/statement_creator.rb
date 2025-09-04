@@ -82,17 +82,15 @@ class StatementCreator
 
   def validate_parent_statement
     if parent_invoice_number.present? && SettingsHelper.feature_on?(:reference_statement_invoice_number)
-      # Parse invoice number format: "account_id-statement_id"
-      if /\A(?<account_id>\d+)-(?<statement_id>\d+)\z/ =~ parent_invoice_number
-        parent_statement = Statement.find_by(id: statement_id)
+      parent_statement = Statement.find_by(
+        invoice_number: parent_invoice_number,
+        parent_statement_id: nil,
+      )
 
-        if parent_statement.present? && parent_statement.account_id == account_id.to_i
-          statement_id
-        else
-          @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
-        end
+      if parent_statement.present?
+        parent_statement.id
       else
-        @errors << I18n.t("services.statement_creator.invalid_invoice_format")
+        @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
       end
     end
   end
