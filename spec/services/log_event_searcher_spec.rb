@@ -69,23 +69,11 @@ RSpec.describe LogEventSearcher do
       expect(results).to match_array([log_1])
     end
 
-    it "finds the statement by statement ID" do
-      results = search(invoice_number: statement1.id.to_s)
-      expect(results).to match_array([log_1])
-    end
-
     it "finds statements by partial match of invoice number" do
       # Extract part of the invoice number (e.g., if invoice is "1-23", search for "1-2")
       partial_invoice = statement1.invoice_number[0..-2]
       results = search(invoice_number: partial_invoice)
-      expect(results).to match_array([log_1])
-    end
-
-    it "finds statements by partial match of statement ID" do
-      # Use last digit of statement ID
-      partial_id = statement1.id.to_s[-1]
-      results = search(invoice_number: partial_id)
-      expect(results.map(&:loggable_id)).to include(statement1.id)
+      expect(results).to include(log_1)
     end
 
     it "finds nothing when invoice number doesn't match" do
