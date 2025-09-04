@@ -7,4 +7,3 @@ en:
         request_failed: "Scishield API error: Unable to access training certificates."
     statement_creator:
       parent_statement_not_found: "Parent statement with invoice number %{invoice_number} not found"
-      invalid_invoice_format: "Invalid invoice number format. Expected format: 'account_id-statement_id' (e.g., '123-456')"

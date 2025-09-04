@@ -92,8 +92,6 @@ class StatementCreator
       else
         @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
       end
-    else
-      @errors << I18n.t("services.statement_creator.invalid_invoice_format")
     end
   end
 end
