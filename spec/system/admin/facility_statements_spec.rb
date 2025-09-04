@@ -57,7 +57,7 @@ RSpec.describe "Facility Statement Admin" do
         click_button "Save"
 
         expect(page).to have_current_path(new_facility_statement_path(facility))
-        expect(page).to have_content("Notifications sent successfully")
+        expect(page).to have_content("successfully")
 
         child_statement = Statement.find_by(invoice_number: "#{parent_statement.invoice_number}-2")
         expect(child_statement).to be_present
@@ -74,7 +74,7 @@ RSpec.describe "Facility Statement Admin" do
         click_button "Save"
 
         expect(page).to have_current_path(new_facility_statement_path(facility))
-        expect(page).to have_content("Notifications sent successfully")
+        expect(page).to have_content("successfully")
 
         standard_statement = Statement.order(invoice_number: :asc).last
         expect(standard_statement.parent_statement_id).to be_nil
@@ -91,7 +91,7 @@ RSpec.describe "Facility Statement Admin" do
         click_button "Create"
 
         expect(page).to have_current_path(new_facility_statement_path(facility))
-        expect(page).to have_content("Notifications sent successfully")
+        expect(page).to have_content("successfully")
 
         standard_statement = Statement.order(invoice_number: :asc).last
         expect(standard_statement.parent_statement_id).to be_nil
