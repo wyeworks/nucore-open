@@ -22,6 +22,16 @@ class FacilityAccountsController < ApplicationController
   def index
     accounts = Account.with_orders_for_facility(current_facility)
 
+    if SettingsHelper.feature_on?(:account_tabs)
+      set_account_types
+
+      accounts = if params[:suspended] == "true"
+                   accounts.suspended
+                 else
+                   accounts.active
+                 end
+    end
+
     @accounts = accounts.paginate(page: params[:page])
   end
 
@@ -73,13 +83,21 @@ class FacilityAccountsController < ApplicationController
 
   # GET/POST /facilities/:facility_id/accounts/search_results
   def search_results
-    searcher = AccountSearcher.new(params[:search_term], scope: Account.for_facility(current_facility))
+    account_scope = Account.for_facility(current_facility)
+
+    if SettingsHelper.feature_on?(:account_tabs) && params[:account_type].present?
+      account_scope = account_scope.where(type: params[:account_type])
+    end
+
+    searcher = AccountSearcher.new(params[:search_term], scope: account_scope)
+
     if searcher.valid?
       @accounts = searcher.results
 
       respond_to do |format|
         format.html do
           @accounts = @accounts.paginate(page: params[:page])
+          set_account_types
           render layout: false
         end
         format.csv do
@@ -90,6 +108,7 @@ class FacilityAccountsController < ApplicationController
       end
     else
       flash.now[:errors] = "Search terms must be 3 or more characters."
+      set_account_types
       render layout: false
     end
   end
@@ -176,6 +195,10 @@ class FacilityAccountsController < ApplicationController
     else
       @facility_accounts_for_user = []
     end
+  end
+
+  def set_account_types
+    @account_types = Account.config.account_types_for_facility(current_facility, :create)
   end
 
 end
