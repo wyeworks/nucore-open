@@ -21,7 +21,7 @@
 %ul.list-inline
   - if SettingsHelper.feature_on?(:edit_accounts) && current_ability.can?(:create, Account)
     %li= link_to t(".add_account"), new_account_user_search_facility_accounts_path, class: "btn-add"
-  - if !@accounts.blank?
+  - if !@accounts.blank? && SettingsHelper.feature_off?(:account_tabs)
     %li.toggle_expired_accts_btn--js.toggle_expired_btn.btn.btn-primary= t("views.facility_accounts.account_table.hide_text")
 #result
   = render "account_table"
