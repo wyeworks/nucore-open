@@ -487,4 +487,84 @@ RSpec.describe FacilityJournalsController do
       end
     end
   end
+
+  describe "#unreconcile" do
+    def perform
+      post :unreconcile, params: { facility_id: facility.url_name, journal_id: journal.id }
+    end
+
+    before do
+      sign_in admin_user
+      ignore_account_validations
+      create_order_details
+      @journal.create_journal_rows!([@order_detail1, @order_detail2, @order_detail3])
+    end
+
+    describe "when all order details are reconciled" do
+      before do
+        @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+        @order_detail2.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+        @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+      end
+
+      it "unreconciles all order details" do
+        perform
+        expect(@order_detail1.reload.state).to eq("complete")
+        expect(@order_detail2.reload.state).to eq("complete")
+        expect(@order_detail3.reload.state).to eq("complete")
+      end
+
+      it "clears reconciled_at for all order details" do
+        perform
+        expect(@order_detail1.reload.reconciled_at).to be_nil
+        expect(@order_detail2.reload.reconciled_at).to be_nil
+        expect(@order_detail3.reload.reconciled_at).to be_nil
+      end
+
+      it "sets flash notice with correct count" do
+        perform
+        expect(flash[:notice]).to eq("3 payments successfully unreconciled")
+      end
+    end
+
+    describe "when some order details are not reconciled" do
+      before do
+        @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+        @order_detail2.update!(state: "complete")
+        @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+      end
+
+      it "only unreconciles the reconciled ones" do
+        perform
+        expect(@order_detail1.reload.state).to eq("complete")
+        expect(@order_detail2.reload.state).to eq("complete")
+        expect(@order_detail3.reload.state).to eq("complete")
+      end
+
+      it "shows correct count in flash notice" do
+        perform
+        expect(flash[:notice]).to eq("2 payments successfully unreconciled")
+      end
+    end
+
+    describe "when no order details are reconciled" do
+      before do
+        @order_detail1.update!(state: "complete")
+        @order_detail2.update!(state: "complete")
+        @order_detail3.update!(state: "complete")
+      end
+
+      it "does not change any states" do
+        perform
+        expect(@order_detail1.reload.state).to eq("complete")
+        expect(@order_detail2.reload.state).to eq("complete")
+        expect(@order_detail3.reload.state).to eq("complete")
+      end
+
+      it "does not show a flash notice" do
+        perform
+        expect(flash[:notice]).to be_nil
+      end
+    end
+  end
 end
