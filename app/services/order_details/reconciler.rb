@@ -92,7 +92,7 @@ module OrderDetails
     # but we do need to make sure to allow them on the same day.
     def all_journals_and_statements_must_be_before_reconciliation_date
       return unless reconciled_at.present?
-      if @order_details.any? { |od| od.journal_or_statement_date.beginning_of_day > reconciled_at }
+      if @order_details.any? { |od| od.journal_or_statement_date&.beginning_of_day&.> reconciled_at }
         errors.add(:reconciled_at, :after_all_journal_dates)
       end
     end
