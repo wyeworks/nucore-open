@@ -311,6 +311,7 @@ Rails.application.routes.draw do
 
     resources :journals, controller: "facility_journals", only: [:index, :new, :create, :update, :show] do
       post "reconcile", to: "facility_journals#reconcile"
+      post "unreconcile", to: "facility_journals#unreconcile"
     end
 
     resources :price_groups do

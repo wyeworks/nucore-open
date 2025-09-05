@@ -137,23 +137,107 @@ class FacilityJournalsController < ApplicationController
   end
 
   def reconcile
+    process_reconciliation_action(:reconcile)
+  end
+
+  def unreconcile
+    process_reconciliation_action(:unreconcile)
+  end
+
+  private
+
+  def process_reconciliation_action(action)
+    selected_ids = get_selected_order_ids
+
+    if selected_ids.empty?
+      flash[:error] = I18n.t("controllers.facility_journals.#{action}.errors.none_selected")
+      redirect_to [current_facility, @journal] and return
+    end
+
+    orders = find_orders_for_action(action, selected_ids)
+
+    if orders.empty?
+      flash[:notice] = I18n.t("controllers.facility_journals.#{action}.errors.none_eligible")
+      redirect_to [current_facility, @journal] and return
+    end
+
+    send("#{action}_orders", orders)
+    redirect_to [current_facility, @journal]
+  end
+
+  def get_selected_order_ids
+    order_detail_params = params[:order_detail] || {}
+    order_detail_params.select do |_id, attrs|
+      attrs[:selected] == "1"
+    end.keys
+  end
+
+  def format_success_message(count, action)
+    I18n.t("controllers.facility_journals.#{action}.success", count: count)
+  end
+
+  def find_orders_for_action(action, ids)
+    case action
+    when :reconcile
+      @journal.order_details.where(id: ids).where.not(state: "reconciled")
+    when :unreconcile
+      @journal.order_details.where(id: ids, state: "reconciled")
+    end
+  end
+
+  def reconcile_orders(orders)
+    filtered_params = build_reconciler_params(orders.pluck(:id))
+
     reconciler = OrderDetails::Reconciler.new(
-      @journal.order_details,
-      params[:order_detail],
+      orders,
+      filtered_params,
       @journal.journal_date,
       "reconciled"
     )
 
     if reconciler.reconcile_all > 0
-      count = reconciler.count
-      flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully reconciled" if count > 0
+      flash[:notice] = format_success_message(reconciler.count, "reconciled")
     else
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
     end
-    redirect_to [current_facility, @journal]
   end
 
-  private
+  def unreconcile_orders(orders)
+    unreconciled_count = 0
+    errors = []
+
+    orders.readonly(false).each do |order_detail|
+
+      if order_detail.update!(
+        state: "complete",
+        order_status: OrderStatus.complete,
+        reconciled_at: nil,
+        deposit_number: nil
+      )
+        unreconciled_count += 1
+      end
+    rescue => e
+      errors << "Order ##{order_detail}: #{e.message}"
+
+    end
+
+    flash[:notice] = format_success_message(unreconciled_count, "unreconciled") if unreconciled_count > 0
+    flash[:error] = errors.join("<br />").html_safe if errors.any?
+  end
+
+  def build_reconciler_params(order_ids)
+    order_detail_params = params[:order_detail] || {}
+    selected_params = {}
+
+    order_ids.each do |id|
+      id_str = id.to_s
+      if order_detail_params[id_str]
+        selected_params[id_str] = order_detail_params[id_str].merge("reconciled" => "1")
+      end
+    end
+
+    selected_params
+  end
 
   def new_journal_from_params
     @journal = Journal.new(
