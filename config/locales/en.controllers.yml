@@ -65,6 +65,16 @@ en:
       create:
         notice: "The journal file has been created successfully"
         more_errors: "There are more errors. Please resolve those above to see those that remain."
+      reconcile:
+        success: "%{count} payment(s) successfully reconciled"
+        errors:
+          none_selected: "No orders were selected to reconcile"
+          none_eligible: "All selected orders are already reconciled"
+      unreconcile:
+        success: "%{count} payment(s) successfully unreconciled"
+        errors:
+          none_selected: "No orders were selected to unreconcile"
+          none_eligible: "No reconciled orders were selected to unreconcile"
 
     facility_order_details:
       destroy:
