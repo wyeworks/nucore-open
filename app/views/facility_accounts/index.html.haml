@@ -5,6 +5,9 @@
 
 %h2= t(".head")
 
+- if SettingsHelper.feature_on?(:account_tabs)
+  = render "shared/accounts_tab_nav"
+
 = form_tag search_results_facility_accounts_path, id: "ajax_form", method: :get, class: "js--searchForm" do
   = label_tag :search_term, text("facility_accounts.index.label.search_term")
   = hidden_field_tag :email, current_user.email, disabled: true

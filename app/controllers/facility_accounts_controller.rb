@@ -22,6 +22,14 @@ class FacilityAccountsController < ApplicationController
   def index
     accounts = Account.with_orders_for_facility(current_facility)
 
+    if SettingsHelper.feature_on?(:account_tabs)
+      accounts = if params[:suspended] == "true"
+                   accounts.suspended
+                 else
+                   accounts.active
+                 end
+    end
+
     @accounts = accounts.paginate(page: params[:page])
   end
 

@@ -1,0 +1,4 @@
+- cross_facility = current_facility.nil?
+%ul.nav.nav-tabs
+  = tab "Active", cross_facility ? accounts_path : facility_accounts_path(current_facility), !(params[:suspended] == "true")
+  = tab "Suspended", cross_facility ? accounts_path(suspended: "true") : facility_accounts_path(current_facility, suspended: "true"), (params[:suspended] == "true")
