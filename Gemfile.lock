@@ -306,7 +306,7 @@ GEM
       eye (>= 0.10.0)
     factory_bot (6.5.5)
       activesupport (>= 6.1.0)
-    factory_bot_rails (6.5.0)
+    factory_bot_rails (6.5.1)
       factory_bot (~> 6.5)
       railties (>= 6.1.0)
     faraday (2.13.4)
