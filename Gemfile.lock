@@ -334,7 +334,7 @@ GEM
       rainbow
       rubocop (>= 1.0)
       sysexits (~> 1.1)
-    hashdiff (1.2.0)
+    hashdiff (1.2.1)
     health_check (3.1.0)
       railties (>= 5.0)
     i18n (1.14.7)
