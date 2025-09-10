@@ -196,7 +196,7 @@ class FacilityJournalsController < ApplicationController
     )
 
     if reconciler.reconcile_all > 0
-      flash[:notice] = format_success_message(reconciler.count, "reconciled")
+      flash[:notice] = format_success_message(reconciler.count, "reconcile")
     else
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
     end
@@ -221,7 +221,7 @@ class FacilityJournalsController < ApplicationController
 
     end
 
-    flash[:notice] = format_success_message(unreconciled_count, "unreconciled") if unreconciled_count > 0
+    flash[:notice] = format_success_message(unreconciled_count, "unreconcile") if unreconciled_count > 0
     flash[:error] = errors.join("<br />").html_safe if errors.any?
   end
 

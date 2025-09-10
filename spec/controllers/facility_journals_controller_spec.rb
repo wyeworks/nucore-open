@@ -436,8 +436,8 @@ RSpec.describe FacilityJournalsController do
     describe "submitting a single order detail" do
       let(:order_detail_params) do
         {
-          @order_detail1.id.to_s => { reconciled: "1" },
-          @order_detail3.id.to_s => { reconciled: "0" },
+          @order_detail1.id.to_s => { selected: "1", reconciled: "1" },
+          @order_detail3.id.to_s => { selected: "0", reconciled: "0" },
         }
       end
 
@@ -461,14 +461,14 @@ RSpec.describe FacilityJournalsController do
 
       let(:order_detail_params) do
         {
-          @order_detail1.id.to_s => { reconciled: "1" },
-          @order_detail2.id.to_s => { reconciled: "1" },
+          @order_detail1.id.to_s => { selected: "1", reconciled: "1" },
+          @order_detail2.id.to_s => { selected: "1", reconciled: "1" },
         }
       end
 
-      it "does not reconcile either" do
-        expect { perform }.to raise_error(ActiveRecord::RecordNotFound)
-        expect(@order_detail1.reload.state).to eq("complete")
+      it "only reconciles the order detail belonging to this journal" do
+        perform
+        expect(@order_detail1.reload.state).to eq("reconciled")
         expect(@order_detail2.reload.state).to eq("complete")
       end
     end
@@ -476,8 +476,8 @@ RSpec.describe FacilityJournalsController do
     describe "when submitting nothing checked" do
       let(:order_detail_params) do
         {
-          @order_detail1.id.to_s => { reconciled: "0" },
-          @order_detail3.id.to_s => { reconciled: "0" },
+          @order_detail1.id.to_s => { selected: "0", reconciled: "0" },
+          @order_detail3.id.to_s => { selected: "0", reconciled: "0" },
         }
       end
 
@@ -489,8 +489,20 @@ RSpec.describe FacilityJournalsController do
   end
 
   describe "#unreconcile" do
-    def perform
-      post :unreconcile, params: { facility_id: facility.url_name, journal_id: journal.id }
+    def perform(order_detail_params = nil)
+      if order_detail_params.nil?
+        # By default, select all order details for unreconciling
+        order_detail_params = {
+          @order_detail1.id.to_s => { "selected" => "1" },
+          @order_detail2.id.to_s => { "selected" => "1" },
+          @order_detail3.id.to_s => { "selected" => "1" }
+        }
+      end
+      post :unreconcile, params: {
+        facility_id: facility.url_name,
+        journal_id: journal.id,
+        order_detail: order_detail_params
+      }
     end
 
     before do
@@ -523,7 +535,7 @@ RSpec.describe FacilityJournalsController do
 
       it "sets flash notice with correct count" do
         perform
-        expect(flash[:notice]).to eq("3 payments successfully unreconciled")
+        expect(flash[:notice]).to eq("3 payment(s) successfully unreconciled")
       end
     end
 
@@ -543,7 +555,7 @@ RSpec.describe FacilityJournalsController do
 
       it "shows correct count in flash notice" do
         perform
-        expect(flash[:notice]).to eq("2 payments successfully unreconciled")
+        expect(flash[:notice]).to eq("2 payment(s) successfully unreconciled")
       end
     end
 
@@ -561,9 +573,9 @@ RSpec.describe FacilityJournalsController do
         expect(@order_detail3.reload.state).to eq("complete")
       end
 
-      it "does not show a flash notice" do
+      it "shows appropriate flash notice" do
         perform
-        expect(flash[:notice]).to be_nil
+        expect(flash[:notice]).to eq("No reconciled orders were selected to unreconcile")
       end
     end
   end
