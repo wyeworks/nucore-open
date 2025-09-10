@@ -24,6 +24,11 @@
         = select_tag :account_type,
         options_for_select(@account_types.map { |type| [type.constantize.label_name, type] }, params[:account_type]),
         { class: "form-control mb-2", include_blank: "" }
+      .col-md-4
+        = label_tag :account_status, I18n.t("facility_accounts.index.label.account_status")
+        = select_tag :account_status,
+        options_for_select([["Active", "active"], ["Expired", "expired"]], params[:account_status]),
+        { class: "form-control mb-2", include_blank: "" }
   .row
     .col-md-2
       = submit_tag t(".search"), class: "btn btn-default"

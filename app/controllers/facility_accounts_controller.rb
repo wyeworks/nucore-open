@@ -12,6 +12,7 @@ class FacilityAccountsController < ApplicationController
   before_action :init_account, except: :search_results
   before_action :build_account, only: [:new, :create]
   before_action :set_facility_accounts_for_user, only: [:accounts_available_for_order]
+  before_action :set_account_types, only: [:index, :search_results]
 
   authorize_resource :account, except: [:accounts_available_for_order]
 
@@ -23,12 +24,10 @@ class FacilityAccountsController < ApplicationController
     accounts = Account.with_orders_for_facility(current_facility)
 
     if SettingsHelper.feature_on?(:account_tabs)
-      set_account_types
-
       accounts = if params[:suspended] == "true"
                    accounts.suspended
                  else
-                   accounts.active
+                   accounts.not_suspended
                  end
     end
 
@@ -85,8 +84,22 @@ class FacilityAccountsController < ApplicationController
   def search_results
     account_scope = Account.for_facility(current_facility)
 
-    if SettingsHelper.feature_on?(:account_tabs) && params[:account_type].present?
-      account_scope = account_scope.where(type: params[:account_type])
+    if SettingsHelper.feature_on?(:account_tabs)
+      if params[:account_type].present?
+        account_scope = account_scope.where(type: params[:account_type])
+      end
+
+      if params[:account_status] == "active"
+        account_scope = account_scope.active
+      elsif params[:account_status] == "expired"
+        account_scope = account_scope.expired
+      end
+
+      if params[:search_term].blank?
+        @accounts = account_scope.paginate(page: params[:page])
+
+        return render layout: false
+      end
     end
 
     searcher = AccountSearcher.new(params[:search_term], scope: account_scope)
@@ -97,7 +110,6 @@ class FacilityAccountsController < ApplicationController
       respond_to do |format|
         format.html do
           @accounts = @accounts.paginate(page: params[:page])
-          set_account_types
           render layout: false
         end
         format.csv do
@@ -108,7 +120,6 @@ class FacilityAccountsController < ApplicationController
       end
     else
       flash.now[:errors] = "Search terms must be 3 or more characters."
-      set_account_types
       render layout: false
     end
   end
@@ -198,7 +209,9 @@ class FacilityAccountsController < ApplicationController
   end
 
   def set_account_types
-    @account_types = Account.config.account_types_for_facility(current_facility, :create)
+    if SettingsHelper.feature_on?(:account_tabs)
+      @account_types = Account.config.account_types_for_facility(current_facility, :create)
+    end
   end
 
 end

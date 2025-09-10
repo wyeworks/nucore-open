@@ -216,7 +216,8 @@ en:
       add_account: "Add Payment Source"
       label:
         search_term: "Search by payment source number, description, accounts receivable number, or payment source owner's !name_or_sso_id!"
-        account_type: "Filter by Type"
+        account_type: "Type"
+        account_status: "Status"
       search: Search
     new_account_user_search:
       head: "Add Payment Source"
