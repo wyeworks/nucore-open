@@ -46,7 +46,7 @@ RSpec.describe "Facility Accounts Tab" do
       end
 
       it "should filter by account type" do
-        select I18n.t("activerecord.models.#{active_account.type.underscore}.one"), from: I18n.t("facility_accounts.index.label.account_type")
+        select active_account.model_name.human, from: I18n.t("facility_accounts.index.label.account_type")
         find('[data-test-id="account_search_button"]').click
         # Wait for the loader to not be found, which is when the search results are shown
         expect(page).to have_no_css('[data-test-id="account_search_button"]', text: "Please Wait...")
