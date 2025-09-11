@@ -699,7 +699,8 @@ class OrderDetail < ApplicationRecord
   end
 
   def assign_actual_price
-    pp = product.cheapest_price_policy(self, time_for_policy_lookup)
+    date = time_for_policy_lookup || Time.current
+    pp = product.cheapest_price_policy(self, date)
 
     return unless pp
     costs = pp.calculate_cost_and_subsidy_from_order_detail(self)
