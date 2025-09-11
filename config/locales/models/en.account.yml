@@ -8,4 +8,5 @@ en:
   account:
     statuses:
       active: Active
+      expired: Expired
       suspended: Suspended
