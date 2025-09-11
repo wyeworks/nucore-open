@@ -19,7 +19,7 @@ module TransactionSearch
     end
 
     def label_method
-      :name
+      :name_scoped
     end
   end
 end

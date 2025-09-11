@@ -65,6 +65,10 @@ class PriceGroup < ApplicationRecord
     master_internal? ? "#{I18n.t('institution_name')} #{self[:name]}" : self[:name]
   end
 
+  def name_scoped
+    facility_id.present? ? "#{name} (#{facility.name})" : name
+  end
+
   def to_s
     name
   end

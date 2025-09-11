@@ -130,4 +130,20 @@ RSpec.describe PriceGroup do
     end
   end
 
+  describe "scoped_name" do
+    subject { price_group.name_scoped }
+
+    context "when it's global" do
+      before { price_group.update(facility: nil) }
+
+      it { is_expected.to eq price_group.name }
+    end
+
+    context "when it's not global" do
+      before { price_group.update(facility:) }
+
+      it { is_expected.to include(price_group.name) }
+      it { is_expected.to include(facility.name) }
+    end
+  end
 end
