@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Facility Accounts Tab", :js do
+RSpec.describe "Facility Accounts Tab" do
   let(:admin) { create(:user, :administrator) }
   let(:facility) { create(:setup_facility) }
   let(:active_account) { create(:nufs_account, :with_account_owner, facility:, expires_at: 1.day.from_now) }
