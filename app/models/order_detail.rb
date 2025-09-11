@@ -526,13 +526,8 @@ class OrderDetail < ApplicationRecord
   def price_groups
     return [PriceGroup.nonbillable] if product.nonbillable_mode?
 
-    if SettingsHelper.feature_on?(:pricing_flows_from_payment_source)
-      groups = account&.owner_user&.price_groups || user.price_groups
-    else
-      groups = user.price_groups
-      groups += account.price_groups if account
-    end
-
+    groups = SettingsHelper.feature_on?(:pricing_flows_from_payment_source) ? [] : user.price_groups
+    groups += account.price_groups if account
     groups.uniq
   end
 
