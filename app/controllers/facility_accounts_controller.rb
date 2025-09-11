@@ -89,11 +89,15 @@ class FacilityAccountsController < ApplicationController
         account_scope = account_scope.where(type: params[:account_type])
       end
 
-      if params[:account_status] == "active"
-        account_scope = account_scope.active
-      elsif params[:account_status] == "expired"
-        account_scope = account_scope.expired
-      end
+      account_scope = if params[:suspended] == "true"
+                        account_scope.suspended
+                      elsif params[:account_status] == "active"
+                        account_scope.active
+                      elsif params[:account_status] == "expired"
+                        account_scope.expired
+                      else
+                        account_scope.not_suspended
+                      end
 
       if params[:search_term].blank?
         @accounts = account_scope.paginate(page: params[:page])
