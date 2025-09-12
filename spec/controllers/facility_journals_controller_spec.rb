@@ -436,8 +436,8 @@ RSpec.describe FacilityJournalsController do
     describe "submitting a single order detail" do
       let(:order_detail_params) do
         {
-          @order_detail1.id.to_s => { reconciled: "1" },
-          @order_detail3.id.to_s => { reconciled: "0" },
+          @order_detail1.id.to_s => { selected: "1", reconciled: "1" },
+          @order_detail3.id.to_s => { selected: "0", reconciled: "0" },
         }
       end
 
@@ -461,14 +461,14 @@ RSpec.describe FacilityJournalsController do
 
       let(:order_detail_params) do
         {
-          @order_detail1.id.to_s => { reconciled: "1" },
-          @order_detail2.id.to_s => { reconciled: "1" },
+          @order_detail1.id.to_s => { selected: "1", reconciled: "1" },
+          @order_detail2.id.to_s => { selected: "1", reconciled: "1" },
         }
       end
 
-      it "does not reconcile either" do
-        expect { perform }.to raise_error(ActiveRecord::RecordNotFound)
-        expect(@order_detail1.reload.state).to eq("complete")
+      it "only reconciles the order detail belonging to this journal" do
+        perform
+        expect(@order_detail1.reload.state).to eq("reconciled")
         expect(@order_detail2.reload.state).to eq("complete")
       end
     end
@@ -476,14 +476,106 @@ RSpec.describe FacilityJournalsController do
     describe "when submitting nothing checked" do
       let(:order_detail_params) do
         {
-          @order_detail1.id.to_s => { reconciled: "0" },
-          @order_detail3.id.to_s => { reconciled: "0" },
+          @order_detail1.id.to_s => { selected: "0", reconciled: "0" },
+          @order_detail3.id.to_s => { selected: "0", reconciled: "0" },
         }
       end
 
       it "sets a flash message" do
         perform
-        expect(flash[:error]).to include("No orders")
+        expect(flash[:error]).to eq("No orders were selected or eligible to reconcile")
+      end
+    end
+  end
+
+  describe "#unreconcile" do
+    def perform(order_detail_params = nil)
+      if order_detail_params.nil?
+        # By default, select all order details for unreconciling
+        order_detail_params = {
+          @order_detail1.id.to_s => { "selected" => "1" },
+          @order_detail2.id.to_s => { "selected" => "1" },
+          @order_detail3.id.to_s => { "selected" => "1" }
+        }
+      end
+      post :unreconcile, params: {
+        facility_id: facility.url_name,
+        journal_id: journal.id,
+        order_detail: order_detail_params
+      }
+    end
+
+    before do
+      sign_in admin_user
+      ignore_account_validations
+      create_order_details
+      @journal.create_journal_rows!([@order_detail1, @order_detail2, @order_detail3])
+    end
+
+    describe "when all order details are reconciled" do
+      before do
+        @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+        @order_detail2.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+        @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+      end
+
+      it "unreconciles all order details" do
+        perform
+        expect(@order_detail1.reload.state).to eq("complete")
+        expect(@order_detail2.reload.state).to eq("complete")
+        expect(@order_detail3.reload.state).to eq("complete")
+      end
+
+      it "clears reconciled_at for all order details" do
+        perform
+        expect(@order_detail1.reload.reconciled_at).to be_nil
+        expect(@order_detail2.reload.reconciled_at).to be_nil
+        expect(@order_detail3.reload.reconciled_at).to be_nil
+      end
+
+      it "sets flash notice with correct count" do
+        perform
+        expect(flash[:notice]).to eq("3 payment(s) successfully unreconciled")
+      end
+    end
+
+    describe "when some order details are not reconciled" do
+      before do
+        @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+        @order_detail2.update!(state: "complete")
+        @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+      end
+
+      it "only unreconciles the reconciled ones" do
+        perform
+        expect(@order_detail1.reload.state).to eq("complete")
+        expect(@order_detail2.reload.state).to eq("complete")
+        expect(@order_detail3.reload.state).to eq("complete")
+      end
+
+      it "shows correct count in flash notice" do
+        perform
+        expect(flash[:notice]).to eq("2 payment(s) successfully unreconciled")
+      end
+    end
+
+    describe "when no order details are reconciled" do
+      before do
+        @order_detail1.update!(state: "complete")
+        @order_detail2.update!(state: "complete")
+        @order_detail3.update!(state: "complete")
+      end
+
+      it "does not change any states" do
+        perform
+        expect(@order_detail1.reload.state).to eq("complete")
+        expect(@order_detail2.reload.state).to eq("complete")
+        expect(@order_detail3.reload.state).to eq("complete")
+      end
+
+      it "shows appropriate flash error" do
+        perform
+        expect(flash[:error]).to eq("No orders were selected or eligible to unreconcile")
       end
     end
   end
