@@ -10,3 +10,6 @@ en:
         no_transactions: No transactions exist for this period.
         transaction_date: Transaction Date
         amount: Amount
+      accounts_tab_nav:
+        active: "Active"
+        suspended: "Suspended"

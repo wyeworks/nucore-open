@@ -5,20 +5,41 @@
 
 %h2= t(".head")
 
+- if SettingsHelper.feature_on?(:account_tabs)
+  = render "shared/accounts_tab_nav"
+
 = form_tag search_results_facility_accounts_path, id: "ajax_form", method: :get, class: "js--searchForm" do
   = label_tag :search_term, text("facility_accounts.index.label.search_term")
   = hidden_field_tag :email, current_user.email, disabled: true
   = hidden_field_tag :format, params[:format], disabled: true
   %br
-  = text_field_tag :search_term, nil, size: 30, class: "form-control"
-  = submit_tag t(".search"), class: "btn btn-default"
+  .row
+    .col-md-4
+      = text_field_tag :search_term, nil, size: 30, class: "form-control"
+
+  - if SettingsHelper.feature_on?(:account_tabs)
+    .row
+      .col-md-4
+        = label_tag :account_type, I18n.t("facility_accounts.index.label.account_type")
+        = select_tag :account_type,
+        options_for_select(@account_types.map { |type| [type.constantize.label_name, type] }, params[:account_type]),
+        { class: "form-control mb-2", include_blank: "" }
+      - unless params[:suspended] == "true"
+        .col-md-4
+          = label_tag :account_status, I18n.t("facility_accounts.index.label.account_status")
+          = select_tag :account_status,
+          options_for_select([[I18n.t("account.statuses.active"), "active"], [I18n.t("account.statuses.expired"), "expired"]], params[:account_status]),
+          { class: "form-control mb-2", include_blank: "" }
+  .row
+    .col-md-2
+      = submit_tag t(".search"), class: "btn btn-default", data: { test_id: "account_search_button" }
 
 %hr
 
 %ul.list-inline
   - if SettingsHelper.feature_on?(:edit_accounts) && current_ability.can?(:create, Account)
     %li= link_to t(".add_account"), new_account_user_search_facility_accounts_path, class: "btn-add"
-  - if !@accounts.blank?
+  - if !@accounts.blank? && SettingsHelper.feature_off?(:account_tabs)
     %li.toggle_expired_accts_btn--js.toggle_expired_btn.btn.btn-primary= t("views.facility_accounts.account_table.hide_text")
 #result
   = render "account_table"

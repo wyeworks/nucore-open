@@ -19,6 +19,8 @@ Rails.application.configure do
     Bullet.add_safelist type: :counter_cache, class_name: "Statement", association: :order_details
 
     Bullet.add_safelist type: :n_plus_one_query, class_name: "AccountUser", association: :account
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Account", association: :owner
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Account", association: :owner_user
     Bullet.add_safelist type: :n_plus_one_query, class_name: "AccountUser", association: :user
     Bullet.add_safelist type: :n_plus_one_query, class_name: "AccountPriceGroupMember", association: :price_group
     Bullet.add_safelist type: :n_plus_one_query, class_name: "AdminReservation", association: :order_detail
