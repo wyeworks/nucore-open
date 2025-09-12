@@ -134,6 +134,20 @@ RSpec.describe OrderDetail do
               .not_to change { order_detail.price_policy }
           end
         end
+
+        context "when fulfilled_at is nil" do
+          before :each do
+            order_detail.update_attribute(:fulfilled_at, nil)
+            current_price_policy.update_attribute(:start_date, 1.day.ago)
+            current_price_policy.update_attribute(:expire_date, SettingsHelper.fiscal_year_end(1.day.ago))
+          end
+
+          it "assigns the expected price policy" do
+            expect { order_detail.assign_price_policy }
+              .to change { order_detail.price_policy }
+              .from(nil).to(current_price_policy)
+          end
+        end
       end
 
       context "when no compatible price policies exist" do
