@@ -8,33 +8,79 @@ module OrderDetails
 
     attr_reader :persist_errors, :count, :order_details, :reconciled_at
 
-    validates :reconciled_at, :order_details, presence: true
-    validate :reconciliation_must_be_in_past
-    validate :all_journals_and_statements_must_be_before_reconciliation_date
+    validates :reconciled_at, presence: true, if: :reconciling?
+    validate :reconciliation_must_be_in_past, if: :reconciling?
+    validate :all_journals_and_statements_must_be_before_reconciliation_date, if: :reconciling?
 
     def initialize(
       order_detail_scope,
       params,
       reconciled_at,
-      order_status,
+      order_status = nil,
       bulk_reconcile: false,
       **kwargs
     )
       @params = params || ActionController::Parameters.new
       @order_status = order_status || "reconciled"
-      @order_details = order_detail_scope.readonly(false).find_ids(to_be_reconciled.keys)
+      @order_detail_scope = order_detail_scope.readonly(false)
       @reconciled_at = reconciled_at
       @bulk_note = kwargs[:bulk_note] if bulk_reconcile
       @bulk_deposit_number = kwargs[:bulk_deposit_number] if bulk_reconcile
+
+      @order_details = []
+      if @params.present? && !@params.empty?
+        selected_ids = @params.select { |_, p| p[:selected] == "1" }.keys
+        if selected_ids.any?
+          @order_details = @order_detail_scope.where(id: selected_ids)
+        end
+      end
     end
 
     def reconcile_all
       return 0 unless valid?
       @count = 0
+      @persist_errors = []
+
       OrderDetail.transaction do
         order_details.each do |od|
-          od_params = @params[od.id.to_s]
-          update_status(od, od_params)
+          next if od.reconciled?
+
+          od_params = @params[od.id.to_s] || {}
+          begin
+            od.assign_attributes(allowed(od_params))
+            od.reconciled_at = @reconciled_at
+            od.reconciled_note = @bulk_note if @bulk_note.present?
+            od.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
+            od.change_status!(OrderStatus.reconciled)
+            @count += 1
+          rescue => e
+            @persist_errors << "Order ##{od.id}: #{e.message}"
+            raise ActiveRecord::Rollback
+          end
+        end
+      end
+      @count
+    end
+
+    def unreconcile_all
+      @count = 0
+      @persist_errors = []
+
+      OrderDetail.transaction do
+        order_details.each do |od|
+          next unless od.reconciled?
+
+          begin
+            od.update!(
+              state: "complete",
+              order_status: OrderStatus.complete,
+              reconciled_at: nil,
+              deposit_number: nil
+            )
+            @count += 1
+          rescue => e
+            @persist_errors << "Order ##{od.id}: #{e.message}"
+          end
         end
       end
       @count
@@ -46,33 +92,8 @@ module OrderDetails
 
     private
 
-    # The params hash comes in with the unchecked IDs as well. Filter out to only
-    # those we're going to reconcile. Returns an array of IDs.
-    def to_be_reconciled
-      @params.select { |_order_detail_id, params| params[:reconciled] == "1" }
-    end
-
-    def update_status(order_detail, params)
-      order_detail.assign_attributes(allowed(params))
-
-      if @order_status == "reconciled"
-        order_detail.reconciled_at = @reconciled_at
-        order_detail.reconciled_note = @bulk_note if @bulk_note.present?
-        order_detail.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
-        order_detail.change_status!(OrderStatus.reconciled)
-      else
-        order_detail.reconciled_at = nil
-        order_detail.deposit_number = nil
-        order_detail.unrecoverable_note = @bulk_note if @bulk_note.present?
-        order_detail.change_status!(OrderStatus.unrecoverable)
-      end
-      @count += 1
-    rescue => e
-      @error_fields = { order_detail.id => order_detail.errors.collect { |field, _error| field } }
-      @persist_errors = order_detail.errors.full_messages
-      @persist_errors = [e.message] if @persist_errors.empty?
-      @count = 0
-      raise ActiveRecord::Rollback
+    def reconciling?
+      @reconciled_at.present?
     end
 
     def allowed(params)
@@ -88,10 +109,8 @@ module OrderDetails
       errors.add(:reconciled_at, :must_be_in_past) if reconciled_at > Time.current.end_of_day
     end
 
-    # You cannot set the reconciliation date for a date before the journal/statement date,
-    # but we do need to make sure to allow them on the same day.
     def all_journals_and_statements_must_be_before_reconciliation_date
-      return unless reconciled_at.present?
+      return unless reconciled_at.present? && @order_details.present?
       if @order_details.any? { |od| od.journal_or_statement_date&.beginning_of_day&.> reconciled_at }
         errors.add(:reconciled_at, :after_all_journal_dates)
       end

@@ -68,13 +68,11 @@ en:
       reconcile:
         success: "%{count} payment(s) successfully reconciled"
         errors:
-          none_selected: "No orders were selected to reconcile"
-          none_eligible: "All selected orders are already reconciled"
+          none_eligible: "No orders were selected or eligible to reconcile"
       unreconcile:
         success: "%{count} payment(s) successfully unreconciled"
         errors:
-          none_selected: "No orders were selected to unreconcile"
-          none_eligible: "No reconciled orders were selected to unreconcile"
+          none_eligible: "No orders were selected or eligible to unreconcile"
 
     facility_order_details:
       destroy:
