@@ -9,8 +9,8 @@ module OrderDetails
     attr_reader :persist_errors, :count, :order_details, :reconciled_at
 
     validates :reconciled_at, presence: true, if: :reconciling?
-    validate :reconciliation_must_be_in_past, if: :reconciling?
-    validate :all_journals_and_statements_must_be_before_reconciliation_date, if: :reconciling?
+    validate :reconciliation_must_be_in_past, if: -> { reconciled_at.present? && reconciling? }
+    validate :all_journals_and_statements_must_be_before_reconciliation_date, if: -> { reconciled_at.present? && reconciling? }
 
     def initialize(
       order_detail_scope,
@@ -103,7 +103,7 @@ module OrderDetails
     private
 
     def reconciling?
-      @reconciled_at.present?
+      @order_status == "reconciled"
     end
 
     def allowed(params)

@@ -50,7 +50,7 @@ RSpec.describe FacilityAccountsReconciliationController do
                               reconciled_at: formatted_reconciled_at,
                               order_detail: {
                                 order_detail.id.to_s => {
-                                  reconciled: "1",
+                                  selected: "1",
                                   reconciled_note: "A note",
                                 },
                               } }
@@ -70,7 +70,7 @@ RSpec.describe FacilityAccountsReconciliationController do
           page: 2,
           order_detail: {
             order_detail.id.to_s => {
-              reconciled: "1",
+              selected: "1",
               reconciled_note: "A note",
             },
           }
