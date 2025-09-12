@@ -483,7 +483,7 @@ RSpec.describe FacilityJournalsController do
 
       it "sets a flash message" do
         perform
-        expect(flash[:error]).to include("No orders")
+        expect(flash[:error]).to eq("No orders were selected or eligible to reconcile")
       end
     end
   end
@@ -573,9 +573,9 @@ RSpec.describe FacilityJournalsController do
         expect(@order_detail3.reload.state).to eq("complete")
       end
 
-      it "shows appropriate flash notice" do
+      it "shows appropriate flash error" do
         perform
-        expect(flash[:notice]).to eq("No reconciled orders were selected to unreconcile")
+        expect(flash[:error]).to eq("No orders were selected or eligible to unreconcile")
       end
     end
   end
