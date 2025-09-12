@@ -43,15 +43,25 @@ module OrderDetails
 
       OrderDetail.transaction do
         order_details.each do |od|
-          next if od.reconciled?
+          next if @order_status == "reconciled" && od.reconciled?
+          next if @order_status == "unrecoverable" && od.unrecoverable?
 
           od_params = @params[od.id.to_s] || {}
           begin
             od.assign_attributes(allowed(od_params))
-            od.reconciled_at = @reconciled_at
-            od.reconciled_note = @bulk_note if @bulk_note.present?
-            od.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
-            od.change_status!(OrderStatus.reconciled)
+
+            if @order_status == "reconciled"
+              od.reconciled_at = @reconciled_at
+              od.reconciled_note = @bulk_note if @bulk_note.present?
+              od.deposit_number = @bulk_deposit_number if @bulk_deposit_number.present?
+              od.change_status!(OrderStatus.reconciled)
+            else # unrecoverable
+              od.reconciled_at = nil
+              od.deposit_number = nil
+              od.unrecoverable_note = @bulk_note if @bulk_note.present?
+              od.change_status!(OrderStatus.unrecoverable)
+            end
+
             @count += 1
           rescue => e
             @persist_errors << "Order ##{od.id}: #{e.message}"
