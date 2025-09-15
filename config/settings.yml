@@ -180,7 +180,7 @@ feature:
   reference_statement_invoice_number: false
   stored_order_notices: false
   account_tabs: false
-  pricing_flows_from_payment_source: false
+  user_based_price_groups_exclude_purchaser: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts
