@@ -51,23 +51,67 @@ RSpec.describe OrderStatus do
       create(:order_status, facility: create(:facility), parent: described_class.new_status, name: "Other Brand New")
     end
 
-    it "returns all new and in process statuses for the facility" do
-      expected_statuses = [
-        described_class.new_status,
-        facility_status,
-        described_class.in_process,
-      ]
+    context "without product parameter (default behavior)" do
+      it "returns all new and in process statuses for the facility" do
+        expected_statuses = [
+          described_class.new_status,
+          facility_status,
+          described_class.in_process,
+        ]
 
-      expect(described_class.initial_statuses(facility)).to eq(expected_statuses)
+        expect(described_class.initial_statuses(facility)).to eq(expected_statuses)
+      end
+
+      it "returns all new and in process statuses in cross-facility context" do
+        expected_statuses = [
+          described_class.new_status,
+          described_class.in_process,
+        ]
+
+        expect(described_class.initial_statuses(nil)).to eq(expected_statuses)
+      end
     end
 
-    it "returns all new and in process statuses in cross-facility context" do
-      expected_statuses = [
-        described_class.new_status,
-        described_class.in_process,
-      ]
+    context "with an Item product" do
+      let(:item) { build(:item) }
 
-      expect(described_class.initial_statuses(nil)).to eq(expected_statuses)
+      it "returns all new, in process, and complete statuses for the facility" do
+        expected_statuses = [
+          described_class.new_status,
+          facility_status,
+          described_class.in_process,
+          described_class.complete,
+        ]
+
+        expect(described_class.initial_statuses(facility, product: item)).to eq(expected_statuses)
+      end
+
+      it "returns all new, in process, and complete statuses in cross-facility context" do
+        expected_statuses = [
+          described_class.new_status,
+          described_class.in_process,
+          described_class.complete,
+        ]
+
+        expect(described_class.initial_statuses(nil, product: item)).to eq(expected_statuses)
+      end
+    end
+
+    context "with other product types" do
+      let(:service) { build(:service) }
+      let(:instrument) { build(:instrument) }
+
+      it "returns same as default for non-item product types" do
+        expected_statuses = [
+          described_class.new_status,
+          facility_status,
+          described_class.in_process,
+        ]
+
+        expect(described_class.initial_statuses(facility, product: service)).to eq(expected_statuses)
+        expect(described_class.initial_statuses(facility, product: instrument)).to eq(expected_statuses)
+        expect(described_class.initial_statuses(facility, product: nil)).to eq(expected_statuses)
+      end
     end
   end
 
