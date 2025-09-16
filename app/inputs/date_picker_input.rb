@@ -11,7 +11,9 @@ class DatePickerInput < SimpleForm::Inputs::Base
 
     min_date = options[:min_date]
 
-    html_options = input_html_options.merge(value: value, class: "datepicker__data")
+    html_options = input_html_options.merge(
+      value:, class: "datepicker__data form-control",
+    )
     html_options[:data] = { min_date: min_date } if min_date
 
     @builder.text_field attribute_name, html_options
