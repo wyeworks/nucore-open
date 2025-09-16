@@ -94,7 +94,7 @@ class FacilityAccountsController < ApplicationController
                       elsif params[:account_status] == "active"
                         account_scope.active
                       elsif params[:account_status] == "expired"
-                        account_scope.expired
+                        account_scope.expired.not_suspended
                       else
                         account_scope.not_suspended
                       end
