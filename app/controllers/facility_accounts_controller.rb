@@ -12,6 +12,7 @@ class FacilityAccountsController < ApplicationController
   before_action :init_account, except: :search_results
   before_action :build_account, only: [:new, :create]
   before_action :set_facility_accounts_for_user, only: [:accounts_available_for_order]
+  before_action :set_account_types, only: [:index, :search_results]
 
   authorize_resource :account, except: [:accounts_available_for_order]
 
@@ -21,6 +22,14 @@ class FacilityAccountsController < ApplicationController
   # GET /facilties/:facility_id/accounts
   def index
     accounts = Account.with_orders_for_facility(current_facility)
+
+    if SettingsHelper.feature_on?(:account_tabs)
+      accounts = if params[:suspended] == "true"
+                   accounts.suspended
+                 else
+                   accounts.not_suspended
+                 end
+    end
 
     @accounts = accounts.paginate(page: params[:page])
   end
@@ -73,7 +82,32 @@ class FacilityAccountsController < ApplicationController
 
   # GET/POST /facilities/:facility_id/accounts/search_results
   def search_results
-    searcher = AccountSearcher.new(params[:search_term], scope: Account.for_facility(current_facility))
+    account_scope = Account.for_facility(current_facility)
+
+    if SettingsHelper.feature_on?(:account_tabs)
+      if params[:account_type].present?
+        account_scope = account_scope.where(type: params[:account_type])
+      end
+
+      account_scope = if params[:suspended] == "true"
+                        account_scope.suspended
+                      elsif params[:account_status] == "active"
+                        account_scope.active
+                      elsif params[:account_status] == "expired"
+                        account_scope.expired.not_suspended
+                      else
+                        account_scope.not_suspended
+                      end
+
+      if params[:search_term].blank?
+        @accounts = account_scope.paginate(page: params[:page])
+
+        return render layout: false
+      end
+    end
+
+    searcher = AccountSearcher.new(params[:search_term], scope: account_scope)
+
     if searcher.valid?
       @accounts = searcher.results
 
@@ -175,6 +209,12 @@ class FacilityAccountsController < ApplicationController
       @facility_accounts_for_user = AvailableAccountsFinder.new(order_user, current_facility).accounts.map { |a| { id: a.id, label: a.to_s } }
     else
       @facility_accounts_for_user = []
+    end
+  end
+
+  def set_account_types
+    if SettingsHelper.feature_on?(:account_tabs)
+      @account_types = Account.config.account_types_for_facility(current_facility, :create)
     end
   end
 

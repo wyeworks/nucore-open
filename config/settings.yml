@@ -179,6 +179,7 @@ feature:
   billing_table_price_groups: false
   reference_statement_invoice_number: false
   stored_order_notices: false
+  account_tabs: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts
