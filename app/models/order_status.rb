@@ -125,7 +125,7 @@ class OrderStatus < ApplicationRecord
       statuses = new_status.self_and_descendants
         .or(in_process.self_and_descendants)
 
-      if product.is_a?(Item)
+      if SettingsHelper.feature_on?(:item_initial_order_status_complete) && product.is_a?(Item)
         statuses = statuses.or(complete.self_and_descendants)
       end
 
