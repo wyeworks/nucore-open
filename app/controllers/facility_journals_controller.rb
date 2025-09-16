@@ -154,7 +154,11 @@ class FacilityJournalsController < ApplicationController
       order_status
     )
 
-    count = reconciler.send("#{action}_all")
+    count = if action == :reconcile
+              reconciler.reconcile_all
+            else
+              reconciler.unreconcile_all
+            end
 
     if count > 0
       flash[:notice] = I18n.t("controllers.facility_journals.#{action}.success", count: count)
