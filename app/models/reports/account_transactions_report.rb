@@ -72,11 +72,9 @@ class Reports::AccountTransactionsReport
       OrderDetail.human_attribute_name(:note),
       text(".cross_core_project_facility"),
       text(".order_detail_notices"),
+      OrderDetail.human_attribute_name(:price_group),
     ]
 
-    if SettingsHelper.feature_on?(:billing_table_price_groups)
-      headers << OrderDetail.human_attribute_name(:price_group)
-    end
     # add dispute reason if needed
     if SettingsHelper.feature_on?(:export_order_disputes)
       headers.concat [
@@ -119,10 +117,9 @@ class Reports::AccountTransactionsReport
       order_detail.note,
       originating_cross_core_facility(order_detail),
       notices_for(order_detail),
+      order_detail.price_policy&.price_group&.name,
     ]
-    if SettingsHelper.feature_on?(:billing_table_price_groups)
-      row << order_detail.price_policy&.price_group&.name
-    end
+
     # add dispute reason if needed
     if SettingsHelper.feature_on?(:export_order_disputes)
       row.concat [
