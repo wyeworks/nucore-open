@@ -53,6 +53,36 @@ RSpec.describe Reports::AccountTransactionsReport do
         end
       end
 
+      describe "price group column" do
+        let(:order_details) { OrderDetail.limit(1) }
+        let(:order_detail) { order_details.first }
+        let(:price_policy) { order_detail.product.price_policies.last }
+        let(:price_group) { price_policy.price_group }
+        let(:header_row) { report.to_csv.lines.first.strip }
+        let(:first_row) { report.to_csv.lines.second.strip }
+        let(:first_row_values) { header_row.split(",").zip(first_row.split(",")).to_h }
+
+        it "includes the column" do
+          expect(header_row).to include(OrderDetail.human_attribute_name(:price_group))
+        end
+
+        context "and the order detail does not have price policy" do
+          before { order_detail.update(price_policy_id: nil) }
+
+          it "handles orders without price policy" do
+            expect(first_row_values[OrderDetail.human_attribute_name(:price_group)]).to be_nil
+          end
+        end
+
+        context "and the order detail has a price group" do
+          before { order_detail.update(price_policy:) }
+
+          it "handles orders with price policy" do
+            expect(first_row_values[OrderDetail.human_attribute_name(:price_group)]).to eq(price_group.name)
+          end
+        end
+      end
+
       describe "excludes the order's dispute details if feature is OFF", feature_setting: { export_order_disputes: false } do
         it "generates headers without Dispute details" do
           expect(report.to_csv.lines.first).not_to include(

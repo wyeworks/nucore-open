@@ -72,7 +72,9 @@ class Reports::AccountTransactionsReport
       OrderDetail.human_attribute_name(:note),
       text(".cross_core_project_facility"),
       text(".order_detail_notices"),
+      OrderDetail.human_attribute_name(:price_group),
     ]
+
     # add dispute reason if needed
     if SettingsHelper.feature_on?(:export_order_disputes)
       headers.concat [
@@ -115,7 +117,9 @@ class Reports::AccountTransactionsReport
       order_detail.note,
       originating_cross_core_facility(order_detail),
       notices_for(order_detail),
+      order_detail.price_policy&.price_group&.name,
     ]
+
     # add dispute reason if needed
     if SettingsHelper.feature_on?(:export_order_disputes)
       row.concat [
@@ -129,8 +133,6 @@ class Reports::AccountTransactionsReport
     end
 
   end
-
-  private
 
   def notices_for(order_detail)
     OrderDetailNoticePresenter.new(order_detail).badges_to_text
