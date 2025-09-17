@@ -4,10 +4,30 @@ require "rails_helper"
 
 RSpec.describe "Facility Accounts Tab" do
   let(:admin) { create(:user, :administrator) }
+  let(:account_type1) { Account.config.journal_account_types.first.demodulize }
+  let(:account_type2) { Account.config.statement_account_types.first.demodulize }
   let(:facility) { create(:setup_facility) }
-  let(:active_account) { create(:nufs_account, :with_account_owner, facility:, expires_at: 1.day.from_now) }
-  let(:expired_account) { create(:purchase_order_account, :with_account_owner, facility:, expires_at: 1.day.ago) }
-  let(:suspended_account) { create(:nufs_account, :with_account_owner, facility:, suspended_at: 1.day.ago) }
+  let(:active_account) do
+    create(
+      account_type1.underscore,
+      :with_account_owner,
+      expires_at: 1.day.from_now,
+    )
+  end
+  let(:expired_account) do
+    create(
+      account_type2.underscore,
+      :with_account_owner,
+      expires_at: 1.day.ago,
+    )
+  end
+  let(:suspended_account) do
+    create(
+      account_type1.underscore,
+      :with_account_owner,
+      suspended_at: 1.day.ago
+    )
+  end
   let(:product) { create(:setup_item, facility:) }
 
   before do
