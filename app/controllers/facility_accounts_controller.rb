@@ -31,7 +31,7 @@ class FacilityAccountsController < ApplicationController
                  end
     end
 
-    @accounts = accounts.paginate(page: params[:page])
+    @accounts = accounts.includes(:owner,  :owner_user).paginate(page: params[:page])
   end
 
   # GET /facilties/:facility_id/accounts/:id

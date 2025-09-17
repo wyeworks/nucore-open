@@ -67,10 +67,6 @@ Rails.application.configure do
     Bullet.add_safelist type: :n_plus_one_query, class_name: "ProductDisplayGroup", association: :products
     Bullet.add_safelist type: :n_plus_one_query, class_name: "Project", association: :facility
     Bullet.add_safelist type: :n_plus_one_query, class_name: "Project", association: :orders
-    Bullet.add_safelist type: :n_plus_one_query, class_name: "CreditCardAccount", association: :facilities
-    Bullet.add_safelist type: :n_plus_one_query, class_name: "CreditCardAccount", association: :owner
-    Bullet.add_safelist type: :n_plus_one_query, class_name: "CreditCardAccount", association: :owner_user
-    Bullet.add_safelist type: :n_plus_one_query, class_name: "CreditCardAccount", association: :price_group_members
     Bullet.add_safelist type: :n_plus_one_query, class_name: "PurchaseOrderAccount", association: :facilities
     Bullet.add_safelist type: :n_plus_one_query, class_name: "PurchaseOrderAccount", association: :owner
     Bullet.add_safelist type: :n_plus_one_query, class_name: "PurchaseOrderAccount", association: :owner_user
