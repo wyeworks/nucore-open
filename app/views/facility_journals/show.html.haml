@@ -41,16 +41,26 @@
   %p= t(".instruct.orders")
 
 - if @journal.order_details.present?
-  = form_tag facility_journal_reconcile_path(current_facility, @journal), method: :post do
-    - journal_is_submittable = @journal.submittable?
+  - journal_is_submittable = @journal.submittable?
+  - has_reconciled = @journal.order_details.where(state: "reconciled").any?
+  - has_unreconciled = @journal.order_details.where.not(state: "reconciled").any?
+  - journal_can_reconcile = @journal.successful? && has_unreconciled
+  - journal_can_unreconcile = @journal.successful? && has_reconciled
+  - show_checkboxes = journal_is_submittable || journal_can_unreconcile || journal_can_reconcile
+  
+  = form_tag facility_journal_reconcile_path(current_facility, @journal), method: :post, id: "journal-form" do
     %table.table.table-striped.table-hover
       %thead
-        - if journal_is_submittable
+        - if show_checkboxes
           %tr.borderless
             %th{colspan: 3}= select_all_link
-            %th.currency{colspan: 3}= submit_tag t(".submit"), class: "btn btn-primary"
+            %th.currency{colspan: 3}
+              - if journal_can_reconcile || journal_is_submittable
+                = submit_tag t(".submit"), class: "btn btn-primary", onclick: "this.form.action='#{facility_journal_reconcile_path(current_facility, @journal)}'; return true;"
+              - if journal_can_unreconcile
+                = submit_tag "Unreconcile Orders", class: "btn btn-primary", onclick: "this.form.action='#{facility_journal_unreconcile_path(current_facility, @journal)}'; return true;", style: "margin-left: 5px;"
         %tr
-          - if journal_is_submittable
+          - if show_checkboxes
             %th
           %th= t(".th.order")
           %th= t(".th.fulfilled")
@@ -59,10 +69,11 @@
           %th= t(".th.reconciled")
       %tbody
         - @journal.order_details.each do |order_detail|
-          - disable = order_detail.reconciled? || @journal.open?
           %tr
-            - if journal_is_submittable
-              %td= check_box_tag "order_detail[#{order_detail.id}][reconciled]", "1", order_detail.reconciled?, disabled: order_detail.reconciled?, class: (order_detail.reconciled? ? "" : "toggle")
+            - if show_checkboxes
+              %td
+                - checkbox_checked = journal_is_submittable && !journal_can_unreconcile && order_detail.reconciled?
+                = check_box_tag "order_detail[#{order_detail.id}][selected]", "1", checkbox_checked, class: "toggle"
             %td
               = link_to order_detail, facility_order_path(order_detail.order.facility.url_name, order_detail.order_id)
               - if order_detail.note?
@@ -72,9 +83,13 @@
             %td= order_detail.account
             %td= number_to_currency(order_detail.total)
             %td= order_detail.reconciled? ? t("boolean.true") : t("boolean.false")
-        - if journal_is_submittable
+        - if show_checkboxes
           %tr.borderless
             %td{colspan: 3}
-            %td.currency{colspan: 3}= submit_tag t(".submit"), class: "btn btn-primary"
+            %td.currency{colspan: 3}
+              - if journal_can_reconcile || journal_is_submittable
+                = submit_tag t(".submit"), class: "btn btn-primary", onclick: "this.form.action='#{facility_journal_reconcile_path(current_facility, @journal)}'; return true;"
+              - if journal_can_unreconcile
+                = submit_tag "Unreconcile Orders", class: "btn btn-primary", onclick: "this.form.action='#{facility_journal_unreconcile_path(current_facility, @journal)}'; return true;", style: "margin-left: 5px;"
 - else
   %p.notice= t(".notice")

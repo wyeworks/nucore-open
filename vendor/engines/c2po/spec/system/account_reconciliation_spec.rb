@@ -61,7 +61,7 @@ RSpec.describe "Account Reconciliation", :js do
       expect(page).to have_content(order_number)
       expect(page).not_to have_content(other_order_number)
 
-      check "order_detail_#{order_detail.id}_reconciled"
+      check "order_detail_#{order_detail.id}_selected"
 
       fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
       fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
@@ -90,10 +90,10 @@ RSpec.describe "Account Reconciliation", :js do
         expect(page).to have_button("Update Orders", disabled: true)
 
         fill_in "Bulk Note", with: "this is the bulk note"
-        check "order_detail_#{order_detail.id}_reconciled"
+        check "order_detail_#{order_detail.id}_selected"
         expect(page).to have_button("Update Orders", disabled: false)
 
-        check "order_detail_#{orders.last.order_details.first.id}_reconciled"
+        check "order_detail_#{orders.last.order_details.first.id}_selected"
         fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
         click_button "Update Orders", match: :first
 
@@ -112,8 +112,8 @@ RSpec.describe "Account Reconciliation", :js do
         check "Use Bulk Note"
         fill_in "Bulk Note", with: "this is the bulk note"
         uncheck "Use Bulk Note"
-        check "order_detail_#{order_detail.id}_reconciled"
-        check "order_detail_#{orders.last.order_details.first.id}_reconciled"
+        check "order_detail_#{order_detail.id}_selected"
+        check "order_detail_#{orders.last.order_details.first.id}_selected"
         fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
         click_button "Update Orders", match: :first
 
@@ -144,7 +144,7 @@ RSpec.describe "Account Reconciliation", :js do
       expect(page).to have_content(order_number)
       expect(page).not_to have_content(other_order_number)
 
-      check "order_detail_#{order_detail.id}_reconciled"
+      check "order_detail_#{order_detail.id}_selected"
       fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
       fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
       click_button "Update Orders", match: :first
@@ -166,8 +166,8 @@ RSpec.describe "Account Reconciliation", :js do
 
       check "Use Bulk Note"
       fill_in "Bulk Note", with: "this is the bulk note"
-      check "order_detail_#{order_detail.id}_reconciled"
-      check "order_detail_#{orders.last.order_details.first.id}_reconciled"
+      check "order_detail_#{order_detail.id}_selected"
+      check "order_detail_#{orders.last.order_details.first.id}_selected"
       fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
       click_button "Update Orders", match: :first
 
@@ -230,10 +230,10 @@ RSpec.describe "Account Reconciliation", :js do
         end
 
         it "allows to add unrecoverable_note individually" do
-          check "order_detail_#{order_detail1.id}_reconciled"
+          check "order_detail_#{order_detail1.id}_selected"
           fill_in "order_detail_#{order_detail1.id}_unrecoverable_note", with: "Unrecoverable note 1"
 
-          check "order_detail_#{order_detail2.id}_reconciled"
+          check "order_detail_#{order_detail2.id}_selected"
           fill_in "order_detail_#{order_detail2.id}_unrecoverable_note", with: "Unrecoverable note 2"
 
           click_button "Update Orders", match: :first
@@ -249,8 +249,8 @@ RSpec.describe "Account Reconciliation", :js do
 
         it "allows to add a unrecoverable_note in bulk" do
           check "Use Bulk Note"
-          check "order_detail_#{order_detail1.id}_reconciled"
-          check "order_detail_#{order_detail2.id}_reconciled"
+          check "order_detail_#{order_detail1.id}_selected"
+          check "order_detail_#{order_detail2.id}_selected"
 
           fill_in "Bulk Note", with: "Unrecoverable note"
 
@@ -268,7 +268,7 @@ RSpec.describe "Account Reconciliation", :js do
         it "clears reconciled_note if then set as unrecoverable" do
           select "Reconciled", from: "order_status"
 
-          check "order_detail_#{order_detail1.id}_reconciled"
+          check "order_detail_#{order_detail1.id}_selected"
           fill_in "order_detail_#{order_detail1.id}_reconciled_note", with: "Reconciled note"
 
           select "Unrecoverable", from: "order_status"

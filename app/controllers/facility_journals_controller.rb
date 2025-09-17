@@ -137,23 +137,39 @@ class FacilityJournalsController < ApplicationController
   end
 
   def reconcile
+    process_reconciliation(:reconcile, "reconciled")
+  end
+
+  def unreconcile
+    process_reconciliation(:unreconcile)
+  end
+
+  private
+
+  def process_reconciliation(action, order_status = nil)
     reconciler = OrderDetails::Reconciler.new(
       @journal.order_details,
       params[:order_detail],
       @journal.journal_date,
-      "reconciled"
+      order_status
     )
 
-    if reconciler.reconcile_all > 0
-      count = reconciler.count
-      flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully reconciled" if count > 0
-    else
+    count = if action == :reconcile
+              reconciler.reconcile_all
+            else
+              reconciler.unreconcile_all
+            end
+
+    if count > 0
+      flash[:notice] = I18n.t("controllers.facility_journals.#{action}.success", count: count)
+    elsif reconciler.full_errors.any?
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
+    else
+      flash[:error] = I18n.t("controllers.facility_journals.#{action}.errors.none_eligible")
     end
+
     redirect_to [current_facility, @journal]
   end
-
-  private
 
   def new_journal_from_params
     @journal = Journal.new(

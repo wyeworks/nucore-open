@@ -11,7 +11,7 @@ RSpec.describe OrderDetails::Reconciler do
       OrderDetail.create!(product: product, quantity: 1, actual_cost: 1, actual_subsidy: 0, state: "complete", statement:, order_id: order.id, created_by_user: user)
     end
   end
-  let(:params) { order_details.each_with_object({}) { |od, h| h[od.id.to_s] = ActionController::Parameters.new(reconciled: "1") } }
+  let(:params) { order_details.each_with_object({}) { |od, h| h[od.id.to_s] = ActionController::Parameters.new(selected: "1", reconciled: "1") } }
   let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled") }
   let(:account) { create(:account, :with_account_owner, type: Account.config.statement_account_types.first) }
   let(:statement) { create(:statement, facility: product.facility, account:, created_by_user: user) }
@@ -71,7 +71,7 @@ RSpec.describe OrderDetails::Reconciler do
     context "with NO bulk note" do
       context "with reconciled note set" do
         let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled") }
-        let(:params) { order_details.each_with_object({}) { |od, h| h[od.id.to_s] = ActionController::Parameters.new(reconciled: "1", reconciled_note: "note #{od.id}") } }
+        let(:params) { order_details.each_with_object({}) { |od, h| h[od.id.to_s] = ActionController::Parameters.new(selected: "1", reconciled: "1", reconciled_note: "note #{od.id}") } }
 
         it "adds the note to the appropriate order details" do
           reconciler.reconcile_all

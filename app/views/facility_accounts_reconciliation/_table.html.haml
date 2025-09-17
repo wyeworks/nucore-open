@@ -15,7 +15,7 @@
   %tbody
     - @unreconciled_details.each do |order_detail|
       %tr
-        %td.centered= check_box_tag "order_detail[#{order_detail.id}][reconciled]", "1", false, class: "toggle", aria: {label: t("facility_accounts_reconciliation.index.checkbox_label", order_number:  order_detail.to_s)}
+        %td.centered= check_box_tag "order_detail[#{order_detail.id}][selected]", "1", false, class: "toggle", aria: {label: t("facility_accounts_reconciliation.index.checkbox_label", order_number:  order_detail.to_s)}
         %td= "##{order_detail.statement_invoice_number}"
         %td
           = order_detail.account
