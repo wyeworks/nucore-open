@@ -147,7 +147,6 @@ feature:
   price_policy_requires_note: true
   multi_facility_accounts: true
   facility_directors_can_manage_price_groups: true
-  item_initial_order_status_complete: false
   account_reference_field: false
   facility_payment_urls: false
   uses_ldap_authentication: false
@@ -182,6 +181,7 @@ feature:
   stored_order_notices: false
   account_tabs: false
   user_based_price_groups_exclude_purchaser: false
+  item_initial_order_status_complete: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts

@@ -16,7 +16,7 @@ RSpec.describe Item do
   it_should_behave_like "NonReservationProduct", :item
 
   describe "initial_order_status" do
-
+    let(:item) { build(:item, facility:, facility_account:) }
     let(:complete_status) { OrderStatus.complete }
 
     context "when item_initial_order_status_complete feature is on", feature_setting: { item_initial_order_status_complete: true } do
@@ -54,7 +54,6 @@ RSpec.describe Item do
       end
 
       it "does not include Complete in available initial statuses for Items" do
-        item = build(:item, facility:, facility_account:)
         available_statuses = OrderStatus.initial_statuses(facility, product: item)
 
         expect(available_statuses).not_to include(complete_status)
