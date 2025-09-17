@@ -121,10 +121,15 @@ class OrderStatus < ApplicationRecord
       root_statuses.first
     end
 
-    def initial_statuses(facility)
-      new_status.self_and_descendants
+    def initial_statuses(facility, product: nil)
+      statuses = new_status.self_and_descendants
         .or(in_process.self_and_descendants)
-        .for_facility(facility).sorted
+
+      if SettingsHelper.feature_on?(:item_initial_order_status_complete) && product.is_a?(Item)
+        statuses = statuses.or(complete.self_and_descendants)
+      end
+
+      statuses.for_facility(facility).sorted
     end
 
     def non_protected_statuses(facility)

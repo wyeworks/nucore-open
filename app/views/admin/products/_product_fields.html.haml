@@ -3,7 +3,7 @@
 - unless f.object.is_a?(Bundle)
   = render "admin/products/account_fields", f: f
 
-  = f.input :initial_order_status_id, collection: OrderStatus.initial_statuses(current_facility).collect {|cf| [cf.name_with_level, cf.id] }, hint: text("hints.initial_order_status"), include_blank: false
+  = f.input :initial_order_status_id, collection: OrderStatus.initial_statuses(current_facility, product: f.object).collect {|cf| [cf.name_with_level, cf.id] }, hint: text("hints.initial_order_status"), include_blank: false
 
   - if @product.id.blank? && current_user.administrator?
     = f.input :billing_mode, collection: Product.billing_modes, include_blank: false, hint: text("hints.billing_mode")
