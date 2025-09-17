@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe OrderDetail do
-  describe "#price_groups with user_based_price_groups_exclude_purchaser feature" do
+  describe "#price_groups with user_based_price_groups_exclude_purchaser feature", if: SettingsHelper.feature_on?(:user_based_price_groups) do
     let(:product) { create(:setup_item) }
     let(:facility) { product.facility }
     let(:purchaser) { create(:user) }
