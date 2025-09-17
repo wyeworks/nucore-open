@@ -87,7 +87,7 @@ module OrderDetails
 
       selected_ids = @params.select { |_, p| p[:selected] == "1" }.keys
 
-      selected_ids.any? ? @order_detail_scope.where(id: selected_ids) : []
+      @order_detail_scope.where(id: selected_ids)
     end
 
     def reconciling?
