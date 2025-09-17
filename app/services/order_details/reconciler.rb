@@ -70,6 +70,7 @@ module OrderDetails
             @count += 1
           rescue => e
             @persist_errors << "Order ##{order_detail.id}: #{e.message}"
+            raise ActiveRecord::Rollback
           end
         end
       end
