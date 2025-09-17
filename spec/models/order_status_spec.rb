@@ -75,25 +75,39 @@ RSpec.describe OrderStatus do
     context "with an Item product" do
       let(:item) { build(:item) }
 
-      it "returns all new, in process, and complete statuses for the facility" do
-        expected_statuses = [
-          described_class.new_status,
-          facility_status,
-          described_class.in_process,
-          described_class.complete,
-        ]
+      context "when item_initial_order_status_complete feature is on", feature_setting: { item_initial_order_status_complete: true } do
+        it "returns all new, in process, and complete statuses for the facility" do
+          expected_statuses = [
+            described_class.new_status,
+            facility_status,
+            described_class.in_process,
+            described_class.complete,
+          ]
 
-        expect(described_class.initial_statuses(facility, product: item)).to eq(expected_statuses)
+          expect(described_class.initial_statuses(facility, product: item)).to eq(expected_statuses)
+        end
+
+        it "returns all new, in process, and complete statuses in cross-facility context" do
+          expected_statuses = [
+            described_class.new_status,
+            described_class.in_process,
+            described_class.complete,
+          ]
+
+          expect(described_class.initial_statuses(nil, product: item)).to eq(expected_statuses)
+        end
       end
 
-      it "returns all new, in process, and complete statuses in cross-facility context" do
-        expected_statuses = [
-          described_class.new_status,
-          described_class.in_process,
-          described_class.complete,
-        ]
+      context "when item_initial_order_status_complete feature is off", feature_setting: { item_initial_order_status_complete: false } do
+        it "returns same as default even for Item products" do
+          expected_statuses = [
+            described_class.new_status,
+            facility_status,
+            described_class.in_process,
+          ]
 
-        expect(described_class.initial_statuses(nil, product: item)).to eq(expected_statuses)
+          expect(described_class.initial_statuses(facility, product: item)).to eq(expected_statuses)
+        end
       end
     end
 
