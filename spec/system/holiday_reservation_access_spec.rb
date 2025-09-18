@@ -9,13 +9,6 @@ RSpec.describe "Reserving an instrument on a holiday" do
   let(:facility) { instrument.facility }
   let!(:account) { create(:nufs_account, :with_account_owner, owner: user) }
   let!(:price_policy) { create(:instrument_price_policy, price_group: PriceGroup.base, product: instrument) }
-  let!(:account_price_group_member) { create(:account_price_group_member, account: account, price_group: PriceGroup.base) }
-  let!(:price_group_products) do
-    # Update all price_group_products to allow at least 7 days reservation window
-    instrument.price_group_products.each do |pgp|
-      pgp.update!(reservation_window: 7)
-    end
-  end
   let!(:holiday) { Holiday.create(date: 2.days.from_now) }
 
   before do

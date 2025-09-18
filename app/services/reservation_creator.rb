@@ -120,6 +120,7 @@ class ReservationCreator
     if account != @order.account
       @order.invalidate if @order.persisted?
       @order.account = account
+      @order_detail.account = account if @order_detail
       @order.save! if @order.persisted?
     end
   end
