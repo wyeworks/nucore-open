@@ -20,7 +20,7 @@ RSpec.describe "Reserving an instrument on a holiday" do
     let!(:product_access_group) { create(:product_access_group, allow_holiday_access: true, product: instrument) }
     let!(:product_user) { create(:product_user, user: user, product_access_group: product_access_group, product: instrument) }
 
-    context "with user_based_price_groups_exclude_purchaser ff disabled (default)" do
+    context "with user_based_price_groups_exclude_purchaser ff disabled", :feature_setting => { user_based_price_groups_exclude_purchaser: false }  do
       it "allows making a reservation" do
         click_link instrument.name
         select user.accounts.first.description, from: "Payment Source"
