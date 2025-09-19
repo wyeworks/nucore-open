@@ -33,6 +33,7 @@ module OrderDetails
       return 0 unless valid?
       @count = 0
       @persist_errors = []
+      rollback_occurred = false
 
       OrderDetail.transaction do
         order_details.each do |order_detail|
@@ -45,16 +46,19 @@ module OrderDetails
             @count += 1
           rescue => e
             @persist_errors << "Order ##{order_detail.id}: #{e.message}"
+            rollback_occurred = true
             raise ActiveRecord::Rollback
           end
         end
       end
-      @count
+
+      rollback_occurred ? 0 : @count
     end
 
     def unreconcile_all
       @count = 0
       @persist_errors = []
+      rollback_occurred = false
 
       OrderDetail.transaction do
         order_details.each do |order_detail|
@@ -70,11 +74,13 @@ module OrderDetails
             @count += 1
           rescue => e
             @persist_errors << "Order ##{order_detail.id}: #{e.message}"
+            rollback_occurred = true
             raise ActiveRecord::Rollback
           end
         end
       end
-      @count
+
+      rollback_occurred ? 0 : @count
     end
 
     def full_errors
