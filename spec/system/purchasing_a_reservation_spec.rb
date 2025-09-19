@@ -49,6 +49,58 @@ RSpec.describe "Purchasing a reservation" do
     end
   end
 
+  describe "reservation window with user_based_price_groups_exclude_purchaser feature flag" do
+    context "when feature flag is disabled", feature_setting: { user_based_price_groups_exclude_purchaser: false } do
+      it "allows making a reservation with user price groups" do
+        click_link instrument.name
+        select account.to_s, from: Order.human_attribute_name(:account)
+        fill_in "Reserve Start", with: 2.days.from_now
+        click_button "Create"
+        expect(page).to have_content("Reservation created successfully")
+      end
+    end
+
+    context "when feature flag is enabled", feature_setting: { user_based_price_groups_exclude_purchaser: true } do
+      context "when account HAS price groups configured" do
+        before do
+          instrument.price_group_products.update_all(reservation_window: 7)
+        end
+
+        it "allows making a reservation using account price groups" do
+          click_link instrument.name
+          select account.to_s, from: Order.human_attribute_name(:account)
+          fill_in "Reserve Start", with: 2.days.from_now
+          click_button "Create"
+          expect(page).to have_content("Reservation created successfully")
+        end
+      end
+
+      context "when account has NO direct price groups (uses owner price groups)" do
+        before do
+          AccountPriceGroupMember.where(account:).destroy_all
+          instrument.price_group_products.update_all(reservation_window: 1)
+        end
+
+        it "fails with 'too far in advance' error when trying to reserve 2 days ahead" do
+          click_link instrument.name
+          select account.to_s, from: Order.human_attribute_name(:account)
+          fill_in "Reserve Start", with: 2.days.from_now
+          click_button "Create"
+          expect(page).to have_content("The reservation is too far in advance")
+          expect(page).not_to have_content("Reservation created successfully")
+        end
+
+        it "allows reservation within the minimum window (1 day)" do
+          click_link instrument.name
+          select account.to_s, from: Order.human_attribute_name(:account)
+          fill_in "Reserve Start", with: 1.day.from_now
+          click_button "Create"
+          expect(page).to have_content("Reservation created successfully")
+        end
+      end
+    end
+  end
+
   describe "trying to order with a required note" do
     before do
       instrument.update!(

@@ -12,8 +12,8 @@ en:
         Sorry, but we could not find a valid payment source that you can use to
         purchase this %{product_type}
       no_price_groups: |
-        You are not in a price group that may purchase this %{product_type}; please contact
-        the !facility_downcase!.
+        No price groups found for this purchase. Please contact
+        the !facility_downcase! for assistance.
       requires_approval: |
         <i class="fa fa-lock"></i> This %{product_type} requires approval to purchase. Please [contact the !facility_downcase!](mailto:%{email}) to request access to this %{product_type}.
       pricing_not_available: |
