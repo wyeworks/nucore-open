@@ -38,13 +38,13 @@ RSpec.describe "Adding products with different billing modes to cart" do
       if price_groups_present
         expect(page).to have_content("Sorry, but we could not find a valid payment source that you can use to purchase this")
       else
-        expect(page).to have_content("You are not in a price group that may purchase this")
+        expect(page).to have_content("No price groups found for this purchase")
       end
     end
 
     it "does not allow a user without any accounts to add a Default product to cart" do
       visit facility_item_path(facility, default_item)
-      expect(page).to have_content("You are not in a price group that may purchase this")
+      expect(page).to have_content("No price groups found for this purchase")
     end
   end
 
