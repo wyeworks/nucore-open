@@ -6,8 +6,8 @@ en:
         The %{product_name} instrument is currently unavailable for reservation online.
       no_accounts: Sorry, but we could not find a valid payment source that you can use to reserve this instrument
       no_price_groups: |
-        You are not in a price group that may reserve instrument %{product_name};
-        please contact the !facility_downcase!.
+        No price groups found for this reservation. Please contact
+        the !facility_downcase! for assistance.
       not_authorized_to_order_on_behalf: |
         You are not authorized to order instruments from this !facility_downcase! on behalf of a user.
       pricing_not_available: |
