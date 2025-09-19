@@ -81,7 +81,7 @@ class ProductForCart
       price_group_ids = if product.nonbillable_mode?
                           [PriceGroup.nonbillable.id]
                         else
-                          (user.price_groups + user.account_price_groups).flatten.uniq.map(&:id)
+                          (user.purchaser_price_groups + user.account_price_groups).flatten.uniq.map(&:id)
                         end
 
       @error_message = text(".no_price_groups", i18n_params) unless product.can_purchase?(price_group_ids)

@@ -153,6 +153,15 @@ class User < ApplicationRecord
     accounts.active.collect(&:price_groups).flatten.uniq
   end
 
+  # Returns the price groups for the user when acting as a purchaser
+  def purchaser_price_groups
+    if SettingsHelper.feature_on?(:user_based_price_groups_exclude_purchaser)
+      []
+    else
+      price_groups
+    end
+  end
+
   #
   # Given a +Product+ returns all valid accounts this user has for
   # purchasing that product
