@@ -26,10 +26,7 @@
   - if params[:search_term].present?
     - pagination_params = { search_term: params[:search_term] }
   - elsif SettingsHelper.feature_on?(:account_tabs)
-    - filter_params = {}
-    - filter_params[:account_type] = params[:account_type] if params[:account_type].present?
-    - filter_params[:suspended] = params[:suspended] if params[:suspended].present?
-    - filter_params[:account_status] = params[:account_status] if params[:account_status].present?
+    - filter_params = params.slice(:account_type, :suspended, :account_status).compact_blank
     - pagination_params = filter_params if filter_params.present?
 
   - if pagination_params.present?
