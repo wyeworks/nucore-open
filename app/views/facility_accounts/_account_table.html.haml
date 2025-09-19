@@ -22,9 +22,15 @@
           - if current_facility.cross_facility?
             %td= account.per_facility? ? account.facilities.alphabetized.join(", ") : html("all", inline: true)
 
+  - pagination_params = {}
   - if params[:search_term].present?
-    = will_paginate(@accounts, class: "ajax_links",
-      params: { search_term: params[:search_term] })
+    - pagination_params = { search_term: params[:search_term] }
+  - elsif SettingsHelper.feature_on?(:account_tabs)
+    - filter_params = params.slice(:account_type, :suspended, :account_status).compact_blank
+    - pagination_params = filter_params if filter_params.present?
+
+  - if pagination_params.present?
+    = will_paginate(@accounts, class: "ajax_links", params: pagination_params)
   - else
     = will_paginate(@accounts)
 
