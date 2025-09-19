@@ -108,7 +108,7 @@ RSpec.describe ProductForCart do
 
       it "sets error_message explaining why they can't purchase the product" do
         product_for_cart.purchasable_by?(user, user)
-        expect(product_for_cart.error_message).to match(/You are not in a price group that may/)
+        expect(product_for_cart.error_message).to match(/No price groups found for this purchase/)
       end
     end
 
