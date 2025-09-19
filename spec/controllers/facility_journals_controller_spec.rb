@@ -578,5 +578,42 @@ RSpec.describe FacilityJournalsController do
         expect(flash[:error]).to eq("No orders were selected or eligible to unreconcile")
       end
     end
+
+    describe "when unreconcile fails for one order detail" do
+      before do
+        @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+        @order_detail2.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+        @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+
+        allow_any_instance_of(OrderDetail).to receive(:update!).and_call_original
+
+        call_count = 0
+        allow_any_instance_of(OrderDetail).to receive(:update!).and_wrap_original do |original, receiver, *args|
+          call_count += 1
+          if call_count == 2 # Fail on the second order detail
+            raise StandardError, "Failed to update order detail"
+          else
+            original.call(receiver, *args)
+          end
+        end
+      end
+
+      it "rolls back all changes" do
+        perform
+        expect(@order_detail1.reload.state).to eq("reconciled")
+        expect(@order_detail2.reload.state).to eq("reconciled")
+        expect(@order_detail3.reload.state).to eq("reconciled")
+      end
+
+      it "shows error message with the failing order detail" do
+        perform
+        expect(flash[:error]).to include("Failed to update order detail")
+      end
+
+      it "does not show success message" do
+        perform
+        expect(flash[:notice]).to be_nil
+      end
+    end
   end
 end
