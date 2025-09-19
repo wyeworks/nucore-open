@@ -308,7 +308,12 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
 
     it "cannot create a reservation" do
       expect(page).not_to have_content("Create Reservation")
-      expect(page).to have_content("Sorry, but we could not find a valid payment source that you can use to reserve this instrument")
+
+      if SettingsHelper.feature_on?(:user_based_price_groups_exclude_purchaser)
+        expect(page).to have_content("No price groups found for this reservation")
+      else
+        expect(page).to have_content("Sorry, but we could not find a valid payment source that you can use to reserve this instrument")
+      end
     end
   end
 
