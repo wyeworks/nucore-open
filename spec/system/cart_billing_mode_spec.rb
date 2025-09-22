@@ -34,9 +34,8 @@ RSpec.describe "Adding products with different billing modes to cart" do
 
     it "does not allow a user without any accounts to add a Skip Review product to cart" do
       visit facility_item_path(facility, skip_review_item)
-      price_groups_present = self.class.metadata[:feature_setting][:user_based_price_groups]
-      exclude_purchaser = self.class.metadata[:feature_setting][:user_based_price_groups_exclude_purchaser]
-      if price_groups_present && !exclude_purchaser
+
+      if SettingsHelper.feature_on?(:user_based_price_groups) && !SettingsHelper.feature_on?(:user_based_price_groups_exclude_purchaser)
         expect(page).to have_content("Sorry, but we could not find a valid payment source that you can use to purchase this")
       else
         expect(page).to have_content("No price groups found for this purchase")
