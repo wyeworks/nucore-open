@@ -182,6 +182,7 @@ feature:
   account_tabs: false
   user_based_price_groups_exclude_purchaser: false
   item_initial_order_status_complete: false
+  allow_mass_unreconciling: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts

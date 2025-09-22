@@ -73,6 +73,7 @@ en:
         success: "%{count} payment(s) successfully unreconciled"
         errors:
           none_eligible: "No orders were selected or eligible to unreconcile"
+        feature_disabled: "Mass unreconciling is not enabled"
 
     facility_order_details:
       destroy:
