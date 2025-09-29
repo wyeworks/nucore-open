@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
-gem "rails", "~> 7.0.8"
+gem "rails", "~> 8.0.3"
 gem "sprockets"
 gem "sprockets-rails"
 gem "config"
