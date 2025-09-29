@@ -13,7 +13,7 @@ module SangerSequencing
     has_many :submissions, class_name: "SangerSequencing::Submission", inverse_of: :batch, dependent: :nullify
     has_many :samples, class_name: "SangerSequencing::Sample", through: :submissions
 
-    serialize :well_plates_raw
+    serialize :well_plates_raw, coder: YAML
 
     def self.for_facility(facility)
       where(facility:)

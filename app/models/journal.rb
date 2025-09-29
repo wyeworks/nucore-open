@@ -41,7 +41,7 @@ class Journal < ApplicationRecord
 
   attr_accessor :order_details_for_creation
 
-  belongs_to :facility
+  belongs_to :facility, optional: true
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
 
   has_many :journal_rows

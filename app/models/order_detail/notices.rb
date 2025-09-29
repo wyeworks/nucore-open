@@ -4,8 +4,8 @@ module OrderDetail::Notices
   extend ActiveSupport::Concern
 
   included do
-    serialize :notice_keys, Array
-    serialize :problem_keys, Array
+    serialize :notice_keys, coder: JSON, type: Array
+    serialize :problem_keys, coder: JSON, type: Array
 
     before_save :set_problem_and_notices
     before_save :update_fulfilled_at_on_resolve

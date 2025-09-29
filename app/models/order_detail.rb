@@ -39,20 +39,20 @@ class OrderDetail < ApplicationRecord
   after_save :update_billable_minutes_on_reservation, if: :reservation
 
   belongs_to :product
-  belongs_to :price_policy
-  belongs_to :statement, inverse_of: :order_details
-  belongs_to :journal
+  belongs_to :price_policy, optional: true
+  belongs_to :statement, inverse_of: :order_details, optional: true
+  belongs_to :journal, optional: true
   belongs_to :order, inverse_of: :order_details, required: true
-  belongs_to :assigned_user, class_name: "User", foreign_key: "assigned_user_id"
+  belongs_to :assigned_user, class_name: "User", foreign_key: "assigned_user_id", optional: true
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by # created_by_user is the ordered_by user, not ordered_for user
-  belongs_to :dispute_by, class_name: "User"
-  belongs_to :price_changed_by_user, class_name: "User"
-  belongs_to :order_status
-  belongs_to :account
-  belongs_to :bundle, foreign_key: "bundle_product_id"
-  belongs_to :canceled_by_user, foreign_key: :canceled_by, class_name: "User"
-  belongs_to :problem_resolved_by, class_name: "User"
-  belongs_to :project, class_name: "Project", foreign_key: :project_id, inverse_of: :order_details
+  belongs_to :dispute_by, class_name: "User", optional: true
+  belongs_to :price_changed_by_user, class_name: "User", optional: true
+  belongs_to :order_status, optional: true
+  belongs_to :account, optional: true
+  belongs_to :bundle, foreign_key: "bundle_product_id", optional: true
+  belongs_to :canceled_by_user, foreign_key: :canceled_by, class_name: "User", optional: true
+  belongs_to :problem_resolved_by, class_name: "User", optional: true
+  belongs_to :project, class_name: "Project", foreign_key: :project_id, inverse_of: :order_details, optional: true
   has_one    :reservation, inverse_of: :order_detail
   # for some reason, dependent: :delete on reservation isn't working with paranoia, hitting foreign key constraints
   before_destroy { reservation.try(:really_destroy!) }
@@ -78,7 +78,9 @@ class OrderDetail < ApplicationRecord
   delegate :reference, to: :journal, prefix: true, allow_nil: true
   delegate :projects, to: :facility, prefix: true
 
-  alias_attribute :problem_description_keys, :problem_keys
+  def problem_description_keys
+    problem_keys
+  end
 
   def estimated_price_group
     estimated_price_policy.try(:price_group)
