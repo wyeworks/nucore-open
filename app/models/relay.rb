@@ -9,7 +9,13 @@ class Relay < ApplicationRecord
   validates_presence_of :instrument_id, on: :update
   validate :unique_host_and_schedule
 
-  alias_attribute :host, :ip
+  def host
+    ip
+  end
+
+  def host=(value)
+    self.ip = value
+  end
 
   delegate :facility, to: :instrument
 
