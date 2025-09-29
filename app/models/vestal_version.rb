@@ -10,6 +10,6 @@ class VestalVersion < ApplicationRecord
 
   belongs_to :versioned, polymorphic: true
 
-  serialize :modifications
+  serialize :modifications, coder: JSON
 
 end

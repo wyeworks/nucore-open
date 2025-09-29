@@ -2,7 +2,7 @@
 
 namespace :db do
   def db_allow_task?
-    if Rails.env.test? || Rails.env.development?
+    if Rails.env.local?
       true
     else
       puts "Only allowed in development and test mode"

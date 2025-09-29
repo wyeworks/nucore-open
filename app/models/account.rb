@@ -46,7 +46,7 @@ class Account < ApplicationRecord
   has_many :orders
   has_many :statements, through: :order_details
   has_many :payments, inverse_of: :account
-  belongs_to :affiliate
+  belongs_to :affiliate, optional: true
   accepts_nested_attributes_for :account_users
   has_many :log_events, as: :loggable
 

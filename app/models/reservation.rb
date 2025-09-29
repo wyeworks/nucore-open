@@ -16,8 +16,8 @@ class Reservation < ApplicationRecord
   #####
   belongs_to :product
   belongs_to :instrument, foreign_key: :product_id
-  belongs_to :order_detail, inverse_of: :reservation
-  belongs_to :created_by, class_name: "User"
+  belongs_to :order_detail, inverse_of: :reservation, optional: true
+  belongs_to :created_by, class_name: "User", optional: true
   has_one :order, through: :order_detail
 
   ## Virtual attributes

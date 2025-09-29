@@ -15,7 +15,30 @@ module Nucore
 
   class Application < Rails::Application
 
-    config.load_defaults 6.1
+    config.load_defaults 7.2
+
+    # Rails 7.2 compatibility for secrets
+    def secrets
+      @secrets ||= begin
+        require "active_support/ordered_options"
+        secrets = ActiveSupport::OrderedOptions.new
+
+        secrets_file = Rails.root.join("config", "secrets.yml")
+        if File.exist?(secrets_file)
+          require "erb"
+          require "yaml"
+
+          all_secrets = YAML.load(ERB.new(File.read(secrets_file)).result, aliases: true) || {}
+          env_secrets = all_secrets[Rails.env]
+
+          if env_secrets
+            secrets.merge!(env_secrets.deep_symbolize_keys)
+          end
+        end
+
+        secrets
+      end
+    end
 
     # TODO- clean up unconventional inverse relations
     config.active_record.has_many_inversing = false
@@ -54,6 +77,10 @@ module Nucore
     # config.autoload_paths += Dir["#{config.root}/lib"]
     # config.eager_load_paths += Dir["#{config.root}/lib"]
 
+    # Rails 7.2 autoloading configuration
+    config.autoload_lib(ignore: %w[assets tasks daemons])
+    config.add_autoload_paths_to_load_path = true
+
     config.autoload_paths += Dir["#{config.root}/app/models/external_services"]
     config.eager_load_paths += Dir["#{config.root}/app/models/external_services"]
 
@@ -89,6 +116,11 @@ module Nucore
 
     # Indicate to the browser that an image should be lazily loaded
     config.action_view.image_loading = "lazy"
+
+    # Temporarily disable Rails 7.1+ callback action validation
+    # This allows callbacks to reference non-existent actions without raising errors
+    # TODO: Clean up callbacks in a separate PR and remove this configuration
+    config.action_controller.raise_on_missing_callback_actions = false
   end
 
 end
