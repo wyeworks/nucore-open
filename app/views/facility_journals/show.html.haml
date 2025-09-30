@@ -45,7 +45,7 @@
   - has_reconciled = @journal.order_details.where(state: "reconciled").any?
   - has_unreconciled = @journal.order_details.where.not(state: "reconciled").any?
   - journal_can_reconcile = @journal.successful? && has_unreconciled
-  - journal_can_unreconcile = @journal.successful? && has_reconciled && SettingsHelper.feature_on?(:allow_mass_unreconciling)
+  - journal_can_unreconcile = @journal.successful? && has_reconciled && SettingsHelper.feature_on?(:allow_mass_unreconciling) && current_user.administrator?
   - show_checkboxes = journal_is_submittable || journal_can_unreconcile || journal_can_reconcile
   
   = form_tag facility_journal_reconcile_path(current_facility, @journal), method: :post, id: "journal-form" do

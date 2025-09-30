@@ -74,6 +74,7 @@ en:
         errors:
           none_eligible: "No orders were selected or eligible to unreconcile"
         feature_disabled: "Mass unreconciling is not enabled"
+        access_denied: "Only global administrators can perform mass unreconciling"
 
     facility_order_details:
       destroy:

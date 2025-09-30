@@ -145,6 +145,10 @@ class FacilityJournalsController < ApplicationController
       raise CanCan::AccessDenied, I18n.t("controllers.facility_journals.unreconcile.feature_disabled")
     end
 
+    unless current_user.administrator?
+      raise CanCan::AccessDenied, I18n.t("controllers.facility_journals.unreconcile.access_denied")
+    end
+
     process_reconciliation(:unreconcile)
   end
 
