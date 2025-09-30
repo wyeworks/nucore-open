@@ -601,16 +601,84 @@ RSpec.describe FacilityJournalsController do
           end
         end
 
+        describe "with accessory orders" do
+          let(:parent_order) do
+            od = place_and_complete_item_order(user, facility, account, true)
+            od.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+            od
+          end
+
+          let!(:accessory_product) { create(:item, facility:, name: "Accessory Item") }
+
+          let!(:accessory_in_journal) do
+            create(:order_detail,
+                   order: parent_order.order,
+                   product: accessory_product,
+                   parent_order_detail: parent_order,
+                   account:,
+                   state: "reconciled",
+                   order_status: OrderStatus.reconciled,
+                   fulfilled_at: 1.day.ago,
+                   reconciled_at: 1.day.ago
+                  )
+          end
+
+          let!(:accessory_not_in_journal) do
+            create(:order_detail,
+                   order: parent_order.order,
+                   product: accessory_product,
+                   parent_order_detail: parent_order,
+                   account:,
+                   state: "reconciled",
+                   order_status: OrderStatus.reconciled,
+                   fulfilled_at: 1.day.ago,
+                   reconciled_at: 1.day.ago
+                  )
+          end
+
+          before do
+            @journal.journal_rows.destroy_all
+            @journal.create_journal_rows!([parent_order, accessory_in_journal])
+          end
+
+          it "only unreconciles orders that are in the journal" do
+            expect(@journal.order_details.count).to eq(2)
+            expect(@journal.order_details).to include(parent_order, accessory_in_journal)
+            expect(@journal.order_details).not_to include(accessory_not_in_journal)
+
+            params = {}
+            @journal.order_details.each do |od|
+              params[od.id.to_s] = { "selected" => "1" }
+            end
+
+            post :unreconcile, params: {
+              facility_id: facility.url_name,
+              journal_id: journal.id,
+              order_detail: params
+            }
+
+            parent_order.reload
+            accessory_in_journal.reload
+            accessory_not_in_journal.reload
+
+            expect(parent_order.state).to eq("complete")
+            expect(accessory_in_journal.state).to eq("complete")
+            expect(accessory_not_in_journal.state).to eq("reconciled") # Should remain reconciled
+
+            expect(flash[:notice]).to include("successfully unreconciled") if flash[:notice]
+          end
+        end
+
         describe "when unreconcile fails for one order detail" do
           before do
             @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
             @order_detail2.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
             @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
 
-            allow_any_instance_of(OrderDetail).to receive(:update!).and_call_original
+            allow_any_instance_of(OrderDetail).to receive(:update_columns).and_call_original
 
             call_count = 0
-            allow_any_instance_of(OrderDetail).to receive(:update!).and_wrap_original do |original, receiver, *args|
+            allow_any_instance_of(OrderDetail).to receive(:update_columns).and_wrap_original do |original, receiver, *args|
               call_count += 1
               if call_count == 2 # Fail on the second order detail
                 raise StandardError, "Failed to update order detail"

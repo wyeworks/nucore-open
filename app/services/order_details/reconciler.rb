@@ -63,12 +63,13 @@ module OrderDetails
         next unless order_detail.reconciled?
 
         begin
-          order_detail.update!(
+          order_detail.update_columns(
             state: "complete",
-            order_status: OrderStatus.complete,
+            order_status_id: OrderStatus.complete.id,
             reconciled_at: nil,
             deposit_number: nil,
-            reconciled_note: nil
+            reconciled_note: nil,
+            updated_at: Time.current
           )
           @count += 1
         rescue => e
