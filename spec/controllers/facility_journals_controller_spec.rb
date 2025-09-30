@@ -620,11 +620,11 @@ RSpec.describe FacilityJournalsController do
             end
           end
 
-          it "rolls back all changes" do
+          it "unreconciles the successful orders but not the failed one" do
             perform
-            expect(@order_detail1.reload.state).to eq("reconciled")
+            expect(@order_detail1.reload.state).to eq("complete")
             expect(@order_detail2.reload.state).to eq("reconciled")
-            expect(@order_detail3.reload.state).to eq("reconciled")
+            expect(@order_detail3.reload.state).to eq("complete")
           end
 
           it "shows error message with the failing order detail" do
@@ -632,9 +632,9 @@ RSpec.describe FacilityJournalsController do
             expect(flash[:error]).to include("Failed to update order detail")
           end
 
-          it "does not show success message" do
+          it "shows partial success message" do
             perform
-            expect(flash[:notice]).to be_nil
+            expect(flash[:notice]).to eq("2 payment(s) successfully unreconciled")
           end
         end
       end

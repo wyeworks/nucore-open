@@ -58,29 +58,25 @@ module OrderDetails
     def unreconcile_all
       @count = 0
       @persist_errors = []
-      rollback_occurred = false
 
-      OrderDetail.transaction do
-        order_details.each do |order_detail|
-          next unless order_detail.reconciled?
+      order_details.each do |order_detail|
+        next unless order_detail.reconciled?
 
-          begin
-            order_detail.update!(
-              state: "complete",
-              order_status: OrderStatus.complete,
-              reconciled_at: nil,
-              deposit_number: nil
-            )
-            @count += 1
-          rescue => e
-            @persist_errors << "Order ##{order_detail.id}: #{e.message}"
-            rollback_occurred = true
-            raise ActiveRecord::Rollback
-          end
+        begin
+          order_detail.update!(
+            state: "complete",
+            order_status: OrderStatus.complete,
+            reconciled_at: nil,
+            deposit_number: nil,
+            reconciled_note: nil
+          )
+          @count += 1
+        rescue => e
+          @persist_errors << "Order ##{order_detail.id}: #{e.message}"
         end
       end
 
-      rollback_occurred ? 0 : @count
+      @count
     end
 
     def full_errors
