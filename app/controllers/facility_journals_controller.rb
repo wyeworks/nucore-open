@@ -145,9 +145,7 @@ class FacilityJournalsController < ApplicationController
       raise CanCan::AccessDenied
     end
 
-    unless current_user.administrator?
-      raise CanCan::AccessDenied
-    end
+    authorize! :unreconcile, OrderDetail
 
     process_reconciliation(:unreconcile)
   end

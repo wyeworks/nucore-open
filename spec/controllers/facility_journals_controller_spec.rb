@@ -637,17 +637,17 @@ RSpec.describe FacilityJournalsController do
           end
 
           before do
-            @journal.journal_rows.destroy_all
-            @journal.create_journal_rows!([parent_order, accessory_in_journal])
+            journal.journal_rows.destroy_all
+            journal.create_journal_rows!([parent_order, accessory_in_journal])
           end
 
           it "only unreconciles orders that are in the journal" do
-            expect(@journal.order_details.count).to eq(2)
-            expect(@journal.order_details).to include(parent_order, accessory_in_journal)
-            expect(@journal.order_details).not_to include(accessory_not_in_journal)
+            expect(journal.order_details.count).to eq(2)
+            expect(journal.order_details).to include(parent_order, accessory_in_journal)
+            expect(journal.order_details).not_to include(accessory_not_in_journal)
 
             params = {}
-            @journal.order_details.each do |od|
+            journal.order_details.each do |od|
               params[od.id.to_s] = { "selected" => "1" }
             end
 
@@ -665,7 +665,7 @@ RSpec.describe FacilityJournalsController do
             expect(accessory_in_journal.state).to eq("complete")
             expect(accessory_not_in_journal.state).to eq("reconciled") # Should remain reconciled
 
-            expect(flash[:notice]).to include("successfully unreconciled") if flash[:notice]
+            expect(flash[:notice]).to include("successfully unreconciled")
           end
         end
 
@@ -675,10 +675,8 @@ RSpec.describe FacilityJournalsController do
             @order_detail2.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
             @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
 
-            allow_any_instance_of(OrderDetail).to receive(:update_columns).and_call_original
-
             call_count = 0
-            allow_any_instance_of(OrderDetail).to receive(:update_columns).and_wrap_original do |original, receiver, *args|
+            allow_any_instance_of(OrderDetail).to receive(:unreconcile!).and_wrap_original do |original, receiver, *args|
               call_count += 1
               if call_count == 2 # Fail on the second order detail
                 raise StandardError, "Failed to update order detail"
