@@ -142,11 +142,11 @@ class FacilityJournalsController < ApplicationController
 
   def unreconcile
     unless SettingsHelper.feature_on?(:allow_mass_unreconciling)
-      raise CanCan::AccessDenied, I18n.t("controllers.facility_journals.unreconcile.feature_disabled")
+      raise CanCan::AccessDenied
     end
 
     unless current_user.administrator?
-      raise CanCan::AccessDenied, I18n.t("controllers.facility_journals.unreconcile.access_denied")
+      raise CanCan::AccessDenied
     end
 
     process_reconciliation(:unreconcile)

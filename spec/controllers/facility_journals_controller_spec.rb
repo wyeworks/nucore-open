@@ -526,8 +526,8 @@ RSpec.describe FacilityJournalsController do
           sign_in user
         end
 
-        it "denies access with proper error message" do
-          expect { perform }.to raise_error(CanCan::AccessDenied, "Only global administrators can perform mass unreconciling")
+        it "denies access" do
+          expect { perform }.to raise_error(CanCan::AccessDenied)
         end
       end
 
