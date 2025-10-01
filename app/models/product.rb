@@ -394,6 +394,7 @@ class Product < ApplicationRecord
 
   def find_cheapest_price_policy_for_groups(detail, date, groups)
     price_policies = current_price_policies(date).newest.to_a.delete_if { |pp| pp.restrict_purchase? || groups.exclude?(pp.price_group) }
+    return nil if price_policies.empty?
 
     # provide a predictable ordering of price groups so that equal unit costs
     # are always handled the same way. Put the base group at the front of the
