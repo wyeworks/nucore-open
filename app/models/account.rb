@@ -11,10 +11,6 @@ class Account < ApplicationRecord
       (account_price_groups + (owner_user ? owner_user.price_groups : [])).uniq
     end
 
-    def account_price_groups
-      price_group_members.collect(&:price_group)
-    end
-
   end
 
   include Overridable
@@ -40,6 +36,9 @@ class Account < ApplicationRecord
   # when used with has many through
   has_many :price_group_members, -> { AccountPriceGroupMember.all }
   has_many :price_groups_relation,
+           through: :price_group_members,
+           source: :price_group
+  has_many :account_price_groups,
            through: :price_group_members,
            source: :price_group
   has_many :order_details
