@@ -40,6 +40,24 @@ RSpec.describe OrderDetail do
         order_detail.account = nil
         expect(order_detail.price_groups).to eq([])
       end
+
+      context "when account has price groups assigned directly" do
+        let(:account_price_group) { create(:price_group, facility:) }
+
+        before do
+          account.price_group_members.create!(price_group: account_price_group)
+        end
+
+        it "uses account's assigned price groups instead of owner's price groups" do
+          expect(order_detail.price_groups).to include(account_price_group)
+          expect(order_detail.price_groups).not_to include(owner_price_group)
+          expect(order_detail.price_groups).not_to include(purchaser_price_group)
+        end
+
+        it "only includes the account's directly assigned price groups" do
+          expect(order_detail.price_groups).to eq([account_price_group])
+        end
+      end
     end
   end
 end
