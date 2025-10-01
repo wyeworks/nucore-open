@@ -679,7 +679,7 @@ RSpec.describe FacilityJournalsController do
             allow_any_instance_of(OrderDetail).to receive(:to_complete_from_reconciled!).and_wrap_original do |original, receiver, *args|
               call_count += 1
               if call_count == 2 # Fail on the second order detail
-                raise StandardError, "Failed to update order detail"
+                raise ActiveRecord::RecordInvalid, @order_detail2
               else
                 original.call(receiver, *args)
               end
@@ -695,7 +695,7 @@ RSpec.describe FacilityJournalsController do
 
           it "shows error message with the failing order detail" do
             perform
-            expect(flash[:error]).to include("Failed to update order detail")
+            expect(flash[:error]).to include("Order ##{@order_detail2.id}:")
           end
 
           it "shows partial success message" do

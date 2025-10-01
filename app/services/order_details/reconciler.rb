@@ -68,7 +68,7 @@ module OrderDetails
           order_detail.reconciled_note = nil
           order_detail.to_complete_from_reconciled!
           @count += 1
-        rescue => e
+        rescue AASM::InvalidTransition, ActiveRecord::RecordInvalid => e
           @persist_errors << "Order ##{order_detail.id}: #{e.message}"
         end
       end
