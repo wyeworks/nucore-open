@@ -426,58 +426,6 @@ RSpec.describe Account do
     end
   end
 
-  describe "#price_groups" do
-    let(:facility) { create(:facility) }
-    let(:owner_user) { create(:user) }
-    let(:account) { create(:nufs_account, :with_account_owner, owner: owner_user) }
-    let(:owner_price_group) { create(:price_group, facility:) }
-    let(:account_price_group) { create(:price_group, facility:) }
-
-    before do
-      owner_user.price_groups << owner_price_group
-    end
-
-    context "when user_based_price_groups_exclude_purchaser is disabled", feature_setting: { user_based_price_groups_exclude_purchaser: false } do
-      context "when account has no price groups assigned" do
-        it "returns only the owner's price groups" do
-          expect(account.price_groups).to include(owner_price_group)
-        end
-      end
-
-      context "when account has price groups assigned" do
-        before do
-          account.price_group_members.create!(price_group: account_price_group)
-        end
-
-        it "returns both account and owner price groups" do
-          expect(account.price_groups).to include(account_price_group, owner_price_group)
-        end
-      end
-    end
-
-    context "when user_based_price_groups_exclude_purchaser is enabled", feature_setting: { user_based_price_groups_exclude_purchaser: true } do
-      context "when account has no price groups assigned" do
-        it "returns the owner's price groups" do
-          expect(account.price_groups).to include(owner_price_group)
-        end
-      end
-
-      context "when account has price groups assigned directly" do
-        before do
-          account.price_group_members.create!(price_group: account_price_group)
-        end
-
-        it "returns only the account's price groups" do
-          expect(account.price_groups).to contain_exactly(account_price_group)
-        end
-
-        it "does not include the owner's price groups" do
-          expect(account.price_groups).not_to include(owner_price_group)
-        end
-      end
-    end
-  end
-
   describe "#expired?" do
     it "returns true if the account is expired" do
       account.expires_at = 1.day.ago

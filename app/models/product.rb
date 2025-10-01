@@ -267,7 +267,7 @@ class Product < ApplicationRecord
 
     # When feature flag is enabled, try account price groups first, then fallback to all groups
     if detail.is_a?(OrderDetail) && detail.account && SettingsHelper.feature_on?(:user_based_price_groups_exclude_purchaser)
-      account_price_groups = detail.account.account_price_groups
+      account_price_groups = detail.account.price_group_members.collect(&:price_group)
 
       if account_price_groups.present?
         policy = find_cheapest_price_policy_for_groups(detail, date, account_price_groups)
