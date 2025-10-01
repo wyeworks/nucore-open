@@ -391,7 +391,7 @@ class OrderDetail < ApplicationRecord
       transitions to: :reconciled, from: :complete, guard: :actual_total
     end
 
-    event :unreconcile do
+    event :to_complete_from_reconciled do
       transitions to: :complete, from: :reconciled, after: :set_complete_order_status
     end
 

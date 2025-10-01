@@ -676,7 +676,7 @@ RSpec.describe FacilityJournalsController do
             @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
 
             call_count = 0
-            allow_any_instance_of(OrderDetail).to receive(:unreconcile!).and_wrap_original do |original, receiver, *args|
+            allow_any_instance_of(OrderDetail).to receive(:to_complete_from_reconciled!).and_wrap_original do |original, receiver, *args|
               call_count += 1
               if call_count == 2 # Fail on the second order detail
                 raise StandardError, "Failed to update order detail"
