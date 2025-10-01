@@ -519,107 +519,189 @@ RSpec.describe FacilityJournalsController do
     end
 
     context "when feature flag is enabled", feature_setting: { allow_mass_unreconciling: true } do
-      describe "when all order details are reconciled" do
+      context "when user is not global admin" do
+        let!(:user) { create(:user, :facility_director, facility:) }
+
         before do
-          @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
-          @order_detail2.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
-          @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+          sign_in user
         end
 
-        it "unreconciles all order details" do
-          perform
-          expect(@order_detail1.reload.state).to eq("complete")
-          expect(@order_detail2.reload.state).to eq("complete")
-          expect(@order_detail3.reload.state).to eq("complete")
-        end
-
-        it "clears reconciled_at for all order details" do
-          perform
-          expect(@order_detail1.reload.reconciled_at).to be_nil
-          expect(@order_detail2.reload.reconciled_at).to be_nil
-          expect(@order_detail3.reload.reconciled_at).to be_nil
-        end
-
-        it "sets flash notice with correct count" do
-          perform
-          expect(flash[:notice]).to eq("3 payment(s) successfully unreconciled")
+        it "denies access" do
+          expect { perform }.to raise_error(CanCan::AccessDenied)
         end
       end
 
-      describe "when some order details are not reconciled" do
-        before do
-          @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
-          @order_detail2.update!(state: "complete")
-          @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
-        end
+      context "when user is global admin" do
+        let!(:user) { create(:user, :administrator) }
 
-        it "only unreconciles the reconciled ones" do
-          perform
-          expect(@order_detail1.reload.state).to eq("complete")
-          expect(@order_detail2.reload.state).to eq("complete")
-          expect(@order_detail3.reload.state).to eq("complete")
-        end
+        describe "when all order details are reconciled" do
+          before do
+            @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+            @order_detail2.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+            @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+          end
 
-        it "shows correct count in flash notice" do
-          perform
-          expect(flash[:notice]).to eq("2 payment(s) successfully unreconciled")
-        end
-      end
+          it "unreconciles all order details" do
+            perform
+            expect(@order_detail1.reload.state).to eq("complete")
+            expect(@order_detail2.reload.state).to eq("complete")
+            expect(@order_detail3.reload.state).to eq("complete")
+          end
 
-      describe "when no order details are reconciled" do
-        before do
-          @order_detail1.update!(state: "complete")
-          @order_detail2.update!(state: "complete")
-          @order_detail3.update!(state: "complete")
-        end
+          it "clears reconciled_at for all order details" do
+            perform
+            expect(@order_detail1.reload.reconciled_at).to be_nil
+            expect(@order_detail2.reload.reconciled_at).to be_nil
+            expect(@order_detail3.reload.reconciled_at).to be_nil
+          end
 
-        it "does not change any states" do
-          perform
-          expect(@order_detail1.reload.state).to eq("complete")
-          expect(@order_detail2.reload.state).to eq("complete")
-          expect(@order_detail3.reload.state).to eq("complete")
-        end
-
-        it "shows appropriate flash error" do
-          perform
-          expect(flash[:error]).to eq("No orders were selected or eligible to unreconcile")
-        end
-      end
-
-      describe "when unreconcile fails for one order detail" do
-        before do
-          @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
-          @order_detail2.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
-          @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
-
-          allow_any_instance_of(OrderDetail).to receive(:update!).and_call_original
-
-          call_count = 0
-          allow_any_instance_of(OrderDetail).to receive(:update!).and_wrap_original do |original, receiver, *args|
-            call_count += 1
-            if call_count == 2 # Fail on the second order detail
-              raise StandardError, "Failed to update order detail"
-            else
-              original.call(receiver, *args)
-            end
+          it "sets flash notice with correct count" do
+            perform
+            expect(flash[:notice]).to eq("3 payment(s) successfully unreconciled")
           end
         end
 
-        it "rolls back all changes" do
-          perform
-          expect(@order_detail1.reload.state).to eq("reconciled")
-          expect(@order_detail2.reload.state).to eq("reconciled")
-          expect(@order_detail3.reload.state).to eq("reconciled")
+        describe "when some order details are not reconciled" do
+          before do
+            @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+            @order_detail2.update!(state: "complete")
+            @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+          end
+
+          it "only unreconciles the reconciled ones" do
+            perform
+            expect(@order_detail1.reload.state).to eq("complete")
+            expect(@order_detail2.reload.state).to eq("complete")
+            expect(@order_detail3.reload.state).to eq("complete")
+          end
+
+          it "shows correct count in flash notice" do
+            perform
+            expect(flash[:notice]).to eq("2 payment(s) successfully unreconciled")
+          end
         end
 
-        it "shows error message with the failing order detail" do
-          perform
-          expect(flash[:error]).to include("Failed to update order detail")
+        describe "when no order details are reconciled" do
+          before do
+            @order_detail1.update!(state: "complete")
+            @order_detail2.update!(state: "complete")
+            @order_detail3.update!(state: "complete")
+          end
+
+          it "does not change any states" do
+            perform
+            expect(@order_detail1.reload.state).to eq("complete")
+            expect(@order_detail2.reload.state).to eq("complete")
+            expect(@order_detail3.reload.state).to eq("complete")
+          end
+
+          it "shows appropriate flash error" do
+            perform
+            expect(flash[:error]).to eq("No orders were selected or eligible to unreconcile")
+          end
         end
 
-        it "does not show success message" do
-          perform
-          expect(flash[:notice]).to be_nil
+        describe "with accessory orders" do
+          let(:parent_order) do
+            od = place_and_complete_item_order(user, facility, account, true)
+            od.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+            od
+          end
+
+          let!(:accessory_product) { create(:item, facility:, name: "Accessory Item") }
+
+          let!(:accessory_in_journal) do
+            create(:order_detail,
+                   order: parent_order.order,
+                   product: accessory_product,
+                   parent_order_detail: parent_order,
+                   account:,
+                   state: "reconciled",
+                   order_status: OrderStatus.reconciled,
+                   fulfilled_at: 1.day.ago,
+                   reconciled_at: 1.day.ago
+                  )
+          end
+
+          let!(:accessory_not_in_journal) do
+            create(:order_detail,
+                   order: parent_order.order,
+                   product: accessory_product,
+                   parent_order_detail: parent_order,
+                   account:,
+                   state: "reconciled",
+                   order_status: OrderStatus.reconciled,
+                   fulfilled_at: 1.day.ago,
+                   reconciled_at: 1.day.ago
+                  )
+          end
+
+          before do
+            journal.journal_rows.destroy_all
+            journal.create_journal_rows!([parent_order, accessory_in_journal])
+          end
+
+          it "only unreconciles orders that are in the journal" do
+            expect(journal.order_details.count).to eq(2)
+            expect(journal.order_details).to include(parent_order, accessory_in_journal)
+            expect(journal.order_details).not_to include(accessory_not_in_journal)
+
+            params = {}
+            journal.order_details.each do |od|
+              params[od.id.to_s] = { "selected" => "1" }
+            end
+
+            post :unreconcile, params: {
+              facility_id: facility.url_name,
+              journal_id: journal.id,
+              order_detail: params
+            }
+
+            parent_order.reload
+            accessory_in_journal.reload
+            accessory_not_in_journal.reload
+
+            expect(parent_order.state).to eq("complete")
+            expect(accessory_in_journal.state).to eq("complete")
+            expect(accessory_not_in_journal.state).to eq("reconciled") # Should remain reconciled
+
+            expect(flash[:notice]).to include("successfully unreconciled")
+          end
+        end
+
+        describe "when unreconcile fails for one order detail" do
+          before do
+            @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+            @order_detail2.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+            @order_detail3.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
+
+            call_count = 0
+            allow_any_instance_of(OrderDetail).to receive(:to_complete_from_reconciled!).and_wrap_original do |original, receiver, *args|
+              call_count += 1
+              if call_count == 2 # Fail on the second order detail
+                raise ActiveRecord::RecordInvalid, @order_detail2
+              else
+                original.call(receiver, *args)
+              end
+            end
+          end
+
+          it "unreconciles the successful orders but not the failed one" do
+            perform
+            expect(@order_detail1.reload.state).to eq("complete")
+            expect(@order_detail2.reload.state).to eq("reconciled")
+            expect(@order_detail3.reload.state).to eq("complete")
+          end
+
+          it "shows error message with the failing order detail" do
+            perform
+            expect(flash[:error]).to include("Order ##{@order_detail2.id}:")
+          end
+
+          it "shows partial success message" do
+            perform
+            expect(flash[:notice]).to eq("2 payment(s) successfully unreconciled")
+          end
         end
       end
     end

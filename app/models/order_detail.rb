@@ -391,6 +391,10 @@ class OrderDetail < ApplicationRecord
       transitions to: :reconciled, from: :complete, guard: :actual_total
     end
 
+    event :to_complete_from_reconciled do
+      transitions to: :complete, from: :reconciled, after: :set_complete_order_status
+    end
+
     event :to_unrecoverable do
       transitions to: :unrecoverable, from: :complete, guard: :can_be_marked_as_unrecoverable?
     end
@@ -1007,6 +1011,10 @@ class OrderDetail < ApplicationRecord
   end
 
   private
+
+  def set_complete_order_status
+    self.order_status = OrderStatus.complete
+  end
 
   # Is there enough information to move an associated order to complete/problem?
   def time_data_completeable?

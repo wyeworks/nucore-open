@@ -43,6 +43,8 @@ module OrderDetail::Accessorized
 
   def update_children
     return unless child_order_details.any?
+    # Skip updating children during unreconciliation to prevent unreconciling orders outside a journal
+    return if saved_change_to_state? && state_before_last_save == "reconciled" && state == "complete"
     accessorizer = Accessories::ChildUpdater.new(self)
     @updated_children = accessorizer.update_children
   end
