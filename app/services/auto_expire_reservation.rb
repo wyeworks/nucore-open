@@ -31,8 +31,11 @@ class AutoExpireReservation
   def expire_reservation(order_detail)
     MoveToProblemQueue.move!(order_detail, cause: :auto_expire)
 
-    # fulfilled_at gets set to Time.current but we want it to be the end of the reservation
-    order_detail.update!(fulfilled_at: order_detail.reservation.reserve_end_at)
+    order_detail.fulfilled_at = order_detail.reservation.reserve_end_at
+
+    order_detail.assign_price_policy if order_detail.product.nonbillable_mode?
+
+    order_detail.save!
   rescue => e
     ActiveSupport::Notifications.instrument("background_error",
                                             exception: e, information: "Failed expire reservation order detail ##{order_detail}")
