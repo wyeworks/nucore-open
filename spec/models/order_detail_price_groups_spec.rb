@@ -40,6 +40,58 @@ RSpec.describe OrderDetail do
         order_detail.account = nil
         expect(order_detail.price_groups).to eq([])
       end
+
+      context "when account has price groups assigned directly" do
+        let(:account_price_group) { create(:price_group, facility:) }
+
+        before do
+          account.price_group_members.create!(price_group: account_price_group)
+        end
+
+        it "includes both account and owner price groups for fallback" do
+          expect(order_detail.price_groups).to include(account_price_group)
+          expect(order_detail.price_groups).to include(owner_price_group)
+          expect(order_detail.price_groups).not_to include(purchaser_price_group)
+        end
+
+        context "when product has prices for account price groups" do
+          before do
+            create(:item_price_policy, product:, price_group: account_price_group, unit_cost: 10)
+            create(:item_price_policy, product:, price_group: owner_price_group, unit_cost: 20)
+          end
+
+          it "prioritizes account price group over owner price group" do
+            order_detail.assign_estimated_price
+            expect(order_detail.estimated_price_group).to eq(account_price_group)
+          end
+        end
+
+        context "when product only has prices for owner price groups" do
+          before do
+            create(:item_price_policy, product:, price_group: owner_price_group, unit_cost: 20)
+          end
+
+          it "falls back to owner price group" do
+            order_detail.assign_estimated_price
+            expect(order_detail.estimated_price_group).to eq(owner_price_group)
+          end
+        end
+
+        context "when account has price groups but product has no prices for them" do
+          let(:unpriced_account_group) { create(:price_group, name: "Unpriced Account Group", facility:) }
+
+          before do
+            account.price_group_members.create!(price_group: unpriced_account_group)
+            create(:item_price_policy, product:, price_group: owner_price_group, unit_cost: 15)
+          end
+
+          it "falls back to owner price group when account group has no valid prices" do
+            order_detail.assign_estimated_price
+            expect(order_detail.estimated_price_group).to eq(owner_price_group)
+            expect(order_detail.estimated_cost).to eq(15)
+          end
+        end
+      end
     end
   end
 end
