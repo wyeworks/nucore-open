@@ -278,35 +278,6 @@ class Product < ApplicationRecord
     find_cheapest_price_policy_for_groups(detail, date, groups)
   end
 
-  private
-
-  def find_cheapest_price_policy_for_groups(detail, date, groups)
-    price_policies = current_price_policies(date).newest.to_a.delete_if { |pp| pp.restrict_purchase? || groups.exclude?(pp.price_group) }
-    return nil if price_policies.empty?
-
-    # provide a predictable ordering of price groups so that equal unit costs
-    # are always handled the same way. Put the base group at the front of the
-    # price policy array so that it takes precedence over all others that have
-    # equal unit cost. See task #49823.
-    base_ndx = price_policies.index { |pp| pp.price_group == PriceGroup.base }
-    base = price_policies.delete_at base_ndx if base_ndx
-    price_policies.sort! { |pp1, pp2| pp1.price_group.name <=> pp2.price_group.name }
-    price_policies.unshift base if base
-
-    if detail.is_a?(OrderDetail)
-      price_policies.min_by do |pp|
-        # default to very large number if the estimate returns a nil
-        costs = pp.estimate_cost_and_subsidy_from_order_detail(detail) || { cost: 999_999_999, subsidy: 0 }
-        costs[:cost] - costs[:subsidy]
-      end
-    elsif detail.is_a?(EstimateDetail) && SettingsHelper.feature_on?(:show_estimates_option)
-      price_policies.min_by do |pp|
-        # default to very large number if the estimate returns a nil
-        pp.estimate_cost_from_estimate_detail(detail) || 999_999_999
-      end
-    end
-  end
-
   def product_type
     self.class.name.underscore.pluralize
   end
@@ -419,6 +390,33 @@ class Product < ApplicationRecord
 
   def start_time_disabled_daily_booking_only
     self.start_time_disabled = start_time_disabled && daily_booking?
+  end
+
+  def find_cheapest_price_policy_for_groups(detail, date, groups)
+    price_policies = current_price_policies(date).newest.to_a.delete_if { |pp| pp.restrict_purchase? || groups.exclude?(pp.price_group) }
+    return nil if price_policies.empty?
+
+    # provide a predictable ordering of price groups so that equal unit costs
+    # are always handled the same way. Put the base group at the front of the
+    # price policy array so that it takes precedence over all others that have
+    # equal unit cost. See task #49823.
+    base_ndx = price_policies.index { |pp| pp.price_group == PriceGroup.base }
+    base = price_policies.delete_at base_ndx if base_ndx
+    price_policies.sort! { |pp1, pp2| pp1.price_group.name <=> pp2.price_group.name }
+    price_policies.unshift base if base
+
+    if detail.is_a?(OrderDetail)
+      price_policies.min_by do |pp|
+        # default to very large number if the estimate returns a nil
+        costs = pp.estimate_cost_and_subsidy_from_order_detail(detail) || { cost: 999_999_999, subsidy: 0 }
+        costs[:cost] - costs[:subsidy]
+      end
+    elsif detail.is_a?(EstimateDetail) && SettingsHelper.feature_on?(:show_estimates_option)
+      price_policies.min_by do |pp|
+        # default to very large number if the estimate returns a nil
+        pp.estimate_cost_from_estimate_detail(detail) || 999_999_999
+      end
+    end
   end
 
 end
