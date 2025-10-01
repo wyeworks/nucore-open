@@ -534,6 +534,10 @@ RSpec.describe FacilityJournalsController do
       context "when user is global admin" do
         let!(:user) { create(:user, :administrator) }
 
+        before do
+          sign_in user
+        end
+
         describe "when all order details are reconciled" do
           before do
             @order_detail1.update!(state: "reconciled", reconciled_at: 1.day.ago, order_status: OrderStatus.reconciled)
