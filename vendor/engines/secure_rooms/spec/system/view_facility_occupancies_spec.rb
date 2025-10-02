@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe "Viewing Occupancies" do
   let(:facility) { create(:setup_facility) }
-  let(:secure_room) { create(:secure_room, facility: facility) }
-  let(:facility_director) { create(:user, :facility_director, facility: facility) }
+  let(:secure_room) { create(:secure_room, facility:) }
+  let(:facility_director) { create(:user, :facility_director, facility:) }
   before { login_as facility_director }
 
   context "with no in-progress occupancies" do
@@ -28,8 +28,8 @@ RSpec.describe "Viewing Occupancies" do
           :occupancy,
           :active,
           user: order_detail.user,
-          secure_room: secure_room,
-          order_detail: order_detail,
+          secure_room:,
+          order_detail:,
           account: order_detail.account,
         )
       end
@@ -53,8 +53,8 @@ RSpec.describe "Viewing Occupancies" do
           :occupancy,
           :orphan,
           user: order_detail.user,
-          secure_room: secure_room,
-          order_detail: order_detail,
+          secure_room:,
+          order_detail:,
           account: order_detail.account,
         )
       end
@@ -74,14 +74,15 @@ RSpec.describe "Viewing Occupancies" do
     end
 
     context "with a missing price-policy occupancy" do
+      let(:account) { order_detail.account }
       let!(:occupancy) do
         create(
           :occupancy,
           :complete,
           user: order_detail.user,
-          secure_room: secure_room,
-          order_detail: order_detail,
-          account: order_detail.account,
+          secure_room:,
+          order_detail:,
+          account:,
         )
       end
 
@@ -96,7 +97,7 @@ RSpec.describe "Viewing Occupancies" do
         expect(page).to have_content(order_detail.id)
         expect(page).to have_content("Missing Price Policy")
 
-        create(:secure_room_price_policy, product: secure_room, price_group: order_detail.user.price_groups.first)
+        create(:secure_room_price_policy, product: secure_room, price_group: order_detail.account.price_groups.first)
 
         click_link "Assign Price Policies"
 
