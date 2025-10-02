@@ -60,7 +60,13 @@ RSpec.describe "Purchasing a reservation" do
       end
     end
 
-    context "when feature flag is enabled", feature_setting: { user_based_price_groups_exclude_purchaser: true } do
+    context(
+      "when feature flag is enabled",
+      feature_setting: {
+        user_based_price_groups: true,
+        user_based_price_groups_exclude_purchaser: true,
+      }
+    ) do
       context "when account HAS price groups configured" do
         before do
           instrument.price_group_products.update_all(reservation_window: 7)
