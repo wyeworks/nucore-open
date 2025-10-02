@@ -19,7 +19,11 @@ RSpec.describe "Scanning in and out", type: :controller do
 
   let(:user) { create(:user, card_number: "123456") }
   let(:account) { create(:nufs_account, :with_account_owner, owner: user) }
-  before { secure_room.product_users.create!(user: user, approved_by: 0) }
+
+  before do
+    create(:account_price_group_member, account:, price_group: PriceGroup.base)
+    secure_room.product_users.create!(user: user, approved_by: 0)
+  end
 
   describe "with a room having both in and out" do
     let!(:out_reader) { create(:card_reader, ingress: false, secure_room: secure_room) }
