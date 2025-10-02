@@ -8,6 +8,9 @@ RSpec.describe "Reserving an instrument on a holiday" do
   let!(:instrument) { create(:setup_instrument, restrict_holiday_access: true) }
   let(:facility) { instrument.facility }
   let!(:account) { create(:nufs_account, :with_account_owner, owner: user) }
+  let!(:account_price_group_member) do
+    create(:account_price_group_member, account:, price_group: PriceGroup.base)
+  end
   let!(:price_policy) { create(:instrument_price_policy, price_group: PriceGroup.base, product: instrument) }
   let!(:holiday) { Holiday.create(date: 2.days.from_now) }
 
