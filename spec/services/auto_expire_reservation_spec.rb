@@ -59,6 +59,11 @@ RSpec.describe AutoExpireReservation, :time_travel do
                                                    product: instrument)
       end
 
+      before do
+        reservation.order.account = NonbillableAccount.singleton_instance
+        reservation.order.save!
+      end
+
       it "completes the reservation" do
         expect { action.perform }.to change { order_detail.reload.state }.from("new").to("complete")
       end
