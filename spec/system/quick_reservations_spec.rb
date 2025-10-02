@@ -18,6 +18,10 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
   let!(:reservation) {}
 
   before do
+    if account.present?
+      create(:account_price_group_member, account:, price_group: price_policy.price_group)
+    end
+
     login_as user
     visit new_facility_instrument_quick_reservation_path(facility, instrument)
   end

@@ -33,5 +33,11 @@ FactoryBot.define do
     after(:build) do |model|
       define_open_account "42345", model.account_number
     end
+
+    after(:create) do |account|
+      unless SettingsHelper.feature_on?(:user_based_price_groups)
+        AccountPriceGroupMember.create(account:, price_group: PriceGroup.base)
+      end
+    end
   end
 end
