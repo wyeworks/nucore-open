@@ -7,13 +7,16 @@ RSpec.describe "Billing mode workflows" do
   let(:accepts_po) { true }
   let(:billing_mode) { "Default" }
   let(:item) { create(:setup_item, facility:, billing_mode:) }
-  let(:order) { create(:setup_order, product: item, account: create(:purchase_order_account, :with_account_owner, facility:)) }
+  let(:account) { create(:purchase_order_account, :with_account_owner, facility:) }
+  let(:order) { create(:setup_order, product: item, account:) }
   let(:order_detail) { order.order_details.first }
   let(:director) { create(:user, :facility_director, facility:) }
   let(:user) { order.account.owner.user }
   let(:logged_in_user) { nil }
 
   before do
+    create(:account_price_group_member, account:, price_group: PriceGroup.base)
+
     login_as logged_in_user
   end
 
