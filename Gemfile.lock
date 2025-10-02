@@ -419,7 +419,7 @@ GEM
       rails (>= 3.2.0)
     net-http (0.6.0)
       uri
-    net-imap (0.5.10)
+    net-imap (0.5.11)
       date
       net-protocol
     net-ldap (0.20.0)
