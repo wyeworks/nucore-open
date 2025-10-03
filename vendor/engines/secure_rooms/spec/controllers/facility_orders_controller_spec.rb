@@ -4,15 +4,16 @@ require "rails_helper"
 
 RSpec.describe FacilityOrdersController do
   let(:facility) { create(:setup_facility) }
-  let(:secure_room) { create(:secure_room, :with_schedule_rule, :with_base_price, facility: facility) }
-
+  let(:secure_room) { create(:secure_room, :with_schedule_rule, :with_base_price, facility:) }
   let(:account) { create(:nufs_account, :with_account_owner, owner: facility_director) }
-  let!(:in_progress_occupancy) { create(:occupancy, :active, :with_order_detail, secure_room: secure_room, user: facility_director, account: account) }
-  let!(:problem_occupancy) { create(:occupancy, :problem_with_order_detail, secure_room: secure_room, user: facility_director, account: account) }
+  let(:facility_director) { create(:user, :facility_director, facility:) }
 
-  let(:facility_director) { create(:user, :facility_director, facility: facility) }
-
-  before { sign_in facility_director }
+  before do
+    create(:account_price_group_member, account:, price_group: PriceGroup.base)
+    create(:occupancy, :active, :with_order_detail, secure_room:, user: facility_director, account:)
+    create(:occupancy, :problem_with_order_detail, secure_room:, user: facility_director, account:)
+    sign_in facility_director
+  end
 
   describe "index" do
     before { get :index, params: { facility_id: facility } }

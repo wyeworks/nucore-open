@@ -11,11 +11,12 @@ RSpec.describe "Adding to an existing order for cross core", :js do
   let!(:facility2_credit_card_account) { create(:account, :with_account_owner, type: "CreditCardAccount", owner: order.user, description: "Credit Card Account", facility: facility2) }
   let!(:facility2_account) { create(:nufs_account, :with_account_owner, owner: order.user, description: "Internal Account", facility: facility2) }
   let(:price_group) { PriceGroup.base }
-  let!(:account_price_group_member) { create(:account_price_group_member, account: facility2_account, price_group:) }
   let(:external_price_group) { PriceGroup.external }
-  let!(:account_price_group_member) { create(:account_price_group_member, account: facility2_account, price_group: external_price_group) }
 
   before do
+    create(:account_price_group_member, account: facility2_account, price_group: external_price_group)
+    create(:account_price_group_member, account: facility2_account, price_group:)
+
     login_as user
   end
 
@@ -162,6 +163,7 @@ RSpec.describe "Adding to an existing order for cross core", :js do
             price_group:,
             start_date: 1.day.ago,
           )
+
           visit facility_order_path(facility, order)
           select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
           select_from_chosen product2.name, from: "add_to_order_form[product_id]", scroll_to: :center

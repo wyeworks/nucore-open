@@ -8,11 +8,11 @@ RSpec.describe Reports::ExportRaw, :time_travel do
   let(:facility) { secure_room.facility }
 
   let(:occupancy) do
-    FactoryBot.create(
+    create(
       :occupancy,
       :with_order_detail,
       user: user,
-      account: account,
+      account:,
       entry_at: Time.zone.parse("2016-02-01 08:30"),
       exit_at: Time.zone.parse("2016-02-01 09:35"),
     )
@@ -39,8 +39,12 @@ RSpec.describe Reports::ExportRaw, :time_travel do
   let(:column_values) { cells_without_headers.pluck(column_index) }
   let(:column_index) { headers.index(column_header) }
 
+  before do
+    create(:account_price_group_member, account:, price_group: PriceGroup.base)
+  end
+
   describe "normal accounts" do
-    let(:account) { FactoryBot.create(:setup_account, owner: user) }
+    let(:account) { create(:setup_account, owner: user) }
 
     it "populates the report properly" do
       expect(report).to have_column_values(
@@ -65,7 +69,7 @@ RSpec.describe Reports::ExportRaw, :time_travel do
   end
 
   describe "split accounts", :enable_split_accounts do
-    let(:account) { FactoryBot.create(:split_account, owner: user) }
+    let(:account) { create(:split_account, owner: user) }
 
     it "splits and populates the report properly" do
       expect(report).to have_column_values(

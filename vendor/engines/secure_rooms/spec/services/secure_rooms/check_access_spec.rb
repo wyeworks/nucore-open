@@ -21,8 +21,8 @@ RSpec.describe SecureRooms::CheckAccess, type: :service do
   describe "with default rules" do
     subject(:verdict) { described_class.new.authorize(card_user, card_reader) }
 
-    let(:card_reader) { build(:card_reader, secure_room: secure_room) }
-    let(:exit_card_reader) { build(:card_reader, :exit, secure_room: secure_room) }
+    let(:card_reader) { build(:card_reader, secure_room:) }
+    let(:exit_card_reader) { build(:card_reader, :exit, secure_room:) }
 
     context "when a user is not present" do
       let(:card_user) { nil }
@@ -71,7 +71,11 @@ RSpec.describe SecureRooms::CheckAccess, type: :service do
 
     describe "a normal user" do
       let(:card_user) { create(:user) }
-      let!(:account) { create(:nufs_account, :with_account_owner, owner: card_user) }
+      let(:account) { create(:nufs_account, :with_account_owner, owner: card_user) }
+
+      before do
+        create(:account_price_group_member, account:, price_group: PriceGroup.base)
+      end
 
       describe "the product is archived" do
         before { secure_room.is_archived = true }
@@ -99,6 +103,7 @@ RSpec.describe SecureRooms::CheckAccess, type: :service do
 
       describe "the user is on the access list" do
         before { secure_room.product_users.create!(user: card_user, approved_by: 0) }
+
         describe "and inside the schedule rules", :time_travel do
           let(:now) { Time.zone.local(2016, 5, 15, 12, 0) }
           it { is_expected.to be_pending }

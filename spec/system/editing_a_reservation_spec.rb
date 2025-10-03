@@ -129,6 +129,7 @@ RSpec.describe "Editing your own reservation" do
         :daily_booking,
       )
     end
+    let(:account) { reservation.order_detail.account }
     let!(:reservation) do
       create(
         :purchased_reservation,
@@ -146,6 +147,10 @@ RSpec.describe "Editing your own reservation" do
         reserve_end_at: today + 2.days,
         product: instrument,
       )
+    end
+
+    before do
+      instrument.price_group_products.update_all(reservation_window: 11)
     end
 
     it "shows current reservation", :js do
@@ -300,6 +305,7 @@ RSpec.describe "Editing your own reservation" do
     end
 
     before do
+      instrument.price_group_products.update_all(reservation_window: 10)
       visit reservations_path
       click_link reservation.to_s
     end

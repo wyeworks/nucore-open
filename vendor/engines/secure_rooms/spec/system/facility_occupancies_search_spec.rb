@@ -5,21 +5,21 @@ require "rails_helper"
 RSpec.describe "Facility Orders Search" do
 
   let(:facility) { create(:setup_facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
-  let(:secure_room) { create(:secure_room, :with_schedule_rule, :with_base_price, facility: facility) }
-  let(:secure_room2) { create(:secure_room, :with_schedule_rule, :with_base_price, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
+  let(:secure_room) { create(:secure_room, :with_schedule_rule, :with_base_price, facility:) }
+  let(:secure_room2) { create(:secure_room, :with_schedule_rule, :with_base_price, facility:) }
   let(:account) { create(:setup_account) }
   let(:user) { account.owner_user }
 
-  let!(:occupancies) do
-    [secure_room, secure_room2].map do |room|
-      create(:occupancy, :with_entry, :with_order_detail, secure_room: room, user: user, account: account)
-    end
-  end
+  before do
+    create(:account_price_group_member, account:, price_group: PriceGroup.base)
 
-  let!(:problem_occupancies) do
     [secure_room, secure_room2].map do |room|
-      create(:occupancy, :problem_with_order_detail, secure_room: room, user: user, account: account)
+      create(:occupancy, :with_entry, :with_order_detail, secure_room: room, user:, account:)
+    end
+    # problem occupancies
+    [secure_room, secure_room2].map do |room|
+      create(:occupancy, :problem_with_order_detail, secure_room: room, user:, account:)
     end
   end
 

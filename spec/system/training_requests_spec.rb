@@ -2,11 +2,11 @@ require "rails_helper"
 
 RSpec.describe "Training Requests", feature_setting: { training_requests: true, reload_routes: true } do
   let(:facility) { create(:setup_facility) }
-
   let(:user) { create(:user) }
   let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user) }
 
   before do
+    create(:account_price_group_member, account:, price_group: PriceGroup.base)
     login_as user
   end
 

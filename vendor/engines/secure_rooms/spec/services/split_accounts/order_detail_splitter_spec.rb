@@ -19,7 +19,7 @@ RSpec.describe SplitAccounts::OrderDetailSplitter do
     let(:secure_room) { build_stubbed(:secure_room) }
 
     let(:order_detail) do
-      build_stubbed(:order_detail, occupancy: occupancy,
+      build_stubbed(:order_detail, occupancy:,
                                    created_by: 1,
                                    quantity: 1,
                                    actual_cost: BigDecimal("9.99"),
@@ -32,7 +32,7 @@ RSpec.describe SplitAccounts::OrderDetailSplitter do
 
     let(:entry_at) { 1.hour.ago }
     let(:occupancy) do
-      build_stubbed(:occupancy, entry_at: entry_at, exit_at: entry_at + 45.minutes)
+      build_stubbed(:occupancy, entry_at:, exit_at: entry_at + 45.minutes)
     end
     let(:order_detail_results) { described_class.new(order_detail, split_time_data: true).split }
     let(:results) { order_detail_results.map(&:time_data) }
@@ -67,8 +67,12 @@ RSpec.describe SplitAccounts::OrderDetailSplitter do
       end
     end
 
-    let(:occupancy) { create(:occupancy, :complete, :with_order_detail, user: user, account: split_account) }
+    let(:occupancy) { create(:occupancy, :complete, :with_order_detail, user:, account: split_account) }
     let(:order_detail) { occupancy.order_detail }
+
+    before do
+      create(:account_price_group_member, account: split_account, price_group: PriceGroup.base)
+    end
 
     it "does not do anything to the occupancy" do
       order_detail.update!(account: split_account)
