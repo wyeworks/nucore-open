@@ -5,7 +5,14 @@ class InstrumentStatus < ApplicationRecord
   belongs_to :instrument, inverse_of: :instrument_statuses
 
   validates_numericality_of :instrument_id
-  alias_attribute :on, :is_on
+
+  def on
+    is_on
+  end
+
+  def on=(value)
+    self.is_on = value
+  end
 
   attr_accessor :error_message
 

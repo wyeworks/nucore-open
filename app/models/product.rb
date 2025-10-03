@@ -45,7 +45,13 @@ class Product < ApplicationRecord
   email_list_attribute :order_notification_recipients
 
   # Allow us to use `product.hidden?`
-  alias_attribute :hidden, :is_hidden
+  def hidden
+    is_hidden
+  end
+
+  def hidden=(value)
+    self.is_hidden = value
+  end
 
   validates :type, presence: true
   validates :name, presence: true, length: { maximum: 200 }
