@@ -11,7 +11,8 @@ RSpec.describe "Accessing invalid formats" do
   end
 
   it "renders a 404 for a missing page in pdf" do
-    expect { visit "/#{I18n.t('facilities_downcase')}/examp.pdf" }.to raise_error(ActiveRecord::RecordNotFound)
+    visit "/#{I18n.t('facilities_downcase')}/examp.pdf"
+    expect(page).to have_http_status(:not_found)
   end
 
   describe "for a page I don't have access to" do
@@ -22,7 +23,8 @@ RSpec.describe "Accessing invalid formats" do
       it "renders a 403 as html" do
         login_as user
 
-        expect { visit "#{I18n.t('facilities_downcase')}/list.pdf" }.to raise_error(CanCan::AccessDenied)
+        visit "#{I18n.t('facilities_downcase')}/list.pdf"
+        expect(page).to have_http_status(:forbidden)
       end
     end
 
@@ -32,7 +34,8 @@ RSpec.describe "Accessing invalid formats" do
       it "renders a 403 as html" do
         login_as user
 
-        expect { visit "accounts/#{statement.account.id}/statements/#{statement.id}.pdf" }.to raise_error(CanCan::AccessDenied)
+        visit "accounts/#{statement.account.id}/statements/#{statement.id}.pdf"
+        expect(page).to have_http_status(:forbidden)
       end
     end
 
@@ -42,7 +45,8 @@ RSpec.describe "Accessing invalid formats" do
       it "renders a 403 as html" do
         login_as user
 
-        expect { visit "orders/#{reservation.order.id}/order_details/#{reservation.order_detail.id}/reservations/#{reservation.id}.ics" }.to raise_error(CanCan::AccessDenied)
+        visit "orders/#{reservation.order.id}/order_details/#{reservation.order_detail.id}/reservations/#{reservation.id}.ics"
+        expect(page).to have_http_status(:forbidden)
       end
     end
   end
