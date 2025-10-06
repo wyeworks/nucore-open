@@ -376,6 +376,11 @@ en:
       account:
         suspended: "Account is suspended"
         expired: "Account is expired"
+    status_options:
+      blank: " "
+      succeeded: "Succeeded, no errors"
+      succeeded_errors: "Succeeded, with errors"
+      failed: "Failed"
     show:
       head:
         h2: "Journal #%{journal} Details"
