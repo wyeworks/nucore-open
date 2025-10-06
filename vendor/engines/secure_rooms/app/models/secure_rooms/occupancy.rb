@@ -20,21 +20,8 @@ module SecureRooms
     date_time_inputable :entry_at
     date_time_inputable :exit_at
 
-    def actual_start_at
-      entry_at
-    end
-
-    def actual_start_at=(value)
-      self.entry_at = value
-    end
-
-    def actual_end_at
-      exit_at
-    end
-
-    def actual_end_at=(value)
-      self.exit_at = value
-    end
+    alias_attribute :actual_start_at, :entry_at
+    alias_attribute :actual_end_at, :exit_at
 
     validates :secure_room, :user, presence: true
     validate :entry_and_exit_are_valid, if: :editing_time_data

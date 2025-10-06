@@ -6,13 +6,7 @@ class InstrumentStatus < ApplicationRecord
 
   validates_numericality_of :instrument_id
 
-  def on
-    is_on
-  end
-
-  def on=(value)
-    self.is_on = value
-  end
+  alias_attribute :on, :is_on
 
   attr_accessor :error_message
 

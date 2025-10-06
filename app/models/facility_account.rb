@@ -17,13 +17,7 @@ class FacilityAccount < ApplicationRecord
   scope :active, -> { where(is_active: true) }
   scope :inactive, -> { where(is_active: false) }
 
-  def active
-    is_active
-  end
-
-  def active=(value)
-    self.is_active = value
-  end
+  alias_attribute :active, :is_active
 
   def self.editable_attributes(user)
     if revenue_account_editable_by_user?(user)

@@ -10,13 +10,7 @@ module SecureRooms
 
     delegate :facility, to: :secure_room
 
-    def ingress
-      direction_in
-    end
-
-    def ingress=(value)
-      self.direction_in = value
-    end
+    alias_attribute :ingress, :direction_in
 
     validates :product_id, presence: true
     validates :control_device_number, presence: true, format: { with: MAC_ADDRESS_FORMAT }

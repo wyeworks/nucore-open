@@ -37,23 +37,11 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :account_users, allow_destroy: true
 
   # Gem ldap_authenticatable expects User to respond_to? :login. For us that's #username.
-  def login
-    username
-  end
-
-  def login=(value)
-    self.username = value
-  end
+  alias_attribute :login, :username
 
   # TODO: This allows downstream forks that reference deactivated_at to not break. Once
   # those are cleaned up, remove me.
-  def deactivated_at
-    suspended_at
-  end
-
-  def deactivated_at=(value)
-    self.suspended_at = value
-  end
+  alias_attribute :deactivated_at, :suspended_at
 
   # Gem ldap_authenticatable expects User to respond_to? :ldap_attributes. For us should return nil.
   attr_accessor :ldap_attributes
