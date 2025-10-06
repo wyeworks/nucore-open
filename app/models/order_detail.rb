@@ -947,7 +947,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def requires_but_missing_actuals?
-    problem_description_keys.include?(:missing_actuals)
+    problem_description_keys.include?("missing_actuals")
   end
 
   def price_change_reason_option
