@@ -19,14 +19,14 @@ class SurveysController < ApplicationController
   def activate
     @survey.activate
     flash[:notice] = "Survey activated"
-    redirect_to request.referer
+    redirect_to request.referer, allow_other_host: true
   end
 
   # PUT /facilities/1/services/1/surveys/2/deactivate
   def deactivate
     @survey.deactivate
     flash[:notice] = "Survey de-activated"
-    redirect_to request.referer
+    redirect_to request.referer, allow_other_host: true
   end
 
   def complete
@@ -43,7 +43,7 @@ class SurveysController < ApplicationController
       # TO DO: Remove logging when the other consumers of this code path are better understood.
       # This action should not be available via GET, but we need to know more before making that change.
       Rails.logger.info("Non-Form.io survey completed for Order detail: #{params[:receiver_id]}, external service: #{params[:external_service_id]}")
-      redirect_to params[:referer]
+      redirect_to params[:referer], allow_other_host: true
     end
   end
 
