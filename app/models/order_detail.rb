@@ -69,6 +69,12 @@ class OrderDetail < ApplicationRecord
   # associated class can be removed
   has_many   :vestal_versions, as: :versioned
 
+  # Rails 7.2 changed how columns are automatically serialized. Without explicit
+  # serialize declarations, symbols in arrays are converted to strings when read
+  # from the database. We explicitly use YAML serialization to preserve symbols.
+  serialize :problem_keys, coder: YAML, type: Array
+  serialize :notice_keys, coder: YAML, type: Array
+
   delegate :edit_url, to: :external_service_receiver, allow_nil: true
   delegate :in_cart?, :facility, :user, to: :order # user is the ordered_for user, not ordered_by user
   delegate :invoice_number, to: :statement, prefix: true
