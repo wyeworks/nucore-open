@@ -1,3 +1,13 @@
+GIT
+  remote: https://github.com/jejacks0n/teaspoon.git
+  revision: d6602f1a23d7538c7237006ab76229febe7670c5
+  specs:
+    teaspoon (1.4.0)
+      rackup (>= 2.1)
+      railties (>= 5.0)
+    teaspoon-jasmine (2.9.1)
+      teaspoon (>= 1.0.0)
+
 PATH
   remote: vendor/engines/bulk_email
   specs:
@@ -178,7 +188,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.20)
     benchmark (0.4.1)
-    bigdecimal (3.2.3)
+    bigdecimal (3.3.0)
     bindex (0.8.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
@@ -495,7 +505,7 @@ GEM
     puma (6.6.1)
       nio4r (~> 2.0)
     racc (1.8.1)
-    rack (3.1.16)
+    rack (3.1.17)
     rack-mini-profiler (4.0.1)
       rack (>= 1.2.0)
     rack-session (2.1.1)
@@ -669,10 +679,6 @@ GEM
     synaccess_connect (0.3.1)
       nokogiri (>= 1.6)
     sysexits (1.2.0)
-    teaspoon (1.4.0)
-      railties (>= 5.0)
-    teaspoon-jasmine (2.9.1)
-      teaspoon (>= 1.0.0)
     temple (0.10.4)
     terrapin (1.1.1)
       climate_control
@@ -834,7 +840,8 @@ DEPENDENCIES
   sprockets
   sprockets-rails
   synaccess_connect
-  teaspoon-jasmine
+  teaspoon!
+  teaspoon-jasmine!
   terser (~> 1.2)
   text_helpers
   tzinfo-data

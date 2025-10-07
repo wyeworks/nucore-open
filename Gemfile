@@ -131,7 +131,9 @@ group :development, :test do
   gem "rspec-rails"
   gem "rspec-activejob"
   gem "selenium-webdriver"
-  gem "teaspoon-jasmine"
+  # Using fork that supports Rack 3 for Rails 7.2
+  gem "teaspoon", github: "jejacks0n/teaspoon"
+  gem "teaspoon-jasmine", github: "jejacks0n/teaspoon"
   gem "webrick"
 end
 
