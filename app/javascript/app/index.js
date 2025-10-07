@@ -23,7 +23,6 @@ import './manage_price_policy';
 import './merge_orders';
 import './modal';
 import './move_reservation';
-import './multi_select_helper';
 import './multi_select_move_between';
 import './multi_select_reorder';
 import './order_table_refresh';

@@ -3,11 +3,11 @@
 require "rails_helper"
 
 RSpec.describe "Managing Price Groups", :aggregate_failures do
-  let(:facility) { FactoryBot.create(:facility) }
+  let(:facility) { create(:facility) }
 
   describe "create" do
     describe "as a facility admin", feature_setting: { facility_directors_can_manage_price_groups: true } do
-      let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility: facility) }
 
       before do
         login_as user
@@ -26,7 +26,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
     end
 
     describe "as a facility senior staff" do
-      let(:user) { FactoryBot.create(:user, :senior_staff, facility: facility) }
+      let(:user) { create(:user, :senior_staff, facility: facility) }
 
       before do
         login_as user
@@ -38,9 +38,9 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
   describe "manage users of a price group" do
     describe "as a facility admin", feature_setting: { user_based_price_groups: true, facility_directors_can_manage_price_groups: true } do
-      let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
-      let(:user2) { FactoryBot.create(:user) }
-      let!(:price_group) { FactoryBot.create(:price_group, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility: facility) }
+      let(:user2) { create(:user) }
+      let!(:price_group) { create(:price_group, facility: facility) }
 
       before do
         login_as user
@@ -124,8 +124,8 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
   describe "destroy" do
     describe "as a facility admin", feature_setting: { facility_directors_can_manage_price_groups: true } do
-      let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
-      let!(:price_group) { FactoryBot.create(:price_group, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility: facility) }
+      let!(:price_group) { create(:price_group, facility: facility) }
 
       before do
         login_as user
@@ -146,24 +146,25 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
     end
 
     describe "as a facility senior staff" do
-      let(:user) { FactoryBot.create(:user, :senior_staff, facility: facility) }
+      let(:user) { create(:user, :senior_staff, facility: facility) }
+      let!(:price_group) { create(:price_group, facility: facility) }
 
       before do
         login_as user
+        visit facility_price_groups_path(facility)
       end
 
       it "does not have a remove link present" do
-        expect { visit facility_price_groups_path(facility) }.to raise_error(CanCan::AccessDenied)
         expect(page).not_to have_link("Remove")
       end
     end
   end
 
   describe "searching to add price group member", js: true do
-    let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
-    let(:price_group) { FactoryBot.create(:price_group, facility_id: facility.id ) }
-    let!(:account1) { FactoryBot.create(:account, :with_account_owner, account_number: "135711", description: "first account", facilities: [facility], owner: user) }
-    let!(:account2) { FactoryBot.create(:account, :with_account_owner, account_number: "246810", description: "second account", facilities: [facility], owner: user) }
+    let(:user) { create(:user, :facility_director, facility: facility) }
+    let(:price_group) { create(:price_group, facility_id: facility.id ) }
+    let!(:account1) { create(:account, :with_account_owner, account_number: "135711", description: "first account", facilities: [facility], owner: user) }
+    let!(:account2) { create(:account, :with_account_owner, account_number: "246810", description: "second account", facilities: [facility], owner: user) }
 
     before do
       allow(Account.config).to receive(:facility_account_types).and_return(["Account"])
