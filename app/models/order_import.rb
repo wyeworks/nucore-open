@@ -200,15 +200,23 @@ class OrderImport < ApplicationRecord
   end
 
   def store_error_report
+    # Rails 7.2+ has stricter ActiveStorage lifecycle requirements
+    # Build the attachment payload separately and attach during initialization
+    io = StringIO.new(self.error_report)
+
     self.error_file = StoredFile.new(
       name: "error_report.csv",
       file_content_type: "text/csv",
       file_type: "import_error",
-      file: StringIO.new(self.error_report),
       created_by: creator.id,
     )
 
-    error_file.update_filename("error_report.csv")
+    error_file.file.attach(
+      io: io,
+      filename: "error_report.csv",
+      content_type: "text/csv"
+    )
+
     error_file.save!
   end
 

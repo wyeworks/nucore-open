@@ -347,10 +347,11 @@ RSpec.describe OrderImport, :time_travel do
       end
 
       it "sends an exception notification" do
-        expect(ActiveSupport::Notifications).to receive(:instrument).with("background_error", anything)
+        allow(ActiveSupport::Notifications).to receive(:instrument).and_call_original
+        expect(ActiveSupport::Notifications).to receive(:instrument).with("background_error", anything).and_call_original
 
         if SettingsHelper.feature_on?(:active_storage)
-          expect(ActiveSupport::Notifications).to receive(:instrument).with("service_upload.active_storage", anything)
+          expect(ActiveSupport::Notifications).to receive(:instrument).with("service_upload.active_storage", anything).and_call_original
         end
 
         import.process_upload!
