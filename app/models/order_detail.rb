@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class OrderDetail < ApplicationRecord
   include Nucore::Database::SortHelper
   include TranslationHelper
@@ -1121,3 +1122,4 @@ class OrderDetail < ApplicationRecord
     end
   end
 end
+# rubocop:enable Metrics/ClassLength
