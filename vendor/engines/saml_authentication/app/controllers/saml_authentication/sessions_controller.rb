@@ -14,7 +14,7 @@ module SamlAuthentication
       ::Rails.logger.warn "There was an error trying to log in the SAML user '#{exception}'"
 
       flash[:alert] = I18n.t("devise.failure.saml_update_failed").html_safe
-      redirect_to new_user_session_path
+      redirect_to new_user_session_path, allow_other_host: true
     end
 
     # Overrides SamlSessionsController.
@@ -52,12 +52,25 @@ module SamlAuthentication
       request.create(config)
     end
 
+    # Override Devise::SessionsController to add allow_other_host for SAML redirects
+    # Rails 7.2 requires explicit allow_other_host for external redirects
+    def respond_to_on_destroy
+      respond_to do |format|
+        format.all { head :no_content }
+        format.any(*navigational_formats) do
+          redirect_to after_sign_out_path_for(resource_name),
+                      status: Devise.responder.redirect_status,
+                      allow_other_host: true
+        end
+      end
+    end
+
     private
 
     # SP is NUcore. User is already logged out by the sessions#delete call
     def sp_initiated_sign_out
       if Devise.saml_sign_out_success_url
-        redirect_to Devise.saml_sign_out_success_url
+        redirect_to Devise.saml_sign_out_success_url, allow_other_host: true
       else
         redirect_to action: :new
       end
@@ -69,7 +82,7 @@ module SamlAuthentication
       saml_config = saml_config(get_idp_entity_id(params))
       logout_request = OneLogin::RubySaml::SloLogoutrequest.new(params[:SAMLRequest], settings: saml_config)
 
-      redirect_to generate_idp_logout_response(saml_config, logout_request.id)
+      redirect_to generate_idp_logout_response(saml_config, logout_request.id), allow_other_host: true
     end
 
     # Store the username for use in `after_sign_out_path_for`
