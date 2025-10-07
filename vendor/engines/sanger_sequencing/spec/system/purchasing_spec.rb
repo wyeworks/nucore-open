@@ -119,7 +119,8 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           visit sanger_sequencing_submission_path(SangerSequencing::Submission.last)
           expect(page.status_code).to eq(200)
 
-          expect { visit edit_sanger_sequencing_submission_path(SangerSequencing::Submission.last) }.to raise_error(ActiveRecord::RecordNotFound)
+          visit edit_sanger_sequencing_submission_path(SangerSequencing::Submission.last)
+          expect(page).to have_content("The page you were looking for doesn't exist")
         end
 
         it "renders the sample ID on the receipt" do
@@ -199,8 +200,9 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
 
           click_link("Add")
 
-          # Allow empty primer name
-          fill_in("sanger_sequencing_submission[samples_attributes][3][primer_name]", with: "")
+          field = find_field("sanger_sequencing_submission[samples_attributes][3][primer_name]")
+          field.fill_in(with: "")
+          field.native.send_keys(:tab) # Trigger JS change to process the change
 
           click_button("Save Submission")
 
