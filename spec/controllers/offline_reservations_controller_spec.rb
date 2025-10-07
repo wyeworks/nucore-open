@@ -38,7 +38,7 @@ RSpec.describe OfflineReservationsController do
           .from(false)
           .to(true)
         # And it's for the right reason
-        expect(reservation.order_detail.problem_description_key).to eq("missing_actuals")
+        expect(reservation.order_detail.problem_description_key).to eq(:missing_actuals)
       end
 
       it "logs the problem reservation" do
