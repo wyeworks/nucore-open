@@ -68,8 +68,8 @@ RSpec.describe "Fixing a problem reservation" do
 
     it "can view the page" do
       expect(reservation.order_detail).to be_problem
-      expect(reservation.order_detail.problem_description_keys).to include("missing_price_policy")
-      expect(reservation.order_detail.problem_description_keys).to include("missing_actuals")
+      expect(reservation.order_detail.problem_description_keys).to include(:missing_price_policy)
+      expect(reservation.order_detail.problem_description_keys).to include(:missing_actuals)
       visit edit_problem_reservation_path(reservation)
       expect(page).to have_field("Actual Duration")
     end
