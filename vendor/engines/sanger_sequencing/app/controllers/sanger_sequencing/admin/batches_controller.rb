@@ -30,7 +30,7 @@ module SangerSequencing
 
       def create
         # Allow-listing should happen in the form object
-        if @batch.update_form_attributes(params[:batch].merge(created_by: current_user, facility: current_facility))
+        if @batch.update_form_attributes(create_params.merge(created_by: current_user, facility: current_facility))
           redirect_to [current_facility, :sanger_sequencing, :admin, :batches, group: @batch.group], notice: text("create.success")
         else
           @submissions = Submission.ready_for_batch.for_facility(current_facility)
@@ -111,6 +111,13 @@ module SangerSequencing
         @batch = BatchForm.new.tap do |batch_form|
           batch_form.batch = SangerSequencing::Batch.new(group: product_group)
         end
+      end
+
+      def create_params
+        params.require(:batch).permit(
+          :group, :column_order, :submission_ids,
+          reserved_cells: [], well_plate_data: {},
+        )
       end
 
     end
