@@ -116,6 +116,9 @@ Rails.application.configure do
     Bullet.add_safelist type: :n_plus_one_query, class_name: "SecureRoomPricePolicy", association: :price_group
     Bullet.add_safelist type: :n_plus_one_query, class_name: "SecureRoomPricePolicy", association: :duration_rates
     Bullet.add_safelist type: :n_plus_one_query, class_name: "SecureRoom", association: :alert
+
+    # Rails 7.2 ActiveStorage automatically includes :record association
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "ActiveStorage::Attachment", association: :record
   end
 
   # Settings specified here will take precedence over those in config/application.rb.
@@ -124,7 +127,7 @@ Rails.application.configure do
   # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+  config.enable_reloading = false
 
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that

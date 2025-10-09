@@ -54,6 +54,11 @@ module SamlAuthentication
 
     private
 
+    # Override default redirect behavior to allow external redirects
+    def _allow_other_host
+      true
+    end
+
     # SP is NUcore. User is already logged out by the sessions#delete call
     def sp_initiated_sign_out
       if Devise.saml_sign_out_success_url

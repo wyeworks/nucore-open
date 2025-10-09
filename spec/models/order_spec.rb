@@ -33,7 +33,7 @@ RSpec.describe Order do
     expect(order).to be_new
   end
 
-  it { is_expected.to belong_to :order_import }
+  it { is_expected.to belong_to(:order_import).optional }
 
   context "total cost" do
     let(:account) { create(:nufs_account, :with_account_owner, owner: user) }

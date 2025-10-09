@@ -4,9 +4,9 @@ class StoredFile < ApplicationRecord
 
   include DownloadableFile
 
-  belongs_to              :product
+  belongs_to              :product, optional: true
   belongs_to              :creator, class_name: "User", foreign_key: "created_by"
-  belongs_to              :order_detail
+  belongs_to              :order_detail, optional: true
   validates_presence_of   :name, :file_type, :created_by
   validates_presence_of   :product_id,      if: ->(o) { o.file_type == "info" || o.file_type == "template" }
   validates_presence_of   :order_detail_id, if: ->(o) { o.file_type == "template_result" || o.file_type == "sample_result" }

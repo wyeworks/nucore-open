@@ -60,7 +60,8 @@ RSpec.describe LdapAuthentication::UserUpdater do
     let!(:user) { create(:user, email: "old@example.org", username: "abc123") }
 
     it "triggers a notification" do
-      expect(ActiveSupport::Notifications).to receive(:instrument).with("background_error", a_hash_including(information: /Could not update User/))
+      allow(ActiveSupport::Notifications).to receive(:instrument).and_call_original
+      expect(ActiveSupport::Notifications).to receive(:instrument).with("background_error", a_hash_including(information: /Could not update User/)).and_call_original
 
       described_class.new(user).update_from_ldap
     end

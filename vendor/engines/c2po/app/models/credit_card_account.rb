@@ -25,7 +25,8 @@ class CreditCardAccount < Account
   protected
 
   def setup_false_credit_card_number
-    self.account_number = "xxxx-xxxx-xxxx-xxxx"
+    # Rails 7.2+ enforces readonly attributes more strictly.
+    self.account_number = "xxxx-xxxx-xxxx-xxxx" if new_record? && account_number.blank?
   end
 
 end

@@ -4,9 +4,9 @@ require "csv"
 
 class OrderImport < ApplicationRecord
 
-  belongs_to :facility
+  belongs_to :facility, optional: true
   belongs_to :upload_file, class_name: "StoredFile", dependent: :destroy, required: true
-  belongs_to :error_file, class_name: "StoredFile", dependent: :destroy
+  belongs_to :error_file, class_name: "StoredFile", dependent: :destroy, optional: true
   belongs_to :creator, class_name: "User", foreign_key: :created_by
 
   validates_presence_of :upload_file, :created_by
@@ -200,15 +200,26 @@ class OrderImport < ApplicationRecord
   end
 
   def store_error_report
+    io = StringIO.new(self.error_report)
+
     self.error_file = StoredFile.new(
       name: "error_report.csv",
       file_content_type: "text/csv",
       file_type: "import_error",
-      file: StringIO.new(self.error_report),
       created_by: creator.id,
     )
 
-    error_file.update_filename("error_report.csv")
+    if SettingsHelper.feature_on?(:active_storage)
+      error_file.file.attach(
+        io: io,
+        filename: "error_report.csv",
+        content_type: "text/csv"
+      )
+    else
+      error_file.file = io
+      error_file.update_filename("error_report.csv")
+    end
+
     error_file.save!
   end
 

@@ -10,4 +10,4 @@
         {{sampleAtCell(cell.name, plateIndex).customerSampleId()}}
         %br
         {{sampleAtCell(cell.name, plateIndex).displayId()}}
-        = hidden_field_tag("batch[well_plate_data[{{plateIndex}}][{{cell.name}}]]", "{{sampleAtCell(cell.name, plateIndex).id()}}", id: "well_plate_{{plateIndex}}_{{cell.name}}")
+        = hidden_field_tag("batch[well_plate_data][{{plateIndex}}][{{cell.name}}]", "{{sampleAtCell(cell.name, plateIndex).id()}}", id: "well_plate_{{plateIndex}}_{{cell.name}}")

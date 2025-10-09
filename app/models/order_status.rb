@@ -3,8 +3,8 @@
 class OrderStatus < ApplicationRecord
 
   has_many :order_details
-  belongs_to :facility
-  belongs_to :parent, class_name: "OrderStatus"
+  belongs_to :facility, optional: true
+  belongs_to :parent, class_name: "OrderStatus", optional: true
   has_many :children, class_name: "OrderStatus", foreign_key: :parent_id
 
   validates_presence_of :name

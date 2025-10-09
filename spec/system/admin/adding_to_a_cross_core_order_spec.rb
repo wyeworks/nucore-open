@@ -196,8 +196,12 @@ RSpec.describe "Adding to an existing order for cross core", :js do
           select facility2_account.to_s, from: "Payment Source"
           click_button "Create"
 
-          # After the reservation is created, the merge_order is cleared
-          expect(project.reload.orders.last.merge_with_order_id).to eq(nil)
+          # After the reservation is created, the order_detail is moved to the merge_order
+          # and the temporary merge order should be destroyed (or have no merge_with_order_id)
+          expect(page).to have_content("The reservation was successfully created")
+
+          project.reload
+          expect(project.orders.where.not(merge_with_order_id: nil)).to be_empty
         end
       end
     end
