@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/ClassLength
 class OrderDetail < ApplicationRecord
   include Nucore::Database::SortHelper
   include TranslationHelper
@@ -70,12 +69,6 @@ class OrderDetail < ApplicationRecord
   # associated class can be removed
   has_many   :vestal_versions, as: :versioned
 
-  # Rails 7.2 changed how columns are automatically serialized. Without explicit
-  # serialize declarations, symbols in arrays are converted to strings when read
-  # from the database. We explicitly use YAML serialization to preserve symbols.
-  serialize :problem_keys, coder: YAML, type: Array
-  serialize :notice_keys, coder: YAML, type: Array
-
   delegate :edit_url, to: :external_service_receiver, allow_nil: true
   delegate :in_cart?, :facility, :user, to: :order # user is the ordered_for user, not ordered_by user
   delegate :invoice_number, to: :statement, prefix: true
@@ -85,9 +78,7 @@ class OrderDetail < ApplicationRecord
   delegate :reference, to: :journal, prefix: true, allow_nil: true
   delegate :projects, to: :facility, prefix: true
 
-  def problem_description_keys
-    problem_keys
-  end
+  alias_attribute :problem_description_keys, :problem_keys
 
   def estimated_price_group
     estimated_price_policy.try(:price_group)
@@ -1122,4 +1113,3 @@ class OrderDetail < ApplicationRecord
     end
   end
 end
-# rubocop:enable Metrics/ClassLength

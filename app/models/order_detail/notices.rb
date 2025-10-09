@@ -4,8 +4,11 @@ module OrderDetail::Notices
   extend ActiveSupport::Concern
 
   included do
-    serialize :notice_keys, coder: JSON, type: Array
-    serialize :problem_keys, coder: JSON, type: Array
+    # Rails 7.2 changed how columns are automatically serialized. Without explicit
+    # serialize declarations, symbols in arrays are converted to strings when read
+    # from the database. We explicitly use YAML serialization to preserve symbols.
+    serialize :notice_keys, coder: YAML, type: Array
+    serialize :problem_keys, coder: YAML, type: Array
 
     before_save :set_problem_and_notices
     before_save :update_fulfilled_at_on_resolve
