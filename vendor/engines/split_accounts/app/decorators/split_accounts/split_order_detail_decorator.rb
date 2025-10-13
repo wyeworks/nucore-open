@@ -30,7 +30,6 @@ module SplitAccounts
       OrderDetail.primary_key
     end
 
-    # Rails 7.2+ requires these methods for ActiveRecord compatibility
     def self.has_query_constraints?
       OrderDetail.has_query_constraints?
     end

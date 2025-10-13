@@ -78,7 +78,7 @@ module Nucore
     # config.eager_load_paths += Dir["#{config.root}/lib"]
 
     # Rails 7.2 autoloading configuration
-    config.autoload_lib(ignore: %w[assets tasks daemons])
+    config.autoload_lib(ignore: %w[tasks daemons])
     config.add_autoload_paths_to_load_path = true
 
     config.autoload_paths += Dir["#{config.root}/app/models/external_services"]
