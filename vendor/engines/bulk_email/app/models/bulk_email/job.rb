@@ -9,8 +9,8 @@ module BulkEmail
     belongs_to :facility, foreign_key: :facility_id
     belongs_to :user, foreign_key: :user_id
 
-    serialize :recipients, Array
-    serialize :search_criteria, Hash
+    serialize :recipients, coder: YAML, type: Array
+    serialize :search_criteria, coder: YAML, type: Hash
 
     validates :user_id,
               :subject,

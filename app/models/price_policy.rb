@@ -5,8 +5,8 @@ class PricePolicy < ApplicationRecord
   include Nucore::Database::DateHelper
 
   belongs_to :price_group
-  belongs_to :product
-  belongs_to :created_by, class_name: "User"
+  belongs_to :product, optional: true
+  belongs_to :created_by, class_name: "User", optional: true
   has_many :order_details
   has_many :duration_rates, dependent: :destroy
 

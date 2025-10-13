@@ -3,9 +3,9 @@
 class LogEvent < ApplicationRecord
   include ArchivedEmailSupport
 
-  belongs_to :user # This is whodunnit
+  belongs_to :user, optional: true # This is whodunnit
   belongs_to :loggable, -> { with_deleted if respond_to?(:with_deleted) }, polymorphic: true
-  serialize :metadata, JSON
+  serialize :metadata, coder: JSON
 
   BILLING_EVENT_TYPES = %w[
     user.review_orders_email

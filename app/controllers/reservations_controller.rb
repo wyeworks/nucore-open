@@ -95,7 +95,7 @@ class ReservationsController < ApplicationController
       @order_details = relation.with_reservation
     elsif @status == "upcoming"
       @status = @available_statuses.first
-      @order_details = in_progress + relation.with_upcoming_reservation
+      @order_details = relation.with_in_progress_reservation.or(relation.with_upcoming_reservation)
     else
       return redirect_to reservations_status_path(status: "upcoming")
     end
