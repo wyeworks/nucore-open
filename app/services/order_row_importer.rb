@@ -139,10 +139,10 @@ class OrderRowImporter
   private
 
   def add_to_order
-    @order = field(:order_number).present? ? existing_order : @order_import.fetch_or_create_order!(self)
-
     ActiveRecord::Base.transaction do
       begin
+        @order = field(:order_number).present? ? existing_order : @order_import.fetch_or_create_order(self)
+
         # The order adding feature has some quirky behavior because of the "order form"
         # feature: if you add multiple of a timed service, it creates multiple line items
         # in your cart. Also, in the "add to order" feature, there is a separate `duration`
