@@ -140,7 +140,7 @@ class OrderRowImporter
 
   def add_to_order
     @order = field(:order_number).present? ? existing_order : @order_import.fetch_or_create_order!(self)
-    
+
     ActiveRecord::Base.transaction do
       begin
         # The order adding feature has some quirky behavior because of the "order form"
