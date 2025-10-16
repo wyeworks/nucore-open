@@ -89,7 +89,7 @@ FactoryBot.define do
     max_reserve_mins { 120 }
 
     after(:build) do |product|
-      product.facility_account ||= product.facility.facility_accounts.first
+      product.facility_account ||= product.facility.facility_accounts.first || create(:facility_account, facility: product.facility)
     end
 
     after(:create) do |product|
