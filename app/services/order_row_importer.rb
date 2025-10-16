@@ -139,10 +139,14 @@ class OrderRowImporter
   private
 
   def add_to_order
+    validate_note
+    validate_quantity_format
+    return if errors?
+
+    @order = field(:order_number).present? ? existing_order : @order_import.fetch_or_create_order!(self)
+
     ActiveRecord::Base.transaction do
       begin
-        @order = field(:order_number).present? ? existing_order : @order_import.fetch_or_create_order(self)
-
         # The order adding feature has some quirky behavior because of the "order form"
         # feature: if you add multiple of a timed service, it creates multiple line items
         # in your cart. Also, in the "add to order" feature, there is a separate `duration`
@@ -321,6 +325,28 @@ class OrderRowImporter
 
   def project
     facility.projects.active.find_by name: field(:project_name)
+  end
+
+  def validate_note
+    note = field(:notes)
+    if note.present? && note.length > 1000
+      add_error("Note is too long (maximum is 1000 characters)")
+    end
+  end
+
+  def validate_quantity_format
+    return if product.blank?
+
+    quantity_value = field(:quantity)
+
+    # For timed services, quantity must be numeric (not "hh:mm" format)
+    if product.quantity_as_time?
+      begin
+        Integer(quantity_value)
+      rescue ArgumentError, TypeError
+        add_error("Quantity is not a valid number")
+      end
+    end
   end
 
 end
