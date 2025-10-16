@@ -14,8 +14,8 @@ class OrderImport < ApplicationRecord
 
   delegate :download_url, to: :error_file, prefix: true, allow_nil: true
 
-  def fetch_or_create_order!(row_importer)
-    order_cache[row_importer.order_key] || create_order_from_imported_row!(row_importer)
+  def fetch_or_create_order(row_importer)
+    order_cache[row_importer.order_key] || create_order_from_imported_row(row_importer)
   end
 
   #
@@ -74,8 +74,8 @@ class OrderImport < ApplicationRecord
 
   private
 
-  def create_order_from_imported_row!(row_importer)
-    Order.create!(
+  def create_order_from_imported_row(row_importer)
+    Order.create(
       facility:,
       account: row_importer.account,
       user: row_importer.user,
