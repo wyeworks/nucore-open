@@ -20,7 +20,7 @@
             = text_field_tag :reconciled_at,
               format_usa_date(Time.current),
               class: "datepicker__data form-control",
-              data: { min_date: unreconciled_order_details.map(&:journal_or_statement_date).min.iso8601, max_date: Time.current.iso8601 }
+              data: { min_date: unreconciled_order_details.map(&:journal_or_statement_date).compact.min&.iso8601, max_date: Time.current.iso8601 }
     .row.table-actions.form-horizontal
       .form-group
         = label_tag :bulk_note_checkbox, t("facility_accounts_reconciliation.index.bulk_note_checkbox"), class: "control-label col-md-2"
