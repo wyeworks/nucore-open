@@ -8,6 +8,7 @@
   = t(".head.h1", order_number: @order_detail.to_s)
 
 - res = @order_detail.reservation
+- order_detail_presenter = OrderDetailPresenter.new(@order_detail)
 .row
   .col-md-6
     %p= link_to t(".link.receipt"), receipt_order_path(@order)
@@ -77,7 +78,7 @@
             %td.centered= reservation_actions(res)
           %td.centered= @order_detail.wrapped_quantity
           %td.user-order-detail
-            .order-detail-description= OrderDetailPresenter.new(@order_detail).description_as_html
+            .order-detail-description= order_detail_presenter.description_as_html
             - if res
               .order-detail-extra= reservation_view_edit_link(res)
             - if @order_detail.survey_completed?
