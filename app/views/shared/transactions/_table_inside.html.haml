@@ -65,11 +65,11 @@
         - if @account.nil? && controller_name != "projects"
           - if SettingsHelper.feature_on?(:billing_table_price_groups)
             %td= order_detail.account.owner_user
-            %td= order_detail.account
+            %td= order_detail_presenter.account_display_description
             %td= order_detail.price_policy&.price_group&.name
             - colspan_for_total += 3
           - else
-            %td= order_detail.account
+            %td= order_detail_presenter.account_display_description
             %td= order_detail.account.owner_user
             - colspan_for_total += 2
         %td.currency
