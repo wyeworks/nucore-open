@@ -214,7 +214,7 @@ class FacilityAccountsController < ApplicationController
 
   def set_account_types
     if SettingsHelper.feature_on?(:account_tabs)
-      @account_types = Account.config.account_types_for_facility(current_facility, :create)
+      @account_types = Account.config.account_types
     end
   end
 
