@@ -169,19 +169,6 @@ class Statement < ApplicationRecord
     "#{account_id}-#{id}"
   end
 
-  def default_account_description
-    if account.type == "PurchaseOrderAccount"
-      account.account_number
-    elsif account.type == "CreditCardAccount"
-      account.description
-    elsif account.respond_to?(:primary_payment_info)
-      account.primary_payment_info
-    else
-      "\n"
-    end
-  end
-
-  alias account_description default_account_description
   delegate :remittance_information, to: :account, prefix: true
 
   private
