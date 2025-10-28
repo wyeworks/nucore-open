@@ -1010,6 +1010,18 @@ class OrderDetail < ApplicationRecord
     (facility_projects.active.display_order + [project]).uniq.compact
   end
 
+  def product_name
+    product.to_s
+  end
+
+  def bundle_name
+    bundle&.to_s
+  end
+
+  def account_description
+    account&.to_s
+  end
+
   private
 
   def set_complete_order_status

@@ -15,15 +15,15 @@ class OrderDetailPresenter < SimpleDelegator
   end
 
   def description_as_html(skip_html_escape: false)
-    [bundle, product].compact.map do |description|
+    [bundle_name, product_name].compact.map do |description|
       skip_html_escape ? description : ERB::Util.html_escape(description)
     end.join(" &mdash; ").html_safe
   end
 
   def description_as_text
-    name = product.to_s
+    name = product_name
     if bundle
-      name.prepend("#{bundle} -- ")
+      name.prepend("#{bundle_name} -- ")
     else
       name
     end.html_safe
