@@ -12,6 +12,8 @@
   = label_tag :search_term, text("facility_accounts.index.label.search_term")
   = hidden_field_tag :email, current_user.email, disabled: true
   = hidden_field_tag :format, params[:format], disabled: true
+  - if SettingsHelper.feature_on?(:account_tabs)
+    = hidden_field_tag :suspended, params[:suspended]
   %br
   .row
     .col-md-4

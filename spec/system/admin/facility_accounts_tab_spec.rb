@@ -88,6 +88,15 @@ RSpec.describe "Facility Accounts Tab" do
         click_link I18n.t("views.facility_accounts.accounts_tab_nav.suspended")
         expect(page).to have_no_content(I18n.t("facility_accounts.index.label.account_status"))
       end
+
+      it "should filter suspended accounts by account type" do
+        click_link I18n.t("views.facility_accounts.accounts_tab_nav.suspended")
+        select suspended_account.model_name.human, from: I18n.t("facility_accounts.index.label.account_type")
+        find('[data-test-id="account_search_button"]').click
+        # Wait for the loader to not be found, which is when the search results are shown
+        expect(page).to have_no_css('[data-test-id="account_search_button"]', text: "Please Wait...")
+        expect(page).to have_content(suspended_account.to_s)
+      end
     end
 
   end
