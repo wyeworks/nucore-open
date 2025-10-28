@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_09_03_124148) do
+ActiveRecord::Schema[7.0].define(version: 2025_09_30_195809) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -324,6 +324,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_03_124148) do
     t.integer "file_file_size"
     t.datetime "file_updated_at", precision: nil
     t.datetime "journal_date", precision: nil, null: false
+    t.datetime "journaled_at"
     t.index ["facility_id"], name: "index_journals_on_facility_id"
   end
 
