@@ -8,7 +8,45 @@ on:
   pull_request:
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    container:
+      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+    env:
+      RAILS_ENV: test
+    steps:
+      - uses: actions/checkout@v5
+      - uses: ./.github/actions/setup-rails
+
+      - name: Precompile assets
+        run: bundle exec rails assets:precompile
+
+      - name: Build JavaScript
+        run: yarn build
+
+      - name: Cache bundler gems
+        uses: actions/cache/save@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Cache compiled assets
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            public/assets
+            public/packs
+          key: ${{ runner.os }}-assets-${{ github.sha }}
+
+      - name: Cache node modules
+        uses: actions/cache/save@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+
   run-rspec-engines:
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 60
     services:
@@ -30,7 +68,22 @@ jobs:
       MYSQL_PASSWORD: root
     steps:
       - uses: actions/checkout@v5
-      - uses: ./.github/actions/setup-rails
+
+      - name: Restore bundler cache
+        uses: actions/cache/restore@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Restore assets cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            public/assets
+            public/packs
+          key: ${{ runner.os }}-assets-${{ github.sha }}
+
+      - uses: ./.github/actions/setup-bundler
 
       - name: Glob match
         uses: tj-actions/glob@v22
@@ -39,10 +92,10 @@ jobs:
           files: |
             vendor/engines/*/spec/**/*_spec.rb
 
-      - run: bundle exec rails assets:precompile
       - run: bundle exec rspec ${{ steps.glob.outputs.paths }}
 
   run-rspec:
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 60
     services:
@@ -65,15 +118,31 @@ jobs:
       PARALLEL_TEST_PROCESSORS: 4
     steps:
       - uses: actions/checkout@v5
-      - uses: ./.github/actions/setup-rails
+
+      - name: Restore bundler cache
+        uses: actions/cache/restore@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Restore assets cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            public/assets
+            public/packs
+          key: ${{ runner.os }}-assets-${{ github.sha }}
+
+      - uses: ./.github/actions/setup-bundler
+
       # Uncomment below to open ssh tunnel for debugging
       # - uses: mxschmitt/action-tmate@v3
       - run: bundle exec rails parallel:create
       - run: bundle exec rails parallel:load_schema
-      - run: bundle exec rails assets:precompile
       - run: bundle exec rails parallel:spec
 
   run-teaspoon:
+    needs: build
     runs-on: ubuntu-latest
     timeout-minutes: 60
     services:
@@ -103,11 +172,25 @@ jobs:
       TEST_APP_PORT: 3000
     steps:
       - uses: actions/checkout@v5
-      - uses: ./.github/actions/setup-rails
-      - run: yarn build
+
+      - name: Restore bundler cache
+        uses: actions/cache/restore@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Restore node modules cache
+        uses: actions/cache/restore@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
+
+      - uses: ./.github/actions/setup-bundler
+
       - run: bundle exec rake teaspoon
 
   run-rubocop:
+    needs: build
     runs-on: ubuntu-latest
     container:
       image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
@@ -115,5 +198,13 @@ jobs:
       RAILS_ENV: test
     steps:
       - uses: actions/checkout@v5
+
+      - name: Restore bundler cache
+        uses: actions/cache/restore@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+
       - uses: ./.github/actions/setup-bundler
+
       - run: bundle exec rubocop
