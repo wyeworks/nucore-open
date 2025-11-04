@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "facility_product_routing_concern"
+require Rails.root.join("app/lib/facility_product_routing_concern")
 
 Rails.application.routes.draw do
   get "/users/sign_in.pdf" => redirect("/users/sign_in")
@@ -60,7 +60,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :facilities, except: [:delete], path: I18n.t("facilities_downcase") do
+  resources :facilities, except: [:destroy], path: I18n.t("facilities_downcase") do
     collection do
       get "list"
     end

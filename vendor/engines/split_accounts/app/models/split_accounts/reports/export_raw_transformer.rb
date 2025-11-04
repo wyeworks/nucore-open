@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "hash_helper"
+require Rails.root.join("app/lib/hash_helper")
 module SplitAccounts
 
   module Reports

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "date_helper" # parse_usa_import_date
+# DateHelper is autoloaded from app/helpers/date_helper.rb
 
 class OrderRowImporter
 
