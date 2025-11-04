@@ -24,7 +24,7 @@ class UserSuspensionController < ApplicationController
   private
 
   def suspension_params
-    params.require(:user).permit(:suspension_note)
+    params.expect(user: [:suspension_note])
   end
 
 end

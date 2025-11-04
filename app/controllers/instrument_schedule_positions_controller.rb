@@ -32,7 +32,7 @@ class InstrumentSchedulePositionsController < ApplicationController
   private
 
   def update_params
-    params.require(:instrument_schedule_position).permit(schedule_ids: [])
+    params.expect(instrument_schedule_position: [schedule_ids: []])
   end
 
   def authorize_schedules

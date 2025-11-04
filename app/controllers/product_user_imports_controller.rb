@@ -28,7 +28,7 @@ class ProductUserImportsController < ApplicationController
   private
 
   def create_params
-    params.require(:product_user_import).permit(:file)
+    params.expect(product_user_import: [:file])
   end
 
   def create_product_user_import!

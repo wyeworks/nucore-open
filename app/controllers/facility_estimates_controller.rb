@@ -135,13 +135,13 @@ class FacilityEstimatesController < ApplicationController
   private
 
   def facility_estimate_params
-    raw_params = params.require(:estimate).permit(
-      :description, :price_group_id, :user_id,
-      :custom_name, :note, :expires_at,
-      estimate_details_attributes: [
-        :id, :product_id, :quantity, :duration,
-        :duration_unit, :_destroy, :recalculate,
-      ]
+    raw_params = params.expect(
+      estimate: [:description, :price_group_id, :user_id,
+                 :custom_name, :note, :expires_at,
+                 { estimate_details_attributes: [
+                   :id, :product_id, :quantity, :duration,
+                   :duration_unit, :_destroy, :recalculate,
+                 ] }]
     )
     if raw_params[:expires_at].present?
       raw_params[:expires_at] = parse_usa_date(raw_params[:expires_at])

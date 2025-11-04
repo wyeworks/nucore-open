@@ -24,7 +24,7 @@ class UserPreferencesController < ApplicationController
   end
 
   def user_preference_params
-    params.require(:user_preference).permit(:value)
+    params.expect(user_preference: [:value])
   end
 
 end

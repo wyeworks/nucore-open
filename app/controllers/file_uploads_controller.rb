@@ -121,7 +121,7 @@ class FileUploadsController < ApplicationController
   private
 
   def create_params
-    params.require(:stored_file).permit(:name, :file_type, :file)
+    params.expect(stored_file: [:name, :file_type, :file])
   end
 
   def init_product

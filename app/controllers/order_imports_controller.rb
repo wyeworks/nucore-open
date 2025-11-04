@@ -41,7 +41,7 @@ class OrderImportsController < ApplicationController
   private
 
   def create_params
-    params.require(:order_import).permit(:upload_file, :fail_on_error, :send_receipts)
+    params.expect(order_import: [:upload_file, :fail_on_error, :send_receipts])
   end
 
   def create_order_import!

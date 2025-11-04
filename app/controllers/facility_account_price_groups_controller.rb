@@ -52,8 +52,6 @@ class FacilityAccountPriceGroupsController < ApplicationController
       account_type: @account.class.to_s,
     )
 
-    params.require(
-      account_builder.account_params_key,
-    ).permit(price_groups_relation_ids: [])
+    params.expect(account_builder.account_params_key => [price_groups_relation_ids: []])
   end
 end

@@ -195,7 +195,7 @@ class FacilitiesController < ApplicationController
   end
 
   def facility_params
-    params.require(:facility).permit(*self.class.permitted_facility_params)
+    params.expect(facility: [*self.class.permitted_facility_params])
   end
 
   cattr_accessor(:permitted_facility_params) do

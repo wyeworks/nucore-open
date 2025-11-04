@@ -51,7 +51,7 @@ class JournalCutoffDatesController < ApplicationController
   end
 
   def journal_cutoff_date_params
-    params.require(:journal_cutoff_date).permit(cutoff_date: [:date, :hour, :minute, :ampm])
+    params.expect(journal_cutoff_date: [cutoff_date: [:date, :hour, :minute, :ampm]])
   end
 
 end

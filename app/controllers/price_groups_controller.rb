@@ -130,7 +130,7 @@ class PriceGroupsController < ApplicationController
   end
 
   def price_group_params
-    params.require(:price_group).permit(:name, :display_order, :is_internal, :is_hidden, :admin_editable, :facility_id)
+    params.expect(price_group: [:name, :display_order, :is_internal, :is_hidden, :admin_editable, :facility_id])
   end
 
   def paginate(relation)

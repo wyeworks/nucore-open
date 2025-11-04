@@ -150,7 +150,7 @@ class UsersController < ApplicationController
   helper_method :training_requested_for?
 
   def create_params
-    params.require(:user).permit(*user_form_class.permitted_params)
+    params.expect(user: [*user_form_class.permitted_params])
   end
 
   def edit_user_params

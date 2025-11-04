@@ -110,7 +110,7 @@ class ProjectsController < ApplicationController
   end
 
   def project_params
-    params.require(:project).permit("active", "description", "name")
+    params.expect(project: ["active", "description", "name"])
   end
 
   def save_project

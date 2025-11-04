@@ -13,7 +13,7 @@ class AccountFacilityJoinsController < ApplicationController
   end
 
   def update
-    update_params = params.require(:account_facility_joins_form).permit(facility_ids: [])
+    update_params = params.expect(account_facility_joins_form: [facility_ids: []])
     @account_facility_joins_form.assign_attributes(update_params)
     if @account_facility_joins_form.save
       redirect_to({ action: :edit }, notice: text("update.success"))

@@ -34,7 +34,7 @@ class InstrumentAlertsController < ApplicationController
   end
 
   def instrument_alert_params
-    params.require(:instrument_alert).permit(:note)
+    params.expect(instrument_alert: [:note])
   end
 
 end

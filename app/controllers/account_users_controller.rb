@@ -56,7 +56,7 @@ class AccountUsersController < ApplicationController
   protected
 
   def create_params
-    params.require(:account_user).permit(:user_role)
+    params.expect(account_user: [:user_role])
   end
 
   def init_account

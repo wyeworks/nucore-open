@@ -33,8 +33,8 @@ class ProblemReservationsController < ApplicationController
   end
 
   def update_params
-    params.require(:reservation).permit(
-      :actual_end_date, :actual_end_hour, :actual_end_min, :actual_end_meridian, :actual_duration_mins
+    params.expect(
+      reservation: [:actual_end_date, :actual_end_hour, :actual_end_min, :actual_end_meridian, :actual_duration_mins]
     )
   end
 

@@ -168,13 +168,13 @@ class FacilityReservationsController < ApplicationController
   protected
 
   def reservation_params
-    params.require(:reservation).permit(:reserve_start_date,
-                                        :reserve_start_hour,
-                                        :reserve_start_min,
-                                        :reserve_start_meridian,
-                                        :duration_mins,
-                                        :reserve_start_at,
-                                        :reserve_end_at)
+    params.expect(reservation: [:reserve_start_date,
+                                :reserve_start_hour,
+                                :reserve_start_min,
+                                :reserve_start_meridian,
+                                :duration_mins,
+                                :reserve_start_at,
+                                :reserve_end_at])
   end
 
   def admin_reservation_params

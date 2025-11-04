@@ -75,11 +75,11 @@ class BundleProductsController < ApplicationController
   private
 
   def create_params
-    params.require(:bundle_product).permit(:product_id, :quantity)
+    params.expect(bundle_product: [:product_id, :quantity])
   end
 
   def update_params
-    params.require(:bundle_product).permit(:quantity)
+    params.expect(bundle_product: [:quantity])
   end
 
 end

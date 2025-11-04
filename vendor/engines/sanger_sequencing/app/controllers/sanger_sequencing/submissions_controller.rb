@@ -69,9 +69,9 @@ module SangerSequencing
     end
 
     def submission_params
-      params.require(:sanger_sequencing_submission)
-            .permit(self.class.permitted_submission_params,
-                    samples_attributes: self.class.permitted_sample_attributes)
+      params
+        .expect(sanger_sequencing_submission: [self.class.permitted_submission_params,
+                                               { samples_attributes: self.class.permitted_sample_attributes }])
     end
 
     def external_return_options

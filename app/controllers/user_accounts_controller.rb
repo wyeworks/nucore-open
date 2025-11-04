@@ -34,7 +34,7 @@ class UserAccountsController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(account_users_attributes: [:id, :_destroy])
+    params.expect(user: [account_users_attributes: [:id, :_destroy]])
   end
 
   def load_accounts
