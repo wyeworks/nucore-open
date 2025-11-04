@@ -190,4 +190,5 @@ Rails.application.configure do
   Delayed::Worker.delay_jobs = false
 
   config.assets.compile = false if ENV["RAILS_TEST_COMPILED_ASSETS"].present?
+  config.active_record.async_query_executor = :inline
 end
