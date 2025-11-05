@@ -13,7 +13,9 @@ module Nucore
 
     config.active_record.belongs_to_required_by_default = false
 
-    config.i18n.load_path += Dir[Rails.root.join("config", "override_locales", "*.{rb,yml}").to_s]
+    initializer "nucore.i18n.move_overrides_to_end", after: "text_helpers.i18n.add_load_paths" do
+      config.i18n.load_path += Dir[Rails.root.join("config", "override_locales", "*.{rb,yml}").to_s]
+    end
 
     config.action_dispatch.rescue_responses.merge!(
       "NUCore::PermissionDenied" => :forbidden,
