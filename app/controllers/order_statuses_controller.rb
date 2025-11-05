@@ -73,11 +73,11 @@ class OrderStatusesController < ApplicationController
   private
 
   def create_params
-    params.expect(order_status: [:name, :parent_id])
+    params.require(:order_status).permit(:name, :parent_id)
   end
 
   def update_params
-    params.expect(order_status: [:name])
+    params.require(:order_status).permit(:name)
   end
 
   def ensure_editable

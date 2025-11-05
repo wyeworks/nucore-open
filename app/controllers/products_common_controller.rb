@@ -105,7 +105,7 @@ class ProductsCommonController < ApplicationController
   private
 
   def resource_params
-    params.expect(:"#{singular_object_name}" => [*permitted_params])
+    params.require(:"#{singular_object_name}").permit(*permitted_params)
   end
 
   # Needs to be over-rideable from engines

@@ -117,7 +117,7 @@ class OrderDetailsController < ApplicationController
   end
 
   def order_detail_params
-    params.expect(order_detail: [:account_id])
+    params.require(:order_detail).permit(:account_id)
   end
 
   def redirect_to_path

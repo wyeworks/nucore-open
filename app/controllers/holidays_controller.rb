@@ -43,7 +43,7 @@ class HolidaysController < ApplicationController
   private
 
   def holiday_params
-    params.expect(holiday: [:date])
+    params.require(:holiday).permit(:date)
   end
 
 end

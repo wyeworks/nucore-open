@@ -83,7 +83,7 @@ class FacilityAccountUsersController < ApplicationController
   end
 
   def create_params
-    params.expect(account_user: [:user_role])
+    params.require(:account_user).permit(:user_role)
   end
 
   def current_owner?

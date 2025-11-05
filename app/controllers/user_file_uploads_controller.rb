@@ -51,6 +51,6 @@ class UserFileUploadsController < ApplicationController
   end
 
   def create_params
-    params.expect(stored_file: [:name, :file_type, :file]).merge(created_by: session_user.id, file_type: "user_info")
+    params.require(:stored_file).permit(:name, :file_type, :file).merge(created_by: session_user.id, file_type: "user_info")
   end
 end

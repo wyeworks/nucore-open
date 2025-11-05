@@ -56,7 +56,7 @@ class ProductAccessGroupsController < ApplicationController
   private
 
   def product_access_group_params
-    params.expect(product_access_group: [:name, :allow_holiday_access])
+    params.require(:product_access_group).permit(:name, :allow_holiday_access)
   end
 
 end

@@ -38,7 +38,7 @@ class ProductAccessoriesController < ApplicationController
   private
 
   def create_params
-    params.expect(product_accessory: [:accessory_id, :scaling_type])
+    params.require(:product_accessory).permit(:accessory_id, :scaling_type)
   end
 
   def init_product

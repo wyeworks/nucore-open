@@ -83,11 +83,12 @@ class ScheduleRulesController < ApplicationController
 
   def schedule_rule_params
     params
-      .expect(
-        schedule_rule: [:start_hour, :start_min, :end_hour, :end_min,
-                        :on_sun, :on_mon, :on_tue, :on_wed, :on_thu, :on_fri, :on_sat,
-                        { price_group_discounts_attributes: [:discount_percent, :price_group_id, :id],
-                          product_access_group_ids: [] }]
+      .require(:schedule_rule)
+      .permit(
+        :start_hour, :start_min, :end_hour, :end_min,
+        :on_sun, :on_mon, :on_tue, :on_wed, :on_thu, :on_fri, :on_sat,
+        price_group_discounts_attributes: [:discount_percent, :price_group_id, :id],
+        product_access_group_ids: []
       ).tap do |schedule_rule_params|
         if @product.start_time_disabled?
           schedule_rule_params.merge! ScheduleRule.full_day_attributes

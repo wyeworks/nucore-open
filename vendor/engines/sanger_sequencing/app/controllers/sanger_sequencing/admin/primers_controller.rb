@@ -31,8 +31,8 @@ module SangerSequencing
       private
 
       def primers_params
-        params.expect(
-          facility: [sanger_sequencing_primers_attributes: %i[id _destroy name]]
+        params.require(:facility).permit(
+          sanger_sequencing_primers_attributes: %i[id _destroy name]
         )
       end
 

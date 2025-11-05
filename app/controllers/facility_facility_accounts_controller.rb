@@ -65,7 +65,7 @@ class FacilityFacilityAccountsController < ApplicationController
   private
 
   def create_params
-    strong_params = params.expect(facility_account: [:revenue_account, :account_number, :is_active, { account_number_parts: FacilityAccount.account_number_field_names }])
+    strong_params = params.require(:facility_account).permit(:revenue_account, :account_number, :is_active, account_number_parts: FacilityAccount.account_number_field_names)
     if SettingsHelper.feature_on?(:expense_accounts)
       strong_params
     else
@@ -74,7 +74,7 @@ class FacilityFacilityAccountsController < ApplicationController
   end
 
   def update_params
-    params.expect(facility_account: [:is_active])
+    params.require(:facility_account).permit(:is_active)
   end
 
 end

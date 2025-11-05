@@ -43,7 +43,7 @@ class JournalCreationRemindersController < ApplicationController
   private
 
   def journal_creation_reminder_params
-    params.expect(journal_creation_reminder: [:message, :starts_at, :ends_at])
+    params.require(:journal_creation_reminder).permit(:message, :starts_at, :ends_at)
   end
 
 end

@@ -49,7 +49,7 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
   private
 
   def certificate_params
-    params.expect(research_safety_certificate: [:name])
+    params.require(:research_safety_certificate).permit(:name)
   end
 
   def load_certificate

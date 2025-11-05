@@ -35,10 +35,10 @@ module SangerSequencing
     helper_method :sanger_product_groups
 
     def sanger_product_params
-      params.expect(
-        sanger_sequencing_sanger_product: [:needs_primer,
-                                           :group,
-                                           { primer_ids: [] }],
+      params.require(:sanger_sequencing_sanger_product).permit(
+        :needs_primer,
+        :group,
+        primer_ids: [],
       )
     end
 

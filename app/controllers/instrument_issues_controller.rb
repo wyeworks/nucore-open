@@ -27,7 +27,7 @@ class InstrumentIssuesController < ApplicationController
   private
 
   def create_params
-    params.expect(instrument_issue: [:message])
+    params.require(:instrument_issue).permit(:message)
   end
 
   def init_order_detail

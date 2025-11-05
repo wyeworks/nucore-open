@@ -68,7 +68,7 @@ class AffiliatesController < GlobalSettingsController
   private
 
   def affiliate_params
-    params.expect(affiliate: [:name, :subaffiliates_enabled])
+    params.require(:affiliate).permit(:name, :subaffiliates_enabled)
   end
 
 end

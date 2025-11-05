@@ -32,11 +32,11 @@ class ProductNotificationsController < ApplicationController
   private
 
   def notification_params
-    params.expect(
-      product: [:training_request_contacts,
-                :order_notification_recipients,
-                :cancellation_email_recipients,
-                :issue_report_recipients],
+    params.require(:product).permit(
+      :training_request_contacts,
+      :order_notification_recipients,
+      :cancellation_email_recipients,
+      :issue_report_recipients,
     )
   end
 

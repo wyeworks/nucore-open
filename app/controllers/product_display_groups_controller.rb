@@ -54,7 +54,7 @@ class ProductDisplayGroupsController < ApplicationController
   private
 
   def product_display_group_params
-    params.expect(product_display_group: [:name, { product_ids: [] }])
+    params.require(:product_display_group).permit(:name, product_ids: [])
   end
 
   def load_ungrouped_products

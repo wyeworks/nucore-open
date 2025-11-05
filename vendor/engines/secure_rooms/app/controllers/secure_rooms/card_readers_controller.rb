@@ -64,8 +64,8 @@ module SecureRooms
     end
 
     def card_reader_params
-      params.expect(
-        card_reader: [:description, :card_reader_number, :control_device_number, :direction_in]
+      params.require(:card_reader).permit(
+        :description, :card_reader_number, :control_device_number, :direction_in
       )
     end
 
