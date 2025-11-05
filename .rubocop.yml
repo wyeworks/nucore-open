@@ -39,6 +39,9 @@ Style/CollectionQuerying:
 Rails/HttpPositionalArguments:
   Enabled: false
 
+Rails/StrongParametersExpect:
+  Enabled: false
+
 Rails/ApplicationRecord:
   Exclude:
     - "db/migrate/*.rb"
