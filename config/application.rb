@@ -12,6 +12,7 @@ module Nucore
     config.load_defaults 8.0
 
     config.active_record.belongs_to_required_by_default = false
+    config.active_record.observers = :order_detail_observer
 
     initializer "nucore.i18n.move_overrides_to_end", after: "text_helpers.i18n.add_load_paths" do
       config.i18n.load_path += Dir[Rails.root.join("config", "override_locales", "*.{rb,yml}").to_s]
