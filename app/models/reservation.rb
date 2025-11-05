@@ -364,6 +364,7 @@ class Reservation < ApplicationRecord
   end
 
   def update_billable_minutes
+    return unless persisted? && order_detail&.persisted?
     update_column(:billable_minutes, calculated_billable_minutes)
   end
 
