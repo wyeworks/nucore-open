@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "spec_helper"
-require "array_util"
 
 RSpec.describe ArrayUtil do
   let(:array) { [:a, :b, :c] }

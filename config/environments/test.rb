@@ -111,6 +111,7 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order_status
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :reservation
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :statement
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Reservation", association: :order
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Service", association: :current_offline_reservations
     Bullet.add_safelist type: :n_plus_one_query, class_name: "SecureRoomPricePolicy", association: :price_group
@@ -190,4 +191,5 @@ Rails.application.configure do
   Delayed::Worker.delay_jobs = false
 
   config.assets.compile = false if ENV["RAILS_TEST_COMPILED_ASSETS"].present?
+  config.active_record.async_query_executor = :inline
 end

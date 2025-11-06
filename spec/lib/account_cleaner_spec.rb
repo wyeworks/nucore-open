@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "account_cleaner"
 
 RSpec.describe AccountCleaner do
 

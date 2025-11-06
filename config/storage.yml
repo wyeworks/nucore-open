@@ -9,10 +9,10 @@ local:
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 amazon:
   service: S3
-  access_key_id: <%= Rails.application.secrets.dig(:active_storage, :s3, :access_key_id) %>
-  secret_access_key: <%= Rails.application.secrets.dig(:active_storage, :s3, :secret_access_key) %>
+  access_key_id: <%= ENV.fetch("BUCKETEER_AWS_ACCESS_KEY_ID", Rails.application.secrets.dig(:active_storage, :s3, :access_key_id)) %>
+  secret_access_key: <%= ENV.fetch("BUCKETEER_AWS_SECRET_ACCESS_KEY", Rails.application.secrets.dig(:active_storage, :s3, :secret_access_key)) %>
   region: us-east-1
-  bucket: <%= Rails.application.secrets.dig(:active_storage, :s3, :bucket) %>
+  bucket: <%= ENV.fetch("BUCKETEER_BUCKET_NAME", Rails.application.secrets.dig(:active_storage, :s3, :bucket)) %>
 
 # Remember not to checkin your GCS keyfile to a repository
 # google:
@@ -24,9 +24,9 @@ amazon:
 # Use rails credentials:edit to set the Azure Storage secret (as azure_storage:storage_access_key)
 # azure:
 #   service: AzureStorage
-#   storage_account_name: <%= Rails.application.secrets.dig(:active_storage, :azure, :storage_account_name) %>
-#   storage_access_key: <%= Rails.application.secrets.dig(:active_storage, :azure, :storage_access_key) %>
-#   container: <%= Rails.application.secrets.dig(:active_storage, :azure, :container) %>
+#   storage_account_name: <%= ENV.fetch("AZURE_STORAGE_ACCOUNT_NAME", "") %>
+#   storage_access_key: <%= ENV.fetch("AZURE_STORAGE_ACCESS_KEY", "") %>
+#   container: <%= ENV.fetch("AZURE_STORAGE_CONTAINER", "") %>
 
 # mirror:
 #   service: Mirror
