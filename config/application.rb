@@ -10,7 +10,15 @@ module Nucore
   class Application < Rails::Application
     config.load_defaults 8.0
 
+    # TODO- clean up unconventional inverse relations
+    config.active_record.has_many_inversing = false
+
     config.active_record.belongs_to_required_by_default = false
+
+    # Needed on the 6.1.6.1 version bump.
+    # https://github.com/rails/rails/blob/dc1242fd5a4d91e63846ab552a07e19ebf8716ac/activerecord/CHANGELOG.md
+    config.active_record.yaml_column_permitted_classes = [Symbol, ActiveSupport::HashWithIndifferentAccess]
+
     config.active_record.observers = :order_detail_observer
 
     initializer "nucore.i18n.move_overrides_to_end", after: "text_helpers.i18n.add_load_paths" do
