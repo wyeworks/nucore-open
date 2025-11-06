@@ -37,6 +37,9 @@ module Nucore
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks daemons])
 
+    # Add app/lib to load path for manual requires (e.g., in routes.rb)
+    $LOAD_PATH.unshift Rails.root.join("app", "lib")
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

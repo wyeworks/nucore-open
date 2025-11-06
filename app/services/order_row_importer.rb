@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-# DateHelper is autoloaded from app/helpers/date_helper.rb
-
 class OrderRowImporter
 
   include DateHelper

@@ -41,7 +41,7 @@ class ReservationCreator
           purchase_original_cross_core_order
 
           @success = :merged_order
-        elsif @order.order_details.reload.where(parent_order_detail_id: nil).one?
+        elsif @order.order_details.where(parent_order_detail_id: nil).one?
           @success = :instrument_only_order
         else
           @success = :default

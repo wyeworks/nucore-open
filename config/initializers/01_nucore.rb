@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
-# Explicitly load NUCore module early to avoid autoload issues
-require Rails.root.join("app/lib/nucore")
+require "nucore"
 
 ActiveRecord::Base.class_eval do
   def self.validate_url_name(attr_name, scope = nil)

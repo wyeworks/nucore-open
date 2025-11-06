@@ -1,6 +1,5 @@
 # frozen_string_literal: true
-# Load EngineManager early as it's needed before Rails fully initializes
-require Rails.root.join("app/lib/engine_manager")
+require "engine_manager"
 
 Teaspoon.configure do |config|
   # Determines where the Teaspoon routes will be mounted. Changing this to "/jasmine" would allow you to browse to

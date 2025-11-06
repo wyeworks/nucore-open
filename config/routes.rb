@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require Rails.root.join("app/lib/facility_product_routing_concern")
+require "facility_product_routing_concern"
 
 Rails.application.routes.draw do
   get "/users/sign_in.pdf" => redirect("/users/sign_in")
