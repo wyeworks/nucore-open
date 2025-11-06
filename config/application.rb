@@ -8,7 +8,6 @@ Bundler.require(*Rails.groups)
 
 module Nucore
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 8.0
 
     config.active_record.belongs_to_required_by_default = false
@@ -40,38 +39,26 @@ module Nucore
 
     # Rails 8 removed Rails.application.secrets
     # Provide backward compatibility for storage.yml and other code still using secrets
-    # TODO: Migrate to Rails.application.credentials or Rails.application.config_for
     def secrets
       @secrets ||= begin
-        secrets_file = Rails.root.join("config/secrets.yml")
+        require "active_support/ordered_options"
+        secrets = ActiveSupport::OrderedOptions.new
+
+        secrets_file = Rails.root.join("config", "secrets.yml")
         if File.exist?(secrets_file)
-          secrets_hash = YAML.load_file(secrets_file, aliases: true)[Rails.env].with_indifferent_access
-          SecretsWrapper.new(secrets_hash)
-        else
-          SecretsWrapper.new({})
+          require "erb"
+          require "yaml"
+
+          all_secrets = YAML.safe_load(ERB.new(File.read(secrets_file)).result, aliases: true) || {}
+          env_secrets = all_secrets[Rails.env]
+
+          if env_secrets
+            secrets.merge!(env_secrets.deep_symbolize_keys)
+          end
         end
+
+        secrets
       end
-    end
-  end
-
-  # Wrapper to provide method access to secrets hash (e.g., secrets.api, secrets.secret_key_base)
-  class SecretsWrapper
-    def initialize(secrets_hash)
-      @secrets = secrets_hash
-    end
-
-    def method_missing(method, *_args)
-      @secrets[method] || @secrets[method.to_s]
-    end
-
-    def respond_to_missing?(method, include_private = false)
-      @secrets.key?(method) || @secrets.key?(method.to_s) || super
-    end
-
-    delegate :[], to: :@secrets
-
-    def dig(*keys)
-      @secrets.dig(*keys)
     end
   end
 end

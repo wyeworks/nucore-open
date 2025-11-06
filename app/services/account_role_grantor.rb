@@ -27,8 +27,6 @@ class AccountRoleGrantor
         old_account_user = AccountUser.find_by(account: account, user: user, deleted_at: nil)
         destroy_old_account_user(old_account_user) if old_account_user
 
-        # Rails 8 caches associations more aggressively, so we need to reload
-        # to ensure validations see the current state after deletions
         account.account_users.reload
 
         account_user.save!
