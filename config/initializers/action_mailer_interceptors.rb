@@ -1,3 +1,6 @@
 # frozen_string_literal: true
 
-ActionMailer::Base.register_interceptor(StagingMailInterceptor) if Settings.email.fake.enabled
+if Settings.email.fake.enabled
+  require "staging_mail_interceptor"
+  ActionMailer::Base.register_interceptor(StagingMailInterceptor)
+end
