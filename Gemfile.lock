@@ -470,8 +470,8 @@ GEM
     parallel (1.27.0)
     parallel_tests (5.4.0)
       parallel
-    paranoia (3.0.1)
-      activerecord (>= 6, < 8.1)
+    paranoia (3.1.0)
+      activerecord (>= 7, < 8.2)
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
@@ -709,7 +709,7 @@ GEM
       kgio (~> 2.6)
       raindrops (~> 0.7)
     uniform_notifier (1.18.0)
-    uri (1.0.4)
+    uri (1.1.1)
     useragent (0.16.11)
     virtus (2.0.0)
       axiom-types (~> 0.1)
