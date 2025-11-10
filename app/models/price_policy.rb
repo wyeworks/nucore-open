@@ -193,13 +193,7 @@ class PricePolicy < ApplicationRecord
   # The cost applied to a unit of
   # whatever quantity is being priced
   def unit_net_cost
-    if try(:has_rate?)
-      subsidized_hourly_usage_cost
-    elsif try(:has_daily_rate?)
-      subsidized_daily_usage_cost
-    else
-      unit_total
-    end
+    self[rate_field] - self[subsidy_field]
   end
 
   private
