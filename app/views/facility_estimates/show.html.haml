@@ -30,9 +30,10 @@
         %th= Product.model_name.human
         %th= EstimateDetail.human_attribute_name(:quantity)
         %th= EstimateDetail.human_attribute_name(:duration)
+        %th= EstimateDetail.human_attribute_name(:unit_cost)
         %th.pull-right= EstimateDetail.human_attribute_name(:cost)
     %tbody
-      - @estimate.estimate_details.each do |estimate_detail|
+      - @estimate.estimate_details.includes(:price_policy).each do |estimate_detail|
         - displayTime = estimate_detail.duration_unit == "mins"
         %tr
           %td
@@ -47,6 +48,7 @@
               = estimate_detail.duration
             - elsif estimate_detail.duration_unit.present?
               = "#{estimate_detail.duration} #{t(".days")}"
+          %td.currency= number_to_currency(estimate_detail.price_policy&.unit_net_cost)
           %td.currency= number_to_currency(estimate_detail.cost)
     %tfoot
       %tr
