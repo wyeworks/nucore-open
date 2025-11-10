@@ -4,15 +4,21 @@
 window.addEventListener("DOMContentLoaded", () => {
   const toggleExpiredAcctsBtn = document.querySelector(".toggle_expired_accts_btn--js");
   const expiredAccts = document.querySelectorAll("tr.expired--js");
-  let hideAccounts = false;
+  let hideAccounts = true;
 
   if (toggleExpiredAcctsBtn) { toggleExpiredAcctsBtn.addEventListener("click", toggleExpiredAccounts); }
 
+  toggleRowVisibility();
+
   function toggleExpiredAccounts() {
     hideAccounts = !hideAccounts;
+    toggleRowVisibility();
+  }
+
+  function toggleRowVisibility() {
     let displayStyle;
     let buttonText;
-    
+
     if (hideAccounts) {
       displayStyle = "none";
       buttonText = "<%= I18n.t("views.facility_accounts.account_table.show_text") %>";
@@ -20,11 +26,14 @@ window.addEventListener("DOMContentLoaded", () => {
       displayStyle = "table-row";
       buttonText = "<%= I18n.t("views.facility_accounts.account_table.hide_text") %>";
     }
-    
+
     expiredAccts.forEach((acctEle) => {
       acctEle.style.display = displayStyle;
-      toggleExpiredAcctsBtn.textContent = buttonText;
     });
+
+    if (toggleExpiredAcctsBtn) {
+      toggleExpiredAcctsBtn.textContent = buttonText;
+    }
   }
 
 });
