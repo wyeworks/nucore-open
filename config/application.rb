@@ -45,8 +45,9 @@ module Nucore
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.time_zone = Settings.time_zone
 
     # Rails 8 removed Rails.application.secrets
     # Provide backward compatibility for storage.yml and other code still using secrets
