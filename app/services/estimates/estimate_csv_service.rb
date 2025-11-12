@@ -22,7 +22,14 @@ module Estimates
         end
 
         csv << ["Products"]
-        csv << ["Facility", "Product", "Quantity", "Duration", "Unit Price", "Price"]
+        csv << [
+          Product.human_attribute_name(:facility),
+          Product.model_name.human,
+          EstimateDetail.human_attribute_name(:quantity),
+          EstimateDetail.human_attribute_name(:duration),
+          EstimateDetail.human_attribute_name(:unit_cost),
+          EstimateDetail.human_attribute_name(:cost),
+        ]
 
         @estimate.estimate_details.includes(:product).each do |estimate_detail|
           unit_price = estimate_detail.price_policy&.unit_net_cost
