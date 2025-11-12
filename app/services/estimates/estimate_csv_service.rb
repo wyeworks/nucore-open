@@ -22,20 +22,30 @@ module Estimates
         end
 
         csv << ["Products"]
-        csv << %w[Facility Product Quantity Duration Price]
+        csv << [
+          Product.human_attribute_name(:facility),
+          Product.model_name.human,
+          EstimateDetail.human_attribute_name(:quantity),
+          EstimateDetail.human_attribute_name(:duration),
+          EstimateDetail.human_attribute_name(:unit_cost),
+          EstimateDetail.human_attribute_name(:cost),
+        ]
 
         @estimate.estimate_details.includes(:product).each do |estimate_detail|
+          unit_price = estimate_detail.price_policy&.unit_net_cost
+
           csv << [
             estimate_detail.product.facility.name,
             estimate_detail.product.name,
             estimate_detail.quantity,
             format_duration(estimate_detail),
+            unit_price.presence && helpers.number_to_currency(unit_price),
             helpers.number_to_currency(estimate_detail.cost)
           ]
         end
 
         csv << []
-        csv << ["Total", "", "", "", helpers.number_to_currency(@estimate.total_cost)]
+        csv << ["Total", "", "", "", "", helpers.number_to_currency(@estimate.total_cost)]
       end
     end
 
