@@ -72,11 +72,11 @@
     = f.error_messages
     = f.hidden_field :file_type
 
-    = f.label :file, "File", class: "required"
-    = f.file_field :file
+    .form-group
+      = f.label :file, "File", class: "required"
+      = f.file_field :file
 
-    %ul.list-inline
-      %li= f.submit text("shared.upload"), data: { disable_with: "Uploading..." }, class: "btn btn-default"
+    = f.submit text("shared.upload"), data: { disable_with: "Uploading..." }, class: "btn btn-default"
 
   %br
 
