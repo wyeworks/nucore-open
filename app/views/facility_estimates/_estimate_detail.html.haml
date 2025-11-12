@@ -28,4 +28,4 @@
       - duration_default_value = estimate_detail.duration.present? ? estimate_detail.duration : "0:01"
       = text_field_tag "#{id_prefix}[duration]", duration_default_value, class: "js--estimate-duration-mins"
   %td
-    .btn.btn-default.remove-estimate-detail= t('.remove')
+    .btn.remove-estimate-detail= t('.remove')

@@ -82,21 +82,20 @@ RSpec.describe Estimates::EstimateCsvService do
 
       it "generates the products section correctly" do
         expect(csv_rows[7]).to eq(%w[Products])
-        expect(csv_rows[8]).to eq(["Facility", "Product", "Quantity", "Duration", "Unit Price", "Price"])
+        expect(csv_rows[8]).to eq(%w[Facility Product Quantity Duration Price])
         expect(csv_rows[9]).to eq(
           [
             facility.name,
             item.name,
             "2",
             nil,
-            "$100.00",
             "$200.00"
           ]
         )
       end
 
       it "includes the total" do
-        expect(csv_rows.last).to eq(["Total", "", "", "", "", "$200.00"])
+        expect(csv_rows.last).to eq(["Total", "", "", "", "$200.00"])
       end
     end
 
@@ -114,12 +113,8 @@ RSpec.describe Estimates::EstimateCsvService do
         expect(csv_rows[9][3]).to eq("3:00")
       end
 
-      it "calculates the right unit price" do
-        expect(csv_rows[9][4]).to eq("$60.00")
-      end
-
       it "calculates the right price" do
-        expect(csv_rows[9][5]).to eq("$180.00")
+        expect(csv_rows[9][4]).to eq("$180.00")
       end
     end
 
@@ -137,12 +132,8 @@ RSpec.describe Estimates::EstimateCsvService do
         expect(csv_rows[9][3]).to eq("3 days")
       end
 
-      it "calculates the right unit price" do
-        expect(csv_rows[9][4]).to eq("$50.00")
-      end
-
       it "calculates the right price" do
-        expect(csv_rows[9][5]).to eq("$150.00")
+        expect(csv_rows[9][4]).to eq("$150.00")
       end
     end
 
@@ -161,7 +152,7 @@ RSpec.describe Estimates::EstimateCsvService do
       end
 
       it "calculates the total correctly across facilities" do
-        expect(csv_rows.last).to eq(["Total", "", "", "", "", "$280.00"])
+        expect(csv_rows.last).to eq(["Total", "", "", "", "$280.00"])
       end
     end
 
@@ -182,7 +173,7 @@ RSpec.describe Estimates::EstimateCsvService do
       end
 
       it "calculates the total correctly" do
-        expect(csv_rows.last).to eq(["Total", "", "", "", "", "$380.00"])
+        expect(csv_rows.last).to eq(["Total", "", "", "", "$380.00"])
       end
     end
   end
