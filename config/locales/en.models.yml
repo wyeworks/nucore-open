@@ -259,8 +259,6 @@ en:
         expires_at: Expires at
         note: Notes
       estimate_detail:
-        cost: Price
-        unit_cost: Unit Price
         duration: Duration
         duration_mins: Duration (hh:mm)
       schedule_rule:

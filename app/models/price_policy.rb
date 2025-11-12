@@ -190,16 +190,6 @@ class PricePolicy < ApplicationRecord
     product&.daily_booking?
   end
 
-  # The cost applied to a unit of
-  # whatever quantity is being priced
-  def unit_net_cost
-    return unless defined?(rate_field) && defined?(subsidy_field)
-
-    return if self[rate_field].blank?
-
-    self[rate_field] - (self[subsidy_field] || 0.0)
-  end
-
   private
 
   # TODO: Refactor
