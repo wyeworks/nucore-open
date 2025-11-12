@@ -677,7 +677,7 @@ GEM
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
     state_machines (0.100.2)
-    stringio (3.1.7)
+    stringio (3.1.8)
     synaccess_connect (0.3.1)
       nokogiri (>= 1.6)
     sysexits (1.2.0)
