@@ -76,6 +76,14 @@ module PricePolicies
       minimum_cost - minimum_cost_subsidy
     end
 
+    def unit_net_cost
+      if has_daily_rate?
+        subsidized_daily_usage_cost
+      else
+        subsidized_hourly_usage_cost
+      end
+    end
+
     private
 
     def subsidy_ratio

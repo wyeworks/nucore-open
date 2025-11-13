@@ -226,6 +226,35 @@ RSpec.describe PricePolicy do
 
   end
 
+  describe "unit_net_cost" do
+    let(:attrs) do
+      {
+        unit_cost: 20.0,
+        unit_subsidy: 1.0,
+        usage_rate: 8.0,
+        usage_subsidy: 3.0,
+      }
+    end
+
+    it "returns nil for base class" do
+      instance = PricePolicy.new(attrs)
+
+      expect(instance.unit_net_cost).to be(nil)
+    end
+
+    it "returns usage for instrument policy" do
+      instance = InstrumentPricePolicy.new(attrs)
+
+      expect(instance.unit_net_cost).to be_within(1e-5).of(5.0)
+    end
+
+    it "returns unit for item policy" do
+      instance = ItemPricePolicy.new(attrs)
+
+      expect(instance.unit_net_cost).to be_within(1e-5).of(19.0)
+    end
+  end
+
   describe "note" do
     context "when the required note feature is enabled", feature_setting: { price_policy_requires_note: true } do
       it "requires the note" do
