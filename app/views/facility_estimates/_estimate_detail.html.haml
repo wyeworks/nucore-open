@@ -5,7 +5,7 @@
   = hidden_field_tag "#{id_prefix}[product_id]", estimate_detail.product_id
   - if estimate_detail.duration_unit.present?
     = hidden_field_tag "#{id_prefix}[duration_unit]", estimate_detail.duration_unit
-  
+
   = hidden_field_tag "#{id_prefix}[_destroy]", false, class: 'destroy-field', id: "destroy_#{index}"
   = hidden_field_tag "#{id_prefix}[recalculate]", true
 
@@ -18,7 +18,7 @@
     - if estimate_detail.errors.any?
       .error-inline= estimate_detail.errors.full_messages.join(", ")
   - quantity_default_value = estimate_detail.quantity.present? ? estimate_detail.quantity : 1
-  %td= number_field_tag "#{id_prefix}[quantity]", quantity_default_value, min: 1, style: "width: 3em;"
+  %td= number_field_tag "#{id_prefix}[quantity]", quantity_default_value, min: 1, style: "width: 6em;"
   %td
     - time_unit = estimate_detail.product.time_unit
     - if time_unit == "days"
