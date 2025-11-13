@@ -17,7 +17,7 @@ class UserFileUploadsController < ApplicationController
 
   def download
     file = @user.file_uploads.find(params[:id])
-    redirect_to file.download_url
+    redirect_to file.download_url, allow_other_host: true
   end
 
   def create
