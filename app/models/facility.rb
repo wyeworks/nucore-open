@@ -37,7 +37,7 @@ class Facility < ApplicationRecord
   validate_url_name :url_name
   validates_uniqueness_of :abbreviation, :journal_mask, case_sensitive: false
   validates_format_of :abbreviation, with: /\A[a-zA-Z\d\-.\s]+\z/, message: "may include letters, numbers, hyphens, spaces, or periods only"
-  validates_format_of :journal_mask, with: /\AC\d{2}\z/, message: "must be in the format C##"
+  validates_format_of :journal_mask, with: /\AC\d{2,3}\z/, message: "must be in the format C## or C###"
 
   validates :order_notification_recipient,
             format: URI::MailTo::EMAIL_REGEXP,
@@ -170,8 +170,9 @@ class Facility < ApplicationRecord
 
   def set_journal_mask
     f = Facility.all.order(journal_mask: :desc).first
-    self.journal_mask = if f&.journal_mask&.match(/^C(\d{2})$/)
-                          format("C%02d", Regexp.last_match(1).to_i + 1)
+    self.journal_mask = if f&.journal_mask&.match(/^C(\d{2,3})$/)
+                          next_number = Regexp.last_match(1).to_i + 1
+                          format("C%0#{next_number < 100 ? 2 : 3}d", next_number)
                         else
                           "C01"
                         end
