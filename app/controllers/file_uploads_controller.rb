@@ -91,11 +91,8 @@ class FileUploadsController < ApplicationController
       create_product_survey_from_url
     end
     flash[:notice] = @flash_notice if @flash_notice
-    if @redirect_to
-      redirect_to(@redirect_to)
-    else
-      render :product_survey
-    end
+
+    render :product_survey
   end
 
   def destroy
@@ -150,7 +147,6 @@ class FileUploadsController < ApplicationController
         end
         @file.save!
         @flash_notice = "Order File Template uploaded"
-        @redirect_to = product_survey_path(current_facility, @product.parameterize, @product)
       rescue => e
         @file.errors.add(:base, "Order File Template delete error: #{e.message}")
         raise ActiveRecord::Rollback
@@ -160,31 +156,33 @@ class FileUploadsController < ApplicationController
   end
 
   def create_product_survey_from_url
-    survey_param = UrlService.name.underscore.to_sym
-
-    if params[survey_param].blank? || params[survey_param][:location].blank?
+    if url_service_params.blank? || url_service_params[:location].blank?
       @survey = UrlService.new
       @survey.errors.add(:base, "No location specified")
     else
       begin
-        url = params[survey_param][:location]
-        ext = UrlService.find_or_create_by(location: url)
-        esp = ExternalServicePasser.where(passer: @product, external_service_id: ext.id).first
+        external_service = UrlService.find_or_create_by(url_service_params)
+        external_service_passer = ExternalServicePasser.where(passer: @product, external_service:).first
 
-        if esp
-          @flash_notice = "That Online Order Form already exists"
+        if external_service_passer
+          # Keep form filled skipping the id
+          @survey = external_service.dup
+          @survey.errors.add(:base, "That Online Order Form already exists")
         else
+          ExternalServicePasser.create!(passer: @product, external_service:)
           @flash_notice = "Online Order Form added"
-          ExternalServicePasser.create!(passer: @product, external_service: ext)
+          @survey = UrlService.new
         end
-
-        @redirect_to = product_survey_path(current_facility, @product.parameterize, @product)
       rescue => e
         @survey ||= UrlService.new
         @survey.errors.add(:base, "Online Order Form add error: #{e.message}")
       end
     end
     @file = @product.stored_files.new(file_type: "template")
+  end
+
+  def url_service_params
+    params.expect(url_service: %i[location admin_can_skip])
   end
 
 end

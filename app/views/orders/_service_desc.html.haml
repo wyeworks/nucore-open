@@ -12,7 +12,9 @@
         survey.edit_url(order_detail, request), class: "btn btn-default"
     - else
       = link_to t("orders.show.order_form.new"),
-        survey.new_url(order_detail, request), class: "btn js--cartLinkTrackQuantity", data: { quantity_field: "quantity#{order_detail.id}" }
+        survey.new_url(order_detail, request),
+        class: "btn btn-default js--cartLinkTrackQuantity",
+        data: { quantity_field: "quantity#{order_detail.id}" }
 
 - if order_detail.product.stored_files.template.count > 0
   .order-action
