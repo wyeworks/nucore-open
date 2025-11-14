@@ -436,8 +436,8 @@ GEM
       coffee-rails (>= 3.2.1)
       jquery-rails
       rails (>= 3.2.0)
-    net-http (0.6.0)
-      uri
+    net-http (0.8.0)
+      uri (>= 0.11.1)
     net-imap (0.5.12)
       date
       net-protocol
@@ -709,7 +709,7 @@ GEM
       kgio (~> 2.6)
       raindrops (~> 0.7)
     uniform_notifier (1.18.0)
-    uri (1.0.4)
+    uri (1.1.1)
     useragent (0.16.11)
     virtus (2.0.0)
       axiom-types (~> 0.1)
