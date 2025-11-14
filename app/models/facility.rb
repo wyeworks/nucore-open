@@ -169,7 +169,7 @@ class Facility < ApplicationRecord
   private
 
   def set_journal_mask
-    f = Facility.all.order(journal_mask: :desc).first
+    f = Facility.order(created_at: :desc).first
     self.journal_mask = if f&.journal_mask&.match(/^C(\d{2,3})$/)
                           next_number = Regexp.last_match(1).to_i + 1
                           format("C%0#{next_number < 100 ? 2 : 3}d", next_number)
