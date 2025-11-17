@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2025_09_03_124148) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_17_143245) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -705,6 +705,7 @@ ActiveRecord::Schema[7.0].define(version: 2025_09_03_124148) do
     t.integer "max_reserve_days"
     t.boolean "start_time_disabled", default: false, null: false
     t.boolean "sanger_sequencing_enabled", default: false, null: false
+    t.boolean "admin_skip_order_form", default: false, null: false
     t.index ["dashboard_token"], name: "index_products_on_dashboard_token"
     t.index ["facility_account_id"], name: "fk_facility_accounts"
     t.index ["facility_id"], name: "fk_rails_0c9fa1afbe"
