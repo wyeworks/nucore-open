@@ -35,9 +35,11 @@ RSpec.describe "Account Reconciliation", :js do
     let(:order_number) { "##{orders.first.id} - #{order_detail.id}" }
     let(:other_order_number) { "##{orders.last.id} - #{orders.last.order_details.first.id}" }
 
-    it "can search and then reconcile a credit card order" do
+    before do
       skip_if_account_unreconcilable(:credit_card)
+    end
 
+    it "can search and then reconcile a credit card order" do
       visit facility_notifications_path(facility)
       click_link "Reconcile Credit Cards"
 
@@ -81,8 +83,6 @@ RSpec.describe "Account Reconciliation", :js do
 
     context "with bulk reconciliation note" do
       it "sets the note when checkbox is checked" do
-        skip_if_account_unreconcilable(:credit_card)
-
         visit credit_cards_facility_accounts_path(facility)
         click_link "Reconcile Credit Cards"
 
@@ -104,8 +104,6 @@ RSpec.describe "Account Reconciliation", :js do
       end
 
       it "does NOT set the note when checkbox is NOT checked" do
-        skip_if_account_unreconcilable(:credit_card)
-
         visit credit_cards_facility_accounts_path(facility)
         click_link "Reconcile Credit Cards"
 
@@ -131,6 +129,10 @@ RSpec.describe "Account Reconciliation", :js do
     # This is a page-specific format
     let(:order_number) { "##{orders.first.id} - #{orders.first.order_details.first.id}" }
     let(:other_order_number) { "##{orders.last.id} - #{orders.last.order_details.first.id}" }
+
+    before do
+      skip_if_account_unreconcilable(:purchase_order)
+    end
 
     it "can search and then reconcile a PO order" do
       visit facility_notifications_path(facility)

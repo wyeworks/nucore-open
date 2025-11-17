@@ -16,6 +16,8 @@ RSpec.describe "FacilityAccountsReconciliationController" do
   end
 
   it "routes purchase_orders" do
+    skip_if_account_unreconcilable(:purchase_order)
+
     expect(get("/#{facilities_route}/test-facility/accounts/purchase_orders"))
       .to route_to(controller: "facility_accounts_reconciliation",
                    action: "index",
