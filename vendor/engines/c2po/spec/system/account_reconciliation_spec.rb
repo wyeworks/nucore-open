@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "Account Reconciliation", :js do
-  include C2poTestHelper
+  include AccountsTestHelper
 
   let(:facility) { create(:setup_facility) }
   let(:item) { create(:setup_item, facility:) }
@@ -36,7 +36,7 @@ RSpec.describe "Account Reconciliation", :js do
     let(:other_order_number) { "##{orders.last.id} - #{orders.last.order_details.first.id}" }
 
     it "can search and then reconcile a credit card order" do
-      skip_if_credit_card_unreconcilable
+      skip_if_account_unreconcilable(:credit_card)
 
       visit facility_notifications_path(facility)
       click_link "Reconcile Credit Cards"
@@ -81,7 +81,7 @@ RSpec.describe "Account Reconciliation", :js do
 
     context "with bulk reconciliation note" do
       it "sets the note when checkbox is checked" do
-        skip_if_credit_card_unreconcilable
+        skip_if_account_unreconcilable(:credit_card)
 
         visit credit_cards_facility_accounts_path(facility)
         click_link "Reconcile Credit Cards"
@@ -104,7 +104,7 @@ RSpec.describe "Account Reconciliation", :js do
       end
 
       it "does NOT set the note when checkbox is NOT checked" do
-        skip_if_credit_card_unreconcilable
+        skip_if_account_unreconcilable(:credit_card)
 
         visit credit_cards_facility_accounts_path(facility)
         click_link "Reconcile Credit Cards"

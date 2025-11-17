@@ -3,10 +3,10 @@
 require "rails_helper"
 
 RSpec.describe "FacilityAccountsReconciliationController" do
-  include C2poTestHelper
+  include AccountsTestHelper
 
   it "routes credit_cards" do
-    skip_if_credit_card_unreconcilable
+    skip_if_account_unreconcilable(:credit_card)
 
     expect(get("/#{facilities_route}/test-facility/accounts/credit_cards"))
       .to route_to(controller: "facility_accounts_reconciliation",
