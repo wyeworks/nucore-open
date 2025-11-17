@@ -46,7 +46,8 @@ Rails/ApplicationRecord:
   Exclude:
     - "db/migrate/*.rb"
     - "vendor/engines/*/db/migrate/*.rb"
+
 Metrics/BlockLength:
-  # spec/ is excluded in txi, but we need to exclude from engines as well
   Exclude:
+    - "spec/**/*.rb"
     - "vendor/engines/*/spec/**/*.rb"
