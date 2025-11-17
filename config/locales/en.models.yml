@@ -343,6 +343,7 @@ en:
         unit_net_cost: Unit Net Cost
       service:
         sanger_sequencing_enabled: Sanger Enabled
+        admin_skip_order_form: Admin can skip order forms
       stored_file:
         file_file_size: File
       user_role:

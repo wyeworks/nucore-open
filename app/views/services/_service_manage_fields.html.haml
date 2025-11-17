@@ -1,2 +1,4 @@
+= f.input :admin_skip_order_form
+
 - if current_facility.sanger_sequencing_enabled? && SettingsHelper.feature_on?(:sanger_enabled_service)
   = f.input :sanger_sequencing_enabled
