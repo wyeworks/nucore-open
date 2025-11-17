@@ -169,13 +169,15 @@ class Facility < ApplicationRecord
   private
 
   def set_journal_mask
-    f = Facility.all.order(journal_mask: :desc).first
-    self.journal_mask = if f&.journal_mask&.match(/^C(\d{2,3})$/)
-                          next_number = Regexp.last_match(1).to_i + 1
-                          format("C%0#{next_number < 100 ? 2 : 3}d", next_number)
-                        else
-                          "C01"
-                        end
+    max_number = Facility.pluck(:journal_mask)
+                         .filter_map do |mask|
+                           match = mask&.match(/^C(\d{2,3})$/)
+                           match[1].to_i if match
+                         end
+                         .max
+
+    next_number = max_number ? max_number + 1 : 1
+    self.journal_mask = format("C%0#{next_number < 100 ? 2 : 3}d", next_number)
   end
 
 end
