@@ -94,6 +94,7 @@ RSpec.describe "Placing an item order" do
 
     describe "that has a service with an order form" do
       let(:service) { FactoryBot.create(:setup_service, :with_order_form) }
+
       before do
         FactoryBot.create(:service_price_policy, price_group: PriceGroup.base, product: service)
         bundle.bundle_products.create!(product: service, quantity: 2)
@@ -102,6 +103,40 @@ RSpec.describe "Placing an item order" do
       it "adds the item as a single line item" do
         add_to_cart
         expect(page).to have_content(service.name).once
+      end
+
+      context "when the service has admin_skip_order_form flag on" do
+        before do
+          service.update(admin_skip_order_form: true)
+        end
+        context "when it's file order form" do
+          it "shows form required message" do
+            add_to_cart
+
+            expect(page).to have_content("Please upload an order form")
+            expect(page).not_to have_button("Purchase")
+          end
+        end
+
+        context "when it's a url order form" do
+          let(:external_service) { UrlService.create(location: "/some/path") }
+
+          before do
+            service.stored_files.destroy_all
+            ExternalServicePasser.create(
+              active: true,
+              external_service:,
+              passer: service,
+            )
+          end
+
+          it "shows form required when url order form" do
+            add_to_cart
+
+            expect(page).to have_content("Please complete the online order form")
+            expect(page).not_to have_button("Purchase")
+          end
+        end
       end
     end
 

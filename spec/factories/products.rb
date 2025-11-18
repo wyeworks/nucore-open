@@ -124,6 +124,15 @@ FactoryBot.define do
         create(:stored_file, :template, product: product)
       end
     end
+
+    trait :with_survey do
+      after(:create) do |product|
+        ExternalServicePasser.create(
+          external_service: UrlService.create(location: "/some/survey/path"),
+          passer: product, active: true,
+        )
+      end
+    end
   end
 
   factory :setup_instrument, class: Instrument, parent: :setup_product do
