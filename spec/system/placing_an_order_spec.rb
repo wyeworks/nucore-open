@@ -105,7 +105,10 @@ RSpec.describe "Placing an item order" do
         expect(page).to have_content(service.name).once
       end
 
-      context "when the service has admin_skip_order_form flag on" do
+      context(
+        "when the service has admin_skip_order_form flag on",
+        feature_setting: { admin_skip_order_forms: true },
+      ) do
         before do
           service.update(admin_skip_order_form: true)
         end

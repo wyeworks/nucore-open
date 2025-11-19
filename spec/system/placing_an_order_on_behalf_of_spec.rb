@@ -166,7 +166,10 @@ RSpec.describe "Placing an order on behalf of" do
         expect(page).not_to have_button("Purchase")
       end
 
-      context "when the service has the admin_skip_order_form flag on" do
+      context(
+        "when the service has the admin_skip_order_form flag on",
+        feature_setting: { admin_skip_order_forms: true },
+      ) do
         let(:service) do
           create(
             :setup_service,
