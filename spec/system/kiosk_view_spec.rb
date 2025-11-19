@@ -115,10 +115,11 @@ RSpec.describe "Launching Kiosk View", :js, :disable_requests_local, feature_set
         expect(page).to have_content(login_label)
         click_link "Add Accessories"
         wait_for_ajax
+        wait_for { page.has_field?(accessory.name) }
         check accessory.name
         wait_for { page.has_field?("kiosk_accessories_#{accessory.id}_quantity") }
         fill_in "kiosk_accessories_#{accessory.id}_quantity", with: "3"
-        wait_for { page.has_field?("kiosk_reservations_password") }
+        wait_for { page.has_field?("kiosk_accessories_password") }
         fill_in "Password", with: password
         click_button "Save Changes"
 
@@ -133,10 +134,11 @@ RSpec.describe "Launching Kiosk View", :js, :disable_requests_local, feature_set
         expect(page).to have_content(login_label)
         click_link "Add Accessories"
         wait_for_ajax
+        wait_for { page.has_field?(accessory.name) }
         check accessory.name
         wait_for { page.has_field?("kiosk_accessories_#{accessory.id}_quantity") }
         fill_in "kiosk_accessories_#{accessory.id}_quantity", with: "3"
-        wait_for { page.has_field?("kiosk_reservations_password") }
+        wait_for { page.has_field?("kiosk_accessories_password") }
         fill_in "Password", with: "not-the-password"
         click_button "Save Changes"
         expect(page).not_to have_content("1 accessory added")
@@ -150,10 +152,11 @@ RSpec.describe "Launching Kiosk View", :js, :disable_requests_local, feature_set
         expect(page).to have_content(login_label)
         click_link "End Reservation"
         wait_for_ajax
+        wait_for { page.has_field?(accessory.name) }
         check accessory.name
         wait_for { page.has_field?("kiosk_accessories_#{accessory.id}_quantity") }
         fill_in "kiosk_accessories_#{accessory.id}_quantity", with: "3"
-        wait_for { page.has_field?("kiosk_reservations_password") }
+        wait_for { page.has_field?("kiosk_accessories_password") }
         fill_in "Password", with: password
         click_button "Save Changes"
 
@@ -171,6 +174,7 @@ RSpec.describe "Launching Kiosk View", :js, :disable_requests_local, feature_set
         check accessory.name
         wait_for_ajax
         fill_in "kiosk_accessories_#{accessory.id}_quantity", with: "3"
+        wait_for { page.has_field?("kiosk_accessories_password") }
         fill_in "Password", with: "not-the-password"
         click_button "Save Changes"
 
