@@ -8,8 +8,8 @@ RSpec.describe "Placing an item order" do
   let(:facility) { product.facility }
   let!(:price_policy) do
     create(:item_price_policy,
-                      price_group: PriceGroup.base, product: product,
-                      unit_cost: 33.25)
+           price_group: PriceGroup.base, product: product,
+           unit_cost: 33.25)
   end
   let!(:account_price_group_member) do
     create(:account_price_group_member, account: account, price_group: price_policy.price_group)
@@ -157,7 +157,7 @@ RSpec.describe "Placing an item order" do
       let!(:instrument) { create(:setup_instrument, facility: facility) }
       let!(:price_policy) do
         create(:instrument_price_policy,
-                          price_group: PriceGroup.base, product: instrument)
+               price_group: PriceGroup.base, product: instrument)
       end
 
       before do
