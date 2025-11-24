@@ -169,6 +169,8 @@ class Statement < ApplicationRecord
     "#{account_id}-#{id}"
   end
 
+  delegate :remittance_information, to: :account, prefix: true
+
   private
 
   def set_invoice_number

@@ -48,7 +48,8 @@
           - colspan_for_total += 1
         %td.user-order-detail.order-note
           .order-detail-description
-            = OrderDetailPresenter.new(order_detail).description_as_html
+            - order_detail_presenter = OrderDetailPresenter.new(order_detail)
+            = order_detail_presenter.description_as_html
             - order_detail.extend PriceDisplayment
             = "(#{order_detail.wrapped_quantity})".html_safe unless order_detail.problem?
             - if order_detail.time_data.present?
@@ -64,15 +65,14 @@
         - if @account.nil? && controller_name != "projects"
           - if SettingsHelper.feature_on?(:billing_table_price_groups)
             %td= order_detail.account.owner_user
-            %td= order_detail.account
+            %td= order_detail_presenter.account_description
             %td= order_detail.price_policy&.price_group&.name
             - colspan_for_total += 3
           - else
-            %td= order_detail.account
+            %td= order_detail_presenter.account_description
             %td= order_detail.account.owner_user
             - colspan_for_total += 2
         %td.currency
-          - order_detail_presenter = OrderDetailPresenter.new(order_detail)
           = order_detail_presenter.wrapped_total
           - if controller_name == "projects"
             %br
