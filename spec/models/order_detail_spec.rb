@@ -390,6 +390,30 @@ RSpec.describe OrderDetail do
                                                  order_detail: @order_detail, created_by: @user)
       expect(@order_detail.valid_service_meta?).to be true
     end
+
+    context "when product has admin_skip_order_form flag" do
+      let(:external_service) { UrlService.create(location: "/some/path") }
+
+      before do
+        @service.update(admin_skip_order_form: true)
+        @order_detail.reload
+
+        ExternalServicePasser.create(
+          external_service:,
+          passer: @service,
+          active: true,
+        )
+      end
+
+      it "is not valid as user" do
+        expect(@order_detail.valid_service_meta?).to be false
+      end
+
+      it "is valid as admin" do
+        @order_detail.being_purchased_by_admin = true
+        expect(@order_detail.valid_service_meta?).to be true
+      end
+    end
   end
 
   context "instrument" do

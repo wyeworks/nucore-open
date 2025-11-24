@@ -600,7 +600,8 @@ class OrderDetail < ApplicationRecord
   end
 
   def validate_service_meta
-    return nil unless product.is_a?(Service)
+    return unless product.is_a?(Service)
+    return if being_purchased_by_admin && product.admin_skip_order_form
 
     requires_upload = !product.stored_files.template.empty?
     requires_survey = product.active_survey?

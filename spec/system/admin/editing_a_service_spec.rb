@@ -21,6 +21,42 @@ RSpec.describe "Editing a Service" do
     expect(page).to have_content("Some description")
   end
 
+  describe "admin_skip_order_form field" do
+    context(
+      "when the feature flag is on",
+      feature_setting: { admin_skip_order_forms: true },
+    ) do
+      it "shows the field on show and edit" do
+        visit manage_facility_service_path(facility, service)
+
+        expect(page).to have_content(
+          Service.human_attribute_name(:admin_skip_order_form)
+        )
+
+        click_link "Edit"
+
+        expect(page).to have_field("service[admin_skip_order_form]")
+      end
+    end
+
+    context(
+      "when the feature flag is off",
+      feature_setting: { admin_skip_order_forms: false },
+    ) do
+      it "does not show the field on show and edit" do
+        visit manage_facility_service_path(facility, service)
+
+        expect(page).not_to have_content(
+          Service.human_attribute_name(:admin_skip_order_form)
+        )
+
+        click_link "Edit"
+
+        expect(page).not_to have_field(:admin_skip_order_form)
+      end
+    end
+  end
+
   describe "sanger enable change", feature_setting: { sanger_enabled_service: true } do
     it "does not show sanger enable if facility is not sanger enabled" do
       facility.update(sanger_sequencing_enabled: false)

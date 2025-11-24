@@ -6,7 +6,7 @@ class ServicesController < ProductsCommonController
   private
 
   def permitted_params
-    params = super
+    params = super + %i[admin_skip_order_form]
 
     if current_facility.sanger_sequencing_enabled?
       params += %i[sanger_sequencing_enabled]
