@@ -15,14 +15,12 @@ class UsersController < ApplicationController
   include UsersHelper
   include TextHelpers::Translation
 
-  customer_tab :password
   admin_tab     :all
-  before_action :init_current_facility, except: [:password, :password_reset]
-  skip_before_action :authenticate_user!, only: [:password_reset]
+  before_action :init_current_facility
   before_action :check_acting_as
 
-  load_and_authorize_resource except: [:create, :password, :password_reset, :edit, :update, :show], id_param: :user_id
-  load_and_authorize_resource only: [:edit, :update, :show, :suspend, :unsuspend, :unexpire], id_param: :id
+  load_and_authorize_resource except: [:create, :edit, :update, :show], id_param: :user_id
+  load_and_authorize_resource only: [:edit, :update, :show, :unexpire], id_param: :id
 
   layout "two_column"
 

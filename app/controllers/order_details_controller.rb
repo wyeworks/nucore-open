@@ -4,7 +4,7 @@ class OrderDetailsController < ApplicationController
 
   customer_tab  :all
 
-  before_action :check_acting_as, except: [:order_file, :upload_order_file, :remove_order_file]
+  before_action :check_acting_as
   before_action :init_order_detail
   before_action :set_active_tab
   before_action :prevent_edit_based_on_state, only: [:edit, :update]

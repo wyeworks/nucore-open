@@ -2,15 +2,13 @@
 
 class BundleProductsController < ApplicationController
 
-  customer_tab  :show
   admin_tab     :create, :destroy, :new, :edit, :index, :update, :manage
-  skip_before_action :authenticate_user!, only: :show
   before_action :check_acting_as
   before_action :init_current_facility
   before_action :init_bundle
   before_action :init_bundle_product, except: [:new, :create, :index]
 
-  load_and_authorize_resource except: :show, through: :bundle
+  load_and_authorize_resource through: :bundle
 
   layout "two_column"
 
