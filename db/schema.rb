@@ -324,6 +324,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_143245) do
     t.integer "file_file_size"
     t.datetime "file_updated_at", precision: nil
     t.datetime "journal_date", precision: nil, null: false
+    t.datetime "journaled_at"
     t.index ["facility_id"], name: "index_journals_on_facility_id"
   end
 
