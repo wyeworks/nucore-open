@@ -1,8 +1,8 @@
 # paperclip:
 #   storage: s3
 #   s3_credentials:
-#     access_key_id: <%= ENV.fetch("AWS_ACCESS_KEY", Rails.application.secrets.dig(:paperclip, :aws_access_key_id)) %>
-#     secret_access_key: <%= ENV.fetch("AWS_SECRET_ACCESS_KEY", Rails.application.secrets.dig(:paperclip, :aws_secret_access_key)) %>
+#     access_key_id: <%= ENV.fetch("AWS_ACCESS_KEY", nil) %>
+#     secret_access_key: <%= ENV.fetch("AWS_SECRET_ACCESS_KEY", nil) %>
 #   s3_region: us-east-1
 #   s3_permissions: private
 #   bucket: "nucore-production"

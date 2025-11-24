@@ -11,4 +11,5 @@ class ExternalServicePasser < ApplicationRecord
 
   validates_presence_of :external_service_id, :passer_id
 
+  scope :actives, -> { where(active: true) }
 end

@@ -30,6 +30,14 @@ module SplitAccounts
       OrderDetail.primary_key
     end
 
+    def self.has_query_constraints?
+      OrderDetail.has_query_constraints?
+    end
+
+    def self.composite_primary_key?
+      OrderDetail.composite_primary_key?
+    end
+
   end
 
 end

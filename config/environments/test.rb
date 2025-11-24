@@ -111,11 +111,15 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order_status
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :reservation
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :statement
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Reservation", association: :order
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Service", association: :current_offline_reservations
     Bullet.add_safelist type: :n_plus_one_query, class_name: "SecureRoomPricePolicy", association: :price_group
     Bullet.add_safelist type: :n_plus_one_query, class_name: "SecureRoomPricePolicy", association: :duration_rates
     Bullet.add_safelist type: :n_plus_one_query, class_name: "SecureRoom", association: :alert
+
+    # Rails 7.2 ActiveStorage automatically includes :record association
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "ActiveStorage::Attachment", association: :record
   end
 
   # Settings specified here will take precedence over those in config/application.rb.
@@ -124,7 +128,7 @@ Rails.application.configure do
   # test suite. You never need to work with it otherwise. Remember that
   # your test database is "scratch space" for the test suite and is wiped
   # and recreated between test runs. Don't rely on the data there!
-  config.cache_classes = true
+  config.enable_reloading = false
 
   # Do not eager load code on boot. This avoids loading your whole application
   # just for the purpose of running a single test. If you are using a tool that
@@ -187,4 +191,5 @@ Rails.application.configure do
   Delayed::Worker.delay_jobs = false
 
   config.assets.compile = false if ENV["RAILS_TEST_COMPILED_ASSETS"].present?
+  config.active_record.async_query_executor = :inline
 end

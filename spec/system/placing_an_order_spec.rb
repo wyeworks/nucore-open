@@ -3,18 +3,18 @@
 require "rails_helper"
 
 RSpec.describe "Placing an item order" do
-  let!(:product) { FactoryBot.create(:setup_item) }
-  let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user) }
+  let!(:product) { create(:setup_item) }
+  let!(:account) { create(:nufs_account, :with_account_owner, owner: user) }
   let(:facility) { product.facility }
   let!(:price_policy) do
-    FactoryBot.create(:item_price_policy,
-                      price_group: PriceGroup.base, product: product,
-                      unit_cost: 33.25)
+    create(:item_price_policy,
+           price_group: PriceGroup.base, product: product,
+           unit_cost: 33.25)
   end
   let!(:account_price_group_member) do
-    FactoryBot.create(:account_price_group_member, account: account, price_group: price_policy.price_group)
+    create(:account_price_group_member, account: account, price_group: price_policy.price_group)
   end
-  let(:user) { FactoryBot.create(:user) }
+  let(:user) { create(:user) }
 
   before do
     login_as user
@@ -63,7 +63,7 @@ RSpec.describe "Placing an item order" do
   end
 
   describe "adding a bundle" do
-    let(:bundle) { FactoryBot.create(:bundle, facility: facility) }
+    let(:bundle) { create(:bundle, facility: facility) }
 
     def add_to_cart
       visit facility_bundle_path(facility.url_name, bundle.url_name)
@@ -73,10 +73,10 @@ RSpec.describe "Placing an item order" do
     end
 
     describe "that has multiple items" do
-      let!(:product2) { FactoryBot.create(:setup_item, facility: facility) }
+      let!(:product2) { create(:setup_item, facility: facility) }
 
       before do
-        FactoryBot.create(:item_price_policy, price_group: PriceGroup.base, product: product2)
+        create(:item_price_policy, price_group: PriceGroup.base, product: product2)
         bundle.bundle_products.create!(product: product, quantity: 2)
         bundle.bundle_products.create!(product: product2, quantity: 3)
       end
@@ -93,9 +93,10 @@ RSpec.describe "Placing an item order" do
     end
 
     describe "that has a service with an order form" do
-      let(:service) { FactoryBot.create(:setup_service, :with_order_form) }
+      let(:service) { create(:setup_service, :with_order_form) }
+
       before do
-        FactoryBot.create(:service_price_policy, price_group: PriceGroup.base, product: service)
+        create(:service_price_policy, price_group: PriceGroup.base, product: service)
         bundle.bundle_products.create!(product: service, quantity: 2)
       end
 
@@ -103,14 +104,42 @@ RSpec.describe "Placing an item order" do
         add_to_cart
         expect(page).to have_content(service.name).once
       end
+
+      context(
+        "when the service has admin_skip_order_form flag on",
+        feature_setting: { admin_skip_order_forms: true },
+      ) do
+        before do
+          service.update(admin_skip_order_form: true)
+        end
+        context "when it's file order form" do
+          it "shows form required message" do
+            add_to_cart
+
+            expect(page).to have_content("Please upload an order form")
+            expect(page).not_to have_button("Purchase")
+          end
+        end
+
+        context "when it's a url order form" do
+          let(:service) { create(:setup_service, :with_survey) }
+
+          it "shows form required when url order form" do
+            add_to_cart
+
+            expect(page).to have_content("Please complete the online order form")
+            expect(page).not_to have_button("Purchase")
+          end
+        end
+      end
     end
 
     describe "that has a timed service" do
-      let(:timed_service) { FactoryBot.create(:setup_timed_service) }
+      let(:timed_service) { create(:setup_timed_service) }
       let(:quantity) { 3 }
 
       before do
-        FactoryBot.create(:timed_service_price_policy, price_group: PriceGroup.base, product: timed_service)
+        create(:timed_service_price_policy, price_group: PriceGroup.base, product: timed_service)
         bundle.bundle_products.create!(product: timed_service, quantity: quantity)
       end
 
@@ -125,10 +154,10 @@ RSpec.describe "Placing an item order" do
     end
 
     describe "that has a multiple of instruments" do
-      let!(:instrument) { FactoryBot.create(:setup_instrument, facility: facility) }
+      let!(:instrument) { create(:setup_instrument, facility: facility) }
       let!(:price_policy) do
-        FactoryBot.create(:instrument_price_policy,
-                          price_group: PriceGroup.base, product: instrument)
+        create(:instrument_price_policy,
+               price_group: PriceGroup.base, product: instrument)
       end
 
       before do
@@ -163,13 +192,13 @@ RSpec.describe "Placing an item order" do
   end
 
   describe "when the order's account payment source is invalid" do
-    let(:other_user) { FactoryBot.create(:user) }
-    let(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: other_user) }
-    let!(:account_user) { FactoryBot.create(:account_user, :purchaser, account: account, user: user) }
-    let!(:other_account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: other_user) }
-    let!(:other_account_user) { FactoryBot.create(:account_user, :purchaser, account: other_account, user: user) }
+    let(:other_user) { create(:user) }
+    let(:account) { create(:nufs_account, :with_account_owner, owner: other_user) }
+    let!(:account_user) { create(:account_user, :purchaser, account: account, user: user) }
+    let!(:other_account) { create(:nufs_account, :with_account_owner, owner: other_user) }
+    let!(:other_account_user) { create(:account_user, :purchaser, account: other_account, user: user) }
     let!(:other_account_price_group_member) do
-      FactoryBot.create(:account_price_group_member, account: other_account, price_group: price_policy.price_group)
+      create(:account_price_group_member, account: other_account, price_group: price_policy.price_group)
     end
 
     def add_to_cart(payment_source)

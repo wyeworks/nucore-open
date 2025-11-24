@@ -33,6 +33,7 @@ class FileUploadsController < ApplicationController
         .where(file_type: params[:file_type])
         .find(params[:id])
         .download_url,
+      allow_other_host: true
     )
   end
 

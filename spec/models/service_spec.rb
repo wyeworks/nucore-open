@@ -22,4 +22,27 @@ RSpec.describe Service do
 
   it_should_behave_like "NonReservationProduct", :service
 
+  describe "#active_survey" do
+    let(:service) { create(:setup_service) }
+    let(:url_service) { UrlService.create(location: "/some/location") }
+    let(:url_service2) { UrlService.create(location: "/some/location") }
+
+    before do
+      ExternalServicePasser.create(
+        external_service: url_service,
+        passer: service,
+        active: true,
+      )
+      ExternalServicePasser.create(
+        external_service: url_service2,
+        passer: service,
+        active: false,
+      )
+    end
+
+    it "returns a url_service" do
+      expect(service.active_survey).to eq(url_service)
+    end
+  end
+
 end

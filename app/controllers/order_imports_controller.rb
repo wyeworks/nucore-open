@@ -32,7 +32,7 @@ class OrderImportsController < ApplicationController
 
   def error_report
     if order_import.error_file_present?
-      redirect_to order_import.error_file_download_url
+      redirect_to order_import.error_file_download_url, allow_other_host: true
     else
       raise ActiveRecord::RecordNotFound
     end

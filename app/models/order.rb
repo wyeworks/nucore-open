@@ -4,11 +4,11 @@ class Order < ApplicationRecord
 
   belongs_to :user
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
-  belongs_to :merge_order, class_name: "Order", foreign_key: :merge_with_order_id
-  belongs_to :account
-  belongs_to :facility
-  belongs_to :order_import
-  belongs_to :cross_core_project, class_name: "Project"
+  belongs_to :merge_order, class_name: "Order", foreign_key: :merge_with_order_id, optional: true
+  belongs_to :account, optional: true
+  belongs_to :facility, optional: true
+  belongs_to :order_import, optional: true
+  belongs_to :cross_core_project, class_name: "Project", optional: true
   has_many   :order_details, inverse_of: :order, dependent: :destroy
   has_many :products, through: :order_details
 

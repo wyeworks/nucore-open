@@ -19,6 +19,7 @@ module SplitAccounts
     def update_suspended_at_for_parent_split_accounts
       if parent_split_accounts.any? && saved_change_to_suspended_at?
         parent_split_accounts.each do |split_account|
+          split_account.splits.reload
           split_account.set_suspended_at_from_subaccounts
           split_account.save
         end
@@ -28,6 +29,7 @@ module SplitAccounts
     def update_expires_at_for_parent_split_accounts
       if parent_split_accounts.any? && saved_change_to_expires_at?
         parent_split_accounts.each do |split_account|
+          split_account.splits.reload
           split_account.set_expires_at_from_subaccounts
           split_account.save
         end

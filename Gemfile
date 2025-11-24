@@ -5,7 +5,7 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
-gem "rails", "~> 7.0.8"
+gem "rails", "~> 8.0.4"
 gem "sprockets"
 gem "sprockets-rails"
 gem "config"
@@ -26,10 +26,6 @@ gem 'csv'
 gem "benchmark"
 gem "reline"
 gem "irb"
-
-# Remove once we upgrade to rails 7.2.X or greater
-# See: github.com/rails/rails/pull/54264
-gem "concurrent-ruby", "< 1.3.5"
 
 ## database
 gem "mysql2"
@@ -81,7 +77,7 @@ gem "rubyzip"
 gem "prawn-rails"
 
 ## Email
-gem "mailgun-ruby", "~>1.3.10"
+gem "mailgun-ruby", "~>1.4.0"
 
 ## other
 gem "delayed_job_active_record"
@@ -135,7 +131,9 @@ group :development, :test do
   gem "rspec-rails"
   gem "rspec-activejob"
   gem "selenium-webdriver"
-  gem "teaspoon-jasmine"
+  # Using GitHub version that supports Rack 3 for Rails 7.2
+  gem "teaspoon", github: "jejacks0n/teaspoon"
+  gem "teaspoon-jasmine", github: "jejacks0n/teaspoon"
   gem "webrick"
 end
 

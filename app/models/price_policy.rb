@@ -5,8 +5,8 @@ class PricePolicy < ApplicationRecord
   include Nucore::Database::DateHelper
 
   belongs_to :price_group
-  belongs_to :product
-  belongs_to :created_by, class_name: "User"
+  belongs_to :product, optional: true
+  belongs_to :created_by, class_name: "User", optional: true
   has_many :order_details
   has_many :duration_rates, dependent: :destroy
 
@@ -188,6 +188,16 @@ class PricePolicy < ApplicationRecord
 
   def daily_booking?
     product&.daily_booking?
+  end
+
+  # The cost applied to a unit of
+  # whatever quantity is being priced
+  def unit_net_cost
+    return unless defined?(rate_field) && defined?(subsidy_field)
+
+    return if self[rate_field].blank?
+
+    self[rate_field] - (self[subsidy_field] || 0.0)
   end
 
   private

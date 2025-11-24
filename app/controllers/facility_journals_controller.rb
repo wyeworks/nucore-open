@@ -126,7 +126,7 @@ class FacilityJournalsController < ApplicationController
         headers["Content-Disposition"] = "attachment; filename=\"#{@filename}.xml\""
       end
 
-      format.xls { redirect_to @journal.download_url }
+      format.xls { redirect_to @journal.download_url, allow_other_host: true }
 
       # Fallback for other formats
       format.any do

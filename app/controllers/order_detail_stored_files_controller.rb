@@ -10,7 +10,7 @@ class OrderDetailStoredFilesController < ApplicationController
   authorize_resource class: OrderDetail
 
   def sample_results
-    redirect_to @order_detail.stored_files.sample_result.find(params[:id]).download_url
+    redirect_to @order_detail.stored_files.sample_result.find(params[:id]).download_url, allow_other_host: true
   end
 
   def sample_results_zip
@@ -22,7 +22,7 @@ class OrderDetailStoredFilesController < ApplicationController
   end
 
   def template_results
-    redirect_to @order_detail.stored_files.template_result.find(params[:id]).download_url
+    redirect_to @order_detail.stored_files.template_result.find(params[:id]).download_url, allow_other_host: true
   end
 
   # GET /orders/:order_id/order_details/:order_detail_id/order_file

@@ -89,6 +89,9 @@ class AccountUser < ApplicationRecord
   end
 
   def validate_account_has_owner
+    # Only validate if we're not adding an owner
+    return if owner? && !deleted_at?
+
     errors.add(:base, :account_missing_owner) if account&.missing_owner?
   end
 
