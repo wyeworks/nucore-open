@@ -143,6 +143,7 @@ RSpec.describe "Placing an order on behalf of" do
         product: service,
         price_group:,
       )
+      account.price_group_members.create(price_group:)
       create(
         :order_detail, account:,
                        order:, product: service,
