@@ -3,6 +3,7 @@
 class FacilityAccountsController < ApplicationController
 
   include AccountSuspendActions
+  include AccountScopeFiltering
   include SearchHelper
   include CsvEmailAction
 
@@ -85,27 +86,23 @@ class FacilityAccountsController < ApplicationController
   # GET/POST /facilities/:facility_id/accounts/search_results
   def search_results
     account_scope = Account.for_facility(current_facility)
+    filter_params = {
+      account_type: params[:account_type],
+      suspended: params[:suspended],
+      account_status: params[:account_status],
+    }
+    account_scope = apply_account_filters(account_scope, filter_params)
 
-    if SettingsHelper.feature_on?(:account_tabs)
-      if params[:account_type].present?
-        account_scope = account_scope.where(type: params[:account_type])
+    if SettingsHelper.feature_on?(:account_tabs) && params[:search_term].blank?
+      respond_to do |format|
+        format.html do
+          @accounts = account_scope.paginate(page: params[:page])
+          render layout: false
+        end
+        format.csv { export_accounts_csv("") }
       end
 
-      account_scope = if params[:suspended] == "true"
-                        account_scope.suspended
-                      elsif params[:account_status] == "active"
-                        account_scope.active
-                      elsif params[:account_status] == "expired"
-                        account_scope.expired.not_suspended
-                      else
-                        account_scope.not_suspended
-                      end
-
-      if params[:search_term].blank?
-        @accounts = account_scope.paginate(page: params[:page])
-
-        return render layout: false
-      end
+      return
     end
 
     searcher = AccountSearcher.new(params[:search_term], scope: account_scope)
@@ -118,11 +115,7 @@ class FacilityAccountsController < ApplicationController
           @accounts = @accounts.paginate(page: params[:page])
           render layout: false
         end
-        format.csv do
-          yield_email_and_respond_for_report do |email|
-            AccountSearchResultMailer.search_result(email, params[:search_term], SerializableFacility.new(current_facility)).deliver_later
-          end
-        end
+        format.csv { export_accounts_csv(params[:search_term]) }
       end
     else
       flash.now[:errors] = "Search terms must be 3 or more characters."
@@ -217,6 +210,22 @@ class FacilityAccountsController < ApplicationController
   def set_account_types
     if SettingsHelper.feature_on?(:account_tabs)
       @account_types = Account.config.account_types
+    end
+  end
+
+  def export_accounts_csv(search_term)
+    filter_params = if SettingsHelper.feature_on?(:account_tabs)
+                      {
+                        account_type: params[:account_type],
+                        suspended: params[:suspended],
+                        account_status: params[:account_status],
+                      }
+                    else
+                      {}
+                    end
+
+    yield_email_and_respond_for_report do |email|
+      AccountSearchResultMailer.search_result(email, search_term, SerializableFacility.new(current_facility), filter_params:).deliver_later
     end
   end
 
