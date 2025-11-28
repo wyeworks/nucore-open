@@ -4,7 +4,7 @@
 
 %div{class: modal? ? "modal-header" : ""}
   = modal_close_button if modal?
-  %h3= "Order ##{@order_detail} #{@order_detail.product}"
+  %h3= "Order ##{@order_detail} #{@order_detail.product_name}"
 
 = render "shared_details"
 
