@@ -3,7 +3,6 @@
 class FacilityAccountsController < ApplicationController
 
   include AccountSuspendActions
-  include AccountScopeFiltering
   include SearchHelper
   include CsvEmailAction
 
@@ -91,9 +90,9 @@ class FacilityAccountsController < ApplicationController
       suspended: params[:suspended],
       account_status: params[:account_status],
     }
-    account_scope = apply_account_filters(account_scope, filter_params)
 
     if SettingsHelper.feature_on?(:account_tabs) && params[:search_term].blank?
+      account_scope = AccountSearcher.new("", scope: account_scope, filter_params:).filtered_scope
       respond_to do |format|
         format.html do
           @accounts = account_scope.paginate(page: params[:page])
@@ -105,7 +104,7 @@ class FacilityAccountsController < ApplicationController
       return
     end
 
-    searcher = AccountSearcher.new(params[:search_term], scope: account_scope)
+    searcher = AccountSearcher.new(params[:search_term], scope: account_scope, filter_params:)
 
     if searcher.valid?
       @accounts = searcher.results
