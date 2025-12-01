@@ -18,13 +18,17 @@ class InstrumentStatusFetcher
   # Returns the updated InstrumentStatus.
   def self.refresh_status(instrument)
     return nil unless instrument.relay&.networked_relay?
-    return InstrumentStatus.new(on: true, instrument: instrument) unless SettingsHelper.relays_enabled_for_admin?
+
+    # When relays are disabled, save status as "on" without polling
+    unless SettingsHelper.relays_enabled_for_admin?
+      return InstrumentStatus.set_status_for(instrument, is_on: true)
+    end
 
     begin
       is_on = instrument.relay.get_status
       InstrumentStatus.set_status_for(instrument, is_on: is_on)
     rescue => e
-      status = instrument.current_instrument_status || InstrumentStatus.new(instrument: instrument)
+      status = instrument.instrument_status || InstrumentStatus.new(instrument: instrument)
       status.error_message = e.message
       status
     end
@@ -33,21 +37,20 @@ class InstrumentStatusFetcher
   private
 
   def instruments
-    @facility.instruments.order(:id).includes(:relay, :instrument_statuses).select { |instrument| instrument.relay&.networked_relay? }
+    @facility.instruments.order(:id).includes(:relay, :instrument_status).select { |instrument| instrument.relay&.networked_relay? }
   end
 
   # Returns the cached status from the database without polling the relay.
   def cached_status_for(instrument)
-    # Always return true/on if the relay feature is disabled
-    return InstrumentStatus.new(on: true, instrument: instrument) unless SettingsHelper.relays_enabled_for_admin?
+    status = instrument.instrument_status
 
-    status = instrument.current_instrument_status
-    if status
-      status
-    else
-      # No cached status exists - return unknown state
-      InstrumentStatus.new(instrument: instrument, is_on: nil)
+    # If relays are disabled, return cached status or create a new "on" status
+    unless SettingsHelper.relays_enabled_for_admin?
+      return status || InstrumentStatus.new(on: true, instrument: instrument)
     end
+
+    # Return cached status or unknown state if none exists
+    status || InstrumentStatus.new(instrument: instrument, is_on: nil)
   end
 
 end

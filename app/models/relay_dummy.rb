@@ -4,7 +4,7 @@ class RelayDummy < Relay
 
   def get_status
     return @active unless @active.nil?
-    instrument.current_instrument_status.try(:is_on?)
+    instrument.instrument_status.try(:is_on?)
   end
 
   def activate

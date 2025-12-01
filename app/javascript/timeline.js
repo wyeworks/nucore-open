@@ -113,7 +113,7 @@ $(function() {
       var updatedAt = new Date(stat.updated_at);
       $refreshBtn.find('.relay_updated_at').text(formatRelativeTime(updatedAt));
     } else {
-      $refreshBtn.find('.relay_updated_at').text('');
+      $refreshBtn.find('.relay_updated_at').text('Never');
     }
     $refreshBtn.removeClass("loading").prop("disabled", false);
   }
@@ -155,7 +155,6 @@ $(function() {
       error: function(xhr) {
         $btn.removeClass("loading").prop("disabled", false);
         $checkbox.parent().removeClass("loading");
-        alert("Failed to refresh status");
       },
       dataType: 'json'
     });
@@ -166,11 +165,9 @@ $(function() {
     e.preventDefault();
     var $btn = $(this);
 
-    // Disable button and show loading state
     $btn.addClass("loading").prop("disabled", true);
     $btn.find('.fa-refresh').addClass("fa-spin");
 
-    // Show loading state on all relay checkboxes and individual refresh buttons
     $('.relay_checkbox').addClass("loading");
     $('.relay_refresh_btn').addClass("loading").prop("disabled", true);
 
@@ -189,7 +186,6 @@ $(function() {
         $btn.find('.fa-refresh').removeClass("fa-spin");
         $('.relay_checkbox').removeClass("loading");
         $('.relay_refresh_btn').removeClass("loading").prop("disabled", false);
-        alert("Failed to refresh statuses");
       },
       dataType: 'json'
     });

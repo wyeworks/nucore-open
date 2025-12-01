@@ -500,7 +500,7 @@ RSpec.describe InstrumentsController, type: :controller do
             do_request
           end.not_to change(InstrumentStatus, :count)
 
-          expect(instrument_with_relay.reload.current_instrument_status).to be_on
+          expect(instrument_with_relay.reload.instrument_status).to be_on
         end
 
         it "returns the status as JSON" do
@@ -546,7 +546,7 @@ RSpec.describe InstrumentsController, type: :controller do
             do_request
           end.to change(InstrumentStatus, :count).by(1)
 
-          expect(instrument_with_relay.current_instrument_status).to be_on
+          expect(instrument_with_relay.instrument_status).to be_on
         end
 
         context "with instrument_ids filter" do

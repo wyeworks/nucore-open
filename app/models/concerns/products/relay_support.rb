@@ -6,7 +6,7 @@ module Products::RelaySupport
 
   included do
     has_one :relay, inverse_of: :instrument, dependent: :destroy
-    has_many :instrument_statuses, foreign_key: "instrument_id", inverse_of: :instrument
+    has_one :instrument_status, foreign_key: "instrument_id", inverse_of: :instrument
 
     accepts_nested_attributes_for :relay
   end
@@ -14,11 +14,6 @@ module Products::RelaySupport
   # control mechanism for instrument
   def control_mechanism
     relay.try(:control_mechanism)
-  end
-
-  def current_instrument_status
-    # With the unique index on instrument_id, there's only one status per instrument
-    instrument_statuses.first
   end
 
   def has_real_relay?

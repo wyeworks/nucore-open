@@ -57,6 +57,7 @@ RSpec.describe InstrumentStatusFetcher do
 
       expect(status).to be_on
       expect(status).to be_persisted
+      expect(status.updated_at).to be_present
     end
 
     it "updates an existing status instead of creating a new one" do
@@ -66,7 +67,7 @@ RSpec.describe InstrumentStatusFetcher do
       described_class.refresh_status(instrument_with_relay)
 
       expect(InstrumentStatus.where(instrument: instrument_with_relay).count).to eq(1)
-      expect(instrument_with_relay.current_instrument_status).to be_on
+      expect(instrument_with_relay.reload.instrument_status).to be_on
     end
 
     it "handles errors gracefully" do
@@ -100,6 +101,20 @@ RSpec.describe InstrumentStatusFetcher do
       expect_any_instance_of(RelaySynaccessRevA).not_to receive(:query_status)
       status = described_class.refresh_status(instrument_with_relay)
       expect(status).to be_on
+    end
+
+    it "refresh_status saves status with updated_at" do
+      status = described_class.refresh_status(instrument_with_relay)
+      expect(status).to be_persisted
+      expect(status.updated_at).to be_present
+    end
+
+    it "statuses returns status with updated_at" do
+      # First refresh to create a status
+      described_class.refresh_status(instrument_with_relay)
+
+      status = statuses.find { |s| s.instrument == instrument_with_relay }
+      expect(status.updated_at).to be_present
     end
   end
 end

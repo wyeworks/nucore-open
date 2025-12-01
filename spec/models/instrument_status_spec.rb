@@ -18,7 +18,7 @@ RSpec.describe InstrumentStatus do
         described_class.set_status_for(instrument, is_on: false)
       end.not_to change(described_class, :count)
 
-      expect(instrument.current_instrument_status).not_to be_on
+      expect(instrument.reload.instrument_status).not_to be_on
     end
 
     it "updates the updated_at timestamp" do

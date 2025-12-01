@@ -76,7 +76,6 @@ class InstrumentsController < ProductsCommonController
   def instrument_statuses
     instruments = current_facility.instruments.includes(:relay).select { |i| i.relay&.networked_relay? }
 
-    # Filter by instrument_ids if provided
     if params[:instrument_ids].present?
       instrument_ids = Array(params[:instrument_ids]).map(&:to_i)
       instruments = instruments.select { |i| instrument_ids.include?(i.id) }
@@ -88,7 +87,7 @@ class InstrumentsController < ProductsCommonController
                              end
                            else
                              instruments.map do |instrument|
-                               instrument.current_instrument_status || InstrumentStatus.new(instrument: instrument, is_on: nil)
+                               instrument.instrument_status || InstrumentStatus.new(instrument: instrument, is_on: nil)
                              end
                            end
     render json: @instrument_statuses
@@ -106,7 +105,6 @@ class InstrumentsController < ProductsCommonController
         status = (params[:switch] == "on" ? relay.activate : relay.deactivate)
       end
 
-      # Update or create a single status record for this instrument
       @status = InstrumentStatus.set_status_for(@product, is_on: status)
     rescue => e
       logger.error "ERROR: #{e.message}"
