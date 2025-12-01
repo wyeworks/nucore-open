@@ -237,6 +237,69 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
         expect(assigns(:accounts)).to be_nil
         expect(flash.now[:errors]).to be_present
       end
+
+      context "with CSV format" do
+        it "enqueues AccountSearchResultMailer with search term" do
+          expect do
+            get :search_results, params: { facility_id: facility.url_name, search_term: account.account_number.first(3), format: :csv }
+          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
+        end
+      end
+    end
+
+    context "with account_tabs feature flag", feature_setting: { account_tabs: true } do
+      let(:director) { create(:user, :facility_director, facility:) }
+      let(:owner1) { create(:user, first_name: "Owner", last_name: "One") }
+      let(:owner2) { create(:user, first_name: "Owner", last_name: "Two") }
+      let!(:active_account) { create(:nufs_account, :with_account_owner, owner: owner1, account_number: "ACTIVE") }
+      let!(:suspended_account) { create(:nufs_account, :with_account_owner, owner: owner2, account_number: "SUSPENDED", suspended_at: Time.current) }
+      let!(:expired_account) { create(:nufs_account, :with_account_owner, owner: owner1, account_number: "EXPIRED", expires_at: 1.day.ago) }
+
+      before do
+        sign_in director
+        [active_account, suspended_account, expired_account].each do |acc|
+          acc.facilities << facility unless acc.facilities.include?(facility)
+        end
+      end
+
+      context "with CSV format and no search term" do
+        it "enqueues AccountSearchResultMailer with blank search term" do
+          expect do
+            get :search_results, params: { facility_id: facility.url_name, format: :csv }
+          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
+            .with(anything, "", anything, { filter_params: hash_including(account_type: nil, suspended: nil, account_status: nil) })
+        end
+
+        it "respects suspended filter" do
+          expect do
+            get :search_results, params: { facility_id: facility.url_name, suspended: "true", format: :csv }
+          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
+            .with(anything, "", anything, { filter_params: hash_including(suspended: "true") })
+        end
+
+        it "respects account_status filter" do
+          expect do
+            get :search_results, params: { facility_id: facility.url_name, account_status: "active", format: :csv }
+          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
+            .with(anything, "", anything, { filter_params: hash_including(account_status: "active") })
+        end
+
+        it "respects account_type filter" do
+          expect do
+            get :search_results, params: { facility_id: facility.url_name, account_type: "NufsAccount", format: :csv }
+          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
+            .with(anything, "", anything, { filter_params: hash_including(account_type: "NufsAccount") })
+        end
+      end
+
+      context "with CSV format and search term" do
+        it "enqueues AccountSearchResultMailer with search term and filtered scope" do
+          expect do
+            get :search_results, params: { facility_id: facility.url_name, search_term: "ACTIVE", account_status: "active", format: :csv }
+          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
+            .with(anything, "ACTIVE", anything, { filter_params: hash_including(account_status: "active") })
+        end
+      end
     end
   end
 
