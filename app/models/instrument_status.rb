@@ -12,7 +12,7 @@ class InstrumentStatus < ApplicationRecord
 
   def self.set_status_for(instrument, is_on:)
     status = find_or_initialize_by(instrument: instrument)
-    status.update!(is_on: is_on)
+    status.update!(is_on: is_on, updated_at: Time.current)
     status
   end
 
