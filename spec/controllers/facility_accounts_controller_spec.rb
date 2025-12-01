@@ -251,9 +251,9 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
       let(:director) { create(:user, :facility_director, facility:) }
       let(:owner1) { create(:user, first_name: "Owner", last_name: "One") }
       let(:owner2) { create(:user, first_name: "Owner", last_name: "Two") }
-      let!(:active_account) { create(:nufs_account, :with_account_owner, owner: owner1, account_number: "ACTIVE") }
-      let!(:suspended_account) { create(:nufs_account, :with_account_owner, owner: owner2, account_number: "SUSPENDED", suspended_at: Time.current) }
-      let!(:expired_account) { create(:nufs_account, :with_account_owner, owner: owner1, account_number: "EXPIRED", expires_at: 1.day.ago) }
+      let!(:active_account) { create(:nufs_account, :with_account_owner, owner: owner1) }
+      let!(:suspended_account) { create(:nufs_account, :with_account_owner, owner: owner2, suspended_at: Time.current) }
+      let!(:expired_account) { create(:nufs_account, :with_account_owner, owner: owner1, expires_at: 1.day.ago) }
 
       before do
         sign_in director
