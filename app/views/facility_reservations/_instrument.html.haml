@@ -13,6 +13,9 @@
         .current_time{style: "left: #{datetime_left_position(@display_datetime, Time.current)}"}
 
     - if @display_datetime.today? && instrument.has_real_relay?
+      %button.relay_refresh_btn{ type: "button", title: t("instruments.timeline.refresh_status"), "data-instrument-id" => instrument.id }
+        %i.fa.fa-refresh
+        %span.relay_updated_at
       .relay_checkbox
         = check_box_tag "relay[#{instrument.id}]", 1, false, :disabled => true, :"data-relay-url" => facility_instrument_switch_path(instrument.facility, instrument)
         .loading_box

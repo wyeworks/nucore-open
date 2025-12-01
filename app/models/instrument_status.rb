@@ -10,6 +10,15 @@ class InstrumentStatus < ApplicationRecord
 
   attr_accessor :error_message
 
+  # Creates or updates the status for an instrument.
+  # Maintains a single row per instrument instead of creating new entries.
+  def self.set_status_for(instrument, is_on:)
+    status = find_or_initialize_by(instrument: instrument)
+    status.is_on = is_on
+    status.save!
+    status
+  end
+
   def as_json(_options = {})
     {
       instrument_status: {
@@ -19,6 +28,7 @@ class InstrumentStatus < ApplicationRecord
         type: instrument.relay&.type,
         is_on: is_on?,
         error_message: @error_message,
+        updated_at: updated_at&.iso8601,
       },
     }
   end

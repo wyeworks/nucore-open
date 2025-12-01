@@ -1238,6 +1238,10 @@ en:
       preference_value_header: Selected
 
   instruments:
+    timeline:
+      refresh_status: Refresh status from relay
+      refresh_all: Refresh All
+      refresh_all_statuses: Refresh all relay statuses
     manage:
       label:
         control_mech: "Control mechanism"

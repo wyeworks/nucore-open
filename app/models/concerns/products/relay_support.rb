@@ -17,7 +17,8 @@ module Products::RelaySupport
   end
 
   def current_instrument_status
-    instrument_statuses.order(created_at: :desc).first
+    # With the unique index on instrument_id, there's only one status per instrument
+    instrument_statuses.first
   end
 
   def has_real_relay?

@@ -66,8 +66,31 @@ class InstrumentsController < ProductsCommonController
     end
   end
 
+  # GET /facilities/:facility_id/instrument_statuses
+  # GET /facilities/:facility_id/instrument_statuses?refresh=true
+  # GET /facilities/:facility_id/instrument_statuses?refresh=true&instrument_ids[]=1&instrument_ids[]=2
+  #
+  # Without refresh param: returns cached statuses from DB (fast)
+  # With refresh=true: polls relays and updates DB (slower but accurate)
+  # With instrument_ids[]: only refreshes/returns specified instruments
   def instrument_statuses
-    @instrument_statuses = InstrumentStatusFetcher.new(current_facility).statuses
+    instruments = current_facility.instruments.includes(:relay).select { |i| i.relay&.networked_relay? }
+
+    # Filter by instrument_ids if provided
+    if params[:instrument_ids].present?
+      instrument_ids = Array(params[:instrument_ids]).map(&:to_i)
+      instruments = instruments.select { |i| instrument_ids.include?(i.id) }
+    end
+
+    @instrument_statuses = if params[:refresh] == "true"
+                             instruments.filter_map do |instrument|
+                               InstrumentStatusFetcher.refresh_status(instrument)
+                             end
+                           else
+                             instruments.map do |instrument|
+                               instrument.current_instrument_status || InstrumentStatus.new(instrument: instrument, is_on: nil)
+                             end
+                           end
     render json: @instrument_statuses
   end
 
@@ -83,7 +106,8 @@ class InstrumentsController < ProductsCommonController
         status = (params[:switch] == "on" ? relay.activate : relay.deactivate)
       end
 
-      @status = @product.instrument_statuses.create!(is_on: status)
+      # Update or create a single status record for this instrument
+      @status = InstrumentStatus.set_status_for(@product, is_on: status)
     rescue => e
       logger.error "ERROR: #{e.message}"
       @status = InstrumentStatus.new(instrument: @product, error_message: e.message)

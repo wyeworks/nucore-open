@@ -28,6 +28,9 @@
         inline_label: true,
         label: false,
         wrapper_html: { class: "compressed-inline" }
+      %button#refresh_all_relays.btn.btn-default.btn-sm{ type: "button", title: t("instruments.timeline.refresh_all_statuses") }
+        %i.fa.fa-refresh
+        = t("instruments.timeline.refresh_all")
 
 .clear
 .col-md-12.timeline-wrapper

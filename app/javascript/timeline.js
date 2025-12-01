@@ -83,29 +83,117 @@ $(function() {
       success: function(data) {
         for(var i = 0; i < data.length; i++) {
           updateRelayStatus(data[i].instrument_status);
-
         }
-        // Refresh 2 minutes after updating
-        setTimeout(loadRelayStatuses, 120000);
       },
       dataType: 'json'
     });
   }
 
   function updateRelayStatus(stat) {
-    $checkbox = $("#relay_" + stat.instrument_id);
+    var $checkbox = $("#relay_" + stat.instrument_id);
+    var $refreshBtn = $(".relay_refresh_btn[data-instrument-id='" + stat.instrument_id + "']");
+
     // remove pre-existing errors
     $checkbox.parent().find("span.error").remove();
     if (stat.error_message) {
       $checkbox.prop("disabled", true);
       // add a new error if there is one
       $checkbox.parent().append($("<span class=\"error\" title=\"" + stat.error_message + "\"></span>"));
+    } else if (stat.is_on === null) {
+      // No cached status - disable checkbox until status is refreshed
+      $checkbox.prop("disabled", true);
     } else {
       $checkbox.prop("disabled", false).prop("checked", stat.is_on);
     }
     $checkbox.parent().removeClass("loading");
     $checkbox.trigger("change");
+
+    // Update the refresh button's timestamp
+    if (stat.updated_at) {
+      var updatedAt = new Date(stat.updated_at);
+      $refreshBtn.find('.relay_updated_at').text(formatRelativeTime(updatedAt));
+    } else {
+      $refreshBtn.find('.relay_updated_at').text('');
+    }
+    $refreshBtn.removeClass("loading").prop("disabled", false);
   }
+
+  function formatRelativeTime(date) {
+    var now = new Date();
+    var diffMs = now - date;
+    var diffMins = Math.floor(diffMs / 60000);
+    var diffHours = Math.floor(diffMs / 3600000);
+    var diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'just now';
+    if (diffMins < 60) return diffMins + 'm ago';
+    if (diffHours < 24) return diffHours + 'h ago';
+    return diffDays + 'd ago';
+  }
+
+  // Handle individual refresh button clicks
+  $('.relay_refresh_btn').on('click', function(e) {
+    e.preventDefault();
+    var $btn = $(this);
+    var instrumentId = $btn.data('instrument-id');
+    var $checkbox = $("#relay_" + instrumentId);
+
+    $btn.addClass("loading").prop("disabled", true);
+    $checkbox.parent().addClass("loading");
+
+    $.ajax({
+      url: '../instrument_statuses',
+      data: {
+        refresh: 'true',
+        'instrument_ids[]': instrumentId
+      },
+      success: function(data) {
+        if (data.length > 0) {
+          updateRelayStatus(data[0].instrument_status);
+        }
+      },
+      error: function(xhr) {
+        $btn.removeClass("loading").prop("disabled", false);
+        $checkbox.parent().removeClass("loading");
+        alert("Failed to refresh status");
+      },
+      dataType: 'json'
+    });
+  });
+
+  // Handle "Refresh All" button click
+  $('#refresh_all_relays').on('click', function(e) {
+    e.preventDefault();
+    var $btn = $(this);
+
+    // Disable button and show loading state
+    $btn.addClass("loading").prop("disabled", true);
+    $btn.find('.fa-refresh').addClass("fa-spin");
+
+    // Show loading state on all relay checkboxes and individual refresh buttons
+    $('.relay_checkbox').addClass("loading");
+    $('.relay_refresh_btn').addClass("loading").prop("disabled", true);
+
+    $.ajax({
+      url: '../instrument_statuses',
+      data: { refresh: 'true' },
+      success: function(data) {
+        for (var i = 0; i < data.length; i++) {
+          updateRelayStatus(data[i].instrument_status);
+        }
+        $btn.removeClass("loading").prop("disabled", false);
+        $btn.find('.fa-refresh').removeClass("fa-spin");
+      },
+      error: function(xhr) {
+        $btn.removeClass("loading").prop("disabled", false);
+        $btn.find('.fa-refresh').removeClass("fa-spin");
+        $('.relay_checkbox').removeClass("loading");
+        $('.relay_refresh_btn').removeClass("loading").prop("disabled", false);
+        alert("Failed to refresh statuses");
+      },
+      dataType: 'json'
+    });
+  });
 
   $('.relay_checkbox').addClass('loading');
   // Only try to load relay statuses if there are relays to check

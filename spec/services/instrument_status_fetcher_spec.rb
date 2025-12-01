@@ -9,10 +9,8 @@ RSpec.describe InstrumentStatusFetcher do
   subject(:fetcher) { described_class.new(facility) }
   let(:statuses) { fetcher.statuses }
 
-  # Otherwise
   before do
     allow(SettingsHelper).to receive(:relays_enabled_for_admin?).and_return(true)
-    allow_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_return(true)
   end
 
   describe "#statuses" do
@@ -28,35 +26,80 @@ RSpec.describe InstrumentStatusFetcher do
       expect(statuses.map(&:instrument)).not_to include(instrument_with_dummy_relay)
     end
 
-    it "has the status" do
-      expect(statuses.find { |status| status.instrument == instrument_with_relay }).to be_on
+    context "when there is a cached status" do
+      before do
+        InstrumentStatus.set_status_for(instrument_with_relay, is_on: true)
+      end
+
+      it "returns the cached status without polling the relay" do
+        expect_any_instance_of(RelaySynaccessRevA).not_to receive(:query_status)
+        expect(statuses.find { |status| status.instrument == instrument_with_relay }).to be_on
+      end
     end
 
-    it "has a false status" do
-      allow_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_return(false)
-      expect(statuses.find { |status| status.instrument == instrument_with_relay }).not_to be_on
-    end
-
-    it "can have an error" do
-      allow_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_raise(StandardError.new("Error!"))
-      expect(statuses.first.error_message).to eq("Error!")
+    context "when there is no cached status" do
+      it "returns a status with nil is_on" do
+        status = statuses.find { |s| s.instrument == instrument_with_relay }
+        expect(status.is_on).to be_nil
+      end
     end
   end
 
-  describe "caching" do
-    describe "with a second identical relay" do
-      let!(:relay2) {create(:relay_syna, relay.attributes.except("id").merge(instrument: instrument_with_relay2)) }
-      let(:instrument_with_relay2) { create(:instrument, no_relay: true, facility: facility, schedule: instrument_with_relay.schedule) }
+  describe ".refresh_status" do
+    before do
+      allow_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_return(true)
+    end
 
-      it "only fetches once" do
-        allow_any_instance_of(Instrument).to receive(:relay).and_return relay
-        expect(relay).to receive(:query_status).once
-        statuses
-      end
+    it "polls the relay and saves the status" do
+      expect_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_return(true)
 
-      it "returns two instrument_ids" do
-        expect(statuses.map(&:instrument)).to contain_exactly(instrument_with_relay, instrument_with_relay2)
-      end
+      status = described_class.refresh_status(instrument_with_relay)
+
+      expect(status).to be_on
+      expect(status).to be_persisted
+    end
+
+    it "updates an existing status instead of creating a new one" do
+      InstrumentStatus.set_status_for(instrument_with_relay, is_on: false)
+      expect(InstrumentStatus.where(instrument: instrument_with_relay).count).to eq(1)
+
+      described_class.refresh_status(instrument_with_relay)
+
+      expect(InstrumentStatus.where(instrument: instrument_with_relay).count).to eq(1)
+      expect(instrument_with_relay.current_instrument_status).to be_on
+    end
+
+    it "handles errors gracefully" do
+      allow_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_raise(StandardError.new("Connection failed"))
+
+      status = described_class.refresh_status(instrument_with_relay)
+
+      expect(status.error_message).to eq("Connection failed")
+    end
+
+    it "returns nil for instruments without networked relays" do
+      expect(described_class.refresh_status(reservation_only_instrument)).to be_nil
+    end
+
+    it "returns nil for instruments with dummy relays" do
+      expect(described_class.refresh_status(instrument_with_dummy_relay)).to be_nil
+    end
+  end
+
+  describe "when relays are disabled" do
+    before do
+      allow(SettingsHelper).to receive(:relays_enabled_for_admin?).and_return(false)
+    end
+
+    it "returns on status without polling" do
+      expect_any_instance_of(RelaySynaccessRevA).not_to receive(:query_status)
+      expect(statuses.first).to be_on
+    end
+
+    it "refresh_status returns on status without polling" do
+      expect_any_instance_of(RelaySynaccessRevA).not_to receive(:query_status)
+      status = described_class.refresh_status(instrument_with_relay)
+      expect(status).to be_on
     end
   end
 end

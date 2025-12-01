@@ -474,6 +474,95 @@ RSpec.describe InstrumentsController, type: :controller do
       end
 
       it_should_allow_operators_only
+
+      context "signed in" do
+        let(:instrument_with_relay) { FactoryBot.create(:instrument, facility: facility, no_relay: true) }
+        let!(:relay) { FactoryBot.create(:relay_syna, instrument: instrument_with_relay) }
+
+        before do
+          @params[:instrument_id] = instrument_with_relay.url_name
+          allow(SettingsHelper).to receive(:relays_enabled_for_admin?).and_return(true)
+          allow_any_instance_of(RelaySynaccessRevA).to receive(:toggle).and_return(true)
+          maybe_grant_always_sign_in :director
+        end
+
+        it "creates a status if one does not exist" do
+          expect do
+            do_request
+          end.to change(InstrumentStatus, :count).by(1)
+        end
+
+        it "updates an existing status instead of creating a new one" do
+          InstrumentStatus.set_status_for(instrument_with_relay, is_on: false)
+          expect(InstrumentStatus.where(instrument: instrument_with_relay).count).to eq(1)
+
+          expect do
+            do_request
+          end.not_to change(InstrumentStatus, :count)
+
+          expect(instrument_with_relay.reload.current_instrument_status).to be_on
+        end
+
+        it "returns the status as JSON" do
+          do_request
+          json = JSON.parse(response.body, symbolize_names: true)
+
+          expect(json[:instrument_status][:is_on]).to be(true)
+          expect(json[:instrument_status][:instrument_id]).to eq(instrument_with_relay.id)
+        end
+      end
+    end
+
+    context "instrument_statuses with refresh" do
+      let(:instrument_with_relay) { FactoryBot.create(:instrument, facility: facility, no_relay: true) }
+      let!(:relay) { FactoryBot.create(:relay_syna, instrument: instrument_with_relay) }
+
+      before :each do
+        @method = :get
+        @action = :instrument_statuses
+        @params.delete(:id)
+      end
+
+      context "with refresh=true" do
+        before do
+          @params[:refresh] = "true"
+          allow(SettingsHelper).to receive(:relays_enabled_for_admin?).and_return(true)
+          allow_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_return(true)
+          maybe_grant_always_sign_in :director
+        end
+
+        it "polls the relay and returns status" do
+          expect_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_return(true)
+
+          do_request
+          json = JSON.parse(response.body, symbolize_names: true)
+
+          status = json.find { |s| s[:instrument_status][:instrument_id] == instrument_with_relay.id }
+          expect(status[:instrument_status][:is_on]).to be(true)
+        end
+
+        it "saves the status to the database" do
+          expect do
+            do_request
+          end.to change(InstrumentStatus, :count).by(1)
+
+          expect(instrument_with_relay.current_instrument_status).to be_on
+        end
+
+        context "with instrument_ids filter" do
+          before do
+            @params[:instrument_ids] = [instrument_with_relay.id]
+          end
+
+          it "only refreshes specified instruments" do
+            do_request
+            json = JSON.parse(response.body, symbolize_names: true)
+
+            expect(json.length).to eq(1)
+            expect(json.first[:instrument_status][:instrument_id]).to eq(instrument_with_relay.id)
+          end
+        end
+      end
     end
   end
 end
