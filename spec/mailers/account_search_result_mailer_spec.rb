@@ -5,13 +5,13 @@ require "rails_helper"
 RSpec.describe AccountSearchResultMailer do
   let(:facility) { create(:facility) }
   let(:owner) { create(:user, first_name: "John", last_name: "Doe") }
-  let!(:account1) { create(:nufs_account, :with_account_owner, owner:, account_number: "12345", description: "Account One") }
-  let!(:account2) { create(:nufs_account, :with_account_owner, owner:, account_number: "67890", description: "Account Two") }
+  let!(:account1) { create(:nufs_account, :with_account_owner, owner:, description: "Account One") }
+  let!(:account2) { create(:nufs_account, :with_account_owner, owner:, description: "Account Two") }
   let(:email) { "test@example.com" }
 
   describe "#search_result" do
     context "with a search term" do
-      let(:mail) { described_class.search_result(email, "12345", facility).deliver_now }
+      let(:mail) { described_class.search_result(email, account1.account_number, facility).deliver_now }
 
       it "sends an email" do
         expect { mail }.to change(ActionMailer::Base.deliveries, :count).by(1)
@@ -28,7 +28,7 @@ RSpec.describe AccountSearchResultMailer do
 
       it "includes matching accounts in the CSV" do
         csv_content = mail.attachments.first.body.to_s
-        expect(csv_content).to include("12345")
+        expect(csv_content).to include(account1.account_number)
         expect(csv_content).to include("Account One")
       end
     end
@@ -42,8 +42,8 @@ RSpec.describe AccountSearchResultMailer do
 
       it "includes all accounts in the CSV" do
         csv_content = mail.attachments.first.body.to_s
-        expect(csv_content).to include("12345")
-        expect(csv_content).to include("67890")
+        expect(csv_content).to include(account1.account_number)
+        expect(csv_content).to include(account2.account_number)
       end
     end
 
@@ -62,8 +62,8 @@ RSpec.describe AccountSearchResultMailer do
         it "only includes suspended accounts" do
           csv_content = mail.attachments.first.body.to_s
           expect(csv_content).to include(suspended_account.account_number)
-          expect(csv_content).not_to include("12345")
-          expect(csv_content).not_to include("67890")
+          expect(csv_content).not_to include(account1.account_number)
+          expect(csv_content).not_to include(account2.account_number)
         end
       end
 
@@ -72,8 +72,8 @@ RSpec.describe AccountSearchResultMailer do
 
         it "only includes active accounts" do
           csv_content = mail.attachments.first.body.to_s
-          expect(csv_content).to include("12345")
-          expect(csv_content).to include("67890")
+          expect(csv_content).to include(account1.account_number)
+          expect(csv_content).to include(account2.account_number)
           expect(csv_content).not_to include(suspended_account.account_number)
         end
       end
