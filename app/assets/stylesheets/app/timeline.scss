@@ -1,5 +1,5 @@
 #ui-datepicker-div {
-  display: none;
+ display: none;
 }
 
 .timeline {
@@ -316,10 +316,8 @@ button.ui-datepicker-trigger {
   background: #f5f5f5;
   border: 1px solid #ccc;
   border-radius: 3px;
-  font-size: 12px;
   margin-left: 3px;
   height: 20px;
-  padding: 0 10px;
   display: inline-flex;
   align-items: center;
 
@@ -342,12 +340,16 @@ button.ui-datepicker-trigger {
 
   .relay_updated_at {
     font-size: 10px;
-    color: #999;
+    color: $gray-light;
     margin-left: 4px;
   }
 }
 
 #refresh_all_relays {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
   &.loading .fa-refresh {
     animation: spin 1s linear infinite;
   }
