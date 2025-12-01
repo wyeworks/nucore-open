@@ -6,11 +6,10 @@ class InstrumentStatusFetcher
     @facility = facility
   end
 
-  # Returns stored statuses from the database without polling relays.
-  # This provides fast loading at the expense of potentially outdated information.
+  # Returns last known statuses from the database without polling relays.
   def statuses
     instruments.map do |instrument|
-      cached_status_for(instrument)
+      last_status_for(instrument)
     end
   end
 
@@ -40,16 +39,16 @@ class InstrumentStatusFetcher
     @facility.instruments.order(:id).includes(:relay, :instrument_status).select { |instrument| instrument.relay&.networked_relay? }
   end
 
-  # Returns the cached status from the database without polling the relay.
-  def cached_status_for(instrument)
+  # Returns the last known status from the database without polling the relay.
+  def last_status_for(instrument)
     status = instrument.instrument_status
 
-    # If relays are disabled, return cached status or create a new "on" status
+    # If relays are disabled, return last status or create a new "on" status
     unless SettingsHelper.relays_enabled_for_admin?
       return status || InstrumentStatus.new(on: true, instrument: instrument)
     end
 
-    # Return cached status or unknown state if none exists
+    # Return last status or unknown state if none exists
     status || InstrumentStatus.new(instrument: instrument, is_on: nil)
   end
 

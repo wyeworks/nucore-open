@@ -6,8 +6,8 @@ require "controller_spec_helper"
 RSpec.describe InstrumentsController, type: :controller do
   render_views
 
-  let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:instrument) { FactoryBot.create(:instrument, facility:, no_relay: true) }
+  let(:facility) { create(:setup_facility) }
+  let(:instrument) { create(:instrument, facility:, no_relay: true) }
 
   before(:all) { create_users }
 
@@ -194,7 +194,7 @@ RSpec.describe InstrumentsController, type: :controller do
 
     context "when the instrument is hidden" do
       before do
-        FactoryBot.create(:schedule_rule, product: instrument)
+        create(:schedule_rule, product: instrument)
         instrument.update!(is_hidden: true)
         facility_operators.each do |operator|
           add_account_for_user(operator, instrument)
@@ -253,10 +253,10 @@ RSpec.describe InstrumentsController, type: :controller do
       @method = :post
       @action = :create
       @params.merge!(
-        instrument: FactoryBot.attributes_for(:instrument,
-                                              no_relay: true,
-                                              facility_account_id: facility.facility_accounts.first.id,
-                                             ),
+        instrument: attributes_for(:instrument,
+                                   no_relay: true,
+                                   facility_account_id: facility.facility_accounts.first.id,
+                                  ),
       )
     end
 
@@ -272,7 +272,7 @@ RSpec.describe InstrumentsController, type: :controller do
 
     describe "shared schedule" do
       before :each do
-        @schedule = FactoryBot.create(:schedule, facility:)
+        @schedule = create(:schedule, facility:)
         sign_in @admin
       end
 
@@ -408,14 +408,14 @@ RSpec.describe InstrumentsController, type: :controller do
 
       describe "schedule sharing" do
         let(:admin_reservation) do
-          FactoryBot.create(
+          create(
             :admin_reservation,
             product: instrument,
             reserve_start_at: 2.days.from_now,
           )
         end
         let(:admin_reservation2) do
-          FactoryBot.create(
+          create(
             :admin_reservation,
             product: instrument,
             reserve_start_at: 1.day.from_now,
@@ -440,10 +440,10 @@ RSpec.describe InstrumentsController, type: :controller do
       before :each do
         @method = :get
         @action = :instrument_statuses
-        @instrument_with_relay = FactoryBot.create(:instrument,
-                                                   facility:,
-                                                   no_relay: true)
-        FactoryBot.create(:relay_syna, instrument: @instrument_with_relay)
+        @instrument_with_relay = create(:instrument,
+                                        facility:,
+                                        no_relay: true)
+        create(:relay_syna, instrument: @instrument_with_relay)
       end
 
       it_should_allow_operators_only {}
@@ -476,8 +476,8 @@ RSpec.describe InstrumentsController, type: :controller do
       it_should_allow_operators_only
 
       context "signed in" do
-        let(:instrument_with_relay) { FactoryBot.create(:instrument, facility: facility, no_relay: true) }
-        let!(:relay) { FactoryBot.create(:relay_syna, instrument: instrument_with_relay) }
+        let(:instrument_with_relay) { create(:instrument, facility:, no_relay: true) }
+        let!(:relay) { create(:relay_syna, instrument: instrument_with_relay) }
 
         before do
           @params[:instrument_id] = instrument_with_relay.url_name
@@ -514,8 +514,8 @@ RSpec.describe InstrumentsController, type: :controller do
     end
 
     context "instrument_statuses with refresh" do
-      let(:instrument_with_relay) { FactoryBot.create(:instrument, facility: facility, no_relay: true) }
-      let!(:relay) { FactoryBot.create(:relay_syna, instrument: instrument_with_relay) }
+      let(:instrument_with_relay) { create(:instrument, facility:, no_relay: true) }
+      let!(:relay) { create(:relay_syna, instrument: instrument_with_relay) }
 
       before :each do
         @method = :get

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe InstrumentStatus do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:instrument, facility: facility) }
+  let(:instrument) { create(:instrument, facility:) }
 
   describe ".set_status_for" do
     it "creates a new status if one does not exist" do

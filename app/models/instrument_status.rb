@@ -10,12 +10,9 @@ class InstrumentStatus < ApplicationRecord
 
   attr_accessor :error_message
 
-  # Creates or updates the status for an instrument.
-  # Maintains a single row per instrument instead of creating new entries.
   def self.set_status_for(instrument, is_on:)
     status = find_or_initialize_by(instrument: instrument)
-    status.is_on = is_on
-    status.save!
+    status.update!(is_on: is_on)
     status
   end
 
