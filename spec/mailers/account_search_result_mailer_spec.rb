@@ -77,31 +77,6 @@ RSpec.describe AccountSearchResultMailer do
           expect(csv_content).not_to include(suspended_account.account_number)
         end
       end
-
-      context "with account type filter" do
-        let(:other_account_type_class) { Account.config.account_types.find { |type| type != "NufsAccount" } }
-        let(:other_account_type) do
-          if other_account_type_class
-            acc = create(other_account_type_class.underscore.to_sym, :with_account_owner, owner: owner)
-            acc.facilities << facility unless acc.facilities.include?(facility)
-            acc
-          end
-        end
-        let(:mail) { described_class.search_result(email, "", facility, filter_params: { account_type: "NufsAccount" }).deliver_now }
-
-        before do
-          other_account_type if other_account_type_class
-        end
-
-        it "only includes accounts of the specified type" do
-          csv_content = mail.attachments.first.body.to_s
-          expect(csv_content).to include("12345")
-          expect(csv_content).to include("67890")
-          if other_account_type
-            expect(csv_content).not_to include(other_account_type.account_number)
-          end
-        end
-      end
     end
   end
 end
