@@ -26,18 +26,18 @@ RSpec.describe InstrumentStatusFetcher do
       expect(statuses.map(&:instrument)).not_to include(instrument_with_dummy_relay)
     end
 
-    context "when there is a cached status" do
+    context "when there is a stored status" do
       before do
         InstrumentStatus.set_status_for(instrument_with_relay, is_on: true)
       end
 
-      it "returns the cached status without polling the relay" do
+      it "returns the stored status without polling the relay" do
         expect_any_instance_of(RelaySynaccessRevA).not_to receive(:query_status)
         expect(statuses.find { |status| status.instrument == instrument_with_relay }).to be_on
       end
     end
 
-    context "when there is no cached status" do
+    context "when there is no stored status" do
       it "returns a status with nil is_on" do
         status = statuses.find { |s| s.instrument == instrument_with_relay }
         expect(status.is_on).to be_nil
