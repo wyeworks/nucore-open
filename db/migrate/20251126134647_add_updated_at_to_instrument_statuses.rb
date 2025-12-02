@@ -4,9 +4,6 @@ class AddUpdatedAtToInstrumentStatuses < ActiveRecord::Migration[8.0]
   def up
     add_column :instrument_statuses, :updated_at, :datetime
 
-    # Set updated_at to created_at for existing records
-    execute "UPDATE instrument_statuses SET updated_at = created_at"
-
     # Keep only the most recent status for each instrument
     execute <<-SQL.squish
       DELETE FROM instrument_statuses
@@ -18,6 +15,9 @@ class AddUpdatedAtToInstrumentStatuses < ActiveRecord::Migration[8.0]
         ) AS latest
       )
     SQL
+
+    # Set updated_at to created_at for remaining records
+    execute "UPDATE instrument_statuses SET updated_at = created_at"
 
     # Add unique index on instrument_id to enforce one row per instrument
     add_index :instrument_statuses, :instrument_id, unique: true

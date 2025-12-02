@@ -25,9 +25,9 @@ class InstrumentStatusFetcher
 
     begin
       is_on = instrument.relay.get_status
-      InstrumentStatus.set_status_for(instrument, is_on: is_on)
+      InstrumentStatus.set_status_for(instrument, is_on:)
     rescue => e
-      status = instrument.instrument_status || InstrumentStatus.new(instrument: instrument)
+      status = instrument.instrument_status || InstrumentStatus.new(instrument:)
       status.error_message = e.message
       status
     end
@@ -45,11 +45,11 @@ class InstrumentStatusFetcher
 
     # If relays are disabled, return last status or create a new "on" status
     unless SettingsHelper.relays_enabled_for_admin?
-      return status || InstrumentStatus.new(on: true, instrument: instrument)
+      return status || InstrumentStatus.new(on: true, instrument:)
     end
 
     # Return last status or unknown state if none exists
-    status || InstrumentStatus.new(instrument: instrument, is_on: nil)
+    status || InstrumentStatus.new(instrument:, is_on: nil)
   end
 
 end

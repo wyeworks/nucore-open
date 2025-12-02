@@ -74,12 +74,9 @@ class InstrumentsController < ProductsCommonController
   # With refresh=true: polls relays and updates DB (slower but accurate)
   # With instrument_ids[]: only refreshes/returns specified instruments
   def instrument_statuses
-    instruments = current_facility.instruments.includes(:relay).select { |i| i.relay&.networked_relay? }
-
-    if params[:instrument_ids].present?
-      instrument_ids = Array(params[:instrument_ids]).map(&:to_i)
-      instruments = instruments.select { |i| instrument_ids.include?(i.id) }
-    end
+    instruments = current_facility.instruments.includes(:relay)
+    instruments = instruments.where(id: params[:instrument_ids]) if params[:instrument_ids].present?
+    instruments = instruments.select { |i| i.relay&.networked_relay? }
 
     @instrument_statuses = if params[:refresh] == "true"
                              instruments.filter_map do |instrument|
