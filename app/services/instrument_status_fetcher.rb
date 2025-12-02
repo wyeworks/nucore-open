@@ -28,14 +28,13 @@ class InstrumentStatusFetcher
       return InstrumentStatus.set_status_for(instrument, is_on: true)
     end
 
-    begin
-      is_on = instrument.relay.get_status
-      InstrumentStatus.set_status_for(instrument, is_on:)
-    rescue => e
-      status = instrument.instrument_status || InstrumentStatus.new(instrument:)
-      status.error_message = e.message
-      status
+    InstrumentStatus.with_lock_for(instrument) do
+      instrument.relay.get_status
     end
+  rescue => e
+    status = instrument.instrument_status || InstrumentStatus.new(instrument:)
+    status.error_message = e.message
+    status
   end
 
   def instruments

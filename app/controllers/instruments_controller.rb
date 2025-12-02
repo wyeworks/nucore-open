@@ -82,22 +82,19 @@ class InstrumentsController < ProductsCommonController
 
   # GET /facilities/:facility_id/instruments/:instrument_id/switch
   def switch
-    raise ActiveRecord::RecordNotFound unless params[:switch] && (params[:switch] == "on" || params[:switch] == "off")
+    raise ActiveRecord::RecordNotFound unless params[:switch].in?(%w[on off])
 
-    begin
-      relay = @product.relay
-      status = true
-
+    @status = InstrumentStatus.with_lock_for(@product) do
       if SettingsHelper.relays_enabled_for_admin?
-        status = (params[:switch] == "on" ? relay.activate : relay.deactivate)
+        params[:switch] == "on" ? @product.relay.activate : @product.relay.deactivate
+      else
+        true
       end
-
-      @status = InstrumentStatus.set_status_for(@product, is_on: status)
-    rescue => e
-      logger.error "ERROR: #{e.message}"
-      @status = InstrumentStatus.new(instrument: @product, error_message: e.message)
-      # raise ActiveRecord::RecordNotFound
     end
+    render json: @status
+  rescue => e
+    logger.error "ERROR: #{e.message}"
+    @status = InstrumentStatus.new(instrument: @product, error_message: e.message)
     render json: @status
   end
 
