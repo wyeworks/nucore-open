@@ -2,20 +2,25 @@
 
 class InstrumentStatusFetcher
 
-  def initialize(facility)
+  def initialize(facility, instrument_ids = nil)
     @facility = facility
+    @instrument_ids = instrument_ids
   end
 
-  # Returns last known statuses from the database without polling relays.
-  def statuses
-    instruments.map do |instrument|
-      last_status_for(instrument)
+  # Returns statuses for instruments.
+  # When refresh: true, polls relays and updates DB.
+  # When refresh: false, returns last known statuses from the database.
+  def statuses(refresh: false)
+    if refresh
+      instruments.filter_map { |instrument| refresh_status(instrument) }
+    else
+      instruments.map { |instrument| last_status_for(instrument) }
     end
   end
 
-  # Refreshes status for a single instrument by polling its relay.
-  # Returns the updated InstrumentStatus.
-  def self.refresh_status(instrument)
+  private
+
+  def refresh_status(instrument)
     return nil unless instrument.relay&.networked_relay?
 
     # When relays are disabled, save status as "on" without polling
@@ -33,10 +38,10 @@ class InstrumentStatusFetcher
     end
   end
 
-  private
-
   def instruments
-    @facility.instruments.order(:id).includes(:relay, :instrument_status).select { |instrument| instrument.relay&.networked_relay? }
+    scope = @facility.instruments.order(:id).includes(:relay, :instrument_status)
+    scope = scope.where(id: @instrument_ids) if @instrument_ids.present?
+    scope.select { |instrument| instrument.relay&.networked_relay? }
   end
 
   # Returns the last known status from the database without polling the relay.

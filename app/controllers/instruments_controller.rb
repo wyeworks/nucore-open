@@ -70,23 +70,13 @@ class InstrumentsController < ProductsCommonController
   # GET /facilities/:facility_id/instrument_statuses?refresh=true
   # GET /facilities/:facility_id/instrument_statuses?refresh=true&instrument_ids[]=1&instrument_ids[]=2
   #
-  # Without refresh param: returns cached statuses from DB (fast)
+  # Without refresh param: returns stored statuses from DB (fast)
   # With refresh=true: polls relays and updates DB (slower but accurate)
   # With instrument_ids[]: only refreshes/returns specified instruments
   def instrument_statuses
-    instruments = current_facility.instruments.includes(:relay)
-    instruments = instruments.where(id: params[:instrument_ids]) if params[:instrument_ids].present?
-    instruments = instruments.select { |i| i.relay&.networked_relay? }
-
-    @instrument_statuses = if params[:refresh] == "true"
-                             instruments.filter_map do |instrument|
-                               InstrumentStatusFetcher.refresh_status(instrument)
-                             end
-                           else
-                             instruments.map do |instrument|
-                               instrument.instrument_status || InstrumentStatus.new(instrument: instrument, is_on: nil)
-                             end
-                           end
+    @instrument_statuses = InstrumentStatusFetcher
+                           .new(current_facility, params[:instrument_ids])
+                           .statuses(refresh: params[:refresh] == "true")
     render json: @instrument_statuses
   end
 
