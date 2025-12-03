@@ -16,6 +16,13 @@ module AccountsTestHelper
     skip("#{account_type} cannot be reconciled")
   end
 
+  def skip_if_account_global(account_type)
+    return unless Account.config.global_account_types.include?(
+      to_account_class(account_type))
+
+    skip("#{account_type} is global")
+  end
+
   def to_account_class(account_type)
     account_type = account_type.to_s.camelize
 
