@@ -18,10 +18,10 @@
           %th= Account.model_name.human
         - if current_facility&.cross_facility?
           %th= Facility.model_name.human
-        %th.currency # of #{Order.model_name.human.pluralize}
-        %th.currency= Statement.human_attribute_name(:total_cost)
-        %th= t("statements.closed_at")
-        %th= t("statements.closed_by")
+        - if view_hook_exists?("statement_table_column_headers")
+          = render_view_hook("statement_table_column_headers")
+        - else
+          = render "shared/statements/table_column_headers"
         %th= Statement.human_attribute_name(:status)
     %tbody
       - StatementPresenter.wrap(@statements).each do |s|
@@ -59,16 +59,10 @@
             %td= link_to s.account, facility_account_path(current_facility, s.account)
           - if current_facility&.cross_facility?
             %td= s.facility.name
-          %td.currency= s.order_details.count
-          %td.currency= number_to_currency(s.total_cost)
-          %td
-            %ul.unstyled
-              - s.closed_by_times.each do |closed_by_time|
-                %li.statement__nowrap-text= closed_by_time
-          %td
-            %ul.unstyled
-              - s.closed_by_user_full_names.each do |closed_by_name|
-                %li.statement__nowrap-text= closed_by_name
+          - if view_hook_exists?("statement_table_column_data")
+            = render_view_hook("statement_table_column_data", statement: s)
+          - else
+            = render "shared/statements/table_column_data", statement: s
           %td
             %div
               %span= Statement.human_attribute_name("status.#{s.status}")
@@ -92,5 +86,3 @@
 
 
   = will_paginate(@statements)
-  
-

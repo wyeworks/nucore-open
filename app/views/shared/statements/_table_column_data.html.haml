@@ -1,0 +1,11 @@
+- statement = local_assigns[:statement]
+%td.currency= statement.order_details.count
+%td.currency= number_to_currency(statement.total_cost)
+%td
+  %ul.unstyled
+    - statement.closed_by_times.each do |closed_by_time|
+      %li.statement__nowrap-text= closed_by_time
+%td
+  %ul.unstyled
+    - statement.closed_by_user_full_names.each do |closed_by_name|
+      %li.statement__nowrap-text= closed_by_name
