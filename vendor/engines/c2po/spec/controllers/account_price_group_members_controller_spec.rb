@@ -8,6 +8,7 @@ RSpec.describe AccountPriceGroupMembersController do
   describe "search_results" do
     # Ignore validation errors, e.g. number format
     before { allow(AccountValidator::ValidatorFactory).to receive(:instance).and_return(AccountValidator::ValidatorDefault.new) }
+    before { skip if facility_account_type.blank? }
 
     let(:partial_account_number) { build(:nufs_account).account_number[0..-4] }
     let(:price_group) { create(:price_group, facility: facility) }

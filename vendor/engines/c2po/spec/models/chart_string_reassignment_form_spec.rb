@@ -7,7 +7,10 @@ RSpec.describe ChartStringReassignmentForm do
     subject(:form) { ChartStringReassignmentForm.new(order_details) }
 
     context "User has accounts in multiple facilities" do
-      let(:current_facility_account) { setup_account(:purchase_order_account, current_facility, user) }
+      let(:facility_account_type) { Account.config.facility_account_types.first&.underscore }
+      let(:current_facility_account) do
+        setup_account(facility_account_type, current_facility, user)
+      end
       let(:current_facility) { create(:facility) }
       let(:order) { create(:purchased_order, product: product) }
       let(:order_details) { [create(:order_detail, order: order, product: product)] }
@@ -15,8 +18,10 @@ RSpec.describe ChartStringReassignmentForm do
       let(:product) { create(:setup_item) }
       let(:user) { create(:user) }
 
+      before { skip if facility_account_type.blank? }
+
       before :each do
-        setup_account(:purchase_order_account, other_facility, user)
+        setup_account(facility_account_type, other_facility, user)
 
         order.update(facility_id: current_facility.id, user_id: user.id)
 
