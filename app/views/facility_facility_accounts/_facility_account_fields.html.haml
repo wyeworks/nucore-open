@@ -1,6 +1,7 @@
 - revenue_acct_readonly = local_assigns[:readonly] && !FacilityAccount.revenue_account_editable_by_user?(current_user)
 .well
   = render "shared/account_fields", f: f, account_class: FacilityAccount, readonly: local_assigns[:readonly]
+  = render_view_hook "additional_fields", f: f, readonly: local_assigns[:readonly]
   = f.input :revenue_account, readonly: revenue_acct_readonly, required: true, input_html: { maxlength: Settings.accounts.revenue_account_default.to_s.length, size: 10 } if SettingsHelper.feature_on?(:expense_accounts)
 
   = f.label :is_active do
