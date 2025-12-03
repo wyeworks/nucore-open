@@ -4,6 +4,7 @@ require "rails_helper"
 
 RSpec.describe PurchaseOrderAccount do
   include TextHelpers
+  include AccountsTestHelper
 
   let(:facility) { FactoryBot.create(:facility) }
   subject(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility: facility) }
@@ -11,12 +12,18 @@ RSpec.describe PurchaseOrderAccount do
   include_examples "AffiliateAccount"
   include_examples "an Account"
 
-  it "is a per-facility account" do
-    expect(described_class).to be_per_facility
-  end
+  context "when it's not global" do
+    before do
+      skip_if_account_global(:purchase_order)
+    end
 
-  it "is not a global account" do
-    expect(described_class).not_to be_global
+    it "is a per-facility account" do
+      expect(described_class).to be_per_facility
+    end
+
+    it "is not a global account" do
+      expect(described_class).not_to be_global
+    end
   end
 
   it "includes the facility in the description" do
