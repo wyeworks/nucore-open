@@ -63,6 +63,10 @@ RSpec.describe FacilityAccountsController do
     end
 
     context "but it belongs to another facility" do
+      before do
+        skip_if_account_global(:purchase_order)
+      end
+
       let(:other_facility) { FactoryBot.create(:facility, name: "other") }
       let(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility: other_facility) }
 
@@ -171,6 +175,10 @@ RSpec.describe FacilityAccountsController do
 
       context "PurchaseOrderAccount" do
         let(:account_type) { "PurchaseOrderAccount" }
+
+        before do
+          skip_if_account_global(:purchase_order)
+        end
 
         it "falls back to using a chartstring" do
           expect(response).to be_successful
