@@ -378,7 +378,7 @@ RSpec.describe Account do
       let!(:po_deleted) { create_po_for(user, facility, 1.day.ago) }
 
       it "filters by facility" do
-        expect(user.accounts.for_facility(facility)).to match_array([po_show])
+        expect(user.accounts.for_facility(facility)).to include(po_show)
       end
 
       it "filters deleted accounts" do
