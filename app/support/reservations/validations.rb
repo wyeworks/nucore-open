@@ -123,29 +123,46 @@ module Reservations::Validations
   end
 
   def satisfies_minimum_length?
-    diff = reserve_end_at - reserve_start_at # in seconds
-    return false unless product.min_reserve_mins.nil? || product.min_reserve_mins == 0 || diff / 60 >= product.min_reserve_mins
-    true
+    if product.daily_booking?
+      return true if product.min_reserve_days.to_i == 0
+      duration_days >= product.min_reserve_days
+    else
+      diff = reserve_end_at - reserve_start_at # in seconds
+      product.min_reserve_mins.nil? || product.min_reserve_mins == 0 || diff / 60 >= product.min_reserve_mins
+    end
   end
 
   def satisfies_minimum_length
-    errors.add(:base, :too_short, length: product.min_reserve_mins) unless satisfies_minimum_length?
+    if product.daily_booking?
+      errors.add(:base, :too_short_days, length: product.min_reserve_days) unless satisfies_minimum_length?
+    else
+      errors.add(:base, :too_short, length: product.min_reserve_mins) unless satisfies_minimum_length?
+    end
   end
 
   def satisfies_maximum_length?
-    return true if product.max_reserve_mins.to_i == 0
-    diff = reserve_end_at - reserve_start_at # in seconds
+    if product.daily_booking?
+      return true if product.max_reserve_days.to_i == 0
+      duration_days <= product.max_reserve_days
+    else
+      return true if product.max_reserve_mins.to_i == 0
+      diff = reserve_end_at - reserve_start_at # in seconds
 
-    # If this is updating because we're in the grace period, use the old value for checking duration
-    if in_grace_period? && actual_start_at && reserve_start_at_changed? && reserve_start_at_was
-      diff = reserve_end_at - reserve_start_at_was
+      # If this is updating because we're in the grace period, use the old value for checking duration
+      if in_grace_period? && actual_start_at && reserve_start_at_changed? && reserve_start_at_was
+        diff = reserve_end_at - reserve_start_at_was
+      end
+
+      diff <= product.max_reserve_mins.minutes
     end
-
-    diff <= product.max_reserve_mins.minutes
   end
 
   def satisfies_maximum_length
-    errors.add(:base, :too_long, length: product.max_reserve_mins) unless satisfies_maximum_length?
+    if product.daily_booking?
+      errors.add(:base, :too_long_days, length: product.max_reserve_days) unless satisfies_maximum_length?
+    else
+      errors.add(:base, :too_long, length: product.max_reserve_mins) unless satisfies_maximum_length?
+    end
   end
 
   def allowed_in_schedule_rules?
