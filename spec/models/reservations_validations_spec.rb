@@ -151,4 +151,84 @@ RSpec.describe Reservations::Validations do
       end
     end
   end
+
+  describe "daily booking min/max length validations" do
+    subject(:reservation) do
+      build(
+        :setup_reservation,
+        product:,
+        reserve_start_at: start_at,
+        reserve_end_at: end_at
+      )
+    end
+
+    let(:product) { create :setup_instrument, :daily_booking }
+    let(:start_at) { Time.current }
+
+    describe "satisfies_maximum_length" do
+      context "when max_reserve_days is not set" do
+        let(:end_at) { start_at + 10.days }
+
+        it { is_expected.to be_valid }
+      end
+
+      context "when max_reserve_days is set" do
+        before { product.update!(max_reserve_days: 4) }
+
+        context "when reservation is within max days" do
+          let(:end_at) { start_at + 3.days }
+
+          it { is_expected.to be_valid }
+        end
+
+        context "when reservation equals max days" do
+          let(:end_at) { start_at + 4.days }
+
+          it { is_expected.to be_valid }
+        end
+
+        context "when reservation exceeds max days" do
+          let(:end_at) { start_at + 6.days }
+
+          it "is invalid with too_long_days error" do
+            is_expected.not_to be_valid
+            expect(reservation.errors).to be_added(:base, :too_long_days, length: 4)
+          end
+        end
+      end
+    end
+
+    describe "satisfies_minimum_length" do
+      context "when min_reserve_days is not set" do
+        let(:end_at) { start_at + 1.day }
+
+        it { is_expected.to be_valid }
+      end
+
+      context "when min_reserve_days is set" do
+        before { product.update!(min_reserve_days: 2) }
+
+        context "when reservation meets minimum days" do
+          let(:end_at) { start_at + 3.days }
+
+          it { is_expected.to be_valid }
+        end
+
+        context "when reservation equals minimum days" do
+          let(:end_at) { start_at + 2.days }
+
+          it { is_expected.to be_valid }
+        end
+
+        context "when reservation is less than minimum days" do
+          let(:end_at) { start_at + 1.day }
+
+          it "is invalid with too_short_days error" do
+            is_expected.not_to be_valid
+            expect(reservation.errors).to be_added(:base, :too_short_days, length: 2)
+          end
+        end
+      end
+    end
+  end
 end

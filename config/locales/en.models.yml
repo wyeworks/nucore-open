@@ -112,6 +112,8 @@ en:
               no_schedule_group: You do not have permission to make a reservation at this time
               too_long: The reservation is too long. It cannot be longer than %{length} minutes.
               too_short: The reservation is too short. It must be at least %{length} minutes.
+              too_long_days: The reservation is too long. It cannot be longer than %{length} days.
+              too_short_days: The reservation is too short. It must be at least %{length} days.
             reserve_start_at:
               after_cutoff: must be at least %{hours} hours in the future
               in_past: must be in the future
