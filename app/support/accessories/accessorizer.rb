@@ -55,7 +55,7 @@ class Accessories::Accessorizer
   def build_order_details_from(params)
     order_details = accessory_order_details.collect do |od|
       detail_params = params[od.product_id.to_s]
-      od.assign_attributes(detail_params.permit(:enabled, :quantity)) if detail_params
+      od.assign_attributes(detail_params.permit(:enabled, :quantity, :note)) if detail_params
       od
     end
   end
@@ -89,6 +89,8 @@ class Accessories::Accessorizer
     od.assign_estimated_price
     od.enabled = true
 
+    validate_note!(od)
+
     if @order_detail.complete?
       od.save! # do validations before trying to backdate
       od.backdate_to_complete! @order_detail.fulfilled_at
@@ -100,8 +102,15 @@ class Accessories::Accessorizer
     end
   end
 
+  def validate_note!(od)
+    order_detail = od.respond_to?(:order_detail) ? od.order_detail : od
+    unless NotePresenceValidator.new(order_detail).valid?
+      raise ActiveRecord::RecordInvalid, order_detail
+    end
+  end
+
   def permitted_attributes(params)
-    params.except(:enabled).permit(:quantity)
+    params.except(:enabled).permit(:quantity, :note)
   end
 
   def product_accessory(accessory)

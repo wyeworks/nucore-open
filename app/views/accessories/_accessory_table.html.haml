@@ -14,3 +14,9 @@
             disabled: !od.quantity_editable?,
             label: false,
             input_html: { value: od.quantity, class: od.quantity_as_time? ? "timeinput" : "", data: { always_disabled: !od.quantity_editable? } }
+        - if od.product.user_notes_field_mode.visible?
+          %td
+            = p.input :note,
+              label: od.product.user_notes_label.presence || OrderDetail.human_attribute_name(:note),
+              required: od.product.user_notes_field_mode.required?,
+              input_html: { rows: 2 }
