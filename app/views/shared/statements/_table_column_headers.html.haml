@@ -1,0 +1,4 @@
+%th.currency # of #{Order.model_name.human.pluralize}
+%th.currency= Statement.human_attribute_name(:total_cost)
+%th= t("statements.closed_at")
+%th= t("statements.closed_by")
