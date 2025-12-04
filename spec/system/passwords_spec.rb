@@ -119,7 +119,7 @@ RSpec.describe "Passwords", :aggregate_failures, feature_setting: { password_upd
       end
 
       it "finds the user and sends reset email" do
-        expect(page).to have_content "Password reset instructions have been sent"
+        expect(page).to have_content "Instructions on how to reset your password have been sent"
         open_email(external_user.email)
         expect(current_email).to be_present
       end
