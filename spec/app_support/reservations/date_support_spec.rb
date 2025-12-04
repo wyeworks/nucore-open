@@ -270,4 +270,50 @@ RSpec.describe Reservations::DateSupport do
       expect(reservation.has_reserved_times?).to be true
     end
   end
+
+  describe "#actual_duration_days" do
+    context "when @actual_duration_days is set" do
+      before { reservation.instance_variable_set(:@actual_duration_days, "3") }
+
+      it "returns the value as an integer" do
+        expect(reservation.actual_duration_days).to eq(3)
+      end
+    end
+
+    context "when actual_start_at and actual_end_at are set" do
+      let(:actual_start_at) { Time.zone.parse("2015-01-01T09:00:00") }
+      let(:actual_end_at) { Time.zone.parse("2015-01-04T09:00:00") }
+
+      it "returns the duration in days (ceiling)" do
+        expect(reservation.actual_duration_days).to eq(3)
+      end
+    end
+
+    context "when actual_start_at is set but actual_end_at is nil" do
+      let(:actual_start_at) { Time.zone.parse("2015-01-01T09:00:00") }
+      let(:actual_end_at) { nil }
+
+      it "returns nil" do
+        expect(reservation.actual_duration_days).to be_nil
+      end
+    end
+
+    context "when actual_start_at is nil" do
+      let(:actual_start_at) { nil }
+
+      it "returns 0" do
+        expect(reservation.actual_duration_days).to eq(0)
+      end
+    end
+
+    context "when using actual_end_fallback" do
+      let(:actual_start_at) { Time.zone.parse("2015-01-01T09:00:00") }
+      let(:actual_end_at) { nil }
+
+      it "uses the fallback to calculate duration" do
+        fallback = Time.zone.parse("2015-01-03T09:00:00")
+        expect(reservation.actual_duration_days(actual_end_fallback: fallback)).to eq(2)
+      end
+    end
+  end
 end
