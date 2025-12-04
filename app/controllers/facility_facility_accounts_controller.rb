@@ -65,12 +65,23 @@ class FacilityFacilityAccountsController < ApplicationController
   private
 
   def create_params
-    strong_params = params.require(:facility_account).permit(:revenue_account, :account_number, :is_active, account_number_parts: FacilityAccount.account_number_field_names)
+    strong_params = params.require(:facility_account).permit(
+      create_params_attributes,
+      account_number_parts: FacilityAccount.account_number_field_names,
+    )
     if SettingsHelper.feature_on?(:expense_accounts)
       strong_params
     else
       strong_params.merge(revenue_account: Settings.accounts.revenue_account_default)
     end
+  end
+
+  def create_params_attributes
+    [
+      :revenue_account,
+      :account_number,
+      :is_active,
+    ]
   end
 
   def update_params
