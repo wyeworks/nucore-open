@@ -18,6 +18,10 @@
 
   = hidden_field_tag :account_type, @current_account_type
   = render "facility_accounts/account_type_tabs", owner_user: @owner_user
+  - if current_facility.cross_facility? && Account.config.per_facility?(@current_account_type)
+    = f.association :facilities,
+      multiple: true, input_html: { class: "js--chosen" },
+      hint: t(".facilities_hint")
   = render "facility_accounts/account_fields/#{@current_account_type.to_s.underscore}", f: f, is_new: true
   = render_view_hook("end_of_form", f: f, account: @account)
 

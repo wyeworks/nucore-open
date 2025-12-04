@@ -248,6 +248,7 @@ en:
           type: "Payment Source Type"
     new:
       head: "Add Payment Source"
+      facilities_hint: Facility Managed Payment Sources require at least one facility
     show:
       label:
         owner: "Owner"
