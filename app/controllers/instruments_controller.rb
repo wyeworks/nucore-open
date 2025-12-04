@@ -66,29 +66,35 @@ class InstrumentsController < ProductsCommonController
     end
   end
 
+  # GET /facilities/:facility_id/instrument_statuses
+  # GET /facilities/:facility_id/instrument_statuses?refresh=true
+  # GET /facilities/:facility_id/instrument_statuses?refresh=true&instrument_ids[]=1&instrument_ids[]=2
+  #
+  # Without refresh param: returns stored statuses from DB (fast)
+  # With refresh=true: polls relays and updates DB (slower but accurate)
+  # With instrument_ids[]: only refreshes/returns specified instruments
   def instrument_statuses
-    @instrument_statuses = InstrumentStatusFetcher.new(current_facility).statuses
+    @instrument_statuses = InstrumentStatusFetcher
+                           .new(current_facility, params[:instrument_ids])
+                           .statuses(refresh: params[:refresh] == "true")
     render json: @instrument_statuses
   end
 
   # GET /facilities/:facility_id/instruments/:instrument_id/switch
   def switch
-    raise ActiveRecord::RecordNotFound unless params[:switch] && (params[:switch] == "on" || params[:switch] == "off")
+    raise ActiveRecord::RecordNotFound unless params[:switch].in?(%w[on off])
 
-    begin
-      relay = @product.relay
-      status = true
-
+    @status = InstrumentStatus.with_lock_for(@product) do
       if SettingsHelper.relays_enabled_for_admin?
-        status = (params[:switch] == "on" ? relay.activate : relay.deactivate)
+        params[:switch] == "on" ? @product.relay.activate : @product.relay.deactivate
+      else
+        true
       end
-
-      @status = @product.instrument_statuses.create!(is_on: status)
-    rescue => e
-      logger.error "ERROR: #{e.message}"
-      @status = InstrumentStatus.new(instrument: @product, error_message: e.message)
-      # raise ActiveRecord::RecordNotFound
     end
+    render json: @status
+  rescue => e
+    logger.error "ERROR: #{e.message}"
+    @status = InstrumentStatus.new(instrument: @product, error_message: e.message)
     render json: @status
   end
 

@@ -1,4 +1,6 @@
-#ui-datepicker-div { display: none; }
+#ui-datepicker-div {
+ display: none;
+}
 
 .timeline {
   background: image-url('timeline.png') no-repeat;
@@ -13,7 +15,8 @@
   text-align: center;
 }
 
-.timeline-schedule, .timeline-single {
+.timeline-schedule,
+.timeline-single {
   display: inline-block;
   text-align: left;
 }
@@ -51,7 +54,7 @@ body .unit {
 }
 
 .unit.ui-draggable-dragging {
-  z-index:99999;
+  z-index: 99999;
 }
 
 .unit.invalid {
@@ -63,6 +66,7 @@ body .unit {
   @include gradient-vertical(#3A7E31, #5C9A5B);
   border-left: 1px solid #CCC;
 }
+
 .unit:hover {
   box-shadow: 0 0 10px #3a7e31;
 }
@@ -70,6 +74,7 @@ body .unit {
 .unit.status_canceled {
   @include gradient-vertical(#772311, #A5341B);
 }
+
 .unit.status_canceled:hover {
   box-shadow: 0 0 10px #a5341b;
 }
@@ -77,8 +82,9 @@ body .unit {
 .unit.status_complete {
   @include gradient-vertical(#3A6D88, #5C859B);
 }
+
 .unit.status_complete:hover {
-  box-shadow:0 0 10px #3a6d88;
+  box-shadow: 0 0 10px #3a6d88;
 }
 
 .unit.other-product {
@@ -97,44 +103,47 @@ body .unit {
 /* Tall blocks */
 .unit.blackout,
 .unit.admin {
-  display:inline-block;
-  height:28px;
-  opacity:0.5;
+  display: inline-block;
+  height: 28px;
+  opacity: 0.5;
   filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
-  top:15px;
-  width:110px;
+  top: 15px;
+  width: 110px;
   z-index: 10;
   border-radius: 3px 3px 0 0;
   border: none;
   box-shadow: none;
 }
+
 .unit.blackout {
   cursor: default;
 }
 
 .unit.blackout {
-  background:#ccc;
-  border-top:5px solid #000;
+  background: #ccc;
+  border-top: 5px solid #000;
 }
 
 .unit.admin {
   background: #ECC;
-  border-top:5px solid #F00;
+  border-top: 5px solid #F00;
 }
 
 .current_time {
-  background:#f00;
-  display:inline-block;
-  height:35px;
-  opacity:.4;
-  position:relative;
-  top:8px;
-  width:2px;
+  background: #f00;
+  display: inline-block;
+  height: 35px;
+  opacity: .4;
+  position: relative;
+  top: 8px;
+  width: 2px;
   z-index: 0;
 }
 
 /* tooltip_reservation should be hidden until it gets pulled into the popup */
-.tooltip_admin_reservation, .tooltip_reservation, .tooltip_offline_reservation {
+.tooltip_admin_reservation,
+.tooltip_reservation,
+.tooltip_offline_reservation {
   display: none;
 }
 
@@ -144,19 +153,20 @@ body .unit {
   color: #303030;
   background-color: #fff;
   border: 1px solid #ccc;
-  border-radius : 5px;
+  border-radius: 5px;
   -moz-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
   -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, .5);
   box-shadow: 0 0 10px rgba(0, 0, 0, .5);
   text-shadow: none;
 
   /* Moving the tooltip box 1px down so it's butted up with the reservation block and doesn't dissappear when you try to click on it. */
-  position:relative;
-  top:1px;
+  position: relative;
+  top: 1px;
 }
 
-.tooltip_stay:hover, .tooltip_stay:focus {
-    display:block !important;
+.tooltip_stay:hover,
+.tooltip_stay:focus {
+  display: block !important;
 }
 
 .timeline_header {
@@ -191,15 +201,22 @@ body .unit {
 
 .timeline_options {
   float: right;
-  position:relative;
-  top:-17px;
-}
+  position: relative;
+  top: -17px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-.timeline_options label {
-  color: #777;
-  font-weight: normal;
-  display: inline;
-  margin: 0;
+  .form-group {
+    margin: 0;
+  }
+
+  label {
+    color: #777;
+    font-weight: normal;
+    display: inline;
+    margin: 0;
+  }
 }
 
 .ui-datepicker-trigger {
@@ -217,7 +234,7 @@ button.ui-datepicker-trigger {
 .relay_checkbox {
   float: right;
   position: relative;
-  right: 10px;
+  right: -70px;
 }
 
 .toggle_switch {
@@ -228,12 +245,13 @@ button.ui-datepicker-trigger {
   cursor: pointer;
   z-index: 0;
 }
+
 .toggle_switch.disabled {
   cursor: default;
 }
 
 .toggle_switch .bg {
-   background: image-url("itoggle_border.png") top left no-repeat;
+  background: image-url("itoggle_border.png") top left no-repeat;
   z-index: 200;
   position: absolute;
   top: 0;
@@ -241,9 +259,11 @@ button.ui-datepicker-trigger {
   width: 100%;
   height: 100%;
 }
+
 .toggle_switch.disabled .bg {
-  background-color: rgba(255,255,255,0.9);
+  background-color: rgba(255, 255, 255, 0.9);
 }
+
 .toggle_switch .switch {
   position: absolute;
   height: 100%;
@@ -260,7 +280,7 @@ button.ui-datepicker-trigger {
 /***
  * Relay switch overlays
  */
-.relay_checkbox .loading_box{
+.relay_checkbox .loading_box {
   background-image: image-url("spinner-big.gif");
   width: 32px;
   height: 32px;
@@ -270,9 +290,11 @@ button.ui-datepicker-trigger {
   z-index: 1000;
   display: none;
 }
+
 .relay_checkbox.loading .loading_box {
   display: block;
 }
+
 .relay_checkbox .error {
   background: transparent image-url("icon-warning-48.png") no-repeat;
   display: block;
@@ -284,17 +306,79 @@ button.ui-datepicker-trigger {
   z-index: 1000;
 }
 
+/***
+ * Relay status refresh button
+ */
+.relay_refresh_btn {
+  float: right;
+  position: relative;
+  right: -75px;
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-left: 3px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+
+  &:hover {
+    background: #e8e8e8;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &.loading {
+    cursor: wait;
+
+    .fa-refresh {
+      animation: spin 1s linear infinite;
+    }
+  }
+
+  .relay_updated_at {
+    font-size: 10px;
+    color: $gray-light;
+    margin-left: 4px;
+  }
+}
+
+#refresh_all_relays {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  &.loading .fa-refresh {
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 #reservation_date_container {
   overflow: hidden;
   margin: 0 auto;
   width: 300px;
 }
 
-#reservation_date_container #reservation_left, #reservation_date_container #reservation_date, #reservation_date_container #reservation_right {
-  float:left;
+#reservation_date_container #reservation_left,
+#reservation_date_container #reservation_date,
+#reservation_date_container #reservation_right {
+  float: left;
 }
 
-#reservation_date_container #reservation_left, #reservation_date_container #reservation_right {
+#reservation_date_container #reservation_left,
+#reservation_date_container #reservation_right {
   display: block;
   height: 20px;
   text-indent: -9999px;
@@ -309,8 +393,8 @@ button.ui-datepicker-trigger {
   background: image-url("btn-right.jpg") top left no-repeat;
 }
 
- #reservation_date_container #reservation_date {
-   font-size: 18px;
-   text-align: center;
-   width: 255px;
- }
+#reservation_date_container #reservation_date {
+  font-size: 18px;
+  text-align: center;
+  width: 255px;
+}

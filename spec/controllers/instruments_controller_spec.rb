@@ -6,8 +6,8 @@ require "controller_spec_helper"
 RSpec.describe InstrumentsController, type: :controller do
   render_views
 
-  let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:instrument) { FactoryBot.create(:instrument, facility:, no_relay: true) }
+  let(:facility) { create(:setup_facility) }
+  let(:instrument) { create(:instrument, facility:, no_relay: true) }
 
   before(:all) { create_users }
 
@@ -194,7 +194,7 @@ RSpec.describe InstrumentsController, type: :controller do
 
     context "when the instrument is hidden" do
       before do
-        FactoryBot.create(:schedule_rule, product: instrument)
+        create(:schedule_rule, product: instrument)
         instrument.update!(is_hidden: true)
         facility_operators.each do |operator|
           add_account_for_user(operator, instrument)
@@ -253,10 +253,10 @@ RSpec.describe InstrumentsController, type: :controller do
       @method = :post
       @action = :create
       @params.merge!(
-        instrument: FactoryBot.attributes_for(:instrument,
-                                              no_relay: true,
-                                              facility_account_id: facility.facility_accounts.first.id,
-                                             ),
+        instrument: attributes_for(:instrument,
+                                   no_relay: true,
+                                   facility_account_id: facility.facility_accounts.first.id,
+                                  ),
       )
     end
 
@@ -272,7 +272,7 @@ RSpec.describe InstrumentsController, type: :controller do
 
     describe "shared schedule" do
       before :each do
-        @schedule = FactoryBot.create(:schedule, facility:)
+        @schedule = create(:schedule, facility:)
         sign_in @admin
       end
 
@@ -408,14 +408,14 @@ RSpec.describe InstrumentsController, type: :controller do
 
       describe "schedule sharing" do
         let(:admin_reservation) do
-          FactoryBot.create(
+          create(
             :admin_reservation,
             product: instrument,
             reserve_start_at: 2.days.from_now,
           )
         end
         let(:admin_reservation2) do
-          FactoryBot.create(
+          create(
             :admin_reservation,
             product: instrument,
             reserve_start_at: 1.day.from_now,
@@ -440,10 +440,10 @@ RSpec.describe InstrumentsController, type: :controller do
       before :each do
         @method = :get
         @action = :instrument_statuses
-        @instrument_with_relay = FactoryBot.create(:instrument,
-                                                   facility:,
-                                                   no_relay: true)
-        FactoryBot.create(:relay_syna, instrument: @instrument_with_relay)
+        @instrument_with_relay = create(:instrument,
+                                        facility:,
+                                        no_relay: true)
+        create(:relay_syna, instrument: @instrument_with_relay)
       end
 
       it_should_allow_operators_only {}
@@ -474,6 +474,95 @@ RSpec.describe InstrumentsController, type: :controller do
       end
 
       it_should_allow_operators_only
+
+      context "signed in" do
+        let(:instrument_with_relay) { create(:instrument, facility:, no_relay: true) }
+        let!(:relay) { create(:relay_syna, instrument: instrument_with_relay) }
+
+        before do
+          @params[:instrument_id] = instrument_with_relay.url_name
+          allow(SettingsHelper).to receive(:relays_enabled_for_admin?).and_return(true)
+          allow_any_instance_of(RelaySynaccessRevA).to receive(:toggle).and_return(true)
+          maybe_grant_always_sign_in :director
+        end
+
+        it "creates a status if one does not exist" do
+          expect do
+            do_request
+          end.to change(InstrumentStatus, :count).by(1)
+        end
+
+        it "updates an existing status instead of creating a new one" do
+          InstrumentStatus.set_status_for(instrument_with_relay, is_on: false)
+          expect(InstrumentStatus.where(instrument: instrument_with_relay).count).to eq(1)
+
+          expect do
+            do_request
+          end.not_to change(InstrumentStatus, :count)
+
+          expect(instrument_with_relay.reload.instrument_status).to be_on
+        end
+
+        it "returns the status as JSON" do
+          do_request
+          json = JSON.parse(response.body, symbolize_names: true)
+
+          expect(json[:instrument_status][:is_on]).to be(true)
+          expect(json[:instrument_status][:instrument_id]).to eq(instrument_with_relay.id)
+        end
+      end
+    end
+
+    context "instrument_statuses with refresh" do
+      let(:instrument_with_relay) { create(:instrument, facility:, no_relay: true) }
+      let!(:relay) { create(:relay_syna, instrument: instrument_with_relay) }
+
+      before :each do
+        @method = :get
+        @action = :instrument_statuses
+        @params.delete(:id)
+      end
+
+      context "with refresh=true" do
+        before do
+          @params[:refresh] = "true"
+          allow(SettingsHelper).to receive(:relays_enabled_for_admin?).and_return(true)
+          allow_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_return(true)
+          maybe_grant_always_sign_in :director
+        end
+
+        it "polls the relay and returns status" do
+          expect_any_instance_of(RelaySynaccessRevA).to receive(:query_status).and_return(true)
+
+          do_request
+          json = JSON.parse(response.body, symbolize_names: true)
+
+          status = json.find { |s| s[:instrument_status][:instrument_id] == instrument_with_relay.id }
+          expect(status[:instrument_status][:is_on]).to be(true)
+        end
+
+        it "saves the status to the database" do
+          expect do
+            do_request
+          end.to change(InstrumentStatus, :count).by(1)
+
+          expect(instrument_with_relay.instrument_status).to be_on
+        end
+
+        context "with instrument_ids filter" do
+          before do
+            @params[:instrument_ids] = [instrument_with_relay.id]
+          end
+
+          it "only refreshes specified instruments" do
+            do_request
+            json = JSON.parse(response.body, symbolize_names: true)
+
+            expect(json.length).to eq(1)
+            expect(json.first[:instrument_status][:instrument_id]).to eq(instrument_with_relay.id)
+          end
+        end
+      end
     end
   end
 end

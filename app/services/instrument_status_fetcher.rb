@@ -2,39 +2,58 @@
 
 class InstrumentStatusFetcher
 
-  def initialize(facility)
+  def initialize(facility, instrument_ids = nil)
     @facility = facility
+    @instrument_ids = instrument_ids
   end
 
-  def statuses
-    @instrument_statuses = instruments.map do |instrument|
-      instrument_status_for(instrument)
+  # Returns statuses for instruments.
+  # When refresh: true, polls relays and updates DB.
+  # When refresh: false, returns last known statuses from the database.
+  def statuses(refresh: false)
+    if refresh
+      instruments.filter_map { |instrument| refresh_status(instrument) }
+    else
+      instruments.map { |instrument| last_status_for(instrument) }
     end
   end
 
   private
 
-  def instruments
-    @facility.instruments.order(:id).includes(:relay).select { |instrument| instrument.relay&.networked_relay? }
-  end
+  def refresh_status(instrument)
+    return nil unless instrument.relay&.networked_relay?
 
-  def instrument_status_for(instrument)
-    # Always return true/on if the relay feature is disabled
-    return InstrumentStatus.new(on: true, instrument: instrument) unless SettingsHelper.relays_enabled_for_admin?
-
-    key = instrument.relay.status_cache_key
-    # If it exists in the cache, we can use that value, but we need to update the instrument
-    return status_cache[key].dup.tap { |status| status.instrument = instrument } if status_cache.key?(key)
-
-    begin
-      status_cache[key] = InstrumentStatus.new(on: instrument.relay.get_status, instrument: instrument)
-    rescue => e
-      status_cache[key] = InstrumentStatus.new(error_message: e.message, instrument: instrument)
+    # When relays are disabled, save status as "on" without polling
+    unless SettingsHelper.relays_enabled_for_admin?
+      return InstrumentStatus.set_status_for(instrument, is_on: true)
     end
+
+    InstrumentStatus.with_lock_for(instrument) do
+      instrument.relay.get_status
+    end
+  rescue => e
+    status = instrument.instrument_status || InstrumentStatus.new(instrument:)
+    status.error_message = e.message
+    status
   end
 
-  def status_cache
-    @status_cache ||= {}
+  def instruments
+    scope = @facility.instruments.order(:id).includes(:relay, :instrument_status)
+    scope = scope.where(id: @instrument_ids) if @instrument_ids.present?
+    scope.select { |instrument| instrument.relay&.networked_relay? }
+  end
+
+  # Returns the last known status from the database without polling the relay.
+  def last_status_for(instrument)
+    status = instrument.instrument_status
+
+    # If relays are disabled, return last status or create a new "on" status
+    unless SettingsHelper.relays_enabled_for_admin?
+      return status || InstrumentStatus.new(on: true, instrument:)
+    end
+
+    # Return last status or unknown state if none exists
+    status || InstrumentStatus.new(instrument:, is_on: nil)
   end
 
 end

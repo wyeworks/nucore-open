@@ -1289,8 +1289,8 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
           end
 
           it "updates the instrument status" do
-            expect(assigns(:instrument).instrument_statuses.size).to eq(1)
-            expect(assigns(:instrument).instrument_statuses[0].is_on).to eq(true)
+            expect(assigns(:instrument).instrument_status).to be_present
+            expect(assigns(:instrument).instrument_status.is_on).to eq(true)
           end
 
           it "responds properly" do
@@ -1427,8 +1427,8 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
           expect(assigns(:reservation).order_detail.price_policy).not_to be_nil
           expect(assigns(:reservation).actual_end_at).to be <= Time.zone.now
           expect(assigns(:reservation)).to be_complete
-          expect(assigns(:instrument).instrument_statuses.size).to eq(1)
-          expect(assigns(:instrument).instrument_statuses[0].is_on).to eq(false)
+          expect(assigns(:instrument).instrument_status).to be_present
+          expect(assigns(:instrument).instrument_status.is_on).to eq(false)
           is_expected.to set_flash
           is_expected.to respond_with :redirect
         end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_17_143245) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_26_134647) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -281,7 +281,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_143245) do
     t.integer "instrument_id", null: false
     t.boolean "is_on", null: false
     t.datetime "created_at", precision: nil, null: false
-    t.index ["instrument_id", "created_at"], name: "index_instrument_statuses_on_instrument_id_and_created_at"
+    t.datetime "updated_at"
+    t.index ["instrument_id"], name: "index_instrument_statuses_on_instrument_id", unique: true
   end
 
   create_table "journal_creation_reminders", charset: "utf8mb3", force: :cascade do |t|
