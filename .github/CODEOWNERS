@@ -3,10 +3,7 @@
 
 * @LeticiaErrandonea @diebas @joaquinco
 
-# Ignore changes to the Gemfile + Gemfile.lock
-# by assigning the review to @ghost, which is
-# NOT a a collaborator on this project,
-# and thus not assigned for review.
-Gemfile* @ghost
-package.json @ghost
-yarn.lock @ghost
+# Do not add reviewers for dependabot updates
+Gemfile*
+package.json
+yarn.lock
