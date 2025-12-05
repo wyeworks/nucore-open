@@ -107,6 +107,47 @@ RSpec.describe Accessories::Accessorizer do
           expect(allow_any_instance_of(OrderDetail).to receive(:assign_estimated_price))
         end
 
+        context "with a note" do
+          let(:params) do
+            ActionController::Parameters.new(quantity_accessory.id.to_s => { enabled: "true", quantity: "3", note: "Test note" })
+          end
+
+          it "sets the note attribute" do
+            results = accessorizer.update_accessorizer_attributes(params).order_details
+            expect(results.first.note).to eq("Test note")
+          end
+        end
+
+        context "when note is required" do
+          before do
+            quantity_accessory.update!(user_notes_field_mode: "required")
+          end
+
+          context "and note is blank" do
+            let(:params) do
+              ActionController::Parameters.new(quantity_accessory.id.to_s => { enabled: "true", quantity: "3", note: "" })
+            end
+
+            it "is not valid" do
+              results = accessorizer.update_accessorizer_attributes(params)
+              expect(results).to_not be_valid
+              expect(results.order_details.first.errors[:note]).to be_present
+            end
+          end
+
+          context "and note is provided" do
+            let(:params) do
+              ActionController::Parameters.new(quantity_accessory.id.to_s => { enabled: "true", quantity: "3", note: "Required note" })
+            end
+
+            it "is valid" do
+              results = accessorizer.update_accessorizer_attributes(params)
+              expect(results).to be_valid
+              expect(results.order_details.first.note).to eq("Required note")
+            end
+          end
+        end
+
         context "with an invalid entry" do
           let(:results) { accessorizer.update_accessorizer_attributes(params) }
 

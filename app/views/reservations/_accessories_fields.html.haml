@@ -8,13 +8,7 @@
     - accessory_order_details = accessorizer.accessory_order_details
 
     - if accessory_order_details.any?
-      %table.table
-        %thead
-          %tr
-            %th= t("product_accessories.pick_accessories.accessory")
-            %th= t("product_accessories.pick_accessories.quantity")
-        %tbody
-          = fields_for :accessories do |accessories_form|
-            = render "accessories/accessory_table", f: accessories_form, order_details: accessory_order_details
+      = fields_for :accessories do |accessories_form|
+        = render "accessories/accessory_table", f: accessories_form, order_details: accessory_order_details
     - else
       %p.text-muted= t("product_accessories.pick_accessories.no_accessories")

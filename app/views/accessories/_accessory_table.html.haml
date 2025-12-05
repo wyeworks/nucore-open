@@ -1,16 +1,32 @@
+- any_notes_visible = order_details.any? { |od| od.product.user_notes_field_mode.visible? }
 %table.table
-  - order_details.each do |od|
-    = f.simple_fields_for od.product.id.to_s, od do |p|
-      %tr{class: ["accessory-row", "scaling-#{od.class.name.demodulize.underscore}"]}
-        %td
-          = p.input :enabled,
-            as: :boolean,
-            label: false,
-            inline_label: "#{od.product.to_s} (#{t("product_accessories.type.#{od.scaling_type}")})",
-            checked_value: "true",
-            unchecked_value: "false"
-        %td
-          = p.input :quantity,
-            disabled: !od.quantity_editable?,
-            label: false,
-            input_html: { value: od.quantity, class: od.quantity_as_time? ? "timeinput" : "", data: { always_disabled: !od.quantity_editable? } }
+  %thead
+    %tr
+      %th= t("product_accessories.pick_accessories.accessory")
+      %th= t("product_accessories.pick_accessories.quantity")
+      - if any_notes_visible
+        %th= OrderDetail.human_attribute_name(:note)
+  %tbody
+    - order_details.each do |od|
+      = f.simple_fields_for od.product.id.to_s, od do |p|
+        %tr{class: ["accessory-row", "scaling-#{od.class.name.demodulize.underscore}"]}
+          %td
+            = p.input :enabled,
+              as: :boolean,
+              label: false,
+              inline_label: "#{od.product.to_s} (#{t("product_accessories.type.#{od.scaling_type}")})",
+              checked_value: "true",
+              unchecked_value: "false"
+          %td
+            = p.input :quantity,
+              disabled: !od.quantity_editable?,
+              label: false,
+              input_html: { value: od.quantity, class: od.quantity_as_time? ? "timeinput" : "", data: { always_disabled: !od.quantity_editable? } }
+          - if any_notes_visible
+            %td
+              - if od.product.user_notes_field_mode.visible?
+                = p.input :note,
+                  label: false,
+                  placeholder: od.product.user_notes_label.presence || OrderDetail.human_attribute_name(:note),
+                  required: od.product.user_notes_field_mode.required?,
+                  input_html: { rows: 2 }
