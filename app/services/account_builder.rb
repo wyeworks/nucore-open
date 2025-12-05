@@ -183,8 +183,10 @@ class AccountBuilder
 
     facility_ids = [facility&.id.presence].compact
     if facility_ids.empty? && Account.config.globally_managed?(account.type)
-      facility_ids = account_facilities_param
+      facility_ids = (account_facilities_param || {})[:facility_ids]
     end
+
+    facility_ids&.compact_blank!
 
     return if facility_ids.blank?
 
