@@ -55,7 +55,7 @@ class AccountBuilder
     build_account_users
     set_affiliate
     set_created_by
-    set_facility
+    set_facilities
 
     after_build
     account
@@ -103,6 +103,10 @@ class AccountBuilder
   # for update action. Returns an array of "permitted" params.
   def account_params_for_update
     self.class.common_permitted_account_params.dup
+  end
+
+  def account_facilities_param
+    params[account_params_key]&.permit(facility_ids: [])
   end
 
   # Applies strong_param rules to the passed in params based on the current
@@ -174,10 +178,19 @@ class AccountBuilder
   end
 
   # Set the facility if the account type is scoped to facility.
-  def set_facility
-    return unless account.per_facility? && facility&.id
-    account.account_facility_joins.build(facility: facility)
-    account
+  def set_facilities
+    return unless account.per_facility?
+
+    facility_ids = [facility&.id.presence].compact
+    if facility_ids.empty? && Account.config.globally_managed?(account.type)
+      facility_ids = account_facilities_param
+    end
+
+    return if facility_ids.blank?
+
+    facility_ids.each do |facility_id|
+      account.account_facility_joins.build(facility_id:)
+    end
   end
 
   # Set created_by. Only used for `build`.
