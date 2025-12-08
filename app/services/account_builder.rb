@@ -96,7 +96,9 @@ class AccountBuilder
   # Override in subclassed builder to define additional strong_param attributes
   # for build action. Returns an array of "permitted" params.
   def account_params_for_build
-    self.class.common_permitted_account_params + [:account_number]
+    self.class.common_permitted_account_params + [
+      :account_number, { price_groups_relation_ids: [] },
+    ]
   end
 
   # Override in subclassed builder to define additional strong_param attributes
@@ -183,7 +185,7 @@ class AccountBuilder
 
     facility_ids = [facility&.id.presence].compact
     if facility_ids.empty? && Account.config.globally_managed?(account.type)
-      facility_ids = (account_facilities_param || {})[:facility_ids]
+      facility_ids = account_facilities_param.to_h[:facility_ids]
     end
 
     facility_ids&.compact_blank!

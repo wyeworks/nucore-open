@@ -170,4 +170,48 @@ RSpec.describe "creating accounts" do
       end
     end
   end
+
+  describe(
+    "price groups selection",
+    feature_setting: { show_account_price_groups_tab: true },
+  ) do
+    let(:facility) { create(:setup_facility) }
+    let(:account_class) { NufsAccount }
+    let(:account_type) { account_class.to_s }
+    let(:price_group) { PriceGroup.last }
+
+    before do
+      allow(Account.config).to receive(:creation_enabled_types) do
+        [account_type]
+      end
+      allow(Account.config).to receive(:account_types) do
+        [account_type]
+      end
+    end
+
+    it "shows price groups select checkbox" do
+      get new_facility_account_path(facility, owner_user_id: user.id)
+
+      expect(page).to have_field("#{account_type.underscore}[price_groups_relation_ids][]")
+    end
+
+    it "can submit price groups" do
+      params = {
+        account_type.underscore => {
+          account_number: "1234",
+          description: "Some description",
+          price_groups_relation_ids: [price_group.id],
+        }
+      }
+
+      expect do
+        post(
+          facility_accounts_path(facility, owner_user_id: user.id, account_type:),
+          params:
+        )
+      end.to change(Account, :count).by(1)
+
+      expect(Account.last.price_groups_relation).to match([price_group])
+    end
+  end
 end
