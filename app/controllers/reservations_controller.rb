@@ -269,7 +269,11 @@ class ReservationsController < ApplicationController
       return
     end
 
-    redirect_to params[:redirect_to] || request.referer || order_order_detail_path(@order, @order_detail)
+    redirect_to(
+      url_from(params[:redirect_to]) ||
+      url_from(request.referer) ||
+      order_order_detail_path(@order, @order_detail),
+    )
   end
 
   private
