@@ -19,6 +19,9 @@ RSpec.describe "reservations" do
         create(:account_user, :purchaser, user:, account:)
       end
     end
+    let(:fallback_url) do
+      order_order_detail_url(order, order_detail)
+    end
 
     describe "redirection" do
       let(:action) do
@@ -52,9 +55,7 @@ RSpec.describe "reservations" do
             params: { redirect_to: "https://otherdomain.com/some/path" },
           )
 
-          expect(response.location).to(
-            eq(order_order_detail_url(order, order_detail))
-          )
+          expect(response.location).to eq(fallback_url)
         end
       end
 
@@ -72,18 +73,14 @@ RSpec.describe "reservations" do
             headers: { referer: "https://otherdomain.com/some/path" },
           )
 
-          expect(response.location).to(
-            eq(order_order_detail_url(order, order_detail))
-          )
+          expect(response.location).to eq(fallback_url)
         end
       end
 
       it "falls back to order detail show url" do
         action.call
 
-        expect(response.location).to eq(
-          order_order_detail_url(order, order_detail)
-        )
+        expect(response.location).to eq(fallback_url)
       end
     end
   end
