@@ -141,7 +141,7 @@ RSpec.describe "creating accounts" do
 
             expect(page).to have_content("Add Payment Source")
             expect(page).not_to have_field(
-              "#{facility_account_type.underscore}[faiclitie_ids][]"
+              "#{facility_account_type.underscore}[facility_ids][]",
             )
           end
 
