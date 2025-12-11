@@ -248,6 +248,7 @@ en:
           type: "Payment Source Type"
     new:
       head: "Add Payment Source"
+      facilities_hint: This is a facility level Payment Source
     show:
       label:
         owner: "Owner"
