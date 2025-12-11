@@ -21,7 +21,7 @@ class InstrumentStatus < ApplicationRecord
     transaction do
       # Create with default is_on if not exists, then lock the row
       status = find_or_create_by!(instrument: instrument) { |s| s.is_on = false }
-      status.lock!
+      where(id: status.id).lock.load
       is_on = yield
       status.update!(is_on: is_on, updated_at: Time.current) unless is_on.nil?
       status
