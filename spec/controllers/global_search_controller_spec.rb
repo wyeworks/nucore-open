@@ -40,9 +40,15 @@ RSpec.describe GlobalSearchController do
   let!(:order) { FactoryBot.create(:purchased_order, product: product) }
   let!(:order_detail) { order.order_details.first }
   let!(:facility) { order.facility }
-  let(:order_detail_results) { assigns[:searchers].find { |s| s.template == "order_details" }.results }
-  let(:statement_results) { assigns[:searchers].find { |s| s.template == "statements" }.results }
-  let(:product_results) { assigns[:searchers].find { |s| s.template == "products" }.results }
+  let(:order_detail_results) do
+    assigns[:searchers].find { |s| s.is_a?(GlobalSearch::OrderSearcher) }&.results
+  end
+  let(:statement_results) do
+    assigns[:searchers].find { |s| s.is_a?(GlobalSearch::StatementSearcher) }&.results
+  end
+  let(:product_results) do
+    assigns[:searchers].find { |s| s.is_a?(GlobalSearch::ProductSearcher) }&.results
+  end
 
   describe "index" do
     before do
