@@ -467,6 +467,7 @@ en:
         price_group: Price Group
         remittance_information: Bill To
         suspended_at: Suspended
+        price_groups_relation: Price Groups
       nufs_account:
         account_number: Payment Source Number
       training_request:
