@@ -1,4 +1,4 @@
-- show_checkboxes = !view_hook_exists?("reconciliation_table_row")
+- show_checkboxes = (!view_hook_exists?("reconciliation_table_row") && !view_hook_exists?("reconciliation_table_columns")) || !use_custom_reconciliation_features?(account_class)
 
 %table.table.table-striped.table-hover
   %caption= t("facility_accounts_reconciliation.index.caption", model: account_class.model_name.human)
@@ -10,8 +10,8 @@
       %th{scope: "col"}= Account.model_name.human
       %th{scope: "col"}= Order.model_name.human
       %th{scope: "col"}= Statement.human_attribute_name(:total_cost)
-      - if view_hook_exists?("reconciliation_table_headers")
-        = render_view_hook("reconciliation_table_headers")
+      - if view_hook_exists?("reconciliation_table_headers") && use_custom_reconciliation_features?(account_class)
+        = render_view_hook("reconciliation_table_headers", account_class: account_class)
       - else
         = render "facility_accounts_reconciliation/table_column_headers"
       - if show_reconciliation_deposit_number
@@ -38,8 +38,8 @@
               .order-detail-extra.order-detail-note= order_detail.note
 
         %td= show_actual_total(order_detail)
-        - if view_hook_exists?("reconciliation_table_columns")
-          = render_view_hook("reconciliation_table_columns", order_detail: order_detail)
+        - if view_hook_exists?("reconciliation_table_columns") && use_custom_reconciliation_features?(account_class)
+          = render_view_hook("reconciliation_table_columns", order_detail: order_detail, account_class: account_class)
         - else
           = render "facility_accounts_reconciliation/table_column_data", order_detail: order_detail
         - if show_reconciliation_deposit_number

@@ -86,3 +86,5 @@
 
 
   = will_paginate(@statements)
+  - if view_hook_exists?("statements_table_after_content")
+    = render_view_hook("statements_table_after_content")
