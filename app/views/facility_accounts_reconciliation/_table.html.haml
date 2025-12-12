@@ -13,7 +13,7 @@
       - if view_hook_exists?("reconciliation_table_headers")
         = render_view_hook("reconciliation_table_headers")
       - else
-        %th#reconcile-note.row-note-input.js--reconciledField{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
+        = render "facility_accounts_reconciliation/table_column_headers"
       - if show_reconciliation_deposit_number
         %th#reconcile-deposit-number.row-note-input.js--reconciledField{ scope: "col", data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
           = OrderDetail.human_attribute_name(:deposit_number)
@@ -41,7 +41,7 @@
         - if view_hook_exists?("reconciliation_table_columns")
           = render_view_hook("reconciliation_table_columns", order_detail: order_detail)
         - else
-          %td.row-note-input.js--reconciledField= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]", nil, aria: {labelledby: "reconcile-note"}
+          = render "facility_accounts_reconciliation/table_column_data", order_detail: order_detail
         - if show_reconciliation_deposit_number
           %td.row-note-input.js--reconciledField= text_field_tag "order_detail[#{order_detail.id}][deposit_number]", nil, aria: {labelledby: "reconcile-deposit-number"}
         %td.row-note-input.js--unrecoverableField.hidden
