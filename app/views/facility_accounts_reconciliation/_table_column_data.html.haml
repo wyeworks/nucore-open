@@ -1,0 +1,2 @@
+- order_detail = local_assigns[:order_detail]
+%td.row-note-input.js--reconciledField= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]", nil, aria: {labelledby: "reconcile-note"}
