@@ -96,9 +96,13 @@ class AccountBuilder
   # Override in subclassed builder to define additional strong_param attributes
   # for build action. Returns an array of "permitted" params.
   def account_params_for_build
-    self.class.common_permitted_account_params + [
-      :account_number, { price_groups_relation_ids: [] },
-    ]
+    common_params = [:account_number]
+
+    if SettingsHelper.feature_on?(:show_account_price_groups_tab)
+      common_params << { price_groups_relation_ids: [] }
+    end
+
+    self.class.common_permitted_account_params + common_params
   end
 
   # Override in subclassed builder to define additional strong_param attributes
