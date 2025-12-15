@@ -6,6 +6,7 @@ class OrderDetail < ApplicationRecord
   include NotificationSubject
   include OrderDetail::Accessorized
   include OrderDetail::Notices
+  include OrderDetail::Calculations
   include Nucore::Database::WhereIdsIn
 
   has_paper_trail
