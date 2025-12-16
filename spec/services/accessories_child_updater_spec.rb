@@ -79,5 +79,24 @@ RSpec.describe Accessories::ChildUpdater do
         expect(child_order_detail).to be_canceled
       end
     end
+
+    context "when the child has a different initial order status than the parent" do
+      let(:in_process_status) { OrderStatus.in_process }
+
+      before do
+        product.update!(initial_order_status: in_process_status)
+        child_order_detail.update!(order_status: in_process_status)
+      end
+
+      context "when the parent moves from new to complete" do
+        before do
+          reservation.end_reservation!
+        end
+
+        it "does not change the child's status" do
+          expect(child_order_detail.reload.order_status).to eq(in_process_status)
+        end
+      end
+    end
   end
 end

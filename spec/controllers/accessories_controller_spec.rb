@@ -172,16 +172,22 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.quantity).to eq(3)
         end
 
-        it "creates the order detail as the same status as the parent" do
+        it "creates the order detail with the accessory's initial order status" do
           do_request
-          expect(assigns(:order_details).first.order_status).to eq(order_detail.order_status)
+          expect(assigns(:order_details).first.order_status).to eq(quantity_accessory.initial_order_status)
         end
 
-        it "creates the order detail as completed if the original is" do
+        it "uses a custom initial order status when configured on the accessory" do
+          custom_status = create(:order_status, name: "Pending Review")
+          quantity_accessory.update!(initial_order_status: custom_status)
+          do_request
+          expect(assigns(:order_details).first.order_status).to eq(custom_status)
+        end
+
+        it "uses the accessory's initial order status even if the original is completed" do
           order_detail.backdate_to_complete!
           do_request
-          expect(assigns(:order_details).first.reload).to be_complete
-          expect(assigns(:order_details).first).to be_fulfilled_at
+          expect(assigns(:order_details).first.reload.order_status).to eq(quantity_accessory.initial_order_status)
         end
 
         context "adding a disabled accessory" do
@@ -231,16 +237,15 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.quantity).to eq(30)
         end
 
-        it "creates the order detail as the same status as the parent" do
+        it "creates the order detail with the accessory's initial order status" do
           do_request
-          expect(assigns(:order_details).first.order_status).to eq(order_detail.order_status)
+          expect(assigns(:order_details).first.order_status).to eq(manual_accessory.initial_order_status)
         end
 
-        it "creates the order detail as completed if the original is" do
+        it "uses the accessory's initial order status even if the original is completed" do
           order_detail.backdate_to_complete!
           do_request
-          expect(assigns(:order_details).first.reload).to be_complete
-          expect(assigns(:order_details).first).to be_fulfilled_at
+          expect(assigns(:order_details).first.reload.order_status).to eq(manual_accessory.initial_order_status)
         end
 
         context "adding a disabled accessory" do
@@ -275,15 +280,15 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.quantity).to eq(30)
         end
 
-        it "creates the order detail as the same status as the parent" do
+        it "creates the order detail with the accessory's initial order status" do
           do_request
-          expect(assigns(:order_details).first.order_status).to eq(order_detail.order_status)
+          expect(assigns(:order_details).first.order_status).to eq(auto_accessory.initial_order_status)
         end
 
-        it "creates the order detail as completed if the original is" do
+        it "uses the accessory's initial order status even if the original is completed" do
           order_detail.backdate_to_complete!
           do_request
-          expect(assigns(:order_details).first).to be_complete
+          expect(assigns(:order_details).first.order_status).to eq(auto_accessory.initial_order_status)
         end
 
         context "adding a disabled accessory" do

@@ -195,10 +195,25 @@ RSpec.describe Accessories::Accessorizer do
         allow(order_detail).to receive(:fulfilled_at).and_return 1.hour.ago
       end
 
-      it "marks the children as complete" do
-        expect_any_instance_of(OrderDetail).to receive(:backdate_to_complete!).with(order_detail.fulfilled_at)
-        accessorizer.update_accessorizer_attributes(params).order_details
+      it "uses the accessory's initial order status instead of completing it" do
+        results = accessorizer.update_accessorizer_attributes(params).order_details
+        expect(results.first.order_status).to eq(quantity_accessory.initial_order_status)
+      end
+    end
 
+    context "order status assignment" do
+      let(:custom_order_status) { create(:order_status, name: "Pending Review") }
+      let(:params) do
+        ActionController::Parameters.new(quantity_accessory.id.to_s => { enabled: "true", quantity: "3" })
+      end
+
+      before do
+        quantity_accessory.update!(initial_order_status: custom_order_status)
+      end
+
+      it "uses the accessory product's initial order status" do
+        results = accessorizer.update_accessorizer_attributes(params).order_details
+        expect(results.first.order_status).to eq(custom_order_status)
       end
     end
   end

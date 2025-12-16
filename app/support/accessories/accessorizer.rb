@@ -91,15 +91,10 @@ class Accessories::Accessorizer
 
     validate_note!(od)
 
-    if @order_detail.complete?
-      od.save! # do validations before trying to backdate
-      od.backdate_to_complete! @order_detail.fulfilled_at
-    else
-      # Cannot do this with backdate_to_complete! because then it doesn't think
-      # the status is changing.
-      od.order_status_id = @order_detail.order_status_id
-      od.save!
-    end
+    # Always use the accessory product's initial order status,
+    # regardless of the parent's status. Accessories should be independent.
+    od.order_status_id = od.product.initial_order_status.id
+    od.save!
   end
 
   def validate_note!(od)
