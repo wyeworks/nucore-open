@@ -40,6 +40,8 @@ class StatementPresenter < SimpleDelegator
                            order_details_notes(:reconciled_note)
                          elsif status == :unrecoverable
                            order_details_notes(:unrecoverable_note)
+                         else
+                           []
                          end
   end
 

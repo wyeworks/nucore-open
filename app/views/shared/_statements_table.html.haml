@@ -67,17 +67,18 @@
             %div
               %span= Statement.human_attribute_name("status.#{s.status}")
             - if show_reconcile_notes && s.reconcile_notes.present?
+              - notes = s.reconcile_notes.dup
               %div
                 %small
                   %strong= "#{t('statements.notes')}:"
               %div
-                %small= s.reconcile_notes.shift
+                %small= notes.shift
               - collapsable_section_id = "statement-notes-#{s.id}"
               %ul.unstyled.collapse{ id: collapsable_section_id }
-                - s.reconcile_notes.each do |note|
+                - notes.each do |note|
                   %li
                     %small= note
-              - if s.reconcile_notes.length > 0
+              - if notes.length > 0
                 %a{ role: "button",
                 href: "##{collapsable_section_id}",
                 data: { toggle: "collapse" },
