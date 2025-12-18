@@ -45,5 +45,5 @@
             %span
               = text("facility_accounts_reconciliation.index.bulk_deposit_number_prefix")
             = text_field_tag :bulk_deposit_number, nil, class: "form-control"
-- if view_hook_exists?("reconciliation_action_row") && defined?(account_class) && use_custom_reconciliation_features?(account_class)
+- if view_hook_exists?("reconciliation_action_row") && local_assigns.key?(:account_class) && use_custom_reconciliation_features?(account_class)
   = render_view_hook("reconciliation_action_row", local_assigns.merge(account_class: account_class))
