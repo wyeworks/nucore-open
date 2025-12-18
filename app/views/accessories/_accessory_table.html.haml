@@ -14,9 +14,7 @@
             = p.input :enabled,
               as: :boolean,
               label: false,
-              inline_label: "#{od.product.to_s} (#{t("product_accessories.type.#{od.scaling_type}")})",
-              checked_value: "true",
-              unchecked_value: "false"
+              inline_label: "#{od.product.to_s} (#{t("product_accessories.type.#{od.scaling_type}")})"
           %td
             = p.input :quantity,
               disabled: !od.quantity_editable?,
