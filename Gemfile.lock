@@ -436,7 +436,7 @@ GEM
       coffee-rails (>= 3.2.1)
       jquery-rails
       rails (>= 3.2.0)
-    net-http (0.8.0)
+    net-http (0.9.1)
       uri (>= 0.11.1)
     net-imap (0.5.12)
       date
