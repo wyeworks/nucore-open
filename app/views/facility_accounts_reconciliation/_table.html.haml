@@ -1,19 +1,15 @@
-- show_checkboxes = !view_hook_exists?("reconciliation_table_row")
-
 %table.table.table-striped.table-hover
   %caption= t("facility_accounts_reconciliation.index.caption", model: account_class.model_name.human)
   %thead
     %tr
-      - if show_checkboxes
-        %th
+      %th
       %th{scope: "col"}= Statement.human_attribute_name(:invoice_number)
       %th{scope: "col"}= Account.model_name.human
       %th{scope: "col"}= Order.model_name.human
       %th{scope: "col"}= Statement.human_attribute_name(:total_cost)
-      - if view_hook_exists?("reconciliation_table_headers")
-        = render_view_hook("reconciliation_table_headers")
-      - else
-        %th#reconcile-note.row-note-input.js--reconciledField{ scope: "col" }= OrderDetail.human_attribute_name(:reconciled_note)
+      - if view_hook_exists?("reconciliation_table_headers") && use_custom_reconciliation_features?(account_class)
+        = render_view_hook("reconciliation_table_headers", account_class: account_class)
+      = render "facility_accounts_reconciliation/table_column_headers"
       - if show_reconciliation_deposit_number
         %th#reconcile-deposit-number.row-note-input.js--reconciledField{ scope: "col", data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
           = OrderDetail.human_attribute_name(:deposit_number)
@@ -21,8 +17,7 @@
   %tbody
     - @unreconciled_details.each do |order_detail|
       %tr
-        - if show_checkboxes
-          %td.centered= check_box_tag "order_detail[#{order_detail.id}][selected]", "1", false, class: "toggle", aria: {label: t("facility_accounts_reconciliation.index.checkbox_label", order_number:  order_detail.to_s)}
+        %td.centered= check_box_tag "order_detail[#{order_detail.id}][selected]", "1", false, class: "toggle", aria: {label: t("facility_accounts_reconciliation.index.checkbox_label", order_number:  order_detail.to_s)}
         %td= "##{order_detail.statement_invoice_number}"
         %td
           = order_detail.account
@@ -38,10 +33,9 @@
               .order-detail-extra.order-detail-note= order_detail.note
 
         %td= show_actual_total(order_detail)
-        - if view_hook_exists?("reconciliation_table_columns")
-          = render_view_hook("reconciliation_table_columns", order_detail: order_detail)
-        - else
-          %td.row-note-input.js--reconciledField= text_field_tag "order_detail[#{order_detail.id}][reconciled_note]", nil, aria: {labelledby: "reconcile-note"}
+        - if view_hook_exists?("reconciliation_table_columns") && use_custom_reconciliation_features?(account_class)
+          = render_view_hook("reconciliation_table_columns", order_detail: order_detail, account_class: account_class)
+        = render "facility_accounts_reconciliation/table_column_data", order_detail: order_detail
         - if show_reconciliation_deposit_number
           %td.row-note-input.js--reconciledField= text_field_tag "order_detail[#{order_detail.id}][deposit_number]", nil, aria: {labelledby: "reconcile-deposit-number"}
         %td.row-note-input.js--unrecoverableField.hidden

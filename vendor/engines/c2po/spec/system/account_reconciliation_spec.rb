@@ -78,7 +78,9 @@ RSpec.describe "Account Reconciliation", :js do
 
       # ensure the closed by times show up on the statement history page
       click_link "#{I18n.t('Statement')} History"
-      expect(page).to have_content(statement.closed_by_times.first)
+      unless ViewHook.find("shared.statements_table", "statement_table_column_data").any?
+        expect(page).to have_content(statement.closed_by_times.first)
+      end
     end
 
     context "with bulk reconciliation note" do
@@ -132,6 +134,7 @@ RSpec.describe "Account Reconciliation", :js do
 
     before do
       skip_if_account_unreconcilable(:purchase_order)
+      skip_if_custom_reconciliation_viewhooks_present
     end
 
     it "can search and then reconcile a PO order" do
@@ -159,7 +162,9 @@ RSpec.describe "Account Reconciliation", :js do
 
       # ensure the closed by times show up on the statement history page
       click_link "#{I18n.t('Statement')} History"
-      expect(page).to have_content(statement.closed_by_times.first)
+      unless ViewHook.find("shared.statements_table", "statement_table_column_data").any?
+        expect(page).to have_content(statement.closed_by_times.first)
+      end
     end
 
     it "can take a bulk reconciliation note" do
