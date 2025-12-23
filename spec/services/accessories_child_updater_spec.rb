@@ -41,8 +41,8 @@ RSpec.describe Accessories::ChildUpdater do
         order_detail.update_order_status! user, OrderStatus.in_process
       end
 
-      it "moves the child to in process as well" do
-        expect(child_order_detail.reload).to be_inprocess
+      it "does not change the child's status (accessories are independent)" do
+        expect(child_order_detail.reload.order_status).to eq(OrderStatus.new_status)
       end
     end
 
@@ -51,9 +51,8 @@ RSpec.describe Accessories::ChildUpdater do
         reservation.end_reservation!
       end
 
-      it "moves the child to complete as well" do
-        expect(child_order_detail).to be_complete
-        expect(child_order_detail.fulfilled_at).to eq(order_detail.fulfilled_at)
+      it "does not change the child's status (accessories are independent)" do
+        expect(child_order_detail.reload.order_status).to eq(OrderStatus.new_status)
       end
     end
 
@@ -64,19 +63,19 @@ RSpec.describe Accessories::ChildUpdater do
         order_detail.update_order_status! user, OrderStatus.canceled
       end
 
-      it "moves the child to canceled" do
-        expect(child_order_detail).to be_canceled
+      it "does not change the child's status (accessories are independent)" do
+        expect(child_order_detail.reload.order_status).to eq(OrderStatus.new_status)
       end
     end
 
-    context "when the child has been canceled, but the parent is still new and moves to completed" do
+    context "when the child has been manually canceled" do
       before do
         child_order_detail.update_order_status! user, OrderStatus.canceled
         reservation.end_reservation!
       end
 
-      it "does not move the child" do
-        expect(child_order_detail).to be_canceled
+      it "keeps the child canceled" do
+        expect(child_order_detail.reload).to be_canceled
       end
     end
 
