@@ -28,13 +28,17 @@ RSpec.describe "canceling statements" do
 
     context "when an order detail is NOT reconciled" do
       it "cancels a statement" do
-        click_on "Cancel"
+        within("tr.statement") do
+          click_on "Cancel"
+        end
         expect(page).to have_content "#{I18n.t('Statement')} has been canceled"
         expect(page).to have_content "Canceled"
       end
 
       it "does not allow download or emailing of statement" do
-        click_on "Cancel"
+        within("tr.statement") do
+          click_on "Cancel"
+        end
         expect(page).to_not have_link "Download"
         expect(page).to_not have_content "Resend"
         expect(page).to_not have_link "Cancel"
