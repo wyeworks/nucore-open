@@ -91,12 +91,16 @@ class Accessories::Accessorizer
 
     validate_note!(od)
 
-    if @order_detail.complete?
-      od.save! # do validations before trying to backdate
+    if SettingsHelper.feature_on?(:accessory_independent_order_status)
+      # always use own initial order status
+      od.order_status_id = od.product.initial_order_status.id
+      od.save!
+    elsif @order_detail.complete?
+      # complete the accessory along with the parent
+      od.save!
       od.backdate_to_complete! @order_detail.fulfilled_at
     else
-      # Cannot do this with backdate_to_complete! because then it doesn't think
-      # the status is changing.
+      # inherit parent's status
       od.order_status_id = @order_detail.order_status_id
       od.save!
     end

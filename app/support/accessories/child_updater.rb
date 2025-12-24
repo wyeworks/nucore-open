@@ -26,7 +26,10 @@ class Accessories::ChildUpdater
   end
 
   def status_changed?(child)
-    @order_detail.saved_change_to_order_status_id? && @order_detail.order_status_id_before_last_save == child.order_status_id
+    return false if SettingsHelper.feature_on?(:accessory_independent_order_status)
+
+    @order_detail.saved_change_to_order_status_id? &&
+      @order_detail.order_status_id_before_last_save == child.order_status_id
   end
 
   def change_status!(child)
