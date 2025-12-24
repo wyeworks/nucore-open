@@ -3,18 +3,17 @@
 %td.currency= number_to_currency(statement.total_cost)
 - if SettingsHelper.feature_on?(:merged_statement_history_columns)
   %td
-    %ul.unstyled
-      - statement.closed_by_times.zip(statement.closed_by_user_full_names).each do |time, name|
-        %li.statement__nowrap-text
-          %strong= t("statements.closed_at") + ":"
-          = time
-        %li.statement__nowrap-text
-          %strong= t("statements.closed_by") + ":"
-          = name
-        - if statement.reconciled_at_times.present?
-          %li.statement__nowrap-text
-            %strong= t("statements.reconciled_at") + ":"
-            = statement.reconciled_at_times.first
+    - statement.closed_by_times.zip(statement.closed_by_user_full_names).each do |time, name|
+      %div
+        %strong= t("statements.closed_at") + ":"
+        = time
+      %div
+        %strong= t("statements.closed_by") + ":"
+        = name
+      - if statement.reconciled_at_times.present?
+        %div
+          %strong= t("statements.reconciled_at") + ":"
+          = statement.reconciled_at_times.first
 - else
   %td
     %ul.unstyled
