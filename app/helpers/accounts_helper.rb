@@ -33,6 +33,18 @@ module AccountsHelper
     SettingsHelper.feature_on?(:multi_facility_accounts) && account.per_facility? && ability.can?(:edit, AccountFacilityJoinsForm.new(account: account))
   end
 
+  def account_price_groups_select_options
+    if current_facility.cross_facility?
+      PriceGroup.includes(:facility).all.map(&:presenter).map do |price_group|
+        [price_group.long_name, price_group.id]
+      end
+    else
+      PriceGroup.for_facility(current_facility).map do |price_group|
+        [price_group.name, price_group.id]
+      end
+    end
+  end
+
   private
 
   def available_accounts_array
