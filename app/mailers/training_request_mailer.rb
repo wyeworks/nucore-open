@@ -5,8 +5,9 @@ class TrainingRequestMailer < ApplicationMailer
   def notify_facility_staff(user, product)
     @user = user
     @product = product
+    reply_to = @user.email
     if @product.training_request_contacts.any?
-      mail(to: @product.training_request_contacts, subject: t("training_request_mailer.notify_facility_staff.subject", facility: @product.facility))
+      mail(to: @product.training_request_contacts, reply_to: reply_to, subject: t("training_request_mailer.notify_facility_staff.subject", facility: @product.facility))
     end
   end
 
