@@ -25,9 +25,9 @@ class Accessories::ChildUpdater
     end
   end
 
-  def status_changed?(_child)
-    # Accessories are always independent from the parent's status.
-    false
+  def status_changed?(child)
+    @order_detail.saved_change_to_order_status_id? &&
+      @order_detail.order_status_id_before_last_save == child.order_status_id
   end
 
   def change_status!(child)

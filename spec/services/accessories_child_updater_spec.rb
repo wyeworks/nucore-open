@@ -36,55 +36,15 @@ RSpec.describe Accessories::ChildUpdater do
         .create(attributes_for(:order_detail, order_status: OrderStatus.new_status, product: product, order: order))
     end
 
-    context "when the parent moves from new to in process" do
-      before do
-        order_detail.update_order_status! user, OrderStatus.in_process
-      end
+    context "when accessory_independent_order_status feature is enabled", feature_setting: { accessory_independent_order_status: true } do
+      context "when the parent moves from new to in process" do
+        before do
+          order_detail.update_order_status! user, OrderStatus.in_process
+        end
 
-      it "does not change the child's status (accessories are independent)" do
-        expect(child_order_detail.reload.order_status).to eq(OrderStatus.new_status)
-      end
-    end
-
-    context "when the parent moves from new to complete" do
-      before do
-        reservation.end_reservation!
-      end
-
-      it "does not change the child's status (accessories are independent)" do
-        expect(child_order_detail.reload.order_status).to eq(OrderStatus.new_status)
-      end
-    end
-
-    context "when the parent moves from complete to canceled" do
-      before do
-        allow_any_instance_of(Reservation).to receive(:can_cancel?).and_return true
-        reservation.end_reservation!
-        order_detail.update_order_status! user, OrderStatus.canceled
-      end
-
-      it "does not change the child's status (accessories are independent)" do
-        expect(child_order_detail.reload.order_status).to eq(OrderStatus.new_status)
-      end
-    end
-
-    context "when the child has been manually canceled" do
-      before do
-        child_order_detail.update_order_status! user, OrderStatus.canceled
-        reservation.end_reservation!
-      end
-
-      it "keeps the child canceled" do
-        expect(child_order_detail.reload).to be_canceled
-      end
-    end
-
-    context "when the child has a different initial order status than the parent" do
-      let(:in_process_status) { OrderStatus.in_process }
-
-      before do
-        product.update!(initial_order_status: in_process_status)
-        child_order_detail.update!(order_status: in_process_status)
+        it "does not change the child's status (accessories are independent)" do
+          expect(child_order_detail.reload.order_status).to eq(OrderStatus.new_status)
+        end
       end
 
       context "when the parent moves from new to complete" do
@@ -92,8 +52,102 @@ RSpec.describe Accessories::ChildUpdater do
           reservation.end_reservation!
         end
 
-        it "does not change the child's status" do
-          expect(child_order_detail.reload.order_status).to eq(in_process_status)
+        it "does not change the child's status (accessories are independent)" do
+          expect(child_order_detail.reload.order_status).to eq(OrderStatus.new_status)
+        end
+      end
+
+      context "when the parent moves from complete to canceled" do
+        before do
+          allow_any_instance_of(Reservation).to receive(:can_cancel?).and_return true
+          reservation.end_reservation!
+          order_detail.update_order_status! user, OrderStatus.canceled
+        end
+
+        it "does not change the child's status (accessories are independent)" do
+          expect(child_order_detail.reload.order_status).to eq(OrderStatus.new_status)
+        end
+      end
+
+      context "when the child has been manually canceled" do
+        before do
+          child_order_detail.update_order_status! user, OrderStatus.canceled
+          reservation.end_reservation!
+        end
+
+        it "keeps the child canceled" do
+          expect(child_order_detail.reload).to be_canceled
+        end
+      end
+
+      context "when the child has a different initial order status than the parent" do
+        let(:in_process_status) { OrderStatus.in_process }
+
+        before do
+          product.update!(initial_order_status: in_process_status)
+          child_order_detail.update!(order_status: in_process_status)
+        end
+
+        context "when the parent moves from new to complete" do
+          before do
+            reservation.end_reservation!
+          end
+
+          it "does not change the child's status" do
+            expect(child_order_detail.reload.order_status).to eq(in_process_status)
+          end
+        end
+      end
+    end
+
+    context "when accessory_independent_order_status feature is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+      context "when the parent moves from new to in process" do
+        before do
+          order_detail.update_order_status! user, OrderStatus.in_process
+        end
+
+        it "changes the child's status to match the parent" do
+          expect(child_order_detail.reload.order_status).to eq(OrderStatus.in_process)
+        end
+      end
+
+      context "when the parent moves from new to complete" do
+        before do
+          reservation.end_reservation!
+        end
+
+        it "changes the child's status to complete" do
+          expect(child_order_detail.reload.order_status).to eq(OrderStatus.complete)
+        end
+      end
+
+      context "when the child has been manually canceled" do
+        before do
+          child_order_detail.update_order_status! user, OrderStatus.canceled
+          reservation.end_reservation!
+        end
+
+        it "keeps the child canceled (different status from parent)" do
+          expect(child_order_detail.reload).to be_canceled
+        end
+      end
+
+      context "when the child has a different status than the parent" do
+        let(:in_process_status) { OrderStatus.in_process }
+
+        before do
+          product.update!(initial_order_status: in_process_status)
+          child_order_detail.update!(order_status: in_process_status)
+        end
+
+        context "when the parent moves from new to complete" do
+          before do
+            reservation.end_reservation!
+          end
+
+          it "does not change the child's status (different from parent's previous status)" do
+            expect(child_order_detail.reload.order_status).to eq(in_process_status)
+          end
         end
       end
     end

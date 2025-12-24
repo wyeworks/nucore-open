@@ -9,9 +9,9 @@ RSpec.describe AccessoriesController do
 
   let(:instrument) { create(:setup_instrument, :always_available) }
   let(:facility) { instrument.facility }
-  let(:quantity_accessory) { create(:accessory, parent: instrument, facility: facility) }
-  let(:auto_accessory) { create(:time_based_accessory, parent: instrument, scaling_type: "auto", facility: facility) }
-  let(:manual_accessory) { create(:time_based_accessory, parent: instrument, scaling_type: "manual", facility: facility) }
+  let(:quantity_accessory) { create(:accessory, parent: instrument, facility:) }
+  let(:auto_accessory) { create(:time_based_accessory, parent: instrument, scaling_type: "auto", facility:) }
+  let(:manual_accessory) { create(:time_based_accessory, parent: instrument, scaling_type: "manual", facility:) }
   let(:reservation) { create(:purchased_reservation, product: instrument, reserve_start_at: 1.hour.ago) }
   let(:order_detail) { reservation.order_detail }
   let(:order) { order_detail.order }
@@ -184,10 +184,20 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.order_status).to eq(custom_status)
         end
 
-        it "uses the accessory's initial order status even if the original is completed" do
-          order_detail.backdate_to_complete!
-          do_request
-          expect(assigns(:order_details).first.reload.order_status).to eq(quantity_accessory.initial_order_status)
+        context "when accessory_independent_order_status is enabled", feature_setting: { accessory_independent_order_status: true } do
+          it "uses the accessory's initial order status even if the original is completed" do
+            order_detail.backdate_to_complete!
+            do_request
+            expect(assigns(:order_details).first.reload.order_status).to eq(quantity_accessory.initial_order_status)
+          end
+        end
+
+        context "when accessory_independent_order_status is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+          it "inherits the parent's completed status" do
+            order_detail.backdate_to_complete!
+            do_request
+            expect(assigns(:order_details).first.reload.order_status).to eq(order_detail.order_status)
+          end
         end
 
         context "adding a disabled accessory" do
@@ -242,10 +252,20 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.order_status).to eq(manual_accessory.initial_order_status)
         end
 
-        it "uses the accessory's initial order status even if the original is completed" do
-          order_detail.backdate_to_complete!
-          do_request
-          expect(assigns(:order_details).first.reload.order_status).to eq(manual_accessory.initial_order_status)
+        context "when accessory_independent_order_status is enabled", feature_setting: { accessory_independent_order_status: true } do
+          it "uses the accessory's initial order status even if the original is completed" do
+            order_detail.backdate_to_complete!
+            do_request
+            expect(assigns(:order_details).first.reload.order_status).to eq(manual_accessory.initial_order_status)
+          end
+        end
+
+        context "when accessory_independent_order_status is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+          it "inherits the parent's completed status" do
+            order_detail.backdate_to_complete!
+            do_request
+            expect(assigns(:order_details).first.reload.order_status).to eq(order_detail.order_status)
+          end
         end
 
         context "adding a disabled accessory" do
@@ -285,10 +305,20 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.order_status).to eq(auto_accessory.initial_order_status)
         end
 
-        it "uses the accessory's initial order status even if the original is completed" do
-          order_detail.backdate_to_complete!
-          do_request
-          expect(assigns(:order_details).first.order_status).to eq(auto_accessory.initial_order_status)
+        context "when accessory_independent_order_status is enabled", feature_setting: { accessory_independent_order_status: true } do
+          it "uses the accessory's initial order status even if the original is completed" do
+            order_detail.backdate_to_complete!
+            do_request
+            expect(assigns(:order_details).first.order_status).to eq(auto_accessory.initial_order_status)
+          end
+        end
+
+        context "when accessory_independent_order_status is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+          it "inherits the parent's completed status" do
+            order_detail.backdate_to_complete!
+            do_request
+            expect(assigns(:order_details).first.order_status).to eq(order_detail.order_status)
+          end
         end
 
         context "adding a disabled accessory" do

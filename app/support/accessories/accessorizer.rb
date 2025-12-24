@@ -91,10 +91,19 @@ class Accessories::Accessorizer
 
     validate_note!(od)
 
-    # Always use the accessory product's initial order status,
-    # regardless of the parent's status. Accessories should be independent.
-    od.order_status_id = od.product.initial_order_status.id
-    od.save!
+    if SettingsHelper.feature_on?(:accessory_independent_order_status)
+      # always use own initial order status
+      od.order_status_id = od.product.initial_order_status.id
+      od.save!
+    elsif @order_detail.complete?
+      # complete the accessory along with the parent
+      od.save!
+      od.backdate_to_complete! @order_detail.fulfilled_at
+    else
+      # inherit parent's status
+      od.order_status_id = @order_detail.order_status_id
+      od.save!
+    end
   end
 
   def validate_note!(od)
