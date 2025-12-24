@@ -39,7 +39,7 @@ module AccountsHelper
         [price_group.long_name, price_group.id]
       end
     else
-      PriceGroup.for_facility(current_facility) do |price_group|
+      PriceGroup.for_facility(current_facility).map do |price_group|
         [price_group.name, price_group.id]
       end
     end
