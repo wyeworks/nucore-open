@@ -33,8 +33,10 @@ module AccountsHelper
     SettingsHelper.feature_on?(:multi_facility_accounts) && account.per_facility? && ability.can?(:edit, AccountFacilityJoinsForm.new(account: account))
   end
 
-  def use_custom_reconciliation_features?(_account_class = nil)
-    false
+  def use_custom_reconciliation_features?(account_class = nil)
+    return false if account_class.blank?
+
+    Account.config.using_custom_reconciliation?(account_class.name)
   end
 
   private

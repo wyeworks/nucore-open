@@ -144,4 +144,13 @@ class AccountConfig
     account_type.to_s.classify
   end
 
+  # Returns an array of subclassed Account object names that use custom reconciliation features.
+  def custom_reconciliation_account_types
+    @custom_reconciliation_account_types ||= []
+  end
+
+  # Returns true if this account type uses custom reconciliation features.
+  def using_custom_reconciliation?(account_type)
+    custom_reconciliation_account_types.include?(account_type.to_s.classify)
+  end
 end
