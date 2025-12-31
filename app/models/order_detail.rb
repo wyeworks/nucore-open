@@ -528,6 +528,10 @@ class OrderDetail < ApplicationRecord
     cost - subsidy unless cost.nil? || subsidy.nil?
   end
 
+  def order_status_display_name
+    order_status&.name
+  end
+
   def price_groups
     return [PriceGroup.nonbillable] if product.nonbillable_mode?
 

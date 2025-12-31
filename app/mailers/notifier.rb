@@ -75,7 +75,7 @@ class Notifier < ActionMailer::Base
   def order_detail_status_changed(order_detail)
     @order_detail = order_detail
     facility = order_detail.facility.abbreviation
-    status = order_detail.order_status.name
+    status = order_detail_status_name_for_mail(order_detail)
     mail(
       to: order_detail.order.user.email,
       subject: text("views.notifier.order_detail_status_changed.subject", facility: facility, status: status)
@@ -83,6 +83,10 @@ class Notifier < ActionMailer::Base
   end
 
   private
+
+  def order_detail_status_name_for_mail(order_detail)
+    order_detail.order_status.name
+  end
 
   def attach_statement_pdf
     attachments[statement_pdf.filename] = {
