@@ -16,7 +16,7 @@
 
 * `create_users` Should admins be able to manually add users
 * `devise/lock_strategy`Lock account after 5 failed attempts 
-* `lookup_netids`: If enabled, allow internal and external users to be created. Add additional step to ensure the NetId or email is not already present. Else, navigate to create external user (no internal user creation allowed).
+* `lookup_netids`: If enabled, allow internal and external users to be created and add additional step to ensure the NetId or email is not already present. Else, navigate to create external user (no internal user creation allowed).
 * `password_update` Allow users to update or reset password (forgot password button)
 * `saml: create_user` create/update saml users on login
 * `uses_ldap_authentication`: Enable if ldap authentication engine is used and configured.
@@ -91,7 +91,6 @@
 * `reservations: grace_period`, `reservations: timeout_period`, `occupancies: timeout_period`, `billing: review_period` various grace periods, time periods, and review periods
 * `add_accessories_before_reservation_starts`: Allow to add accessories before a reservation starts.
 * `auto_end_reservations_on_next_start` Automatically end previous reservations for timer/relay controlled instruments, when another user starts a new reservation.
-* `auto_end_reservations_on_next_start`: Automatically ends an unfinished reservation if another reservation for the same instrument is started.
 * `walkup_reservations`: Show quick reservation link on product detail. Quick reservation page is always enabled.
 
 ## Products
@@ -108,7 +107,7 @@
 * `accounts: product_default` `accounts: revenue_account_default` Specify a default Expense account from which fees will be withdrawn; must be open on purchaser's Chart String - one default for products and one for facilities.  Optionally, these can be edited per product.
 * `cross_facility_reports` Allow generating cross facility reports (does not work with SES due to attached file size limits)
 * `kiosk_view` Kiosk mode - display a list of actionable reservations without logging in (optionally allow acting w/o auth)
-* `bypass_kiosk_auth`: Do not require authentication on Kioks view actions.
+* `bypass_kiosk_auth`: Do not require authentication on Kiosk view actions.
 * `active_storage` use `ActiveStorage` if `true`, or `Paperclip` if `false`
 * `active_storage_for_images_only` enables `ActiveStorage` for the `DownloadableFiles::Image` module. This flag needs to be enabled even if `active_storage` is
 * `show_estimates_option`: Enable estimates menu entry on facility management.
