@@ -33,6 +33,12 @@ module AccountsHelper
     SettingsHelper.feature_on?(:multi_facility_accounts) && account.per_facility? && ability.can?(:edit, AccountFacilityJoinsForm.new(account: account))
   end
 
+  def use_custom_reconciliation_features?(account_class = nil)
+    return false if account_class.blank?
+
+    Account.config.using_custom_reconciliation?(account_class.name)
+  end
+  
   def account_price_groups_select_options
     if current_facility.cross_facility?
       PriceGroup.includes(:facility).all.map(&:presenter).map do |price_group|

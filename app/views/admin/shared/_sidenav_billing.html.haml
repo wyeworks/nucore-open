@@ -25,8 +25,11 @@
     %li.nav-spacer
     - Account.config.reconcilable_account_types.each do |account_type|
       - route_name = Account.config.account_type_to_route(account_type)
-      = tab text("reconcile", model: account_type.constantize.model_name.human(count: 2)),
-        [route_name.to_sym, FacilityAccount], (sidenav_tab == route_name)
+      - if view_hook_exists?("reconciliation_sidenav_link")
+        = render_view_hook("reconciliation_sidenav_link", account_type: account_type, route_name: route_name, sidenav_tab: sidenav_tab)
+      - else
+        = tab text("reconcile", model: account_type.constantize.model_name.human(count: 2)),
+          [route_name.to_sym, FacilityAccount], (sidenav_tab == route_name)
   = render_view_hook("custom_reconcilable_account_types", sidenav_tab: sidenav_tab)
 
   - billing_log_events_ff = SettingsHelper.feature_on?(:billing_log_events)
