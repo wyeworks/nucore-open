@@ -152,14 +152,11 @@ class FacilitiesController < ApplicationController
                             .preload(account: :owner_user)
                             .reorder(sort_clause)
 
-    if @order_details.size < 1000
-      @grand_total = @order_details.sum { |od| (od.actual_total || od.estimated_total) || 0 }
-    else
-      @too_many_results = true
-    end
-
     respond_to do |format|
-      format.html { @order_details = @order_details.paginate(page: params[:page]).order(:id) }
+      format.html do
+        @grand_total = @order_details.grand_total
+        @order_details = @order_details.paginate(page: params[:page]).order(:id)
+      end
       format.csv { handle_csv_search }
     end
   end

@@ -170,4 +170,103 @@ RSpec.describe "creating accounts" do
       end
     end
   end
+
+  describe(
+    "price groups selection",
+    feature_setting: { show_account_price_groups_tab: true },
+  ) do
+    let(:facility) { create(:setup_facility) }
+    let(:account_class) { NufsAccount }
+    let(:account_type) { account_class.to_s }
+    let(:price_group) { PriceGroup.last }
+
+    before do
+      allow(Account.config).to receive(:creation_enabled_types) do
+        [account_type]
+      end
+      allow(Account.config).to receive(:account_types) do
+        [account_type]
+      end
+    end
+
+    it "shows price groups select checkbox" do
+      get new_facility_account_path(facility, owner_user_id: user.id)
+
+      expect(page).to have_field("#{account_type.underscore}[price_groups_relation_ids][]")
+    end
+
+    it "can submit price groups" do
+      params = {
+        account_type.underscore => {
+          account_number: "1234",
+          description: "Some description",
+          price_groups_relation_ids: [price_group.id],
+        }
+      }
+
+      expect do
+        post(
+          facility_accounts_path(facility, owner_user_id: user.id, account_type:),
+          params:
+        )
+      end.to change(Account, :count).by(1)
+
+      expect(Account.last.price_groups_relation).to match([price_group])
+    end
+
+    describe "price groups options" do
+      let(:facility) { create(:facility) }
+      let(:other_facility) { create(:facility) }
+      let!(:facility_price_group) do
+        create(:price_group, facility:)
+      end
+      let!(:other_facility_price_group) do
+        create(:price_group, facility: other_facility)
+      end
+      let(:account_class) { NufsAccount }
+      let(:account_type) { account_class.to_s }
+      let(:account_type_key) { account_type.underscore }
+      let(:price_groups_key) do
+        "#{account_type_key}[price_groups_relation_ids][]"
+      end
+
+      context "when current facility is not cross facility" do
+        let(:current_facility) { facility }
+
+        it "does not show local price group's facility name" do
+          get new_facility_account_path(current_facility, owner_user_id: user.id)
+
+          expect(page).to have_select(
+            price_groups_key, with_options: [facility_price_group.name],
+          )
+        end
+
+        it "includes global and facility price groups but not other facilities'" do
+          get new_facility_account_path(current_facility, owner_user_id: user.id)
+
+          select_field = page.find_field(price_groups_key)
+
+          options_text = select_field.all("option").map(&:text)
+
+          expect(options_text).to include(PriceGroup.base.name)
+          expect(options_text).to include(a_string_matching(facility_price_group.name))
+          expect(options_text).not_to include(a_string_matching(other_facility_price_group.name))
+        end
+      end
+
+      context "when facility is cross facility" do
+        let(:current_facility) { Facility.cross_facility }
+
+        it "shows facility price group's with facility name" do
+          facility_price_group = create(:price_group, facility: create(:facility))
+
+          get new_facility_account_path(current_facility, owner_user_id: user.id)
+
+          expect(page).to have_select(
+            price_groups_key, with_options: [facility_price_group.presenter.long_name],
+          )
+        end
+      end
+    end
+  end
 end
