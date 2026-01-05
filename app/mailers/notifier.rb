@@ -73,7 +73,7 @@ class Notifier < ActionMailer::Base
   end
 
   def order_detail_status_changed(order_detail)
-    @order_detail = order_detail
+    @order_detail = OrderDetailPresenter.new(order_detail)
     facility = order_detail.facility.abbreviation
     status = order_detail_status_name_for_mail(order_detail)
     mail(
