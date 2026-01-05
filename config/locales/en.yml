@@ -775,7 +775,7 @@ en:
     cancel: Cancel
     closed_at: Closed At
     closed_by: Closed By
-    closed_on: Closed At/By/Note
+    closed_on: Closed At/By
     reconciled_at: Reconciled At
     notes: Notes
     expand: Expand
