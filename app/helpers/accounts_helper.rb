@@ -38,7 +38,7 @@ module AccountsHelper
 
     Account.config.using_custom_reconciliation?(account_class.name)
   end
-  
+
   def account_price_groups_select_options
     if current_facility.cross_facility?
       PriceGroup.includes(:facility).all.map(&:presenter).map do |price_group|
