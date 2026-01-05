@@ -1,11 +1,29 @@
 - statement = local_assigns[:statement]
 %td.currency= statement.order_details.count
 %td.currency= number_to_currency(statement.total_cost)
-%td
-  %ul.unstyled
-    - statement.closed_by_times.each do |closed_by_time|
-      %li.statement__nowrap-text= closed_by_time
-%td
-  %ul.unstyled
-    - statement.closed_by_user_full_names.each do |closed_by_name|
-      %li.statement__nowrap-text= closed_by_name
+- if SettingsHelper.feature_on?(:merged_statement_history_columns)
+  %td
+    - if statement.closed_by_times.any?
+      %div
+        %strong= "Closed:"
+        %ul.unstyled
+          - statement.closed_by_times.zip(statement.closed_by_user_full_names).each do |time, name|
+            %li.statement__nowrap-text
+              = time
+              %br
+              = name
+    - if statement.reconciled_at_times.present?
+      %div
+        %strong= t("statements.reconciled_at") + ":"
+        %ul.unstyled
+          - statement.reconciled_at_times.each do |reconciled_time|
+            %li.statement__nowrap-text= reconciled_time
+- else
+  %td
+    %ul.unstyled
+      - statement.closed_by_times.each do |closed_by_time|
+        %li.statement__nowrap-text= closed_by_time
+  %td
+    %ul.unstyled
+      - statement.closed_by_user_full_names.each do |closed_by_name|
+        %li.statement__nowrap-text= closed_by_name

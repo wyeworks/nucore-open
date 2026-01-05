@@ -62,7 +62,7 @@ module Reports
     private
 
     def headers
-      [
+      base_headers = [
         Statement.human_attribute_name(:invoice_number),
         Statement.human_attribute_name(:created_at),
         Statement.human_attribute_name(:account_admins),
@@ -72,10 +72,22 @@ module Reports
         Statement.human_attribute_name(:total_cost),
         Statement.human_attribute_name(:status),
       ]
+
+      if SettingsHelper.feature_on?(:merged_statement_history_columns)
+        base_headers + [
+          I18n.t("statements.closed_at"),
+          I18n.t("statements.closed_by"),
+          I18n.t("statements.reconciled_at"),
+        ]
+      else
+        base_headers
+      end
     end
 
     def build_row(statement)
-      [
+      presenter = StatementPresenter.new(statement)
+
+      base_row = [
         statement.invoice_number,
         format_usa_datetime(statement.created_at),
         statement.account.notify_users.map(&:full_name).join(', '),
@@ -85,6 +97,16 @@ module Reports
         number_to_currency(statement.total_cost),
         statement.status,
       ]
+
+      if SettingsHelper.feature_on?(:merged_statement_history_columns)
+        base_row + [
+          presenter.closed_by_times.join("; "),
+          presenter.closed_by_user_full_names.join("; "),
+          presenter.reconciled_at_times.join("; "),
+        ]
+      else
+        base_row
+      end
     end
   end
 end
