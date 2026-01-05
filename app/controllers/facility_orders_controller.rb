@@ -63,7 +63,7 @@ class FacilityOrdersController < ApplicationController
     end
 
     redirect_fallback = @order ? facility_order_path(current_facility, @order) : root_path
-    redirect_back(fallback_location: redirect_fallback)
+    redirect_back_or_to(redirect_fallback)
   end
 
   # PUT/PATCH /facilities/:facility_id/orders/:id

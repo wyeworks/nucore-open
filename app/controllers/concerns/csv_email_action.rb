@@ -17,7 +17,7 @@ module CsvEmailAction
       render plain: I18n.t("controllers.reports.mail_queued", email: csv_send_to_email)
     else
       flash[:notice] = I18n.t("controllers.reports.mail_queued", email: csv_send_to_email)
-      redirect_back(fallback_location: url_for)
+      redirect_back_or_to(url_for)
     end
   end
 
