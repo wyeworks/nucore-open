@@ -15,10 +15,10 @@ RSpec.describe Accessories::Accessorizer do
   let(:child_order_details) { [child_order_detail].compact }
   let(:order_detail) do
     build_stubbed :order_detail,
-                  product: product,
-                  order: order,
-                  reservation: reservation,
-                  child_order_details: child_order_details,
+                  product:,
+                  order:,
+                  reservation:,
+                  child_order_details:,
                   attributes: {
                     order_id: order.id,
                   }
@@ -184,21 +184,71 @@ RSpec.describe Accessories::Accessorizer do
 
     end
 
-    context "a completed order" do
+    context "order status assignment" do
+      let(:custom_order_status) { create(:order_status, name: "Pending Review") }
       let(:params) do
         ActionController::Parameters.new(quantity_accessory.id.to_s => { enabled: "true", quantity: "3" })
       end
-      before do
-        reservation.order_detail = order_detail
-        allow_any_instance_of(OrderDetail).to receive(:assign_price_policy)
-        allow(order_detail).to receive(:state).and_return("complete")
-        allow(order_detail).to receive(:fulfilled_at).and_return 1.hour.ago
+
+      context "when accessory_independent_order_status feature is enabled", feature_setting: { accessory_independent_order_status: true } do
+        before do
+          quantity_accessory.update!(initial_order_status: custom_order_status)
+        end
+
+        it "uses the accessory product's initial order status" do
+          results = accessorizer.update_accessorizer_attributes(params).order_details
+          expect(results.first.order_status).to eq(custom_order_status)
+        end
+
+        context "when the parent order is complete" do
+          before do
+            reservation.order_detail = order_detail
+            allow_any_instance_of(OrderDetail).to receive(:assign_price_policy)
+            allow(order_detail).to receive(:state).and_return("complete")
+            allow(order_detail).to receive(:fulfilled_at).and_return 1.hour.ago
+          end
+
+          it "uses the accessory's initial order status instead of completing it" do
+            results = accessorizer.update_accessorizer_attributes(params).order_details
+            expect(results.first.order_status).to eq(custom_order_status)
+          end
+        end
       end
 
-      it "marks the children as complete" do
-        expect_any_instance_of(OrderDetail).to receive(:backdate_to_complete!).with(order_detail.fulfilled_at)
-        accessorizer.update_accessorizer_attributes(params).order_details
+      context "when accessory_independent_order_status feature is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+        it "inherits the parent's order status when parent is not complete" do
+          results = accessorizer.update_accessorizer_attributes(params).order_details
+          expect(results.first.order_status).to eq(order_detail.order_status)
+        end
 
+        context "when the parent order is complete" do
+          let(:reservation) do
+            build_stubbed :reservation, reserve_start_at: 30.minutes.ago, reserve_end_at: 1.minute.ago, actual_duration_mins: 30
+          end
+          let(:order_detail) do
+            build_stubbed :order_detail,
+                          product:,
+                          order:,
+                          reservation:,
+                          child_order_details:,
+                          state: "complete",
+                          order_status: OrderStatus.complete,
+                          fulfilled_at: 1.hour.ago,
+                          attributes: {
+                            order_id: order.id,
+                          }
+          end
+
+          before do
+            reservation.order_detail = order_detail
+            allow_any_instance_of(OrderDetail).to receive(:assign_price_policy)
+          end
+
+          it "completes the accessory using backdate_to_complete!" do
+            results = accessorizer.update_accessorizer_attributes(params).order_details
+            expect(results.first.order_status).to eq(OrderStatus.complete)
+          end
+        end
       end
     end
   end
