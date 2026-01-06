@@ -15,6 +15,15 @@ RSpec.describe "creating accounts" do
       facility_account_class.to_s
     end
     let(:facility_account_class) { NufsAccount }
+    let(:account_number) { build(:nufs_account).account_number }
+
+    before do
+      creation_disabled_types = Account.config.creation_disabled_types
+
+      allow(Account.config).to receive(:creation_disabled_types) do
+        creation_disabled_types - [facility_account_type]
+      end
+    end
 
     before do
       allow(Account.config).to receive(:creation_enabled_types) do
@@ -68,7 +77,7 @@ RSpec.describe "creating accounts" do
             it "can create the account assigning a facility" do
               params = {
                 facility_account_type.underscore => {
-                  account_number: "213",
+                  account_number:,
                   description: "Some description",
                   facility_ids: [some_facility.id],
                 }
@@ -148,7 +157,7 @@ RSpec.describe "creating accounts" do
           it "assigns current facility on creation" do
             params = {
               facility_account_type.underscore => {
-                account_number: "213",
+                account_number:,
                 description: "Some description",
               }
             }
@@ -178,9 +187,14 @@ RSpec.describe "creating accounts" do
     let(:facility) { create(:setup_facility) }
     let(:account_class) { NufsAccount }
     let(:account_type) { account_class.to_s }
+    let(:account_number) { build(:nufs_account).account_number }
     let(:price_group) { PriceGroup.last }
 
     before do
+      creation_disabled_types = Account.config.creation_disabled_types
+      allow(Account.config).to receive(:creation_disabled_types) do
+        creation_disabled_types - [account_type]
+      end
       allow(Account.config).to receive(:creation_enabled_types) do
         [account_type]
       end
@@ -198,7 +212,7 @@ RSpec.describe "creating accounts" do
     it "can submit price groups" do
       params = {
         account_type.underscore => {
-          account_number: "1234",
+          account_number:,
           description: "Some description",
           price_groups_relation_ids: [price_group.id],
         }
