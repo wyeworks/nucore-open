@@ -85,6 +85,48 @@ RSpec.describe StatementPresenter do
     end
   end
 
+  describe "#reconciled_at_times" do
+    let(:product) { create(:setup_instrument) }
+    let(:order) { create(:setup_order, product:) }
+    let(:reconciled_at1) { Time.zone.local(2015, 10, 20, 10, 30) }
+    let(:reconciled_at2) { Time.zone.local(2015, 10, 21, 14, 45) }
+
+    before do
+      create_list(:order_detail, 2, statement:, order:, product:)
+    end
+
+    context "when order details have reconciled_at dates" do
+      before do
+        statement.order_details.first.update(reconciled_at: reconciled_at1)
+        statement.order_details.second.update(reconciled_at: reconciled_at2)
+      end
+
+      it "returns formatted reconciled_at times in descending order" do
+        expected_times = [
+          I18n.l(reconciled_at2, format: :usa),
+          I18n.l(reconciled_at1, format: :usa),
+        ]
+        expect(subject.reconciled_at_times).to eq expected_times
+      end
+    end
+
+    context "when order details have the same reconciled_at date" do
+      before do
+        statement.order_details.update_all(reconciled_at: reconciled_at1)
+      end
+
+      it "returns unique reconciled_at times" do
+        expect(subject.reconciled_at_times).to eq [I18n.l(reconciled_at1, format: :usa)]
+      end
+    end
+
+    context "when no order details have reconciled_at dates" do
+      it "returns an empty array" do
+        expect(subject.reconciled_at_times).to eq []
+      end
+    end
+  end
+
   describe "#reconcile_notes" do
     let(:product) { create(:setup_instrument) }
     let(:order) { create(:setup_order, product:) }

@@ -7,10 +7,12 @@
 = content_for :sidebar do
   = render :partial => "admin/shared/sidenav_billing", locals: { sidenav_tab: account_route }
 
-%h2= t(".head", model: account_class.model_name.human(count: 2))
+- if view_hook_exists?("reconciliation_heading") && use_custom_reconciliation_features?(account_class)
+  = render_view_hook("reconciliation_heading", account_class: account_class)
+- else
+  %h2= t(".head", model: account_class.model_name.human(count: 2))
 
 = render "shared/transactions/search"
-- show_action_row = !view_hook_exists?("reconciliation_modal")
 
 - if @unreconciled_details.any?
   - show_reconciliation_deposit_number = SettingsHelper.feature_on?(:show_reconciliation_deposit_number)
@@ -24,19 +26,17 @@
           = hidden_field_tag "search[#{key}]", value
     - if params[:page].present?
       = hidden_field_tag :page, params[:page]
-    - if show_action_row
-      = render "action_row", date: true,
-        unreconciled_order_details: @unreconciled_details,
-        show_reconciliation_deposit_number: show_reconciliation_deposit_number,
-        show_order_status: true
+    = render "action_row", date: true,
+      unreconciled_order_details: @unreconciled_details,
+      show_reconciliation_deposit_number: show_reconciliation_deposit_number,
+      show_order_status: true
     = render "table",
       show_reconciliation_deposit_number: show_reconciliation_deposit_number
-    - if show_action_row
-      = render "action_row", show_reconciliation_deposit_number: show_reconciliation_deposit_number, show_order_status: false
+    = render "action_row", show_reconciliation_deposit_number: show_reconciliation_deposit_number, show_order_status: false
 
   %p= will_paginate(@unreconciled_details)
 - else
   %p.notice= t(".none", model: account_class.model_name.human(count: 2).downcase)
 
-- if view_hook_exists?("reconciliation_modal")
-  = render_view_hook("reconciliation_modal")
+- if view_hook_exists?("reconciliation_modal") && use_custom_reconciliation_features?(account_class)
+  = render_view_hook("reconciliation_modal", account_class: account_class)

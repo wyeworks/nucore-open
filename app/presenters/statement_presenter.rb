@@ -35,11 +35,21 @@ class StatementPresenter < SimpleDelegator
     closed_events.map { |event| format_usa_datetime(event.event_time) }
   end
 
+  def reconciled_at_times
+    order_details.where.not(reconciled_at: nil)
+                 .order(reconciled_at: :desc)
+                 .pluck(:reconciled_at)
+                 .uniq
+                 .map { |time| format_usa_datetime(time) }
+  end
+
   def reconcile_notes
     @reconcile_notes ||= if status == :reconciled
                            order_details_notes(:reconciled_note)
                          elsif status == :unrecoverable
                            order_details_notes(:unrecoverable_note)
+                         else
+                           []
                          end
   end
 

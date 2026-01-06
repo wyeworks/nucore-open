@@ -78,13 +78,13 @@ RSpec.describe Reservations::DateSupport do
           ["2015-01-01T01:00:59", 60],
         ]
           .each do |timestring, expected_minutes|
-          context "and the actual_end_at is #{timestring}" do
-            let(:actual_end_at) { Time.zone.parse(timestring) }
+            context "and the actual_end_at is #{timestring}" do
+              let(:actual_end_at) { Time.zone.parse(timestring) }
 
-            it "returns #{expected_minutes}" do
-              expect(reservation.actual_duration_mins).to eq(expected_minutes)
+              it "returns #{expected_minutes}" do
+                expect(reservation.actual_duration_mins).to eq(expected_minutes)
+              end
             end
-          end
         end
 
         context "and actual_end_at is unset" do
@@ -97,11 +97,11 @@ RSpec.describe Reservations::DateSupport do
             ["2015-01-01T01:00:59", 60],
           ]
             .each do |timestring, expected_minutes|
-            context "and the base_time is #{timestring}" do
-              it "returns #{expected_minutes}" do
-                expect(reservation.actual_duration_mins).to be_blank
+              context "and the base_time is #{timestring}" do
+                it "returns #{expected_minutes}" do
+                  expect(reservation.actual_duration_mins).to be_blank
+                end
               end
-            end
           end
         end
       end
@@ -211,13 +211,13 @@ RSpec.describe Reservations::DateSupport do
           ["2015-01-01T01:00:59", 60],
         ]
           .each do |timestring, expected_minutes|
-          context "and reserve_end_at is #{timestring}" do
-            let(:reserve_end_at) { Time.zone.parse(timestring) }
+            context "and reserve_end_at is #{timestring}" do
+              let(:reserve_end_at) { Time.zone.parse(timestring) }
 
-            it "returns #{expected_minutes}" do
-              expect(reservation.duration_mins).to eq(expected_minutes)
+              it "returns #{expected_minutes}" do
+                expect(reservation.duration_mins).to eq(expected_minutes)
+              end
             end
-          end
         end
 
         context "and reserve_end_at is unset" do

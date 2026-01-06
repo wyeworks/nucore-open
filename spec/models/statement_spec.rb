@@ -233,6 +233,7 @@ RSpec.describe Statement do
         let!(:payments) { FactoryBot.create_list(:payment, 2, account: statement.account, statement: statement, amount: statement.total_cost / 2) }
 
         it "is paid_in_full" do
+          statement.instance_variable_set(:@total_payments, nil) if statement.respond_to?(:total_payments)
           expect(statement).to be_paid_in_full
         end
       end

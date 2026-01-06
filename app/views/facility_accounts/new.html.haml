@@ -25,7 +25,8 @@
 
   - if SettingsHelper.feature_on?(:show_account_price_groups_tab)
     = f.association :price_groups_relation,
-      multiple: true, input_html: { class: "js--chosen" }
+      multiple: true, input_html: { class: "js--chosen" },
+      collection: account_price_groups_select_options
 
   = render "facility_accounts/account_fields/#{@current_account_type.to_s.underscore}", f: f, is_new: true
   = render_view_hook("end_of_form", f: f, account: @account)
