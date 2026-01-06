@@ -177,7 +177,10 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.order_status).to eq(quantity_accessory.initial_order_status)
         end
 
-        it "uses a custom initial order status when configured on the accessory" do
+        it(
+          "uses a custom initial order status when configured on the accessory",
+          feature_setting: { accessory_independent_order_status: true },
+        ) do
           custom_status = create(:order_status, name: "Pending Review")
           quantity_accessory.update!(initial_order_status: custom_status)
           do_request
