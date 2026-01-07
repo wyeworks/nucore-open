@@ -49,6 +49,10 @@ class OrderDetailPresenter < SimpleDelegator
     price_group&.name || estimated_price_group_name
   end
 
+  def order_status_display_name
+    order_status&.name
+  end
+
   private
 
   # Is a fulfilled order detail nearing the end of the 90 day reconcile period?
