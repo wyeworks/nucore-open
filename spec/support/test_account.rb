@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class TestAccount < Account
+  NUMBER_PREFIX = "test-account"
+
   before_validation :set_expires_at
 
   private

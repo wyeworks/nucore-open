@@ -206,8 +206,12 @@ RSpec.configure do |config|
 
   config.before :each, :use_test_account do
     allow(AccountValidator::ValidatorFactory).to(
-      receive(:instance) do |*args|
-        TestAccountValidator.new(*args)
+      receive(:instance) do |account_number, *args|
+        if account_number.start_with?(TestAccount::NUMBER_PREFIX)
+          TestAccountValidator.new(account_number, *args)
+        else
+          AccountValidator::ValidatorFactory.validator_class.new(account_number, *args)
+        end
       end
     )
   end

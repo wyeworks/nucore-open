@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   sequence :test_account_number do |n|
-    format("test-%06d", n)
+    format("%s-%06d", TestAccount::NUMBER_PREFIX, n)
   end
 
   factory :test_account do
