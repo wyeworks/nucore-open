@@ -11,19 +11,19 @@ class InstrumentStatus < ApplicationRecord
   attr_accessor :error_message
 
   def self.set_status_for(instrument, is_on:)
-    status = find_or_initialize_by(instrument: instrument)
-    status.update!(is_on: is_on, updated_at: Time.current)
-    status
+    transaction do
+      update_all_shared_instruments(instrument, is_on: is_on)
+      find_by(instrument: instrument)
+    end
   end
 
-  # Locks the instrument status row before executing the block.
   def self.with_lock_for(instrument)
     transaction do
-      # Create with default is_on if not exists, then lock the row
       status = find_or_create_by!(instrument: instrument) { |s| s.is_on = false }
       where(id: status.id).lock.load
       is_on = yield
-      status.update!(is_on: is_on, updated_at: Time.current) unless is_on.nil?
+      update_all_shared_instruments(instrument, is_on: is_on) unless is_on.nil?
+      status.reload
       status
     end
   end
@@ -40,6 +40,39 @@ class InstrumentStatus < ApplicationRecord
         updated_at: updated_at&.iso8601,
       },
     }
+  end
+
+  def self.update_all_shared_instruments(instrument, is_on:)
+    return unless instrument.relay&.networked_relay?
+
+    shared_instruments = instrument.relay.shared_instruments
+    return if shared_instruments.empty?
+
+    valid_instruments = shared_instruments.select do |inst|
+      inst.id.present? && inst.relay&.networked_relay?
+    end
+
+    return if valid_instruments.empty?
+
+    instrument_ids = valid_instruments.map(&:id).sort # Sort to avoid deadlocks
+    now = Time.current
+
+    existing_statuses = where(instrument_id: instrument_ids).order(:instrument_id).lock.load
+    existing_ids = existing_statuses.map(&:instrument_id)
+
+    where(instrument_id: existing_ids).update_all(is_on:, updated_at: now) if existing_ids.any?
+
+    missing_ids = instrument_ids - existing_ids
+
+    return if missing_ids.empty?
+
+    missing_ids.each do |inst_id|
+      missing_instrument = valid_instruments.find { |inst| inst.id == inst_id }
+      next unless missing_instrument
+
+      status = find_or_initialize_by(instrument: missing_instrument)
+      status.update!(is_on:, updated_at: now)
+    end
   end
 
 end
