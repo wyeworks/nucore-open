@@ -10,7 +10,7 @@
 # Compare your current branch to a tag:
 # bin/merge_describer v2024-06-18
 target_branch=${1:-master}
-git log $target_branch.. | egrep '\(#\d+\)$' | while read LINE; do
+git log $target_branch.. | grep -E '\(#[[:digit:]]+\)' | while read LINE; do
   # $LINE looks like this:
   # 4369    Move render to right td
   # The PR number is the first part (4369)...
