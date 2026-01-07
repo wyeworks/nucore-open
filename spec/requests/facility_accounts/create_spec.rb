@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "creating accounts" do
+RSpec.describe "creating accounts", :use_test_account do
   let(:admin) { create(:user, :administrator) }
   let(:user) { create(:user) }
 
@@ -14,7 +14,16 @@ RSpec.describe "creating accounts" do
     let(:facility_account_type) do
       facility_account_class.to_s
     end
-    let(:facility_account_class) { NufsAccount }
+    let(:facility_account_class) { TestAccount }
+    let(:account_number) { build(:test_account).account_number }
+
+    before do
+      creation_disabled_types = Account.config.creation_disabled_types
+
+      allow(Account.config).to receive(:creation_disabled_types) do
+        creation_disabled_types - [facility_account_type]
+      end
+    end
 
     before do
       allow(Account.config).to receive(:creation_enabled_types) do
@@ -68,7 +77,7 @@ RSpec.describe "creating accounts" do
             it "can create the account assigning a facility" do
               params = {
                 facility_account_type.underscore => {
-                  account_number: "213",
+                  account_number:,
                   description: "Some description",
                   facility_ids: [some_facility.id],
                 }
@@ -101,6 +110,8 @@ RSpec.describe "creating accounts" do
           end
 
           it "does not show the account type on creation" do
+            skip if Account.config.global_account_types.empty?
+
             get new_facility_account_path(facility, owner_user_id: user.id)
 
             expect(page).to have_content("Add Payment Source")
@@ -148,7 +159,7 @@ RSpec.describe "creating accounts" do
           it "assigns current facility on creation" do
             params = {
               facility_account_type.underscore => {
-                account_number: "213",
+                account_number:,
                 description: "Some description",
               }
             }
@@ -176,11 +187,16 @@ RSpec.describe "creating accounts" do
     feature_setting: { show_account_price_groups_tab: true },
   ) do
     let(:facility) { create(:setup_facility) }
-    let(:account_class) { NufsAccount }
+    let(:account_class) { TestAccount }
     let(:account_type) { account_class.to_s }
+    let(:account_number) { build(:test_account).account_number }
     let(:price_group) { PriceGroup.last }
 
     before do
+      creation_disabled_types = Account.config.creation_disabled_types
+      allow(Account.config).to receive(:creation_disabled_types) do
+        creation_disabled_types - [account_type]
+      end
       allow(Account.config).to receive(:creation_enabled_types) do
         [account_type]
       end
@@ -198,7 +214,7 @@ RSpec.describe "creating accounts" do
     it "can submit price groups" do
       params = {
         account_type.underscore => {
-          account_number: "1234",
+          account_number:,
           description: "Some description",
           price_groups_relation_ids: [price_group.id],
         }
@@ -223,7 +239,7 @@ RSpec.describe "creating accounts" do
       let!(:other_facility_price_group) do
         create(:price_group, facility: other_facility)
       end
-      let(:account_class) { NufsAccount }
+      let(:account_class) { TestAccount }
       let(:account_type) { account_class.to_s }
       let(:account_type_key) { account_type.underscore }
       let(:price_groups_key) do
