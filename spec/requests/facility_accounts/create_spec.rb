@@ -15,7 +15,7 @@ RSpec.describe "creating accounts", :use_test_account do
       facility_account_class.to_s
     end
     let(:facility_account_class) { TestAccount }
-    let(:account_number) { build(:nufs_account).account_number }
+    let(:account_number) { build(:test_account).account_number }
 
     before do
       creation_disabled_types = Account.config.creation_disabled_types
@@ -190,7 +190,7 @@ RSpec.describe "creating accounts", :use_test_account do
     let(:facility) { create(:setup_facility) }
     let(:account_class) { TestAccount }
     let(:account_type) { account_class.to_s }
-    let(:account_number) { build(:nufs_account).account_number }
+    let(:account_number) { build(:test_account).account_number }
     let(:price_group) { PriceGroup.last }
 
     before do
@@ -240,7 +240,7 @@ RSpec.describe "creating accounts", :use_test_account do
       let!(:other_facility_price_group) do
         create(:price_group, facility: other_facility)
       end
-      let(:account_class) { NufsAccount }
+      let(:account_class) { TestAccount }
       let(:account_type) { account_class.to_s }
       let(:account_type_key) { account_type.underscore }
       let(:price_groups_key) do
