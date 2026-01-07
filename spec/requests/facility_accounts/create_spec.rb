@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "creating accounts" do
+RSpec.describe "creating accounts", :use_test_account do
   let(:admin) { create(:user, :administrator) }
   let(:user) { create(:user) }
 
@@ -14,7 +14,7 @@ RSpec.describe "creating accounts" do
     let(:facility_account_type) do
       facility_account_class.to_s
     end
-    let(:facility_account_class) { NufsAccount }
+    let(:facility_account_class) { TestAccount }
     let(:account_number) { build(:nufs_account).account_number }
 
     before do
@@ -110,8 +110,11 @@ RSpec.describe "creating accounts" do
           end
 
           it "does not show the account type on creation" do
+            skip if Account.config.global_account_types.empty?
+
             get new_facility_account_path(facility, owner_user_id: user.id)
 
+            File.write("account_new.html", response.body)
             expect(page).to have_content("Add Payment Source")
             expect(page).not_to(
               have_content(facility_account_class.model_name.human)
@@ -185,7 +188,7 @@ RSpec.describe "creating accounts" do
     feature_setting: { show_account_price_groups_tab: true },
   ) do
     let(:facility) { create(:setup_facility) }
-    let(:account_class) { NufsAccount }
+    let(:account_class) { TestAccount }
     let(:account_type) { account_class.to_s }
     let(:account_number) { build(:nufs_account).account_number }
     let(:price_group) { PriceGroup.last }

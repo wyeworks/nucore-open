@@ -204,6 +204,25 @@ RSpec.configure do |config|
     WebMock.disable_net_connect!(allow_localhost: true)
   end
 
+  config.before :each, :use_test_account do
+    allow(AccountValidator::ValidatorFactory).to(
+      receive(:instance) do |*args|
+        TestAccountValidator.new(*args)
+      end
+    )
+  end
+
+  config.around :each, :use_test_account do |example|
+    test_view_path = Rails.root.join("spec/support/views")
+    view_paths_before = ApplicationController.view_paths
+
+    ApplicationController.append_view_path test_view_path
+
+    example.run
+
+    ApplicationController.view_paths = view_paths_before
+  end
+
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this
   # config option.
