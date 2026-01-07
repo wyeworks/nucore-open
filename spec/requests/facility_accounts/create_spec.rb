@@ -114,7 +114,6 @@ RSpec.describe "creating accounts", :use_test_account do
 
             get new_facility_account_path(facility, owner_user_id: user.id)
 
-            File.write("account_new.html", response.body)
             expect(page).to have_content("Add Payment Source")
             expect(page).not_to(
               have_content(facility_account_class.model_name.human)
