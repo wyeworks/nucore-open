@@ -26,7 +26,7 @@ class AccountConfig
   # Account subclasses names that are facility accounts and can be
   # managed globally by specifying which facilities they belong to.
   def facility_account_globally_managed_types
-    @facility_account_globally_managed_types ||= []
+    @facility_account_globally_managed_types ||= ["PurchaseOrderAccount"]
   end
 
   # Returns an array of subclassed Account object names that support statements.
