@@ -84,18 +84,18 @@ class InstrumentsController < ProductsCommonController
   def switch
     raise ActiveRecord::RecordNotFound unless params[:switch].in?(%w[on off])
 
-    @status = InstrumentStatus.with_lock_for(@product) do
+    @statuses = InstrumentStatus.with_lock_for(@product) do
       if SettingsHelper.relays_enabled_for_admin?
         params[:switch] == "on" ? @product.relay.activate : @product.relay.deactivate
       else
         true
       end
     end
-    render json: @status
+    render json: @statuses
   rescue => e
     logger.error "ERROR: #{e.message}"
     @status = InstrumentStatus.new(instrument: @product, error_message: e.message)
-    render json: @status
+    render json: [@status]
   end
 
   private

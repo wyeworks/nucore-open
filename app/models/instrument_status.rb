@@ -12,19 +12,35 @@ class InstrumentStatus < ApplicationRecord
 
   def self.set_status_for(instrument, is_on:)
     transaction do
-      update_all_shared_instruments(instrument, is_on: is_on)
-      find_by(instrument: instrument)
+      instrument_ids = shared_instrument_ids(instrument)
+
+      statuses = instrument_ids.map do |inst_id|
+        find_or_create_by!(instrument_id: inst_id) { |s| s.is_on = false }
+      end
+
+      update_all_shared_instruments(instrument_ids, is_on:)
+
+      # Reload all statuses to get the updated values and return them all
+      statuses.each(&:reload)
+      statuses
     end
   end
 
   def self.with_lock_for(instrument)
     transaction do
-      status = find_or_create_by!(instrument: instrument) { |s| s.is_on = false }
-      where(id: status.id).lock.load
+      instrument_ids = shared_instrument_ids(instrument)
+
+      statuses = instrument_ids.map do |inst_id|
+        find_or_create_by!(instrument_id: inst_id) { |s| s.is_on = false }
+      end
+
+      where(id: statuses.map(&:id)).order(:id).lock.load
+
       is_on = yield
-      update_all_shared_instruments(instrument, is_on: is_on) unless is_on.nil?
-      status.reload
-      status
+      update_all_shared_instruments(instrument_ids, is_on:) unless is_on.nil?
+
+      statuses.each(&:reload)
+      statuses
     end
   end
 
@@ -42,37 +58,25 @@ class InstrumentStatus < ApplicationRecord
     }
   end
 
-  def self.update_all_shared_instruments(instrument, is_on:)
-    return unless instrument.relay&.networked_relay?
+  def self.update_all_shared_instruments(instrument_ids, is_on:)
+    return if instrument_ids.empty?
+
+    now = Time.current
+
+    where(instrument_id: instrument_ids).update_all(is_on:, updated_at: now)
+  end
+
+  def self.shared_instrument_ids(instrument)
+    return [instrument.id] unless instrument.relay&.networked_relay?
 
     shared_instruments = instrument.relay.shared_instruments
-    return if shared_instruments.empty?
+    return [] if shared_instruments.empty?
 
     valid_instruments = shared_instruments.select do |inst|
       inst.id.present? && inst.relay&.networked_relay?
     end
 
-    return if valid_instruments.empty?
-
-    instrument_ids = valid_instruments.map(&:id).sort # Sort to avoid deadlocks
-    now = Time.current
-
-    existing_statuses = where(instrument_id: instrument_ids).order(:instrument_id).lock.load
-    existing_ids = existing_statuses.map(&:instrument_id)
-
-    where(instrument_id: existing_ids).update_all(is_on:, updated_at: now) if existing_ids.any?
-
-    missing_ids = instrument_ids - existing_ids
-
-    return if missing_ids.empty?
-
-    missing_ids.each do |inst_id|
-      missing_instrument = valid_instruments.find { |inst| inst.id == inst_id }
-      next unless missing_instrument
-
-      status = find_or_initialize_by(instrument: missing_instrument)
-      status.update!(is_on:, updated_at: now)
-    end
+    valid_instruments.map(&:id).sort # Sort to avoid deadlocks
   end
 
 end
