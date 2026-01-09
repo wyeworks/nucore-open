@@ -50,7 +50,6 @@ class Relay < ApplicationRecord
 
     Relay.unscoped
          .where(host:, outlet:, ip_port:)
-         .where.not(id: nil) # Exclude unsaved records
   end
 
   # Returns all instruments that share the same relay.
