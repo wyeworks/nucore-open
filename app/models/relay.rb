@@ -43,6 +43,20 @@ class Relay < ApplicationRecord
     instrument.name
   end
 
+  # Returns all relays that share the same phisical relay (same host, outlet, and ip_port).
+  # This includes the current relay itself.
+  def shared_relays
+    return Relay.none unless host.present? && outlet.present?
+
+    Relay.unscoped
+         .where(host:, outlet:, ip_port:)
+  end
+
+  # Returns all instruments that share the same relay.
+  def shared_instruments
+    shared_relays.includes(:instrument).filter_map(&:instrument)
+  end
+
   private
 
   def toggle(_status)

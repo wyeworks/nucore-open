@@ -12,7 +12,17 @@ class InstrumentStatusFetcher
   # When refresh: false, returns last known statuses from the database.
   def statuses(refresh: false)
     if refresh
-      instruments.filter_map { |instrument| refresh_status(instrument) }
+      instruments.each_with_object({ processed_ids: Set.new, statuses: [] }) do |instrument, acc|
+        next if acc[:processed_ids].include?(instrument.id)
+
+        statuses = refresh_status(instrument)
+        next unless statuses
+
+        shared_ids = statuses.map(&:instrument_id)
+
+        shared_ids.each { |id| acc[:processed_ids].add(id) }
+        acc[:statuses].concat(Array(statuses))
+      end[:statuses]
     else
       instruments.map { |instrument| last_status_for(instrument) }
     end
@@ -34,7 +44,7 @@ class InstrumentStatusFetcher
   rescue => e
     status = instrument.instrument_status || InstrumentStatus.new(instrument:)
     status.error_message = e.message
-    status
+    [status]
   end
 
   def instruments
