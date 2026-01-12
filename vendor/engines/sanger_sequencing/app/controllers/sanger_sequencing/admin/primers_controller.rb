@@ -24,7 +24,7 @@ module SangerSequencing
           )
         else
           flash[:error] = text("update.invalid")
-          render :edit, status: :unprocessable_entity
+          render :edit, status: :unprocessable_content
         end
       end
 
