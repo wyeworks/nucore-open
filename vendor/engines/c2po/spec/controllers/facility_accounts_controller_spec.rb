@@ -169,6 +169,12 @@ RSpec.describe FacilityAccountsController do
         }
       end
 
+      before do
+        skip if Account.config.facility_account_globally_managed_types.include?(
+          account_type
+        )
+      end
+
       context "PurchaseOrderAccount" do
         let(:account_type) { "PurchaseOrderAccount" }
 
