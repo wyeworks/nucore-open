@@ -503,12 +503,14 @@ RSpec.describe InstrumentsController, type: :controller do
           expect(instrument_with_relay.reload.instrument_status).to be_on
         end
 
-        it "returns the status as JSON" do
+        it "returns the statuses as JSON array" do
           do_request
           json = JSON.parse(response.body, symbolize_names: true)
 
-          expect(json[:instrument_status][:is_on]).to be(true)
-          expect(json[:instrument_status][:instrument_id]).to eq(instrument_with_relay.id)
+          expect(json).to be_an(Array)
+          expect(json.length).to eq(1)
+          expect(json.first[:instrument_status][:is_on]).to be(true)
+          expect(json.first[:instrument_status][:instrument_id]).to eq(instrument_with_relay.id)
         end
       end
     end
