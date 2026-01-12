@@ -176,7 +176,6 @@ RSpec.describe FacilityAccountsController do
       end
 
       context "PurchaseOrderAccount" do
-
         let(:account_type) { "PurchaseOrderAccount" }
 
         it "falls back to using a chartstring" do
