@@ -22,7 +22,7 @@
           = render_view_hook("statement_table_column_headers")
         - else
           = render "shared/statements/table_column_headers"
-        %th= Statement.human_attribute_name(:status)
+          %th= Statement.human_attribute_name(:status)
     %tbody
       - StatementPresenter.wrap(@statements).each do |s|
         %tr.statement
@@ -63,27 +63,27 @@
             = render_view_hook("statement_table_column_data", statement: s)
           - else
             = render "shared/statements/table_column_data", statement: s
-          %td
-            %div
-              %span= Statement.human_attribute_name("status.#{s.status}")
-            - if show_reconcile_notes && s.reconcile_notes.present?
-              - notes = s.reconcile_notes.dup
+            %td
               %div
-                %small
-                  %strong= "#{t('statements.notes')}:"
-              %div
-                %small= notes.shift
-              - collapsable_section_id = "statement-notes-#{s.id}"
-              %ul.unstyled.collapse{ id: collapsable_section_id }
-                - notes.each do |note|
-                  %li
-                    %small= note
-              - if notes.length > 0
-                %a{ role: "button",
-                href: "##{collapsable_section_id}",
-                data: { toggle: "collapse" },
-                aria: { expanded: false, controls: collapsable_section_id } }
-                  %small= t("statements.expand")
+                %span= Statement.human_attribute_name("status.#{s.status}")
+              - if show_reconcile_notes && s.reconcile_notes.present?
+                - notes = s.reconcile_notes.dup
+                %div
+                  %small
+                    %strong= "#{t('statements.notes')}:"
+                %div
+                  %small= notes.shift
+                - collapsable_section_id = "statement-notes-#{s.id}"
+                %ul.unstyled.collapse{ id: collapsable_section_id }
+                  - notes.each do |note|
+                    %li
+                      %small= note
+                - if notes.length > 0
+                  %a{ role: "button",
+                  href: "##{collapsable_section_id}",
+                  data: { toggle: "collapse" },
+                  aria: { expanded: false, controls: collapsable_section_id } }
+                    %small= t("statements.expand")
 
 
   = will_paginate(@statements)
