@@ -63,7 +63,9 @@ $(function() {
         $.ajax({
           url: $(this).data("relay-url"),
           success: function(data) {
-            updateRelayStatus(data.instrument_status);
+            for (let i = 0; i < data.length; i++) {
+              updateRelayStatus(data[i].instrument_status);
+            }
           },
           data: {
             switch: $(this).is(":checked") ? "on" : "off"
