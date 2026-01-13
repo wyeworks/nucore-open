@@ -89,7 +89,7 @@
             - unless @order_detail.note.blank?
               .order-detail-extra.order-detail-note= render "shared/order_detail_note", order_detail: @order_detail
           %td
-            = @order_detail.order_status
+            = order_detail_presenter.order_status_display_name
             = order_detail_status_badges(@order_detail)
           - if @order_detail.cost_estimated?
             %td.estimated_cost.currency= show_estimated_cost(@order_detail)

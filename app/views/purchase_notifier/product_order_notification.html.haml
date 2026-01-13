@@ -45,7 +45,7 @@
           %br
           = @order_detail.reservation
       %td= @order_detail.quantity
-      %td= @order_detail.order_status.name
+      %td= OrderDetailPresenter.new(@order_detail).order_status_display_name
       %td= @order_detail.display_cost
       %td= @order_detail.display_subsidy
       %td= @order_detail.display_total

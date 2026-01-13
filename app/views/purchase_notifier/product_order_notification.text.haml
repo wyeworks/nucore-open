@@ -14,7 +14,7 @@
 - if @order_detail.reservation
   #{Reservation.model_name.to_s.titleize}: #{@order_detail.reservation}
 #{OrderDetail.human_attribute_name(:quantity)}: #{@order_detail.quantity}
-#{OrderDetail.human_attribute_name(:status)}: #{@order_detail.order_status.name}
+#{OrderDetail.human_attribute_name(:status)}: #{OrderDetailPresenter.new(@order_detail).order_status_display_name}
 - label_key_prefix = display_cost_prefix_for_order(@order)
 #{OrderDetail.human_attribute_name("#{label_key_prefix}_cost")}: #{@order_detail.display_cost}
 #{OrderDetail.human_attribute_name("#{label_key_prefix}_subsidy")}: #{@order_detail.display_subsidy}

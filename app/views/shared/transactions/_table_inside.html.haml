@@ -78,7 +78,7 @@
             %br
             = order_detail_presenter.price_group_name
         %td.nowrap
-          = order_detail.order_status
+          = order_detail_presenter.order_status_display_name
           %br
           = order_detail_status_badges(order_detail)
         - if local_assigns[:show_statements]
