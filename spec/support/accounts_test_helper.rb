@@ -22,6 +22,10 @@ module AccountsTestHelper
     skip("Purchase Order reconciliation uses different flow when viewhooks are present")
   end
 
+  def statements_table_viewhooks_present?
+    ViewHook.find("shared.statements_table", "statement_table_column_data").any?
+  end
+
   def to_account_class(account_type)
     account_type = account_type.to_s.camelize
 

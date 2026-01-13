@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "Billing mode workflows" do
+  include AccountsTestHelper
+
   let(:facility) { create(:setup_facility, accepts_po:) }
   let(:accepts_po) { true }
   let(:billing_mode) { "Default" }
@@ -39,7 +41,9 @@ RSpec.describe "Billing mode workflows" do
 
         visit facility_transactions_path(facility)
 
-        expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
+        unless statements_table_viewhooks_present?
+          expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
+        end
       end
     end
 
@@ -71,7 +75,9 @@ RSpec.describe "Billing mode workflows" do
 
       visit facility_transactions_path(facility)
 
-      expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
+      unless statements_table_viewhooks_present?
+        expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
+      end
     end
   end
 end

@@ -54,7 +54,7 @@
               = render partial: "shared/order_detail_cell", locals: { od: od, show_reservation: false }
               %td= od.assigned_user&.full_name
               %td
-                = od.order_status.name
+                = OrderDetailPresenter.new(od).order_status_display_name
               %td.currency
                 = OrderDetailPresenter.new(od).wrapped_total
 

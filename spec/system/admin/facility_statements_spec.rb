@@ -3,6 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "Facility Statement Admin" do
+  include AccountsTestHelper
+
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let(:item) { create(:setup_item, facility:) }
@@ -217,8 +219,10 @@ RSpec.describe "Facility Statement Admin" do
 
       within("table.table") do
         expect(page).to have_content(account.description)
-        expect(page).to have_content("Some note #123")
-        expect(page).to_not have_element("a", text: "Expand")
+        unless statements_table_viewhooks_present?
+          expect(page).to have_content("Some note #123")
+          expect(page).to_not have_element("a", text: "Expand")
+        end
       end
     end
 
@@ -229,12 +233,14 @@ RSpec.describe "Facility Statement Admin" do
 
       within("table.table") do
         expect(page).to have_content(account.description)
-        expect(page).to have_content("Some note #123")
-        expect(page).to_not have_content("Other note #456")
-        expect(page).to have_element("a", text: "Expand")
-        click_link("Expand")
+        unless statements_table_viewhooks_present?
+          expect(page).to have_content("Some note #123")
+          expect(page).to_not have_content("Other note #456")
+          expect(page).to have_element("a", text: "Expand")
+          click_link("Expand")
 
-        expect(page).to have_content("Other note #456")
+          expect(page).to have_content("Other note #456")
+        end
       end
     end
   end

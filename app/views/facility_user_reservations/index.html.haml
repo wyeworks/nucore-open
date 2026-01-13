@@ -47,7 +47,7 @@
               .order-detail-extra.order-detail-note
                 = render "shared/order_detail_note", order_detail: order_detail
 
-          %td.centered= order_detail.order_status.name
+          %td.centered= order_detail.order_status_display_name
           %td.currency= order_detail.wrapped_total
 
   %p.footnote

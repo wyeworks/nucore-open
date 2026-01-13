@@ -9,8 +9,9 @@
 
     - order_detail = reservation.order_detail
     - if order_detail.present?
+      - order_detail_presenter = OrderDetailPresenter.new(order_detail)
       %span{ class: order_detail.order_status.to_s.downcase }
-        = "- #{order_detail.order_status}"
+        = "- #{order_detail_presenter.order_status_display_name}"
 
       - if order_detail.note.present? && order_detail.facility.show_order_note?
         %br
