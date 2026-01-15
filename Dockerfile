@@ -3,6 +3,9 @@ FROM ruby:3.4.4 AS base
 WORKDIR /app
 ENV BUNDLE_PATH=/gems
 
+# Update package lists and upgrade all packages
+RUN apt-get update && apt-get upgrade -y && apt-get clean
+
 # Install NodeJS based on https://github.com/nodesource/distributions#installation-instructions
 ARG NODE_MAJOR=22
 RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash -
