@@ -9,7 +9,7 @@ RUN apt-get update && apt-get upgrade -y && apt-get clean
 # Install NodeJS based on https://github.com/nodesource/distributions#installation-instructions
 ARG NODE_MAJOR=22
 RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash -
-RUN apt-get update && apt-get install --yes libvips42 nodejs
+RUN apt-get install --yes libvips42 nodejs
 RUN npm install --global yarn
 
 # Copy just what we need in order to bundle
