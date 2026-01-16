@@ -1017,6 +1017,23 @@ RSpec.describe OrdersController do
       expect(response).to redirect_to overridden_redirect
       is_expected.to set_flash.to /removed/
     end
+
+    context "when removing last item from a merge order" do
+      before do
+        @merge_to_order = @staff.orders.create(attributes_for(:order, created_by: @staff.id, facility_id: @authable.id))
+        @order.update_attribute :merge_with_order_id, @merge_to_order.id
+      end
+
+      it "does not raise FrozenError when the order is destroyed by the observer" do
+        maybe_grant_always_sign_in :staff
+
+        expect { do_request }.not_to raise_error
+        expect(response).to redirect_to "/orders/#{@order.id}"
+        is_expected.to set_flash.to /removed/
+
+        expect { @order.reload }.to raise_error(ActiveRecord::RecordNotFound)
+      end
+    end
   end
 
   context "update order_detail quantities" do
