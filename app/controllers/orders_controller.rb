@@ -175,7 +175,7 @@ class OrdersController < ApplicationController
     redirect_to params[:redirect_to].presence || order_path(@order)
 
     # clear out account on the order if its now empty
-    if !@order.frozen? && @order.order_details.reload.empty?
+    if !@order.destroyed? && @order.order_details.reload.empty?
       @order.account_id = nil
       @order.save!
     end
