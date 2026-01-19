@@ -139,6 +139,12 @@ en:
           cannot_be_in_future: may not be in the future.
           cannot_be_before_last_fulfillment: may not be before the latest fulfillment date.
           must_be_after_cutoffs: "The cutoff date for %{month} has passed. Journal date must be after %{cutoff}"
+        statement:
+          attributes:
+            invoice_date:
+              cannot_be_in_future: may not be in the future.
+              cannot_be_before_fulfillment: may not be before the earliest fulfillment date of the orders.
+              invalid: "Invalid date: Please use MM/DD/YYYY format"
         journal_cutoff_date:
           month_taken: There is already a cutoff date for %{month}
         nufs_account:
@@ -444,6 +450,7 @@ en:
         id: "Invoice #"
         created_by: Sent By
         created_at: Created At
+        invoice_date: Statement Date
         invoice_number: "Invoice #"
         reconcile_note: Reconcile Note
         account_admins: Account Admins

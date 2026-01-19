@@ -19,7 +19,11 @@ class Statement < ApplicationRecord
 
   validates_numericality_of :account_id, :facility_id, :created_by, only_integer: true
   validates :parent_statement, presence: true, if: :parent_statement_id
+  validates :invoice_date, presence: true
+  validate :invoice_date_cannot_be_in_future, if: :invoice_date?
+  validate :invoice_date_cannot_be_before_fulfillment, on: :create, if: :has_order_details?
 
+  before_validation :set_default_invoice_date, on: :create
   after_save :set_invoice_number
 
   default_scope -> { order(created_at: :desc) }
@@ -86,7 +90,7 @@ class Statement < ApplicationRecord
   end
 
   def invoice_date
-    created_at.to_date
+    self[:invoice_date] || Time.current.to_date
   end
 
   def reconciled?
@@ -184,6 +188,29 @@ class Statement < ApplicationRecord
     end
 
     save!
+  end
+
+  def set_default_invoice_date
+    self[:invoice_date] ||= Time.current.to_date
+  end
+
+  def invoice_date_cannot_be_in_future
+    errors.add(:invoice_date, :cannot_be_in_future) if invoice_date > Time.current.to_date
+  end
+
+  def invoice_date_cannot_be_before_fulfillment
+    return unless order_details.any?
+
+    earliest_fulfillment = order_details.map(&:fulfilled_at).compact.min
+    return unless earliest_fulfillment
+
+    if invoice_date < earliest_fulfillment.to_date
+      errors.add(:invoice_date, :cannot_be_before_fulfillment)
+    end
+  end
+
+  def has_order_details?
+    order_details.any?
   end
 
 end

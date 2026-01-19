@@ -14,7 +14,13 @@
             .form-group.fields
               %label.control-label{ for: @action_date_field.keys.first }= @action_date_field.keys.first.to_s.titleize
               .controls
-                = text_field_tag @action_date_field.keys.first, @action_date_field.values.first.strftime("%m/%d/%Y"), class: :datepicker
+                - date_value = @action_date_field.values.first
+                = text_field_tag @action_date_field.keys.first, date_value.present? ? date_value.strftime("%m/%d/%Y") : "", class: :datepicker
+          - elsif local_assigns[:show_invoice_date_field]
+            .form-group.fields
+              %label.control-label{ for: "invoice_date" }= Statement.human_attribute_name(:invoice_date)
+              .controls
+                = text_field_tag "invoice_date", "", class: :datepicker
           - else
             &nbsp;
         .col-md-2

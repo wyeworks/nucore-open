@@ -16,6 +16,8 @@ class FacilityStatementsController < ApplicationController
   include CsvEmailAction
   include SortableBillingTable
 
+  helper_method :can_set_invoice_date?
+
   def initialize
     @active_tab = "admin_billing"
     super
@@ -63,12 +65,18 @@ class FacilityStatementsController < ApplicationController
 
   # POST /facilities/:facility_id/statements
   def create
-    @statement_creator = StatementCreator.new(
+    creator_params = {
       order_detail_ids: params[:order_detail_ids],
       session_user:,
       current_facility:,
       parent_invoice_number: params[:parent_invoice_number]
-    )
+    }
+
+    if can_set_invoice_date? && params[:invoice_date].present?
+      creator_params[:invoice_date] = params[:invoice_date]
+    end
+
+    @statement_creator = StatementCreator.new(creator_params)
 
     if @statement_creator.order_detail_ids.blank?
       flash[:error] = text("no_selection")
@@ -119,6 +127,10 @@ class FacilityStatementsController < ApplicationController
 
   def success_message
     SettingsHelper.feature_on?(:send_statement_emails) ? "success_with_email_html" : "success_html"
+  end
+
+  def can_set_invoice_date?
+    session_user.administrator? || session_user.global_billing_administrator?
   end
 
 end
