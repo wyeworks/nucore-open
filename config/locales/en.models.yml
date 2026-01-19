@@ -450,7 +450,7 @@ en:
         id: "Invoice #"
         created_by: Sent By
         created_at: Created At
-        invoice_date: Statement Date
+        invoice_date: Invoice Date
         invoice_number: "Invoice #"
         reconcile_note: Reconcile Note
         account_admins: Account Admins
