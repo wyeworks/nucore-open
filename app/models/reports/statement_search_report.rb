@@ -64,6 +64,7 @@ module Reports
     def headers
       base_headers = [
         Statement.human_attribute_name(:invoice_number),
+        Statement.human_attribute_name(:invoice_date),
         Statement.human_attribute_name(:created_at),
         Statement.human_attribute_name(:account_admins),
         Account.model_name.human,
@@ -89,7 +90,8 @@ module Reports
 
       base_row = [
         statement.invoice_number,
-        format_usa_datetime(statement.created_at),
+        format_usa_date(statement.invoice_date),
+        format_usa_date(statement.created_at.to_date),
         statement.account.notify_users.map(&:full_name).join(', '),
         statement.account,
         statement.facility,
