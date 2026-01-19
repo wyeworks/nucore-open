@@ -4,7 +4,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const saveBtn = document.getElementsByClassName('js--saveStatementButton')[0];
   const parentInput = document.getElementById("parent_invoice_number");
   const hiddenInput = document.getElementById("parent_invoice_number_hidden");
-  const invoiceDateInput = document.getElementById("invoice_date");
 
   if (createBtn && modal && saveBtn && parentInput && hiddenInput) {
     createBtn.addEventListener('click', function(e) {
@@ -28,12 +27,4 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  if (invoiceDateInput) {
-    const today = new Date();
-    const todayString = (today.getMonth() + 1) + '/' + today.getDate() + '/' + today.getFullYear();
-
-    $(invoiceDateInput).datepicker({
-      "maxDate": todayString
-    });
-  }
 });

@@ -20,7 +20,7 @@
             .form-group.fields
               %label.control-label{ for: "invoice_date" }= Statement.human_attribute_name(:invoice_date)
               .controls
-                = text_field_tag "invoice_date", "", class: :datepicker
+                = text_field_tag "invoice_date", "", class: "datepicker__data", data: { max_date: Time.current.iso8601 }
           - else
             &nbsp;
         .col-md-2
