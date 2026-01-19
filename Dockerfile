@@ -6,7 +6,7 @@ ENV BUNDLE_PATH=/gems
 # Update package lists and upgrade all packages
 # This is a workaround to avoid caching the package lists and upgrades
 ARG CACHE_INVALIDATOR=1
-RUN echo "$CACHE_INVALIDATOR" && apt-get update && apt-get upgrade -y && apt-get clean
+RUN apt-get update && apt-get upgrade -y && apt-get clean
 
 # Install NodeJS based on https://github.com/nodesource/distributions#installation-instructions
 ARG NODE_MAJOR=22
