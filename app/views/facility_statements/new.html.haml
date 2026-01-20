@@ -16,7 +16,7 @@
     - else
       %p.notice.notice-info= text(".instructions_without_email")
 
-  = render "shared/transactions/table", order_details: @order_details, show_invoice_date_field: can_set_invoice_date?
+  = render "shared/transactions/table", order_details: @order_details
   = render "shared/reconcile_footnote"
 
   - if SettingsHelper.feature_on?(:reference_statement_invoice_number)

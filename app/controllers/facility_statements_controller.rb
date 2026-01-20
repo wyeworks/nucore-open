@@ -61,6 +61,10 @@ class FacilityStatementsController < ApplicationController
 
     @date_range_field = @search_form.date_params[:field]
     @order_details = @search.order_details.reorder(sort_clause)
+
+    if can_set_invoice_date?
+      @action_date_field = { invoice_date: Time.current.to_date }
+    end
   end
 
   # POST /facilities/:facility_id/statements
