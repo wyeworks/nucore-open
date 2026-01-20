@@ -315,7 +315,7 @@ RSpec.describe Statement do
       let(:fulfillment_date) { 5.days.ago }
       let(:invoice_date) { fulfillment_date.to_date }
       let(:order_detail) { place_and_complete_item_order(user, facility, account, true) }
-      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: invoice_date) }
+      let(:statement) { build(:statement, account:, created_by: user.id, facility: facility, invoice_date: invoice_date) }
 
       before do
         order_detail.update(fulfilled_at: fulfillment_date)
@@ -329,7 +329,7 @@ RSpec.describe Statement do
 
     context "when invoice_date is today" do
       let(:invoice_date) { Time.current.to_date }
-      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: invoice_date) }
+      let(:statement) { build(:statement, account:, created_by: user.id, facility: facility, invoice_date: invoice_date) }
 
       it "is valid" do
         expect(statement).to be_valid
@@ -339,7 +339,7 @@ RSpec.describe Statement do
 
   describe "set_default_invoice_date callback" do
     context "on create" do
-      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: nil) }
+      let(:statement) { build(:statement, account:, created_by: user.id, facility: facility, invoice_date: nil) }
 
       it "sets invoice_date to current date if not provided" do
         statement.save!
