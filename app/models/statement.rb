@@ -195,8 +195,6 @@ class Statement < ApplicationRecord
   end
 
   def invoice_date_cannot_be_before_fulfillment
-    return unless order_details.any?
-
     earliest_fulfillment = order_details.filter_map(&:fulfilled_at).min
     return unless earliest_fulfillment
 
