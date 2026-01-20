@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_26_134647) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_20_181309) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -949,6 +949,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_26_134647) do
     t.datetime "canceled_at", precision: nil
     t.integer "parent_statement_id"
     t.string "invoice_number"
+    t.boolean "value", default: false
     t.index ["account_id"], name: "index_statements_on_account_id"
     t.index ["facility_id"], name: "fk_statement_facilities"
     t.index ["invoice_number"], name: "index_stmt_invoice_number", unique: true
