@@ -35,8 +35,13 @@
                 method: :delete
 
           %td
+            - if price_group.external_subsidy?
+              %span.text-muted ↳
             = link_to price_group.name,
               facility_price_group_path(current_facility, price_group)
+            - if price_group.external_subsidy?
+              %small.text-muted
+                = "(#{t('.subsidy_of', parent: price_group.parent_price_group&.name)})"
 
           %td= price_group.type_string
           %td= t(".#{price_group.global?.to_s}")

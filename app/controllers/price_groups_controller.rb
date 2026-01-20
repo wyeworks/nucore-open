@@ -8,6 +8,7 @@ class PriceGroupsController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   before_action :load_price_group_and_ability!, only: [:accounts, :destroy, :edit, :show, :update, :users, :users_search]
+  before_action :set_available_parent_groups, only: [:new, :edit]
 
   load_and_authorize_resource
 
@@ -20,7 +21,7 @@ class PriceGroupsController < ApplicationController
 
   # GET /facilities/:facility_id/price_groups
   def index
-    @price_groups = current_facility.price_groups
+    @price_groups = PriceGroup.ordered_with_subsidies(current_facility.price_groups.to_a)
   end
 
   # GET /facilities/:facility_id/price_groups/:id
@@ -130,7 +131,13 @@ class PriceGroupsController < ApplicationController
   end
 
   def price_group_params
-    params.require(:price_group).permit(:name, :display_order, :is_internal, :is_hidden, :admin_editable, :facility_id)
+    permitted = [:name, :display_order, :is_internal, :is_hidden, :admin_editable, :facility_id]
+    permitted << :parent_price_group_id if SettingsHelper.feature_on?(:external_price_group_subsidies)
+    params.require(:price_group).permit(permitted)
+  end
+
+  def set_available_parent_groups
+    @available_parent_groups = PriceGroup.available_parent_groups(current_facility) if SettingsHelper.feature_on?(:external_price_group_subsidies)
   end
 
   def paginate(relation)
