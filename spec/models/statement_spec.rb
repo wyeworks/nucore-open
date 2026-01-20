@@ -282,4 +282,96 @@ RSpec.describe Statement do
 
     end
   end
+
+  describe "#invoice_date" do
+    context "when invoice_date is set" do
+      let(:invoice_date) { 5.days.ago.to_date }
+      let(:statement) { create(:statement, account: account, created_by: user.id, facility: facility, invoice_date: invoice_date) }
+
+      it "returns the invoice_date" do
+        expect(statement.invoice_date).to eq(invoice_date)
+      end
+    end
+
+    context "when invoice_date is not set" do
+      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: nil) }
+
+      it "returns the current date" do
+        statement.save!
+        expect(statement.invoice_date).to eq(Time.current.to_date)
+      end
+    end
+  end
+
+  describe "invoice_date validations" do
+    context "when invoice_date is in the future" do
+      let(:future_date) { 1.day.from_now.to_date }
+      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: future_date) }
+
+      it "is invalid" do
+        statement.valid?
+        expect(statement.errors[:invoice_date]).to include(I18n.t("activerecord.errors.models.statement.attributes.invoice_date.cannot_be_in_future"))
+      end
+    end
+
+    context "when invoice_date is before fulfillment date" do
+      let(:fulfillment_date) { 5.days.ago }
+      let(:invoice_date) { 10.days.ago.to_date }
+      let(:order_detail) { place_and_complete_item_order(user, facility, account, true) }
+      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: invoice_date) }
+
+      before do
+        order_detail.update(fulfilled_at: fulfillment_date)
+        statement.order_details << order_detail
+      end
+
+      it "is invalid" do
+        statement.valid?
+        expect(statement.errors[:invoice_date]).to include(I18n.t("activerecord.errors.models.statement.attributes.invoice_date.cannot_be_before_fulfillment"))
+      end
+    end
+
+    context "when invoice_date is on or after fulfillment date" do
+      let(:fulfillment_date) { 5.days.ago }
+      let(:invoice_date) { fulfillment_date.to_date }
+      let(:order_detail) { place_and_complete_item_order(user, facility, account, true) }
+      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: invoice_date) }
+
+      before do
+        order_detail.update(fulfilled_at: fulfillment_date)
+        statement.order_details << order_detail
+      end
+
+      it "is valid" do
+        expect(statement).to be_valid
+      end
+    end
+
+    context "when invoice_date is today" do
+      let(:invoice_date) { Time.current.to_date }
+      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: invoice_date) }
+
+      it "is valid" do
+        expect(statement).to be_valid
+      end
+    end
+  end
+
+  describe "set_default_invoice_date callback" do
+    context "on create" do
+      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: nil) }
+
+      it "sets invoice_date to current date if not provided" do
+        statement.save!
+        expect(statement.invoice_date).to eq(Time.current.to_date)
+      end
+
+      it "does not override provided invoice_date" do
+        custom_date = 3.days.ago.to_date
+        statement.invoice_date = custom_date
+        statement.save!
+        expect(statement.invoice_date).to eq(custom_date)
+      end
+    end
+  end
 end

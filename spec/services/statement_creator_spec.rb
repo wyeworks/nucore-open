@@ -172,4 +172,33 @@ RSpec.describe StatementCreator do
     end
   end
 
+  describe "with invoice_date" do
+    context "when invoice_date is provided" do
+      let(:invoice_date_value) { 3.days.ago.to_date }
+      let(:invoice_date) { invoice_date_value.strftime("%m/%d/%Y") }
+      let(:creator_with_date) do
+        described_class.new(
+          order_detail_ids: [order_detail_1.id],
+          session_user: user,
+          current_facility: facility,
+          invoice_date:,
+        )
+      end
+
+      it "creates statement with the provided invoice_date" do
+        creator_with_date.create
+        statement = Statement.last
+        expect(statement.invoice_date).to eq(invoice_date_value)
+      end
+    end
+
+    context "when invoice_date is not provided" do
+      it "creates statement with default invoice_date (current date)" do
+        creator.create
+        statement = Statement.last
+        expect(statement.invoice_date).to eq(Time.current.to_date)
+      end
+    end
+  end
+
 end
