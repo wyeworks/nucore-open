@@ -283,26 +283,6 @@ RSpec.describe Statement do
     end
   end
 
-  describe "#invoice_date" do
-    context "when invoice_date is set" do
-      let(:invoice_date) { 5.days.ago.to_date }
-      let(:statement) { create(:statement, account: account, created_by: user.id, facility: facility, invoice_date: invoice_date) }
-
-      it "returns the invoice_date" do
-        expect(statement.invoice_date).to eq(invoice_date)
-      end
-    end
-
-    context "when invoice_date is not set" do
-      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: nil) }
-
-      it "returns the current date" do
-        statement.save!
-        expect(statement.invoice_date).to eq(Time.current.to_date)
-      end
-    end
-  end
-
   describe "invoice_date validations" do
     context "when invoice_date is in the future" do
       let(:future_date) { 1.day.from_now.to_date }

@@ -89,10 +89,6 @@ class Statement < ApplicationRecord
     end.uniq
   end
 
-  def invoice_date
-    self[:invoice_date] || Time.current.to_date
-  end
-
   def reconciled?
     order_details.unreconciled.empty? && canceled_at.blank?
   end
