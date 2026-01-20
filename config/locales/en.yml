@@ -1028,6 +1028,9 @@ en:
     price_group_fields:
       internal_instruction: "Check this box if this price group is internal:"
       hidden_instruction: "Check this box if this price group is no longer used:"
+      subsidy_instruction: "Make this a subsidy of:"
+      subsidy_of: "Subsidy of"
+      not_a_subsidy: "-- Not a subsidy (shows Rate field) --"
     accounts:
       intro: "Pricing policies apply to orders paid for with the following payment sources."
       notice: "No payment sources have been added to this price group."
@@ -1045,6 +1048,7 @@ en:
       notice: "No price groups exist yet."
       true: "Yes"
       false: "No"
+      subsidy_of: "subsidy of %{parent}"
       th:
         actions: "Actions"
         pg: "Price Group"

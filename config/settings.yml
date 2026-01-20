@@ -128,6 +128,7 @@ feature:
   split_accounts: true
   print_order_detail: false
   user_based_price_groups: true
+  external_price_group_subsidies: false
   my_files: true
   # results file notifications requires that my_files be on as well
   results_file_notifications: true
