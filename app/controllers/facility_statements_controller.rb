@@ -130,7 +130,7 @@ class FacilityStatementsController < ApplicationController
   end
 
   def can_set_invoice_date?
-    session_user.administrator? || session_user.global_billing_administrator?
+    can?(:set_invoice_date, Statement)
   end
 
 end

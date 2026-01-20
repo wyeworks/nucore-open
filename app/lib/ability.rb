@@ -129,6 +129,7 @@ class Ability
     can :mark_unrecoverable, OrderDetail
     can :manage, [Account, Journal, OrderDetail]
     can :manage, Statement if resource.is_a?(Facility)
+    can :set_invoice_date, Statement if resource.is_a?(Facility)
     can [:send_receipt, :show], Order
     if resource == Facility.cross_facility
       can [:accounts, :index, :orders, :show, :administer], User
