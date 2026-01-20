@@ -35,17 +35,17 @@ RSpec.describe StatementCreator do
 
   describe "#create" do
     context "when there are no errors" do
-      before { creator.create }
-
       it "sets order details to be statemented" do
+        creator.create
         expect(creator.to_statement).not_to be_empty
         expect(creator.to_statement.keys.first.id).to eq(account.id)
       end
 
       it "creates statements" do
-        expect(Statement.all.length).to eq(1)
+        expect { creator.create }.to change(Statement, :count).by(1)
         expect(order_detail_1.reload.statement).not_to be_nil
         expect(order_detail_2.reload.statement).not_to be_nil
+        expect(order_detail_1.reload.statement).to eq(order_detail_2.reload.statement)
         log_event = LogEvent.find_by(loggable: order_detail_1.statement, event_type: :create)
         expect(log_event).to be_present
       end
