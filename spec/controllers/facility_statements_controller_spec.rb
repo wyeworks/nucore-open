@@ -280,7 +280,9 @@ if Account.config.statements_enabled?
           it "ignores invoice_date parameter and uses default" do
             expect(controller.helpers.can_set_invoice_date?).to be false
             do_request
-            statement = Statement.last
+            # Find the statement created for the account used in this test
+            statement = Statement.where(account: @account).order(created_at: :desc).first
+            expect(statement).not_to be_nil
             expect(statement[:invoice_date]).to eq(Date.current)
             expect(statement.invoice_date).to eq(Date.current)
           end
@@ -293,7 +295,9 @@ if Account.config.statements_enabled?
 
           it "creates statement with default invoice_date" do
             do_request
-            statement = Statement.last
+            # Find the statement created for the account used in this test
+            statement = Statement.where(account: @account).order(created_at: :desc).first
+            expect(statement).not_to be_nil
             expect(statement[:invoice_date]).to eq(Date.current)
             expect(statement.invoice_date).to eq(Date.current)
           end
