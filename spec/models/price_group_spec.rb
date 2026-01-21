@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe PriceGroup do
 
-  let(:facility) { FactoryBot.create(:facility) }
-  let(:price_group) { FactoryBot.create(:price_group, facility: facility) }
+  let(:facility) { create(:facility) }
+  let(:price_group) { create(:price_group, facility:) }
 
   before :each do
     @facility = facility
@@ -21,13 +21,13 @@ RSpec.describe PriceGroup do
   end
 
   it "requires unique name within a facility" do
-    price_group2 = build(:price_group, name: price_group.name, facility: facility)
+    price_group2 = build(:price_group, name: price_group.name, facility:)
     expect(price_group2).not_to be_valid
     expect(price_group2.errors[:name]).to be_present
   end
 
   it "requires the unique name case-insensitively" do
-    price_group2 = build(:price_group, name: price_group.name.upcase, facility: facility)
+    price_group2 = build(:price_group, name: price_group.name.upcase, facility:)
     expect(price_group2).not_to be_valid
     expect(price_group2.errors[:name]).to be_present
 
@@ -39,8 +39,8 @@ RSpec.describe PriceGroup do
   context "can_purchase?" do
 
     before :each do
-      @facility_account = FactoryBot.create(:facility_account, facility: @facility)
-      @product = FactoryBot.create(:item, facility: @facility, facility_account: @facility_account)
+      @facility_account = create(:facility_account, facility: @facility)
+      @product = create(:item, facility: @facility, facility_account: @facility_account)
     end
 
     it "should not be able to purchase product" do
@@ -68,9 +68,120 @@ RSpec.describe PriceGroup do
     end
   end
 
+  describe "external?" do
+    context "when is_internal is false" do
+      subject { build(:price_group, is_internal: false) }
+
+      it { is_expected.to be_external }
+    end
+
+    context "when is_internal is true" do
+      subject { build(:price_group, is_internal: true) }
+
+      it { is_expected.not_to be_external }
+    end
+  end
+
+  describe "external_subsidy?", feature_setting: { external_price_group_subsidies: true } do
+    let(:external_base) { create(:price_group, :global_external) }
+
+    context "when external with a parent" do
+      subject { build(:price_group, facility:, is_internal: false, parent_price_group: external_base) }
+
+      it { is_expected.to be_external_subsidy }
+    end
+
+    context "when external without a parent" do
+      subject { build(:price_group, facility:, is_internal: false, parent_price_group: nil) }
+
+      it { is_expected.not_to be_external_subsidy }
+    end
+
+    context "when internal with a parent" do
+      subject { build(:price_group, facility:, is_internal: true, parent_price_group: external_base) }
+
+      it { is_expected.not_to be_external_subsidy }
+    end
+  end
+
+  describe "shows_adjustment_input?" do
+    context "for non-master internal groups" do
+      subject { build(:price_group, is_internal: true, display_order: 2) }
+
+      it { is_expected.to be_shows_adjustment_input }
+    end
+
+    context "for master internal (display_order 1)" do
+      subject { build(:price_group, is_internal: true, display_order: 1) }
+
+      it { is_expected.not_to be_shows_adjustment_input }
+    end
+
+    context "for external subsidy with feature enabled", feature_setting: { external_price_group_subsidies: true } do
+      let(:external_base) { create(:price_group, :global_external) }
+      subject { build(:price_group, facility:, is_internal: false, parent_price_group: external_base) }
+
+      it { is_expected.to be_shows_adjustment_input }
+    end
+
+    context "for external subsidy with feature disabled", feature_setting: { external_price_group_subsidies: false } do
+      let(:external_base) { create(:price_group, :global_external) }
+      subject { build(:price_group, facility:, is_internal: false, parent_price_group: external_base) }
+
+      it { is_expected.not_to be_shows_adjustment_input }
+    end
+  end
+
+  describe ".available_parent_groups", feature_setting: { external_price_group_subsidies: true } do
+    let!(:external_rate_1) { create(:price_group, :global_external, name: "External Rate 1") }
+    let!(:external_rate_2) { create(:price_group, :global_external, name: "External Rate 2") }
+    let!(:internal_base) { PriceGroup.base }
+    let!(:hidden_external) { create(:price_group, :global_external, name: "Hidden External", is_hidden: true) }
+
+    it "returns only visible global external groups without parents" do
+      available = PriceGroup.available_parent_groups(facility)
+      expect(available).to include(external_rate_1, external_rate_2)
+      expect(available).not_to include(internal_base)
+      expect(available).not_to include(hidden_external)
+    end
+  end
+
+  describe ".ordered_with_subsidies", feature_setting: { external_price_group_subsidies: true } do
+    let!(:internal_group) { create(:price_group, facility:, is_internal: true, name: "Internal Group") }
+    let!(:external_base) { create(:price_group, :global_external, name: "External Base") }
+    let!(:subsidy_1) { create(:price_group, facility:, is_internal: false, parent_price_group: external_base, name: "Subsidy 1") }
+    let!(:subsidy_2) { create(:price_group, facility:, is_internal: false, parent_price_group: external_base, name: "Subsidy 2") }
+
+    it "orders groups with subsidies immediately after their parent" do
+      groups = [internal_group, external_base, subsidy_1, subsidy_2]
+      ordered = PriceGroup.ordered_with_subsidies(groups)
+
+      external_base_index = ordered.index(external_base)
+      subsidy_1_index = ordered.index(subsidy_1)
+      subsidy_2_index = ordered.index(subsidy_2)
+
+      expect(subsidy_1_index).to be > external_base_index
+      expect(subsidy_2_index).to be > external_base_index
+    end
+
+    it "places internal groups before external groups" do
+      groups = [external_base, internal_group, subsidy_1]
+      ordered = PriceGroup.ordered_with_subsidies(groups)
+
+      expect(ordered.index(internal_group)).to be < ordered.index(external_base)
+    end
+  end
+
+  describe ".ordered_with_subsidies with feature disabled", feature_setting: { external_price_group_subsidies: false } do
+    it "returns groups unchanged when feature is disabled" do
+      groups = [price_group]
+      expect(PriceGroup.ordered_with_subsidies(groups)).to eq(groups)
+    end
+  end
+
   describe "can_delete?" do
     it "should not be deletable if global" do
-      @global_price_group = FactoryBot.build(:price_group, facility: nil, global: true)
+      @global_price_group = build(:price_group, facility: nil, global: true)
       @global_price_group.save
       expect(@global_price_group).to be_persisted
       expect(@global_price_group).to be_global
@@ -105,9 +216,9 @@ RSpec.describe PriceGroup do
 
     context "with price policy" do
       before :each do
-        @facility_account = FactoryBot.create(:facility_account, facility: @facility)
-        @item = @facility.items.create(FactoryBot.attributes_for(:item, facility_account_id: @facility_account.id))
-        @price_policy = @item.item_price_policies.create(FactoryBot.attributes_for(:item_price_policy, price_group: @price_group))
+        @facility_account = create(:facility_account, facility: @facility)
+        @item = @facility.items.create(attributes_for(:item, facility_account_id: @facility_account.id))
+        @price_policy = @item.item_price_policies.create(attributes_for(:item_price_policy, price_group: @price_group))
       end
 
       it "should be deletable if no orders on policy" do
@@ -119,9 +230,9 @@ RSpec.describe PriceGroup do
       end
 
       it "should not be deletable if there are orders on a policy" do
-        @user = FactoryBot.create(:user)
-        @order = FactoryBot.create(:order, user: @user, created_by: @user.id)
-        @order_detail = @order.order_details.create(FactoryBot.attributes_for(:order_detail, product: @item, price_policy: @price_policy))
+        @user = create(:user)
+        @order = create(:order, user: @user, created_by: @user.id)
+        @order_detail = @order.order_details.create(attributes_for(:order_detail, product: @item, price_policy: @price_policy))
         expect(@order_detail.reload.price_policy).to eq(@price_policy)
         expect(@price_group).not_to be_can_delete
         expect { @price_group.destroy }.to raise_error ActiveRecord::DeleteRestrictionError

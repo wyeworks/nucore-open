@@ -14,6 +14,11 @@ FactoryBot.define do
       admin_editable { false }
     end
 
+    trait :global_external do
+      global
+      is_internal { false }
+    end
+
     trait :cancer_center do
       global
       admin_editable { true }
