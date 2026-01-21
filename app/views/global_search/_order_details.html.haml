@@ -28,4 +28,4 @@
         %td.currency
           = OrderDetailPresenter.new(order_detail).wrapped_total
         %td.nowrap
-          = order_detail.order_status
+          = OrderDetailPresenter.new(order_detail).order_status_display_name

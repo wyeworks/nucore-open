@@ -32,7 +32,7 @@
 
         - else
           = f.label :order_status
-          = @order_detail.order_status
+          = OrderDetailPresenter.new(@order_detail).order_status_display_name
           - if f.object.reconciled? && current_ability.can?(:unreconcile, @order_detail)
             = l(@order_detail.reconciled_at.to_date, format: :usa)
             = link_to t("facility_order_details.edit.label.unreconcile"), facility_order_order_detail_reconcilliation_path(current_facility, @order, @order_detail), method: :delete
