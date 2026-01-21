@@ -293,6 +293,20 @@ if Account.config.statements_enabled?
           end
         end
 
+        context "when invoice_date is before fulfillment" do
+          let(:bad_invoice_date) { 10.days.ago.to_date.strftime("%m/%d/%Y") }
+
+          before do
+            sign_in billing_admin
+            @params[:invoice_date] = bad_invoice_date
+          end
+
+          it "shows an error and does not create a statement" do
+            expect { do_request }.not_to change(Statement, :count)
+            expect(flash[:error]).to be_present
+          end
+        end
+
         context "when invoice_date is not provided" do
           before do
             sign_in administrator
