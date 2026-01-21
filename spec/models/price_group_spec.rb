@@ -133,14 +133,14 @@ RSpec.describe PriceGroup do
   end
 
   describe ".available_parent_groups", feature_setting: { external_price_group_subsidies: true } do
-    let!(:external_rate_1) { create(:price_group, :global_external, name: "External Rate 1") }
-    let!(:external_rate_2) { create(:price_group, :global_external, name: "External Rate 2") }
+    let!(:external_rate_one) { create(:price_group, :global_external, name: "External Rate 1") }
+    let!(:external_rate_two) { create(:price_group, :global_external, name: "External Rate 2") }
     let!(:internal_base) { PriceGroup.base }
     let!(:hidden_external) { create(:price_group, :global_external, name: "Hidden External", is_hidden: true) }
 
     it "returns only visible global external groups without parents" do
       available = PriceGroup.available_parent_groups(facility)
-      expect(available).to include(external_rate_1, external_rate_2)
+      expect(available).to include(external_rate_one, external_rate_two)
       expect(available).not_to include(internal_base)
       expect(available).not_to include(hidden_external)
     end
@@ -149,23 +149,23 @@ RSpec.describe PriceGroup do
   describe ".ordered_with_subsidies", feature_setting: { external_price_group_subsidies: true } do
     let!(:internal_group) { create(:price_group, facility:, is_internal: true, name: "Internal Group") }
     let!(:external_base) { create(:price_group, :global_external, name: "External Base") }
-    let!(:subsidy_1) { create(:price_group, facility:, is_internal: false, parent_price_group: external_base, name: "Subsidy 1") }
-    let!(:subsidy_2) { create(:price_group, facility:, is_internal: false, parent_price_group: external_base, name: "Subsidy 2") }
+    let!(:subsidy_one) { create(:price_group, facility:, is_internal: false, parent_price_group: external_base, name: "Subsidy 1") }
+    let!(:subsidy_two) { create(:price_group, facility:, is_internal: false, parent_price_group: external_base, name: "Subsidy 2") }
 
     it "orders groups with subsidies immediately after their parent" do
-      groups = [internal_group, external_base, subsidy_1, subsidy_2]
+      groups = [internal_group, external_base, subsidy_one, subsidy_two]
       ordered = PriceGroup.ordered_with_subsidies(groups)
 
       external_base_index = ordered.index(external_base)
-      subsidy_1_index = ordered.index(subsidy_1)
-      subsidy_2_index = ordered.index(subsidy_2)
+      subsidy_one_index = ordered.index(subsidy_one)
+      subsidy_two_index = ordered.index(subsidy_two)
 
-      expect(subsidy_1_index).to be > external_base_index
-      expect(subsidy_2_index).to be > external_base_index
+      expect(subsidy_one_index).to be > external_base_index
+      expect(subsidy_two_index).to be > external_base_index
     end
 
     it "places internal groups before external groups" do
-      groups = [external_base, internal_group, subsidy_1]
+      groups = [external_base, internal_group, subsidy_one]
       ordered = PriceGroup.ordered_with_subsidies(groups)
 
       expect(ordered.index(internal_group)).to be < ordered.index(external_base)
