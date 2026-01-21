@@ -29,6 +29,7 @@ class Ability
       facility_director_abilities(user, resource, controller)
       account_manager_abilities(user, resource)
       cannot :mark_unrecoverable, OrderDetail
+      cannot :set_invoice_date, Statement if resource.is_a?(Facility)
 
       global_billing_administrator_abilities(user, resource)
 

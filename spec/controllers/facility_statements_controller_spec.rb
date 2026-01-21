@@ -243,6 +243,8 @@ if Account.config.statements_enabled?
 
         before do
           UserRole.grant(regular_user, UserRole::FACILITY_DIRECTOR, @authable)
+          @order_detail1.update_column(:fulfilled_at, 5.days.ago)
+          @order_detail3.update_column(:fulfilled_at, 5.days.ago)
         end
 
         context "when user is administrator" do
@@ -252,8 +254,9 @@ if Account.config.statements_enabled?
           end
 
           it "accepts invoice_date parameter" do
+            existing_ids = Statement.where(account: @account).pluck(:id)
             do_request
-            statement = Statement.last
+            statement = Statement.where(account: @account).where.not(id: existing_ids).first
             expect(statement.invoice_date).to eq(invoice_date_value)
           end
         end
@@ -265,8 +268,9 @@ if Account.config.statements_enabled?
           end
 
           it "accepts invoice_date parameter" do
+            existing_ids = Statement.where(account: @account).pluck(:id)
             do_request
-            statement = Statement.last
+            statement = Statement.where(account: @account).where.not(id: existing_ids).first
             expect(statement.invoice_date).to eq(invoice_date_value)
           end
         end
@@ -278,6 +282,7 @@ if Account.config.statements_enabled?
           end
 
           it "ignores invoice_date parameter and uses default" do
+            get :new, params: { facility_id: @authable.url_name }
             expect(controller.helpers.can_set_invoice_date?).to be false
             do_request
             # Find the statement created for the account used in this test
