@@ -7,7 +7,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
   describe "create" do
     describe "as a facility admin", feature_setting: { facility_directors_can_manage_price_groups: true } do
-      let(:user) { create(:user, :facility_director, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility:) }
 
       before do
         login_as user
@@ -26,7 +26,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
     end
 
     describe "as a facility senior staff" do
-      let(:user) { create(:user, :senior_staff, facility: facility) }
+      let(:user) { create(:user, :senior_staff, facility:) }
 
       before do
         login_as user
@@ -38,9 +38,9 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
   describe "manage users of a price group" do
     describe "as a facility admin", feature_setting: { user_based_price_groups: true, facility_directors_can_manage_price_groups: true } do
-      let(:user) { create(:user, :facility_director, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility:) }
       let(:user2) { create(:user) }
-      let!(:price_group) { create(:price_group, facility: facility) }
+      let!(:price_group) { create(:price_group, facility:) }
 
       before do
         login_as user
@@ -124,8 +124,8 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
   describe "destroy" do
     describe "as a facility admin", feature_setting: { facility_directors_can_manage_price_groups: true } do
-      let(:user) { create(:user, :facility_director, facility: facility) }
-      let!(:price_group) { create(:price_group, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility:) }
+      let!(:price_group) { create(:price_group, facility:) }
 
       before do
         login_as user
@@ -146,8 +146,8 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
     end
 
     describe "as a facility senior staff" do
-      let(:user) { create(:user, :senior_staff, facility: facility) }
-      let!(:price_group) { create(:price_group, facility: facility) }
+      let(:user) { create(:user, :senior_staff, facility:) }
+      let!(:price_group) { create(:price_group, facility:) }
 
       before do
         login_as user
@@ -161,7 +161,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
   end
 
   describe "searching to add price group member", js: true do
-    let(:user) { create(:user, :facility_director, facility: facility) }
+    let(:user) { create(:user, :facility_director, facility:) }
     let(:price_group) { create(:price_group, facility_id: facility.id ) }
     let!(:account1) { create(:account, :with_account_owner, account_number: "135711", description: "first account", facilities: [facility], owner: user) }
     let!(:account2) { create(:account, :with_account_owner, account_number: "246810", description: "second account", facilities: [facility], owner: user) }
@@ -189,6 +189,54 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
     it "is accessible" do
       skip "Accessibility tests temporarily disabled during Bootstrap 2->3 migration"
       expect(page).to be_axe_clean
+    end
+  end
+
+  describe "external subsidy price groups", feature_setting: { external_price_group_subsidies: true, facility_directors_can_manage_price_groups: true } do
+    let(:user) { create(:user, :facility_director, facility:) }
+    let!(:external_base) { create(:price_group, :global_external, name: "External Rate 1") }
+
+    before do
+      login_as user
+    end
+
+    describe "creating an external subsidy" do
+      it "shows the subsidy dropdown for external groups" do
+        visit new_facility_price_group_path(facility)
+        expect(page).to have_content("Make this a subsidy of:")
+        expect(page).to have_select("price_group_parent_price_group_id")
+      end
+
+      it "creates an external price group as a subsidy" do
+        visit new_facility_price_group_path(facility)
+        fill_in "Name", with: "Subsidized External"
+        uncheck "Is Internal?" if has_checked_field?("Is Internal?")
+        select "External Rate 1", from: "price_group_parent_price_group_id"
+
+        expect { click_button "Create" }.to change(PriceGroup, :count).by(1)
+
+        new_group = PriceGroup.find_by(name: "Subsidized External")
+        expect(new_group.parent_price_group).to eq(external_base)
+        expect(new_group).to be_external_subsidy
+      end
+    end
+
+    describe "viewing the index" do
+      let!(:subsidy_group) { create(:price_group, facility:, is_internal: false, name: "Subsidized Group", parent_price_group: external_base) }
+
+      it "shows subsidies with visual indicator" do
+        visit facility_price_groups_path(facility)
+        expect(page).to have_content("↳")
+        expect(page).to have_content("(subsidy of External Rate 1)")
+      end
+
+      it "orders subsidies below their parent group" do
+        visit facility_price_groups_path(facility)
+        page_content = page.body
+        external_base_position = page_content.index("External Rate 1")
+        subsidy_position = page_content.index("Subsidized Group")
+        expect(subsidy_position).to be > external_base_position
+      end
     end
   end
 
