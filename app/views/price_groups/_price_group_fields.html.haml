@@ -1,10 +1,24 @@
+= content_for :head_content do
+  = javascript_include_tag "price_group_form"
+
 = f.input :name
 
 .well.well-small
   %p.help-block= t(".internal_instruction")
 
-  = f.input :is_internal, as: :boolean, inline_label: true, label: false
+  = f.input :is_internal, as: :boolean, inline_label: true, label: false, input_html: { class: "js--isInternal" }
 
+- if SettingsHelper.feature_on?(:external_price_group_subsidies) && @available_parent_groups.present?
+  .well.well-small.js--subsidySection{ style: f.object.is_internal? ? "display: none;" : "" }
+    %p.help-block= t(".subsidy_instruction")
+
+    = f.input :parent_price_group_id,
+      collection: @available_parent_groups,
+      label_method: :name,
+      value_method: :id,
+      include_blank: t(".not_a_subsidy"),
+      label: t(".subsidy_of"),
+      input_html: { class: "form-control" }
 
 .well.well-small
   %p.help-block= t(".hidden_instruction")
