@@ -203,7 +203,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
     describe "creating an external subsidy" do
       it "shows the subsidy dropdown for external groups" do
         visit new_facility_price_group_path(facility)
-        expect(page).to have_content("Make this a subsidy of:")
+        expect(page).to have_content("Make this price group a subsidy:")
         expect(page).to have_select("price_group_parent_price_group_id")
       end
 
