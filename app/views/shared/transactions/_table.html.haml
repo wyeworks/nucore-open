@@ -12,9 +12,14 @@
         .col-md-9
           - if @action_date_field
             .form-group.fields
-              %label.control-label{ for: @action_date_field.keys.first }= @action_date_field.keys.first.to_s.titleize
+              - field_name = @action_date_field.keys.first
+              - date_value = @action_date_field.values.first
+              - is_invoice_date = field_name == :invoice_date
+              %label.control-label{ for: field_name }= is_invoice_date ? Statement.human_attribute_name(:invoice_date) : field_name.to_s.titleize
               .controls
-                = text_field_tag @action_date_field.keys.first, @action_date_field.values.first.strftime("%m/%d/%Y"), class: :datepicker
+                - field_options = { class: is_invoice_date ? "datepicker__data" : :datepicker }
+                - field_options[:data] = { max_date: Time.current.iso8601 } if is_invoice_date
+                = text_field_tag field_name, date_value.present? ? date_value.strftime("%m/%d/%Y") : "", field_options
           - else
             &nbsp;
         .col-md-2

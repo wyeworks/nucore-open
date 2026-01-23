@@ -41,6 +41,7 @@ RSpec.describe Reports::StatementSearchReport do
         row = csv.first
 
         expect(row[Statement.human_attribute_name(:invoice_number)]).to eq(statement.invoice_number)
+        expect(row[Statement.human_attribute_name(:created_at)]).to eq(statement.created_at.to_date.strftime("%m/%d/%Y"))
         expect(row[I18n.t("statements.closed_at")]).to be_nil
         expect(row[I18n.t("statements.closed_by")]).to be_nil
         expect(row[I18n.t("statements.reconciled_at")]).to be_nil
@@ -128,6 +129,28 @@ RSpec.describe Reports::StatementSearchReport do
   describe "#has_attachment?" do
     it "returns true" do
       expect(report.has_attachment?).to be true
+    end
+  end
+
+  describe "invoice_date in CSV" do
+    let(:invoice_date) { 3.days.ago.to_date }
+
+    before do
+      statement.update(invoice_date: invoice_date)
+    end
+
+    it "includes invoice_date in CSV headers" do
+      csv_lines = report.to_csv.lines
+      header = csv_lines.first
+
+      expect(header).to include(Statement.human_attribute_name(:invoice_date))
+    end
+
+    it "includes invoice_date in CSV rows" do
+      csv = CSV.parse(report.to_csv, headers: true)
+      row = csv.first
+
+      expect(row[Statement.human_attribute_name(:invoice_date)]).to eq(invoice_date.strftime("%m/%d/%Y"))
     end
   end
 end

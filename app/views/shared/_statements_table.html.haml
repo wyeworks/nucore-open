@@ -13,6 +13,7 @@
           %input{type: "checkbox", class: "js--select-all-statements"}
         %th= Statement.human_attribute_name(:invoice_number)
         %th= Statement.human_attribute_name(:created_at)
+        %th= Statement.human_attribute_name(:invoice_date)
         %th= Statement.human_attribute_name(:account_admins)
         - unless @account
           %th= Account.model_name.human
@@ -52,6 +53,7 @@
                     class: "btn btn-danger",
                     data: { confirm: "Are you sure you want to cancel?" })
           %td= format_usa_datetime(s.created_at)
+          %td= format_usa_date(s.invoice_date)
           %td
             - s.account.notify_users.each do |user|
               = mail_to user.email, user.full_name
