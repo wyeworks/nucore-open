@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+class FacilityUserPermission < ApplicationRecord
+
+  acts_as_paranoid
+
+  belongs_to :user
+  belongs_to :facility
+
+  PERMISSIONS = %i[
+    product_management
+    product_pricing
+    order_management
+    price_adjustment
+    billing_send
+    billing_journals
+    instrument_management
+    assign_permissions
+  ].freeze
+
+  validates :user_id, uniqueness: { scope: :facility_id }
+
+end
