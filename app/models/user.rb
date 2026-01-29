@@ -21,6 +21,7 @@ class User < ApplicationRecord
   has_many :assigned_order_details, class_name: "OrderDetail", foreign_key: "assigned_user_id"
   has_many :user_roles, -> { extending UserRole::AssociationExtension }, dependent: :destroy
   has_many :facilities, through: :user_roles
+  has_many :facility_user_permissions, dependent: :destroy
   has_many :training_requests, dependent: :destroy
   has_many :stored_files, through: :order_details, class_name: "StoredFile"
   has_many :file_uploads, class_name: "StoredFile" # accessed in the UI on the user's Docs tab
