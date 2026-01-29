@@ -48,7 +48,7 @@ class FacilityOrderDetailsController < ApplicationController
     end
 
     if @order_detail.order.cross_core_project.present?
-      redirect_back(fallback_location: root_path)
+      redirect_back_or_to(root_path)
     else
       redirect_to facility_order_path(current_facility, redirect_to_order)
     end
