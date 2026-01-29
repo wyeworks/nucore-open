@@ -6,7 +6,7 @@ class PriceGroup < ApplicationRecord
 
   belongs_to :facility
   belongs_to :parent_price_group, class_name: "PriceGroup", optional: true
-  has_many   :subsidy_price_groups, class_name: "PriceGroup", foreign_key: :parent_price_group_id
+  has_many   :subsidy_price_groups, class_name: "PriceGroup", foreign_key: :parent_price_group_id, dependent: :destroy
   has_many   :price_policies
   has_many   :order_details, through: :price_policies, dependent: :restrict_with_exception
   has_many   :price_group_members, dependent: :destroy
@@ -111,11 +111,13 @@ class PriceGroup < ApplicationRecord
   end
 
   # Returns price groups ordered: Internal groups first, then external base groups with their subsidies below
+  # Respects display_order for internal and external base groups
   def self.ordered_with_subsidies(price_groups)
     return price_groups unless SettingsHelper.feature_on?(:external_price_group_subsidies)
 
-    internal_groups = price_groups.select(&:is_internal?)
+    internal_groups = price_groups.select(&:is_internal?).sort_by { |pg| [pg.display_order || 999, pg.name] }
     external_base_groups = price_groups.select { |pg| pg.external? && pg.parent_price_group_id.nil? }
+                                       .sort_by { |pg| [pg.display_order || 999, pg.name] }
     external_subsidy_groups = price_groups.select(&:external_subsidy?)
 
     result = internal_groups.dup
@@ -123,6 +125,7 @@ class PriceGroup < ApplicationRecord
     external_base_groups.each do |base_group|
       result << base_group
       subsidies = external_subsidy_groups.select { |pg| pg.parent_price_group_id == base_group.id }
+                                         .sort_by { |pg| [pg.display_order || 999, pg.name] }
       result.concat(subsidies)
     end
 

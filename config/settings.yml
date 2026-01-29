@@ -128,7 +128,6 @@ feature:
   split_accounts: true
   print_order_detail: false
   user_based_price_groups: true
-  external_price_group_subsidies: false
   my_files: true
   # results file notifications requires that my_files be on as well
   results_file_notifications: true
@@ -187,6 +186,7 @@ feature:
   admin_skip_order_forms: true
   accessory_independent_order_status: false
   merged_statement_history_columns: false
+  external_price_group_subsidies: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts

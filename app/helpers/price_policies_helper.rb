@@ -21,7 +21,18 @@ module PricePoliciesHelper
 
   def display_usage_rate(price_group, price_policy)
     param_for_price_group(price_group, :usage_rate) ||
-      display_rate(price_policy.hourly_usage_rate)
+      display_rate(base_hourly_usage_rate(price_group, price_policy))
+  end
+
+  def base_hourly_usage_rate(price_group, price_policy)
+    if price_group.external_subsidy? && SettingsHelper.feature_on?(:external_price_group_subsidies)
+      parent_policy = price_policy.product.price_policies
+                                  .current
+                                  .find_by(price_group: price_group.parent_price_group)
+      parent_policy&.hourly_usage_rate
+    else
+      price_policy.hourly_usage_rate
+    end
   end
 
   def display_usage_subsidy(price_group, price_policy)

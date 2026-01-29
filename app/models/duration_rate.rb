@@ -49,14 +49,7 @@ class DurationRate < ApplicationRecord
     return unless requires_subsidy?
     return if rate.present?
 
-    if price_group.external_subsidy?
-      parent_policy = price_policy.product.price_policies
-                                  .current
-                                  .find_by(price_group: price_group.parent_price_group)
-      self.rate = parent_policy&.hourly_usage_rate
-    else
-      self.rate = price_policy.hourly_usage_rate
-    end
+    self.rate = price_policy.hourly_usage_rate
   end
 
   private
