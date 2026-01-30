@@ -30,4 +30,4 @@
     = pp.text_field :usage_rate, value: display_usage_rate(price_group, price_policy),
       size: 8,
       class: "#{price_group.master_internal? ? 'master_usage_cost' : ''} usage_rate",
-      data: { target: ".js--usageRate" }
+      data: { target: ".js--usageRate", price_group_id: price_group.id }

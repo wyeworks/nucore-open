@@ -62,6 +62,21 @@ $(document).ready(function() {
 
   $(".js--masterInternalRow input[type=text]").keyup(evt => updateAdjustmentFields($(evt.target))).trigger("keyup");
 
+  // Update external subsidy rows when parent external rate changes
+  const updateExternalSubsidyRates = function($sourceElement) {
+    const priceGroupId = $sourceElement.data("price-group-id");
+    if (!priceGroupId) return;
+
+    const rate = $sourceElement.val();
+    $(`.js--externalSubsidyRow[data-parent-price-group-id="${priceGroupId}"]`).each(function() {
+      $(this).find(".js--usageRate").val(rate);
+    });
+  };
+
+  $(".usage_rate").on("keyup change", function(evt) {
+    updateExternalSubsidyRates($(evt.target));
+  }).trigger("keyup");
+
   $(".js--price-policy-note-select").on("change", function(event) {
     const selectedOption = event.target.options[event.target.selectedIndex];
     const noteTextField = $(".js--price-policy-note");

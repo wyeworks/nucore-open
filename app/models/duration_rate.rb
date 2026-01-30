@@ -72,10 +72,7 @@ class DurationRate < ApplicationRecord
   end
 
   def requires_subsidy?
-    return true if price_group.is_internal? && !price_group.master_internal?
-    return true if price_group.external_subsidy? && SettingsHelper.feature_on?(:external_price_group_subsidies)
-
-    false
+    price_group.shows_adjustment_input?
   end
 
 end
