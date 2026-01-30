@@ -147,8 +147,6 @@ RSpec.configure do |config|
     # users are not created within transactions, so delete them all here before running tests
     PriceGroupMember.delete_all
     UserRole.delete_all
-    AccountUser.delete_all
-    ProductUser.delete_all
     User.delete_all
     OrderStatus.delete_all
 
