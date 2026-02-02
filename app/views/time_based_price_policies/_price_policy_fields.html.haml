@@ -58,19 +58,19 @@
       = fields_for "price_policy_#{price_group.id}", price_policy do |pp|
         - row_class = []
         - row_class << "js--masterInternalRow" if price_group.master_internal?
-        - row_class << "js--adjustmentRow" if price_group.shows_adjustment_input?
+        - row_class << "js--adjustmentRow" if price_group.subsidy_only?
         - row_class << "js--externalSubsidyRow" if price_group.external_subsidy?
         %tr{class: row_class, data: price_group.external_subsidy? ? { parent_price_group_id: price_group.parent_price_group_id } : {}}
           %th{ scope: "row" }= price_group.name
           %td= price_group.type_string
           %td= pp.check_box :can_purchase, class: "js--canPurchase"
-          - if !price_group.shows_adjustment_input?
+          - if !price_group.subsidy_only?
             = render "time_based_price_policies/amount_row", price_group: price_group, price_policy: price_policy, pp: pp, cancellation: cancellation, minimum_cost: minimum_cost
           - else
             = render "time_based_price_policies/adjustment_row", price_group: price_group, price_policy: price_policy, pp: pp, cancellation: cancellation, minimum_cost: minimum_cost
           - duration_rates = pp.object.duration_rates.sort_by { |d| d.min_duration_hours || 1_000 }
           = pp.fields_for :duration_rates, duration_rates do |dr|
-            - if !price_group.shows_adjustment_input?
+            - if !price_group.subsidy_only?
               - rate_input_class = price_group.master_internal? ? "js--baseRate usage_rate" : "usage_rate"
               %td
                 = dr.label :rate, t(".rate_per_hr"), class: "normal-weight"

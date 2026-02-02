@@ -72,7 +72,7 @@ class DurationRate < ApplicationRecord
   end
 
   def requires_subsidy?
-    price_group.shows_adjustment_input?
+    price_group.subsidy_only?
   end
 
 end

@@ -96,7 +96,7 @@ class PriceGroup < ApplicationRecord
     external? && parent_price_group_id.present?
   end
 
-  def shows_adjustment_input?
+  def subsidy_only?
     return true if is_internal? && !master_internal?
     return true if external_subsidy? && SettingsHelper.feature_on?(:external_price_group_subsidies)
 

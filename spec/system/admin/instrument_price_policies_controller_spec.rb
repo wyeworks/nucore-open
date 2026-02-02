@@ -427,11 +427,11 @@ RSpec.describe InstrumentPricePoliciesController do
       # Verify external subsidy gets external rate (not base)
       expect(page).to have_field("price_policy_#{external_subsidy_group.id}[usage_rate]", with: "120", type: :hidden)
 
-      # Check full cancellation on base - should NOT affect external subsidy
+      # Check full cancellation on base - should not affect external subsidy
       check "price_policy_#{base_price_group.id}[full_price_cancellation]"
       expect(page).to have_field("price_policy_#{external_subsidy_group.id}[cancellation_cost]", disabled: false, type: :hidden)
 
-      # Check full cancellation on external parent - SHOULD affect external subsidy
+      # Check full cancellation on external parent - should affect external subsidy
       check "price_policy_#{external_price_group.id}[full_price_cancellation]"
       expect(page).to have_field("price_policy_#{external_subsidy_group.id}[cancellation_cost]", disabled: true, type: :hidden)
     end

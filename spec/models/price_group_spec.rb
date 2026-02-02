@@ -104,31 +104,31 @@ RSpec.describe PriceGroup do
     end
   end
 
-  describe "shows_adjustment_input?" do
+  describe "subsidy_only?" do
     context "for non-master internal groups" do
       subject { build(:price_group, is_internal: true, display_order: 2) }
 
-      it { is_expected.to be_shows_adjustment_input }
+      it { is_expected.to be_subsidy_only }
     end
 
     context "for master internal (display_order 1)" do
       subject { build(:price_group, is_internal: true, display_order: 1) }
 
-      it { is_expected.not_to be_shows_adjustment_input }
+      it { is_expected.not_to be_subsidy_only }
     end
 
     context "for external subsidy with feature enabled", feature_setting: { external_price_group_subsidies: true } do
       let(:external_base) { create(:price_group, :global_external) }
       subject { build(:price_group, facility:, is_internal: false, parent_price_group: external_base) }
 
-      it { is_expected.to be_shows_adjustment_input }
+      it { is_expected.to be_subsidy_only }
     end
 
     context "for external subsidy with feature disabled", feature_setting: { external_price_group_subsidies: false } do
       let(:external_base) { create(:price_group, :global_external) }
       subject { build(:price_group, facility:, is_internal: false, parent_price_group: external_base) }
 
-      it { is_expected.not_to be_shows_adjustment_input }
+      it { is_expected.not_to be_subsidy_only }
     end
   end
 
