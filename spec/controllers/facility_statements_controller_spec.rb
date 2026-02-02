@@ -126,6 +126,49 @@ if Account.config.statements_enabled?
           expect(assigns(:order_details)).to contain_all [@order_detail1, @order_detail3]
         end
       end
+
+      context "invoice_date field visibility" do
+        let(:administrator) { create(:user, :administrator) }
+        let(:billing_admin) { create(:user, :global_billing_administrator) }
+        let(:regular_user) { create(:user) }
+
+        before do
+          UserRole.grant(regular_user, UserRole::FACILITY_DIRECTOR, @authable)
+        end
+
+        context "when user is administrator" do
+          before do
+            sign_in administrator
+            do_request
+          end
+
+          it "makes can_set_invoice_date? available to view" do
+            expect(controller.helpers.can_set_invoice_date?).to be true
+          end
+        end
+
+        context "when user is global billing administrator" do
+          before do
+            sign_in billing_admin
+            do_request
+          end
+
+          it "makes can_set_invoice_date? available to view" do
+            expect(controller.helpers.can_set_invoice_date?).to be true
+          end
+        end
+
+        context "when user is not administrator or billing admin" do
+          before do
+            sign_in regular_user
+            do_request
+          end
+
+          it "makes can_set_invoice_date? return false" do
+            expect(controller.helpers.can_set_invoice_date?).to be false
+          end
+        end
+      end
     end
 
     context "create" do
@@ -188,6 +231,95 @@ if Account.config.statements_enabled?
           do_request
           expect(flash[:error]).not_to be_nil
           expect(response).to redirect_to action: :new
+        end
+      end
+
+      context "with invoice_date" do
+        let(:administrator) { create(:user, :administrator) }
+        let(:billing_admin) { create(:user, :global_billing_administrator) }
+        let(:regular_user) { create(:user) }
+        let(:invoice_date_value) { 3.days.ago.to_date }
+        let(:invoice_date) { invoice_date_value.strftime("%m/%d/%Y") }
+
+        before do
+          UserRole.grant(regular_user, UserRole::FACILITY_DIRECTOR, @authable)
+          @order_detail1.update_column(:fulfilled_at, 5.days.ago)
+          @order_detail3.update_column(:fulfilled_at, 5.days.ago)
+        end
+
+        context "when user is administrator" do
+          before do
+            sign_in administrator
+            @params[:invoice_date] = invoice_date
+          end
+
+          it "accepts invoice_date parameter" do
+            existing_ids = Statement.where(account: @account).pluck(:id)
+            do_request
+            statement = Statement.where(account: @account).where.not(id: existing_ids).first
+            expect(statement.invoice_date).to eq(invoice_date_value)
+          end
+        end
+
+        context "when user is global billing administrator" do
+          before do
+            sign_in billing_admin
+            @params[:invoice_date] = invoice_date
+          end
+
+          it "accepts invoice_date parameter" do
+            existing_ids = Statement.where(account: @account).pluck(:id)
+            do_request
+            statement = Statement.where(account: @account).where.not(id: existing_ids).first
+            expect(statement.invoice_date).to eq(invoice_date_value)
+          end
+        end
+
+        context "when user is not administrator or billing admin" do
+          before do
+            sign_in regular_user
+            @params[:invoice_date] = invoice_date
+          end
+
+          it "ignores invoice_date parameter and uses default" do
+            get :new, params: { facility_id: @authable.url_name }
+            expect(controller.helpers.can_set_invoice_date?).to be false
+            do_request
+            # Find the statement created for the account used in this test
+            statement = Statement.where(account: @account).order(created_at: :desc).first
+            expect(statement).not_to be_nil
+            expect(statement[:invoice_date]).to eq(Date.current)
+            expect(statement.invoice_date).to eq(Date.current)
+          end
+        end
+
+        context "when invoice_date is before fulfillment" do
+          let(:bad_invoice_date) { 10.days.ago.to_date.strftime("%m/%d/%Y") }
+
+          before do
+            sign_in billing_admin
+            @params[:invoice_date] = bad_invoice_date
+          end
+
+          it "shows an error and does not create a statement" do
+            expect { do_request }.not_to change(Statement, :count)
+            expect(flash[:error]).to be_present
+          end
+        end
+
+        context "when invoice_date is not provided" do
+          before do
+            sign_in administrator
+          end
+
+          it "creates statement with default invoice_date" do
+            do_request
+            # Find the statement created for the account used in this test
+            statement = Statement.where(account: @account).order(created_at: :desc).first
+            expect(statement).not_to be_nil
+            expect(statement[:invoice_date]).to eq(Date.current)
+            expect(statement.invoice_date).to eq(Date.current)
+          end
         end
       end
     end

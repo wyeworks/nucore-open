@@ -35,17 +35,17 @@ RSpec.describe StatementCreator do
 
   describe "#create" do
     context "when there are no errors" do
-      before { creator.create }
-
       it "sets order details to be statemented" do
+        creator.create
         expect(creator.to_statement).not_to be_empty
         expect(creator.to_statement.keys.first.id).to eq(account.id)
       end
 
       it "creates statements" do
-        expect(Statement.all.length).to eq(1)
+        expect { creator.create }.to change(Statement, :count).by(1)
         expect(order_detail_1.reload.statement).not_to be_nil
         expect(order_detail_2.reload.statement).not_to be_nil
+        expect(order_detail_1.reload.statement).to eq(order_detail_2.reload.statement)
         log_event = LogEvent.find_by(loggable: order_detail_1.statement, event_type: :create)
         expect(log_event).to be_present
       end
@@ -169,6 +169,42 @@ RSpec.describe StatementCreator do
 
     it "returns account list items with line breaks" do
       expect(creator.formatted_account_list).to eq(account.account_list_item)
+    end
+  end
+
+  describe "with invoice_date" do
+    context "when invoice_date is provided" do
+      let(:invoice_date) { 3.days.ago.to_date }
+      let(:creator_with_date) do
+        described_class.new(
+          order_detail_ids: [order_detail_1.id],
+          session_user: user,
+          current_facility: facility,
+          invoice_date:,
+        )
+      end
+
+      before do
+        ordered_at = invoice_date - 2.days
+        order_detail_1.update_columns(
+          ordered_at:,
+          fulfilled_at: ordered_at,
+        )
+      end
+
+      it "creates statement with the provided invoice_date" do
+        creator_with_date.create
+        statement = Statement.last
+        expect(statement.invoice_date).to eq(invoice_date)
+      end
+    end
+
+    context "when invoice_date is not provided" do
+      it "creates statement with default invoice_date (current date)" do
+        creator.create
+        statement = Statement.last
+        expect(statement.invoice_date).to eq(Time.current.to_date)
+      end
     end
   end
 

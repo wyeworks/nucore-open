@@ -2,13 +2,16 @@
 
 class StatementCreator
 
-  attr_accessor :order_detail_ids, :errors, :to_statement, :account_statements, :session_user, :current_facility, :parent_invoice_number
+  include DateHelper
+
+  attr_accessor :order_detail_ids, :errors, :to_statement, :account_statements, :session_user, :current_facility, :parent_invoice_number, :invoice_date
 
   def initialize(params)
     @order_detail_ids = params[:order_detail_ids]
     @session_user = params[:session_user]
     @current_facility = params[:current_facility]
     @parent_invoice_number = params[:parent_invoice_number]
+    @invoice_date = params[:invoice_date]
     @errors = []
     @to_statement = {}
   end
@@ -66,10 +69,21 @@ class StatementCreator
         created_by: session_user.id
       }
 
+      if invoice_date.present?
+        statement_attrs[:invoice_date] = invoice_date
+      end
+
       statement_id = validate_parent_statement
       statement_attrs[:parent_statement_id] = statement_id if statement_id.present?
 
-      statement = Statement.create!(statement_attrs)
+      statement = Statement.new(statement_attrs)
+      statement.order_details = order_details
+      unless statement.valid?
+        @errors.concat(statement.errors.full_messages)
+        next
+      end
+
+      statement.save!
       LogEvent.log(statement, :create, session_user)
       order_details.each do |od|
         StatementRow.create!(statement_id: statement.id, order_detail_id: od.id)
