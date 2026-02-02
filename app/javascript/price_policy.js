@@ -30,7 +30,7 @@ $(document).ready(function() {
     let rate = parseFloat($sourceElement.val());
     rate = isFiniteAndPositive(rate) ? rate : 0;
 
-    const $targets = $(".js--adjustmentRow").find($sourceElement.data("target"));
+    const $targets = $(".js--adjustmentRow").not(".js--externalSubsidyRow").find($sourceElement.data("target"));
     $targets.filter(":input").val(rate);
     return $targets.filter("span").html(rate);
   };
@@ -41,7 +41,7 @@ $(document).ready(function() {
   };
 
   const toggleFullCancellationInAdjustmentRows = function(isChecked) {
-    const $adjustmentFields = $(".js--adjustmentRow .js--fullCancellationCost");
+    const $adjustmentFields = $(".js--adjustmentRow").not(".js--externalSubsidyRow").find(".js--fullCancellationCost");
     $adjustmentFields.val(isChecked ? "1" : "0");
     hardToggleField($adjustmentFields.siblings(".js--cancellationCost").filter(":input"), isChecked);
     // Show/hide the pricing spans
@@ -62,20 +62,43 @@ $(document).ready(function() {
 
   $(".js--masterInternalRow input[type=text]").keyup(evt => updateAdjustmentFields($(evt.target))).trigger("keyup");
 
-  // Update external subsidy rows when parent external rate changes
-  const updateExternalSubsidyRates = function($sourceElement) {
-    const priceGroupId = $sourceElement.data("price-group-id");
+  // Update external subsidy rows when parent external group fields change
+  const updateExternalSubsidyFields = function($sourceElement) {
+    const $row = $sourceElement.parents("tr");
+    const priceGroupId = $row.find(".usage_rate").data("price-group-id");
     if (!priceGroupId) return;
 
-    const rate = $sourceElement.val();
+    const target = $sourceElement.data("target");
+    if (!target) return;
+
+    let value = $sourceElement.val();
+    if ($sourceElement.is(":checkbox")) {
+      value = $sourceElement.is(":checked") ? "1" : "0";
+    }
+
     $(`.js--externalSubsidyRow[data-parent-price-group-id="${priceGroupId}"]`).each(function() {
-      $(this).find(".js--usageRate").val(rate);
+      const $targetField = $(this).find(target);
+      $targetField.filter(":input").val(value);
+      $targetField.filter("span").html(value);
+
+      // Handle full cancellation checkbox special case
+      if ($sourceElement.hasClass("js--fullCancellationCost")) {
+        const isChecked = $sourceElement.is(":checked");
+        $(this).find(".js--fullCancellationCost").val(isChecked ? "1" : "0");
+        hardToggleField($(this).find(".js--cancellationCost").filter(":input"), isChecked);
+        $(this).find(".js--cancellationCost").filter("span").toggle(!isChecked);
+      }
     });
   };
 
-  $(".usage_rate").on("keyup change", function(evt) {
-    updateExternalSubsidyRates($(evt.target));
+  // Bind to external base group fields (rows that are not master internal and not external subsidies)
+  $("tr").not(".js--masterInternalRow").not(".js--externalSubsidyRow").not(".js--adjustmentRow").find("input[type=text]").on("keyup change", function(evt) {
+    updateExternalSubsidyFields($(evt.target));
   }).trigger("keyup");
+
+  $("tr").not(".js--masterInternalRow").not(".js--externalSubsidyRow").not(".js--adjustmentRow").find(".js--fullCancellationCost").on("change", function(evt) {
+    updateExternalSubsidyFields($(evt.target));
+  });
 
   $(".js--price-policy-note-select").on("change", function(event) {
     const selectedOption = event.target.options[event.target.selectedIndex];
