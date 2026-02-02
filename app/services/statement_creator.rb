@@ -70,12 +70,7 @@ class StatementCreator
       }
 
       if invoice_date.present?
-        parsed_date = parse_usa_date(invoice_date)
-        if parsed_date.nil?
-          @errors << I18n.t("activerecord.errors.models.statement.attributes.invoice_date.invalid")
-          next
-        end
-        statement_attrs[:invoice_date] = parsed_date.to_date
+        statement_attrs[:invoice_date] = invoice_date
       end
 
       statement_id = validate_parent_statement

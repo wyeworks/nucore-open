@@ -77,7 +77,7 @@ class FacilityStatementsController < ApplicationController
     }
 
     if can_set_invoice_date? && params[:invoice_date].present?
-      creator_params[:invoice_date] = params[:invoice_date]
+      creator_params[:invoice_date] = parse_usa_date(params[:invoice_date])
     end
 
     @statement_creator = StatementCreator.new(creator_params)

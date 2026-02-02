@@ -174,8 +174,7 @@ RSpec.describe StatementCreator do
 
   describe "with invoice_date" do
     context "when invoice_date is provided" do
-      let(:invoice_date_value) { 3.days.ago.to_date }
-      let(:invoice_date) { I18n.l(invoice_date_value, format: :usa) }
+      let(:invoice_date) { 3.days.ago.to_date }
       let(:creator_with_date) do
         described_class.new(
           order_detail_ids: [order_detail_1.id],
@@ -186,7 +185,7 @@ RSpec.describe StatementCreator do
       end
 
       before do
-        ordered_at = invoice_date_value - 2.days
+        ordered_at = invoice_date - 2.days
         order_detail_1.update_columns(
           ordered_at:,
           fulfilled_at: ordered_at,
@@ -196,7 +195,7 @@ RSpec.describe StatementCreator do
       it "creates statement with the provided invoice_date" do
         creator_with_date.create
         statement = Statement.last
-        expect(statement.invoice_date).to eq(invoice_date_value)
+        expect(statement.invoice_date).to eq(invoice_date)
       end
     end
 
