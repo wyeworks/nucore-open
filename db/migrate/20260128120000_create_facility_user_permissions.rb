@@ -4,8 +4,8 @@ class CreateFacilityUserPermissions < ActiveRecord::Migration[8.0]
 
   def change
     create_table :facility_user_permissions do |t|
-      t.references :user, null: false, foreign_key: true
-      t.references :facility, null: false, foreign_key: true
+      t.references :user, null: false, type: :integer, foreign_key: true
+      t.references :facility, null: false, type: :integer, foreign_key: true
 
       t.boolean :product_management, default: false, null: false
       t.boolean :product_pricing, default: false, null: false
@@ -17,7 +17,6 @@ class CreateFacilityUserPermissions < ActiveRecord::Migration[8.0]
       t.boolean :assign_permissions, default: false, null: false
 
       t.timestamps
-      t.datetime :deleted_at
     end
 
     add_index :facility_user_permissions, [:user_id, :facility_id], unique: true
