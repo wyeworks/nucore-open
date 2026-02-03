@@ -28,6 +28,7 @@ class Facility < ApplicationRecord
   has_many :training_requests, through: :products
   has_many :user_roles, dependent: :destroy
   has_many :users, -> { distinct }, through: :user_roles
+  has_many :facility_user_permissions, dependent: :destroy
   has_many :reservations, through: :instruments
   has_many :product_display_groups
   has_many :projects, inverse_of: :facility, dependent: :destroy # Though Facilities cannot be destroyed
