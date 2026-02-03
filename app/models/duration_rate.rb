@@ -72,7 +72,7 @@ class DurationRate < ApplicationRecord
   end
 
   def requires_subsidy?
-    price_group.is_internal? && !price_group.master_internal?
+    price_group.subsidy_only?
   end
 
 end

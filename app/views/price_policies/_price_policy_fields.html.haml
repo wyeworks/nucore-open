@@ -18,15 +18,17 @@
       = fields_for "price_policy_#{price_group.id}", price_policy do |pp|
         - row_class = []
         - row_class << "js--masterInternalRow" if price_group.master_internal?
-        - row_class << "js--adjustmentRow" unless price_group.external? || price_group.master_internal?
-        %tr{class: row_class}
+        - row_class << "js--adjustmentRow" if price_group.subsidy_only?
+        - row_class << "js--externalSubsidyRow" if price_group.external_subsidy?
+        %tr{class: row_class, data: price_group.external_subsidy? ? { parent_price_group_id: price_group.parent_price_group_id } : {}}
           %td= price_group.name
           %td= price_group.type_string
           %td= pp.check_box :can_purchase, class: "js--canPurchase"
-          - if price_group.external?
+          - if price_group.external? && !price_group.subsidy_only?
             %td.centered
               = pp.text_field :unit_cost, value: number_to_currency(price_policy.unit_cost, unit: "", delimiter: ""),
-                size: 8
+                size: 8,
+                data: { price_group_id: price_group.id }
             %td.centered
           - elsif price_group.master_internal?
             %td.centered

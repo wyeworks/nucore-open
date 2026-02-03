@@ -15,7 +15,8 @@
     - if SettingsHelper.feature_on?(:charge_full_price_on_cancellation)
       = label_tag(nil, class: "checkbox normal-weight") do
         = pp.check_box :full_price_cancellation,
-          class: "js--fullCancellationCost"
+          class: "js--fullCancellationCost",
+          data: { target: ".js--fullCancellationCost" }
         = price_policy.class.human_attribute_name(:full_price_cancellation)
         = tooltip_icon "fa fa-question-circle-o", t("price_policies.charge_full_price_on_cancellation_hint")
 
@@ -30,4 +31,4 @@
     = pp.text_field :usage_rate, value: display_usage_rate(price_group, price_policy),
       size: 8,
       class: "#{price_group.master_internal? ? 'master_usage_cost' : ''} usage_rate",
-      data: { target: ".js--usageRate" }
+      data: { target: ".js--usageRate", price_group_id: price_group.id }

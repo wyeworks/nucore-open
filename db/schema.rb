@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_16_152209) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_20_142610) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -556,7 +556,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_16_152209) do
     t.boolean "highlighted", default: false, null: false
     t.boolean "global", default: false, null: false
     t.boolean "is_hidden", default: false, null: false
+    t.integer "parent_price_group_id"
     t.index ["facility_id", "name"], name: "index_price_groups_on_facility_id_and_name"
+    t.index ["parent_price_group_id"], name: "index_price_groups_on_parent_price_group_id"
   end
 
   create_table "price_policies", id: :integer, charset: "utf8mb3", force: :cascade do |t|
@@ -1119,6 +1121,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_16_152209) do
   add_foreign_key "price_group_members", "price_groups"
   add_foreign_key "price_group_members", "users"
   add_foreign_key "price_groups", "facilities"
+  add_foreign_key "price_groups", "price_groups", column: "parent_price_group_id"
   add_foreign_key "price_policies", "price_groups"
   add_foreign_key "price_policies", "users", column: "created_by_id"
   add_foreign_key "product_display_group_products", "product_display_groups"
