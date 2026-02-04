@@ -388,7 +388,7 @@ GEM
       base64
     kgio (2.11.4)
     kostya-sigar (2.0.11)
-    kt-paperclip (7.2.2)
+    kt-paperclip (7.3.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
       marcel (~> 1.0.1)
