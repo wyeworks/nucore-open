@@ -1038,7 +1038,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
         before :each do
           @params[:order_detail] = {
             reservation: reservation_params(reservation.reserve_start_at)
-                                   .merge(duration_mins: new_duration),
+                         .merge(duration_mins: new_duration),
           }
           do_request
         end
@@ -1074,7 +1074,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
           order_detail.update_order_status! @admin, OrderStatus.complete
           @params[:order_detail] = {
             reservation: reservation_params(reservation.reserve_start_at, reservation.reserve_start_at)
-                                   .merge(duration_mins: reservation.duration_mins, actual_duration_mins: new_duration),
+                         .merge(duration_mins: reservation.duration_mins, actual_duration_mins: new_duration),
           }
           expect(order_detail).to be_complete
         end

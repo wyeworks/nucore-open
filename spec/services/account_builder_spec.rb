@@ -57,7 +57,8 @@ RSpec.describe AccountBuilder, type: :service do
 
     context "when subclassed account builder exists" do
       before do
-        ExistingBuilder = Class.new(AccountBuilder)
+        class ExistingBuilder < AccountBuilder
+        end
       end
 
       it "returns subclassed builder" do
@@ -72,7 +73,8 @@ RSpec.describe AccountBuilder, type: :service do
     context "when the builder is namespaced" do
       before do
         module TestNamespace
-          ExistingBuilder = Class.new(AccountBuilder)
+          class ExistingBuilder < AccountBuilder
+          end
         end
       end
 
