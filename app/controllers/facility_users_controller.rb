@@ -2,11 +2,15 @@
 
 class FacilityUsersController < ApplicationController
 
+  include GrantedPermissionAuthorization
+
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
 
   load_and_authorize_resource class: User
+  skip_authorize_resource only: [:index]
+  before_action :authorize_index, only: [:index]
 
   layout "two_column"
 
@@ -48,6 +52,14 @@ class FacilityUsersController < ApplicationController
         render action: "map_user"
       end
     end
+  end
+
+  private
+
+  def authorize_index
+    return if current_ability.can?(:read, User)
+
+    authorize_granted_permission!(:assign_permissions)
   end
 
 end
