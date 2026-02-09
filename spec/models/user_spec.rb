@@ -209,4 +209,65 @@ RSpec.describe User do
       expect(described_class.find_users_by_facility(facility)).to contain_exactly(facility_director, staff, facility_admin_and_director)
     end
   end
+
+  describe "#operable_facilities" do
+    let(:user) { create(:user) }
+    let(:facility1) { create(:facility) }
+    let(:facility2) { create(:facility) }
+
+    context "when user has only facility roles" do
+      before do
+        UserRole.grant(user, UserRole::FACILITY_STAFF, facility1)
+      end
+
+      it "returns facilities from roles" do
+        expect(user.operable_facilities).to contain_exactly(facility1)
+      end
+    end
+
+    context "when user has only granular permissions" do
+      before do
+        create(:facility_user_permission, user:, facility: facility2, assign_permissions: true)
+      end
+
+      it "returns facilities from permissions" do
+        expect(user.operable_facilities).to contain_exactly(facility2)
+      end
+    end
+
+    context "when user has both roles and permissions on different facilities" do
+      before do
+        UserRole.grant(user, UserRole::FACILITY_STAFF, facility1)
+        create(:facility_user_permission, user:, facility: facility2, assign_permissions: true)
+      end
+
+      it "returns both facilities without duplicates" do
+        expect(user.operable_facilities).to contain_exactly(facility1, facility2)
+      end
+    end
+
+    context "when user has both role and permission on the same facility" do
+      before do
+        UserRole.grant(user, UserRole::FACILITY_STAFF, facility1)
+        create(:facility_user_permission, user:, facility: facility1, product_management: true)
+      end
+
+      it "returns the facility once" do
+        expect(user.operable_facilities).to contain_exactly(facility1)
+      end
+    end
+
+    context "when user is an administrator" do
+      let(:user) { create(:user, :administrator) }
+
+      before do
+        facility1
+        facility2
+      end
+
+      it "returns all facilities" do
+        expect(user.operable_facilities).to include(facility1, facility2)
+      end
+    end
+  end
 end
