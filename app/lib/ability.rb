@@ -414,6 +414,7 @@ class Ability
       TrainingRequest,
       OfflineReservation,
       ProductDisplayGroup,
+      FacilityUserPermission,
     ]
 
     cannot :create_daily_booking, Product

@@ -187,6 +187,7 @@ feature:
   accessory_independent_order_status: false
   merged_statement_history_columns: false
   external_price_group_subsidies: false
+  granular_permissions: true
 
 split_accounts:
   # Roles are allowed to create Split Accounts
