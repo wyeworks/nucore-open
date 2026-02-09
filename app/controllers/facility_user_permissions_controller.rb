@@ -2,12 +2,13 @@
 
 class FacilityUserPermissionsController < ApplicationController
 
+  include GrantedPermissionAuthorization
+
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
   before_action :check_granular_permissions_enabled
-
-  authorize_resource class: FacilityUserPermission
+  before_action { authorize_granted_permission!(:assign_permissions) }
 
   layout "two_column"
 
@@ -40,7 +41,13 @@ class FacilityUserPermissionsController < ApplicationController
   private
 
   def permission_params
-    params.require(:facility_user_permission).permit(*FacilityUserPermission::PERMISSIONS)
+    allowed = if current_user.administrator?
+                FacilityUserPermission::PERMISSIONS
+              else
+                FacilityUserPermission::PERMISSIONS - [:assign_permissions]
+              end
+
+    params.require(:facility_user_permission).permit(*allowed)
   end
 
   def check_granular_permissions_enabled
