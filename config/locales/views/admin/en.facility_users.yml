@@ -8,6 +8,8 @@ en:
         remove_roles: Remove Roles
         th:
           roles: Roles
+        granular_permissions: Granular Permissions
+        permissions_search_instruct: Search for a user to manage their permissions for this !facility_downcase!.
 
       map_user:
         h2: Grant !Facility! Role

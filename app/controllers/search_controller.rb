@@ -28,8 +28,8 @@ class SearchController < ApplicationController
 
   def valid_search_types
     %w(account_account_user create_new_user facility_account_account_user
-       global_user_role manage_user map_user user_new_account
-       user_price_group_member user_product_approval)
+       facility_user_permission global_user_role manage_user map_user
+       user_new_account user_price_group_member user_product_approval)
   end
 
   def load_facility

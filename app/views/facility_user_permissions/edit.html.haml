@@ -1,0 +1,32 @@
+= content_for :h1 do
+  = current_facility
+= content_for :sidebar do
+  = render "admin/shared/sidenav_admin", sidenav_tab: "staff"
+
+%h2= text(".h2", name: @user.full_name)
+
+= form_for @permission, url: facility_facility_user_permission_path(current_facility, @user), method: :patch do |f|
+  .form
+    %fieldset
+      %legend= text(".user_info")
+      .form-group
+        = label_tag :username
+        = text_field_tag :username, @user.username, disabled: true, class: "form-control"
+      .form-group
+        = label_tag :name
+        = text_field_tag :name, @user.full_name, disabled: true, class: "form-control"
+      .form-group
+        = label_tag :email
+        = text_field_tag :email, @user.email, disabled: true, class: "form-control"
+
+    %fieldset
+      %legend= text(".permissions")
+      - FacilityUserPermission::PERMISSIONS.each do |perm|
+        .checkbox
+          %label
+            = f.check_box perm
+            = text(".permission_labels.#{perm}")
+
+  %ul.list-inline
+    %li= f.submit text("shared.save"), class: "btn btn-primary"
+    %li= link_to text("shared.cancel"), facility_facility_users_path
