@@ -1,0 +1,16 @@
+en:
+  views:
+    facility_user_permissions:
+      edit:
+        h2: "Manage Permissions for %{name}"
+        user_info: User Info
+        permissions: Permissions
+        permission_labels:
+          product_management: Product Management
+          product_pricing: Product Pricing
+          order_management: Order Management
+          price_adjustment: Price Adjustment
+          billing_send: Billing Send
+          billing_journals: Billing Journals
+          instrument_management: Instrument Management
+          assign_permissions: Assign Permissions

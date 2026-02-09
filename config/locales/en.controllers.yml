@@ -81,6 +81,11 @@ en:
         error: "Could not delete order detail %{order_detail_id}"
         success: "The order detail was successfully removed"
 
+    facility_user_permissions:
+      update:
+        success: Permissions have been updated successfully.
+        failure: There was an error updating permissions.
+
     facility_user_reservations:
       cancel:
         success: The reservation has been canceled successfully.

@@ -31,3 +31,15 @@
           %td= user.username
           %td= user.email
           %td= user.facility_user_roles(current_facility).map(&:role).join(", ")
+
+- if SettingsHelper.feature_on?(:granular_permissions)
+  %hr
+  %h2= text(".granular_permissions")
+  = form_tag user_search_results_path, id: "ajax_form", method: "get" do
+    %p.instructions= text(".permissions_search_instruct")
+    = text_field_tag :search_term, nil, size: 30, class: "form-control"
+    = submit_tag text("shared.search"), class: "btn btn-default"
+    = hidden_field_tag :facility_id, current_facility.id
+    = hidden_field_tag :search_type, "facility_user_permission"
+  %br
+  #result

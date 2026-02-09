@@ -168,6 +168,8 @@ Rails.application.routes.draw do
       match "map_user", to: "facility_users#map_user", via: [:get, :post]
     end
 
+    resources :facility_user_permissions, only: [:edit, :update], path: "permissions"
+
     users_options = if SettingsHelper.feature_on?(:create_users)
                       {}
                     else
