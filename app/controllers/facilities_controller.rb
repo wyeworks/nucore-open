@@ -12,9 +12,9 @@ class FacilitiesController < ApplicationController
   before_action :store_fullpath_in_session, only: [:index, :show]
   before_action :enable_sorting, only: [:disputed_orders, :movable_transactions, :transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
 
+  around_action :allow_granted_permission_users, only: [:list, :dashboard]
   load_and_authorize_resource find_by: :url_name
   skip_load_and_authorize_resource only: [:index, :show]
-  around_action :allow_granted_permission_users, only: [:list, :dashboard]
 
   include AZHelper
   include MovableTransactions
