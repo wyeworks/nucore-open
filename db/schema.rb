@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_20_142610) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_28_120000) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -260,6 +260,24 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_20_142610) do
     t.datetime "created_at", precision: nil, null: false
     t.integer "revenue_account", null: false
     t.index ["facility_id"], name: "fk_facilities"
+  end
+
+  create_table "facility_user_permissions", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "facility_id", null: false
+    t.boolean "product_management", default: false, null: false
+    t.boolean "product_pricing", default: false, null: false
+    t.boolean "order_management", default: false, null: false
+    t.boolean "price_adjustment", default: false, null: false
+    t.boolean "billing_send", default: false, null: false
+    t.boolean "billing_journals", default: false, null: false
+    t.boolean "instrument_management", default: false, null: false
+    t.boolean "assign_permissions", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["facility_id"], name: "index_facility_user_permissions_on_facility_id"
+    t.index ["user_id", "facility_id"], name: "index_facility_user_permissions_on_user_id_and_facility_id", unique: true
+    t.index ["user_id"], name: "index_facility_user_permissions_on_user_id"
   end
 
   create_table "holidays", charset: "utf8mb3", force: :cascade do |t|
@@ -1083,6 +1101,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_20_142610) do
   add_foreign_key "bundle_products", "products", name: "fk_bundle_prod_bundle"
   add_foreign_key "email_events", "users"
   add_foreign_key "facility_accounts", "facilities", name: "fk_facilities"
+  add_foreign_key "facility_user_permissions", "facilities"
+  add_foreign_key "facility_user_permissions", "users"
   add_foreign_key "instrument_statuses", "products", column: "instrument_id", name: "fk_int_stats_product"
   add_foreign_key "journal_rows", "accounts"
   add_foreign_key "journal_rows", "journals"
