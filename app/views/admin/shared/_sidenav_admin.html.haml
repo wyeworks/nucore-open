@@ -1,8 +1,9 @@
 %ul.sidebar-nav
-  = tab t("shared.sidenav_admin.overview"), manage_facility_path(current_facility), sidenav_tab == "overview"
-
-  = tab FacilityAccount.model_name.human(count: 2), facility_facility_accounts_path(current_facility), sidenav_tab == "recharge_accounts"
+  - if can?(:manage, current_facility)
+    = tab t("shared.sidenav_admin.overview"), manage_facility_path(current_facility), sidenav_tab == "overview"
+    = tab FacilityAccount.model_name.human(count: 2), facility_facility_accounts_path(current_facility), sidenav_tab == "recharge_accounts"
   = tab text("facility_users.title"), facility_facility_users_path(current_facility), sidenav_tab == "staff"
-  = tab PriceGroup.model_name.human(count: 2), facility_price_groups_path(current_facility), sidenav_tab == "price_groups"
-  = tab OrderStatus.model_name.human(count: 2), facility_order_statuses_path(current_facility), sidenav_tab == "statuses"
+  - if can?(:manage, current_facility)
+    = tab PriceGroup.model_name.human(count: 2), facility_price_groups_path(current_facility), sidenav_tab == "price_groups"
+    = tab OrderStatus.model_name.human(count: 2), facility_order_statuses_path(current_facility), sidenav_tab == "statuses"
   = render_view_hook "last", sidenav_tab: sidenav_tab

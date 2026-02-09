@@ -44,7 +44,13 @@ class FacilityUserPermissionsController < ApplicationController
   private
 
   def permission_params
-    params.require(:facility_user_permission).permit(*FacilityUserPermission::PERMISSIONS)
+    allowed = if current_user.administrator?
+                FacilityUserPermission::PERMISSIONS
+              else
+                FacilityUserPermission::PERMISSIONS - [:assign_permissions]
+              end
+
+    params.require(:facility_user_permission).permit(*allowed)
   end
 
   def permission_changes

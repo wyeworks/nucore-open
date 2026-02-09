@@ -14,6 +14,7 @@ class FacilitiesController < ApplicationController
 
   load_and_authorize_resource find_by: :url_name
   skip_load_and_authorize_resource only: [:index, :show]
+  around_action :allow_granted_permission_users, only: [:list, :dashboard]
 
   include AZHelper
   include MovableTransactions
@@ -178,6 +179,21 @@ class FacilitiesController < ApplicationController
   end
 
   private
+
+  def allow_granted_permission_users
+    yield
+  rescue CanCan::AccessDenied
+    raise unless current_user&.facility_user_permissions&.any?
+
+    case action_name
+    when "list"
+      list
+    when "dashboard"
+      redirect_to facility_facility_users_path(current_facility)
+    else
+      raise
+    end
+  end
 
   def include_facilities?
     current_facility.cross_facility?
