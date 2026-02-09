@@ -54,7 +54,7 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
       before { sign_in no_permission_user }
 
       it "denies access" do
-        expect { get :edit, params: @params }.to raise_error(CanCan::AccessDenied)
+        expect { get :edit, params: @params }.to raise_error(NUCore::PermissionDenied)
       end
     end
 
@@ -67,7 +67,7 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
       end
 
       it "denies access" do
-        expect { get :edit, params: @params }.to raise_error(CanCan::AccessDenied)
+        expect { get :edit, params: @params }.to raise_error(NUCore::PermissionDenied)
       end
     end
   end
@@ -146,7 +146,7 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
       before { sign_in no_permission_user }
 
       it "denies access" do
-        expect { patch :update, params: @params }.to raise_error(CanCan::AccessDenied)
+        expect { patch :update, params: @params }.to raise_error(NUCore::PermissionDenied)
       end
     end
   end

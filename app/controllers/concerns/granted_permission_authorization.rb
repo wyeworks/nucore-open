@@ -15,7 +15,7 @@ module GrantedPermissionAuthorization
 
     granted = current_user&.facility_user_permissions&.find_by(facility: current_facility)
 
-    raise CanCan::AccessDenied unless granted&.public_send(permission)
+    raise NUCore::PermissionDenied unless granted&.public_send(permission)
   end
 
   def has_granted_permission?(permission)

@@ -47,13 +47,13 @@ RSpec.describe GrantedPermissionAuthorization do
     end
 
     it "raises AccessDenied" do
-      expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(NUCore::PermissionDenied)
     end
   end
 
   context "when user has no permissions" do
     it "raises AccessDenied" do
-      expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(NUCore::PermissionDenied)
     end
   end
 
@@ -65,7 +65,7 @@ RSpec.describe GrantedPermissionAuthorization do
     end
 
     it "raises AccessDenied" do
-      expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(NUCore::PermissionDenied)
     end
   end
 
@@ -91,17 +91,13 @@ RSpec.describe GrantedPermissionAuthorization do
     end
 
     context "when user does not have the permission" do
-      let(:user) { create(:user, :administrator) }
-
       before do
-        create(:facility_user_permission, user: create(:user), facility:, product_management: true)
+        create(:facility_user_permission, user:, facility:, assign_permissions: true)
       end
 
-      it "returns false for a permission the user does not have" do
+      it "returns false" do
         get :index, params: { facility_id: facility.url_name }
-        # Admin returns true for everything via the shortcut, so test with a non-admin
-        # This test verifies the method exists and works for admins
-        expect(controller.send(:has_granted_permission?, :assign_permissions)).to be true
+        expect(controller.send(:has_granted_permission?, :product_management)).to be false
       end
     end
   end
