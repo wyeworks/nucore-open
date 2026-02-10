@@ -220,4 +220,88 @@ RSpec.describe FacilityNotificationsController do
 
     include_examples "zero-day review period"
   end
+
+  context "with granular permissions", feature_setting: { granular_permissions: true } do
+    let(:permitted_user) { create(:user) }
+    let(:unpermitted_user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: permitted_user, facility: @authable, billing_send: true)
+      create(:facility_user_permission, user: unpermitted_user, facility: @authable, billing_send: false)
+    end
+
+    describe "GET #index", billing_review_period: 7.days do
+      before do
+        @method = :get
+        @action = :index
+      end
+
+      it "allows a user with billing_send permission" do
+        sign_in permitted_user
+        do_request
+        expect(response).to be_successful
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { do_request }.to raise_error(NUCore::PermissionDenied)
+      end
+    end
+
+    describe "POST #send_notifications", billing_review_period: 7.days do
+      before do
+        @method = :post
+        @action = :send_notifications
+        @params.merge!(order_detail_ids: [@order_detail1.id, @order_detail2.id])
+      end
+
+      it "allows a user with billing_send permission" do
+        sign_in permitted_user
+        do_request
+        expect(response).to be_redirect
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { do_request }.to raise_error(NUCore::PermissionDenied)
+      end
+    end
+
+    describe "GET #in_review", billing_review_period: 7.days do
+      before do
+        @method = :get
+        @action = :in_review
+      end
+
+      it "allows a user with billing_send permission" do
+        sign_in permitted_user
+        do_request
+        expect(response).to be_successful
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { do_request }.to raise_error(NUCore::PermissionDenied)
+      end
+    end
+
+    describe "POST #mark_as_reviewed", billing_review_period: 7.days do
+      before do
+        @method = :post
+        @action = :mark_as_reviewed
+        @params.merge!(order_detail_ids: [@order_detail1.id, @order_detail3.id])
+      end
+
+      it "allows a user with billing_send permission" do
+        sign_in permitted_user
+        do_request
+        expect(response).to be_redirect
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { do_request }.to raise_error(NUCore::PermissionDenied)
+      end
+    end
+  end
 end

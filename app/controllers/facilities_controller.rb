@@ -12,11 +12,12 @@ class FacilitiesController < ApplicationController
   before_action :store_fullpath_in_session, only: [:index, :show]
   before_action :enable_sorting, only: [:disputed_orders, :movable_transactions, :transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
 
-  around_action :allow_granted_permission_users, only: [:list, :dashboard]
+  around_action :allow_granted_permission_users, only: [:list, :dashboard, :transactions, :disputed_orders, :movable_transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
   load_and_authorize_resource find_by: :url_name
   skip_load_and_authorize_resource only: [:index, :show]
 
   include AZHelper
+  include GrantedPermissionAuthorization
   include MovableTransactions
   include OrderDetailsCsvExport
   include SortableBillingTable
@@ -178,6 +179,11 @@ class FacilitiesController < ApplicationController
     @order_details = @search.order_details.reorder(sort_clause).paginate(page: params[:page])
   end
 
+  BILLING_SEND_ACTIONS = %w[
+    transactions disputed_orders movable_transactions
+    reassign_chart_strings confirm_transactions move_transactions
+  ].freeze
+
   private
 
   def allow_granted_permission_users
@@ -189,9 +195,26 @@ class FacilitiesController < ApplicationController
     when "list"
       list
     when "dashboard"
-      redirect_to facility_facility_users_path(current_facility)
+      redirect_to granted_permission_landing_path
+    when *BILLING_SEND_ACTIONS
+      authorize_granted_permission!(:billing_send)
+      load_order_details if %w[reassign_chart_strings confirm_transactions move_transactions].include?(action_name)
+      send(action_name)
+      render action: action_name unless performed?
     else
       raise
+    end
+  end
+
+  def granted_permission_landing_path
+    permission = current_user.facility_user_permissions.find_by(facility: current_facility)
+
+    if permission&.assign_permissions
+      facility_facility_users_path(current_facility)
+    elsif permission&.billing_send
+      facility_transactions_path(current_facility)
+    else
+      facility_path(current_facility)
     end
   end
 
