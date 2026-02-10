@@ -79,7 +79,7 @@ class NavTab::LinkCollection
   end
 
   def admin_billing
-    if single_facility? && ability.can?(:manage_billing, facility)
+    if single_facility? && (ability.can?(:manage_billing, facility) || has_billing_permission?)
       NavTab::Link.new(tab: :admin_billing, url: billing_tab_landing_path)
     end
   end
@@ -131,6 +131,8 @@ class NavTab::LinkCollection
   def admin_facility
     if single_facility? && ability.can?(:edit, facility)
       NavTab::Link.new(tab: :admin_facility, url: manage_facility_path(facility))
+    elsif single_facility? && has_assign_permissions?
+      NavTab::Link.new(tab: :admin_facility, url: facility_facility_users_path(facility))
     end
   end
 
@@ -152,6 +154,20 @@ class NavTab::LinkCollection
         url: facility_estimates_path(facility),
       )
     end
+  end
+
+  def has_billing_permission?
+    return false unless SettingsHelper.feature_on?(:granular_permissions)
+
+    permission = user&.facility_user_permissions&.find_by(facility:)
+    permission&.billing_send || false
+  end
+
+  def has_assign_permissions?
+    return false unless SettingsHelper.feature_on?(:granular_permissions)
+
+    permission = user&.facility_user_permissions&.find_by(facility:)
+    permission&.assign_permissions || false
   end
 
   def billing_tab_landing_path

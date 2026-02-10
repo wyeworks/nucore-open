@@ -2,11 +2,13 @@
 
 class FacilityNotificationsController < ApplicationController
 
+  include GrantedPermissionAuthorization
+
   admin_tab     :all
   before_action :check_acting_as
 
   before_action :init_current_facility
-  before_action :check_billing_access
+  before_action :authorize_billing_send
 
   before_action :check_review_period
   before_action :enable_sorting, only: [:index, :in_review]
@@ -109,6 +111,14 @@ class FacilityNotificationsController < ApplicationController
   end
 
   private
+
+  def authorize_billing_send
+    raise ActiveRecord::RecordNotFound unless current_facility
+
+    authorize! :manage_billing, current_facility
+  rescue CanCan::AccessDenied
+    authorize_granted_permission!(:billing_send)
+  end
 
   def send_notification_success_message(sender)
     if sender.accounts_notified_size > 10

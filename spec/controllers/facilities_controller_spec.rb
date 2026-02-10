@@ -343,4 +343,74 @@ RSpec.describe FacilitiesController do
 
     it_should_allow_managers_only
   end
+
+  context "billing actions with granular permissions", feature_setting: { granular_permissions: true } do
+    let(:permitted_user) { create(:user) }
+    let(:unpermitted_user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: permitted_user, facility:, billing_send: true)
+      create(:facility_user_permission, user: unpermitted_user, facility:, billing_send: false)
+    end
+
+    describe "GET #transactions" do
+      before do
+        @method = :get
+        @action = :transactions
+        @params = { facility_id: facility.url_name }
+      end
+
+      it "allows a user with billing_send permission and renders the page" do
+        sign_in permitted_user
+        do_request
+        expect(response).to be_successful
+        expect(response.body).to include("menu_billing")
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { do_request }.to raise_error(NUCore::PermissionDenied)
+      end
+    end
+
+    describe "GET #disputed_orders" do
+      before do
+        @method = :get
+        @action = :disputed_orders
+        @params = { facility_id: facility.url_name }
+      end
+
+      it "allows a user with billing_send permission and renders the page" do
+        sign_in permitted_user
+        do_request
+        expect(response).to be_successful
+        expect(response.body).to include("menu_billing")
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { do_request }.to raise_error(NUCore::PermissionDenied)
+      end
+    end
+
+    describe "GET #movable_transactions" do
+      before do
+        @method = :get
+        @action = :movable_transactions
+        @params = { facility_id: facility.url_name }
+      end
+
+      it "allows a user with billing_send permission and renders the page" do
+        sign_in permitted_user
+        do_request
+        expect(response).to be_successful
+        expect(response.body).to include("menu_billing")
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { do_request }.to raise_error(NUCore::PermissionDenied)
+      end
+    end
+  end
 end
