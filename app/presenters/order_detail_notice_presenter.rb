@@ -100,7 +100,7 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
 
     def label_class
       {
-        status: "label-info",
+        status: "label-default",
         warning: "label-danger",
       }.fetch(@severity)
     end
