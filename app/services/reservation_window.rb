@@ -1,3 +1,8 @@
+# frozen_string_literal: true
+
+##
+# Computes reservation window for reservation
+# create/edit form
 class ReservationWindow
   def initialize(reservation, user)
     @reservation = reservation
@@ -6,7 +11,8 @@ class ReservationWindow
 
   def max_window
     return 365 if operator?
-    @reservation.longest_reservation_window(@reservation.order_detail.price_groups)
+
+    @reservation.longest_reservation_window(price_groups)
   end
 
   def max_days_ago
@@ -25,5 +31,9 @@ class ReservationWindow
 
   def operator?
     @user.operator_of?(@reservation.facility)
+  end
+
+  def price_groups
+    @reservation.product.price_groups || []
   end
 end
