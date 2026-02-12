@@ -13,10 +13,10 @@ class Product < ApplicationRecord
   has_many :order_details
   has_many :stored_files
   has_many :price_group_products
-  has_many :price_groups, through: :price_group_products
   has_many :product_accessories, -> { where(deleted_at: nil) }, dependent: :destroy
   has_many :accessories, through: :product_accessories, class_name: "Product"
   has_many :price_policies
+  has_many :price_groups, through: :price_policies
   has_many :training_requests, dependent: :destroy
   has_many :product_research_safety_certification_requirements
   has_many :research_safety_certificates, through: :product_research_safety_certification_requirements
