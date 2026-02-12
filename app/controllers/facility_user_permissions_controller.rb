@@ -35,7 +35,8 @@ class FacilityUserPermissionsController < ApplicationController
     @permission = current_facility.facility_user_permissions.find_or_initialize_by(user: @user)
 
     if @permission.update(permission_params)
-      LogEvent.log(@permission, (@permission.previously_new_record? ? :create : :update), current_user)
+      event_type = @permission.previously_new_record? ? :create : :update
+      LogEvent.log(@permission, event_type, current_user, metadata: permission_changes)
       flash[:notice] = text("update.success")
       redirect_to facility_facility_users_path(current_facility)
     else
@@ -48,6 +49,10 @@ class FacilityUserPermissionsController < ApplicationController
 
   def permission_params
     params.require(:facility_user_permission).permit(*FacilityUserPermission::PERMISSIONS)
+  end
+
+  def permission_changes
+    @permission.previous_changes.slice(*FacilityUserPermission::PERMISSIONS.map(&:to_s))
   end
 
   def check_granular_permissions_enabled

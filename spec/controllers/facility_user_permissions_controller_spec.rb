@@ -65,6 +65,19 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
     end
   end
 
+  context "as a user with other permissions but not assign_permissions" do
+    let(:user_without_assign) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: user_without_assign, facility:, product_management: true)
+      sign_in user_without_assign
+    end
+
+    it "denies access to edit" do
+      expect { get :edit, params: { facility_id: facility.url_name, id: target_user.id } }.to raise_error(NUCore::PermissionDenied)
+    end
+  end
+
   context "when granular_permissions feature is disabled", feature_setting: { granular_permissions: false } do
     before { sign_in @admin }
 
