@@ -8,6 +8,10 @@ en:
         remove_roles: Remove Roles
         th:
           roles: Roles
+          permissions: Permissions
+        granular_permissions: Granular Permissions
+        add_permissions: Add Permissions
+        no_permission_users: No users have been assigned granular permissions for this !facility_downcase!.
 
       map_user:
         h2: Grant !Facility! Role

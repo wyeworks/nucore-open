@@ -2,11 +2,15 @@
 
 class FacilityUsersController < ApplicationController
 
+  include GrantedPermissionAuthorization
+
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
 
   load_and_authorize_resource class: User
+  skip_authorize_resource only: [:index]
+  before_action :authorize_index, only: [:index]
 
   layout "two_column"
 
@@ -18,6 +22,7 @@ class FacilityUsersController < ApplicationController
   # GET /facilities/:facility_id/facility_users
   def index
     @users = User.find_users_by_facility(current_facility)
+    @permission_users = current_facility.facility_user_permissions.includes(:user) if SettingsHelper.feature_on?(:granular_permissions)
   end
 
   # DELETE /facilities/:facility_id/facility_users/:facility_user_id/map_user
@@ -47,6 +52,14 @@ class FacilityUsersController < ApplicationController
         render action: "map_user"
       end
     end
+  end
+
+  private
+
+  def authorize_index
+    return if current_ability.can?(:read, User)
+
+    authorize_granted_permission!(:assign_permissions)
   end
 
 end
