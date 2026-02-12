@@ -1,6 +1,9 @@
 en:
   views:
     facility_user_permissions:
+      search:
+        h2: Add Permissions
+        instruct: Search for a user to manage their permissions for this !facility_downcase!.
       edit:
         h2: "Manage Permissions for %{name}"
         user_info: User Info

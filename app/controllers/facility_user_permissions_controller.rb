@@ -7,13 +7,20 @@ class FacilityUserPermissionsController < ApplicationController
   before_action :init_current_facility
   before_action :check_granular_permissions_enabled
 
+  include GrantedPermissionAuthorization
+
   authorize_resource class: FacilityUserPermission
+  before_action { authorize_granted_permission!(:assign_permissions) }
 
   layout "two_column"
 
   def initialize
     @active_tab = "admin_facility"
     super
+  end
+
+  # GET /facilities/:facility_id/permissions/search
+  def search
   end
 
   # GET /facilities/:facility_id/permissions/:id/edit
