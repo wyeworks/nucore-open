@@ -793,7 +793,6 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
         before do
           instrument
             .price_group_products
-            .where(price_group: instrument.price_groups)
             .first
             .update(reservation_window:)
         end
