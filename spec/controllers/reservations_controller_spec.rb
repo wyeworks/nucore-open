@@ -939,11 +939,11 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
         expect(response).to be_successful
       end
 
-      it "uses the minimum reservation window" do
+      it "uses the maxiumum reservation window" do
         pgp2 = FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 7)
         pgp3 = FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 21)
         do_request
-        expect(assigns(:reservation_window).max_window).to eq(7)
+        expect(assigns(:reservation_window).max_window).to eq(21)
       end
     end
 
