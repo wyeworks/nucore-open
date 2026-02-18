@@ -9,7 +9,6 @@ class FacilityUserPermissionsController < ApplicationController
 
   include GrantedPermissionAuthorization
 
-  authorize_resource class: FacilityUserPermission
   before_action { authorize_granted_permission!(:assign_permissions) }
 
   layout "two_column"
