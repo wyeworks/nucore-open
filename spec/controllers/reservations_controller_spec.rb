@@ -783,27 +783,37 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
 
     # guests should only be able to go the default reservation window into the future
     context "with a guest user" do
-      describe "without user based price groups", feature_setting: { user_based_price_groups: false } do
-        it "sets the reservation window correctly" do
-          sign_in @guest
+      before do
+        sign_in @guest
+      end
+
+      shared_examples "sets the reservation window correctly" do
+        let(:reservation_window) { PriceGroupProduct.maximum(:reservation_window) + 1 }
+
+        before do
+          instrument
+            .price_group_products
+            .where(price_group: instrument.price_groups)
+            .first
+            .update(reservation_window:)
+        end
+
+        it "uses the maxium reservation window" do
           do_request
-          expect(assigns[:reservation_window].max_window).to eq(PriceGroupProduct::DEFAULT_RESERVATION_WINDOW)
+
+          expect(assigns[:reservation_window].max_window).to eq(reservation_window)
           expect(assigns[:reservation_window].max_days_ago).to eq(0)
-          expect(assigns[:reservation_window].max_date).to eq((Time.zone.now + PriceGroupProduct::DEFAULT_RESERVATION_WINDOW.days).strftime("%Y%m%d"))
+          expect(assigns[:reservation_window].max_date).to eq((Time.zone.now + reservation_window.days).strftime("%Y%m%d"))
           expect(assigns[:reservation_window].min_date).to eq(Time.zone.now.strftime("%Y%m%d"))
         end
       end
 
+      describe "without user based price groups", feature_setting: { user_based_price_groups: false } do
+        include_examples "sets the reservation window correctly"
+      end
+
       describe "with user based price groups", feature_setting: { user_based_price_groups: true } do
-        it "sets the reservation window correctly" do
-          @guest.create_default_price_group!
-          sign_in @guest
-          do_request
-          expect(assigns[:reservation_window].max_window).to eq(PriceGroupProduct::DEFAULT_RESERVATION_WINDOW)
-          expect(assigns[:reservation_window].max_days_ago).to eq(0)
-          expect(assigns[:reservation_window].max_date).to eq((Time.zone.now + PriceGroupProduct::DEFAULT_RESERVATION_WINDOW.days).strftime("%Y%m%d"))
-          expect(assigns[:reservation_window].min_date).to eq(Time.zone.now.strftime("%Y%m%d"))
-        end
+        include_examples "sets the reservation window correctly"
       end
     end
 

@@ -33,6 +33,9 @@ class ReservationWindow
     @user.operator_of?(@reservation.facility)
   end
 
+  ##
+  # Use all price groups product since conditions might
+  # change depending on the selected account
   def price_groups
     @reservation.product.price_groups || []
   end
