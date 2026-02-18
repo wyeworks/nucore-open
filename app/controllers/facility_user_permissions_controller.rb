@@ -6,10 +6,7 @@ class FacilityUserPermissionsController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   before_action :check_granular_permissions_enabled
-
-  include GrantedPermissionAuthorization
-
-  before_action { authorize_granted_permission!(:assign_permissions) }
+  before_action { authorize! :manage, FacilityUserPermission }
 
   layout "two_column"
 

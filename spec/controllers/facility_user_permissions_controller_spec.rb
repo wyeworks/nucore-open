@@ -65,6 +65,30 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
     end
   end
 
+  context "as a user with assign_permissions granted" do
+    let(:permission_user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: permission_user, facility:, assign_permissions: true)
+      sign_in permission_user
+    end
+
+    it "allows access to edit" do
+      get :edit, params: { facility_id: facility.url_name, id: target_user.id }
+      expect(response).to be_successful
+    end
+
+    it "allows access to update" do
+      patch :update, params: { facility_id: facility.url_name, id: target_user.id, facility_user_permission: { product_management: true } }
+      expect(response).to redirect_to(facility_facility_users_path(facility))
+    end
+
+    it "allows access to search" do
+      get :search, params: { facility_id: facility.url_name }
+      expect(response).to be_successful
+    end
+  end
+
   context "as a user with other permissions but not assign_permissions" do
     let(:user_without_assign) { create(:user) }
 
@@ -74,7 +98,7 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
     end
 
     it "denies access to edit" do
-      expect { get :edit, params: { facility_id: facility.url_name, id: target_user.id } }.to raise_error(NUCore::PermissionDenied)
+      expect { get :edit, params: { facility_id: facility.url_name, id: target_user.id } }.to raise_error(CanCan::AccessDenied)
     end
   end
 

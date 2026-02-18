@@ -32,7 +32,7 @@
           %td= user.email
           %td= user.facility_user_roles(current_facility).map(&:role).join(", ")
 
-- if SettingsHelper.feature_on?(:granular_permissions) && has_granted_permission?(:assign_permissions)
+- if SettingsHelper.feature_on?(:granular_permissions) && can?(:manage, FacilityUserPermission)
   %hr
   %h2= text(".granular_permissions")
 
