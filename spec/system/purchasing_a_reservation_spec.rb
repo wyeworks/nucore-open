@@ -87,12 +87,12 @@ RSpec.describe "Purchasing a reservation" do
           instrument.price_group_products.update_all(reservation_window: 1)
         end
 
-        it "fails with 'too far in advance' error when trying to reserve 2 days ahead" do
+        it "fails with out of window error when trying to reserve 2 days ahead" do
           click_link instrument.name
           select account.to_s, from: Order.human_attribute_name(:account)
           fill_in "Reserve Start", with: 2.days.from_now
           click_button "Create"
-          expect(page).to have_content("The reservation is too far in advance")
+          expect(page).to have_content(/The reservation must be within the next \d+ days/)
           expect(page).not_to have_content("Reservation created successfully")
         end
 
