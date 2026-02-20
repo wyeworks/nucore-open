@@ -18,6 +18,7 @@ class FacilityUsersController < ApplicationController
   # GET /facilities/:facility_id/facility_users
   def index
     @users = User.find_users_by_facility(current_facility)
+    @permission_users = current_facility.facility_user_permissions.includes(:user) if SettingsHelper.feature_on?(:granular_permissions)
   end
 
   # DELETE /facilities/:facility_id/facility_users/:facility_user_id/map_user

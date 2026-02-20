@@ -1,0 +1,19 @@
+en:
+  views:
+    facility_user_permissions:
+      search:
+        h2: Add Permissions
+        instruct: Search for a user to manage their permissions for this !facility_downcase!.
+      edit:
+        h2: "Manage Permissions for %{name}"
+        user_info: User Info
+        permissions: Permissions
+        permission_labels:
+          product_management: Product Management
+          product_pricing: Product Pricing
+          order_management: Order Management
+          price_adjustment: Price Adjustment
+          billing_send: Billing Send
+          billing_journals: Billing Journals
+          instrument_management: Instrument Management
+          assign_permissions: Assign Permissions

@@ -35,6 +35,8 @@ class Ability
 
       account_administrator_abilities(user, resource, controller)
 
+      facility_granted_permission_abilities(user, resource, controller)
+
       cannot :unreconcile, OrderDetail
     end
 
@@ -314,6 +316,18 @@ class Ability
     if SettingsHelper.feature_on?(:move_transactions_account_roles) && Account.administered_by(user).any?
       can :reassign_transactions, TransactionsController
     end
+  end
+
+
+  def facility_granted_permission_abilities(user, resource, controller)
+    return unless SettingsHelper.feature_on?(:granular_permissions)
+    return unless resource.is_a?(Facility)
+
+    permission = user.facility_user_permissions.find_by(facility: resource)
+    return unless permission&.assign_permissions?
+
+    can :manage, FacilityUserPermission
+    can :index, User if controller.is_a?(FacilityUsersController)
   end
 
 

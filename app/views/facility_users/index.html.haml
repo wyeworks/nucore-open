@@ -31,3 +31,28 @@
           %td= user.username
           %td= user.email
           %td= user.facility_user_roles(current_facility).map(&:role).join(", ")
+
+- if SettingsHelper.feature_on?(:granular_permissions) && can?(:manage, FacilityUserPermission)
+  %hr
+  %h2= text(".granular_permissions")
+
+  %ul.list-inline
+    %li= link_to text(".add_permissions"), search_facility_facility_user_permissions_path, class: "btn-add"
+
+  - if @permission_users.empty?
+    %p.notice= text(".no_permission_users")
+  - else
+    %table.table.table-striped.table-hover
+      %thead
+        %tr
+          %th= User.human_attribute_name(:name)
+          %th= User.human_attribute_name(:username)
+          %th= User.human_attribute_name(:email)
+          %th= text(".th.permissions")
+      %tbody
+        - @permission_users.each do |permission|
+          %tr
+            %td{style: "white-space: nowrap"}= link_to permission.user.full_name, edit_facility_facility_user_permission_path(current_facility, permission.user)
+            %td{style: "white-space: nowrap"}= permission.user.username
+            %td{style: "white-space: nowrap"}= permission.user.email
+            %td= permission_summary(permission)
