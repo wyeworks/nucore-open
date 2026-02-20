@@ -325,7 +325,6 @@ class Ability
   def facility_granted_permission_abilities(user, resource, controller)
     return unless SettingsHelper.feature_on?(:granular_permissions)
 
-    # Allow listing facilities for users with any granular permission
     if controller.is_a?(FacilitiesController) && user.facility_user_permissions.any?
       can :list, Facility
     end
