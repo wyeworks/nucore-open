@@ -220,4 +220,66 @@ RSpec.describe FacilityNotificationsController do
 
     include_examples "zero-day review period"
   end
+
+  context "with granular permissions", feature_setting: { granular_permissions: true } do
+    let(:facility) { @authable }
+    let(:permitted_user) { create(:user) }
+    let(:unpermitted_user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: permitted_user, facility:, billing_send: true)
+    end
+
+    describe "GET #index" do
+      it "allows a user with billing_send permission" do
+        sign_in permitted_user
+        get :index, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "POST #send_notifications" do
+      it "allows a user with billing_send permission" do
+        sign_in permitted_user
+        post :send_notifications, params: { facility_id: facility.url_name }
+        expect(response).to redirect_to(facility_notifications_path(facility))
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { post :send_notifications, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #in_review" do
+      it "allows a user with billing_send permission" do
+        sign_in permitted_user
+        get :in_review, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { get :in_review, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "POST #mark_as_reviewed" do
+      it "allows a user with billing_send permission" do
+        sign_in permitted_user
+        post :mark_as_reviewed, params: { facility_id: facility.url_name }
+        expect(response).to redirect_to(facility_notifications_in_review_path(facility))
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { post :mark_as_reviewed, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
 end

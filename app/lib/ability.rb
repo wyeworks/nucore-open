@@ -327,12 +327,20 @@ class Ability
     return unless resource.is_a?(Facility)
 
     permission = user.facility_user_permissions.find_by(facility: resource)
-    return unless permission&.assign_permissions?
+    return unless permission
 
     can :list, Facility if controller.is_a?(FacilitiesController)
     can :dashboard, Facility
-    can :manage, FacilityUserPermission
-    can :index, User if controller.is_a?(FacilityUsersController)
+
+    if permission.assign_permissions?
+      can :manage, FacilityUserPermission
+      can :index, User if controller.is_a?(FacilityUsersController)
+    end
+
+    if permission.billing_send?
+      can :manage_billing, resource
+      can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility
+    end
   end
 
 
