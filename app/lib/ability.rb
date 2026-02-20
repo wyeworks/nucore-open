@@ -325,10 +325,6 @@ class Ability
   def facility_granted_permission_abilities(user, resource, controller)
     return unless SettingsHelper.feature_on?(:granular_permissions)
 
-    if controller.is_a?(FacilitiesController) && user.facility_user_permissions.any?
-      can :list, Facility
-    end
-
     return unless resource.is_a?(Facility)
 
     permission = user.facility_user_permissions.find_by(facility: resource)

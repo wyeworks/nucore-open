@@ -25,7 +25,7 @@ module Users
     end
 
     # Returns relation of facilities for which this user is staff, a director, or an admin,
-    # or has been granted any granular permission.
+    # or has been granted the assign_permissions granular permission.
     def operable_facilities
       if administrator?
         Facility.alphabetized
