@@ -2,6 +2,22 @@
 
 class DefaultFacilityHomepageRedirector
 
+  # Maps each implemented permission to its landing path method.
+  # Order matters — first match wins for dashboard redirect.
+  # Add new permissions here as they are implemented.
+  PERMISSION_LANDING_PATHS = [
+    [:assign_permissions, :facility_facility_users_path],
+    [:billing_send, :facility_transactions_path],
+    [:billing_journals, :facility_transactions_path],
+    # [:product_management, :facility_products_path],
+    # [:order_management, :facility_orders_path],
+    # [:instrument_management, :timeline_facility_reservations_path],
+    # [:product_pricing, :facility_products_path],
+    # [:price_adjustment, :facility_orders_path],
+  ].freeze
+
+  IMPLEMENTED_PERMISSIONS = PERMISSION_LANDING_PATHS.map(&:first).freeze
+
   def self.redirect_path(facility, user)
     if granular_permissions_only?(user, facility)
       granted_permission_landing_path(facility, user)
@@ -20,21 +36,20 @@ class DefaultFacilityHomepageRedirector
     !UserRole.exists?(user: user, facility: facility) &&
       user.facility_user_permissions
           .where(facility:)
-          .where("assign_permissions = TRUE OR billing_send = TRUE")
+          .where(IMPLEMENTED_PERMISSIONS.map { |p| "#{p} = TRUE" }.join(" OR "))
           .exists?
   end
 
   def self.granted_permission_landing_path(facility, user)
     routes = Rails.application.routes.url_helpers
     permission = user.facility_user_permissions.find_by(facility:)
+    return routes.facility_path(facility) unless permission
 
-    if permission&.assign_permissions?
-      routes.facility_facility_users_path(facility)
-    elsif permission&.billing_send?
-      routes.facility_transactions_path(facility)
-    else
-      routes.facility_path(facility)
+    PERMISSION_LANDING_PATHS.each do |flag, path_method|
+      return routes.send(path_method, facility) if permission.send("#{flag}?")
     end
+
+    routes.facility_path(facility)
   end
 
 end
