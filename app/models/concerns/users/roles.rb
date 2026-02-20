@@ -31,7 +31,7 @@ module Users
         Facility.alphabetized
       else
         role_facility_ids = facilities.where(user_roles: { role: UserRole.facility_roles }).pluck(:id)
-        permission_facility_ids = facility_user_permissions.where(assign_permissions: true).pluck(:facility_id)
+        permission_facility_ids = facility_user_permissions.pluck(:facility_id)
         combined_ids = (role_facility_ids + permission_facility_ids).uniq
 
         Facility.where(id: combined_ids).alphabetized
