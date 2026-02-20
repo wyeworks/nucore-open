@@ -26,6 +26,50 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
       expect(assigns(:user)).to eq(target_user)
       expect(assigns(:permission)).to be_a(FacilityUserPermission)
     end
+
+    context "as a user with assign_permissions" do
+      let(:permission_user) { create(:user) }
+
+      before do
+        create(:facility_user_permission, user: permission_user, facility:, assign_permissions: true)
+        sign_in permission_user
+      end
+
+      it "allows access" do
+        get :edit, params: @params
+        expect(response).to be_successful
+        expect(assigns(:user)).to eq(target_user)
+        expect(assigns(:permission)).to be_a(FacilityUserPermission)
+      end
+
+      it "does not show the assign_permissions checkbox" do
+        get :edit, params: @params
+        expect(response.body).not_to include("assign_permissions")
+      end
+    end
+
+    context "as a user without assign_permissions" do
+      let(:no_permission_user) { create(:user) }
+
+      before { sign_in no_permission_user }
+
+      it "denies access" do
+        expect { get :edit, params: @params }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "as a user with other permissions but not assign_permissions" do
+      let(:other_permission_user) { create(:user) }
+
+      before do
+        create(:facility_user_permission, user: other_permission_user, facility:, product_management: true)
+        sign_in other_permission_user
+      end
+
+      it "denies access" do
+        expect { get :edit, params: @params }.to raise_error(CanCan::AccessDenied)
+      end
+    end
   end
 
   context "update" do
@@ -61,6 +105,55 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
       it "redirects to facility users path" do
         patch :update, params: @params
         expect(response).to redirect_to(facility_facility_users_path(facility))
+      end
+
+      it "can assign the assign_permissions permission" do
+        @params[:facility_user_permission] = { assign_permissions: true }
+        patch :update, params: @params
+        permission = FacilityUserPermission.find_by(user: target_user, facility:)
+        expect(permission.assign_permissions).to be true
+      end
+
+      it "destroys the record when all permissions are unchecked" do
+        create(:facility_user_permission, user: target_user, facility:, product_management: true)
+        @params[:facility_user_permission] = { product_management: false }
+        expect { patch :update, params: @params }.to change { FacilityUserPermission.count }.by(-1)
+        expect(FacilityUserPermission.find_by(user: target_user, facility:)).to be_nil
+      end
+    end
+
+    context "as a user with assign_permissions" do
+      let(:permission_user) { create(:user) }
+
+      before do
+        create(:facility_user_permission, user: permission_user, facility:, assign_permissions: true)
+        sign_in permission_user
+      end
+
+      it "can update permissions" do
+        patch :update, params: @params
+        expect(response).to redirect_to(facility_facility_users_path(facility))
+        permission = FacilityUserPermission.find_by(user: target_user, facility:)
+        expect(permission.product_management).to be true
+        expect(permission.billing_journals).to be true
+      end
+
+      it "cannot assign the assign_permissions permission" do
+        @params[:facility_user_permission] = { assign_permissions: true, product_management: true }
+        patch :update, params: @params
+        permission = FacilityUserPermission.find_by(user: target_user, facility:)
+        expect(permission.assign_permissions).to be false
+        expect(permission.product_management).to be true
+      end
+    end
+
+    context "as a user without assign_permissions" do
+      let(:no_permission_user) { create(:user) }
+
+      before { sign_in no_permission_user }
+
+      it "denies access" do
+        expect { patch :update, params: @params }.to raise_error(CanCan::AccessDenied)
       end
     end
   end

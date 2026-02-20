@@ -69,7 +69,10 @@ RSpec.describe ApplicationHelper do
 
     context "when the user is a global admin" do
       let(:user) { @admin }
-      it_behaves_like "it returns only facilities with a role"
+
+      it "returns all facilities" do
+        expect(menu_facilities).to match_array(facilities)
+      end
     end
 
     context "when the user is a global billing_admin", feature_setting: { global_billing_administrator: true } do

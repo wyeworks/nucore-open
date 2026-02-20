@@ -3,34 +3,35 @@
 = content_for :sidebar do
   = render "admin/shared/sidenav_admin", sidenav_tab: "staff"
 
-%h2= text(".head")
+- if can?(:manage, User)
+  %h2= text(".head")
 
-%ul.list-inline
-  %li= link_to text("admin.shared.add", model: text("facility_users.title")), search_facility_facility_users_path, class: "btn-add"
+  %ul.list-inline
+    %li= link_to text("admin.shared.add", model: text("facility_users.title")), search_facility_facility_users_path, class: "btn-add"
 
-- if @users.empty?
-  %p.notice= text(".no_users")
-- else
-  %table.table.table-striped.table-hover
-    %thead
-      %tr
-        %th
-        %th= User.human_attribute_name(:name)
-        %th= User.human_attribute_name(:username)
-        %th= User.human_attribute_name(:email)
-        %th= text(".th.roles")
-    %tbody
-      - @users.each do |user|
+  - if @users.empty?
+    %p.notice= text(".no_users")
+  - else
+    %table.table.table-striped.table-hover
+      %thead
         %tr
-          %td.centered
-            = link_to text(".remove_roles"),
-              facility_facility_user_path(current_facility, user),
-              data: { confirm: text(".remove_roles_confirm") },
-              method: :delete
-          %td= user.full_name
-          %td= user.username
-          %td= user.email
-          %td= user.facility_user_roles(current_facility).map(&:role).join(", ")
+          %th
+          %th= User.human_attribute_name(:name)
+          %th= User.human_attribute_name(:username)
+          %th= User.human_attribute_name(:email)
+          %th= text(".th.roles")
+      %tbody
+        - @users.each do |user|
+          %tr
+            %td.centered
+              = link_to text(".remove_roles"),
+                facility_facility_user_path(current_facility, user),
+                data: { confirm: text(".remove_roles_confirm") },
+                method: :delete
+            %td= user.full_name
+            %td= user.username
+            %td= user.email
+            %td= user.facility_user_roles(current_facility).map(&:role).join(", ")
 
 - if SettingsHelper.feature_on?(:granular_permissions) && can?(:manage, FacilityUserPermission)
   %hr

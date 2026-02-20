@@ -22,6 +22,7 @@
     %fieldset
       %legend= text(".permissions")
       - FacilityUserPermission::PERMISSIONS.each do |perm|
+        - next if perm == :assign_permissions && !current_user.administrator?
         .checkbox
           %label
             = f.check_box perm
