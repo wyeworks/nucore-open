@@ -44,11 +44,8 @@ class FacilityUserPermissionsController < ApplicationController
   private
 
   def permission_params
-    allowed = if current_user.administrator?
-                FacilityUserPermission::PERMISSIONS
-              else
-                FacilityUserPermission::PERMISSIONS - [:assign_permissions]
-              end
+    allowed = FacilityUserPermission::PERMISSIONS
+    allowed -= [:assign_permissions] unless current_user.administrator?
 
     params.require(:facility_user_permission).permit(*allowed)
   end

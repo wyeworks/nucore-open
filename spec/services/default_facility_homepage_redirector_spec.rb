@@ -3,8 +3,8 @@
 require "rails_helper"
 
 RSpec.describe DefaultFacilityHomepageRedirector do
-  let(:facility) { FactoryBot.create(:facility) }
-  let(:user) { FactoryBot.create(:user) }
+  let(:facility) { create(:facility) }
+  let(:user) { create(:user) }
 
   describe "#redirect_path" do
     context "with active instruments" do
@@ -27,7 +27,7 @@ RSpec.describe DefaultFacilityHomepageRedirector do
 
     context "when user has only granular permissions", feature_setting: { granular_permissions: true } do
       before do
-        create(:facility_user_permission, user: user, facility: facility, assign_permissions: true)
+        create(:facility_user_permission, user:, facility:, assign_permissions: true)
       end
 
       it "redirects to the staff page" do
@@ -40,7 +40,7 @@ RSpec.describe DefaultFacilityHomepageRedirector do
     context "when user has a facility role and granular permissions", feature_setting: { granular_permissions: true } do
       before do
         UserRole.grant(user, UserRole::FACILITY_STAFF, facility)
-        create(:facility_user_permission, user: user, facility: facility, assign_permissions: true)
+        create(:facility_user_permission, user:, facility:, assign_permissions: true)
       end
 
       it "redirects to orders (not staff page)" do
