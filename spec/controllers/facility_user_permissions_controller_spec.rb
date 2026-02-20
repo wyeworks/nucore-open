@@ -113,6 +113,13 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
         permission = FacilityUserPermission.find_by(user: target_user, facility:)
         expect(permission.assign_permissions).to be true
       end
+
+      it "destroys the record when all permissions are unchecked" do
+        create(:facility_user_permission, user: target_user, facility:, product_management: true)
+        @params[:facility_user_permission] = { product_management: false }
+        expect { patch :update, params: @params }.to change { FacilityUserPermission.count }.by(-1)
+        expect(FacilityUserPermission.find_by(user: target_user, facility:)).to be_nil
+      end
     end
 
     context "as a user with assign_permissions" do
