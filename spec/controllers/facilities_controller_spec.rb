@@ -343,4 +343,56 @@ RSpec.describe FacilitiesController do
 
     it_should_allow_managers_only
   end
+
+  context "with granular permissions", feature_setting: { granular_permissions: true } do
+    let(:facility) { create(:facility) }
+    let(:permitted_user) { create(:user) }
+    let(:unpermitted_user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: permitted_user, facility:, billing_send: true)
+    end
+
+    describe "GET #transactions" do
+      it "allows a user with billing_send permission and renders the page" do
+        sign_in permitted_user
+        get :transactions, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+        expect(response.body).to include("menu_billing")
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { get :transactions, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #disputed_orders" do
+      it "allows a user with billing_send permission and renders the page" do
+        sign_in permitted_user
+        get :disputed_orders, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+        expect(response.body).to include("menu_billing")
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { get :disputed_orders, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #movable_transactions" do
+      it "allows a user with billing_send permission and renders the page" do
+        sign_in permitted_user
+        get :movable_transactions, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+        expect(response.body).to include("menu_billing")
+      end
+
+      it "denies a user without billing_send permission" do
+        sign_in unpermitted_user
+        expect { get :movable_transactions, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
 end

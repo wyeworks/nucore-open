@@ -334,6 +334,11 @@ class Ability
     if permission.assign_permissions?
       can :manage, FacilityUserPermission
     end
+
+    if permission.billing_send?
+      can :manage_billing, resource
+      can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility
+    end
   end
 
   # Read-only access for users with any granular permission.
