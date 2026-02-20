@@ -319,24 +319,20 @@ class Ability
   end
 
 
+  # Grants abilities based on granular permissions (FacilityUserPermission).
+  # Adding new permission checks here as they are implemented.
   def facility_granted_permission_abilities(user, resource, controller)
     return unless SettingsHelper.feature_on?(:granular_permissions)
-
-    if controller.is_a?(FacilitiesController) && user.facility_user_permissions.any?
-      can :list, Facility
-    end
 
     return unless resource.is_a?(Facility)
 
     permission = user.facility_user_permissions.find_by(facility: resource)
-    return unless permission
+    return unless permission&.assign_permissions?
 
+    can :list, Facility if controller.is_a?(FacilitiesController)
     can :dashboard, Facility
-
-    if permission.assign_permissions?
-      can :manage, FacilityUserPermission
-      can :index, User if controller.is_a?(FacilityUsersController)
-    end
+    can :manage, FacilityUserPermission
+    can :index, User if controller.is_a?(FacilityUsersController)
   end
 
 
