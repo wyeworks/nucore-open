@@ -13,7 +13,7 @@ RSpec.describe OrderDetailNoticePresenter do
                       when :important
                         "danger"
                       else
-                        @level || "info"
+                        @level || "default"
                       end
         html = Nokogiri::HTML(string)
         @element = html.css(".label.label-#{level_class}").any? { |node| node.text == expected_text }

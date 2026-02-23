@@ -186,7 +186,7 @@ table.order-list {
 .label {
   font-size: 1.0em;
   font-weight: 300;
-  background-color: $gray-dark;
+
   &.status-complete,
   &.status-reconciled {
     @extend .label-success;
