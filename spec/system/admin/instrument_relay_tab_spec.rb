@@ -232,7 +232,7 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { disable_relay_synacces
         expect(instrument.relay).not_to be_present
       end
 
-      it "does leaves a hanging relay" do
+      it "does not leave a hanging relay record" do
         select "Reservation only", from: "Control mechanism"
 
         click_button "Save"
