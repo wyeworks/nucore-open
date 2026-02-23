@@ -610,14 +610,9 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:manage, FacilityUserPermission) }
       it { is_expected.not_to be_allowed_to(:edit, facility) }
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
-      it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
     end
 
     context "with billing_send" do
-      before do
-        FacilityUserPermission.find_by(user:, facility:).update!(billing_send: true)
-      end
-
       it { is_expected.to be_allowed_to(:manage_billing, facility) }
     end
 

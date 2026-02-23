@@ -340,6 +340,37 @@ class Ability
       can :manage_billing, resource
       can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility
     end
+
+    if permission.product_management?
+      can :manage, [
+        BundleProduct,
+        Product,
+        ProductAccessGroup,
+        ProductAccessory,
+        ProductDisplayGroup,
+        ProductUser,
+        Schedule,
+        ScheduleRule,
+        StoredFile,
+        TrainingRequest,
+        OfflineReservation,
+      ]
+      cannot :create_daily_booking, Product
+      can [:administer, :index, :view_details, :schedule, :show], Product
+      can [:show, :index], PriceGroup
+      can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
+      can :index, [BundleProduct, PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ScheduleRule, ServicePricePolicy, ProductAccessory, ProductAccessGroup]
+      can :edit, [PriceGroupProduct]
+      can [:index, :create, :destroy], ProductResearchSafetyCertificationRequirement
+    end
+
+    if permission.product_pricing?
+      can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
+      can :manage, PriceGroup
+      can :manage, PriceGroupProduct
+      can [:administer, :index, :view_details, :schedule, :show], Product
+      can :index, [BundleProduct, PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ScheduleRule, ServicePricePolicy, ProductAccessory, ProductAccessGroup]
+    end
   end
 
   # Read-only access for users with any granular permission.
