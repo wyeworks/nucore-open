@@ -25,13 +25,13 @@ module Users
     end
 
     # Returns relation of facilities for which this user is staff, a director, or an admin,
-    # or has been granted the assign_permissions granular permission.
+    # or has been granted any granular permission.
     def operable_facilities
       if administrator?
         Facility.alphabetized
       else
         role_facility_ids = facilities.where(user_roles: { role: UserRole.facility_roles }).pluck(:id)
-        permission_facility_ids = facility_user_permissions.where(assign_permissions: true).pluck(:facility_id)
+        permission_facility_ids = facility_user_permissions.pluck(:facility_id)
         combined_ids = (role_facility_ids + permission_facility_ids).uniq
 
         Facility.where(id: combined_ids).alphabetized

@@ -582,6 +582,46 @@ RSpec.describe Ability do
     end
   end
 
+  describe "user with granular permissions", feature_setting: { granular_permissions: true } do
+    let(:user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user:, facility:, billing_send: true)
+    end
+
+    context "read-only facility access" do
+      it_is_allowed_to([:list, :dashboard, :show], Facility)
+      it_is_allowed_to([:administer, :index, :show], Order)
+      it_is_allowed_to([:administer, :index, :show, :timeline], Reservation)
+      it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
+      it_is_allowed_to([:show, :index], PriceGroup)
+      it_is_allowed_to([:index], StoredFile)
+      it { is_expected.to be_allowed_to(:index, Project) }
+      it { is_expected.to be_allowed_to(:administer, User) }
+      it { is_expected.to be_allowed_to(:read, Schedule) }
+      it { is_expected.to be_allowed_to(:read, ProductDisplayGroup) }
+    end
+
+    context "write abilities are denied" do
+      it_is_not_allowed_to([:create, :update, :batch_update], Order)
+      it_is_not_allowed_to([:create, :update, :destroy], Reservation)
+      it_is_not_allowed_to([:create, :update, :destroy], Product)
+      it { is_expected.not_to be_allowed_to(:manage, OrderDetail) }
+      it { is_expected.not_to be_allowed_to(:manage, FacilityUserPermission) }
+      it { is_expected.not_to be_allowed_to(:edit, facility) }
+      it { is_expected.not_to be_allowed_to(:act_as, facility) }
+      it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
+    end
+
+    context "with assign_permissions" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(assign_permissions: true)
+      end
+
+      it { is_expected.to be_allowed_to(:manage, FacilityUserPermission) }
+    end
+  end
+
   describe "account administrator" do
     let(:user) { create(:user) }
     let(:account) { create(:setup_account, owner: user) }

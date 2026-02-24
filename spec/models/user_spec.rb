@@ -227,7 +227,7 @@ RSpec.describe User do
 
     context "when user has only granular permissions" do
       before do
-        create(:facility_user_permission, user:, facility: facility2, assign_permissions: true)
+        create(:facility_user_permission, user:, facility: facility2, billing_send: true)
       end
 
       it "returns facilities from permissions" do
