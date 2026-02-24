@@ -30,11 +30,10 @@ module Users
       if administrator?
         Facility.alphabetized
       else
-        role_facility_ids = facilities.where(user_roles: { role: UserRole.facility_roles }).pluck(:id)
-        permission_facility_ids = facility_user_permissions.pluck(:facility_id)
-        combined_ids = (role_facility_ids + permission_facility_ids).uniq
-
-        Facility.where(id: combined_ids).alphabetized
+        Facility
+          .where(id: user_roles.where(role: UserRole.facility_roles).select(:facility_id))
+          .or(Facility.where(id: facility_user_permissions.select(:facility_id)))
+          .alphabetized
       end
     end
 
@@ -51,7 +50,7 @@ module Users
       if administrator? || global_billing_administrator?
         Facility.alphabetized
       else
-        facilities.alphabetized.where(user_roles: { role: UserRole.facility_management_roles })
+        user_roles_facilities.alphabetized.where(user_roles: { role: UserRole.facility_management_roles })
       end
     end
 

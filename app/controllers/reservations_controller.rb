@@ -444,7 +444,7 @@ class ReservationsController < ApplicationController
   def set_cross_core_cancel_path
     return if @order.cross_core_project_id.blank?
 
-    current_user_facilities = current_user.facilities
+    current_user_facilities = current_user.user_roles_facilities
     facility_orders = @order_detail.order.cross_core_project.orders.where(facility: current_user_facilities)
 
     if facility_orders.count.zero?
