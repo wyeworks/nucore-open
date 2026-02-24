@@ -44,7 +44,7 @@ class InstrumentRelaysController < ApplicationController
       # Need to update the loggable_id for the old relay, because the relay is being replaced.
       LogEvent.where(loggable_type: "Relay", loggable_id: old_id).update_all(loggable_id: @relay.id) if old_id.present?
 
-      LogEvent.log(@relay, :update, current_user, metadata: { instrument_name: @product.name }) if action_string == "edit"
+      LogEvent.log(@relay, :update, current_user, metadata: { instrument_name: @product.name }) if @relay.persisted?
 
       flash[:notice] = "Relay was successfully updated."
       redirect_to facility_instrument_relays_path(current_facility, @product)

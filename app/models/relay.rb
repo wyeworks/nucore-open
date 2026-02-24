@@ -40,7 +40,7 @@ class Relay < ApplicationRecord
   end
 
   def to_log_s
-    instrument.name
+    instrument&.name || "-"
   end
 
   # Returns all relays that share the same phisical relay (same host, outlet, and ip_port).

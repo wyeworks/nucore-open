@@ -232,6 +232,14 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { disable_relay_synacces
         expect(instrument.relay).not_to be_present
       end
 
+      it "does not leave a hanging relay record" do
+        select "Reservation only", from: "Control mechanism"
+
+        click_button "Save"
+
+        expect(Relay.exists?(instrument_id: nil)).to be false
+      end
+
     end
 
     context "from reservation only to timer" do
