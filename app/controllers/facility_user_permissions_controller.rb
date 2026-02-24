@@ -32,7 +32,7 @@ class FacilityUserPermissionsController < ApplicationController
 
     if @permission.update(permission_params)
       if @permission.no_permissions?
-        LogEvent.log(@permission, :delete, current_user)
+        LogEvent.log(@permission, :delete, current_user, metadata: { loggable_to_s: @permission.to_log_s })
         @permission.destroy
       else
         event_type = @permission.previously_new_record? ? :create : :update

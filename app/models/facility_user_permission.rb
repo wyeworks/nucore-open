@@ -22,4 +22,8 @@ class FacilityUserPermission < ApplicationRecord
     PERMISSIONS.none? { |perm| send(perm) }
   end
 
+  def to_log_s
+    "#{user} - #{facility.abbreviation}"
+  end
+
 end

@@ -55,6 +55,7 @@ class LogEventSearcher
     order_details = OrderDetail.where_order_number(query)
     products = Product.where(Product.arel_table[:name].lower.matches("%#{query.downcase}%"))
     product_users = ProductUser.with_deleted.where(product_id: products).or(ProductUser.with_deleted.where(user_id: users))
+    facility_user_permissions = FacilityUserPermission.where(user_id: users).or(FacilityUserPermission.where(facility_id: facilities))
     [
       accounts,
       users,
@@ -65,6 +66,7 @@ class LogEventSearcher
       order_details,
       products,
       product_users,
+      facility_user_permissions,
     ].compact.map do |filter|
       LogEvent.where(loggable_type: filter.model.name, loggable_id: filter)
     end.inject(&:or)

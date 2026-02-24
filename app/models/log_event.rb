@@ -66,6 +66,8 @@ class LogEvent < ApplicationRecord
   def loggable_to_s
     if loggable.respond_to?(:to_log_s)
       loggable.to_log_s
+    elsif metadata["loggable_to_s"].present?
+      metadata["loggable_to_s"]
     else
       loggable.to_s
     end
