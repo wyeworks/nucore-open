@@ -343,7 +343,6 @@ class Ability
   end
 
   # Read-only access for users with any granular permission.
-  # Mirrors the read subset of operator_abilities_for_facility.
   def granted_permission_read_only_abilities(controller)
     can [:list, :dashboard, :show], Facility
 
@@ -362,6 +361,7 @@ class Ability
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
 
     can :index, Project
+
 
 
     can [:administer], User
