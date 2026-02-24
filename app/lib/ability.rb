@@ -324,7 +324,6 @@ class Ability
   # Adding new permission-specific abilities as they are implemented.
   def facility_granted_permission_abilities(user, resource, controller)
     return unless SettingsHelper.feature_on?(:granular_permissions)
-
     return unless resource.is_a?(Facility)
 
     permission = user.facility_user_permissions.find_by(facility: resource)
@@ -336,6 +335,7 @@ class Ability
       can :manage, FacilityUserPermission
     end
 
+
     if permission.billing_send?
       can :manage_billing, resource
       can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility
@@ -343,6 +343,7 @@ class Ability
   end
 
   # Read-only access for users with any granular permission.
+  # Mirrors the read subset of operator_abilities_for_facility.
   def granted_permission_read_only_abilities(controller)
     can [:list, :dashboard, :show], Facility
 
@@ -361,6 +362,7 @@ class Ability
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
 
     can :index, Project
+
 
     can [:administer], User
     can :index, User if controller.is_a?(FacilityUsersController)
