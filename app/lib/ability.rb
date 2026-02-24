@@ -337,34 +337,25 @@ class Ability
   end
 
   # Read-only access for users with any granular permission.
-  # Mirrors the read subset of operator_abilities_for_facility.
   def granted_permission_read_only_abilities(controller)
-    # Facility navigation
     can [:list, :dashboard, :show], Facility
 
-    # Orders tab (read-only)
     can [:administer, :index, :show, :tab_counts], Order
 
-    # Reservations tab (read-only)
     can [:administer, :index, :show, :timeline], Reservation
 
-    # Products tab (read-only)
     can [:administer, :index, :view_details, :schedule, :show], Product
     can :read, ProductDisplayGroup
     can :read, Schedule
-    can :index, [BundleProduct, PricePolicy, InstrumentPricePolicy, ItemPricePolicy,
-                 ScheduleRule, ServicePricePolicy, ProductAccessory, ProductAccessGroup]
+    can :index, [BundleProduct, ScheduleRule, ProductAccessory, ProductAccessGroup]
     can [:index], StoredFile
     can [:instrument_status, :instrument_statuses], Instrument
 
-    # Price groups (read-only)
     can [:show, :index], PriceGroup
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
 
-    # Projects tab
     can :index, Project
 
-    # Users tab (read-only)
     can [:administer], User
     can :index, User if controller.is_a?(FacilityUsersController)
   end
