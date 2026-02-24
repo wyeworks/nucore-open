@@ -27,4 +27,5 @@ class FacilityUserPermission < ApplicationRecord
   end
 
 
+
 end
