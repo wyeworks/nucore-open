@@ -22,7 +22,7 @@
 
   = render_view_hook("after_statements", sidenav_tab: sidenav_tab)
 
-  - if can?(:manage, Journal) && current_facility.single_facility? && Account.config.reconcilable_account_types.any?
+  - if can?(:manage, Statement) && current_facility.single_facility? && Account.config.reconcilable_account_types.any?
     %li.nav-spacer
     - Account.config.reconcilable_account_types.each do |account_type|
       - route_name = Account.config.account_type_to_route(account_type)
