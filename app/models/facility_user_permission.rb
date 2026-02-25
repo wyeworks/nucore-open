@@ -26,5 +26,4 @@ class FacilityUserPermission < ApplicationRecord
     "#{user} - #{facility.abbreviation}"
   end
 
-
 end
