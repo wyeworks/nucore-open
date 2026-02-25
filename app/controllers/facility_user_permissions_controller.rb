@@ -31,8 +31,13 @@ class FacilityUserPermissionsController < ApplicationController
     @permission = current_facility.facility_user_permissions.find_or_initialize_by(user: @user)
 
     if @permission.update(permission_params)
-      event_type = @permission.previously_new_record? ? :create : :update
-      LogEvent.log(@permission, event_type, current_user, metadata: permission_changes)
+      if @permission.no_permissions?
+        LogEvent.log(@permission, :delete, current_user, metadata: { loggable_to_s: @permission.to_log_s })
+        @permission.destroy
+      else
+        event_type = @permission.previously_new_record? ? :create : :update
+        LogEvent.log(@permission, event_type, current_user, metadata: permission_changes)
+      end
       flash[:notice] = text("update.success")
       redirect_to facility_facility_users_path(current_facility)
     else
@@ -44,7 +49,10 @@ class FacilityUserPermissionsController < ApplicationController
   private
 
   def permission_params
-    params.require(:facility_user_permission).permit(*FacilityUserPermission::PERMISSIONS)
+    allowed = FacilityUserPermission::PERMISSIONS
+    allowed -= [:assign_permissions] unless current_user.administrator?
+
+    params.require(:facility_user_permission).permit(*allowed)
   end
 
   def permission_changes

@@ -24,12 +24,16 @@ module Users
       end
     end
 
-    # Returns relation of facilities for which this user is staff, a director, or an admin
+    # Returns relation of facilities for which this user is staff, a director, or an admin,
+    # or has been granted any granular permission.
     def operable_facilities
       if administrator?
         Facility.alphabetized
       else
-        facilities.alphabetized.where(user_roles: { role: UserRole.facility_roles })
+        Facility
+          .where(id: user_roles.where(role: UserRole.facility_roles).select(:facility_id))
+          .or(Facility.where(id: facility_user_permissions.select(:facility_id)))
+          .alphabetized
       end
     end
 
@@ -46,7 +50,7 @@ module Users
       if administrator? || global_billing_administrator?
         Facility.alphabetized
       else
-        facilities.alphabetized.where(user_roles: { role: UserRole.facility_management_roles })
+        user_roles_facilities.alphabetized.where(user_roles: { role: UserRole.facility_management_roles })
       end
     end
 

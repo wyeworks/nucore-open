@@ -68,7 +68,7 @@ module ApplicationHelper
 
   def menu_facilities
     return [] unless session_user
-    session_user.facilities
+    session_user.operable_facilities
   end
 
   def render_if_exists(partial, options = {})

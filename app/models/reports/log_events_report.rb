@@ -14,6 +14,8 @@ module Reports
       "account.suspended", "account.unsuspended",
       "journal.create", "statement.create",
       "user_role.create", "user_role.delete",
+      "facility_user_permission.create", "facility_user_permission.update",
+      "facility_user_permission.delete",
       "order_detail.dispute", "order_detail.resolve",
       "order_detail.notify", "order_detail.review",
       "order_detail.problem_queue", "order_detail.price_change",
