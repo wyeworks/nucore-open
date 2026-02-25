@@ -24,6 +24,5 @@ RSpec.describe DefaultFacilityHomepageRedirector do
         expect(DefaultFacilityHomepageRedirector.redirect_path(facility, user)).to eq path
       end
     end
-
   end
 end

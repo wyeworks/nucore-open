@@ -335,7 +335,6 @@ class Ability
       can :manage, FacilityUserPermission
     end
 
-
     if permission.billing_send?
       can :manage_billing, resource
       can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility
@@ -356,10 +355,8 @@ class Ability
         OfflineReservation,
       ]
       cannot :create_daily_booking, Product
-      can [:administer, :index, :view_details, :schedule, :show], Product
       can [:show, :index], PriceGroup
       can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
-      can :index, [BundleProduct, PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ScheduleRule, ServicePricePolicy, ProductAccessory, ProductAccessGroup]
       can :edit, [PriceGroupProduct]
       can [:index, :create, :destroy], ProductResearchSafetyCertificationRequirement
     end
@@ -368,8 +365,6 @@ class Ability
       can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
       can :manage, PriceGroup
       can :manage, PriceGroupProduct
-      can [:administer, :index, :view_details, :schedule, :show], Product
-      can :index, [BundleProduct, PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ScheduleRule, ServicePricePolicy, ProductAccessory, ProductAccessGroup]
     end
   end
 
@@ -392,8 +387,6 @@ class Ability
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
 
     can :index, Project
-
-
 
     can [:administer], User
     can :index, User if controller.is_a?(FacilityUsersController)
