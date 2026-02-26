@@ -58,7 +58,11 @@ class InstrumentRelaysController < ApplicationController
   end
 
   def manage
-    authorize! :view_details, @product
+    if %w[new create edit update].include?(action_name)
+      authorize! :manage, @product
+    else
+      authorize! :view_details, @product
+    end
     @active_tab = "admin_products"
   end
 

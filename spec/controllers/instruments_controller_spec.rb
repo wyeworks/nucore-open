@@ -567,4 +567,117 @@ RSpec.describe InstrumentsController, type: :controller do
       end
     end
   end
+
+  context "with granular permissions", feature_setting: { granular_permissions: true } do
+    let(:permitted_user) { create(:user) }
+    let(:unpermitted_user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: permitted_user, facility:, product_management: true)
+    end
+
+    describe "GET #index" do
+      it "allows a user with product_management permission" do
+        sign_in permitted_user
+        get :index, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without product_management permission" do
+        sign_in unpermitted_user
+        expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #new" do
+      it "allows a user with product_management permission" do
+        sign_in permitted_user
+        get :new, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without product_management permission" do
+        sign_in unpermitted_user
+        expect { get :new, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #edit" do
+      it "allows a user with product_management permission" do
+        sign_in permitted_user
+        get :edit, params: { facility_id: facility.url_name, id: instrument.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without product_management permission" do
+        sign_in unpermitted_user
+        expect { get :edit, params: { facility_id: facility.url_name, id: instrument.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #manage" do
+      it "allows a user with product_management permission" do
+        sign_in permitted_user
+        get :manage, params: { facility_id: facility.url_name, id: instrument.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without product_management permission" do
+        sign_in unpermitted_user
+        expect { get :manage, params: { facility_id: facility.url_name, id: instrument.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "POST #create" do
+      let(:create_params) do
+        {
+          facility_id: facility.url_name,
+          instrument: attributes_for(:instrument,
+                                     no_relay: true,
+                                     facility_account_id: facility.facility_accounts.first.id),
+        }
+      end
+
+      it "allows a user with product_management permission" do
+        sign_in permitted_user
+        post :create, params: create_params
+        expect(response).to be_redirect
+      end
+
+      it "denies a user without product_management permission" do
+        sign_in unpermitted_user
+        expect { post :create, params: create_params }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "with only product_pricing permission" do
+      let(:pricing_user) { create(:user) }
+
+      before do
+        create(:facility_user_permission, user: pricing_user, facility:, product_pricing: true)
+      end
+
+      it "denies creating a product" do
+        sign_in pricing_user
+        params = {
+          facility_id: facility.url_name,
+          instrument: attributes_for(:instrument,
+                                     no_relay: true,
+                                     facility_account_id: facility.facility_accounts.first.id),
+        }
+        expect { post :create, params: }.to raise_error(CanCan::AccessDenied)
+      end
+
+      it "denies editing a product" do
+        sign_in pricing_user
+        expect { get :edit, params: { facility_id: facility.url_name, id: instrument.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+
+      it "allows viewing product manage page" do
+        sign_in pricing_user
+        get :manage, params: { facility_id: facility.url_name, id: instrument.url_name }
+        expect(response).to be_successful
+      end
+    end
+  end
 end
