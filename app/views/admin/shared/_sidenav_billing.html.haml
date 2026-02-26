@@ -8,12 +8,13 @@
   = tab text("send_notifications"), facility_notifications_path, (sidenav_tab == 'notifications') if SettingsHelper::has_review_period?
   = tab text("orders_in_review"), facility_notifications_in_review_path, (sidenav_tab == 'in_review') if SettingsHelper::has_review_period?
 
-  %li.divider
-  %li.nav-header= text("internal_billing")
-  = tab t_create_model(Journal), new_facility_journal_path, (sidenav_tab == 'new_journal') if current_facility.single_facility?
-  = tab t_manage_models(Journal), facility_journals_path, (sidenav_tab == 'journals')
+  - if can?(:manage, Journal)
+    %li.divider
+    %li.nav-header= text("internal_billing")
+    = tab t_create_model(Journal), new_facility_journal_path, (sidenav_tab == 'new_journal') if current_facility.single_facility?
+    = tab t_manage_models(Journal), facility_journals_path, (sidenav_tab == 'journals')
 
-  - if Account.config.statements_enabled?
+  - if can?(:manage, Statement) && Account.config.statements_enabled?
     %li.divider
     %li.nav-header= text("external_billing")
     = tab t_create_models(Statement), new_facility_statement_path(current_facility), (sidenav_tab == 'statements')
@@ -21,7 +22,7 @@
 
   = render_view_hook("after_statements", sidenav_tab: sidenav_tab)
 
-  - if current_facility.single_facility? && Account.config.reconcilable_account_types.any?
+  - if can?(:manage, Statement) && current_facility.single_facility? && Account.config.reconcilable_account_types.any?
     %li.nav-spacer
     - Account.config.reconcilable_account_types.each do |account_type|
       - route_name = Account.config.account_type_to_route(account_type)
