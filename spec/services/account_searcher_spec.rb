@@ -16,8 +16,8 @@ RSpec.describe AccountSearcher do
   end
 
   describe "results" do
-    let(:owner) { FactoryBot.create(:user, first_name: "Myfirst", last_name: "Mylast", username: "Myuser", email: "myemail@example.com") }
-    let!(:account) { FactoryBot.create(:account, :with_account_owner, owner: owner, account_number: "123456", description: "Mydescription", ar_number: "ARNUMBER") }
+    let(:owner) { create(:user, first_name: "Myfirst", last_name: "Mylast", username: "Myuser", email: "myemail@example.com") }
+    let!(:account) { create(:account, :with_account_owner, owner: owner, account_number: "123456", description: "Mydescription", ar_number: "ARNUMBER") }
 
     it "matches the account number" do
       expect(described_class.new("123456").results).to eq([account])
@@ -40,8 +40,8 @@ RSpec.describe AccountSearcher do
     end
 
     describe "with a purchaser as well" do
-      let(:purchaser) { FactoryBot.create(:user, username: "Iampurchaser") }
-      let!(:purchaser_account_user) { FactoryBot.create(:account_user, :purchaser, user: purchaser, account: account) }
+      let(:purchaser) { create(:user, username: "Iampurchaser") }
+      let!(:purchaser_account_user) { create(:account_user, :purchaser, user: purchaser, account: account) }
 
       it "does not find the account" do
         expect(described_class.new("purchaser").results).to be_blank
@@ -97,8 +97,8 @@ RSpec.describe AccountSearcher do
     end
 
     describe "when there's an account that matches another facility" do
-      let(:facility) { FactoryBot.create(:facility) }
-      let!(:other_account) { FactoryBot.create(:account, :with_account_owner, account_number: account.account_number, facilities: [facility], owner: owner) }
+      let(:facility) { create(:facility) }
+      let!(:other_account) { create(:account, :with_account_owner, account_number: account.account_number, facilities: [facility], owner: owner) }
 
       before(:each) do
         allow(Account.config).to receive(:global_account_types).and_return([])
@@ -111,6 +111,42 @@ RSpec.describe AccountSearcher do
 
       it "only account for the specified facility" do
         expect(described_class.new(account.account_number, scope: Account.for_facility(facility)).results).to eq([other_account])
+      end
+    end
+  end
+
+  describe "filter_params", :use_test_account, feature_setting: { account_tabs: true } do
+    let(:user) { create(:user) }
+    let(:facility) { Facility.cross_facility }
+    let!(:suspended_account) do
+      create(
+        :test_account,
+        :with_account_owner,
+        created_by: user.id,
+        suspended_at: Time.current,
+      )
+    end
+    let!(:active_account) do
+      create(:test_account, :with_account_owner, created_by: user.id)
+    end
+
+    context "with suspended filter" do
+      let(:searcher) do
+        described_class.new("", scope: Account.all, filter_params: { suspended: "true" })
+      end
+
+      it "includes suspende account" do
+        expect(searcher.results).to match([suspended_account])
+      end
+    end
+
+    context "with account_status active filter" do
+      let(:searcher) do
+        described_class.new("", scope: Account.all, filter_params: { account_status: "active" })
+      end
+
+      it "only includes active accounts" do
+        expect(searcher.results).to match([active_account])
       end
     end
   end

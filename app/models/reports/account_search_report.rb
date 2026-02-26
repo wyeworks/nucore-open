@@ -2,16 +2,36 @@
 
 module Reports
 
-  class AccountSearchCsv
+  class AccountSearchReport
 
     include Reports::CsvExporter
 
-    def initialize(accounts)
-      @accounts = accounts
+    attr_reader :search_term, :facility, :filter_params
+
+    def initialize(search_term:, facility:, filter_params:)
+      @search_term = search_term
+      @facility = facility
+      @filter_params = filter_params
     end
 
     def report_data_query
-      @accounts
+      @report_data_query ||= account_searcher.results
+    end
+
+    def account_searcher
+      AccountSearcher.new(
+        search_term,
+        scope: Account.for_facility(facility),
+        filter_params:,
+      )
+    end
+
+    def filename
+      "accounts.csv"
+    end
+
+    def description
+      I18n.t("views.account_search_result_mailer.search_result.subject")
     end
 
     private
