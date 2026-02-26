@@ -6,7 +6,6 @@ class InstrumentRelaysController < ApplicationController
   before_action :check_acting_as
   before_action :init_instrument
   before_action :manage
-  before_action :authorize_manage, only: [:new, :create, :edit, :update]
 
   layout "two_column"
 
@@ -59,12 +58,12 @@ class InstrumentRelaysController < ApplicationController
   end
 
   def manage
-    authorize! :view_details, @product
+    if %w[new create edit update].include?(action_name)
+      authorize! :manage, @product
+    else
+      authorize! :view_details, @product
+    end
     @active_tab = "admin_products"
-  end
-
-  def authorize_manage
-    authorize! :manage, @product
   end
 
   def relay_params
