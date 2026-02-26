@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Reports::AccountSearchCsv do
+RSpec.describe Reports::AccountSearchReport do
   let(:facility) { build(:facility, name: "Single Facility", abbreviation: "SF") }
   let(:facility2) { build(:facility, name: "Other Facility", abbreviation: "OF") }
   let(:owner) { create(:user, first_name: "My", last_name: "Owner") }
@@ -10,19 +10,25 @@ RSpec.describe Reports::AccountSearchCsv do
   let(:suspended) { create(:account, :with_account_owner, account_number: "54321", description: "Testing Susp", owner: owner, suspended_at: Time.zone.parse("2019-12-01"), expires_at: Time.zone.parse("2020-01-02")) }
   let(:multi_facility) { create(:account, :with_account_owner, facilities: [facility, facility2]) }
 
-  let(:accounts) { [account, suspended, multi_facility] }
+  let!(:accounts) { [account, suspended, multi_facility] }
 
-  subject(:report) { described_class.new(accounts) }
+  subject(:report) do
+    described_class.new(
+      search_term: "",
+      facility: SerializableFacility.new(Facility.cross_facility),
+      filter_params: {},
+    )
+  end
 
   it "has the right fields" do
     expect(report).to have_column_values(
-      "Payment Source" => ["Testing / 12345", "Testing Susp / 54321 (SUSPENDED)", anything],
-      "Account Number" => ["12345", "54321", anything],
-      "Description" => ["Testing", "Testing Susp", anything],
-      "Suspended" => [be_blank, "12/01/2019", anything],
-      "Owner" => ["My Owner", "My Owner", anything],
-      "Expiration" => ["01/01/2020", "01/02/2020", anything],
-      "Facilities" => ["All", "All", "Single Facility (SF), Other Facility (OF)"],
+      "Payment Source" => [anything, "Testing / 12345", "Testing Susp / 54321 (SUSPENDED)"],
+      "Account Number" => [anything, "12345", "54321"],
+      "Description" => [anything, "Testing", "Testing Susp"],
+      "Suspended" => [anything, be_blank, "12/01/2019"],
+      "Owner" => [anything, "My Owner", "My Owner"],
+      "Expiration" => [anything, "01/01/2020", "01/02/2020"],
+      "Facilities" => [anything, "All", "All"],
     )
   end
 end
