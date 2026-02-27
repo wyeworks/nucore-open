@@ -7,6 +7,7 @@
     url: manage_facility_order_order_detail_path(current_facility, @order, @order_detail),
     remote: modal?,
     html: { class: ["manage_order_detail", edit_disabled? ? "disabled" : ""] } do |f|
+  = "<fieldset #{'disabled' if read_only?}>".html_safe
 
   %div{class: modal? ? "modal-body" : ""}
     .row
@@ -68,11 +69,12 @@
           = f.input :quantity, as: :order_detail_quantity, hint_html: { class: "help-block" }
         .col-md-7= render "costs", f: f
 
-    .row
-      .col-md-7
-      .col-md-3
-        .btn.btn-primary.js--recalculate-pricing
-          = text("order_management.order_details.form.recalculate_price")
+    - unless read_only?
+      .row
+        .col-md-7
+        .col-md-3
+          .btn.btn-primary.js--recalculate-pricing
+            = text("order_management.order_details.form.recalculate_price")
 
     .row
       .col-md-3
@@ -102,10 +104,12 @@
     - if @order_detail.dispute_at
       .row= render "dispute", f: f
 
+  = "</fieldset>".html_safe
   .modal-footer
     - if modal? && SettingsHelper.feature_on?(:print_order_detail)
       = link_to manage_facility_order_order_detail_path(current_facility, @order, @order_detail, anchor: "print"), target: "_blank" do
         %i.fa.fa-print.pull-left
-    .hidden.updating-message= t("facility_order_details.edit.label.updating")
-    = f.submit "Save", class: ["btn", "btn-primary"]
+    - unless read_only?
+      .hidden.updating-message= t("facility_order_details.edit.label.updating")
+      = f.submit "Save", class: ["btn", "btn-primary"]
     = modal_cancel_button
