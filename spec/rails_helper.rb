@@ -254,6 +254,7 @@ RSpec.configure do |config|
     I18n.t("facilities_downcase")
   end
 
+  config.include DisableAnimations, type: :system
   config.include Warden::Test::Helpers, type: :system
   config.after type: :system do
     Warden.test_reset!

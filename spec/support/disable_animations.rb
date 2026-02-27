@@ -28,7 +28,3 @@ module DisableAnimations
   end
 
 end
-
-RSpec.configure do |config|
-  config.include DisableAnimations, type: :system
-end
