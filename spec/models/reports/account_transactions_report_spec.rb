@@ -7,8 +7,10 @@ RSpec.describe Reports::AccountTransactionsReport do
   include_context "cross core orders"
 
   let(:item) { create(:setup_item, facility:, name: "Item for testing & checking") }
-  subject(:report) { Reports::AccountTransactionsReport.new(order_details, report_options) }
+  let(:order_detail_ids) { order_details.pluck(:id) }
   let(:report_options) { {} }
+
+  subject(:report) { Reports::AccountTransactionsReport.new(order_detail_ids, report_options) }
 
   describe "#to_csv" do
     context "with no order details" do
