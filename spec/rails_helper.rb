@@ -90,6 +90,7 @@ RSpec.configure do |config|
   end
 
   Capybara.server = :webrick
+  Capybara.disable_animation = true
   require "capybara/email/rspec"
   Capybara.enable_aria_label = true
 
