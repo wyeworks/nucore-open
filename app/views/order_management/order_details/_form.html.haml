@@ -7,104 +7,103 @@
     url: manage_facility_order_order_detail_path(current_facility, @order, @order_detail),
     remote: modal?,
     html: { class: ["manage_order_detail", edit_disabled? ? "disabled" : ""] } do |f|
-  = "<fieldset #{'disabled' if read_only?}>".html_safe
+  %fieldset{disabled: read_only? || nil}
 
-  %div{class: modal? ? "modal-body" : ""}
-    .row
-      .col-md-5.js--pricingUpdate
-        = account_input(f)
-      .col-md-2
-        %strong= t("facility_order_details.edit.label.account_owner")
-        .account-owner= @order_detail.account.owner_user
-
-      .col-md-2
-        - if @order_statuses
-          = f.association :order_status, collection: @order_statuses, label_method: :name_with_level, include_blank: false
-          - if can_edit_fulfilled_at?(f.object, current_user)
-            = f.input :fulfilled_at,
-              as: :string,
-              placeholder: OrderDetail.human_attribute_name(:fulfilled_at),
-              input_html: { class: "datepicker__data js--showOnCompleteStatus",
-                value: format_usa_date(f.object.fulfilled_at),
-                autocomplete: "off",
-                data: { min_date: ValidFulfilledAtDate.min.iso8601,
-                  max_date: ValidFulfilledAtDate.max.iso8601,
-                  complete_target: "#order_detail_order_status_id"}}
-
-        - else
-          = f.label :order_status
-          = OrderDetailPresenter.new(@order_detail).order_status_display_name
-          - if f.object.reconciled? && current_ability.can?(:unreconcile, @order_detail)
-            = l(@order_detail.reconciled_at.to_date, format: :usa)
-            = link_to t("facility_order_details.edit.label.unreconcile"), facility_order_order_detail_reconcilliation_path(current_facility, @order, @order_detail), method: :delete
-
-        - if @order_detail.reservation
-          .cancel-fee-option
-            = label_tag "with_cancel_fee", class: "checkbox" do
-              = check_box_tag "with_cancel_fee",
-                1,
-                false,
-                data: { connect: "#order_detail_order_status_id", show_on: OrderStatus.canceled.id }
-              = t("facility_order_details.edit.label.with_cancel_fee")
-
-    .row
-      .col-md-3
-        = render "projects/shared/select_project", f: f, order_detail: @order_detail
-        - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
-        = render_view_hook "after_order_status", f: f, order_detail: @order_detail
-      .col-md-7
-        - if f.object.account.try(:splits).try(:present?)
-          = render "split_costs", order_detail: @order_detail
-
-    - if @order_detail.time_data.present?
+    %div{class: modal? ? "modal-body" : ""}
       .row
-        .col-md-3
-        .col-md-7= render "costs", f: f
-      .row
-        .col-md-3
-        .col-md-7= render "order_management/order_details/#{@order_detail.time_data.class.name.underscore}", f: f
-    - else
-      .row
-        .col-md-3.js--pricingUpdate
-          = f.input :quantity, as: :order_detail_quantity, hint_html: { class: "help-block" }
-        .col-md-7= render "costs", f: f
+        .col-md-5.js--pricingUpdate
+          = account_input(f)
+        .col-md-2
+          %strong= t("facility_order_details.edit.label.account_owner")
+          .account-owner= @order_detail.account.owner_user
 
-    - unless read_only?
-      .row
-        .col-md-7
-        .col-md-3
-          .btn.btn-primary.js--recalculate-pricing
-            = text("order_management.order_details.form.recalculate_price")
+        .col-md-2
+          - if @order_statuses
+            = f.association :order_status, collection: @order_statuses, label_method: :name_with_level, include_blank: false
+            - if can_edit_fulfilled_at?(f.object, current_user)
+              = f.input :fulfilled_at,
+                as: :string,
+                placeholder: OrderDetail.human_attribute_name(:fulfilled_at),
+                input_html: { class: "datepicker__data js--showOnCompleteStatus",
+                  value: format_usa_date(f.object.fulfilled_at),
+                  autocomplete: "off",
+                  data: { min_date: ValidFulfilledAtDate.min.iso8601,
+                    max_date: ValidFulfilledAtDate.max.iso8601,
+                    complete_target: "#order_detail_order_status_id"}}
 
-    .row
-      .col-md-3
-        = render "assigned_user", f: f
-
-      .col-md-3
-        = f.input :reference_id
-
-      .col-md-3
-        - if @order_detail.actual_cost?
-          - if Settings.order_detail_price_change_reason_options.present?
-            = f.input :price_change_reason_option, as: :select, collection: Settings.order_detail_price_change_reason_options + ["Other"], input_html: { class: "js--order-detail-price-change-reason-select", name: nil, id: nil }
-            = f.input :price_change_reason, label: false, input_html: { class: "js--order-detail-price-change-reason", hidden: @order_detail.price_change_reason_option != "Other" }
           - else
-            = f.input :price_change_reason
-      .col-md-1= render "facility_orders/order_file_icon", od: @order_detail
+            = f.label :order_status
+            = OrderDetailPresenter.new(@order_detail).order_status_display_name
+            - if f.object.reconciled? && current_ability.can?(:unreconcile, @order_detail)
+              = l(@order_detail.reconciled_at.to_date, format: :usa)
+              = link_to t("facility_order_details.edit.label.unreconcile"), facility_order_order_detail_reconcilliation_path(current_facility, @order, @order_detail), method: :delete
 
-    .row
-      .col-md-3
-      .col-md-7
-        = f.input :note, input_html: { class: "note", rows: 3 }
-        - if @order_detail.can_reconcile? || @order_detail.reconciled?
-          = f.input :reconciled_note, input_html: { class: "note" }
-        - if @order_detail.unrecoverable?
-          = f.input :unrecoverable_note, input_html: { class: "note" }
+          - if @order_detail.reservation
+            .cancel-fee-option
+              = label_tag "with_cancel_fee", class: "checkbox" do
+                = check_box_tag "with_cancel_fee",
+                  1,
+                  false,
+                  data: { connect: "#order_detail_order_status_id", show_on: OrderStatus.canceled.id }
+                = t("facility_order_details.edit.label.with_cancel_fee")
 
-    - if @order_detail.dispute_at
-      .row= render "dispute", f: f
+      .row
+        .col-md-3
+          = render "projects/shared/select_project", f: f, order_detail: @order_detail
+          - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
+          = render_view_hook "after_order_status", f: f, order_detail: @order_detail
+        .col-md-7
+          - if f.object.account.try(:splits).try(:present?)
+            = render "split_costs", order_detail: @order_detail
 
-  = "</fieldset>".html_safe
+      - if @order_detail.time_data.present?
+        .row
+          .col-md-3
+          .col-md-7= render "costs", f: f
+        .row
+          .col-md-3
+          .col-md-7= render "order_management/order_details/#{@order_detail.time_data.class.name.underscore}", f: f
+      - else
+        .row
+          .col-md-3.js--pricingUpdate
+            = f.input :quantity, as: :order_detail_quantity, hint_html: { class: "help-block" }
+          .col-md-7= render "costs", f: f
+
+      - unless read_only?
+        .row
+          .col-md-7
+          .col-md-3
+            .btn.btn-primary.js--recalculate-pricing
+              = text("order_management.order_details.form.recalculate_price")
+
+      .row
+        .col-md-3
+          = render "assigned_user", f: f
+
+        .col-md-3
+          = f.input :reference_id
+
+        .col-md-3
+          - if @order_detail.actual_cost?
+            - if Settings.order_detail_price_change_reason_options.present?
+              = f.input :price_change_reason_option, as: :select, collection: Settings.order_detail_price_change_reason_options + ["Other"], input_html: { class: "js--order-detail-price-change-reason-select", name: nil, id: nil }
+              = f.input :price_change_reason, label: false, input_html: { class: "js--order-detail-price-change-reason", hidden: @order_detail.price_change_reason_option != "Other" }
+            - else
+              = f.input :price_change_reason
+        .col-md-1= render "facility_orders/order_file_icon", od: @order_detail
+
+      .row
+        .col-md-3
+        .col-md-7
+          = f.input :note, input_html: { class: "note", rows: 3 }
+          - if @order_detail.can_reconcile? || @order_detail.reconciled?
+            = f.input :reconciled_note, input_html: { class: "note" }
+          - if @order_detail.unrecoverable?
+            = f.input :unrecoverable_note, input_html: { class: "note" }
+
+      - if @order_detail.dispute_at
+        .row= render "dispute", f: f
+
   .modal-footer
     - if modal? && SettingsHelper.feature_on?(:print_order_detail)
       = link_to manage_facility_order_order_detail_path(current_facility, @order, @order_detail, anchor: "print"), target: "_blank" do
