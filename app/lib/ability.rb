@@ -405,6 +405,17 @@ class Ability
       can :adjust_price, OrderDetail
       can :manage, OrderDetail
     end
+
+    if permission.instrument_management?
+      can :manage, OfflineReservation
+      can :switch, Instrument
+
+      can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
+           :cancel, :create, :edit, :edit_admin, :index, :show, :tab_counts,
+           :timeline, :update, :update_admin], Reservation
+      can(:destroy, Reservation, &:admin?)
+      can :read, ProductAccessory
+    end
   end
 
   def granted_permission_facility(resource)
@@ -425,7 +436,7 @@ class Ability
   end
 
   def granted_permission_reservation_abilities(permission)
-    if permission.order_management?
+    if permission.order_management? || permission.instrument_management?
       can :read, ProductAccessory
       can :manage, Reservation
     end
