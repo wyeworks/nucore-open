@@ -418,11 +418,9 @@ class Ability
   def granted_permission_order_detail_abilities(permission, resource)
     if permission.order_management? || permission.price_adjustment?
       can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
-      cannot :adjust_price, OrderDetail
-    end
-
-    if permission.price_adjustment?
-      can :adjust_price, OrderDetail
+      unless permission.price_adjustment?
+        cannot :adjust_price, OrderDetail
+      end
     end
   end
 
