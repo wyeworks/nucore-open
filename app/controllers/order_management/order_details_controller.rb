@@ -148,7 +148,10 @@ class OrderManagement::OrderDetailsController < ApplicationController
   end
 
   def update_params
-    params[:order_detail] || empty_params
+    raw_params = params[:order_detail] || empty_params
+    return raw_params if can?(:adjust_price, @order_detail)
+
+    raw_params.except(:actual_cost, :actual_subsidy)
   end
 
   def authorize_mark_unrecoverable

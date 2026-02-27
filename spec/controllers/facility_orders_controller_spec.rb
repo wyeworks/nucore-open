@@ -587,4 +587,42 @@ RSpec.describe FacilityOrdersController do
       end
     end
   end
+
+  context "with granular permissions", feature_setting: { granular_permissions: true } do
+    let(:facility) { create(:setup_facility) }
+    let(:product) { create(:setup_service, facility:) }
+    let(:order) { create(:purchased_order, product:) }
+    let(:permitted_user) { create(:user) }
+    let(:unpermitted_user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: permitted_user, facility:, order_management: true)
+    end
+
+    describe "GET #show" do
+      it "allows a user with order_management permission" do
+        sign_in permitted_user
+        get :show, params: { facility_id: facility.url_name, id: order.id }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without order_management permission" do
+        sign_in unpermitted_user
+        expect { get :show, params: { facility_id: facility.url_name, id: order.id } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    context "with only price_adjustment permission" do
+      let(:price_adjustment_user) { create(:user) }
+
+      before do
+        create(:facility_user_permission, user: price_adjustment_user, facility:, price_adjustment: true)
+      end
+
+      it "denies creating an order" do
+        sign_in price_adjustment_user
+        expect { post :batch_update, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
 end

@@ -324,10 +324,22 @@ class Ability
   # Adding new permission-specific abilities as they are implemented.
   def facility_granted_permission_abilities(user, resource, controller)
     return unless SettingsHelper.feature_on?(:granular_permissions)
-    return unless resource.is_a?(Facility)
 
-    permission = user.facility_user_permissions.find_by(facility: resource)
+    facility = granted_permission_facility(resource)
+    return unless facility
+
+    permission = user.facility_user_permissions.find_by(facility:)
     return unless permission
+
+    if resource.is_a?(OrderDetail)
+      granted_permission_order_detail_abilities(permission, resource)
+    end
+
+    if resource.is_a?(Reservation)
+      granted_permission_reservation_abilities(permission)
+    end
+
+    return unless resource.is_a?(Facility)
 
     granted_permission_read_only_abilities(controller)
 
@@ -365,6 +377,57 @@ class Ability
       can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
       can :manage, PriceGroup
       can :manage, PriceGroupProduct
+    end
+
+    if permission.order_management?
+      can :manage, OrderDetail
+      cannot :adjust_price, OrderDetail
+
+      can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
+           :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order
+
+      can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
+           :cancel, :create, :edit, :edit_admin, :index, :show, :tab_counts,
+           :timeline, :update, :update_admin], Reservation
+      can(:destroy, Reservation, &:admin?)
+      cannot :manage, OfflineReservation
+
+      can :act_as, Facility
+      can(:switch_to, User, &:active?)
+      can :read, Notification
+
+      can [:upload_sample_results, :destroy], StoredFile do |fileupload|
+        fileupload.file_type == "sample_result"
+      end
+    end
+
+    if permission.price_adjustment?
+      can :adjust_price, OrderDetail
+      can :manage, OrderDetail
+    end
+  end
+
+  def granted_permission_facility(resource)
+    case resource
+    when Facility then resource
+    when OrderDetail then resource.facility
+    when Reservation then resource.product.facility
+    end
+  end
+
+  def granted_permission_order_detail_abilities(permission, resource)
+    if permission.order_management? || permission.price_adjustment?
+      can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
+      unless permission.price_adjustment?
+        cannot :adjust_price, OrderDetail
+      end
+    end
+  end
+
+  def granted_permission_reservation_abilities(permission)
+    if permission.order_management?
+      can :read, ProductAccessory
+      can :manage, Reservation
     end
   end
 

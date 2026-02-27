@@ -623,6 +623,41 @@ RSpec.describe Ability do
 
       it { is_expected.to be_allowed_to(:manage, FacilityUserPermission) }
     end
+
+    context "with order_management" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(order_management: true)
+      end
+
+      it { is_expected.to be_allowed_to(:manage, OrderDetail) }
+      it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order)
+      it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :cancel, :create, :edit, :edit_admin, :index, :show, :tab_counts, :timeline, :update, :update_admin], Reservation)
+      it { is_expected.to be_allowed_to(:act_as, facility) }
+      it { is_expected.to be_allowed_to(:read, Notification) }
+      it { is_expected.not_to be_allowed_to(:adjust_price, OrderDetail) }
+      it { is_expected.not_to be_allowed_to(:manage, OfflineReservation) }
+    end
+
+    context "with price_adjustment" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(price_adjustment: true)
+      end
+
+      it { is_expected.to be_allowed_to(:adjust_price, OrderDetail) }
+      it { is_expected.to be_allowed_to(:manage, OrderDetail) }
+      it { is_expected.not_to be_allowed_to(:act_as, facility) }
+      it_is_not_allowed_to([:create, :update, :batch_update], Order)
+    end
+
+    context "with both order_management and price_adjustment" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(order_management: true, price_adjustment: true)
+      end
+
+      it { is_expected.to be_allowed_to(:manage, OrderDetail) }
+      it { is_expected.to be_allowed_to(:adjust_price, OrderDetail) }
+      it { is_expected.to be_allowed_to(:act_as, facility) }
+    end
   end
 
   describe "account administrator" do
