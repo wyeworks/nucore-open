@@ -338,5 +338,71 @@ if Account.config.statements_enabled?
 
     end
 
+    context "with granular permissions", feature_setting: { granular_permissions: true } do
+      let(:facility) { @authable }
+      let(:permitted_user) { create(:user) }
+      let(:unpermitted_user) { create(:user) }
+
+      before do
+        create(:facility_user_permission, user: permitted_user, facility:, billing_journals: true)
+      end
+
+      describe "GET #index" do
+        it "allows a user with billing_journals permission" do
+          sign_in permitted_user
+          get :index, params: { facility_id: facility.url_name }
+          expect(response).to be_successful
+        end
+
+        it "denies a user without billing_journals permission" do
+          sign_in unpermitted_user
+          expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      describe "GET #new" do
+        before { create_order_details }
+
+        it "allows a user with billing_journals permission" do
+          sign_in permitted_user
+          get :new, params: { facility_id: facility.url_name }
+          expect(response).to be_successful
+        end
+
+        it "denies a user without billing_journals permission" do
+          sign_in unpermitted_user
+          expect { get :new, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      describe "POST #create" do
+        before { create_order_details }
+
+        it "allows a user with billing_journals permission" do
+          sign_in permitted_user
+          post :create, params: { facility_id: facility.url_name, order_detail_ids: [@order_detail1.id, @order_detail3.id] }
+          expect(response).to redirect_to(action: :new)
+        end
+
+        it "denies a user without billing_journals permission" do
+          sign_in unpermitted_user
+          expect { post :create, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+
+      describe "GET #show" do
+        it "allows a user with billing_journals permission" do
+          sign_in permitted_user
+          get :show, params: { facility_id: facility.url_name, id: @statement.id }
+          expect(response).to be_successful
+        end
+
+        it "denies a user without billing_journals permission" do
+          sign_in unpermitted_user
+          expect { get :show, params: { facility_id: facility.url_name, id: @statement.id } }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+    end
+
   end
 end

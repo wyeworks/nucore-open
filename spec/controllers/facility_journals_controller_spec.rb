@@ -706,4 +706,75 @@ RSpec.describe FacilityJournalsController do
       end
     end
   end
+
+  context "with granular permissions", feature_setting: { granular_permissions: true } do
+    let(:permitted_user) { create(:user) }
+    let(:unpermitted_user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: permitted_user, facility:, billing_journals: true)
+    end
+
+    describe "GET #index" do
+      it "allows a user with billing_journals permission" do
+        sign_in permitted_user
+        get :index, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without billing_journals permission" do
+        sign_in unpermitted_user
+        expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #show" do
+      it "allows a user with billing_journals permission" do
+        sign_in permitted_user
+        get :show, params: { facility_id: facility.url_name, id: journal.id }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without billing_journals permission" do
+        sign_in unpermitted_user
+        expect { get :show, params: { facility_id: facility.url_name, id: journal.id } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "GET #new" do
+      before do
+        ignore_account_validations
+        create_order_details
+      end
+
+      it "allows a user with billing_journals permission" do
+        sign_in permitted_user
+        get :new, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without billing_journals permission" do
+        sign_in unpermitted_user
+        expect { get :new, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+
+    describe "POST #create" do
+      before do
+        ignore_account_validations
+        create_order_details
+      end
+
+      it "allows a user with billing_journals permission" do
+        sign_in permitted_user
+        post :create, params: { facility_id: facility.url_name, journal_date: I18n.l(Time.zone.today, format: :usa), order_detail_ids: [@order_detail1.id, @order_detail3.id] }
+        expect(response).to redirect_to(facility_journals_path(facility))
+      end
+
+      it "denies a user without billing_journals permission" do
+        sign_in unpermitted_user
+        expect { post :create, params: { facility_id: facility.url_name, journal_date: I18n.l(Time.zone.today, format: :usa) } }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
 end
