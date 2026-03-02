@@ -659,6 +659,29 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:adjust_price, OrderDetail) }
       it { is_expected.to be_allowed_to(:act_as, facility) }
     end
+
+    context "with billing_journals" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(billing_journals: true)
+      end
+
+      it { is_expected.to be_allowed_to(:manage_billing, facility) }
+      it_is_allowed_to(:manage, Journal)
+      it_is_allowed_to(:manage, Statement)
+      it_is_allowed_to(:manage, OrderDetail)
+      it_is_allowed_to([:send_receipt, :show], Order)
+      it_is_allowed_to([:accounts, :index, :orders, :show, :administer], User)
+      it { is_expected.to be_allowed_to(:manage, AccountUser) }
+
+      %i(disputed_orders movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions).each do |action|
+        it { is_expected.to be_allowed_to(action, facility) }
+      end
+    end
+
+    context "without billing_journals" do
+      it { is_expected.not_to be_allowed_to(:manage, Journal) }
+      it { is_expected.not_to be_allowed_to(:manage, Statement) }
+    end
   end
 
   describe "account administrator" do

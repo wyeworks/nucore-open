@@ -10,6 +10,9 @@ class FacilityJournalsController < ApplicationController
   admin_tab     :all
   before_action :check_acting_as
   before_action :check_billing_access
+
+  authorize_resource class: Journal
+
   before_action :init_journals, except: :create
   before_action :enable_sorting, only: [:new]
 
