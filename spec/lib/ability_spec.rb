@@ -592,6 +592,7 @@ RSpec.describe Ability do
     context "read-only facility access" do
       it_is_allowed_to([:list, :dashboard, :show], Facility)
       it_is_allowed_to([:administer, :index, :show], Order)
+      it { is_expected.to be_allowed_to(:show, OrderDetail) }
       it_is_allowed_to([:administer, :index, :show, :timeline], Reservation)
       it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
       it_is_allowed_to([:show, :index], PriceGroup)

@@ -196,6 +196,60 @@ RSpec.describe OrderManagement::OrderDetailsController do
     end
   end
 
+  describe "edit with granular permissions", feature_setting: { granular_permissions: true } do
+    render_views
+
+    let(:item_order) { create(:purchased_order, product: item) }
+    let(:item_order_detail) { item_order.order_details.first }
+    let(:user) { create(:user) }
+
+    before do
+      @action = :edit
+      @method = :get
+      @params = { facility_id: facility.url_name, order_id: item_order.id, id: item_order_detail.id }
+    end
+
+    context "with a permission that does not grant order detail management" do
+      before do
+        create(:facility_user_permission, user:, facility:, product_management: true)
+        sign_in user
+        do_request
+      end
+
+      it "allows viewing the order detail in read-only mode" do
+        expect(response).to be_successful
+      end
+
+      it "renders the form with a disabled fieldset" do
+        expect(response.body).to include("<fieldset disabled")
+      end
+
+      it "does not render the Save button" do
+        expect(response.body).not_to include('value="Save"')
+      end
+    end
+
+    context "as a facility staff member" do
+      before do
+        create(:user_role, user:, facility:, role: UserRole::FACILITY_STAFF)
+        sign_in user
+        do_request
+      end
+
+      it "allows editing the order detail" do
+        expect(response).to be_successful
+      end
+
+      it "renders the form without a disabled fieldset" do
+        expect(response.body).not_to include("<fieldset disabled")
+      end
+
+      it "renders the Save button" do
+        expect(response.body).to include('value="Save"')
+      end
+    end
+  end
+
   describe "PUT #update" do
     before do
       @action = :update

@@ -332,6 +332,7 @@ class Ability
     return unless permission
 
     if resource.is_a?(OrderDetail)
+      can :show, OrderDetail, order: { facility_id: resource.order.facility_id }
       granted_permission_order_detail_abilities(permission, resource)
     end
 
@@ -436,6 +437,7 @@ class Ability
     can [:list, :dashboard, :show], Facility
 
     can [:administer, :index, :show, :tab_counts], Order
+    can :show, OrderDetail
 
     can [:administer, :index, :show, :timeline], Reservation
 

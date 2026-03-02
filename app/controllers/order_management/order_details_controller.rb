@@ -11,9 +11,10 @@ class OrderManagement::OrderDetailsController < ApplicationController
   # We can't load through the facility because of cross-core orders
   before_action :init_order_detail, only: [:files, :template_results]
 
-  helper_method :edit_disabled?, :actual_cost_edit_disabled?
+  helper_method :edit_disabled?, :actual_cost_edit_disabled?, :read_only?
 
-  before_action :authorize_order_detail, except: %i(sample_results)
+  before_action :authorize_order_detail, except: %i(sample_results update remove_from_journal)
+  before_action :authorize_order_detail_update, only: %i(update remove_from_journal)
   before_action :authorize_mark_unrecoverable, only: :update
   before_action :load_accounts, only: [:edit, :update]
   before_action :load_order_statuses, only: [:edit, :update]
@@ -92,7 +93,15 @@ class OrderManagement::OrderDetailsController < ApplicationController
   end
 
   def authorize_order_detail
+    authorize! :show, @order_detail
+  end
+
+  def authorize_order_detail_update
     authorize! :update, @order_detail
+  end
+
+  def read_only?
+    cannot?(:update, @order_detail)
   end
 
   def load_accounts
