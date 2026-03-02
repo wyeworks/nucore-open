@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+# Mailer that generates a csv report and
+# sends the result.
+#
+# Since it receives the report instance it cannot
+# be called async. See CsvReportEmailJob.
 class CsvReportMailer < ApplicationMailer
 
   def csv_report_email(to_address, report)
