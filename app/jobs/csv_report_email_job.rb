@@ -10,4 +10,8 @@ class CsvReportEmailJob < ApplicationJob
       .csv_report_email(email, report)
       .deliver_now
   end
+
+  def queue_name
+    "reports"
+  end
 end

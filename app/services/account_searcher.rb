@@ -16,9 +16,11 @@ class AccountSearcher
   end
 
   def results
-    matches_owner
-      .or(matches_field(:account_number, :description, :ar_number))
-      .order(:type, :account_number)
+    scope = matches_owner.order(:type, :account_number)
+
+    return scope if @query.blank?
+
+    scope.or(matches_field(:account_number, :description, :ar_number))
   end
 
   def filtered_scope
