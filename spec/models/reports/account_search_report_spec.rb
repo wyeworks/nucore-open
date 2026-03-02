@@ -6,9 +6,35 @@ RSpec.describe Reports::AccountSearchReport do
   let(:facility) { build(:facility, name: "Single Facility", abbreviation: "SF") }
   let(:facility2) { build(:facility, name: "Other Facility", abbreviation: "OF") }
   let(:owner) { create(:user, first_name: "My", last_name: "Owner") }
-  let(:account) { create(:account, :with_account_owner, account_number: "12345", description: "Testing", owner: owner, expires_at: Time.zone.parse("2020-01-01")) }
-  let(:suspended) { create(:account, :with_account_owner, account_number: "54321", description: "Testing Susp", owner: owner, suspended_at: Time.zone.parse("2019-12-01"), expires_at: Time.zone.parse("2020-01-02")) }
-  let(:multi_facility) { create(:account, :with_account_owner, facilities: [facility, facility2]) }
+  let(:account) do
+    create(
+      :account,
+      :with_account_owner,
+      account_number: "12345",
+      description: "Testing",
+      owner:,
+      expires_at: Time.zone.parse("2020-01-01"),
+    )
+  end
+  let(:suspended) do
+    create(
+      :account,
+      :with_account_owner,
+      account_number: "54321",
+      description: "Testing Susp",
+      owner:,
+      suspended_at: Time.zone.parse("2019-12-01"),
+      expires_at: Time.zone.parse("2020-01-02"),
+    )
+  end
+  let(:multi_facility) do
+    create(
+      :account,
+      :with_account_owner,
+      account_number: "10001",
+      facilities: [facility, facility2],
+    )
+  end
 
   let!(:accounts) { [account, suspended, multi_facility] }
 
