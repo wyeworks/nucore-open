@@ -388,10 +388,8 @@ class Ability
            :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order
 
       can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
-           :cancel, :create, :edit, :edit_admin, :index, :show, :tab_counts,
-           :timeline, :update, :update_admin], Reservation
-      can(:destroy, Reservation, &:admin?)
-      cannot :manage, OfflineReservation
+           :cancel, :edit, :index, :show, :tab_counts,
+           :timeline, :update], Reservation
 
       can :act_as, Facility
       can(:switch_to, User, &:active?)
