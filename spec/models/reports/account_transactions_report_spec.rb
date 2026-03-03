@@ -10,7 +10,7 @@ RSpec.describe Reports::AccountTransactionsReport do
   let(:order_detail_ids) { order_details.pluck(:id) }
   let(:report_options) { {} }
 
-  subject(:report) { Reports::AccountTransactionsReport.new(order_detail_ids, report_options) }
+  subject(:report) { described_class.new(order_detail_ids:, **report_options) }
 
   describe "#to_csv" do
     context "with no order details" do
