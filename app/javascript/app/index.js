@@ -13,7 +13,6 @@ import './disabling_by_checkbox';
 import './estimate_products_table';
 import './export_csv_report';
 import './facility_order_show';
-import './flash';
 import './hide_reconcile_fields';
 import './load_cart_count';
 import './logout_after_end_reservation';

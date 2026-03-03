@@ -10,12 +10,13 @@ module Reports
 
     def export_all
       if date_range_too_large?
-        flash[:error] = t(
-          ".date_range_too_large",
-          days: MAX_REPORT_PERIOD_DAYS,
+        render(
+          plain: t(
+            ".date_range_too_large",
+            days: MAX_REPORT_PERIOD_DAYS,
+          ),
+          status: :bad_request,
         )
-
-        redirect_back_or_to(success_redirect_path)
       else
         super
       end
