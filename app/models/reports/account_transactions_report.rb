@@ -8,7 +8,7 @@ class Reports::AccountTransactionsReport
   include ERB::Util
   include TextHelpers::Translation
 
-  def initialize(order_detail_ids, options = {})
+  def initialize(order_detail_ids:, **options)
     @order_detail_ids = order_detail_ids
     @date_range_field = options[:date_range_field] || "fulfilled_at"
     @label_key_prefix = options[:label_key_prefix] || :actual

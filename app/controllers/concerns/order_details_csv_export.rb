@@ -11,7 +11,7 @@ module OrderDetailsCsvExport
 
     queue_csv_report_email(
       Reports::AccountTransactionsReport,
-      order_detail_ids,
+      order_detail_ids:,
       date_range_field: @date_range_field,
       label_key_prefix: @label_key_prefix,
     )
