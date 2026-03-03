@@ -4,7 +4,22 @@ module Reports
 
   class ExportRawReportsController < CsvExportController
 
+    MAX_REPORT_PERIOD_DAYS = 60
+
     include StatusFilterParams
+
+    def export_all
+      if date_range_too_large?
+        flash[:error] = t(
+          ".date_range_too_large",
+          days: MAX_REPORT_PERIOD_DAYS,
+        )
+
+        redirect_back_or_to(success_redirect_path)
+      else
+        super
+      end
+    end
 
     private
 
@@ -24,6 +39,12 @@ module Reports
 
     def success_redirect_path
       facility_general_reports_path(current_facility, report_by: :product)
+    end
+
+    def date_range_too_large?
+      return false unless [@date_start, @date_end].all?(&:present?)
+
+      (@date_end - @date_start) > MAX_REPORT_PERIOD_DAYS.days
     end
 
   end

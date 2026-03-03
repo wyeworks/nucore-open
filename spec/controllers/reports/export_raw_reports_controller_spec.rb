@@ -19,4 +19,48 @@ RSpec.describe Reports::ExportRawReportsController do
     include_examples "csv email action"
   end
 
+  context "date validation", :perform_enqueued_jobs do
+    let(:params) do
+      {
+        facility_id: facility.url_name,
+        date_start:,
+        date_end:,
+        status_filter: OrderStatus.pluck(:id),
+      }
+    end
+    let(:date_end) { Time.current.to_date }
+    let(:date_start) { date_end - report_days.days }
+
+    before do
+      sign_in user
+    end
+
+    context "when period too large" do
+      let(:report_days) do
+        Reports::ExportRawReportsController::MAX_REPORT_PERIOD_DAYS + 1
+      end
+
+      it "does not run the report" do
+        expect(Reports::ExportRaw).not_to receive(:new)
+
+        get(:export_all, params:)
+
+        expect(flash[:error]).to include("Date range can be up to")
+      end
+    end
+
+    context "when period is valid" do
+      let(:report_days) { 10 }
+
+      it "runs the report" do
+        expect(Reports::ExportRaw).to(
+          receive(:new).and_call_original,
+        )
+
+        get(:export_all, params:)
+
+        expect(flash[:error]).to be_blank
+      end
+    end
+  end
 end
