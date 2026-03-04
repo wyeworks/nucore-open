@@ -7,5 +7,5 @@
 #   s3_permissions: private
 #   bucket: "nucore-production"
 
-feature_flags:
+feature:
   granular_permissions: false
