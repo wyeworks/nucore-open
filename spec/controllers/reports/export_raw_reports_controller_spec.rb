@@ -43,9 +43,10 @@ RSpec.describe Reports::ExportRawReportsController do
       it "does not run the report" do
         expect(Reports::ExportRaw).not_to receive(:new)
 
-        get(:export_all, params:)
+        get(:export_all, params:, xhr: true)
 
-        expect(flash[:error]).to include("Date range can be up to")
+        expect(response).to have_http_status(:bad_request)
+        expect(response.body).to include("Date range can be up to")
       end
     end
 
@@ -57,9 +58,10 @@ RSpec.describe Reports::ExportRawReportsController do
           receive(:new).and_call_original,
         )
 
-        get(:export_all, params:)
+        get(:export_all, params:, xhr: true)
 
-        expect(flash[:error]).to be_blank
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("A report is being prepared")
       end
     end
   end
