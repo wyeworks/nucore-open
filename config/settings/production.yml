@@ -6,3 +6,6 @@
 #   s3_region: us-east-1
 #   s3_permissions: private
 #   bucket: "nucore-production"
+
+feature_flags:
+  granular_permissions: false
