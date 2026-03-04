@@ -632,10 +632,13 @@ RSpec.describe Ability do
 
       it { is_expected.to be_allowed_to(:manage, OrderDetail) }
       it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order)
-      it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :cancel, :create, :edit, :edit_admin, :index, :show, :tab_counts, :timeline, :update, :update_admin], Reservation)
+      it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :cancel, :edit, :index, :show, :tab_counts, :timeline, :update], Reservation)
       it { is_expected.to be_allowed_to(:act_as, facility) }
       it { is_expected.to be_allowed_to(:read, Notification) }
       it { is_expected.not_to be_allowed_to(:adjust_price, OrderDetail) }
+
+      # Admin reservation actions belong to instrument_management, not order_management
+      it_is_not_allowed_to([:create, :edit_admin, :update_admin], Reservation)
       it { is_expected.not_to be_allowed_to(:manage, OfflineReservation) }
     end
 
@@ -681,6 +684,41 @@ RSpec.describe Ability do
     context "without billing_journals" do
       it { is_expected.not_to be_allowed_to(:manage, Journal) }
       it { is_expected.not_to be_allowed_to(:manage, Statement) }
+    end
+
+    context "with instrument_management" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(instrument_management: true)
+      end
+
+      it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
+      it { is_expected.to be_allowed_to(:switch, Instrument) }
+      it_is_allowed_to([:create, :edit_admin, :update_admin, :timeline, :index, :show], Reservation)
+      it { is_expected.to be_allowed_to(:read, ProductAccessory) }
+
+      it_behaves_like "it can destroy admistrative reservations"
+
+      it { is_expected.not_to be_allowed_to(:manage, OrderDetail) }
+      it { is_expected.not_to be_allowed_to(:act_as, facility) }
+      it { is_expected.not_to be_allowed_to(:adjust_price, OrderDetail) }
+
+      context "when managing reservations" do
+        let(:subject_resource) { create(:reservation, product: instrument) }
+
+        it { is_expected.to be_allowed_to(:read, ProductAccessory) }
+        it { is_expected.to be_allowed_to(:manage, Reservation) }
+      end
+    end
+
+    context "with both order_management and instrument_management" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(order_management: true, instrument_management: true)
+      end
+
+      it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
+      it { is_expected.to be_allowed_to(:manage, OrderDetail) }
+      it { is_expected.to be_allowed_to(:act_as, facility) }
+      it { is_expected.to be_allowed_to(:switch, Instrument) }
     end
   end
 

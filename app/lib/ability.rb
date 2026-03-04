@@ -388,10 +388,8 @@ class Ability
            :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order
 
       can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
-           :cancel, :create, :edit, :edit_admin, :index, :show, :tab_counts,
-           :timeline, :update, :update_admin], Reservation
-      can(:destroy, Reservation, &:admin?)
-      cannot :manage, OfflineReservation
+           :cancel, :edit, :index, :show, :tab_counts,
+           :timeline, :update], Reservation
 
       can :act_as, Facility
       can(:switch_to, User, &:active?)
@@ -418,6 +416,17 @@ class Ability
         account.global? || account.account_facility_joins.any? { |af| af.facility_id == resource.id }
       end
     end
+
+    if permission.instrument_management?
+      can :manage, OfflineReservation
+      can :switch, Instrument
+
+      can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
+           :cancel, :create, :edit, :edit_admin, :index, :show, :tab_counts,
+           :timeline, :update, :update_admin], Reservation
+      can(:destroy, Reservation, &:admin?)
+      can :read, ProductAccessory
+    end
   end
 
   def granted_permission_facility(resource)
@@ -438,7 +447,7 @@ class Ability
   end
 
   def granted_permission_reservation_abilities(permission)
-    if permission.order_management?
+    if permission.order_management? || permission.instrument_management?
       can :read, ProductAccessory
       can :manage, Reservation
     end
