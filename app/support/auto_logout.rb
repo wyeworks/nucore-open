@@ -39,8 +39,9 @@ class AutoLogout
   def logout_and_move_to_problem_queue(order_detail)
     reservation = order_detail.reservation
     unless reservation.other_reservation_using_relay?
-      reservation.product.relay.deactivate
-      InstrumentStatus.set_status_for(reservation.product, is_on: false)
+      InstrumentStatus.with_lock_for(reservation.product) do
+        reservation.product.relay.deactivate
+      end
     end
     MoveToProblemQueue.move!(order_detail, cause: :auto_logout)
   rescue => e
