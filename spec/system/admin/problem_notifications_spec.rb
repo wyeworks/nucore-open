@@ -51,7 +51,7 @@ RSpec.describe "Problem Notifications", :js do
 
       click_button "Send Reminders"
 
-      expect(page).to have_css(".alert-danger")
+      expect(page).to have_css(".alert-error")
       expect(page).not_to have_content("Successfully sent")
     end
 
