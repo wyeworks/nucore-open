@@ -655,7 +655,9 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
       end
 
       it_should_allow_all [:guest], "to receive an error that they are trying to reserve outside of the window" do
-        expect(assigns[:reservation].errors[:base]).to include("The reservation is too far in advance")
+        expect(assigns[:reservation].errors[:base]).to(
+          include(a_string_matching(/The reservation must be within the next \d+ days/))
+        )
         expect(response).to render_template(:new)
       end
     end

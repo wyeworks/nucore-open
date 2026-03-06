@@ -207,14 +207,14 @@ module Reservations::Validations
 
   # checks that the reservation is within the longest window for the groups the user is in
   def in_window?
-    groups   = order_detail.price_groups
-    max_days = longest_reservation_window(groups)
-    diff     = reserve_start_at.to_date - Date.today
+    max_days = window_days
+    diff = reserve_start_at.to_date - Date.today
+
     diff <= max_days
   end
 
   def in_window
-    errors.add(:base, :out_of_window) unless in_window?
+    errors.add(:base, :out_of_window, days: window_days) unless in_window?
   end
 
   # return the longest available reservation window for the groups
