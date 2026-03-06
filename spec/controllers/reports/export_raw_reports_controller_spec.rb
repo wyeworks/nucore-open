@@ -37,7 +37,7 @@ RSpec.describe Reports::ExportRawReportsController do
 
     context "when period too large" do
       let(:report_days) do
-        Reports::ExportRawReportsController::MAX_REPORT_PERIOD_DAYS + 1
+        Reports::ExportRawReportsController.max_period_days + 1
       end
 
       it "does not run the report" do

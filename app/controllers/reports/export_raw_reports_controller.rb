@@ -4,16 +4,18 @@ module Reports
 
   class ExportRawReportsController < CsvExportController
 
-    MAX_REPORT_PERIOD_DAYS = 60
-
     include StatusFilterParams
+
+    def self.max_period_days
+      Settings.dig(:reports, :export_raw, :max_period_days) || 60
+    end
 
     def export_all
       if date_range_too_large?
         render(
           plain: t(
             ".date_range_too_large",
-            days: MAX_REPORT_PERIOD_DAYS,
+            days: self.class.max_period_days,
           ),
           status: :bad_request,
         )
@@ -45,7 +47,7 @@ module Reports
     def date_range_too_large?
       return false unless [@date_start, @date_end].all?(&:present?)
 
-      (@date_end - @date_start) > MAX_REPORT_PERIOD_DAYS.days
+      (@date_end - @date_start) > self.class.max_period_days.days
     end
 
   end
