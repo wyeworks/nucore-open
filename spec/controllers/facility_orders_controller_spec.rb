@@ -112,14 +112,20 @@ RSpec.describe FacilityOrdersController do
         expect(assigns[:order_details]).to eq([@order_detail_item])
       end
 
-      context "export" do
+      context "export", :perform_enqueued_jobs do
+        let(:mail) { ActionMailer::Base.deliveries.last }
+        let(:mail_attachment) { mail&.attachments&.first }
+
         before :each do
           @params.merge!(format: :csv)
         end
 
-        it "renders a csv download" do
+        it "sends csv by email" do
           do_request
-          expect(response.headers["Content-Type"]).to match %r{\Atext/csv\b}
+
+          expect(mail_attachment).to be_present
+          expect(mail_attachment.content_type).to match %r{\Atext/csv\b}
+          expect(mail_attachment.body).to include("Order,Order Detail")
         end
       end
     end

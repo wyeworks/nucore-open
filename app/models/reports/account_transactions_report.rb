@@ -8,8 +8,8 @@ class Reports::AccountTransactionsReport
   include ERB::Util
   include TextHelpers::Translation
 
-  def initialize(order_details, options = {})
-    @order_details = order_details
+  def initialize(order_detail_ids:, **options)
+    @order_detail_ids = order_detail_ids
     @date_range_field = options[:date_range_field] || "fulfilled_at"
     @label_key_prefix = options[:label_key_prefix] || :actual
   end
@@ -19,7 +19,7 @@ class Reports::AccountTransactionsReport
 
     report << CSV.generate_line(headers)
 
-    @order_details.find_each do |od|
+    order_details.find_each do |od|
       report << CSV.generate_line(build_row(od))
     end
 
@@ -44,6 +44,19 @@ class Reports::AccountTransactionsReport
 
   def translation_scope
     "reports.account_transactions"
+  end
+
+  def order_details
+    @order_details ||=
+      OrderDetail
+      .where_ids_in(@order_detail_ids)
+      .preload(
+        :product,
+        :order_status,
+        :reservation,
+        :account,
+        order: [:facility, :user],
+      )
   end
 
   private

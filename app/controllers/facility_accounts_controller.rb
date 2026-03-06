@@ -222,10 +222,12 @@ class FacilityAccountsController < ApplicationController
                     else
                       {}
                     end
-
-    yield_email_and_respond_for_report do |email|
-      AccountSearchResultMailer.search_result(email, search_term, SerializableFacility.new(current_facility), filter_params:).deliver_later
-    end
+    queue_csv_report_email(
+      Reports::AccountSearchReport,
+      search_term:,
+      facility: SerializableFacility.new(current_facility),
+      filter_params:,
+    )
   end
 
 end
