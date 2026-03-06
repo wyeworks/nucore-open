@@ -1,7 +1,8 @@
 %ul.sidebar-nav#menu_billing
   %li.nav-header= text("transactions_header")
   = tab text("all_transactions"), facility_transactions_path, (sidenav_tab == 'transactions')
-  = tab text("move_transactions"), facility_movable_transactions_path, (sidenav_tab == 'movable_transactions')
+  - if can?(:movable_transactions, current_facility)
+    = tab text("move_transactions"), facility_movable_transactions_path, (sidenav_tab == 'movable_transactions')
   = tab text("disputed_orders"), facility_disputed_orders_path, (sidenav_tab == "disputed_orders") if SettingsHelper::has_review_period?
 
   %li.nav-spacer
