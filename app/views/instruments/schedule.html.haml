@@ -27,9 +27,10 @@
 %h3= t(".administrative_reservations")
 
 %p
-  = link_to t(".add_admin_reservation"),
-    new_facility_instrument_reservation_path,
-    class: "btn-add"
+  - if can?(:create, Reservation)
+    = link_to t(".add_admin_reservation"),
+      new_facility_instrument_reservation_path,
+      class: "btn-add"
 
   - if current_ability.can?(:create, OfflineReservation)
     - if @product.offline?
