@@ -5,6 +5,8 @@
  */
 // Requires a data-attribute `form` which is a selector for the search form to submit
 // The form requires an email and a format field (hidden).
+import { Flash } from "./flash";
+
 class ExportCsvReport {
   constructor(selector) {
     this.selector = selector;

@@ -1137,6 +1137,8 @@ en:
       not_found: We cannot find %{email} in our records.
 
   reports:
+    export_raw_reports:
+      date_range_too_large: "Date range can be up to %{days} days"
     export_as_csv: "!reports.account_transactions.export!"
     fields:
       between: between
