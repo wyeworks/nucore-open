@@ -21,7 +21,7 @@ class PriceGroupsController < ApplicationController
 
   # GET /facilities/:facility_id/price_groups
   def index
-    @price_groups = PriceGroup.ordered_with_subsidies(current_facility.price_groups.to_a)
+    @price_groups = PriceGroup.ordered_with_subsidies(current_facility.price_groups)
   end
 
   # GET /facilities/:facility_id/price_groups/:id

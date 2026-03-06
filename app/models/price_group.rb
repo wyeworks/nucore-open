@@ -115,6 +115,8 @@ class PriceGroup < ApplicationRecord
   def self.ordered_with_subsidies(price_groups)
     return price_groups unless SettingsHelper.feature_on?(:external_price_group_subsidies)
 
+    price_groups = price_groups.try(:includes, :parent_price_group) || price_groups
+
     internal_groups = price_groups.select(&:is_internal?).sort_by { |pg| [pg.display_order || 999, pg.name] }
     external_base_groups = price_groups.select { |pg| pg.external? && pg.parent_price_group_id.nil? }
                                        .sort_by { |pg| [pg.display_order || 999, pg.name] }
