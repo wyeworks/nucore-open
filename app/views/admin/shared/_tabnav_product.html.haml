@@ -1,7 +1,7 @@
 - return nil if @product.nil? || @product.id.nil?
 %ul.nav.nav-tabs
   = tab t("views.admin.products.tabnav.details"), [:manage, current_facility, @product], (secondary_tab == "details")
-  - if @product.is_a?(Instrument)
+  - if @product.is_a?(Instrument) && can?(:manage, @product)
     = tab t("views.admin.products.tabnav.relays"), [current_facility, @product, Relay], (secondary_tab == "relays")
   - if @product.requires_approval? && @product.respond_to?(:product_access_groups)
     = tab ProductAccessGroup.model_name.human.pluralize, facility_instrument_product_access_groups_path(current_facility, @product), (secondary_tab == "restriction_levels")
