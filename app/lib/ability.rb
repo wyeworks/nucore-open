@@ -350,7 +350,7 @@ class Ability
 
     if permission.billing_send?
       can :manage_billing, resource
-      can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility
+      can [:disputed_orders, :transactions, :reassign_chart_strings, :confirm_transactions], Facility
     end
 
     if permission.product_management?
