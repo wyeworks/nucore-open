@@ -4,9 +4,10 @@
   = tab text("move_transactions"), facility_movable_transactions_path, (sidenav_tab == 'movable_transactions')
   = tab text("disputed_orders"), facility_disputed_orders_path, (sidenav_tab == "disputed_orders") if SettingsHelper::has_review_period?
 
-  %li.nav-spacer
-  = tab text("send_notifications"), facility_notifications_path, (sidenav_tab == 'notifications') if SettingsHelper::has_review_period?
-  = tab text("orders_in_review"), facility_notifications_in_review_path, (sidenav_tab == 'in_review') if SettingsHelper::has_review_period?
+  - if can?(:confirm_transactions, current_facility)
+    %li.nav-spacer
+    = tab text("send_notifications"), facility_notifications_path, (sidenav_tab == 'notifications') if SettingsHelper::has_review_period?
+    = tab text("orders_in_review"), facility_notifications_in_review_path, (sidenav_tab == 'in_review') if SettingsHelper::has_review_period?
 
   - if can?(:manage, Journal)
     %li.divider
