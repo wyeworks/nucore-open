@@ -13,6 +13,8 @@ RSpec.describe ReservationInstrumentSwitcher do
     allow_any_instance_of(RelaySynaccessRevA).to receive(:relay_connection).and_return(relay_connection)
     allow(relay_connection).to receive(:toggle) { |_outlet, status| status }
     allow(relay_connection).to receive(:status).and_return(true)
+
+    allow(SettingsHelper).to receive(:relays_enabled_for_reservation?) { true }
   end
 
   describe "#switch_on!" do
@@ -62,6 +64,16 @@ RSpec.describe ReservationInstrumentSwitcher do
 
       it "does not do anything to the canceled reservation" do
         expect { do_action }.not_to change { running_reservation.reload }
+      end
+    end
+
+    context "when cannot switch instrument" do
+      before do
+        allow_any_instance_of(Reservation).to receive(:can_switch_instrument_on?) { false }
+      end
+
+      it "raises error" do
+        expect { do_action }.to raise_error(RuntimeError, /cannot switch instrument/i)
       end
     end
   end

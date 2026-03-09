@@ -1286,6 +1286,9 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
 
         context "as the user" do
           before :each do
+            allow(SettingsHelper).to receive(:relays_enabled_for_reservation?) { true }
+            allow_any_instance_of(Relay).to receive(:activate) { true }
+
             sign_in @guest
             do_request
           end
@@ -1422,6 +1425,9 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
 
       context "off" do
         before :each do
+          allow(SettingsHelper).to receive(:relays_enabled_for_reservation?) { true }
+          allow_any_instance_of(Relay).to receive(:deactivate) { false }
+
           @reservation.update_attribute(:actual_start_at, @start)
           @params[:switch] = "off"
           travel(2.seconds)
