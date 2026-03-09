@@ -235,3 +235,7 @@ devise:
   lock_strategy: :failed_attempts
   unlock_strategy: :email
   minutes_to_unlock_in: 5
+
+reports:
+  export_raw:
+    max_period_days: 180

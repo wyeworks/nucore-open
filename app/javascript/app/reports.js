@@ -4,6 +4,8 @@
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
+import { Flash } from "./flash";
+
 class TabbableReports {
   constructor($element) {
     this.$element = $element;
@@ -127,6 +129,16 @@ class TabbableReports {
 
   init_export_all_handler() {
     this.$emailToAddressField = $('.js--exportRawEmailField');
+    this
+      .export_all_link()
+      .on("ajax:success", (_event, data) => { Flash.info(data) })
+      .on("ajax:error", (_event, xhr) => {
+        const message = xhr.status === 400 ?
+          xhr.responseText : "An unexpected error happened";
+
+        Flash.error(message)
+      });
+
     return this.export_all_link()
       .attr("data-remote", true)
       .data("original-url", this.export_all_link().attr("href"))
@@ -144,9 +156,6 @@ class TabbableReports {
     if (new_to) {
       this.$emailToAddressField.val(new_to);
       this.update_export_urls();
-      // Actual sending handled by remote: true
-      return Flash.info(`A report is being prepared and will be emailed to ${new_to} \
-when complete`);
     } else {
       return false; // prevent handling by remote: true
     }

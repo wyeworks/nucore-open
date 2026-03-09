@@ -1,3 +1,5 @@
+import { Flash } from "./flash";
+
 $(document).ready(function() {
   // Only execute if we're on the problem notifications page
   if ($('input[name="notification_groups[]"]').length === 0) {
@@ -66,7 +68,7 @@ $(document).ready(function() {
       if (result === 'no_groups') {
         return;
       } else if (result.emails === 0 || result.users === 0) {
-        $("#js--flash").html('<div class="alert alert-danger">' + noUsersToNotifyMessage + '</div>');
+        Flash.error(noUsersToNotifyMessage);
         return;
       } else {
         message = originalTemplate.replace('{count}', result.emails).replace('{users}', result.users);
