@@ -7,6 +7,14 @@ RSpec.describe ReservationInstrumentSwitcher do
   let(:reservation) { FactoryBot.create(:purchased_reservation, product: instrument) }
   let(:action) { described_class.new(reservation) }
 
+  let(:relay_connection) { double("RelayConnection") }
+
+  before do
+    allow_any_instance_of(RelaySynaccessRevA).to receive(:relay_connection).and_return(relay_connection)
+    allow(relay_connection).to receive(:toggle) { |_outlet, status| status }
+    allow(relay_connection).to receive(:status).and_return(true)
+  end
+
   describe "#switch_on!" do
     def do_action
       action.switch_on!
@@ -19,6 +27,12 @@ RSpec.describe ReservationInstrumentSwitcher do
     context "no other reservations" do
       it "starts the reservation" do
         expect { do_action }.to change { reservation.reload.actual_start_at }.from(nil)
+      end
+
+      it "updates InstrumentStatus to on" do
+        do_action
+        status = InstrumentStatus.find_by(instrument_id: instrument.id)
+        expect(status.is_on).to be true
       end
     end
 
@@ -48,6 +62,61 @@ RSpec.describe ReservationInstrumentSwitcher do
 
       it "does not do anything to the canceled reservation" do
         expect { do_action }.not_to change { running_reservation.reload }
+      end
+    end
+  end
+
+  describe "#switch_off!" do
+    def do_action
+      action.switch_off!
+    end
+
+    before do
+      allow(reservation).to receive(:can_switch_instrument_off?).and_return(true)
+      # Start the reservation so it can be ended
+      reservation.update!(actual_start_at: 30.minutes.ago)
+    end
+
+    it "ends the reservation" do
+      expect { do_action }.to change { reservation.reload.actual_end_at }.from(nil)
+    end
+
+    it "updates InstrumentStatus to off" do
+      # Set initial status to ON
+      InstrumentStatus.create!(instrument:, is_on: true)
+
+      do_action
+      expect(InstrumentStatus.find_by(instrument_id: instrument.id).is_on).to be false
+    end
+
+    context "when relays are enabled" do
+      before do
+        allow(SettingsHelper).to receive(:relays_enabled_for_reservation?).and_return(true)
+      end
+
+      it "does not call get_status on the relay" do
+        expect(instrument.relay).not_to receive(:get_status)
+        do_action
+      end
+
+      it "updates InstrumentStatus to off" do
+        InstrumentStatus.create!(instrument:, is_on: true)
+
+        do_action
+        expect(InstrumentStatus.find_by(instrument_id: instrument.id).is_on).to be false
+      end
+
+      context "when the relay deactivation raises an error" do
+        before do
+          allow(relay_connection).to receive(:toggle).and_raise(NetBooter::Error, "Connection failed")
+        end
+
+        it "raises and does not update InstrumentStatus" do
+          InstrumentStatus.create!(instrument:, is_on: true)
+
+          expect { do_action }.to raise_error(NetBooter::Error)
+          expect(InstrumentStatus.find_by(instrument_id: instrument.id).is_on).to be true
+        end
       end
     end
   end

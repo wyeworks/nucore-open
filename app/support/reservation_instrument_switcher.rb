@@ -36,7 +36,6 @@ class ReservationInstrumentSwitcher
   def switch_relay_off
     if relays_enabled?
       relay.deactivate
-      relay.get_status
     else
       false
     end
@@ -45,7 +44,6 @@ class ReservationInstrumentSwitcher
   def switch_relay_on
     if relays_enabled?
       relay.activate
-      relay.get_status
     else
       true
     end
