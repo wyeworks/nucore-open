@@ -395,7 +395,6 @@ class Ability
       can(:switch_to, User, &:active?)
       can :read, Notification
 
-      can :manage_billing, resource
       can [:transactions, :disputed_orders], Facility
       can :manage, OrderImport
 
