@@ -6,6 +6,7 @@ class CurrencyInput < SimpleForm::Inputs::Base
 
   def input(_wrapper_options)
     set_value
+    input_html_options[:class] = Array(input_html_options[:class]) + ["form-control"]
 
     out = template.content_tag :div, class: ["input-prepend", "currency-input"] do
       template.content_tag(:span, "$", class: "add-on") +
