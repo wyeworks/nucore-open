@@ -13,7 +13,7 @@ class FacilitiesController < ApplicationController
   before_action :enable_sorting, only: [:disputed_orders, :movable_transactions, :transactions] # rubocop:disable Rails/LexicallyScopedActionFilter
 
   load_and_authorize_resource find_by: :url_name
-  skip_load_and_authorize_resource only: [:index, :show]
+  skip_load_and_authorize_resource only: [:index, :show, :manage]
 
   include AZHelper
   include MovableTransactions
@@ -87,6 +87,7 @@ class FacilitiesController < ApplicationController
 
   # GET /facilities/:facility_id/manage
   def manage
+    authorize! :show, current_facility
     @active_tab = "admin_facility"
   end
 

@@ -472,6 +472,9 @@ class Ability
     can [:show, :index], PriceGroup
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
 
+    can [:show, :index], OrderStatus
+    can :index, FacilityAccount
+
     can :index, Project
 
     can [:administer], User

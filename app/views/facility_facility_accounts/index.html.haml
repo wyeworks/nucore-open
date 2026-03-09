@@ -8,10 +8,11 @@
 
 %p= text("main")
 
-%ul.list-inline
-  %li
-    = link_to text("admin.shared.add", model: FacilityAccount.model_name.human),
-      new_facility_facility_account_path, class: "btn-add"
+- if can?(:create, FacilityAccount)
+  %ul.list-inline
+    %li
+      = link_to text("admin.shared.add", model: FacilityAccount.model_name.human),
+        new_facility_facility_account_path, class: "btn-add"
 
 - if @accounts.empty?
   %p.notice= text("notice")
@@ -25,6 +26,9 @@
       - @accounts.each do |account|
         %tr
           %td
-            = link_to account, edit_facility_facility_account_path(current_facility, account)
+            - if can?(:edit, account)
+              = link_to account, edit_facility_facility_account_path(current_facility, account)
+            - else
+              = account
             - unless account.active?
               = text("inactive")
