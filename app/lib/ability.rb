@@ -414,7 +414,7 @@ class Ability
       can [:send_receipt, :show], Order
       can [:accounts, :index, :orders, :show, :administer], User
       can :manage, AccountUser
-      can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility
+      can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :move_transactions], Facility
       can :manage, Account do |account|
         account.global? || account.account_facility_joins.any? { |af| af.facility_id == resource.id }
       end
