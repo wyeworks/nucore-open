@@ -73,7 +73,7 @@ RSpec.describe ReservationInstrumentSwitcher do
       end
 
       it "raises error" do
-        expect { do_action }.to raise_error(RuntimeError, /cannot switch instrument/i)
+        expect { do_action }.to raise_error(NUCore::Error, /cannot switch instrument/i)
       end
     end
   end

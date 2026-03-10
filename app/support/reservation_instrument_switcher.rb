@@ -62,7 +62,7 @@ class ReservationInstrumentSwitcher
   end
 
   def cannot_switch_instrument!
-    raise I18n.t("reservations.instrument_switcher.cannot_switch_error")
+    raise NUCore::Error, I18n.t("reservations.instrument_switcher.cannot_switch_error")
   end
 
 end

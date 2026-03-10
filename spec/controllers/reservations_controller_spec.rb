@@ -1315,6 +1315,24 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
           end
         end
 
+        context "when cannot switch reservation" do
+          before do
+            allow_any_instance_of(Reservation).to(
+              receive(:can_switch_instrument_on?) { false }
+            )
+
+            sign_in @guest
+            do_request
+          end
+
+          it "does not end the reservation" do
+            reservation.reload
+
+            expect(reservation.actual_end_at).to be_blank
+            expect(flash[:error]).to match(/cannot switch instrument/i)
+          end
+        end
+
         it_should_allow_all facility_operators, "turn on instrument from someone elses reservation" do
           is_expected.to respond_with :redirect
         end
