@@ -79,7 +79,7 @@ class NavTab::LinkCollection
   end
 
   def admin_billing
-    if single_facility? && ability.can?(:manage_billing, facility)
+    if single_facility? && (ability.can?(:manage_billing, facility) || ability.can?(:transactions, facility))
       NavTab::Link.new(tab: :admin_billing, url: billing_tab_landing_path)
     end
   end

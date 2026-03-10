@@ -395,6 +395,9 @@ class Ability
       can(:switch_to, User, &:active?)
       can :read, Notification
 
+      can [:transactions, :disputed_orders], Facility
+      can :manage, OrderImport
+
       can [:upload_sample_results, :destroy], StoredFile do |fileupload|
         fileupload.file_type == "sample_result"
       end
