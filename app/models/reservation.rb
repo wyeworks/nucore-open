@@ -380,6 +380,11 @@ class Reservation < ApplicationRecord
     end
   end
 
+  def window_days
+    groups = order_detail&.price_groups
+    longest_reservation_window(groups)
+  end
+
   private
 
   def auto_save_order_detail

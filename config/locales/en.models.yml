@@ -107,7 +107,7 @@ en:
             base:
               conflict: The reservation conflicts with another reservation.
               conflict_in_cart: The reservation conflicts with another reservation in your cart. Please purchase or remove it then continue.
-              out_of_window: The reservation is too far in advance
+              out_of_window: "The reservation must be within the next %{days} days"
               no_schedule_rule: The reservation spans time that the instrument is unavailable for reservation
               no_schedule_group: You do not have permission to make a reservation at this time
               too_long: The reservation is too long. It cannot be longer than %{length} minutes.
