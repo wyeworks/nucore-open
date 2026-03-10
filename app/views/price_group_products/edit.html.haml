@@ -30,6 +30,6 @@
         %tr{ class: "#{'disabled' unless is_current}" }
           %td= "#{price_group.name} (#{price_group.type_string})"
           - if @is_instrument
-            %td= text_field_tag "price_group_#{price_group.id}[reservation_window]", price_group_product.reservation_window, disabled: !is_current || cannot?(:update, PriceGroupProduct)
+            %td= text_field_tag "price_group_#{price_group.id}[reservation_window]", price_group_product.reservation_window, disabled: !is_current || cannot?(:update, PriceGroupProduct), class: "form-control"
 
   = submit_tag "Save restrictions", class: :btn if can? :update, PriceGroupProduct

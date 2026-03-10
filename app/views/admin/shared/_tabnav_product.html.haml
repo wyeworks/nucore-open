@@ -7,7 +7,7 @@
     = tab ProductAccessGroup.model_name.human.pluralize, facility_instrument_product_access_groups_path(current_facility, @product), (secondary_tab == "restriction_levels")
   - if @product.respond_to?(:schedule_rules)
     = tab t("views.admin.products.tabnav.schedule_rules"), [current_facility, @product, ScheduleRule], (secondary_tab == "schedule_rules")
-  - if @product.requires_approval?
+  - if @product.requires_approval? && can?(:index, ProductUser)
     = tab t("views.admin.products.tabnav.users"), [current_facility, @product, :users], (secondary_tab == "users")
   - if @product.is_a?(Bundle)
     = tab t("views.admin.products.tabnav.products"), facility_bundle_bundle_products_path(current_facility, @product), (secondary_tab == "products")
@@ -26,7 +26,7 @@
     = tab t("views.admin.products.tabnav.surveys"), product_survey_path(current_facility, @product.parameterize, @product.url_name), (secondary_tab == "surveys")
   = tab t("views.admin.products.tabnav.notifications"), facility_product_notifications_path(current_facility, @product), (secondary_tab == "notifications")
   - unless @product.is_a?(Bundle)
-    - if ResearchSafetyCertificate.any?
+    - if ResearchSafetyCertificate.any? && can?(:index, ProductResearchSafetyCertificationRequirement)
       = tab ProductResearchSafetyCertificationRequirement.model_name.human.pluralize, facility_product_product_research_safety_certification_requirements_path(current_facility, @product), secondary_tab == "certification_reqs"
 
   = render_view_hook "additional_tabs", secondary_tab: secondary_tab
