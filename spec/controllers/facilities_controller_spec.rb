@@ -382,14 +382,25 @@ RSpec.describe FacilitiesController do
     end
 
     describe "GET #movable_transactions" do
-      it "allows a user with billing_send permission and renders the page" do
-        sign_in permitted_user
+      let(:journals_user) { create(:user) }
+
+      before do
+        create(:facility_user_permission, user: journals_user, facility:, billing_journals: true)
+      end
+
+      it "allows a user with billing_journals permission and renders the page" do
+        sign_in journals_user
         get :movable_transactions, params: { facility_id: facility.url_name }
         expect(response).to be_successful
         expect(response.body).to include("menu_billing")
       end
 
-      it "denies a user without billing_send permission" do
+      it "denies a user with only billing_send permission" do
+        sign_in permitted_user
+        expect { get :movable_transactions, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+
+      it "denies a user without any billing permission" do
         sign_in unpermitted_user
         expect { get :movable_transactions, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
       end
