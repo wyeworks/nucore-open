@@ -171,6 +171,7 @@ table.order-list {
 
   .estimated_cost {
     @extend .label;
+    @extend .label-default;
   }
 
   [class^="fa-"], [class*=" fa-"] {
