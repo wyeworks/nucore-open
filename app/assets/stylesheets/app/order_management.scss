@@ -188,7 +188,9 @@ table.order-list {
   font-size: 1.0em;
   font-weight: 300;
 
-  &.status-new {
+  &.status-new,
+  &.status-in-process,
+  &.status-unrecoverable {
     @extend .label-default;
   }
   &.status-complete,
