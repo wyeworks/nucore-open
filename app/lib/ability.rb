@@ -346,6 +346,12 @@ class Ability
 
     if permission.assign_permissions?
       can :manage, FacilityUserPermission
+      can :update, Facility
+      can :manage, FacilityAccount
+      can :manage, PriceGroup
+      can :manage, [AccountPriceGroupMember, UserPriceGroupMember]
+      can :manage, PriceGroupProduct
+      can :manage, OrderStatus
     end
 
     if permission.billing_send?
