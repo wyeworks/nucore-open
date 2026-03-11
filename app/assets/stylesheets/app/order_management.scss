@@ -187,6 +187,9 @@ table.order-list {
   font-size: 1.0em;
   font-weight: 300;
 
+  &.status-new {
+    @extend .label-default;
+  }
   &.status-complete,
   &.status-reconciled {
     @extend .label-success;
