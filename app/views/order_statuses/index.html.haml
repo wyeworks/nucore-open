@@ -5,15 +5,16 @@
 
 %h2 Order Statuses
 
-%ul.list-inline
-  %li= link_to 'Add Order Status', new_facility_order_status_path, :class => 'btn-add'
+- if can?(:create, OrderStatus)
+  %ul.list-inline
+    %li= link_to 'Add Order Status', new_facility_order_status_path, :class => 'btn-add'
 
 %table.table.table-striped.table-hover.order-statuses-table
   %tbody
     - @order_statuses.each do |order_status|
       %tr
         %td.action-column
-          - if order_status.editable?
+          - if order_status.editable? && can?(:destroy, order_status)
             = link_to t("shared.remove"),
               facility_order_status_path(current_facility, order_status),
               data: { confirm: t("shared.confirm_message") },
@@ -24,5 +25,5 @@
         - else
           %td.child
             = order_status.name
-            - if order_status.editable?
+            - if order_status.editable? && can?(:edit, order_status)
               %span.child (#{link_to('Edit', edit_facility_order_status_path(current_facility, order_status))})

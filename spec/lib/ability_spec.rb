@@ -611,6 +611,9 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:manage, FacilityUserPermission) }
       it { is_expected.not_to be_allowed_to(:edit, facility) }
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
+      it { is_expected.not_to be_allowed_to(:manage, FacilityAccount) }
+      it { is_expected.not_to be_allowed_to(:manage, OrderStatus) }
+      it { is_expected.not_to be_allowed_to(:create, PriceGroup) }
     end
 
     context "with billing_send" do
@@ -623,6 +626,25 @@ RSpec.describe Ability do
       end
 
       it { is_expected.to be_allowed_to(:manage, FacilityUserPermission) }
+      it_is_allowed_to([:edit, :update], Facility)
+      it { is_expected.to be_allowed_to(:manage, FacilityAccount) }
+      it { is_expected.to be_allowed_to(:manage, PriceGroup) }
+      it { is_expected.to be_allowed_to(:manage, PriceGroupProduct) }
+      it { is_expected.to be_allowed_to(:manage, AccountPriceGroupMember) }
+      it { is_expected.to be_allowed_to(:manage, UserPriceGroupMember) }
+      it { is_expected.to be_allowed_to(:manage, OrderStatus) }
+
+      # Should not grant broader facility abilities
+      it { is_expected.not_to be_allowed_to(:act_as, facility) }
+    end
+
+    context "with only assign_permissions (no other flags)" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, assign_permissions: true)
+      end
+
+      it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
+      it { is_expected.not_to be_allowed_to(:manage, OrderDetail) }
     end
 
     context "with order_management" do
