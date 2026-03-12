@@ -732,6 +732,8 @@ en:
     account_field:
       prompt: "Please select a payment source"
       note_hint: Visible to facility staff only
+    instrument_switcher:
+      cannot_switch_error: "Cannot switch instrument on/off on this reservation"
 
   statements:
     index:

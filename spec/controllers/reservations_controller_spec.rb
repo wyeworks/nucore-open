@@ -1288,6 +1288,9 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
 
         context "as the user" do
           before :each do
+            allow(SettingsHelper).to receive(:relays_enabled_for_reservation?) { true }
+            allow_any_instance_of(Relay).to receive(:activate) { true }
+
             sign_in @guest
             do_request
           end
@@ -1311,6 +1314,24 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
 
           it "starts the reservation" do
             expect(assigns(:reservation).actual_start_at).to eq(Time.zone.now)
+          end
+        end
+
+        context "when cannot switch reservation" do
+          before do
+            allow_any_instance_of(Reservation).to(
+              receive(:can_switch_instrument_on?) { false }
+            )
+
+            sign_in @guest
+            do_request
+          end
+
+          it "does not end the reservation" do
+            reservation.reload
+
+            expect(reservation.actual_end_at).to be_blank
+            expect(flash[:error]).to match(/cannot switch instrument/i)
           end
         end
 
@@ -1424,6 +1445,9 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
 
       context "off" do
         before :each do
+          allow(SettingsHelper).to receive(:relays_enabled_for_reservation?) { true }
+          allow_any_instance_of(Relay).to receive(:deactivate) { false }
+
           @reservation.update_attribute(:actual_start_at, @start)
           @params[:switch] = "off"
           travel(2.seconds)
