@@ -112,6 +112,7 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :order_status
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :reservation
     Bullet.add_safelist type: :unused_eager_loading, class_name: "OrderDetail", association: :statement
+    Bullet.add_safelist type: :unused_eager_loading, class_name: "PriceGroup", association: :parent_price_group
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Reservation", association: :order
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Service", association: :current_offline_reservations
     Bullet.add_safelist type: :unused_eager_loading, class_name: "Statement", association: :closed_events
