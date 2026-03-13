@@ -53,7 +53,7 @@ class ArchivedEmailsController < ApplicationController
 
   def redirect_with_error(error_key)
     flash[:error] = text(error_key)
-    redirect_back(fallback_location: billing_log_events_path)
+    redirect_back_or_to(billing_log_events_path)
   end
 
   def prepare_email_data(mail)

@@ -17,7 +17,7 @@ class NotificationsController < ApplicationController
     if @notices.none?
       flash[:notice] = I18n.t "controllers.notifications.no_notices"
 
-      redirect_back(fallback_location: root_path)
+      redirect_back_or_to(root_path)
     end
   end
 
