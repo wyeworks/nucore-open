@@ -56,12 +56,14 @@ namespace :order_details do
   task :uncancel, [:filename] => :environment do |_t, args|
     Rails.logger = Logger.new(STDOUT)
     uncanceler = OrderUncanceler.new
-    File.open(args[:filename]).each_line do |line|
-      order_detail = OrderDetail.find_by(id: line.chomp)
-      if order_detail
-        uncanceler.uncancel_to_complete(order_detail)
-      else
-        puts "Could not find order detail #{line}"
+    File.open(args[:filename]) do |file|
+      file.each_line do |line|
+        order_detail = OrderDetail.find_by(id: line.chomp)
+        if order_detail
+          uncanceler.uncancel_to_complete(order_detail)
+        else
+          puts "Could not find order detail #{line}"
+        end
       end
     end
   end
@@ -122,10 +124,12 @@ namespace :order_details do
 
       def self.remove_orders(file)
         OrderDetail.transaction do
-          File.open(file, "r").each_line do |line|
-            next unless /([0-9]+)-([0-9]+)/ =~ line
+          File.open(file, "r") do |file|
+            file.each_line do |line|
+              next unless /([0-9]+)-([0-9]+)/ =~ line
 
-            remove_order(OrderDetail.find(Regexp.last_match(2)))
+              remove_order(OrderDetail.find(Regexp.last_match(2)))
+            end
           end
         end
         puts "Done"

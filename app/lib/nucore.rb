@@ -19,4 +19,7 @@ module NUCore
 
   class PurchaseException < NUCore::Error; end
 
+  class OrderDetailUpdateException < NUCore::Error
+  end
+
 end
