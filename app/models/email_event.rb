@@ -29,7 +29,7 @@ class EmailEvent < ApplicationRecord
   end
 
   def self.key_for(keys)
-    Array(keys).map(&:to_s).join("/")
+    Array(keys).join("/")
   end
 
 end

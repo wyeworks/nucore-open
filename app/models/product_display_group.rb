@@ -14,7 +14,7 @@ class ProductDisplayGroup < ApplicationRecord
     name
   end
 
-  Fake = Struct.new(:name, :products, keyword_init: true) do
+  Fake = Struct.new(:name, :products) do
     def to_s
       name
     end
