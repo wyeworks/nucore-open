@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-module NUCore
-
-  class OrderDetailUpdateException < StandardError
-  end
-
-end
-
 class OrderDetailUpdater
 
   attr_reader :order, :params, :quantities_changed
