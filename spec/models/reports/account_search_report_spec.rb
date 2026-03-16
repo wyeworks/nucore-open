@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe Reports::AccountSearchReport do
+RSpec.describe Reports::AccountSearchReport, feature_setting: { account_tabs: false } do
   let(:facility) { build(:facility, name: "Single Facility", abbreviation: "SF") }
   let(:facility2) { build(:facility, name: "Other Facility", abbreviation: "OF") }
   let(:owner) { create(:user, first_name: "My", last_name: "Owner") }
