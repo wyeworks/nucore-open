@@ -119,8 +119,8 @@ module BulkEmail
     end
 
     def user_types
-      RecipientSearcher.user_types.each_with_object({}) do |user_type, hash|
-        hash[user_type] = I18n.t("bulk_email.user_type.#{user_type}")
+      RecipientSearcher.user_types.to_h do |user_type|
+        [user_type, I18n.t("bulk_email.user_type.#{user_type}")]
       end
     end
 

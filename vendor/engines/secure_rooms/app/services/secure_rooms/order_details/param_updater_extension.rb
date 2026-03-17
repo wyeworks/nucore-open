@@ -11,8 +11,10 @@ module SecureRooms
       included do
         permitted_attributes.append(
           occupancy_attributes: [
-            entry_at: [:date, :hour, :minute, :ampm],
-            exit_at: [:date, :hour, :minute, :ampm],
+            {
+              entry_at: [:date, :hour, :minute, :ampm],
+              exit_at: [:date, :hour, :minute, :ampm]
+            },
           ],
         )
       end
