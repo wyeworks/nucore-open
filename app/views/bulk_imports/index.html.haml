@@ -1,0 +1,32 @@
+= content_for :h1 do
+  = t("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "bulk_imports"
+
+%h2= t(".title")
+
+%p= link_to(t(".add"), new_bulk_import_path, class: "btn btn-success")
+
+%table.table.table-stripped
+  %thead
+    %tr
+      %th= BulkImport.human_attribute_name(:id)
+      %th= BulkImport.human_attribute_name(:created_at)
+      %th= BulkImport.human_attribute_name(:created_by)
+      %th= BulkImport.human_attribute_name(:import_type)
+      %th= BulkImport.human_attribute_name(:status)
+      %th= BulkImport.human_attribute_name(:file)
+  %tbody
+    - @bulk_imports.each do |bulk_import|
+      %tr
+        %td= link_to(bulk_import.id, bulk_import_path(bulk_import))
+        %td= I18n.l(bulk_import.created_at, format: :short)
+        %td= bulk_import.created_by.full_name
+        %td= bulk_import.import_type.humanize
+        %td= bulk_import.status.humanize
+        %td
+          - if bulk_import.file.present?
+            = link_to(bulk_import.file.filename, url_for(bulk_import.file))
+
+= will_paginate @bulk_imports

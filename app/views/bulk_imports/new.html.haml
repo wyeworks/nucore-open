@@ -1,0 +1,13 @@
+= content_for :h1 do
+  = t("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "bulk_imports"
+
+%h2= t(".title")
+
+= simple_form_for(@bulk_import, url: bulk_imports_path, method: :post) do |form|
+  = render("form", form:)
+  = form.submit t("shared.create"),
+    class: "btn btn-primary",
+    data: { disable_with: t("shared.create") }

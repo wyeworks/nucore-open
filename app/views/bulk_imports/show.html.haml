@@ -1,0 +1,19 @@
+= content_for :h1 do
+  = t("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "bulk_imports"
+
+%h2= t(".title", id: @bulk_import.id)
+
+= readonly_form_for(:bulk_import, @bulk_import) do |form|
+  = render("form", form:)
+
+  = form.input :created_by,
+    input_html: { value: @bulk_import.created_by.full_name }
+
+  = form.input :status,
+    input_html: { value: @bulk_import.status.humanize }
+
+- if @bulk_import.file.present?
+  = link_to(@bulk_import.file.filename, url_for(@bulk_import.file))

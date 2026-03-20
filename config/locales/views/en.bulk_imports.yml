@@ -1,0 +1,12 @@
+en:
+  bulk_imports:
+    index:
+      title: Bulk Imports
+      add: New Bulk Import
+    show:
+      title: "Bulk Import %{id}"
+    new:
+      title: New Bulk Imports
+    create:
+      success: Bulk Import scheduled successfully
+      file_blank: File must be present

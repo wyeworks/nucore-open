@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_28_120000) do
+ActiveRecord::Schema[8.0].define(version: 2026_03_12_124843) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -112,6 +112,16 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_28_120000) do
     t.datetime "updated_at", precision: nil, null: false
     t.index ["facility_id"], name: "fk_rails_37dbedd2b3"
     t.index ["user_id"], name: "fk_rails_7cd8662ccc"
+  end
+
+  create_table "bulk_imports", charset: "utf8mb3", force: :cascade do |t|
+    t.string "import_type", null: false
+    t.string "status"
+    t.string "created_by_id", null: false
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["created_at", "import_type"], name: "index_bulk_imports_on_created_at_and_import_type"
   end
 
   create_table "bundle_products", id: :integer, charset: "utf8mb3", force: :cascade do |t|
