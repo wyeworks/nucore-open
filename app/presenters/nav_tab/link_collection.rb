@@ -123,7 +123,8 @@ class NavTab::LinkCollection
   end
 
   def admin_users
-    if single_facility? && (ability.can?(:manage, User) || ability.can?(:manage, FacilityUserPermission))
+    # TODO: This is reverted back to fix NU-473, but a better fix is needed so both Granular permissions and role-based permissions work.
+    if single_facility? && (ability.can?(:administer, User) || ability.can?(:manage, FacilityUserPermission))
       NavTab::Link.new(tab: :admin_users, url: facility_users_path(facility))
     end
   end
