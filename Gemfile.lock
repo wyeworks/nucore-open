@@ -698,7 +698,7 @@ GEM
     temple (0.10.4)
     terrapin (1.1.1)
       climate_control
-    terser (1.2.6)
+    terser (1.2.7)
       execjs (>= 0.3.0, < 3)
     text_helpers (1.2.0)
       activesupport
