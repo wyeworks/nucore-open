@@ -1,3 +1,11 @@
+= content_for :head_content do
+  :javascript
+    $(function(){
+      $("#journals_create_form").submit(function(e) {
+        $(e.target).find(":submit").attr("disabled", "true");
+      });
+    });
+
 = render "shared/transactions/headers"
 
 - content_for :h1 do
