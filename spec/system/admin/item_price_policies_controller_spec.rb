@@ -72,6 +72,34 @@ RSpec.describe ItemPricePoliciesController, :js do
     include_examples "with hidden price groups", "item"
   end
 
+  context "External subsidy price groups", feature_setting: { external_price_group_subsidies: true, facility_directors_can_manage_price_groups: true } do
+    let!(:external_subsidy_group) { create(:price_group, facility: nil, is_internal: false, global: true, admin_editable: false, name: "External Subsidy", parent_price_group: external_price_group) }
+
+    it "syncs unit cost from external parent to subsidy row" do
+      visit new_facility_item_price_policy_path(facility, item)
+
+      fill_in "price_policy_#{base_price_group.id}[unit_cost]", with: "100.00"
+      fill_in "price_policy_#{external_price_group.id}[unit_cost]", with: "150.00"
+
+      # Verify external subsidy gets external rate (not base)
+      expect(page).to have_field("price_policy_#{external_subsidy_group.id}[unit_cost]", with: "150.00", type: :hidden)
+    end
+
+    it "can save price policies with external subsidies" do
+      visit new_facility_item_price_policy_path(facility, item)
+
+      fill_in "price_policy_#{base_price_group.id}[unit_cost]", with: "100.00"
+      fill_in "price_policy_#{external_price_group.id}[unit_cost]", with: "150.00"
+      fill_in "price_policy_#{external_subsidy_group.id}[unit_subsidy]", with: "25.00"
+      fill_in "note", with: "External subsidy test"
+
+      click_button "Add Pricing Rules"
+
+      expect(page).to have_content(table_row("#{external_price_group.name} (External)", "$150.00", "$0.00", "$150.00"))
+      expect(page).to have_content(table_row("#{external_subsidy_group.name} (External)", "$150.00", "$25.00", "$125.00"))
+    end
+  end
+
   def table_row(*columns)
     columns.join(" ")
   end
