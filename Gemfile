@@ -113,7 +113,7 @@ group :development do
   gem "haml_lint", require: false
   gem "letter_opener"
   gem "rack-mini-profiler", "~> 4.0"
-  gem "rubocop", "1.85.1", require: false
+  gem "rubocop", "1.86.0", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"
