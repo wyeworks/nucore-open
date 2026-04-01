@@ -17,7 +17,7 @@ module ReservationSwitch
     else
       respond_error(e.message)
     end
-  rescue NUCore::Error => e
+  rescue NUCore::Error, NetBooter::Error => e
     respond_error(e.message)
   end
 
