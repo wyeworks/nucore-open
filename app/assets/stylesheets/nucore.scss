@@ -548,6 +548,17 @@ select.tall {
   margin-right: 1em;
 }
 
+.no-stepper::-webkit-inner-spin-button,
+.no-stepper::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-stepper {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 .inline-block {
   display: inline-block;
 }
