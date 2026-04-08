@@ -147,7 +147,7 @@ GEM
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
       uri (>= 0.13.1)
-    addressable (2.8.9)
+    addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     amazing_print (2.0.0)
     ast (2.4.3)
@@ -423,7 +423,7 @@ GEM
       zeitwerk
     marcel (1.0.4)
     matrix (0.4.3)
-    mcp (0.10.0)
+    mcp (0.11.0)
       json-schema (>= 4.1)
     method_source (1.1.0)
     mime-types (3.7.0)
