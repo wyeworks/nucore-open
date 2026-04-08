@@ -5,7 +5,7 @@ class BulkImport < ApplicationRecord
 
   belongs_to :created_by, class_name: "User"
 
-  serialize :data, coder: JSON, type: Hash
+  store :data, accessors: %i[results load_errors failure], coder: JSON
 
   validates(
     :import_type,
@@ -28,7 +28,7 @@ class BulkImport < ApplicationRecord
     default: "new",
   )
 
-  has_one_attached :file
+  include DownloadableFile
 
   scope :by_date, -> { order(created_at: :desc) }
 

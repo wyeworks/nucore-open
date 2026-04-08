@@ -22,4 +22,6 @@ module NUCore
   class OrderDetailUpdateException < NUCore::Error
   end
 
+  class BulkImporterError < NUCore::Error; end
+
 end
