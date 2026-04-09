@@ -729,7 +729,7 @@ GEM
       axiom-types (~> 0.1)
       coercible (~> 1.0)
       descendants_tracker (~> 0.0, >= 0.0.3)
-    vuejs-rails (1.0.26)
+    vuejs-rails (2.5.13)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.3.0)
@@ -861,7 +861,7 @@ DEPENDENCIES
   text_helpers
   tzinfo-data
   unicorn
-  vuejs-rails (~> 1.0.26)
+  vuejs-rails (~> 2.5.13)
   web-console
   webmock
   webrick
