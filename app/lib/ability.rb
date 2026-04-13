@@ -484,7 +484,7 @@ class Ability
     can :index, Project
 
     can [:administer], User
-    can :index, User if controller.is_a?(FacilityUsersController)
+    can :index, User if controller.is_a?(FacilityUsersController) || controller.is_a?(UsersController)
   end
 
 

@@ -601,6 +601,18 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:administer, User) }
       it { is_expected.to be_allowed_to(:read, Schedule) }
       it { is_expected.to be_allowed_to(:read, ProductDisplayGroup) }
+
+      context "when accessing UsersController" do
+        let(:stub_controller) { UsersController.new }
+
+        it { is_expected.to be_allowed_to(:index, User) }
+      end
+
+      context "when accessing FacilityUsersController" do
+        let(:stub_controller) { FacilityUsersController.new }
+
+        it { is_expected.to be_allowed_to(:index, User) }
+      end
     end
 
     context "write abilities are denied" do
