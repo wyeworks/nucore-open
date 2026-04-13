@@ -14,6 +14,11 @@ module Nucore
       @is_mysql = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "mysql2"
     end
 
+    def self.postgresql?
+      return @is_postgresql if defined?(@is_postgresql)
+      @is_postgresql = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "postgresql"
+    end
+
     def self.boolean(value)
       # Oracle doesn't always properly handle boolean values correctly
       if oracle?
@@ -26,6 +31,8 @@ module Nucore
     def self.sample(scope, count = 1)
       if Nucore::Database.oracle?
         scope.order(Arel.sql("DBMS_RANDOM.VALUE")).limit(count)
+      elsif Nucore::Database.postgresql?
+        scope.order(Arel.sql("RANDOM()")).limit(count)
       else
         scope.order(Arel.sql("RAND()")).limit(count)
       end

@@ -48,7 +48,7 @@ class JournalCutoffDate < ApplicationRecord
   end
 
   def self.time_section_equal(section, time)
-    if Nucore::Database.oracle?
+    if Nucore::Database.oracle? || Nucore::Database.postgresql?
       # EXTRACT(MONTH from cutoff_date)
       where("EXTRACT(#{section} FROM cutoff_date) = ?", time)
     else
