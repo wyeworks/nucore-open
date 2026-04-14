@@ -92,7 +92,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def statement_date
-    statement.try(:invoice_date)
+    statement.try(:created_at)
   end
 
   def journal_or_statement_date
