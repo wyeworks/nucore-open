@@ -187,7 +187,7 @@ class Statement < ApplicationRecord
   end
 
   def set_default_invoice_date
-    self[:invoice_date] ||= Time.current.to_date
+    self[:invoice_date] ||= (created_at || Time.current).to_date
   end
 
   def invoice_date_cannot_be_in_future
