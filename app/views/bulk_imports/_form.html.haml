@@ -1,4 +1,4 @@
 = form.input :import_type,
-  collection: BulkImport.import_types.map { |t| [t.humanize, t] }
+  collection: BulkImport.import_types.map { |t| [import_type_label(t), t] }
 
 = form.input :file, as: :file

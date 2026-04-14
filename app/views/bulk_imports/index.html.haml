@@ -23,7 +23,7 @@
         %td= link_to(bulk_import.id, bulk_import_path(bulk_import))
         %td= I18n.l(bulk_import.created_at, format: :short)
         %td= bulk_import.created_by.full_name
-        %td= bulk_import.import_type.humanize
+        %td= import_type_label(bulk_import.import_type)
         %td= bulk_import.status.humanize
         %td
           - if bulk_import.file.present?

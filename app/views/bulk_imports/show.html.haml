@@ -8,7 +8,7 @@
 
 = readonly_form_for(:bulk_import, @bulk_import) do |form|
   = form.input :import_type,
-    input_html: { value: @bulk_import.import_type.humanize }
+    input_html: { value: import_type_label(@bulk_import.import_type) }
 
   = form.input :created_by,
     input_html: { value: @bulk_import.created_by.full_name }
