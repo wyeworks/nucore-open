@@ -18,6 +18,12 @@ module ActiveStorageFile
     end
   end
 
+  module ClassMethods
+    def includes_file
+      includes(file_attachment: :blob)
+    end
+  end
+
   def download_url
     file
   end

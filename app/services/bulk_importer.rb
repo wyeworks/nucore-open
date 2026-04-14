@@ -86,9 +86,11 @@ class BulkImporter
 
       results << result.to_s
     rescue NUCore::BulkImporterError => e
-      errors << (e.message || e.to_s)
-
-      raise ActiveRecord::Rollback if run_in_transaction?
+      errors << format_row_error(index + 1, e.message || e.to_s)
+    rescue ActiveRecord::RecordInvalid => e
+      errors << format_row_error(index + 1, e.record.errors.full_messages.join(". "))
+    ensure
+      raise ActiveRecord::Rollback if errors.present? && run_in_transaction?
     end
   end
 
@@ -153,5 +155,9 @@ class BulkImporter
       status: :failed,
       failure: message,
     )
+  end
+
+  def format_row_error(row_number, error_message)
+    "##{row_number}: #{error_message}"
   end
 end

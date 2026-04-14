@@ -5,6 +5,9 @@ en:
       add: New Bulk Import
     show:
       title: "Bulk Import %{id}"
+      failure: Failure Message
+      errors: Error Messages
+      results: Loaded Records
     new:
       title: New Bulk Imports
     create:

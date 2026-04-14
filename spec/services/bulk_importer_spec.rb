@@ -69,8 +69,8 @@ RSpec.describe BulkImporter do
 
         expect(bulk_import.load_errors).to(
           eq([
-               "Error loading val1",
-               "Error loading val3",
+               "#1: Error loading val1",
+               "#2: Error loading val3",
              ])
         )
       end

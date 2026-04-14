@@ -7,7 +7,12 @@ class BulkImportsController < ApplicationController
   before_action { @active_tab = "global_settings" }
 
   def index
-    @bulk_imports = @bulk_imports.by_date.paginate(page: params[:page])
+    @bulk_imports =
+      @bulk_imports
+      .by_date
+      .includes(:created_by)
+      .includes_file
+      .paginate(page: params[:page])
   end
 
   def show

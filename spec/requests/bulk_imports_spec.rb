@@ -61,6 +61,60 @@ RSpec.describe "bulk imports" do
 
         expect(page).to have_content("Bulk Import #{bulk_import.id}")
       end
+
+      context "when status failure" do
+        let(:failure_message) { "Something failed" }
+
+        before do
+          bulk_import.update(status: :failed, failure: failure_message)
+        end
+
+        it "shows failure message" do
+          action.call
+
+          expect(page).to have_text("Failure Message")
+          expect(page).to have_text(failure_message)
+        end
+      end
+
+      context "when errors is present" do
+        let(:error_messages) do
+          ["Error 1", "Error 2"]
+        end
+
+        before do
+          bulk_import.update(
+            status: :done_errors,
+            load_errors: error_messages,
+          )
+        end
+
+        it "show error messages" do
+          action.call
+
+          expect(page).to have_text("Error Messages")
+          error_messages.each do |error_message|
+            expect(page).to have_text(error_message)
+          end
+        end
+      end
+
+      context "when results is present" do
+        let(:results) { ["some-id", "other-id"] }
+
+        before do
+          bulk_import.update(status: :done, results:)
+        end
+
+        it "shows results" do
+          action.call
+
+          expect(page).to have_text("Loaded Records")
+          results.each do |result|
+            expect(page).to have_text(result)
+          end
+        end
+      end
     end
   end
 
