@@ -46,4 +46,5 @@ FROM base AS deploy
 ENV RAILS_ENV=production
 RUN bundle install --without=development test
 # asset compile
+RUN yarn build
 RUN SECRET_KEY_BASE=fake bundle exec rake assets:precompile
