@@ -348,9 +348,9 @@ GEM
       temple (>= 0.8.2)
       thor
       tilt
-    haml_lint (0.72.0)
+    haml_lint (0.73.0)
       haml (>= 5.0)
-      parallel (~> 1.10)
+      parallel (>= 1.10)
       rainbow
       rubocop (>= 1.0)
       sysexits (~> 1.1)
@@ -423,7 +423,7 @@ GEM
       zeitwerk
     marcel (1.0.4)
     matrix (0.4.3)
-    mcp (0.10.0)
+    mcp (0.11.0)
       json-schema (>= 4.1)
     method_source (1.1.0)
     mime-types (3.7.0)
@@ -578,7 +578,7 @@ GEM
       psych (>= 4.0.0)
       tsort
     redcarpet (3.6.1)
-    regexp_parser (2.11.3)
+    regexp_parser (2.12.0)
     reline (0.6.3)
       io-console (~> 0.5)
     request_store (1.7.0)
