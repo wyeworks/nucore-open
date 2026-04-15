@@ -28,7 +28,7 @@
             %td.centered
               = pp.text_field :unit_cost, value: number_to_currency(price_policy.unit_cost, unit: "", delimiter: ""),
                 size: 8,
-                data: { price_group_id: price_group.id }
+                data: { price_group_id: price_group.id, target: ".js--unitRate" }
             %td.centered
           - elsif price_group.master_internal?
             %td.centered

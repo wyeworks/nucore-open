@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class Product < ApplicationRecord; end
-
 class UpdateCrossCoreOrderingAvailableInProducts < ActiveRecord::Migration[7.0]
+  class Product < ApplicationRecord; end
+
   def up
     change_column :products, :cross_core_ordering_available, :boolean, default: false, null: false
 

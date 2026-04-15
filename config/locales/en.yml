@@ -732,6 +732,8 @@ en:
     account_field:
       prompt: "Please select a payment source"
       note_hint: Visible to facility staff only
+    instrument_switcher:
+      cannot_switch_error: "Cannot switch instrument on/off on this reservation"
 
   statements:
     index:
@@ -1137,6 +1139,8 @@ en:
       not_found: We cannot find %{email} in our records.
 
   reports:
+    export_raw_reports:
+      date_range_too_large: "Date range can be up to %{days} days"
     export_as_csv: "!reports.account_transactions.export!"
     fields:
       between: between

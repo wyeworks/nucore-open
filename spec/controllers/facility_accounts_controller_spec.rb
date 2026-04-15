@@ -239,10 +239,18 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
       end
 
       context "with CSV format" do
-        it "enqueues AccountSearchResultMailer with search term" do
+        it "enqueues CsvReportEmailJob with search term" do
           expect do
             get :search_results, params: { facility_id: facility.url_name, search_term: account.account_number.first(3), format: :csv }
-          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
+          end.to have_enqueued_job(CsvReportEmailJob)
+        end
+
+        it "sends an email" do
+          perform_enqueued_jobs do
+            get :search_results, params: { facility_id: facility.url_name, search_term: account.account_number.first(3), format: :csv }
+          end
+
+          expect(ActionMailer::Base.deliveries.length).to eq(1)
         end
       end
     end
@@ -263,41 +271,85 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
       end
 
       context "with CSV format and no search term" do
-        it "enqueues AccountSearchResultMailer with blank search term" do
+        it "enqueues CsvReportEmailJob with blank search term" do
           expect do
             get :search_results, params: { facility_id: facility.url_name, format: :csv }
-          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
-            .with(anything, "", anything, { filter_params: hash_including(account_type: nil, suspended: nil, account_status: nil) })
+          end.to(
+            have_enqueued_job(CsvReportEmailJob).with(
+              Reports::AccountSearchReport.to_s,
+              anything,
+              hash_including(
+                search_term: "",
+                filter_params: hash_including(
+                  account_type: nil,
+                  suspended: nil,
+                  account_status: nil,
+                )
+              )
+            )
+          )
         end
 
         it "respects suspended filter" do
           expect do
             get :search_results, params: { facility_id: facility.url_name, suspended: "true", format: :csv }
-          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
-            .with(anything, "", anything, { filter_params: hash_including(suspended: "true") })
+          end.to(
+            have_enqueued_job(CsvReportEmailJob).with(
+              Reports::AccountSearchReport.to_s,
+              anything,
+              hash_including(
+                search_term: "",
+                filter_params: hash_including(suspended: "true"),
+              )
+            )
+          )
         end
 
         it "respects account_status filter" do
           expect do
             get :search_results, params: { facility_id: facility.url_name, account_status: "active", format: :csv }
-          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
-            .with(anything, "", anything, { filter_params: hash_including(account_status: "active") })
+          end.to(
+            have_enqueued_job(CsvReportEmailJob).with(
+              Reports::AccountSearchReport.to_s,
+              anything,
+              hash_including(
+                search_term: "",
+                filter_params: hash_including(account_status: "active"),
+              )
+            )
+          )
         end
 
         it "respects account_type filter" do
           expect do
             get :search_results, params: { facility_id: facility.url_name, account_type: "NufsAccount", format: :csv }
-          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
-            .with(anything, "", anything, { filter_params: hash_including(account_type: "NufsAccount") })
+          end.to(
+            have_enqueued_job(CsvReportEmailJob).with(
+              Reports::AccountSearchReport.to_s,
+              anything,
+              hash_including(
+                search_term: "",
+                filter_params: hash_including(account_type: "NufsAccount"),
+              )
+            )
+          )
         end
       end
 
       context "with CSV format and search term" do
-        it "enqueues AccountSearchResultMailer with search term and filtered scope" do
+        it "enqueues CsvReportEmailJob with search term and filtered scope" do
           expect do
             get :search_results, params: { facility_id: facility.url_name, search_term: "ACTIVE", account_status: "active", format: :csv }
-          end.to have_enqueued_mail(AccountSearchResultMailer, :search_result)
-            .with(anything, "ACTIVE", anything, { filter_params: hash_including(account_status: "active") })
+          end.to(
+            have_enqueued_job(CsvReportEmailJob).with(
+              Reports::AccountSearchReport.to_s,
+              anything,
+              hash_including(
+                search_term: "ACTIVE",
+                filter_params: hash_including(account_status: "active"),
+              )
+            )
+          )
         end
       end
     end

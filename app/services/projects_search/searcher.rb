@@ -61,8 +61,8 @@ module ProjectsSearch
       end
 
       def to_options_by_searcher
-        @to_h ||= options.each_with_object({}) do |searcher, hash|
-          hash[searcher.key] = searcher.options
+        @to_h ||= options.to_h do |searcher|
+          [searcher.key, searcher.options]
         end
       end
 

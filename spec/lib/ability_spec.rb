@@ -601,6 +601,18 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:administer, User) }
       it { is_expected.to be_allowed_to(:read, Schedule) }
       it { is_expected.to be_allowed_to(:read, ProductDisplayGroup) }
+
+      context "when accessing UsersController" do
+        let(:stub_controller) { UsersController.new }
+
+        it { is_expected.to be_allowed_to(:index, User) }
+      end
+
+      context "when accessing FacilityUsersController" do
+        let(:stub_controller) { FacilityUsersController.new }
+
+        it { is_expected.to be_allowed_to(:index, User) }
+      end
     end
 
     context "write abilities are denied" do
@@ -611,6 +623,9 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:manage, FacilityUserPermission) }
       it { is_expected.not_to be_allowed_to(:edit, facility) }
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
+      it { is_expected.not_to be_allowed_to(:manage, FacilityAccount) }
+      it { is_expected.not_to be_allowed_to(:manage, OrderStatus) }
+      it { is_expected.not_to be_allowed_to(:create, PriceGroup) }
     end
 
     context "with billing_send" do
@@ -623,6 +638,25 @@ RSpec.describe Ability do
       end
 
       it { is_expected.to be_allowed_to(:manage, FacilityUserPermission) }
+      it_is_allowed_to([:edit, :update], Facility)
+      it { is_expected.to be_allowed_to(:manage, FacilityAccount) }
+      it { is_expected.to be_allowed_to(:manage, PriceGroup) }
+      it { is_expected.to be_allowed_to(:manage, PriceGroupProduct) }
+      it { is_expected.to be_allowed_to(:manage, AccountPriceGroupMember) }
+      it { is_expected.to be_allowed_to(:manage, UserPriceGroupMember) }
+      it { is_expected.to be_allowed_to(:manage, OrderStatus) }
+
+      # Should not grant broader facility abilities
+      it { is_expected.not_to be_allowed_to(:act_as, facility) }
+    end
+
+    context "with only assign_permissions (no other flags)" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, assign_permissions: true)
+      end
+
+      it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
+      it { is_expected.not_to be_allowed_to(:manage, OrderDetail) }
     end
 
     context "with order_management" do
@@ -640,6 +674,69 @@ RSpec.describe Ability do
       # Admin reservation actions belong to instrument_management, not order_management
       it_is_not_allowed_to([:create, :edit_admin, :update_admin], Reservation)
       it { is_expected.not_to be_allowed_to(:manage, OfflineReservation) }
+
+      context "cross-core order abilities" do
+        let(:other_facility) { create(:setup_facility) }
+        let(:other_facility_item) { create(:setup_item, facility: other_facility) }
+        let(:cross_core_project) { create(:project, facility:) }
+        let!(:cross_core_order) { create(:purchased_order, product: other_facility_item, account: create(:setup_account), cross_core_project:) }
+        let(:cross_core_order_detail) { cross_core_order.order_details.first }
+
+        context "when managing cross-core order details" do
+          let(:subject_resource) { cross_core_order_detail }
+
+          it_is_allowed_to([:add_accessories, :new, :show, :update, :cancel, :template_results], OrderDetail)
+        end
+
+        context "when managing cross-core reservations" do
+          let(:other_facility_instrument) { create(:setup_instrument, facility: other_facility) }
+          let!(:cross_core_instrument_order) { create(:purchased_order, product: other_facility_instrument, account: create(:setup_account), cross_core_project:) }
+          let(:reservation) { create(:reservation, product: other_facility_instrument, order_detail: cross_core_instrument_order.order_details.first) }
+          let(:subject_resource) { reservation }
+          let(:stub_controller) { ReservationsController.new }
+
+          it { is_expected.to be_allowed_to(:manage, Reservation) }
+        end
+
+        context "when destroying cross-core order details" do
+          let(:stub_controller) { FacilityOrderDetailsController.new }
+          let(:subject_resource) { facility }
+
+          it "allows destroying the cross-core order detail" do
+            expect(ability).to be_allowed_to(:destroy, cross_core_order_detail)
+          end
+        end
+
+        context "when searching accounts for cross-core orders" do
+          let(:stub_controller) { FacilityAccountsController.new }
+
+          it { is_expected.to be_allowed_to(:accounts_available_for_order, Account) }
+        end
+
+        context "when browsing products for cross-core ordering" do
+          let(:stub_controller) { ProductsController.new }
+
+          it { is_expected.to be_allowed_to(:available_for_cross_core_ordering, Product) }
+        end
+
+        context "without order_management at the project facility" do
+          let(:third_facility) { create(:setup_facility) }
+          let(:third_facility_project) { create(:project, facility: third_facility) }
+          let(:third_facility_item) { create(:setup_item, facility: third_facility) }
+          let!(:unrelated_cross_core_order) { create(:purchased_order, product: third_facility_item, account: create(:setup_account), cross_core_project: third_facility_project) }
+          let(:unrelated_order_detail) { unrelated_cross_core_order.order_details.first }
+          let(:subject_resource) { unrelated_order_detail }
+
+          # Must test against instances (not OrderDetail class) because all_role_abilities
+          # grants conditional abilities (order: { user_id: user.id }) that CanCanCan
+          # cannot evaluate against the class.
+          it "does not allow cross-core actions on the order detail" do
+            %i[add_accessories new update cancel template_results].each do |action|
+              expect(ability).not_to be_allowed_to(action, unrelated_order_detail)
+            end
+          end
+        end
+      end
     end
 
     context "with price_adjustment" do

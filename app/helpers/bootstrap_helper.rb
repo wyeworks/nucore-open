@@ -27,7 +27,7 @@ module BootstrapHelper
   end
 
   def status_badge(order_detail)
-    classes = ["label", "status-#{order_detail.order_status.root.name.underscore}"]
+    classes = ["label", "status-#{order_detail.order_status.root.name.parameterize}"]
     content_tag :span, order_detail.order_status, class: classes
   end
 

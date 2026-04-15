@@ -34,8 +34,8 @@ class ResearchSafetyCertificationLookup
   end
 
   def certificates_with_status
-    ResearchSafetyCertificate.ordered.each_with_object({}) do |certificate, hash|
-      hash[certificate] = adapter.certified?(certificate)
+    ResearchSafetyCertificate.ordered.to_h do |certificate|
+      [certificate, adapter.certified?(certificate)]
     end
   end
 

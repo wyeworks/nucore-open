@@ -49,8 +49,43 @@ RSpec.describe AutoLogout, :time_travel do
       action.perform
     end
 
+    it "updates the instrument status to off" do
+      action.perform
+      status = InstrumentStatus.find_by(instrument: reservation.product)
+      expect(status.is_on).to be false
+    end
+
     it "triggers an email" do
       expect { action.perform }.to enqueue_mail(ProblemOrderMailer, :notify_user)
+    end
+  end
+
+  describe "a started reservation with 0-minute auto logout" do
+    let(:relay) { build_stubbed(:relay, auto_logout: true, auto_logout_minutes: 0) }
+    let!(:reservation) { create(:purchased_reservation, :yesterday, actual_start_at: 1.day.ago) }
+
+    include_context "all instruments return a relay"
+
+    before do
+      reservation.product.price_policies.destroy_all
+      create :instrument_usage_price_policy, price_group: reservation.product.facility.price_groups.last, usage_rate: 1, product: reservation.product
+      reservation.reload
+
+      expect(relay).to receive(:deactivate)
+    end
+
+    it "deactivates the relay" do
+      action.perform
+    end
+
+    it "moves to problem queue" do
+      expect { action.perform }.to change { order_detail.reload.problem_order? }.to(true)
+    end
+
+    it "updates the instrument status to off" do
+      action.perform
+      status = InstrumentStatus.find_by(instrument: reservation.product)
+      expect(status.is_on).to be false
     end
   end
 

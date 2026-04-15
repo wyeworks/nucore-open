@@ -1778,6 +1778,17 @@ RSpec.describe Reservation do
           subject.run_callbacks(:save) { false }
           expect(subject.billable_minutes).to eq 88
         end
+
+        it "falls back to reserved duration when actual times are nil (e.g. instrument without relay)" do
+          subject.assign_attributes(
+            actual_start_at: nil,
+            actual_end_at: nil,
+            reserve_start_at: 90.minutes.ago,
+            reserve_end_at: 30.minutes.ago,
+          )
+          subject.run_callbacks(:save) { false }
+          expect(subject.billable_minutes).to eq 60
+        end
       end
     end
 

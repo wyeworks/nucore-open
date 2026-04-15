@@ -38,7 +38,11 @@ class AutoLogout
 
   def logout_and_move_to_problem_queue(order_detail)
     reservation = order_detail.reservation
-    reservation.product.relay.deactivate unless reservation.other_reservation_using_relay?
+    unless reservation.other_reservation_using_relay?
+      InstrumentStatus.with_lock_for(reservation.product) do
+        reservation.product.relay.deactivate
+      end
+    end
     MoveToProblemQueue.move!(order_detail, cause: :auto_logout)
   rescue => e
     ActiveSupport::Notifications.instrument("background_error",

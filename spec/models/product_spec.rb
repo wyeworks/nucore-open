@@ -126,6 +126,7 @@ RSpec.describe Product do
     end
 
     context "with overlapping price policies" do
+      subject(:product) { create(:setup_instrument) }
       let!(:order) { FactoryBot.create(:setup_order, product: product) }
       let!(:order_detail) { order.order_details.first }
       let!(:price_policy) do

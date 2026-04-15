@@ -77,7 +77,7 @@ gem "rubyzip"
 gem "prawn-rails"
 
 ## Email
-gem "mailgun-ruby", "~>1.4.2"
+gem "mailgun-ruby", "~>1.4.3"
 
 ## other
 gem "delayed_job_active_record"
@@ -113,7 +113,7 @@ group :development do
   gem "haml_lint", require: false
   gem "letter_opener"
   gem "rack-mini-profiler", "~> 4.0"
-  gem "rubocop", "1.84.1", require: false
+  gem "rubocop", "1.85.1", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec"

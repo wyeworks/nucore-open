@@ -346,11 +346,17 @@ class Ability
 
     if permission.assign_permissions?
       can :manage, FacilityUserPermission
+      can :update, Facility
+      can :manage, FacilityAccount
+      can :manage, PriceGroup
+      can :manage, [AccountPriceGroupMember, UserPriceGroupMember]
+      can :manage, PriceGroupProduct
+      can :manage, OrderStatus
     end
 
     if permission.billing_send?
       can :manage_billing, resource
-      can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility
+      can [:disputed_orders, :transactions, :reassign_chart_strings, :confirm_transactions], Facility
     end
 
     if permission.product_management?
@@ -395,6 +401,9 @@ class Ability
       can(:switch_to, User, &:active?)
       can :read, Notification
 
+      can [:transactions, :disputed_orders], Facility
+      can :manage, OrderImport
+
       can [:upload_sample_results, :destroy], StoredFile do |fileupload|
         fileupload.file_type == "sample_result"
       end
@@ -411,7 +420,7 @@ class Ability
       can [:send_receipt, :show], Order
       can [:accounts, :index, :orders, :show, :administer], User
       can :manage, AccountUser
-      can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility
+      can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :move_transactions], Facility
       can :manage, Account do |account|
         account.global? || account.account_facility_joins.any? { |af| af.facility_id == resource.id }
       end
@@ -475,7 +484,7 @@ class Ability
     can :index, Project
 
     can [:administer], User
-    can :index, User if controller.is_a?(FacilityUsersController)
+    can :index, User if controller.is_a?(FacilityUsersController) || controller.is_a?(UsersController)
   end
 
 
@@ -609,19 +618,19 @@ class Ability
   def cross_core_abilities(user, resource, controller)
     if controller.is_a?(FacilityOrdersController) || controller.is_a?(ProductsController)
       can :available_for_cross_core_ordering, Product
-    elsif controller.is_a?(FacilityAccountsController) && user.facility_staff_or_manager_of_any_facility?
+    elsif controller.is_a?(FacilityAccountsController) && can_manage_cross_core_orders_at_any_facility?(user)
       can [:accounts_available_for_order], Account
     elsif controller.is_a?(FacilityOrderDetailsController) && resource.is_a?(Facility)
       can [:destroy], OrderDetail do |order_detail|
         project = order_detail.order.cross_core_project
 
-        project.present? && (user.facility_staff_or_manager_of?(project.facility) || user.facility_staff_or_manager_of?(order_detail.order.facility))
+        project.present? && (can_manage_cross_core_orders_at?(user, project.facility) || can_manage_cross_core_orders_at?(user, order_detail.order.facility))
       end
     elsif controller.is_a?(ReservationsController) && resource.is_a?(Reservation)
       project = resource.order_detail.order.cross_core_project
 
       if project.present?
-        can :manage, Reservation if user.facility_staff_or_manager_of?(project.facility)
+        can :manage, Reservation if can_manage_cross_core_orders_at?(user, project.facility)
       end
     end
 
@@ -629,7 +638,7 @@ class Ability
       project = resource.order.cross_core_project
 
       if project.present?
-        can [:add_accessories, :new, :show, :update, :cancel, :template_results], OrderDetail if user.facility_staff_or_manager_of?(project.facility)
+        can [:add_accessories, :new, :show, :update, :cancel, :template_results], OrderDetail if can_manage_cross_core_orders_at?(user, project.facility)
       end
     end
 
@@ -638,11 +647,31 @@ class Ability
         project = fileupload.order_detail.project
 
         project&.cross_core? &&
-          (user.facility_staff_or_manager_of?(project.facility) ||
-            user.facility_staff_or_manager_of?(order_detail.order.facility)) &&
+          (can_manage_cross_core_orders_at?(user, project.facility) ||
+            can_manage_cross_core_orders_at?(user, fileupload.order_detail.order.facility)) &&
           fileupload.file_type == "sample_result"
       end
     end
+  end
+
+  def can_manage_cross_core_orders_at?(user, facility)
+    user.facility_staff_or_manager_of?(facility) ||
+      has_order_management_permission?(user, facility)
+  end
+
+  def can_manage_cross_core_orders_at_any_facility?(user)
+    user.facility_staff_or_manager_of_any_facility? ||
+      has_any_order_management_permission?(user)
+  end
+
+  def has_order_management_permission?(user, facility)
+    SettingsHelper.feature_on?(:granular_permissions) &&
+      user.facility_user_permissions.find_by(facility:)&.order_management?
+  end
+
+  def has_any_order_management_permission?(user)
+    SettingsHelper.feature_on?(:granular_permissions) &&
+      user.facility_user_permissions.exists?(order_management: true)
   end
 
 

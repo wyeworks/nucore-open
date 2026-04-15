@@ -65,7 +65,7 @@ $(document).ready(function() {
   // Update external subsidy rows when parent external group fields change
   const updateExternalSubsidyFields = function($sourceElement) {
     const $row = $sourceElement.parents("tr");
-    const priceGroupId = $row.find(".usage_rate").data("price-group-id");
+    const priceGroupId = $row.find("[data-price-group-id]").first().data("price-group-id");
     if (!priceGroupId) return;
 
     const target = $sourceElement.data("target");

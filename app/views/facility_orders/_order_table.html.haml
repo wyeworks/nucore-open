@@ -1,6 +1,6 @@
 %tbody{ id: "facility_id_#{facility_id}", class: "js--orderTableRefresh" }
   - OrderDetailPresenter.wrap(order_details).each do |od|
-    %tr{class: [od.parent_order_detail_id ? "child" : "parent", "status-#{od.order_status.root.name.underscore}", flash[:updated_order_details].try(:include?, od.id) ? "updated-order-detail" : ""] }
+    %tr{class: [od.parent_order_detail_id ? "child" : "parent", "status-#{od.order_status.root.name.parameterize}", flash[:updated_order_details].try(:include?, od.id) ? "updated-order-detail" : ""] }
       %th.order-id{scope: "row"}
         - if cross_core
           = od
