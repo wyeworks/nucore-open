@@ -14,21 +14,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_$NODE_MAJOR.x | bash -
 RUN apt-get install --yes libvips42 nodejs
 RUN npm install --global yarn
 
-# Copy just what we need in order to bundle
-COPY Gemfile Gemfile.lock .ruby-version /app/
-# We reference the engines in the Gemfile, so we need them to be there, too
-COPY vendor/engines /app/vendor/engines
-
-# Install Bundler 2
-RUN gem install bundler --version=$(cat Gemfile.lock | tail -1 | tr -d " ")
-
-# Build bundle
-RUN bundle install
-
-RUN yarn install --non-interactive
-
-# Copy application code base into image
 COPY . /app
+
+RUN gem install bundler --version=$(cat Gemfile.lock | tail -1 | tr -d " ")
+RUN bundle install
+RUN yarn install --non-interactive
 
 RUN cp config/database.yml.mysql.template config/database.yml && \
   cp config/secrets.yml.template config/secrets.yml
