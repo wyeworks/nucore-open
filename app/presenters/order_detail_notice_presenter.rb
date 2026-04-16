@@ -9,21 +9,16 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   end
 
   def statuses
-    values = if SettingsHelper.feature_on?(:stored_order_notices)
-               notice_keys
-             else
-               notices_service.notices
-             end
+    values = notice_keys
+    values += notices_service.dynamic_notices
+
     values.map { |s| Notice.new(s) }
   end
 
   def warnings
     if problem?
-      problem_key = if SettingsHelper.feature_on?(:stored_order_notices)
-                      problem_description_key
-                    else
-                      notices_service.problems.first
-                    end
+      problem_key = problem_description_key
+
       [Notice.new(problem_key || :problem_out_of_sync, :warning)]
     else
       []

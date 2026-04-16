@@ -15,15 +15,22 @@ module OrderDetails
 
       statuses = []
 
-      statuses << :in_review if in_review?
       statuses << :in_dispute if in_dispute? && !global_admin_must_resolve?
       statuses << :global_admin_must_resolve if in_dispute? && global_admin_must_resolve?
       statuses << :missing_form if missing_form? && !problem?
       statuses << :can_reconcile if can_reconcile_journaled?
       statuses << :in_open_journal if in_open_journal?
+      statuses << :awaiting_payment if awaiting_payment?
+
+      statuses
+    end
+
+    def dynamic_notices
+      statuses = []
+
+      statuses << :in_review if in_review?
       statuses << :ready_for_statement if ready_for_statement?
       statuses << :ready_for_journal if ready_for_journal? && SettingsHelper.feature_on?(:ready_for_journal_notice)
-      statuses << :awaiting_payment if awaiting_payment?
 
       statuses
     end

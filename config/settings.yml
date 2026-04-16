@@ -178,7 +178,6 @@ feature:
   add_accessories_before_reservation_starts: false
   billing_table_price_groups: false
   reference_statement_invoice_number: false
-  stored_order_notices: false
   account_tabs: false
   user_based_price_groups_exclude_purchaser: false
   item_initial_order_status_complete: false
