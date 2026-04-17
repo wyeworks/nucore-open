@@ -5,14 +5,21 @@
 = content_for :sidebar do
   = render "admin/shared/sidenav_billing", sidenav_tab: "statement_history"
 
-= simple_form_for @search_form, url: url_for, method: :get, html: { class: "search_form" }, defaults: { required: false } do |f|
+= simple_form_for @search_form, url: url_for, method: :get,
+  html: { class: "search_form" }, defaults: { required: false } do |f|
   .row
-    %fieldset.col-md-6#search
+    %fieldset.col-md-8#search
       - if @search_form.facility_filter?
-        = f.input :facilities, collection: @search_form.available_facilities, as: :transaction_chosen, input_html: { class: "js--chosen" }
-      = f.input :accounts, collection: @search_form.available_accounts, as: :transaction_chosen, input_html: { class: "js--chosen" }, label_method: :account_list_item
-      = f.input :account_admins, collection: @search_form.available_account_admins, as: :transaction_chosen, input_html: { class: "js--chosen" }, label: Statement.human_attribute_name(:account_admins), hint: text(".account_admins_hint")
-    %fieldset.col-md-2
+        = f.input :facilities, collection: @search_form.available_facilities,
+          as: :transaction_chosen, input_html: { class: "js--chosen chosen-full-width" }
+      = f.input :accounts, collection: @search_form.available_accounts,
+        as: :transaction_chosen, input_html: { class: "js--chosen chosen-full-width" },
+        label_method: :account_list_item
+      = f.input :account_admins, collection: @search_form.available_account_admins,
+        as: :transaction_chosen, input_html: { class: "js--chosen chosen-full-width" },
+        label: Statement.human_attribute_name(:account_admins),
+        hint: text(".account_admins_hint")
+    %fieldset.col-md-4
       = f.input :status, collection: @search_form.available_statuses
       = f.input :date_range_start, input_html: { class: "datepicker__data" }
       = f.input :date_range_end, input_html: { class: "datepicker__data" }

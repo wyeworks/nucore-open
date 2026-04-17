@@ -4,9 +4,22 @@
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
 window.ChosenActivator = class ChosenActivator {
+  static activateChosen(elem, options = null) {
+    elem = $(elem);
+
+    options = {...options }
+    if (elem.hasClass("chosen-full-width")) {
+      options.width = "100%";
+    }
+    elem.chosen(options);
+  }
+
   static activate() {
-    $(".js--chosen").not(".optional").chosen();
-    return $(".js--chosen.optional").chosen({allow_single_deselect: true});
+    $(".js--chosen").not(".optional").each(function() { ChosenActivator.activateChosen(this) })
+
+    return $(".js--chosen.optional").each(function() {
+      ChosenActivator.activateChosen(this, {allow_single_deselect: true})
+    });
   }
 };
 
