@@ -12,7 +12,8 @@
 - else
   %h2= t(".head", model: account_class.model_name.human(count: 2))
 
-= render "shared/transactions/search"
+.col-md-12
+  = render "shared/transactions/search"
 
 - if @unreconciled_details.any?
   - show_reconciliation_deposit_number = SettingsHelper.feature_on?(:show_reconciliation_deposit_number)
@@ -36,7 +37,8 @@
 
   %p= will_paginate(@unreconciled_details)
 - else
-  %p.notice= t(".none", model: account_class.model_name.human(count: 2).downcase)
+  .col-md-12
+    %p.notice= t(".none", model: account_class.model_name.human(count: 2).downcase)
 
 - if view_hook_exists?("reconciliation_modal") && use_custom_reconciliation_features?(account_class)
   = render_view_hook("reconciliation_modal", account_class: account_class)
