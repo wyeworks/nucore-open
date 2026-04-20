@@ -3,8 +3,8 @@
 RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |product_sym|
   render_views
 
-  let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:product) { FactoryBot.create(product_sym, facility: facility) }
+  let(:facility) { create(:setup_facility) }
+  let(:product) { create(product_sym, facility: facility) }
   let(:senior_staff) { create(:user, :senior_staff, facility: facility) }
 
   let(:product_params) { { facility_id: facility.url_name, :"#{product_sym}_id" => product.url_name } }
@@ -68,7 +68,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
       post :create, params: product_params.merge(schedule_rule: rule_params)
     end
 
-    let(:rule_params) { FactoryBot.attributes_for(:schedule_rule, product_id: product.id) }
+    let(:rule_params) { attributes_for(:schedule_rule, product_id: product.id) }
 
     it "creates the schedule rule and redirects to index" do
       expect { do_request }.to change(ScheduleRule, :count).by(1)
@@ -76,7 +76,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
     end
 
     context "with product access groups" do
-      let!(:product_access_groups) { FactoryBot.create_list(:product_access_group, 3, product_id: product.id) }
+      let!(:product_access_groups) { create_list(:product_access_group, 3, product_id: product.id) }
 
       it "should come out with no restriction levels" do
         do_request
@@ -116,7 +116,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
   end
 
   describe "with an existing ScheduleRule" do
-    let(:rule) { product.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule)) }
+    let(:rule) { product.schedule_rules.create(attributes_for(:schedule_rule)) }
 
     describe "edit" do
       before do
@@ -131,7 +131,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
     end
 
     describe "update" do
-      let(:rule_params) { FactoryBot.attributes_for(:schedule_rule, :weekend) }
+      let(:rule_params) { attributes_for(:schedule_rule, :weekend) }
       def do_request
         sign_in senior_staff
         put :update, params: product_params.merge(
@@ -150,7 +150,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
       end
 
       context "with product access groups" do
-        let!(:product_access_groups) { FactoryBot.create_list(:product_access_group, 3, product_id: product.id) }
+        let!(:product_access_groups) { create_list(:product_access_group, 3, product_id: product.id) }
 
         it "should come out with no restriction levels" do
           do_request
@@ -205,6 +205,61 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
             expect(rule.end_hour).to eq(0)
             expect(rule.end_min).to eq(1)
           end
+        end
+      end
+    end
+
+    describe "price group discounts permissions" do
+      let(:user) { create(:user) }
+      let!(:facility_user_permission) do
+        FacilityUserPermission.create(user:, facility:, product_management: true)
+      end
+      let(:schedule_rule) { create(:schedule_rule, product:) }
+      let(:price_group_discount) do
+        PriceGroupDiscount.create(
+          price_group: PriceGroup.base,
+          discount_percent: 10,
+          schedule_rule:,
+        )
+      end
+      let(:params) do
+        product_params.merge(
+          id: schedule_rule.id,
+          schedule_rule: {
+            price_group_discounts_attributes: {
+              id: price_group_discount.id,
+              discount_percent: price_group_discount.discount_percent + 1,
+            }
+          }
+        )
+      end
+      let(:action) do
+        lambda do
+          put(:update, params:)
+        end
+      end
+
+      before do
+        sign_in user
+      end
+
+      context "when product pricing disabled" do
+        it "cannot update price group discount" do
+          expect { action.call }.not_to(
+            change { price_group_discount.reload.discount_percent }
+          )
+        end
+      end
+
+      context "when product pricing enabled" do
+        before do
+          facility_user_permission.update(product_pricing: true)
+        end
+
+        it "can update price group discount" do
+          expect { action.call }.to(
+            change { price_group_discount.reload.discount_percent }.by(1)
+          )
         end
       end
     end
