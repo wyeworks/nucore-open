@@ -17,3 +17,4 @@ en:
           billing_journals: Billing Journals
           instrument_management: Instrument Management
           assign_permissions: Assign Permissions
+          read_only: Read Only

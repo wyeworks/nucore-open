@@ -479,6 +479,7 @@ class Ability
     can :index, [BundleProduct, ScheduleRule, ProductAccessory, ProductAccessGroup]
     can [:index], StoredFile
     can [:instrument_status, :instrument_statuses], Instrument
+    can [:index, :dashboard, :tab_counts, :show], SecureRooms::Occupancy
 
     can [:show, :index], PriceGroup
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]

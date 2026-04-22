@@ -595,6 +595,7 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:show, OrderDetail) }
       it_is_allowed_to([:administer, :index, :show, :timeline], Reservation)
       it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
+      it_is_allowed_to([:index, :dashboard, :tab_counts, :show], SecureRooms::Occupancy)
       it_is_allowed_to([:show, :index], PriceGroup)
       it_is_allowed_to([:index], StoredFile)
       it { is_expected.to be_allowed_to(:index, Project) }
@@ -816,6 +817,31 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:manage, OrderDetail) }
       it { is_expected.to be_allowed_to(:act_as, facility) }
       it { is_expected.to be_allowed_to(:switch, Instrument) }
+    end
+
+    context "with only read_only (no other flags)" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, read_only: true)
+      end
+
+      it_is_allowed_to([:list, :dashboard, :show], Facility)
+      it_is_allowed_to([:administer, :index, :show, :tab_counts], Order)
+      it { is_expected.to be_allowed_to(:show, OrderDetail) }
+      it_is_allowed_to([:administer, :index, :show, :timeline], Reservation)
+      it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
+      it_is_allowed_to([:index, :dashboard, :tab_counts, :show], SecureRooms::Occupancy)
+      it { is_expected.to be_allowed_to(:index, Project) }
+
+      it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
+      it { is_expected.not_to be_allowed_to(:manage, Journal) }
+      it { is_expected.not_to be_allowed_to(:manage, Statement) }
+      it { is_expected.not_to be_allowed_to(:manage, FacilityUserPermission) }
+      it { is_expected.not_to be_allowed_to(:edit, facility) }
+      it { is_expected.not_to be_allowed_to(:act_as, facility) }
+      it { is_expected.not_to be_allowed_to(:manage, OrderDetail) }
+      it { is_expected.not_to be_allowed_to(:adjust_price, OrderDetail) }
+      it { is_expected.not_to be_allowed_to(:manage, Product) }
+      it { is_expected.not_to be_allowed_to(:manage, OfflineReservation) }
     end
   end
 
