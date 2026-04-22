@@ -7,7 +7,7 @@ RSpec.describe OrderDetails::NoticesService do
   let(:instance) { described_class.new(order_detail) }
 
   describe "statuses" do
-    subject { instance.notices }
+    subject { instance.notices + instance.dynamic_notices }
 
     it "shows nothing for a blank order detail" do
       is_expected.to be_blank
@@ -76,6 +76,38 @@ RSpec.describe OrderDetails::NoticesService do
       )
 
       is_expected.to include(:in_review, :in_dispute)
+    end
+
+    describe "in review" do
+      it "includes in review" do
+        order_detail.reviewed_at = 2.hours.from_now
+        is_expected.to include(:in_review)
+      end
+
+      context "in 3 hours" do
+        around do |example|
+          order_detail.reviewed_at = 2.hours.from_now
+          order_detail.account = build(:account)
+
+          travel_to_and_return(3.hours.from_now) do
+            example.run
+          end
+        end
+
+        it "does not include in review in three hours" do
+          is_expected.not_to include(:in_review)
+        end
+
+        context "when ready_for_journal notice enabled", feature_setting: { ready_for_journal_notice: true } do
+          before do
+            allow(Account.config).to receive(:using_journal?) { true }
+          end
+
+          it "includes ready for journal" do
+            is_expected.to include(:ready_for_journal)
+          end
+        end
+      end
     end
   end
 

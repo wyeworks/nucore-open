@@ -820,10 +820,6 @@ class OrderDetail < ApplicationRecord
     !valid_service_meta?
   end
 
-  def cached_missing_form?
-
-  end
-
   def ready_for_statement?
     reviewed? &&
       statement_id.blank? &&
