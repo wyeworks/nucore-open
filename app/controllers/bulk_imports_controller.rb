@@ -21,6 +21,12 @@ class BulkImportsController < ApplicationController
   def new
   end
 
+  def help
+    @importer_class = BulkImport.import_classes[params[:import_type]]
+
+    render partial: "bulk_imports/help"
+  end
+
   def create
     @bulk_import = BulkImport.new(create_params)
 

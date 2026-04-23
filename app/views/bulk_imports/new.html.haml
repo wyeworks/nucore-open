@@ -7,7 +7,14 @@
 %h2= t(".title")
 
 = simple_form_for(@bulk_import, url: bulk_imports_path, method: :post) do |form|
-  = render("form", form:)
-  = form.submit t("shared.create"),
-    class: "btn btn-primary",
-    data: { disable_with: t("shared.create") }
+  %div{data: { controller: "new-bulk-import" } }
+    = form.input :import_type,
+      collection: BulkImport.import_types.map { |t| [import_type_label(t), t] },
+      input_html: { data: { action: "new-bulk-import#updateHelp" } }
+    = form.input :file, as: :file
+
+    = render "help"
+
+    = form.submit t("shared.create"),
+      class: "btn btn-primary",
+      data: { disable_with: t("shared.create") }

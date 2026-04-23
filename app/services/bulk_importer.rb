@@ -41,6 +41,10 @@
 class BulkImporter
   attr_reader :bulk_import, :results, :errors
 
+  def self.required_headers
+    new(nil).required_headers
+  end
+
   def initialize(bulk_import)
     @bulk_import = bulk_import
     @results = []
@@ -75,6 +79,10 @@ class BulkImporter
   #
   def run_in_transaction?
     false
+  end
+
+  def required_headers
+    []
   end
 
   private
@@ -116,10 +124,6 @@ class BulkImporter
 
   def filecontent
     bulk_import.read_attached_file
-  end
-
-  def required_headers
-    []
   end
 
   def validate_headers!(row)

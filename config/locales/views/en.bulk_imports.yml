@@ -13,3 +13,4 @@ en:
     create:
       success: Bulk Import scheduled successfully
       file_blank: File must be present
+    help: "Required CSV columns are: %{headers}"

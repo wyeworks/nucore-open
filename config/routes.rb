@@ -383,7 +383,11 @@ Rails.application.routes.draw do
   resources :holidays, except: :show
   resources :log_events, only: :index
 
-  resources :bulk_imports, only: %i[index show new create]
+  resources :bulk_imports, only: %i[index show new create] do
+    collection do
+      get :help
+    end
+  end
 
   resources :billing_log_events, only: :index do
     resource :archived_email, only: [:show] do

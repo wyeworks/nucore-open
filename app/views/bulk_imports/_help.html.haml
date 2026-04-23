@@ -1,0 +1,4 @@
+= turbo_frame_tag("bulk-import-help", data: { base_url: help_bulk_imports_path, "new-bulk-import-target": "help" }) do
+  - if (required_headers = bulk_import_required_headers(@importer_class)).present?
+    .alert.alert-warning
+      %p= I18n.t("bulk_imports.help", headers: required_headers)
