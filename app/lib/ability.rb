@@ -265,6 +265,7 @@ class Ability
         ProductAccessory,
         ProductUser,
         ScheduleRule,
+        PriceGroupDiscount,
         StoredFile,
         TrainingRequest,
         OfflineReservation,
@@ -384,6 +385,7 @@ class Ability
       can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
       can :manage, PriceGroup
       can :manage, PriceGroupProduct
+      can :manage, PriceGroupDiscount
     end
 
     if permission.order_management?
