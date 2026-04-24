@@ -17,7 +17,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
         visit show_path
 
         expect(page).to have_content("Login")
-        expect(page).to_not have_content("Sanger")
+        expect(page).to_not have_content(I18n.t("sanger_sequencing.tabnav_product"))
         expect(page).to_not have_content(service.name)
       end
     end
@@ -49,7 +49,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
         visit show_path
 
         within(".nav-tabs") do
-          expect(page).to_not have_content("Sanger")
+          expect(page).to_not have_content(I18n.t("sanger_sequencing.tabnav_product"))
         end
       end
 
@@ -57,7 +57,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
         visit show_path
 
         within(".nav-tabs") do
-          expect(page).to have_content("Sanger")
+          expect(page).to have_content(I18n.t("sanger_sequencing.tabnav_product"))
         end
       end
     end
@@ -70,16 +70,16 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
       visit manage_facility_service_path(facility, service)
 
       within(".nav-tabs") do
-        click_link("Sanger")
+        click_link(I18n.t("sanger_sequencing.tabnav_product"))
       end
 
-      expect(page).to have_content("Sanger Configuration")
+      expect(page).to have_content(I18n.t("views.sanger_sequencing.sanger_products.show.title"))
     end
 
     it "shows sanger product information" do
       visit show_path
 
-      expect(page).to have_content("Sanger Configuration")
+      expect(page).to have_content(I18n.t("views.sanger_sequencing.sanger_products.show.title"))
       expect(page).to have_content("Needs a Primer")
       expect(page).to have_content("Plated Service Type")
       expect(page).to have_link("Edit")
@@ -96,7 +96,7 @@ RSpec.describe "Sanger Products", :disable_requests_local, feature_setting: { sa
 
       click_button("Save")
 
-      expect(page).to have_content("Sanger Configuration updated successfully")
+      expect(page).to have_content(I18n.t("controllers.sanger_sequencing/sanger_products.update.success"))
     end
 
     describe "primers change" do

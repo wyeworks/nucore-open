@@ -20,7 +20,7 @@ RSpec.describe "Sanger Sequencing Administration" do
       before do
         visit list_facilities_path
         click_link(facility.name, match: :first)
-        click_link("Sanger", match: :first)
+        click_link(I18n.t("sanger_sequencing.tabnav_product"), match: :first)
       end
 
       it "has only the purchased submission" do
