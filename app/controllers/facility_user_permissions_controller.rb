@@ -30,6 +30,11 @@ class FacilityUserPermissionsController < ApplicationController
     @user = User.find(params[:id])
     @permission = current_facility.facility_user_permissions.find_or_initialize_by(user: @user)
 
+    if @permission.new_record? && permission_params.values.all? { |v| ActiveModel::Type::Boolean.new.cast(v) == false }
+      flash[:notice] = text("update.success")
+      return redirect_to facility_facility_users_path(current_facility)
+    end
+
     if @permission.update(permission_params)
       if @permission.no_permissions?
         LogEvent.log(@permission, :delete, current_user, metadata: { loggable_to_s: @permission.to_log_s })

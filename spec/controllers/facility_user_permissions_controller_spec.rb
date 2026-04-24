@@ -116,9 +116,22 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
 
       it "destroys the record when all permissions are unchecked" do
         create(:facility_user_permission, user: target_user, facility:, product_management: true)
-        @params[:facility_user_permission] = { product_management: false }
+        @params[:facility_user_permission] = FacilityUserPermission::PERMISSIONS.index_with { false }
         expect { patch :update, params: @params }.to change { FacilityUserPermission.count }.by(-1)
         expect(FacilityUserPermission.find_by(user: target_user, facility:)).to be_nil
+      end
+
+      it "logs a delete event when the record is destroyed" do
+        permission = create(:facility_user_permission, user: target_user, facility:, product_management: true)
+        @params[:facility_user_permission] = FacilityUserPermission::PERMISSIONS.index_with { false }
+        patch :update, params: @params
+        expect(LogEvent).to be_exists(loggable: permission, event_type: :delete, user: @admin)
+      end
+
+      it "does not create a record when all permissions are unchecked on a new permission" do
+        @params[:facility_user_permission] = FacilityUserPermission::PERMISSIONS.index_with { false }
+        expect { patch :update, params: @params }.not_to change { FacilityUserPermission.count }
+        expect(response).to redirect_to(facility_facility_users_path(facility))
       end
     end
 

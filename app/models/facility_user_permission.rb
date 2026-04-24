@@ -6,6 +6,7 @@ class FacilityUserPermission < ApplicationRecord
   belongs_to :facility
 
   PERMISSIONS = %i[
+    read_access
     product_management
     product_pricing
     order_management
@@ -14,7 +15,6 @@ class FacilityUserPermission < ApplicationRecord
     billing_journals
     instrument_management
     assign_permissions
-    read_only
   ].freeze
 
   validates :user_id, uniqueness: { scope: :facility_id }

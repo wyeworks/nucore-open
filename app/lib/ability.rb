@@ -330,7 +330,7 @@ class Ability
     return unless facility
 
     permission = user.facility_user_permissions.find_by(facility:)
-    return unless permission
+    return unless permission&.read_access?
 
     if resource.is_a?(OrderDetail)
       can :show, OrderDetail, order: { facility_id: resource.order.facility_id }
@@ -479,7 +479,6 @@ class Ability
     can :index, [BundleProduct, ScheduleRule, ProductAccessory, ProductAccessGroup]
     can [:index], StoredFile
     can [:instrument_status, :instrument_statuses], Instrument
-    can [:index, :dashboard, :tab_counts, :show], SecureRooms::Occupancy
 
     can [:show, :index], PriceGroup
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
