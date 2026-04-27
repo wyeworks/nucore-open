@@ -11,6 +11,7 @@ en:
 
   date:
     formats:
+      default: "%m/%d/%Y"
       journal_line_reference: "%Y%m%d"
       timeline_navigation: "%a, %B %e, %Y"
       usa: "%m/%d/%Y"

@@ -9,7 +9,7 @@
   = f.input :owner_user, input_html: { value: @statement.account.owner_user.full_name }
   = f.input :account
   = f.input :created_at, input_html: { value: I18n.l(@statement.created_at) }
-  = f.input :invoice_date, input_html: { value: I18n.l(@statement.invoice_date, format: :usa) }
+  = f.input :invoice_date, input_html: { value: I18n.l(@statement.invoice_date) }
   = f.input :status,
     input_html: { value: Statement.human_attribute_name("status.#{@statement.status}") }
   = render_view_hook("readonly_form", form: f)
