@@ -821,11 +821,18 @@ class OrderDetail < ApplicationRecord
   end
 
   def ready_for_statement?
-    reviewed? && statement_id.blank? && Account.config.using_statements?(account.type) && !missing_form?
+    reviewed? &&
+      statement_id.blank? &&
+      Account.config.using_statements?(account.type) &&
+      problem_keys.exclude?(:missing_form)
   end
 
   def ready_for_journal?
-    reviewed? && journal_id.blank? && Account.config.using_journal?(account.type) && !reconciled? && !missing_form?
+    reviewed? &&
+      journal_id.blank? &&
+      Account.config.using_journal?(account.type) &&
+      !reconciled? &&
+      problem_keys.exclude?(:missing_form)
   end
 
   def awaiting_payment?

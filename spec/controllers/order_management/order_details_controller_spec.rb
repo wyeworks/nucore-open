@@ -169,7 +169,10 @@ RSpec.describe OrderManagement::OrderDetailsController do
         before :each do
           item_order_detail.change_status!(OrderStatus.complete)
           item_order_detail.update(reviewed_at: 1.day.ago)
-          journal.create_journal_rows! [item_order_detail]
+          # Needs job that sets order detail notices
+          perform_enqueued_jobs do
+            journal.create_journal_rows! [item_order_detail]
+          end
           item_order_detail.reload
           expect(item_order_detail.journal).to be_present
 
