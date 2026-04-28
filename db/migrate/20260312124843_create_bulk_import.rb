@@ -5,7 +5,7 @@ class CreateBulkImport < ActiveRecord::Migration[8.0]
     create_table :bulk_imports do |t|
       t.string :import_type, null: false
       t.string :status
-      t.string :created_by_id, null: false
+      t.integer :created_by_id, null: false
       t.text :data
 
       t.timestamps
