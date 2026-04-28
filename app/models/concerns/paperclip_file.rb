@@ -16,6 +16,13 @@ module PaperclipFile
     after_validation :clean_up_paperclip_errors
   end
 
+  module ClassMethods
+    def includes_file
+      # TODO: Add support for file assoc eager load
+      self
+    end
+  end
+
   def download_url
     file.expiring_url
   end
