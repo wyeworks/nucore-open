@@ -29,7 +29,7 @@ RSpec.describe "Schedule Rules" do
     let(:user) { create(:user) }
     let!(:facility_user_permission) do
       FacilityUserPermission.create(
-        user:, facility:, product_management: true,
+        user:, facility:, product_management: true, read_access: true,
       )
     end
     let(:schedule_rule) { create(:schedule_rule, product: instrument) }

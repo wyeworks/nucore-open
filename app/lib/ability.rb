@@ -330,7 +330,7 @@ class Ability
     return unless facility
 
     permission = user.facility_user_permissions.find_by(facility:)
-    return unless permission
+    return unless permission&.read_access?
 
     if resource.is_a?(OrderDetail)
       can :show, OrderDetail, order: { facility_id: resource.order.facility_id }

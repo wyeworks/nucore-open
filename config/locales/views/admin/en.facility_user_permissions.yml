@@ -9,6 +9,7 @@ en:
         user_info: User Info
         permissions: Permissions
         permission_labels:
+          read_access: Read Access
           product_management: Product Management
           product_pricing: Product Pricing
           order_management: Order Management

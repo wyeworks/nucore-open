@@ -29,6 +29,19 @@ module SecureRooms
         ability.can :manage, CardReader
         ability.can :show_problems, Occupancy
       end
+
+      if granted_read_access?(user, resource)
+        ability.can [:index, :dashboard, :tab_counts, :show], Occupancy
+      end
+    end
+
+    private
+
+    def granted_read_access?(user, resource)
+      return false unless SettingsHelper.feature_on?(:granular_permissions)
+      return false unless resource.is_a?(Facility)
+
+      user.facility_user_permissions.find_by(facility: resource)&.read_access?
     end
 
   end

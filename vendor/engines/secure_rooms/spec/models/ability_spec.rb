@@ -67,4 +67,14 @@ RSpec.describe Ability do
     it_is_allowed_to([:index, :dashboard, :tab_counts, :show_problems,
                       :assign_price_policies_to_problem_orders], SecureRooms::Occupancy)
   end
+
+  describe "granular permission user with read_access", feature_setting: { granular_permissions: true } do
+    let(:user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user:, facility:, read_access: true)
+    end
+
+    it_is_allowed_to([:index, :dashboard, :tab_counts, :show], SecureRooms::Occupancy)
+  end
 end

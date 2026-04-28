@@ -212,7 +212,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
     describe "price group discounts permissions" do
       let(:user) { create(:user) }
       let!(:facility_user_permission) do
-        FacilityUserPermission.create(user:, facility:, product_management: true)
+        FacilityUserPermission.create(user:, facility:, product_management: true, read_access: true)
       end
       let(:schedule_rule) { create(:schedule_rule, product:) }
       let(:price_group_discount) do
