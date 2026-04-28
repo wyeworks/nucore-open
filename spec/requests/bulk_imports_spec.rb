@@ -12,12 +12,24 @@ RSpec.describe "bulk imports" do
     end
   end
 
-  shared_examples "require login" do
+  shared_examples "on admin user" do
     it "redirects to login page" do
       action.call
 
       expect(response).to have_http_status(:found)
       expect(response.location).to eq(new_user_session_url)
+    end
+
+    context "when user is non administrator" do
+      let(:user) { create(:user, :global_billing_administrator) }
+
+      before { login_as user }
+
+      it "responds forbidden" do
+        action.call
+
+        expect(response).to have_http_status(:forbidden)
+      end
     end
   end
 
@@ -26,7 +38,7 @@ RSpec.describe "bulk imports" do
       -> { get new_bulk_import_path }
     end
 
-    it_behaves_like "require login"
+    it_behaves_like "on admin user"
 
     context "with admin user" do
       before { login_as(admin) }
@@ -51,7 +63,7 @@ RSpec.describe "bulk imports" do
       -> { get bulk_import_path(bulk_import) }
     end
 
-    it_behaves_like "require login"
+    it_behaves_like "on admin user"
 
     context "with admin user" do
       before { login_as admin }
@@ -129,7 +141,7 @@ RSpec.describe "bulk imports" do
       -> { get bulk_imports_path }
     end
 
-    it_behaves_like "require login"
+    it_behaves_like "on admin user"
 
     context "with admin user" do
       before { login_as admin }
@@ -170,7 +182,7 @@ RSpec.describe "bulk imports" do
       File.unlink(file.path) if file
     end
 
-    it_behaves_like "require login"
+    it_behaves_like "on admin user"
 
     context "with admin user" do
       before { login_as(admin) }
