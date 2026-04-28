@@ -15,7 +15,7 @@ module SangerSequencing
       if single_facility? && facility.sanger_sequencing_enabled?
         NavTab::Link.new(
           tab: :admin_sanger_sequencing,
-          text: "Sanger",
+          text: I18n.t("sanger_sequencing.name"),
           url: facility_sanger_sequencing_admin_submissions_path(facility),
         )
       end
