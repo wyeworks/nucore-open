@@ -1,17 +1,30 @@
 /*
  * Facility User Permission form
- * When any non-read-access permission is checked, auto-check Read Access.
- * Read Access is only unchecked when the admin does it manually.
+ * Read Access is required whenever any other permission is active.
+ * Checking another permission auto-checks Read Access and locks it
+ * (visually disabled and unclickable). When all other permissions
+ * are unchecked, Read Access becomes editable again.
  */
 $(document).ready(function() {
   const readAccessCheckbox = $(".js--readAccessCheckbox");
   const otherCheckboxes = $(".js--otherPermissionCheckbox");
 
-  if (!readAccessCheckbox.length) return;
-
-  otherCheckboxes.on("change", function() {
-    if ($(this).is(":checked")) {
+  function syncReadAccess() {
+    const anyOtherChecked = otherCheckboxes.is(":checked");
+    if (anyOtherChecked) {
       readAccessCheckbox.prop("checked", true);
+      readAccessCheckbox.attr("data-locked", "true").css("opacity", "0.5");
+    } else {
+      readAccessCheckbox.removeAttr("data-locked").css("opacity", "");
+    }
+  }
+
+  readAccessCheckbox.on("click", function(event) {
+    if ($(this).attr("data-locked") === "true") {
+      event.preventDefault();
     }
   });
+
+  otherCheckboxes.on("change", syncReadAccess);
+  syncReadAccess();
 });

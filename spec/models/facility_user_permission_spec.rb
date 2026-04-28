@@ -28,4 +28,29 @@ RSpec.describe FacilityUserPermission do
       expect(permission.send(perm)).to be false
     end
   end
+
+  describe "read_access validation" do
+    it "is invalid when another permission is set without read_access" do
+      permission.read_access = false
+      permission.billing_send = true
+      expect(permission).not_to be_valid
+      expect(permission.errors[:read_access]).to be_present
+    end
+
+    it "is valid with read_access plus another permission" do
+      permission.read_access = true
+      permission.billing_send = true
+      expect(permission).to be_valid
+    end
+
+    it "is valid with only read_access" do
+      permission.read_access = true
+      expect(permission).to be_valid
+    end
+
+    it "is valid with no permissions at all" do
+      permission.read_access = false
+      expect(permission).to be_valid
+    end
+  end
 end

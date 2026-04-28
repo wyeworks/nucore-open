@@ -57,7 +57,14 @@ class FacilityUserPermissionsController < ApplicationController
     allowed = FacilityUserPermission::PERMISSIONS
     allowed -= [:assign_permissions] unless current_user.administrator?
 
-    params.require(:facility_user_permission).permit(*allowed)
+    permitted = params.require(:facility_user_permission).permit(*allowed)
+
+    other_flags = (FacilityUserPermission::PERMISSIONS - [:read_access]).map(&:to_s)
+    if other_flags.any? { |flag| ActiveModel::Type::Boolean.new.cast(permitted[flag]) }
+      permitted[:read_access] = true
+    end
+
+    permitted
   end
 
   def permission_changes

@@ -841,20 +841,6 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
     end
 
-    context "with read_access: false but other flags true (master switch off)" do
-      before do
-        FacilityUserPermission.find_by(user:, facility:).update!(
-          read_access: false,
-          billing_send: true,
-          order_management: true,
-        )
-      end
-
-      it_is_not_allowed_to([:list, :dashboard, :show], Facility)
-      it_is_not_allowed_to([:manage], OrderDetail)
-      it_is_not_allowed_to([:administer, :index, :show], Order)
-      it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
-    end
   end
 
   describe "account administrator" do
