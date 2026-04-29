@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_22_115005) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_29_140724) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -121,6 +121,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_22_115005) do
     t.text "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "file_file_name"
+    t.string "file_content_type"
+    t.bigint "file_file_size"
+    t.datetime "file_updated_at"
     t.index ["created_at", "import_type"], name: "index_bulk_imports_on_created_at_and_import_type"
   end
 
