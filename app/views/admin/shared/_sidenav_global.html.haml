@@ -8,4 +8,7 @@
   = tab JournalCreationReminder.model_name.human(count: 2), journal_creation_reminders_path, sidenav_tab == "journal_creation_reminders"
   = tab text("views.research_safety_certificates.index.title"), research_safety_certificates_path, sidenav_tab == "certificates"
   = tab t("pages.holidays"), holidays_path, sidenav_tab == "holidays"
+  - if BulkImport.import_classes.present? && can?(:manage, BulkImport)
+    = tab t("bulk_imports.index.title"), bulk_imports_path, sidenav_tab == "bulk_imports"
+
   = render_view_hook "after", sidenav_tab: sidenav_tab

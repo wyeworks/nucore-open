@@ -706,6 +706,9 @@ GEM
     tsort (0.2.0)
     ttfunk (1.8.0)
       bigdecimal (~> 3.1)
+    turbo-rails (2.0.23)
+      actionpack (>= 7.1.0)
+      railties (>= 7.1.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2026.2)
@@ -853,6 +856,7 @@ DEPENDENCIES
   teaspoon-jasmine!
   terser (~> 1.2)
   text_helpers
+  turbo-rails (~> 2.0)
   tzinfo-data
   unicorn
   vuejs-rails (~> 1.0.26)

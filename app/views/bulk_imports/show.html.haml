@@ -1,0 +1,43 @@
+= content_for :h1 do
+  = t("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "bulk_imports"
+
+%h2= t(".title", id: @bulk_import.id)
+
+= readonly_form_for(:bulk_import, @bulk_import) do |form|
+  = form.input :import_type,
+    input_html: { value: import_type_label(@bulk_import.import_type) }
+
+  = form.input :created_by,
+    input_html: { value: @bulk_import.created_by.full_name }
+
+  - if @bulk_import.file.present?
+    .form-group
+      %strong= BulkImport.human_attribute_name(:file)
+      %div
+        = link_to(@bulk_import.file.filename, url_for(@bulk_import.file))
+
+  = form.input :status,
+    input_html: { value: @bulk_import.status.humanize }
+
+  - if @bulk_import.status_failed?
+    .form-group
+      %strong= t(".failure")
+      %div
+        %small= @bulk_import.failure
+
+  - if @bulk_import.load_errors.present?
+    .form-group
+      %strong= t(".errors")
+      %ul.list-unstyled
+        - @bulk_import.load_errors.each do |error_message|
+          %li= error_message
+
+  - if @bulk_import.results.present?
+    .form-group
+      %strong= t(".results")
+      %ul.list-unstyled
+        - @bulk_import.results.each do |result|
+          %li= result
