@@ -18,7 +18,6 @@ module PaperclipFile
 
   module ClassMethods
     def includes_file
-      # TODO: Add support for file assoc eager load
       self
     end
   end
