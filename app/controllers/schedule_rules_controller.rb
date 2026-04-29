@@ -82,13 +82,17 @@ class ScheduleRulesController < ApplicationController
   private
 
   def schedule_rule_params
+    permitted_kwargs = { product_access_group_ids: [] }
+    if can?(:edit, PriceGroupDiscount)
+      permitted_kwargs[:price_group_discounts_attributes] = [:discount_percent, :price_group_id, :id]
+    end
+
     params
       .require(:schedule_rule)
       .permit(
         :start_hour, :start_min, :end_hour, :end_min,
         :on_sun, :on_mon, :on_tue, :on_wed, :on_thu, :on_fri, :on_sat,
-        price_group_discounts_attributes: [:discount_percent, :price_group_id, :id],
-        product_access_group_ids: []
+        **permitted_kwargs,
       ).tap do |schedule_rule_params|
         if @product.start_time_disabled?
           schedule_rule_params.merge! ScheduleRule.full_day_attributes

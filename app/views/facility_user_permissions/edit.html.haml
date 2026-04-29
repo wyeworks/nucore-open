@@ -1,3 +1,5 @@
+= content_for :head_content do
+  = javascript_include_tag "facility_user_permission_form"
 = content_for :h1 do
   = current_facility
 = content_for :sidebar do
@@ -19,13 +21,13 @@
         = label_tag :email
         = text_field_tag :email, @user.email, disabled: true, class: "form-control"
 
-    %fieldset
+    %fieldset.js--permissionsFieldset
       %legend= text(".permissions")
       - FacilityUserPermission::PERMISSIONS.each do |perm|
         - next if perm == :assign_permissions && !current_user.administrator?
         .checkbox
           %label
-            = f.check_box perm
+            = f.check_box perm, class: (perm == :read_access ? "js--readAccessCheckbox" : "js--otherPermissionCheckbox")
             = text(".permission_labels.#{perm}")
 
   %ul.list-inline

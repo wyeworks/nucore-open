@@ -16,12 +16,12 @@
             - if content_for?(:h2)
               %h2= yield(:h2)
         .row
-          .col-md-9.pull-right
+          .col-xs-12.col-md-3.pull-left
+            #sidebar
+              = yield :sidebar
+          .col-xs-12.col-md-9.pull-right
             = render partial: "shared/flashes"
             = yield :tabnav
             = yield
-          .col-md-3.pull-left
-            #sidebar
-              = yield :sidebar
     %footer
       = render partial: "/shared/footer"

@@ -1,25 +1,25 @@
-- # TO DO: This template appears to be unused.  If nothing is logged to rollbar by March 2024, delete this file.
-- Rollbar.warn("Someone used facility_statements/show.html.haml", statement: @statement) if defined? Rollbar
 = content_for :h1 do
   = current_facility
-
+= content_for :h2 do
+  = "#{Statement.model_name.human} ##{@statement.invoice_number}"
 = content_for :sidebar do
-  = render :partial => 'admin/shared/sidenav_billing', :locals => { :sidenav_tab => 'statement_history' }
+  = render "admin/shared/sidenav_billing", sidenav_tab: "statement_history"
 
-%p= "Statement sent on #{format_usa_datetime(@statement.created_at)} by #{begin User.find(@statement.created_by).full_name rescue 'Unknown' end}.  Notifications were emailed to the following accounts."
+= readonly_form_for(:statement) do |f|
+  = f.input :owner_user, input_html: { value: @statement.account.owner_user.full_name }
+  = f.input :account
+  = f.input :created_at, input_html: { value: I18n.l(@statement.created_at) }
+  = f.input :invoice_date, input_html: { value: I18n.l(@statement.invoice_date) }
+  = f.input :status,
+    input_html: { value: Statement.human_attribute_name("status.#{@statement.status}") }
+  = render_view_hook("readonly_form", form: f)
 
-%table.table.table-striped.table-hover
-  %thead
-    %tr
-      %th
-      %th Account
-      %th Owner
-  %tbody
-    %tr
-      %td.centered
-        - if @statement.created_at < Time.zone.now
-          = link_to 'View Invoice', facility_account_statement_path(current_facility, @statement.account, @statement)
-      %td
-        %ul
-          %li= link_to @statement.account, facility_account_statement_path(current_facility, @statement.account, 'recent')
-      %td= @statement.account.owner_user.full_name
+= render_view_hook("actions")
+
+= render "shared/order_details_table",
+  order_details: @statement.order_details,
+  omit_footnote: true
+
+.text-right
+  %strong= Statement.human_attribute_name(:total_cost)
+  %span= number_to_currency(@statement.total_cost)

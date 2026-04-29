@@ -11,6 +11,7 @@ en:
 
   date:
     formats:
+      default: "%m/%d/%Y"
       journal_line_reference: "%Y%m%d"
       timeline_navigation: "%a, %B %e, %Y"
       usa: "%m/%d/%Y"
@@ -140,6 +141,7 @@ en:
     remove: Remove
     save: Save
     search: Search
+    view: View
     filter: Filter
     select_all: Select All
     select_none: Select None

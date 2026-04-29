@@ -6,6 +6,7 @@ class FacilityUserPermission < ApplicationRecord
   belongs_to :facility
 
   PERMISSIONS = %i[
+    read_access
     product_management
     product_pricing
     order_management
@@ -17,6 +18,7 @@ class FacilityUserPermission < ApplicationRecord
   ].freeze
 
   validates :user_id, uniqueness: { scope: :facility_id }
+  validate :read_access_required_with_other_permissions
 
   def no_permissions?
     PERMISSIONS.none? { |perm| send(perm) }
@@ -24,6 +26,15 @@ class FacilityUserPermission < ApplicationRecord
 
   def to_log_s
     "#{user} - #{facility.abbreviation}"
+  end
+
+  private
+
+  def read_access_required_with_other_permissions
+    return if read_access?
+    return if (PERMISSIONS - [:read_access]).none? { |perm| send(perm) }
+
+    errors.add(:read_access, "must be granted when other permissions are active")
   end
 
 end
