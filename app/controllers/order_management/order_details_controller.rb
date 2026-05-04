@@ -4,6 +4,8 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   include OrderDetailFileDownload
 
+  PRICE_ADJUSTMENT_ATTRIBUTES = %i[actual_cost actual_subsidy price_change_reason].freeze
+
   load_resource :facility, find_by: :url_name
 
   load_resource :order, through: :facility, except: [:files, :template_results]
@@ -11,7 +13,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
   # We can't load through the facility because of cross-core orders
   before_action :init_order_detail, only: [:files, :template_results]
 
-  helper_method :edit_disabled?, :actual_cost_edit_disabled?, :read_only?
+  helper_method :edit_disabled?, :actual_cost_edit_disabled?, :read_only?, :metadata_edit_disabled?
 
   before_action :authorize_order_detail, except: %i(sample_results update remove_from_journal)
   before_action :authorize_order_detail_update, only: %i(update remove_from_journal)
@@ -105,6 +107,10 @@ class OrderManagement::OrderDetailsController < ApplicationController
     cannot?(:update, @order_detail)
   end
 
+  def metadata_edit_disabled?
+    read_only? || cannot?(:manage_order_details, @order_detail)
+  end
+
   def load_accounts
     @available_accounts = @order_detail.available_accounts.to_a
     @available_accounts << @order.account unless @available_accounts.include?(@order.account)
@@ -160,13 +166,14 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   def update_params
     raw_params = params[:order_detail] || empty_params
-    return raw_params if can?(:adjust_price, @order_detail)
+    return raw_params.slice(*PRICE_ADJUSTMENT_ATTRIBUTES) unless can?(:manage_order_details, @order_detail)
 
-    raw_params.except(:actual_cost, :actual_subsidy)
+    raw_params = raw_params.except(:actual_cost, :actual_subsidy) unless can?(:adjust_price, @order_detail)
+    raw_params
   end
 
   def authorize_mark_unrecoverable
-    return if @order_detail.unrecoverable? || update_params[:order_status_id].to_s != OrderStatus.unrecoverable.id.to_s
+    return if @order_detail.unrecoverable? || submitted_order_status_id.to_s != OrderStatus.unrecoverable.id.to_s
 
     authorize!(:mark_unrecoverable, OrderDetail)
   end
@@ -178,8 +185,12 @@ class OrderManagement::OrderDetailsController < ApplicationController
   end
 
   def changing_order_status?
-    new_status = update_params[:order_status_id]
-    new_status.present? && new_status.to_s != @order_detail.order_status_id.to_s
+    submitted_order_status_id.present? &&
+      submitted_order_status_id.to_s != @order_detail.order_status_id.to_s
+  end
+
+  def submitted_order_status_id
+    params.dig(:order_detail, :order_status_id)
   end
 
 end

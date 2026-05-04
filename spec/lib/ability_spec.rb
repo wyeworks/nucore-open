@@ -666,6 +666,7 @@ RSpec.describe Ability do
 
       it { is_expected.to be_allowed_to(:manage, OrderDetail) }
       it { is_expected.to be_allowed_to(:change_status, OrderDetail) }
+      it { is_expected.to be_allowed_to(:manage_order_details, OrderDetail) }
       it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order)
       it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :cancel, :edit, :index, :show, :tab_counts, :timeline, :update], Reservation)
       it { is_expected.to be_allowed_to(:act_as, facility) }
@@ -748,6 +749,7 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:adjust_price, OrderDetail) }
       it { is_expected.to be_allowed_to(:manage, OrderDetail) }
       it { is_expected.not_to be_allowed_to(:change_status, OrderDetail) }
+      it { is_expected.not_to be_allowed_to(:manage_order_details, OrderDetail) }
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
       it_is_not_allowed_to([:create, :update, :batch_update], Order)
     end
@@ -760,6 +762,7 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:manage, OrderDetail) }
       it { is_expected.to be_allowed_to(:adjust_price, OrderDetail) }
       it { is_expected.to be_allowed_to(:change_status, OrderDetail) }
+      it { is_expected.to be_allowed_to(:manage_order_details, OrderDetail) }
       it { is_expected.to be_allowed_to(:act_as, facility) }
     end
 

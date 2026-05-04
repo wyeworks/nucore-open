@@ -414,7 +414,10 @@ class Ability
     if permission.price_adjustment?
       can :adjust_price, OrderDetail
       can :manage, OrderDetail
-      cannot :change_status, OrderDetail unless permission.order_management?
+      unless permission.order_management?
+        cannot :change_status, OrderDetail
+        cannot :manage_order_details, OrderDetail
+      end
     end
 
     if permission.billing_journals?
@@ -457,6 +460,7 @@ class Ability
       end
       if permission.price_adjustment? && !permission.order_management?
         cannot :change_status, OrderDetail
+        cannot :manage_order_details, OrderDetail
       end
     end
   end

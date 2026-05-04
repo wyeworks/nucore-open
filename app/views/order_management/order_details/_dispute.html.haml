@@ -18,6 +18,6 @@
         .col-md-3
           = f.input :dispute_reason, as: :readonly
         .col-md-4
-          = f.input :dispute_resolved_reason, input_html: { class: 'note' }
+          = f.input :dispute_resolved_reason, input_html: { class: 'note', disabled: metadata_edit_disabled? }
 - else
   = t("order_details.notices.global_admin_must_resolve.alert")
