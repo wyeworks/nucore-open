@@ -202,6 +202,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
     let(:item_order) { create(:purchased_order, product: item) }
     let(:item_order_detail) { item_order.order_details.first }
     let(:user) { create(:user) }
+    let(:dom) { Nokogiri::HTML(response.body) }
 
     before do
       @action = :edit
@@ -262,9 +263,6 @@ RSpec.describe OrderManagement::OrderDetailsController do
       end
 
       it "disables management inputs (account, quantity, reference_id, note)" do
-        dom = Nokogiri::HTML(response.body)
-        # assigned_user is rendered as static text once the order is Complete,
-        # so it is not present as an input — covered indirectly.
         %w[order_detail_account_id order_detail_quantity order_detail_reference_id
            order_detail_note].each do |id|
           input = dom.css("##{id}").first
@@ -274,7 +272,6 @@ RSpec.describe OrderManagement::OrderDetailsController do
       end
 
       it "leaves price-related inputs enabled" do
-        dom = Nokogiri::HTML(response.body)
         cost = dom.css("#order_detail_actual_cost").first
         expect(cost).to be_present
         expect(cost).not_to be_has_attribute("disabled")
@@ -289,7 +286,6 @@ RSpec.describe OrderManagement::OrderDetailsController do
       end
 
       it "leaves management inputs enabled" do
-        dom = Nokogiri::HTML(response.body)
         %w[order_detail_account_id order_detail_quantity order_detail_reference_id
            order_detail_note].each do |id|
           input = dom.css("##{id}").first
