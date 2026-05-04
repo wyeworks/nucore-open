@@ -15,6 +15,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   before_action :authorize_order_detail, except: %i(sample_results update remove_from_journal)
   before_action :authorize_order_detail_update, only: %i(update remove_from_journal)
+  before_action :authorize_change_status, only: :update
   before_action :authorize_mark_unrecoverable, only: :update
   before_action :load_accounts, only: [:edit, :update]
   before_action :load_order_statuses, only: [:edit, :update]
@@ -111,6 +112,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   def load_order_statuses
     return if @order_detail.reconciled?
+    return if cannot?(:change_status, @order_detail)
 
     if @order_detail.complete?
       @order_statuses = OrderStatus.by_names([
@@ -167,6 +169,17 @@ class OrderManagement::OrderDetailsController < ApplicationController
     return if @order_detail.unrecoverable? || update_params[:order_status_id].to_s != OrderStatus.unrecoverable.id.to_s
 
     authorize!(:mark_unrecoverable, OrderDetail)
+  end
+
+  def authorize_change_status
+    return unless changing_order_status?
+
+    authorize!(:change_status, @order_detail)
+  end
+
+  def changing_order_status?
+    new_status = update_params[:order_status_id]
+    new_status.present? && new_status.to_s != @order_detail.order_status_id.to_s
   end
 
 end

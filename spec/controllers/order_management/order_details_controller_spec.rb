@@ -1051,6 +1051,84 @@ RSpec.describe OrderManagement::OrderDetailsController do
         end
       end
     end
+
+    describe "with granular permissions", feature_setting: { granular_permissions: true } do
+      let(:order) { create(:purchased_order, product: item) }
+      let(:order_detail) { order.order_details.first }
+      let(:user) { create(:user) }
+      let(:complete_status_id) { OrderStatus.complete.id.to_s }
+      let(:canceled_status_id) { OrderStatus.canceled.id.to_s }
+
+      before do
+        sign_in user
+      end
+
+      context "with price_adjustment only" do
+        before do
+          create(:facility_user_permission, user:, facility:, price_adjustment: true)
+          order_detail.change_status!(OrderStatus.complete)
+        end
+
+        it "allows updating actual_cost without changing status" do
+          @params[:order_detail] = {
+            actual_cost: "10",
+            actual_subsidy: "0",
+            price_change_reason: "adjusting the price",
+          }
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          expect(order_detail.reload.actual_cost).to eq(10)
+        end
+
+        it "denies changing the order status" do
+          @params[:order_detail] = { order_status_id: canceled_status_id }
+
+          expect { do_request }.to raise_error(CanCan::AccessDenied)
+          expect(order_detail.reload.order_status).to eq(OrderStatus.complete)
+        end
+
+        it "allows submitting the current status (idempotent)" do
+          @params[:order_detail] = {
+            order_status_id: complete_status_id,
+            actual_cost: "5",
+            actual_subsidy: "0",
+            price_change_reason: "adjusting the price",
+          }
+
+          expect { do_request }.not_to raise_error
+          expect(response).to have_http_status(:redirect)
+        end
+      end
+
+      context "with order_management" do
+        before do
+          create(:facility_user_permission, user:, facility:, order_management: true)
+        end
+
+        it "allows marking the order complete" do
+          @params[:order_detail] = { order_status_id: complete_status_id }
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          expect(order_detail.reload.order_status).to eq(OrderStatus.complete)
+        end
+      end
+
+      context "with both order_management and price_adjustment" do
+        before do
+          create(:facility_user_permission, user:, facility:, order_management: true, price_adjustment: true)
+        end
+
+        it "allows marking the order complete" do
+          @params[:order_detail] = { order_status_id: complete_status_id }
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          expect(order_detail.reload.order_status).to eq(OrderStatus.complete)
+        end
+      end
+    end
   end
 
   describe "pricing" do
