@@ -15,6 +15,7 @@ RSpec.describe FacilityFacilityAccountsController do
 
   let(:facility) { create(:facility) }
   let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:admin) { create(:user, :administrator) }
   let(:senior_staff) { create(:user, :senior_staff, facility: facility) }
 
   let(:params) { { facility_id: facility.url_name } }
@@ -38,8 +39,8 @@ RSpec.describe FacilityFacilityAccountsController do
   end
 
   describe "GET #new" do
-    it "allows a director" do
-      sign_in director
+    it "allows an authorized user" do
+      sign_in admin
       get :new, params: params
 
       is_expected.to render_template "new"
@@ -56,10 +57,10 @@ RSpec.describe FacilityFacilityAccountsController do
   describe "POST #create" do
     let(:params) { super().merge(facility_account: attributes_for(:facility_account).except(:created_by)) }
 
-    describe "as a director" do
-      before { sign_in director }
+    describe "as an authorized user" do
+      before { sign_in admin }
 
-      it "allows a director to create an account if it is open" do
+      it "creates the account if it is open" do
         expect_any_instance_of(AccountValidator::ValidatorFactory.validator_class).to receive(:account_is_open!).and_return(true)
 
         expect { put :create, params: params }.to change(FacilityAccount, :count).by(1)

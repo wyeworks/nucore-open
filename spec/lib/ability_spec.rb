@@ -267,6 +267,7 @@ RSpec.describe Ability do
 
     it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
     it { is_expected.to be_allowed_to(:manage, Account) }
+    it { is_expected.to be_allowed_to(:manage, FacilityAccount) }
     it { is_expected.to be_allowed_to(:read, Notification) }
     it { is_expected.to be_allowed_to(:manage, Schedule) }
     it { is_expected.to be_allowed_to(:manage, TrainingRequest) }
@@ -316,6 +317,7 @@ RSpec.describe Ability do
 
     it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
     it { is_expected.to be_allowed_to(:manage, Account) }
+    it { is_expected.to be_allowed_to(:manage, FacilityAccount) }
     it { is_expected.to be_allowed_to(:manage, TrainingRequest) }
     it { is_expected.to be_allowed_to(:read, Notification) }
     it { is_expected.to be_allowed_to(:manage, Schedule) }
