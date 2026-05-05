@@ -70,4 +70,36 @@ RSpec.describe SangerSequencing::SangerProductsController do
       )
     end
   end
+
+  describe "authorization", feature_setting: { granular_permissions: true } do
+    before do
+      @method = :get
+      @action = :show
+    end
+
+    context "as a granular product_management user" do
+      let(:user) { create(:user) }
+
+      before do
+        create(:facility_user_permission, user:, facility:, product_management: true)
+      end
+
+      it "is allowed" do
+        do_request
+        expect(response).to have_http_status(:ok)
+      end
+    end
+
+    context "as a granular user without product_management" do
+      let(:user) { create(:user) }
+
+      before do
+        create(:facility_user_permission, user:, facility:, read_access: true)
+      end
+
+      it "is forbidden" do
+        expect { do_request }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
 end
