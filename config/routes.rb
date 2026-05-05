@@ -386,6 +386,7 @@ Rails.application.routes.draw do
   resources :bulk_imports, only: %i[index show new create] do
     collection do
       get :help
+      get :template
     end
   end
 

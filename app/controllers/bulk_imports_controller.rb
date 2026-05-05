@@ -27,6 +27,21 @@ class BulkImportsController < ApplicationController
     render partial: "bulk_imports/help"
   end
 
+  def template
+    importer_class = BulkImport.import_classes[params[:import_type]]
+
+    if importer_class
+      respond_to do |format|
+        format.csv do
+          filename = "#{params[:import_type]}_template.csv"
+          render csv: importer_class.csv_template, filename:
+        end
+      end
+    else
+      render plain: "Invalid type", status: :bad_request
+    end
+  end
+
   def create
     @bulk_import = BulkImport.new(create_params)
 

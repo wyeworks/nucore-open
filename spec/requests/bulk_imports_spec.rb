@@ -234,4 +234,40 @@ RSpec.describe "bulk imports" do
       end
     end
   end
+
+  describe "template" do
+    let(:action) do
+      -> { get template_bulk_imports_path(import_type:, format: :csv) }
+    end
+    let(:import_type) { "some_type" }
+    let(:import_class) do
+      Class.new(BulkImporter) do
+        def required_headers
+          %i[first_name last_name middle_name]
+        end
+      end
+    end
+
+    before do
+      allow(BulkImport).to receive(:import_classes) do
+        { import_type => import_class }
+      end
+    end
+
+    before { login_as create(:user, :administrator) }
+
+    it "responds ok" do
+      action.call
+
+      expect(response).to have_http_status(:ok)
+    end
+
+    it "returns the csv template" do
+      action.call
+
+      import_class.required_headers_humanized.each do |header|
+        expect(response.body).to include(header)
+      end
+    end
+  end
 end
