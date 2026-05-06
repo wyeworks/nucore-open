@@ -202,6 +202,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
     let(:item_order) { create(:purchased_order, product: item) }
     let(:item_order_detail) { item_order.order_details.first }
     let(:user) { create(:user) }
+    let(:dom) { Nokogiri::HTML(response.body) }
 
     before do
       @action = :edit
@@ -246,6 +247,51 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
       it "renders the Save button" do
         expect(response.body).to include('value="Save"')
+      end
+    end
+
+    context "with price_adjustment only" do
+      before do
+        create(:facility_user_permission, user:, facility:, price_adjustment: true)
+        item_order_detail.change_status!(OrderStatus.complete)
+        sign_in user
+        do_request
+      end
+
+      it "renders the Save button" do
+        expect(response.body).to include('value="Save"')
+      end
+
+      it "disables management inputs (account, quantity, reference_id, note)" do
+        %w[order_detail_account_id order_detail_quantity order_detail_reference_id
+           order_detail_note].each do |id|
+          input = dom.css("##{id}").first
+          expect(input).to be_present, "expected #{id} to be rendered"
+          expect(input).to be_has_attribute("disabled"), "expected #{id} to be disabled"
+        end
+      end
+
+      it "leaves price-related inputs enabled" do
+        cost = dom.css("#order_detail_actual_cost").first
+        expect(cost).to be_present
+        expect(cost).not_to be_has_attribute("disabled")
+      end
+    end
+
+    context "with order_management only" do
+      before do
+        create(:facility_user_permission, user:, facility:, order_management: true)
+        sign_in user
+        do_request
+      end
+
+      it "leaves management inputs enabled" do
+        %w[order_detail_account_id order_detail_quantity order_detail_reference_id
+           order_detail_note].each do |id|
+          input = dom.css("##{id}").first
+          expect(input).to be_present, "expected #{id} to be rendered"
+          expect(input).not_to be_has_attribute("disabled"), "expected #{id} to be enabled"
+        end
       end
     end
   end
@@ -1048,6 +1094,134 @@ RSpec.describe OrderManagement::OrderDetailsController do
               .to change { order_detail.reload.reconciled_at }
               .to(Time.current.change(usec: 0))
           end
+        end
+      end
+    end
+
+    describe "with granular permissions", feature_setting: { granular_permissions: true } do
+      let(:order) { create(:purchased_order, product: item) }
+      let(:order_detail) { order.order_details.first }
+      let(:user) { create(:user) }
+      let(:complete_status_id) { OrderStatus.complete.id.to_s }
+      let(:canceled_status_id) { OrderStatus.canceled.id.to_s }
+
+      before do
+        sign_in user
+      end
+
+      context "with price_adjustment only" do
+        before do
+          create(:facility_user_permission, user:, facility:, price_adjustment: true)
+          order_detail.change_status!(OrderStatus.complete)
+        end
+
+        it "allows updating actual_cost without changing status" do
+          @params[:order_detail] = {
+            actual_cost: "10",
+            actual_subsidy: "0",
+            price_change_reason: "adjusting the price",
+          }
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          expect(order_detail.reload.actual_cost).to eq(10)
+        end
+
+        it "denies changing the order status" do
+          @params[:order_detail] = { order_status_id: canceled_status_id }
+
+          expect { do_request }.to raise_error(CanCan::AccessDenied)
+          expect(order_detail.reload.order_status).to eq(OrderStatus.complete)
+        end
+
+        it "allows submitting the current status (idempotent)" do
+          @params[:order_detail] = {
+            order_status_id: complete_status_id,
+            actual_cost: "5",
+            actual_subsidy: "0",
+            price_change_reason: "adjusting the price",
+          }
+
+          expect { do_request }.not_to raise_error
+          expect(response).to have_http_status(:redirect)
+        end
+
+        it "silently strips order management attributes (note, reference_id)" do
+          @params[:order_detail] = {
+            note: "tampered note",
+            reference_id: "tampered ref",
+            actual_cost: "10",
+            actual_subsidy: "0",
+            price_change_reason: "adjusting the price",
+          }
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          order_detail.reload
+          expect(order_detail.note).not_to eq("tampered note")
+          expect(order_detail.reference_id).not_to eq("tampered ref")
+          expect(order_detail.actual_cost).to eq(10)
+        end
+
+        it "silently strips account_id and quantity changes" do
+          alternate_account = create(:setup_account, owner: order_detail.user)
+          original_account_id = order_detail.account_id
+          original_quantity = order_detail.quantity
+
+          @params[:order_detail] = {
+            account_id: alternate_account.id,
+            quantity: original_quantity + 5,
+            actual_cost: "10",
+            actual_subsidy: "0",
+            price_change_reason: "adjusting the price",
+          }
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          order_detail.reload
+          expect(order_detail.account_id).to eq(original_account_id)
+          expect(order_detail.quantity).to eq(original_quantity)
+        end
+      end
+
+      context "with order_management" do
+        before do
+          create(:facility_user_permission, user:, facility:, order_management: true)
+        end
+
+        it "allows marking the order complete" do
+          @params[:order_detail] = { order_status_id: complete_status_id }
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          expect(order_detail.reload.order_status).to eq(OrderStatus.complete)
+        end
+
+        it "allows updating order management attributes (note, reference_id)" do
+          @params[:order_detail] = {
+            note: "updated note",
+            reference_id: "REF-123",
+          }
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          order_detail.reload
+          expect(order_detail.note).to eq("updated note")
+          expect(order_detail.reference_id).to eq("REF-123")
+        end
+      end
+
+      context "with both order_management and price_adjustment" do
+        before do
+          create(:facility_user_permission, user:, facility:, order_management: true, price_adjustment: true)
+        end
+
+        it "allows marking the order complete" do
+          @params[:order_detail] = { order_status_id: complete_status_id }
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          expect(order_detail.reload.order_status).to eq(OrderStatus.complete)
         end
       end
     end

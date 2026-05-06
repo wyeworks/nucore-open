@@ -2,4 +2,4 @@
   - if f.object.complete?
     = f.object.assigned_user ? f.object.assigned_user.full_name : "Unassigned"
   - else
-    = f.association :assigned_user, collection: User.find_users_by_facility(current_facility), label_method: :full_name, label: false, prompt: "Unassigned"
+    = f.association :assigned_user, collection: User.find_users_by_facility(current_facility), label_method: :full_name, label: false, prompt: "Unassigned", input_html: { disabled: metadata_edit_disabled? }
