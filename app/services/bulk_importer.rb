@@ -41,8 +41,20 @@
 class BulkImporter
   attr_reader :bulk_import, :results, :errors
 
-  def self.required_headers
-    new(nil).required_headers
+  class << self
+    def required_headers
+      new(nil).required_headers.map(&:to_s)
+    end
+
+    def required_headers_humanized
+      required_headers.map(&:humanize)
+    end
+
+    def csv_template
+      CSV.generate(force_quotes: true) do |csv|
+        csv << required_headers_humanized
+      end
+    end
   end
 
   def initialize(bulk_import)
@@ -81,6 +93,8 @@ class BulkImporter
     false
   end
 
+  ##
+  # List of snake_case keys
   def required_headers
     []
   end
@@ -133,7 +147,7 @@ class BulkImporter
     normalized_row_keys = row.to_h.keys.map { |h| normalize_header(h) }
     return if (normalized_required - normalized_row_keys).empty?
 
-    raise "Required columns are #{required_headers.join(', ')}"
+    raise "Required columns are #{self.class.required_headers_humanized.join(', ')}"
   end
 
   def normalize_data(row)
