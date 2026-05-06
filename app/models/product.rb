@@ -22,6 +22,9 @@ class Product < ApplicationRecord
   has_many :research_safety_certificates, through: :product_research_safety_certification_requirements
   has_one :product_display_group_product
   has_one :product_display_group, through: :product_display_group_product
+  # TODO: move notifications recipient fields to the product
+  # notification model (and then change to has_many)
+  has_one :product_notification, dependent: :destroy
 
   # Instrument specifc
   has_one(

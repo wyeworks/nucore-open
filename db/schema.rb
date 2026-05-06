@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_29_140724) do
+ActiveRecord::Schema[8.0].define(version: 2026_04_29_170631) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -662,6 +662,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_29_140724) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.index ["facility_id"], name: "index_product_display_groups_on_facility_id"
+  end
+
+  create_table "product_notifications", charset: "utf8", force: :cascade do |t|
+    t.bigint "product_id", null: false
+    t.string "notification_type", null: false
+    t.string "recipient_source"
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["product_id", "notification_type"], name: "idx_on_product_id_notification_type_a94d780b74"
+    t.index ["product_id"], name: "index_product_notifications_on_product_id"
   end
 
   create_table "product_user_imports", charset: "utf8mb3", force: :cascade do |t|
