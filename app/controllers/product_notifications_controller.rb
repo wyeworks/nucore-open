@@ -37,6 +37,13 @@ class ProductNotificationsController < ApplicationController
       :order_notification_recipients,
       :cancellation_email_recipients,
       :issue_report_recipients,
+      product_notification_attributes: %i[
+        id
+        _destroy
+        notification_type
+        recipient_source
+        reservation_days
+      ]
     )
   end
 

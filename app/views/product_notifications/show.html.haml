@@ -18,6 +18,10 @@
       - issue_report_hint = text("hints.issue_report_recipients") if f.object.issue_report_recipients.blank?
       = f.input :issue_report_recipients, as: :string, hint: issue_report_hint
 
+      - if (pn = @product.product_notification).present?
+        .form-group
+          %label.form-label= ProductNotification.human_attribute_name("notification_type.#{pn.notification_type}")
+          %div= text("recipient_source.#{pn.recipient_source}", period: "#{pn.reservation_days} #{"day".pluralize(pn.reservation_days)}")
 
 - if can?(:edit, @product)
   = link_to text("shared.edit"), edit_facility_product_notifications_path(current_facility, @product), class: "btn btn-default"

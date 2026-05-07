@@ -71,6 +71,8 @@ class Product < ApplicationRecord
     errors.add(:contact_email, text("errors.models.product.attributes.contact_email.required")) unless email.present?
   end
 
+  accepts_nested_attributes_for :product_notification, allow_destroy: true
+
   def self.billing_modes
     ["Default", "Skip Review", "Nonbillable"]
   end

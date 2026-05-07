@@ -1,0 +1,15 @@
+- # TODO: Refactor product recipients fields into product notifications
+- if @product.is_a?(Instrument)
+  .well{ data: { controller: "product-notification" } }
+    %h4= ProductNotification.human_attribute_name("notification_type.slot_available")
+    = f.simple_fields_for(:product_notification, @product.product_notification || @product.build_product_notification) do |pn|
+      = pn.input :_destroy, as: :hidden,
+        input_html: { data: { "product-notification-target" => "destroy" } }
+      = pn.input :notification_type, input_html: { value: :slot_available }, as: :hidden
+      = pn.input :recipient_source, collection: recipient_source_options, as: :select,
+         include_blank: text("include_blanks.recipient_source"), hint: text("hints.recipient_source"),
+        input_html: { data: { "action" => "product-notification#toggleReservationDays" } }
+      - reservation_days_class = pn.object.recipient_source == "reservations" ? "" : "hidden"
+      %div#reservation-days{ data: { "product-notification-target" => "reservationDays" }, class: reservation_days_class }
+        = pn.input :reservation_days, as: :numeric, max: 30, min: 1,
+          hint: text("hints.reservation_days")

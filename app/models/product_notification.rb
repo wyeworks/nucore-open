@@ -12,4 +12,16 @@ class ProductNotification < ApplicationRecord
 
   validates_uniqueness_of :notification_type, scope: :product_id
   validates_presence_of :notification_type, :recipient_source
+
+  validates(
+    :reservation_days,
+    numericality: { greater_than: 0, less_than_or_equal_to: 30 },
+    if: :recipients_reservations?,
+  )
+
+  def reservation_days
+    return if (value = super).nil?
+
+    value.to_i
+  end
 end

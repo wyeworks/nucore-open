@@ -6,6 +6,9 @@ en:
         hints:
           already_configured: "%{email} is already configured to receive all order notifications for the !facility_downcase!."
           issue_report_recipients: Facility Directors, Facility Administrators, and Training Request Recipients will receive each issue report if not designated.
+        recipient_source:
+          reservations: "Notify users with reservations in the following %{period}"
+          access_list: Notify users from the access list
       edit:
         instructions: Leave blank to skip notifications for the event.
         hints:
@@ -20,6 +23,12 @@ en:
           issue_report_recipients: |
             Comma separated list of email addresses to be notified when an issue is reported.
             !views.product_notifications.show.hints.issue_report_recipients!
+      product_notifications_form:
+        hints:
+          recipient_source: User list to notify
+          reservation_days: Time window to fetch reservations
+        include_blanks:
+          recipient_source: Disabled
 
   controllers:
     product_notifications:
