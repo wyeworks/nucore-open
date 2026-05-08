@@ -111,16 +111,13 @@ class Reservation < ApplicationRecord
       .where("reserve_start_at < ?", end_time)
   end
 
-  def self.upcoming(t = Time.current)
-    # If this is a named scope differences emerge between Oracle & MySQL on #reserve_end_at querying.
-    # Eliminate by letting Rails filter by #reserve_end_at
+  def self.upcoming(time_from = Time.current)
     joins("LEFT JOIN order_details ON order_details.id = reservations.order_detail_id")
       .joins("LEFT JOIN orders ON orders.id = order_details.order_id")
       .not_canceled
       .where("orders.state" => [nil, "purchased"])
+      .where(reserve_end_at: time_from...)
       .order(reserve_end_at: :asc)
-      .to_a
-      .delete_if { |reservation| reservation.reserve_end_at < t }
   end
 
   def self.overlapping(start_at, end_at)
