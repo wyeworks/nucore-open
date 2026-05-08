@@ -19,6 +19,8 @@ class OrderManagement::OrderDetailsController < ApplicationController
   before_action :load_accounts, only: [:edit, :update]
   before_action :load_order_statuses, only: [:edit, :update]
 
+  after_action :handle_cancelation_notification, only: :update
+
   admin_tab :all
 
   # GET /facilities/:facility_id/orders/:order_id/order_details/:id/manage
@@ -169,4 +171,9 @@ class OrderManagement::OrderDetailsController < ApplicationController
     authorize!(:mark_unrecoverable, OrderDetail)
   end
 
+  def handle_cancelation_notification
+    return unless @order_detail.canceled? && @order_detail.status_recently_changed && @order_detail.reservation.present?
+
+    ProductNotifications::SlotAvailableService.from_reservation(@order_detail.reservation).notify!
+  end
 end

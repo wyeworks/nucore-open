@@ -2,11 +2,107 @@
 
 require "rails_helper"
 
-RSpec.describe "order_management/order_details", type: :request do
+RSpec.describe "order_management/order_details" do
   let(:facility) { create(:setup_facility) }
   let(:product) { create(:setup_service, facility:) }
   let(:order) { create(:purchased_order, product:) }
   let(:order_detail) { order.order_details.last }
+
+  describe "mark as canceled" do
+    let(:params) do
+      {
+        order_detail: {
+          id: order_detail.id,
+          order_status_id: OrderStatus.canceled.id,
+        }
+      }
+    end
+    let(:update_action) do
+      lambda do
+        put(
+          manage_facility_order_order_detail_path(facility, order, order_detail),
+          params:
+        )
+      end
+    end
+
+    before { login_as create(:user, :administrator) }
+
+    it "changes the order status" do
+      expect { update_action.call }.to(
+        change do
+          order_detail.reload.order_status
+        end.from(OrderStatus.new_status).to(OrderStatus.canceled)
+      )
+    end
+
+    it "does not call slot available service" do
+      expect(ProductNotifications::SlotAvailableService).not_to(
+        receive(:new)
+      )
+
+      update_action.call
+    end
+
+    context "when order detail has a reservation" do
+      let(:product) { create(:setup_instrument, facility:) }
+      let(:reservation) do
+        create(:purchased_reservation, product:, user: create(:user))
+      end
+      let(:order_detail) { reservation.order_detail }
+      let(:order) { order_detail.order }
+
+      it "calls slot available service when canceled" do
+        expect(ProductNotifications::SlotAvailableService).to(
+          receive(:new).and_call_original
+        )
+
+        update_action.call
+      end
+
+      context "when marked as in progress" do
+        let(:params) do
+          {
+            order_detail: {
+              id: order_detail.id,
+              order_status_id: OrderStatus.in_process.id,
+            }
+          }
+        end
+
+        it "does not call the slot available service" do
+          expect(ProductNotifications::SlotAvailableService).not_to(
+            receive(:new)
+          )
+
+          update_action.call
+        end
+      end
+
+      context "when already canceled" do
+        let(:params) do
+          {
+            order_detail: {
+              id: order_detail.id,
+              notes: "Some note",
+            }
+          }
+        end
+
+        before do
+          order_detail.update_order_status!(create(:user), OrderStatus.canceled)
+        end
+
+        it "does not call slot available service" do
+          expect(ProductNotifications::SlotAvailableService).not_to(
+            receive(:new)
+          )
+
+          update_action.call
+        end
+      end
+    end
+  end
 
   describe "mark as unrecoverable" do
     let(:params) do

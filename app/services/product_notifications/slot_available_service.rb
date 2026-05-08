@@ -9,6 +9,15 @@ module ProductNotifications
 
     delegate :product_notification, to: :product
 
+    def self.from_reservation(reservation)
+      new(
+        reservation.order_detail.product,
+        reservation.reserve_start_at,
+        reservation.reserve_end_at,
+        exclude_user: reservation.order_detail.user,
+      )
+    end
+
     def initialize(product, start_time, end_time, exclude_user: nil)
       @product = product
       @start_time = start_time
