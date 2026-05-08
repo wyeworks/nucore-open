@@ -1217,6 +1217,23 @@ RSpec.describe OrderManagement::OrderDetailsController do
           expect(order_detail.note).to eq("updated note")
           expect(order_detail.reference_id).to eq("REF-123")
         end
+
+        it "preserves a manually-set actual_cost when editing other fields" do
+          order_detail.change_status!(OrderStatus.complete)
+          order_detail.update_columns(actual_cost: 50.0, actual_subsidy: 0.0,
+                                       estimated_cost: 60.0, estimated_subsidy: 0.0,
+                                       price_change_reason: "manual override",
+                                       price_changed_by_user_id: create(:user).id)
+          @params[:order_detail] = { note: "OM user editing note" }
+
+          do_request
+
+          expect(response).to have_http_status(:redirect)
+          order_detail.reload
+          expect(order_detail.actual_cost).to eq(50)
+          expect(order_detail.actual_subsidy).to eq(0)
+          expect(order_detail.note).to eq("OM user editing note")
+        end
       end
 
       context "with both order_management and price_adjustment" do

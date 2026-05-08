@@ -170,10 +170,17 @@ class OrderManagement::OrderDetailsController < ApplicationController
     if cannot?(:manage_order_details, @order_detail)
       raw_params.slice(*PRICE_ADJUSTMENT_ATTRIBUTES)
     elsif cannot?(:adjust_price, @order_detail)
-      raw_params.except(*PRICE_ADJUSTMENT_ATTRIBUTES)
+      raw_params.except(*PRICE_ADJUSTMENT_ATTRIBUTES).merge(persisted_actual_price_params)
     else
       raw_params
     end
+  end
+
+  def persisted_actual_price_params
+    return {} if @order_detail.actual_cost.blank?
+
+    { actual_cost: @order_detail.actual_cost.to_s,
+      actual_subsidy: @order_detail.actual_subsidy.to_s }
   end
 
   def authorize_mark_unrecoverable
