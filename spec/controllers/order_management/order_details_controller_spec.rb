@@ -276,6 +276,10 @@ RSpec.describe OrderManagement::OrderDetailsController do
         expect(cost).to be_present
         expect(cost).not_to be_has_attribute("disabled")
       end
+
+      it "hides the Recalculate pricing button" do
+        expect(dom.css(".js--recalculate-pricing")).to be_empty
+      end
     end
 
     context "with order_management only" do
@@ -292,6 +296,10 @@ RSpec.describe OrderManagement::OrderDetailsController do
           expect(input).to be_present, "expected #{id} to be rendered"
           expect(input).not_to be_has_attribute("disabled"), "expected #{id} to be enabled"
         end
+      end
+
+      it "shows the Recalculate pricing button" do
+        expect(dom.css(".js--recalculate-pricing")).not_to be_empty
       end
     end
   end

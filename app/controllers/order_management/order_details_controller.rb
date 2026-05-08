@@ -166,10 +166,14 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   def update_params
     raw_params = params[:order_detail] || empty_params
-    return raw_params.slice(*PRICE_ADJUSTMENT_ATTRIBUTES) unless can?(:manage_order_details, @order_detail)
 
-    raw_params = raw_params.except(:actual_cost, :actual_subsidy) unless can?(:adjust_price, @order_detail)
-    raw_params
+    if cannot?(:manage_order_details, @order_detail)
+      raw_params.slice(*PRICE_ADJUSTMENT_ATTRIBUTES)
+    elsif cannot?(:adjust_price, @order_detail)
+      raw_params.except(*PRICE_ADJUSTMENT_ATTRIBUTES)
+    else
+      raw_params
+    end
   end
 
   def authorize_mark_unrecoverable

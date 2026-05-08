@@ -72,7 +72,7 @@
             = f.input :quantity, as: :order_detail_quantity, hint_html: { class: "help-block" }, input_html: { disabled: metadata_edit_disabled? }
           .col-md-7= render "costs", f: f
 
-      - unless read_only?
+      - unless metadata_edit_disabled?
         .row
           .col-md-7
           .col-md-3
