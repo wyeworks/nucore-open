@@ -104,11 +104,11 @@ class OrderManagement::OrderDetailsController < ApplicationController
   end
 
   def read_only?
-    cannot?(:update, @order_detail)
+    cannot?(:manage_order_details, @order_detail) && cannot?(:adjust_price, @order_detail)
   end
 
   def metadata_edit_disabled?
-    read_only? || cannot?(:manage_order_details, @order_detail)
+    cannot?(:manage_order_details, @order_detail)
   end
 
   def load_accounts
