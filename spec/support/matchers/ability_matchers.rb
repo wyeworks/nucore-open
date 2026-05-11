@@ -13,7 +13,7 @@ RSpec::Matchers.define :be_allowed_to do |actions, object|
   end
 
   match do |ability|
-    [actions].flatten.each do |action|
+    [actions].flatten.all? do |action|
       ability.can?(action, object)
     end
   end

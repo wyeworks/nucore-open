@@ -7,7 +7,8 @@ class PriceGroupProductsController < ApplicationController
   before_action :init_current_facility
   before_action :init_price_group_products
 
-  load_and_authorize_resource
+  load_resource
+  authorize_resource except: :edit
 
   layout "two_column"
 
@@ -17,6 +18,7 @@ class PriceGroupProductsController < ApplicationController
   end
 
   def edit
+    authorize! :show, PriceGroupProduct
   end
 
   def update
