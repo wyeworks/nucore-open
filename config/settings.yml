@@ -36,6 +36,11 @@ converters:
   product_to_journal_rows: Converters::ProductToJournalRowAttributes
   order_detail_to_journal_rows: Converters::OrderDetailToJournalRowAttributes
 
+# TODO: Move notification settings here
+notifications:
+  product:
+    slot_available: false
+
 research_safety_adapter:
   class_name: <%= ENV.fetch("RESEARCH_SAFETY_ADAPTER_CLASS", "ResearchSafetyAdapters::ResearchSafetyAlwaysCertifiedAdapter") %>
   scishield:

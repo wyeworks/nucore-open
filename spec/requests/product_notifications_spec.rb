@@ -53,10 +53,34 @@ RSpec.describe "product_notifications" do
     context "when product is an instrument" do
       let(:product) { create(:setup_instrument) }
 
-      it "shows product notifications form" do
-        action.call
+      context "when slot available setting is on" do
+        before do
+          allow(Settings).to(
+            receive_message_chain("notifications.product.slot_available")
+            .and_return(true)
+          )
+        end
 
-        expect(page).to have_field(recipient_source_field_name)
+        it "shows product notifications form" do
+          action.call
+
+          expect(page).to have_field(recipient_source_field_name)
+        end
+      end
+
+      context "when slot available setting is off" do
+        before do
+          allow(Settings).to(
+            receive_message_chain("notifications.product.slot_available")
+            .and_return(false)
+          )
+        end
+
+        it "does not show product notifications form" do
+          action.call
+
+          expect(page).not_to have_field(recipient_source_field_name)
+        end
       end
     end
 
