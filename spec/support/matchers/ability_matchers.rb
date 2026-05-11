@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-RSpec::Matchers.define :be_allowed_to do |action, object|
+RSpec::Matchers.define :be_allowed_to do |actions, object|
   description do
-    "be allowed to #{action} " +
+    "be allowed to #{actions} " +
       if object.respond_to?(:model_name)
         object.model_name.human.pluralize
       elsif object.class.respond_to?(:model_name)
@@ -13,13 +13,15 @@ RSpec::Matchers.define :be_allowed_to do |action, object|
   end
 
   match do |ability|
-    ability.can?(action, object)
+    [actions].flatten.each do |action|
+      ability.can?(action, object)
+    end
   end
 end
 
 def it_is_allowed_to(actions, object = nil)
   Array(actions).each do |action|
-    it "is allowed to #{action}" do
+    it "is allowed to #{action} #{object}" do
       target = object || yield
       expect(subject).to be_allowed_to(action, target)
     end
