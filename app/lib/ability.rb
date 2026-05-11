@@ -343,7 +343,7 @@ class Ability
 
     return unless resource.is_a?(Facility)
 
-    granted_permission_read_only_abilities(controller)
+    granted_permission_read_access_abilities(controller)
 
     if permission.assign_permissions?
       can :manage, FacilityUserPermission
@@ -465,7 +465,7 @@ class Ability
   end
 
   # Read-only access for users with any granular permission.
-  def granted_permission_read_only_abilities(controller)
+  def granted_permission_read_access_abilities(controller)
     can [:list, :dashboard, :show], Facility
 
     can [:administer, :index, :show, :tab_counts], Order
@@ -481,6 +481,7 @@ class Ability
     can [:instrument_status, :instrument_statuses], Instrument
 
     can [:show, :index], PriceGroup
+    can :read, PriceGroupProduct
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
 
     can :index, Project
