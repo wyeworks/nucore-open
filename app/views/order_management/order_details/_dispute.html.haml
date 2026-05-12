@@ -7,7 +7,7 @@
     = banner_label      @order_detail, :dispute_resolved_reason
 - elsif !@order_detail.global_admin_must_resolve? || current_ability.can?(:manage, :all)
   .col-md-10
-    .well.well-small
+    .well.well-sm
       %h4= t('facility_order_details.edit.head.resolve_dispute')
       = f.input :resolve_dispute, as: :hidden
       .row
