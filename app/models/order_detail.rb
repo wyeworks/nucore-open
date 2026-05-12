@@ -81,7 +81,7 @@ class OrderDetail < ApplicationRecord
 
   alias_attribute :problem_description_keys, :problem_keys
 
-  # Used to track status change of an object
+  # Used to track status changes side efects
   attribute :status_recently_changed, :boolean, default: false
 
   def estimated_price_group
