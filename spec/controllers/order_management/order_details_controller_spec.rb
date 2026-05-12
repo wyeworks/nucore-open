@@ -1135,10 +1135,11 @@ RSpec.describe OrderManagement::OrderDetailsController do
           expect(order_detail.reload.actual_cost).to eq(10)
         end
 
-        it "denies changing the order status" do
+        it "silently strips the order_status_id" do
           @params[:order_detail] = { order_status_id: canceled_status_id }
+          do_request
 
-          expect { do_request }.to raise_error(CanCan::AccessDenied)
+          expect(response).to have_http_status(:redirect)
           expect(order_detail.reload.order_status).to eq(OrderStatus.complete)
         end
 

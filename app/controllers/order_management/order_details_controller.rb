@@ -16,8 +16,8 @@ class OrderManagement::OrderDetailsController < ApplicationController
   helper_method :edit_disabled?, :actual_cost_edit_disabled?, :read_only?, :metadata_edit_disabled?
 
   before_action :authorize_order_detail, except: %i(sample_results update remove_from_journal)
-  before_action :authorize_order_detail_update, only: %i(update remove_from_journal)
-  before_action :authorize_change_status, only: :update
+  before_action :authorize_order_detail_update, only: :update
+  before_action :authorize_remove_from_journal, only: :remove_from_journal
   before_action :authorize_mark_unrecoverable, only: :update
   before_action :load_accounts, only: [:edit, :update]
   before_action :load_order_statuses, only: [:edit, :update]
@@ -100,15 +100,21 @@ class OrderManagement::OrderDetailsController < ApplicationController
   end
 
   def authorize_order_detail_update
-    authorize! :update, @order_detail
+    return if can?(:adjust_price, @order_detail)
+
+    authorize!(:update, @order_detail)
+  end
+
+  def authorize_remove_from_journal
+    authorize!(:update, @order_detail)
   end
 
   def read_only?
-    cannot?(:manage_order_details, @order_detail) && cannot?(:adjust_price, @order_detail)
+    cannot?(:update, @order_detail) && cannot?(:adjust_price, @order_detail)
   end
 
   def metadata_edit_disabled?
-    cannot?(:manage_order_details, @order_detail)
+    cannot?(:update, @order_detail)
   end
 
   def load_accounts
@@ -118,7 +124,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   def load_order_statuses
     return if @order_detail.reconciled?
-    return if cannot?(:change_status, @order_detail)
+    return if cannot?(:update, @order_detail)
 
     if @order_detail.complete?
       @order_statuses = OrderStatus.by_names([
@@ -167,7 +173,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
   def update_params
     raw_params = params[:order_detail] || empty_params
 
-    if cannot?(:manage_order_details, @order_detail)
+    if cannot?(:update, @order_detail)
       raw_params.slice(*PRICE_ADJUSTMENT_ATTRIBUTES)
     elsif cannot?(:adjust_price, @order_detail)
       raw_params.except(*PRICE_ADJUSTMENT_ATTRIBUTES).merge(persisted_actual_price_params)
@@ -187,17 +193,6 @@ class OrderManagement::OrderDetailsController < ApplicationController
     return if @order_detail.unrecoverable? || submitted_order_status_id.to_s != OrderStatus.unrecoverable.id.to_s
 
     authorize!(:mark_unrecoverable, OrderDetail)
-  end
-
-  def authorize_change_status
-    return unless changing_order_status?
-
-    authorize!(:change_status, @order_detail)
-  end
-
-  def changing_order_status?
-    submitted_order_status_id.present? &&
-      submitted_order_status_id.to_s != @order_detail.order_status_id.to_s
   end
 
   def submitted_order_status_id
