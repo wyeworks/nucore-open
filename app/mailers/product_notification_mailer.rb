@@ -2,7 +2,7 @@
 
 class ProductNotificationMailer < ApplicationMailer
   ##
-  # An future time slot has become available
+  # A future time slot has become available
   def slot_available(product, user, start_time, end_time)
     @product = product
     @user = user
