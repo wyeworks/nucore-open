@@ -389,8 +389,8 @@ class Ability
     end
 
     if permission.order_management?
-      can :manage, OrderDetail
-      cannot :adjust_price, OrderDetail
+      can :update, OrderDetail
+      can :mark_unrecoverable, OrderDetail
 
       can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
            :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order
@@ -413,7 +413,6 @@ class Ability
 
     if permission.price_adjustment?
       can :adjust_price, OrderDetail
-      can :manage, OrderDetail
     end
 
     if permission.billing_journals?
@@ -449,11 +448,15 @@ class Ability
   end
 
   def granted_permission_order_detail_abilities(permission, resource)
-    if permission.order_management? || permission.price_adjustment?
-      can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
-      unless permission.price_adjustment?
-        cannot :adjust_price, OrderDetail
-      end
+    facility_scope = { order: { facility_id: resource.order.facility_id } }
+
+    if permission.order_management?
+      can :update, OrderDetail, facility_scope
+      can :mark_unrecoverable, OrderDetail, facility_scope
+    end
+
+    if permission.price_adjustment?
+      can :adjust_price, OrderDetail, facility_scope
     end
   end
 

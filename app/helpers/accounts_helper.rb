@@ -2,14 +2,14 @@
 
 module AccountsHelper
 
-  def account_input(form)
+  def account_input(form, disabled: false)
     form.input :account_id,
       as: :select,
       label: OrderDetail.human_attribute_name(:account),
       collection: available_accounts_array,
       selected: @order_detail.account_id,
       include_blank: false,
-      disabled: edit_disabled?
+      disabled: edit_disabled? || disabled
   end
 
   def payment_source_link_or_text(account)
