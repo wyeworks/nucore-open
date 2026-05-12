@@ -480,7 +480,7 @@ class Ability
     can :read, ProductDisplayGroup
     can :read, Schedule
     can :index, [BundleProduct, ScheduleRule, ProductAccessory, ProductAccessGroup]
-    can [:index], StoredFile
+    can [:index, :product_survey], StoredFile
     can [:instrument_status, :instrument_statuses], Instrument
 
     can [:show, :index], PriceGroup
