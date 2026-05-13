@@ -8,20 +8,6 @@ html {
   margin-bottom: 20px;
 }
 
-.well {
-  padding: 19px;
-  
-  // Use darker colors for better accessibility contrast
-  a {
-    color: darken($secondaryColor, 10%);
-    
-    &:hover,
-    &:focus {
-      color: darken($secondaryColor, 20%);
-    }
-  }
-}
-
 .nowrap {
   white-space: nowrap;
 }
