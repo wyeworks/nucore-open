@@ -12,7 +12,7 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
     values = notice_keys
     values += notices_service.time_based_notices
 
-    values.map { |s| Notice.new(s) }
+    values.uniq.map { |s| Notice.new(s) }
   end
 
   def warnings
