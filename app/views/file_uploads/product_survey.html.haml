@@ -37,7 +37,7 @@
         %tr
           - if can?(:edit, StoredFile)
             %th
-          %th.centered Status
+          %th Status
           %th Service URL
           %th Date Added
 
@@ -56,7 +56,7 @@
                     activate_survey_path(current_facility, @product, esp),
                     method: :put
 
-            %td.centered= esp.active? ? "Active" : "Inactive"
+            %td= esp.active? ? "Active" : "Inactive"
             %td
               = link_to truncate(esp.external_service.location, length: 60),
                 esp.external_service.location,
@@ -90,7 +90,8 @@
     %table.table.table-striped.table-hover
       %thead
         %tr
-          %th
+          - if can?(:edit, StoredFile)
+            %th
           %th File
           %th Date Uploaded
           %th Uploaded By
@@ -98,11 +99,12 @@
       %tbody
         - files.each do |stored_file|
           %tr
-            %td
-              = link_to text("shared.delete"),
-                [current_facility, @product, :file_upload, id: stored_file],
-                method: :delete,
-                data: { confirm: t(".download_form.confirm") }
+            - if can?(:edit, StoredFile)
+              %td.centered
+                = link_to text("shared.delete"),
+                  [current_facility, @product, :file_upload, id: stored_file],
+                  method: :delete,
+                  data: { confirm: t(".download_form.confirm") }
 
             %td= link_to stored_file.name, product_file_path(stored_file)
             %td= format_usa_datetime(stored_file.created_at)
