@@ -15,6 +15,7 @@ class FacilityUserPermission < ApplicationRecord
     billing_journals
     instrument_management
     assign_permissions
+    account_management
   ].freeze
 
   validates :user_id, uniqueness: { scope: :facility_id }
