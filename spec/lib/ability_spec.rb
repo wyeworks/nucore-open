@@ -661,7 +661,7 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:manage, OrderDetail) }
     end
 
-    context "with product_creation" do
+    context "with product_creation (implies product_edition)" do
       before do
         FacilityUserPermission.find_by(user:, facility:).update!(product_creation: true)
       end
@@ -689,14 +689,6 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:manage, StoredFile) }
       it { is_expected.to be_allowed_to(:manage, OfflineReservation) }
       it { is_expected.not_to be_allowed_to(:create_daily_booking, Product) }
-    end
-
-    context "with both product_creation and product_edition" do
-      before do
-        FacilityUserPermission.find_by(user:, facility:).update!(product_creation: true, product_edition: true)
-      end
-
-      it_is_allowed_to([:new, :create, :update, :edit, :destroy], Product)
     end
 
     context "with order_management" do

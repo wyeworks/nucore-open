@@ -360,7 +360,7 @@ class Ability
       can [:disputed_orders, :transactions, :reassign_chart_strings, :confirm_transactions], Facility
     end
 
-    if permission.product_creation? || permission.product_edition?
+    if permission.product_edition?
       can :manage, [
         BundleProduct,
         Product,
@@ -375,12 +375,15 @@ class Ability
         OfflineReservation,
       ]
       cannot :create_daily_booking, Product
+      cannot :create, Product
       can [:show, :index], PriceGroup
       can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
       can [:read, :edit], PriceGroupProduct
       can [:index, :create, :destroy], ProductResearchSafetyCertificationRequirement
+    end
 
-      cannot :create, Product unless permission.product_creation?
+    if permission.product_creation?
+      can :create, Product
     end
 
     if permission.product_pricing?

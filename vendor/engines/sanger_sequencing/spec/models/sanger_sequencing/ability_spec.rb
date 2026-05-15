@@ -80,6 +80,15 @@ RSpec.describe SangerSequencing::Ability do
       it_is_allowed_to(:manage, SangerSequencing::Primer)
     end
 
+    context "with product_creation (implies product_edition)" do
+      before do
+        create(:facility_user_permission, user:, facility:, product_creation: true)
+      end
+
+      it_is_allowed_to([:index, :show], SangerSequencing::Submission)
+      it_is_allowed_to(:manage, SangerSequencing::Batch)
+    end
+
     context "with read_access only (no product_edition)" do
       before do
         create(:facility_user_permission, user:, facility:, read_access: true)

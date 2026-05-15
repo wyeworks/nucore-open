@@ -27,7 +27,7 @@
         - next if perm == :assign_permissions && !current_user.administrator?
         .checkbox
           %label
-            = f.check_box perm, class: (perm == :read_access ? "js--readAccessCheckbox" : "js--otherPermissionCheckbox")
+            = f.check_box perm, class: permission_checkbox_classes(perm)
             = FacilityUserPermission.human_attribute_name(perm)
 
   %ul.list-inline
