@@ -11,7 +11,7 @@ class ProductNotificationMailer < ApplicationMailer
     mail(
       to: user.email,
       subject: text(
-        "product_notification_mailer.slot_available.subject",
+        "views.product_notification_mailer.slot_available.subject",
         product_facility: "#{product} (#{product.facility.abbreviation})",
         time_range: @time_range,
       ),

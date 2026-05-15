@@ -1,16 +1,11 @@
 en:
-  product_notification_mailer:
-    slot_available:
-      subject: "!app_name! - New availability %{product_facility} - %{time_range}"
-      body_html: |
-        Hello %{user_name},
+  views:
+    product_notification_mailer:
+      slot_available:
+        subject: "!app_name! - New availability %{product_facility} - %{time_range}"
+        body: |
+          Hello %{user_name},
 
-        Time slot %{time_range} became available for %{product} at %{facility}.
+          Time slot %{time_range} became available for %{product} at %{facility}.
 
-        [Make a reservation](%{new_reservation_url}Make a reservation)
-      body: |
-        Hello %{user_name},
-
-        Time slot %{time_range} became available for %{product} at %{facility}.
-
-        Make a reservation: %{new_reservation_url}
+          [Make a reservation](%{new_reservation_url})
