@@ -62,7 +62,7 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
       let(:other_permission_user) { create(:user) }
 
       before do
-        create(:facility_user_permission, user: other_permission_user, facility:, product_management: true)
+        create(:facility_user_permission, user: other_permission_user, facility:, product_edition: true)
         sign_in other_permission_user
       end
 
@@ -76,12 +76,12 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
     before :each do
       @method = :patch
       @action = :update
-      @params[:facility_user_permission] = { product_management: true, billing_journals: true }
+      @params[:facility_user_permission] = { product_edition: true, billing_journals: true }
     end
 
     it_should_allow_admin_only :redirect do
       expect(assigns(:permission)).to be_persisted
-      expect(assigns(:permission).product_management).to be true
+      expect(assigns(:permission).product_edition).to be true
       expect(assigns(:permission).billing_journals).to be true
       expect(assigns(:permission).order_management).to be false
     end
@@ -115,14 +115,14 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
       end
 
       it "destroys the record when all permissions are unchecked" do
-        create(:facility_user_permission, user: target_user, facility:, product_management: true)
+        create(:facility_user_permission, user: target_user, facility:, product_edition: true)
         @params[:facility_user_permission] = FacilityUserPermission::PERMISSIONS.index_with { false }
         expect { patch :update, params: @params }.to change { FacilityUserPermission.count }.by(-1)
         expect(FacilityUserPermission.find_by(user: target_user, facility:)).to be_nil
       end
 
       it "logs a delete event when the record is destroyed" do
-        permission = create(:facility_user_permission, user: target_user, facility:, product_management: true)
+        permission = create(:facility_user_permission, user: target_user, facility:, product_edition: true)
         @params[:facility_user_permission] = FacilityUserPermission::PERMISSIONS.index_with { false }
         patch :update, params: @params
         expect(LogEvent).to be_exists(loggable: permission, event_type: :delete, user: @admin)
@@ -147,16 +147,16 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
         patch :update, params: @params
         expect(response).to redirect_to(facility_facility_users_path(facility))
         permission = FacilityUserPermission.find_by(user: target_user, facility:)
-        expect(permission.product_management).to be true
+        expect(permission.product_edition).to be true
         expect(permission.billing_journals).to be true
       end
 
       it "cannot assign the assign_permissions permission" do
-        @params[:facility_user_permission] = { assign_permissions: true, product_management: true }
+        @params[:facility_user_permission] = { assign_permissions: true, product_edition: true }
         patch :update, params: @params
         permission = FacilityUserPermission.find_by(user: target_user, facility:)
         expect(permission.assign_permissions).to be false
-        expect(permission.product_management).to be true
+        expect(permission.product_edition).to be true
       end
     end
 
@@ -185,7 +185,7 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
     end
 
     it "allows access to update" do
-      patch :update, params: { facility_id: facility.url_name, id: target_user.id, facility_user_permission: { product_management: true } }
+      patch :update, params: { facility_id: facility.url_name, id: target_user.id, facility_user_permission: { product_edition: true } }
       expect(response).to redirect_to(facility_facility_users_path(facility))
     end
 
@@ -199,7 +199,7 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
     let(:user_without_assign) { create(:user) }
 
     before do
-      create(:facility_user_permission, user: user_without_assign, facility:, product_management: true)
+      create(:facility_user_permission, user: user_without_assign, facility:, product_edition: true)
       sign_in user_without_assign
     end
 
@@ -219,7 +219,7 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
 
     it "raises a routing error on update" do
       expect do
-        patch :update, params: { facility_id: facility.url_name, id: target_user.id, facility_user_permission: { product_management: true } }
+        patch :update, params: { facility_id: facility.url_name, id: target_user.id, facility_user_permission: { product_edition: true } }
       end.to raise_error(ActionController::RoutingError)
     end
   end

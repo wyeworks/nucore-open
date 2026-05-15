@@ -77,11 +77,11 @@ RSpec.describe SangerSequencing::SangerProductsController do
       @action = :show
     end
 
-    context "as a granular product_management user" do
+    context "as a granular product_edition user" do
       let(:user) { create(:user) }
 
       before do
-        create(:facility_user_permission, user:, facility:, product_management: true)
+        create(:facility_user_permission, user:, facility:, product_edition: true)
       end
 
       it "is allowed" do
@@ -90,7 +90,7 @@ RSpec.describe SangerSequencing::SangerProductsController do
       end
     end
 
-    context "as a granular user without product_management" do
+    context "as a granular user without product_edition" do
       let(:user) { create(:user) }
 
       before do

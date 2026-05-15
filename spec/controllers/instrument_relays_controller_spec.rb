@@ -8,19 +8,19 @@ RSpec.describe InstrumentRelaysController do
 
   context "with granular permissions", feature_setting: { granular_permissions: true } do
     describe "authorization for write actions" do
-      let(:product_management_user) { create(:user) }
+      let(:product_edition_user) { create(:user) }
       let(:product_pricing_user) { create(:user) }
       let(:billing_send_user) { create(:user) }
 
       before do
-        create(:facility_user_permission, user: product_management_user, facility:, product_management: true)
+        create(:facility_user_permission, user: product_edition_user, facility:, product_edition: true)
         create(:facility_user_permission, user: product_pricing_user, facility:, product_pricing: true)
         create(:facility_user_permission, user: billing_send_user, facility:, billing_send: true)
       end
 
       describe "GET #new" do
-        it "allows a user with product_management permission" do
-          sign_in product_management_user
+        it "allows a user with product_edition permission" do
+          sign_in product_edition_user
           get :new, params: { facility_id: facility.url_name, instrument_id: instrument.url_name }
           expect(response).to be_successful
         end

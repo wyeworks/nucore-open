@@ -7,7 +7,8 @@ class FacilityUserPermission < ApplicationRecord
 
   PERMISSIONS = %i[
     read_access
-    product_management
+    product_creation
+    product_edition
     product_pricing
     order_management
     price_adjustment

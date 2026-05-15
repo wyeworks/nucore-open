@@ -249,7 +249,7 @@ RSpec.describe User do
     context "when user has both role and permission on the same facility" do
       before do
         UserRole.grant(user, UserRole::FACILITY_STAFF, facility1)
-        create(:facility_user_permission, user:, facility: facility1, product_management: true)
+        create(:facility_user_permission, user:, facility: facility1, product_edition: true)
       end
 
       it "returns the facility once" do

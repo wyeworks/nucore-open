@@ -360,7 +360,7 @@ class Ability
       can [:disputed_orders, :transactions, :reassign_chart_strings, :confirm_transactions], Facility
     end
 
-    if permission.product_management?
+    if permission.product_creation? || permission.product_edition?
       can :manage, [
         BundleProduct,
         Product,
@@ -379,6 +379,8 @@ class Ability
       can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
       can [:read, :edit], PriceGroupProduct
       can [:index, :create, :destroy], ProductResearchSafetyCertificationRequirement
+
+      cannot :create, Product unless permission.product_creation?
     end
 
     if permission.product_pricing?

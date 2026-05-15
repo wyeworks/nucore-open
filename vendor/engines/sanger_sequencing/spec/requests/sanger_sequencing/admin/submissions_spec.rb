@@ -10,11 +10,11 @@ RSpec.describe "sanger_sequencing/admin/submissions" do
       proc { get facility_sanger_sequencing_admin_submissions_path(facility) }
     end
 
-    describe "as a granular product_management user", feature_setting: { granular_permissions: true } do
+    describe "as a granular product_edition user", feature_setting: { granular_permissions: true } do
       let(:user) { create(:user) }
 
       before do
-        create(:facility_user_permission, user:, facility:, product_management: true)
+        create(:facility_user_permission, user:, facility:, product_edition: true)
         login_as user
       end
 
@@ -25,7 +25,7 @@ RSpec.describe "sanger_sequencing/admin/submissions" do
       end
     end
 
-    describe "as a granular user without product_management", feature_setting: { granular_permissions: true } do
+    describe "as a granular user without product_edition", feature_setting: { granular_permissions: true } do
       let(:user) { create(:user) }
 
       before do

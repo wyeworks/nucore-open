@@ -57,11 +57,11 @@ RSpec.describe InstrumentPricePoliciesController do
       end
     end
 
-    context "with only product_management permission" do
+    context "with only product_edition permission" do
       let(:management_user) { create(:user) }
 
       before do
-        create(:facility_user_permission, user: management_user, facility:, product_management: true)
+        create(:facility_user_permission, user: management_user, facility:, product_edition: true)
       end
 
       it "allows viewing price policies index" do

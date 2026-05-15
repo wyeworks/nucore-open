@@ -309,7 +309,8 @@ en:
         instrument_management: Instrument Management
         order_management: Order Management
         price_adjustment: Price Adjustment
-        product_management: Product Management
+        product_creation: Product Creation
+        product_edition: Product Edition
         product_pricing: Product Pricing
       product:
         can_be_used_by?: Approved?

@@ -569,60 +569,85 @@ RSpec.describe InstrumentsController, type: :controller do
   end
 
   context "with granular permissions", feature_setting: { granular_permissions: true } do
-    let(:permitted_user) { create(:user) }
+    let(:creation_user) { create(:user) }
+    let(:edition_user) { create(:user) }
     let(:unpermitted_user) { create(:user) }
 
     before do
-      create(:facility_user_permission, user: permitted_user, facility:, product_management: true)
+      create(:facility_user_permission, user: creation_user, facility:, product_creation: true)
+      create(:facility_user_permission, user: edition_user, facility:, product_edition: true)
     end
 
     describe "GET #index" do
-      it "allows a user with product_management permission" do
-        sign_in permitted_user
+      it "allows a user with product_creation permission" do
+        sign_in creation_user
         get :index, params: { facility_id: facility.url_name }
         expect(response).to be_successful
       end
 
-      it "denies a user without product_management permission" do
+      it "allows a user with product_edition permission" do
+        sign_in edition_user
+        get :index, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without product creation or edition permission" do
         sign_in unpermitted_user
         expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
       end
     end
 
     describe "GET #new" do
-      it "allows a user with product_management permission" do
-        sign_in permitted_user
+      it "allows a user with product_creation permission" do
+        sign_in creation_user
         get :new, params: { facility_id: facility.url_name }
         expect(response).to be_successful
       end
 
-      it "denies a user without product_management permission" do
+      it "denies a user with only product_edition permission" do
+        sign_in edition_user
+        expect { get :new, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      end
+
+      it "denies a user without product creation or edition permission" do
         sign_in unpermitted_user
         expect { get :new, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
       end
     end
 
     describe "GET #edit" do
-      it "allows a user with product_management permission" do
-        sign_in permitted_user
+      it "allows a user with product_creation permission" do
+        sign_in creation_user
         get :edit, params: { facility_id: facility.url_name, id: instrument.url_name }
         expect(response).to be_successful
       end
 
-      it "denies a user without product_management permission" do
+      it "allows a user with product_edition permission" do
+        sign_in edition_user
+        get :edit, params: { facility_id: facility.url_name, id: instrument.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without product creation or edition permission" do
         sign_in unpermitted_user
         expect { get :edit, params: { facility_id: facility.url_name, id: instrument.url_name } }.to raise_error(CanCan::AccessDenied)
       end
     end
 
     describe "GET #manage" do
-      it "allows a user with product_management permission" do
-        sign_in permitted_user
+      it "allows a user with product_creation permission" do
+        sign_in creation_user
         get :manage, params: { facility_id: facility.url_name, id: instrument.url_name }
         expect(response).to be_successful
       end
 
-      it "denies a user without product_management permission" do
+      it "allows a user with product_edition permission" do
+        sign_in edition_user
+        get :manage, params: { facility_id: facility.url_name, id: instrument.url_name }
+        expect(response).to be_successful
+      end
+
+      it "denies a user without product creation or edition permission" do
         sign_in unpermitted_user
         expect { get :manage, params: { facility_id: facility.url_name, id: instrument.url_name } }.to raise_error(CanCan::AccessDenied)
       end
@@ -638,13 +663,18 @@ RSpec.describe InstrumentsController, type: :controller do
         }
       end
 
-      it "allows a user with product_management permission" do
-        sign_in permitted_user
+      it "allows a user with product_creation permission" do
+        sign_in creation_user
         post :create, params: create_params
         expect(response).to be_redirect
       end
 
-      it "denies a user without product_management permission" do
+      it "denies a user with only product_edition permission" do
+        sign_in edition_user
+        expect { post :create, params: create_params }.to raise_error(CanCan::AccessDenied)
+      end
+
+      it "denies a user without product creation or edition permission" do
         sign_in unpermitted_user
         expect { post :create, params: create_params }.to raise_error(CanCan::AccessDenied)
       end
