@@ -8,13 +8,3 @@ en:
         h2: "Manage Permissions for %{name}"
         user_info: User Info
         permissions: Permissions
-        permission_labels:
-          read_access: Read Access
-          product_management: Product Management
-          product_pricing: Product Pricing
-          order_management: Order Management
-          price_adjustment: Price Adjustment
-          billing_send: Billing Send
-          billing_journals: Billing Journals
-          instrument_management: Instrument Management
-          assign_permissions: Assign Permissions

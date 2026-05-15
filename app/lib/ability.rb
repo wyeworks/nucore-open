@@ -437,6 +437,11 @@ class Ability
       can(:destroy, Reservation, &:admin?)
       can :read, ProductAccessory
     end
+
+    if permission.account_management?
+      can :manage, Account
+      can :manage, AccountUser
+    end
   end
 
   def granted_permission_facility(resource)

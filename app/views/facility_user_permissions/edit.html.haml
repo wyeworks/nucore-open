@@ -28,7 +28,7 @@
         .checkbox
           %label
             = f.check_box perm, class: (perm == :read_access ? "js--readAccessCheckbox" : "js--otherPermissionCheckbox")
-            = text(".permission_labels.#{perm}")
+            = FacilityUserPermission.human_attribute_name(perm)
 
   %ul.list-inline
     %li= f.submit text("shared.save"), class: "btn btn-primary"

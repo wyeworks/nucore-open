@@ -300,6 +300,17 @@ en:
         account_number: Chart String Number
         revenue_account: Revenue Account
         is_active: "Is Active?"
+      facility_user_permission:
+        read_access: Read Access
+        account_management: Payment Source Management
+        assign_permissions: Assign Permissions
+        billing_journals: Billing Journals
+        billing_send: Billing Send
+        instrument_management: Instrument Management
+        order_management: Order Management
+        price_adjustment: Price Adjustment
+        product_management: Product Management
+        product_pricing: Product Pricing
       product:
         can_be_used_by?: Approved?
         cross_core_ordering_available: "Available for Cross-Core Ordering?"
