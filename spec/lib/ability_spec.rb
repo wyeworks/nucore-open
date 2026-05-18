@@ -830,6 +830,14 @@ RSpec.describe Ability do
       it_is_allowed_to([:manage], AccountUser)
     end
 
+    context "with reporting access" do
+      before do
+        user.facility_user_permissions.where(facility:).update(reporting: true)
+      end
+
+      it_is_allowed_to([:manage], Reports::ReportsController)
+    end
+
     context "with only read_access (no other flags)" do
       before do
         FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, read_access: true)
@@ -851,6 +859,8 @@ RSpec.describe Ability do
       it_is_not_allowed_to([:manage], OfflineReservation)
       it_is_not_allowed_to([:manage], Account)
       it_is_not_allowed_to([:manage], AccountUser)
+      it_is_not_allowed_to([:manage], Reports::ReportsController)
+
       it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
       it { is_expected.not_to be_allowed_to(:edit, facility) }
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
