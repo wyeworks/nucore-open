@@ -15,6 +15,7 @@ class FacilityUserPermission < ApplicationRecord
     billing_send
     billing_journals
     instrument_management
+    user_management
     assign_permissions
     account_management
     reporting

@@ -313,6 +313,7 @@ en:
         product_edition: Product Edition
         product_pricing: Product Pricing
         reporting: Reporting
+        user_management: User Management
       product:
         can_be_used_by?: Approved?
         cross_core_ordering_available: "Available for Cross-Core Ordering?"
