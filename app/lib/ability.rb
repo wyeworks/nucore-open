@@ -442,6 +442,10 @@ class Ability
       can :manage, Account
       can :manage, AccountUser
     end
+
+    if permission.reporting?
+      can :manage, Reports::ReportsController
+    end
   end
 
   def granted_permission_facility(resource)
