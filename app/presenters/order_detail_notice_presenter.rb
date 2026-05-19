@@ -17,9 +17,7 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
 
   def warnings
     if problem?
-      problem_key = problem_description_key
-
-      [Notice.new(problem_key || :problem_out_of_sync, :warning)]
+      [Notice.new(problem_description_key || :problem_out_of_sync, :warning)]
     else
       []
     end
