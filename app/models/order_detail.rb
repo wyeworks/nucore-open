@@ -944,16 +944,6 @@ class OrderDetail < ApplicationRecord
     problem_keys.first
   end
 
-  def build_problem_keys
-    return [] unless complete?
-
-    time_data_problem_key = time_data.problem_description_key
-    price_policy_problem_key = :missing_price_policy if price_policy.blank?
-    missing_form_problem_key = :missing_form if missing_form?
-
-    [time_data_problem_key, price_policy_problem_key, missing_form_problem_key].compact
-  end
-
   def requires_but_missing_actuals?
     problem_description_keys.include?(:missing_actuals)
   end

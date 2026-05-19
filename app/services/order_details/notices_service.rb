@@ -1,6 +1,12 @@
 # frozen_string_literal: true
 
 module OrderDetails
+  ##
+  # Used to retrieve OrderDetail notices and problems.
+  #
+  # notices and problems are stored in order detail
+  # where as time_based_notices are always computed.
+  #
   class NoticesService
     attr_reader :order_detail
 
@@ -36,7 +42,13 @@ module OrderDetails
     end
 
     def problems
-      build_problem_keys
+      return [] unless complete?
+
+      [
+        time_data.problem_description_key,
+        (:missing_price_policy if price_policy.blank?),
+        (:missing_form if missing_form?),
+      ].compact
     end
   end
 end

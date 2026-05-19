@@ -115,7 +115,8 @@ RSpec.describe OrderDetails::NoticesService do
     subject { instance.problems }
 
     it "shows a problem notice" do
-      allow(order_detail).to receive_messages(problem?: true, build_problem_keys: [:missing_price_policy])
+      order_detail.price_policy = nil
+      order_detail.state = :complete
 
       is_expected.to eq([:missing_price_policy])
     end
