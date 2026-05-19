@@ -577,8 +577,10 @@ class OrderDetail < ApplicationRecord
     return response if response
 
     # are survey requirements met
-    response = validate_service_meta
-    return response if response
+    unless being_purchased_by_admin && product.admin_skip_order_form
+      response = validate_service_meta
+      return response if response
+    end
 
     return nil if product.can_purchase_order_detail? self
 
@@ -602,7 +604,6 @@ class OrderDetail < ApplicationRecord
 
   def validate_service_meta
     return unless product.is_a?(Service)
-    return if being_purchased_by_admin && product.admin_skip_order_form
 
     requires_upload = !product.stored_files.template.empty?
     requires_survey = product.active_survey?

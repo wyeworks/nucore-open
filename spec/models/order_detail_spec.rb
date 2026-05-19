@@ -406,12 +406,23 @@ RSpec.describe OrderDetail do
       end
 
       it "is not valid as user" do
-        expect(@order_detail.valid_service_meta?).to be false
+        expect(@order_detail.valid_for_purchase?).to be false
       end
 
-      it "is valid as admin" do
-        @order_detail.being_purchased_by_admin = true
-        expect(@order_detail.valid_service_meta?).to be true
+      context "as admin" do
+        before do
+          @order_detail.being_purchased_by_admin = true
+        end
+
+        it "is valid" do
+          expect(@order_detail.valid_for_purchase?).to be true
+        end
+
+        it "assigns missing_form notice on save" do
+          @order_detail.save
+
+          expect(@order_detail.notice_keys).to include(:missing_form)
+        end
       end
     end
   end
