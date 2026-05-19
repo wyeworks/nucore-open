@@ -363,7 +363,6 @@ class Ability
     if permission.product_edition?
       can :manage, [
         BundleProduct,
-        Product,
         ProductAccessGroup,
         ProductAccessory,
         ProductDisplayGroup,
@@ -374,8 +373,8 @@ class Ability
         TrainingRequest,
         OfflineReservation,
       ]
+      can [:update, :destroy], Product
       cannot :create_daily_booking, Product
-      cannot :create, Product
       can [:show, :index], PriceGroup
       can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
       can [:read, :edit], PriceGroupProduct

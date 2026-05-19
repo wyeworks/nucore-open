@@ -10,9 +10,10 @@ module FacilityUserPermissionsHelper
   end
 
   def permission_checkbox_classes(perm)
-    classes = [perm == :read_access ? "js--readAccessCheckbox" : "js--otherPermissionCheckbox"]
-    classes << "js--productCreationCheckbox" if perm == :product_creation
-    classes << "js--productEditionCheckbox" if perm == :product_edition
+    return "js--readAccessCheckbox" if perm == :read_access
+
+    classes = ["js--otherPermissionCheckbox"]
+    classes << "js--#{perm.to_s.camelize(:lower)}Checkbox" if %i[product_creation product_edition].include?(perm)
     classes.join(" ")
   end
 

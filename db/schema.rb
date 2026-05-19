@@ -289,9 +289,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_14_174415) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "read_access", default: false, null: false
-    t.boolean "account_management", default: false, null: false
     t.boolean "product_creation", default: false, null: false
     t.boolean "product_edition", default: false, null: false
+    t.boolean "account_management", default: false, null: false
     t.index ["facility_id"], name: "index_facility_user_permissions_on_facility_id"
     t.index ["user_id", "facility_id"], name: "index_facility_user_permissions_on_user_id_and_facility_id", unique: true
     t.index ["user_id"], name: "index_facility_user_permissions_on_user_id"
