@@ -403,11 +403,13 @@ class Ability
            :cancel, :edit, :index, :show, :tab_counts,
            :timeline, :update], Reservation
 
+      can :show_problems, [Order, Reservation]
+
       can :act_as, Facility
       can(:switch_to, User, &:active?)
       can :read, Notification
 
-      can [:transactions, :disputed_orders], Facility
+      can [:transactions], Facility
       can :manage, OrderImport
 
       can [:upload_sample_results, :destroy], StoredFile do |fileupload|
