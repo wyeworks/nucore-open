@@ -186,6 +186,86 @@ RSpec.describe MessageSummarizer do
     end
   end
 
+  context "with granular permissions", feature_setting: { granular_permissions: true } do
+    let(:admin_tab?) { true }
+    let(:user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user:, facility:, **permission_attrs)
+    end
+
+    context "when a disputed order detail exists" do
+      before { order_detail.update_attribute(:dispute_at, 1.day.ago) }
+
+      context "with order_management only" do
+        let(:permission_attrs) { { read_access: true, order_management: true } }
+
+        it_behaves_like "there are no messages"
+      end
+
+      context "with billing_send" do
+        let(:permission_attrs) { { read_access: true, billing_send: true } }
+
+        it_behaves_like "there is one overall message"
+        it { expect(subject.first.link).to match(/\bDisputed Orders \(1\)/) }
+      end
+
+      context "with billing_journals" do
+        let(:permission_attrs) { { read_access: true, billing_journals: true } }
+
+        it_behaves_like "there is one overall message"
+        it { expect(subject.first.link).to match(/\bDisputed Orders \(1\)/) }
+      end
+    end
+
+    context "when a problem order detail exists" do
+      let(:product) { create(:setup_item) }
+
+      before { set_problem_order }
+
+      context "with order_management" do
+        let(:permission_attrs) { { read_access: true, order_management: true } }
+
+        it_behaves_like "there is one overall message"
+        it { expect(subject.first.link).to match(/\bProblem Orders \(1\)/) }
+      end
+
+      context "with product_edition only" do
+        let(:permission_attrs) { { read_access: true, product_edition: true } }
+
+        it_behaves_like "there are no messages"
+      end
+    end
+
+    context "when a problem reservation order detail exists" do
+      before { set_problem_order }
+
+      context "with order_management" do
+        let(:permission_attrs) { { read_access: true, order_management: true } }
+
+        it_behaves_like "there is one overall message"
+        it { expect(subject.first.link).to match(/\bProblem Reservations \(1\)/) }
+      end
+
+      context "with product_edition only" do
+        let(:permission_attrs) { { read_access: true, product_edition: true } }
+
+        it_behaves_like "there are no messages"
+      end
+    end
+
+    context "when a training request exists" do
+      before { create(:training_request, product: product) }
+
+      context "with product_edition" do
+        let(:permission_attrs) { { read_access: true, product_edition: true } }
+
+        it_behaves_like "there is one overall message"
+        it { expect(subject.first.link).to match(/\bTraining Requests \(1\)/) }
+      end
+    end
+  end
+
   context "when a training request exists" do
     before { create(:training_request, product: product) }
 
