@@ -392,30 +392,7 @@ class Ability
       can :manage, PriceGroupDiscount
     end
 
-    if permission.order_management?
-      can :update, OrderDetail
-      can :mark_unrecoverable, OrderDetail
-
-      can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
-           :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order
-
-      can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
-           :cancel, :edit, :index, :show, :tab_counts,
-           :timeline, :update], Reservation
-
-      can :show_problems, [Order, Reservation]
-
-      can :act_as, Facility
-      can(:switch_to, User, &:active?)
-      can :read, Notification
-
-      can [:transactions], Facility
-      can :manage, OrderImport
-
-      can [:upload_sample_results, :destroy], StoredFile do |fileupload|
-        fileupload.file_type == "sample_result"
-      end
-    end
+    granted_permission_order_management_abilities if permission.order_management?
 
     if permission.price_adjustment?
       can :adjust_price, OrderDetail
@@ -479,6 +456,31 @@ class Ability
     if permission.order_management? || permission.instrument_management?
       can :read, ProductAccessory
       can :manage, Reservation
+    end
+  end
+
+  def granted_permission_order_management_abilities
+    can :update, OrderDetail
+    can :mark_unrecoverable, OrderDetail
+
+    can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
+         :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order
+
+    can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
+         :cancel, :edit, :index, :show, :tab_counts,
+         :timeline, :update], Reservation
+
+    can :show_problems, [Order, Reservation]
+
+    can :act_as, Facility
+    can(:switch_to, User, &:active?)
+    can :read, Notification
+
+    can [:transactions], Facility
+    can :manage, OrderImport
+
+    can [:upload_sample_results, :destroy], StoredFile do |fileupload|
+      fileupload.file_type == "sample_result"
     end
   end
 
