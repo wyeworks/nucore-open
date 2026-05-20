@@ -31,7 +31,7 @@ RSpec.describe "product survey page" do
         .update_all(product_management: true)
     end
 
-    it "does not see survey or template forms" do
+    it "sees survey and template forms" do
       visit product_survey_url(facility, service.model_name.plural, service)
 
       expect(page).to have_css("form#new_url_service")
