@@ -113,5 +113,4 @@
 * `active_storage_for_images_only` enables `ActiveStorage` for the `DownloadableFiles::Image` module. This flag needs to be enabled even if `active_storage` is
 * `show_estimates_option`: Enable estimates menu entry on facility management.
 * `billing_log_events`: Enable billing logs on global menu.
-* `stored_order_notices`: Show order details notices and problems from order detail table instead of computing them on the fly.
 * `admin_skip_order_forms`: Allow admins to skip order forms when ordering for a User. This should be enabled for each Service.

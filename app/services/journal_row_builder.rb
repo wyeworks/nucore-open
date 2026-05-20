@@ -68,6 +68,7 @@ class JournalRowBuilder
     if valid? && journal_rows.present?
       journal_rows.each(&:save!)
       set_journal_for_order_details(journal, order_details.map(&:id))
+      enqueue_order_detail_notice_update
     end
     self
   end
@@ -183,6 +184,12 @@ class JournalRowBuilder
   # Updates the journal_id of each order_detail.
   def set_journal_for_order_details(journal, order_detail_ids)
     OrderDetail.where_ids_in(order_detail_ids).update_all(journal_id: journal.id)
+  end
+
+  def enqueue_order_detail_notice_update
+    journal.order_details.map do |order_detail|
+      OrderDetailNoticesUpdateJob.perform_later(order_detail)
+    end
   end
 
 end

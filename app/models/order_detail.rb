@@ -577,8 +577,10 @@ class OrderDetail < ApplicationRecord
     return response if response
 
     # are survey requirements met
-    response = validate_service_meta
-    return response if response
+    unless being_purchased_by_admin && product.admin_skip_order_form
+      response = validate_service_meta
+      return response if response
+    end
 
     return nil if product.can_purchase_order_detail? self
 
@@ -602,7 +604,6 @@ class OrderDetail < ApplicationRecord
 
   def validate_service_meta
     return unless product.is_a?(Service)
-    return if being_purchased_by_admin && product.admin_skip_order_form
 
     requires_upload = !product.stored_files.template.empty?
     requires_survey = product.active_survey?
@@ -821,11 +822,18 @@ class OrderDetail < ApplicationRecord
   end
 
   def ready_for_statement?
-    reviewed? && statement_id.blank? && Account.config.using_statements?(account.type) && !missing_form?
+    reviewed? &&
+      statement_id.blank? &&
+      Account.config.using_statements?(account.type) &&
+      problem_keys.exclude?(:missing_form)
   end
 
   def ready_for_journal?
-    reviewed? && journal_id.blank? && Account.config.using_journal?(account.type) && !reconciled? && !missing_form?
+    reviewed? &&
+      journal_id.blank? &&
+      Account.config.using_journal?(account.type) &&
+      !reconciled? &&
+      problem_keys.exclude?(:missing_form)
   end
 
   def awaiting_payment?
@@ -934,16 +942,6 @@ class OrderDetail < ApplicationRecord
 
   def problem_description_key
     problem_keys.first
-  end
-
-  def build_problem_keys
-    return [] unless complete?
-
-    time_data_problem_key = time_data.problem_description_key
-    price_policy_problem_key = :missing_price_policy if price_policy.blank?
-    missing_form_problem_key = :missing_form if missing_form?
-
-    [time_data_problem_key, price_policy_problem_key, missing_form_problem_key].compact
   end
 
   def requires_but_missing_actuals?

@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Journals::Closer do
   let(:facility) { create(:facility) }
-  let(:journal) do
+  let!(:journal) do
     create(
       :journal,
       :with_completed_order,
@@ -59,7 +59,7 @@ RSpec.describe Journals::Closer do
     let(:params) { ActionController::Parameters.new }
 
     it "does not schedule update order notices on error" do
-      expect { subject.perform("succeeded") }.not_to have_enqueued_job
+      expect { subject.perform("succeeded") }.not_to have_enqueued_job(OrderDetailNoticesUpdateJob)
     end
   end
 end
