@@ -5,7 +5,7 @@ module SangerSequencing
   class SangerProductsController < BaseController
     before_action :set_resources
     before_action { @active_tab = "admin_products" }
-    before_action { authorize! :manage, @product }
+    before_action { authorize! :update, @product }
 
     layout "two_column"
     admin_tab :all
