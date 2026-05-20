@@ -886,12 +886,8 @@ RSpec.describe Ability do
 
       it { is_expected.to be_allowed_to(:manage_users, facility) }
 
-      it "allows switching to an active user" do
-        expect(ability).to be_allowed_to(:switch_to, create(:user))
-      end
-
-      it "does not allow switching to a suspended user" do
-        expect(ability).not_to be_allowed_to(:switch_to, create(:user, suspended_at: Time.current))
+      it "does not allow switch_to (that is order_management's responsibility)" do
+        expect(ability).not_to be_allowed_to(:switch_to, create(:user))
       end
 
       context "when accessing FacilityUsersController" do

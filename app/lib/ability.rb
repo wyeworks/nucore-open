@@ -437,7 +437,6 @@ class Ability
     return unless permission.user_management?
 
     can :manage_users, resource
-    can(:switch_to, User, &:active?)
     can :manage, User if controller.is_a?(FacilityUsersController)
 
     if controller.is_a?(UsersController)
