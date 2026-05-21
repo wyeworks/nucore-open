@@ -5,29 +5,39 @@
 class FacilityUserPermissionAbility
   include CanCan::Ability
 
+  attr_reader :user, :resource, :controller
+
   def initialize(user, resource, controller = nil)
+    @user = user
+    @resource = resource
+    @controller = controller
+
+    grant_permissions
+  end
+
+  def facility
+    @facility ||=
+      case resource
+      when Facility then resource
+      when OrderDetail, Project then resource.facility
+      when Reservation then resource.product.facility
+      end
+  end
+
+  def grant_permissions
     return unless SettingsHelper.feature_on?(:granular_permissions)
 
-    facility = get_facility(resource)
     return unless facility
 
     facility_user_permission = user.facility_user_permissions.find_by(facility:)
     return unless facility_user_permission&.read_access?
 
     facility_user_permission.active_permissions.each do |permission|
-      send("grant_#{permission}", user, resource, controller)
+      send("grant_#{permission}")
     end
   end
 
-  def get_facility(resource)
-    case resource
-    when Facility then resource
-    when OrderDetail, Project then resource.facility
-    when Reservation then resource.product.facility
-    end
-  end
-
-  def grant_read_access(_user, _resource, controller)
+  def grant_read_access
     can [:list, :dashboard, :show], Facility
 
     can [:administer, :index, :show, :tab_counts], Order
@@ -52,7 +62,7 @@ class FacilityUserPermissionAbility
     can :index, User if controller.is_a?(FacilityUsersController) || controller.is_a?(UsersController)
   end
 
-  def grant_assign_permissions(*)
+  def grant_assign_permissions
     can :manage, FacilityUserPermission
     can :update, Facility
     can :manage, FacilityAccount
@@ -62,12 +72,12 @@ class FacilityUserPermissionAbility
     can :manage, OrderStatus
   end
 
-  def grant_billing_send(_user, resource, _controller)
+  def grant_billing_send
     can :manage_billing, resource
     can [:disputed_orders, :transactions, :reassign_chart_strings, :confirm_transactions], Facility
   end
 
-  def grant_billing_journals(_user, resource, _controller)
+  def grant_billing_journals
     can :manage_billing, resource
     can :manage, [Journal, Statement, OrderDetail]
     can [:send_receipt, :show], Order
@@ -79,7 +89,7 @@ class FacilityUserPermissionAbility
     end
   end
 
-  def grant_product_edition(*)
+  def grant_product_edition
     can :manage, [
       BundleProduct,
       ProductAccessGroup,
@@ -100,20 +110,20 @@ class FacilityUserPermissionAbility
     can [:index, :create, :destroy], ProductResearchSafetyCertificationRequirement
   end
 
-  def grant_product_creation(*)
+  def grant_product_creation
     can :create, Product
   end
 
-  def grant_product_pricing(*)
+  def grant_product_pricing
     can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
     can :manage, PriceGroup
     can :manage, PriceGroupProduct
     can :manage, PriceGroupDiscount
   end
 
-  def grant_order_management(*)
-    can :update, OrderDetail
-    can :mark_unrecoverable, OrderDetail
+  def grant_order_management
+    can :update, OrderDetail, { order: { facility_id: facility.id } }
+    can :mark_unrecoverable, OrderDetail, { order: { facility_id: facility.id } }
 
     can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
          :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order
@@ -135,11 +145,11 @@ class FacilityUserPermissionAbility
     end
   end
 
-  def grant_price_adjustment(*)
-    can :adjust_price, OrderDetail
+  def grant_price_adjustment
+    can :adjust_price, OrderDetail, { order: { facility_id: facility.id } }
   end
 
-  def grant_instrument_management(_user, resource, _controller)
+  def grant_instrument_management
     can :manage, OfflineReservation
     can :switch, Instrument
 
@@ -152,25 +162,25 @@ class FacilityUserPermissionAbility
     can :read, ProductAccessory
   end
 
-  def grant_account_management(*)
+  def grant_account_management
     can :manage, Account
     can :manage, AccountUser
   end
 
-  def grant_reporting(*)
+  def grant_reporting
     can :manage, Reports::ReportsController
   end
 
-  def grant_project_management(*)
+  def grant_project_management
     can [:show, :edit, :update], Project, facility_id: facility.id
     can [:create, :new, :cross_core_orders], Project
   end
 
-  def grant_quoting(*)
+  def grant_quoting
     can :manage, Estimate, facility_id: facility.id
   end
 
-  def grant_user_management(_user, resource, controller)
+  def grant_user_management
     can :manage_users, resource
     can :manage, User if controller.is_a?(FacilityUsersController)
 
