@@ -661,6 +661,36 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:manage, OrderDetail) }
     end
 
+    context "with product_creation (implies product_edition)" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(product_creation: true)
+      end
+
+      it_is_allowed_to([:new, :create, :update, :edit, :destroy], Product)
+      it_is_allowed_to([:new, :create, :update, :edit, :destroy], BundleProduct)
+      it { is_expected.to be_allowed_to(:manage, Schedule) }
+      it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
+      it { is_expected.to be_allowed_to(:manage, StoredFile) }
+      it { is_expected.to be_allowed_to(:manage, OfflineReservation) }
+      it { is_expected.not_to be_allowed_to(:create_daily_booking, Product) }
+    end
+
+    context "with product_edition" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(product_edition: true)
+      end
+
+      it_is_allowed_to([:update, :edit, :destroy], Product)
+      it { is_expected.not_to be_allowed_to(:new, Product) }
+      it { is_expected.not_to be_allowed_to(:create, Product) }
+      it_is_allowed_to([:new, :create, :update, :edit, :destroy], BundleProduct)
+      it { is_expected.to be_allowed_to(:manage, Schedule) }
+      it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
+      it { is_expected.to be_allowed_to(:manage, StoredFile) }
+      it { is_expected.to be_allowed_to(:manage, OfflineReservation) }
+      it { is_expected.not_to be_allowed_to(:create_daily_booking, Product) }
+    end
+
     context "with order_management" do
       before do
         FacilityUserPermission.find_by(user:, facility:).update!(order_management: true)

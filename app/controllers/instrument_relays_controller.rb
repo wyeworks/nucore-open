@@ -59,7 +59,7 @@ class InstrumentRelaysController < ApplicationController
 
   def manage
     if %w[new create edit update].include?(action_name)
-      authorize! :manage, @product
+      authorize! :update, @product
     else
       authorize! :view_details, @product
     end

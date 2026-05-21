@@ -215,7 +215,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
     context "with a permission that does not grant order detail management" do
       before do
-        create(:facility_user_permission, user:, facility:, product_management: true)
+        create(:facility_user_permission, user:, facility:, product_edition: true)
         sign_in user
         do_request
       end

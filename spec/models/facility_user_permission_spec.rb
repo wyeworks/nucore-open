@@ -53,4 +53,30 @@ RSpec.describe FacilityUserPermission do
       expect(permission).to be_valid
     end
   end
+
+  describe "product_creation implies product_edition" do
+    it "auto-grants product_edition when product_creation is true" do
+      permission.read_access = true
+      permission.product_creation = true
+      permission.product_edition = false
+      permission.save!
+      expect(permission.reload.product_edition).to be true
+    end
+
+    it "does not auto-grant product_edition when product_creation is false" do
+      permission.read_access = true
+      permission.product_creation = false
+      permission.product_edition = false
+      permission.save!
+      expect(permission.reload.product_edition).to be false
+    end
+
+    it "leaves product_edition true when both flags are explicitly set" do
+      permission.read_access = true
+      permission.product_creation = true
+      permission.product_edition = true
+      permission.save!
+      expect(permission.reload).to have_attributes(product_creation: true, product_edition: true)
+    end
+  end
 end

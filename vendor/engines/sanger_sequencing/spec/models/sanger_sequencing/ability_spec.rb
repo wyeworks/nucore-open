@@ -69,9 +69,9 @@ RSpec.describe SangerSequencing::Ability do
   describe "user with granular permissions", feature_setting: { granular_permissions: true } do
     let(:user) { create(:user) }
 
-    context "with product_management" do
+    context "with product_edition" do
       before do
-        create(:facility_user_permission, user:, facility:, product_management: true)
+        create(:facility_user_permission, user:, facility:, product_edition: true)
       end
 
       it_is_allowed_to([:index, :show], SangerSequencing::Submission)
@@ -80,7 +80,16 @@ RSpec.describe SangerSequencing::Ability do
       it_is_allowed_to(:manage, SangerSequencing::Primer)
     end
 
-    context "with read_access only (no product_management)" do
+    context "with product_creation (implies product_edition)" do
+      before do
+        create(:facility_user_permission, user:, facility:, product_creation: true)
+      end
+
+      it_is_allowed_to([:index, :show], SangerSequencing::Submission)
+      it_is_allowed_to(:manage, SangerSequencing::Batch)
+    end
+
+    context "with read_access only (no product_edition)" do
       before do
         create(:facility_user_permission, user:, facility:, read_access: true)
       end
@@ -89,9 +98,9 @@ RSpec.describe SangerSequencing::Ability do
       it_is_not_allowed_to(:manage, SangerSequencing::Batch)
     end
 
-    context "with product_management but read_access disabled" do
+    context "with product_edition but read_access disabled" do
       before do
-        permission = build(:facility_user_permission, user:, facility:, product_management: true, read_access: false)
+        permission = build(:facility_user_permission, user:, facility:, product_edition: true, read_access: false)
         permission.save(validate: false)
       end
 
@@ -99,7 +108,7 @@ RSpec.describe SangerSequencing::Ability do
       it_is_not_allowed_to(:manage, SangerSequencing::Batch)
     end
 
-    context "with other granular permissions but not product_management" do
+    context "with other granular permissions but not product_edition" do
       before do
         create(:facility_user_permission, user:, facility:, order_management: true)
       end
@@ -112,7 +121,7 @@ RSpec.describe SangerSequencing::Ability do
       let(:other_facility) { create(:facility, sanger_sequencing_enabled: true) }
 
       before do
-        create(:facility_user_permission, user:, facility: other_facility, product_management: true)
+        create(:facility_user_permission, user:, facility: other_facility, product_edition: true)
       end
 
       it_is_not_allowed_to([:index], SangerSequencing::Submission)
@@ -120,12 +129,12 @@ RSpec.describe SangerSequencing::Ability do
     end
   end
 
-  describe "user with product_management granular permission, feature flag off",
+  describe "user with product_edition granular permission, feature flag off",
            feature_setting: { granular_permissions: false } do
     let(:user) { create(:user) }
 
     before do
-      create(:facility_user_permission, user:, facility:, product_management: true)
+      create(:facility_user_permission, user:, facility:, product_edition: true)
     end
 
     it_is_not_allowed_to([:index], SangerSequencing::Submission)

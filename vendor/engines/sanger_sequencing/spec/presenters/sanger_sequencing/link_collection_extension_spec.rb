@@ -35,8 +35,8 @@ RSpec.describe SangerSequencing::LinkCollectionExtension do
   describe "user with granular permissions", feature_setting: { granular_permissions: true } do
     let(:user) { create(:user) }
 
-    context "with product_management" do
-      before { create(:facility_user_permission, user:, facility:, product_management: true) }
+    context "with product_edition" do
+      before { create(:facility_user_permission, user:, facility:, product_edition: true) }
 
       it { is_expected.to be_a(NavTab::Link) }
     end
@@ -47,7 +47,7 @@ RSpec.describe SangerSequencing::LinkCollectionExtension do
       it { is_expected.to be_nil }
     end
 
-    context "with order_management but no product_management" do
+    context "with order_management but no product_edition" do
       before { create(:facility_user_permission, user:, facility:, order_management: true) }
 
       it { is_expected.to be_nil }
