@@ -850,6 +850,8 @@ RSpec.describe Ability do
       it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
       it_is_allowed_to([:index], Project)
       it_is_allowed_to(:read, PriceGroupProduct)
+      it_is_allowed_to(:index, StoredFile)
+      it_is_allowed_to(:product_survey, StoredFile)
 
       it_is_not_allowed_to([:manage], Journal)
       it_is_not_allowed_to([:manage], Statement)

@@ -16,13 +16,15 @@
   %h3= t(".order_form.head")
   %p= html("file_uploads.product_survey.order_form.main", email: Settings.support_email)
 
-  = simple_form_for(@survey, url: create_product_survey_path(current_facility, @product.parameterize, @product), html: { multipart: true }) do |f|
-    = f.error_messages
-    = f.input :location, label: "Service URL", required: true, input_html: { size: 60 }
+  - if can?(:edit, StoredFile)
+    = simple_form_for(@survey, url: create_product_survey_path(current_facility, @product.parameterize, @product), html: { multipart: true }) do |f|
 
-    = f.submit "Add", data: { disable_with: "Adding..." }, class: "btn btn-default"
+      = f.error_messages
+      = f.input :location, label: "Service URL", required: true, input_html: { size: 60 }
 
-  %br
+      = f.submit "Add", data: { disable_with: "Adding..." }, class: "btn btn-default"
+
+    %br
 
   - surveys = @product.external_service_passers
 
@@ -33,30 +35,28 @@
     %table.table.table-striped.table-hover
       %thead
         %tr
-          %th
-          %th.centered Status
+          - if can?(:edit, StoredFile)
+            %th
+          %th Status
           %th Service URL
           %th Date Added
 
       %tbody
         - surveys.each do |esp|
           %tr
-            - if esp.active?
-              %td.centered
-                = link_to "Deactivate",
-                  deactivate_survey_path(current_facility, @product, esp),
-                  method: :put
+            - if can?(:edit, StoredFile)
+              - if esp.active?
+                %td.centered
+                  = link_to "Deactivate",
+                    deactivate_survey_path(current_facility, @product, esp),
+                    method: :put
+              - else
+                %td.centered
+                  = link_to "Activate",
+                    activate_survey_path(current_facility, @product, esp),
+                    method: :put
 
-              %td.centered Active
-
-            - else
-              %td.centered
-                = link_to "Activate",
-                  activate_survey_path(current_facility, @product, esp),
-                  method: :put
-
-              %td.centered Inactive
-
+            %td= esp.active? ? "Active" : "Inactive"
             %td
               = link_to truncate(esp.external_service.location, length: 60),
                 esp.external_service.location,
@@ -68,15 +68,16 @@
   %h3= t(".download_form.head")
   %p= t(".download_form.main")
 
-  = form_for(@file, url: create_product_survey_path(current_facility, @product.parameterize, @product), html: { multipart: true, method: :post }) do |f|
-    = f.error_messages
-    = f.hidden_field :file_type
+  - if can?(:edit, StoredFile)
+    = form_for(@file, url: create_product_survey_path(current_facility, @product.parameterize, @product), html: { multipart: true, method: :post }) do |f|
+      = f.error_messages
+      = f.hidden_field :file_type
 
-    .form-group
-      = f.label :file, "File", class: "required"
-      = f.file_field :file
+      .form-group
+        = f.label :file, "File", class: "required"
+        = f.file_field :file
 
-    = f.submit text("shared.upload"), data: { disable_with: "Uploading..." }, class: "btn btn-default"
+      = f.submit text("shared.upload"), data: { disable_with: "Uploading..." }, class: "btn btn-default"
 
   %br
 
@@ -89,7 +90,8 @@
     %table.table.table-striped.table-hover
       %thead
         %tr
-          %th
+          - if can?(:edit, StoredFile)
+            %th
           %th File
           %th Date Uploaded
           %th Uploaded By
@@ -97,11 +99,12 @@
       %tbody
         - files.each do |stored_file|
           %tr
-            %td
-              = link_to text("shared.delete"),
-                [current_facility, @product, :file_upload, id: stored_file],
-                method: :delete,
-                data: { confirm: t(".download_form.confirm") }
+            - if can?(:edit, StoredFile)
+              %td.centered
+                = link_to text("shared.delete"),
+                  [current_facility, @product, :file_upload, id: stored_file],
+                  method: :delete,
+                  data: { confirm: t(".download_form.confirm") }
 
             %td= link_to stored_file.name, product_file_path(stored_file)
             %td= format_usa_datetime(stored_file.created_at)
