@@ -200,7 +200,7 @@ class OrderImport < ApplicationRecord
   end
 
   def store_error_report
-    io = StringIO.new(self.error_report)
+    io = StringIO.new(error_report)
 
     self.error_file = StoredFile.new(
       name: "error_report.csv",
