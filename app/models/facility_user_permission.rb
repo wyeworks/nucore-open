@@ -36,6 +36,10 @@ class FacilityUserPermission < ApplicationRecord
     "#{user} - #{facility.abbreviation}"
   end
 
+  def active_permissions
+    PERMISSIONS.select { |perm| send(perm) }
+  end
+
   private
 
   def read_access_required_with_other_permissions
