@@ -82,12 +82,12 @@ RSpec.describe SecureRoomsApi::ScansController do
           it { is_expected.to have_http_status(:multiple_choices) }
 
           it "is expected to contain a list of accounts" do
-            expect(JSON.parse(response.body)).to include("accounts")
-            expect(JSON.parse(response.body)["accounts"].size).to eq 3
+            expect(response.parsed_body).to include("accounts")
+            expect(response.parsed_body["accounts"].size).to eq 3
           end
 
           it "has the tablet token" do
-            expect(JSON.parse(response.body)["tablet_identifier"]).to eq("TABLETID")
+            expect(response.parsed_body["tablet_identifier"]).to eq("TABLETID")
           end
         end
       end
