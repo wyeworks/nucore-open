@@ -32,7 +32,7 @@ class ReservationsController < ApplicationController
     @reservations_by_instrument = Reservation.for_timeline(@display_datetime, instrument_ids).group_by(&:product)
   end
 
-  # GET /facilities/1/instruments/1/reservations.js?_=1279579838269&start=1279429200&end=1280034000
+  # GET /facilities/1/instruments/1/reservations.json?_=1279579838269&start=1279429200&end=1280034000
   def index
     @facility = Facility.find_by!(url_name: params[:facility_id])
     @instrument = @facility.instruments.find_by!(url_name: params[:instrument_id])
@@ -64,7 +64,7 @@ class ReservationsController < ApplicationController
     discriminate = params[:discriminate] == "true" && can?(:administer, Reservation)
 
     respond_to do |format|
-      format.js do
+      format.json do
         render(
           json: CalendarEventsPresenter.new(
             @instrument,

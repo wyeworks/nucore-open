@@ -50,7 +50,7 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
 
       @method = :xhr
       @action = :index
-      @params.merge!(instrument_id: instrument.url_name, facility_id: facility.url_name)
+      @params.merge!(instrument_id: instrument.url_name, facility_id: facility.url_name, format: :json)
     end
 
     it_should_allow_all facility_users do

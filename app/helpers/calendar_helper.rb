@@ -12,7 +12,7 @@ module CalendarHelper
 
   def calendar_events_path(facility, product, **params)
     opts = {
-      format: "js",
+      format: "json",
       with_details: product.show_details?,
     }
     opts[:view] = product_calendar_view(product)
