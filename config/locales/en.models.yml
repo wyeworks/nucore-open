@@ -311,6 +311,7 @@ en:
         price_adjustment: Price Adjustment
         product_management: Product Management
         product_pricing: Product Pricing
+        reporting: Reporting
       product:
         can_be_used_by?: Approved?
         cross_core_ordering_available: "Available for Cross-Core Ordering?"
