@@ -28,7 +28,7 @@ RSpec.describe "product survey page" do
     before do
       FacilityUserPermission
         .where(user:, facility:)
-        .update_all(product_management: true)
+        .update_all(product_edition: true)
     end
 
     it "sees survey and template forms" do
