@@ -61,7 +61,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
     context "signed in" do
       render_views
 
-      let(:dom) { Nokogiri::HTML(response.body) }
+      let(:dom) { response.parsed_body }
 
       before :each do
         sign_in @admin
@@ -202,7 +202,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
     let(:item_order) { create(:purchased_order, product: item) }
     let(:item_order_detail) { item_order.order_details.first }
     let(:user) { create(:user) }
-    let(:dom) { Nokogiri::HTML(response.body) }
+    let(:dom) { response.parsed_body }
 
     before do
       @action = :edit
