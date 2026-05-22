@@ -76,7 +76,6 @@ window.MergeOrder = class MergeOrder {
             productField.append('<option value=""></option>');
           }
 
-          data = JSON.parse(data);
           data.forEach(function (product) {
             return productField.append(
               '<option value="' +
@@ -110,7 +109,6 @@ window.MergeOrder = class MergeOrder {
         success(data) {
           // Populate dropdown
           accountField.empty();
-          data = JSON.parse(data);
 
           const rawIncludeBlank = accountField.attr("include_blank");
           if (rawIncludeBlank && JSON.parse(rawIncludeBlank)) {
