@@ -25,6 +25,7 @@
       %legend= text(".permissions")
       - FacilityUserPermission::PERMISSIONS.each do |perm|
         - next if perm == :assign_permissions && !current_user.administrator?
+        - next if perm == :quoting && SettingsHelper.feature_off?(:show_estimates_option)
         .checkbox
           %label
             = f.check_box perm, class: permission_checkbox_classes(perm)

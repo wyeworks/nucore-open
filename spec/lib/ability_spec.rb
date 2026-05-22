@@ -980,6 +980,10 @@ RSpec.describe Ability do
       it_is_not_allowed_to([:manage], AccountUser)
       it_is_not_allowed_to([:manage], Reports::ReportsController)
 
+      context "with show_estimates_option enabled", feature_setting: { show_estimates_option: true } do
+        it_behaves_like "it does not have estimate abilities"
+      end
+
       it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
       it { is_expected.not_to be_allowed_to(:edit, facility) }
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
