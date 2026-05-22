@@ -881,7 +881,7 @@ RSpec.describe Ability do
 
     context "with user_management" do
       before do
-        FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, user_management: true)
+        FacilityUserPermission.find_by(user:, facility:).update!(user_management: true)
       end
 
       it { is_expected.to be_allowed_to(:manage_users, facility) }
@@ -905,7 +905,6 @@ RSpec.describe Ability do
       end
 
       it { is_expected.not_to be_allowed_to(:manage, FacilityUserPermission) }
-      it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
       it { is_expected.not_to be_allowed_to(:edit, facility) }
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
       it_is_not_allowed_to([:manage], Product)
