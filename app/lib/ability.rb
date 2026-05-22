@@ -341,6 +341,10 @@ class Ability
       granted_permission_reservation_abilities(permission)
     end
 
+    if resource.is_a?(Project) && permission.project_management?
+      can [:show, :edit, :update], Project
+    end
+
     return unless resource.is_a?(Facility)
 
     granted_permission_read_access_abilities(controller)
@@ -430,6 +434,10 @@ class Ability
       can :manage, Reports::ReportsController
     end
 
+    if permission.project_management?
+      can [:create, :new, :cross_core_orders], Project
+    end
+
     granted_permission_user_management_abilities(permission, resource, controller)
   end
 
@@ -449,7 +457,7 @@ class Ability
   def granted_permission_facility(resource)
     case resource
     when Facility then resource
-    when OrderDetail then resource.facility
+    when OrderDetail, Project then resource.facility
     when Reservation then resource.product.facility
     end
   end

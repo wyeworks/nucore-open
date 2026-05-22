@@ -911,6 +911,36 @@ RSpec.describe Ability do
       it_is_not_allowed_to([:manage], OrderDetail)
     end
 
+    context "with project_management" do
+      before do
+        user.facility_user_permissions.where(facility:).update!(project_management: true)
+      end
+
+      it_is_allowed_to([:create, :new, :cross_core_orders], Project)
+
+      context "when authorizing against a Project instance" do
+        let(:project) { create(:project, facility:) }
+        let(:subject_resource) { project }
+
+        it_is_allowed_to([:show, :edit, :update], Project)
+      end
+    end
+
+    context "without project_management" do
+      it { is_expected.not_to be_allowed_to(:create, Project) }
+      it { is_expected.not_to be_allowed_to(:update, Project) }
+      it { is_expected.not_to be_allowed_to(:cross_core_orders, Project) }
+
+      context "when authorizing against a Project instance" do
+        let(:project) { create(:project, facility:) }
+        let(:subject_resource) { project }
+
+        it { is_expected.not_to be_allowed_to(:show, project) }
+        it { is_expected.not_to be_allowed_to(:edit, project) }
+        it { is_expected.not_to be_allowed_to(:update, project) }
+      end
+    end
+
     context "with only read_access (no other flags)" do
       before do
         FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, read_access: true)
