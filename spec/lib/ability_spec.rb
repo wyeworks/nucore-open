@@ -701,11 +701,22 @@ RSpec.describe Ability do
       it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :cancel, :edit, :index, :show, :tab_counts, :timeline, :update], Reservation)
       it { is_expected.to be_allowed_to(:act_as, facility) }
       it { is_expected.to be_allowed_to(:read, Notification) }
+      it { is_expected.to be_allowed_to(:transactions, facility) }
+      it { is_expected.to be_allowed_to(:show_problems, Order) }
+      it { is_expected.to be_allowed_to(:show_problems, Reservation) }
       it { is_expected.not_to be_allowed_to(:adjust_price, OrderDetail) }
 
       # Admin reservation actions belong to instrument_management, not order_management
       it_is_not_allowed_to([:create, :edit_admin, :update_admin], Reservation)
       it { is_expected.not_to be_allowed_to(:manage, OfflineReservation) }
+
+      context "without billing_send" do
+        before do
+          FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, billing_journals: false)
+        end
+
+        it { is_expected.not_to be_allowed_to(:disputed_orders, facility) }
+      end
 
       context "cross-core order abilities" do
         let(:other_facility) { create(:setup_facility) }
