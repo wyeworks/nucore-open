@@ -429,6 +429,21 @@ class Ability
     if permission.reporting?
       can :manage, Reports::ReportsController
     end
+
+    granted_permission_user_management_abilities(permission, resource, controller)
+  end
+
+  def granted_permission_user_management_abilities(permission, resource, controller)
+    return unless permission.user_management?
+
+    can :manage_users, resource
+    can :manage, User if controller.is_a?(FacilityUsersController)
+
+    if controller.is_a?(UsersController)
+      can [:read, :create, :new, :new_external, :search,
+           :access_list, :access_list_approvals, :edit, :update,
+           :unexpire, :orders, :accounts], User
+    end
   end
 
   def granted_permission_facility(resource)

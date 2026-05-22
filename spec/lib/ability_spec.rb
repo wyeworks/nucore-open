@@ -879,6 +879,38 @@ RSpec.describe Ability do
       it_is_allowed_to([:manage], Reports::ReportsController)
     end
 
+    context "with user_management" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(user_management: true)
+      end
+
+      it { is_expected.to be_allowed_to(:manage_users, facility) }
+
+      it "does not allow switch_to (that is order_management's responsibility)" do
+        expect(ability).not_to be_allowed_to(:switch_to, create(:user))
+      end
+
+      context "when accessing FacilityUsersController" do
+        let(:stub_controller) { FacilityUsersController.new }
+
+        it { is_expected.to be_allowed_to(:manage, User) }
+      end
+
+      context "when accessing UsersController" do
+        let(:stub_controller) { UsersController.new }
+
+        it_is_allowed_to([:read, :create, :new, :new_external, :search,
+                          :access_list, :access_list_approvals, :edit, :update,
+                          :unexpire, :orders, :accounts], User)
+      end
+
+      it { is_expected.not_to be_allowed_to(:manage, FacilityUserPermission) }
+      it { is_expected.not_to be_allowed_to(:edit, facility) }
+      it { is_expected.not_to be_allowed_to(:act_as, facility) }
+      it_is_not_allowed_to([:manage], Product)
+      it_is_not_allowed_to([:manage], OrderDetail)
+    end
+
     context "with only read_access (no other flags)" do
       before do
         FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, read_access: true)

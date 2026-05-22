@@ -293,6 +293,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_18_160805) do
     t.boolean "product_edition", default: false, null: false
     t.boolean "account_management", default: false, null: false
     t.boolean "reporting", default: false, null: false
+    t.boolean "user_management", default: false, null: false
     t.index ["facility_id"], name: "index_facility_user_permissions_on_facility_id"
     t.index ["user_id", "facility_id"], name: "index_facility_user_permissions_on_user_id_and_facility_id", unique: true
     t.index ["user_id"], name: "index_facility_user_permissions_on_user_id"
