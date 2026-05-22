@@ -43,7 +43,7 @@ class OrdersController < ApplicationController
 
   def cart_order_details_count
     respond_to do |format|
-      format.js do
+      format.json do
         order_details_count = acting_user.cart(session_user).order_details.count
 
         render json: { data: { count: order_details_count } }

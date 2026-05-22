@@ -24,7 +24,7 @@ class ScheduleRulesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.haml
-      format.js do
+      format.json do
         render json: ScheduleRules::CalendarPresenter.events(@schedule_rules).to_json
       end
     end

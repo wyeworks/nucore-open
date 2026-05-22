@@ -149,7 +149,7 @@ class FacilityAccountsController < ApplicationController
 
   def accounts_available_for_order
     respond_to do |format|
-      format.js do
+      format.json do
         render json: @facility_accounts_for_user
       end
     end
