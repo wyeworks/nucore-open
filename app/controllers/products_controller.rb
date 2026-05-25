@@ -31,7 +31,7 @@ class ProductsController < ApplicationController
 
   def available_for_cross_core_ordering
     respond_to do |format|
-      format.js do
+      format.json do
         render json: @facility_products
       end
     end
