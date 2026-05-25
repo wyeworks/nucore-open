@@ -342,7 +342,7 @@ class Ability
     end
 
     if resource.is_a?(Project) && permission.project_management?
-      can [:show, :edit, :update], Project
+      can [:show, :edit, :update], Project, facility_id: facility.id
     end
 
     return unless resource.is_a?(Facility)
