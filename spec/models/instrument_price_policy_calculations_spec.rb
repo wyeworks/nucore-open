@@ -84,16 +84,6 @@ RSpec.describe InstrumentPricePolicyCalculations do
     it "stores the net cost (cost minus subsidy) per unit, times quantity" do
       expect(policy.estimate_cost_from_estimate_detail(estimate_detail)).to be_within(0.001).of((852 - 85.2) * 2)
     end
-
-    context "when the calculator returns nil" do
-      before do
-        allow(calculator).to receive(:calculate).with(nil, nil, 480).and_return(nil)
-      end
-
-      it "returns nil" do
-        expect(policy.estimate_cost_from_estimate_detail(estimate_detail)).to be_nil
-      end
-    end
   end
 
   describe "calculating with two effective schedule rules, one discounting one not" do
