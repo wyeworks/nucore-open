@@ -312,6 +312,7 @@ en:
         product_creation: Product Creation
         product_edition: Product Edition
         product_pricing: Product Pricing
+        project_management: Project Management
         reporting: Reporting
         user_management: User Management
       product:
