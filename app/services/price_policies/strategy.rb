@@ -61,7 +61,10 @@ module PricePolicies
       end
 
       def calculate_estimate
-        duration * usage_rate
+        {
+          cost: duration * usage_rate,
+          subsidy: duration * (usage_subsidy || 0),
+        }
       end
     end
 
@@ -90,7 +93,10 @@ module PricePolicies
       end
 
       def calculate_estimate
-        duration * usage_rate_daily
+        {
+          cost: duration * usage_rate_daily,
+          subsidy: duration * (usage_subsidy_daily || 0),
+        }
       end
 
     end
@@ -101,7 +107,15 @@ module PricePolicies
       delegate :duration_mins, to: :time_range
 
       def calculate
-        result = build_intervals.reduce({ time_left: duration_mins, cost: 0, subsidy: 0 }) do |acc, interval_data|
+        cost_and_subsidy_for(duration_mins)
+      end
+
+      def calculate_estimate
+        cost_and_subsidy_for(duration)
+      end
+
+      def cost_and_subsidy_for(total_mins)
+        result = build_intervals.reduce({ time_left: total_mins, cost: 0, subsidy: 0 }) do |acc, interval_data|
           time_left = acc[:time_left]
 
           interval_length = (interval_data[:interval_end] - interval_data[:interval_start]) * 60

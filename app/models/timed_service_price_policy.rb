@@ -23,9 +23,10 @@ class TimedServicePricePolicy < PricePolicy
   end
 
   def estimate_cost_from_estimate_detail(estimate_detail)
-    cost_for_one = calculate_for_time(estimate_detail.duration)[:cost]
+    costs = calculate_for_time(estimate_detail.duration)
+    net_cost_for_one = costs[:cost] - costs[:subsidy]
 
-    cost_for_one * estimate_detail.quantity
+    net_cost_for_one * estimate_detail.quantity
   end
 
   private

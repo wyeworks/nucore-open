@@ -84,9 +84,12 @@ module InstrumentPricePolicyCalculations
   end
 
   def calculate_for_estimated_time(duration, quantity = 1)
-    cost_for_one = PricePolicies::TimeBasedPriceCalculator.new(self).calculate(nil, nil, duration)
+    costs = PricePolicies::TimeBasedPriceCalculator.new(self).calculate(nil, nil, duration)
+    return unless costs
 
-    cost_for_one * quantity
+    net_cost_for_one = costs[:cost] - costs[:subsidy]
+
+    net_cost_for_one * quantity
   end
 
 end

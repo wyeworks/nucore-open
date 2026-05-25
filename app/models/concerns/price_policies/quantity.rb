@@ -40,7 +40,7 @@ module PricePolicies
     end
 
     def estimate_cost_from_estimate_detail(estimate_detail)
-      unit_cost * estimate_detail.quantity
+      unit_total * estimate_detail.quantity
     end
 
     private
