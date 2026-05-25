@@ -20,6 +20,7 @@ class FacilityUserPermission < ApplicationRecord
     account_management
     reporting
     project_management
+    quoting
   ].freeze
 
   validates :user_id, uniqueness: { scope: :facility_id }

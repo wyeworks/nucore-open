@@ -941,6 +941,20 @@ RSpec.describe Ability do
       end
     end
 
+    context "with quoting access" do
+      before do
+        user.facility_user_permissions.where(facility:).update(quoting: true)
+      end
+
+      context "when show_estimates_option is enabled", feature_setting: { show_estimates_option: true } do
+        it_behaves_like "it has estimate abilities"
+      end
+
+      context "when show_estimates_option is disabled", feature_setting: { show_estimates_option: false } do
+        it_behaves_like "it does not have estimate abilities"
+      end
+    end
+
     context "with only read_access (no other flags)" do
       before do
         FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, read_access: true)
@@ -965,6 +979,10 @@ RSpec.describe Ability do
       it_is_not_allowed_to([:manage], Account)
       it_is_not_allowed_to([:manage], AccountUser)
       it_is_not_allowed_to([:manage], Reports::ReportsController)
+
+      context "with show_estimates_option enabled", feature_setting: { show_estimates_option: true } do
+        it_behaves_like "it does not have estimate abilities"
+      end
 
       it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
       it { is_expected.not_to be_allowed_to(:edit, facility) }

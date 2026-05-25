@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_05_22_122529) do
+ActiveRecord::Schema[8.0].define(version: 2026_05_22_140003) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -295,6 +295,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_05_22_122529) do
     t.boolean "reporting", default: false, null: false
     t.boolean "user_management", default: false, null: false
     t.boolean "project_management", default: false, null: false
+    t.boolean "quoting", default: false, null: false
     t.index ["facility_id"], name: "index_facility_user_permissions_on_facility_id"
     t.index ["user_id", "facility_id"], name: "index_facility_user_permissions_on_user_id_and_facility_id", unique: true
     t.index ["user_id"], name: "index_facility_user_permissions_on_user_id"

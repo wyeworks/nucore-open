@@ -223,4 +223,20 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
       end.to raise_error(ActionController::RoutingError)
     end
   end
+
+  context "when show_estimates_option feature is disabled", feature_setting: { show_estimates_option: false } do
+    before { sign_in @admin }
+
+    it "does not show the quoting checkbox" do
+      get :edit, params: { facility_id: facility.url_name, id: target_user.id }
+      expect(response.body).not_to include("quoting")
+    end
+
+    it "ignores the quoting flag when updating" do
+      patch :update, params: { facility_id: facility.url_name, id: target_user.id, facility_user_permission: { quoting: true, product_edition: true } }
+      permission = FacilityUserPermission.find_by(user: target_user, facility:)
+      expect(permission.quoting).to be false
+      expect(permission.product_edition).to be true
+    end
+  end
 end

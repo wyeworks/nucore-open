@@ -438,7 +438,15 @@ class Ability
       can [:create, :new, :cross_core_orders], Project
     end
 
+    granted_permission_quoting_abilities(permission)
+
     granted_permission_user_management_abilities(permission, resource, controller)
+  end
+
+  def granted_permission_quoting_abilities(permission)
+    return unless permission.quoting? && SettingsHelper.feature_on?(:show_estimates_option)
+
+    can :manage, Estimate
   end
 
   def granted_permission_user_management_abilities(permission, resource, controller)
