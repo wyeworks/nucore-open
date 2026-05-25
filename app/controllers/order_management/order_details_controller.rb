@@ -172,6 +172,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   def update_params
     raw_params = params[:order_detail] || empty_params
+    raw_params = raw_params.except(*PRICE_ADJUSTMENT_ATTRIBUTES) if @order_detail.product.skip_order_review?
 
     if cannot?(:update, @order_detail)
       raw_params.slice(*PRICE_ADJUSTMENT_ATTRIBUTES)

@@ -1109,6 +1109,38 @@ RSpec.describe OrderManagement::OrderDetailsController do
       end
     end
 
+    describe "for a Skip Review or Nonbillable item" do
+      ["Skip Review", "Nonbillable"].each do |billing_mode|
+        context "when the product is #{billing_mode}" do
+          let(:item) { FactoryBot.create(:setup_item, facility:, billing_mode:) }
+          let(:order) { FactoryBot.create(:purchased_order, product: item) }
+          let(:order_detail) { order.order_details.first }
+
+          before do
+            sign_in @admin
+            order_detail.change_status!(OrderStatus.complete)
+          end
+
+          it "ignores a manually submitted actual_cost" do
+            @params[:order_detail] = {
+              actual_cost: "10",
+              price_change_reason: "trying to override the price",
+            }
+
+            expect { do_request }.not_to change { order_detail.reload.actual_cost }
+          end
+
+          it "does not require a price change reason when a price is submitted" do
+            @params[:order_detail] = { actual_cost: "10" }
+            do_request
+
+            expect(assigns[:order_detail].errors).not_to include(:price_change_reason)
+            expect(response).to redirect_to([facility, order])
+          end
+        end
+      end
+    end
+
     describe "with granular permissions", feature_setting: { granular_permissions: true } do
       let(:order) { create(:purchased_order, product: item) }
       let(:order_detail) { order.order_details.first }
