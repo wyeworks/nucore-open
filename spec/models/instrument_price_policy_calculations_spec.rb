@@ -72,6 +72,20 @@ RSpec.describe InstrumentPricePolicyCalculations do
     end
   end
 
+  describe "#estimate_cost_from_estimate_detail" do
+    let(:estimate_detail) { double("EstimateDetail", duration: 480, quantity: 2) }
+    let(:calculator) { instance_double(PricePolicies::TimeBasedPriceCalculator) }
+
+    before do
+      allow(PricePolicies::TimeBasedPriceCalculator).to receive(:new).with(policy).and_return(calculator)
+      allow(calculator).to receive(:calculate).with(nil, nil, 480).and_return(cost: 852, subsidy: 85.2)
+    end
+
+    it "stores the net cost (cost minus subsidy) per unit, times quantity" do
+      expect(policy.estimate_cost_from_estimate_detail(estimate_detail)).to be_within(0.001).of((852 - 85.2) * 2)
+    end
+  end
+
   describe "calculating with two effective schedule rules, one discounting one not" do
     describe "no minimum cost" do
       let(:friday_evening) { Time.zone.parse("2017-04-21 23:00:15") }

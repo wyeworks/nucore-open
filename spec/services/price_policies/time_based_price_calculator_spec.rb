@@ -206,6 +206,19 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
         it { is_expected.to eq(0.88) }
       end
     end
+
+    describe "#calculate with a duration (estimate path)" do
+      let(:options) { { usage_rate: 60, usage_subsidy: 15 } }
+      subject(:costs) { calculator.calculate(nil, nil, 60) }
+
+      it "uses the per-minute strategy" do
+        expect(calculator_strategy).to be PricePolicies::Strategy::PerMinute
+      end
+
+      it "returns cost and subsidy without applying schedule-rule discounts" do
+        is_expected.to eq(cost: 60, subsidy: 15)
+      end
+    end
   end
 
   context "when product has duration pricing mode" do
@@ -350,6 +363,46 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
         end
       end
     end
+
+    describe "#calculate with a duration (estimate path)" do
+      subject(:costs) { calculator.calculate(nil, nil, duration_mins) }
+
+      describe "for external price group" do
+        let(:price_group) { create(:price_group, is_internal: false) }
+        let(:options) { { usage_rate: 130 } }
+        let(:duration_mins) { 8 * 60 }
+
+        before do
+          create(:duration_rate, price_policy:, min_duration_hours: 6, rate: 36)
+        end
+
+        it "uses the stepped strategy" do
+          expect(calculator_strategy).to be PricePolicies::Strategy::SteppedRate
+        end
+
+        it "charges each tier across the duration" do
+          expect(costs[:cost].round(4)).to eq(852)
+          expect(costs[:subsidy]).to eq(0)
+        end
+      end
+
+      describe "for a subsidized (cancer center) price group" do
+        let(:price_group) { create(:price_group, :cancer_center) }
+        let(:options) { { usage_rate: 120, usage_subsidy: 30 } }
+        let(:duration_mins) { (5 * 60) + 15 }
+
+        before do
+          create(:duration_rate, price_policy:, min_duration_hours: 1, rate: 110, subsidy: 25)
+          create(:duration_rate, price_policy:, min_duration_hours: 3, rate: 100, subsidy: 20)
+          create(:duration_rate, price_policy:, min_duration_hours: 5, rate: 90, subsidy: 15)
+        end
+
+        it "returns both cost and subsidy across the tiers" do
+          expect(costs[:cost]).to eq(562.5)
+          expect(costs[:subsidy].round(4)).to eq(123.75)
+        end
+      end
+    end
   end
 
   context "when instrument has daily rate pricing" do
@@ -402,6 +455,17 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
       let(:start_at) { Time.current.beginning_of_day }
 
       it { is_expected.to eq(cost: expected_cost, subsidy: expected_subsidy) }
+    end
+
+    describe "#calculate with a duration (estimate path)" do
+      subject { calculator.calculate(nil, nil, duration_days) }
+
+      it "returns cost and subsidy for the daily rate" do
+        is_expected.to eq(
+          cost: duration_days * usage_rate_daily,
+          subsidy: duration_days * usage_subsidy_daily,
+        )
+      end
     end
   end
 end

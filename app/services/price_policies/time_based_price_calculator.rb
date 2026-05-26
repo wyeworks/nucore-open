@@ -16,7 +16,7 @@ module PricePolicies
       return if start_at.blank? && end_at.blank? && duration.blank?
 
       if duration.present?
-        strategy_class(avoid_stepped: true).new(price_policy, start_at, end_at, duration:).calculate_estimate
+        strategy_class.new(price_policy, start_at, end_at, duration:).calculate_estimate
       else
         return if start_at > end_at
 
@@ -26,10 +26,10 @@ module PricePolicies
 
     private
 
-    def strategy_class(avoid_stepped: false)
+    def strategy_class
       if product.daily_booking?
         Strategy::PerDay
-      elsif !avoid_stepped && product.is_a?(Instrument) && product.duration_pricing_mode? && price_policy.duration_rates.present?
+      elsif product.is_a?(Instrument) && product.duration_pricing_mode? && price_policy.duration_rates.present?
         Strategy::SteppedRate
       else
         Strategy::PerMinute

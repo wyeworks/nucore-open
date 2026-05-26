@@ -18,6 +18,14 @@ RSpec.describe ItemPricePolicy do
     expect(ipp.unit_total.to_f).to eq(10)
   end
 
+  describe "#estimate_cost_from_estimate_detail" do
+    it "returns the net cost (unit_cost minus unit_subsidy) times quantity" do
+      ipp = ItemPricePolicy.new(unit_cost: 10.75, unit_subsidy: 0.75)
+      estimate_detail = double("EstimateDetail", quantity: 3)
+      expect(ipp.estimate_cost_from_estimate_detail(estimate_detail).to_f).to eq(30)
+    end
+  end
+
   context "validations" do
     it { is_expected.to validate_presence_of(:unit_cost) }
     it { is_expected.to validate_numericality_of(:unit_cost).is_greater_than_or_equal_to(0) }

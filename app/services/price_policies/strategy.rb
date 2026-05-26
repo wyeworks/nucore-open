@@ -61,7 +61,10 @@ module PricePolicies
       end
 
       def calculate_estimate
-        duration * usage_rate
+        {
+          cost: duration * usage_rate,
+          subsidy: duration * (usage_subsidy || 0),
+        }
       end
     end
 
@@ -90,7 +93,10 @@ module PricePolicies
       end
 
       def calculate_estimate
-        duration * usage_rate_daily
+        {
+          cost: duration * usage_rate_daily,
+          subsidy: duration * (usage_subsidy_daily || 0),
+        }
       end
 
     end
@@ -101,21 +107,11 @@ module PricePolicies
       delegate :duration_mins, to: :time_range
 
       def calculate
-        result = build_intervals.reduce({ time_left: duration_mins, cost: 0, subsidy: 0 }) do |acc, interval_data|
-          time_left = acc[:time_left]
+        cost_and_subsidy_for(duration_mins)
+      end
 
-          interval_length = (interval_data[:interval_end] - interval_data[:interval_start]) * 60
-
-          time_to_charge = [time_left, interval_length].min
-
-          acc[:time_left] -= time_to_charge
-          acc[:cost] += (interval_data[:step_rate] || 0) * time_to_charge
-          acc[:subsidy] += (interval_data[:step_subsidy] || 0) * time_to_charge
-
-          acc
-        end
-
-        { cost: result[:cost], subsidy: result[:subsidy] }
+      def calculate_estimate
+        cost_and_subsidy_for(duration)
       end
 
       def build_intervals
@@ -143,6 +139,26 @@ module PricePolicies
 
       def sorted_duration_rates
         @sorted_duration_rates ||= price_policy.duration_rates.sorted
+      end
+
+      private
+
+      def cost_and_subsidy_for(total_mins)
+        result = build_intervals.reduce({ time_left: total_mins, cost: 0, subsidy: 0 }) do |acc, interval_data|
+          time_left = acc[:time_left]
+
+          interval_length = (interval_data[:interval_end] - interval_data[:interval_start]) * 60
+
+          time_to_charge = [time_left, interval_length].min
+
+          acc[:time_left] -= time_to_charge
+          acc[:cost] += (interval_data[:step_rate] || 0) * time_to_charge
+          acc[:subsidy] += (interval_data[:step_subsidy] || 0) * time_to_charge
+
+          acc
+        end
+
+        { cost: result[:cost], subsidy: result[:subsidy] }
       end
     end
 
