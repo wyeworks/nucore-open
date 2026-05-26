@@ -963,7 +963,7 @@ RSpec.describe Ability do
       it_is_allowed_to([:list, :dashboard, :show], Facility)
       it_is_allowed_to([:administer, :index, :show, :tab_counts], Order)
       it_is_allowed_to([:show], OrderDetail)
-      it_is_allowed_to([:administer, :index, :show, :timeline], Reservation)
+      it_is_allowed_to([:administer, :index, :show, :timeline, :tab_counts], Reservation)
       it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
       it_is_allowed_to([:index], Project)
       it_is_allowed_to(:read, PriceGroupProduct)
