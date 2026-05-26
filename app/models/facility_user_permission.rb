@@ -29,11 +29,15 @@ class FacilityUserPermission < ApplicationRecord
   before_validation :grant_product_edition_when_product_creation_granted
 
   def no_permissions?
-    PERMISSIONS.none? { |perm| send(perm) }
+    active_permissions.blank?
   end
 
   def to_log_s
     "#{user} - #{facility.abbreviation}"
+  end
+
+  def active_permissions
+    PERMISSIONS.select { |perm| send(perm) }
   end
 
   private
