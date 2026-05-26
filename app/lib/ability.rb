@@ -35,9 +35,9 @@ class Ability
 
       account_administrator_abilities(user, resource, controller)
 
-      cannot :unreconcile, OrderDetail
-
       merge(FacilityUserPermissionAbility.new(user, resource, controller))
+
+      cannot :unreconcile, OrderDetail
     end
 
     ability_extender.extend(user, resource)

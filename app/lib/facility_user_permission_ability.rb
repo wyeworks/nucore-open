@@ -73,19 +73,19 @@ class FacilityUserPermissionAbility
   end
 
   def grant_billing_send
-    can :manage_billing, resource
+    can :manage_billing, facility
     can [:disputed_orders, :transactions, :reassign_chart_strings, :confirm_transactions], Facility
   end
 
   def grant_billing_journals
-    can :manage_billing, resource
+    can :manage_billing, facility
     can :manage, [Journal, Statement, OrderDetail]
     can [:send_receipt, :show], Order
     can [:accounts, :index, :orders, :show, :administer], User
     can :manage, AccountUser
     can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :move_transactions], Facility
     can :manage, Account do |account|
-      account.global? || account.account_facility_joins.any? { |af| af.facility_id == resource.id }
+      account.global? || account.account_facility_joins.any? { |af| af.facility_id == facility.id }
     end
   end
 
