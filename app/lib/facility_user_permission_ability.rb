@@ -132,13 +132,14 @@ class FacilityUserPermissionAbility
          :cancel, :edit, :index, :show, :tab_counts,
          :timeline, :update], Reservation
 
+    can :show_problems, [Order, Reservation]
+
     can :act_as, Facility
     can(:switch_to, User, &:active?)
     can :read, Notification
 
-    can [:transactions, :disputed_orders], Facility
+    can [:transactions], Facility
     can :manage, OrderImport
-    can :read, ProductAccessory
 
     can [:upload_sample_results, :destroy], StoredFile do |fileupload|
       fileupload.file_type == "sample_result"
@@ -177,11 +178,13 @@ class FacilityUserPermissionAbility
   end
 
   def grant_quoting
+    return if SettingsHelper.feature_off?(:show_estimates_option)
+
     can :manage, Estimate, facility_id: facility.id
   end
 
   def grant_user_management
-    can :manage_users, resource
+    can :manage_users, facility
     can :manage, User if controller.is_a?(FacilityUsersController)
 
     if controller.is_a?(UsersController)
