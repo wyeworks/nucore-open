@@ -1112,8 +1112,8 @@ RSpec.describe OrderManagement::OrderDetailsController do
     describe "for a Skip Review or Nonbillable item" do
       ["Skip Review", "Nonbillable"].each do |billing_mode|
         context "when the product is #{billing_mode}" do
-          let(:item) { FactoryBot.create(:setup_item, facility:, billing_mode:) }
-          let(:order) { FactoryBot.create(:purchased_order, product: item) }
+          let(:item) { create(:setup_item, facility:, billing_mode:) }
+          let(:order) { create(:purchased_order, product: item) }
           let(:order_detail) { order.order_details.first }
 
           before do
