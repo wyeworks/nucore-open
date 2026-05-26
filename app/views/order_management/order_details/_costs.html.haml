@@ -1,5 +1,5 @@
 - f.object.send(:extend, PriceDisplayment)
-- price_edit_disabled = actual_cost_edit_disabled? || cannot?(:adjust_price, f.object)
+- price_edit_disabled = actual_cost_edit_disabled? || cannot?(:adjust_price, f.object) || f.object.product.skip_order_review?
 - if f.object.actual_cost?
   .cost-table
     .cost= f.input :actual_cost, as: :currency, disabled: price_edit_disabled
