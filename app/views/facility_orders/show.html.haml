@@ -28,8 +28,8 @@
 
 - subheader_key = (@cross_core_project.present? ? "views.facility_orders.show.add_to_cross_core_order_header" : "views.facility_orders.show.add_to_order_header")
 
-%h2= t(subheader_key)
 - if @cross_core_data_by_facility_id.present?
+  %h2= t(subheader_key)
   #js--reportAnIssueModal.modal.fade
 
   #accordion
@@ -41,4 +41,5 @@
         = render "order_table_footer", order: @cross_core_data_by_facility_id[facility_id][:order], cross_core: true
 
 - if current_ability.can?(:update, Order)
+  %h2= t(subheader_key)
   = render "merge_order_form"
