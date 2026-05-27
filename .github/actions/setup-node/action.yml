@@ -8,7 +8,7 @@ runs:
       uses: actions/cache@v3
       with:
         path: node_modules
-        key: ${{ runner.os }}-bundle-${{ hashFiles('yarn.lock') }}
-        restore-keys: ${{ runner.os }}-yarn-
+        key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
+        restore-keys: ${{ runner.os }}-node-
     - run: yarn install
       shell: bash

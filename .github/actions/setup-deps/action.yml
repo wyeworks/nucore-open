@@ -1,5 +1,5 @@
-name: Setup Rails
-description: Install dependencies and create the database
+name: Setup dependencies
+description: Install Ruby/JS dependencies and write test configuration
 
 runs:
   using: composite
@@ -10,8 +10,3 @@ runs:
       shell: bash
     - run: cp config/secrets.yml.template config/secrets.yml
       shell: bash
-    - run: bundle exec rake db:create db:schema:load
-      shell: bash
-    - run: yarn build
-      shell: bash
-
