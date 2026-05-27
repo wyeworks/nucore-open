@@ -16,7 +16,7 @@ class ProductForCart
   def purchasable_by?(acting_user)
     raise NUCore::PermissionDenied unless product.is_accessible_to_user?(operator?)
 
-    checks(acting_user, session_user).all? do |check|
+    checks(acting_user).all? do |check|
       result = check.call
       [error_path, error_message].all?(&:blank?) && result != false
     end
@@ -38,7 +38,7 @@ class ProductForCart
 
   private
 
-  def checks(acting_user, session_user)
+  def checks(acting_user)
     [
       check_that_user_is_present(acting_user),
       check_that_product_is_available_for_purchase,

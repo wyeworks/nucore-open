@@ -4,7 +4,7 @@ class InstrumentForCart < ProductForCart
 
   private
 
-  def checks(acting_user, _session_user)
+  def checks(acting_user)
     [check_that_user_is_present(acting_user), check_that_product_has_schedule_rules] + super
   end
 
