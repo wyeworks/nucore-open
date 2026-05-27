@@ -744,7 +744,7 @@ RSpec.describe Product do
     context "when the product is archived" do
       before(:each) { subject.is_archived = true }
 
-      it("returns false") { expect(subject.is_accessible_to_user?(user)).to be false }
+      it("returns false") { expect(subject.is_accessible_to_user?(is_operator)).to be false }
     end
   end
 

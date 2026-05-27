@@ -319,7 +319,7 @@ class Product < ApplicationRecord
     self[:user_notes_field_mode] = Products::UserNoteMode[str_value]
   end
 
-  def is_accessible_to_user?(is_operator = false)
+  def is_accessible_to_user?(is_operator)
     !(is_archived? || (is_hidden? && !is_operator))
   end
 
