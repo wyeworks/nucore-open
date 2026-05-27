@@ -43,7 +43,7 @@ class FacilityUserPermissionAbility
     can [:administer, :index, :show, :tab_counts], Order
     can :show, OrderDetail
 
-    can [:administer, :index, :show, :timeline], Reservation
+    can [:administer, :index, :show, :timeline, :tab_counts], Reservation
 
     can [:administer, :index, :view_details, :schedule, :show], Product
     can :read, ProductDisplayGroup
