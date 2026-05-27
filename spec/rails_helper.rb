@@ -215,6 +215,11 @@ RSpec.configure do |config|
         end
       end
     )
+    Account.config.account_types << TestAccount.name
+  end
+
+  config.after :each, :use_test_account do
+    Account.config.account_types.delete TestAccount.name
   end
 
   config.around :each, :use_test_account do |example|

@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe ProductForCart do
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:setup_item, facility: facility) }
+  let(:item) { create(:setup_item, facility:) }
   let(:user) { create(:user) }
   let(:ability) { Ability.new(user, facility, ApplicationController.new) }
   let(:product_for_cart) { described_class.new(item, user, ability) }
@@ -124,6 +124,48 @@ RSpec.describe ProductForCart do
       it "sets error_message explaining that we could not find a valid payment source" do
         product_for_cart.purchasable_by?(user)
         expect(product_for_cart.error_message).to match(/could not find a valid payment source/)
+      end
+    end
+  end
+
+  describe "ordering for", :use_test_account do
+    let(:other_user) { create(:user) }
+    let(:account) { create(:test_account, :with_account_owner, created_by: user.id) }
+
+    before do
+      allow(item).to receive(:can_purchase?).and_return(true)
+      create(
+        :account_user, :purchaser,
+        account:, user: other_user,
+        created_by_user: user,
+      )
+      account.price_groups << PriceGroup.base
+    end
+
+    context "when user has a user_role" do
+      before do
+        UserRole.create!(
+          user:, facility:,
+          role: UserRole::FACILITY_STAFF,
+        )
+      end
+
+      it "can purchase on behalf" do
+        expect(product_for_cart.purchasable_by?(other_user)).to be true
+      end
+    end
+
+    context "when user has granular permission with order mngm" do
+      before do
+        user.facility_user_permissions.create!(
+          facility:,
+          read_access: true,
+          order_management: true,
+        )
+      end
+
+      it "can purchase on behalf" do
+        expect(product_for_cart.purchasable_by?(other_user)).to be true
       end
     end
   end
