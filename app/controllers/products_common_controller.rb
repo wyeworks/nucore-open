@@ -38,8 +38,8 @@ class ProductsCommonController < ApplicationController
   # GET /facilities/:facility_id/(services|items|bundles)/:(service|item|bundle)_id
   def show
     @active_tab = "home"
-    product_for_cart = ProductForCart.new(@product)
-    @add_to_cart = product_for_cart.purchasable_by?(acting_user, session_user)
+    product_for_cart = ProductForCart.new(@product, session_user, current_ability)
+    @add_to_cart = product_for_cart.purchasable_by?(acting_user)
 
     if product_for_cart.error_path
       redirect_to product_for_cart.error_path, notice: product_for_cart.error_message
