@@ -14,7 +14,7 @@ class ProductForCart
   end
 
   def purchasable_by?(acting_user)
-    raise NUCore::PermissionDenied unless product.is_accessible_to_user?(operator?)
+    raise NUCore::PermissionDenied unless product.is_accessible_to_user?(facility_operator?)
 
     checks(acting_user).all? do |check|
       result = check.call
@@ -28,7 +28,7 @@ class ProductForCart
 
   delegate :facility, to: :product
 
-  def operator?
+  def facility_operator?
     ability.can?(:act_as, facility)
   end
 
@@ -67,7 +67,7 @@ class ProductForCart
 
   def check_that_product_can_be_used(acting_user, session_user)
     proc do
-      if !product.can_be_used_by?(acting_user) && !operator?
+      if !product.can_be_used_by?(acting_user) && !facility_operator?
         if SettingsHelper.feature_on?(:training_requests) && product.allows_training_requests?
           if TrainingRequest.submitted?(session_user, product)
             @error_message = text("models.product_for_cart.already_requested_access", i18n_params)
@@ -101,7 +101,7 @@ class ProductForCart
 
   def check_that_session_user_can_order_on_behalf_of_assumed_user(acting_user, session_user)
     proc do
-      if acting_as?(acting_user, session_user) && !operator?
+      if acting_as?(acting_user, session_user) && !facility_operator?
         @error_message = text(".not_authorized_to_order_on_behalf", i18n_params)
       end
     end
