@@ -122,7 +122,7 @@ class QuickReservationsController < ApplicationController
     instrument_for_cart = InstrumentForCart.new(
       @instrument,
       current_user,
-      # Use ability basedd on facility since
+      # Use ability based on facility since
       # ability_resource is not present yet
       Ability.new(current_user, current_facility, self),
       quick_reservation: true,
