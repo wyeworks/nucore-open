@@ -204,6 +204,11 @@ paperclip:
   url: ":rails_relative_url_root/system/:class/:attachment/:id_partition/:style/:safe_filename"
   path: ":rails_root/public/system/:class/:attachment/:id_partition/:style/:safe_filename"
 
+login:
+  disabled: <%= ENV.fetch("NUCORE_LOGIN_DSIABLED", false) %>
+  disabled_banner: NUcore login is disabled
+  disabled_error: Login is temporary disabled
+
 # saml:
 #   create_user: true
 #   # Use login_enabled: false if you want to allow access to metadata without yet
