@@ -47,6 +47,9 @@ Rails/ApplicationRecord:
     - "db/migrate/*.rb"
     - "vendor/engines/*/db/migrate/*.rb"
 
+Rails/HasAndBelongsToMany:
+  Enabled: false
+
 Metrics/BlockLength:
   Exclude:
     - "spec/**/*.rb"

@@ -27,6 +27,7 @@ class User < ApplicationRecord
   has_many :file_uploads, class_name: "StoredFile" # accessed in the UI on the user's Docs tab
   has_many :log_events, as: :loggable
   has_many :user_preferences, dependent: :destroy
+  has_and_belongs_to_many :product_notifications
 
   validates_presence_of :username, :first_name, :last_name
 
