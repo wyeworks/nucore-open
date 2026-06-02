@@ -1,0 +1,18 @@
+name: Setup dependencies
+description: Install Ruby/JS dependencies and write test configuration
+
+runs:
+  using: composite
+  steps:
+    - uses: ./.github/actions/setup-node
+    - uses: ./.github/actions/setup-bundler
+    - name: cache bootsnap
+      uses: actions/cache@v4
+      with:
+        path: tmp/cache/bootsnap
+        key: ${{ runner.os }}-bootsnap-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: ${{ runner.os }}-bootsnap-
+    - run: cp config/database.yml.mysql.template config/database.yml
+      shell: bash
+    - run: cp config/secrets.yml.template config/secrets.yml
+      shell: bash

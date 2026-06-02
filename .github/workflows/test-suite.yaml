@@ -8,7 +8,30 @@ on:
   pull_request:
 
 jobs:
+  build-assets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+    env:
+      RAILS_ENV: test
+    steps:
+      - uses: actions/checkout@v6
+      - uses: ./.github/actions/setup-deps
+      - run: yarn build
+      - run: bundle exec rails assets:precompile
+      - name: Upload compiled assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-assets
+          path: |
+            public/assets
+            app/assets/builds
+          retention-days: 1
+          include-hidden-files: true
+
   run-rspec-engines:
+    needs: build-assets
     runs-on: ubuntu-latest
     timeout-minutes: 60
     services:
@@ -30,7 +53,12 @@ jobs:
       MYSQL_PASSWORD: root
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/setup-rails
+      - uses: ./.github/actions/setup-deps
+      - name: Download compiled assets
+        uses: actions/download-artifact@v4
+        with:
+          name: compiled-assets
+      - run: bundle exec rake db:create db:schema:load
 
       - name: Glob match
         uses: tj-actions/glob@v22
@@ -39,12 +67,16 @@ jobs:
           files: |
             vendor/engines/*/spec/**/*_spec.rb
 
-      - run: bundle exec rails assets:precompile
       - run: bundle exec rspec ${{ steps.glob.outputs.paths }}
 
   run-rspec:
+    needs: build-assets
     runs-on: ubuntu-latest
     timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        ci_node: [0, 1, 2, 3]
     services:
       mysql:
         image: mysql:8.0.28
@@ -65,15 +97,24 @@ jobs:
       PARALLEL_TEST_PROCESSORS: 4
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/setup-rails
+      - uses: ./.github/actions/setup-deps
+      - name: Download compiled assets
+        uses: actions/download-artifact@v4
+        with:
+          name: compiled-assets
       # Uncomment below to open ssh tunnel for debugging
       # - uses: mxschmitt/action-tmate@v3
       - run: bundle exec rails parallel:create
       - run: bundle exec rails parallel:load_schema
-      - run: bundle exec rails assets:precompile
-      - run: bundle exec rails parallel:spec
+      - name: Run rspec shard ${{ matrix.ci_node }} of 4
+        run: |
+          start=$(( ${{ matrix.ci_node }} * 4 + 1 ))
+          groups=$(seq -s, "$start" "$(( start + 3 ))")
+          echo "Shard ${{ matrix.ci_node }}: running groups $groups of 16"
+          bundle exec parallel_test spec --type rspec -n 16 --only-group "$groups" --group-by filesize
 
   run-teaspoon:
+    needs: build-assets
     runs-on: ubuntu-latest
     timeout-minutes: 60
     services:
@@ -103,8 +144,12 @@ jobs:
       TEST_APP_PORT: 3000
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/setup-rails
-      - run: yarn build
+      - uses: ./.github/actions/setup-deps
+      - name: Download compiled assets
+        uses: actions/download-artifact@v4
+        with:
+          name: compiled-assets
+      - run: bundle exec rake db:create db:schema:load
       - run: bundle exec rake teaspoon
 
   run-rubocop:

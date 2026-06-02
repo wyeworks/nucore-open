@@ -5,10 +5,10 @@ runs:
   using: composite
   steps:
     - name: node-cache
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: node_modules
-        key: ${{ runner.os }}-bundle-${{ hashFiles('yarn.lock') }}
-        restore-keys: ${{ runner.os }}-yarn-
+        key: ${{ runner.os }}-node-${{ hashFiles('yarn.lock') }}
+        restore-keys: ${{ runner.os }}-node-
     - run: yarn install
       shell: bash
