@@ -150,12 +150,20 @@ RSpec.describe ProductForCart do
         )
       end
 
-      it "can purchase on behalf" do
-        expect(product_for_cart.purchasable_by?(other_user)).to be true
+      context "when granular permissions is off", feature_setting: { granular_permissions: false } do
+        it "can purchase on behalf" do
+          expect(product_for_cart.purchasable_by?(other_user)).to be true
+        end
+      end
+
+      context "when granular permission is on", feature_setting: { granular_permissions: true } do
+        it "can purchase on behalf" do
+          expect(product_for_cart.purchasable_by?(other_user)).to be true
+        end
       end
     end
 
-    context "when user has granular permission with order mngm" do
+    context "when user has granular permission with order mngm", feature_setting: { granular_permissions: true } do
       before do
         user.facility_user_permissions.create!(
           facility:,
