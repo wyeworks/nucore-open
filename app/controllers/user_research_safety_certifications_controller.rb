@@ -6,6 +6,8 @@ class UserResearchSafetyCertificationsController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
 
+  authorize_resource class: User
+
   layout "two_column"
 
   def initialize

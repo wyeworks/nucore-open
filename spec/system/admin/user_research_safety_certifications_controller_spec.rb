@@ -31,4 +31,14 @@ RSpec.describe "Viewing a user's safety certifications" do
       expect(page).not_to have_link "Certifications"
     end
   end
+
+  describe "as a user without access to the facility" do
+    let(:unauthorized_user) { create(:user) }
+
+    before { login_as unauthorized_user }
+
+    it_behaves_like "raises specified error",
+                    -> { visit facility_user_user_research_safety_certifications_path(facility, user) },
+                    CanCan::AccessDenied
+  end
 end
