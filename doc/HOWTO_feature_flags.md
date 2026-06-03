@@ -20,6 +20,7 @@
 * `password_update` Allow users to update or reset password (forgot password button)
 * `saml: create_user` create/update saml users on login
 * `uses_ldap_authentication`: Enable if ldap authentication engine is used and configured.
+* `login.disabled`: Disable login for every user except from global administrators. This can be configured along `login.disabled_error` which is the error to show on login and `login.disabled_banner` which is the banner to show on top of every page.
 
 ## Roles
 

@@ -4,6 +4,10 @@
     = render "/shared/head"
   %body{ class: SettingsHelper.feature_on?(:use_manage) && manage_mode? ? "manage-mode" : "" }
     %header
+      - if current_user.blank? && Settings.login.disabled
+        .global-alert-banner
+          .container= Settings.login.disabled_banner
+
       = render "/shared/acting_as"
       = yield(:banner)
       = render "/shared/header"
