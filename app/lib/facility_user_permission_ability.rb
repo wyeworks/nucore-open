@@ -128,6 +128,8 @@ class FacilityUserPermissionAbility
     can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
          :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order
 
+    can :manage, Reservation if resource.is_a?(Reservation)
+
     can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
          :cancel, :edit, :index, :show, :tab_counts,
          :timeline, :update], Reservation

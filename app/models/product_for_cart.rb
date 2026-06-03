@@ -4,18 +4,19 @@ class ProductForCart
 
   include TextHelpers::Translation
 
-  attr_accessor :error_message
-  attr_accessor :error_path
+  attr_accessor :error_message, :error_path
 
-  def initialize(product, quick_reservation: false)
+  def initialize(product, session_user, ability, quick_reservation: false)
     @product = product
+    @ability = ability
+    @session_user = session_user
     @quick_reservation = quick_reservation
   end
 
-  def purchasable_by?(acting_user, session_user)
-    raise NUCore::PermissionDenied unless product.is_accessible_to_user?(session_user)
+  def purchasable_by?(acting_user)
+    raise NUCore::PermissionDenied unless product.is_accessible_to_user?(facility_operator?)
 
-    checks(acting_user, session_user).all? do |check|
+    checks(acting_user).all? do |check|
       result = check.call
       [error_path, error_message].all?(&:blank?) && result != false
     end
@@ -23,15 +24,21 @@ class ProductForCart
 
   protected
 
+  attr_reader :product, :quick_reservation, :ability, :session_user
+
+  delegate :facility, to: :product
+
+  def facility_operator?
+    ability.can?(:act_as, facility)
+  end
+
   def translation_scope
     "models.#{self.class.name.underscore}"
   end
 
   private
 
-  attr_accessor :product
-
-  def checks(acting_user, session_user)
+  def checks(acting_user)
     [
       check_that_user_is_present(acting_user),
       check_that_product_is_available_for_purchase,
@@ -60,7 +67,7 @@ class ProductForCart
 
   def check_that_product_can_be_used(acting_user, session_user)
     proc do
-      if !product.can_be_used_by?(acting_user) && !(session_user.present? && session_user.can_override_restrictions?(product))
+      if !product.can_be_used_by?(acting_user) && !facility_operator?
         if SettingsHelper.feature_on?(:training_requests) && product.allows_training_requests?
           if TrainingRequest.submitted?(session_user, product)
             @error_message = text("models.product_for_cart.already_requested_access", i18n_params)
@@ -94,7 +101,7 @@ class ProductForCart
 
   def check_that_session_user_can_order_on_behalf_of_assumed_user(acting_user, session_user)
     proc do
-      if acting_as?(acting_user, session_user) && !session_user.operator_of?(product.facility)
+      if acting_as?(acting_user, session_user) && !facility_operator?
         @error_message = text(".not_authorized_to_order_on_behalf", i18n_params)
       end
     end

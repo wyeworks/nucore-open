@@ -3,22 +3,20 @@
 require "rails_helper"
 
 RSpec.describe ProductForCart do
-
-  let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:item) { FactoryBot.create(:setup_item, facility: facility) }
-  let(:user) { FactoryBot.create(:user) }
-
-  let(:product_for_cart) { ProductForCart.new(item) }
+  let(:facility) { create(:setup_facility) }
+  let(:item) { create(:setup_item, facility:) }
+  let(:user) { create(:user) }
+  let(:ability) { Ability.new(user, facility, ApplicationController.new) }
+  let(:product_for_cart) { described_class.new(item, user, ability) }
 
   describe "#purchasable_by?" do
-
     context "when a product is not available for purchase" do
       before(:each) { allow(item).to receive(:available_for_purchase?).and_return(false) }
 
-      it("returns false") { expect(product_for_cart.purchasable_by?(user, user)).to be false }
+      it("returns false") { expect(product_for_cart.purchasable_by?(user)).to be false }
 
       it "sets error_message explaining that the product can't be purchased online" do
-        product_for_cart.purchasable_by?(user, user)
+        product_for_cart.purchasable_by?(user)
         expect(product_for_cart.error_message).to match(/unavailable for purchase online/)
       end
     end
@@ -27,18 +25,18 @@ RSpec.describe ProductForCart do
       before(:each) { item.price_policies.delete_all }
 
       context "and it is not a bundle" do
-        it("returns false") { expect(product_for_cart.purchasable_by?(user, user)).to be false }
+        it("returns false") { expect(product_for_cart.purchasable_by?(user)).to be false }
 
         it "sets error_message explaining that pricing is unavailable" do
-          product_for_cart.purchasable_by?(user, user)
+          product_for_cart.purchasable_by?(user)
           expect(product_for_cart.error_message).to match(/Pricing for this item is currently unavailable/)
         end
       end
 
       context "and it is a bundle" do
-        let(:bundle) { FactoryBot.create(:bundle, facility: facility) }
+        let(:bundle) { create(:bundle, facility: facility) }
         let(:bundle_product) { BundleProduct.new(bundle: @bundle, product: item, quantity: 1) }
-        let(:product_for_cart) { ProductForCart.new(bundle) }
+        let(:product_for_cart) { described_class.new(bundle, user, ability) }
 
         before(:each) { BundleProduct.create(bundle: bundle, product: item, quantity: 1) }
 
@@ -46,18 +44,18 @@ RSpec.describe ProductForCart do
           before(:each) { item.price_policies.delete_all }
 
           it "sets error_message explaining that pricing is unavailable" do
-            product_for_cart.purchasable_by?(user, user)
+            product_for_cart.purchasable_by?(user)
             expect(product_for_cart.error_message).to match(/Pricing for this bundle is currently unavailable/)
           end
         end
 
         context "and at least one of its products has pricing policies" do
           before(:each) do
-            item.item_price_policies.create(FactoryBot.attributes_for(:item_price_policy, price_group: @nupg))
+            item.item_price_policies.create(attributes_for(:item_price_policy, price_group: @nupg))
           end
 
           it "does not set error_message about unavailable pricing" do
-            product_for_cart.purchasable_by?(user, user)
+            product_for_cart.purchasable_by?(user)
             expect(product_for_cart.error_message).not_to match(/Pricing for this bundle is currently unavailable/)
           end
         end
@@ -75,12 +73,12 @@ RSpec.describe ProductForCart do
           before(:each) { allow(TrainingRequest).to receive(:submitted?).and_return(true) }
 
           it "sets error_message explaining that the user has already requested access" do
-            product_for_cart.purchasable_by?(user, user)
+            product_for_cart.purchasable_by?(user)
             expect(product_for_cart.error_message).to match(/You have requested/)
           end
 
           it "sets error_path to the facility page" do
-            product_for_cart.purchasable_by?(user, user)
+            product_for_cart.purchasable_by?(user)
             expect(product_for_cart.error_path).to eq Rails.application.routes.url_helpers.facility_path(item.facility)
           end
         end
@@ -89,7 +87,7 @@ RSpec.describe ProductForCart do
           before(:each) { allow(TrainingRequest).to receive(:submitted?).and_return(false) }
 
           it "sets error_path to the page for making a training request" do
-            product_for_cart.purchasable_by?(user, user)
+            product_for_cart.purchasable_by?(user)
             expect(product_for_cart.error_path).to eq Rails.application.routes.url_helpers.new_facility_product_training_request_path(item.facility, item)
           end
         end
@@ -97,7 +95,7 @@ RSpec.describe ProductForCart do
 
       context "and training requests are turned off", feature_setting: { training_requests: false, reload_routes: true } do
         it "sets error_message explaining that the product requires approval" do
-          product_for_cart.purchasable_by?(user, user)
+          product_for_cart.purchasable_by?(user)
           expect(product_for_cart.error_message).to match(/requires approval to purchase/)
         end
       end
@@ -107,7 +105,7 @@ RSpec.describe ProductForCart do
       before(:each) { allow(item).to receive(:can_purchase?).and_return(false) }
 
       it "sets error_message explaining why they can't purchase the product" do
-        product_for_cart.purchasable_by?(user, user)
+        product_for_cart.purchasable_by?(user)
         expect(product_for_cart.error_message).to match(/No price groups found for this purchase/)
       end
     end
@@ -124,11 +122,59 @@ RSpec.describe ProductForCart do
       end
 
       it "sets error_message explaining that we could not find a valid payment source" do
-        product_for_cart.purchasable_by?(user, user)
+        product_for_cart.purchasable_by?(user)
         expect(product_for_cart.error_message).to match(/could not find a valid payment source/)
       end
     end
-
   end
 
+  describe "ordering for", :use_test_account do
+    let(:other_user) { create(:user) }
+    let(:account) { create(:test_account, :with_account_owner, created_by: user.id) }
+
+    before do
+      allow(item).to receive(:can_purchase?).and_return(true)
+      create(
+        :account_user, :purchaser,
+        account:, user: other_user,
+        created_by_user: user,
+      )
+      account.price_groups << PriceGroup.base
+    end
+
+    context "when user has a user_role" do
+      before do
+        UserRole.create!(
+          user:, facility:,
+          role: UserRole::FACILITY_STAFF,
+        )
+      end
+
+      context "when granular permissions is off", feature_setting: { granular_permissions: false } do
+        it "can purchase on behalf" do
+          expect(product_for_cart.purchasable_by?(other_user)).to be true
+        end
+      end
+
+      context "when granular permission is on", feature_setting: { granular_permissions: true } do
+        it "can purchase on behalf" do
+          expect(product_for_cart.purchasable_by?(other_user)).to be true
+        end
+      end
+    end
+
+    context "when user has granular permission with order mngm", feature_setting: { granular_permissions: true } do
+      before do
+        user.facility_user_permissions.create!(
+          facility:,
+          read_access: true,
+          order_management: true,
+        )
+      end
+
+      it "can purchase on behalf" do
+        expect(product_for_cart.purchasable_by?(other_user)).to be true
+      end
+    end
+  end
 end

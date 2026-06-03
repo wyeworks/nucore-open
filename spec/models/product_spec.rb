@@ -713,6 +713,7 @@ RSpec.describe Product do
 
   describe "#is_accessible_to_user?" do
     let(:user) { User.new }
+    let(:is_operator) { user.operator_of?(subject.facility) }
 
     context "when the product is not archived" do
       before(:each) { subject.is_archived = false }
@@ -720,7 +721,7 @@ RSpec.describe Product do
       context "and it is not hidden" do
         before(:each) { subject.is_hidden = false }
 
-        it("returns true") { expect(subject.is_accessible_to_user?(user)).to be true }
+        it("returns true") { expect(subject.is_accessible_to_user?(is_operator)).to be true }
       end
 
       context "and it is hidden" do
@@ -729,13 +730,13 @@ RSpec.describe Product do
         context "and the user is an operator of the product’s facility" do
           before(:each) { allow(user).to receive(:operator_of?).and_return(true) }
 
-          it("returns true") { expect(subject.is_accessible_to_user?(user)).to be true }
+          it("returns true") { expect(subject.is_accessible_to_user?(is_operator)).to be true }
         end
 
         context "and the user is not an operator of the product’s facility" do
           before(:each) { allow(user).to receive(:operator_of?).and_return(false) }
 
-          it("returns false") { expect(subject.is_accessible_to_user?(user)).to be false }
+          it("returns false") { expect(subject.is_accessible_to_user?(is_operator)).to be false }
         end
       end
     end
@@ -743,7 +744,7 @@ RSpec.describe Product do
     context "when the product is archived" do
       before(:each) { subject.is_archived = true }
 
-      it("returns false") { expect(subject.is_accessible_to_user?(user)).to be false }
+      it("returns false") { expect(subject.is_accessible_to_user?(is_operator)).to be false }
     end
   end
 

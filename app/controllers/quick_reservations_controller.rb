@@ -119,8 +119,15 @@ class QuickReservationsController < ApplicationController
 
     # Check if the user can create a reservation, among other things, this will
     # catch instruments with no schedule rules
-    instrument_for_cart = InstrumentForCart.new(@instrument, quick_reservation: true)
-    @can_add_to_cart = instrument_for_cart.purchasable_by?(current_user, current_user)
+    instrument_for_cart = InstrumentForCart.new(
+      @instrument,
+      current_user,
+      # Use ability based on facility since
+      # ability_resource is not present yet
+      Ability.new(current_user, current_facility, self),
+      quick_reservation: true,
+    )
+    @can_add_to_cart = instrument_for_cart.purchasable_by?(current_user)
 
     if instrument_for_cart.error_message
       flash.now[:notice] = instrument_for_cart.error_message
