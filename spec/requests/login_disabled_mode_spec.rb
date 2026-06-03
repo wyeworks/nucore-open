@@ -13,9 +13,9 @@ RSpec.describe "login disabled" do
     end
 
     it "shows banner on the top" do
-      get root_path
+      get facilities_path
 
-      expect(page).not_to have_content(Settings.login.disabled_banner)
+      expect(page).to have_content(Settings.login.disabled_banner)
     end
 
     it "cannot login as normal user" do
