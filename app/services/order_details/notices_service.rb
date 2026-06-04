@@ -5,7 +5,7 @@ module OrderDetails
   # Used to retrieve OrderDetail notices and problems.
   #
   # notices and problems are stored in order detail
-  # where as time_based_notices are always computed.
+  # where as dynamic_notices are always computed.
   #
   class NoticesService
     attr_reader :order_detail
@@ -31,7 +31,7 @@ module OrderDetails
     ##
     # Notices that cannot be stored since depend on current time
     # or can be computed out of the order detail attributes
-    def time_based_notices
+    def dynamic_notices
       return [] if canceled?
 
       {

@@ -6,7 +6,7 @@ ssl = Rails.application.config.force_ssl
 
 Rails.application.config.session_store(
   :cookie_store,
-  key: "_nucore_session",
+  key: "_open_session",
   httponly: true,
   secure: ssl,
   same_site: (ssl ? :none : :lax)
