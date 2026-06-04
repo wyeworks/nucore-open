@@ -25,12 +25,12 @@ module OrderDetails
         missing_form: missing_form? && !problem?,
         can_reconcile: can_reconcile_journaled?,
         in_open_journal: in_open_journal?,
-        awaiting_payment: awaiting_payment?,
       }.compact_blank.keys
     end
 
     ##
     # Notices that cannot be stored since depend on current time
+    # or can be computed out of the order detail attributes
     def time_based_notices
       return [] if canceled?
 
@@ -38,6 +38,7 @@ module OrderDetails
         in_review: in_review?,
         ready_for_statement: ready_for_statement?,
         ready_for_journal: ready_for_journal? && SettingsHelper.feature_on?(:ready_for_journal_notice),
+        awaiting_payment: awaiting_payment?,
       }.compact_blank.keys
     end
 
