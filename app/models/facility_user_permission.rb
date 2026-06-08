@@ -29,6 +29,14 @@ class FacilityUserPermission < ApplicationRecord
 
   before_validation :grant_product_edition_when_product_creation_granted
 
+  def self.all_permissions
+    PERMISSIONS.dup.then do |perms|
+      perms.delete(:bulk_email) unless defined?(BulkEmail)
+
+      perms
+    end
+  end
+
   def no_permissions?
     active_permissions.blank?
   end

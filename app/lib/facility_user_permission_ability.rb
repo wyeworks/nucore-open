@@ -197,6 +197,8 @@ class FacilityUserPermissionAbility
   end
 
   def grant_bulk_email
+    return unless defined?(BulkEmail)
+
     can :send_bulk_emails, facility
   end
 end

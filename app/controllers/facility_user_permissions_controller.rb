@@ -54,13 +54,13 @@ class FacilityUserPermissionsController < ApplicationController
   private
 
   def permission_params
-    allowed = FacilityUserPermission::PERMISSIONS
+    allowed = FacilityUserPermission.all_permissions
     allowed -= [:assign_permissions] unless current_user.administrator?
     allowed -= [:quoting] if SettingsHelper.feature_off?(:show_estimates_option)
 
     permitted = params.require(:facility_user_permission).permit(*allowed)
 
-    other_flags = (FacilityUserPermission::PERMISSIONS - [:read_access]).map(&:to_s)
+    other_flags = (FacilityUserPermission.all_permissions - [:read_access]).map(&:to_s)
     if other_flags.any? { |flag| ActiveModel::Type::Boolean.new.cast(permitted[flag]) }
       permitted[:read_access] = true
     end
@@ -69,7 +69,7 @@ class FacilityUserPermissionsController < ApplicationController
   end
 
   def permission_changes
-    @permission.previous_changes.slice(*FacilityUserPermission::PERMISSIONS.map(&:to_s))
+    @permission.previous_changes.slice(*FacilityUserPermission.all_permissions.map(&:to_s))
   end
 
   def check_granular_permissions_enabled

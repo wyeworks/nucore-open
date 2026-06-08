@@ -24,7 +24,7 @@ RSpec.describe FacilityUserPermission do
 
   it "defaults all permission columns to false at the DB level" do
     permission = FacilityUserPermission.create!(user: create(:user), facility: create(:facility))
-    FacilityUserPermission::PERMISSIONS.each do |perm|
+    FacilityUserPermission.all_permissions.each do |perm|
       expect(permission.send(perm)).to be false
     end
   end
