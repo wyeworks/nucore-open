@@ -21,6 +21,8 @@ FactoryBot.use_parent_strategy = false
 # don't overlap with db instances
 FactoryBot::Strategy::Stub.next_id = 100_000
 
+Capybara::Node::Base.prepend(CapybaraStaleNodeRetry)
+
 RSpec.configure do |config|
   include ActiveJob::TestHelper
 
