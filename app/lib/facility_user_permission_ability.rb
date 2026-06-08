@@ -195,4 +195,8 @@ class FacilityUserPermissionAbility
            :unexpire, :orders, :accounts], User
     end
   end
+
+  def grant_bulk_email
+    can :send_bulk_emails, facility
+  end
 end

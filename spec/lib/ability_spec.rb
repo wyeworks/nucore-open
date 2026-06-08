@@ -955,6 +955,14 @@ RSpec.describe Ability do
       end
     end
 
+    context "with bulk_email" do
+      before do
+        user.facility_user_permissions.where(facility:).update(bulk_email: true)
+      end
+
+      it { is_expected.to be_allowed_to(:send_bulk_emails, facility) }
+    end
+
     context "with only read_access (no other flags)" do
       before do
         FacilityUserPermission.find_by(user:, facility:).update!(billing_send: false, read_access: true)
@@ -987,6 +995,7 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
       it { is_expected.not_to be_allowed_to(:edit, facility) }
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
+      it { is_expected.not_to be_allowed_to(:send_bulk_emails, facility) }
     end
 
   end
