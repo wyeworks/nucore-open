@@ -304,6 +304,7 @@ en:
         read_access: Read Access
         account_management: Payment Source Management
         assign_permissions: Assign Permissions
+        bulk_email: Bulk Email
         billing_journals: Billing Journals
         billing_send: Billing Send
         instrument_management: Instrument Management
