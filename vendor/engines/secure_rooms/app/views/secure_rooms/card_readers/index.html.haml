@@ -9,7 +9,8 @@
 
 %p= text("views.admin.secure_rooms.card_readers.index.description")
 
-%p= link_to text("admin.shared.add", model: SecureRooms::CardReader.model_name.human), new_facility_secure_room_card_reader_path(current_facility, @product), class: "btn-add"
+- if can? :create, SecureRooms::CardReader
+  %p= link_to text("admin.shared.add", model: SecureRooms::CardReader.model_name.human), new_facility_secure_room_card_reader_path(current_facility, @product), class: "btn-add"
 
 - if @card_readers.empty?
   %p.notice= text("views.admin.secure_rooms.card_readers.index.none")
@@ -32,8 +33,12 @@
           %td= card_reader.card_reader_number
           %td= card_reader.direction
           %td= card_reader.tablet_token if card_reader.ingress?
-          %td= link_to text("shared.edit"), edit_facility_secure_room_card_reader_path(current_facility, @product, card_reader)
-          %td= link_to text("shared.remove"), facility_secure_room_card_reader_path(current_facility, @product, card_reader), data: { confirm: text("shared.confirm_message") }, method: :delete
+          %td
+            - if can? :manage, SecureRooms::CardReader
+              = link_to text("shared.edit"), edit_facility_secure_room_card_reader_path(current_facility, @product, card_reader)
+          %td
+            - if can? :manage, SecureRooms::CardReader
+              = link_to text("shared.remove"), facility_secure_room_card_reader_path(current_facility, @product, card_reader), data: { confirm: text("shared.confirm_message") }, method: :delete
 
 = readonly_form_for :product do |f|
   = f.simple_fields_for @product, :defaults => { :default_value => 'N/A'} do |r|
