@@ -7,7 +7,7 @@ RSpec.describe OrderDetails::NoticesService do
   let(:instance) { described_class.new(order_detail) }
 
   describe "statuses" do
-    subject { instance.notices + instance.time_based_notices }
+    subject { instance.notices + instance.dynamic_notices }
 
     it "shows nothing for a blank order detail" do
       is_expected.to be_blank

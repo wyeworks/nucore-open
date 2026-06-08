@@ -5,7 +5,7 @@ module OrderDetails
   # Used to retrieve OrderDetail notices and problems.
   #
   # notices and problems are stored in order detail
-  # where as time_based_notices are always computed.
+  # where as dynamic_notices are always computed.
   #
   class NoticesService
     attr_reader :order_detail
@@ -25,19 +25,20 @@ module OrderDetails
         missing_form: missing_form? && !problem?,
         can_reconcile: can_reconcile_journaled?,
         in_open_journal: in_open_journal?,
-        awaiting_payment: awaiting_payment?,
       }.compact_blank.keys
     end
 
     ##
     # Notices that cannot be stored since depend on current time
-    def time_based_notices
+    # or can be computed out of the order detail attributes
+    def dynamic_notices
       return [] if canceled?
 
       {
         in_review: in_review?,
         ready_for_statement: ready_for_statement?,
         ready_for_journal: ready_for_journal? && SettingsHelper.feature_on?(:ready_for_journal_notice),
+        awaiting_payment: awaiting_payment?,
       }.compact_blank.keys
     end
 

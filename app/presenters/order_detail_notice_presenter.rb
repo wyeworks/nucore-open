@@ -9,7 +9,7 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
   end
 
   def statuses
-    values = notice_keys + notices_service.time_based_notices
+    values = notice_keys + notices_service.dynamic_notices
 
     values.uniq.map { |s| Notice.new(s) }
   end
