@@ -1510,7 +1510,7 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
     end
   end
 
-  describe "timeline as guest", feature_setting: { daily_view: true, reload_routes: true } do
+  describe "timeline as guest", feature_setting: { "style_display.daily_view" => true, reload_routes: true } do
     let!(:hidden_instrument) do
       create(
         :instrument,

@@ -265,7 +265,7 @@ Rails.application.routes.draw do
       end
     end
 
-    get "public_timeline", to: "reservations#public_timeline", as: "public_timeline" if SettingsHelper.feature_on?(:daily_view)
+    get "public_timeline", to: "reservations#public_timeline", as: "public_timeline" if SettingsHelper.feature_on?("style_display.daily_view")
 
     ### Feature Toggle Editing Accounts ###
     if SettingsHelper.feature_on?(:edit_accounts)

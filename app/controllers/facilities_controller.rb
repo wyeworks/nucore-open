@@ -35,8 +35,8 @@ class FacilitiesController < ApplicationController
   def index
     @facilities = Facility.active.alphabetized
     @recently_used_facilities = MostRecentlyUsedSearcher.new(acting_user).recently_used_facilities.alphabetized
-    @active_tab = SettingsHelper.feature_on?(:use_manage) ? "use" : "home"
-    @list_layout = SettingsHelper.feature_on?(:facility_tile_list) ? "tile" : "list"
+    @active_tab = SettingsHelper.feature_on?("style_display.use_manage") ? "use" : "home"
+    @list_layout = SettingsHelper.feature_on?("style_display.facility_tile_list") ? "tile" : "list"
     @recent_products = MostRecentlyUsedSearcher.new(acting_user).recently_used_products.includes(:facility).alphabetized
     @azlist = build_az_list(@facilities)
     render layout: "application"
@@ -46,8 +46,8 @@ class FacilitiesController < ApplicationController
   def show
     return redirect_to(facilities_path) if current_facility.try(:cross_facility?)
     raise ActiveRecord::RecordNotFound unless current_facility.try(:is_active?)
-    @columns = "columns" if SettingsHelper.feature_on?(:product_list_columns)
-    @active_tab = SettingsHelper.feature_on?(:use_manage) ? "use" : "home"
+    @columns = "columns" if SettingsHelper.feature_on?("style_display.product_list_columns")
+    @active_tab = SettingsHelper.feature_on?("style_display.use_manage") ? "use" : "home"
 
     @product_scope = Product.alphabetized
     if acting_as? || session_user.try(:operator_of?, current_facility)
@@ -231,7 +231,7 @@ class FacilitiesController < ApplicationController
   end
 
   def azlist_on?
-    SettingsHelper.feature_on?(:azlist)
+    SettingsHelper.feature_on?("style_display.azlist")
   end
   helper_method :azlist_on?
 

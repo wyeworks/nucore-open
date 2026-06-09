@@ -38,7 +38,7 @@ class NavTab::LinkCollection
   end
 
   def home_button
-    if SettingsHelper.feature_on?(:use_manage)
+    if SettingsHelper.feature_on?("style_display.use_manage")
       use
     else
       home

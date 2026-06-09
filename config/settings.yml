@@ -112,16 +112,16 @@ relays:
 #
 # For these settings use SettingsHelper#feature_on?
 feature:
-  # Style & Display
-  azlist: false
-  daily_view: true
-  equipment_list: true
-  facility_banner_notice: true
-  facility_tile_list: <%= ENV.fetch("FACILITY_TILE_LIST", false) %>
-  facility_tile_list_admin: false
-  limit_short_description: true
-  product_list_columns: false
-  use_manage: false
+  style_display:
+    azlist: false
+    daily_view: true
+    equipment_list: true
+    facility_banner_notice: true
+    facility_tile_list: <%= ENV.fetch("FACILITY_TILE_LIST", false) %>
+    facility_tile_list_admin: false
+    limit_short_description: true
+    product_list_columns: false
+    use_manage: false
 
   # Users & Authentication
   create_users: true
