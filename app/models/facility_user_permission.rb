@@ -16,6 +16,7 @@ class FacilityUserPermission < ApplicationRecord
     billing_journals
     instrument_management
     user_management
+    bulk_email
     assign_permissions
     account_management
     reporting
@@ -27,6 +28,14 @@ class FacilityUserPermission < ApplicationRecord
   validate :read_access_required_with_other_permissions
 
   before_validation :grant_product_edition_when_product_creation_granted
+
+  def self.all_permissions
+    PERMISSIONS.dup.then do |perms|
+      perms.delete(:bulk_email) unless defined?(BulkEmail)
+
+      perms
+    end
+  end
 
   def no_permissions?
     active_permissions.blank?
