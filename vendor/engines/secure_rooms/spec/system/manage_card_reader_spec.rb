@@ -54,4 +54,40 @@ RSpec.describe "Managing CardReaders" do
       expect { SecureRooms::CardReader.find(card_reader.id) }.to raise_error ActiveRecord::RecordNotFound
     end
   end
+
+  context "with granular permissions", feature_setting: { granular_permissions: true } do
+    let!(:card_reader) { create(:card_reader, secure_room: secure_room) }
+    let(:user) { create(:user) }
+
+    before { login_as user }
+
+    context "with read access only" do
+      before { create(:facility_user_permission, user:, facility:, read_access: true) }
+
+      it "views card readers without management links" do
+        visit facility_secure_room_card_readers_path(facility, secure_room)
+
+        within(".product_list") { expect(page).to have_content(card_reader.card_reader_number) }
+        expect(page).not_to have_link("Add Card Reader")
+        within(".product_list") do
+          expect(page).not_to have_link("Edit")
+          expect(page).not_to have_link("Remove")
+        end
+      end
+    end
+
+    context "with product management" do
+      before { create(:facility_user_permission, user:, facility:, read_access: true, product_edition: true) }
+
+      it "shows the management links" do
+        visit facility_secure_room_card_readers_path(facility, secure_room)
+
+        expect(page).to have_link("Add Card Reader")
+        within(".product_list") do
+          expect(page).to have_link("Edit")
+          expect(page).to have_link("Remove")
+        end
+      end
+    end
+  end
 end

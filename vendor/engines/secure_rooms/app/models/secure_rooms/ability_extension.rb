@@ -32,6 +32,11 @@ module SecureRooms
 
       if granted_read_access?(user, resource)
         ability.can [:index, :dashboard, :tab_counts, :show], Occupancy
+        ability.can [:index, :show], CardReader
+      end
+
+      if granted_product_edition?(user, resource)
+        ability.can :manage, CardReader
       end
     end
 
@@ -42,6 +47,13 @@ module SecureRooms
       return false unless resource.is_a?(Facility)
 
       user.facility_user_permissions.find_by(facility: resource)&.read_access?
+    end
+
+    def granted_product_edition?(user, resource)
+      return false unless SettingsHelper.feature_on?(:granular_permissions)
+      return false unless resource.is_a?(Facility)
+
+      user.facility_user_permissions.find_by(facility: resource)&.product_edition?
     end
 
   end

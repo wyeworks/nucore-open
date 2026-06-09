@@ -76,5 +76,17 @@ RSpec.describe Ability do
     end
 
     it_is_allowed_to([:index, :dashboard, :tab_counts, :show], SecureRooms::Occupancy)
+    it_is_allowed_to([:index, :show], SecureRooms::CardReader)
+    it_is_not_allowed_to([:create, :update, :destroy], SecureRooms::CardReader)
+  end
+
+  describe "granular permission user with product_edition", feature_setting: { granular_permissions: true } do
+    let(:user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user:, facility:, read_access: true, product_edition: true)
+    end
+
+    it_is_allowed_to([:index, :show, :create, :update, :destroy], SecureRooms::CardReader)
   end
 end
