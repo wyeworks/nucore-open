@@ -473,12 +473,12 @@ class OrderDetail < ApplicationRecord
   end
 
   def valid_as_user?(user)
-    @being_purchased_by_admin = user.operator_of?(product.facility)
+    @being_purchased_by_admin = user.can_act_as?(product.facility)
     valid?
   end
 
   def save_as_user(user)
-    @being_purchased_by_admin = user.operator_of?(product.facility)
+    @being_purchased_by_admin = user.can_act_as?(product.facility)
     save
   end
 
