@@ -260,7 +260,7 @@ class PricePolicy < ApplicationRecord
   def no_truncation_of_assigned_policies
     return unless OrderDetail.exists?(price_policy_id: policies_to_truncate.select(:id))
 
-    errors.add(:base, "cannot overlap an existing price policy that has orders assigned to it")
+    errors.add(:base, :overlapping_assigned_policy)
   end
 
 end
