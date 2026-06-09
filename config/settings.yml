@@ -112,81 +112,102 @@ relays:
 #
 # For these settings use SettingsHelper#feature_on?
 feature:
-  global_billing_administrator: true
-  global_billing_administrator_users_tab: true
-  create_users: true
-  lookup_netids: true
-  limit_short_description: true
-  order_assignment_notifications: true
-  password_update: true
-  expense_accounts: true
-  edit_accounts: true
-  suspend_accounts: true
-  product_specific_contacts: true
-  training_requests: true
-  daily_view: true
-  split_accounts: true
-  print_order_detail: false
-  user_based_price_groups: true
-  my_files: true
-  # results file notifications requires that my_files be on as well
-  results_file_notifications: true
-  set_statement_search_start_date: false
-  send_statement_emails: true
-  ready_for_journal_notice: true
-  journals_may_span_fiscal_years: false
-  equipment_list: true
-  price_change_reason_required: true
-  can_manage_global_price_groups: true
-  cross_facility_reports: false
-  product_list_columns: false
+  # Style & Display
   azlist: false
-  use_manage: false
+  daily_view: true
+  equipment_list: true
   facility_banner_notice: true
-  charge_full_price_on_cancellation: true
-  price_policy_requires_note: true
-  multi_facility_accounts: true
-  facility_directors_can_manage_price_groups: true
-  account_reference_field: false
-  facility_payment_urls: false
-  uses_ldap_authentication: false
-  kiosk_view: true
-  bypass_kiosk_auth: false
-  revenue_account_editable: false
-  active_storage: true
-  active_storage_for_images_only: true
   facility_tile_list: <%= ENV.fetch("FACILITY_TILE_LIST", false) %>
   facility_tile_list_admin: false
-  po_require_affiliate_account: true
-  walkup_reservations: true
-  show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
-  show_daily_rate_option: true
-  sanger_enabled_service: <%= ENV.fetch("SANGER_ENABLED_SERVICE", false) %>
-  well_plate_alternative_csv_format: <%= ENV.fetch("well_plate_alternative_csv_format", false) %>
-  disable_relay_synaccess_rev_a: false
+  limit_short_description: true
+  product_list_columns: false
+  use_manage: false
+
+  # Users & Authentication
+  create_users: true
+  lookup_netids: true
+  password_update: true
+  uses_ldap_authentication: false
+
+  # Roles
   allow_global_billing_admin_update_actual_prices: false
-  export_order_disputes: false
-  show_estimates_option: true
-  billing_log_events: false
-  show_account_opencontract_field: false
-  hide_account_far_future_expiration: false
-  show_account_price_groups_tab: false
-  purchase_order_monetary_cap: false
-  auto_end_reservations_on_next_start: false
-  show_reconcile_credit_cards: false
+  global_billing_administrator: true
+  global_billing_administrator_users_tab: true
   move_transactions_account_roles: false
-  add_accessories_before_reservation_starts: false
-  billing_table_price_groups: false
-  reference_statement_invoice_number: false
+
+  # Accounts & Account Types
+  account_reference_field: false
   account_tabs: false
-  user_based_price_groups_exclude_purchaser: false
-  item_initial_order_status_complete: false
-  allow_mass_unreconciling: false
-  admin_skip_order_forms: true
-  accessory_independent_order_status: false
-  merged_statement_history_columns: false
+  edit_accounts: true
+  expense_accounts: true
+  facility_payment_urls: false
+  hide_account_far_future_expiration: false
+  multi_facility_accounts: true
+  po_require_affiliate_account: true
+  purchase_order_monetary_cap: false
+  revenue_account_editable: false
+  show_account_opencontract_field: false
+  show_account_price_groups_tab: false
+  split_accounts: true
+  suspend_accounts: true
+
+  # Price Groups & Pricing
+  can_manage_global_price_groups: true
   external_price_group_subsidies: false
+  facility_directors_can_manage_price_groups: true
+  price_policy_requires_note: true
+  user_based_price_groups: true
+  user_based_price_groups_exclude_purchaser: false
+
+  # Billing
+  allow_mass_unreconciling: false
+  billing_log_events: false
+  billing_table_price_groups: false
+  charge_full_price_on_cancellation: true
+  journals_may_span_fiscal_years: false
+  merged_statement_history_columns: false
+  ready_for_journal_notice: true
+  reference_statement_invoice_number: false
+  set_statement_search_start_date: false
+  show_reconcile_credit_cards: false
+  show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
+
+  # Notifications
+  order_assignment_notifications: true
+  product_specific_contacts: true
+  send_statement_emails: true
+
+  # Orders
+  export_order_disputes: false
+  my_files: true
+  price_change_reason_required: true
+  print_order_detail: false
+  # results_file_notifications requires my_files to be on as well
+  results_file_notifications: true
+
+  # Reservations
+  accessory_independent_order_status: false
+  add_accessories_before_reservation_starts: false
+  auto_end_reservations_on_next_start: false
+  walkup_reservations: true
+
+  # Products
+  disable_relay_synaccess_rev_a: false
+  item_initial_order_status_complete: false
+  sanger_enabled_service: <%= ENV.fetch("SANGER_ENABLED_SERVICE", false) %>
+  show_daily_rate_option: true
+  well_plate_alternative_csv_format: <%= ENV.fetch("well_plate_alternative_csv_format", false) %>
+
+  # Other
+  active_storage: true
+  active_storage_for_images_only: true
+  admin_skip_order_forms: true
+  bypass_kiosk_auth: false
+  cross_facility_reports: false
   granular_permissions: true
+  kiosk_view: true
+  show_estimates_option: true
+  training_requests: true
 
 split_accounts:
   # Roles are allowed to create Split Accounts
