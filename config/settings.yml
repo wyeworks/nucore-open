@@ -177,13 +177,13 @@ feature:
     product_specific_contacts: true
     send_statement_emails: true
 
-  # Orders
-  export_order_disputes: false
-  my_files: true
-  price_change_reason_required: true
-  print_order_detail: false
-  # results_file_notifications requires my_files to be on as well
-  results_file_notifications: true
+  orders:
+    export_order_disputes: false
+    my_files: true
+    price_change_reason_required: true
+    print_order_detail: false
+    # results_file_notifications requires my_files to be on as well
+    results_file_notifications: true
 
   # Reservations
   accessory_independent_order_status: false

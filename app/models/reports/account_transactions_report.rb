@@ -89,7 +89,7 @@ class Reports::AccountTransactionsReport
     ]
 
     # add dispute reason if needed
-    if SettingsHelper.feature_on?(:export_order_disputes)
+    if SettingsHelper.feature_on?("orders.export_order_disputes")
       headers.concat [
         OrderDetail.human_attribute_name(:dispute_at),
         OrderDetail.human_attribute_name(:dispute_reason),
@@ -134,7 +134,7 @@ class Reports::AccountTransactionsReport
     ]
 
     # add dispute reason if needed
-    if SettingsHelper.feature_on?(:export_order_disputes)
+    if SettingsHelper.feature_on?("orders.export_order_disputes")
       row.concat [
         order_detail.dispute_at,
         order_detail.dispute_reason,

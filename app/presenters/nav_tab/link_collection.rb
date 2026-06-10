@@ -75,7 +75,7 @@ class NavTab::LinkCollection
   end
 
   def files
-    NavTab::Link.new(tab: :my_files, text: I18n.t("views.my_files.index.header"), url: my_files_path) if SettingsHelper.feature_on?(:my_files)
+    NavTab::Link.new(tab: :my_files, text: I18n.t("views.my_files.index.header"), url: my_files_path) if SettingsHelper.feature_on?("orders.my_files")
   end
 
   def admin_billing

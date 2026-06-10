@@ -473,7 +473,7 @@ Rails.application.routes.draw do
   get "reservations", to: "reservations#list", as: "reservations"
   get "reservations(/:status)", to: "reservations#list", as: "reservations_status"
 
-  resources :my_files, only: [:index] if SettingsHelper.feature_on?(:my_files)
+  resources :my_files, only: [:index] if SettingsHelper.feature_on?("orders.my_files")
 
   # file upload routes
   post  "/#{I18n.t('facilities_downcase')}/:facility_id/:product/:product_id/sample_results", to: "file_uploads#upload_sample_results", as: "add_uploader_file"
