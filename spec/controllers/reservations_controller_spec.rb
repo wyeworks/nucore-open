@@ -809,11 +809,11 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
         end
       end
 
-      describe "without user based price groups", feature_setting: { user_based_price_groups: false } do
+      describe "without user based price groups", feature_setting: { "pricing.user_based_price_groups" => false } do
         include_examples "sets the reservation window correctly"
       end
 
-      describe "with user based price groups", feature_setting: { user_based_price_groups: true } do
+      describe "with user based price groups", feature_setting: { "pricing.user_based_price_groups" => true } do
         include_examples "sets the reservation window correctly"
       end
     end

@@ -53,7 +53,7 @@ RSpec.describe PriceGroupsController do
         @action = :users
       end
 
-      context "when user-based price groups are enabled", feature_setting: { user_based_price_groups: true, facility_directors_can_manage_price_groups: true } do
+      context "when user-based price groups are enabled", feature_setting: { "pricing.user_based_price_groups" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
         let(:user) { FactoryBot.create(:user) }
         let!(:user_member) { FactoryBot.create(:user_price_group_member, price_group: price_group, user: user) }
 
@@ -64,7 +64,7 @@ RSpec.describe PriceGroupsController do
         end
       end
 
-      context "when user-based price groups are disabled", feature_setting: { user_based_price_groups: false, facility_directors_can_manage_price_groups: true } do
+      context "when user-based price groups are disabled", feature_setting: { "pricing.user_based_price_groups" => false, "pricing.facility_directors_can_manage_price_groups" => true } do
         before(:each) do
           maybe_grant_always_sign_in(user)
         end
@@ -105,7 +105,7 @@ RSpec.describe PriceGroupsController do
         @action = :accounts
       end
 
-      context "when facility_directors_can_manage_price_groups on", feature_setting: { facility_directors_can_manage_price_groups: true } do
+      context "when facility_directors_can_manage_price_groups on", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
         it_should_allow_managers_only do
           expect(assigns(:account_members)).to include(account_member)
           expect(assigns(:tab)).to eq(:accounts)
@@ -113,7 +113,7 @@ RSpec.describe PriceGroupsController do
         end
       end
 
-      context "when facility_directors_can_manage_price_groups off", feature_setting: { facility_directors_can_manage_price_groups: false } do
+      context "when facility_directors_can_manage_price_groups off", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => false } do
         it_should_allow_admin_only do
           expect(assigns(:account_members)).to include(account_member)
           expect(assigns(:tab)).to eq(:accounts)
@@ -128,14 +128,14 @@ RSpec.describe PriceGroupsController do
         @action = :edit
       end
 
-      context "when facility_directors_can_manage_price_groups on", feature_setting: { facility_directors_can_manage_price_groups: true } do
+      context "when facility_directors_can_manage_price_groups on", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
         it_should_allow_managers_only do
           expect(assigns(:price_group)).to be_kind_of(PriceGroup).and eq(price_group)
           is_expected.to render_template("edit")
         end
       end
 
-      context "when facility_directors_can_manage_price_groups off", feature_setting: { facility_directors_can_manage_price_groups: false } do
+      context "when facility_directors_can_manage_price_groups off", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => false } do
         it_should_allow_admin_only do
           expect(assigns(:price_group)).to be_kind_of(PriceGroup).and eq(price_group)
           is_expected.to render_template("edit")
@@ -150,7 +150,7 @@ RSpec.describe PriceGroupsController do
         @params.merge!(price_group: attributes_for(:price_group, facility_id: facility.id))
       end
 
-      context "when facility_directors_can_manage_price_groups on", feature_setting: { facility_directors_can_manage_price_groups: true } do
+      context "when facility_directors_can_manage_price_groups on", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
         it_should_allow_managers_only :redirect do
           expect(assigns(:price_group)).to be_kind_of(PriceGroup).and eq(price_group)
           expect(flash[:notice]).to include("successfully updated")
@@ -158,7 +158,7 @@ RSpec.describe PriceGroupsController do
         end
       end
 
-      context "when facility_directors_can_manage_price_groups off", feature_setting: { facility_directors_can_manage_price_groups: false } do
+      context "when facility_directors_can_manage_price_groups off", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => false } do
         it_should_allow_admin_only :redirect do
           expect(assigns(:price_group)).to be_kind_of(PriceGroup).and eq(price_group)
           expect(flash[:notice]).to include("successfully updated")
@@ -173,7 +173,7 @@ RSpec.describe PriceGroupsController do
         @action = :destroy
       end
 
-      context "when facility_directors_can_manage_price_groups on", feature_setting: { facility_directors_can_manage_price_groups: true } do
+      context "when facility_directors_can_manage_price_groups on", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
         it_should_allow_managers_only :redirect do
           expect(assigns(:price_group)).to be_kind_of(PriceGroup).and eq(price_group)
           should_be_destroyed price_group
@@ -181,7 +181,7 @@ RSpec.describe PriceGroupsController do
         end
       end
 
-      context "when facility_directors_can_manage_price_groups off", feature_setting: { facility_directors_can_manage_price_groups: false } do
+      context "when facility_directors_can_manage_price_groups off", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => false } do
         it_should_allow_admin_only :redirect do
           expect(assigns(:price_group)).to be_kind_of(PriceGroup).and eq(price_group)
           should_be_destroyed price_group

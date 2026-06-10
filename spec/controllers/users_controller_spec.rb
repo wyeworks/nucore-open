@@ -66,7 +66,7 @@ RSpec.describe UsersController do
       expect(response).to redirect_to facility_user_path(facility, user)
     end
 
-    context "the price group changes", feature_setting: { user_based_price_groups: true } do
+    context "the price group changes", feature_setting: { "pricing.user_based_price_groups" => true } do
       before(:each) do
         @params[:user][:internal] = true
       end
@@ -77,7 +77,7 @@ RSpec.describe UsersController do
       end
     end
 
-    context "the price group does not change", feature_setting: { user_based_price_groups: true } do
+    context "the price group does not change", feature_setting: { "pricing.user_based_price_groups" => true } do
       before(:each) do
         @params[:user][:internal] = false
       end

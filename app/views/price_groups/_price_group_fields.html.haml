@@ -8,7 +8,7 @@
 
   = f.input :is_internal, as: :boolean, inline_label: true, label: false, input_html: { class: "js--isInternal" }
 
-- if SettingsHelper.feature_on?(:external_price_group_subsidies) && @available_parent_groups.present?
+- if SettingsHelper.feature_on?("pricing.external_price_group_subsidies") && @available_parent_groups.present?
   .well.well-sm.js--subsidySection{ style: f.object.is_internal? ? "display: none;" : "" }
     %p.help-block= t(".subsidy_instruction")
 

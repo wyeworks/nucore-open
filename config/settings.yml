@@ -151,13 +151,13 @@ feature:
     split_accounts: true
     suspend_accounts: true
 
-  # Price Groups & Pricing
-  can_manage_global_price_groups: true
-  external_price_group_subsidies: false
-  facility_directors_can_manage_price_groups: true
-  price_policy_requires_note: true
-  user_based_price_groups: true
-  user_based_price_groups_exclude_purchaser: false
+  pricing:
+    can_manage_global_price_groups: true
+    external_price_group_subsidies: false
+    facility_directors_can_manage_price_groups: true
+    price_policy_requires_note: true
+    user_based_price_groups: true
+    user_based_price_groups_exclude_purchaser: false
 
   # Billing
   allow_mass_unreconciling: false

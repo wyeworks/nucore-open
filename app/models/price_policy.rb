@@ -25,7 +25,7 @@ class PricePolicy < ApplicationRecord
 
   validate :subsidy_less_than_rate, unless: :restrict_purchase?
 
-  with_options if: -> { SettingsHelper.feature_on?(:price_policy_requires_note) } do
+  with_options if: -> { SettingsHelper.feature_on?("pricing.price_policy_requires_note") } do
     # Length of 10 is defined by Dartmouth.
     validates :note, presence: true, length: { minimum: 10, allow_blank: true }, on: :create
   end

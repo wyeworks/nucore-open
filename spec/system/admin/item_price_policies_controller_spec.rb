@@ -16,7 +16,7 @@ RSpec.describe ItemPricePoliciesController, :js do
     facility.price_groups.destroy_all # get rid of the price groups created by the factories
   end
 
-  it "can set up price policies", feature_setting: { facility_directors_can_manage_price_groups: true }  do
+  it "can set up price policies", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true }  do
     visit facility_items_path(facility, item)
     click_link item.name
     click_link "Pricing"
@@ -37,7 +37,7 @@ RSpec.describe ItemPricePoliciesController, :js do
     expect(page).to have_content("This is my note")
   end
 
-  it "can allow only some groups to purchase", feature_setting: { facility_directors_can_manage_price_groups: true }  do
+  it "can allow only some groups to purchase", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true }  do
     visit facility_items_path(facility, item)
     click_link item.name
     click_link "Pricing"
@@ -56,7 +56,7 @@ RSpec.describe ItemPricePoliciesController, :js do
     expect(page).not_to have_content(external_price_group.name)
   end
 
-  describe "with required note enabled", feature_setting: { price_policy_requires_note: true, facility_directors_can_manage_price_groups: true } do
+  describe "with required note enabled", feature_setting: { "pricing.price_policy_requires_note" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
     it "requires the field" do
       visit facility_items_path(facility, item)
       click_link item.name
@@ -68,11 +68,11 @@ RSpec.describe ItemPricePoliciesController, :js do
     end
   end
 
-  describe "with hidden price policies", feature_setting: { facility_directors_can_manage_price_groups: true } do
+  describe "with hidden price policies", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
     include_examples "with hidden price groups", "item"
   end
 
-  context "External subsidy price groups", feature_setting: { external_price_group_subsidies: true, facility_directors_can_manage_price_groups: true } do
+  context "External subsidy price groups", feature_setting: { "pricing.external_price_group_subsidies" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
     let!(:external_subsidy_group) { create(:price_group, facility: nil, is_internal: false, global: true, admin_editable: false, name: "External Subsidy", parent_price_group: external_price_group) }
 
     it "syncs unit cost from external parent to subsidy row" do

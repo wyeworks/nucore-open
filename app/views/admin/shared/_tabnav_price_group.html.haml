@@ -1,6 +1,6 @@
 %ul.nav.nav-tabs
   = tab t('shared.tabnav_price_group.accounts'), accounts_facility_price_group_path(current_facility, @price_group), (secondary_tab == 'accounts')
-  - if SettingsHelper.feature_on?(:user_based_price_groups) && @price_group_ability.can?(:read, UserPriceGroupMember)
+  - if SettingsHelper.feature_on?("pricing.user_based_price_groups") && @price_group_ability.can?(:read, UserPriceGroupMember)
     = tab t('shared.tabnav_price_group.users'), users_facility_price_group_path(current_facility, @price_group), (secondary_tab == 'users')
   - if @price_group.is_not_global? && current_ability.can?(:edit, PriceGroup)
     = tab t('shared.tabnav_price_group.edit'), edit_facility_price_group_path(current_facility, @price_group), (secondary_tab == 'edit')

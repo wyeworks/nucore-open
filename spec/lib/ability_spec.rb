@@ -334,7 +334,7 @@ RSpec.describe Ability do
     it_behaves_like "it allows switch_to on active, but not deactivated users"
     it_behaves_like "it can manage training requests"
 
-    context "when facility_directors_can_manage_price_groups enabled", feature_setting: { facility_directors_can_manage_price_groups: true } do
+    context "when facility_directors_can_manage_price_groups enabled", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       it_is_allowed_to(:manage, PriceGroup)
       it_is_allowed_to(:manage, PricePolicy)
       it_is_allowed_to(:manage, InstrumentPricePolicy)
@@ -342,7 +342,7 @@ RSpec.describe Ability do
       it_is_allowed_to(:manage, ServicePricePolicy)
     end
 
-    context "when facility_directors_can_manage_price_groups disabled", feature_setting: { facility_directors_can_manage_price_groups: false } do
+    context "when facility_directors_can_manage_price_groups disabled", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => false } do
       it_is_allowed_to([:show, :index], PriceGroup)
       it_is_not_allowed_to([:create, :edit, :update, :destroy], PriceGroup)
       it_is_allowed_to([:show, :index], PricePolicy)

@@ -170,7 +170,7 @@ class Ability
     if resource.is_a?(Facility) && user.facility_director_of?(resource)
       manager_abilities_for_facility(user, resource, controller)
 
-      if SettingsHelper.feature_on?(:facility_directors_can_manage_price_groups)
+      if SettingsHelper.feature_on?("pricing.facility_directors_can_manage_price_groups")
         can :manage, PriceGroup
         can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
       else

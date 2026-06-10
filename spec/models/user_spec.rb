@@ -36,7 +36,7 @@ RSpec.describe User do
     it { is_expected.to be_valid }
   end
 
-  describe "#create_default_price_group!", feature_setting: { user_based_price_groups: true } do
+  describe "#create_default_price_group!", feature_setting: { "pricing.user_based_price_groups" => true } do
     before do
       expect(User).to receive(:default_price_group_finder).and_return(Users::DefaultPriceGroupSelector.new)
     end
@@ -52,7 +52,7 @@ RSpec.describe User do
     end
   end
 
-  describe "price groups", feature_setting: { user_based_price_groups: true } do
+  describe "price groups", feature_setting: { "pricing.user_based_price_groups" => true } do
 
     it "is a member of any explicitly mapped price groups" do
       pg = FactoryBot.create(:price_group, facility: facility)

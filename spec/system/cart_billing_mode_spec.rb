@@ -35,7 +35,7 @@ RSpec.describe "Adding products with different billing modes to cart" do
     it "does not allow a user without any accounts to add a Skip Review product to cart" do
       visit facility_item_path(facility, skip_review_item)
 
-      if SettingsHelper.feature_on?(:user_based_price_groups) && !SettingsHelper.feature_on?(:user_based_price_groups_exclude_purchaser)
+      if SettingsHelper.feature_on?("pricing.user_based_price_groups") && !SettingsHelper.feature_on?("pricing.user_based_price_groups_exclude_purchaser")
         expect(page).to have_content("Sorry, but we could not find a valid payment source that you can use to purchase this")
       else
         expect(page).to have_content("No price groups found for this purchase")
@@ -145,7 +145,7 @@ RSpec.describe "Adding products with different billing modes to cart" do
   end
 
   ### SPEC CONTEXTS ###
-  context "with user-based price groups disabled", feature_setting: { user_based_price_groups: false } do
+  context "with user-based price groups disabled", feature_setting: { "pricing.user_based_price_groups" => false } do
     context "when a user has no price groups (or no account with price groups)" do
       it_behaves_like "user with no accounts" do
         let(:logged_in_user) { internal_user }
@@ -159,7 +159,7 @@ RSpec.describe "Adding products with different billing modes to cart" do
     end
   end
 
-  context "with user-based price groups enabled", feature_setting: { user_based_price_groups: true } do
+  context "with user-based price groups enabled", feature_setting: { "pricing.user_based_price_groups" => true } do
     context "with an internal that has no account" do
       it_behaves_like "user with no accounts" do
         let(:logged_in_user) { internal_user }

@@ -16,7 +16,7 @@ RSpec.describe TimedServicePricePoliciesController, :js do
     facility.price_groups.destroy_all # get rid of the price groups created by the factories
   end
 
-  it "can set up price policies", :aggregate_failures, feature_setting: { facility_directors_can_manage_price_groups: true } do
+  it "can set up price policies", :aggregate_failures, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
     visit facility_timed_services_path(facility, timed_service)
     click_link timed_service.name
     click_link "Pricing"
@@ -38,7 +38,7 @@ RSpec.describe TimedServicePricePoliciesController, :js do
     expect(page).to have_content("This is my note")
   end
 
-  it "can allow only some groups to purchase", feature_setting: { facility_directors_can_manage_price_groups: true }  do
+  it "can allow only some groups to purchase", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true }  do
     visit facility_timed_services_path(facility, timed_service)
     click_link timed_service.name
     click_link "Pricing"
@@ -57,7 +57,7 @@ RSpec.describe TimedServicePricePoliciesController, :js do
     expect(page).not_to have_content(external_price_group.name)
   end
 
-  describe "with required note enabled", feature_setting: { price_policy_requires_note: true, facility_directors_can_manage_price_groups: true } do
+  describe "with required note enabled", feature_setting: { "pricing.price_policy_requires_note" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
     it "requires the field" do
       visit facility_timed_services_path(facility, timed_service)
       click_link timed_service.name
