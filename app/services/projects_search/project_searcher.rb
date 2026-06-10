@@ -9,7 +9,20 @@ module ProjectsSearch
     end
 
     def options
-      Project.where(id: order_details.select("distinct project_id")).order(:name)
+      projects =
+        if @current_facility.cross_facility?
+          Project.all
+        else
+          project_ids =
+            @current_facility
+            .order_details
+            .where(project_id: nil)
+            .select(:project_id)
+
+          Project.where(id: project_ids)
+        end
+
+      projects.order(:name)
     end
 
     def search(params)
