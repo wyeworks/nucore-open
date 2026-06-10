@@ -46,9 +46,10 @@ module TransactionSearch
     end
 
     # Expects an array of `TransactionSearch::BaseSearcher`s
-    def initialize(*searchers, **kwargs)
+    def initialize(facility, *searchers, **kwargs)
       searchers_config = default_config.merge(kwargs)
 
+      @facility = facility
       @searchers_config = searchers_config
       @searchers =
         searchers.presence ||
@@ -64,14 +65,14 @@ module TransactionSearch
         searcher_config = searcher_config(searcher_class.key.to_sym)
         searcher = searcher_class.new(
           results.order_details,
-          params[:current_facility_id],
+          @facility,
           **searcher_config,
         )
         search_params = params[searcher_class.key.to_sym]
         search_params = Array(search_params).reject(&:blank?) unless searcher.multipart?
 
         # Options should not be restricted, they should search over the full order details
-        option_searcher = searcher_class.new(order_details, **searcher_config)
+        option_searcher = searcher_class.new(order_details, @facility, **searcher_config)
 
         Results.new(
           searcher.search(search_params),

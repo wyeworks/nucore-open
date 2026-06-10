@@ -4,15 +4,15 @@ module TransactionSearch
 
   class BaseSearcher
 
-    attr_reader :order_details, :config
+    attr_reader :order_details, :current_facility, :config
 
     def self.key
       to_s.sub(/\ATransactionSearch::/, "").sub(/Searcher\z/, "").pluralize.underscore
     end
 
-    def initialize(order_details, current_facility_id = nil, **config)
+    def initialize(order_details, current_facility, **config)
       @order_details = order_details
-      @current_facility_id = current_facility_id
+      @current_facility = current_facility
       @config = config
     end
 
