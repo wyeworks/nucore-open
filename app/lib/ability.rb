@@ -64,7 +64,7 @@ class Ability
         # TODO: Refactor
         # We think this is here to keep the Users tab visible. See LinkCollection#admin_users.
         cannot :manage, User unless resource.is_a?(Facility) || resource.is_a?(Project)
-        if SettingsHelper.feature_off?(:create_users)
+        if SettingsHelper.feature_off?("users_authentication.create_users")
           cannot([:edit, :update], User)
         end
       end
@@ -119,7 +119,7 @@ class Ability
       can :manage, AccountUser
       can [:create, :read, :administer, :accounts, :new_external, :search], User
       can [:create, :read, :update, :suspend, :unsuspend], Account
-      if SettingsHelper.feature_off?(:create_users)
+      if SettingsHelper.feature_off?("users_authentication.create_users")
         cannot([:create, :update], User)
       end
     end

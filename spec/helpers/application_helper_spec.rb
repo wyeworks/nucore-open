@@ -20,11 +20,11 @@ RSpec.describe ApplicationHelper do
     context "when the user can :manage_users for the current facility" do
       let(:can_manage_users?) { true }
 
-      context "and the :create_users feature is on", feature_setting: { create_users: true } do
+      context "and the :create_users feature is on", feature_setting: { "users_authentication.create_users" => true } do
         it { expect(can_create_users?).to be true }
       end
 
-      context "and the :create_users feature is off", feature_setting: { create_users: false } do
+      context "and the :create_users feature is off", feature_setting: { "users_authentication.create_users" => false } do
         it { expect(can_create_users?).to be false }
       end
     end
@@ -32,11 +32,11 @@ RSpec.describe ApplicationHelper do
     context "when the user cannot :manage_users for the current facility" do
       let(:can_manage_users?) { false }
 
-      context "and the :create_users feature is on", feature_setting: { create_users: true } do
+      context "and the :create_users feature is on", feature_setting: { "users_authentication.create_users" => true } do
         it { expect(can_create_users?).to be false }
       end
 
-      context "and the :create_users feature is off", feature_setting: { create_users: false } do
+      context "and the :create_users feature is off", feature_setting: { "users_authentication.create_users" => false } do
         it { expect(can_create_users?).to be false }
       end
     end

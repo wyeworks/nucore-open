@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { create_users: true, user_based_price_groups: true, reload_routes: true } do
+RSpec.describe "Managing User Details", :aggregate_failures, feature_setting: { "users_authentication.create_users" => true, user_based_price_groups: true, reload_routes: true } do
   let(:facility) { FactoryBot.create(:facility) }
   let(:admin) { FactoryBot.create(:user, :netid, :administrator) }
 

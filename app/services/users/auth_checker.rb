@@ -28,7 +28,7 @@ module Users
     end
 
     def ldap_enabled?
-      SettingsHelper.feature_on?(:uses_ldap_authentication) && LdapAuthentication.configured?
+      SettingsHelper.feature_on?("users_authentication.uses_ldap_authentication") && LdapAuthentication.configured?
     end
 
     # TODO - Decide if we need to authenticate against employee ID, a reservation passcode, or IdP/LDAP API.

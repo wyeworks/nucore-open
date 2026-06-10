@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "User suspension", feature_setting: { create_users: true, reload_routes: true } do
+RSpec.describe "User suspension", feature_setting: { "users_authentication.create_users" => true, reload_routes: true } do
   let(:facility) { create(:facility) }
   let(:user) { create(:user, email: "todelete@example.com", first_name: "Del", last_name: "User") }
 

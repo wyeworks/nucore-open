@@ -123,11 +123,11 @@ feature:
     product_list_columns: false
     use_manage: false
 
-  # Users & Authentication
-  create_users: true
-  lookup_netids: true
-  password_update: true
-  uses_ldap_authentication: false
+  users_authentication:
+    create_users: true
+    lookup_netids: true
+    password_update: true
+    uses_ldap_authentication: false
 
   # Roles
   allow_global_billing_admin_update_actual_prices: false

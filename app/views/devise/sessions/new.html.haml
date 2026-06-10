@@ -14,7 +14,7 @@
 
       = f.button :submit, text("submit"), class: ["btn", "btn-primary"]
 
-  - if SettingsHelper.feature_on? :password_update
+  - if SettingsHelper.feature_on? "users_authentication.password_update"
     %p= link_to text("forgot_password"), :reset_password
 
 = render_view_hook("login_screen_announcement")

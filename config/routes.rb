@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   devise_for :users
   mount SangerSequencing::Engine => "/" if defined?(SangerSequencing)
 
-  if SettingsHelper.feature_on?(:password_update)
+  if SettingsHelper.feature_on?("users_authentication.password_update")
     match "/users/password/edit_current", to: "user_password#edit_current", as: "edit_current_password", via: [:get, :post]
     match "/users/password/reset", to: "user_password#reset", as: "reset_password", via: [:get, :post]
   end
@@ -174,14 +174,14 @@ Rails.application.routes.draw do
       end
     end
 
-    users_options = if SettingsHelper.feature_on?(:create_users)
+    users_options = if SettingsHelper.feature_on?("users_authentication.create_users")
                       {}
                     else
                       { except: [:edit, :update, :new, :create], constraints: { id: /\d+/ } }
                     end
 
     resources :users, users_options do
-      if SettingsHelper.feature_on?(:create_users)
+      if SettingsHelper.feature_on?("users_authentication.create_users")
         collection do
           get "new_external"
           post "search"

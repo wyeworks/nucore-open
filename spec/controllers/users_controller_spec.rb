@@ -36,7 +36,7 @@ RSpec.describe UsersController do
     end
   end
 
-  describe "GET #edit", feature_setting: { create_users: true, reload_routes: true } do
+  describe "GET #edit", feature_setting: { "users_authentication.create_users" => true, reload_routes: true } do
     let(:user) { FactoryBot.create(:user, :external) }
 
     before(:each) do
@@ -48,7 +48,7 @@ RSpec.describe UsersController do
     it_should_allow_admin_only { expect(assigns[:user]).to eq(user) }
   end
 
-  describe "PUT #update", feature_setting: { create_users: true, reload_routes: true } do
+  describe "PUT #update", feature_setting: { "users_authentication.create_users" => true, reload_routes: true } do
     let(:user) { FactoryBot.create(:user, :external, first_name: "Old", uid: 22) }
 
     before(:each) do
@@ -118,7 +118,7 @@ RSpec.describe UsersController do
   end
 
   context "creating users" do
-    context "enabled", feature_setting: { create_users: true, reload_routes: true } do
+    context "enabled", feature_setting: { "users_authentication.create_users" => true, reload_routes: true } do
       it "routes", :aggregate_failures do
         expect(get: "/#{facilities_route}/url_name/users/new").to route_to(controller: "users", action: "new", facility_id: "url_name")
         expect(post: "/#{facilities_route}/url_name/users").to route_to(controller: "users", action: "create", facility_id: "url_name")
@@ -288,7 +288,7 @@ RSpec.describe UsersController do
       end
     end
 
-    context "disabled", feature_setting: { create_users: false, reload_routes: true } do
+    context "disabled", feature_setting: { "users_authentication.create_users" => false, reload_routes: true } do
       it "doesn't route route", :aggregate_failures do
         expect(get: "/#{facilities_route}/url_name/users/new").not_to be_routable
         expect(get: "/#{facilities_route}/url_name/users/edit").not_to be_routable
@@ -322,7 +322,7 @@ RSpec.describe UsersController do
     end
   end
 
-  describe "unexpire", feature_setting: { create_users: true, reload_routes: true } do
+  describe "unexpire", feature_setting: { "users_authentication.create_users" => true, reload_routes: true } do
     let(:expired_user) { create(:user, :expired) }
     let(:facility) { create(:facility) }
 

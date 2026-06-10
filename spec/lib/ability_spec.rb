@@ -79,12 +79,12 @@ RSpec.describe Ability do
     end
 
     shared_examples_for "correct User permissions" do
-      context "when create_users feature is on", feature_setting: { create_users: true } do
+      context "when create_users feature is on", feature_setting: { "users_authentication.create_users" => true } do
         it_is_allowed_to([:new, :create, :read, :index, :accounts, :search], User)
         it_is_not_allowed_to([:switch_to, :edit, :update, :suspend, :unsuspend, :orders], User)
       end
 
-      context "when create_users feature is off", feature_setting: { create_users: false } do
+      context "when create_users feature is off", feature_setting: { "users_authentication.create_users" => false } do
         it_is_allowed_to([:read, :index, :accounts, :search], User)
         it_is_not_allowed_to([:new, :create, :edit, :update, :switch_to, :suspend, :unsuspend, :orders], User)
       end
@@ -159,7 +159,7 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:batch_update, Order) }
       it { is_expected.to be_allowed_to(:batch_update, Reservation) }
 
-      context "when create_users feature is on", feature_setting: { create_users: true } do
+      context "when create_users feature is on", feature_setting: { "users_authentication.create_users" => true } do
         context "when user is external" do
           it { is_expected.to be_allowed_to(:edit, external_user) }
           it { is_expected.to be_allowed_to(:update, external_user) }
@@ -171,7 +171,7 @@ RSpec.describe Ability do
         end
       end
 
-      context "when create_users feature is off", feature_setting: { create_users: false } do
+      context "when create_users feature is off", feature_setting: { "users_authentication.create_users" => false } do
         context "when user is external" do
           it { is_expected.not_to be_allowed_to(:edit, external_user) }
           it { is_expected.not_to be_allowed_to(:update, external_user) }
