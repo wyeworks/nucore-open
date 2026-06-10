@@ -929,7 +929,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
               .to(staff_user)
           end
 
-          context "when assignment notifications are on", feature_setting: { order_assignment_notifications: true } do
+          context "when assignment notifications are on", feature_setting: { "notifications.order_assignment_notifications": true } do
             it "sends a notification to the assigned user" do
               expect { do_request }.to(
                 have_enqueued_mail(OrderAssignmentMailer, :notify_assigned_user)
@@ -937,7 +937,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
             end
           end
 
-          context "when assignment notifications are off", feature_setting: { order_assignment_notifications: false } do
+          context "when assignment notifications are off", feature_setting: { "notifications.order_assignment_notifications": false } do
             it "sends no notifications" do
               expect { do_request }.not_to have_enqueued_mail
             end

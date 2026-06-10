@@ -172,10 +172,10 @@ feature:
     show_reconcile_credit_cards: false
     show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
 
-  # Notifications
-  order_assignment_notifications: true
-  product_specific_contacts: true
-  send_statement_emails: true
+  notifications:
+    order_assignment_notifications: true
+    product_specific_contacts: true
+    send_statement_emails: true
 
   # Orders
   export_order_disputes: false

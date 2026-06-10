@@ -140,13 +140,13 @@ RSpec.describe StatementCreator do
   describe "#send_statement_emails" do
     before { creator.create }
 
-    context "when statement emailing is on", feature_setting: { send_statement_emails: true } do
+    context "when statement emailing is on", feature_setting: { "notifications.send_statement_emails": true } do
       it "sends statements" do
         expect { creator.send_statement_emails }.to enqueue_mail(Notifier, :statement)
       end
     end
 
-    context "when statement emailing is off", feature_setting: { send_statement_emails: false } do
+    context "when statement emailing is off", feature_setting: { "notifications.send_statement_emails": false } do
       it "does not send statements" do
         expect { creator.send_statement_emails }.not_to enqueue_mail
       end

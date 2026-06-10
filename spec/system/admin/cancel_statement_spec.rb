@@ -53,7 +53,7 @@ RSpec.describe "canceling statements" do
 
       it "does not allow statement to be canceled" do
         expect(page).to have_content "Download"
-        expect(page).to have_content "Resend" if SettingsHelper.feature_on?(:send_statement_emails)
+        expect(page).to have_content "Resend" if SettingsHelper.feature_on?("notifications.send_statement_emails")
         expect(page).to_not have_link "Cancel"
       end
     end
@@ -63,7 +63,7 @@ RSpec.describe "canceling statements" do
 
       it "does not allow statement to be canceled, downloaded, or resent" do
         expect(page).not_to have_link "Download"
-        expect(page).not_to have_content "Resend" if SettingsHelper.feature_on?(:send_statement_emails)
+        expect(page).not_to have_content "Resend" if SettingsHelper.feature_on?("notifications.send_statement_emails")
         expect(page).not_to have_link "Cancel"
       end
     end
@@ -77,7 +77,7 @@ RSpec.describe "canceling statements" do
 
     it "does not allow statement to be canceled or resent" do
       expect(page).to have_content "Download"
-      expect(page).not_to have_content "Resend" if SettingsHelper.feature_on?(:send_statement_emails)
+      expect(page).not_to have_content "Resend" if SettingsHelper.feature_on?("notifications.send_statement_emails")
       expect(page).not_to have_link "Cancel"
     end
   end

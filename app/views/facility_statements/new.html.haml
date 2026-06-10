@@ -19,7 +19,7 @@
 
 - if @order_details.any?
   = content_for :action_instructions do
-    - if SettingsHelper.feature_on?(:send_statement_emails)
+    - if SettingsHelper.feature_on?("notifications.send_statement_emails")
       %p.notice.notice-info= text(".instructions")
     - else
       %p.notice.notice-info= text(".instructions_without_email")

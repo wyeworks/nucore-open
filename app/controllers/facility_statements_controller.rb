@@ -97,7 +97,7 @@ class FacilityStatementsController < ApplicationController
 
   # POST /facilities/:facility_id/statements/:id/resend_emails
   def resend_emails
-    if SettingsHelper.feature_on?(:send_statement_emails)
+    if SettingsHelper.feature_on?("notifications.send_statement_emails")
       statement = Statement.find(params[:id])
       statement.send_emails
       flash[:notice] = text("success_with_email_html", accounts: statement.account)
@@ -130,7 +130,7 @@ class FacilityStatementsController < ApplicationController
   private
 
   def success_message
-    SettingsHelper.feature_on?(:send_statement_emails) ? "success_with_email_html" : "success_html"
+    SettingsHelper.feature_on?("notifications.send_statement_emails") ? "success_with_email_html" : "success_html"
   end
 
   def can_set_invoice_date?

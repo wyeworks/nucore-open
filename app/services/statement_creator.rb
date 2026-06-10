@@ -30,7 +30,7 @@ class StatementCreator
   end
 
   def send_statement_emails
-    if SettingsHelper.feature_on?(:send_statement_emails)
+    if SettingsHelper.feature_on?("notifications.send_statement_emails")
       account_statements.each do |_account, statement|
         statement.send_emails
       end

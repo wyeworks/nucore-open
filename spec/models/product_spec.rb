@@ -185,7 +185,7 @@ RSpec.describe Product do
         @product = TestProduct.create!(contact_email: "product@example.com", facility: @facility, name: "Test Product", url_name: "test")
       end
 
-      context "product specific enabled", feature_setting: { product_specific_contacts: true } do
+      context "product specific enabled", feature_setting: { "notifications.product_specific_contacts": true } do
 
         it "should return the product's email if it has it" do
           expect(@product.email).to eq("product@example.com")
@@ -213,7 +213,7 @@ RSpec.describe Product do
         end
       end
 
-      context "product specific disabled", feature_setting: { product_specific_contacts: false } do
+      context "product specific disabled", feature_setting: { "notifications.product_specific_contacts": false } do
 
         it "should return the facility's email address even if the product has an email" do
           expect(@product.email).to eq("facility@example.com")
