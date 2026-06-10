@@ -75,7 +75,7 @@ RSpec.describe OrderStatus do
     context "with an Item product" do
       let(:item) { build(:item) }
 
-      context "when item_initial_order_status_complete feature is on", feature_setting: { item_initial_order_status_complete: true } do
+      context "when item_initial_order_status_complete feature is on", feature_setting: { "products.item_initial_order_status_complete": true } do
         it "returns all new, in process, and complete statuses for the facility" do
           expected_statuses = [
             described_class.new_status,
@@ -98,7 +98,7 @@ RSpec.describe OrderStatus do
         end
       end
 
-      context "when item_initial_order_status_complete feature is off", feature_setting: { item_initial_order_status_complete: false } do
+      context "when item_initial_order_status_complete feature is off", feature_setting: { "products.item_initial_order_status_complete": false } do
         it "returns same as default even for Item products" do
           expected_statuses = [
             described_class.new_status,

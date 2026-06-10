@@ -13,7 +13,7 @@
     %vue-sanger-sequencing-well-plate(v-for="plateIndex in builder.plateCount()"){":builder" => "builder", ":plate-index" => "$index" }
 
     - if @submissions.any?
-      - if SettingsHelper.feature_on?(:sanger_enabled_service)
+      - if SettingsHelper.feature_on?("products.sanger_enabled_service")
         = f.input :column_order,
           collection: order_options,
           include_blank: false,

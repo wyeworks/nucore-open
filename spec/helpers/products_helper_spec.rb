@@ -8,7 +8,7 @@ RSpec.describe ProductsHelper do
 
     it(
       "list all relay types if none disabled",
-      { feature_setting: { disable_relay_synaccess_rev_a: false } }
+      { feature_setting: { "products.disable_relay_synaccess_rev_a": false } }
     ) do
       expect(subject.to_h).to include(
         RelaySynaccessRevA,
@@ -19,7 +19,7 @@ RSpec.describe ProductsHelper do
 
     it(
       "exclude synaccess rev a if disabled flag is on",
-      { feature_setting: { disable_relay_synaccess_rev_a: true } }
+      { feature_setting: { "products.disable_relay_synaccess_rev_a": true } }
     ) do
       expect(subject.to_h).to_not include(RelaySynaccessRevA)
     end

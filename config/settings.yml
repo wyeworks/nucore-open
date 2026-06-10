@@ -191,12 +191,12 @@ feature:
     auto_end_reservations_on_next_start: false
     walkup_reservations: true
 
-  # Products
-  disable_relay_synaccess_rev_a: false
-  item_initial_order_status_complete: false
-  sanger_enabled_service: <%= ENV.fetch("SANGER_ENABLED_SERVICE", false) %>
-  show_daily_rate_option: true
-  well_plate_alternative_csv_format: <%= ENV.fetch("well_plate_alternative_csv_format", false) %>
+  products:
+    disable_relay_synaccess_rev_a: false
+    item_initial_order_status_complete: false
+    sanger_enabled_service: <%= ENV.fetch("SANGER_ENABLED_SERVICE", false) %>
+    show_daily_rate_option: true
+    well_plate_alternative_csv_format: <%= ENV.fetch("well_plate_alternative_csv_format", false) %>
 
   # Other
   active_storage: true
