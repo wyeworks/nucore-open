@@ -69,7 +69,6 @@ en:
         already_in_queue: Only one file may be in process at a time
         zero_duration: must be greater than zero
         start_after_end: must be after Ending Date
-        overlapping_assigned_policy: "cannot overlap an existing price policy that has orders assigned to it"
         # Append your own errors here or at the model/attributes scope.
       full_messages:
         format: "%{attribute} %{message}"
