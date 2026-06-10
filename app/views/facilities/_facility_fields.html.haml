@@ -43,7 +43,7 @@
   = f.input :phone_number
   = f.input :fax_number
   = f.input :email
-  - if SettingsHelper.feature_on?(:facility_payment_urls)
+  - if SettingsHelper.feature_on?("accounts.facility_payment_urls")
     = f.input :payment_url
 
 .well

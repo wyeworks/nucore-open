@@ -36,7 +36,7 @@ Rails.application.routes.draw do
       get "user_search"
     end
 
-    if SettingsHelper.feature_on? :suspend_accounts
+    if SettingsHelper.feature_on? "accounts.suspend_accounts"
       get "suspend", to: "accounts#suspend", as: "suspend"
       get "unsuspend", to: "accounts#unsuspend", as: "unsuspend"
     end
@@ -268,7 +268,7 @@ Rails.application.routes.draw do
     get "public_timeline", to: "reservations#public_timeline", as: "public_timeline" if SettingsHelper.feature_on?("style_display.daily_view")
 
     ### Feature Toggle Editing Accounts ###
-    if SettingsHelper.feature_on?(:edit_accounts)
+    if SettingsHelper.feature_on?("accounts.edit_accounts")
       resources :accounts, controller: "facility_accounts", only: [:new, :create, :edit, :update] do
         collection do
           get "new_account_user_search"
@@ -279,14 +279,14 @@ Rails.application.routes.draw do
           end
         end
 
-        resource :account_facility_joins, only: [:edit, :update], path: "facilities" if SettingsHelper.feature_on?(:multi_facility_accounts)
+        resource :account_facility_joins, only: [:edit, :update], path: "facilities" if SettingsHelper.feature_on?("accounts.multi_facility_accounts")
       end
     end
 
     resources :accounts, controller: "facility_accounts", only: [:index, :show] do
       get "search_results", via: [:post], on: :collection
 
-      if SettingsHelper.feature_on?(:suspend_accounts)
+      if SettingsHelper.feature_on?("accounts.suspend_accounts")
         get "suspend",   to: "facility_accounts#suspend",   as: "suspend"
         get "unsuspend", to: "facility_accounts#unsuspend", as: "unsuspend"
       end

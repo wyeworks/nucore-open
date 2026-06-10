@@ -135,21 +135,21 @@ feature:
     global_billing_administrator_users_tab: true
     move_transactions_account_roles: false
 
-  # Accounts & Account Types
-  account_reference_field: false
-  account_tabs: false
-  edit_accounts: true
-  expense_accounts: true
-  facility_payment_urls: false
-  hide_account_far_future_expiration: false
-  multi_facility_accounts: true
-  po_require_affiliate_account: true
-  purchase_order_monetary_cap: false
-  revenue_account_editable: false
-  show_account_opencontract_field: false
-  show_account_price_groups_tab: false
-  split_accounts: true
-  suspend_accounts: true
+  accounts:
+    account_reference_field: false
+    account_tabs: false
+    edit_accounts: true
+    expense_accounts: true
+    facility_payment_urls: false
+    hide_account_far_future_expiration: false
+    multi_facility_accounts: true
+    po_require_affiliate_account: true
+    purchase_order_monetary_cap: false
+    revenue_account_editable: false
+    show_account_opencontract_field: false
+    show_account_price_groups_tab: false
+    split_accounts: true
+    suspend_accounts: true
 
   # Price Groups & Pricing
   can_manage_global_price_groups: true

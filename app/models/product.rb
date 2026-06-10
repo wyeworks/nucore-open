@@ -58,7 +58,7 @@ class Product < ApplicationRecord
     presence: true,
     numericality: { only_integer: true },
     length: { minimum: 1, maximum: Settings.accounts.product_default.to_s.length },
-    if: -> { SettingsHelper.feature_on?(:expense_accounts) && requires_account? },
+    if: -> { SettingsHelper.feature_on?("accounts.expense_accounts") && requires_account? },
   )
 
   validates :facility_account_id, presence: true, if: :requires_account?

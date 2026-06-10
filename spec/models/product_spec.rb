@@ -159,7 +159,7 @@ RSpec.describe Product do
       end
     end
 
-    context "expense accounts", feature_setting: { expense_accounts: true } do
+    context "expense accounts", feature_setting: { "accounts.expense_accounts" => true } do
       it "allows the default expense account" do
         product = build(:product, account: Settings.accounts.product_default)
         product.valid?
@@ -179,7 +179,7 @@ RSpec.describe Product do
       end
     end
 
-    context "email", feature_setting: { expense_accounts: false } do
+    context "email", feature_setting: { "accounts.expense_accounts" => false } do
       before :each do
         @facility = FactoryBot.create(:facility, email: "facility@example.com")
         @product = TestProduct.create!(contact_email: "product@example.com", facility: @facility, name: "Test Product", url_name: "test")

@@ -69,7 +69,7 @@ class FacilityFacilityAccountsController < ApplicationController
       create_params_attributes,
       account_number_parts: FacilityAccount.account_number_field_names,
     )
-    if SettingsHelper.feature_on?(:expense_accounts)
+    if SettingsHelper.feature_on?("accounts.expense_accounts")
       strong_params
     else
       strong_params.merge(revenue_account: Settings.accounts.revenue_account_default)

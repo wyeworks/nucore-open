@@ -5,21 +5,21 @@
 
 %h2= t(".head")
 
-- if SettingsHelper.feature_on?(:account_tabs)
+- if SettingsHelper.feature_on?("accounts.account_tabs")
   = render "shared/accounts_tab_nav"
 
 = form_tag search_results_facility_accounts_path, id: "ajax_form", method: :get, class: "js--searchForm" do
   = label_tag :search_term, text("facility_accounts.index.label.search_term")
   = hidden_field_tag :email, current_user.email, disabled: true
   = hidden_field_tag :format, params[:format], disabled: true
-  - if SettingsHelper.feature_on?(:account_tabs)
+  - if SettingsHelper.feature_on?("accounts.account_tabs")
     = hidden_field_tag :suspended, params[:suspended]
   %br
   .row
     .col-md-4
       = text_field_tag :search_term, nil, size: 30, class: "form-control"
 
-  - if SettingsHelper.feature_on?(:account_tabs)
+  - if SettingsHelper.feature_on?("accounts.account_tabs")
     .row
       .col-md-4
         = label_tag :account_type, I18n.t("facility_accounts.index.label.account_type")
@@ -39,9 +39,9 @@
 %hr
 
 %ul.list-inline
-  - if SettingsHelper.feature_on?(:edit_accounts) && current_ability.can?(:create, Account)
+  - if SettingsHelper.feature_on?("accounts.edit_accounts") && current_ability.can?(:create, Account)
     %li= link_to t(".add_account"), new_account_user_search_facility_accounts_path, class: "btn-add"
-  - if !@accounts.blank? && SettingsHelper.feature_off?(:account_tabs)
+  - if !@accounts.blank? && SettingsHelper.feature_off?("accounts.account_tabs")
     %li.toggle_expired_accts_btn--js.toggle_expired_btn.btn.btn-primary= t("views.facility_accounts.account_table.hide_text")
 #result
   = render "account_table"

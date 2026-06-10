@@ -98,7 +98,7 @@ class AccountBuilder
   def account_params_for_build
     common_params = [:account_number]
 
-    if SettingsHelper.feature_on?(:show_account_price_groups_tab)
+    if SettingsHelper.feature_on?("accounts.show_account_price_groups_tab")
       common_params << { price_groups_relation_ids: [] }
     end
 
