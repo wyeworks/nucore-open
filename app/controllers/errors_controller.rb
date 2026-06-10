@@ -9,7 +9,11 @@ class ErrorsController < ApplicationController
   end
 
   def internal_server_error
-    send_static_error_page
+    render(
+      file: Rails.public_path.join("500.html"),
+      status: :internal_server_error,
+      layout: false,
+    )
   end
 
   def forbidden
@@ -31,10 +35,4 @@ class ErrorsController < ApplicationController
   rescue ActionController::UnknownFormat
     head status
   end
-
-  def send_static_error_page
-    static_file_path = Rails.public_path.join("500.html")
-    send_file static_file_path, status: :internal_server_error, type: "text/html"
-  end
-
 end
