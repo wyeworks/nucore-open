@@ -73,7 +73,7 @@ RSpec.describe StatementCreator do
         )
       end
 
-      context "when reference_statement_invoice_number feature is on", feature_setting: { reference_statement_invoice_number: true } do
+      context "when reference_statement_invoice_number feature is on", feature_setting: { "billing.reference_statement_invoice_number" => true } do
         it "creates statement with parent_statement_id" do
           creator_with_parent.create
           expect(creator_with_parent.errors).to be_empty
@@ -116,7 +116,7 @@ RSpec.describe StatementCreator do
         end
       end
 
-      context "when reference_statement_invoice_number feature is off", feature_setting: { reference_statement_invoice_number: false } do
+      context "when reference_statement_invoice_number feature is off", feature_setting: { "billing.reference_statement_invoice_number" => false } do
         it "ignores parent invoice number and creates standard statement" do
           creator_with_parent.create
           expect(creator_with_parent.errors).to be_empty

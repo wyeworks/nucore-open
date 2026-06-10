@@ -45,7 +45,7 @@ RSpec.describe OrderDetails::NoticesService do
       is_expected.to eq([:can_reconcile])
     end
 
-    it "shows ready for journal if setting is on", feature_setting: { ready_for_journal_notice: true } do
+    it "shows ready for journal if setting is on", feature_setting: { "billing.ready_for_journal_notice" => true } do
       allow(order_detail).to receive(:ready_for_journal?).and_return(true)
 
       is_expected.to eq([:ready_for_journal])
@@ -57,7 +57,7 @@ RSpec.describe OrderDetails::NoticesService do
       is_expected.to eq([:ready_for_statement])
     end
 
-    it "does not show ready for journal if setting is off", feature_setting: { ready_for_journal_notice: false } do
+    it "does not show ready for journal if setting is off", feature_setting: { "billing.ready_for_journal_notice" => false } do
       allow(order_detail).to receive(:ready_for_journal?).and_return(true)
 
       is_expected.to be_empty
@@ -98,7 +98,7 @@ RSpec.describe OrderDetails::NoticesService do
           is_expected.not_to include(:in_review)
         end
 
-        context "when ready_for_journal notice enabled", feature_setting: { ready_for_journal_notice: true } do
+        context "when ready_for_journal notice enabled", feature_setting: { "billing.ready_for_journal_notice" => true } do
           before do
             allow(Account.config).to receive(:using_journal?) { true }
           end

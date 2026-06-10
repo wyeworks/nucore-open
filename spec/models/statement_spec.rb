@@ -41,7 +41,7 @@ RSpec.describe Statement do
     let(:child_statement) { build(:statement, account:, facility:, created_by: user.id, parent_statement:) }
 
     describe "invoice number generation" do
-      context "when reference_statement_invoice_number feature is on", feature_setting: { reference_statement_invoice_number: true } do
+      context "when reference_statement_invoice_number feature is on", feature_setting: { "billing.reference_statement_invoice_number" => true } do
         it "generates standard invoice number for statements without parent" do
           statement.save!
           expect(statement.invoice_number).to eq(statement.build_invoice_number)
@@ -61,7 +61,7 @@ RSpec.describe Statement do
         end
       end
 
-      context "when reference_statement_invoice_number feature is off", feature_setting: { reference_statement_invoice_number: false } do
+      context "when reference_statement_invoice_number feature is off", feature_setting: { "billing.reference_statement_invoice_number" => false } do
         it "generates standard invoice numbers even for child statements" do
           child_statement.save!
           expect(child_statement.invoice_number).to eq(child_statement.build_invoice_number)

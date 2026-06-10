@@ -16,7 +16,7 @@
   = render "shared/transactions/search"
 
 - if @unreconciled_details.any?
-  - show_reconciliation_deposit_number = SettingsHelper.feature_on?(:show_reconciliation_deposit_number)
+  - show_reconciliation_deposit_number = SettingsHelper.feature_on?("billing.show_reconciliation_deposit_number")
   = form_tag([:update, account_route.to_sym, FacilityAccount], method: :post, class: "js--reconcileForm") do
     - if params[:search].present?
       - params[:search].each do |key, value|

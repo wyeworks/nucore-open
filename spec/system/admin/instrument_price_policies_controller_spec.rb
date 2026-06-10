@@ -87,7 +87,7 @@ RSpec.describe InstrumentPricePoliciesController do
       end
     end
 
-    describe "with full cancellation cost enabled", :js, feature_setting: { charge_full_price_on_cancellation: true, "pricing.facility_directors_can_manage_price_groups" => true } do
+    describe "with full cancellation cost enabled", :js, feature_setting: { "billing.charge_full_price_on_cancellation" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
       it "can set up the price policies", :js do
         visit facility_instruments_path(facility, instrument)
         click_link instrument.name
@@ -415,7 +415,7 @@ RSpec.describe InstrumentPricePoliciesController do
     end
   end
 
-  context "External subsidy price groups", :js, feature_setting: { "pricing.external_price_group_subsidies" => true, "pricing.facility_directors_can_manage_price_groups" => true, charge_full_price_on_cancellation: true } do
+  context "External subsidy price groups", :js, feature_setting: { "pricing.external_price_group_subsidies" => true, "pricing.facility_directors_can_manage_price_groups" => true, "billing.charge_full_price_on_cancellation" => true } do
     let!(:external_subsidy_group) { create(:price_group, facility: nil, is_internal: false, global: true, admin_editable: false, name: "External Subsidy", parent_price_group: external_price_group) }
 
     it "syncs fields from external parent (not base internal) and handles full cancellation correctly" do

@@ -52,7 +52,7 @@ class FacilityStatementsController < ApplicationController
     order_details = OrderDetail.need_statement(@facility)
     @order_detail_action = :create
 
-    defaults = SettingsHelper.feature_on?(:set_statement_search_start_date) ? { date_range_start: format_usa_date(1.month.ago.beginning_of_month) } : {}
+    defaults = SettingsHelper.feature_on?("billing.set_statement_search_start_date") ? { date_range_start: format_usa_date(1.month.ago.beginning_of_month) } : {}
     @search_form = TransactionSearch::SearchForm.new(params[:search], defaults:)
     @search =
       TransactionSearch::Searcher

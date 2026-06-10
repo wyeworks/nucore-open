@@ -159,18 +159,18 @@ feature:
     user_based_price_groups: true
     user_based_price_groups_exclude_purchaser: false
 
-  # Billing
-  allow_mass_unreconciling: false
-  billing_log_events: false
-  billing_table_price_groups: false
-  charge_full_price_on_cancellation: true
-  journals_may_span_fiscal_years: false
-  merged_statement_history_columns: false
-  ready_for_journal_notice: true
-  reference_statement_invoice_number: false
-  set_statement_search_start_date: false
-  show_reconcile_credit_cards: false
-  show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
+  billing:
+    allow_mass_unreconciling: false
+    billing_log_events: false
+    billing_table_price_groups: false
+    charge_full_price_on_cancellation: true
+    journals_may_span_fiscal_years: false
+    merged_statement_history_columns: false
+    ready_for_journal_notice: true
+    reference_statement_invoice_number: false
+    set_statement_search_start_date: false
+    show_reconcile_credit_cards: false
+    show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
 
   # Notifications
   order_assignment_notifications: true

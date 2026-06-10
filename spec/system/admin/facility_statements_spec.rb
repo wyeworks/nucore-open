@@ -44,7 +44,7 @@ RSpec.describe "Facility Statement Admin" do
       login_as director
     end
 
-    context "when reference_statement_invoice_number feature is on", feature_setting: { reference_statement_invoice_number: true } do
+    context "when reference_statement_invoice_number feature is on", feature_setting: { "billing.reference_statement_invoice_number" => true } do
       it "creates child statement with parent reference" do
         visit new_facility_statement_path(facility)
 
@@ -84,7 +84,7 @@ RSpec.describe "Facility Statement Admin" do
       end
     end
 
-    context "when reference_statement_invoice_number feature is off", feature_setting: { reference_statement_invoice_number: false } do
+    context "when reference_statement_invoice_number feature is off", feature_setting: { "billing.reference_statement_invoice_number" => false } do
       it "does not show parent statement modal" do
         visit new_facility_statement_path(facility)
 

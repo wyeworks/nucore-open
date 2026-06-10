@@ -196,7 +196,7 @@ RSpec.describe FacilityJournalsController do
         end
       end
 
-      describe "log event creation", feature_setting: { billing_log_events: true } do
+      describe "log event creation", feature_setting: { "billing.billing_log_events" => true } do
         it "creates a log event when journal is closed" do
           @params[:journal_status] = "succeeded"
           expect { do_request }.to change {
@@ -300,7 +300,7 @@ RSpec.describe FacilityJournalsController do
         it_behaves_like "journal error", "No orders were selected to journal"
       end
 
-      context "spans fiscal year", feature_setting: { journals_may_span_fiscal_years: false } do
+      context "spans fiscal year", feature_setting: { "billing.journals_may_span_fiscal_years" => false } do
         before :each do
           @order_detail1.update(fulfilled_at: SettingsHelper.fiscal_year_end - 1.day)
           @order_detail3.update(fulfilled_at: SettingsHelper.fiscal_year_end + 1.day)
@@ -512,13 +512,13 @@ RSpec.describe FacilityJournalsController do
       @journal.create_journal_rows!([@order_detail1, @order_detail2, @order_detail3])
     end
 
-    context "when feature flag is disabled", feature_setting: { allow_mass_unreconciling: false } do
+    context "when feature flag is disabled", feature_setting: { "billing.allow_mass_unreconciling" => false } do
       it "raises access denied error" do
         expect { perform }.to raise_error(CanCan::AccessDenied)
       end
     end
 
-    context "when feature flag is enabled", feature_setting: { allow_mass_unreconciling: true } do
+    context "when feature flag is enabled", feature_setting: { "billing.allow_mass_unreconciling" => true } do
       context "when user is not global admin" do
         let!(:user) { create(:user, :facility_director, facility:) }
 

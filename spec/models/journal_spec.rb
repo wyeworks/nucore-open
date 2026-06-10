@@ -28,11 +28,11 @@ RSpec.describe Journal do
         journal.order_details_for_creation = order.order_details
       end
 
-      context "when journals may span fiscal years", feature_setting: { journals_may_span_fiscal_years: true } do
+      context "when journals may span fiscal years", feature_setting: { "billing.journals_may_span_fiscal_years" => true } do
         it { is_expected.to be_valid }
       end
 
-      context "when journals may not span fiscal years", feature_setting: { journals_may_span_fiscal_years: false } do
+      context "when journals may not span fiscal years", feature_setting: { "billing.journals_may_span_fiscal_years" => false } do
         it { is_expected.not_to be_valid }
 
         it "has the appropriate error" do

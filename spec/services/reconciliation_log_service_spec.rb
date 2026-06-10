@@ -22,7 +22,7 @@ RSpec.describe ReconciliationLogService do
   let(:service) { described_class.new(order_details, user) }
 
   describe "#log_events" do
-    context "when billing_log_events is enabled", feature_setting: { billing_log_events: true } do
+    context "when billing_log_events is enabled", feature_setting: { "billing.billing_log_events" => true } do
       it "creates a log event with metadata" do
         expect { service.log_events }.to change {
           LogEvent.where(loggable: statement, event_type: :closed).count
@@ -42,7 +42,7 @@ RSpec.describe ReconciliationLogService do
       end
     end
 
-    context "when billing_log_events is disabled", feature_setting: { billing_log_events: false } do
+    context "when billing_log_events is disabled", feature_setting: { "billing.billing_log_events" => false } do
       it "does not create a log event" do
         expect { service.log_events }.not_to change {
           LogEvent.where(loggable: statement, event_type: :closed).count
