@@ -3,7 +3,7 @@
 require "rails_helper"
 require "controller_spec_helper"
 
-RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_on_next_start: false } do
+RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end_reservations_on_next_start": false } do
   let(:facility) { @authable }
   let(:instrument) { @instrument }
   let(:order) { @order }
@@ -621,7 +621,7 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
       end
     end
 
-    context "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
+    context "with accessories feature enabled", feature_setting: { "reservations.add_accessories_before_reservation_starts": true } do
       let!(:accessory) { create(:accessory, parent: @instrument) }
       let(:params) { default_params.merge(accessories: { accessory.id.to_s => { enabled: "true", quantity: "2" } }) }
 
@@ -634,7 +634,7 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
       end
     end
 
-    context "with accessories feature disabled", feature_setting: { add_accessories_before_reservation_starts: false } do
+    context "with accessories feature disabled", feature_setting: { "reservations.add_accessories_before_reservation_starts": false } do
       let!(:accessory) { create(:accessory, parent: @instrument) }
       let(:params) { default_params.merge(accessories: { accessory.id.to_s => { enabled: "true", quantity: "2" } }) }
 

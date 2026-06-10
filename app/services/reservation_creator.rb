@@ -100,7 +100,7 @@ class ReservationCreator
   end
 
   def accessory_params
-    return {} unless SettingsHelper.feature_on?(:add_accessories_before_reservation_starts)
+    return {} unless SettingsHelper.feature_on?("reservations.add_accessories_before_reservation_starts")
 
     permitted_params = {}
     @order_detail.product.accessories.each do |accessory|
@@ -139,7 +139,7 @@ class ReservationCreator
     order_detail.assign_estimated_price(reservation.reserve_end_at)
     order_detail.save_as_user!(session_user)
 
-    process_accessories if SettingsHelper.feature_on?(:add_accessories_before_reservation_starts)
+    process_accessories if SettingsHelper.feature_on?("reservations.add_accessories_before_reservation_starts")
   end
 
   def status_q

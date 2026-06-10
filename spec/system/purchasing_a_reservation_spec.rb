@@ -429,7 +429,7 @@ RSpec.describe "Purchasing a reservation" do
     end
   end
 
-  describe "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
+  describe "with accessories feature enabled", feature_setting: { "reservations.add_accessories_before_reservation_starts": true } do
     let!(:accessory) { create(:accessory, parent: instrument) }
 
     it "shows accessories section and allows selection" do
