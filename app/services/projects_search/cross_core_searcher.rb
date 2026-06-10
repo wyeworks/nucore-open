@@ -30,11 +30,11 @@ module ProjectsSearch
     private
 
     def cross_core_projects
-      Project.cross_core.for_facility(@current_facility_id).distinct
+      Project.cross_core.for_facility(current_facility.id).distinct
     end
 
     def single_facility_projects
-      Project.for_single_facility(@current_facility_id)
+      Project.for_single_facility(current_facility.id)
     end
 
   end

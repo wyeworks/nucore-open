@@ -46,9 +46,10 @@ module TransactionSearch
     end
 
     # Expects an array of `TransactionSearch::BaseSearcher`s
-    def initialize(*searchers, **kwargs)
+    def initialize(facility, *searchers, **kwargs)
       searchers_config = default_config.merge(kwargs)
 
+      @facility = facility
       @searchers_config = searchers_config
       @searchers =
         searchers.presence ||
@@ -61,17 +62,22 @@ module TransactionSearch
       order_details = add_global_optimizations(order_details)
 
       @searchers.reduce(Results.new(order_details)) do |results, searcher_class|
-        searcher_config = searcher_config(searcher_class.key.to_sym)
+        searcher_config =
+          searcher_config(searcher_class.key.to_sym)
+          .merge(current_facility: @facility)
+
         searcher = searcher_class.new(
           results.order_details,
-          params[:current_facility_id],
           **searcher_config,
         )
         search_params = params[searcher_class.key.to_sym]
         search_params = Array(search_params).reject(&:blank?) unless searcher.multipart?
 
         # Options should not be restricted, they should search over the full order details
-        option_searcher = searcher_class.new(order_details, **searcher_config)
+        option_searcher = searcher_class.new(
+          order_details,
+          **searcher_config,
+        )
 
         Results.new(
           searcher.search(search_params),
@@ -116,7 +122,7 @@ module TransactionSearch
       def to_options_by_searcher
         @to_h ||= options.to_h do |searcher|
           [searcher.key, searcher.options]
-        end
+        end.with_indifferent_access
       end
 
     end
