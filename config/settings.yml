@@ -129,11 +129,11 @@ feature:
     password_update: true
     uses_ldap_authentication: false
 
-  # Roles
-  allow_global_billing_admin_update_actual_prices: false
-  global_billing_administrator: true
-  global_billing_administrator_users_tab: true
-  move_transactions_account_roles: false
+  roles:
+    allow_global_billing_admin_update_actual_prices: false
+    global_billing_administrator: true
+    global_billing_administrator_users_tab: true
+    move_transactions_account_roles: false
 
   # Accounts & Account Types
   account_reference_field: false

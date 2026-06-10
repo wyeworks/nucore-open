@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe UserPresenter, feature_setting: { global_billing_administrator: true } do
+RSpec.describe UserPresenter, feature_setting: { "roles.global_billing_administrator" => true } do
   subject { described_class.new(user) }
   let(:global_role_list) { subject.global_role_list }
   let(:global_role_select_options) { subject.global_role_select_options }

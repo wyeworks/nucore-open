@@ -199,7 +199,7 @@ RSpec.describe Ability do
     end
   end
 
-  describe "global billing administrator", feature_setting: { global_billing_administrator: true } do
+  describe "global billing administrator", feature_setting: { "roles.global_billing_administrator" => true } do
     let(:user) { create(:user, :global_billing_administrator) }
 
     it { is_expected.to be_allowed_to(:manage, Account) }
@@ -226,11 +226,11 @@ RSpec.describe Ability do
     context "in cross-facility" do
       let(:facility) { Facility.cross_facility }
 
-      context "with the users tab active", feature_setting: { global_billing_administrator_users_tab: true } do
+      context "with the users tab active", feature_setting: { "roles.global_billing_administrator_users_tab" => true } do
         it { is_expected.to be_allowed_to(:manage_users, facility) }
       end
 
-      context "with the users tab inactive", feature_setting: { global_billing_administrator_users_tab: false } do
+      context "with the users tab inactive", feature_setting: { "roles.global_billing_administrator_users_tab" => false } do
         it { is_expected.not_to be_allowed_to(:manage_users, facility) }
       end
 
@@ -248,11 +248,11 @@ RSpec.describe Ability do
     context "in no facility" do
       let(:facility) { nil }
 
-      context "with the users tab active", feature_setting: { global_billing_administrator_users_tab: true } do
+      context "with the users tab active", feature_setting: { "roles.global_billing_administrator_users_tab" => true } do
         it { is_expected.to be_allowed_to(:manage_users, Facility.cross_facility) }
       end
 
-      context "with the users tab inactive", feature_setting: { global_billing_administrator_users_tab: false } do
+      context "with the users tab inactive", feature_setting: { "roles.global_billing_administrator_users_tab" => false } do
         it { is_expected.not_to be_allowed_to(:manage_users, Facility.cross_facility) }
       end
 

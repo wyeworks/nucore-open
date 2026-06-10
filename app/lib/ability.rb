@@ -137,7 +137,7 @@ class Ability
     if resource == Facility.cross_facility
       can [:accounts, :index, :orders, :show, :administer], User
     end
-    can :manage_users, Facility.cross_facility if SettingsHelper.feature_on?(:global_billing_administrator_users_tab)
+    can :manage_users, Facility.cross_facility if SettingsHelper.feature_on?("roles.global_billing_administrator_users_tab")
     can :manage_billing, Facility.cross_facility
     can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility, &:cross_facility?
 
@@ -314,7 +314,7 @@ class Ability
       can [:show, :suspend, :unsuspend, :user_search, :user_accounts, :statements, :show_statement, :index], Statement
     end
 
-    if SettingsHelper.feature_on?(:move_transactions_account_roles) && Account.administered_by(user).any?
+    if SettingsHelper.feature_on?("roles.move_transactions_account_roles") && Account.administered_by(user).any?
       can :reassign_transactions, TransactionsController
     end
   end

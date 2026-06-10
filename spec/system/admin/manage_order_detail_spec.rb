@@ -445,7 +445,7 @@ RSpec.describe "Managing an order detail" do
       visit manage_facility_order_order_detail_path(facility, order, order_detail)
     end
 
-    context "with feature flag ON", feature_setting: { allow_global_billing_admin_update_actual_prices: true } do
+    context "with feature flag ON", feature_setting: { "roles.allow_global_billing_admin_update_actual_prices" => true } do
       context "as a global admin" do
         it "does not allow to update actual cost" do
           expect(page).to have_field("order_detail[actual_cost]", disabled: true)
@@ -459,7 +459,7 @@ RSpec.describe "Managing an order detail" do
       end
     end
 
-    context "with feature flag OFF", feature_setting: { allow_global_billing_admin_update_actual_prices: false } do
+    context "with feature flag OFF", feature_setting: { "roles.allow_global_billing_admin_update_actual_prices" => false } do
       context "as a global admin" do
         it_behaves_like "allows to update actual cost"
       end

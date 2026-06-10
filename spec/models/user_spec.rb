@@ -108,7 +108,7 @@ RSpec.describe User do
       it { is_expected.to match_array(privileged_users) }
     end
 
-    context "when users have the global billing administrator role", feature_setting: { global_billing_administrator: true } do
+    context "when users have the global billing administrator role", feature_setting: { "roles.global_billing_administrator" => true } do
       let!(:privileged_users) { create_list(:user, 2, :global_billing_administrator) }
 
       it { is_expected.to match_array(privileged_users) }
