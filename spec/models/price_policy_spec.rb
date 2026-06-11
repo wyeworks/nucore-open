@@ -180,6 +180,66 @@ RSpec.describe PricePolicy do
       end
     end
 
+    context "when an existing policy has orders assigned" do
+      def assign_order_to(price_policy)
+        order = @user.orders.create!(attributes_for(:order, created_by: @user.id, account: @account, facility: @facility))
+        order_detail = order.order_details.create!(attributes_for(:order_detail).update(product_id: @item.id, account_id: @account.id))
+        order_detail.update!(price_policy: price_policy)
+      end
+
+      it "blocks creating an overlapping policy and leaves the existing one untouched" do
+        @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
+
+        travel_to_and_return(@today) do
+          @pp = create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 30.days)
+          assign_order_to(@pp)
+
+          overlapping = build(:item_price_policy, product: @item, price_group: @price_group, start_date: @today + 2.days, expire_date: @today + 30.days)
+
+          expect(overlapping.save).to be(false)
+          expect(overlapping.errors[:base]).to include("cannot overlap an existing price policy that has orders assigned to it")
+          expect(@pp.reload.expire_date).to eq(@today + 30.days)
+        end
+      end
+
+      it "allows creating a non-overlapping future policy" do
+        @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
+
+        travel_to_and_return(@today) do
+          @pp = create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 30.days)
+          assign_order_to(@pp)
+
+          future = build(:item_price_policy, product: @item, price_group: @price_group, start_date: @today + 40.days, expire_date: @today + 70.days)
+
+          expect(future.save).to be(true)
+          expect(@pp.reload.expire_date).to eq(@today + 30.days)
+        end
+      end
+    end
+
+    context "auditing with PaperTrail" do
+      it "records a version when a policy is created" do
+        @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
+
+        travel_to_and_return(@today) do
+          pp = create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 30.days)
+
+          expect(pp.versions.map(&:event)).to include("create")
+        end
+      end
+
+      it "records a version when a policy is truncated" do
+        @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
+
+        travel_to_and_return(@today) do
+          @pp = create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 30.days)
+          create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today + 2.days, expire_date: @today + 30.days)
+
+          expect(@pp.reload.versions.map(&:event)).to include("update")
+        end
+      end
+    end
+
     context "should define abstract methods" do
 
       before :each do

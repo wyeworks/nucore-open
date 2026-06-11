@@ -4,6 +4,8 @@ class PricePolicy < ApplicationRecord
 
   include Nucore::Database::DateHelper
 
+  has_paper_trail
+
   belongs_to :price_group
   belongs_to :product, optional: true
   belongs_to :created_by, class_name: "User", optional: true
@@ -22,6 +24,7 @@ class PricePolicy < ApplicationRecord
   validates :price_group_id, :type, presence: true
   validate :start_date_is_unique, if: :start_date?
   validate :expire_date_within_fiscal_year, if: :order_review_product?
+  validate :no_truncation_of_assigned_policies, on: :create, if: :start_date?
 
   validate :subsidy_less_than_rate, unless: :restrict_purchase?
 
@@ -238,16 +241,27 @@ class PricePolicy < ApplicationRecord
 
   def truncate_existing_policies
     logger.debug("Truncating existing policies")
-    existing_policies = PricePolicy.current.where(type: self.class.name,
-                                                  price_group_id: price_group_id,
-                                                  product_id: product_id)
 
-    existing_policies = existing_policies.where("id != ?", id) unless id.nil?
-
-    existing_policies.each do |policy|
+    policies_to_truncate.each do |policy|
       policy.expire_date = (start_date - 1.day).end_of_day
       policy.save
     end
+  end
+
+  def policies_to_truncate
+    existing_policies = PricePolicy.where(type: self.class.name,
+                                          price_group_id: price_group_id,
+                                          product_id: product_id)
+                                   .where("start_date <= :start_date AND expire_date >= :start_date", start_date: start_date)
+
+    existing_policies = existing_policies.where("id != ?", id) unless id.nil?
+    existing_policies
+  end
+
+  def no_truncation_of_assigned_policies
+    return unless OrderDetail.exists?(price_policy_id: policies_to_truncate.select(:id))
+
+    errors.add(:base, :overlapping_assigned_policy)
   end
 
 end
