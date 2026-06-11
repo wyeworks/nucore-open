@@ -70,12 +70,22 @@ module Users
       user_roles.staff?(facility) || administrator?
     end
 
+    def can_act_as?(facility)
+      return false if facility.blank?
+      return true if operator_of?(facility)
+
+      @can_act_as ||= {}
+      @can_act_as.fetch(facility.id) do
+        @can_act_as[facility.id] = Ability.new(self, facility).can?(:act_as, facility)
+      end
+    end
+
     def can_override_restrictions?(product)
-      operator_of? product.facility
+      can_act_as?(product.facility)
     end
 
     def cannot_override_restrictions?(product)
-      !operator_of?(product.facility)
+      !can_override_restrictions?(product)
     end
 
     # Creates methods #purchaser_of?, #owner_of?, etc.

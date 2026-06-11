@@ -30,7 +30,7 @@ class ReservationWindow
   private
 
   def operator?
-    @user.operator_of?(@reservation.facility)
+    @user.can_act_as?(@reservation.facility)
   end
 
   ##
