@@ -24,7 +24,7 @@
   %td.daily_rate
     = pp.label :usage_rate_daily, t("price_policies.rate"), class: "normal-weight"
     = pp.text_field :usage_rate_daily, value: display_rate(price_policy.usage_rate_daily),
-      size: 8, data: { target: ".js--usageRate" }
+      size: 8, data: { target: ".js--usageRate", price_group_id: price_group.id }
 - else
   %td
     = pp.label :usage_rate, t("price_policies.rate"), class: "normal-weight"

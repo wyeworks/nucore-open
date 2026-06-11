@@ -435,6 +435,38 @@ RSpec.describe InstrumentPricePoliciesController do
       check "price_policy_#{external_price_group.id}[full_price_cancellation]"
       expect(page).to have_field("price_policy_#{external_subsidy_group.id}[cancellation_cost]", disabled: true, type: :hidden)
     end
+
+    context "with daily booking pricing mode" do
+      let(:pricing_mode) { Instrument::Pricing::SCHEDULE_DAILY }
+
+      it "syncs the daily rate from the external parent and saves the subsidy against it" do
+        visit new_facility_instrument_price_policy_path(facility, instrument)
+
+        check("price_policy_#{base_price_group.id}[can_purchase]")
+        check("price_policy_#{external_price_group.id}[can_purchase]")
+        check("price_policy_#{external_subsidy_group.id}[can_purchase]")
+        uncheck("price_policy_#{cancer_center.id}[can_purchase]")
+
+        fill_in("price_policy_#{base_price_group.id}[usage_rate_daily]", with: "1200")
+        fill_in("price_policy_#{external_price_group.id}[usage_rate_daily]", with: "2000")
+        fill_in("price_policy_#{external_subsidy_group.id}[usage_subsidy_daily]", with: "1500")
+
+        expect(page).to have_field(
+          "price_policy_#{external_subsidy_group.id}[usage_rate_daily]",
+          with: "2000",
+          type: :hidden
+        )
+
+        fill_in("note", with: "Daily external subsidy")
+        click_button("Add Pricing Rules")
+
+        expect(page).to have_content("Price Rules were successfully created.")
+
+        subsidy_policy = instrument.price_policies.find_by(price_group: external_subsidy_group)
+        expect(subsidy_policy.usage_rate_daily).to eq(2000)
+        expect(subsidy_policy.usage_subsidy_daily).to eq(1500)
+      end
+    end
   end
 
   context "Schedule Rule Daily pricing mode", feature_setting: { facility_directors_can_manage_price_groups: true } do
