@@ -1,0 +1,7 @@
+en:
+  facility_product_notifications:
+    index:
+      empty: No product notifications have been created
+    show:
+      empty_users: No users added
+      empty_products: No products added
