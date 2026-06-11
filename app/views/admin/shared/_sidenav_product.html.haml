@@ -11,4 +11,6 @@
   - if SettingsHelper.feature_on?(:training_requests) && current_ability.can?(:index, TrainingRequest)
     %li.divider
     = tab "#{TrainingRequest.model_name.human.pluralize} (#{current_facility.training_requests.count})", facility_training_requests_path(current_facility), sidenav_tab == TrainingRequest.model_name.plural
-
+  = tab ProductNotification.model_name.human.pluralize,
+    list_facility_product_notifications_path(current_facility),
+    sidenav_tab == ProductNotification.model_name.plural
