@@ -1,0 +1,9 @@
+.list-group
+  - @product_notifications.each do |product_notification|
+    - presenter = ProductNotificationPresenter.new(product_notification)
+    = link_to facility_product_notification_path(current_facility, product_notification),
+      class: "list-group-item" do
+      %span.list-group-item-heading= presenter.display_name
+      %span.list-group-item-text= presenter.product_names
+
+= will_paginate(@product_notifications)

@@ -1,0 +1,21 @@
+= content_for :h1 do
+  = current_facility
+= content_for :sidebar do
+  = render "admin/shared/sidenav_product", sidenav_tab: ProductNotification.model_name.plural
+
+%h2= ProductNotification.model_name.human.pluralize
+
+- if @product_notifications.empty?
+  %p= t(".empty")
+  = link_to t("admin.shared.add", model: ProductNotification.model_name.human),
+    new_facility_product_notification_path(current_facility),
+    class: "btn btn-add"
+- else
+  %p
+    = link_to t("admin.shared.add", model: ProductNotification.model_name.human),
+      new_facility_product_notification_path(current_facility),
+      class: "btn btn-add"
+
+  = render "list", product_notifications: @product_notifications
+
+

@@ -1,0 +1,27 @@
+= content_for :h1 do
+  = current_facility
+= content_for :sidebar do
+  = render "admin/shared/sidenav_product", sidenav_tab: ProductNotification.model_name.plural
+
+%h2= @product_notification.name
+
+= readonly_form_for(:product_notification) do |f|
+  = f.input :notification_type,
+    input_html: { value: ProductNotification.human_attribute_name("notification_type.#{@product_notification.notification_type}") }
+  = f.input :created_at, input_html: { value: I18n.l(@product_notification.created_at) }
+
+%h4= ProductNotification.human_attribute_name(:products)
+- if @product_notification.products.empty?
+  %p= t(".empty_products")
+- else
+  %ul.unstyled
+    - @product_notification.products.each do |product|
+      %li= "#{product.class.model_name.human} - #{product.name}"
+
+%h4= ProductNotification.human_attribute_name(:users)
+- if @product_notification.users.empty?
+  %p= t(".empty_users")
+- else
+  %ul.unstyled
+    - @product_notification.users.each do |user|
+      %li= "#{user.name} (#{user.username})"
