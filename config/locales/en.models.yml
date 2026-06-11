@@ -306,7 +306,7 @@ en:
         assign_permissions: Assign Permissions
         bulk_email: Bulk Email
         billing_journals: Billing Journals
-        billing_send: Billing Send
+        billing_send: Billing Send Notifications
         instrument_management: Instrument Management
         order_management: Order Management
         price_adjustment: Price Adjustment
