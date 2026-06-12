@@ -89,9 +89,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :product_notifications, controller: "facility_product_notifications", except: :index do
+    resources :product_notifications, controller: "facility_product_notifications", except: [:index, :create] do
       collection do
+        post :create, action: :create, as: :create
         get :list, action: :index
+        get :user_search
       end
 
     end

@@ -1,0 +1,43 @@
+= form.input :name
+= form.input :reservation_days
+
+%h4= ProductNotification.human_attribute_name(:products)
+
+= form.input :product_ids,
+  collection: @instruments,
+  label: false,
+  input_html: { class: "js--chosen", multiple: true, data: { placeholder: t(".select_products_hint") } }
+
+%h4= ProductNotification.human_attribute_name(:users)
+
+%p.text-muted= t(".select_users_hint")
+
+.well{ data: { controller: "user-search",
+               user_search_search_url_value: user_search_facility_product_notifications_path(current_facility) } }
+  .input-group
+    = text_field_tag :search_term, nil,
+      class: "form-control",
+      placeholder: t(".search_users_placeholder"),
+      data: { user_search_target: "searchInput" }
+    .input-group-btn
+      %button.btn.btn-default{ type: "button", data: { action: "click->user-search#search" } }
+        = t(".search_users")
+
+  %div
+    = render "user_search_results"
+
+  %div
+    %strong= t(".selected_users")
+
+  %ul.list-unstyled{ data: { user_search_target: "selectedUsers" } }
+    = hidden_field_tag "product_notification[user_ids][]"
+    - form.object.users.each do |user|
+      %li.list-group-item{ data: { user_id: user.id } }
+        %span= "#{user.name} (#{user.username})"
+        = hidden_field_tag "product_notification[user_ids][]", user.id
+        %button.btn.btn-xs.btn-danger.pull-right{ type: "button", data: { action: "click->user-search#removeUser" } }
+          = t(".remove")
+
+.actions
+  = form.button :submit, class: "btn-primary"
+  = link_to t("shared.cancel"), :back, class: "btn btn-default"

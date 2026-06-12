@@ -1,7 +1,29 @@
 en:
   facility_product_notifications:
     index:
-      empty: No product notifications have been created
+      empty: No Product Notifications have been created
+    new:
+      title: New Product Notification
+    create:
+      success: Product Notification created successfully
+      error: An error occurred creating the record
+    edit:
+      title: Edit Product Notification
+    update:
+      success: Product Notification updated successfully
+      error: An error occurred updating the record
+    form:
+      search_users: Search
+      search_users_placeholder: Type name or username
+      add_user: Add
+      remove: Remove
+      no_results: No users found
+      selected_users: Selected Users
+      select_products_hint: Select instruments
+      select_users_hint: Search and select users one by one
+    user_search_results:
+      add_user: Add
+      no_results: No users found
     show:
       empty_users: No users added
       empty_products: No products added

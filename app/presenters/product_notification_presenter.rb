@@ -10,7 +10,7 @@ class ProductNotificationPresenter < SimpleDelegator
       name,
       notification_type_human,
       "#{users_count} Users"
-    ].compact.join(" • ")
+    ].compact_blank.join(" • ")
   end
 
   def product_names
