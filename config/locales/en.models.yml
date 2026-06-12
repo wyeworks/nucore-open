@@ -346,6 +346,11 @@ en:
       product_display_group:
         product_ids: Products
         ungrouped_product_ids: Ungrouped
+      product_notification:
+        name: Name
+        reservation_days: Reservation Days
+        products: Products
+        users: Users
       product_notification/notification_type:
         slot_available: Time Slot Available
       instrument:

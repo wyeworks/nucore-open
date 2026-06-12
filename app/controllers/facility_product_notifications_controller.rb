@@ -12,6 +12,8 @@ class FacilityProductNotificationsController < ApplicationController
     class: ProductNotification,
   )
 
+  before_action :load_instruments, only: [:new, :edit]
+
   def show
   end
 
@@ -22,9 +24,9 @@ class FacilityProductNotificationsController < ApplicationController
   def create
     if @product_notification.save
       flash[:notice] = t(".success")
-      redirect_to :show
+      redirect_to action: :show, id: @product_notification
     else
-      flash[:error] = t(".error")
+      flash.now[:error] = t(".error")
       render :new
     end
   end
@@ -33,9 +35,9 @@ class FacilityProductNotificationsController < ApplicationController
   end
 
   def update
-    if @product_notification.update(product_notification_params)
+    if @product_notification.update(facility_product_notification_params)
       flash[:notice] = t(".success")
-      redirect_to :show
+      redirect_to action: :show
     else
       flash.now[:error] = t(".error")
       render :edit
@@ -53,16 +55,27 @@ class FacilityProductNotificationsController < ApplicationController
   def destroy
     @product_notification.destroy
     flash[:notice] = t(".success")
-    redirect_to :index
+    redirect_to action: :index
+  end
+
+  # TODO: Check permissions and Users that can be searched
+  def user_search
+    @users = UserFinder.search(params[:search_term], limit: 25)
+    render partial: "user_search_results", layout: false
   end
 
   private
 
-  def product_notification_params
+  def load_instruments
+    @instruments = current_facility.products.active.not_archived.of_type("Instrument").alphabetized
+  end
+
+  def facility_product_notification_params
     params.require(:product_notification).permit(
+      :name,
       :reservation_days,
-      :user_ids,
-      :product_ids,
+      user_ids: [],
+      product_ids: [],
     ).merge(facility_id: current_facility.id)
   end
 end
