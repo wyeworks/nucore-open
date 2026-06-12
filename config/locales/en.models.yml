@@ -344,6 +344,8 @@ en:
       product_display_group:
         product_ids: Products
         ungrouped_product_ids: Ungrouped
+      product_notification/notification_type:
+        slot_available: Time Slot Available
       instrument:
         start_time_disabled: Start Time Disabled
         min_reserve_mins: Minimum Reservation Minutes

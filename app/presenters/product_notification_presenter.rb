@@ -1,8 +1,16 @@
 # frozen_string_literal: true
 
 class ProductNotificationPresenter < SimpleDelegator
-  def display_name
-    "#{name} (#{users_count} Users)"
+  def display_line
+    notification_type_human =
+      ProductNotification
+      .human_attribute_name("notification_type.#{notification_type}")
+
+    [
+      name,
+      notification_type_human,
+      "#{users_count} Users"
+    ].compact.join(" • ")
   end
 
   def product_names

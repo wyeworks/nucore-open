@@ -4,7 +4,7 @@
     = link_to facility_product_notification_path(current_facility, product_notification),
       class: "list-group-item" do
       %div
-        %strong.list-group-item-heading= presenter.display_name
+        %strong.list-group-item-heading= presenter.display_line
       .list-group-item-text.text-truncate= presenter.product_names
 
 = will_paginate(@product_notifications)
