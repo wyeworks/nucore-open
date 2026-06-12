@@ -58,13 +58,13 @@ class Product < ApplicationRecord
     presence: true,
     numericality: { only_integer: true },
     length: { minimum: 1, maximum: Settings.accounts.product_default.to_s.length },
-    if: -> { SettingsHelper.feature_on?(:expense_accounts) && requires_account? },
+    if: -> { SettingsHelper.feature_on?("accounts.expense_accounts") && requires_account? },
   )
 
   validates :facility_account_id, presence: true, if: :requires_account?
 
   # Use lambda so we can dynamically enable/disable in specs
-  validate if: -> { SettingsHelper.feature_on?(:product_specific_contacts) } do
+  validate if: -> { SettingsHelper.feature_on?("notifications.product_specific_contacts") } do
     errors.add(:contact_email, text("errors.models.product.attributes.contact_email.required")) unless email.present?
   end
 
@@ -178,8 +178,8 @@ class Product < ApplicationRecord
 
   # If there isn't an email specific to the product, fall back to the facility's email
   def email
-    # If product_specific_contacts is off, always return the facility's email
-    return facility.email unless SettingsHelper.feature_on? :product_specific_contacts
+    # If notifications.product_specific_contacts is off, always return the facility's email
+    return facility.email unless SettingsHelper.feature_on?("notifications.product_specific_contacts")
     contact_email.presence || facility.try(:email)
   end
 

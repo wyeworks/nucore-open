@@ -6,7 +6,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
   let(:facility) { create(:facility) }
 
   describe "create" do
-    describe "as a facility admin", feature_setting: { facility_directors_can_manage_price_groups: true } do
+    describe "as a facility admin", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       let(:user) { create(:user, :facility_director, facility:) }
 
       before do
@@ -37,7 +37,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
   end
 
   describe "manage users of a price group" do
-    describe "as a facility admin", feature_setting: { user_based_price_groups: true, facility_directors_can_manage_price_groups: true } do
+    describe "as a facility admin", feature_setting: { "pricing.user_based_price_groups" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
       let(:user) { create(:user, :facility_director, facility:) }
       let(:user2) { create(:user) }
       let!(:price_group) { create(:price_group, facility:) }
@@ -123,7 +123,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
   end
 
   describe "destroy" do
-    describe "as a facility admin", feature_setting: { facility_directors_can_manage_price_groups: true } do
+    describe "as a facility admin", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       let(:user) { create(:user, :facility_director, facility:) }
       let!(:price_group) { create(:price_group, facility:) }
 
@@ -192,7 +192,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
     end
   end
 
-  describe "external subsidy price groups", feature_setting: { external_price_group_subsidies: true, facility_directors_can_manage_price_groups: true } do
+  describe "external subsidy price groups", feature_setting: { "pricing.external_price_group_subsidies" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
     let(:user) { create(:user, :facility_director, facility:) }
     let!(:external_base) { create(:price_group, :global_external, name: "External Rate 1") }
 

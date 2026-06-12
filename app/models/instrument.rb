@@ -19,7 +19,7 @@ class Instrument < Product
   RESERVE_INTERVAL_DAILY = 1
 
   PRICING_MODES = [Pricing::SCHEDULE_RULE, Pricing::DURATION].tap do |pricing_modes|
-    if SettingsHelper.feature_on?(:show_daily_rate_option)
+    if SettingsHelper.feature_on?("products.show_daily_rate_option")
       pricing_modes.insert(1, Pricing::SCHEDULE_DAILY)
     end
   end.freeze

@@ -1,5 +1,5 @@
 %ul.sidebar-nav
-  - if SettingsHelper.feature_on?(:sanger_enabled_service)
+  - if SettingsHelper.feature_on?("products.sanger_enabled_service")
     = tab text("sanger_sequencing.tabnav_manage_primers"), facility_sanger_sequencing_admin_primers_path(current_facility), sidenav_tab == "manage_primers"
   = tab SangerSequencing::Submission.model_name.human(count: 2), facility_sanger_sequencing_admin_submissions_path(current_facility), sidenav_tab == "submissions"
   - SangerSequencing::SangerProduct::GROUPS.each do |product_group|

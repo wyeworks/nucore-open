@@ -92,7 +92,7 @@ RSpec.describe TransactionsController do
     end
   end
 
-  context "MovableTransactions concern", feature_setting: { move_transactions_account_roles: true } do
+  context "MovableTransactions concern", feature_setting: { "roles.move_transactions_account_roles" => true } do
     let(:user_a) { create(:user) }
     let(:user_b) { create(:user) }
     let!(:account_a) { create(:setup_account, :with_account_owner, owner: user_a) }

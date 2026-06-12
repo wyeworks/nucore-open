@@ -175,7 +175,7 @@ RSpec.describe AccountConfig, type: :model do
     end
   end
 
-  describe "reconcilable_account_types", feature_setting: { show_reconcile_credit_cards: false } do
+  describe "reconcilable_account_types", feature_setting: { "billing.show_reconcile_credit_cards" => false } do
     let(:some_account_type) { "SomeAccount" }
 
     before do

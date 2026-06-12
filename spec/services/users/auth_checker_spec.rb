@@ -23,7 +23,7 @@ RSpec.describe Users::AuthChecker do
       end
     end
 
-    context "with a netid user", :ldap, feature_setting: { uses_ldap_authentication: true, bypass_kiosk_auth: false } do
+    context "with a netid user", :ldap, feature_setting: { "users_authentication.uses_ldap_authentication" => true, bypass_kiosk_auth: false } do
       let(:user) { create(:user, :netid, email: "internal@example.org", username: "netid") }
 
       before(:each) do

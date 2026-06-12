@@ -176,7 +176,7 @@ class Statement < ApplicationRecord
   def set_invoice_number
     return if invoice_number.present?
 
-    if parent_statement_id? && SettingsHelper.feature_on?(:reference_statement_invoice_number)
+    if parent_statement_id? && SettingsHelper.feature_on?("billing.reference_statement_invoice_number")
       sequence_number = next_sequence_number_for_parent
       self.invoice_number = "#{parent_statement.invoice_number}-#{sequence_number}"
     else

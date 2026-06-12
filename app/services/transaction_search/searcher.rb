@@ -36,7 +36,7 @@ module TransactionSearch
     cattr_accessor(:default_config) do
       {
         facilities: false,
-        price_groups: SettingsHelper.feature_on?(:billing_table_price_groups),
+        price_groups: SettingsHelper.feature_on?("billing.billing_table_price_groups"),
       }
     end
 

@@ -57,7 +57,7 @@ RSpec.describe "Editing a Service" do
     end
   end
 
-  describe "sanger enable change", feature_setting: { sanger_enabled_service: true } do
+  describe "sanger enable change", feature_setting: { "products.sanger_enabled_service": true } do
     it "does not show sanger enable if facility is not sanger enabled" do
       facility.update(sanger_sequencing_enabled: false)
 

@@ -194,7 +194,7 @@ RSpec.describe "All Transactions Search", :js do
     expect(page).not_to have_content("Participating Facilities")
   end
 
-  describe "price group column and filtering", feature_setting: { billing_table_price_groups: true } do
+  describe "price group column and filtering", feature_setting: { "billing.billing_table_price_groups" => true } do
     let(:order_detail1) { facility.order_details.complete.first }
     let(:order_detail2) { facility.order_details.complete.second }
     let(:price_group_name) { "Some Price Group" }
@@ -248,7 +248,7 @@ RSpec.describe "All Transactions Search", :js do
     end
   end
 
-  context "when price groups feature is disabled", feature_setting: { billing_table_price_groups: false } do
+  context "when price groups feature is disabled", feature_setting: { "billing.billing_table_price_groups" => false } do
     before { login_as director }
 
     it "does not show Price Group column" do

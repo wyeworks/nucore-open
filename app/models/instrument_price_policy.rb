@@ -22,7 +22,7 @@ class InstrumentPricePolicy < PricePolicy
   end
 
   def charge_full_price_on_cancellation?
-    SettingsHelper.feature_on?(:charge_full_price_on_cancellation) && full_price_cancellation?
+    SettingsHelper.feature_on?("billing.charge_full_price_on_cancellation") && full_price_cancellation?
   end
 
   private

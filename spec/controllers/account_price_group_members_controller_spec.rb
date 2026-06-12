@@ -35,7 +35,7 @@ RSpec.describe AccountPriceGroupMembersController do
     context "with a global price group" do
       let(:price_group) { FactoryBot.create(:price_group, :cancer_center) }
 
-      context "when can manage global price groups", feature_setting: { can_manage_global_price_groups: true } do
+      context "when can manage global price groups", feature_setting: { "pricing.can_manage_global_price_groups" => true } do
         it_should_allow :admin do
           successful_action_expectations
         end
@@ -89,7 +89,7 @@ RSpec.describe AccountPriceGroupMembersController do
     include_examples "facility price group restrictions"
     include_examples "global price group restrictions"
 
-    context "when cannot manage global price groups", feature_setting: { can_manage_global_price_groups: false } do
+    context "when cannot manage global price groups", feature_setting: { "pricing.can_manage_global_price_groups" => false } do
       let(:price_group) { FactoryBot.create(:price_group, :cancer_center) }
 
       it_should_deny :admin
@@ -120,7 +120,7 @@ RSpec.describe AccountPriceGroupMembersController do
     include_examples "facility price group restrictions"
     include_examples "global price group restrictions"
 
-    context "when cannot manage global price groups", feature_setting: { can_manage_global_price_groups: false } do
+    context "when cannot manage global price groups", feature_setting: { "pricing.can_manage_global_price_groups" => false } do
       let(:price_group) { FactoryBot.create(:price_group, :cancer_center) }
 
       it_should_deny :admin

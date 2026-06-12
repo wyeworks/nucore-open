@@ -30,7 +30,7 @@ class PricePolicySelector
   def prioritize_account_price_groups?
     @detail.is_a?(OrderDetail) &&
       @detail.account &&
-      SettingsHelper.feature_on?(:user_based_price_groups_exclude_purchaser)
+      SettingsHelper.feature_on?("pricing.user_based_price_groups_exclude_purchaser")
   end
 
   def find_cheapest_for_groups(groups)

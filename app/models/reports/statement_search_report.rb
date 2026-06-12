@@ -74,7 +74,7 @@ module Reports
         Statement.human_attribute_name(:status),
       ]
 
-      if SettingsHelper.feature_on?(:merged_statement_history_columns)
+      if SettingsHelper.feature_on?("billing.merged_statement_history_columns")
         base_headers + [
           I18n.t("statements.closed_at"),
           I18n.t("statements.closed_by"),
@@ -100,7 +100,7 @@ module Reports
         statement.status,
       ]
 
-      if SettingsHelper.feature_on?(:merged_statement_history_columns)
+      if SettingsHelper.feature_on?("billing.merged_statement_history_columns")
         base_row + [
           presenter.closed_by_times.join("; "),
           presenter.closed_by_user_full_names.join("; "),

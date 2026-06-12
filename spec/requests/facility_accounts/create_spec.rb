@@ -184,7 +184,7 @@ RSpec.describe "creating accounts", :use_test_account do
 
   describe(
     "price groups selection",
-    feature_setting: { show_account_price_groups_tab: true },
+    feature_setting: { "accounts.show_account_price_groups_tab" => true },
   ) do
     let(:facility) { create(:setup_facility) }
     let(:account_class) { TestAccount }

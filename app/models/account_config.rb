@@ -38,7 +38,7 @@ class AccountConfig
   def reconcilable_account_types
     basic_account_types = (statement_account_types - creation_disabled_types)
 
-    if SettingsHelper.feature_on?(:show_reconcile_credit_cards)
+    if SettingsHelper.feature_on?("billing.show_reconcile_credit_cards")
       basic_account_types << "CreditCardAccount"
     end
 

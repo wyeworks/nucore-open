@@ -35,7 +35,7 @@
             - else
               %li.navbar-text= "#{acting_user.full_name} (#{acting_user.username})"
             %li.divider-vertical
-            - if current_user.password_updatable? && SettingsHelper.feature_on?(:password_update)
+            - if current_user.password_updatable? && SettingsHelper.feature_on?("users_authentication.password_update")
               %li= link_to t("user_password.edit.head"), :edit_current_password
               %li.divider-vertical
             -# .visible-with-nav is visible > 979px

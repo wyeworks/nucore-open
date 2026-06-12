@@ -2,7 +2,7 @@
 %html{lang: "en"}
   %head
     = render partial: "/shared/head"
-  %body{ class: SettingsHelper.feature_on?(:use_manage) && manage_mode? ? "manage-mode" : "" }
+  %body{ class: SettingsHelper.feature_on?("style_display.use_manage") && manage_mode? ? "manage-mode" : "" }
     %header
       = render partial: "/shared/header"
     %nav

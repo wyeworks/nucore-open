@@ -46,7 +46,7 @@ class UsersController < ApplicationController
 
   # GET /facilities/:facility_id/users/new
   def new
-    redirect_to action: :new_external if SettingsHelper.feature_off?(:lookup_netids)
+    redirect_to action: :new_external if SettingsHelper.feature_off?("users_authentication.lookup_netids")
   end
 
   # GET /facilities/:facility_id/users/new_external

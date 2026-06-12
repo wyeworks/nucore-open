@@ -40,7 +40,7 @@ RSpec.describe "Managing accounts" do
         click_on "Edit"
       end
 
-      context "when feature flag is enabled", feature_setting: { purchase_order_monetary_cap: true } do
+      context "when feature flag is enabled", feature_setting: { "accounts.purchase_order_monetary_cap" => true } do
         it "shows the monetary cap field", :aggregate_failures do
           expect(page).to have_field("purchase_order_account_monetary_cap")
           expect(page).to have_content("Optional monetary cap for this purchase order account")
@@ -56,7 +56,7 @@ RSpec.describe "Managing accounts" do
         end
       end
 
-      context "when feature flag is disabled", feature_setting: { purchase_order_monetary_cap: false } do
+      context "when feature flag is disabled", feature_setting: { "accounts.purchase_order_monetary_cap" => false } do
         it "does not show the monetary cap field" do
           expect(page).not_to have_field("purchase_order_account_monetary_cap")
           expect(page).not_to have_content("Optional monetary cap for this purchase order account")
@@ -132,7 +132,7 @@ RSpec.describe "Managing accounts" do
 
       it(
         "shows expiration date when ff is off",
-        feature_setting: { hide_account_far_future_expiration: false },
+        feature_setting: { "accounts.hide_account_far_future_expiration" => false },
       ) do
         within("table") do
           expect(page).to have_content(account.human_date(account.expires_at))
@@ -141,7 +141,7 @@ RSpec.describe "Managing accounts" do
 
       it(
         "shows expiration date when ff is on",
-        feature_setting: { hide_account_far_future_expiration: true },
+        feature_setting: { "accounts.hide_account_far_future_expiration" => true },
       ) do
         within("table") do
           expect(page).to have_content(account.human_date(account.expires_at))
@@ -162,7 +162,7 @@ RSpec.describe "Managing accounts" do
 
       it(
         "does not show expiration date when ff is on",
-        feature_setting: { hide_account_far_future_expiration: true },
+        feature_setting: { "accounts.hide_account_far_future_expiration" => true },
       ) do
         within("table") do
           expect(page).not_to have_content(account.human_date(account.expires_at))
@@ -171,7 +171,7 @@ RSpec.describe "Managing accounts" do
 
       it(
         "shows expiration date when ff is off",
-        feature_setting: { hide_account_far_future_expiration: false },
+        feature_setting: { "accounts.hide_account_far_future_expiration" => false },
       ) do
         within("table") do
           expect(page).to have_content(account.human_date(account.expires_at))

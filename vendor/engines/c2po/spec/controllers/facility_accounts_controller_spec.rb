@@ -262,7 +262,7 @@ RSpec.describe FacilityAccountsController do
   end
 
   context "GET #show" do
-    context "when the multi_facility_accounts feature is turned off", feature_setting: { multi_facility_accounts: false, reload_routes: true } do
+    context "when the multi_facility_accounts feature is turned off", feature_setting: { "accounts.multi_facility_accounts" => false, reload_routes: true } do
       let(:admin) { @admin }
       let(:purchase_order) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility: facility) }
 

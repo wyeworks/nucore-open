@@ -38,7 +38,7 @@ RSpec.describe "Facility Accounts Tab" do
     login_as admin
   end
 
-  context "when the feature flag is on", feature_setting: { account_tabs: true } do
+  context "when the feature flag is on", feature_setting: { "accounts.account_tabs" => true } do
 
     before do
       visit facility_accounts_path(facility)
@@ -101,7 +101,7 @@ RSpec.describe "Facility Accounts Tab" do
 
   end
 
-  context "when the feature flag is off", feature_setting: { account_tabs: false } do
+  context "when the feature flag is off", feature_setting: { "accounts.account_tabs" => false } do
     it "should not assign the account types" do
       visit facility_accounts_path(facility)
       expect(page).to have_no_select("Account Type")

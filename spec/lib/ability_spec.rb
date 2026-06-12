@@ -79,12 +79,12 @@ RSpec.describe Ability do
     end
 
     shared_examples_for "correct User permissions" do
-      context "when create_users feature is on", feature_setting: { create_users: true } do
+      context "when create_users feature is on", feature_setting: { "users_authentication.create_users" => true } do
         it_is_allowed_to([:new, :create, :read, :index, :accounts, :search], User)
         it_is_not_allowed_to([:switch_to, :edit, :update, :suspend, :unsuspend, :orders], User)
       end
 
-      context "when create_users feature is off", feature_setting: { create_users: false } do
+      context "when create_users feature is off", feature_setting: { "users_authentication.create_users" => false } do
         it_is_allowed_to([:read, :index, :accounts, :search], User)
         it_is_not_allowed_to([:new, :create, :edit, :update, :switch_to, :suspend, :unsuspend, :orders], User)
       end
@@ -159,7 +159,7 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:batch_update, Order) }
       it { is_expected.to be_allowed_to(:batch_update, Reservation) }
 
-      context "when create_users feature is on", feature_setting: { create_users: true } do
+      context "when create_users feature is on", feature_setting: { "users_authentication.create_users" => true } do
         context "when user is external" do
           it { is_expected.to be_allowed_to(:edit, external_user) }
           it { is_expected.to be_allowed_to(:update, external_user) }
@@ -171,7 +171,7 @@ RSpec.describe Ability do
         end
       end
 
-      context "when create_users feature is off", feature_setting: { create_users: false } do
+      context "when create_users feature is off", feature_setting: { "users_authentication.create_users" => false } do
         context "when user is external" do
           it { is_expected.not_to be_allowed_to(:edit, external_user) }
           it { is_expected.not_to be_allowed_to(:update, external_user) }
@@ -199,7 +199,7 @@ RSpec.describe Ability do
     end
   end
 
-  describe "global billing administrator", feature_setting: { global_billing_administrator: true } do
+  describe "global billing administrator", feature_setting: { "roles.global_billing_administrator" => true } do
     let(:user) { create(:user, :global_billing_administrator) }
 
     it { is_expected.to be_allowed_to(:manage, Account) }
@@ -226,11 +226,11 @@ RSpec.describe Ability do
     context "in cross-facility" do
       let(:facility) { Facility.cross_facility }
 
-      context "with the users tab active", feature_setting: { global_billing_administrator_users_tab: true } do
+      context "with the users tab active", feature_setting: { "roles.global_billing_administrator_users_tab" => true } do
         it { is_expected.to be_allowed_to(:manage_users, facility) }
       end
 
-      context "with the users tab inactive", feature_setting: { global_billing_administrator_users_tab: false } do
+      context "with the users tab inactive", feature_setting: { "roles.global_billing_administrator_users_tab" => false } do
         it { is_expected.not_to be_allowed_to(:manage_users, facility) }
       end
 
@@ -248,11 +248,11 @@ RSpec.describe Ability do
     context "in no facility" do
       let(:facility) { nil }
 
-      context "with the users tab active", feature_setting: { global_billing_administrator_users_tab: true } do
+      context "with the users tab active", feature_setting: { "roles.global_billing_administrator_users_tab" => true } do
         it { is_expected.to be_allowed_to(:manage_users, Facility.cross_facility) }
       end
 
-      context "with the users tab inactive", feature_setting: { global_billing_administrator_users_tab: false } do
+      context "with the users tab inactive", feature_setting: { "roles.global_billing_administrator_users_tab" => false } do
         it { is_expected.not_to be_allowed_to(:manage_users, Facility.cross_facility) }
       end
 
@@ -334,7 +334,7 @@ RSpec.describe Ability do
     it_behaves_like "it allows switch_to on active, but not deactivated users"
     it_behaves_like "it can manage training requests"
 
-    context "when facility_directors_can_manage_price_groups enabled", feature_setting: { facility_directors_can_manage_price_groups: true } do
+    context "when facility_directors_can_manage_price_groups enabled", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       it_is_allowed_to(:manage, PriceGroup)
       it_is_allowed_to(:manage, PricePolicy)
       it_is_allowed_to(:manage, InstrumentPricePolicy)
@@ -342,7 +342,7 @@ RSpec.describe Ability do
       it_is_allowed_to(:manage, ServicePricePolicy)
     end
 
-    context "when facility_directors_can_manage_price_groups disabled", feature_setting: { facility_directors_can_manage_price_groups: false } do
+    context "when facility_directors_can_manage_price_groups disabled", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => false } do
       it_is_allowed_to([:show, :index], PriceGroup)
       it_is_not_allowed_to([:create, :edit, :update, :destroy], PriceGroup)
       it_is_allowed_to([:show, :index], PricePolicy)

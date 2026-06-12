@@ -21,7 +21,7 @@ module ProductsHelper
 
   def options_for_relay
     [
-      if SettingsHelper.feature_on?(:disable_relay_synaccess_rev_a)
+      if SettingsHelper.feature_on?("products.disable_relay_synaccess_rev_a")
           nil
       else
         [RelaySynaccessRevA, RelaySynaccessRevA.name]

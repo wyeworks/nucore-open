@@ -159,7 +159,7 @@ RSpec.describe Product do
       end
     end
 
-    context "expense accounts", feature_setting: { expense_accounts: true } do
+    context "expense accounts", feature_setting: { "accounts.expense_accounts" => true } do
       it "allows the default expense account" do
         product = build(:product, account: Settings.accounts.product_default)
         product.valid?
@@ -179,13 +179,13 @@ RSpec.describe Product do
       end
     end
 
-    context "email", feature_setting: { expense_accounts: false } do
+    context "email", feature_setting: { "accounts.expense_accounts" => false } do
       before :each do
         @facility = FactoryBot.create(:facility, email: "facility@example.com")
         @product = TestProduct.create!(contact_email: "product@example.com", facility: @facility, name: "Test Product", url_name: "test")
       end
 
-      context "product specific enabled", feature_setting: { product_specific_contacts: true } do
+      context "product specific enabled", feature_setting: { "notifications.product_specific_contacts": true } do
 
         it "should return the product's email if it has it" do
           expect(@product.email).to eq("product@example.com")
@@ -213,7 +213,7 @@ RSpec.describe Product do
         end
       end
 
-      context "product specific disabled", feature_setting: { product_specific_contacts: false } do
+      context "product specific disabled", feature_setting: { "notifications.product_specific_contacts": false } do
 
         it "should return the facility's email address even if the product has an email" do
           expect(@product.email).to eq("facility@example.com")

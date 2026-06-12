@@ -25,7 +25,7 @@ RSpec.describe BulkEmail::AbilityExtension do
     it_behaves_like "it may send bulk email"
   end
 
-  describe "global billing administrator", feature_setting: { global_billing_administrator: true } do
+  describe "global billing administrator", feature_setting: { "roles.global_billing_administrator" => true } do
     let(:user) { FactoryBot.create(:user, :global_billing_administrator) }
 
     context "when in a cross-facility context" do

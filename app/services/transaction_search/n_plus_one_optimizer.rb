@@ -9,7 +9,7 @@ module TransactionSearch
                             .includes(:reservation)
                             .preload(:bundle)
 
-      if SettingsHelper.feature_on?(:billing_table_price_groups)
+      if SettingsHelper.feature_on?("billing.billing_table_price_groups")
         result = result.includes(price_policy: :price_group)
       end
 

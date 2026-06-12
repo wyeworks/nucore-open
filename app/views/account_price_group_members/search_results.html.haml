@@ -4,7 +4,7 @@
   - else
     %h3= t(".head")
 
-    - if SettingsHelper.feature_on?(:edit_accounts)
+    - if SettingsHelper.feature_on?("accounts.edit_accounts")
       %p
         = t(".main")
         = link_to t(".create"), new_account_user_search_facility_accounts_path(current_facility)

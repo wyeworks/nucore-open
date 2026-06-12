@@ -125,19 +125,19 @@ class PriceGroupsController < ApplicationController
   end
 
   def can_see_price_group_users!
-    unless SettingsHelper.feature_on?(:user_based_price_groups) && @price_group_ability.can?(:read, UserPriceGroupMember)
+    unless SettingsHelper.feature_on?("pricing.user_based_price_groups") && @price_group_ability.can?(:read, UserPriceGroupMember)
       raise ActiveRecord::RecordNotFound
     end
   end
 
   def price_group_params
     permitted = [:name, :display_order, :is_internal, :is_hidden, :admin_editable, :facility_id]
-    permitted << :parent_price_group_id if SettingsHelper.feature_on?(:external_price_group_subsidies)
+    permitted << :parent_price_group_id if SettingsHelper.feature_on?("pricing.external_price_group_subsidies")
     params.require(:price_group).permit(permitted)
   end
 
   def set_available_parent_groups
-    @available_parent_groups = PriceGroup.available_parent_groups(current_facility) if SettingsHelper.feature_on?(:external_price_group_subsidies)
+    @available_parent_groups = PriceGroup.available_parent_groups(current_facility) if SettingsHelper.feature_on?("pricing.external_price_group_subsidies")
   end
 
   def paginate(relation)

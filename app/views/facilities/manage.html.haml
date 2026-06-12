@@ -8,11 +8,11 @@
   = f.input :name
   = f.input :abbreviation
   = f.input :url_name
-  - if SettingsHelper.feature_on?(:facility_tile_list_admin) && current_facility.file_present?
+  - if SettingsHelper.feature_on?("style_display.facility_tile_list_admin") && current_facility.file_present?
     = image_tag(current_facility.padded_image, class: "tile-image")
   = f.input :short_description
   = f.input :description
-  = f.input :banner_notice if SettingsHelper.feature_on?(:facility_banner_notice)
+  = f.input :banner_notice if SettingsHelper.feature_on?("style_display.facility_banner_notice")
   = f.input :accepts_multi_add, label: text("views.facilities.facility_fields.labels.accepts_multi_add")
   = f.input :show_order_note, label: text("views.facilities.facility_fields.labels.show_order_note")
   = f.input :show_instrument_availability, label: text("views.facilities.facility_fields.labels.show_instrument_availability")
@@ -24,7 +24,7 @@
   = f.input :phone_number, default_value: "None Entered"
   = f.input :fax_number, default_value: "None Entered"
   = f.input :email, default_value: "None Entered"
-  - if SettingsHelper.feature_on?(:facility_payment_urls)
+  - if SettingsHelper.feature_on?("accounts.facility_payment_urls")
     = f.input :payment_url
   = f.input :journal_mask
   = f.input :order_notification_recipient, default_value: "None Entered"

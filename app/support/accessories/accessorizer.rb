@@ -91,7 +91,7 @@ class Accessories::Accessorizer
 
     validate_note!(od)
 
-    if SettingsHelper.feature_on?(:accessory_independent_order_status)
+    if SettingsHelper.feature_on?("reservations.accessory_independent_order_status")
       # always use own initial order status
       od.order_status_id = od.product.initial_order_status.id
       od.save!

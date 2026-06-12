@@ -105,7 +105,7 @@ if Account.config.statements_enabled?
 
       it_should_deny_all [:staff, :senior_staff]
 
-      context "if set statement search start date feature is disabled", feature_setting: { set_statement_search_start_date: false } do
+      context "if set statement search start date feature is disabled", feature_setting: { "billing.set_statement_search_start_date" => false } do
         it "should return the right order details without start date" do
           grant_and_sign_in(@user)
           do_request
@@ -116,7 +116,7 @@ if Account.config.statements_enabled?
         end
       end
 
-      context "if set statement search start date feature is enabled", feature_setting: { set_statement_search_start_date: true } do
+      context "if set statement search start date feature is enabled", feature_setting: { "billing.set_statement_search_start_date" => true } do
         it "should return the right order details with start date" do
           grant_and_sign_in(@user)
           do_request
@@ -186,7 +186,7 @@ if Account.config.statements_enabled?
 
       it_should_deny_all [:staff, :senior_staff]
 
-      context "when statement emailing is on", feature_setting: { send_statement_emails: true } do
+      context "when statement emailing is on", feature_setting: { "notifications.send_statement_emails": true } do
         include_examples "it sets up order_detail and creates statements"
 
         it "sends statements" do
@@ -198,7 +198,7 @@ if Account.config.statements_enabled?
         end
       end
 
-      context "when statement emailing is off", feature_setting: { send_statement_emails: false } do
+      context "when statement emailing is off", feature_setting: { "notifications.send_statement_emails": false } do
         include_examples "it sets up order_detail and creates statements"
 
         it "does not send statements" do
@@ -208,7 +208,7 @@ if Account.config.statements_enabled?
         end
       end
 
-      context "with multiple payment sources", feature_setting: { send_statement_emails: true } do
+      context "with multiple payment sources", feature_setting: { "notifications.send_statement_emails": true } do
         it "displays properly formatted flash message" do
           sign_in(@user)
           do_request
@@ -216,7 +216,7 @@ if Account.config.statements_enabled?
         end
       end
 
-      context "with multiple payment sources", feature_setting: { send_statement_emails: false } do
+      context "with multiple payment sources", feature_setting: { "notifications.send_statement_emails": false } do
         it "displays properly formatted flash message" do
           sign_in(@user)
           do_request

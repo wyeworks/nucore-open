@@ -38,7 +38,7 @@ RSpec.describe SearchController do
       let(:params) { { account_id: account.id } }
     end
 
-    describe "facility_account_account_user", feature_setting: { edit_accounts: true, reload_routes: true } do
+    describe "facility_account_account_user", feature_setting: { "accounts.edit_accounts" => true, reload_routes: true } do
       it_behaves_like "searching", "facility_account_account_user" do
         let(:account) { FactoryBot.create(:setup_account) }
         let(:params) { { account_id: account.id } }
@@ -58,7 +58,7 @@ RSpec.describe SearchController do
 
     it_behaves_like "searching", "map_user"
 
-    describe "user_new_account", feature_setting: { edit_accounts: true, reload_routes: true } do
+    describe "user_new_account", feature_setting: { "accounts.edit_accounts" => true, reload_routes: true } do
       it_behaves_like "searching", "user_new_account"
     end
 

@@ -19,7 +19,7 @@ RSpec.describe InstrumentPricePoliciesController do
   end
 
   context "Schedule Rule pricing mode" do
-    it "can set up the price policies", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+    it "can set up the price policies", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       visit facility_instruments_path(facility, instrument)
       click_link instrument.name
       click_link "Pricing"
@@ -53,7 +53,7 @@ RSpec.describe InstrumentPricePoliciesController do
       expect(page).not_to have_content("Rate Start (hr):")
     end
 
-    it "can only allow some to purchase", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+    it "can only allow some to purchase", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       visit facility_instruments_path(facility, instrument)
       click_link instrument.name
       click_link "Pricing"
@@ -75,7 +75,7 @@ RSpec.describe InstrumentPricePoliciesController do
       expect(page).not_to have_content(cancer_center.name)
     end
 
-    describe "with required note enabled", feature_setting: { price_policy_requires_note: true, facility_directors_can_manage_price_groups: true } do
+    describe "with required note enabled", feature_setting: { "pricing.price_policy_requires_note" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
       it "requires the field" do
         visit facility_instruments_path(facility, instrument)
         click_link instrument.name
@@ -87,7 +87,7 @@ RSpec.describe InstrumentPricePoliciesController do
       end
     end
 
-    describe "with full cancellation cost enabled", :js, feature_setting: { charge_full_price_on_cancellation: true, facility_directors_can_manage_price_groups: true } do
+    describe "with full cancellation cost enabled", :js, feature_setting: { "billing.charge_full_price_on_cancellation" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
       it "can set up the price policies", :js do
         visit facility_instruments_path(facility, instrument)
         click_link instrument.name
@@ -155,7 +155,7 @@ RSpec.describe InstrumentPricePoliciesController do
       end
     end
 
-    describe "with hidden price policies", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+    describe "with hidden price policies", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       let(:item) { instrument }
 
       include_examples "with hidden price groups", "instrument"
@@ -166,7 +166,7 @@ RSpec.describe InstrumentPricePoliciesController do
     let(:pricing_mode) { Instrument::Pricing::DURATION }
     let!(:cannot_purchase_group) { create(:price_group, facility:) }
 
-    it "can set up the price policies", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+    it "can set up the price policies", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       visit facility_instruments_path(facility, instrument)
       click_link instrument.name
       click_link "Pricing"
@@ -236,7 +236,7 @@ RSpec.describe InstrumentPricePoliciesController do
     end
 
     context "validations" do
-      it "fails to save when duration rate is higher than base rate", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+      it "fails to save when duration rate is higher than base rate", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
         visit new_facility_instrument_price_policy_path(facility, instrument)
 
         fill_in "min_duration_0", with: "2"
@@ -255,7 +255,7 @@ RSpec.describe InstrumentPricePoliciesController do
         expect(page).to have_content("Duration rates base Rate must be lesser than or equal to Base rate")
       end
 
-      it "fails to save when duration subsidy is higher than step rate", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+      it "fails to save when duration subsidy is higher than step rate", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
         visit new_facility_instrument_price_policy_path(facility, instrument)
 
         fill_in "min_duration_0", with: "2"
@@ -281,7 +281,7 @@ RSpec.describe InstrumentPricePoliciesController do
         expect(page).to have_content("Subsidy must be lesser than or equal to step rate")
       end
 
-      it "fails to save if not all steps are filled", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+      it "fails to save if not all steps are filled", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
         visit new_facility_instrument_price_policy_path(facility, instrument)
 
         fill_in "price_policy_#{base_price_group.id}[usage_rate]", with: "60"
@@ -297,7 +297,7 @@ RSpec.describe InstrumentPricePoliciesController do
         expect(page).to have_content("Missing value for 'Rate start (hr)'")
       end
 
-      it "fails to save duration rates do not have a rate start provided", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+      it "fails to save duration rates do not have a rate start provided", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
         visit new_facility_instrument_price_policy_path(facility, instrument)
 
         fill_in "price_policy_#{base_price_group.id}[usage_rate]", with: "60"
@@ -317,7 +317,7 @@ RSpec.describe InstrumentPricePoliciesController do
       end
     end
 
-    it "can edit price policies", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+    it "can edit price policies", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       visit new_facility_instrument_price_policy_path(facility, instrument)
 
       fill_in "min_duration_0", with: "2"
@@ -408,14 +408,14 @@ RSpec.describe InstrumentPricePoliciesController do
       expect(page).not_to have_content("$90.00") # Step 3 rate (removed)
     end
 
-    describe "with hidden price policies", :js, feature_setting: { facility_directors_can_manage_price_groups: true } do
+    describe "with hidden price policies", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       let(:item) { instrument }
 
       include_examples "with hidden price groups", "instrument"
     end
   end
 
-  context "External subsidy price groups", :js, feature_setting: { external_price_group_subsidies: true, facility_directors_can_manage_price_groups: true, charge_full_price_on_cancellation: true } do
+  context "External subsidy price groups", :js, feature_setting: { "pricing.external_price_group_subsidies" => true, "pricing.facility_directors_can_manage_price_groups" => true, "billing.charge_full_price_on_cancellation" => true } do
     let!(:external_subsidy_group) { create(:price_group, facility: nil, is_internal: false, global: true, admin_editable: false, name: "External Subsidy", parent_price_group: external_price_group) }
 
     it "syncs fields from external parent (not base internal) and handles full cancellation correctly" do
@@ -469,7 +469,7 @@ RSpec.describe InstrumentPricePoliciesController do
     end
   end
 
-  context "Schedule Rule Daily pricing mode", feature_setting: { facility_directors_can_manage_price_groups: true } do
+  context "Schedule Rule Daily pricing mode", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
     let(:pricing_mode) { Instrument::Pricing::SCHEDULE_DAILY }
 
     it "can add price policies", :js do
