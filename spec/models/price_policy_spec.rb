@@ -202,7 +202,7 @@ RSpec.describe PricePolicy do
         end
       end
 
-      it "allows creating a non-overlapping future policy" do
+      it "allows creating a non-overlapping future policy and extends the preceding one to fill the gap" do
         @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
 
         travel_to_and_return(@today) do
@@ -212,30 +212,62 @@ RSpec.describe PricePolicy do
           future = build(:item_price_policy, product: @item, price_group: @price_group, start_date: @today + 40.days, expire_date: @today + 70.days)
 
           expect(future.save).to be(true)
-          expect(@pp.reload.expire_date).to eq(@today + 30.days)
+          expect(@pp.reload.expire_date).to be_within(1.second).of((@today + 40.days - 1.day).end_of_day)
         end
       end
     end
 
-    context "auditing with PaperTrail" do
-      it "records a version when a policy is created" do
+    context "extending the preceding policy to keep coverage continuous" do
+      it "extends the currently-active policy up to the day before the new one starts" do
         @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
 
         travel_to_and_return(@today) do
-          pp = create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 30.days)
+          existing = create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 20.days)
 
-          expect(pp.versions.map(&:event)).to include("create")
+          create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today + 40.days, expire_date: @today + 70.days)
+
+          expect(existing.reload.expire_date).to be_within(1.second).of((@today + 40.days - 1.day).end_of_day)
         end
       end
 
-      it "records a version when a policy is truncated" do
+      it "does not extend a policy beyond the new one when they overlap" do
         @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
 
         travel_to_and_return(@today) do
-          @pp = create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 30.days)
-          create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today + 2.days, expire_date: @today + 30.days)
+          existing = create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 30.days)
 
-          expect(@pp.reload.versions.map(&:event)).to include("update")
+          create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today + 10.days, expire_date: @today + 30.days)
+
+          expect(existing.reload.expire_date).to be_within(1.second).of((@today + 10.days - 1.day).end_of_day)
+        end
+      end
+
+      it "does not extend policies for other products or price groups" do
+        @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
+
+        travel_to_and_return(@today) do
+          other_group = create(:price_group, facility: @facility)
+          other_product_policy = create(:item_price_policy, product: @item2, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 20.days)
+          other_group_policy = create(:item_price_policy, product: @item, price_group: other_group, start_date: @today.beginning_of_day, expire_date: @today + 20.days)
+
+          create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today + 40.days, expire_date: @today + 70.days)
+
+          expect(other_product_policy.reload.expire_date).to eq(@today + 20.days)
+          expect(other_group_policy.reload.expire_date).to eq(@today + 20.days)
+        end
+      end
+
+      it "does not extend the preceding policy across a fiscal year boundary" do
+        @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
+
+        travel_to_and_return(@today) do
+          existing = create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: PricePolicy.generate_expire_date(@today))
+
+          next_fiscal_year = Time.zone.local(2012, 1, 15)
+          future = build(:item_price_policy, product: @item, price_group: @price_group, start_date: next_fiscal_year, expire_date: PricePolicy.generate_expire_date(next_fiscal_year))
+
+          expect(future.save).to be(true)
+          expect(existing.reload.expire_date).to be_within(1.second).of(PricePolicy.generate_expire_date(@today))
         end
       end
     end
