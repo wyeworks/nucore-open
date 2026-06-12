@@ -139,6 +139,8 @@ class NavTab::LinkCollection
       NavTab::Link.new(tab: :admin_facility, url: manage_facility_path(facility))
     elsif single_facility? && ability.can?(:manage, FacilityUserPermission)
       NavTab::Link.new(tab: :admin_facility, url: facility_facility_users_path(facility))
+    elsif single_facility? && ability.can?(:manage, PriceGroupDiscount)
+      NavTab::Link.new(tab: :admin_facility, url: facility_price_groups_path(facility))
     end
   end
 
