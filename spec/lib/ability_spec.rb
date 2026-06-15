@@ -599,7 +599,7 @@ RSpec.describe Ability do
       it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
       it_is_allowed_to([:show, :index], PriceGroup)
       it_is_allowed_to([:index], StoredFile)
-      it { is_expected.to be_allowed_to(:index, Project) }
+      it_is_allowed_to([:index, :cross_core_orders], Project)
       it { is_expected.to be_allowed_to(:administer, User) }
       it { is_expected.to be_allowed_to(:read, Schedule) }
       it { is_expected.to be_allowed_to(:read, ProductDisplayGroup) }

@@ -56,7 +56,7 @@ class FacilityUserPermissionAbility
     can :read, PriceGroupProduct
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
 
-    can :index, Project
+    can [:index, :cross_core_orders], Project
 
     can [:administer], User
     can :index, User if controller.is_a?(FacilityUsersController) || controller.is_a?(UsersController)
