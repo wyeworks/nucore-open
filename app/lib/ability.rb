@@ -200,6 +200,7 @@ class Ability
     if resource.is_a?(Facility) && user.facility_administrator_of?(resource)
       manager_abilities_for_facility(user, resource, controller)
       can :manage, PriceGroup
+      can :manage, PriceGroupDiscount
       can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
     end
 
