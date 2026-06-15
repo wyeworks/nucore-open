@@ -4,16 +4,23 @@ export default class extends Controller {
   static targets = ["searchInput", "searchResults", "selectedUsers"]
   static values = { searchUrl: String }
 
+  connect() {
+    this.searchInputTarget.addEventListener(
+      "keydown",
+      this.maybeSubmitSearch.bind(this),
+    )
+  }
+
   search() {
     const term = this.searchInputTarget.value.trim()
     if (term.length === 0) return
 
-    const resultsUrl = `${this.searchUrlValue}?search_term=${encodeURIComponent(term)}`;
-    this.searchResultsTarget.src = resultsUrl;
+    const resultsUrl = `${this.searchUrlValue}?search_term=${encodeURIComponent(term)}`
+    this.searchResultsTarget.src = resultsUrl
   }
 
   addUser({ target } = event) {
-    if (this.selectedIds.includes(target.dataset.userId)) { return; }
+    if (this.selectedIds.includes(target.dataset.userId)) { return }
 
     const li = event.currentTarget.closest("li")
     const input = li.querySelector("input")
@@ -36,5 +43,12 @@ export default class extends Controller {
     return [...this.selectedUsersTarget.querySelectorAll("li")].map(
       li => li.dataset.userId
     )
+  }
+
+  maybeSubmitSearch(event) {
+    if (event.key === "Enter") {
+      event.preventDefault()
+      this.search()
+    }
   }
 }
