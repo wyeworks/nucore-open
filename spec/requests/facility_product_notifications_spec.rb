@@ -127,21 +127,31 @@ RSpec.describe "FacilityProductNotifications" do
 
     context "as an administrator" do
       before { login_as create(:user, :administrator) }
+      let(:product_notification_attributes) do
+        {
+          name: "New Notification",
+          reservation_days: 10,
+          email_subject: "Some subject",
+        }
+      end
 
       context "with valid params" do
         let(:params) do
           {
             product_notification: {
-              name: "New Notification",
-              reservation_days: 10,
               product_ids: [],
               user_ids: [],
+              **product_notification_attributes,
             },
           }
         end
 
-        it "creates a product notification" do
-          expect { action.call }.to change(ProductNotification, :count).by(1)
+        it "creates a product notification with correct attributes" do
+          expect { action.call }.to(
+            change do
+              ProductNotification.where(product_notification_attributes).count
+            end.by(1)
+          )
         end
 
         it "redirects to show" do

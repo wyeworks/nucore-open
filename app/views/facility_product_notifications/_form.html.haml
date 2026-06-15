@@ -4,6 +4,7 @@
   hint: t(".hints.#{form.object.notification_type}"),
   input_html: { value: ProductNotification.human_attribute_name("notification_type.#{form.object.notification_type}") }
 = form.input :reservation_days, hint: t(".hints.reservation_days")
+= form.input :email_subject, hint: t(".hints.email_subject")
 
 %h4= ProductNotification.human_attribute_name(:products)
 

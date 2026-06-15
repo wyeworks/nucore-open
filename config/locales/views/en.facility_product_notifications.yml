@@ -21,6 +21,7 @@ en:
       select_products_hint: Select instruments
       select_users_hint: Search and select users one by one
       hints:
+        email_subject: Override default email subject
         reservation_days: Reservations canceled within the amount of days will trigger the notification
         slot_available: Notify users when a Reservation or Admin Hold is canceled for any of the selected instruments
     user_search_results:
