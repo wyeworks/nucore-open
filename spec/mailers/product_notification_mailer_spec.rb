@@ -9,10 +9,10 @@ RSpec.describe ProductNotificationMailer do
     let(:user) { create(:user) }
     let(:start_time) { 1.hour.from_now }
     let(:end_time) { start_time + 30.minutes }
-    let(:subject) { nil }
+    let(:mail_subject) { nil }
     let(:mail) do
       described_class.slot_available(
-        product, user, start_time, end_time, subject:,
+        product, user, start_time, end_time, subject: mail_subject,
       )
     end
 
