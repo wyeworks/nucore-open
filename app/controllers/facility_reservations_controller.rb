@@ -154,6 +154,8 @@ class FacilityReservationsController < ApplicationController
 
     @reservation.destroy
     flash[:notice] = "The reservation has been removed successfully"
+    ProductNotifications::SlotAvailableService.from_reservation(@reservation).notify!
+
     redirect_to facility_instrument_schedule_url
   end
 

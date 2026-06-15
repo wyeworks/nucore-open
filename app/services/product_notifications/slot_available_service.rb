@@ -11,7 +11,7 @@ module ProductNotifications
         reservation.order_detail.product,
         reservation.reserve_start_at,
         reservation.reserve_end_at,
-        exclude_user: reservation.order_detail.user,
+        exclude_user: reservation&.order_detail&.user,
       )
     end
 
