@@ -23,25 +23,18 @@ module ProductNotifications
     end
 
     def notify!
-      recipients.find_each do |user|
-        ProductNotificationMailer.slot_available(
-          product, user, start_time, end_time
-        ).deliver_later
+      product_notifications.find_each do |product_notification|
+        product_notification.users.where.not(id: exclude_user&.id).find_each do |user|
+          ProductNotificationMailer.slot_available(
+            product, user,
+            start_time, end_time,
+            subject: product_notification.email_subject,
+          ).deliver_later
+        end
       end
     end
 
     private
-
-    def recipients
-      return User.none if product_notifications.blank?
-
-      user_ids =
-        product_notifications
-        .joins("INNER JOIN product_notifications_users")
-        .select(:user_id)
-
-      User.where(id: user_ids).where.not(id: exclude_user&.id)
-    end
 
     def product_notifications
       product

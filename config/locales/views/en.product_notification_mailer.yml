@@ -2,7 +2,7 @@ en:
   views:
     product_notification_mailer:
       slot_available:
-        subject: "!app_name! - New availability %{product_facility} - %{time_range}"
+        subject: "!app_name! New availability for %{product_facility} - %{time_range}"
         body: |
           Hello %{user_name},
 

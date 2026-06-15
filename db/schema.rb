@@ -674,6 +674,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_125147) do
   create_table "product_notifications", charset: "utf8mb3", force: :cascade do |t|
     t.bigint "facility_id", null: false
     t.string "name"
+    t.string "email_subject"
     t.string "notification_type", null: false
     t.integer "users_count", default: 0, null: false
     t.integer "reservation_days"

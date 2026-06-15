@@ -9,15 +9,28 @@ RSpec.describe ProductNotificationMailer do
     let(:user) { create(:user) }
     let(:start_time) { 1.hour.from_now }
     let(:end_time) { start_time + 30.minutes }
-    let(:email) do
+    let(:subject) { nil }
+    let(:mail) do
       described_class.slot_available(
-        product, user, start_time, end_time,
+        product, user, start_time, end_time, subject:,
       )
     end
 
     it "includes new reservation link" do
-      expect(email.to).to eq [user.email]
-      expect(email.body).to include(new_facility_instrument_single_reservation_path(facility, product))
+      expect(mail.to).to eq [user.email]
+      expect(mail.body).to include(new_facility_instrument_single_reservation_path(facility, product))
+    end
+
+    describe "subject" do
+      it "handles subject by default" do
+        expect(mail.subject).to include("New availability for #{product.name}")
+      end
+
+      context "can override subject" do
+        let(:mail_subject) { "Some subject" }
+
+        it { expect(mail.subject).to eq(mail_subject) }
+      end
     end
   end
 end

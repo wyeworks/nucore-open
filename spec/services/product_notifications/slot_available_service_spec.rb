@@ -41,7 +41,7 @@ RSpec.describe ProductNotifications::SlotAvailableService do
         have_enqueued_mail(
           ProductNotificationMailer,
           :slot_available,
-        ).with(product, some_user, start_time, end_time)
+        ).with(product, some_user, start_time, end_time, subject: nil)
       )
     end
 
@@ -50,7 +50,7 @@ RSpec.describe ProductNotifications::SlotAvailableService do
         have_enqueued_mail(
           ProductNotificationMailer,
           :slot_available,
-        ).with(product, reservation_user, start_time, end_time)
+        ).with(product, reservation_user, start_time, end_time, subject: nil)
       )
     end
 
@@ -58,6 +58,23 @@ RSpec.describe ProductNotifications::SlotAvailableService do
       expect { subject.notify! }.to(
         have_enqueued_mail(ProductNotificationMailer, :slot_available).exactly(2)
       )
+    end
+
+    context "when email subject is specified" do
+      let(:email_subject) { "Some subject" }
+
+      before do
+        product_notification.update(email_subject:)
+      end
+
+      it "pass the subject to the mailer" do
+        expect { subject.notify! }.to(
+          have_enqueued_mail(
+            ProductNotificationMailer,
+            :slot_available,
+          ).with(product, some_user, start_time, end_time, subject: email_subject)
+        )
+      end
     end
 
     context "when upcoming reservation user excluded" do
@@ -73,7 +90,7 @@ RSpec.describe ProductNotifications::SlotAvailableService do
           have_enqueued_mail(
             ProductNotificationMailer,
             :slot_available,
-          ).with(product, some_user, start_time, end_time)
+          ).with(product, some_user, start_time, end_time, subject: nil)
         )
       end
 
