@@ -3,7 +3,7 @@
   disabled: true,
   hint: t(".hints.#{form.object.notification_type}"),
   input_html: { value: ProductNotification.human_attribute_name("notification_type.#{form.object.notification_type}") }
-= form.input :reservation_days
+= form.input :reservation_days, hint: t(".hints.reservation_days")
 
 %h4= ProductNotification.human_attribute_name(:products)
 
