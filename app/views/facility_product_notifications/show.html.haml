@@ -3,7 +3,7 @@
 = content_for :sidebar do
   = render "admin/shared/sidenav_product", sidenav_tab: ProductNotification.model_name.plural
 
-%h2= @product_notification.name
+%h2= @product_notification.name || "#{ProductNotification.model_name} ##{@product_notification.id}"
 
 %p
   = link_to t("shared.edit"),
@@ -14,6 +14,7 @@
   = f.input :notification_type,
     input_html: { value: ProductNotification.human_attribute_name("notification_type.#{@product_notification.notification_type}") }
   = f.input :created_at, input_html: { value: I18n.l(@product_notification.created_at) }
+  = f.input :email_subject, input_html: { value: @product_notification.email_subject || "-" }
 
 %h4= ProductNotification.human_attribute_name(:products)
 - if @product_notification.products.empty?
