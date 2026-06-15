@@ -224,6 +224,7 @@ en:
       product_display_group:
         one: Product Group
         other: Product Groups
+      product_notification: Product Notification
       research_safety_certificate:
         one: Certificate
         other: Certificates
