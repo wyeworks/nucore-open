@@ -23,6 +23,8 @@ module ProductNotifications
     end
 
     def notify!
+      return if SettingsHelper.feature_off?(:facility_product_notifications)
+
       product_notifications.find_each do |product_notification|
         product_notification.users.where.not(id: exclude_user&.id).find_each do |user|
           ProductNotificationMailer.slot_available(

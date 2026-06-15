@@ -187,6 +187,7 @@ feature:
   merged_statement_history_columns: false
   external_price_group_subsidies: false
   granular_permissions: true
+  facility_product_notifications: false
 
 split_accounts:
   # Roles are allowed to create Split Accounts
