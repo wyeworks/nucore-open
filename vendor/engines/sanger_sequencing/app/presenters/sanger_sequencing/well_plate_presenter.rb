@@ -82,7 +82,7 @@ module SangerSequencing
     end
 
     def well_plate_alternative_csv_format?
-      SettingsHelper.feature_on?(:well_plate_alternative_csv_format)
+      SettingsHelper.feature_on?("products.well_plate_alternative_csv_format")
     end
 
   end

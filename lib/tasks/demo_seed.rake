@@ -435,7 +435,7 @@ namespace :demo do
       UserRole.grant(user_account_manager, UserRole::ACCOUNT_MANAGER)
     end
 
-    if SettingsHelper.feature_on?(:global_billing_administrator)
+    if SettingsHelper.feature_on?("roles.global_billing_administrator")
       user_global_billing_administrator = User.find_by(email: "bba123@example.com")
       if user_global_billing_administrator.blank?
         user_global_billing_administrator = User.new(username: "bba123@example.com",
@@ -520,7 +520,7 @@ namespace :demo do
     end
 
     # create split account if the feature is enabled
-    if SettingsHelper.feature_on?(:split_accounts)
+    if SettingsHelper.feature_on?("accounts.split_accounts")
       split_account = SplitAccounts::SplitAccount.find_by(account_number: "111-2222222-55555555-01")
       unless split_account
 
