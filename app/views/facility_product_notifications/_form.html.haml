@@ -18,14 +18,13 @@
 
 .well{ data: { controller: "user-search",
                user_search_search_url_value: user_search_facility_product_notifications_path(current_facility) } }
-  .input-group
+  %p
     = text_field_tag :search_term, nil,
       class: "form-control",
       placeholder: t(".search_users_placeholder"),
       data: { user_search_target: "searchInput" }
-    .input-group-btn
-      %button.btn.btn-default{ type: "button", data: { action: "click->user-search#search" } }
-        = t(".search_users")
+    %button.btn.btn-default{ type: "button", data: { action: "click->user-search#search" } }
+      = t("shared.search")
 
   %div
     = render "user_search_results"

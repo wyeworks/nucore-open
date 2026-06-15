@@ -13,7 +13,6 @@ en:
       success: Product Notification updated successfully
       error: An error occurred updating the record
     form:
-      search_users: Search
       search_users_placeholder: Type name or username
       add_user: Add
       remove: Remove
