@@ -56,6 +56,7 @@ class FacilityProductNotificationsController < ApplicationController
 
   def destroy
     @product_notification.destroy
+
     flash[:notice] = t(".success")
     redirect_to action: :index
   end

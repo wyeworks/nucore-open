@@ -385,4 +385,44 @@ RSpec.describe "FacilityProductNotifications" do
       end
     end
   end
+
+  describe "destroy" do
+    let(:notification) do
+      create(:product_notification, facility:, name: "Some Notification")
+    end
+    let(:action) do
+      -> { delete facility_product_notification_path(facility, notification) }
+    end
+
+    it_behaves_like "forbids non-admin user"
+
+    context "with admin user" do
+      before { login_as create(:user, :administrator) }
+
+      it "deletes the product notification" do
+        expect { action.call }.to(
+          change do
+            ProductNotification.find_by(id: notification.id)
+          end.to(nil)
+        )
+      end
+
+      it "redirects to index action" do
+        action.call
+
+        expect(response).to have_http_status(:found)
+        expect(response.location).to eq(
+          list_facility_product_notifications_url(facility)
+        )
+      end
+
+      it "shows a success message" do
+        action.call
+
+        get response.location
+
+        expect(page).to have_content("deleted successfully")
+      end
+    end
+  end
 end

@@ -2,6 +2,10 @@ en:
   facility_product_notifications:
     index:
       empty: No Product Notifications have been created
+    show:
+      empty_users: No users added
+      empty_products: No products added
+      confirm_delete: Are you sure you want to delete this record?
     new:
       title: New Product Notification
     create:
@@ -12,6 +16,8 @@ en:
     update:
       success: Product Notification updated successfully
       error: An error occurred updating the record
+    destroy:
+      success: Product Notification deleted successfully
     form:
       search_users_placeholder: Type name or username
       remove: Remove
@@ -26,6 +32,3 @@ en:
     user_search_results:
       add_user: Add
       no_results: No users found
-    show:
-      empty_users: No users added
-      empty_products: No products added
