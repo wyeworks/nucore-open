@@ -6,9 +6,9 @@
  *   Checking another permission auto-checks Read Access and locks it
  *   (visually disabled and unclickable). When all other permissions
  *   are unchecked, Read Access becomes editable again.
- * - Granting Product Creation implies Product Edition. Checking Product
- *   Creation auto-checks Product Edition and locks it. Unchecking Product
- *   Creation releases the lock (Product Edition keeps its current state).
+ * - Granting Product Creation implies Product Editing. Checking Product
+ *   Creation auto-checks Product Editing and locks it. Unchecking Product
+ *   Creation releases the lock (Product Editing keeps its current state).
  */
 $(document).ready(function() {
   const readAccessCheckbox = $(".js--readAccessCheckbox");
