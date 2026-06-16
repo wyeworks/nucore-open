@@ -276,6 +276,7 @@ RSpec.describe Ability do
     it_is_allowed_to([:batch_update, :cancel, :index], Reservation)
     it { is_expected.to be_allowed_to(:administer, User) }
     it { is_expected.to be_allowed_to(:manage, PriceGroup) }
+    it { is_expected.to be_allowed_to(:manage, PriceGroupDiscount) }
     it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
     it { is_expected.to be_allowed_to(:manage, ProductAccessGroup) }
     it_is_not_allowed_to([:edit, :update]) { FactoryBot.create(:user) }
