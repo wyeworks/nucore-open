@@ -23,8 +23,7 @@ module ProductNotifications
     end
 
     def notify!
-      return if SettingsHelper.feature_off?("notifications.facility_product_notifications")
-      return unless product_schedulable?
+      return unless should_notfy?
 
       product_notifications.find_each do |product_notification|
         product_notification.users.where.not(id: exclude_user&.id).find_each do |user|
@@ -38,6 +37,14 @@ module ProductNotifications
     end
 
     private
+
+    def should_notfy?
+      [
+        SettingsHelper.feature_on?("notifications.facility_product_notifications"),
+        start_time&.future?,
+        product_schedulable?,
+      ].all?
+    end
 
     def product_schedulable?
       product.schedule_rules.cover?(start_time, end_time)

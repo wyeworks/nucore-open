@@ -105,7 +105,7 @@ RSpec.describe(
     end
   end
 
-  describe "when product not available" do
+  describe "when product not schedulable" do
     let(:product) do
       create(
         :setup_instrument,
@@ -132,7 +132,21 @@ RSpec.describe(
       )
     end
 
-    it "does not call notify if product not schedulable" do
+    it "does not send emails" do
+      expect { subject.notify! }.not_to have_enqueued_mail
+    end
+  end
+
+  describe "when date in the past" do
+    let(:subject) do
+      described_class.new(
+        product,
+        2.days.ago,
+        1.day.ago,
+      )
+    end
+
+    it "does not send emails" do
       expect { subject.notify! }.not_to have_enqueued_mail
     end
   end
