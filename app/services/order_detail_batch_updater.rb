@@ -143,7 +143,11 @@ class OrderDetailBatchUpdater
     order_details.each do |order_detail|
       # cancel reservation order details
       if order_status.id == OrderStatus.canceled.id && order_detail.reservation
-        unless order_detail.cancel_reservation(user, order_status: order_status, admin: true)
+        if order_detail.cancel_reservation(user, order_status: order_status, admin: true)
+          ProductNotifications::SlotAvailableService
+            .from_reservation(order_detail.reservation)
+            .notify!
+        else
           raise "#{msg_type} ##{order_detail} failed cancellation."
         end
       # cancel other orders
