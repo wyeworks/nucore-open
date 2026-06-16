@@ -104,4 +104,36 @@ RSpec.describe(
       end
     end
   end
+
+  describe "when product not available" do
+    let(:product) do
+      create(
+        :setup_instrument,
+        skip_schedule_rules: true,
+      )
+    end
+    let(:start_time) do
+      Time.current.next_weekday.beginning_of_day
+    end
+    let(:end_time) { start_time + 1.hour }
+    let(:subject) do
+      described_class.new(
+        product,
+        start_time,
+        end_time
+      )
+    end
+
+    before do
+      create(
+        :schedule_rule,
+        :weekend,
+        product:,
+      )
+    end
+
+    it "does not call notify if product not schedulable" do
+      expect { subject.notify! }.not_to have_enqueued_mail
+    end
+  end
 end
