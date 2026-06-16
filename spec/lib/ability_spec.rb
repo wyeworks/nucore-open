@@ -280,6 +280,7 @@ RSpec.describe Ability do
     it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
     it { is_expected.to be_allowed_to(:manage, ProductAccessGroup) }
     it_is_not_allowed_to([:edit, :update]) { FactoryBot.create(:user) }
+    it { is_expected.to be_allowed_to(:manage, ProductNotification, facility_id: facility.id) }
 
     it_behaves_like "it can destroy admistrative reservations"
     it_behaves_like "it allows switch_to on active, but not deactivated users"
@@ -851,6 +852,7 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:switch, Instrument) }
       it_is_allowed_to([:create, :edit_admin, :update_admin, :timeline, :index, :show], Reservation)
       it { is_expected.to be_allowed_to(:read, ProductAccessory) }
+      it { is_expected.to be_allowed_to(:manage, ProductNotification, facility_id: facility.id) }
 
       it_behaves_like "it can destroy admistrative reservations"
 
