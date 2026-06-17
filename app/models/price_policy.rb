@@ -4,6 +4,8 @@ class PricePolicy < ApplicationRecord
 
   include Nucore::Database::DateHelper
 
+  has_paper_trail
+
   belongs_to :price_group
   belongs_to :product, optional: true
   belongs_to :created_by, class_name: "User", optional: true
@@ -22,6 +24,7 @@ class PricePolicy < ApplicationRecord
   validates :price_group_id, :type, presence: true
   validate :start_date_is_unique, if: :start_date?
   validate :expire_date_within_fiscal_year, if: :order_review_product?
+  validate :no_truncation_of_assigned_policies, on: :create, if: :start_date?
 
   validate :subsidy_less_than_rate, unless: :restrict_purchase?
 
@@ -33,6 +36,7 @@ class PricePolicy < ApplicationRecord
 
   before_save :set_default_subsidy
   before_create :truncate_existing_policies
+  before_create :extend_preceding_policy
 
   scope :for_date, ->(start_date) { where("start_date >= ? AND start_date <= ?", start_date.beginning_of_day, start_date.end_of_day) if start_date }
   scope :with_visible_price_group, -> { joins(:price_group).where(price_groups: { is_hidden: false }) }
@@ -238,13 +242,40 @@ class PricePolicy < ApplicationRecord
 
   def truncate_existing_policies
     logger.debug("Truncating existing policies")
-    existing_policies = PricePolicy.current.where(type: self.class.name,
-                                                  price_group_id: price_group_id,
-                                                  product_id: product_id)
+    expire_before_new_policy(policies_to_truncate)
+  end
+
+  def policies_to_truncate
+    existing_policies = PricePolicy.where(type: self.class.name,
+                                          price_group_id: price_group_id,
+                                          product_id: product_id)
+                                   .where("start_date <= :start_date AND expire_date >= :start_date", start_date: start_date)
 
     existing_policies = existing_policies.where("id != ?", id) unless id.nil?
+    existing_policies
+  end
 
-    existing_policies.each do |policy|
+  def no_truncation_of_assigned_policies
+    return unless OrderDetail.exists?(price_policy_id: policies_to_truncate.select(:id))
+
+    errors.add(:base, :overlapping_assigned_policy)
+  end
+
+  # Extend the active policy to fill the gap until this one starts.
+  def extend_preceding_policy
+    preceding_policies = PricePolicy.current
+                                    .where(type: self.class.name,
+                                           price_group_id: price_group_id,
+                                           product_id: product_id)
+                                    .where("expire_date < :start_date", start_date: start_date)
+
+    preceding_policies = preceding_policies.where("id != ?", id) unless id.nil?
+
+    expire_before_new_policy(preceding_policies)
+  end
+
+  def expire_before_new_policy(policies)
+    policies.each do |policy|
       policy.expire_date = (start_date - 1.day).end_of_day
       policy.save
     end

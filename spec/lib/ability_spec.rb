@@ -276,6 +276,7 @@ RSpec.describe Ability do
     it_is_allowed_to([:batch_update, :cancel, :index], Reservation)
     it { is_expected.to be_allowed_to(:administer, User) }
     it { is_expected.to be_allowed_to(:manage, PriceGroup) }
+    it { is_expected.to be_allowed_to(:manage, PriceGroupDiscount) }
     it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
     it { is_expected.to be_allowed_to(:manage, ProductAccessGroup) }
     it_is_not_allowed_to([:edit, :update]) { FactoryBot.create(:user) }
@@ -689,6 +690,20 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:manage, StoredFile) }
       it { is_expected.to be_allowed_to(:manage, OfflineReservation) }
       it { is_expected.not_to be_allowed_to(:create_daily_booking, Product) }
+    end
+
+    context "with product_pricing" do
+      before do
+        FacilityUserPermission.find_by(user:, facility:).update!(product_pricing: true)
+      end
+
+      it { is_expected.to be_allowed_to(:manage, PriceGroup) }
+      it { is_expected.to be_allowed_to(:manage, PriceGroupProduct) }
+      it { is_expected.to be_allowed_to(:manage, PriceGroupDiscount) }
+      it_is_allowed_to([:create, :update, :destroy], PricePolicy)
+      it_is_allowed_to([:create, :update, :destroy], InstrumentPricePolicy)
+      it_is_allowed_to([:create, :update, :destroy], ItemPricePolicy)
+      it_is_allowed_to([:create, :update, :destroy], ServicePricePolicy)
     end
 
     context "with order_management" do
