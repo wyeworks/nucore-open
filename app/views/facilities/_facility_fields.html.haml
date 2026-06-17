@@ -2,7 +2,7 @@
   = f.input :name, hint: text(".hints.name")
   = f.input :abbreviation, hint: text(".hints.abbreviation")
   = f.input :url_name, hint: facility_url(f.object.url_name || "url-name"), as: :string
-  - if SettingsHelper.feature_on?(:facility_tile_list_admin)
+  - if SettingsHelper.feature_on?("style_display.facility_tile_list_admin")
     = f.input :file, as: :file, label: "Image", hint: t("simple_form.hints.image_dimensions"), hint_html: { class: "help-block" }
 
     - if current_facility&.file_present?
@@ -11,7 +11,7 @@
   = f.input :short_description, input_html: { class: "wide" }, hint: text(".hints.short_description")
   = f.input :description, input_html: { class: "editor" }, hint: text(".hints.description")
 
-- if SettingsHelper.feature_on?(:facility_banner_notice)
+- if SettingsHelper.feature_on?("style_display.facility_banner_notice")
   %fieldset.well.collapsable{ class: f.object.banner_notice.blank? ? "collapsed" : "" }
     %label.legend= f.label :banner_notice
     = f.input :banner_notice, input_html: { class: "editor__simple" }, hint: text(".hints.banner_notice"), label: false
@@ -43,7 +43,7 @@
   = f.input :phone_number
   = f.input :fax_number
   = f.input :email
-  - if SettingsHelper.feature_on?(:facility_payment_urls)
+  - if SettingsHelper.feature_on?("accounts.facility_payment_urls")
     = f.input :payment_url
 
 .well

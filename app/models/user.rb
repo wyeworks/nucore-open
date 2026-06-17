@@ -14,7 +14,7 @@ class User < ApplicationRecord
   has_many :order_details, through: :orders
   has_many :reservations, through: :order_details
   has_many :price_group_members, class_name: "UserPriceGroupMember", dependent: :destroy
-  has_many :price_groups, -> { SettingsHelper.feature_on?(:user_based_price_groups) ? distinct : none }, through: :price_group_members
+  has_many :price_groups, -> { SettingsHelper.feature_on?("pricing.user_based_price_groups") ? distinct : none }, through: :price_group_members
   has_many :product_users
   has_many :products, through: :product_users
   has_many :notifications
@@ -157,7 +157,7 @@ class User < ApplicationRecord
 
   # Returns the price groups for the user when acting as a purchaser
   def purchaser_price_groups
-    if SettingsHelper.feature_on?(:user_based_price_groups_exclude_purchaser)
+    if SettingsHelper.feature_on?("pricing.user_based_price_groups_exclude_purchaser")
       []
     else
       price_groups
@@ -236,7 +236,7 @@ class User < ApplicationRecord
   end
 
   def create_default_price_group!
-    return unless SettingsHelper.feature_on?(:user_based_price_groups)
+    return unless SettingsHelper.feature_on?("pricing.user_based_price_groups")
 
     price_group_members.find_or_create_by!(price_group: default_price_group)
   end

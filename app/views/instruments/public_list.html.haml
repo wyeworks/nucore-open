@@ -1,4 +1,4 @@
-- if SettingsHelper.feature_on?(:equipment_list)
+- if SettingsHelper.feature_on?("style_display.equipment_list")
   = render "shared/nav/equipment_list_nav"
 - else
   = content_for :h1 do

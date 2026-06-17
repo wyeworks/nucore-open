@@ -144,7 +144,7 @@ class FacilityJournalsController < ApplicationController
   end
 
   def unreconcile
-    unless SettingsHelper.feature_on?(:allow_mass_unreconciling)
+    unless SettingsHelper.feature_on?("billing.allow_mass_unreconciling")
       raise CanCan::AccessDenied
     end
 

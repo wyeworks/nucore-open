@@ -34,7 +34,7 @@ RSpec.describe PurchaseOrderAccount do
   end
 
   describe "monetary_cap validation" do
-    context "when feature flag is enabled", feature_setting: { purchase_order_monetary_cap: true } do
+    context "when feature flag is enabled", feature_setting: { "accounts.purchase_order_monetary_cap" => true } do
       it "is valid with a positive monetary_cap" do
         account.monetary_cap = 1000.50
         expect(account).to be_valid

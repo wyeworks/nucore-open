@@ -5,7 +5,7 @@ module OrderDetails
   class AssignmentNotifier < SimpleDelegator
 
     def notify
-      if SettingsHelper.feature_on?(:order_assignment_notifications) && assigned_user_changed?
+      if SettingsHelper.feature_on?("notifications.order_assignment_notifications") && assigned_user_changed?
         OrderAssignmentMailer.notify_assigned_user(__getobj__).deliver_later
       end
     end

@@ -54,7 +54,7 @@ class ReservationInstrumentSwitcher
   end
 
   def auto_end_previous_reservations
-    return unless SettingsHelper.feature_on?(:auto_end_reservations_on_next_start)
+    return unless SettingsHelper.feature_on?("reservations.auto_end_reservations_on_next_start")
 
     AutoEndPreviousReservation.new(instrument, reservation.user).end_previous_reservations!
   rescue => e

@@ -30,7 +30,7 @@ module AccountsHelper
   end
 
   def show_account_facilities_tab?(ability, account)
-    SettingsHelper.feature_on?(:multi_facility_accounts) && account.per_facility? && ability.can?(:edit, AccountFacilityJoinsForm.new(account: account))
+    SettingsHelper.feature_on?("accounts.multi_facility_accounts") && account.per_facility? && ability.can?(:edit, AccountFacilityJoinsForm.new(account: account))
   end
 
   def use_custom_reconciliation_features?(account_class = nil)
@@ -64,7 +64,7 @@ module AccountsHelper
   end
 
   def account_expiration(expires_at)
-    hide_future_expiration = SettingsHelper.feature_on?(:hide_account_far_future_expiration)
+    hide_future_expiration = SettingsHelper.feature_on?("accounts.hide_account_far_future_expiration")
 
     if hide_future_expiration && expires_at > 75.years.from_now
       "—"

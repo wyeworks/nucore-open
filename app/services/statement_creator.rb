@@ -30,7 +30,7 @@ class StatementCreator
   end
 
   def send_statement_emails
-    if SettingsHelper.feature_on?(:send_statement_emails)
+    if SettingsHelper.feature_on?("notifications.send_statement_emails")
       account_statements.each do |_account, statement|
         statement.send_emails
       end
@@ -95,7 +95,7 @@ class StatementCreator
   end
 
   def validate_parent_statement
-    if parent_invoice_number.present? && SettingsHelper.feature_on?(:reference_statement_invoice_number)
+    if parent_invoice_number.present? && SettingsHelper.feature_on?("billing.reference_statement_invoice_number")
       parent_statement = Statement.find_by(
         invoice_number: parent_invoice_number,
         parent_statement_id: nil,

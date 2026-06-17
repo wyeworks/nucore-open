@@ -52,7 +52,7 @@ class FacilityStatementsController < ApplicationController
     order_details = OrderDetail.need_statement(@facility)
     @order_detail_action = :create
 
-    defaults = SettingsHelper.feature_on?(:set_statement_search_start_date) ? { date_range_start: format_usa_date(1.month.ago.beginning_of_month) } : {}
+    defaults = SettingsHelper.feature_on?("billing.set_statement_search_start_date") ? { date_range_start: format_usa_date(1.month.ago.beginning_of_month) } : {}
     @search_form = TransactionSearch::SearchForm.new(params[:search], defaults:)
     @search =
       TransactionSearch::Searcher
@@ -97,7 +97,7 @@ class FacilityStatementsController < ApplicationController
 
   # POST /facilities/:facility_id/statements/:id/resend_emails
   def resend_emails
-    if SettingsHelper.feature_on?(:send_statement_emails)
+    if SettingsHelper.feature_on?("notifications.send_statement_emails")
       statement = Statement.find(params[:id])
       statement.send_emails
       flash[:notice] = text("success_with_email_html", accounts: statement.account)
@@ -130,7 +130,7 @@ class FacilityStatementsController < ApplicationController
   private
 
   def success_message
-    SettingsHelper.feature_on?(:send_statement_emails) ? "success_with_email_html" : "success_html"
+    SettingsHelper.feature_on?("notifications.send_statement_emails") ? "success_with_email_html" : "success_html"
   end
 
   def can_set_invoice_date?

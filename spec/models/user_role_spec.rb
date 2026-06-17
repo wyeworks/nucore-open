@@ -11,11 +11,11 @@ RSpec.describe UserRole do
       let(:facility) { nil }
       let(:role) { described_class::GLOBAL_BILLING_ADMINISTRATOR }
 
-      context "and the global_billing_administrator feature is enabled", feature_setting: { global_billing_administrator: true } do
+      context "and the global_billing_administrator feature is enabled", feature_setting: { "roles.global_billing_administrator" => true } do
         it { is_expected.to be_valid }
       end
 
-      context "and the global_billing_administrator feature is disabled", feature_setting: { global_billing_administrator: false } do
+      context "and the global_billing_administrator feature is disabled", feature_setting: { "roles.global_billing_administrator" => false } do
         it "is invalid" do
           is_expected.not_to be_valid
           expect(user_role.errors[:role])

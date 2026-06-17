@@ -38,7 +38,7 @@ class NavTab::LinkCollection
   end
 
   def home_button
-    if SettingsHelper.feature_on?(:use_manage)
+    if SettingsHelper.feature_on?("style_display.use_manage")
       use
     else
       home
@@ -75,7 +75,7 @@ class NavTab::LinkCollection
   end
 
   def files
-    NavTab::Link.new(tab: :my_files, text: I18n.t("views.my_files.index.header"), url: my_files_path) if SettingsHelper.feature_on?(:my_files)
+    NavTab::Link.new(tab: :my_files, text: I18n.t("views.my_files.index.header"), url: my_files_path) if SettingsHelper.feature_on?("orders.my_files")
   end
 
   def admin_billing

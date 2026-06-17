@@ -2,7 +2,7 @@
 
 class Facility < ApplicationRecord
 
-  if SettingsHelper.feature_on?(:facility_tile_list_admin) || SettingsHelper.feature_on?(:facility_tile_list)
+  if SettingsHelper.feature_on?("style_display.facility_tile_list_admin") || SettingsHelper.feature_on?("style_display.facility_tile_list")
     # Migration is required if Paperclip is being used (see CHANGELOG)
     include DownloadableFiles::Image
   end
@@ -47,7 +47,7 @@ class Facility < ApplicationRecord
 
   validates :short_description,
             length: { maximum: 300 },
-            if: -> { SettingsHelper.feature_on?(:limit_short_description) }
+            if: -> { SettingsHelper.feature_on?("style_display.limit_short_description") }
 
   delegate :in_dispute, to: :order_details, prefix: true
 

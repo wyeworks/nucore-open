@@ -82,7 +82,7 @@ RSpec.describe PriceGroup do
     end
   end
 
-  describe "external_subsidy?", feature_setting: { external_price_group_subsidies: true } do
+  describe "external_subsidy?", feature_setting: { "pricing.external_price_group_subsidies" => true } do
     let(:external_base) { create(:price_group, :global_external) }
 
     context "when external with a parent" do
@@ -117,14 +117,14 @@ RSpec.describe PriceGroup do
       it { is_expected.not_to be_subsidy_only }
     end
 
-    context "for external subsidy with feature enabled", feature_setting: { external_price_group_subsidies: true } do
+    context "for external subsidy with feature enabled", feature_setting: { "pricing.external_price_group_subsidies" => true } do
       let(:external_base) { create(:price_group, :global_external) }
       subject { build(:price_group, facility:, is_internal: false, parent_price_group: external_base) }
 
       it { is_expected.to be_subsidy_only }
     end
 
-    context "for external subsidy with feature disabled", feature_setting: { external_price_group_subsidies: false } do
+    context "for external subsidy with feature disabled", feature_setting: { "pricing.external_price_group_subsidies" => false } do
       let(:external_base) { create(:price_group, :global_external) }
       subject { build(:price_group, facility:, is_internal: false, parent_price_group: external_base) }
 
@@ -132,7 +132,7 @@ RSpec.describe PriceGroup do
     end
   end
 
-  describe ".available_parent_groups", feature_setting: { external_price_group_subsidies: true } do
+  describe ".available_parent_groups", feature_setting: { "pricing.external_price_group_subsidies" => true } do
     let!(:external_rate_one) { create(:price_group, :global_external, name: "External Rate 1") }
     let!(:external_rate_two) { create(:price_group, :global_external, name: "External Rate 2") }
     let!(:internal_base) { PriceGroup.base }
@@ -146,7 +146,7 @@ RSpec.describe PriceGroup do
     end
   end
 
-  describe ".ordered_with_subsidies", feature_setting: { external_price_group_subsidies: true } do
+  describe ".ordered_with_subsidies", feature_setting: { "pricing.external_price_group_subsidies" => true } do
     let!(:internal_group) { create(:price_group, facility:, is_internal: true, name: "Internal Group") }
     let!(:external_base) { create(:price_group, :global_external, name: "External Base") }
     let!(:subsidy_one) { create(:price_group, facility:, is_internal: false, parent_price_group: external_base, name: "Subsidy 1") }
@@ -172,7 +172,7 @@ RSpec.describe PriceGroup do
     end
   end
 
-  describe ".ordered_with_subsidies with feature disabled", feature_setting: { external_price_group_subsidies: false } do
+  describe ".ordered_with_subsidies with feature disabled", feature_setting: { "pricing.external_price_group_subsidies" => false } do
     it "returns groups unchanged when feature is disabled" do
       groups = [price_group]
       expect(PriceGroup.ordered_with_subsidies(groups)).to eq(groups)

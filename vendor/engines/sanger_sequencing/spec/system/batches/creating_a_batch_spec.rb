@@ -21,7 +21,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
     end
   end
 
-  describe "plate column order", feature_setting: { sanger_enabled_service: true } do
+  describe "plate column order", feature_setting: { "products.sanger_enabled_service": true } do
     let!(:submission) do
       create(
         :sanger_sequencing_submission,
@@ -64,7 +64,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
     end
   end
 
-  describe "plate reserved cells selection", feature_setting: { sanger_enabled_service: true } do
+  describe "plate reserved cells selection", feature_setting: { "products.sanger_enabled_service": true } do
     let!(:submission) do
       create(
         :sanger_sequencing_submission,
@@ -106,7 +106,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
 
     it(
       "does not show the input when the flag is off",
-      feature_setting: { sanger_enabled_service: false }
+      feature_setting: { "products.sanger_enabled_service": false }
     ) do
       visit new_facility_sanger_sequencing_admin_batch_path(facility)
 

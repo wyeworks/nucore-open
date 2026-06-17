@@ -2,7 +2,7 @@ require "rails_helper"
 
 # This is a higher-level test. See order_import_spec and order_row_importer_spec
 # for more details.
-RSpec.describe OrderImport, feature_setting: { user_based_price_groups: true } do
+RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups" => true } do
   let(:facility) { create(:setup_facility) }
 
   describe "adding to existing orders" do

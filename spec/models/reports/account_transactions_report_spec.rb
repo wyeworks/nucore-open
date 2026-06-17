@@ -85,7 +85,7 @@ RSpec.describe Reports::AccountTransactionsReport do
         end
       end
 
-      describe "excludes the order's dispute details if feature is OFF", feature_setting: { export_order_disputes: false } do
+      describe "excludes the order's dispute details if feature is OFF", feature_setting: { "orders.export_order_disputes": false } do
         it "generates headers without Dispute details" do
           expect(report.to_csv.lines.first).not_to include(
             OrderDetail.human_attribute_name(:dispute_at),
@@ -96,7 +96,7 @@ RSpec.describe Reports::AccountTransactionsReport do
         end
       end
 
-      describe "includes the order's dispute details if feature is ON", feature_setting: { export_order_disputes: true } do
+      describe "includes the order's dispute details if feature is ON", feature_setting: { "orders.export_order_disputes": true } do
         it "generates headers with Dispute details" do
           expect(report.to_csv.lines.first).to include(
             OrderDetail.human_attribute_name(:dispute_at),

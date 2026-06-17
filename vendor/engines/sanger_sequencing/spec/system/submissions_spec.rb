@@ -8,7 +8,7 @@ RSpec.describe "submissions" do
   let(:order_detail) { create(:purchased_order, product: service).order_details.first }
   let(:admin) { create(:user, :administrator) }
 
-  describe "submission show", feature_setting: { sanger_enabled_service: true } do
+  describe "submission show", feature_setting: { "products.sanger_enabled_service": true } do
     let(:submission) { create(:sanger_sequencing_submission, sample_count: 2, order_detail:) }
 
     before do

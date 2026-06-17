@@ -1113,7 +1113,7 @@ class OrderDetail < ApplicationRecord
   end
 
   def pricing_note_required?
-    return false unless @manually_priced && SettingsHelper.feature_on?(:price_change_reason_required)
+    return false unless @manually_priced && SettingsHelper.feature_on?("orders.price_change_reason_required")
     return false if cost_estimated? || canceled_at?
 
     !actual_costs_match_calculated?

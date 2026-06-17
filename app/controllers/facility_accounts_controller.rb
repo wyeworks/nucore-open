@@ -23,7 +23,7 @@ class FacilityAccountsController < ApplicationController
   def index
     accounts = Account.with_orders_for_facility(current_facility)
 
-    if SettingsHelper.feature_on?(:account_tabs)
+    if SettingsHelper.feature_on?("accounts.account_tabs")
       accounts = if params[:suspended] == "true"
                    accounts.suspended
                  else
@@ -91,7 +91,7 @@ class FacilityAccountsController < ApplicationController
       account_status: params[:account_status],
     }
 
-    if SettingsHelper.feature_on?(:account_tabs) && params[:search_term].blank?
+    if SettingsHelper.feature_on?("accounts.account_tabs") && params[:search_term].blank?
       account_scope = AccountSearcher.new("", scope: account_scope, filter_params:).filtered_scope
       respond_to do |format|
         format.html do
@@ -207,13 +207,13 @@ class FacilityAccountsController < ApplicationController
   end
 
   def set_account_types
-    if SettingsHelper.feature_on?(:account_tabs)
+    if SettingsHelper.feature_on?("accounts.account_tabs")
       @account_types = Account.config.account_types
     end
   end
 
   def export_accounts_csv(search_term)
-    filter_params = if SettingsHelper.feature_on?(:account_tabs)
+    filter_params = if SettingsHelper.feature_on?("accounts.account_tabs")
                       {
                         account_type: params[:account_type],
                         suspended: params[:suspended],

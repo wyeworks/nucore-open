@@ -646,7 +646,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
           describe "price change reason" do
             # the expected price (calculated from the price policy) is 1
 
-            context "with reason required off", feature_setting: { price_change_reason_required: false } do
+            context "with reason required off", feature_setting: { "orders.price_change_reason_required": false } do
               it "does not require a reason when the price is changed" do
                 @params[:order_detail] = {
                   actual_cost: "10",
@@ -658,7 +658,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
               end
             end
 
-            context "with reason required on", feature_setting: { price_change_reason_required: true } do
+            context "with reason required on", feature_setting: { "orders.price_change_reason_required": true } do
               it "requires a reason when the price is changed from the expected price" do
                 @params[:order_detail] = {
                   actual_cost: "10",
@@ -929,7 +929,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
               .to(staff_user)
           end
 
-          context "when assignment notifications are on", feature_setting: { order_assignment_notifications: true } do
+          context "when assignment notifications are on", feature_setting: { "notifications.order_assignment_notifications": true } do
             it "sends a notification to the assigned user" do
               expect { do_request }.to(
                 have_enqueued_mail(OrderAssignmentMailer, :notify_assigned_user)
@@ -937,7 +937,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
             end
           end
 
-          context "when assignment notifications are off", feature_setting: { order_assignment_notifications: false } do
+          context "when assignment notifications are off", feature_setting: { "notifications.order_assignment_notifications": false } do
             it "sends no notifications" do
               expect { do_request }.not_to have_enqueued_mail
             end

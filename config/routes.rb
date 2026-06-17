@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   devise_for :users
   mount SangerSequencing::Engine => "/" if defined?(SangerSequencing)
 
-  if SettingsHelper.feature_on?(:password_update)
+  if SettingsHelper.feature_on?("users_authentication.password_update")
     match "/users/password/edit_current", to: "user_password#edit_current", as: "edit_current_password", via: [:get, :post]
     match "/users/password/reset", to: "user_password#reset", as: "reset_password", via: [:get, :post]
   end
@@ -36,7 +36,7 @@ Rails.application.routes.draw do
       get "user_search"
     end
 
-    if SettingsHelper.feature_on? :suspend_accounts
+    if SettingsHelper.feature_on? "accounts.suspend_accounts"
       get "suspend", to: "accounts#suspend", as: "suspend"
       get "unsuspend", to: "accounts#unsuspend", as: "unsuspend"
     end
@@ -181,14 +181,14 @@ Rails.application.routes.draw do
       end
     end
 
-    users_options = if SettingsHelper.feature_on?(:create_users)
+    users_options = if SettingsHelper.feature_on?("users_authentication.create_users")
                       {}
                     else
                       { except: [:edit, :update, :new, :create], constraints: { id: /\d+/ } }
                     end
 
     resources :users, users_options do
-      if SettingsHelper.feature_on?(:create_users)
+      if SettingsHelper.feature_on?("users_authentication.create_users")
         collection do
           get "new_external"
           post "search"
@@ -272,10 +272,10 @@ Rails.application.routes.draw do
       end
     end
 
-    get "public_timeline", to: "reservations#public_timeline", as: "public_timeline" if SettingsHelper.feature_on?(:daily_view)
+    get "public_timeline", to: "reservations#public_timeline", as: "public_timeline" if SettingsHelper.feature_on?("style_display.daily_view")
 
     ### Feature Toggle Editing Accounts ###
-    if SettingsHelper.feature_on?(:edit_accounts)
+    if SettingsHelper.feature_on?("accounts.edit_accounts")
       resources :accounts, controller: "facility_accounts", only: [:new, :create, :edit, :update] do
         collection do
           get "new_account_user_search"
@@ -286,14 +286,14 @@ Rails.application.routes.draw do
           end
         end
 
-        resource :account_facility_joins, only: [:edit, :update], path: "facilities" if SettingsHelper.feature_on?(:multi_facility_accounts)
+        resource :account_facility_joins, only: [:edit, :update], path: "facilities" if SettingsHelper.feature_on?("accounts.multi_facility_accounts")
       end
     end
 
     resources :accounts, controller: "facility_accounts", only: [:index, :show] do
       get "search_results", via: [:post], on: :collection
 
-      if SettingsHelper.feature_on?(:suspend_accounts)
+      if SettingsHelper.feature_on?("accounts.suspend_accounts")
         get "suspend",   to: "facility_accounts#suspend",   as: "suspend"
         get "unsuspend", to: "facility_accounts#unsuspend", as: "unsuspend"
       end
@@ -480,7 +480,7 @@ Rails.application.routes.draw do
   get "reservations", to: "reservations#list", as: "reservations"
   get "reservations(/:status)", to: "reservations#list", as: "reservations_status"
 
-  resources :my_files, only: [:index] if SettingsHelper.feature_on?(:my_files)
+  resources :my_files, only: [:index] if SettingsHelper.feature_on?("orders.my_files")
 
   # file upload routes
   post  "/#{I18n.t('facilities_downcase')}/:facility_id/:product/:product_id/sample_results", to: "file_uploads#upload_sample_results", as: "add_uploader_file"

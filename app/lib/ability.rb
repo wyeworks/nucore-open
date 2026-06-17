@@ -64,7 +64,7 @@ class Ability
         # TODO: Refactor
         # We think this is here to keep the Users tab visible. See LinkCollection#admin_users.
         cannot :manage, User unless resource.is_a?(Facility) || resource.is_a?(Project)
-        if SettingsHelper.feature_off?(:create_users)
+        if SettingsHelper.feature_off?("users_authentication.create_users")
           cannot([:edit, :update], User)
         end
       end
@@ -119,7 +119,7 @@ class Ability
       can :manage, AccountUser
       can [:create, :read, :administer, :accounts, :new_external, :search], User
       can [:create, :read, :update, :suspend, :unsuspend], Account
-      if SettingsHelper.feature_off?(:create_users)
+      if SettingsHelper.feature_off?("users_authentication.create_users")
         cannot([:create, :update], User)
       end
     end
@@ -137,7 +137,7 @@ class Ability
     if resource == Facility.cross_facility
       can [:accounts, :index, :orders, :show, :administer], User
     end
-    can :manage_users, Facility.cross_facility if SettingsHelper.feature_on?(:global_billing_administrator_users_tab)
+    can :manage_users, Facility.cross_facility if SettingsHelper.feature_on?("roles.global_billing_administrator_users_tab")
     can :manage_billing, Facility.cross_facility
     can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :confirm_transactions, :move_transactions], Facility, &:cross_facility?
 
@@ -170,7 +170,7 @@ class Ability
     if resource.is_a?(Facility) && user.facility_director_of?(resource)
       manager_abilities_for_facility(user, resource, controller)
 
-      if SettingsHelper.feature_on?(:facility_directors_can_manage_price_groups)
+      if SettingsHelper.feature_on?("pricing.facility_directors_can_manage_price_groups")
         can :manage, PriceGroup
         can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
       else
@@ -315,7 +315,7 @@ class Ability
       can [:show, :suspend, :unsuspend, :user_search, :user_accounts, :statements, :show_statement, :index], Statement
     end
 
-    if SettingsHelper.feature_on?(:move_transactions_account_roles) && Account.administered_by(user).any?
+    if SettingsHelper.feature_on?("roles.move_transactions_account_roles") && Account.administered_by(user).any?
       can :reassign_transactions, TransactionsController
     end
   end

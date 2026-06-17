@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Visiting my files", feature_setting: { my_files: true, reload_routes: true } do
+RSpec.describe "Visiting my files", feature_setting: { "orders.my_files": true, reload_routes: true } do
   let(:facility) { FactoryBot.create(:setup_facility) }
   let!(:service) { FactoryBot.create(:setup_service, facility: facility) }
   let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user) }

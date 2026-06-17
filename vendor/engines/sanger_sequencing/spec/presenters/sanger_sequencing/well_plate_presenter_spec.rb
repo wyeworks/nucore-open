@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe SangerSequencing::WellPlatePresenter, feature_setting: { well_plate_alternative_csv_format: false } do
+RSpec.describe SangerSequencing::WellPlatePresenter, feature_setting: { "products.well_plate_alternative_csv_format" => false } do
   let(:submission) { create(:sanger_sequencing_submission, order_detail:) }
   let(:samples) { FactoryBot.build_stubbed_list(:sanger_sequencing_sample, 10, submission:) }
   let(:order_detail) { create(:order_detail, order:, product:) }
@@ -64,7 +64,7 @@ RSpec.describe SangerSequencing::WellPlatePresenter, feature_setting: { well_pla
       end
     end
 
-    context "when well_plate_alternative_csv_format is enabled", feature_setting: { well_plate_alternative_csv_format: true } do
+    context "when well_plate_alternative_csv_format is enabled", feature_setting: { "products.well_plate_alternative_csv_format" => true } do
       let(:presenter) { described_class.new(well_plate, "") }
       let(:expected_results_group) { a_kind_of(String) }
       let(:expected_instrument_protocol) { a_kind_of(String) }

@@ -149,7 +149,7 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
 
   describe(
     "as global billing administrator",
-    feature_setting: { global_billing_administrator: true },
+    feature_setting: { "roles.global_billing_administrator" => true },
   ) do
     let(:user) { create(:user, :global_billing_administrator) }
     let(:order_detail) { order_details.first }

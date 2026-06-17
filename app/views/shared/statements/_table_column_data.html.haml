@@ -1,7 +1,7 @@
 - statement = local_assigns[:statement]
 %td.currency= statement.order_details.count
 %td.currency= number_to_currency(statement.total_cost)
-- if SettingsHelper.feature_on?(:merged_statement_history_columns)
+- if SettingsHelper.feature_on?("billing.merged_statement_history_columns")
   %td
     - if statement.closed_by_times.any?
       %div

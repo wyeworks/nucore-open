@@ -5,13 +5,13 @@
 
 = f.input :description, required: true
 
-- if SettingsHelper.feature_on?(:purchase_order_monetary_cap)
+- if SettingsHelper.feature_on?("accounts.purchase_order_monetary_cap")
   = f.input :monetary_cap,
     input_html: { step: 0.01 }, 
     hint: "Optional monetary cap for this purchase order account",
     hint_html: { class: "help-inline" }
 
-- if SettingsHelper.feature_on?(:account_reference_field)
+- if SettingsHelper.feature_on?("accounts.account_reference_field")
   = f.input :reference
 
 = render partial: 'facility_accounts/account_fields/affiliate', locals: { f: f }
@@ -26,7 +26,7 @@
 = f.input :ar_number,
   hint: text("ar_number_hint"),
   hint_html: { class: "help-inline" }
-- if SettingsHelper.feature_on?(:show_account_opencontract_field)
+- if SettingsHelper.feature_on?("accounts.show_account_opencontract_field")
   = f.input :open_contract, as: :text, input_html: { rows: 4 }
 
 = render_view_hook "additional_fields", f: f

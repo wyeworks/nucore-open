@@ -3,7 +3,7 @@
 require "rails_helper"
 require "controller_spec_helper"
 
-RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_on_next_start: false } do
+RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end_reservations_on_next_start": false } do
   let(:facility) { @authable }
   let(:instrument) { @instrument }
   let(:order) { @order }
@@ -621,7 +621,7 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
       end
     end
 
-    context "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
+    context "with accessories feature enabled", feature_setting: { "reservations.add_accessories_before_reservation_starts": true } do
       let!(:accessory) { create(:accessory, parent: @instrument) }
       let(:params) { default_params.merge(accessories: { accessory.id.to_s => { enabled: "true", quantity: "2" } }) }
 
@@ -634,7 +634,7 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
       end
     end
 
-    context "with accessories feature disabled", feature_setting: { add_accessories_before_reservation_starts: false } do
+    context "with accessories feature disabled", feature_setting: { "reservations.add_accessories_before_reservation_starts": false } do
       let!(:accessory) { create(:accessory, parent: @instrument) }
       let(:params) { default_params.merge(accessories: { accessory.id.to_s => { enabled: "true", quantity: "2" } }) }
 
@@ -809,11 +809,11 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
         end
       end
 
-      describe "without user based price groups", feature_setting: { user_based_price_groups: false } do
+      describe "without user based price groups", feature_setting: { "pricing.user_based_price_groups" => false } do
         include_examples "sets the reservation window correctly"
       end
 
-      describe "with user based price groups", feature_setting: { user_based_price_groups: true } do
+      describe "with user based price groups", feature_setting: { "pricing.user_based_price_groups" => true } do
         include_examples "sets the reservation window correctly"
       end
     end
@@ -1510,7 +1510,7 @@ RSpec.describe ReservationsController, feature_setting: { auto_end_reservations_
     end
   end
 
-  describe "timeline as guest", feature_setting: { daily_view: true, reload_routes: true } do
+  describe "timeline as guest", feature_setting: { "style_display.daily_view" => true, reload_routes: true } do
     let!(:hidden_instrument) do
       create(
         :instrument,

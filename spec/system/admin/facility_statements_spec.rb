@@ -44,7 +44,7 @@ RSpec.describe "Facility Statement Admin" do
       login_as director
     end
 
-    context "when reference_statement_invoice_number feature is on", feature_setting: { reference_statement_invoice_number: true } do
+    context "when reference_statement_invoice_number feature is on", feature_setting: { "billing.reference_statement_invoice_number" => true } do
       it "creates child statement with parent reference" do
         visit new_facility_statement_path(facility)
 
@@ -84,7 +84,7 @@ RSpec.describe "Facility Statement Admin" do
       end
     end
 
-    context "when reference_statement_invoice_number feature is off", feature_setting: { reference_statement_invoice_number: false } do
+    context "when reference_statement_invoice_number feature is off", feature_setting: { "billing.reference_statement_invoice_number" => false } do
       it "does not show parent statement modal" do
         visit new_facility_statement_path(facility)
 
@@ -245,7 +245,7 @@ RSpec.describe "Facility Statement Admin" do
     end
   end
 
-  describe "resending statement emails", :js, feature_setting: { send_statement_emails: true } do
+  describe "resending statement emails", :js, feature_setting: { "notifications.send_statement_emails": true } do
     let!(:statement) { create(:statement, created_at: 3.days.ago, order_details: [order_details.first], account: order_details.first.account, facility:) }
 
     before do

@@ -19,7 +19,7 @@ RSpec.describe Item do
     let(:item) { build(:item, facility:, facility_account:) }
     let(:complete_status) { OrderStatus.complete }
 
-    context "when item_initial_order_status_complete feature is on", feature_setting: { item_initial_order_status_complete: true } do
+    context "when item_initial_order_status_complete feature is on", feature_setting: { "products.item_initial_order_status_complete": true } do
       it "can be created with Complete as initial order status" do
         item = build(:item,
                      facility:,
@@ -42,7 +42,7 @@ RSpec.describe Item do
       end
     end
 
-    context "when item_initial_order_status_complete feature is off", feature_setting: { item_initial_order_status_complete: false } do
+    context "when item_initial_order_status_complete feature is off", feature_setting: { "products.item_initial_order_status_complete": false } do
       it "uses default (New) status when not specified" do
         item = build(:item,
                      facility:,

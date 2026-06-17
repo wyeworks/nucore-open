@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe(
   ProductNotifications::SlotAvailableService,
-  feature_setting: { facility_product_notifications: true },
+  feature_setting: { "notifications.facility_product_notifications" => true },
 ) do
   let(:product) { create(:setup_instrument) }
   let(:facility) { product.facility }

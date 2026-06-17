@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { sanger_enabled_service: true } do
+RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { "products.sanger_enabled_service": true } do
   let(:facility) { create(:setup_facility, sanger_sequencing_enabled: true) }
   let(:admin) { create(:user, :administrator) }
 
@@ -49,7 +49,7 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { sanger_enab
 
       it(
         "does not render mange primers link if ff is disabeld",
-        feature_setting: { sanger_enabled_service: false }
+        feature_setting: { "products.sanger_enabled_service": false }
       ) do
         action.call
 

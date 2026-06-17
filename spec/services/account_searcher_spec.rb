@@ -115,7 +115,7 @@ RSpec.describe AccountSearcher do
     end
   end
 
-  describe "filter_params", :use_test_account, feature_setting: { account_tabs: true } do
+  describe "filter_params", :use_test_account, feature_setting: { "accounts.account_tabs" => true } do
     let(:user) { create(:user) }
     let(:facility) { Facility.cross_facility }
     let!(:suspended_account) do

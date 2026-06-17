@@ -154,7 +154,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
   def edit_disabled?
     in_open_journal_or_reconciled = @order_detail.in_open_journal? || @order_detail.reconciled?
 
-    if SettingsHelper.feature_on?(:allow_global_billing_admin_update_actual_prices)
+    if SettingsHelper.feature_on?("roles.allow_global_billing_admin_update_actual_prices")
       in_open_journal_or_reconciled || (@order_detail.awaiting_payment? && !current_user.global_billing_administrator?)
     else
       in_open_journal_or_reconciled
@@ -162,7 +162,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
   end
 
   def actual_cost_edit_disabled?
-    return false unless SettingsHelper.feature_on?(:allow_global_billing_admin_update_actual_prices)
+    return false unless SettingsHelper.feature_on?("roles.allow_global_billing_admin_update_actual_prices")
 
     @order_detail.awaiting_payment? && !current_user.global_billing_administrator?
   end

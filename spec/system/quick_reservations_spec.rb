@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Reserving an instrument using quick reservations", feature_setting: { walkup_reservations: true, reload_routes: true, user_based_price_groups: true } do
+RSpec.describe "Reserving an instrument using quick reservations", feature_setting: { "reservations.walkup_reservations": true, reload_routes: true, "pricing.user_based_price_groups" => true } do
   include ResearchSafetyTestHelpers
 
   let(:user) { create(:user) }
@@ -40,7 +40,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
       expect(page).to have_content("Report an Issue")
     end
 
-    context "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
+    context "with accessories feature enabled", feature_setting: { "reservations.add_accessories_before_reservation_starts": true } do
       let!(:accessory) { create(:accessory, parent: instrument) }
 
       before do
@@ -70,7 +70,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
       end
     end
 
-    context "with accessories feature disabled", feature_setting: { add_accessories_before_reservation_starts: false } do
+    context "with accessories feature disabled", feature_setting: { "reservations.add_accessories_before_reservation_starts": false } do
       let!(:accessory) { create(:accessory, parent: instrument) }
 
       it "does not show accessories section" do
@@ -313,7 +313,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
     it "cannot create a reservation" do
       expect(page).not_to have_content("Create Reservation")
 
-      if SettingsHelper.feature_on?(:user_based_price_groups_exclude_purchaser)
+      if SettingsHelper.feature_on?("pricing.user_based_price_groups_exclude_purchaser")
         expect(page).to have_content("No price groups found for this reservation")
       else
         expect(page).to have_content("Sorry, but we could not find a valid payment source that you can use to reserve this instrument")

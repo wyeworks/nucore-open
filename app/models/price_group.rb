@@ -56,7 +56,7 @@ class PriceGroup < ApplicationRecord
   end
 
   def can_manage_price_group_members?
-    is_not_global? || SettingsHelper.feature_on?(:can_manage_global_price_groups)
+    is_not_global? || SettingsHelper.feature_on?("pricing.can_manage_global_price_groups")
   end
 
   def can_purchase?(product)
@@ -98,7 +98,7 @@ class PriceGroup < ApplicationRecord
 
   def subsidy_only?
     return true if is_internal? && !master_internal?
-    return true if external_subsidy? && SettingsHelper.feature_on?(:external_price_group_subsidies)
+    return true if external_subsidy? && SettingsHelper.feature_on?("pricing.external_price_group_subsidies")
 
     false
   end
@@ -113,7 +113,7 @@ class PriceGroup < ApplicationRecord
   # Returns price groups ordered: Internal groups first, then external base groups with their subsidies below
   # Respects display_order for internal and external base groups
   def self.ordered_with_subsidies(price_groups)
-    return price_groups unless SettingsHelper.feature_on?(:external_price_group_subsidies)
+    return price_groups unless SettingsHelper.feature_on?("pricing.external_price_group_subsidies")
 
     price_groups = price_groups.try(:includes, :parent_price_group) || price_groups
 

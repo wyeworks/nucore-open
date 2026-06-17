@@ -2,6 +2,8 @@
 
 ## Style/Display
 
+Grouped under `feature.style_display`.
+
 * `azlist` Display one long list of facilities, or an alphabetized collection (only facilities that start with A, and ...a top nav to access facilities that start with other letters)
 * `daily_view` Display a public daily view for facility's reservation schedule
 * `equipment_list` Display a list of instruments on facility home page
@@ -14,8 +16,10 @@
 
 ## Users and Authentication
 
+Grouped under `feature.users_authentication`.
+
 * `create_users` Should admins be able to manually add users
-* `devise/lock_strategy`Lock account after 5 failed attempts 
+* `devise/lock_strategy`Lock account after 5 failed attempts
 * `lookup_netids`: If enabled, allow internal and external users to be created and add additional step to ensure the NetId or email is not already present. Else, navigate to create external user (no internal user creation allowed).
 * `password_update` Allow users to update or reset password (forgot password button)
 * `saml: create_user` create/update saml users on login
@@ -24,11 +28,15 @@
 
 ## Roles
 
+Grouped under `feature.roles`.
+
 * `allow_global_billing_admin_update_actual_prices`: Allow global billing administrators to update order details actual costs.
 * `global_billing_administrator` and `global_billing_administrator_users_tab` Do you want to use global billing admins? Should they be able to manage users?
 * `move_transactions_account_roles`: Allow account administrator to reassign account on order details.
 
 ## Accounts and Account Types
+
+Grouped under `feature.accounts`.
 
 * `Account.config.facility_account_types` Which account types (CC, PO) can be used at multiple facilities or just one (CC + PO should be available cross-facility)
 * `account_reference_field`: Enable account `reference` field.
@@ -49,6 +57,8 @@
 
 ## Price Groups and Pricing
 
+Grouped under `feature.pricing`.
+
 * `can_manage_global_price_groups`: Enable global price groups management.
 * `external_price_group_subsidies`: Allow facility admins to mark external price groups as subsidies of global external groups. When enabled, external price groups can have a parent group, and they will show an "Adjustment" field instead of "Rate" in price policies (similar to internal price groups).
 * `facility_directors_can_manage_price_groups` Can facility directors manage price groups
@@ -57,6 +67,8 @@
 * `user_based_price_groups` Allow assigning users to specific price groups (Internal Base Rate, External, etc).  This would allow some users to potentially get cheaper (internal) rates even if they don't have access to internal accounts.
 
 ## Billing
+
+Grouped under `feature.billing`.
 
 * `account_reference_field` Store a reference field on accounts. Dartmouth uses this if there is something special about the account. Like is the account shared with an outside source or they only want the account used for particular reasons. It’s mainly for the odd exception that an account maybe flagged for.
 * `allow_mass_unreconciling`: Allow to unreconcile transactions in bulk.
@@ -76,11 +88,15 @@
 
 ## Notifications
 
+Grouped under `feature.notifications`.
+
 * `order_assignment_notifications` Send a notification email when an order is assigned to staff for review
 * `product_specific_contacts` Allow a different contact email for each product
 * `send_statement_emails` Send email notification when statements are created
 
 ## Orders
+
+Grouped under `feature.orders`.
 
 * `export_order_disputes`: Include dispute information on order details report.
 * `my_files`: Enable My Files section for users which shows files attached to orders.
@@ -90,12 +106,16 @@
 
 ## Reservations
 
+Grouped under `feature.reservations`.
+
 * `reservations: grace_period`, `reservations: timeout_period`, `occupancies: timeout_period`, `billing: review_period` various grace periods, time periods, and review periods
 * `add_accessories_before_reservation_starts`: Allow to add accessories before a reservation starts.
 * `auto_end_reservations_on_next_start` Automatically end previous reservations for timer/relay controlled instruments, when another user starts a new reservation.
 * `walkup_reservations`: Show quick reservation link on product detail. Quick reservation page is always enabled.
 
 ## Products
+
+Grouped under `feature.products`.
 
 * `item_initial_order_status_complete`: Allow Items to have the initial order status set to "Complete".
 - `disable_relay_synaccess_rev_a`: Disable creation of relays of type Synaccess Rev A.
@@ -104,6 +124,8 @@
 - `well_plate_alternative_csv_format`: Enable alternative format on exported plate data in sanger sequencing engine.
 
 ## Other
+
+Not grouped, these flags live directly under `feature`.
 
 * `training_requests` Allow users to request training
 * `accounts: product_default` `accounts: revenue_account_default` Specify a default Expense account from which fees will be withdrawn; must be open on purchaser's Chart String - one default for products and one for facilities.  Optionally, these can be edited per product.

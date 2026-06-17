@@ -23,7 +23,7 @@
       multiple: true, input_html: { class: "js--chosen" },
       hint: t(".facilities_hint")
 
-  - if SettingsHelper.feature_on?(:show_account_price_groups_tab)
+  - if SettingsHelper.feature_on?("accounts.show_account_price_groups_tab")
     = f.association :price_groups_relation,
       multiple: true, input_html: { class: "js--chosen" },
       collection: account_price_groups_select_options

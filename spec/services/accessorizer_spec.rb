@@ -190,7 +190,7 @@ RSpec.describe Accessories::Accessorizer do
         ActionController::Parameters.new(quantity_accessory.id.to_s => { enabled: "true", quantity: "3" })
       end
 
-      context "when accessory_independent_order_status feature is enabled", feature_setting: { accessory_independent_order_status: true } do
+      context "when accessory_independent_order_status feature is enabled", feature_setting: { "reservations.accessory_independent_order_status": true } do
         before do
           quantity_accessory.update!(initial_order_status: custom_order_status)
         end
@@ -215,7 +215,7 @@ RSpec.describe Accessories::Accessorizer do
         end
       end
 
-      context "when accessory_independent_order_status feature is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+      context "when accessory_independent_order_status feature is disabled (legacy behavior)", feature_setting: { "reservations.accessory_independent_order_status": false } do
         it "inherits the parent's order status when parent is not complete" do
           results = accessorizer.update_accessorizer_attributes(params).order_details
           expect(results.first.order_status).to eq(order_detail.order_status)

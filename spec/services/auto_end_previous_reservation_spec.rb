@@ -11,7 +11,7 @@ RSpec.describe AutoEndPreviousReservation do
   describe "#end_previous_reservations!" do
     subject { described_class.new(instrument, current_user).end_previous_reservations! }
 
-    context "when feature flag is enabled", feature_setting: { auto_end_reservations_on_next_start: true } do
+    context "when feature flag is enabled", feature_setting: { "reservations.auto_end_reservations_on_next_start": true } do
       context "with a timer-based instrument" do
         let!(:previous_reservation) do
           reservation = build(:purchased_reservation,
@@ -93,7 +93,7 @@ RSpec.describe AutoEndPreviousReservation do
         end
       end
 
-      context "when feature flag is disabled", feature_setting: { auto_end_reservations_on_next_start: false } do
+      context "when feature flag is disabled", feature_setting: { "reservations.auto_end_reservations_on_next_start": false } do
         it "does not end previous reservations" do
           expect do
             subject
