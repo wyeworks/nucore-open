@@ -7,7 +7,8 @@ class FacilityProductNotificationsController < ApplicationController
   layout "two_column"
   load_and_authorize_resource(
     instance_name: :product_notification,
-    throught: :current_facility,
+    through: :current_facility,
+    through_association: :product_notifications,
     class: ProductNotification,
   )
 
@@ -23,7 +24,7 @@ class FacilityProductNotificationsController < ApplicationController
       flash[:notice] = t(".success")
       redirect_to :show
     else
-      flash[:notice] = t(".error")
+      flash[:error] = t(".error")
       render :new
     end
   end

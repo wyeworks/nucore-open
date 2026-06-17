@@ -94,10 +94,10 @@ en:
     facility_product_notifications:
       create:
         success: Product Notification created successfully
-        error: An error was encounterd
+        error: An error was encountered
       update:
         success: Product Notification updated successfully
-        error: An error was encounterd
+        error: An error was encountered
       destroy:
         success: Notification destroyed successfully
 
