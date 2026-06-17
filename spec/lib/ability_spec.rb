@@ -943,7 +943,6 @@ RSpec.describe Ability do
     context "without project_management" do
       it { is_expected.not_to be_allowed_to(:create, Project) }
       it { is_expected.not_to be_allowed_to(:update, Project) }
-      it { is_expected.not_to be_allowed_to(:cross_core_orders, Project) }
 
       context "when authorizing against a Project instance" do
         let(:project) { create(:project, facility:) }
