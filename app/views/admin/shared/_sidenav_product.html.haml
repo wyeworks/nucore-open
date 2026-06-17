@@ -8,7 +8,10 @@
   = tab ProductDisplayGroup.model_name.human(count: :many), facility_product_display_groups_path, sidenav_tab == "product_display_groups"
   = tab text("views.instrument_schedule_positions.show.title"), facility_instrument_schedule_position_path, sidenav_tab == "instrument_display_order"
 
-  - if SettingsHelper.feature_on?(:training_requests) && current_ability.can?(:index, TrainingRequest)
+  - if SettingsHelper.feature_on?(:training_requests) && can?(:index, TrainingRequest)
     %li.divider
     = tab "#{TrainingRequest.model_name.human.pluralize} (#{current_facility.training_requests.count})", facility_training_requests_path(current_facility), sidenav_tab == TrainingRequest.model_name.plural
-
+  - if SettingsHelper.feature_on?("notifications.facility_product_notifications") && can?(:read, ProductNotification)
+    = tab ProductNotification.model_name.human.pluralize,
+      list_facility_product_notifications_path(current_facility),
+      sidenav_tab == ProductNotification.model_name.plural

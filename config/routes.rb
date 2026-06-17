@@ -89,6 +89,13 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :product_notifications, controller: "facility_product_notifications", except: :index do
+      collection do
+        get :list, action: :index
+      end
+
+    end
+
     resource "instrument_schedule_position", only: [:edit, :update, :show]
 
     get "instrument_statuses", to: "instruments#instrument_statuses", as: "instrument_statuses"

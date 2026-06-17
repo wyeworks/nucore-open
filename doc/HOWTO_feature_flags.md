@@ -93,6 +93,7 @@ Grouped under `feature.notifications`.
 * `order_assignment_notifications` Send a notification email when an order is assigned to staff for review
 * `product_specific_contacts` Allow a different contact email for each product
 * `send_statement_emails` Send email notification when statements are created
+* `facility_product_notifications` Enable Product Notification menu
 
 ## Orders
 

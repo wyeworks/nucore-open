@@ -176,6 +176,7 @@ feature:
     order_assignment_notifications: true
     product_specific_contacts: true
     send_statement_emails: true
+    facility_product_notifications: false
 
   orders:
     export_order_disputes: false

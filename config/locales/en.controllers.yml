@@ -91,6 +91,16 @@ en:
         success: The reservation has been canceled successfully.
         error: An error was encountered while canceling the order.
 
+    facility_product_notifications:
+      create:
+        success: Product Notification created successfully
+        error: An error was encountered
+      update:
+        success: Product Notification updated successfully
+        error: An error was encountered
+      destroy:
+        success: Notification destroyed successfully
+
     instruments:
       create:
         daily_booking_not_authorized: "Not allowed to create daily booking instruments"
