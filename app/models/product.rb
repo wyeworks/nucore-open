@@ -20,6 +20,7 @@ class Product < ApplicationRecord
   has_many :training_requests, dependent: :destroy
   has_many :product_research_safety_certification_requirements
   has_many :research_safety_certificates, through: :product_research_safety_certification_requirements
+  has_and_belongs_to_many :product_notifications
   has_one :product_display_group_product
   has_one :product_display_group, through: :product_display_group_product
 

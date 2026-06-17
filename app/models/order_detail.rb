@@ -81,6 +81,9 @@ class OrderDetail < ApplicationRecord
 
   alias_attribute :problem_description_keys, :problem_keys
 
+  # Used to track status changes side efects
+  attribute :status_recently_changed, :boolean, default: false
+
   def estimated_price_group
     estimated_price_policy.try(:price_group)
   end
@@ -424,6 +427,7 @@ class OrderDetail < ApplicationRecord
     # don't try to change status if it's the same as before
     unless new_status == order_status
       self.order_status = new_status
+      self.status_recently_changed = true
       yield(self) if block
       save!
     end

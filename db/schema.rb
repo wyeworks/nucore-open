@@ -671,6 +671,32 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_125147) do
     t.index ["facility_id"], name: "index_product_display_groups_on_facility_id"
   end
 
+  create_table "product_notifications", charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "facility_id", null: false
+    t.string "name"
+    t.string "email_subject"
+    t.string "notification_type", null: false
+    t.integer "users_count", default: 0, null: false
+    t.integer "reservation_days"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["facility_id"], name: "index_product_notifications_on_facility_id"
+  end
+
+  create_table "product_notifications_products", id: false, charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "product_notification_id", null: false
+    t.bigint "product_id", null: false
+    t.index ["product_id"], name: "index_product_notifications_products_on_product_id"
+    t.index ["product_notification_id"], name: "idx_on_product_notification_id_e060f366ad"
+  end
+
+  create_table "product_notifications_users", id: false, charset: "utf8mb3", force: :cascade do |t|
+    t.bigint "product_notification_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["product_notification_id"], name: "index_product_notifications_users_on_product_notification_id"
+    t.index ["user_id"], name: "index_product_notifications_users_on_user_id"
+  end
+
   create_table "product_user_imports", charset: "utf8mb3", force: :cascade do |t|
     t.string "file_file_name"
     t.string "file_content_type"

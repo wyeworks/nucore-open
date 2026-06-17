@@ -1,0 +1,50 @@
+# frozen_string_literal: true
+
+module ProductNotifications
+  ##
+  # Notify users that a time slot is available for an instrument.
+  class SlotAvailableService
+    attr_reader :product, :start_time, :end_time, :exclude_user
+
+    def self.from_reservation(reservation)
+      new(
+        reservation.order_detail.product,
+        reservation.reserve_start_at,
+        reservation.reserve_end_at,
+        exclude_user: reservation.order_detail.user,
+      )
+    end
+
+    def initialize(product, start_time, end_time, exclude_user: nil)
+      @product = product
+      @start_time = start_time
+      @end_time = end_time
+      @exclude_user = exclude_user
+    end
+
+    def notify!
+      product_notifications.find_each do |product_notification|
+        product_notification.users.where.not(id: exclude_user&.id).find_each do |user|
+          ProductNotificationMailer.slot_available(
+            product, user,
+            start_time, end_time,
+            subject: product_notification.email_subject,
+          ).deliver_later
+        end
+      end
+    end
+
+    private
+
+    def product_notifications
+      product
+        .product_notifications
+        .slot_available
+        .where(reservation_days: slot_start_in_days..)
+    end
+
+    def slot_start_in_days
+      ((start_time - Time.current) / 1.day).floor
+    end
+  end
+end

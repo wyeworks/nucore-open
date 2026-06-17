@@ -37,12 +37,16 @@ class OrderDetailsController < ApplicationController
     if @order_detail.reservation && @order_detail.reservation.can_cancel?
       @order_detail.transaction do
         if @order_detail.cancel_reservation(session_user)
-          CancellationMailer.notify_facility(@order_detail).deliver_later
           flash[:notice] = text("cancel.success")
         else
           flash[:error] = text("cancel.error")
           raise ActiveRecord::Rollback
         end
+      end
+
+      if @order_detail.canceled? && @order_detail.status_recently_changed
+        CancellationMailer.notify_facility(@order_detail).deliver_later
+        ProductNotifications::SlotAvailableService.from_reservation(@order_detail.reservation).notify!
       end
 
       redirect_to redirect_to_path
