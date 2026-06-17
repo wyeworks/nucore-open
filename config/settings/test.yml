@@ -1,6 +1,9 @@
 devise:
   secret_key: override-me-in-settings.local.yml
 
+rack_attack:
+  enabled: false
+
 # These credentials are set randomly in the standard settings, but need to be
 # more stable in a testing environment
 secure_rooms_api:
