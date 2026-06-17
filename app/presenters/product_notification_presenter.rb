@@ -14,6 +14,6 @@ class ProductNotificationPresenter < SimpleDelegator
   end
 
   def product_names
-    products.pluck(:name).join(", ").presence || t("facility_product_notifications.show.empty_products")
+    products.pluck(:name).join(", ").presence || I18n.t("facility_product_notifications.show.empty_products")
   end
 end
