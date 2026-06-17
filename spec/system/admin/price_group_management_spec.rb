@@ -139,6 +139,10 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
       expect(page).not_to have_link("Remove")
     end
 
+    it "does not show the Facility Staff sidenav link" do
+      expect(page).not_to have_link("Facility Staff")
+    end
+
     it "is not authorized to view a price group's accounts" do
       visit accounts_facility_price_group_path(facility, price_group)
       expect(page).to have_content("not authorized")
