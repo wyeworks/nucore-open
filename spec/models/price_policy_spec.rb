@@ -348,7 +348,7 @@ RSpec.describe PricePolicy do
   end
 
   describe "note" do
-    context "when the required note feature is enabled", feature_setting: { price_policy_requires_note: true } do
+    context "when the required note feature is enabled", feature_setting: { "pricing.price_policy_requires_note" => true } do
       it "requires the note" do
         note = described_class.new(note: "")
         expect(note).to be_invalid
@@ -382,7 +382,7 @@ RSpec.describe PricePolicy do
       end
     end
 
-    context "when the required note feature is disabled", feature_setting: { price_policy_requires_note: false } do
+    context "when the required note feature is disabled", feature_setting: { "pricing.price_policy_requires_note" => false } do
       it "is fine with a blank value" do
         note = described_class.new(note: "")
         note.valid?

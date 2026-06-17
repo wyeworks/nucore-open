@@ -50,7 +50,7 @@ RSpec.describe "Purchasing a reservation" do
   end
 
   describe "reservation window with user_based_price_groups_exclude_purchaser feature flag" do
-    context "when feature flag is disabled", feature_setting: { user_based_price_groups_exclude_purchaser: false } do
+    context "when feature flag is disabled", feature_setting: { "pricing.user_based_price_groups_exclude_purchaser" => false } do
       it "allows making a reservation with user price groups" do
         click_link instrument.name
         select account.to_s, from: Order.human_attribute_name(:account)
@@ -63,8 +63,8 @@ RSpec.describe "Purchasing a reservation" do
     context(
       "when feature flag is enabled",
       feature_setting: {
-        user_based_price_groups: true,
-        user_based_price_groups_exclude_purchaser: true,
+        "pricing.user_based_price_groups" => true,
+        "pricing.user_based_price_groups_exclude_purchaser" => true,
       }
     ) do
       context "when account HAS price groups configured" do
@@ -429,7 +429,7 @@ RSpec.describe "Purchasing a reservation" do
     end
   end
 
-  describe "with accessories feature enabled", feature_setting: { add_accessories_before_reservation_starts: true } do
+  describe "with accessories feature enabled", feature_setting: { "reservations.add_accessories_before_reservation_starts": true } do
     let!(:accessory) { create(:accessory, parent: instrument) }
 
     it "shows accessories section and allows selection" do

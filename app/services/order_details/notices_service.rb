@@ -37,7 +37,7 @@ module OrderDetails
       {
         in_review: in_review?,
         ready_for_statement: ready_for_statement?,
-        ready_for_journal: ready_for_journal? && SettingsHelper.feature_on?(:ready_for_journal_notice),
+        ready_for_journal: ready_for_journal? && SettingsHelper.feature_on?("billing.ready_for_journal_notice"),
         awaiting_payment: awaiting_payment?,
       }.compact_blank.keys
     end

@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Passwords", :aggregate_failures, feature_setting: { password_update: true, reload_routes: true } do
+RSpec.describe "Passwords", :aggregate_failures, feature_setting: { "users_authentication.password_update" => true, reload_routes: true } do
   let(:external_user) { FactoryBot.create(:user, :external, password: "CurrentP@5sw0rd!!", password_confirmation: "CurrentP@5sw0rd!!") }
   let(:internal_user) { FactoryBot.create(:user) }
 

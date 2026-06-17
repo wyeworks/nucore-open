@@ -103,7 +103,9 @@ RSpec.configure do |config|
 
   config.around(:each, :feature_setting) do |example|
     example.metadata[:feature_setting].except(:reload_routes).each do |feature, value|
-      Settings.feature[feature] = value
+      keys = feature.to_s.split(".")
+      target = keys[0..-2].reduce(Settings.feature) { |node, key| node[key] }
+      target[keys.last] = value
     end
 
     Nucore::Application.reload_routes! if example.metadata[:feature_setting][:reload_routes]

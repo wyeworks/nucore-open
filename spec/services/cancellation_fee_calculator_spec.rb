@@ -52,14 +52,14 @@ RSpec.describe CancellationFeeCalculator do
       context "when the price policy is set to charge for full reservation" do
         before { instrument.price_policies.update_all(usage_rate: 1, full_price_cancellation: true) }
 
-        describe "with the feature on", feature_setting: { charge_full_price_on_cancellation: true } do
+        describe "with the feature on", feature_setting: { "billing.charge_full_price_on_cancellation" => true } do
           it { is_expected.to eq(60) } # usage_rate is per minute
           it "is the full price charge"  do
             expect(calculator).to be_charge_full_price
           end
         end
 
-        describe "with the feature off", feature_setting: { charge_full_price_on_cancellation: false } do
+        describe "with the feature off", feature_setting: { "billing.charge_full_price_on_cancellation" => false } do
           it { is_expected.to eq(0) }
           it "is the full price charge" do
             expect(calculator).not_to be_charge_full_price

@@ -6,11 +6,11 @@ RSpec.describe JournalRow do
     it { is_expected.to validate_presence_of(:journal_id) }
     it { is_expected.to validate_presence_of(:amount) }
 
-    describe "with expense_accounts on", feature_setting: { expense_accounts: true } do
+    describe "with expense_accounts on", feature_setting: { "accounts.expense_accounts" => true } do
       it { is_expected.to validate_presence_of(:account) }
     end
 
-    describe "with expense_accounts on", feature_setting: { expense_accounts: false } do
+    describe "with expense_accounts on", feature_setting: { "accounts.expense_accounts" => false } do
       it { is_expected.not_to validate_presence_of(:account) }
     end
   end

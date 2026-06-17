@@ -1,7 +1,7 @@
 %ul.nav.navbar-nav
   %li{class: [home_button.tab_class(controller), "useButton"], id: home_button.tab_id }
     = home_button.to_html
-  - if SettingsHelper.feature_on?(:use_manage)
+  - if SettingsHelper.feature_on?("style_display.use_manage")
     = render "shared/nav/manage_facilities"
   - if responsive?
     -# .hidden-with-nav is hidden > 979px
@@ -28,7 +28,7 @@
 
 -# trailing "<" enables use of .navbar-collapse .nav:empty in bootstrap responsive styles
 %ul.nav.navbar-nav.navbar-right<
-  - if !SettingsHelper.feature_on?(:use_manage)
+  - if !SettingsHelper.feature_on?("style_display.use_manage")
     = render "shared/nav/manage_facilities"
   - global_navigation_links.each do |link|
     %li{class: link.tab_class(controller)}= link.to_html

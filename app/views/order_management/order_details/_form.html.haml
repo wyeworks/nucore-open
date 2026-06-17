@@ -108,7 +108,7 @@
         .row= render "dispute", f: f
 
   .modal-footer
-    - if modal? && SettingsHelper.feature_on?(:print_order_detail)
+    - if modal? && SettingsHelper.feature_on?("orders.print_order_detail")
       = link_to manage_facility_order_order_detail_path(current_facility, @order, @order_detail, anchor: "print"), target: "_blank" do
         %i.fa.fa-print.pull-left
     - unless read_only?

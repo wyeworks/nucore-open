@@ -84,7 +84,7 @@ RSpec.describe AccountsController do
 
   end
 
-  context "suspension", if: SettingsHelper.feature_on?(:suspend_accounts) do
+  context "suspension", if: SettingsHelper.feature_on?("accounts.suspend_accounts") do
     before :each do
       @account = @authable
     end

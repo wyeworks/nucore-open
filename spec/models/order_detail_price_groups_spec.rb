@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe OrderDetail do
-  describe "#price_groups with user_based_price_groups_exclude_purchaser feature", if: SettingsHelper.feature_on?(:user_based_price_groups) do
+  describe "#price_groups with user_based_price_groups_exclude_purchaser feature", if: SettingsHelper.feature_on?("pricing.user_based_price_groups") do
     let(:product) { create(:setup_item) }
     let(:facility) { product.facility }
     let(:purchaser) { create(:user) }
@@ -23,14 +23,14 @@ RSpec.describe OrderDetail do
       create(:account_user, :purchaser, account: account, user: purchaser)
     end
 
-    context "when feature is disabled", feature_setting: { user_based_price_groups_exclude_purchaser: false } do
+    context "when feature is disabled", feature_setting: { "pricing.user_based_price_groups_exclude_purchaser" => false } do
       it "uses purchaser's price groups plus account's price groups" do
         expect(order_detail.price_groups).to include(purchaser_price_group)
         expect(order_detail.price_groups).to include(owner_price_group)
       end
     end
 
-    context "when feature is enabled", feature_setting: { user_based_price_groups_exclude_purchaser: true } do
+    context "when feature is enabled", feature_setting: { "pricing.user_based_price_groups_exclude_purchaser" => true } do
       it "excludes purchaser's price groups, uses only account's price groups" do
         expect(order_detail.price_groups).to include(owner_price_group)
         expect(order_detail.price_groups).not_to include(purchaser_price_group)

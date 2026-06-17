@@ -171,7 +171,7 @@ RSpec.describe "Launching Kiosk View", :js, :disable_requests_local, feature_set
     end
   end
 
-  context "with an LDAP authenticated user", :ldap, ignore_js_errors: true, feature_setting: { kiosk_view: true, bypass_kiosk_auth: false, uses_ldap_authentication: true } do
+  context "with an LDAP authenticated user", :ldap, ignore_js_errors: true, feature_setting: { kiosk_view: true, bypass_kiosk_auth: false, "users_authentication.uses_ldap_authentication" => true } do
     let(:user) { create(:user, :netid, :purchaser, account: account, email: "internal@example.org", username: "netid") }
 
     before(:each) do

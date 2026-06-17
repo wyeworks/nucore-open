@@ -3,7 +3,7 @@
 require "rails_helper"
 require "controller_spec_helper"
 
-RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: true, suspend_accounts: true, reload_routes: true } do
+RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_accounts" => true, "accounts.suspend_accounts" => true, reload_routes: true } do
   let(:facility) { FactoryBot.create(:facility) }
   let(:account) { create_nufs_account_with_owner }
   let(:admin) { @admin }
@@ -255,7 +255,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { edit_accounts: tru
       end
     end
 
-    context "with account_tabs feature flag", feature_setting: { account_tabs: true } do
+    context "with account_tabs feature flag", feature_setting: { "accounts.account_tabs" => true } do
       let(:director) { create(:user, :facility_director, facility:) }
       let(:owner1) { create(:user, first_name: "Owner", last_name: "One") }
       let(:owner2) { create(:user, first_name: "Owner", last_name: "Two") }

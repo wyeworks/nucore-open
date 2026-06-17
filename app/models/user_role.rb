@@ -60,7 +60,7 @@ class UserRole < ApplicationRecord
   end
 
   def self.global_roles
-    if SettingsHelper.feature_on?(:global_billing_administrator)
+    if SettingsHelper.feature_on?("roles.global_billing_administrator")
       account_manager + administrator + global_billing_administrator
     else
       account_manager + administrator

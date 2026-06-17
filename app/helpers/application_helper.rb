@@ -12,7 +12,7 @@ module ApplicationHelper
   end
 
   def can_create_users?
-    SettingsHelper.feature_on?(:create_users) && current_ability.can?(:create, User)
+    SettingsHelper.feature_on?("users_authentication.create_users") && current_ability.can?(:create, User)
   end
 
   def html_title(title = nil)

@@ -8,7 +8,7 @@ class AutoEndPreviousReservation
   end
 
   def end_previous_reservations!
-    return unless SettingsHelper.feature_on?(:auto_end_reservations_on_next_start)
+    return unless SettingsHelper.feature_on?("reservations.auto_end_reservations_on_next_start")
 
     reservations_to_end = previous_reservations
 

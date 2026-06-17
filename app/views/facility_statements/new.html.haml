@@ -19,7 +19,7 @@
 
 - if @order_details.any?
   = content_for :action_instructions do
-    - if SettingsHelper.feature_on?(:send_statement_emails)
+    - if SettingsHelper.feature_on?("notifications.send_statement_emails")
       %p.notice.notice-info= text(".instructions")
     - else
       %p.notice.notice-info= text(".instructions_without_email")
@@ -27,7 +27,7 @@
   = render "shared/transactions/table", order_details: @order_details
   = render "shared/reconcile_footnote"
 
-  - if SettingsHelper.feature_on?(:reference_statement_invoice_number)
+  - if SettingsHelper.feature_on?("billing.reference_statement_invoice_number")
     = render "statement_modal"
 - else
   %p.alert.alert-info= text(".no_transactions")

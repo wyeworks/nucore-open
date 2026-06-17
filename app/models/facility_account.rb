@@ -28,11 +28,11 @@ class FacilityAccount < ApplicationRecord
   end
 
   def self.revenue_account_editable_by_user?(user)
-    SettingsHelper.feature_on?(:revenue_account_editable) && user.administrator?
+    SettingsHelper.feature_on?("accounts.revenue_account_editable") && user.administrator?
   end
 
   def to_s
-    if SettingsHelper.feature_on?(:expense_accounts)
+    if SettingsHelper.feature_on?("accounts.expense_accounts")
       "#{account_number} (#{revenue_account})"
     else
       account_number

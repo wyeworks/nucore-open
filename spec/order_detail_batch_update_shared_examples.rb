@@ -28,7 +28,7 @@ RSpec.shared_examples_for "it supports order_detail POST #batch_update" do
           .to(Array.new(3) { assignee.id })
       end
 
-      context "when assignment notifications are on", feature_setting: { order_assignment_notifications: true } do
+      context "when assignment notifications are on", feature_setting: { "notifications.order_assignment_notifications": true } do
         it "sends the assignee one notification" do
           expect { do_request }.to(
             have_enqueued_mail(OrderAssignmentMailer, :notify_assigned_user)
@@ -36,7 +36,7 @@ RSpec.shared_examples_for "it supports order_detail POST #batch_update" do
         end
       end
 
-      context "when assignment notifications are off", feature_setting: { order_assignment_notifications: false } do
+      context "when assignment notifications are off", feature_setting: { "notifications.order_assignment_notifications": false } do
         it "sends no notifications" do
           expect { do_request }.not_to have_enqueued_mail
         end

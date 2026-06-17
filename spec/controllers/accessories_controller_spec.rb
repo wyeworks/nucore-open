@@ -179,7 +179,7 @@ RSpec.describe AccessoriesController do
 
         it(
           "uses a custom initial order status when configured on the accessory",
-          feature_setting: { accessory_independent_order_status: true },
+          feature_setting: { "reservations.accessory_independent_order_status": true },
         ) do
           custom_status = create(:order_status, name: "Pending Review")
           quantity_accessory.update!(initial_order_status: custom_status)
@@ -187,7 +187,7 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.order_status).to eq(custom_status)
         end
 
-        context "when accessory_independent_order_status is enabled", feature_setting: { accessory_independent_order_status: true } do
+        context "when accessory_independent_order_status is enabled", feature_setting: { "reservations.accessory_independent_order_status": true } do
           it "uses the accessory's initial order status even if the original is completed" do
             order_detail.backdate_to_complete!
             do_request
@@ -195,7 +195,7 @@ RSpec.describe AccessoriesController do
           end
         end
 
-        context "when accessory_independent_order_status is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+        context "when accessory_independent_order_status is disabled (legacy behavior)", feature_setting: { "reservations.accessory_independent_order_status": false } do
           it "inherits the parent's completed status" do
             order_detail.backdate_to_complete!
             do_request
@@ -255,7 +255,7 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.order_status).to eq(manual_accessory.initial_order_status)
         end
 
-        context "when accessory_independent_order_status is enabled", feature_setting: { accessory_independent_order_status: true } do
+        context "when accessory_independent_order_status is enabled", feature_setting: { "reservations.accessory_independent_order_status": true } do
           it "uses the accessory's initial order status even if the original is completed" do
             order_detail.backdate_to_complete!
             do_request
@@ -263,7 +263,7 @@ RSpec.describe AccessoriesController do
           end
         end
 
-        context "when accessory_independent_order_status is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+        context "when accessory_independent_order_status is disabled (legacy behavior)", feature_setting: { "reservations.accessory_independent_order_status": false } do
           it "inherits the parent's completed status" do
             order_detail.backdate_to_complete!
             do_request
@@ -308,7 +308,7 @@ RSpec.describe AccessoriesController do
           expect(assigns(:order_details).first.order_status).to eq(auto_accessory.initial_order_status)
         end
 
-        context "when accessory_independent_order_status is enabled", feature_setting: { accessory_independent_order_status: true } do
+        context "when accessory_independent_order_status is enabled", feature_setting: { "reservations.accessory_independent_order_status": true } do
           it "uses the accessory's initial order status even if the original is completed" do
             order_detail.backdate_to_complete!
             do_request
@@ -316,7 +316,7 @@ RSpec.describe AccessoriesController do
           end
         end
 
-        context "when accessory_independent_order_status is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+        context "when accessory_independent_order_status is disabled (legacy behavior)", feature_setting: { "reservations.accessory_independent_order_status": false } do
           it "inherits the parent's completed status" do
             order_detail.backdate_to_complete!
             do_request

@@ -33,7 +33,7 @@ module SplitAccounts
       # Include modules in main rails app
       Account.send :include, SplitAccounts::AccountExtension
 
-      if SettingsHelper.feature_on?(:split_accounts)
+      if SettingsHelper.feature_on?("accounts.split_accounts")
         SplitAccounts::Engine.enable!
       end
     end

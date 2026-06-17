@@ -1,4 +1,4 @@
-- if SettingsHelper.feature_on? :suspend_accounts
+- if SettingsHelper.feature_on? "accounts.suspend_accounts"
   - if @account.suspended?
     - if current_ability.can?(:unsuspend, @account)
       = link_to t("shared.activate"), open_or_facility_path("account_unsuspend", @account), class: "btn btn-default"

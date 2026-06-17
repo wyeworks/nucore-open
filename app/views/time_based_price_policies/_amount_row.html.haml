@@ -12,7 +12,7 @@
       size: 8,
       class: "js--cancellationCost",
       data: { target: ".js--cancellationCost" }
-    - if SettingsHelper.feature_on?(:charge_full_price_on_cancellation)
+    - if SettingsHelper.feature_on?("billing.charge_full_price_on_cancellation")
       = label_tag(nil, class: "checkbox normal-weight") do
         = pp.check_box :full_price_cancellation,
           class: "js--fullCancellationCost",

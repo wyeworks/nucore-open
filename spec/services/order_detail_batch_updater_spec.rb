@@ -118,7 +118,7 @@ RSpec.describe OrderDetailBatchUpdater do
               .to(user.id)
           end
 
-          context "when the assignment notifications are on", feature_setting: { order_assignment_notifications: true } do
+          context "when the assignment notifications are on", feature_setting: { "notifications.order_assignment_notifications": true } do
             it "sends the assignee one notification" do
               expect { updater.update! }.to(
                 enqueue_mail(OrderAssignmentMailer, :notify_assigned_user)
@@ -126,7 +126,7 @@ RSpec.describe OrderDetailBatchUpdater do
             end
           end
 
-          context "when the assignment notifications are off", feature_setting: { order_assignment_notifications: false } do
+          context "when the assignment notifications are off", feature_setting: { "notifications.order_assignment_notifications": false } do
             it "sends no notifications" do
               expect { updater.update! }.not_to enqueue_mail
             end

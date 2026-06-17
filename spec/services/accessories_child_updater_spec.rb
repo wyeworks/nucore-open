@@ -36,7 +36,7 @@ RSpec.describe Accessories::ChildUpdater do
         .create(attributes_for(:order_detail, order_status: OrderStatus.new_status, product: product, order: order))
     end
 
-    context "when accessory_independent_order_status feature is enabled", feature_setting: { accessory_independent_order_status: true } do
+    context "when accessory_independent_order_status feature is enabled", feature_setting: { "reservations.accessory_independent_order_status": true } do
       context "when the parent moves from new to in process" do
         before do
           order_detail.update_order_status! user, OrderStatus.in_process
@@ -100,7 +100,7 @@ RSpec.describe Accessories::ChildUpdater do
       end
     end
 
-    context "when accessory_independent_order_status feature is disabled (legacy behavior)", feature_setting: { accessory_independent_order_status: false } do
+    context "when accessory_independent_order_status feature is disabled (legacy behavior)", feature_setting: { "reservations.accessory_independent_order_status": false } do
       context "when the parent moves from new to in process" do
         before do
           order_detail.update_order_status! user, OrderStatus.in_process

@@ -75,7 +75,7 @@ RSpec.describe Project, type: :model do
         it_behaves_like "it has full access for facility level actions"
       end
 
-      describe "global billing administrator", feature_setting: { global_billing_administrator: true } do
+      describe "global billing administrator", feature_setting: { "roles.global_billing_administrator" => true } do
         let(:user) { FactoryBot.create(:user, :global_billing_administrator) }
         it_behaves_like "it has no access for facility level actions"
       end
@@ -142,7 +142,7 @@ RSpec.describe Project, type: :model do
         it_behaves_like "it has full access for project level actions"
       end
 
-      describe "global billing administrator", feature_setting: { global_billing_administrator: true } do
+      describe "global billing administrator", feature_setting: { "roles.global_billing_administrator" => true } do
         let(:user) { FactoryBot.create(:user, :global_billing_administrator) }
         it_behaves_like "it has no access for project level actions"
       end

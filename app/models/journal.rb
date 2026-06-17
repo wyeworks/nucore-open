@@ -177,7 +177,7 @@ class Journal < ApplicationRecord
   private
 
   def should_check_fiscal_years?
-    !SettingsHelper.feature_on?(:journals_may_span_fiscal_years) && has_order_details_for_creation?
+    !SettingsHelper.feature_on?("billing.journals_may_span_fiscal_years") && has_order_details_for_creation?
   end
 
   def has_order_details_for_creation?

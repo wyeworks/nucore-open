@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Move Transactions", :js, feature_setting: { move_transactions_account_roles: true } do
+RSpec.describe "Move Transactions", :js, feature_setting: { "roles.move_transactions_account_roles" => true } do
   let(:facility) { create(:setup_facility) }
   let(:item) { create(:setup_item, facility:) }
   let(:account_owner) { create(:user) }
@@ -37,7 +37,7 @@ RSpec.describe "Move Transactions", :js, feature_setting: { move_transactions_ac
     end
   end
 
-  context "with feature flag ON", feature_setting: { move_transactions_account_roles: true } do
+  context "with feature flag ON", feature_setting: { "roles.move_transactions_account_roles" => true } do
     RSpec.shared_examples "can reassign chart strings" do
       it "can reassign chart strings" do
         visit movable_transactions_transactions_path

@@ -28,7 +28,7 @@ class AccountSearcher
   end
 
   def apply_account_filters(scope, filter_params)
-    return scope if SettingsHelper.feature_off?(:account_tabs)
+    return scope if SettingsHelper.feature_off?("accounts.account_tabs")
 
     if filter_params[:account_type].present?
       scope = scope.where(type: filter_params[:account_type])

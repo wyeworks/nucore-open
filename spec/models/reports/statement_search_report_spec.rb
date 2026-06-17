@@ -23,7 +23,7 @@ RSpec.describe Reports::StatementSearchReport do
   end
 
   describe "#to_csv" do
-    context "when merged_statement_history_columns feature is OFF", feature_setting: { merged_statement_history_columns: false } do
+    context "when merged_statement_history_columns feature is OFF", feature_setting: { "billing.merged_statement_history_columns" => false } do
       it "generates CSV with base headers only" do
         csv_lines = report.to_csv.lines
         header = csv_lines.first
@@ -48,7 +48,7 @@ RSpec.describe Reports::StatementSearchReport do
       end
     end
 
-    context "when merged_statement_history_columns feature is ON", feature_setting: { merged_statement_history_columns: true } do
+    context "when merged_statement_history_columns feature is ON", feature_setting: { "billing.merged_statement_history_columns" => true } do
       let(:closer_user) { create(:user) }
       let(:reconciled_at) { Time.zone.local(2024, 1, 15, 10, 30) }
 

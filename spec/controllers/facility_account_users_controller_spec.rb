@@ -3,7 +3,7 @@
 require "rails_helper"
 require "controller_spec_helper"
 
-RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?(:edit_accounts) do
+RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?("accounts.edit_accounts") do
   render_views
 
   before(:all) { create_users }

@@ -3,7 +3,7 @@
 - elsif account.is_a?(PurchaseOrderAccount)
   = f.input :outside_contact_info
   = f.input :ar_number
-  - if SettingsHelper.feature_on?(:purchase_order_monetary_cap)
+  - if SettingsHelper.feature_on?("accounts.purchase_order_monetary_cap")
     = f.input :monetary_cap, input_html: { value: number_to_currency(@account.monetary_cap) }
-  - if SettingsHelper.feature_on?(:show_account_opencontract_field)
+  - if SettingsHelper.feature_on?("accounts.show_account_opencontract_field")
     = f.input :open_contract
