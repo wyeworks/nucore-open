@@ -26,7 +26,13 @@ module ProductNotifications
       return unless should_notfy?
 
       product_notifications.find_each do |product_notification|
-        product_notification.users.where.not(id: exclude_user&.id).find_each do |user|
+        users =
+          product_notification
+          .users
+          .active
+          .where.not(id: exclude_user&.id)
+
+        users.find_each do |user|
           ProductNotificationMailer.slot_available(
             product, user,
             start_time, end_time,
