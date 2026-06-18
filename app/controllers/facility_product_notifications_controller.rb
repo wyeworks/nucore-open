@@ -27,6 +27,7 @@ class FacilityProductNotificationsController < ApplicationController
       redirect_to action: :show, id: @product_notification
     else
       flash.now[:error] = t(".error")
+      load_instruments
       render :new
     end
   end
@@ -40,6 +41,7 @@ class FacilityProductNotificationsController < ApplicationController
       redirect_to action: :show
     else
       flash.now[:error] = t(".error")
+      load_instruments
       render :edit
     end
   end
