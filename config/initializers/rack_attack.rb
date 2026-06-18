@@ -24,5 +24,3 @@ class Rack::Attack
 end
 
 Rack::Attack.enabled = Settings.rack_attack&.enabled || false
-
-Rails.application.config.middleware.use Rack::Attack
