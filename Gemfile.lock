@@ -515,6 +515,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.2.6)
+    rack-attack (6.8.0)
+      rack (>= 1.0, < 4)
     rack-mini-profiler (4.0.1)
       rack (>= 1.2.0)
     rack-session (2.1.2)
@@ -823,6 +825,7 @@ DEPENDENCIES
   pry-byebug
   pry-rails
   puma
+  rack-attack
   rack-mini-profiler (~> 4.0)
   rack-utf8_sanitizer
   rails (~> 8.0.4)

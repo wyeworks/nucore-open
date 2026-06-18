@@ -70,6 +70,13 @@ email:
     sender: 'noreply@example.com'
     recipients: [ 'warn@example.com', 'error@example.com' ]
 
+rack_attack:
+  enabled: true
+  req_limit: 300
+  req_period: 60
+  login_limit: 10
+  login_period: 60
+
 # support_email_subject is only applied on the Support header link
 # this will be encoded by the mail_to helper, so use standard spaces (not %20)
 support_email: ~

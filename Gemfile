@@ -13,6 +13,7 @@ gem "bootsnap", require: false
 gem "puma"
 gem "jsbundling-rails", "~> 1.3"
 gem "rack-utf8_sanitizer"
+gem "rack-attack"
 gem "net-smtp"
 gem "net-imap"
 gem "net-pop"
