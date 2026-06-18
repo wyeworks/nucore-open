@@ -60,9 +60,12 @@ class FacilityProductNotificationsController < ApplicationController
     redirect_to action: :index
   end
 
-  # TODO: Check permissions and Users that can be searched
   def user_search
-    @users = UserFinder.search(params[:search_term], limit: 25)
+    @users = UserFinder.search(
+      params[:search_term],
+      limit: 10,
+      actives_only: true,
+    )
     render partial: "user_search_results", layout: false
   end
 
