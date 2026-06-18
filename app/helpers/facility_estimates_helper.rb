@@ -28,4 +28,15 @@ module FacilityEstimatesHelper
                     .uniq
     [[t(".all_users"), ""]] + users
   end
+
+  def facility_options
+    facilities =
+      if can?(:update, Order)
+        Facility.active
+      else
+        operable_facilities
+      end
+
+    facilities.alphabetized
+  end
 end
