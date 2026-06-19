@@ -600,7 +600,7 @@ RSpec.describe Ability do
       it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
       it_is_allowed_to([:show, :index], PriceGroup)
       it_is_allowed_to([:index], StoredFile)
-      it { is_expected.to be_allowed_to(:index, Project) }
+      it_is_allowed_to([:index, :cross_core_orders], Project)
       it { is_expected.to be_allowed_to(:administer, User) }
       it { is_expected.to be_allowed_to(:read, Schedule) }
       it { is_expected.to be_allowed_to(:read, ProductDisplayGroup) }
@@ -944,7 +944,6 @@ RSpec.describe Ability do
     context "without project_management" do
       it { is_expected.not_to be_allowed_to(:create, Project) }
       it { is_expected.not_to be_allowed_to(:update, Project) }
-      it { is_expected.not_to be_allowed_to(:cross_core_orders, Project) }
 
       context "when authorizing against a Project instance" do
         let(:project) { create(:project, facility:) }

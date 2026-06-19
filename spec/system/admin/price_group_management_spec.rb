@@ -122,6 +122,33 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
     end
   end
 
+  describe "read-only access", feature_setting: { granular_permissions: true } do
+    let(:user) { create(:user) }
+    let!(:price_group) { create(:price_group, facility:) }
+
+    before do
+      create(:facility_user_permission, user:, facility:, read_access: true)
+      login_as user
+      visit facility_price_groups_path(facility)
+    end
+
+    it "lists the price group but does not link into it" do
+      expect(page).to have_content(price_group.name)
+      expect(page).not_to have_link(price_group.name)
+      expect(page).not_to have_link("Add Price Group")
+      expect(page).not_to have_link("Remove")
+    end
+
+    it "does not show the Facility Staff sidenav link" do
+      expect(page).not_to have_link("Facility Staff")
+    end
+
+    it "is not authorized to view a price group's accounts" do
+      visit accounts_facility_price_group_path(facility, price_group)
+      expect(page).to have_content("not authorized")
+    end
+  end
+
   describe "destroy" do
     describe "as a facility admin", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
       let(:user) { create(:user, :facility_director, facility:) }
