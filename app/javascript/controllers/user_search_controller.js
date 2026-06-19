@@ -19,12 +19,12 @@ export default class extends Controller {
     this.searchResultsTarget.src = resultsUrl
   }
 
-  addUser({ target } = event) {
+  addUser({ target } = _event) {
     if (this.selectedIds.includes(target.dataset.userId)) { return }
 
-    const li = event.currentTarget.closest("li")
+    const li = target.closest("li")
     const input = li.querySelector("input")
-    const addBtn = li.querySelector("button")
+    const addBtn = target
 
     input.disabled = false
     addBtn.classList.remove("btn-primary")
@@ -35,8 +35,8 @@ export default class extends Controller {
     this.selectedUsersTarget.appendChild(li)
   }
 
-  removeUser(event) {
-    event.currentTarget.closest("li").remove()
+  removeUser({ target } = _event) {
+    target.closest("li").remove()
   }
 
   get selectedIds() {

@@ -14,7 +14,6 @@ en:
       error: An error occurred updating the record
     form:
       search_users_placeholder: Type name or username
-      add_user: Add
       remove: Remove
       no_results: No users found
       selected_users: Selected Users
