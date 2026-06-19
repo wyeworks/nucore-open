@@ -117,6 +117,30 @@ RSpec.describe UsersController do
     end
   end
 
+  context "with price_adjustment permission", feature_setting: { granular_permissions: true } do
+    let(:target_user) { create(:user) }
+    let(:price_adjustment_user) { create(:user) }
+
+    before do
+      create(:facility_user_permission, user: price_adjustment_user, facility:, price_adjustment: true)
+      sign_in price_adjustment_user
+    end
+
+    describe "GET #show" do
+      it "renders the user details page" do
+        get :show, params: { facility_id: facility.url_name, id: target_user.id }
+        expect(response).to be_successful
+      end
+    end
+
+    describe "GET #orders" do
+      it "renders the user orders page" do
+        get :orders, params: { facility_id: facility.url_name, user_id: target_user.id }
+        expect(response).to be_successful
+      end
+    end
+  end
+
   context "creating users" do
     context "enabled", feature_setting: { "users_authentication.create_users" => true, reload_routes: true } do
       it "routes", :aggregate_failures do
