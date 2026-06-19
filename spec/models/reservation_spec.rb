@@ -924,6 +924,18 @@ RSpec.describe Reservation do
         expect(new_user_reservation.save_as_user(user)).to be_falsy
         expect(new_user_reservation.errors[:base]).to include("The reservation conflicts with another reservation.")
       end
+
+      context "with granular permissions", feature_setting: { granular_permissions: true } do
+        let(:order_management_user) { create(:user) }
+
+        before do
+          create(:facility_user_permission, user: order_management_user, facility:, order_management: true)
+        end
+
+        it "can schedule over an admin reservation if order is placed by a user with order management" do
+          expect(new_user_reservation.save_as_user(order_management_user)).to be_truthy
+        end
+      end
     end
 
     it "should be invalid" do

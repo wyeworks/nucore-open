@@ -270,4 +270,71 @@ RSpec.describe User do
       end
     end
   end
+
+  describe "#can_act_as?" do
+    let(:user) { create(:user) }
+    let(:facility) { create(:facility) }
+
+    it "returns false without roles or permissions" do
+      expect(user.can_act_as?(facility)).to be(false)
+    end
+
+    it "returns false for a blank facility" do
+      expect(user.can_act_as?(nil)).to be(false)
+    end
+
+    context "when user is facility staff" do
+      before do
+        UserRole.grant(user, UserRole::FACILITY_STAFF, facility)
+      end
+
+      it "returns true" do
+        expect(user.can_act_as?(facility)).to be(true)
+      end
+    end
+
+    context "when user is an administrator" do
+      let(:user) { create(:user, :administrator) }
+
+      it "returns true" do
+        expect(user.can_act_as?(facility)).to be(true)
+      end
+    end
+
+    context "with granular permissions on", feature_setting: { granular_permissions: true } do
+      context "when user has order_management" do
+        before do
+          create(:facility_user_permission, user:, facility:, order_management: true)
+        end
+
+        it "returns true" do
+          expect(user.can_act_as?(facility)).to be(true)
+        end
+
+        it "returns false for another facility" do
+          expect(user.can_act_as?(create(:facility))).to be(false)
+        end
+      end
+
+      context "when user has other permissions but not order_management" do
+        before do
+          create(:facility_user_permission, user:, facility:, billing_send: true)
+        end
+
+        it "returns false" do
+          expect(user.can_act_as?(facility)).to be(false)
+        end
+      end
+    end
+
+    context "with granular permissions off", feature_setting: { granular_permissions: false } do
+      before do
+        create(:facility_user_permission, user:, facility:, order_management: true)
+      end
+
+      it "returns false" do
+        expect(user.can_act_as?(facility)).to be(false)
+      end
+    end
+  end
 end

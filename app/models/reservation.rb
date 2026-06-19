@@ -206,7 +206,7 @@ class Reservation < ApplicationRecord
   end
 
   def valid_as_user?(user)
-    if user.operator_of?(product.facility)
+    if user.can_act_as?(product.facility)
       self.reserved_by_admin = true
       valid?
     else
@@ -216,7 +216,7 @@ class Reservation < ApplicationRecord
   end
 
   def save_as_user(user)
-    if user.operator_of?(product.facility)
+    if user.can_act_as?(product.facility)
       self.reserved_by_admin = true
       save
     else
