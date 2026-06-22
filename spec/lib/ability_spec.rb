@@ -799,14 +799,17 @@ RSpec.describe Ability do
 
     context "with price_adjustment" do
       before do
-        FacilityUserPermission.find_by(user:, facility:).update!(price_adjustment: true)
+        FacilityUserPermission.find_by(user:, facility:).update!(price_adjustment: true, billing_send: false)
       end
 
       it { is_expected.to be_allowed_to(:adjust_price, OrderDetail) }
+      it { is_expected.to be_allowed_to(:transactions, facility) }
+      it_is_allowed_to([:show, :orders], User)
       it { is_expected.not_to be_allowed_to(:update, OrderDetail) }
       it { is_expected.not_to be_allowed_to(:edit, OrderDetail) }
       it { is_expected.not_to be_allowed_to(:mark_unrecoverable, OrderDetail) }
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
+      it { is_expected.not_to be_allowed_to(:manage_billing, facility) }
       it_is_not_allowed_to([:create, :update, :batch_update], Order)
     end
 

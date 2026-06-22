@@ -150,6 +150,8 @@ class FacilityUserPermissionAbility
 
   def grant_price_adjustment
     can :adjust_price, OrderDetail, { order: { facility_id: facility.id } }
+    can :transactions, Facility
+    can [:show, :orders], User
   end
 
   def grant_instrument_management

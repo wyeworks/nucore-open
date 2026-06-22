@@ -365,6 +365,16 @@ RSpec.describe FacilitiesController do
         sign_in unpermitted_user
         expect { get :transactions, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
       end
+
+      it "allows a user with price_adjustment permission and renders the page" do
+        price_adjustment_user = create(:user)
+        create(:facility_user_permission, user: price_adjustment_user, facility:, price_adjustment: true)
+
+        sign_in price_adjustment_user
+        get :transactions, params: { facility_id: facility.url_name }
+        expect(response).to be_successful
+        expect(response.body).to include("menu_billing")
+      end
     end
 
     describe "GET #disputed_orders" do
