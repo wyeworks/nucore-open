@@ -2,7 +2,7 @@
   .row
     .col-md-3
       = f.input :description
-    
+
     .col-md-3
       = f.label :price_group_id, EstimateDetail.human_attribute_name(:price_group_id)
       = f.input_field :price_group_id,
@@ -47,7 +47,7 @@
       %div
         = label_tag :facility_id, Facility.model_name.human
         = select_tag :facility_id,
-          options_for_select(Facility.alphabetized.map { |f| [f.name, f.id, {"data-products-path": available_for_cross_core_ordering_facility_products_path(f, format: :json)}] }, current_facility.id),
+          options_for_select(facility_options.map { |f| [f.name, f.id, {"data-products-path": available_for_cross_core_ordering_facility_products_path(f, format: :json)}] }, current_facility.id),
           class: "js--estimate-facility js--chosen",
           data: { original_facility: current_facility.id },
           include_blank: false
