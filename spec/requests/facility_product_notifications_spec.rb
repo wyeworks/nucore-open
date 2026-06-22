@@ -421,7 +421,7 @@ RSpec.describe "FacilityProductNotifications" do
 
         get response.location
 
-        expect(page).to have_content("deleted successfully")
+        expect(flash[:notice]).to include("deleted successfully")
       end
     end
   end
