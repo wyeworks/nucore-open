@@ -1,0 +1,10 @@
+= content_for :h1 do
+  = current_facility
+= content_for :sidebar do
+  = render "admin/shared/sidenav_product", sidenav_tab: ProductNotification.model_name.plural
+
+%h2= t(".title")
+
+= simple_form_for @product_notification,
+  url: [:create, current_facility, @product_notification] do |f|
+  = render "form", form: f

@@ -1,0 +1,14 @@
+= turbo_frame_tag("user-search-result", data: { user_search_target: "searchResults" }) do
+  - if @users.blank?
+    %p.text-muted= t(".no_results")
+  - else
+    %ul.list-unstyled
+      - @users.each do |user|
+        %li.list-group-item{ data: { user_id: user.id } }
+          %span= "#{user.name} (#{user.username})"
+          = hidden_field_tag "product_notification[user_ids][]", user.id, disabled: true
+          %button.btn.btn-xs.btn-primary.pull-right{ type: "button",
+            data: { user_id: user.id,
+                    action: "click->user-search#addUser",
+                    remove_label: t("facility_product_notifications.form.remove") } }
+            = t(".add_user")

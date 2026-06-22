@@ -1,0 +1,54 @@
+import { Controller } from "@hotwired/stimulus"
+
+export default class extends Controller {
+  static targets = ["searchInput", "searchResults", "selectedUsers"]
+  static values = { searchUrl: String }
+
+  connect() {
+    this.searchInputTarget.addEventListener(
+      "keydown",
+      this.maybeSubmitSearch.bind(this),
+    )
+  }
+
+  search() {
+    const term = this.searchInputTarget.value.trim()
+    if (term.length === 0) return
+
+    const resultsUrl = `${this.searchUrlValue}?search_term=${encodeURIComponent(term)}`
+    this.searchResultsTarget.src = resultsUrl
+  }
+
+  addUser({ target } = _event) {
+    if (this.selectedIds.includes(target.dataset.userId)) { return }
+
+    const li = target.closest("li")
+    const input = li.querySelector("input")
+    const addBtn = target
+
+    input.disabled = false
+    addBtn.classList.remove("btn-primary")
+    addBtn.classList.add("btn-danger")
+    addBtn.textContent = addBtn.dataset.removeLabel || "Remove"
+    addBtn.dataset.action = "click->user-search#removeUser"
+
+    this.selectedUsersTarget.appendChild(li)
+  }
+
+  removeUser({ target } = _event) {
+    target.closest("li").remove()
+  }
+
+  get selectedIds() {
+    return [...this.selectedUsersTarget.querySelectorAll("li")].map(
+      li => li.dataset.userId
+    )
+  }
+
+  maybeSubmitSearch(event) {
+    if (event.key === "Enter") {
+      event.preventDefault()
+      this.search()
+    }
+  }
+}
