@@ -24,7 +24,7 @@
     %fieldset.js--permissionsFieldset
       %legend= text(".permissions")
       - FacilityUserPermission.all_permissions.each do |perm|
-        - next if perm == :assign_permissions && !current_user.administrator?
+        - next if [:assign_permissions, :account_management].include?(perm) && !current_user.administrator?
         - next if perm == :quoting && SettingsHelper.feature_off?(:show_estimates_option)
         .checkbox
           %label
