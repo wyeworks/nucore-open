@@ -267,7 +267,7 @@ RSpec.describe OrderDetailBatchUpdater do
             skip "Only applies to orders with reservations" if order_detail.reservation.blank?
 
             expect(ProductNotifications::SlotAvailableService).to(
-              receive_message_chain("from_reservation.notify!")
+              receive_message_chain("from_reservation.notify_later")
             )
 
             updater.update!

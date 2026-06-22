@@ -146,7 +146,7 @@ class OrderDetailBatchUpdater
         if order_detail.cancel_reservation(user, order_status: order_status, admin: true)
           ProductNotifications::SlotAvailableService
             .from_reservation(order_detail.reservation)
-            .notify!
+            .notify_later
         else
           raise "#{msg_type} ##{order_detail} failed cancellation."
         end

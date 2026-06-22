@@ -29,10 +29,10 @@ RSpec.describe "FacilityReservationsController" do
       )
     end
 
-    it "calls notify! on the service" do
+    it "calls notify_later on the service" do
       action.call(reservation)
 
-      expect(service_spy).to have_received(:notify!)
+      expect(service_spy).to have_received(:notify_later)
     end
 
     it "sets a success notice" do

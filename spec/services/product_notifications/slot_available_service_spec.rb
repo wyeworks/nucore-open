@@ -187,4 +187,13 @@ RSpec.describe(
       expect { subject.notify! }.not_to have_enqueued_mail
     end
   end
+
+  describe "notify_later" do
+    it "enqueues a SlotAvailableJob" do
+      expect { subject.notify_later }.to(
+        enqueue_job(SlotAvailableJob)
+        .with(product, start_time, end_time, exclude_user: nil)
+      )
+    end
+  end
 end

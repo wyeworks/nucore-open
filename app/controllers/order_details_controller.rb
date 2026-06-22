@@ -46,7 +46,7 @@ class OrderDetailsController < ApplicationController
 
       if @order_detail.canceled? && @order_detail.status_recently_changed
         CancellationMailer.notify_facility(@order_detail).deliver_later
-        ProductNotifications::SlotAvailableService.from_reservation(@order_detail.reservation).notify!
+        ProductNotifications::SlotAvailableService.from_reservation(@order_detail.reservation).notify_later
       end
 
       redirect_to redirect_to_path

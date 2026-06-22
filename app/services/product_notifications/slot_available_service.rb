@@ -22,6 +22,10 @@ module ProductNotifications
       @exclude_user = exclude_user
     end
 
+    def notify_later
+      SlotAvailableJob.perform_later(product, start_time, end_time, exclude_user:)
+    end
+
     def notify!
       return unless should_notfy?
 
