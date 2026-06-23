@@ -46,6 +46,11 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
         get :edit, params: @params
         expect(response.body).not_to include("assign_permissions")
       end
+
+      it "does not show the account_management checkbox" do
+        get :edit, params: @params
+        expect(response.body).not_to include("account_management")
+      end
     end
 
     context "as a user without assign_permissions" do
@@ -114,6 +119,13 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
         expect(permission.assign_permissions).to be true
       end
 
+      it "can assign the account_management permission" do
+        @params[:facility_user_permission] = { account_management: true }
+        patch :update, params: @params
+        permission = FacilityUserPermission.find_by(user: target_user, facility:)
+        expect(permission.account_management).to be true
+      end
+
       it "destroys the record when all permissions are unchecked" do
         create(:facility_user_permission, user: target_user, facility:, product_edition: true)
         @params[:facility_user_permission] = FacilityUserPermission.all_permissions.index_with { false }
@@ -156,6 +168,14 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
         patch :update, params: @params
         permission = FacilityUserPermission.find_by(user: target_user, facility:)
         expect(permission.assign_permissions).to be false
+        expect(permission.product_edition).to be true
+      end
+
+      it "cannot assign the account_management permission" do
+        @params[:facility_user_permission] = { account_management: true, product_edition: true }
+        patch :update, params: @params
+        permission = FacilityUserPermission.find_by(user: target_user, facility:)
+        expect(permission.account_management).to be false
         expect(permission.product_edition).to be true
       end
     end

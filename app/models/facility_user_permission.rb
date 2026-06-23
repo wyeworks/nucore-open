@@ -24,6 +24,11 @@ class FacilityUserPermission < ApplicationRecord
     quoting
   ].freeze
 
+  ADMIN_ONLY_PERMISSIONS = %i[
+    assign_permissions
+    account_management
+  ].freeze
+
   validates :user_id, uniqueness: { scope: :facility_id }
   validate :read_access_required_with_other_permissions
 
