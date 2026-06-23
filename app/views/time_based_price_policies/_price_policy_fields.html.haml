@@ -71,7 +71,7 @@
           - duration_rates = pp.object.duration_rates.sort_by { |d| d.min_duration_hours || 1_000 }
           = pp.fields_for :duration_rates, duration_rates do |dr|
             - if !price_group.subsidy_only?
-              - rate_input_class = price_group.master_internal? ? "js--baseRate usage_rate" : "usage_rate"
+              - rate_input_class = price_group.master_internal? || price_group.external? ? "js--baseRate usage_rate" : "usage_rate"
               %td
                 = dr.label :rate, t(".rate_per_hr"), class: "normal-weight"
                 = dr.text_field :rate,
@@ -86,4 +86,5 @@
                 %span.negative-number
                   = dr.text_field :subsidy, value: number_to_currency(dr.object.hourly_subsidy, unit: "", delimiter: ""), size: 8, class: "usage_adjustment"
                 = dr.hidden_field :min_duration_hours
-                = dr.hidden_field :rate, class: "js--hiddenRate"
+                = dr.hidden_field :rate, class: "js--hiddenRate",
+                  data: { parent_price_group_id: price_group.is_internal? ? PriceGroup.master_internal.id : price_group.parent_price_group_id }
