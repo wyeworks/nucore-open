@@ -416,17 +416,7 @@ RSpec.describe InstrumentPricePoliciesController do
   end
 
   context "External subsidy price groups", :js, feature_setting: { "pricing.external_price_group_subsidies" => true, "pricing.facility_directors_can_manage_price_groups" => true, "billing.charge_full_price_on_cancellation" => true } do
-    let!(:external_subsidy_group) do
-      create(
-        :price_group,
-        facility: nil,
-        is_internal: false,
-        global: true,
-        admin_editable: false,
-        name: "External Subsidy",
-        parent_price_group: external_price_group,
-      )
-    end
+    let!(:external_subsidy_group) { create(:price_group, facility: nil, is_internal: false, global: true, admin_editable: false, name: "External Subsidy", parent_price_group: external_price_group) }
 
     it "syncs fields from external parent (not base internal) and handles full cancellation correctly" do
       visit new_facility_instrument_price_policy_path(facility, instrument)
