@@ -16,7 +16,7 @@ jobs:
     env:
       RAILS_ENV: test
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-deps
       - run: yarn build
       - run: bundle exec rails assets:precompile
@@ -52,7 +52,7 @@ jobs:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-deps
       - name: Download compiled assets
         uses: actions/download-artifact@v8
@@ -96,7 +96,7 @@ jobs:
       MYSQL_PASSWORD: root
       PARALLEL_TEST_PROCESSORS: 4
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-deps
       - name: Download compiled assets
         uses: actions/download-artifact@v8
@@ -143,7 +143,7 @@ jobs:
       SELENIUM_PORT: 4444
       TEST_APP_PORT: 3000
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-deps
       - name: Download compiled assets
         uses: actions/download-artifact@v8
@@ -159,6 +159,6 @@ jobs:
     env:
       RAILS_ENV: test
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-bundler
       - run: bundle exec rubocop
