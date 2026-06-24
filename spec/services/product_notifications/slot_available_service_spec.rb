@@ -103,5 +103,97 @@ RSpec.describe(
         )
       end
     end
+
+    describe "when date in the past" do
+      let(:subject) do
+        described_class.new(
+          product,
+          2.days.ago,
+          1.day.ago,
+        )
+      end
+
+      it "does not send emails" do
+        expect { subject.notify! }.not_to have_enqueued_mail
+      end
+    end
+
+    describe "when user is inactive" do
+      let(:start_time) { 1.day.from_now }
+      let(:end_time) { start_time + 1.hour }
+      let(:subject) do
+        described_class.new(
+          product,
+          start_time,
+          end_time,
+        )
+      end
+      let(:inactive_user) do
+        create(:user, suspended_at: Time.current)
+      end
+
+      before do
+        product_notification.users << inactive_user
+      end
+
+      it "enqueues some mails" do
+        expect { subject.notify! }.to(
+          have_enqueued_mail(
+            ProductNotificationMailer,
+            :slot_available,
+          ).exactly(2)
+        )
+      end
+
+      it "does not notify inactive users" do
+        expect { subject.notify! }.not_to(
+          have_enqueued_mail(
+            ProductNotificationMailer,
+            :slot_available,
+          ).with(product, inactive_user, start_time, end_time, subject: nil)
+        )
+      end
+    end
+  end
+
+  describe "when product not schedulable" do
+    let(:product) do
+      create(
+        :setup_instrument,
+        skip_schedule_rules: true,
+      )
+    end
+    let(:start_time) do
+      Time.current.next_weekday.beginning_of_day
+    end
+    let(:end_time) { start_time + 1.hour }
+    let(:subject) do
+      described_class.new(
+        product,
+        start_time,
+        end_time
+      )
+    end
+
+    before do
+      create(
+        :schedule_rule,
+        :weekend,
+        product:,
+      )
+    end
+
+    it "does not send emails" do
+      expect { subject.notify! }.not_to have_enqueued_mail
+    end
+  end
+
+  describe "notify_later" do
+    it "enqueues a SlotAvailableJob" do
+      expect { subject.notify_later }.to(
+        enqueue_job(SlotAvailableJob)
+        .with(product, start_time, end_time, exclude_user: nil)
+      )
+    end
   end
 end

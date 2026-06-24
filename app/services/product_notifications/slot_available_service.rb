@@ -8,10 +8,10 @@ module ProductNotifications
 
     def self.from_reservation(reservation)
       new(
-        reservation.order_detail.product,
+        reservation.product,
         reservation.reserve_start_at,
         reservation.reserve_end_at,
-        exclude_user: reservation.order_detail.user,
+        exclude_user: reservation.order_detail&.user,
       )
     end
 
@@ -22,21 +22,43 @@ module ProductNotifications
       @exclude_user = exclude_user
     end
 
+    def notify_later
+      SlotAvailableJob.perform_later(product, start_time, end_time, exclude_user:)
+    end
+
     def notify!
-      return if SettingsHelper.feature_off?("notifications.facility_product_notifications")
+      return unless should_notify?
 
       product_notifications.find_each do |product_notification|
-        product_notification.users.where.not(id: exclude_user&.id).find_each do |user|
+        users =
+          product_notification
+          .users
+          .active
+          .where.not(id: exclude_user&.id)
+
+        users.find_each do |user|
           ProductNotificationMailer.slot_available(
             product, user,
             start_time, end_time,
-            subject: product_notification.email_subject,
+            subject: product_notification.email_subject.presence,
           ).deliver_later
         end
       end
     end
 
     private
+
+    def should_notify?
+      [
+        SettingsHelper.feature_on?("notifications.facility_product_notifications"),
+        start_time&.future?,
+        product_schedulable?,
+      ].all?
+    end
+
+    def product_schedulable?
+      product.schedule_rules.cover?(start_time, end_time)
+    end
 
     def product_notifications
       product

@@ -17,14 +17,14 @@ RSpec.describe OrderDetailBatchUpdater do
 
   let(:assigned_user_id) { "" }
   let(:facility) { order.facility }
-  let(:item) { FactoryBot.create(:setup_item) }
-  let(:order) { FactoryBot.create(:purchased_order, product: item) }
+  let(:item) { create(:setup_item) }
+  let(:order) { create(:purchased_order, product: item) }
   let(:order_detail) { order.order_details.first }
   let(:order_status_id) { "" }
   let(:params) do
     { assigned_user_id: assigned_user_id, order_status_id: order_status_id }
   end
-  let(:user) { FactoryBot.create(:user) }
+  let(:user) { create(:user) }
 
   describe "#update!" do
     shared_examples_for "batch updating" do
@@ -238,10 +238,54 @@ RSpec.describe OrderDetailBatchUpdater do
       let(:record_type) { "orders" }
 
       it_behaves_like "batch updating"
+
+      describe "slot available service call" do
+        let(:order_status_id) { OrderStatus.canceled.id }
+
+        it "does not call the service" do
+          expect(ProductNotifications::SlotAvailableService).not_to(
+            receive(:from_reservation)
+          )
+
+          updater.update!
+        end
+      end
     end
 
     context "when associated with Reservations" do
       let(:record_type) { "reservations" }
+      let(:instrument) { create(:setup_instrument) }
+      let(:reservation) { create(:setup_reservation, product: instrument) }
+      let(:order_detail) { reservation.order_detail }
+      let(:order) { order_detail.order }
+
+      describe "slot available service call" do
+        context "when new status is canceled" do
+          let(:order_status_id) { OrderStatus.canceled.id }
+
+          it "calls the service" do
+            skip "Only applies to orders with reservations" if order_detail.reservation.blank?
+
+            expect(ProductNotifications::SlotAvailableService).to(
+              receive_message_chain("from_reservation.notify_later")
+            )
+
+            updater.update!
+          end
+        end
+
+        context "when new status is complete" do
+          let(:order_status_id) { OrderStatus.complete.id }
+
+          it "does not call the service" do
+            expect(ProductNotifications::SlotAvailableService).not_to(
+              receive(:from_reservation)
+            )
+
+            updater.update!
+          end
+        end
+      end
 
       it_behaves_like "batch updating"
     end
@@ -258,10 +302,10 @@ RSpec.describe OrderDetailBatchUpdater do
       end
 
       shared_examples_for "batch updating project_id" do
-        let(:other_project) { FactoryBot.create(:project, facility: facility) }
+        let(:other_project) { create(:project, facility: facility) }
 
         context "when project_id is already set" do
-          let(:existing_project) { FactoryBot.create(:project, facility: facility) }
+          let(:existing_project) { create(:project, facility: facility) }
 
           before { order_detail.update_attribute(:project_id, existing_project.id) }
 

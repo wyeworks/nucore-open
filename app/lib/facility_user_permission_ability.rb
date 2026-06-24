@@ -165,6 +165,7 @@ class FacilityUserPermissionAbility
          :timeline, :update, :update_admin], Reservation
     can(:destroy, Reservation, &:admin?)
     can :read, ProductAccessory
+    can :manage, ProductNotification, facility_id: facility.id
   end
 
   def grant_account_management

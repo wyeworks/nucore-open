@@ -205,6 +205,6 @@ class OrderManagement::OrderDetailsController < ApplicationController
   def handle_cancelation_notification
     return unless @order_detail.canceled? && @order_detail.status_recently_changed && @order_detail.reservation.present?
 
-    ProductNotifications::SlotAvailableService.from_reservation(@order_detail.reservation).notify!
+    ProductNotifications::SlotAvailableService.from_reservation(@order_detail.reservation).notify_later
   end
 end

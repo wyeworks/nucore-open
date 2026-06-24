@@ -202,6 +202,7 @@ class Ability
       can :manage, PriceGroup
       can :manage, PriceGroupDiscount
       can :manage, [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
+      can :manage, ProductNotification, facility_id: resource.id
     end
 
     if SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_administrator_of?(resource)
