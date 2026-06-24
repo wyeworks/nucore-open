@@ -98,6 +98,7 @@ gem "aws-sdk-s3"
 # only used when SettingsHelper.feature_on?(:active_storage) is true
 gem "active_storage_validations"
 gem "image_processing", ">= 1.2"
+gem "ruby-vips"
 
 ## custom
 gem "bulk_email", path: "vendor/engines/bulk_email"
