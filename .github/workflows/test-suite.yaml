@@ -95,6 +95,7 @@ jobs:
       MYSQL_USER: root
       MYSQL_PASSWORD: root
       PARALLEL_TEST_PROCESSORS: 4
+      SECRET_KEY_BASE: value_needed_for_ci
     steps:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-deps
