@@ -8,7 +8,12 @@
 %p
   = link_to t("shared.edit"),
     edit_facility_product_notification_path(current_facility, @product_notification),
-    class: "btn btn-default right"
+    class: "btn btn-default"
+  = link_to t("shared.delete"),
+    facility_product_notification_path(current_facility, @product_notification),
+    method: :delete,
+    class: "btn btn-danger",
+    data: { confirm: t(".confirm_delete") }
 
 = readonly_form_for(:product_notification) do |f|
   = f.input :notification_type,
