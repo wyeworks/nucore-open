@@ -78,7 +78,7 @@ class FacilityProductNotificationsController < ApplicationController
       .products
       .active
       .not_archived
-      .of_type(Instrument)
+      .of_type(Instrument.name)
       .alphabetized
   end
 
