@@ -27,7 +27,7 @@ module ProductNotifications
     end
 
     def notify!
-      return unless should_notfy?
+      return unless should_notify?
 
       product_notifications.find_each do |product_notification|
         users =
@@ -48,7 +48,7 @@ module ProductNotifications
 
     private
 
-    def should_notfy?
+    def should_notify?
       [
         SettingsHelper.feature_on?("notifications.facility_product_notifications"),
         start_time&.future?,
