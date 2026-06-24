@@ -480,7 +480,7 @@ RSpec.describe InstrumentPricePoliciesController do
           "price_policy_#{external_price_group.id}[duration_rates_attributes][0][rate]",
           with: "100",
         )
-        # This is filled to focuse out previous input
+        # This is filled to focus out previous input
         fill_in(
           "price_policy_#{external_price_group.id}[duration_rates_attributes][1][rate]",
           with: "80",
