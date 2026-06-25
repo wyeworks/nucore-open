@@ -467,6 +467,61 @@ RSpec.describe InstrumentPricePoliciesController do
         expect(subsidy_policy.usage_subsidy_daily).to eq(1500)
       end
     end
+
+    context "with duration billing" do
+      let(:pricing_mode) { Instrument::Pricing::DURATION }
+
+      it "syncs fields from external parent (not base internal) and handles full cancellation correctly" do
+        visit new_facility_instrument_price_policy_path(facility, instrument)
+
+        fill_in "price_policy_#{base_price_group.id}[usage_rate]", with: "60"
+        fill_in "price_policy_#{external_price_group.id}[usage_rate]", with: "120"
+        fill_in(
+          "price_policy_#{external_price_group.id}[duration_rates_attributes][0][rate]",
+          with: "100",
+        )
+        # This is filled to focus out previous input
+        fill_in(
+          "price_policy_#{external_price_group.id}[duration_rates_attributes][1][rate]",
+          with: "80",
+        )
+
+        expect(page).to have_field(
+          "price_policy_#{cancer_center.id}[usage_rate]",
+          type: :hidden,
+          with: "60",
+        )
+        # Verify external subsidy gets external rate (not base)
+        expect(page).to have_field(
+          "price_policy_#{external_subsidy_group.id}[usage_rate]",
+          with: "120",
+          type: :hidden,
+        )
+
+        # Verify external subsidy step 1 gets external base rate
+        expect(page).to have_field(
+          "price_policy_#{external_subsidy_group.id}[duration_rates_attributes][0][rate]",
+          with: "100",
+          type: :hidden,
+        )
+
+        # Check full cancellation on base - should not affect external subsidy
+        check "price_policy_#{base_price_group.id}[full_price_cancellation]"
+        expect(page).to have_field(
+          "price_policy_#{external_subsidy_group.id}[cancellation_cost]",
+          disabled: false,
+          type: :hidden,
+        )
+
+        # Check full cancellation on external parent - should affect external subsidy
+        check "price_policy_#{external_price_group.id}[full_price_cancellation]"
+        expect(page).to have_field(
+          "price_policy_#{external_subsidy_group.id}[cancellation_cost]",
+          disabled: true,
+          type: :hidden,
+        )
+      end
+    end
   end
 
   context "Schedule Rule Daily pricing mode", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do

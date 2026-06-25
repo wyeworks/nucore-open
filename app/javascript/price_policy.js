@@ -111,20 +111,25 @@ $(document).ready(function() {
     }
   });
 
+  // Duration rates
+
   $(".js--baseRate").each(function (_index, element) {
-    setRateForSubsidyPrieGroups(element);
+    setRateForSubsidyPriceGroups(element);
   });
 
   $(".js--baseRate").on("change", function (event) {
-    setRateForSubsidyPrieGroups(event.target)
+    setRateForSubsidyPriceGroups(event.target)
   });
 
-  function setRateForSubsidyPrieGroups(params) {
+  function setRateForSubsidyPriceGroups(params) {
     const columnIndex = params.dataset.index;
+    const priceGroupId = params.dataset.priceGroupId;
     const stepBaseRate = params.value;
-    $(
-      `input[name*='duration_rates_attributes][${columnIndex}][rate]'].js--hiddenRate`
-    ).val(stepBaseRate);
+
+    $('.js--hiddenRate')
+      .filter(`input[name*='duration_rates_attributes][${columnIndex}][rate]']`)
+      .filter(`[data-parent-price-group-id='${priceGroupId}']`)
+      .val(stepBaseRate);
   }
 
   $(".js--minDuration").on("change", function (event) {

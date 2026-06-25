@@ -42,6 +42,10 @@ class PriceGroup < ApplicationRecord
     base
   end
 
+  def self.master_internal
+    globals.find_by(is_internal: true, display_order: 1)
+  end
+
   # Create a global price group, if it does not exist, and setup all the
   # schedule rules with price group discounts for the price group.
   def self.setup_global(name:, is_internal: false, admin_editable: true, discount_percent: 0, display_order: nil)
