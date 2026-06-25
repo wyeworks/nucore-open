@@ -38,6 +38,10 @@ module SecureRooms
       if granted_product_edition?(user, resource)
         ability.can :manage, CardReader
       end
+
+      if granted_order_management?(user, resource)
+        ability.can :show_problems, Occupancy
+      end
     end
 
     private
@@ -54,6 +58,13 @@ module SecureRooms
       return false unless resource.is_a?(Facility)
 
       user.facility_user_permissions.find_by(facility: resource)&.product_edition?
+    end
+
+    def granted_order_management?(user, resource)
+      return false unless SettingsHelper.feature_on?(:granular_permissions)
+      return false unless resource.is_a?(Facility)
+
+      user.facility_user_permissions.find_by(facility: resource)&.order_management?
     end
 
   end
