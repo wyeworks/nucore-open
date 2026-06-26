@@ -59,6 +59,11 @@ RSpec.describe "All Transactions Search", :js do
         .for_accounts(some_account)
         .pluck(:order_id)
 
+      # appear_in_order matcher doesn't auto-wait
+      order_ids.each do |odid|
+        expect(page).to have_content("test_prefix_#{odid}")
+      end
+
       expect(order_ids.map { |odid| "test_prefix_#{odid}" }).to appear_in_order
     end
   end
