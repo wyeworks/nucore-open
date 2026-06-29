@@ -1,6 +1,6 @@
 <%= text("body",
   user_name: @user.full_name,
-  new_reservation_url: new_facility_instrument_single_reservation_url(@product.facility, @product),
+  new_reservation_url: new_facility_instrument_single_reservation_url(@product.facility, @product, start_at: @time_range.start_at&.iso8601),
   time_range: @time_range,
   product: @product,
   facility: @product.facility)

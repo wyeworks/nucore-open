@@ -10,7 +10,7 @@ class SingleReservationsController < ApplicationController
 
   def new
     @reservation = NextAvailableReservationFinder
-                   .new(@instrument)
+                   .new(@instrument, start_at: start_at_param)
                    .next_available_for(current_user, acting_user)
 
     @reservation.order_detail = @order_detail
@@ -64,4 +64,11 @@ class SingleReservationsController < ApplicationController
     @reservation_window = ReservationWindow.new(@reservation, current_user)
   end
 
+  def start_at_param
+    return if (start_at = params[:start_at]).blank?
+
+    Time.zone.parse(start_at)
+  rescue ArgumentError
+    nil
+  end
 end

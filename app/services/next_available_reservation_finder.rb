@@ -3,14 +3,17 @@
 # Used by the reservations controllers to find the default
 # reservation times to display
 class NextAvailableReservationFinder
-  def initialize(product)
+  attr_reader :product, :start_at
+
+  def initialize(product, start_at: nil)
     @product = product
+    @start_at = start_at || 1.minute.from_now
   end
 
   def next_available_for(current_user, acting_user)
     options = current_user.can_override_restrictions?(@product) ? {} : { user: acting_user }
     next_available = @product.next_available_reservation(
-      after: 1.minute.from_now,
+      after: start_at,
       duration: default_duration,
       options:
     )
@@ -22,8 +25,8 @@ class NextAvailableReservationFinder
 
   def default_reservation
     Reservation.new(product: @product,
-                    reserve_start_at: Time.current,
-                    reserve_end_at: default_duration.from_now)
+                    reserve_start_at: start_at,
+                    reserve_end_at: start_at + default_duration)
   end
 
   def default_duration
