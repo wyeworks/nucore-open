@@ -24,10 +24,10 @@ en:
       no_results: No users found
       selected_users: Selected Users
       select_products_hint: Select instruments
-      select_users_hint: Search and select users one by one
+      select_users_hint: Search and select users to receive notifications
       hints:
         email_subject: Override default email subject
-        reservation_days: Reservations canceled within this amount of days will trigger the notification
+        reservation_days: Reservations canceled within this number of days from today will trigger the notification.
         slot_available: Notify users when a Reservation or Admin Hold is canceled for any of the selected instruments
     user_search_results:
       add_user: Add

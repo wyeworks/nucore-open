@@ -6,6 +6,10 @@ en:
         body: |
           Hello %{user_name},
 
-          Time slot %{time_range} became available for %{product} at %{facility}.
+          There has been a cancellation on %{product}.
+
+          The following time slot is now available:
+
+          %{time_range}
 
           [Make a reservation](%{new_reservation_url})
