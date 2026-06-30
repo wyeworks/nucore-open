@@ -23,6 +23,7 @@ en:
         fail_on_error_hint:
           <p>When checked, an error on any row will halt the import process, allowing you to correct the file and try again.</p>
           <p>Un-check to import valid entries and return any failed entries in a CSV file for review.</p>
+        always_fail_on_error_hint: An error on any row will halt the import process, allowing you to correct the file and try again.
         send_receipts_hint:
           <p>Check this box to send receipts. By default receipts are NOT sent to customers for bulk imported orders.</p>
         history:
