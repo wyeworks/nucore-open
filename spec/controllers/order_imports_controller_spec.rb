@@ -3,13 +3,6 @@
 require "rails_helper"
 require "controller_spec_helper"
 
-def fixture_file(filename)
-  Rack::Test::UploadedFile.new(
-    "#{Rails.root}/spec/files/order_imports/#{filename}",
-    "text/csv",
-  )
-end
-
 RSpec.describe OrderImportsController do
   let(:facility) { create(:facility) }
 
@@ -55,7 +48,7 @@ RSpec.describe OrderImportsController do
       before { sign_in user }
 
       context "on success" do
-        let(:upload_file) { fixture_file("blank.csv") }
+        let(:upload_file) { fixture_file_upload("order_imports/blank.csv", "text/csv") }
 
         it "creates an order import" do
           expect { do_request }.to(
@@ -97,7 +90,7 @@ RSpec.describe OrderImportsController do
     end
 
     context "when the file is blank" do
-      let(:upload_file) { fixture_file("blank.csv") }
+      let(:upload_file) { fixture_file_upload("order_imports/blank.csv", "text/csv") }
       let(:fail_on_error) { false }
       let(:send_receipts) { false }
 
