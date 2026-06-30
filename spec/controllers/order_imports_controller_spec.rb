@@ -112,6 +112,27 @@ RSpec.describe OrderImportsController do
         end
       end
     end
+
+    context(
+      "when always_fail_on_error is true",
+      feature_setting: { "orders.import_always_fail_on_error" => true },
+    ) do
+      let(:fail_on_error) { false }
+      let(:upload_file) do
+        fixture_file_upload("order_imports/blank.csv", "text/csv")
+      end
+      let(:send_receipts) { ["receipt@example.com"] }
+
+      before do
+        sign_in create(:user, :administrator)
+      end
+
+      it "ignores fail on error param and saves it to true" do
+        expect { do_request }.to(
+          change(OrderImport.where(fail_on_error: true), :count).by(1)
+        )
+      end
+    end
   end
 
   describe "downloading an error file" do
