@@ -22,6 +22,7 @@ class FacilityAccountsReconciliationController < ApplicationController
     @search_form = TransactionSearch::SearchForm.new(params[:search])
 
     @search = TransactionSearch::Searcher.new(
+      current_facility,
       TransactionSearch::AccountSearcher,
       TransactionSearch::AccountOwnerSearcher,
       TransactionSearch::StatementSearcher,

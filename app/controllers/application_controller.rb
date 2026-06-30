@@ -111,7 +111,13 @@ class ApplicationController < ActionController::Base
   end
 
   def acting_user
-    @acting_user ||= User.find_by(id: session[:acting_user_id]) || session_user
+    @acting_user ||= fetch_acting_user || session_user
+  end
+
+  def fetch_acting_user
+    return if (acting_user_id = session[:acting_user_id]).blank?
+
+    User.find_by(id: acting_user_id)
   end
 
   def acting_as?

@@ -16,7 +16,11 @@ module NewInprocessController
       TransactionSearch::CrossCoreSearcher,
     ]
 
-    @search = TransactionSearch::Searcher.new(*searchers).search(order_details, @search_form)
+    @search =
+      TransactionSearch::Searcher
+      .new(current_facility, *searchers)
+      .search(order_details, @search_form)
+
     @order_details = @search.order_details.includes(:order_status).joins_assigned_users.reorder(sort_clause)
     @date_range_field = @search_form.date_params[:field]
     @label_key_prefix = "estimated"
