@@ -150,6 +150,7 @@ class ReservationsController < ApplicationController
     raise ActiveRecord::RecordNotFound unless @reservation.nil?
 
     @reservation = NextAvailableReservationFinder.new(@instrument).next_available_for(current_user, acting_user)
+
     @reservation.order_detail = @order_detail
 
     authorize! :new, @reservation

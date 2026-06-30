@@ -4,7 +4,9 @@ require "rails_helper"
 
 RSpec.describe NextAvailableReservationFinder do
   let(:user) { build(:user) }
-  subject(:reservation) { described_class.new(instrument).next_available_for(user, user) }
+  subject(:reservation) do
+    described_class.new(instrument).next_available_for(user, user)
+  end
 
   describe "time scheduled instrument" do
     let(:instrument) { build(:instrument, min_reserve_mins: 0) }
@@ -64,6 +66,31 @@ RSpec.describe NextAvailableReservationFinder do
       it "sets reserve_end_at correctly" do
         expect(reservation.reserve_end_at).to eq(reservation.reserve_start_at + 1.day)
       end
+    end
+  end
+
+  describe "start time specified" do
+    let(:start_at) { 10.days.from_now }
+    let(:instrument) { build(:instrument, min_reserve_mins: 0) }
+    let(:finder) do
+      described_class
+        .new(instrument, start_at:)
+    end
+    let(:reservation) do
+      finder.next_available_for(user, user)
+    end
+
+    it "returns a reservation starting on start_at" do
+      expect(reservation.reserve_start_at).to eq(start_at)
+    end
+
+    it "calls next available reservation after start_at" do
+      expect(instrument).to(
+        receive(:next_available_reservation)
+        .with(a_hash_including(after: start_at))
+      )
+
+      finder.next_available_for(user, user)
     end
   end
 end
