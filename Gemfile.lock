@@ -373,12 +373,12 @@ GEM
       base64
     kgio (2.11.4)
     kostya-sigar (2.0.11)
-    kt-paperclip (7.3.0)
+    kt-paperclip (8.0.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
-      marcel (~> 1.0.1)
+      marcel (>= 1.0.1)
       mime-types
-      terrapin (>= 0.6.0, < 2.0)
+      terrapin (>= 0.6.0)
     language_server-protocol (3.17.0.5)
     launchy (3.1.1)
       addressable (~> 2.8)
@@ -402,7 +402,7 @@ GEM
       faraday-multipart (< 2)
       mini_mime
       zeitwerk
-    marcel (1.0.4)
+    marcel (1.2.1)
     matrix (0.4.3)
     method_source (1.1.0)
     mime-types (3.7.0)
