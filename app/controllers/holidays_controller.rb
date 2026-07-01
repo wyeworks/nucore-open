@@ -15,8 +15,6 @@ class HolidaysController < ApplicationController
   end
 
   def create
-    @holiday.date = parse_usa_date(holiday_params[:date])
-
     if @holiday.save
       redirect_to holidays_path, notice: t("holidays.create.success")
     else
@@ -28,7 +26,7 @@ class HolidaysController < ApplicationController
   end
 
   def update
-    if @holiday.update(date: parse_usa_date(holiday_params[:date]))
+    if @holiday.update(holiday_params)
       redirect_to holidays_path, notice: t("holidays.update.success")
     else
       render :edit
