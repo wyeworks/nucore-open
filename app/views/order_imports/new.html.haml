@@ -15,7 +15,10 @@
           = link_to text("download_link"), template_path, id: "bulk-import-template"
         = f.file_field :upload_file
         = html("upload_file_hint")
-        = f.input :fail_on_error, inline_label: text("fail_on_error"), label: false, hint: html("fail_on_error_hint")
+        - if SettingsHelper.feature_on?("orders.import_always_fail_on_error")
+          %p= text("always_fail_on_error_hint")
+        - else
+          = f.input :fail_on_error, inline_label: text("fail_on_error"), label: false, hint: html("fail_on_error_hint")
         = f.input :send_receipts, inline_label: text("send_receipts"), label: false, hint: text("send_receipts_hint")
       %label
         = text("send_report_to")

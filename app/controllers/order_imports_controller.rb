@@ -41,7 +41,13 @@ class OrderImportsController < ApplicationController
   private
 
   def create_params
-    params.require(:order_import).permit(:upload_file, :fail_on_error, :send_receipts)
+    attributes = [:upload_file, :send_receipts]
+
+    if SettingsHelper.feature_off?("orders.import_always_fail_on_error")
+      attributes << :fail_on_error
+    end
+
+    params.require(:order_import).permit(*attributes)
   end
 
   def create_order_import!

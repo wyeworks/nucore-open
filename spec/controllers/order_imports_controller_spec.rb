@@ -3,13 +3,6 @@
 require "rails_helper"
 require "controller_spec_helper"
 
-def fixture_file(filename)
-  Rack::Test::UploadedFile.new(
-    "#{Rails.root}/spec/files/order_imports/#{filename}",
-    "text/csv",
-  )
-end
-
 RSpec.describe OrderImportsController do
   let(:facility) { create(:facility) }
 
@@ -55,7 +48,7 @@ RSpec.describe OrderImportsController do
       before { sign_in user }
 
       context "on success" do
-        let(:upload_file) { fixture_file("blank.csv") }
+        let(:upload_file) { fixture_file_upload("order_imports/blank.csv", "text/csv") }
 
         it "creates an order import" do
           expect { do_request }.to(
@@ -97,7 +90,7 @@ RSpec.describe OrderImportsController do
     end
 
     context "when the file is blank" do
-      let(:upload_file) { fixture_file("blank.csv") }
+      let(:upload_file) { fixture_file_upload("order_imports/blank.csv", "text/csv") }
       let(:fail_on_error) { false }
       let(:send_receipts) { false }
 
@@ -117,6 +110,27 @@ RSpec.describe OrderImportsController do
         it "creates one StoredFile record" do
           expect { do_request }.to change(StoredFile, :count).from(0).to(1)
         end
+      end
+    end
+
+    context(
+      "when always_fail_on_error is true",
+      feature_setting: { "orders.import_always_fail_on_error" => true },
+    ) do
+      let(:fail_on_error) { false }
+      let(:upload_file) do
+        fixture_file_upload("order_imports/blank.csv", "text/csv")
+      end
+      let(:send_receipts) { ["receipt@example.com"] }
+
+      before do
+        sign_in create(:user, :administrator)
+      end
+
+      it "ignores fail on error param and saves it to true" do
+        expect { do_request }.to(
+          change(OrderImport.where(fail_on_error: true), :count).by(1)
+        )
       end
     end
   end
