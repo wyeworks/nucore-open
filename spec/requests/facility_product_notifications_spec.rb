@@ -43,7 +43,7 @@ RSpec.describe "FacilityProductNotifications" do
 
         expect(page).to have_content("No Product Notifications have been created")
         expect(page).to have_link(
-          "Add Product Notification",
+          "Add User Notification",
           href: new_facility_product_notification_path(facility),
         )
       end
