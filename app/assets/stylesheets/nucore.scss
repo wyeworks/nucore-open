@@ -169,11 +169,17 @@ ul, ol {
       line-height: 2em;
       margin-top: 0;
       color: $black;
+      text-transform: uppercase;
+      font-weight: bold;
     }
     &.divider {
       margin: 0.5em 1px;
+      height: 1px;
+      margin: 9px 0;
+      overflow: hidden;
+      background-color: #e5e5e5;
     }
-    
+
     > a {
       padding: 3px 15px;
     }
