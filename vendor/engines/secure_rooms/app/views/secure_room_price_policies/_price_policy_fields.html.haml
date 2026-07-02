@@ -20,7 +20,7 @@
         - row_class = []
         - row_class << "js--masterInternalRow" if price_group.master_internal?
         - row_class << "js--adjustmentRow" unless price_group.external? || price_group.master_internal?
-        %tr{class: row_class}
+        %tr{ class: row_class }
           %td= price_group.name
           %td= price_group.type_string
           %td= pp.check_box :can_purchase, class: "js--canPurchase"

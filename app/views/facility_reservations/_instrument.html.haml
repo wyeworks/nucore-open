@@ -10,7 +10,7 @@
         locals: { product: instrument }
 
       - if @display_datetime.today?
-        .current_time{style: "left: #{datetime_left_position(@display_datetime, Time.current)}"}
+        .current_time{ style: "left: #{datetime_left_position(@display_datetime, Time.current)}" }
 
     - if @display_datetime.today? && instrument.has_real_relay?
       %button.relay_refresh_btn{ type: "button", title: t("instruments.timeline.refresh_status"), "data-instrument-id" => instrument.id }

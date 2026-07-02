@@ -8,7 +8,7 @@
   = render "shared/fine_uploader_template"
 
 %vue-sanger-sequencing-well-plate-displayer-app(inline-template){ ":submissions" => @submissions.to_json, ":well-plates" => @batch.well_plates.to_json }
-  %vue-sanger-sequencing-well-plate(v-for="plateIndex in builder.plateCount()"){":builder" => "builder", ":plate-index" => "$index" }
+  %vue-sanger-sequencing-well-plate(v-for="plateIndex in builder.plateCount()"){ ":builder" => "builder", ":plate-index" => "$index" }
 
   = render "submission_list"
 

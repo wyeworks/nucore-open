@@ -60,7 +60,7 @@
           data: { product_url: add_product_to_estimate_facility_estimates_url(@estimate.facility) },
           include_blank: false
 
-    %button#add_product_to_estimate.btn.btn-primary{ type: "button" }= t("facility_estimates.form.add_product")
+    %button.btn.btn-primary#add_product_to_estimate{ type: "button" }= t("facility_estimates.form.add_product")
 
   .actions.margin_top
     = f.button :submit, submit_text || t(".add"), class: "btn-primary"

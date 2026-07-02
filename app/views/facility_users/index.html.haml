@@ -53,7 +53,7 @@
       %tbody
         - @permission_users.each do |permission|
           %tr
-            %td{style: "white-space: nowrap"}= link_to permission.user.full_name, edit_facility_facility_user_permission_path(current_facility, permission.user)
-            %td{style: "white-space: nowrap"}= permission.user.username
-            %td{style: "white-space: nowrap"}= permission.user.email
+            %td{ style: "white-space: nowrap" }= link_to permission.user.full_name, edit_facility_facility_user_permission_path(current_facility, permission.user)
+            %td{ style: "white-space: nowrap" }= permission.user.username
+            %td{ style: "white-space: nowrap" }= permission.user.email
             %td= permission_summary(permission)

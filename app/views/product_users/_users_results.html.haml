@@ -12,12 +12,12 @@
       = submit_tag text("search_form.button"), class: "btn btn-default"
 
   - if @product_users.nil?
-    - # Access list not required for this product
+    -# Access list not required for this product
   - elsif @product_users.empty? && @search_term
-    - # search results returned empty
+    -# search results returned empty
     %p.notice= text("no_results")
   - elsif @product_users.empty?
-    - # no users have access to this product, no search was performed
+    -# no users have access to this product, no search was performed
     %p.notice= text("empty_access_list")
   - else
     - if @search_term.blank?

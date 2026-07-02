@@ -10,7 +10,7 @@
   = simple_form_for :batch, url: facility_sanger_sequencing_admin_batches_path do |f|
     = f.input :group, as: :hidden
     = hidden_field_tag "batch[submission_ids]", "{{submissionIds()}}"
-    %vue-sanger-sequencing-well-plate(v-for="plateIndex in builder.plateCount()"){":builder" => "builder", ":plate-index" => "$index" }
+    %vue-sanger-sequencing-well-plate(v-for="plateIndex in builder.plateCount()"){ ":builder" => "builder", ":plate-index" => "$index" }
 
     - if @submissions.any?
       - if SettingsHelper.feature_on?("products.sanger_enabled_service")

@@ -2,8 +2,8 @@
 
 %h4 Subaccounts
 
-%div{data: {subaccounts: true}}
-  - # Load this outside the nested_fields_for so it's only loaded once
+%div{ data: {subaccounts: true} }
+  -# Load this outside the nested_fields_for so it's only loaded once
   - available_subaccounts = SplitAccounts::Split.available_subaccounts.map { |s| [s.to_s, s.id] }
   = f.nested_fields_for :splits, class_name: "SplitAccounts::Split" do |ff|
     .well

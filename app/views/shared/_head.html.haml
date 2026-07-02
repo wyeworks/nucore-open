@@ -1,10 +1,10 @@
 %meta{ "http-equiv" => "content-type", "content" => "text/html; charset=UTF-8" }
-- # use gsub to strip out html tags in the title to prevent html from showing #62643
+-# use gsub to strip out html tags in the title to prevent html from showing #62643
 = render partial: "/shared/title", locals: { title: yield(:h1).gsub(/<[^>]*>/, " ") }
 = render partial: "/shared/favicons"
 = stylesheet_link_tag "application", media: :all
 - if responsive?
-  %meta{name: "viewport", content: "width=device-width, initial-scale=1.0"}
+  %meta{ name: "viewport", content: "width=device-width, initial-scale=1.0" }
   = stylesheet_link_tag "responsive", media: :all
 = stylesheet_link_tag "print", media: :print
 = javascript_include_tag "application"

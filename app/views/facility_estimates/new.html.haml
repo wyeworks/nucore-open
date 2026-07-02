@@ -3,8 +3,8 @@
 
 %h2= t(".create")
 
-= render "form", 
-  form_url: facility_estimates_path(@estimate.facility), 
+= render "form",
+  form_url: facility_estimates_path(@estimate.facility),
   form_method: :post,
   user_collection: [],
   submit_text: t(".add"),

@@ -9,7 +9,7 @@
       %th= Reservation.human_attribute_name(:reserve_end_date)
   %tbody
     - reservations.each do |reservation|
-      %tr{class: "instrument_dashboard_#{reservation.class.name.underscore}"}
+      %tr{ class: "instrument_dashboard_#{reservation.class.name.underscore}" }
         %td
           = reservation.product
           = warning_if_instrument_is_offline_or_partially_available(reservation.product)

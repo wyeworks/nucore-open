@@ -21,7 +21,7 @@
     %th= t(".day")
   %tbody
     - @journal_cutoff_dates.each do |journal_cutoff_date|
-      %tr{class: journal_cutoff_date.past? ? "row-warning" : "" }
+      %tr{ class: journal_cutoff_date.past? ? "row-warning" : "" }
         %td= link_to t(".edit"), edit_journal_cutoff_date_path(journal_cutoff_date)
         %td= l(journal_cutoff_date.last_valid_date, format: "%B")
         %td= format_usa_datetime journal_cutoff_date.cutoff_date
@@ -29,4 +29,3 @@
 
 %p
   %em= t(".recency")
-

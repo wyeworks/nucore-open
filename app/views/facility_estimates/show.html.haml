@@ -43,7 +43,7 @@
               - product_name = "#{product_name} (#{product.facility.name})"
             = product_name
           %td= estimate_detail.quantity
-          %td{class: displayTime ? "timeinput" : ""}
+          %td{ class: displayTime ? "timeinput" : "" }
             - if displayTime
               = estimate_detail.duration
             - elsif estimate_detail.duration_unit.present?
@@ -52,9 +52,9 @@
           %td.currency= number_to_currency(estimate_detail.cost)
     %tfoot
       %tr
-        %td{colspan: 4}
+        %td{ colspan: 4 }
         %td.currency
-          %strong=number_to_currency(@estimate.total_cost)
+          %strong= number_to_currency(@estimate.total_cost)
 
   %p
     = t(".updated_at_notice", updated_at: I18n.l(@estimate.estimate_details.maximum(:updated_at), format: :usa))

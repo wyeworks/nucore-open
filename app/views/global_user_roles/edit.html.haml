@@ -23,7 +23,7 @@
 
     -# Chosen attempts to disable autocomplete, but Chrome still does.
     -# This hidden field tells Chrome to really disable autocomplete:
-    %input.hidden{type: "text", id: "PreventChromeAutocomplete", name: "PreventChromeAutocomplete"}
+    %input.hidden{ type: "text", id: "PreventChromeAutocomplete", name: "PreventChromeAutocomplete" }
 
     = form.label :roles, nil, class: "require"
     = select_tag :roles,

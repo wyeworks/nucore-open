@@ -1,10 +1,10 @@
 -# TODO: this is very similar to reports/report_table
 
-.updated_values{style: "display: none"}
+.updated_values{ style: "display: none" }
   .date_start= format_usa_date(@date_start)
   .date_end= format_usa_date(@date_end)
 
-.export_raw{data: { visible: export_raw_visible?.to_s } }
+.export_raw{ data: { visible: export_raw_visible?.to_s } }
 
 %table.table.table-striped.table-hover
   %thead

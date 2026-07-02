@@ -29,6 +29,6 @@
 
         %td= Users::NamePresenter.new(au.user, username_label: true).full_name
         %td= au.user.email
-        
+
         %td= AccountUserPresenter.new(au).localized_role
         = render_view_hook("member_table_columns", account_user: au)

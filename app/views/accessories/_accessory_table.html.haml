@@ -9,7 +9,7 @@
   %tbody
     - order_details.each do |od|
       = f.simple_fields_for od.product.id.to_s, od do |p|
-        %tr{class: ["accessory-row", "scaling-#{od.class.name.demodulize.underscore}"]}
+        %tr{ class: ["accessory-row", "scaling-#{od.class.name.demodulize.underscore}"] }
           %td
             = p.input :enabled,
               as: :boolean,

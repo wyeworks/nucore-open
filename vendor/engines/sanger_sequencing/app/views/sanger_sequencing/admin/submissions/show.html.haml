@@ -4,11 +4,11 @@
 = content_for :sidebar do
   = render "sanger_sequencing/admin/shared/sidenav", sidenav_tab: "submissions"
 
-%div{class: modal? ? "modal-header" : ""}
+%div{ class: modal? ? "modal-header" : "" }
   = modal_close_button if modal?
   %h2= "#{SangerSequencing::Submission.human_attribute_name(:id)}#{@submission.id}"
 
-%div{class: modal? ? "modal-body" : ""}
+%div{ class: modal? ? "modal-body" : "" }
   .banner-list
     .row
       %dl.col-md-2

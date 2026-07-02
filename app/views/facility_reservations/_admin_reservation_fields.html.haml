@@ -13,10 +13,10 @@
           = f.text_field :reserve_start_date, class: "form-control datepicker__data"
         .form-group
           = time_select f, :reserve_start
-        .form-group{style: "margin-top: -25px;"}
+        .form-group{ style: "margin-top: -25px;" }
           = f.label :duration_mins, "Duration mins", class: "string optional control-label", style: "display: block; margin-bottom: 5px;"
           = f.text_field :duration_mins, class: "form-control timeinput"
-  
+
   .row
     .col-md-12
       = label_tag :admin_reservation_reserve_end_date, "Reserve end date", class: "string optional control-label"

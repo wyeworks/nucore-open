@@ -1,7 +1,7 @@
 %small.text-muted= notes.first
 - if notes.size > 1
   - collapse_id = "#{id_prefix}-#{unique_id}"
-  %div.collapse{ id: collapse_id }
+  .collapse{ id: collapse_id }
     - notes[1..-1].each do |note|
       %br
       %small.text-muted= note

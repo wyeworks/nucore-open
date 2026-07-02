@@ -52,7 +52,7 @@
     = link_to '#past', data: { toggle: "collapse" } do
       %i.fa.fa-folder-open
       = text("past")
-  #past.collapse
+  .collapse#past
     - @past_price_policies_by_date.each do |date, rules|
       - policy = rules.first
       %h4= text("dates", start: human_date(date), expires: human_date(policy.expire_date))

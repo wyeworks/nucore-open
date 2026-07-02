@@ -26,12 +26,12 @@
       = r.input :password
       = r.input :auto_logout
       = r.input :auto_logout_minutes
-      %h3=text("instruments.instrument_fields.relay.label.ethernet_port")
+      %h3= text("instruments.instrument_fields.relay.label.ethernet_port")
       = r.input :mac_address
       = r.input :building_room_number
       = r.input :circuit_number
       = r.input :ethernet_port_number, label: text("instruments.instrument_fields.relay.label.ethernet_port_number")
--else
+- else
   %p UNKNOWN RELAY TYPE
 - if can? :edit, @product
   %ul.list-inline

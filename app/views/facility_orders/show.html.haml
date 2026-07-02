@@ -31,7 +31,7 @@
   %h2= t(subheader_key)
 
 - if @cross_core_data_by_facility_id.present?
-  #js--reportAnIssueModal.modal.fade
+  .modal.fade#js--reportAnIssueModal
 
   #accordion
     - @cross_core_data_by_facility_id.each do |facility_id, data|

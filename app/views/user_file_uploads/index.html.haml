@@ -10,7 +10,7 @@
 %h1= @user
 
 = simple_form_for(@file, url: [current_facility, @user, :user_file_uploads, id: @file]) do |f|
-  = f.error_messages 
+  = f.error_messages
 
   = f.input :file
   = f.input :name
@@ -45,5 +45,4 @@
 
           %td= link_to(uploaded_file.name, facility_user_download_user_file_path(current_facility, @user, uploaded_file))
           %td= format_usa_datetime(uploaded_file.created_at)
-          %td= User.find(uploaded_file.created_by).full_name           
-
+          %td= User.find(uploaded_file.created_by).full_name

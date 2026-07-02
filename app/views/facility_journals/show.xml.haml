@@ -1,4 +1,4 @@
-%journal{id: @journal.id}
+%journal{ id: @journal.id }
   %date= @journal.journal_date.strftime("%Y%m%d")
   %description= "Journal ##{@journal.id}, Created By: #{@journal.created_by_user.username}"
   - @journal_rows.each_with_index do |row, i|
@@ -10,4 +10,4 @@
   %totals
     %record_count= @journal_rows.length
     %total_credits= number_to_currency @journal_rows.inject(0) { |sum,row| sum += (row.amount < 0 ? row.amount : 0) }, :delimiter => '', :unit => '' # negative number
-    %TOTAL_DEBITS= number_to_currency @journal_rows.inject(0) { |sum,row| sum += (row.amount > 0 ? row.amount : 0) }, :delimiter => '', :unit => '' # positive number
+    %total_debits= number_to_currency @journal_rows.inject(0) { |sum,row| sum += (row.amount > 0 ? row.amount : 0) }, :delimiter => '', :unit => '' # positive number

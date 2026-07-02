@@ -1,7 +1,7 @@
 %tbody{ id: "facility_id_#{facility_id}", class: "js--orderTableRefresh" }
   - OrderDetailPresenter.wrap(order_details).each do |od|
-    %tr{class: [od.parent_order_detail_id ? "child" : "parent", "status-#{od.order_status.root.name.parameterize}", flash[:updated_order_details].try(:include?, od.id) ? "updated-order-detail" : ""] }
-      %th.order-id{scope: "row"}
+    %tr{ class: [od.parent_order_detail_id ? "child" : "parent", "status-#{od.order_status.root.name.parameterize}", flash[:updated_order_details].try(:include?, od.id) ? "updated-order-detail" : ""] }
+      %th.order-id{ scope: "row" }
         - if cross_core
           = od
         - else
@@ -40,7 +40,7 @@
           %td.currency
             = od.time_data.actual_duration_days || "???"
         - else
-          %td.currency{class: od.time_data.actual_duration_mins ? "timeinput" : ""}
+          %td.currency{ class: od.time_data.actual_duration_mins ? "timeinput" : "" }
             = od.time_data.actual_duration_mins || "???"
       - elsif od.quantity_as_time?
         %td.currency.timeinput= od.quantity
