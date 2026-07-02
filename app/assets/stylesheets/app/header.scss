@@ -52,10 +52,6 @@ header {
     @include gradient-vertical($headerBackgroundColorHighLight, $headerBackgroundColor);
   }
   
-  .dropdown-toggle {
-    @include gradient-vertical($headerBackgroundColorHighLight, $headerBackgroundColor);
-  }
-
   .container {
     position: relative;
     > .navbar-header,

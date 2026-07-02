@@ -27,14 +27,13 @@ html {
 
 nav .navbar {
   margin-bottom: 0;
-  min-height: auto;
   border-radius: 0;
-  
+
   .navbar-nav > li {
     > a {
       padding: 12px 15px;
     }
-    
+
     &.active,
     &:hover {
       border-top: $navbarActiveBorderHeight solid $navbarActiveBorderColor;
