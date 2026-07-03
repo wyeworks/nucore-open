@@ -8,4 +8,8 @@ class ExternalService < ApplicationRecord
   def self.matching_location(value)
     where("location like ?", "%#{value}%")
   end
+
+  def open_in_new_tab?
+    false
+  end
 end
