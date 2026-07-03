@@ -24,18 +24,18 @@ module Products::RelaySupport
   # See https://andycroll.com/ruby/be-careful-assigning-to-has-one-relations/
   def replace_relay(attributes = nil, param_control_mechanism = nil)
     self.class.transaction do
+      id = relay&.id
       relay&.destroy!
       case param_control_mechanism
       when Relay::CONTROL_MECHANISMS[:relay]
-        create_relay!(attributes)
+        create_relay!(id:, **attributes)
       when Relay::CONTROL_MECHANISMS[:timer]
-        create_relay!(type: "RelayDummy")
+        create_relay!(id:, type: "RelayDummy")
       when "manual"
-        Relay.new # return a relay instance for the form to use
+        Relay.new
       end
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotDestroyed
-    relay # returns invalid object for error handling
+    relay
   end
-
 end
