@@ -47,6 +47,7 @@ en:
       create: Product created
       activate: Product activated
       deactivate: Product deactivated
+      relay_update: Relay updated
     relay:
       update: Relay updated
     user:

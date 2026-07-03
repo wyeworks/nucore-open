@@ -25,7 +25,7 @@ module Reports
       "facility.activate", "facility.deactivate",
       "price_group.create", "price_group.delete",
       "product.activate", "product.deactivate",
-      "product.create", "relay.update",
+      "product.create", "product.relay_update",
       "order_import.created",
     ].freeze
 

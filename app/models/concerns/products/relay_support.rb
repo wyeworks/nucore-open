@@ -32,7 +32,7 @@ module Products::RelaySupport
       when Relay::CONTROL_MECHANISMS[:timer]
         create_relay!(id:, type: "RelayDummy")
       when "manual"
-        Relay.new
+        nil
       end
     end
   rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotDestroyed
