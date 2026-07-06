@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_06_08_125147) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_06_175910) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -894,7 +894,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_06_08_125147) do
 
   create_table "schedule_rules", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "product_id", null: false
-    t.decimal "discount_percent", precision: 10, scale: 2, default: "0.0", null: false
     t.integer "start_hour", null: false
     t.integer "start_min", null: false
     t.integer "end_hour", null: false
