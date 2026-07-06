@@ -159,14 +159,7 @@ class ScheduleRule < ApplicationRecord
       price_group: effective_price_group(price_group)
     ).first
 
-    # TODO: This should always be defined, remove once price_group_discounts have been
-    # added to all existing schedule rules and this is no longer needed.
-    if pgd
-      pgd.discount_percent.to_f
-    else
-      Rollbar.warn("Schedule rule missing price group discount", schedule_rule: id) if defined? Rollbar
-      0
-    end
+    pgd&.discount_percent.to_f
   end
 
   def effective_price_group(price_group)
