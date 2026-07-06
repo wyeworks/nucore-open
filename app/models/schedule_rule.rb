@@ -15,7 +15,7 @@ class ScheduleRule < ApplicationRecord
   validates_numericality_of :start_hour, :end_hour, only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 24
   validates_numericality_of :start_min,  :end_min, only_integer: true, greater_than_or_equal_to: 0, less_than: 60
 
-  validate :at_least_one_day_selected, :end_time_is_after_start_time, :end_time_is_valid, :no_overlap_with_existing_rules, :no_conflict_with_existing_reservation
+  validate :at_least_one_day_selected, :end_time_is_after_start_time, :end_time_is_valid, :no_overlap_with_existing_rules
 
   def self.available_to_user(user)
     where(product_users: { user_id: user.id })
@@ -89,11 +89,6 @@ class ScheduleRule < ApplicationRecord
         end
       end
     end
-  end
-
-  def no_conflict_with_existing_reservation
-    # TODO: implement me
-    true
   end
 
   def days_string
