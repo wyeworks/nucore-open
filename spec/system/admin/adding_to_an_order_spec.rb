@@ -64,7 +64,7 @@ RSpec.describe "Adding to an existing order" do
 
       before do
         select "Complete", from: "Order Status"
-        fill_in "add_to_order_form[fulfilled_at]", with: fulfilled_at_string
+        fill_in "add_to_order_form[fulfilled_at]", with: 1.day.ago.to_date
         click_button "Add To Order"
       end
 
@@ -128,7 +128,7 @@ RSpec.describe "Adding to an existing order" do
       fill_in "add_to_order_form[quantity]", with: "1"
       select product.name, from: "add_to_order_form[product_id]"
       select "Complete", from: "Order Status"
-      fill_in "add_to_order_form[fulfilled_at]", with: fulfilled_at_string
+      fill_in "add_to_order_form[fulfilled_at]", with: 1.day.ago.to_date
       click_button "Add To Order"
     end
 

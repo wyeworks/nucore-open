@@ -61,7 +61,7 @@ RSpec.describe "Estimate Duplication", :js do
       expect(page).to have_css("form.new_estimate")
 
       expect(page).to have_field("Description", with: "Copy of #{estimate.description}")
-      expect(page).to have_field("Expires at", with: I18n.l(estimate.expires_at.to_date, format: :usa))
+      expect(page).to have_field("Expires at", with: estimate.expires_at.to_date.iso8601)
       expect(page).to have_field("Notes", with: estimate.note)
 
       within("#estimate_products_table") do

@@ -87,10 +87,10 @@ RSpec.describe "Placing an order on behalf of" do
       choose account.to_s
       click_button "Continue"
 
-      fill_in "Order date", with: two_days_ago
+      fill_in "Order date", with: 2.days.ago.to_date
       select "Complete", from: "Order Status"
 
-      fill_in "Fulfilled at", with: three_days_ago
+      fill_in "Fulfilled at", with: 3.days.ago.to_date
 
       click_button "Purchase"
 

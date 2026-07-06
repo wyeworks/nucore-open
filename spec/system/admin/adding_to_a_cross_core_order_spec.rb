@@ -33,7 +33,7 @@ RSpec.describe "Adding to an existing order for cross core", :js do
       select_from_chosen facility2_account.to_s, from: "Payment Source", scroll_to: :center
       fill_in "add_to_order_form[quantity]", with: "1"
       select_from_chosen "Complete", from: "Order Status"
-      fill_in "add_to_order_form[fulfilled_at]", with: fulfilled_at_string
+      fill_in "add_to_order_form[fulfilled_at]", with: 1.day.ago.to_date
       click_button "Add to Cross-Core Order"
     end
 

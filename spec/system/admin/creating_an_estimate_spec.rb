@@ -31,7 +31,7 @@ RSpec.describe(
     expect(page).to have_content "Create an Estimate"
 
     fill_in "Description", with: "Test Estimate"
-    fill_in "Expires at", with: 1.month.from_now.strftime("%m/%d/%Y")
+    fill_in "Expires at", with: 1.month.from_now.to_date
     select_from_chosen price_group.name, from: "Price group"
 
     fill_in "Note", with: "This is a test estimate"
