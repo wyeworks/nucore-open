@@ -12,7 +12,7 @@
 
 = simple_form_for current_facility, url: facility_sanger_sequencing_admin_primers_path(current_facility), method: :put do |f|
   = f.nested_fields_for :sanger_sequencing_primers do |primer_form|
-    %div.primer-form
+    .primer-form
       = primer_form.remove_nested_fields_link text("shared.remove")
       = primer_form.input :id, as: :hidden
       = primer_form.input :name, label: false

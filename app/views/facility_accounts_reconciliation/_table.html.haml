@@ -3,15 +3,15 @@
   %thead
     %tr
       %th
-      %th{scope: "col"}= Statement.human_attribute_name(:invoice_number)
-      %th{scope: "col"}= Account.model_name.human
-      %th{scope: "col"}= Order.model_name.human
-      %th{scope: "col"}= Statement.human_attribute_name(:total_cost)
+      %th{ scope: "col" }= Statement.human_attribute_name(:invoice_number)
+      %th{ scope: "col" }= Account.model_name.human
+      %th{ scope: "col" }= Order.model_name.human
+      %th{ scope: "col" }= Statement.human_attribute_name(:total_cost)
       - if view_hook_exists?("reconciliation_table_headers") && use_custom_reconciliation_features?(account_class)
         = render_view_hook("reconciliation_table_headers", account_class: account_class)
       = render "facility_accounts_reconciliation/table_column_headers"
       - if show_reconciliation_deposit_number
-        %th#reconcile-deposit-number.row-note-input.js--reconciledField{ scope: "col", data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
+        %th.row-note-input.js--reconciledField#reconcile-deposit-number{ scope: "col", data: { toggle: "tooltip" }, title: text("facility_accounts_reconciliation.index.bulk_deposit_number_hint") }
           = OrderDetail.human_attribute_name(:deposit_number)
       %th.js--unrecoverableField.hidden= OrderDetail.human_attribute_name(:unrecoverable_note)
   %tbody
@@ -23,7 +23,7 @@
           = order_detail.account
           %br
           = order_detail.account.owner_user
-        %th.user-order-detail{scope: "row"}
+        %th.user-order-detail{ scope: "row" }
           .order-detail-description
             = link_to "##{order_detail.order_id}", facility_order_path(current_facility, order_detail.order_id)
             = "-"

@@ -4,7 +4,7 @@
 - if @walkup_available
   %h2= t(".reservation_details")
 - else
-  %div.reservation_notice
+  .reservation_notice
     %h2= t(".reserved")
     - if @reservation_data
       %p= t(".reserved_message")

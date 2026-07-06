@@ -3,7 +3,7 @@
   - @rows.each do |row|
     %tr
       - row.each_with_index do |col, i|
-        %td{:class => i > (long_report ? 1 : 0) ? 'currency' : ''}= col
+        %td{ :class => i > (long_report ? 1 : 0) ? 'currency' : '' }= col
 
   - if @rows.size > 1
     %tr

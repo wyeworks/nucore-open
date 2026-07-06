@@ -10,7 +10,7 @@
     %thead
       %tr
         %th
-          %input{type: "checkbox", class: "js--select-all-statements"}
+          %input{ type: "checkbox", class: "js--select-all-statements" }
         %th= Statement.human_attribute_name(:invoice_number)
         %th= Statement.human_attribute_name(:created_at)
         %th= Statement.human_attribute_name(:invoice_date)
@@ -34,7 +34,7 @@
             = "##{s.invoice_number}"
             - unless s.canceled_at
               %br
-              - # TODO: Refactor Statement#order_details to go through statement_rows so we can generate PDFs for canceled statements
+              -# TODO: Refactor Statement#order_details to go through statement_rows so we can generate PDFs for canceled statements
               - path = current_facility ? statement_path(s) : account_statement_path(s.account, s, format: :pdf)
               = link_to t("statements.pdf.download"), path
               - if current_facility

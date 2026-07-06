@@ -4,7 +4,7 @@
     .col-md-4
       = link_to t(".assign_price_policies"), local_assigns[:assign_price_policies_path], method: :post, class: %w(btn btn-primary)
     .col-md-1
-      = submit_tag t(".send_reminders"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { confirm_template: t(".send_reminders_confirmation"), select_order_alert: t(".js.select_order_alert"), select_group_alert: t(".js.select_group_alert"), notification_count_error: t(".js.notification_count_error"), no_users_to_notify: t(".js.no_users_to_notify"), disable_with: t(".send_reminders") }   
+      = submit_tag t(".send_reminders"), class: ["btn", "btn-primary", "js--requireValueForSubmit"], data: { confirm_template: t(".send_reminders_confirmation"), select_order_alert: t(".js.select_order_alert"), select_group_alert: t(".js.select_group_alert"), notification_count_error: t(".js.notification_count_error"), no_users_to_notify: t(".js.no_users_to_notify"), disable_with: t(".send_reminders") }
     .col-md-2
       .pull-right
         .inline-checkbox-list
@@ -14,7 +14,7 @@
           %label.checkbox-inline
             = check_box_tag "notification_groups[]", "non_resolvable", false, id: "notification_groups_non_resolvable"
             = t(".notification_groups.non_resolvable")
-    
+
 %table.table.table-striped.table-hover
   %thead
     %tr

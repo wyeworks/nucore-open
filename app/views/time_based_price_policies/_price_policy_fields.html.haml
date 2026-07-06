@@ -60,7 +60,7 @@
         - row_class << "js--masterInternalRow" if price_group.master_internal?
         - row_class << "js--adjustmentRow" if price_group.subsidy_only?
         - row_class << "js--externalSubsidyRow" if price_group.external_subsidy?
-        %tr{class: row_class, data: price_group.external_subsidy? ? { parent_price_group_id: price_group.parent_price_group_id } : {}}
+        %tr{ class: row_class, data: price_group.external_subsidy? ? { parent_price_group_id: price_group.parent_price_group_id } : {} }
           %th{ scope: "row" }= price_group.name
           %td= price_group.type_string
           %td= pp.check_box :can_purchase, class: "js--canPurchase"

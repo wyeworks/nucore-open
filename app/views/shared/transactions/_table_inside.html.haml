@@ -3,9 +3,9 @@
 %table.table.table-striped.table-hover.dense.old-table.js--transactions-table
   %thead
     %tr
-      -if @order_detail_action
+      - if @order_detail_action
         %th
-      -if @order_detail_link
+      - if @order_detail_link
         %th
       - if @sorting_enabled
         = render "shared/transactions/sortable_table_headers"
@@ -83,7 +83,7 @@
           = order_detail_status_badges(order_detail)
         - if local_assigns[:show_statements]
           %td= link_to "Download", account_statement_path(order_detail.account, order_detail.statement_id, format: :pdf) if order_detail.statement
-  - # The 'All Transactions' page is paginated, but other billing pages are not.
+  -# The 'All Transactions' page is paginated, but other billing pages are not.
   - if order_details_are_paginated && order_details.total_pages > 1
     %tfoot
       %tr

@@ -2,7 +2,7 @@
   - @rows.each do |row|
     %tr
       - row.each_with_index do |col, i|
-        %td{class: i == 0 ? '' : 'currency'}
+        %td{ class: i == 0 ? '' : 'currency' }
           - if i == 2
             = number_to_currency(col)
           - elsif i == 3

@@ -2,7 +2,7 @@
 
   %div
     - @user_types.each do |user_type, label_text|
-      %div.checkbox
+      .checkbox
         = label_tag(nil) do
           = check_box_tag "bulk_email[user_types][]",
             user_type,
@@ -17,7 +17,7 @@
     = f.input :products, as: :transaction_chosen_old, data_method: :product_options, hint: t("bulk_email.search_hint")
 
 
-  %div.clearfix
+  .clearfix
     %h4= t("bulk_email.dates.label")
     #dates_between
       .col-md-3

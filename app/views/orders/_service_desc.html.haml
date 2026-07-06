@@ -1,6 +1,6 @@
 = render :partial => "orders/product_description", :locals => { :order_detail => order_detail }
 
-- # if active_survey doesn't match response set survey, blow away the response set
+-# if active_survey doesn't match response set survey, blow away the response set
 - if survey = order_detail.product.active_survey
   - if order_detail.external_service_receiver && survey != order_detail.external_service_receiver.external_service
     - order_detail.external_service_receiver.destroy

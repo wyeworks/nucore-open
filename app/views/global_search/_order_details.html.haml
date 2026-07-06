@@ -12,7 +12,7 @@
       %th= OrderDetail.human_attribute_name("order_status")
   %tbody
     - results.each do |order_detail|
-      %tr{class: row_class(order_detail)}
+      %tr{ class: row_class(order_detail) }
         %td.nowrap
           = order_detail_result_link order_detail
         %td

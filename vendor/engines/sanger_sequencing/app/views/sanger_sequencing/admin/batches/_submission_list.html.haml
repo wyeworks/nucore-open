@@ -11,7 +11,7 @@
       %th= OrderDetail.human_attribute_name(:note)
   %tbody
     - @submissions.each do |submission|
-      %tr{data: { submission_id: submission.id } }
+      %tr{ data: { submission_id: submission.id } }
         %td.sangerSequencing--submissionTable__initialCell
           %div(v-if="isInPlate(#{submission.id})")
             .sangerSequencing--colorCoded__box(v-bind:style="styleForSubmissionId(#{submission.id})")

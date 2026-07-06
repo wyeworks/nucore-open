@@ -26,7 +26,7 @@
     %tbody
       - @order_details.each do |order_detail|
         - od = OrderDetailPresenter.new(order_detail)
-        %tr{class: od.row_class}
+        %tr{ class: od.row_class }
           %td
             - if current_ability.can?(:show, order_detail)
               = link_to od.description, od.show_order_path
@@ -48,7 +48,7 @@
             - else
               %span.actual_cost= od.wrapped_total
       %tr
-        %td.centered{colspan: 5}= will_paginate(@order_details)
+        %td.centered{ colspan: 5 }= will_paginate(@order_details)
 
   = render "/price_display_footnote", admin: true
   = render "shared/reconcile_footnote"

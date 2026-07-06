@@ -35,7 +35,7 @@
               %th Scheduling Groups
     %tbody
       - @schedule_rules.each do |schedule_rule|
-        %tr{:class => cycle("odd", "even")}
+        %tr{ :class => cycle("odd", "even") }
           %td.centered
             - if can? :edit, schedule_rule
               = link_to "Edit",
@@ -65,4 +65,4 @@
   #overlay
     #spinner
       #hide
-        #calendar.fc-noheader
+        .fc-noheader#calendar

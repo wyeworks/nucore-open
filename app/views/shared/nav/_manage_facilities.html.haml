@@ -2,7 +2,7 @@
   %li= link_to text("pages.manage", model: Facility.model_name.human(count: 2)), :list_facilities
 
 - elsif !acting_as? && menu_facilities.any?
-  %li.dropdown.pull-right{class: controller.active_tab == "manage_facilites" ? "active" : ""}
+  %li.dropdown.pull-right{ class: controller.active_tab == "manage_facilites" ? "active" : "" }
     = link_to "#", class: "dropdown-toggle", data: { toggle: :dropdown, target: "#" } do
       = t("pages.manage", model: t("activerecord.models.facility", count: 2))
       %b.caret

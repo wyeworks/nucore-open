@@ -9,4 +9,4 @@
         collection: (@reservations_by_instrument.fetch(instrument, []) + instrument.blackout_reservations(@display_datetime)),
         locals: { product: instrument }
 
-      .current_time{style: "left: #{datetime_left_position(@display_datetime, Time.current)}"}
+      .current_time{ style: "left: #{datetime_left_position(@display_datetime, Time.current)}" }

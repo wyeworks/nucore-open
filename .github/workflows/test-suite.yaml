@@ -163,3 +163,14 @@ jobs:
       - uses: actions/checkout@v7
       - uses: ./.github/actions/setup-bundler
       - run: bundle exec rubocop
+
+  run-haml-lint:
+    runs-on: ubuntu-latest
+    container:
+      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+    env:
+      RAILS_ENV: test
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup-bundler
+      - run: bundle exec haml-lint

@@ -3,8 +3,8 @@
 
 %h2= t(".edit", id: @estimate.id)
 
-= render "form", 
-  form_url: facility_estimate_path(@estimate.facility, @estimate), 
+= render "form",
+  form_url: facility_estimate_path(@estimate.facility, @estimate),
   form_method: :patch,
   user_collection: [[@estimate.user_display_name, @estimate.user_id]],
   submit_text: t(".update"),

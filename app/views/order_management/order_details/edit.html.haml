@@ -2,7 +2,7 @@
   = content_for :h1 do
     = current_facility
 
-%div{class: modal? ? "modal-header" : ""}
+%div{ class: modal? ? "modal-header" : "" }
   = modal_close_button if modal?
   %h3= "Order ##{@order_detail} #{@order_detail.product_name}"
 

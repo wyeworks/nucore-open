@@ -1,11 +1,11 @@
-%div.manage_order_detail
+.manage_order_detail
   .banner-list
     .row
       %dl.col-md-8
         %dt= @order_detail.class.human_attribute_name(:account)
         %dd= @order_detail.account
     = render "projects/shared/project", order_detail: @order_detail
-    - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
+    -# TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
     = render_view_hook "after_account_print", order_detail: @order_detail
     .row
       = banner_label @order_detail, :order_status

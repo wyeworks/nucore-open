@@ -2,7 +2,7 @@
   - @rows.each do |row|
     %tr
       - row.each_with_index do |col, i|
-        %td{:class => i > 0 ? 'currency' : ''}= col
+        %td{ :class => i > 0 ? 'currency' : '' }= col
 
   - if @rows.size > 1
     %tr

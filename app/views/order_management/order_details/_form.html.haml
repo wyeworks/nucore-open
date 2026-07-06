@@ -1,4 +1,4 @@
-%div{class: modal? ? "modal-body" : ""}
+%div{ class: modal? ? "modal-body" : "" }
   .row
     .col-md-10
       = render "warnings"
@@ -7,9 +7,9 @@
     url: manage_facility_order_order_detail_path(current_facility, @order, @order_detail),
     remote: modal?,
     html: { class: ["manage_order_detail", edit_disabled? ? "disabled" : ""] } do |f|
-  %fieldset{disabled: read_only? || nil}
+  %fieldset{ disabled: read_only? || nil }
 
-    %div{class: modal? ? "modal-body" : ""}
+    %div{ class: modal? ? "modal-body" : "" }
       .row
         .col-md-5.js--pricingUpdate
           = account_input(f, disabled: metadata_edit_disabled?)
@@ -49,9 +49,9 @@
 
       .row
         .col-md-3
-          %fieldset{disabled: metadata_edit_disabled? || nil}
+          %fieldset{ disabled: metadata_edit_disabled? || nil }
             = render "projects/shared/select_project", f: f, order_detail: @order_detail
-          - # TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
+          -# TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
           = render_view_hook "after_order_status", f: f, order_detail: @order_detail
         .col-md-7
           - if f.object.account.try(:splits).try(:present?)
@@ -64,7 +64,7 @@
         .row
           .col-md-3
           .col-md-7
-            %fieldset{disabled: metadata_edit_disabled? || nil}
+            %fieldset{ disabled: metadata_edit_disabled? || nil }
               = render "order_management/order_details/#{@order_detail.time_data.class.name.underscore}", f: f
       - else
         .row
