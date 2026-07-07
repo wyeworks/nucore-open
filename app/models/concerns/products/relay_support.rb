@@ -24,13 +24,12 @@ module Products::RelaySupport
   # See https://andycroll.com/ruby/be-careful-assigning-to-has-one-relations/
   def replace_relay(attributes = nil, param_control_mechanism = nil)
     self.class.transaction do
-      id = relay&.id
       relay&.destroy!
       case param_control_mechanism
       when Relay::CONTROL_MECHANISMS[:relay]
-        create_relay!(id:, **attributes)
+        create_relay!(**attributes)
       when Relay::CONTROL_MECHANISMS[:timer]
-        create_relay!(id:, type: "RelayDummy")
+        create_relay!(type: "RelayDummy")
       when "manual"
         nil
       end
