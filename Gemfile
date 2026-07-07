@@ -59,8 +59,6 @@ gem "terser", "~> 1.2"
 gem "haml"
 gem "will_paginate"
 gem "turbo-rails", "~> 2.0"
-# TODO: Remove dynamic_form and use Rails to display errors
-gem "dynamic_form"
 gem "ckeditor", "~> 5.1.3"
 gem "jquery-rails"
 gem "jquery-ui-rails", "~> 6.0"
