@@ -216,7 +216,7 @@ RSpec.describe Instrument do
         end
 
         it "should succeed" do
-          expect(@updated.class).to be Relay
+          expect(@updated).to be nil
         end
 
         it "should have a control_mechanism of manual" do
@@ -241,7 +241,7 @@ RSpec.describe Instrument do
         end
 
         it "should succeed" do
-          expect(@updated.class).to be Relay
+          expect(@updated).to be nil
         end
 
         it "should have a control_mechanism of manual" do

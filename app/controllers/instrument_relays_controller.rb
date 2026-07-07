@@ -37,14 +37,16 @@ class InstrumentRelaysController < ApplicationController
   def handle_relay(action_string)
     old_id = params[:id]
 
-    @relay = @product.replace_relay(relay_params, params[:relay][:control_mechanism])
+    control_mechanism = params[:relay][:control_mechanism]
+    @relay = @product.replace_relay(relay_params, control_mechanism)
+
+    if @relay&.valid? || (@relay.nil? && old_id.present?)
+      LogEvent.log(@product, :relay_update, current_user, metadata: { control_mechanism: })
+    end
+
+    @relay ||= Relay.new
     if @relay.valid?
       @relay.try(:activate_secondary_outlet) if @relay.secondary_outlet.present?
-
-      # Need to update the loggable_id for the old relay, because the relay is being replaced.
-      LogEvent.where(loggable_type: "Relay", loggable_id: old_id).update_all(loggable_id: @relay.id) if old_id.present?
-
-      LogEvent.log(@relay, :update, current_user, metadata: { instrument_name: @product.name }) if @relay.persisted?
 
       flash[:notice] = "Relay was successfully updated."
       redirect_to facility_instrument_relays_path(current_facility, @product)
@@ -84,5 +86,4 @@ class InstrumentRelaysController < ApplicationController
                   :circuit_number,
                   :ethernet_port_number)
   end
-
 end
