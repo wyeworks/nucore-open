@@ -8,6 +8,8 @@ class ApplicationController < ActionController::Base
   include DateHelper
 
   helper :all # include all helpers, all the time
+  helper Nucore::ModelErrorRender::HelperMethods
+
   protect_from_forgery # See ActionController::RequestForgeryProtection for details
 
   # Make the following methods available to all views

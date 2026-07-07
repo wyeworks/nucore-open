@@ -1,7 +1,7 @@
 = content_for :h1 do
   = t(".select")
 
-= error_messages_for(object: @order, object_name: "order")
+= error_messages_for(@order)
 
 - if @accounts.empty?
   %p.notice= text("orders.choose_account.notice")
