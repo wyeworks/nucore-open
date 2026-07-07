@@ -1050,7 +1050,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
             before do
               @params[:order_detail] = {
                 order_status_id: OrderStatus.complete.id.to_s,
-                fulfilled_at: I18n.l(fulfilled_at.to_date, format: :usa),
+                fulfilled_at: fulfilled_at.to_date.iso8601,
               }
               do_request
             end

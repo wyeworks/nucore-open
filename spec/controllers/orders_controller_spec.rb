@@ -574,14 +574,14 @@ RSpec.describe OrdersController do
       it "sets ordered_at to a time in the past" do
         maybe_grant_always_sign_in :director
         switch_to @staff
-        @params[:order_date] = SpecDateHelper.format_usa_date(1.day.ago)
+        @params[:order_date] = 1.day.ago.to_date.iso8601
         do_request
         expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date yesterday)
       end
 
       it "sets ordered_at to now if not acting_as" do
         maybe_grant_always_sign_in :director
-        @params[:order_date] = SpecDateHelper.format_usa_date(1.day.ago)
+        @params[:order_date] = 1.day.ago.to_date.iso8601
         do_request
         expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date Time.current)
       end
@@ -593,7 +593,7 @@ RSpec.describe OrdersController do
 
         @params.merge!(
           "quantity#{@order_detail.id}" => 5,
-          "order_date" => "09/30/2016",
+          "order_date" => "2016-09-30",
           "order_time" => { "hour" => "4", "minute" => "0", "ampm" => "PM" },
         )
         do_request
@@ -651,7 +651,7 @@ RSpec.describe OrdersController do
 
           it "sets the order_detail fulfilled dates to the order time" do
             @item_pp = @item.item_price_policies.create!(FactoryBot.attributes_for(:item_price_policy, price_group_id: @price_group.id, start_date: 1.day.ago, expire_date: 1.day.from_now))
-            @params[:order_date] = SpecDateHelper.format_usa_date(1.day.ago)
+            @params[:order_date] = 1.day.ago.to_date.iso8601
             do_request
             assigns[:order].reload.order_details.all? { |od| expect(od.fulfilled_at).to match_date yesterday }
           end
@@ -664,20 +664,20 @@ RSpec.describe OrdersController do
             end
 
             it "uses the current price policy if the order date falls in the policy's date range" do
-              @params[:order_date] = SpecDateHelper.format_usa_date(yesterday)
+              @params[:order_date] = yesterday.to_date.iso8601
               do_request
               assigns[:order].reload.order_details.all? { |od| expect(od.price_policy).to eq(@item_pp) }
             end
 
             it "uses an old price policy if the order date falls in the old policy's date range" do
-              @params[:order_date] = SpecDateHelper.format_usa_date(5.days.ago)
+              @params[:order_date] = 5.days.ago.to_date.iso8601
               do_request
               assigns[:order].reload.order_details.all? { |od| expect(od.price_policy).to eq(@item_past_pp) }
             end
 
             # when backdating was initially set up, this would cause an error, but behavior changed as of ticket #51239
             it "does not error if there is no policy set for the date in the past" do
-              @params[:order_date] = SpecDateHelper.format_usa_date(9.days.ago)
+              @params[:order_date] = 9.days.ago.to_date.iso8601
               do_request
               assigns[:order].reload.order_details.all? do |od|
                 expect(od.price_policy).to be_nil
@@ -703,7 +703,7 @@ RSpec.describe OrdersController do
           @params[:id] = reservation.order_detail.order.id
           maybe_grant_always_sign_in :director
           switch_to @staff
-          @params[:order_date] = SpecDateHelper.format_usa_date(2.days.ago)
+          @params[:order_date] = 2.days.ago.to_date.iso8601
           @params[:order_time] = { hour: "2", minute: "27", ampm: "PM" }
         end
 

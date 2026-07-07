@@ -43,7 +43,7 @@ RSpec.describe FacilityAccountsReconciliationController do
 
   describe "update" do
     before { sign_in admin }
-    let(:formatted_reconciled_at) { SpecDateHelper.format_usa_date(reconciled_at) }
+    let(:formatted_reconciled_at) { reconciled_at.presence&.to_date&.iso8601 }
 
     def perform
       post :update, params: { facility_id: facility.url_name, account_type: "ReconciliationTestAccount",
