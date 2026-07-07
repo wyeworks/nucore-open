@@ -314,7 +314,7 @@ RSpec.describe FacilityOrdersController do
           before { @params[:add_to_order_form][:order_status_id] = complete_status.id.to_s }
 
           context "and setting fulfilled_at" do
-            before { @params[:add_to_order_form][:fulfilled_at] = fulfilled_at.strftime("%m/%d/%Y") }
+            before { @params[:add_to_order_form][:fulfilled_at] = fulfilled_at.strftime("%Y-%m-%d") }
 
             context "to today" do
               let(:fulfilled_at) { Date.today }
@@ -358,7 +358,7 @@ RSpec.describe FacilityOrdersController do
 
         context "when not setting an order status" do
           context "and setting fulfilled_at" do
-            before { @params[:add_to_order_form][:fulfilled_at] = fulfilled_at.strftime("%m/%d/%Y") }
+            before { @params[:add_to_order_form][:fulfilled_at] = fulfilled_at.strftime("%Y-%m-%d") }
             let(:fulfilled_at) { Date.today }
 
             it_should_allow :director, "to add an item to existing order with status and fulfilled_at set to defaults" do

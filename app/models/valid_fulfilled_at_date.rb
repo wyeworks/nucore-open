@@ -32,8 +32,12 @@ class ValidFulfilledAtDate
 
   # Returns nil if the date is invalid
   def to_time
-    time = parse_usa_date(@string).try(:to_date)
-    time.beginning_of_day + 12.hours if time.present?
+    return if @string.blank?
+
+    date = Date.iso8601(@string.to_s)
+    date.beginning_of_day + 12.hours
+  rescue ArgumentError
+    nil
   end
   alias presence to_time
   # `in_time_zone` allows us to set something like

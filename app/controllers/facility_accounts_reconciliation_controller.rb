@@ -31,7 +31,7 @@ class FacilityAccountsReconciliationController < ApplicationController
   end
 
   def update
-    reconciled_at = parse_usa_date(params[:reconciled_at])
+    reconciled_at = params[:reconciled_at].presence&.to_date&.beginning_of_day
     reconciler = OrderDetails::Reconciler.new(
       unreconciled_details,
       params[:order_detail],

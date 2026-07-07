@@ -361,7 +361,7 @@ class OrdersController < ApplicationController
 
   def build_order_date
     if params[:order_date].present?
-      parse_usa_date(params[:order_date])
+      params[:order_date].to_date.beginning_of_day
     end
   end
 

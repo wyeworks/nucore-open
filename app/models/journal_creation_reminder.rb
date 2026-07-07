@@ -11,8 +11,6 @@
 #   start Sep 1, 2021 and end on the August 2021 cutoff date:
 #   Sep 1, 2021 - Sep 8, 2021.
 class JournalCreationReminder < ApplicationRecord
-  include DateHelper
-
   validates :message, presence: true
   validates :starts_at, presence: true
   validates :ends_at, presence: true
@@ -25,14 +23,25 @@ class JournalCreationReminder < ApplicationRecord
   end
 
   def starts_at=(date_string)
-    super(parse_usa_date(date_string))
+    super(coerce_date(date_string)&.beginning_of_day)
   end
 
   def ends_at=(date_string)
-    super(parse_usa_date(date_string)&.end_of_day)
+    super(coerce_date(date_string)&.end_of_day)
   end
 
   private
+
+  # Accepts an ISO date string (from the form) or a Date/Time (set in code).
+  # Returns nil for blank or unparseable values.
+  def coerce_date(value)
+    return if value.blank?
+    return value.to_date if value.acts_like?(:date) || value.acts_like?(:time)
+
+    Date.iso8601(value.to_s)
+  rescue ArgumentError
+    nil
+  end
 
   def starts_before_ends
     if starts_at && ends_at
