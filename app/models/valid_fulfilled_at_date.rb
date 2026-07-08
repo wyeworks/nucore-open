@@ -3,7 +3,6 @@
 class ValidFulfilledAtDate
 
   include ActiveModel::Validations
-  include DateHelper
 
   validate :valid_format
   validate :not_in_future, if: :to_time
@@ -41,7 +40,7 @@ class ValidFulfilledAtDate
   end
   alias presence to_time
   # `in_time_zone` allows us to set something like
-  # `record.fulfilled_at = ValidFulfilledAtDate.new("XX/XX/XXXX")`
+  # `record.fulfilled_at = ValidFulfilledAtDate.new("YYYY-MM-DD")`
   # and ActiveRecord will treat it like a normal date/time.
   alias in_time_zone to_time
 

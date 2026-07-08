@@ -143,10 +143,17 @@ class PricePoliciesController < ApplicationController
     PricePolicyUpdater.update_all(
       @product,
       @price_policies,
-      params[:start_date].presence&.to_date&.beginning_of_day,
-      params[:expire_date].presence&.to_date&.end_of_day,
+      parse_iso_date(params[:start_date])&.beginning_of_day,
+      parse_iso_date(params[:expire_date])&.end_of_day,
       params.merge(created_by_id: current_user.id),
     )
+  end
+
+  # Returns nil for blank or unparseable (e.g. "5/0/2018") input.
+  def parse_iso_date(value)
+    value.presence&.to_date
+  rescue Date::Error
+    nil
   end
 
   # TO DO: consider moving the methods below to InstrumentPricePolicyController
