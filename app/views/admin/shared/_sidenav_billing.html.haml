@@ -12,13 +12,13 @@
     = tab text("orders_in_review"), facility_notifications_in_review_path, (sidenav_tab == 'in_review') if SettingsHelper::has_review_period?
 
   - if can?(:manage, Journal)
-    %li.divider{role: "separator"}
+    %li.divider{ role: "separator" }
     %li.nav-header= text("internal_billing")
     = tab t_create_model(Journal), new_facility_journal_path, (sidenav_tab == 'new_journal') if current_facility.single_facility?
     = tab t_manage_models(Journal), facility_journals_path, (sidenav_tab == 'journals')
 
   - if can?(:manage, Statement) && Account.config.statements_enabled?
-    %li.divider{role: "separator"}
+    %li.divider{ role: "separator" }
     %li.nav-header= text("external_billing")
     = tab t_create_models(Statement), new_facility_statement_path(current_facility), (sidenav_tab == 'statements')
     = tab text("statement_history"), facility_statements_path(current_facility), (sidenav_tab == "statement_history")
@@ -38,5 +38,5 @@
 
   - billing_log_events_ff = SettingsHelper.feature_on?("billing.billing_log_events")
   - if billing_log_events_ff && current_facility.cross_facility? && can?(:manage_billing, current_facility)
-    %li.divider{role: "separator"}
+    %li.divider{ role: "separator" }
     = tab text("billing_log_event"), facility_billing_log_events_path(current_facility), (sidenav_tab == "billing_log")
