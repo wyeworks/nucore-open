@@ -8,8 +8,8 @@ RSpec.describe Reports::InstrumentUnavailableReportsController do
   let(:params) do
     {
       facility_id: facility.url_name,
-      date_start: date_start.strftime("%m/%d/%Y"),
-      date_end: date_end.strftime("%m/%d/%Y"),
+      date_start: date_start.to_date.iso8601,
+      date_end: date_end.to_date.iso8601,
       report_by: :instrument_unavailable,
     }
   end

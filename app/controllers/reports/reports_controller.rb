@@ -55,14 +55,14 @@ module Reports
     end
 
     def init_report_params
-      @date_start = parse_usa_date(params[:date_start])
+      @date_start = parse_iso_date(params[:date_start])
       @date_start = if @date_start.blank?
                       (Time.zone.now - 1.month).beginning_of_month
                     else
                       @date_start.beginning_of_day
                     end
 
-      @date_end = parse_usa_date(params[:date_end])
+      @date_end = parse_iso_date(params[:date_end])
       @date_end = if @date_end.blank?
                     @date_start.end_of_month
                   else

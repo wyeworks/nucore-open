@@ -163,7 +163,7 @@ RSpec.describe "Facility Statement Admin" do
     end
 
     it "can filter by dates" do
-      fill_in "Start Date", with: I18n.l(4.days.ago.to_date, format: :usa)
+      fill_in "Start Date", with: 4.days.ago.to_date
       click_button "Filter"
 
       expect(page).not_to have_content(statement1.invoice_number)
@@ -171,7 +171,7 @@ RSpec.describe "Facility Statement Admin" do
       expect(page).to have_content(statement3.invoice_number)
 
       fill_in "Start Date", with: ""
-      fill_in "End Date", with: I18n.l(4.days.ago.to_date, format: :usa)
+      fill_in "End Date", with: 4.days.ago.to_date
 
       click_button "Filter"
       expect(page).to have_content(statement1.invoice_number)

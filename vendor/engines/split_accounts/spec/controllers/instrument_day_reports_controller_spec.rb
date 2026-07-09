@@ -23,7 +23,7 @@ RSpec.describe Reports::InstrumentDayReportsController, :enable_split_accounts d
   before { sign_in admin }
 
   def do_request(action)
-    get :index, params: { report_by: action, facility_id: facility.url_name, date_start: "03/01/2016", date_end: "03/31/2016" }, xhr: true
+    get :index, params: { report_by: action, facility_id: facility.url_name, date_start: "2016-03-01", date_end: "2016-03-31" }, xhr: true
   end
 
   describe "reserved_quantity" do

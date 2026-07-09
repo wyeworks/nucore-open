@@ -33,7 +33,7 @@ class StatementSearchForm
               .for_facilities(facilities) # ANDs with the current facility so
               .for_accounts(accounts)
               .for_account_admins(account_admins)
-              .created_between(parse_usa_date(date_range_start)&.beginning_of_day, parse_usa_date(date_range_end)&.end_of_day)
+              .created_between(parse_iso_date(date_range_start)&.beginning_of_day, parse_iso_date(date_range_end)&.end_of_day)
     add_reconciled_status_filter(results)
   end
 

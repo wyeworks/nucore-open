@@ -17,7 +17,7 @@ RSpec.describe Reports::InstrumentReportsController do
   private
 
   def setup_extra_test_data(_user)
-    start_at = parse_usa_date(@params[:date_start], "10:00 AM") + 10.days
+    start_at = Time.zone.parse("#{@params[:date_start]} 10:00 AM") + 10.days
     place_reservation(@authable, @order_detail, start_at)
     @reservation.actual_start_at = start_at
     @reservation.actual_end_at = start_at + 1.hour

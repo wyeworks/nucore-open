@@ -136,7 +136,7 @@ class FacilitiesController < ApplicationController
     @search_form = TransactionSearch::SearchForm.new(
       params[:search],
       defaults: {
-        date_range_start: format_usa_date(1.month.ago.beginning_of_month),
+        date_range_start: 1.month.ago.beginning_of_month.to_date,
       },
     )
 
