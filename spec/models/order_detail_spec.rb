@@ -1767,7 +1767,7 @@ RSpec.describe OrderDetail do
     end
   end
 
-  context "OrderDetailObserver" do
+  context "merge order callbacks" do
     context "after_destroy" do
       it "should not destroy order if order is not a merge and there are no more details" do
         @order_detail.destroy
