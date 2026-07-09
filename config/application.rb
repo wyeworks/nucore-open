@@ -19,8 +19,6 @@ module Nucore
     # https://github.com/rails/rails/blob/dc1242fd5a4d91e63846ab552a07e19ebf8716ac/activerecord/CHANGELOG.md
     config.active_record.yaml_column_permitted_classes = [Symbol, ActiveSupport::HashWithIndifferentAccess]
 
-    config.active_record.observers = :order_detail_observer
-
     initializer "nucore.i18n.move_overrides_to_end", after: "text_helpers.i18n.add_load_paths" do
       config.i18n.load_path += Dir[Rails.root.join("config", "override_locales", "*.{rb,yml}").to_s]
     end

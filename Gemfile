@@ -47,7 +47,6 @@ gem "aasm"
 gem "kt-paperclip"
 gem "paper_trail"
 gem "nokogiri"
-gem "rails-observers"
 gem "icalendar"
 gem "paranoia"
 

@@ -532,8 +532,6 @@ GEM
     rails-html-sanitizer (1.7.0)
       loofah (~> 2.25)
       nokogiri (>= 1.15.7, != 1.16.7, != 1.16.6, != 1.16.5, != 1.16.4, != 1.16.3, != 1.16.2, != 1.16.1, != 1.16.0.rc1, != 1.16.0)
-    rails-observers (0.1.5)
-      activemodel (>= 4.0)
     railties (8.0.5)
       actionpack (= 8.0.5)
       activesupport (= 8.0.5)
@@ -808,7 +806,6 @@ DEPENDENCIES
   rack-utf8_sanitizer
   rails (~> 8.0.4)
   rails-controller-testing
-  rails-observers
   rake
   reline
   rollbar
