@@ -8,7 +8,7 @@
       %th.centered= OrderDetail.human_attribute_name(:status)
       %th.currency= OrderDetail.human_attribute_name(:unassigned_total)
   %tbody
-    - order_details.each do |od|
+    - OrderDetailPresenter.wrap(order_details).each do |od|
       - order = od.order
       - res = od.reservation
       %tr
@@ -21,7 +21,7 @@
           = reservation_view_edit_link(res)
         %td.user-order-detail.order-note.order-note--wide
           .order-detail-description
-            - product_name = OrderDetailPresenter.new(od).description_as_html
+            - product_name = od.description_as_html
             = link_to "#{od.product.facility.abbreviation} / #{product_name}".html_safe, facility_instrument_path(od.product.facility, od.product)
 
             = warning_if_instrument_is_offline_or_partially_available(od.product)
@@ -30,9 +30,8 @@
               .order-detail-extra.order-detail-note
                 = render "shared/order_detail_note", order_detail: od
 
-        %td.centered= OrderDetailPresenter.new(od).order_status_display_name
-        %td.currency
-          = OrderDetailPresenter.new(od).wrapped_total
+        %td.centered= od.order_status_display_name
+        %td.currency= od.wrapped_total
 
 = render "/price_display_footnote"
 = will_paginate(order_details)
