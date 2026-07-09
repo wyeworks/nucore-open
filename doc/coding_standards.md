@@ -174,10 +174,6 @@ We have an `app/support` directory that probably would be more at home in `app/s
 Don't worry too much about moving code you're not actively working with. But when you do work on
 something that seems to be in the wrong place, please fix it!
 
-### Don't use DCI
-There are a few places where we are using [DCI](http://www.sitepoint.com/dci-the-evolution-of-the-object-oriented-paradigm) such as `PriceDisplayment`. Do not use this technique going forward. Prefer decorators/presenters. Consider [`SimpleDelegator`](http://ruby-doc.org/stdlib/libdoc/delegate/rdoc/SimpleDelegator.html) or [`DelegateClass`](http://ruby-doc.org/stdlib/libdoc/delegate/rdoc/Object.html); we have chosen not to use something
-more magical like Draper.
-
 ### Documentation
 If a class is not immediately obvious what its purpose is, add comments to the top of the
 class explaining its purpose and its use.

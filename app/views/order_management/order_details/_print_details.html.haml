@@ -2,7 +2,7 @@
   .banner-list
     .row
       %dl.col-md-8
-        %dt= @order_detail.class.human_attribute_name(:account)
+        %dt= OrderDetail.human_attribute_name(:account)
         %dd= @order_detail.account
     = render "projects/shared/project", order_detail: @order_detail
     -# TODO: Check if un-used and remove.  This was used by the old projects engine before it was brought into the application.
@@ -27,10 +27,10 @@
         = banner_label @order_detail, :quantity
     .row
       - prefix = @order_detail.actual_cost? ? "actual" : "estimated"
-      - @order_detail.send(:extend, PriceDisplayment)
-      = banner_label @order_detail, :display_cost, t("activerecord.attributes.order_detail.#{prefix}_cost")
-      = banner_label @order_detail, :display_subsidy, t("activerecord.attributes.order_detail.#{prefix}_subsidy")
-      = banner_label @order_detail, :display_total, t("activerecord.attributes.order_detail.#{prefix}_total")
+      - order_detail_presenter = OrderDetailPresenter.new(@order_detail)
+      = banner_label order_detail_presenter, :display_cost, t("activerecord.attributes.order_detail.#{prefix}_cost")
+      = banner_label order_detail_presenter, :display_subsidy, t("activerecord.attributes.order_detail.#{prefix}_subsidy")
+      = banner_label order_detail_presenter, :display_total, t("activerecord.attributes.order_detail.#{prefix}_total")
 
     .row
       = banner_label @order_detail, :note

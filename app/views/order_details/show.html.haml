@@ -76,7 +76,7 @@
         %tr
           - if res
             %td.centered= reservation_actions(res)
-          %td.centered= @order_detail.wrapped_quantity
+          %td.centered= order_detail_presenter.wrapped_quantity
           %td.user-order-detail
             .order-detail-description= order_detail_presenter.description_as_html
             - if res

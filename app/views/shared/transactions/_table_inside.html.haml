@@ -15,7 +15,8 @@
     / We need to keep track of how many columns there are to the left of the Cost column,
     / so we can position the Total correctly.
     - colspan_for_total = 5
-    - order_details.each do |order_detail|
+    - order_details_presenters = OrderDetailPresenter.wrap(order_details)
+    - order_details_presenters.each do |order_detail|
       - colspan_for_total = 5
       %tr{ class: row_class(order_detail) }
         - if @order_detail_action
@@ -48,9 +49,7 @@
           - colspan_for_total += 1
         %td.user-order-detail.order-note
           .order-detail-description
-            - order_detail_presenter = OrderDetailPresenter.new(order_detail)
-            = order_detail_presenter.description_as_html
-            - order_detail.extend PriceDisplayment
+            = order_detail.description_as_html
             = "(#{order_detail.wrapped_quantity})".html_safe unless order_detail.problem?
             - if order_detail.time_data.present?
               %br
@@ -65,20 +64,20 @@
         - if @account.nil? && controller_name != "projects"
           - if SettingsHelper.feature_on?("billing.billing_table_price_groups")
             %td= order_detail.account.owner_user
-            %td= order_detail_presenter.account_description
+            %td= order_detail.account_description
             %td= order_detail.price_policy&.price_group&.name
             - colspan_for_total += 3
           - else
-            %td= order_detail_presenter.account_description
+            %td= order_detail.account_description
             %td= order_detail.account.owner_user
             - colspan_for_total += 2
         %td.currency
-          = order_detail_presenter.wrapped_total
+          = order_detail.wrapped_total
           - if controller_name == "projects"
             %br
-            = order_detail_presenter.price_group_name
+            = order_detail.price_group_name
         %td.nowrap
-          = order_detail_presenter.order_status_display_name
+          = order_detail.order_status_display_name
           %br
           = order_detail_status_badges(order_detail)
         - if local_assigns[:show_statements]
@@ -88,7 +87,7 @@
     %tfoot
       %tr
         %th.total{ colspan: colspan_for_total, scope: "row" }= t("shared.transactions.table_inside.page_subtotal")
-        %td.currency= number_to_currency(order_details.sum { |od| od.actual_or_estimated_total || 0 })
+        %td.currency= number_to_currency(order_details_presenters.sum { |od| od.actual_or_estimated_total || 0 })
         %td{ colspan: local_assigns[:show_statements] ? 2 : 1 }
       %tr
         %th.total{ colspan: colspan_for_total, scope: "row" }= t("shared.transactions.table_inside.grand_total")
@@ -102,6 +101,6 @@
   - else
     %tfoot
       %th.total{ colspan: colspan_for_total, scope: "row" }= t("shared.transactions.table_inside.total")
-      %td.currency= number_to_currency(order_details.sum { |od| od.actual_or_estimated_total || 0 })
+      %td.currency= number_to_currency(order_details_presenters.sum { |od| od.actual_or_estimated_total || 0 })
       %td{ colspan: local_assigns[:show_statements] ? 2 : 1 }
 = will_paginate(order_details) if order_details_are_paginated
