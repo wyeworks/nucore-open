@@ -232,8 +232,8 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
         @action = :create
         @start_date = 1.year.from_now
         @expire_date = PricePolicy.generate_expire_date(@start_date)
-        @params[:start_date] = @start_date.to_s
-        @params[:expire_date] = @expire_date.to_s
+        @params[:start_date] = @start_date.to_date.iso8601
+        @params[:expire_date] = @expire_date.to_date.iso8601
         @params[:note] = "This is a note"
 
         @params_modifier.before_create @params if @params_modifier.try :respond_to?, :before_create
@@ -271,7 +271,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
           end
 
           it "rejects everything if expire date is before start date" do
-            @params[:expire_date] = (@start_date - 2.days).to_s
+            @params[:expire_date] = (@start_date - 2.days).to_date.iso8601
             do_request
             expect(flash[:error]).not_to be_nil
             expect(response).to render_template "price_policies/new"
@@ -285,14 +285,14 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
             @order    = @director.orders.create(FactoryBot.attributes_for(:order, created_by: @director.id))
             @order_detail = @order.order_details.create(FactoryBot.attributes_for(:order_detail).update(product_id: @product.id, account_id: @account.id, price_policy: @price_policy))
 
-            @params[:start_date] = @price_policy.start_date
+            @params[:start_date] = @price_policy.start_date.to_date.iso8601
             do_request
             expect(assigns[:price_policies]).to be_empty
             expect(response).to redirect_to [@authable, @product, PricePolicy]
           end
 
           it "rejects everything if the expiration date spans into the next fiscal year" do
-            @params[:expire_date] = (PricePolicy.generate_expire_date(@start_date) + 1.day).to_s
+            @params[:expire_date] = (PricePolicy.generate_expire_date(@start_date) + 1.day).to_date.iso8601
             do_request
             expect(response).to be
             expect(flash[:error]).not_to be_nil
@@ -339,8 +339,8 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
         set_policy_date
         @params.merge!(
           id: price_policy.start_date.to_s,
-          start_date: price_policy.start_date.to_s,
-          expire_date: price_policy.expire_date.to_s,
+          start_date: price_policy.start_date.to_date.iso8601,
+          expire_date: price_policy.expire_date.to_date.iso8601,
           note: "This is a note",
         )
 
@@ -367,7 +367,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
             end
 
             before(:each) do
-              @params[:expire_date] = new_expire_date.to_s
+              @params[:expire_date] = new_expire_date.to_date.iso8601
               do_request
             end
 
@@ -383,7 +383,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
             let(:new_start_date) { price_policy.start_date + 1.day }
 
             before(:each) do
-              @params[:start_date] = new_start_date.to_s
+              @params[:start_date] = new_start_date.to_date.iso8601
               do_request
             end
 
@@ -440,7 +440,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
             end
 
             before(:each) do
-              @params[:expire_date] = expire_date.to_s
+              @params[:expire_date] = expire_date.to_date.iso8601
               do_request
             end
 

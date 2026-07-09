@@ -38,7 +38,9 @@ module DateHelper
   end
 
   def parse_iso_date(value)
-    value.presence&.to_date
+    return value.to_date if value.acts_like?(:date) || value.acts_like?(:time)
+
+    Date.iso8601(value.to_s)
   rescue Date::Error
     nil
   end
