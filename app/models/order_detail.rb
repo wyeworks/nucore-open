@@ -38,6 +38,7 @@ class OrderDetail < ApplicationRecord
   before_save :update_journal_row_amounts, if: :actual_cost_changed?
 
   after_save :update_billable_minutes_on_reservation, if: :reservation
+  after_save :reconcile_if_skip_review, if: :complete?
 
   # Included after the callbacks above so its before_save/after_save hooks
   # run last, matching the ordering the old OrderDetailObserver had.
@@ -368,8 +369,6 @@ class OrderDetail < ApplicationRecord
       query
     end
   end
-
-  after_save :reconcile_if_skip_review, if: :complete?
 
   include AASM
 
