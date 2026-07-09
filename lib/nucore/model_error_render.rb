@@ -8,7 +8,7 @@ module Nucore
       # Run in the context of a ActionView rendering
       #
       # This is a simplified implementation taken from
-      # dynamic_forms
+      # dynamic_form gem
       def error_messages_for(object)
         return if object.blank?
         return if (count = object.errors.count).zero?
