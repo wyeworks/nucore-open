@@ -208,7 +208,7 @@ RSpec.describe FacilityJournalsController do
   end
 
   describe "#create" do
-    let(:journal_date) { I18n.l(Time.zone.today, format: :usa) }
+    let(:journal_date) { Time.zone.today.iso8601 }
 
     before :each do
       @method = :post
@@ -311,7 +311,7 @@ RSpec.describe FacilityJournalsController do
 
       context "trying to journal in the future" do
         before :each do
-          @params[:journal_date] = SpecDateHelper.format_usa_date(1.day.from_now)
+          @params[:journal_date] = 1.day.from_now.to_date.iso8601
         end
 
         it_behaves_like "journal error", "Journal Date may not be in the future"
@@ -321,13 +321,13 @@ RSpec.describe FacilityJournalsController do
         before :each do
           @order_detail1.update(fulfilled_at: 5.days.ago)
           @order_detail3.update(fulfilled_at: 3.days.ago)
-          @params[:journal_date] = SpecDateHelper.format_usa_date(4.days.ago)
+          @params[:journal_date] = 4.days.ago.to_date.iso8601
         end
 
         it_behaves_like "journal error", "Journal Date may not be before the latest fulfillment date."
 
         it "does allow to be the same day" do
-          @params[:journal_date] = SpecDateHelper.format_usa_date(3.days.ago)
+          @params[:journal_date] = 3.days.ago.to_date.iso8601
           do_request
           expect(assigns(:journal)).to be_persisted
         end
@@ -767,13 +767,13 @@ RSpec.describe FacilityJournalsController do
 
       it "allows a user with billing_journals permission" do
         sign_in permitted_user
-        post :create, params: { facility_id: facility.url_name, journal_date: I18n.l(Time.zone.today, format: :usa), order_detail_ids: [@order_detail1.id, @order_detail3.id] }
+        post :create, params: { facility_id: facility.url_name, journal_date: Time.zone.today.iso8601, order_detail_ids: [@order_detail1.id, @order_detail3.id] }
         expect(response).to redirect_to(facility_journals_path(facility))
       end
 
       it "denies a user without billing_journals permission" do
         sign_in unpermitted_user
-        expect { post :create, params: { facility_id: facility.url_name, journal_date: I18n.l(Time.zone.today, format: :usa) } }.to raise_error(CanCan::AccessDenied)
+        expect { post :create, params: { facility_id: facility.url_name, journal_date: Time.zone.today.iso8601 } }.to raise_error(CanCan::AccessDenied)
       end
     end
   end

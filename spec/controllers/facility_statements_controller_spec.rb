@@ -239,7 +239,7 @@ if Account.config.statements_enabled?
         let(:billing_admin) { create(:user, :global_billing_administrator) }
         let(:regular_user) { create(:user) }
         let(:invoice_date_value) { 3.days.ago.to_date }
-        let(:invoice_date) { invoice_date_value.strftime("%m/%d/%Y") }
+        let(:invoice_date) { invoice_date_value.iso8601 }
 
         before do
           UserRole.grant(regular_user, UserRole::FACILITY_DIRECTOR, @authable)
@@ -294,7 +294,7 @@ if Account.config.statements_enabled?
         end
 
         context "when invoice_date is before fulfillment" do
-          let(:bad_invoice_date) { 10.days.ago.to_date.strftime("%m/%d/%Y") }
+          let(:bad_invoice_date) { 10.days.ago.to_date.iso8601 }
 
           before do
             sign_in billing_admin

@@ -186,13 +186,13 @@ class FacilityJournalsController < ApplicationController
   def new_journal_from_params
     @journal = Journal.new(
       created_by: session_user.id,
-      journal_date: parse_usa_date(params[:journal_date]),
+      journal_date: parse_iso_date(params[:journal_date]),
       order_details_for_creation:
     )
   end
 
   def verify_journal_date_format
-    if params[:journal_date].present? && !usa_formatted_date?(params[:journal_date])
+    if params[:journal_date].present? && parse_iso_date(params[:journal_date]).nil?
       @journal.errors.add(:journal_date, :blank)
     end
   end

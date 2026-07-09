@@ -2,10 +2,10 @@
   .row
     .col-md-3
       = label_tag(:start_date, text(:start_date))
-      = text_field_tag(:start_date, params[:start_date], class: :datepicker__data, autocomplete: "off")
+      = date_field_tag(:start_date, params[:start_date], class: "form-control")
     .col-md-3
       = label_tag(:end_date, text(:end_date))
-      = text_field_tag(:end_date, params[:end_date], class: :datepicker__data, autocomplete: "off")
+      = date_field_tag(:end_date, params[:end_date], class: "form-control")
   .row
     .col-md-3
       = label_tag(:events, text(:event_filter))

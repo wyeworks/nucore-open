@@ -4,8 +4,8 @@ module ListBillingLogEvents
   def index
     @billing_log_events = LogEventSearcher.new(
       relation: LogEvent.with_billing_type,
-      start_date: parse_usa_date(index_params[:start_date]),
-      end_date: parse_usa_date(index_params[:end_date]),
+      start_date: parse_iso_date(index_params[:start_date]),
+      end_date: parse_iso_date(index_params[:end_date]),
       events: index_params[:events],
       invoice_number: index_params[:invoice_number],
       payment_source: index_params[:payment_source],

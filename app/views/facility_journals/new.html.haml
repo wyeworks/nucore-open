@@ -3,12 +3,14 @@
     = javascript_include_tag "facility_journal"
     :javascript
       $(function(){
-        var today = "#{l(Time.zone.now.to_date, format: :usa)}";
+        var today = "#{Time.zone.now.to_date.iso8601}";
+        var journalDate = document.getElementById("journal_date");
 
-        $("#journal_date").val(today).datepicker({
-          "minDate": "#{l(@earliest_journal_date, format: :usa)}",
-          "maxDate": today
-        });
+        if (journalDate) {
+          journalDate.value = today;
+          journalDate.min = "#{@earliest_journal_date.to_date.iso8601}";
+          journalDate.max = today;
+        }
       });
 
       $(function(){
