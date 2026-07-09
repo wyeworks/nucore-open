@@ -31,12 +31,7 @@ class FacilityAccountsReconciliationController < ApplicationController
   end
 
   def update
-    reconciled_at =
-      begin
-        params[:reconciled_at].presence&.to_date&.beginning_of_day
-      rescue ArgumentError
-        nil
-      end
+    reconciled_at = parse_iso_date(params[:reconciled_at])&.beginning_of_day
     reconciler = OrderDetails::Reconciler.new(
       unreconciled_details,
       params[:order_detail],

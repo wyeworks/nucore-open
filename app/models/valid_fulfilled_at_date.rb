@@ -3,6 +3,7 @@
 class ValidFulfilledAtDate
 
   include ActiveModel::Validations
+  include DateHelper
 
   validate :valid_format
   validate :not_in_future, if: :to_time
@@ -31,12 +32,8 @@ class ValidFulfilledAtDate
 
   # Returns nil if the date is invalid
   def to_time
-    return if @string.blank?
-
-    date = Date.iso8601(@string.to_s)
-    date.beginning_of_day + 12.hours
-  rescue ArgumentError
-    nil
+    date = parse_iso_date(@string)
+    date.beginning_of_day + 12.hours if date
   end
   alias presence to_time
   # `in_time_zone` allows us to set something like

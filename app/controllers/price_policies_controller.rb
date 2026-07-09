@@ -149,13 +149,6 @@ class PricePoliciesController < ApplicationController
     )
   end
 
-  # Returns nil for blank or unparseable (e.g. "5/0/2018") input.
-  def parse_iso_date(value)
-    value.presence&.to_date
-  rescue Date::Error
-    nil
-  end
-
   # TO DO: consider moving the methods below to InstrumentPricePolicyController
   ## Duration Rates methods start here
   ## These only apply to instruments with duration pricing mode

@@ -56,7 +56,7 @@ RSpec.describe JournalCreationReminder do
     end
 
     context "with an invalid string" do
-      let(:ends_at) { "02/01/222" }
+      let(:ends_at) { "2022-13-45" }
 
       it "doesn't error" do
         expect(reminder.ends_at).to eq nil
@@ -82,7 +82,7 @@ RSpec.describe JournalCreationReminder do
     end
 
     context "with an invalid string" do
-      let(:starts_at) { "02/01/222" }
+      let(:starts_at) { "2022-13-45" }
 
       it "doesn't error" do
         expect(reminder.starts_at).to eq nil

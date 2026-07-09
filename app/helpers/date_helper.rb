@@ -37,6 +37,12 @@ module DateHelper
     nil
   end
 
+  def parse_iso_date(value)
+    value.presence&.to_date
+  rescue Date::Error
+    nil
+  end
+
   def format_usa_date(datetime)
     format_usa_datetime(datetime.try(:to_date))
   end
