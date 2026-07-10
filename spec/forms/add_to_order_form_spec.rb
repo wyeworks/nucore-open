@@ -101,8 +101,8 @@ RSpec.describe AddToOrderForm do
           expect(form.order_status_id).to eq(OrderStatus.complete.id)
         end
 
-        it "has the second order's fulfilled_at to the matching date" do
-          expect(SpecDateHelper.parse_usa_date(form.fulfilled_at)).to eq(second_order_detail.fulfilled_at.beginning_of_day)
+        it "pre-populates fulfilled_at as an ISO date string" do
+          expect(form.fulfilled_at).to eq(second_order_detail.fulfilled_at.to_date.iso8601)
         end
       end
     end

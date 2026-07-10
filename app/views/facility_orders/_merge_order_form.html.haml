@@ -39,12 +39,12 @@
           hint: @order.account.active? ? "" : t(".original_account_inactive", account: @order.account),
           input_html: input_html
 
-      = f.input_field :fulfilled_at,
-        placeholder: OrderDetail.human_attribute_name(:fulfilled_at),
-        data: { min_date: ValidFulfilledAtDate.min.iso8601,
-           max_date: ValidFulfilledAtDate.max.iso8601,
-           complete_target: "#add_to_order_form_order_status_id" },
-        class: "datepicker__data string optional js--showOnCompleteStatus"
+        = f.input :fulfilled_at,
+          as: :date_field,
+          label: OrderDetail.human_attribute_name(:fulfilled_at),
+          min_date: ValidFulfilledAtDate.min,
+          max_date: ValidFulfilledAtDate.max,
+          wrapper_html: { class: "js--showOnCompleteStatus", data: { complete_target: "#add_to_order_form_order_status_id" } }
 
       .row
         .col-md-8

@@ -360,9 +360,7 @@ class OrdersController < ApplicationController
   end
 
   def build_order_date
-    if params[:order_date].present?
-      parse_usa_date(params[:order_date])
-    end
+    parse_iso_date(params[:order_date])&.beginning_of_day
   end
 
   def can_switch_instrument_on?

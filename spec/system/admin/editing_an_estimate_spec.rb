@@ -33,7 +33,7 @@ RSpec.describe "Editing an estimate", :js do
 
     fill_in "Description", with: "Updated Estimate Title"
     fill_in "Note", with: "Updated note text"
-    fill_in "Expires at", with: 2.months.from_now.strftime("%m/%d/%Y")
+    fill_in "Expires at", with: 2.months.from_now.to_date
 
     expect(page).to have_content "Add Products to Estimate"
 

@@ -65,7 +65,7 @@ RSpec.describe "Account Reconciliation", :js do
 
       check "order_detail_#{order_detail.id}_selected"
 
-      fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
+      fill_in "Reconciliation Date", with: 1.day.ago.to_date
       fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
 
       click_button "Update Orders", match: :first
@@ -96,7 +96,7 @@ RSpec.describe "Account Reconciliation", :js do
         expect(page).to have_button("Update Orders", disabled: false)
 
         check "order_detail_#{orders.last.order_details.first.id}_selected"
-        fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
+        fill_in "Reconciliation Date", with: 1.day.ago.to_date
         click_button "Update Orders", match: :first
 
         expect(page).to have_content("2 payments successfully updated")
@@ -114,7 +114,7 @@ RSpec.describe "Account Reconciliation", :js do
         uncheck "Use Bulk Note"
         check "order_detail_#{order_detail.id}_selected"
         check "order_detail_#{orders.last.order_details.first.id}_selected"
-        fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
+        fill_in "Reconciliation Date", with: 1.day.ago.to_date
         click_button "Update Orders", match: :first
 
         expect(page).to have_content("2 payments successfully updated")
@@ -150,7 +150,7 @@ RSpec.describe "Account Reconciliation", :js do
       expect(page).not_to have_content(other_order_number)
 
       check "order_detail_#{order_detail.id}_selected"
-      fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
+      fill_in "Reconciliation Date", with: 1.day.ago.to_date
       fill_in "order_detail_#{order_detail.id}_reconciled_note", with: "this is a note!"
       click_button "Update Orders", match: :first
 
@@ -175,7 +175,7 @@ RSpec.describe "Account Reconciliation", :js do
       fill_in "Bulk Note", with: "this is the bulk note"
       check "order_detail_#{order_detail.id}_selected"
       check "order_detail_#{orders.last.order_details.first.id}_selected"
-      fill_in "Reconciliation Date", with: I18n.l(1.day.ago.to_date, format: :usa)
+      fill_in "Reconciliation Date", with: 1.day.ago.to_date
       click_button "Update Orders", match: :first
 
       expect(page).to have_content("2 payments successfully updated")

@@ -22,14 +22,12 @@
             = f.association :order_status, collection: @order_statuses, label_method: :name_with_level, include_blank: false
             - if can_edit_fulfilled_at?(f.object, current_user)
               = f.input :fulfilled_at,
-                as: :string,
-                placeholder: OrderDetail.human_attribute_name(:fulfilled_at),
-                input_html: { class: "datepicker__data js--showOnCompleteStatus",
-                  value: format_usa_date(f.object.fulfilled_at),
+                as: :date_field,
+                min_date: ValidFulfilledAtDate.min,
+                max_date: ValidFulfilledAtDate.max,
+                input_html: { class: "js--showOnCompleteStatus",
                   autocomplete: "off",
-                  data: { min_date: ValidFulfilledAtDate.min.iso8601,
-                    max_date: ValidFulfilledAtDate.max.iso8601,
-                    complete_target: "#order_detail_order_status_id"}}
+                  data: { complete_target: "#order_detail_order_status_id"}}
 
           - else
             = f.label :order_status

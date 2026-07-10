@@ -400,7 +400,7 @@ RSpec.describe "Managing an order detail" do
 
       before do
         expect(page).to have_selector("input[name='order_detail[fulfilled_at]']")
-        fill_in "order_detail[fulfilled_at]", with: SpecDateHelper.format_usa_date(1.day.ago)
+        fill_in "order_detail[fulfilled_at]", with: 1.day.ago.to_date
         click_button "Save"
         expect(page).to have_content("The order was successfully updated.")
         click_link order_detail.to_s
@@ -409,7 +409,7 @@ RSpec.describe "Managing an order detail" do
       it "can update the fulfilled at date", :js do
         expect(page).to have_content(SpecDateHelper.format_usa_date(1.day.ago))
         expect(page).not_to have_content("invalid date format")
-        expect(page).to have_field("order_detail[fulfilled_at]", with: SpecDateHelper.format_usa_date(1.day.ago))
+        expect(page).to have_field("order_detail[fulfilled_at]", with: 1.day.ago.to_date.iso8601)
       end
 
       it "logs fulfilled at date updates" do

@@ -32,12 +32,12 @@ class ValidFulfilledAtDate
 
   # Returns nil if the date is invalid
   def to_time
-    time = parse_usa_date(@string).try(:to_date)
-    time.beginning_of_day + 12.hours if time.present?
+    date = parse_iso_date(@string)
+    date.beginning_of_day + 12.hours if date
   end
   alias presence to_time
   # `in_time_zone` allows us to set something like
-  # `record.fulfilled_at = ValidFulfilledAtDate.new("XX/XX/XXXX")`
+  # `record.fulfilled_at = ValidFulfilledAtDate.new("YYYY-MM-DD")`
   # and ActiveRecord will treat it like a normal date/time.
   alias in_time_zone to_time
 

@@ -25,11 +25,11 @@ class JournalCreationReminder < ApplicationRecord
   end
 
   def starts_at=(date_string)
-    super(parse_usa_date(date_string))
+    super(parse_iso_date(date_string)&.beginning_of_day)
   end
 
   def ends_at=(date_string)
-    super(parse_usa_date(date_string)&.end_of_day)
+    super(parse_iso_date(date_string)&.end_of_day)
   end
 
   private

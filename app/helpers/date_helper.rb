@@ -37,6 +37,14 @@ module DateHelper
     nil
   end
 
+  def parse_iso_date(value)
+    return value.to_date if value.acts_like?(:date) || value.acts_like?(:time)
+
+    Date.iso8601(value.to_s)
+  rescue Date::Error
+    nil
+  end
+
   def format_usa_date(datetime)
     format_usa_datetime(datetime.try(:to_date))
   end

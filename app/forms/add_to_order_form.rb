@@ -199,9 +199,9 @@ class AddToOrderForm
     @facility_id = original_order.facility_id
 
     if previously_added_to?
-      # This is a string so it displays on the form correctly.
+      # ISO-formatted string so the native date input pre-populates correctly.
       # It may be nil if the order is not complete
-      @fulfilled_at = format_usa_date(previously_added_order_detail.fulfilled_at)
+      @fulfilled_at = previously_added_order_detail.fulfilled_at&.to_date&.iso8601
       @order_status_id = previously_added_order_detail.order_status_id
     else
       @fulfilled_at = nil
@@ -284,9 +284,8 @@ class AddToOrderForm
   end
 
   def backdate(order_detail)
-    # `fulfilled_at` is a string and might get misinterpretted as DD/MM instead of MM/DD.
-    # `manual_fulfilled_at` already handles the proper string parsing so we can use
-    # it instead of duplicating the parsing effort.
+    # `fulfilled_at` is an ISO date string from the native date input.
+    # `manual_fulfilled_at` (ValidFulfilledAtDate) handles parsing and validation.
     order_detail.manual_fulfilled_at = fulfilled_at
     # If we are a merge order (i.e. requires more action like uploading an order form),
     # we do not want to set the ordered_at just yet. It will be set after the issues have

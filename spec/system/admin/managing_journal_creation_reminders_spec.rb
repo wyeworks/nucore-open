@@ -20,7 +20,7 @@ RSpec.describe "Managing JournalCreationReminder" do
     it "allows creating a new reminder" do
       visit journal_creation_reminders_path
       click_link "Add New Reminder"
-      fill_in "Ending Date", with: 2.days.from_now
+      fill_in "Ending Date", with: 2.days.from_now.to_date
 
       # Leave the message field blank to test error handling
       click_button "Submit"
@@ -39,12 +39,12 @@ RSpec.describe "Managing JournalCreationReminder" do
       click_link "Edit"
 
       # Submit an invalid date to test error handling
-      fill_in "Ending Date", with: 2.weeks.ago
+      fill_in "Ending Date", with: 2.weeks.ago.to_date
       click_button "Submit"
       expect(page).to have_content("must be after Ending Date")
 
       # Happy path
-      fill_in "Ending Date", with: 1.year.from_now
+      fill_in "Ending Date", with: 1.year.from_now.to_date
       click_button "Submit"
       expect(page).to have_content("Reminder successfully updated")
       expect(page).to have_content("FY#{1.year.from_now.to_s[2,2]}")

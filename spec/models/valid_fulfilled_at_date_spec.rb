@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe ValidFulfilledAtDate do
   subject(:fulfilled_at) { described_class.new(string) }
-  let(:string) { I18n.l(date, format: :usa) }
+  let(:string) { date.iso8601 }
 
   describe "with a date in the future" do
     let(:date) { 1.day.from_now.to_date }

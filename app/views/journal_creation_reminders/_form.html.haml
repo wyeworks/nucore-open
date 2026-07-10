@@ -1,7 +1,7 @@
 = simple_form_for(@journal_creation_reminder) do |f|
 
-  = f.input :starts_at, as: :date_picker
-  = f.input :ends_at, as: :date_picker
+  = f.input :starts_at, as: :date_field
+  = f.input :ends_at, as: :date_field
 
   = f.input :message, input_html: { rows: 7, class: "form-control" }
 

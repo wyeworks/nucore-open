@@ -19,7 +19,7 @@
       = f.hidden_field :user_id
 
     .col-md-3
-      = f.input :expires_at, as: :date_picker, min_date: Time.current.iso8601
+      = f.input :expires_at, as: :date_field, min_date: Time.current.iso8601
 
   .row
     .col-md-3
