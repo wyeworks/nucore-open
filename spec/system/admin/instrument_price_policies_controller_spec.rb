@@ -252,7 +252,7 @@ RSpec.describe InstrumentPricePoliciesController do
 
         click_button "Add Pricing Rules"
 
-        expect(page).to have_content("Duration rates base Rate must be lesser than or equal to Base rate")
+        expect(page).to have_content("Duration rates Rate must be lesser than or equal to Base rate")
       end
 
       it "fails to save when duration subsidy is higher than step rate", :js, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do

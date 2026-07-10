@@ -235,12 +235,10 @@ li.nav-spacer {
   }
 }
 
-
-
 /*
   Errors
 */
-.errorExplanation {
+.error-explanation {
   @extend .alert;
   @extend .alert-danger;
   h2 {
