@@ -5,7 +5,7 @@
 %li= form.input :date_start,
   as: :date_field,
   label: t("reports.fields.date_start"),
-  input_html: { value: @date_start&.to_date&.iso8601 }
+  input_html: { value: @date_start }
 
 %li
   .field-clarifier= t("support.array.two_words_connector")
@@ -13,4 +13,4 @@
 %li= form.input :date_end,
   as: :date_field,
   label: t("reports.fields.#{controller_name}.date_end", default: t("reports.fields.date_end")),
-  input_html: { value: @date_end&.to_date&.iso8601 }
+  input_html: { value: @date_end }

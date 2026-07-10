@@ -167,7 +167,7 @@ RSpec.describe "All Transactions Search", :js do
     login_as director
     visit facility_transactions_path(facility)
     expected_default_date = 1.month.ago.beginning_of_month
-    expect(page).to have_field("Start Date", with: expected_default_date.to_date.iso8601)
+    expect(page).to have_field("Start Date", with: expected_default_date.to_date)
 
     select_from_chosen accounts.second.account_list_item, from: "Payment Sources"
     click_button "Filter"
