@@ -23,7 +23,8 @@ window.DateTimeSelectionWidgetGroup = class DateTimeSelectionWidgetGroup {
   setDateTime(dateTime) {
     const formatter = new TimeFormatter(dateTime);
 
-    this.$dateField.val(formatter.dateString());
+    const isNative = this.$dateField.attr("type") === "date";
+    this.$dateField.val(isNative ? formatter.isoDateString() : formatter.dateString());
     this.$hourField.val(formatter.hour12());
     this.$meridianField.val(formatter.meridian());
 

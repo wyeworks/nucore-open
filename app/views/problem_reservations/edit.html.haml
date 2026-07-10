@@ -19,13 +19,13 @@
           = f.label :actual_start_date
           .row
             .col-md-3
-              = f.input :actual_start_date, label: false, disabled: true
+              = f.input :actual_start_date, as: :date_field, label: false, input_html: { value: f.object.actual_start_at&.to_date&.iso8601, disabled: true }
             .col-md-4
               = time_select f, :actual_start, { minute_step: 1 }, disabled: true
           = f.label :actual_end_date
           .row
             .col-md-3
-              = f.input :actual_end_date, input_html: { class: "datepicker__data", data: { min_date: f.object.actual_start_at&.beginning_of_day&.iso8601 } }, label: false
+              = f.input :actual_end_date, as: :date_field, label: false, min_date: f.object.actual_start_at, input_html: { value: f.object.actual_end_at&.to_date&.iso8601 }
             .col-md-4
               = time_select f, :actual_end, { minute_step: 1 }
 

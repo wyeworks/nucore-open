@@ -23,6 +23,11 @@ RSpec.describe "Fixing a problem reservation" do
     end
     before { MoveToProblemQueue.move!(reservation.order_detail, cause: :reservation_started) }
 
+    it "renders the actual end date as a native date input" do
+      visit edit_problem_reservation_path(reservation)
+      expect(page).to have_css("input[type='date'][name='reservation[actual_end_date]']")
+    end
+
     it "can edit the reservation" do
       visit reservations_path(status: :all)
       click_link "Fix Usage"
@@ -30,6 +35,7 @@ RSpec.describe "Fixing a problem reservation" do
       click_button "Save"
 
       expect(page).not_to have_content("Fix Usage")
+      expect(reservation.reload.actual_end_at).to be_within(1.minute).of(reservation.actual_start_at + 45.minutes)
       expect(reservation.order_detail.reload.problem_description_key_was).to eq("missing_actuals")
       expect(reservation.order_detail.problem_resolved_at).to be_present
       expect(reservation.order_detail.problem_resolved_by).to eq(reservation.user)
