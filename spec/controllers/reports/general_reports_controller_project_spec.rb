@@ -14,7 +14,7 @@ RSpec.describe Reports::GeneralReportsController do
     before do
       order.order_details.first.update!(project_id: project.id)
       sign_in administrator
-      get :index, params: { report_by: :project, date_start: 2.months.ago, date_end: Time.current,
+      get :index, params: { report_by: :project, date_start: 2.months.ago.to_date.iso8601, date_end: Time.current.to_date.iso8601,
                             status_filter: [OrderStatus.new_status], facility_id: facility.url_name,
                             date_range_field: "ordered_at" }, xhr: true
     end
