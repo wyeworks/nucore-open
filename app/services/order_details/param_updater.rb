@@ -100,7 +100,7 @@ class OrderDetails::ParamUpdater
   def assign_price_changed_by_user
     if @order_detail.actual_costs_match_calculated?
       @order_detail.price_changed_by_user = nil
-    elsif %w[actual_cost actual_subsidy price_change_reason].any? { |a| @order_detail.changed.include?(a) }
+    elsif %w[actual_cost actual_subsidy price_change_reason].intersect?(@order_detail.changed)
       @order_detail.price_changed_by_user = @editing_user
       LogEvent.log(@order_detail, :price_change, @editing_user)
     end
