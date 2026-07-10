@@ -17,7 +17,7 @@
               - is_invoice_date = field_name == :invoice_date
               %label.control-label{ for: field_name }= is_invoice_date ? Statement.human_attribute_name(:invoice_date) : field_name.to_s.titleize
               .controls
-                - field_options = { class: "form-control", style: "max-width: 12em" }
+                - field_options = { class: "form-control date-field" }
                 - field_options[:max] = Time.current.to_date.iso8601 if is_invoice_date
                 = date_field_tag field_name, date_value&.to_date&.iso8601, field_options
           - else
