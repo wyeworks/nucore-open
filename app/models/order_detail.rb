@@ -40,8 +40,7 @@ class OrderDetail < ApplicationRecord
   after_save :update_billable_minutes_on_reservation, if: :reservation
   after_save :reconcile_if_skip_review, if: :complete?
 
-  # Included after the callbacks above so its before_save/after_save hooks
-  # run last, matching the ordering the old OrderDetailObserver had.
+  # Required to be here because of callback order.
   include OrderDetail::MergeOrderHandling
 
   belongs_to :product
