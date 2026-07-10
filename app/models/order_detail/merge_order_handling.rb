@@ -4,22 +4,20 @@ module OrderDetail::MergeOrderHandling
   extend ActiveSupport::Concern
 
   included do
-    before_save :move_to_original_merge_order, if: :should_merge_into_original_order?
+    before_save :move_to_original_merge_order
     after_destroy :cleanup_empty_merge_order
     after_save :cleanup_previous_merge_order
   end
 
   private
 
-  # Move this detail to the original order and backdate its ordered_at
-  # if it was ordered in the past.
   def move_to_original_merge_order
+    return unless order.to_be_merged? && ready_for_merge?
+
+    # move this detail to the original order and backdate its ordered_at if
+    # it was ordered in the past.
     self.order_id = order.merge_order.id
     self.ordered_at = fulfilled_at || Time.current
-  end
-
-  def should_merge_into_original_order?
-    order.to_be_merged? && ready_for_merge?
   end
 
   # Is the order 100% ready to be merged?
