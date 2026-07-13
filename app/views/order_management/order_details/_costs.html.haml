@@ -1,5 +1,5 @@
 - price_edit_disabled = actual_cost_edit_disabled? || cannot?(:adjust_price, f.object) || f.object.product.skip_order_review?
-- if f.object.actual_cost?
+- if f.object.actual_cost.present?
   .cost-table
     .cost= f.input :actual_cost, as: :currency, disabled: price_edit_disabled
     .subsidy=  f.input :actual_subsidy, as: :currency, disabled: !f.object.price_policy.try(:has_subsidy?) || price_edit_disabled, hint: "#{f.object.price_policy.try(:price_group)}"

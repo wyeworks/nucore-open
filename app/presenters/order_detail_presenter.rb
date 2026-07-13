@@ -93,10 +93,6 @@ class OrderDetailPresenter < SimpleDelegator
     end
   end
 
-  def actual_cost?
-    actual_cost.present?
-  end
-
   def wrapped_quantity
     build_quantity_presenter.html
   end

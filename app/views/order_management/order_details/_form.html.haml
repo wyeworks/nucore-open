@@ -87,7 +87,7 @@
           = f.input :reference_id, input_html: { disabled: metadata_edit_disabled? }
 
         .col-md-3
-          - if @order_detail.actual_cost?
+          - if @order_detail.actual_cost.present?
             - if Settings.order_detail_price_change_reason_options.present?
               = f.input :price_change_reason_option, as: :select, collection: Settings.order_detail_price_change_reason_options + ["Other"], input_html: { class: "js--order-detail-price-change-reason-select", name: nil, id: nil }
               = f.input :price_change_reason, label: false, input_html: { class: "js--order-detail-price-change-reason", hidden: @order_detail.price_change_reason_option != "Other" }
