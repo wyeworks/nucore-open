@@ -16,7 +16,7 @@ RSpec.describe Reports::InstrumentReportsController do
       order_detail.update(project: project)
       sign_in user
       get :index, params: { report_by: :project, facility_id: facility.url_name,
-                            date_start: 1.month.ago, date_end: Time.current }, xhr: true
+                            date_start: 1.month.ago.to_date.iso8601, date_end: Time.current.to_date.iso8601 }, xhr: true
     end
 
     describe "the project row" do

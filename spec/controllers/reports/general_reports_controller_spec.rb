@@ -39,12 +39,12 @@ RSpec.describe Reports::GeneralReportsController do
 
     context "with date parameters" do
       it "assigns the start date to the beginning of the day" do
-        expect { get :index, params: { facility_id: facility.url_name, report_by: :product, date_start: "01/01/2014", date_end: "01/31/2014" } }.to raise_error(CanCan::AccessDenied)
+        expect { get :index, params: { facility_id: facility.url_name, report_by: :product, date_start: "2014-01-01", date_end: "2014-01-31" } }.to raise_error(CanCan::AccessDenied)
         expect(assigns(:date_start)).to eq(Time.zone.local(2014, 1, 1))
       end
 
       it "assigns the end date to the end of the day" do
-        expect { get :index, params: { facility_id: facility.url_name, report_by: :product, date_start: "01/01/2014", date_end: "01/31/2014" } }.to raise_error(CanCan::AccessDenied)
+        expect { get :index, params: { facility_id: facility.url_name, report_by: :product, date_start: "2014-01-01", date_end: "2014-01-31" } }.to raise_error(CanCan::AccessDenied)
         expect(assigns(:date_end).to_i).to eq(Time.zone.local(2014, 1, 31, 23, 59, 59).to_i)
       end
     end
@@ -91,8 +91,8 @@ RSpec.describe Reports::GeneralReportsController do
       @params = {
         report_by: :product,
         facility_id: @authable.url_name,
-        date_start: Time.zone.now.strftime("%m/%d/%Y"),
-        date_end: 1.day.from_now.strftime("%m/%d/%Y"),
+        date_start: Time.zone.now.to_date.iso8601,
+        date_end: 1.day.from_now.to_date.iso8601,
       }
 
       sign_in @admin
@@ -128,7 +128,7 @@ RSpec.describe Reports::GeneralReportsController do
 
       it "should find reconciled that started yesterday" do
         @params[:status_filter] = [OrderStatus.reconciled.id]
-        @params[:date_start] = 1.day.ago.strftime("%m/%d/%Y")
+        @params[:date_start] = 1.day.ago.to_date.iso8601
         do_request
         expect(assigns[:report_data].to_a).to contain_all [@order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_yesterday, @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_today]
       end
@@ -159,7 +159,7 @@ RSpec.describe Reports::GeneralReportsController do
 
       it "should find reconciled that started yesterday" do
         @params[:status_filter] = [OrderStatus.reconciled.id]
-        @params[:date_start] = 1.day.ago.strftime("%m/%d/%Y")
+        @params[:date_start] = 1.day.ago.to_date.iso8601
         do_request
         expect(assigns[:report_data].to_a).to contain_all [@order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_yesterday, @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_today]
       end
@@ -191,7 +191,7 @@ RSpec.describe Reports::GeneralReportsController do
 
       it "should find reconciled that started yesterday" do
         @params[:status_filter] = [OrderStatus.reconciled.id]
-        @params[:date_start] = 1.day.ago.strftime("%m/%d/%Y")
+        @params[:date_start] = 1.day.ago.to_date.iso8601
         do_request
         expect(assigns[:report_data].to_a).to contain_all [@order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_today, @order_detail_ordered_yesterday_fulfilled_yesterday_reconciled_yesterday]
       end

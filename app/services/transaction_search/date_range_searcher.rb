@@ -32,17 +32,13 @@ module TransactionSearch
 
     def search(params)
       params ||= {}
-      start_date = to_date(params[:start])
-      end_date = to_date(params[:end])
+      start_date = parse_iso_date(params[:start])
+      end_date = parse_iso_date(params[:end])
       @date_range_field = extract_date_range_field(params)
 
       order_details
         .action_in_date_range(@date_range_field, start_date, end_date)
         .ordered_by_action_date(@date_range_field)
-    end
-
-    def to_date(param_value)
-      parse_usa_date(param_value.to_s.tr("-", "/"))
     end
 
     def extract_date_range_field(params)

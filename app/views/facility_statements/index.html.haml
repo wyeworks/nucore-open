@@ -21,8 +21,8 @@
         hint: text(".account_admins_hint")
     %fieldset.col-md-4
       = f.input :status, collection: @search_form.available_statuses
-      = f.input :date_range_start, input_html: { class: "datepicker__data" }
-      = f.input :date_range_end, input_html: { class: "datepicker__data" }
+      = f.input :date_range_start, as: :date_field
+      = f.input :date_range_end, as: :date_field
 
     .submit_button.col-md-12
       = hidden_field_tag :email, current_user.email, disabled: true

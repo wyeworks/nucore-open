@@ -1,8 +1,8 @@
 -# TODO: this is very similar to reports/report_table
 
 .updated_values{ style: "display: none" }
-  .date_start= format_usa_date(@date_start)
-  .date_end= format_usa_date(@date_end)
+  .date_start= @date_start&.to_date
+  .date_end= @date_end&.to_date
 
 .export_raw{ data: { visible: export_raw_visible?.to_s } }
 

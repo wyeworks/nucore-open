@@ -16,8 +16,8 @@
       - if @search.options.map(&:key).include?("date_ranges")
         %br
         = f.input :date_range_field, collection: TransactionSearch::DateRangeSearcher.options(only: @search_form.allowed_date_fields), label: false, include_blank: false
-        = f.input :date_range_start, input_html: {class: ["datepicker", "in_past"] }, label: t("reports.fields.date_start")
-        = f.input :date_range_end, input_html: { class: ["datepicker", "in_past"] }, label: t("reports.fields.date_end")
+        = f.input :date_range_start, as: :date_field, max_date: Date.current, label: t("reports.fields.date_start")
+        = f.input :date_range_end, as: :date_field, max_date: Date.current, label: t("reports.fields.date_end")
 
   %div
     = hidden_field_tag :email, current_user.email, disabled: true

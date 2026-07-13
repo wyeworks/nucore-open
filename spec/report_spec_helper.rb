@@ -17,8 +17,8 @@ module ReportSpecHelper
       @action = :index
       @params = {
         facility_id: @authable.url_name,
-        date_start: Time.zone.now.strftime("%m/%d/%Y"),
-        date_end: (Time.zone.now + 1.year).strftime("%m/%d/%Y"),
+        date_start: Time.zone.now.to_date.iso8601,
+        date_end: (Time.zone.now + 1.year).to_date.iso8601,
         report_by: @report_by,
       }
 
@@ -36,7 +36,7 @@ module ReportSpecHelper
             [:owner, :staff, :purchaser].each do |user|
               acct = create_nufs_account_with_owner user
               place_and_complete_item_order(instance_variable_get("@#{user}"), @authable, acct)
-              @order_detail.ordered_at = parse_usa_date(@params[:date_start]) + 15.days
+              @order_detail.ordered_at = @params[:date_start].to_date + 15.days
               assert @order.save
               setup_extra_test_data(user)
             end
@@ -98,14 +98,14 @@ module ReportSpecHelper
     if @params[:date_start].blank?
       expect(assigns(:date_start)).to eq(date_start)
     else
-      expect(assigns(:date_start)).to eq(parse_usa_date(@params[:date_start]).beginning_of_day)
+      expect(assigns(:date_start)).to eq(@params[:date_start].to_date.beginning_of_day)
     end
 
     if @params[:date_end].blank?
       date_end = date_start + 42.days
       expect(assigns(:date_end)).to eq(Date.new(date_end.year, date_end.month) - 1.day)
     else
-      expect(assigns(:date_end)).to eq(parse_usa_date(@params[:date_end]).end_of_day)
+      expect(assigns(:date_end)).to eq(@params[:date_end].to_date.end_of_day)
     end
   end
 

@@ -70,7 +70,7 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       it "can find the order when it has a start date before" do
         params = {
           field: "ordered_at",
-          start: I18n.l(5.days.ago, format: :usa),
+          start: 5.days.ago.to_date.iso8601,
         }
         result = searcher.search(scope, date_ranges: params)
         expect(result.order_details).to include(order_detail)
@@ -79,7 +79,7 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       it "does not find it when the start date is after" do
         params = {
           field: "ordered_at",
-          start: I18n.l(1.day.ago.to_date, format: :usa),
+          start: 1.day.ago.to_date.iso8601,
         }
         result = searcher.search(scope, date_ranges: params)
         expect(result.order_details).to be_empty
@@ -88,8 +88,8 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       it "does not find it when the start and end dates are before" do
         params = {
           field: "ordered_at",
-          start: I18n.l(5.days.ago.to_date, format: :usa),
-          end: I18n.l(4.days.ago.to_date, format: :usa),
+          start: 5.days.ago.to_date.iso8601,
+          end: 4.days.ago.to_date.iso8601,
         }
         result = searcher.search(scope, date_ranges: params)
         expect(result.order_details).to be_empty

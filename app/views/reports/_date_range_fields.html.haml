@@ -3,12 +3,14 @@
     = t("reports.fields.#{controller_name}.between", default: t("reports.fields.between"))
 
 %li= form.input :date_start,
+  as: :date_field,
   label: t("reports.fields.date_start"),
-  input_html: { value: format_usa_date(@date_start), class: "datepicker" }
+  input_html: { value: @date_start }
 
 %li
   .field-clarifier= t("support.array.two_words_connector")
 
 %li= form.input :date_end,
+  as: :date_field,
   label: t("reports.fields.#{controller_name}.date_end", default: t("reports.fields.date_end")),
-  input_html: { value: format_usa_date(@date_end), class: "datepicker" }
+  input_html: { value: @date_end }
