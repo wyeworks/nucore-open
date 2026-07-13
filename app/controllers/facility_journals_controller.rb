@@ -50,7 +50,7 @@ class FacilityJournalsController < ApplicationController
 
     unless current_facility.has_pending_journals?
       @order_detail_action = :create
-      @action_date_field = { journal_date: @earliest_journal_date }
+      @action_date_field = { journal_date: Time.zone.now.to_date }
     end
 
     @valid_order_details, @invalid_order_details = AccountValidator::ValidatorFactory.partition_valid_order_details(@order_details.unexpired_account)

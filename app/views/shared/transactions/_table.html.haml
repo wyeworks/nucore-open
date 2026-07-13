@@ -18,7 +18,8 @@
               %label.control-label{ for: field_name }= is_invoice_date ? Statement.human_attribute_name(:invoice_date) : field_name.to_s.titleize
               .controls
                 - field_options = { class: "form-control date-field" }
-                - field_options[:max] = Time.current.to_date if is_invoice_date
+                - field_options[:max] = Time.current.to_date
+                - field_options[:min] = @earliest_journal_date&.to_date unless is_invoice_date
                 = date_field_tag field_name, date_value&.to_date, field_options
           - else
             &nbsp;
