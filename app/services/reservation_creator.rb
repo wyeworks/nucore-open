@@ -23,7 +23,7 @@ class ReservationCreator
       begin
         update_order_account
 
-        # merge state can change after call to #save! due to OrderDetailObserver#before_save
+        # merge state can change after call to #save! due to OrderDetail#move_to_original_merge_order
         to_be_merged = @order_detail.order.to_be_merged?
 
         raise ActiveRecord::RecordInvalid, @order_detail unless reservation_and_order_valid?(session_user)

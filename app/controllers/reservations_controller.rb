@@ -203,7 +203,7 @@ class ReservationsController < ApplicationController
 
     render_edit && return unless changes_valid_for_update?
 
-    # merge state can change after call to #save! due to OrderDetailObserver#before_save
+    # merge state can change after call to #save! due to OrderDetail#move_to_original_merge_order
     mergeable = @order_detail.order.to_be_merged?
     success = true
 

@@ -38,6 +38,10 @@ class OrderDetail < ApplicationRecord
   before_save :update_journal_row_amounts, if: :actual_cost_changed?
 
   after_save :update_billable_minutes_on_reservation, if: :reservation
+  after_save :reconcile_if_skip_review, if: :complete?
+
+  # Required to be here because of callback order.
+  include OrderDetail::MergeOrderHandling
 
   belongs_to :product
   belongs_to :price_policy, optional: true
@@ -364,8 +368,6 @@ class OrderDetail < ApplicationRecord
       query
     end
   end
-
-  after_save :reconcile_if_skip_review, if: :complete?
 
   include AASM
 
