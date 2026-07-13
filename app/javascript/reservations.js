@@ -24,6 +24,13 @@ $(document).ready(function() {
           $('#calendar').fullCalendar('gotoDate', d);
         });
     });
+
+    $('input[type="date"]').change(function() {
+      var parts = $(this).val().split('-');
+      if (parts.length !== 3) return;
+      var d = new Date(parts[0], parts[1] - 1, parts[2]);
+      $('#calendar').fullCalendar('gotoDate', d);
+    });
   }
 
   /* Copy in actual times from reservation time */

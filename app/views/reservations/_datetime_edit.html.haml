@@ -1,9 +1,0 @@
-= f.fields_for field, f.object.send(field) do |d|
-  %li.left
-    = d.label :date, date_label
-    = d.text_field :date, :class => 'datepicker'
-  %li.left
-    = d.label :hour, time_label
-    = d.select :hour, (1..12).to_a
-    = d.select :min, (0..59).step(5).map{|d| [sprintf('%02d', d),d]}
-    = d.select :meridian, ['AM', 'PM']

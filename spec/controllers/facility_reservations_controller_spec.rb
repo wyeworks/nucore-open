@@ -250,6 +250,17 @@ RSpec.describe FacilityReservationsController do
         expect(assigns[:display_datetime]).to eq(Time.zone.parse("2015-06-14T00:00"))
       end
 
+      it "parses an ISO date" do
+        @params[:date] = "2015-06-14"
+        do_request
+        expect(assigns[:display_datetime]).to eq(Time.zone.parse("2015-06-14T00:00"))
+      end
+
+      it "renders a native date input for the date jump" do
+        do_request
+        expect(response.body).to include('type="date"')
+      end
+
       it "shows relay status toggles when the date is today" do
         allow_any_instance_of(Instrument).to receive(:has_real_relay?).and_return(true)
         do_request
@@ -327,7 +338,7 @@ RSpec.describe FacilityReservationsController do
     let(:reserve_start_at) { FactoryBot.attributes_for(:reservation)[:reserve_start_at] }
     let(:reservation_params) do
       {
-        reserve_start_date: reserve_start_at.strftime("%m/%d/%Y"),
+        reserve_start_date: reserve_start_at.to_date.iso8601,
         reserve_start_hour: reserve_start_at.hour.to_s,
         reserve_start_min: reserve_start_at.strftime("%M"),
         reserve_start_meridian: reserve_start_at.strftime("%p"),
