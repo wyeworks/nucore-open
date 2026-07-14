@@ -268,10 +268,10 @@ RSpec.describe FacilityJournalsController do
         it_behaves_like "journal error", "may not be blank"
       end
 
-      context "when the journal_date is in MM/YY/DD format" do
-        let(:journal_date) { "1/1/11" }
+      context "when the journal_date is an invalid date" do
+        let(:journal_date) { "not-a-date" }
 
-        it_behaves_like "journal error", "must be in MM/DD/YYYY format"
+        it_behaves_like "journal error", "may not be blank"
       end
 
       it "throttles the error message size" do
