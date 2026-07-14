@@ -25,7 +25,7 @@ class ReservationsController < ApplicationController
   end
 
   def public_timeline
-    @display_datetime = parse_usa_date(params[:date]) || Time.current.beginning_of_day
+    @display_datetime = parse_iso_date(params[:date])&.beginning_of_day || Time.current.beginning_of_day
 
     @schedules = current_facility.schedules_for_timeline(:public_instruments)
     instrument_ids = @schedules.flat_map { |schedule| schedule.public_instruments.map(&:id) }

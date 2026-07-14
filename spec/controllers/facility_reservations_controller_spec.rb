@@ -244,16 +244,16 @@ RSpec.describe FacilityReservationsController do
         expect(assigns[:display_datetime]).to eq(Time.current.beginning_of_day)
       end
 
-      it "parses the date" do
-        @params[:date] = "6/14/2015"
-        do_request
-        expect(assigns[:display_datetime]).to eq(Time.zone.parse("2015-06-14T00:00"))
-      end
-
       it "parses an ISO date" do
         @params[:date] = "2015-06-14"
         do_request
         expect(assigns[:display_datetime]).to eq(Time.zone.parse("2015-06-14T00:00"))
+      end
+
+      it "falls back to today when the date is not ISO formatted" do
+        @params[:date] = "6/14/2015"
+        do_request
+        expect(assigns[:display_datetime]).to eq(Time.current.beginning_of_day)
       end
 
       it "renders a native date input for the date jump" do
@@ -268,7 +268,7 @@ RSpec.describe FacilityReservationsController do
       end
 
       it "does not show relay status toggles when the date is not today" do
-        @params[:date] = "6/14/2015"
+        @params[:date] = "2015-06-14"
         allow_any_instance_of(Instrument).to receive(:has_real_relay?).and_return(true)
         do_request
         expect(response.body).not_to include("relay_checkbox")
