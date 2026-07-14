@@ -68,12 +68,13 @@ module BulkEmail
 
     def record_delivery
       BulkEmail::Job.create!(
-        facility: facility,
-        user: user,
-        subject: subject,
-        body: body,
+        facility:,
+        user:,
+        subject:,
+        body:,
+        reply_to:,
         recipients: recipients.map(&:email),
-        search_criteria: search_criteria,
+        search_criteria:,
       )
     end
 

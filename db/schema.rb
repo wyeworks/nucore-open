@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_06_175910) do
+ActiveRecord::Schema[8.0].define(version: 2026_07_14_194847) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -110,6 +110,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_06_175910) do
     t.text "search_criteria", null: false
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.string "reply_to"
     t.index ["facility_id"], name: "fk_rails_37dbedd2b3"
     t.index ["user_id"], name: "fk_rails_7cd8662ccc"
   end

@@ -13,6 +13,8 @@
   = f.input :sender
   = f.input :created_at
   = f.input :recipient_list
+  - if @bulk_email_job.reply_to.present?
+    = f.input :reply_to
   = f.input :subject
   = f.input :body, required: false do
     = simple_format(@bulk_email_job.body)

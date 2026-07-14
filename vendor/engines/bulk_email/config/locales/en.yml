@@ -67,6 +67,7 @@ en:
         sender: Sender
         created_at: Sent
         recipient_list: Recipients
+        reply_to: Reply To
         start_date: Start Date
         end_date: End Date
         user_types: User Types

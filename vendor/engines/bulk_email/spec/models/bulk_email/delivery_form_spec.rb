@@ -105,6 +105,7 @@ RSpec.describe BulkEmail::DeliveryForm do
         expect(bulk_email_job.body).to eq(expected_body)
         expect(bulk_email_job.recipients).to match_array(recipients.map(&:email))
         expect(bulk_email_job.search_criteria).to match(this: "is", a: "test")
+        expect(bulk_email_job.reply_to).to eq(form.send(:reply_to))
       end
     end
 
@@ -141,6 +142,11 @@ RSpec.describe BulkEmail::DeliveryForm do
         expect(BulkEmail::Mailer).to have_received(:send_mail)
           .with(hash_including(reply_to: "reply@example.com"))
           .exactly(recipients.count).times
+      end
+
+      it "records it on the job" do
+        form.deliver_all
+        expect(BulkEmail::Job.last.reply_to).to eq("reply@example.com")
       end
     end
 
