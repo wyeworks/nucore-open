@@ -43,6 +43,10 @@ window.TimeFormatter = class TimeFormatter {
     return this.dateTime.toString("M/d/yyyy");
   }
 
+  isoDateString() {
+    return this.dateTime.toString("yyyy-MM-dd");
+  }
+
   toString() {
     return this.dateTime.toString();
   }
@@ -57,14 +61,14 @@ window.TimeFormatter = class TimeFormatter {
 
     const parsedMinute = parseInt(minute, 10);
 
-    const split = date.split("/");
+    // Native date inputs submit ISO (yyyy-mm-dd); legacy datepickers submit US (m/d/yyyy)
+    const iso = date.includes("-");
+    const split = date.split(iso ? "-" : "/").map((n) => parseInt(n, 10));
+    const [parsedYear, parsedMonth, parsedDay] =
+      iso ? split : [split[2], split[0], split[1]];
 
     // Date uses 0-11 for months
-    const parsedMonth = parseInt(split[0], 10) - 1;
-    const parsedDay = parseInt(split[1], 10);
-    const parsedYear = parseInt(split[2], 10);
-
-    date = new Date(parsedYear, parsedMonth, parsedDay, parsedHour, parsedMinute);
+    date = new Date(parsedYear, parsedMonth - 1, parsedDay, parsedHour, parsedMinute);
     return new TimeFormatter(date);
   }
 };
