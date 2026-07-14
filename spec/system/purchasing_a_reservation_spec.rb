@@ -140,7 +140,7 @@ RSpec.describe "Purchasing a reservation" do
           select user.accounts.first.description, from: "Payment Source"
 
           # time is frozen to 9:30am, we expect the default time to be the end of the admin reservation
-          expect(page.find_field("reservation_reserve_start_date").value).to eq Time.zone.today.strftime("%m/%d/%Y")
+          expect(page.find_field("reservation_reserve_start_date").value).to eq Time.zone.today.iso8601
           expect(page.find_field("reservation_reserve_start_hour").value).to eq "11"
           expect(page.find_field("reservation_reserve_start_min").value).to eq "0"
           expect(page.find_field("reservation_reserve_start_meridian").value).to eq "AM"
@@ -188,7 +188,7 @@ RSpec.describe "Purchasing a reservation" do
 
     it "can place a reservation in the future and then edit it" do
       click_link "Make a Reservation", match: :first
-      fill_in "Reserve Start", with: I18n.l(1.day.from_now.to_date, format: :usa)
+      fill_in "Reserve Start", with: 1.day.from_now.to_date
       select "10", from: "reservation[reserve_start_hour]"
       select "00", from: "reservation[reserve_start_min]"
       fill_in "Duration", with: "90"
@@ -205,7 +205,7 @@ RSpec.describe "Purchasing a reservation" do
 
     it "cannot place a reservtion in the past" do
       click_link "Make a Reservation", match: :first
-      fill_in "Reserve Start", with: I18n.l(1.day.ago.to_date, format: :usa)
+      fill_in "Reserve Start", with: 1.day.ago.to_date
       select "10", from: "reservation[reserve_start_hour]"
       select "00", from: "reservation[reserve_start_min]"
       fill_in "Duration", with: "90"
@@ -368,7 +368,7 @@ RSpec.describe "Purchasing a reservation" do
       it "cannot create reservation starting on unavailable day", :js do
         visit reservation_path
 
-        fill_in("reservation[reserve_start_date]", with: I18n.l(unavailable_day, format: :usa))
+        fill_in("reservation[reserve_start_date]", with: unavailable_day)
 
         click_button("Create")
 
@@ -380,7 +380,7 @@ RSpec.describe "Purchasing a reservation" do
       it "can create before unavailable day and span over it" do
         visit reservation_path
 
-        fill_in("reservation[reserve_start_date]", with: I18n.l(available_day, format: :usa))
+        fill_in("reservation[reserve_start_date]", with: available_day)
         fill_in("reservation[duration_days]", with: "2")
 
         click_button("Create")

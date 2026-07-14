@@ -42,14 +42,14 @@ RSpec.shared_examples "new daily reservation" do |before_submit: nil, after_subm
     end_date = 2.days.from_now.to_date
     duration_days = 1
 
-    fill_in("reservation[reserve_start_date]", with: I18n.l(start_date, format: :usa))
+    fill_in("reservation[reserve_start_date]", with: start_date)
     fill_in("reservation[duration_days]", with: duration_days)
 
     select(start_hour, from: "reservation[reserve_start_hour]")
 
     # Fields automatically updated with js
     find_field("reservation[reserve_end_date]", disabled: true).tap do |field|
-      expect(field.value).to eq(I18n.l(end_date, format: :usa))
+      expect(field.value).to eq(end_date.iso8601)
     end
     find_field("reservation[reserve_end_hour]", disabled: true).tap do |field|
       expect(field.value).to eq(start_hour)
@@ -94,7 +94,7 @@ RSpec.shared_examples "new daily reservation with start time disabled" do |befor
 
     expect(page).to_not have_content("Start Time Availability")
 
-    fill_in("Reserve Start", with: I18n.l(1.day.from_now.to_date, format: :usa))
+    fill_in("Reserve Start", with: 1.day.from_now.to_date)
 
     instance_eval(&before_submit) if before_submit.present?
 
