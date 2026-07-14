@@ -3,15 +3,6 @@
     = javascript_include_tag "facility_journal"
     :javascript
       $(function(){
-        var today = "#{l(Time.zone.now.to_date, format: :usa)}";
-
-        $("#journal_date").val(today).datepicker({
-          "minDate": "#{l(@earliest_journal_date, format: :usa)}",
-          "maxDate": today
-        });
-      });
-
-      $(function(){
         $("#journals_create_form").submit(function(e) {
           $(e.target).find(":submit").attr("disabled", "true");
         });

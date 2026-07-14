@@ -62,7 +62,7 @@ RSpec.describe "email log_events page" do
       it "filter events by date" do
         visit billing_log_events_path
 
-        fill_in("End Date", with: I18n.l(1.day.ago.to_date, format: :usa))
+        fill_in("End Date", with: 1.day.ago.to_date)
 
         click_button("Filter")
 

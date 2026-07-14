@@ -32,6 +32,10 @@
     .form-group.fields {
       width: 60%;
       margin: auto;
+
+      .date-field {
+        max-width: 12em;
+      }
     }
   }
 

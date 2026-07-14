@@ -2,7 +2,6 @@
 
 class FacilityJournalsController < ApplicationController
 
-  include DateHelper
   include CSVHelper
   include OrderDetailsCsvExport
   include SortableBillingTable
@@ -50,7 +49,7 @@ class FacilityJournalsController < ApplicationController
 
     unless current_facility.has_pending_journals?
       @order_detail_action = :create
-      @action_date_field = { journal_date: @earliest_journal_date }
+      @action_date_field = { journal_date: Time.zone.now.to_date }
     end
 
     @valid_order_details, @invalid_order_details = AccountValidator::ValidatorFactory.partition_valid_order_details(@order_details.unexpired_account)
@@ -97,7 +96,6 @@ class FacilityJournalsController < ApplicationController
     raise ActiveRecord::RecordNotFound if current_facility.cross_facility?
 
     new_journal_from_params
-    verify_journal_date_format
 
     # The referer can have a crazy long query string depending on how many checkboxes
     # are selected. We've seen Apache not like stuff like that and give a "malformed
@@ -186,15 +184,9 @@ class FacilityJournalsController < ApplicationController
   def new_journal_from_params
     @journal = Journal.new(
       created_by: session_user.id,
-      journal_date: parse_usa_date(params[:journal_date]),
+      journal_date: params[:journal_date],
       order_details_for_creation:
     )
-  end
-
-  def verify_journal_date_format
-    if params[:journal_date].present? && !usa_formatted_date?(params[:journal_date])
-      @journal.errors.add(:journal_date, :blank)
-    end
   end
 
   def order_details_for_creation
