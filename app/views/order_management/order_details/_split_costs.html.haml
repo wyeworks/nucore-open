@@ -17,6 +17,6 @@
             - split_percent = split_order_detail.split.percent
             - apply_remainder = split_order_detail.split.apply_remainder.to_s
             %td.split-cost{ data: { percent: split_percent, apply_remainder: apply_remainder } }
-              - cost_type = order_detail.actual_cost? ? :actual_cost : :estimated_cost
+              - cost_type = order_detail.actual_cost.present? ? :actual_cost : :estimated_cost
               = number_to_currency(split_order_detail.send(cost_type))
             %td= split_percent

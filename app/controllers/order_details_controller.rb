@@ -12,7 +12,6 @@ class OrderDetailsController < ApplicationController
 
   # GET /orders/:order_id/order_details/:id
   def show
-    @order_detail.send(:extend, PriceDisplayment)
   end
 
   # GET /orders/:order_id/order_details/:id
@@ -71,8 +70,9 @@ class OrderDetailsController < ApplicationController
       rescue => e # TODO: be more specific about what Exceptions to rescue
         flash.now[:error] = text("dispute.error")
         @order_detail.dispute_at = nil # manually set this because rollback doesn't reset the unsaved value
-        @order_detail.send(:extend, PriceDisplayment)
+        @order_detail = OrderDetailPresenter.new(@order_detail)
         render :show
+
         raise ActiveRecord::Rollback
       end
     end
