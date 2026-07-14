@@ -40,6 +40,7 @@ en:
     send_mail: Send Mail
     sending: Sending...
     search_hint: Inactive users and products are excluded from search results.
+    reply_to_hint: If left blank, replies will go to the product's contact email, or the !facility_downcase!'s email if none is set.
 
     product_unavailable_reason_statements:
       other: |
@@ -50,6 +51,7 @@ en:
     attributes:
       bulk_email/delivery_form:
         custom_message: Message
+        custom_reply_to: Reply to
         custom_subject: Subject line
 
   activerecord:

@@ -6,11 +6,12 @@ module BulkEmail
 
     include ActiveModel::Model
 
-    attr_accessor :custom_subject, :custom_message, :recipient_ids, :product_id, :search_criteria
+    attr_accessor :custom_subject, :custom_message, :custom_reply_to, :recipient_ids, :product_id, :search_criteria
     attr_reader :facility, :user, :content_generator
 
     validates :recipient_ids, presence: true
     validates :custom_subject, :custom_message, presence: true, unless: :product_offline?
+    validates :custom_reply_to, email_format: true, allow_blank: true
 
     def initialize(user, facility, content_generator)
       @user = user
@@ -22,6 +23,7 @@ module BulkEmail
       params ||= {}
       @custom_message = params[:custom_message]
       @custom_subject = params[:custom_subject]
+      @custom_reply_to = params[:custom_reply_to]&.strip
       @recipient_ids = params[:recipient_ids]
       @product_id = params[:product_id]
       @search_criteria = parse_json_hash(params[:search_criteria])
@@ -51,7 +53,7 @@ module BulkEmail
     end
 
     def reply_to
-      product.try(:contact_email).presence || facility.email
+      custom_reply_to.presence || product.try(:contact_email).presence || facility.email
     end
 
     def deliver(recipient)
