@@ -2,7 +2,8 @@
 = f.simple_fields_for reservation do |r|
   .datetime-block.js--pricingUpdate
     - if reservation.admin_editable?
-      = r.input :reserve_start_date, input_html: { class: "form-control datepicker" }
+      = r.input :reserve_start_date, as: :date_field,
+        input_html: { value: reservation.reserve_start_at }
       .form-group
         .controls
           %label &nbsp;
@@ -18,7 +19,8 @@
   .datetime-block.js--pricingUpdate
     - if reservation.can_edit_actuals? && !reservation.canceled?
       = f.input :editing_time_data, as: :hidden, input_html: { value: true }
-      = r.input :actual_start_date, input_html: { class: "form-control datepicker" }
+      = r.input :actual_start_date, as: :date_field, max_date: Date.current,
+        input_html: { value: reservation.actual_start_at }
       .form-group
         .controls
           %label &nbsp;

@@ -9,12 +9,14 @@
   = modelless_form_for url: facility_public_timeline_path(current_facility), method: :get, id: "timeline_date_search" do |f|
     #reservation_date_container
       = link_to "&laquo;".html_safe,
-        facility_public_timeline_path(current_facility, date: format_usa_date(@display_datetime - 1.day)), id: "reservation_left"
+        facility_public_timeline_path(current_facility, date: (@display_datetime - 1.day).to_date), id: "reservation_left"
       #reservation_date
         = l(@display_datetime.to_date, format: :timeline_navigation)
-        = hidden_field_tag "date", format_usa_date(@display_datetime), class: "datepicker"
+        = date_field_tag "date", @display_datetime.to_date, class: "sr-only js--timelineDatePicker"
+        %button.timeline-datepicker-button.js--timelineDatePickerButton{ type: "button" }
+          %i.fa.fa-calendar.icon-large
       = link_to "&raquo;".html_safe,
-        facility_public_timeline_path(current_facility, date: format_usa_date(@display_datetime + 1.day)), id: "reservation_right"
+        facility_public_timeline_path(current_facility, date: (@display_datetime + 1.day).to_date), id: "reservation_right"
 
 .row
   .col-md-12.timeline-wrapper

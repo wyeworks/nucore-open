@@ -6,14 +6,14 @@ require "controller_spec_helper"
 RSpec.describe OrderManagement::OrderDetailsController do
   def reservation_params(reserve_start_at, actual_start_at = nil)
     params = {
-      reserve_start_date: I18n.l(reserve_start_at.to_date, format: :usa),
+      reserve_start_date: reserve_start_at.to_date.iso8601,
       reserve_start_hour: reserve_start_at.strftime("%l"),
       reserve_start_min: reserve_start_at.strftime("%M"),
       reserve_start_meridian: reserve_start_at.strftime("%p"),
     }
 
     params.merge!(
-      actual_start_date: I18n.l(actual_start_at.to_date, format: :usa),
+      actual_start_date: actual_start_at.to_date.iso8601,
       actual_start_hour: actual_start_at.strftime("%l"),
       actual_start_min: actual_start_at.strftime("%M"),
       actual_start_meridian: actual_start_at.strftime("%p"),

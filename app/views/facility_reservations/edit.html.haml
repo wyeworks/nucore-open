@@ -1,8 +1,6 @@
 = content_for :head_content do
   :javascript
     var events_path     = "#{calendar_events_path(current_facility, @instrument)}";
-    var maxDaysFromNow  = #{@max_window};
-    var minDaysFromNow  = #{@max_days_ago};
     var minTime         = #{@instrument.first_available_hour};
     var maxTime         = #{@instrument.last_available_hour+1};
     var currentReservationId = #{@reservation.id};
@@ -22,7 +20,9 @@
 
   - if @reservation.admin_editable?
     .datetime-block
-      = f.input :reserve_start_date, input_html: { class: "datepicker" }
+      = f.input :reserve_start_date, as: :date_field,
+        min_date: @max_days_ago.days.from_now, max_date: @max_window.days.from_now,
+        input_html: { value: @reservation.reserve_start_at }
       .form-group
         .controls
           .string.optional.control-label &nbsp;
@@ -35,7 +35,9 @@
 
   - if @reservation.can_edit_actuals?
     .datetime-block
-      = f.input :actual_start_date, input_html: { class: "datepicker" }
+      = f.input :actual_start_date, as: :date_field,
+        min_date: @max_days_ago.days.from_now, max_date: Date.current,
+        input_html: { value: @reservation.actual_start_at }
       .form-group
         .controls
           .string.optional.control-label &nbsp;

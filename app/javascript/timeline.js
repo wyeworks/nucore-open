@@ -16,14 +16,20 @@ $(function() {
   });
 
   // Date select calendar
-  $(".datepicker").datepicker({
-    showOn: "button",
-    buttonText: "<i class='fa fa-calendar icon-large'>",
-  }).change(function() {
+  $(".js--timelineDatePicker").change(function() {
     var form = $(this).parents('form');
     var formUrl = form.attr('action');
     form.attr('action', formUrl + '#' + lastHiddenInstrumentId());
     form.submit();
+  });
+
+  $(".js--timelineDatePickerButton").on("click", function() {
+    var input = $(".js--timelineDatePicker")[0];
+    if (input.showPicker) {
+      input.showPicker();
+    } else {
+      input.focus();
+    }
   });
 
   //Get the Current Hour, create a class and add it the time div
