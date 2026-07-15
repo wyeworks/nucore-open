@@ -4,11 +4,11 @@ require "rails_helper"
 
 RSpec.describe FacilityUserPermissionsHelper do
 
-  describe "sorted_permissions" do
+  describe "sorted_permissions_with_labels" do
     it "puts read_access first and the rest alphabetized by display name" do
-      expect(helper.sorted_permissions.first).to eq(:read_access)
+      expect(helper.sorted_permissions_with_labels.first).to eq([:read_access, "Read Access"])
 
-      labels = helper.sorted_permissions.drop(1).map { |perm| FacilityUserPermission.human_attribute_name(perm) }
+      labels = helper.sorted_permissions_with_labels.drop(1).map { |_perm, label| label }
       expect(labels).to eq(labels.sort)
     end
   end

@@ -23,13 +23,13 @@
 
     %fieldset.js--permissionsFieldset
       %legend= text(".permissions")
-      - sorted_permissions.each do |perm|
+      - sorted_permissions_with_labels.each do |perm, label|
         - next if FacilityUserPermission::ADMIN_ONLY_PERMISSIONS.include?(perm) && !current_user.administrator?
         - next if perm == :quoting && SettingsHelper.feature_off?(:show_estimates_option)
         .checkbox
           %label
             = f.check_box perm, class: permission_checkbox_classes(perm)
-            = FacilityUserPermission.human_attribute_name(perm)
+            = label
 
   %ul.list-inline
     %li= f.submit text("shared.save"), class: "btn btn-primary"
