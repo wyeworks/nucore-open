@@ -23,8 +23,7 @@ window.DateTimeSelectionWidgetGroup = class DateTimeSelectionWidgetGroup {
   setDateTime(dateTime) {
     const formatter = new TimeFormatter(dateTime);
 
-    const isNative = this.$dateField.attr("type") === "date";
-    this.$dateField.val(isNative ? formatter.isoDateString() : formatter.dateString());
+    this.$dateField.val(formatter.isoDateString());
     this.$hourField.val(formatter.hour12());
     this.$meridianField.val(formatter.meridian());
 
@@ -225,15 +224,11 @@ window.DailyReservationTimeFieldAdjustor = class DailyReservationTimeFieldAdjust
 
     if (!(duration > 0) || !startDateVal) { return; }
 
-    let startDate = TimeFormatter.fromString(startDateVal, "12", "0", "AM").toDateTime();
-    if (isNaN(startDate.getTime())) { return; }
+    // new Date("yyyy-mm-dd") parses as UTC and shifts a day in negative offsets
+    const [year, month, day] = startDateVal.split("-").map(Number);
+    const endDate = new Date(year, month - 1, day + duration);
 
-    let endDate = new Date(startDate);
-    endDate.setDate(startDate.getDate() + duration);
-
-    const formatter = new TimeFormatter(endDate);
-    const isNative = this.reserveEnd.$dateField.attr("type") === "date";
-    this.reserveEnd.$dateField.val(isNative ? formatter.isoDateString() : formatter.dateString());
+    this.reserveEnd.$dateField.val(new TimeFormatter(endDate).isoDateString());
   }
 
   /* Trigger change and passes start and end times */

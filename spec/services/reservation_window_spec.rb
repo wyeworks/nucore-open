@@ -63,8 +63,8 @@ RSpec.describe ReservationWindow do
       let(:user) { create(:user, :staff, facility: instrument.facility) }
 
       it "returns dates spanning the operator window" do
-        expect(instance.min_reserve_date).to eq(365.days.ago.to_date)
-        expect(instance.max_reserve_date).to eq(365.days.from_now.to_date)
+        expect(instance.min_date).to eq(365.days.ago.to_date)
+        expect(instance.max_date).to eq(365.days.from_now.to_date)
       end
     end
 
@@ -72,7 +72,7 @@ RSpec.describe ReservationWindow do
       let(:user) { create(:user) }
 
       it "starts the window today" do
-        expect(instance.min_reserve_date).to eq(Date.current)
+        expect(instance.min_date).to eq(Date.current)
       end
     end
   end
