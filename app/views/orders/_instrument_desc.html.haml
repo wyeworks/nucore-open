@@ -4,4 +4,4 @@
   - if order_detail.reservation
     = link_to order_detail.reservation, edit_order_order_detail_reservation_path(order_detail.order, order_detail, order_detail.reservation)
   - else
-    = link_to 'Make a Reservation', new_order_order_detail_reservation_path(order_detail.order, order_detail), :class => 'btn'
+    = link_to 'Make a Reservation', new_order_order_detail_reservation_path(order_detail.order, order_detail), :class => 'btn btn-default'
