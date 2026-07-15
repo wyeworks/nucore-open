@@ -20,11 +20,11 @@ class ReservationWindow
   end
 
   def min_date
-    max_days_ago.days.from_now.strftime("%Y%m%d")
+    max_days_ago.days.from_now.to_date
   end
 
   def max_date
-    max_window.days.from_now.strftime("%Y%m%d")
+    max_window.days.from_now.to_date
   end
 
   private

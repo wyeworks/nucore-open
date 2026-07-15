@@ -779,8 +779,8 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
     it_should_allow_all facility_operators do
       expect(assigns[:reservation_window].max_window).to eq(365)
       expect(assigns[:reservation_window].max_days_ago).to eq(-365)
-      expect(assigns[:reservation_window].min_date).to eq(365.days.ago.strftime("%Y%m%d"))
-      expect(assigns[:reservation_window].max_date).to eq(365.days.from_now.strftime("%Y%m%d"))
+      expect(assigns[:reservation_window].min_date).to eq(365.days.ago.to_date)
+      expect(assigns[:reservation_window].max_date).to eq(365.days.from_now.to_date)
     end
 
     # guests should only be able to go the default reservation window into the future
@@ -804,8 +804,8 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
 
           expect(assigns[:reservation_window].max_window).to eq(reservation_window)
           expect(assigns[:reservation_window].max_days_ago).to eq(0)
-          expect(assigns[:reservation_window].max_date).to eq((Time.zone.now + reservation_window.days).strftime("%Y%m%d"))
-          expect(assigns[:reservation_window].min_date).to eq(Time.zone.now.strftime("%Y%m%d"))
+          expect(assigns[:reservation_window].max_date).to eq((Time.zone.now + reservation_window.days).to_date)
+          expect(assigns[:reservation_window].min_date).to eq(Date.current)
         end
       end
 

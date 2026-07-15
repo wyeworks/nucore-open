@@ -54,8 +54,8 @@ RSpec.describe "Editing your own reservation" do
       visit reservations_path
       click_link reservation.to_s
 
-      fill_in "Reserve Start", with: SpecDateHelper.format_usa_date(reservation.reserve_start_at + 1.hour)
-      fill_in "Reserve End", with: SpecDateHelper.format_usa_date(reservation.reserve_end_at + 1.hour)
+      fill_in "Reserve Start", with: (reservation.reserve_start_at + 1.hour).to_date
+      fill_in "Reserve End", with: (reservation.reserve_end_at + 1.hour).to_date
       fill_in "Duration", with: "30"
       click_button "Save"
 
@@ -66,8 +66,8 @@ RSpec.describe "Editing your own reservation" do
       visit reservations_path
       click_link reservation.to_s
 
-      fill_in "Reserve Start", with: SpecDateHelper.format_usa_date(reservation.reserve_start_at - 1.day)
-      fill_in "Reserve End", with: SpecDateHelper.format_usa_date(reservation.reserve_end_at - 1.day)
+      fill_in "Reserve Start", with: (reservation.reserve_start_at - 1.day).to_date
+      fill_in "Reserve End", with: (reservation.reserve_end_at - 1.day).to_date
       click_button "Save"
 
       expect(page).to have_content("My Reservations")

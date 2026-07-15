@@ -9,22 +9,6 @@ $(document).ready(function() {
 
   // initialize datepicker
   function initDatepickers() {
-    if (typeof minDaysFromNow == "undefined") {
-      window['minDaysFromNow'] = 0;
-    }
-    if (typeof maxDaysFromNow == "undefined") {
-      window['maxDaysFromNow'] = 365;
-    }
-    $("#datepicker").datepicker({'minDate': minDaysFromNow, 'maxDate': maxDaysFromNow});
-
-    $('.datepicker').each(function(){
-      $(this).datepicker({'minDate': minDaysFromNow, 'maxDate': maxDaysFromNow})
-        .change(function() {
-          var d = new Date(Date.parse($(this).val()));
-          $('#calendar').fullCalendar('gotoDate', d);
-        });
-    });
-
     $('input[type="date"]').change(function() {
       var parts = $(this).val().split('-');
       if (parts.length !== 3) return;

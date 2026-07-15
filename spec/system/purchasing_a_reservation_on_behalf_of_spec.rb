@@ -55,7 +55,7 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
         click_link instrument.name
 
         # time is frozen to 9:30am ten days after fiscal year start, we expect the default time to be the end of the admin reservation
-        expect(page.find_field("reservation_reserve_start_date").value).to eq Time.zone.today.strftime("%m/%d/%Y")
+        expect(page.find_field("reservation_reserve_start_date").value).to eq Time.zone.today.iso8601
         expect(page.find_field("reservation_reserve_start_hour").value).to eq "11"
         expect(page.find_field("reservation_reserve_start_min").value).to eq "0"
         expect(page.find_field("reservation_reserve_start_meridian").value).to eq "AM"
@@ -112,11 +112,11 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
       click_button "Continue"
 
       click_link "Make a Reservation", match: :first
-      fill_in "Reserve Start", with: I18n.l(1.day.from_now.to_date, format: :usa)
+      fill_in "Reserve Start", with: 1.day.from_now.to_date
       click_button "Create"
 
       all(:link, "Make a Reservation").last.click
-      fill_in "Reserve Start", with: I18n.l(2.days.from_now.to_date, format: :usa)
+      fill_in "Reserve Start", with: 2.days.from_now.to_date
       click_button "Create"
 
       click_button "Purchase"
@@ -133,11 +133,11 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
       click_button "Continue"
 
       click_link "Make a Reservation", match: :first
-      fill_in "Reserve Start", with: I18n.l(1.day.ago.to_date, format: :usa)
+      fill_in "Reserve Start", with: 1.day.ago.to_date
       click_button "Create"
 
       all(:link, "Make a Reservation").last.click
-      fill_in "Reserve Start", with: I18n.l(2.days.ago.to_date, format: :usa)
+      fill_in "Reserve Start", with: 2.days.ago.to_date
       click_button "Create"
 
       click_button "Purchase"
@@ -154,7 +154,7 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
       click_button "Continue"
 
       click_link "Make a Reservation", match: :first
-      fill_in "Reserve Start", with: I18n.l(1.day.from_now.to_date, format: :usa)
+      fill_in "Reserve Start", with: 1.day.from_now.to_date
       select "10", from: "reservation[reserve_start_hour]"
       select "00", from: "reservation[reserve_start_min]"
       fill_in "Duration", with: "90"
@@ -176,7 +176,7 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
       click_button "Continue"
 
       click_link "Make a Reservation", match: :first
-      fill_in "Reserve Start", with: I18n.l(1.day.ago.to_date, format: :usa)
+      fill_in "Reserve Start", with: 1.day.ago.to_date
       select "10", from: "reservation[reserve_start_hour]"
       select "00", from: "reservation[reserve_start_min]"
       fill_in "Duration", with: "90"

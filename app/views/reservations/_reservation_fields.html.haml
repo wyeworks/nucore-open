@@ -7,7 +7,9 @@
       = label_tag :reservation_reserve_start_date, "Reserve Start", class: "string optional control-label"
       .row.form-inline
         .col-md-4
-          = text_field_tag "reservation[reserve_start_date]", f.object.reserve_start_date, class: "form-control datepicker", disabled: start_disabled
+          = date_field_tag "reservation[reserve_start_date]", f.object.reserve_start_at&.to_date,
+            min: @reservation_window&.min_date, max: @reservation_window&.max_date,
+            class: "form-control", disabled: start_disabled
           - if f.object.actual_start_at?
             .started-at= "Started: #{l(f.object.actual_start_at, format: :usa)}"
         - if instrument.start_time_disabled?
@@ -19,8 +21,9 @@
       .row.form-inline
         - if instrument.daily_booking?
           .col-md-4
-            = f.text_field :reserve_end_date,
-              class: "form-control datepicker",
+            = f.date_field :reserve_end_date,
+              value: f.object.reserve_end_at&.to_date,
+              class: "form-control",
               disabled: true
           - if instrument.start_time_disabled?
             = time_select f, :reserve_end, { minute_step: 60 }, disabled: true, hidden: true
@@ -31,8 +34,9 @@
                 { disabled: true, class: "form-control" }
         - else
           .col-md-4
-            = text_field_tag "reservation[reserve_end_date]", f.object.reserve_end_date,
-              class: "form-control datepicker"
+            = date_field_tag "reservation[reserve_end_date]", f.object.reserve_end_at&.to_date,
+              min: @reservation_window&.min_date, max: @reservation_window&.max_date,
+              class: "form-control"
           .col-md-5
             = time_select f, :reserve_end, { minute_step: instrument.reserve_interval }, { class: "form-control" }
 

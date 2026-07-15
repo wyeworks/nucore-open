@@ -10,7 +10,7 @@
       = label_tag :admin_reservation_reserve_start_date, "Reserve start date", class: "string optional control-label"
       .datetime-block
         .form-group
-          = f.text_field :reserve_start_date, class: "form-control datepicker__data"
+          = f.date_field :reserve_start_date, value: f.object.reserve_start_at&.to_date, class: "form-control"
         .form-group
           = time_select f, :reserve_start
         .form-group{ style: "margin-top: -25px;" }
@@ -22,7 +22,7 @@
       = label_tag :admin_reservation_reserve_end_date, "Reserve end date", class: "string optional control-label"
       .datetime-block
         .form-group
-          = f.text_field :reserve_end_date, class: "form-control datepicker__data"
+          = f.date_field :reserve_end_date, value: f.object.reserve_end_at&.to_date, class: "form-control"
         .form-group
           = time_select f, :reserve_end, minute_step: 1
 
