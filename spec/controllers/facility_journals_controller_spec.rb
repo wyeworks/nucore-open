@@ -196,12 +196,23 @@ RSpec.describe FacilityJournalsController do
         end
       end
 
-      describe "log event creation", feature_setting: { "billing.billing_log_events" => true } do
-        it "creates a log event when journal is closed" do
-          @params[:journal_status] = "succeeded"
-          expect { do_request }.to change {
-            LogEvent.where(loggable: @journal, event_type: :closed).count
-          }.by(1)
+      describe "log event creation" do
+        context "when billing_log_events is enabled", feature_setting: { "billing.billing_log_events" => true } do
+          it "creates a log event when journal is closed" do
+            @params[:journal_status] = "succeeded"
+            expect { do_request }.to change {
+              LogEvent.where(loggable: @journal, event_type: :closed).count
+            }.by(1)
+          end
+        end
+
+        context "when billing_log_events is disabled", feature_setting: { "billing.billing_log_events" => false } do
+          it "still creates a log event when journal is closed" do
+            @params[:journal_status] = "succeeded"
+            expect { do_request }.to change {
+              LogEvent.where(loggable: @journal, event_type: :closed).count
+            }.by(1)
+          end
         end
       end
     end
