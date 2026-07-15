@@ -17,8 +17,9 @@
 
     = f.input :fulfilled_at,
       as: :date_field,
-      input_html: { value: params[:fulfilled_at].presence, class: "js--fulfilled_at",
-          min: ValidFulfilledAtDate.min.to_date.iso8601, max: ValidFulfilledAtDate.max.to_date.iso8601 }
+      min_date: ValidFulfilledAtDate.min,
+      max_date: ValidFulfilledAtDate.max,
+      input_html: { value: params[:fulfilled_at].presence, class: "js--fulfilled_at" }
 
     = f.input :send_notification,
       as: :boolean,

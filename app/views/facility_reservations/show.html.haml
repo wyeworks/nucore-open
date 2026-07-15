@@ -3,7 +3,6 @@
   :javascript
     var events_path     = "#{calendar_events_path(current_facility, @instrument)}";
     var orders_path_base = "#{facility_orders_path(current_facility)}";
-    var maxDaysFromNow  = #{@instrument.max_reservation_window};
     var minTime         = #{@instrument.first_available_hour};
     var maxTime         = #{@instrument.last_available_hour+1};
     var initialDate     = "#{@reservation.reserve_start_at.strftime('%Y-%m-%d')}";

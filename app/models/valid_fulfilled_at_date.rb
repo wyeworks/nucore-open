@@ -32,8 +32,7 @@ class ValidFulfilledAtDate
 
   # Returns nil if the date is invalid
   def to_time
-    date = parse_iso_date(@string)
-    date.beginning_of_day + 12.hours if date
+    parse_iso_date(@string)&.noon
   end
   alias presence to_time
   # `in_time_zone` allows us to set something like
@@ -53,7 +52,7 @@ class ValidFulfilledAtDate
   end
 
   def not_in_future
-    errors.add(:base, :in_future) if to_time > self.class.max.end_of_day
+    errors.add(:base, :in_future) if to_time > Time.current.end_of_day
   end
 
 end
