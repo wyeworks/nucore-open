@@ -97,4 +97,30 @@ RSpec.describe "Creating an instrument", :js do
       end
     end
   end
+
+  describe "Duration Billing instrument" do
+    context "as disallowed user" do
+      let(:user) { create(:user, :facility_director, facility:) }
+
+      before { login_as user }
+
+      it "cannot select duration billing pricing mode" do
+        visit new_facility_instrument_path(facility)
+
+        expect(page).to_not have_field(Instrument::Pricing::DURATION)
+      end
+    end
+
+    context "as administrator" do
+      let(:user) { create(:user, :administrator) }
+
+      before { login_as user }
+
+      it "can select duration billing pricing mode" do
+        visit new_facility_instrument_path(facility)
+
+        expect(page).to have_field(Instrument::Pricing::DURATION)
+      end
+    end
+  end
 end

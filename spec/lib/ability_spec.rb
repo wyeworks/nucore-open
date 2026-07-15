@@ -136,6 +136,7 @@ RSpec.describe Ability do
 
     it { is_expected.to be_allowed_to(:read, Notification) }
     it { is_expected.to be_allowed_to(:manage, Schedule) }
+    it { is_expected.to be_allowed_to(:create_duration_billing, Product) }
 
     describe StoredFile do
       describe "#download" do
@@ -279,6 +280,7 @@ RSpec.describe Ability do
     it { is_expected.to be_allowed_to(:manage, PriceGroupDiscount) }
     it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
     it { is_expected.to be_allowed_to(:manage, ProductAccessGroup) }
+    it { is_expected.not_to be_allowed_to(:create_duration_billing, Product) }
     it_is_not_allowed_to([:edit, :update]) { FactoryBot.create(:user) }
     it { is_expected.to be_allowed_to(:manage, ProductNotification, facility_id: facility.id) }
 

@@ -41,6 +41,10 @@ class InstrumentsController < ProductsCommonController
       flash.now[:error] = t("controllers.instruments.create.daily_booking_not_authorized")
 
       render :new
+    elsif resource_params[:pricing_mode] == Instrument::Pricing::DURATION && cannot?(:create_duration_billing, Instrument)
+      flash.now[:error] = t("controllers.instruments.create.duration_billing_not_authorized")
+
+      render :new
     else
       super
     end

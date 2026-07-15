@@ -357,6 +357,49 @@ RSpec.describe InstrumentsController, type: :controller do
         end
       end
     end
+
+    describe "duration billing permissions" do
+      before do
+        @params[:instrument] = attributes_for(
+          :instrument,
+          pricing_mode: Instrument::Pricing::DURATION,
+          facility_account_id: facility.facility_accounts.first.id,
+        )
+      end
+
+      shared_examples "duration billing creation disallowed" do
+        it "does not allow user to create duration billing instrument" do
+          sign_in(user)
+
+          expect { do_request }.to_not change { Instrument.count }
+          expect(@response.body).to(
+            include(I18n.t("controllers.instruments.create.duration_billing_not_authorized"))
+          )
+        end
+      end
+
+      context "as facility admin" do
+        let(:user) { create(:user, :facility_administrator, facility:) }
+
+        include_examples "duration billing creation disallowed"
+      end
+
+      context "as facility director" do
+        let(:user) { create(:user, :facility_director, facility:) }
+
+        include_examples "duration billing creation disallowed"
+      end
+
+      context "as administrator" do
+        let(:user) { create(:user, :administrator) }
+
+        it "allows to create a duration billing instrument" do
+          sign_in user
+
+          expect { do_request }.to change { Instrument.count }.by(1)
+        end
+      end
+    end
   end
 
   context "update" do

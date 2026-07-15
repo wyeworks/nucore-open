@@ -421,6 +421,7 @@ class Ability
     ]
 
     cannot :create_daily_booking, Product
+    cannot :create_duration_billing, Product
     can :manage, User if controller.is_a?(FacilityUsersController)
 
     # ideally we don't use `cannot` as it adds a dependency on the order of assigning abilities for multiple roles
