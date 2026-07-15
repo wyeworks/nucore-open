@@ -11,7 +11,6 @@ RSpec.describe "order_details" do
       end
     end
     let(:product) { create(:setup_item) }
-    let(:facility) { product.facility }
     let(:action) do
       lambda do
         get order_order_detail_path(order, order_detail)
@@ -73,7 +72,6 @@ RSpec.describe "order_details" do
 
   describe "cancel" do
     let(:product) { create(:setup_instrument) }
-    let(:facility) { product.facility }
     let(:user) { create(:user) }
     let(:reservation) do
       create(:purchased_reservation, product:, user:)
