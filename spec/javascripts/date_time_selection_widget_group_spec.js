@@ -116,7 +116,7 @@ describe("DateTimeSelectionWidgetGroup", function() {
         return expect(this.subject.getDateTime()).toEqual(new Date(2016, 2, 2, 11, 45));
       });
 
-      it("sets the date field", () => expect($("input[name=date]", fixture.el).val()).toEqual("3/2/2016"));
+      it("sets the date field", () => expect($("input[name=date]", fixture.el).val()).toEqual("2016-03-02"));
 
       it("sets the hour field", () => expect($("input[name=hour]", fixture.el).val()).toEqual("11"));
 
@@ -132,7 +132,7 @@ describe("DateTimeSelectionWidgetGroup", function() {
         return expect(this.subject.getDateTime()).toEqual(new Date(2016, 2, 2, 13, 45));
       });
 
-      it("sets the date field", () => expect($("input[name=date]", fixture.el).val()).toEqual("3/2/2016"));
+      it("sets the date field", () => expect($("input[name=date]", fixture.el).val()).toEqual("2016-03-02"));
 
       it("sets the hour field", () => expect($("input[name=hour]", fixture.el).val()).toEqual("1"));
 
@@ -145,7 +145,7 @@ describe("DateTimeSelectionWidgetGroup", function() {
       beforeEach(function() { return this.subject.setDateTime(new Date(2016, 2, 2, 12, 45)); });
 
       return it("sets itself to the right datetime", function() {
-        expect($("input[name=date]", fixture.el).val()).toEqual("3/2/2016");
+        expect($("input[name=date]", fixture.el).val()).toEqual("2016-03-02");
         expect($("input[name=hour]", fixture.el).val()).toEqual("12");
         return expect($("input[name=meridian]", fixture.el).val()).toEqual("PM");
       });
@@ -155,7 +155,7 @@ describe("DateTimeSelectionWidgetGroup", function() {
       beforeEach(function() { return this.subject.setDateTime(new Date(2016, 2, 2, 0, 45)); });
 
       return it("sets itself to the right datetime", function() {
-        expect($("input[name=date]", fixture.el).val()).toEqual("3/2/2016");
+        expect($("input[name=date]", fixture.el).val()).toEqual("2016-03-02");
         expect($("input[name=hour]", fixture.el).val()).toEqual("12");
         return expect($("input[name=meridian]", fixture.el).val()).toEqual("AM");
       });
