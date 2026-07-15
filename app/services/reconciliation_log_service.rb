@@ -7,8 +7,6 @@ class ReconciliationLogService
   end
 
   def log_events
-    return unless SettingsHelper.feature_on?("billing.billing_log_events")
-
     log_events_with_notes
   end
 
