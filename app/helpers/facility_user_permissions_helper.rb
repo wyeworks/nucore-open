@@ -3,10 +3,15 @@
 module FacilityUserPermissionsHelper
 
   def permission_summary(permission)
-    active = FacilityUserPermission.all_permissions.select { |perm| permission.public_send(perm) }
-    active.map do |perm|
-      FacilityUserPermission.human_attribute_name(perm)
+    sorted_permissions_with_labels.filter_map do |perm, label|
+      label if permission.public_send(perm)
     end.join(", ")
+  end
+
+  def sorted_permissions_with_labels
+    FacilityUserPermission.all_permissions
+                          .map { |perm| [perm, FacilityUserPermission.human_attribute_name(perm)] }
+                          .sort_by { |perm, label| [perm == :read_access ? 0 : 1, label] }
   end
 
   def permission_checkbox_classes(perm)
