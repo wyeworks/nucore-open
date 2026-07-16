@@ -111,7 +111,20 @@ class InstrumentsController < ProductsCommonController
       params += %i[min_reserve_days max_reserve_days start_time_disabled]
     end
 
+    params -= [:pricing_mode] if action_name == "update" && !allowed_to_set_pricing_mode?
+
     params
+  end
+
+  def allowed_to_set_pricing_mode?
+    case params.dig(:instrument, :pricing_mode)
+    when Instrument::Pricing::SCHEDULE_DAILY
+      can?(:create_daily_booking, Instrument)
+    when Instrument::Pricing::DURATION
+      can?(:create_duration_billing, Instrument)
+    else
+      true
+    end
   end
 
   def start_time_disabled_changed_check

@@ -400,6 +400,34 @@ RSpec.describe InstrumentsController, type: :controller do
         end
       end
     end
+
+    describe "billing mode permissions" do
+      before do
+        @params[:instrument][:billing_mode] = "Nonbillable"
+      end
+
+      context "as a disallowed user" do
+        let(:user) { create(:user, :facility_director, facility:) }
+
+        it "does not set the billing mode" do
+          sign_in(user)
+
+          do_request
+          expect(assigns(:product).billing_mode).to eq("Default")
+        end
+      end
+
+      context "as an administrator" do
+        let(:user) { create(:user, :administrator) }
+
+        it "sets the billing mode" do
+          sign_in(user)
+
+          do_request
+          expect(assigns(:product).billing_mode).to eq("Nonbillable")
+        end
+      end
+    end
   end
 
   context "update" do
@@ -413,6 +441,61 @@ RSpec.describe InstrumentsController, type: :controller do
       yield
       is_expected.to set_flash
       assert_redirected_to manage_facility_instrument_url(facility, assigns(:product))
+    end
+
+    describe "duration billing permissions" do
+      before do
+        @params[:instrument] = { pricing_mode: Instrument::Pricing::DURATION }
+      end
+
+      context "as a disallowed user" do
+        let(:user) { create(:user, :facility_director, facility:) }
+
+        it "does not switch the instrument to duration billing" do
+          sign_in(user)
+
+          expect { do_request }.not_to change { instrument.reload.pricing_mode }
+          expect(instrument.reload).not_to be_duration_pricing_mode
+        end
+      end
+
+      context "as an administrator" do
+        let(:user) { create(:user, :administrator) }
+
+        it "switches the instrument to duration billing" do
+          sign_in(user)
+
+          do_request
+          expect(instrument.reload).to be_duration_pricing_mode
+        end
+      end
+    end
+
+    describe "billing mode permissions" do
+      before do
+        @params[:instrument] = { billing_mode: "Nonbillable" }
+      end
+
+      context "as a disallowed user" do
+        let(:user) { create(:user, :facility_director, facility:) }
+
+        it "does not change the billing mode" do
+          sign_in(user)
+
+          expect { do_request }.not_to change { instrument.reload.billing_mode }
+        end
+      end
+
+      context "as an administrator" do
+        let(:user) { create(:user, :administrator) }
+
+        it "changes the billing mode" do
+          sign_in(user)
+
+          do_request
+          expect(instrument.reload.billing_mode).to eq("Nonbillable")
+        end
+      end
     end
   end
 
