@@ -86,7 +86,13 @@ class Order < ApplicationRecord
   end
 
   def move_order_details_to_default_status
-    order_details.each(&:set_default_status!)
+    order_details.each do |order_detail|
+      if order_detail.new?
+        order_detail.set_default_status!
+      elsif order_detail.changed?
+        order_detail.save!
+      end
+    end
   end
 
   def cart_valid?
