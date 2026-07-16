@@ -182,12 +182,14 @@ RSpec.describe BulkEmail::BulkEmailController do
   describe "POST #deliver" do
     let(:recipients) { FactoryBot.create_list(:user, 3) }
     let(:custom_message) { "Custom message" }
+    let(:custom_reply_to) { nil }
     let(:user) { FactoryBot.create(:user, :senior_staff, facility: facility) }
 
     let(:params) do
       super().merge(bulk_email_delivery_form: {
                       custom_subject: custom_subject,
                       custom_message: custom_message,
+                      custom_reply_to: custom_reply_to,
                       recipient_ids: recipients.map(&:id),
                       search_criteria: {
                         start_date: "12/31/1999",
@@ -240,6 +242,28 @@ RSpec.describe BulkEmail::BulkEmailController do
         is_expected.to render_template(:create)
         expect(assigns[:delivery_form].errors[:custom_subject])
           .to include("can't be blank")
+      end
+    end
+
+    context "with a custom reply-to" do
+      let(:custom_subject) { "Custom subject" }
+
+      context "that is a valid email" do
+        let(:custom_reply_to) { "reply@example.com" }
+
+        it "submits successfully" do
+          is_expected.to redirect_to(facility_bulk_email_path)
+          expect(flash[:notice]).to include("3 email messages queued")
+        end
+      end
+
+      context "that is not a valid email" do
+        let(:custom_reply_to) { "not-an-email" }
+
+        it "redisplays the form with errors" do
+          is_expected.to render_template(:create)
+          expect(assigns[:delivery_form].errors[:custom_reply_to]).to be_present
+        end
       end
     end
   end

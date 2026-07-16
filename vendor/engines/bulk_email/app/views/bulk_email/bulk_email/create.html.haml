@@ -26,6 +26,9 @@
         disabled: true,
         class: "form-control"
 
+    = f.input :custom_reply_to,
+      hint: text("bulk_email.reply_to_hint")
+
     = f.input :custom_subject,
       as: "bulk_email/subject",
       prefix: bulk_email_content_generator.subject_prefix,
