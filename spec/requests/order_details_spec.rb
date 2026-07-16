@@ -41,7 +41,7 @@ RSpec.describe "order_details" do
 
       it_behaves_like "renders successfully"
 
-      it "does not show receipt link" do
+      it "shows the receipt link" do
         action.call
 
         expect(page).to have_link(
@@ -59,7 +59,7 @@ RSpec.describe "order_details" do
 
       it_behaves_like "renders successfully"
 
-      it "shows receipt link" do
+      it "does not show receipt link" do
         action.call
 
         expect(page).not_to have_link(
