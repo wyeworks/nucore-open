@@ -110,7 +110,11 @@ class ProductsCommonController < ApplicationController
 
   # Needs to be over-rideable from engines
   def permitted_params
-    default_permitted_params
+    params = default_permitted_params
+
+    params -= [:billing_mode] unless current_user&.administrator?
+
+    params
   end
 
   def default_permitted_params

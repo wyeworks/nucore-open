@@ -32,10 +32,9 @@ module ProductsHelper
   end
 
   def instrument_pricing_modes
-    return Instrument::PRICING_MODES if can?(:create_daily_booking, Instrument)
-
     Instrument::PRICING_MODES.reject do |pricing_mode|
-      pricing_mode == Instrument::Pricing::SCHEDULE_DAILY
+      (pricing_mode == Instrument::Pricing::SCHEDULE_DAILY && cannot?(:create_daily_booking, Instrument)) ||
+        (pricing_mode == Instrument::Pricing::DURATION && cannot?(:create_duration_billing, Instrument))
     end
   end
 

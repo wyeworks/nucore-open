@@ -104,6 +104,7 @@ class FacilityUserPermissionAbility
     ]
     can [:update, :destroy], Product
     cannot :create_daily_booking, Product
+    cannot :create_duration_billing, Product
     can [:show, :index], PriceGroup
     can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
     can [:read, :edit], PriceGroupProduct
