@@ -9,22 +9,22 @@ RSpec.describe JournalCutoffDate do
     subject(:hash) { described_class.new(cutoff_date: cutoff_date).cutoff_date_date_time_data.to_h }
     describe "am" do
       let(:cutoff_date) { Time.zone.parse("2016-01-01 08:45") }
-      it { is_expected.to eq(date: "01/01/2016", hour: 8, minute: 45, ampm: "AM") }
+      it { is_expected.to eq(date: Date.new(2016, 1, 1), hour: 8, minute: 45, ampm: "AM") }
     end
 
     describe "pm" do
       let(:cutoff_date) { Time.zone.parse("2016-01-01 16:37") }
-      it { is_expected.to eq(date: "01/01/2016", hour: 4, minute: 37, ampm: "PM") }
+      it { is_expected.to eq(date: Date.new(2016, 1, 1), hour: 4, minute: 37, ampm: "PM") }
     end
 
     describe "midnight" do
       let(:cutoff_date) { Time.zone.parse("2016-04-01 00:10") }
-      it { is_expected.to eq(date: "04/01/2016", hour: 12, minute: 10, ampm: "AM") }
+      it { is_expected.to eq(date: Date.new(2016, 4, 1), hour: 12, minute: 10, ampm: "AM") }
     end
 
     describe "noon" do
       let(:cutoff_date) { Time.zone.parse("2016-01-01 12:00") }
-      it { is_expected.to eq(date: "01/01/2016", hour: 12, minute: 0, ampm: "PM") }
+      it { is_expected.to eq(date: Date.new(2016, 1, 1), hour: 12, minute: 0, ampm: "PM") }
     end
   end
 

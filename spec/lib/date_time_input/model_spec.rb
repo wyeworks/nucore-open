@@ -46,7 +46,7 @@ RSpec.describe DateTimeInput::Model do
       let(:time) { Time.zone.parse("2017-08-03 14:23:45") }
       subject(:data) { instance.tap { |i| i.datetime = time }.datetime_date_time_data }
 
-      specify { expect(data.date).to eq("08/03/2017") }
+      specify { expect(data.date).to eq(Date.new(2017, 8, 3)) }
       specify { expect(data.hour).to eq(2) }
       specify { expect(data.minute).to eq(23) }
       specify { expect(data.ampm).to eq("PM") }
