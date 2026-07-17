@@ -42,8 +42,8 @@ module BulkEmail
     end
 
     def date_range_selection_link(translation_key, _params, start_date: Date.today, end_date: Date.today)
-      start_date = start_date.to_date
-      end_date = end_date.to_date
+      start_date = start_date.to_date.iso8601
+      end_date = end_date.to_date.iso8601
 
       link_to(
         text(translation_key, scope: "bulk_email.dates.range"),
