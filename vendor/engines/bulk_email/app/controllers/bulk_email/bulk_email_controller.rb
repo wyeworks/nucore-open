@@ -18,7 +18,7 @@ module BulkEmail
     before_action :init_search_options, only: [:search]
 
     helper_method :bulk_email_content_generator
-    helper_method :datepicker_field_input
+    helper_method :date_field_input
     helper_method :user_type_selected?
 
     def search
@@ -113,9 +113,9 @@ module BulkEmail
       @user_types.delete(:authorized_users) unless products.exists?(requires_approval: true)
     end
 
-    def datepicker_field_input(form, key)
-      date = @search_fields[key].to_s.tr("-", "/")
-      form.input(key, input_html: { value: date, class: :datepicker__data, name: key })
+    def date_field_input(form, key)
+      date = parse_usa_date(@search_fields[key])&.to_date
+      form.input(key, as: :date_field, input_html: { value: date, name: key })
     end
 
     def user_types

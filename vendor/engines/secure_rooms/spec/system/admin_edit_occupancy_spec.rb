@@ -35,12 +35,12 @@ RSpec.describe "Editing an occupancy" do
     let(:exit_at) { Time.zone.parse("2017-09-12 09:30") }
 
     it "can change the times" do
-      fill_in "order_detail_occupancy_attributes_entry_at_date", with: "04/12/2017"
+      fill_in "order_detail_occupancy_attributes_entry_at_date", with: Date.new(2017, 4, 12)
       select "7", from: "order_detail_occupancy_attributes_entry_at_hour"
       select "10", from: "order_detail_occupancy_attributes_entry_at_minute"
       select "PM", from: "order_detail_occupancy_attributes_entry_at_ampm"
 
-      fill_in "order_detail_occupancy_attributes_exit_at_date", with: "4/12/2017"
+      fill_in "order_detail_occupancy_attributes_exit_at_date", with: Date.new(2017, 4, 12)
       select "8", from: "order_detail_occupancy_attributes_exit_at_hour"
       select "00", from: "order_detail_occupancy_attributes_exit_at_minute"
       select "PM", from: "order_detail_occupancy_attributes_exit_at_ampm"
@@ -64,7 +64,7 @@ RSpec.describe "Editing an occupancy" do
     let(:exit_at) { nil }
 
     it "can set the end time" do
-      fill_in "order_detail_occupancy_attributes_exit_at_date", with: "9/12/2017"
+      fill_in "order_detail_occupancy_attributes_exit_at_date", with: Date.new(2017, 9, 12)
       select "9", from: "order_detail_occupancy_attributes_exit_at_hour"
       select "45", from: "order_detail_occupancy_attributes_exit_at_minute"
       select "AM", from: "order_detail_occupancy_attributes_exit_at_ampm"
@@ -89,7 +89,7 @@ RSpec.describe "Editing an occupancy" do
     let(:exit_at) { Time.zone.parse("2017-09-12 10:30") }
 
     it "can set the start time" do
-      fill_in "order_detail_occupancy_attributes_entry_at_date", with: "9/12/2017"
+      fill_in "order_detail_occupancy_attributes_entry_at_date", with: Date.new(2017, 9, 12)
       select "9", from: "order_detail_occupancy_attributes_entry_at_hour"
       select "45", from: "order_detail_occupancy_attributes_entry_at_minute"
       select "AM", from: "order_detail_occupancy_attributes_entry_at_ampm"
