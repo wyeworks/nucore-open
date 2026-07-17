@@ -443,31 +443,18 @@ RSpec.describe InstrumentsController, type: :controller do
       assert_redirected_to manage_facility_instrument_url(facility, assigns(:product))
     end
 
-    describe "duration billing permissions" do
+    describe "pricing mode" do
+      let(:user) { create(:user, :administrator) }
+
       before do
         @params[:instrument] = { pricing_mode: Instrument::Pricing::DURATION }
       end
 
-      context "as a disallowed user" do
-        let(:user) { create(:user, :facility_director, facility:) }
+      it "does not change the instrument's pricing mode" do
+        sign_in(user)
 
-        it "does not switch the instrument to duration billing" do
-          sign_in(user)
-
-          expect { do_request }.not_to change { instrument.reload.pricing_mode }
-          expect(instrument.reload).not_to be_duration_pricing_mode
-        end
-      end
-
-      context "as an administrator" do
-        let(:user) { create(:user, :administrator) }
-
-        it "switches the instrument to duration billing" do
-          sign_in(user)
-
-          do_request
-          expect(instrument.reload).to be_duration_pricing_mode
-        end
+        expect { do_request }.not_to change { instrument.reload.pricing_mode }
+        expect(instrument.reload).not_to be_duration_pricing_mode
       end
     end
 
