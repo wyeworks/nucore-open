@@ -8,7 +8,7 @@
         = builder.text_field :quantity, value: 0, class: "product_quantity", index: nil, aria: { label: text("quantity", product: product) }, id: "order_order_details_#{product.id}_quantity"
         = builder.hidden_field :product_id, value: product.id, index: nil, id: "order_order_details_#{product.id}_product_id"
     = tooltip_icon "fa fa-question-circle-o text__alert", text("line_items") if !product.is_a?(Instrument) && Orders::ItemAdder.multiline?(product)
-  = public_calendar_link(product)
+  = public_calendar_link(product, @instrument_availability)
   = link_to ProductPresenter.new(product), facility_product_path(product.facility, product)
   - if acting_user.present? && !product.can_be_used_by?(acting_user)
     %i.fa.fa-lock
