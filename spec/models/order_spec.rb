@@ -167,6 +167,26 @@ RSpec.describe Order do
       end
     end
 
+    context "when a detail was completed before purchase (e.g. a backdated cross-core reservation)" do
+      before :each do
+        @service.update!(initial_order_status_id: OrderStatus.new_status.id)
+        order_attrs = attributes_for(:order_detail, product_id: @service.id, quantity: 1, price_policy_id: @service_pp.id, account_id: @account.id, actual_cost: 10, actual_subsidy: 5)
+        @order.order_details.create(order_attrs)
+        define_open_account(@service.account, @account.account_number)
+        expect(@order.validate_order!).to be true
+        @order.order_details.first.backdate_to_complete!(1.day.ago)
+      end
+
+      it "purchases without resetting the completed detail to its default status" do
+        expect { @order.purchase! }.not_to raise_error
+        expect(@order.reload).to be_purchased
+
+        order_detail = @order.order_details.first
+        expect(order_detail).to be_complete
+        expect(order_detail.ordered_at).to be_present
+      end
+    end
+
     it "should check for facility active/inactive changes before purchase" do
       order_attrs = FactoryBot.attributes_for(:order_detail, product_id: @service.id, quantity: 1, price_policy_id: @service_pp.id, account_id: @account.id, actual_cost: 10, actual_subsidy: 5)
       @order.order_details.create(order_attrs)
