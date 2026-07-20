@@ -1,6 +1,8 @@
 = f.input :account_number, label: text("account_number"), required: true
 
 = f.input :formatted_expires_at, required: true, as: :date_field,
+  min_date: (Date.current if local_assigns[:is_new]),
+  max_date: (3.years.from_now if local_assigns[:is_new]),
   input_html: { value: f.object.expires_at&.to_date }
 
 = f.input :description, required: true

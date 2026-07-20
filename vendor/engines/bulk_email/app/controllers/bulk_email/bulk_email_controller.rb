@@ -114,7 +114,7 @@ module BulkEmail
     end
 
     def date_field_input(form, key)
-      date = parse_usa_date(@search_fields[key])&.to_date
+      date = parse_iso_date(@search_fields[key])
       form.input(key, as: :date_field, input_html: { value: date, name: key })
     end
 
