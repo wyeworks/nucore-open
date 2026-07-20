@@ -37,9 +37,9 @@ RSpec.describe ProductsHelper do
     context "with a current reservation" do
       before do
         create(:purchased_reservation,
-                          reserve_start_at: 30.minutes.ago,
-                          reserve_end_at: 30.minutes.from_now,
-                          product: instrument)
+               reserve_start_at: 30.minutes.ago,
+               reserve_end_at: 30.minutes.from_now,
+               product: instrument)
       end
 
       it "is in use, not available" do
@@ -51,12 +51,12 @@ RSpec.describe ProductsHelper do
     context "with a current reservation on a schedule-sharing sibling" do
       before do
         sibling = create(:setup_instrument,
-                                    facility: instrument.facility,
-                                    schedule: instrument.schedule)
+                         facility: instrument.facility,
+                         schedule: instrument.schedule)
         create(:admin_reservation,
-                          reserve_start_at: 30.minutes.ago,
-                          reserve_end_at: 30.minutes.from_now,
-                          product: sibling)
+               reserve_start_at: 30.minutes.ago,
+               reserve_end_at: 30.minutes.from_now,
+               product: sibling)
       end
 
       it "marks this instrument in use too" do
@@ -77,9 +77,9 @@ RSpec.describe ProductsHelper do
     context "when offline" do
       before do
         create(:offline_reservation,
-                          product: instrument,
-                          reserve_start_at: 1.hour.ago,
-                          reserve_end_at: nil)
+               product: instrument,
+               reserve_start_at: 1.hour.ago,
+               reserve_end_at: nil)
       end
 
       it "shows the offline note" do
