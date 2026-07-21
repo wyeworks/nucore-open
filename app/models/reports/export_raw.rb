@@ -127,8 +127,14 @@ module Reports
         date_range_field: date_range_field,
         date_range_start: date_start,
         date_range_end: date_end,
-        includes: [:reservation, :statement, :reservation, order: [:user]],
-        preloads: [:created_by_user, :journal, order: [:facility], account: [:affiliate, :owner_user], price_policy: [:price_group]],
+        includes: [:reservation, :statement, order: [:user]],
+        preloads: [
+          :created_by_user, :journal, :bundle, :project,
+          :assigned_user, :price_changed_by_user, :canceled_by_user, :problem_resolved_by,
+          order: [:facility, :cross_core_project],
+          account: [:affiliate, :owner_user],
+          price_policy: [:price_group],
+        ],
         transformer_options: { time_data: true, reporting: true },
       ).perform
     end
