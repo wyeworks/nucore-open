@@ -48,7 +48,7 @@ module BulkEmail
       value = search_criteria[key]
       return I18n.t("bulk_email.dates.unset") if value.blank?
 
-      parsed = parse_usa_date(value)
+      parsed = parse_iso_date(value)
       parsed ? format_usa_date(parsed) : value
     end
 

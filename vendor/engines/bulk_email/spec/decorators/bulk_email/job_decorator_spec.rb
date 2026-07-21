@@ -69,13 +69,13 @@ RSpec.describe BulkEmail::JobDecorator do
   end
 
   describe "#start_date" do
-    context "when stored in US format" do
-      it { expect(job.start_date).to eq "01/01/2015" }
-    end
-
     context "when stored in ISO format" do
       let(:start_date) { "2015-01-01" }
       it { expect(job.start_date).to eq "01/01/2015" }
+    end
+
+    context "when stored in legacy US format" do
+      it { expect(job.start_date).to eq "1/1/2015" }
     end
 
     context "when unset" do
@@ -85,12 +85,12 @@ RSpec.describe BulkEmail::JobDecorator do
   end
 
   describe "#end_date" do
-    context "when stored in US format" do
+    context "when stored in ISO format" do
+      let(:end_date) { "2015-12-31" }
       it { expect(job.end_date).to eq "12/31/2015" }
     end
 
-    context "when stored in ISO format" do
-      let(:end_date) { "2015-12-31" }
+    context "when stored in legacy US format" do
       it { expect(job.end_date).to eq "12/31/2015" }
     end
 
