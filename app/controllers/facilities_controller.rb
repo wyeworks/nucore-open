@@ -20,9 +20,7 @@ class FacilitiesController < ApplicationController
   include OrderDetailsCsvExport
   include SortableBillingTable
 
-  layout lambda {
-    action_name.in?(%w(disputed_orders movable_transactions transactions)) ? "two_column_head" : "two_column"
-  }
+  layout :page_layout
 
   cattr_accessor(:facility_homepage_redirector) { DefaultFacilityHomepageRedirector }
 
@@ -39,7 +37,6 @@ class FacilitiesController < ApplicationController
     @list_layout = SettingsHelper.feature_on?("style_display.facility_tile_list") ? "tile" : "list"
     @recent_products = MostRecentlyUsedSearcher.new(acting_user).recently_used_products.includes(:facility).alphabetized
     @azlist = build_az_list(@facilities)
-    render layout: "application"
   end
 
   # GET /facilities/:facility_id
@@ -58,8 +55,6 @@ class FacilitiesController < ApplicationController
 
     @product_display_groups = current_facility.product_display_groups.sorted
     @product_display_groups = @product_display_groups.to_a + ProductDisplayGroup.fake_groups_by_type(current_facility.products.without_display_group)
-
-    render layout: "application"
   end
 
   # GET /facilities/list
@@ -78,11 +73,8 @@ class FacilitiesController < ApplicationController
       raise ActiveRecord::RecordNotFound if facilities.empty?
       if facilities.size == 1
         redirect_to dashboard_facility_path(facilities.first)
-        return
       end
     end
-
-    render layout: "application"
   end
 
   # GET /facilities/:facility_id/manage
@@ -96,8 +88,6 @@ class FacilitiesController < ApplicationController
     @active_tab = "manage_facilites"
     @facility = Facility.new
     @facility.is_active = true
-
-    render layout: "application"
   end
 
   # GET /facilities/:facility_id/edit
@@ -114,7 +104,7 @@ class FacilitiesController < ApplicationController
       flash[:notice] = text("create.success")
       redirect_to manage_facility_path(@facility)
     else
-      render action: "new", layout: "application"
+      render action: "new"
     end
   end
 
@@ -234,5 +224,13 @@ class FacilitiesController < ApplicationController
     SettingsHelper.feature_on?("style_display.azlist")
   end
   helper_method :azlist_on?
+
+  def page_layout
+    case action_name
+    when "index", "show", "list", "new" then "application"
+    when "disputed_orders", "movable_transactions", "transactions" then "two_column_head"
+    else "two_column"
+    end
+  end
 
 end
