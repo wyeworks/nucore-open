@@ -11,14 +11,28 @@ module Instruments
       @facility = facility
     end
 
-    # Open now per its schedule rules and its schedule not currently in use.
+    # Open now per its schedule rules, its schedule not currently in use, and not
+    # a holiday it restricts access on.
     def available_now?(product)
       return false if in_use_schedule_ids.include?(product.schedule_id)
+      return false if closed_for_holiday?(product)
 
       schedule_rules_by_product.fetch(product.id, []).any? { |rule| rule.cover?(Time.current) }
     end
 
     private
+
+    # No user on the public page, so a holiday only closes instruments that
+    # restrict access (nobody to override it).
+    def closed_for_holiday?(product)
+      product.restrict_holiday_access? && holiday_today?
+    end
+
+    def holiday_today?
+      return @holiday_today unless @holiday_today.nil?
+
+      @holiday_today = Holiday.on(Time.current.to_date).exists?
+    end
 
     # Keyed on schedule so shared-schedule instruments block each other, matching
     # conflicting_*_reservation's `product.schedule.product_ids`.

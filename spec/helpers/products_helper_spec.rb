@@ -74,6 +74,21 @@ RSpec.describe ProductsHelper do
       end
     end
 
+    context "on a holiday" do
+      before { Holiday.create!(date: Time.current.to_date) }
+
+      it "is not available when the instrument restricts holiday access" do
+        instrument.update!(restrict_holiday_access: true)
+        expect(classes).to include("in-use")
+        expect(classes).not_to include("available")
+      end
+
+      it "stays available when the instrument does not restrict holiday access" do
+        instrument.update!(restrict_holiday_access: false)
+        expect(classes).to include("available")
+      end
+    end
+
     context "when offline" do
       before do
         create(:offline_reservation,
