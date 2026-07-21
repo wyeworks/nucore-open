@@ -62,7 +62,7 @@ module Reports
     private
 
     def csv_header
-      column_headers.join(",") + "\n"
+      CSV.generate_line(column_headers)
     end
 
     def csv_body
@@ -94,8 +94,10 @@ module Reports
       [error] + Array.new(report_hash.size - 1)
     end
 
+    # Memoized: format_row consults it for every row, and rebuilding it means
+    # re-running every registered transformer per row.
     def report_hash
-      transformers.reduce(default_report_hash) do |result, class_name|
+      @report_hash ||= transformers.reduce(default_report_hash) do |result, class_name|
         class_name.constantize.new.transform(result)
       end
     end
