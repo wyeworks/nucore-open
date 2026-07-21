@@ -109,8 +109,7 @@ class OrdersController < ApplicationController
       end
     end
 
-    ## make sure the order has an account
-    if @order.account.nil?
+    if needs_payment_source_selection?(items)
       ## add auto_assign back here if needed
 
       ## save the state to the session and redirect
@@ -210,7 +209,7 @@ class OrdersController < ApplicationController
       flash.now[:error] = I18n.t("controllers.orders.choose_account.missing_account") if account.blank? && request.post?
       @accounts = AvailableAccountsFinder.new(acting_user, @product.facility).accounts
       @errors   = {}
-      details   = @order.order_details
+      details   = payment_relevant_order_details
       @accounts.each do |account|
         if session[:add_to_cart] &&
            (ods = session[:add_to_cart].presence) &&
@@ -327,6 +326,20 @@ class OrdersController < ApplicationController
   end
 
   private
+
+  def payment_relevant_order_details
+    @order.order_details.reject { |od| od.product.nonbillable_mode? }
+  end
+
+  def needs_payment_source_selection?(items)
+    @order.account.nil? || adding_billable_products_to_nonbillable_cart?(items)
+  end
+
+  def adding_billable_products_to_nonbillable_cart?(items)
+    return false unless @order.account == NonbillableAccount.singleton_instance
+
+    items.any? { |item| !Product.find(item[:product_id]).nonbillable_mode? }
+  end
 
   def add_account_to_order(account)
     if account
