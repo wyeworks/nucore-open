@@ -20,7 +20,7 @@ class FacilitiesController < ApplicationController
   include OrderDetailsCsvExport
   include SortableBillingTable
 
-  layout :page_layout
+  layout :action_layout
 
   cattr_accessor(:facility_homepage_redirector) { DefaultFacilityHomepageRedirector }
 
@@ -225,7 +225,7 @@ class FacilitiesController < ApplicationController
   end
   helper_method :azlist_on?
 
-  def page_layout
+  def action_layout
     case action_name
     when "index", "show", "list", "new" then "application"
     when "disputed_orders", "movable_transactions", "transactions" then "two_column_head"
