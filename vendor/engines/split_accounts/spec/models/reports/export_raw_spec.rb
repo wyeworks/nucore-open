@@ -19,7 +19,6 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
   subject(:report) { described_class.new(**report_args) }
   let(:report_args) do
     {
-      action_name: "general",
       facility_url_name: facility.url_name,
       order_status_ids: [order_detail.order_status_id],
       date_end: 1.day.from_now,

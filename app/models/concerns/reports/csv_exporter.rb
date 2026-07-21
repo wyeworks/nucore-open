@@ -89,7 +89,9 @@ module Reports
         end
       end
     rescue => e
-      ["*** ERROR WHEN REPORTING ON #{row.class} #{row.id}: #{e.message} ***"]
+      # Pad to full width so an errored row stays column-aligned in the CSV
+      error = "*** ERROR WHEN REPORTING ON #{row.class} #{row.id}: #{e.message} ***"
+      [error] + Array.new(report_hash.size - 1)
     end
 
     def report_hash

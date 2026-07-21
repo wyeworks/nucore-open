@@ -1,24 +1,25 @@
 # frozen_string_literal: true
 
-require "csv"
-
 module Reports
 
   class ExportRaw
 
     include CsvExporter
 
+    REQUIRED_ARGS = [:date_start, :date_end, :facility_url_name, :order_status_ids].freeze
+
     attr_reader :order_status_ids, :facility_url_name, :date_range_field
 
-    def initialize(arguments)
-      [:date_end, :date_start, :facility_url_name, :order_status_ids].each do |property|
-        if arguments[property].present?
-          instance_variable_set("@#{property}".to_sym, arguments[property])
-        else
-          raise ArgumentError, "Required argument '#{property}' is missing"
-        end
+    def initialize(date_start:, date_end:, facility_url_name:, order_status_ids:, date_range_field: nil)
+      @date_start = date_start
+      @date_end = date_end
+      @facility_url_name = facility_url_name
+      @order_status_ids = order_status_ids
+      @date_range_field = date_range_field.presence || "journal_or_statement_date"
+
+      REQUIRED_ARGS.each do |arg|
+        raise ArgumentError, "Required argument '#{arg}' is missing" if public_send(arg).blank?
       end
-      @date_range_field = arguments[:date_range_field] || "journal_or_statement_date"
     end
 
     def facility
@@ -35,14 +36,32 @@ module Reports
 
     private
 
-    def default_report_hash # rubocop:disable Metrics/AbcSize
-      hash = {
+    def default_report_hash
+      hash = order_columns
+             .merge(user_columns)
+             .merge(product_and_account_columns)
+             .merge(cost_columns)
+             .merge(reservation_columns)
+             .merge(resolution_columns)
+
+      return hash if SettingsHelper.has_review_period?
+
+      hash.except(:reviewed_at, :disputed_at, :dispute_reason, :dispute_resolved_at, :dispute_resolved_reason)
+    end
+
+    def order_columns
+      {
         facility: :facility,
         order: :to_s,
         ordered_at: :ordered_at,
         fulfilled_at: :fulfilled_at,
         order_status: ->(od) { od.order_status.name },
         order_state: :state,
+      }
+    end
+
+    def user_columns
+      {
         ordered_by: ->(od) { od.created_by_user.username },
         first_name: ->(od) { od.created_by_user.first_name },
         last_name: ->(od) { od.created_by_user.last_name },
@@ -51,6 +70,11 @@ module Reports
         purchaser_first_name: ->(od) { od.user.first_name },
         purchaser_last_name: ->(od) { od.user.last_name },
         purchaser_email: ->(od) { od.user.email },
+      }
+    end
+
+    def product_and_account_columns
+      {
         product_id: ->(od) { od.product.url_name },
         product_type: ->(od) { od.product.class.model_name.human },
         product: ->(od) { od.product.name },
@@ -65,6 +89,11 @@ module Reports
         owner_first_name: ->(od) { od.account.owner_user.first_name },
         owner_last_name: ->(od) { od.account.owner_user.last_name },
         owner_email: ->(od) { od.account.owner_user.email },
+      }
+    end
+
+    def cost_columns
+      {
         price_group: ->(od) { od.price_policy.try(:price_group).try(:name) },
         charge_for: ->(od) { ChargeMode.for_order_detail(od).to_s.titleize },
         project: :project,
@@ -80,12 +109,22 @@ module Reports
         difference_cost: ->(od) { as_currency_difference(od.actual_cost, od.calculated_cost) },
         difference_subsidy: ->(od) { as_currency_difference(od.actual_subsidy, od.calculated_subsidy) },
         difference_total: ->(od) { as_currency_difference(od.actual_total, od.calculated_total) },
+      }
+    end
+
+    def reservation_columns
+      {
         reservation_start_time: ->(od) { od.reservation.reserve_start_at if od.reservation },
         reservation_end_time: ->(od) { od.reservation.reserve_end_at if od.reservation },
         reservation_minutes: ->(od) { od.time_data.try(:duration_mins) },
         actual_start_time: ->(od) { od.time_data.try(:actual_start_at) },
         actual_end_time: ->(od) { od.time_data.try(:actual_end_at) },
         actual_minutes: ->(od) { od.time_data.try(:actual_duration_mins) },
+      }
+    end
+
+    def resolution_columns
+      {
         canceled_at: :canceled_at,
         canceled_by: ->(od) { canceled_by_name(od) },
         note: :note,
@@ -113,11 +152,6 @@ module Reports
         cross_core_project_active: ->(od) { od.order.cross_core_project&.active? },
         deposit_number: :deposit_number,
       }
-      if SettingsHelper.has_review_period?
-        hash
-      else
-        hash.except(:reviewed_at, :disputed_at, :dispute_reason, :dispute_resolved_at, :dispute_resolved_reason)
-      end
     end
 
     def report_data_query
