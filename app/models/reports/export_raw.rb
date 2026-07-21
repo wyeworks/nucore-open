@@ -173,9 +173,7 @@ module Reports
       ).perform
     end
 
-    # For rows without a price policy, ChargeMode falls back to
-    # Product#current_price_policies, which queries with a fresh timestamp on
-    # every call (uncacheable). Memoize per product for the report run.
+    # ChargeMode's no-policy fallback queries price policies per call; cache per product.
     def charge_mode_name(order_detail)
       return ChargeMode.for_order_detail(order_detail).to_s.titleize if order_detail.price_policy
 
