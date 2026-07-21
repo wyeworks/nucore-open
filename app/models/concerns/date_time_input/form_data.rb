@@ -37,8 +37,7 @@ module DateTimeInput
     end
 
     def date
-      return unless @time
-      I18n.l(@time.to_date, format: :usa)
+      @time&.to_date
     end
 
     def hour

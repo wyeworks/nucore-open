@@ -4,6 +4,8 @@ module BulkEmail
 
   class JobDecorator < SimpleDelegator
 
+    include DateHelper
+
     def to_model
       self
     end
@@ -27,11 +29,11 @@ module BulkEmail
     end
 
     def start_date
-      search_criteria["start_date"] || I18n.t("bulk_email.dates.unset")
+      formatted_search_date("start_date")
     end
 
     def end_date
-      search_criteria["end_date"] || I18n.t("bulk_email.dates.unset")
+      formatted_search_date("end_date")
     end
 
     def user_types
@@ -41,6 +43,14 @@ module BulkEmail
     end
 
     private
+
+    def formatted_search_date(key)
+      value = search_criteria[key]
+      return I18n.t("bulk_email.dates.unset") if value.blank?
+
+      parsed = parse_iso_date(value)
+      parsed ? format_usa_date(parsed) : value
+    end
 
     def selected_product_ids
       ((search_criteria["products"] || []) << search_criteria["product_id"])

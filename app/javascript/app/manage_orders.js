@@ -32,7 +32,6 @@ class OrderDetailManagement {
   }
   constructor($element) {
     this.$element = $element;
-    this.$element.find('.datepicker').datepicker();
     this.$element.find('.timeinput').timeinput();
     this.$element.find('.copy_actual_from_reservation a').click(this.copyReservationTimeIntoActual);
     this.initTotalCalculating();

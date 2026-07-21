@@ -130,7 +130,7 @@ module BulkEmail
 
     def parse_search_field_date(date_field)
       return if search_fields[date_field].blank?
-      parse_usa_date(search_fields[date_field].tr("-", "/"))
+      parse_iso_date(search_fields[date_field])
     end
 
   end

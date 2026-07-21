@@ -19,7 +19,7 @@ class TimeDropdownInput < SimpleForm::Inputs::Base
   private
 
   def date_field(f)
-    f.input :date, input_html: { class: "datepicker" }
+    f.input :date, as: :date_field
   end
 
   def time_fields(f, merged_input_options)
