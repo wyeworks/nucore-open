@@ -95,7 +95,7 @@ module Reports
     def cost_columns
       {
         price_group: ->(od) { od.price_policy.try(:price_group).try(:name) },
-        charge_for: ->(od) { ChargeMode.for_order_detail(od).to_s.titleize },
+        charge_for: ->(od) { charge_mode_name(od) },
         project: :project,
         estimated_cost: ->(od) { as_currency(od.estimated_cost) },
         estimated_subsidy: ->(od) { as_currency(od.estimated_subsidy) },
@@ -171,6 +171,16 @@ module Reports
         ],
         transformer_options: { time_data: true, reporting: true },
       ).perform
+    end
+
+    # For rows without a price policy, ChargeMode falls back to
+    # Product#current_price_policies, which queries with a fresh timestamp on
+    # every call (uncacheable). Memoize per product for the report run.
+    def charge_mode_name(order_detail)
+      return ChargeMode.for_order_detail(order_detail).to_s.titleize if order_detail.price_policy
+
+      @charge_mode_by_product ||= {}
+      @charge_mode_by_product[order_detail.product_id] ||= ChargeMode.for_order_detail(order_detail).to_s.titleize
     end
 
     def as_currency_difference(minuend, subtrahend)
