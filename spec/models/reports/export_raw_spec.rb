@@ -20,6 +20,26 @@ RSpec.describe Reports::ExportRaw do
     }
   end
 
+  describe "initialization" do
+    let(:args) do
+      {
+        facility_url_name: "some-facility",
+        order_status_ids: [1],
+        date_start: 1.day.ago,
+        date_end: 1.day.from_now,
+      }
+    end
+
+    it "defaults date_range_field to journal_or_statement_date" do
+      expect(described_class.new(**args).date_range_field).to eq("journal_or_statement_date")
+    end
+
+    it "raises when a required argument is blank" do
+      expect { described_class.new(**args, order_status_ids: []) }
+        .to raise_error(ArgumentError, /order_status_ids/)
+    end
+  end
+
   describe "for an item" do
     let(:item) { FactoryBot.create(:setup_item, facility: facility) }
     let(:order_detail) do
