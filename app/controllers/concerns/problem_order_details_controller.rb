@@ -56,7 +56,10 @@ module ProblemOrderDetailsController
       TransactionSearch::CrossCoreSearcher,
     ]
 
-    @search = TransactionSearch::Searcher.new(*searchers).search(order_details, @search_form)
+    @search =
+      TransactionSearch::Searcher
+      .new(current_facility, *searchers)
+      .search(order_details, @search_form)
     @order_details = @search.order_details.preload(:order_status, :assigned_user)
 
     respond_to do |format|

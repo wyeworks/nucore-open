@@ -56,7 +56,7 @@ class FacilityStatementsController < ApplicationController
     @search_form = TransactionSearch::SearchForm.new(params[:search], defaults:)
     @search =
       TransactionSearch::Searcher
-      .new(facilities: current_facility.cross_facility?)
+      .new(current_facility, facilities: current_facility.cross_facility?)
       .search(order_details, @search_form)
 
     @date_range_field = @search_form.date_params[:field]

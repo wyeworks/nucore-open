@@ -19,9 +19,9 @@ module ProjectsSearch
       selected_value = params.first
 
       if selected_value == "other"
-        order_details.where.not(orders: { facility_id: @current_facility_id })
+        order_details.where.not(orders: { facility_id: current_facility.id })
       elsif selected_value == "current"
-        order_details.where(orders: { facility_id: @current_facility_id })
+        order_details.where(orders: { facility_id: current_facility.id })
       else
         order_details
       end

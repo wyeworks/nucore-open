@@ -38,7 +38,7 @@ module MovableTransactions
     @search_form = TransactionSearch::SearchForm.new(params[:search])
     @search =
       TransactionSearch::Searcher
-      .new(facilities: include_facilities?)
+      .new(current_facility, facilities: include_facilities?)
       .search(movable_transactions_order_details, @search_form)
 
     @date_range_field = @search_form.date_params[:field]
