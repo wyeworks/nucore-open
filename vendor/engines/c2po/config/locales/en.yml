@@ -6,7 +6,7 @@ en:
         cc_instruct: "No part of a credit card number may be entered. Enter a text description to help you and the user identify this card. For example: \"Dr. Smith's Visa Card\"."
         po_instruct: "Where the invoice should be sent to for this payment source; this text will appear on the customer's invoice."
       errors:
-        expires_at: "Expiration may not be blank and must be in MM/DD/YYYY format"
+        expires_at: "Expiration may not be blank"
     purchase_orders:
       account_number: Account Number
 

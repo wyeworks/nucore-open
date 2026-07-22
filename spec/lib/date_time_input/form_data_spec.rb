@@ -32,6 +32,11 @@ RSpec.describe DateTimeInput::FormData do
       let(:hash) { { date: "19/06/2017", hour: 4, minute: 19, ampm: "PM" } }
       it { is_expected.to be_nil }
     end
+
+    describe "with an ISO date" do
+      let(:hash) { { date: "2017-04-06", hour: 4, minute: 19, ampm: "PM" } }
+      it { is_expected.to eq(Time.zone.parse("2017-04-06 16:19").in_time_zone) }
+    end
   end
 
   describe ".from_param!" do
@@ -64,7 +69,7 @@ RSpec.describe DateTimeInput::FormData do
     subject(:form_data) { described_class.new(time) }
 
     describe "fields" do
-      specify { expect(form_data.date).to eq("04/11/2017") }
+      specify { expect(form_data.date).to eq(Date.new(2017, 4, 11)) }
       specify { expect(form_data.hour).to eq(5) }
       specify { expect(form_data.minute).to eq(34) }
       specify { expect(form_data.ampm).to eq("PM") }
@@ -74,7 +79,7 @@ RSpec.describe DateTimeInput::FormData do
     describe "to_h" do
       it "outputs the expected hash" do
         expect(form_data.to_h).to eq(
-          date: "04/11/2017",
+          date: Date.new(2017, 4, 11),
           hour: 5,
           minute: 34,
           ampm: "PM",

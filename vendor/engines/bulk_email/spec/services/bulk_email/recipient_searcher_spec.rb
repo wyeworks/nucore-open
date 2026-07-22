@@ -35,7 +35,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
 
   let(:account) { FactoryBot.create(:setup_account, owner: owner) }
   let(:price_group) { FactoryBot.create(:price_group, facility: facility) }
-  let(:usa_today) { Time.current.strftime("%m/%d/%Y") }
+  let(:iso_today) { Time.current.strftime("%Y-%m-%d") }
 
   let(:params) do
     {
@@ -73,8 +73,8 @@ RSpec.describe BulkEmail::RecipientSearcher do
         bulk_email: { user_types: [:customers, :account_users] },
         commit: "Submit",
         facility_id: facility.id,
-        start_date: "1/1/2009",
-        end_date: "12/31/2016",
+        start_date: "2009-01-01",
+        end_date: "2016-12-31",
         products: [1, 3, 5],
       }
     end
@@ -87,8 +87,8 @@ RSpec.describe BulkEmail::RecipientSearcher do
     let(:user_type_tags) { fragment.css("input[name='bulk_email[user_types][]']") }
 
     it "generates an HTML fragment with hidden recipient search parameters" do
-      expect(start_date_tag.attr("value").value).to eq("1/1/2009")
-      expect(end_date_tag.attr("value").value).to eq("12/31/2016")
+      expect(start_date_tag.attr("value").value).to eq("2009-01-01")
+      expect(end_date_tag.attr("value").value).to eq("2016-12-31")
       expect(product_tag_values).to match_array %w(1 3 5)
       expect(user_type_tag_values).to match_array %w(customers account_users)
     end
@@ -124,7 +124,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
       end
 
       context "when the search start_date is today" do
-        let(:start_date) { usa_today }
+        let(:start_date) { iso_today }
 
         context "and the end_date is unspecified" do
           it "returns users who ordered today and after" do
@@ -133,7 +133,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
         end
 
         context "and the end_date is today" do
-          let(:end_date) { usa_today }
+          let(:end_date) { iso_today }
 
           it "returns users who ordered today only" do
             expect(users).to eq [purchaser3]
@@ -143,7 +143,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
 
       context "when the search start_date is unspecified" do
         context "and the end_date is today" do
-          let(:end_date) { usa_today }
+          let(:end_date) { iso_today }
 
           it "returns users who ordered today and before" do
             expect(users).to contain_exactly(purchaser3, purchaser)
@@ -182,7 +182,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
       end
 
       context "when the search start_date is today" do
-        let(:start_date) { usa_today }
+        let(:start_date) { iso_today }
 
         context "and the end_date is unspecified" do
           it "returns users who made reservations today and after" do
@@ -191,7 +191,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
         end
 
         context "and the end_date is today" do
-          let(:end_date) { usa_today }
+          let(:end_date) { iso_today }
 
           it "returns users who made reservations today only" do
             expect(users).to eq [purchaser3]
@@ -201,7 +201,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
 
       context "when the search start_date is unspecified" do
         context "and the end_date is today" do
-          let(:end_date) { usa_today }
+          let(:end_date) { iso_today }
 
           it "returns users who made reservations today and before" do
             expect(users).to contain_exactly(purchaser3, purchaser)

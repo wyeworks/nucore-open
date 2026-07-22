@@ -24,4 +24,41 @@ RSpec.describe ProductsHelper do
       expect(subject.to_h).to_not include(RelaySynaccessRevA)
     end
   end
+
+  describe "#public_calendar_availability_options" do
+    subject(:options) { helper.send(:public_calendar_availability_options, instrument) }
+
+    let(:instrument) { create(:setup_instrument) }
+
+    it "marks an available instrument available" do
+      expect(options[:class]).to include("available")
+    end
+
+    context "when not available now" do
+      before do
+        create(:purchased_reservation,
+               reserve_start_at: 30.minutes.ago,
+               reserve_end_at: 30.minutes.from_now,
+               product: instrument)
+      end
+
+      it "marks it in use" do
+        expect(options[:class]).to include("in-use")
+        expect(options[:class]).not_to include("available")
+      end
+    end
+
+    context "when offline" do
+      before do
+        create(:offline_reservation,
+               product: instrument,
+               reserve_start_at: 1.hour.ago,
+               reserve_end_at: nil)
+      end
+
+      it "shows the offline note" do
+        expect(options[:title]).to eq(I18n.t("instruments.offline.note"))
+      end
+    end
+  end
 end

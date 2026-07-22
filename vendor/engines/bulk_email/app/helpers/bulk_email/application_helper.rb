@@ -10,8 +10,8 @@ module BulkEmail
       facility_bulk_email_path(
         bulk_email: { user_types: ["customers"] },
         products: [instrument.id],
-        start_date: l(Date.today, format: :usa),
-        end_date: l(7.days.from_now.to_date, format: :usa),
+        start_date: Date.today,
+        end_date: 7.days.from_now.to_date,
         return_path: facility_instrument_schedule_path(current_facility, instrument),
         product_id: instrument.id,
       )
@@ -42,8 +42,8 @@ module BulkEmail
     end
 
     def date_range_selection_link(translation_key, _params, start_date: Date.today, end_date: Date.today)
-      start_date = format_usa_date(start_date)
-      end_date = format_usa_date(end_date)
+      start_date = start_date.to_date.iso8601
+      end_date = end_date.to_date.iso8601
 
       link_to(
         text(translation_key, scope: "bulk_email.dates.range"),

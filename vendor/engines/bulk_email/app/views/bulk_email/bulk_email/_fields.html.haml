@@ -21,9 +21,9 @@
     %h4= t("bulk_email.dates.label")
     #dates_between
       .col-md-3
-        = datepicker_field_input(f, :start_date)
+        = date_field_input(f, :start_date)
       .col-md-3
-        = datepicker_field_input(f, :end_date)
+        = date_field_input(f, :end_date)
 
   .row.row-no-gutters
     = text("bulk_email.dates.select_range")
