@@ -186,7 +186,7 @@ class OrdersController < ApplicationController
     @product = if session[:add_to_cart].blank?
               @order.order_details[0].try(:product)
             else
-              Product.find(session[:add_to_cart].first[:product_id])
+              find_cart_product(session[:add_to_cart].first[:product_id])
             end
     # For nonbillable products, we don't ask the user to choose an account
     # POST requests are sent from the form on the choose_account page,
@@ -214,7 +214,7 @@ class OrdersController < ApplicationController
         if session[:add_to_cart] &&
            (ods = session[:add_to_cart].presence) &&
            (product_id = ods.first[:product_id])
-          error = account.validate_against_product(Product.find(product_id), acting_user)
+          error = account.validate_against_product(find_cart_product(product_id), acting_user)
           @errors[account.id] = error if error
         end
         next if @errors[account.id]
@@ -327,6 +327,10 @@ class OrdersController < ApplicationController
 
   private
 
+  def find_cart_product(product_id)
+    (@cart_products ||= {})[product_id.to_i] ||= Product.find(product_id)
+  end
+
   def payment_relevant_order_details
     @order.order_details.reject { |od| od.product.nonbillable_mode? }
   end
@@ -338,7 +342,7 @@ class OrdersController < ApplicationController
   def adding_billable_products_to_nonbillable_cart?(items)
     return false unless @order.account == NonbillableAccount.singleton_instance
 
-    items.any? { |item| !Product.find(item[:product_id]).nonbillable_mode? }
+    items.any? { |item| !find_cart_product(item[:product_id]).nonbillable_mode? }
   end
 
   def add_account_to_order(account)
