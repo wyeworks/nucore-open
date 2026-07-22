@@ -227,7 +227,7 @@ class FacilitiesController < ApplicationController
 
   def action_layout
     case action_name
-    when "index", "show", "list", "new" then "application"
+    when "index", "show", "list", "new", "create" then "application"
     when "disputed_orders", "movable_transactions", "transactions" then "two_column_head"
     else "two_column"
     end
