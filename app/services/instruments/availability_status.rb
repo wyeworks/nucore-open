@@ -14,8 +14,8 @@ module Instruments
     # Open now per its schedule rules, its schedule not currently in use, and not
     # a holiday it restricts access on.
     def available_now?(product)
-      return false if in_use_schedule_ids.include?(product.schedule_id)
       return false if closed_for_holiday?(product)
+      return false if in_use_schedule_ids.include?(product.schedule_id)
 
       schedule_rules_by_product.fetch(product.id, []).any? { |rule| rule.cover?(Time.current) }
     end

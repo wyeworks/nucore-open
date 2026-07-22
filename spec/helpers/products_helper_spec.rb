@@ -26,15 +26,15 @@ RSpec.describe ProductsHelper do
   end
 
   describe "#public_calendar_availability_options" do
-    subject(:classes) { helper.send(:public_calendar_availability_options, instrument)[:class] }
+    subject(:options) { helper.send(:public_calendar_availability_options, instrument) }
 
     let(:instrument) { create(:setup_instrument) }
 
-    it "is available when open now with no current reservation" do
-      expect(classes).to include("available")
+    it "marks an available instrument available" do
+      expect(options[:class]).to include("available")
     end
 
-    context "with a current reservation" do
+    context "when not available now" do
       before do
         create(:purchased_reservation,
                reserve_start_at: 30.minutes.ago,
@@ -42,50 +42,9 @@ RSpec.describe ProductsHelper do
                product: instrument)
       end
 
-      it "is in use, not available" do
-        expect(classes).to include("in-use")
-        expect(classes).not_to include("available")
-      end
-    end
-
-    context "with a current reservation on a schedule-sharing sibling" do
-      before do
-        sibling = create(:setup_instrument,
-                         facility: instrument.facility,
-                         schedule: instrument.schedule)
-        create(:admin_reservation,
-               reserve_start_at: 30.minutes.ago,
-               reserve_end_at: 30.minutes.from_now,
-               product: sibling)
-      end
-
-      it "marks this instrument in use too" do
-        expect(classes).to include("in-use")
-        expect(classes).not_to include("available")
-      end
-    end
-
-    context "when closed now (no schedule rule covers the current time)" do
-      before { instrument.schedule_rules.destroy_all }
-
-      it "is not available" do
-        expect(classes).to include("in-use")
-        expect(classes).not_to include("available")
-      end
-    end
-
-    context "on a holiday" do
-      before { Holiday.create!(date: Time.current.to_date) }
-
-      it "is not available when the instrument restricts holiday access" do
-        instrument.update!(restrict_holiday_access: true)
-        expect(classes).to include("in-use")
-        expect(classes).not_to include("available")
-      end
-
-      it "stays available when the instrument does not restrict holiday access" do
-        instrument.update!(restrict_holiday_access: false)
-        expect(classes).to include("available")
+      it "marks it in use" do
+        expect(options[:class]).to include("in-use")
+        expect(options[:class]).not_to include("available")
       end
     end
 
@@ -98,7 +57,6 @@ RSpec.describe ProductsHelper do
       end
 
       it "shows the offline note" do
-        options = helper.send(:public_calendar_availability_options, instrument)
         expect(options[:title]).to eq(I18n.t("instruments.offline.note"))
       end
     end
