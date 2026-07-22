@@ -82,7 +82,7 @@ class OrdersController < ApplicationController
     items = items.compact.map { |i| i.permit(:product_id, :quantity) }.select { |od| od[:quantity].to_i > 0 }
     return redirect_back_or_to(cart_path, notice: "Please add at least one quantity to order something") unless items.size > 0
 
-    first_product = Product.find(items.first[:product_id])
+    first_product = find_cart_product(items.first[:product_id])
     facility_ability = Ability.new(session_user, first_product.facility, self)
 
     # if acting_as, make sure the session user can place orders for the facility
@@ -120,7 +120,7 @@ class OrdersController < ApplicationController
     ## process each item
     @order.transaction do
       items.each do |item|
-        @product = Product.find(item[:product_id])
+        @product = find_cart_product(item[:product_id])
         begin
           @order.add(@product, item[:quantity])
           @order.invalidate! ## this is because we just added an order_detail
@@ -340,7 +340,7 @@ class OrdersController < ApplicationController
   end
 
   def adding_billable_products_to_nonbillable_cart?(items)
-    return false unless @order.account == NonbillableAccount.singleton_instance
+    return false unless @order.account.is_a?(NonbillableAccount)
 
     items.any? { |item| !find_cart_product(item[:product_id]).nonbillable_mode? }
   end
