@@ -38,11 +38,11 @@ module ProductsHelper
     end
   end
 
-  def public_calendar_link(product)
+  def public_calendar_link(product, availability = nil)
     return unless product.respond_to? :reservations
 
     opts = if product.facility.show_instrument_availability?
-      public_calendar_availability_options(product)
+      public_calendar_availability_options(product, availability)
     else
       { class: ["fa fa-calendar fa-lg fa-fw"], title: t("instruments.public_schedule.icon") }
     end
@@ -56,11 +56,13 @@ module ProductsHelper
 
   private
 
-  def public_calendar_availability_options(product)
+  def public_calendar_availability_options(product, availability = nil)
+    availability ||= Instruments::AvailabilityStatus.new(product.facility)
+
     if product.offline?
       { class: ["fa fa-calendar fa-lg fa-fw", "in-use"],
         title: text("instruments.offline.note") }
-    elsif product.walkup_available?
+    elsif availability.available_now?(product)
       { class: ["fa fa-calendar fa-lg fa-fw", "available"],
         title: text("instruments.public_schedule.available") }
     else

@@ -59,6 +59,8 @@ class FacilitiesController < ApplicationController
     @product_display_groups = current_facility.product_display_groups.sorted
     @product_display_groups = @product_display_groups.to_a + ProductDisplayGroup.fake_groups_by_type(current_facility.products.without_display_group)
 
+    @instrument_availability = Instruments::AvailabilityStatus.new(current_facility)
+
     render layout: "application"
   end
 
