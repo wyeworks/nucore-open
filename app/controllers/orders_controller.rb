@@ -82,7 +82,7 @@ class OrdersController < ApplicationController
     items = items.compact.map { |i| i.permit(:product_id, :quantity) }.select { |od| od[:quantity].to_i > 0 }
     return redirect_back_or_to(cart_path, notice: "Please add at least one quantity to order something") unless items.size > 0
 
-    first_product = Product.find(items.first[:product_id])
+    first_product = find_cart_product(items.first[:product_id])
     facility_ability = Ability.new(session_user, first_product.facility, self)
 
     # if acting_as, make sure the session user can place orders for the facility
@@ -109,8 +109,7 @@ class OrdersController < ApplicationController
       end
     end
 
-    ## make sure the order has an account
-    if @order.account.nil?
+    if needs_payment_source_selection?(items)
       ## add auto_assign back here if needed
 
       ## save the state to the session and redirect
@@ -121,7 +120,7 @@ class OrdersController < ApplicationController
     ## process each item
     @order.transaction do
       items.each do |item|
-        @product = Product.find(item[:product_id])
+        @product = find_cart_product(item[:product_id])
         begin
           @order.add(@product, item[:quantity])
           @order.invalidate! ## this is because we just added an order_detail
@@ -187,7 +186,7 @@ class OrdersController < ApplicationController
     @product = if session[:add_to_cart].blank?
               @order.order_details[0].try(:product)
             else
-              Product.find(session[:add_to_cart].first[:product_id])
+              find_cart_product(session[:add_to_cart].first[:product_id])
             end
     # For nonbillable products, we don't ask the user to choose an account
     # POST requests are sent from the form on the choose_account page,
@@ -210,12 +209,12 @@ class OrdersController < ApplicationController
       flash.now[:error] = I18n.t("controllers.orders.choose_account.missing_account") if account.blank? && request.post?
       @accounts = AvailableAccountsFinder.new(acting_user, @product.facility).accounts
       @errors   = {}
-      details   = @order.order_details
+      details   = payment_relevant_order_details
       @accounts.each do |account|
         if session[:add_to_cart] &&
            (ods = session[:add_to_cart].presence) &&
            (product_id = ods.first[:product_id])
-          error = account.validate_against_product(Product.find(product_id), acting_user)
+          error = account.validate_against_product(find_cart_product(product_id), acting_user)
           @errors[account.id] = error if error
         end
         next if @errors[account.id]
@@ -327,6 +326,24 @@ class OrdersController < ApplicationController
   end
 
   private
+
+  def find_cart_product(product_id)
+    (@cart_products ||= {})[product_id.to_i] ||= Product.find(product_id)
+  end
+
+  def payment_relevant_order_details
+    @order.order_details.reject { |od| od.product.nonbillable_mode? }
+  end
+
+  def needs_payment_source_selection?(items)
+    @order.account.nil? || adding_billable_products_to_nonbillable_cart?(items)
+  end
+
+  def adding_billable_products_to_nonbillable_cart?(items)
+    return false unless @order.account.is_a?(NonbillableAccount)
+
+    items.any? { |item| !find_cart_product(item[:product_id]).nonbillable_mode? }
+  end
 
   def add_account_to_order(account)
     if account

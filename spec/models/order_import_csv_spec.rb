@@ -89,5 +89,38 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
       end
 
     end
+
+    describe "when a row would mix billing modes on a nonbillable order" do
+      # There's no specific error handling for NUCore::MixedBillingMode the importer,
+      # so the mismatched row falls through to the generic rescue and error message.
+      let!(:nonbillable_order) do
+        create(:purchased_order,
+               product: nonbillable_item,
+               account: nonbillable_account,
+               user: user,
+               created_by: user.id)
+      end
+
+      let(:body) do
+        <<~CSV
+          #{I18n.t('order_row_importer.headers.user')},#{I18n.t('Chart_string')},Product Name,Quantity,Order Date,Fulfillment Date,Note,Order,Reference ID
+          sst123@example.com,#{account.account_number},Example Item,1,#{yesterday},#{yesterday},Mismatched add,#{nonbillable_order.id},123456789
+        CSV
+      end
+
+      it "does not add the billing-mode-mismatched product to the order" do
+        expect { order_import.process_upload! }
+          .not_to change { nonbillable_order.reload.order_details.count }
+      end
+
+      it "completes the import without raising" do
+        expect { order_import.process_upload! }.not_to raise_error
+      end
+
+      it "reports the row as a failure" do
+        order_import.process_upload!
+        expect(order_import.result.failures).to eq(1)
+      end
+    end
   end
 end

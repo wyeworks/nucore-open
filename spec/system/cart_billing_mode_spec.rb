@@ -72,16 +72,32 @@ RSpec.describe "Adding products with different billing modes to cart" do
         expect(page).to have_content(nonbillable_item.name).twice
       end
 
-      it "cannot add Skip Review item to cart" do
+      it "redirects to the payment selection page when adding a Skip Review item" do
         visit facility_item_path(facility, skip_review_item)
         click_on "Add to cart"
-        expect(page).to have_content("#{skip_review_item.name} cannot be added to your cart because it's billing mode does not match the current products in the cart; please clear your cart or place a separate order.")
+
+        expect(page).to have_content("Select Payment Source")
+        expect(page).not_to have_content("cannot be added to your cart because it's billing mode does not match")
+
+        choose account_used.to_s
+        click_button "Continue"
+
+        expect(page).to have_content(nonbillable_item.name)
+        expect(page).to have_content(skip_review_item.name)
       end
 
-      it "cannot add a Default billing mode product" do
+      it "redirects to the payment selection page when adding a Default item" do
         visit facility_item_path(facility, default_item)
         click_on "Add to cart"
-        expect(page).to have_content("#{default_item.name} cannot be added to your cart because it's billing mode does not match the current products in the cart; please clear your cart or place a separate order.")
+
+        expect(page).to have_content("Select Payment Source")
+        expect(page).not_to have_content("cannot be added to your cart because it's billing mode does not match")
+
+        choose account_used.to_s
+        click_button "Continue"
+
+        expect(page).to have_content(nonbillable_item.name)
+        expect(page).to have_content(default_item.name)
       end
     end
 
