@@ -101,7 +101,7 @@ class FacilityEstimatesController < ApplicationController
                                 end
 
     respond_to do |format|
-      format.js
+      format.json
     end
   end
 

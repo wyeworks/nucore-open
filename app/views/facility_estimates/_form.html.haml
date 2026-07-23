@@ -15,7 +15,7 @@
       = f.input_field :custom_name,
         class: "form-control js--user-autocomplete",
         value: (@estimate.user_display_name),
-        data: { search_url: search_facility_estimates_path, user_input_id: "estimate_user_id" }
+        data: { search_url: search_facility_estimates_path(format: :json), user_input_id: "estimate_user_id" }
       = f.hidden_field :user_id
 
     .col-md-3
