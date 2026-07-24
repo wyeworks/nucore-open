@@ -62,7 +62,7 @@ module Reports
     private
 
     def csv_header
-      column_headers.join(",") + "\n"
+      CSV.generate_line(column_headers)
     end
 
     def csv_body
@@ -89,11 +89,14 @@ module Reports
         end
       end
     rescue => e
-      ["*** ERROR WHEN REPORTING ON #{row.class} #{row.id}: #{e.message} ***"]
+      # Pad to full width so an errored row stays column-aligned in the CSV
+      error = "*** ERROR WHEN REPORTING ON #{row.class} #{row.id}: #{e.message} ***"
+      [error] + Array.new(report_hash.size - 1)
     end
 
+    # format_row reads this once per row - build it once.
     def report_hash
-      transformers.reduce(default_report_hash) do |result, class_name|
+      @report_hash ||= transformers.reduce(default_report_hash) do |result, class_name|
         class_name.constantize.new.transform(result)
       end
     end

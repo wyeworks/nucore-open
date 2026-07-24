@@ -12,13 +12,32 @@ RSpec.describe Reports::ExportRaw do
 
   let(:report_args) do
     {
-      action_name: "general",
       facility_url_name: facility.url_name,
       order_status_ids: [order_detail.order_status_id],
       date_end: 1.day.from_now,
       date_start: 1.day.ago,
       date_range_field: "ordered_at",
     }
+  end
+
+  describe "initialization" do
+    let(:args) do
+      {
+        facility_url_name: "some-facility",
+        order_status_ids: [1],
+        date_start: 1.day.ago,
+        date_end: 1.day.from_now,
+      }
+    end
+
+    it "defaults date_range_field to journal_or_statement_date" do
+      expect(described_class.new(**args).date_range_field).to eq("journal_or_statement_date")
+    end
+
+    it "raises when a required argument is blank" do
+      expect { described_class.new(**args, order_status_ids: []) }
+        .to raise_error(ArgumentError, /order_status_ids/)
+    end
   end
 
   describe "for an item" do
@@ -83,7 +102,6 @@ RSpec.describe Reports::ExportRaw do
     context "in a cross facility context" do
       let(:report_args) do
         {
-          action_name: "general",
           facility_url_name: Facility.cross_facility.url_name,
           order_status_ids: [order_detail.order_status_id],
           date_end: 1.day.from_now,
@@ -211,7 +229,6 @@ RSpec.describe Reports::ExportRaw do
     context "in a cross facility context" do
       let(:report_args) do
         {
-          action_name: "general",
           facility_url_name: Facility.cross_facility.url_name,
           order_status_ids: [order_detail.order_status_id],
           date_end: 1.day.from_now,
@@ -257,6 +274,19 @@ RSpec.describe Reports::ExportRaw do
         "Product" => items.map(&:name),
         "Bundle" => [bundle.name, bundle.name],
       )
+    end
+  end
+
+  describe "when building a row raises an error" do
+    let(:item) { create(:setup_item, facility: facility) }
+    let!(:order_detail) { place_product_order(user, facility, item, account).tap(&:complete!) }
+
+    it "keeps the row column-aligned with the error in the first cell" do
+      allow_any_instance_of(OrderDetail).to receive(:to_s).and_raise("boom")
+      parsed = CSV.parse(report.to_csv)
+
+      expect(parsed.last.size).to eq(parsed.first.size)
+      expect(parsed.last.first).to include("ERROR WHEN REPORTING")
     end
   end
 
