@@ -93,8 +93,14 @@ class Accessories::Accessorizer
 
     if SettingsHelper.feature_on?("reservations.accessory_independent_order_status")
       # always use own initial order status
-      od.order_status_id = od.product.initial_order_status.id
-      od.save!
+      initial_status = od.product.initial_order_status
+      if initial_status.root == OrderStatus.complete
+        od.save!
+        od.backdate_to_complete!(@order_detail.fulfilled_at || Time.current)
+      else
+        od.order_status_id = initial_status.id
+        od.save!
+      end
     elsif @order_detail.complete?
       # complete the accessory along with the parent
       od.save!

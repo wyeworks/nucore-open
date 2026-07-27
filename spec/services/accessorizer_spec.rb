@@ -213,6 +213,20 @@ RSpec.describe Accessories::Accessorizer do
             expect(results.first.order_status).to eq(custom_order_status)
           end
         end
+
+        context "when the accessory's initial order status is Complete" do
+          before do
+            quantity_accessory.update!(initial_order_status: OrderStatus.complete)
+            allow_any_instance_of(OrderDetail).to receive(:assign_price_policy)
+            allow(order_detail).to receive(:fulfilled_at).and_return(1.hour.ago)
+          end
+
+          it "actually completes the accessory using backdate_to_complete!" do
+            results = accessorizer.update_accessorizer_attributes(params).order_details
+            expect(results.first.order_status).to eq(OrderStatus.complete)
+            expect(results.first.fulfilled_at).to be_present
+          end
+        end
       end
 
       context "when accessory_independent_order_status feature is disabled (legacy behavior)", feature_setting: { "reservations.accessory_independent_order_status": false } do
