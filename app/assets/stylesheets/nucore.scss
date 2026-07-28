@@ -83,15 +83,9 @@ legend {
   .row {
     margin-bottom: 15px;
   }
-  
-  input[type="text"]:not(.chosen-search-input),
-  select {
-    @extend .form-control;
-  }
-  
+
   label {
     display: block;
-    margin-bottom: 5px;
   }
 }
 

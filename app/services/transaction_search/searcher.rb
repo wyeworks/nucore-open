@@ -12,6 +12,7 @@ module TransactionSearch
         TransactionSearch::FacilitySearcher,
         TransactionSearch::AccountSearcher,
         TransactionSearch::AccountTypeSearcher,
+        TransactionSearch::SuspendedAccountSearcher,
         TransactionSearch::ProductSearcher,
         TransactionSearch::AccountOwnerSearcher,
         TransactionSearch::PriceGroupSearcher,
@@ -36,6 +37,7 @@ module TransactionSearch
     cattr_accessor(:default_config) do
       {
         facilities: false,
+        suspended_accounts: false,
         price_groups: SettingsHelper.feature_on?("billing.billing_table_price_groups"),
       }
     end

@@ -3,7 +3,8 @@
 */
 .search_form {
   fieldset#search, .full-width {
-    input, select {
+    input:not([type="checkbox"]),
+    select {
       width: 100%;
     }
 
@@ -14,14 +15,7 @@
 }
 
 .search_form input[type=submit] {
-  clear: both;
-  float: right;
   margin-bottom: 0.5em;
-
-  &.float-left {
-    float: left;
-    margin-bottom: 2em;
-  }
 }
 
 
