@@ -47,6 +47,10 @@ RSpec.describe TransactionSearch::Searcher, :use_test_account do
     context "when true" do
       let(:suspended_accounts_param) { "1" }
 
+      it "returns non empty set" do
+        expect(searched_order_details).not_to be_empty
+      end
+
       it "filters out orders with suspended accounts" do
         expect(searched_order_details).not_to include(
           *suspended_account.order_details.to_a
@@ -59,6 +63,10 @@ RSpec.describe TransactionSearch::Searcher, :use_test_account do
 
     context "when false" do
       let(:suspended_accounts_param) { "0" }
+
+      it "returns non empty set" do
+        expect(searched_order_details).not_to be_empty
+      end
 
       it "does not filter orders" do
         expect(searched_order_details).to include(
