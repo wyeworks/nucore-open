@@ -1,0 +1,4 @@
+- if f.object.new_record?
+  = f.input :pricing_mode, as: :radio_buttons, collection: timed_service_pricing_modes,
+    label: text("timed_services.timed_service_fields.pricing_mode"),
+    item_wrapper_class: :radio, item_wrapper_tag: :div

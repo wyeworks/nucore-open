@@ -38,6 +38,22 @@ module ProductsHelper
     end
   end
 
+  def timed_service_pricing_mode_label(pricing_mode)
+    key = case pricing_mode
+          when TimedService::Pricing::DURATION then "duration"
+          when TimedService::Pricing::STANDARD then "standard"
+          end
+
+    text("timed_services.timed_service_fields.pricing_modes.#{key}")
+  end
+
+  def timed_service_pricing_modes
+    modes = TimedService::PRICING_MODES
+    modes -= [TimedService::Pricing::DURATION] if cannot?(:create_duration_billing, TimedService)
+
+    modes.map { |mode| [timed_service_pricing_mode_label(mode), mode] }
+  end
+
   def public_calendar_link(product, availability = nil)
     return unless product.respond_to? :reservations
 
