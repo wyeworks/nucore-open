@@ -2,15 +2,7 @@
   .row
     %fieldset.col-md-8#search
       - @search.options.reject(&:multipart?).each do |searcher|
-        - html_class = searcher.input_type == :select ? "quarter-width" : ""
-        = f.input searcher.key,
-          as: searcher.input_type,
-          collection: searcher.options,
-          label: searcher.label,
-          label_method: searcher.label_method,
-          data_attrs: searcher.method(:data_attrs),
-          input_html: { id: searcher.key, class: html_class },
-          include_blank: false
+        = searcher_input(f, searcher)
 
     %fieldset.col-xs-6.col-md-4#calendar_filter
       - if @search.options.map(&:key).include?("date_ranges")
@@ -22,4 +14,4 @@
   %div
     = hidden_field_tag :email, current_user.email, disabled: true
     = hidden_field_tag :format, params[:format], disabled: true
-    = f.submit t("shared.filter"), class: "btn float-left"
+    = f.submit t("shared.filter"), class: "btn"
