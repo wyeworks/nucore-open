@@ -123,7 +123,7 @@ class FacilityUserPermissionAbility
   end
 
   def grant_order_management
-    can :update, OrderDetail, { order: { facility_id: facility.id } }
+    can [:sample_results, :sample_results_zip, :template_results, :update], OrderDetail, { order: { facility_id: facility.id } }
     can :mark_unrecoverable, OrderDetail, { order: { facility_id: facility.id } }
 
     can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
