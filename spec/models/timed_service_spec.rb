@@ -9,7 +9,7 @@ RSpec.describe TimedService do
 
   describe "pricing_mode" do
     it "defaults to the standard mode" do
-      expect(timed_service.pricing_mode).to eq(TimedService::Pricing::STANDARD)
+      expect(timed_service.pricing_mode).to eq(TimedService::Pricing::SCHEDULE_RULE)
     end
 
     it "allows the duration mode" do

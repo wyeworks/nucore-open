@@ -41,7 +41,7 @@ RSpec.describe TimedServicesController, type: :controller do
         sign_in user
         do_request
 
-        expect(response.body).to include(%(value="#{TimedService::Pricing::STANDARD}"))
+        expect(response.body).to include(%(value="#{TimedService::Pricing::SCHEDULE_RULE}"))
         expect(response.body).not_to include(%(value="#{TimedService::Pricing::DURATION}"))
       end
     end

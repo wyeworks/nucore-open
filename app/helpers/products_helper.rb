@@ -31,27 +31,19 @@ module ProductsHelper
     ].compact
   end
 
-  def instrument_pricing_modes
-    Instrument::PRICING_MODES.reject do |pricing_mode|
-      (pricing_mode == Instrument::Pricing::SCHEDULE_DAILY && cannot?(:create_daily_booking, Instrument)) ||
-        (pricing_mode == Instrument::Pricing::DURATION && cannot?(:create_duration_billing, Instrument))
+  def pricing_modes_for(product_class)
+    modes = product_class::PRICING_MODES.reject do |pricing_mode|
+      (pricing_mode == Product::Pricing::SCHEDULE_DAILY && cannot?(:create_daily_booking, product_class)) ||
+        (pricing_mode == Product::Pricing::DURATION && cannot?(:create_duration_billing, product_class))
     end
+
+    modes.map { |pricing_mode| [pricing_mode_label(product_class, pricing_mode), pricing_mode] }
   end
 
-  def timed_service_pricing_mode_label(pricing_mode)
-    key = case pricing_mode
-          when TimedService::Pricing::DURATION then "duration"
-          when TimedService::Pricing::STANDARD then "standard"
-          end
+  def pricing_mode_label(product_class, pricing_mode)
+    key = pricing_mode.parameterize(separator: "_")
 
-    text("timed_services.timed_service_fields.pricing_modes.#{key}")
-  end
-
-  def timed_service_pricing_modes
-    modes = TimedService::PRICING_MODES
-    modes -= [TimedService::Pricing::DURATION] if cannot?(:create_duration_billing, TimedService)
-
-    modes.map { |mode| [timed_service_pricing_mode_label(mode), mode] }
+    t("products.pricing_modes.#{product_class.model_name.i18n_key}.#{key}", default: pricing_mode)
   end
 
   def public_calendar_link(product, availability = nil)

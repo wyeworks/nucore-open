@@ -651,6 +651,9 @@ en:
       mark_offline: Take instrument offline
 
   products:
+    pricing_modes:
+      timed_service:
+        schedule_rule: Standard
     user_notes_field_mode:
       hidden: "No"
       optional: Optional
@@ -1356,9 +1359,6 @@ en:
   timed_services:
     timed_service_fields:
       pricing_mode: Set Pricing By
-      pricing_modes:
-        standard: Standard
-        duration: Duration
 
   notifications:
     index:

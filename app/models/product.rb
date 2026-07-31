@@ -6,6 +6,16 @@ class Product < ApplicationRecord
   include EmailListAttribute
   include FullTextSearch::Model
 
+  module Pricing
+
+    SCHEDULE_RULE = "Schedule Rule"
+    SCHEDULE_DAILY = "Schedule Rule (Daily Booking only)"
+    DURATION = "Duration"
+
+  end
+
+  PRICING_MODES = [Pricing::SCHEDULE_RULE].freeze
+
   belongs_to :facility
   belongs_to :initial_order_status, class_name: "OrderStatus"
   belongs_to :facility_account
@@ -73,6 +83,7 @@ class Product < ApplicationRecord
     ["Default", "Skip Review", "Nonbillable"]
   end
   validates :billing_mode, inclusion: Product.billing_modes
+  validates :pricing_mode, presence: true, inclusion: { in: ->(product) { product.class::PRICING_MODES } }
 
   scope :active, -> { where(is_archived: false, is_hidden: false) }
   scope :alphabetized, -> { order(Arel.sql("LOWER(products.name)")) }
@@ -325,11 +336,11 @@ class Product < ApplicationRecord
   end
 
   def duration_pricing_mode?
-    false
+    pricing_mode == Pricing::DURATION
   end
 
   def daily_booking?
-    false
+    pricing_mode == Pricing::SCHEDULE_DAILY
   end
 
   def can_apply_discounts?
