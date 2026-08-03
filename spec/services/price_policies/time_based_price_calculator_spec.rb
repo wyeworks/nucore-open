@@ -468,4 +468,53 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
       end
     end
   end
+
+  context "when the product is a timed service" do
+    let(:facility) { create(:setup_facility) }
+    let(:price_group) { create(:price_group, facility:) }
+    let(:options) { { usage_rate: 120, usage_subsidy: 30 } }
+    let(:price_policy) do
+      create(:timed_service_price_policy, options.merge(product:, price_group:))
+    end
+
+    subject(:costs) { calculator.calculate(nil, nil, 180) }
+
+    context "with standard pricing" do
+      let(:product) { create(:timed_service, facility:) }
+
+      it "calls the correct strategy" do
+        expect(calculator_strategy).to be PricePolicies::Strategy::PerMinute
+      end
+
+      it { is_expected.to eq(cost: 360, subsidy: 90) }
+    end
+
+    context "with duration pricing" do
+      let(:product) do
+        create(:timed_service, facility:, pricing_mode: TimedService::Pricing::DURATION)
+      end
+
+      context "with no duration rates set" do
+        it "falls back to the per-minute strategy" do
+          expect(calculator_strategy).to be PricePolicies::Strategy::PerMinute
+        end
+
+        it { is_expected.to eq(cost: 360, subsidy: 90) }
+      end
+
+      context "with duration rates" do
+        before do
+          create(:duration_rate, price_policy:, min_duration_hours: 2, rate: 60, subsidy: 12)
+        end
+
+        it "calls the correct strategy" do
+          expect(calculator_strategy).to be PricePolicies::Strategy::SteppedRate
+        end
+
+        # Cost:    120 min @ $2.00 = $240, then 60 min @ $1.00 = $60
+        # Subsidy: 120 min @ $0.50 = $60,  then 60 min @ $0.20 = $12
+        it { is_expected.to eq(cost: 300, subsidy: 72) }
+      end
+    end
+  end
 end

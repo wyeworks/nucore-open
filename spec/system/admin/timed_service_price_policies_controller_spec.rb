@@ -57,6 +57,54 @@ RSpec.describe TimedServicePricePoliciesController, :js do
     expect(page).not_to have_content(external_price_group.name)
   end
 
+  context "with duration pricing mode" do
+    let!(:timed_service) do
+      create(:timed_service, facility: facility, pricing_mode: TimedService::Pricing::DURATION)
+    end
+
+    it "can set up stepped price policies", :aggregate_failures, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
+      visit facility_timed_services_path(facility, timed_service)
+      click_link timed_service.name
+      click_link "Pricing"
+      click_link "Add Pricing Rules"
+
+      expect(page).to have_content("Stepped Billing Rates")
+
+      fill_in "min_duration_0", with: "2"
+      fill_in "min_duration_1", with: "3"
+      fill_in "min_duration_2", with: "4"
+
+      fill_in "price_policy_#{base_price_group.id}[usage_rate]", with: "60"
+      fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][0][rate]", with: "50"
+      fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][1][rate]", with: "40"
+      fill_in "price_policy_#{base_price_group.id}[duration_rates_attributes][2][rate]", with: "30"
+
+      fill_in "price_policy_#{cancer_center.id}[usage_subsidy]", with: "25"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][0][subsidy]", with: "20"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][1][subsidy]", with: "10"
+      fill_in "price_policy_#{cancer_center.id}[duration_rates_attributes][2][subsidy]", with: "5"
+
+      fill_in "price_policy_#{external_price_group.id}[usage_rate]", with: "120"
+      fill_in "price_policy_#{external_price_group.id}[duration_rates_attributes][0][rate]", with: "110"
+      fill_in "price_policy_#{external_price_group.id}[duration_rates_attributes][1][rate]", with: "100"
+      fill_in "price_policy_#{external_price_group.id}[duration_rates_attributes][2][rate]", with: "90"
+
+      fill_in "note", with: "This is my note"
+
+      click_button "Add Pricing Rules"
+
+      expect(page).to have_content("Over 2 hrs")
+      expect(page).to have_content("Over 3 hrs")
+      expect(page).to have_content("Over 4 hrs")
+
+      # Cancer center, per step
+      expect(page).to have_content("$50.00\n$20.00\n= $30.00")
+      expect(page).to have_content("$40.00\n$10.00\n= $30.00")
+      expect(page).to have_content("$30.00\n$5.00\n= $25.00")
+    end
+
+  end
+
   describe "with required note enabled", feature_setting: { "pricing.price_policy_requires_note" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
     it "requires the field" do
       visit facility_timed_services_path(facility, timed_service)

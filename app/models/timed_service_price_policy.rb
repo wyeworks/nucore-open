@@ -34,7 +34,7 @@ class TimedServicePricePolicy < PricePolicy
   def calculate_for_time(duration)
     return if restrict_purchase?
 
-    costs = { cost: duration * usage_rate, subsidy: duration * usage_subsidy }
+    PricePolicies::TimeBasedPriceCalculator.new(self).calculate(nil, nil, duration)
   end
 
 end

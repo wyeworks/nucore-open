@@ -45,7 +45,7 @@ class PricePoliciesController < ApplicationController
 
     raise ActiveRecord::RecordNotFound if @price_policies.blank?
 
-    build_instrument_stepped_billing_fields
+    build_stepped_billing_fields
   end
 
   # POST /facilities/:facility_id/{product_type}/:product_id/price_policies
@@ -53,7 +53,7 @@ class PricePoliciesController < ApplicationController
     if update_policies_from_params
       redirect_to facility_product_price_policies_path, notice: text("create.success")
     else
-      build_instrument_stepped_billing_fields
+      build_stepped_billing_fields
 
       flash.now[:error] = text("errors.save")
 
@@ -66,7 +66,7 @@ class PricePoliciesController < ApplicationController
     if update_policies_from_params
       redirect_to facility_product_price_policies_path, notice: text("update.success")
     else
-      build_instrument_stepped_billing_fields
+      build_stepped_billing_fields
 
       flash.now[:error] = text("errors.save")
 
@@ -78,7 +78,7 @@ class PricePoliciesController < ApplicationController
   def edit
     raise ActiveRecord::RecordNotFound if @price_policies.blank?
 
-    build_instrument_stepped_billing_fields
+    build_stepped_billing_fields
   end
 
   # DELETE /facilities/:facility_id/{product_type}/:product_id/price_policies/:id
@@ -149,9 +149,9 @@ class PricePoliciesController < ApplicationController
     )
   end
 
-  # TO DO: consider moving the methods below to InstrumentPricePolicyController
   ## Duration Rates methods start here
-  ## These only apply to instruments with duration pricing mode
+  ## These only apply to products with duration pricing mode
+  ## (instruments and timed services)
 
   # Builds a collection of unique min duration hrs values
   # from price policies in memory,
@@ -183,7 +183,7 @@ class PricePoliciesController < ApplicationController
     end
   end
 
-  def build_instrument_stepped_billing_fields
+  def build_stepped_billing_fields
     if @product.duration_pricing_mode?
       build_min_durations
       build_duration_rates

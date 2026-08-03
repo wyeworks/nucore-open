@@ -651,6 +651,9 @@ en:
       mark_offline: Take instrument offline
 
   products:
+    pricing_modes:
+      timed_service:
+        schedule_rule: Standard
     user_notes_field_mode:
       hidden: "No"
       optional: Optional
@@ -1352,6 +1355,10 @@ en:
         instruct:
           sanger_sequencing_enabled: Enable Sanger submissions for this service
           admin_skip_order_form: Allow to skip order forms when ordering for a user
+
+  timed_services:
+    timed_service_fields:
+      pricing_mode: Set Pricing By
 
   notifications:
     index:

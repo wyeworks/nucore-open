@@ -24,6 +24,46 @@ RSpec.describe TimedServicePricePolicy do
     end
   end
 
+  describe "with duration (stepped) pricing" do
+    let(:facility) { create(:setup_facility) }
+    let(:price_group) { create(:price_group, facility:) }
+    let(:product) do
+      create(:timed_service, facility:, pricing_mode: TimedService::Pricing::DURATION)
+    end
+    let(:price_policy) do
+      create(:timed_service_price_policy, product:, price_group:, usage_rate: 120, usage_subsidy: 30)
+    end
+
+    before do
+      create(:duration_rate, price_policy:, min_duration_hours: 2, rate: 60, subsidy: 12)
+    end
+
+    subject(:costs) { price_policy.calculate_cost_and_subsidy_from_order_detail(order_detail) }
+
+    describe "with a duration below the first step" do
+      let(:order_detail) { build_stubbed(:order_detail, product:, quantity: 60) }
+
+      it { is_expected.to eq(cost: 120, subsidy: 30) }
+    end
+
+    describe "with a duration spanning the step boundary" do
+      let(:order_detail) { build_stubbed(:order_detail, product:, quantity: 180) }
+
+      # Cost:    120 min @ $2.00 = $240, then 60 min @ $1.00 = $60
+      # Subsidy: 120 min @ $0.50 = $60,  then 60 min @ $0.20 = $12
+      it { is_expected.to eq(cost: 300, subsidy: 72) }
+    end
+
+    describe "when the product is not in duration pricing mode" do
+      let(:product) { create(:timed_service, facility:) }
+      let(:order_detail) { build_stubbed(:order_detail, product:, quantity: 180) }
+
+      it "ignores the duration rates and charges the flat rate" do
+        is_expected.to eq(cost: 360, subsidy: 90)
+      end
+    end
+  end
+
   describe "#estimate_cost_from_estimate_detail" do
     let(:product) { build_stubbed(:timed_service) }
     let(:price_policy) { build_stubbed(:timed_service_price_policy, product: product, usage_rate: 60, usage_subsidy: 15) }
