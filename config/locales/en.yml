@@ -141,6 +141,7 @@ en:
     remove: Remove
     save: Save
     search: Search
+    loading: Please wait...
     view: View
     filter: Filter
     select_all: Select All

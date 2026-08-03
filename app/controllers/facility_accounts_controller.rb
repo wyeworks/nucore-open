@@ -9,31 +9,35 @@ class FacilityAccountsController < ApplicationController
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
-  before_action :init_account, except: :search_results
+  before_action :init_account, except: :index
   before_action :build_account, only: [:new, :create]
   before_action :set_facility_accounts_for_user, only: [:accounts_available_for_order]
-  before_action :set_account_types, only: [:index, :search_results]
+  before_action :set_account_types, only: :index
 
   authorize_resource :account, except: [:accounts_available_for_order]
 
-  layout "two_column"
   before_action { @active_tab = "admin_users" }
+  layout "two_column"
 
   # GET /facilties/:facility_id/accounts
   def index
-    accounts = Account.with_orders_for_facility(current_facility)
+    searcher = AccountSearcher.new(
+      filter_params[:search_term],
+      scope: account_scope,
+      filter_params:,
+    )
 
-    if SettingsHelper.feature_on?("accounts.account_tabs")
-      accounts = if params[:suspended] == "true"
-                   accounts.suspended
-                 else
-                   accounts.not_suspended
-                 end
+    if searcher.valid?
+      respond_to do |format|
+        format.html do
+          @accounts = searcher.results.includes(:owner_user)
+          @accounts = @accounts.paginate(page: params[:page])
+        end
+        format.csv { export_accounts_csv }
+      end
+    else
+      flash.now[:error] = "Search terms must be 3 or more characters."
     end
-
-    @accounts = accounts.includes(:owner, :owner_user).paginate(page: params[:page])
-
-    render("search_results", layout: false) if request.xhr?
   end
 
   # GET /facilties/:facility_id/accounts/:id
@@ -80,46 +84,6 @@ class FacilityAccountsController < ApplicationController
   end
 
   def new_account_user_search
-  end
-
-  # GET/POST /facilities/:facility_id/accounts/search_results
-  def search_results
-    account_scope = Account.for_facility(current_facility)
-    filter_params = {
-      account_type: params[:account_type],
-      suspended: params[:suspended],
-      account_status: params[:account_status],
-    }
-
-    if SettingsHelper.feature_on?("accounts.account_tabs") && params[:search_term].blank?
-      account_scope = AccountSearcher.new("", scope: account_scope, filter_params:).filtered_scope
-      respond_to do |format|
-        format.html do
-          @accounts = account_scope.paginate(page: params[:page])
-          render layout: false
-        end
-        format.csv { export_accounts_csv("") }
-      end
-
-      return
-    end
-
-    searcher = AccountSearcher.new(params[:search_term], scope: account_scope, filter_params:)
-
-    if searcher.valid?
-      @accounts = searcher.results
-
-      respond_to do |format|
-        format.html do
-          @accounts = @accounts.paginate(page: params[:page])
-          render layout: false
-        end
-        format.csv { export_accounts_csv(params[:search_term]) }
-      end
-    else
-      flash.now[:errors] = "Search terms must be 3 or more characters."
-      render layout: false
-    end
   end
 
   # GET /facilities/:facility_id/accounts/:account_id/members
@@ -212,22 +176,38 @@ class FacilityAccountsController < ApplicationController
     end
   end
 
-  def export_accounts_csv(search_term)
-    filter_params = if SettingsHelper.feature_on?("accounts.account_tabs")
-                      {
-                        account_type: params[:account_type],
-                        suspended: params[:suspended],
-                        account_status: params[:account_status],
-                      }
-                    else
-                      {}
-                    end
+  def export_accounts_csv
     queue_csv_report_email(
       Reports::AccountSearchReport,
-      search_term:,
+      search_term: filter_params[:search_term],
       facility: SerializableFacility.new(current_facility),
       filter_params:,
     )
   end
+
+  # Default scope is to show latest accounts used.
+  #
+  # If we are filtering then return all accounts for facility.
+  def account_scope
+    if filters_active?
+      Account.for_facility(current_facility)
+    else
+      Account.with_orders_for_facility(current_facility)
+    end
+  end
+
+  def filter_params
+    params
+      .permit(:search_term, :account_type, :suspended, :account_status)
+      .to_h
+      .symbolize_keys
+  end
+
+  # Filter active if it's a form submission
+  def filters_active?
+    params[:commit].present?
+  end
+
+  helper_method :filters_active?
 
 end

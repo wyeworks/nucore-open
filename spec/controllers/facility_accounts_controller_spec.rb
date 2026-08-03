@@ -193,15 +193,15 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
     end
   end
 
-  context "search_results" do
+  context "index search" do
     it "requires login" do
-      get :search_results, params: { facility_id: facility.url_name }
+      get :index, params: { facility_id: facility.url_name }
       expect(response).to redirect_to(new_user_session_path)
     end
 
     it "denies senior staff" do
       sign_in create(:user, :senior_staff, facility: facility)
-      expect { get :search_results, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
+      expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
     end
 
     describe "as the director" do
@@ -213,41 +213,41 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
       end
 
       it "finds an account by a partial account number" do
-        get :search_results, params: { facility_id: facility.url_name, search_term: account.account_number.first(3) }
+        get :index, params: { facility_id: facility.url_name, search_term: account.account_number.first(3) }
         expect(assigns(:accounts)).to include(account)
       end
 
       it "finds the account by the owner first name" do
-        get :search_results, params: { facility_id: facility.url_name, search_term: owner.first_name }
+        get :index, params: { facility_id: facility.url_name, search_term: owner.first_name }
         expect(assigns(:accounts)).to include(account)
       end
 
       it "finds the account by the owner last name" do
-        get :search_results, params: { facility_id: facility.url_name, search_term: owner.last_name }
+        get :index, params: { facility_id: facility.url_name, search_term: owner.last_name }
         expect(assigns(:accounts)).to include(account)
       end
 
       it "doesn't find anything with gibberish" do
-        get :search_results, params: { facility_id: facility.url_name, search_term: "GOBBLEDEGOOK" }
+        get :index, params: { facility_id: facility.url_name, search_term: "GOBBLEDEGOOK" }
         expect(assigns(:accounts)).to be_empty
       end
 
       it "returns a warning an no results if less than three characters" do
-        get :search_results, params: { facility_id: facility.url_name, search_term: "A" }
+        get :index, params: { facility_id: facility.url_name, search_term: "A" }
         expect(assigns(:accounts)).to be_nil
-        expect(flash.now[:errors]).to be_present
+        expect(flash.now[:error]).to be_present
       end
 
       context "with CSV format" do
         it "enqueues CsvReportEmailJob with search term" do
           expect do
-            get :search_results, params: { facility_id: facility.url_name, search_term: account.account_number.first(3), format: :csv }
+            get :index, params: { facility_id: facility.url_name, search_term: account.account_number.first(3), format: :csv }
           end.to have_enqueued_job(CsvReportEmailJob)
         end
 
         it "sends an email" do
           perform_enqueued_jobs do
-            get :search_results, params: { facility_id: facility.url_name, search_term: account.account_number.first(3), format: :csv }
+            get :index, params: { facility_id: facility.url_name, search_term: account.account_number.first(3), format: :csv }
           end
 
           expect(ActionMailer::Base.deliveries.length).to eq(1)
@@ -273,18 +273,14 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
       context "with CSV format and no search term" do
         it "enqueues CsvReportEmailJob with blank search term" do
           expect do
-            get :search_results, params: { facility_id: facility.url_name, format: :csv }
+            get :index, params: { facility_id: facility.url_name, format: :csv }
           end.to(
             have_enqueued_job(CsvReportEmailJob).with(
               Reports::AccountSearchReport.to_s,
               anything,
               hash_including(
-                search_term: "",
-                filter_params: hash_including(
-                  account_type: nil,
-                  suspended: nil,
-                  account_status: nil,
-                )
+                search_term: nil,
+                filter_params: {},
               )
             )
           )
@@ -292,13 +288,13 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
 
         it "respects suspended filter" do
           expect do
-            get :search_results, params: { facility_id: facility.url_name, suspended: "true", format: :csv }
+            get :index, params: { facility_id: facility.url_name, suspended: "true", format: :csv }
           end.to(
             have_enqueued_job(CsvReportEmailJob).with(
               Reports::AccountSearchReport.to_s,
               anything,
               hash_including(
-                search_term: "",
+                search_term: nil,
                 filter_params: hash_including(suspended: "true"),
               )
             )
@@ -307,13 +303,13 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
 
         it "respects account_status filter" do
           expect do
-            get :search_results, params: { facility_id: facility.url_name, account_status: "active", format: :csv }
+            get :index, params: { facility_id: facility.url_name, account_status: "active", format: :csv }
           end.to(
             have_enqueued_job(CsvReportEmailJob).with(
               Reports::AccountSearchReport.to_s,
               anything,
               hash_including(
-                search_term: "",
+                search_term: nil,
                 filter_params: hash_including(account_status: "active"),
               )
             )
@@ -322,13 +318,13 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
 
         it "respects account_type filter" do
           expect do
-            get :search_results, params: { facility_id: facility.url_name, account_type: "NufsAccount", format: :csv }
+            get :index, params: { facility_id: facility.url_name, account_type: "NufsAccount", format: :csv }
           end.to(
             have_enqueued_job(CsvReportEmailJob).with(
               Reports::AccountSearchReport.to_s,
               anything,
               hash_including(
-                search_term: "",
+                search_term: nil,
                 filter_params: hash_including(account_type: "NufsAccount"),
               )
             )
@@ -339,7 +335,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
       context "with CSV format and search term" do
         it "enqueues CsvReportEmailJob with search term and filtered scope" do
           expect do
-            get :search_results, params: { facility_id: facility.url_name, search_term: "ACTIVE", account_status: "active", format: :csv }
+            get :index, params: { facility_id: facility.url_name, search_term: "ACTIVE", account_status: "active", format: :csv }
           end.to(
             have_enqueued_job(CsvReportEmailJob).with(
               Reports::AccountSearchReport.to_s,

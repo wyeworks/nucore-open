@@ -3,6 +3,11 @@
  */
 window.addEventListener("DOMContentLoaded", () => {
   const toggleExpiredAcctsBtn = document.querySelector(".toggle_expired_accts_btn--js");
+
+  if (!toggleExpiredAcctsBtn) {
+    return;
+  }
+
   const expiredAccts = document.querySelectorAll("tr.expired--js");
   let hideAccounts = true;
 
