@@ -29,7 +29,7 @@ module PricePolicies
     def strategy_class
       if product.daily_booking?
         Strategy::PerDay
-      elsif product.is_a?(Instrument) && product.duration_pricing_mode? && price_policy.duration_rates.present?
+      elsif product.duration_pricing_mode? && price_policy.duration_rates.present?
         Strategy::SteppedRate
       else
         Strategy::PerMinute

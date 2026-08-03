@@ -2,14 +2,6 @@
 
 class Instrument < Product
 
-  module Pricing
-
-    SCHEDULE_RULE = "Schedule Rule"
-    SCHEDULE_DAILY = "Schedule Rule (Daily Booking only)"
-    DURATION = "Duration"
-
-  end
-
   include Products::RelaySupport
   include Products::ScheduleRuleSupport
   include Products::SchedulingSupport
@@ -47,8 +39,6 @@ class Instrument < Product
   validate :minimum_reservation_is_multiple_of_interval,
            :maximum_reservation_is_multiple_of_interval,
            :max_reservation_not_less_than_min
-
-  validates :pricing_mode, presence: true, inclusion: { in: PRICING_MODES }
 
   # Callbacks
   # --------
@@ -111,14 +101,6 @@ class Instrument < Product
         blackout: true,
       )
     end
-  end
-
-  def duration_pricing_mode?
-    pricing_mode == Pricing::DURATION
-  end
-
-  def daily_booking?
-    pricing_mode == Pricing::SCHEDULE_DAILY
   end
 
   def can_apply_discounts?

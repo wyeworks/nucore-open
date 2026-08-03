@@ -31,11 +31,19 @@ module ProductsHelper
     ].compact
   end
 
-  def instrument_pricing_modes
-    Instrument::PRICING_MODES.reject do |pricing_mode|
-      (pricing_mode == Instrument::Pricing::SCHEDULE_DAILY && cannot?(:create_daily_booking, Instrument)) ||
-        (pricing_mode == Instrument::Pricing::DURATION && cannot?(:create_duration_billing, Instrument))
+  def pricing_modes_for(product_class)
+    modes = product_class::PRICING_MODES.reject do |pricing_mode|
+      (pricing_mode == Product::Pricing::SCHEDULE_DAILY && cannot?(:create_daily_booking, product_class)) ||
+        (pricing_mode == Product::Pricing::DURATION && cannot?(:create_duration_billing, product_class))
     end
+
+    modes.map { |pricing_mode| [pricing_mode_label(product_class, pricing_mode), pricing_mode] }
+  end
+
+  def pricing_mode_label(product_class, pricing_mode)
+    key = pricing_mode.parameterize(separator: "_")
+
+    t("products.pricing_modes.#{product_class.model_name.i18n_key}.#{key}", default: pricing_mode)
   end
 
   def public_calendar_link(product, availability = nil)
