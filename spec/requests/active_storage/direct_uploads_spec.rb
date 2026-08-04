@@ -3,13 +3,12 @@
 require "rails_helper"
 
 RSpec.describe "direct uploads" do
-  let(:action) { -> { post rails_direct_uploads_path } }
+  let(:action) { -> { post rails_direct_uploads_path, xhr: true } }
 
-  it "requires login" do
+  it "returns unauthorized" do
     action.call
 
-    expect(response).to have_http_status(:found)
-    expect(response.location).to eq(new_user_session_url)
+    expect(response).to have_http_status(:unauthorized)
   end
 
   context "with logged in user" do
