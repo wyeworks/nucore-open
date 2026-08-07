@@ -59,13 +59,8 @@ class Statement < ApplicationRecord
     find_by(id:)
   end
 
-  def self.find_by_invoice_number(query)
-    where_invoice_number(query)&.first
-  end
-
-  def self.where_invoice_number(query)
-    return none unless /\A(?<account_id>\d+)-(?<id>\d+)\z/ =~ query
-    where(id:, account_id:)
+  def self.where_invoice_number(invoice_number)
+    where(invoice_number:)
   end
 
   def next_sequence_number_for_parent
