@@ -115,7 +115,7 @@ RSpec.describe AccountSearcher do
     end
   end
 
-  describe "filter_params", :use_test_account, feature_setting: { "accounts.account_tabs" => true } do
+  describe "filter_params", :use_test_account do
     let(:user) { create(:user) }
     let(:facility) { Facility.cross_facility }
     let!(:suspended_account) do
@@ -126,27 +126,58 @@ RSpec.describe AccountSearcher do
         suspended_at: Time.current,
       )
     end
+    let!(:expired_account) do
+      create(
+        :test_account,
+        :with_account_owner,
+        created_by: user.id,
+        expires_at: 1.week.ago,
+      )
+    end
     let!(:active_account) do
       create(:test_account, :with_account_owner, created_by: user.id)
     end
+    let(:searcher) do
+      described_class.new("", scope: Account.all, filter_params:)
+    end
 
-    context "with suspended filter" do
-      let(:searcher) do
-        described_class.new("", scope: Account.all, filter_params: { suspended: "true" })
+    context "with suspended false filter" do
+      let(:filter_params) do
+        { suspended: "false" }
       end
 
-      it "includes suspende account" do
-        expect(searcher.results).to match([suspended_account])
+      it "includes suspended account" do
+        expect(searcher.results).to contain_exactly(active_account, expired_account)
+      end
+    end
+
+    context "with suspended true filter" do
+      let(:filter_params) do
+        { suspended: "true" }
+      end
+
+      it "includes suspended account" do
+        expect(searcher.results).to contain_exactly(suspended_account)
       end
     end
 
     context "with account_status active filter" do
-      let(:searcher) do
-        described_class.new("", scope: Account.all, filter_params: { account_status: "active" })
+      let(:filter_params) do
+        { account_status: "active" }
       end
 
-      it "only includes active accounts" do
-        expect(searcher.results).to match([active_account])
+      it "only includes non expired accounts" do
+        expect(searcher.results).to contain_exactly(active_account, suspended_account)
+      end
+    end
+
+    context "with account_status expired filter" do
+      let(:filter_params) do
+        { account_status: "expired" }
+      end
+
+      it "only includes expired accounts" do
+        expect(searcher.results).to contain_exactly(expired_account)
       end
     end
   end
