@@ -280,7 +280,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
               anything,
               hash_including(
                 search_term: nil,
-                filter_params: {},
+                filter_params: { suspended: "false" },
               )
             )
           )

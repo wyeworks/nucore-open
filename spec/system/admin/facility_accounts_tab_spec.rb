@@ -103,9 +103,9 @@ RSpec.describe "Facility Accounts Tab" do
       expect(page).to have_no_select("Account Type")
     end
 
-    it "should show the Hide Expired Accounts button" do
+    it "displays the Show Expired Accounts button" do
       visit facility_accounts_path(facility)
-      expect(page).to have_content("Hide Expired Accounts")
+      expect(page).to have_content("Show Expired Accounts")
     end
   end
 end
