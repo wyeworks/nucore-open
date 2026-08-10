@@ -23,10 +23,6 @@ class AccountSearcher
     scope.or(matches_field(:account_number, :description, :ar_number))
   end
 
-  def filtered_scope
-    @scope
-  end
-
   def apply_account_filters(scope, filter_params)
     if filter_params[:account_type].present?
       scope = scope.where(type: filter_params[:account_type])
@@ -35,7 +31,7 @@ class AccountSearcher
     scope =
       if filter_params[:suspended] == "true"
         scope.suspended
-      elsif filter_params[:suspended] == "false" || SettingsHelper.feature_on?("accounts.account_tabs")
+      elsif filter_params[:suspended] == "false"
         scope.not_suspended
       else
         scope

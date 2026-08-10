@@ -54,8 +54,8 @@ class Account < ApplicationRecord
   scope :active_at, ->(time) { where("expires_at >= ?", time&.beginning_of_day).where(suspended_at: nil) }
   scope :suspended, -> { where.not(suspended_at: nil) }
   scope :not_suspended, -> { where(suspended_at: nil) }
-  scope :expired, -> { where("expires_at < ?", Time.current.beginning_of_day) }
-  scope :not_expired, -> { where("expires_at > ?", Time.current.beginning_of_day) }
+  scope :expired, -> { where(expires_at: ...Time.current.beginning_of_day) }
+  scope :not_expired, -> { where(expires_at: Time.current.beginning_of_day..) }
 
   scope :administered_by, lambda { |user|
     for_user(user).where("account_users.user_role" => AccountUser.admin_user_roles)

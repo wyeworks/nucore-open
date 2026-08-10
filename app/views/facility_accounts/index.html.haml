@@ -41,10 +41,10 @@
 %ul.list-inline
   - if SettingsHelper.feature_on?("accounts.edit_accounts") && current_ability.can?(:create, Account)
     %li= link_to t(".add_account"), new_account_user_search_facility_accounts_path, class: "btn-add"
-  - if @accounts.present? && SettingsHelper.feature_off?("accounts.account_tabs")
+  - if SettingsHelper.feature_off?("accounts.account_tabs")
     %li.pull-right= toggle_expired_account_btn
 
-= turbo_frame_tag("account-search-result") do
+%div
   - if filters_active? && @accounts.present?
     = link_to text("reports.export_as_csv"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".account-search-form" }
 

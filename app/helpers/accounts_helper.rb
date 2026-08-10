@@ -3,13 +3,13 @@
 module AccountsHelper
 
   def toggle_expired_account_btn
-    toggle_params = request.query_parameters.dup
+    toggle_params = request.query_parameters.dup.except(:page)
 
-    if params[:account_status] == "active"
-      toggle_params.delete :account_status
+    if params[:account_status].blank?
+      toggle_params[:account_status] = "all"
       label = t("views.facility_accounts.account_table.show_text")
     else
-      toggle_params[:account_status] = "active"
+      toggle_params.delete :account_status
       label = t("views.facility_accounts.account_table.hide_text")
     end
 

@@ -197,10 +197,13 @@ class FacilityAccountsController < ApplicationController
   end
 
   def filter_params
-    params
+    @filter_params ||=
+      params
       .permit(:search_term, :account_type, :suspended, :account_status)
       .to_h
       .symbolize_keys
+      .compact_blank
+      .reverse_merge(default_filters)
   end
 
   # Filter active if it's a form submission
@@ -209,5 +212,13 @@ class FacilityAccountsController < ApplicationController
   end
 
   helper_method :filters_active?
+
+  def default_filters
+    if SettingsHelper.feature_on?("accounts.account_tabs")
+      { suspended: "false" }
+    else
+      { account_status: "active" }
+    end
+  end
 
 end
