@@ -40,6 +40,34 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
       expect(assigns(:accounts).first).to eq(@account)
       is_expected.to render_template("index")
     end
+
+    describe "default filters" do
+      before { sign_in create(:user, :administrator) }
+
+      context "when account_tab is off", feature_setting: { "accounts.account_tabs" => false } do
+        it "list active accounts" do
+          expect(AccountSearcher).to receive(:new).with(
+            nil,
+            scope: anything,
+            filter_params: { account_status: "active" }
+          ).and_call_original
+
+          do_request
+        end
+      end
+
+      context "when account_tab is on", feature_setting: { "accounts.account_tabs" => true } do
+        it "list non suspended accounts" do
+          expect(AccountSearcher).to receive(:new).with(
+            nil,
+            scope: anything,
+            filter_params: { suspended: "false" }
+          ).and_call_original
+
+          do_request
+        end
+      end
+    end
   end
 
   context "show" do
