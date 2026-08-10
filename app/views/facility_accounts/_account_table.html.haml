@@ -13,7 +13,7 @@
           %th= Facility.model_name.human
     %tbody
       - @accounts.each do |account|
-        %tr{ class: account.expired? ? "expired--js" : "" }
+        %tr
           %td= payment_source_link_or_text(account)
           %td= account.type_string
           %td= account.owner_user.full_name if account.owner_user

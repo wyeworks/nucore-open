@@ -146,7 +146,7 @@ RSpec.describe AccountSearcher do
         { suspended: "false" }
       end
 
-      it "includes suspended account" do
+      it "excludes suspended account" do
         expect(searcher.results).to contain_exactly(active_account, expired_account)
       end
     end

@@ -6,6 +6,8 @@ module AccountsHelper
     toggle_params = request.query_parameters.dup.except(:page)
 
     if params[:account_status].blank?
+      # `all` is only used to override the default account_status filter.
+      # It does not really filter anything
       toggle_params[:account_status] = "all"
       label = t("views.facility_accounts.account_table.show_text")
     else
