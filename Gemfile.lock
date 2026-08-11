@@ -672,7 +672,7 @@ GEM
     synaccess_connect (0.3.1)
       nokogiri (>= 1.6)
     sysexits (1.2.0)
-    temple (0.10.4)
+    temple (0.10.6)
     terrapin (1.1.1)
       climate_control
     terser (1.2.8)
