@@ -12,7 +12,7 @@ class AccountSearcher
   end
 
   def valid?
-    @query.to_s.length >= MINIMUM_SEARCH_LENGTH
+    @query.blank? || @query.to_s.length >= MINIMUM_SEARCH_LENGTH
   end
 
   def results
@@ -23,25 +23,26 @@ class AccountSearcher
     scope.or(matches_field(:account_number, :description, :ar_number))
   end
 
-  def filtered_scope
-    @scope
-  end
-
   def apply_account_filters(scope, filter_params)
-    return scope if SettingsHelper.feature_off?("accounts.account_tabs")
-
     if filter_params[:account_type].present?
       scope = scope.where(type: filter_params[:account_type])
     end
 
-    if filter_params[:suspended] == "true"
-      scope.suspended
-    elsif filter_params[:account_status] == "active"
-      scope.active
+    scope =
+      if filter_params[:suspended] == "true"
+        scope.suspended
+      elsif filter_params[:suspended] == "false"
+        scope.not_suspended
+      else
+        scope
+      end
+
+    if filter_params[:account_status] == "active"
+      scope.not_expired
     elsif filter_params[:account_status] == "expired"
-      scope.expired.not_suspended
+      scope.expired
     else
-      scope.not_suspended
+      scope
     end
   end
 

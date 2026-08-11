@@ -3,10 +3,15 @@
  */
 window.addEventListener("DOMContentLoaded", () => {
   const toggleExpiredAcctsBtn = document.querySelector(".toggle_expired_accts_btn--js");
+
+  if (!toggleExpiredAcctsBtn) {
+    return;
+  }
+
   const expiredAccts = document.querySelectorAll("tr.expired--js");
   let hideAccounts = true;
 
-  if (toggleExpiredAcctsBtn) { toggleExpiredAcctsBtn.addEventListener("click", toggleExpiredAccounts); }
+  toggleExpiredAcctsBtn.addEventListener("click", toggleExpiredAccounts);
 
   toggleRowVisibility();
 
@@ -31,9 +36,7 @@ window.addEventListener("DOMContentLoaded", () => {
       acctEle.style.display = displayStyle;
     });
 
-    if (toggleExpiredAcctsBtn) {
-      toggleExpiredAcctsBtn.textContent = buttonText;
-    }
+    toggleExpiredAcctsBtn.textContent = buttonText;
   }
 
 });

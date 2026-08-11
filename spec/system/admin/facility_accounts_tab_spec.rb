@@ -57,9 +57,8 @@ RSpec.describe "Facility Accounts Tab" do
     context "when in the active tab" do
       it "should filter by account status" do
         select I18n.t("account.statuses.active"), from: I18n.t("facility_accounts.index.label.account_status")
-        find('[data-test-id="account_search_button"]').click
-        # Wait for the loader to not be found, which is when the search results are shown
-        expect(page).to have_no_css('[data-test-id="account_search_button"]', text: "Please Wait...")
+        find(".account-search-form input[type='submit']").click
+
         expect(page).to have_content(active_account.to_s)
         expect(page).to have_no_content(expired_account.to_s)
         expect(page).to have_no_content(suspended_account.to_s)
@@ -67,9 +66,8 @@ RSpec.describe "Facility Accounts Tab" do
 
       it "should filter by account type" do
         select active_account.model_name.human, from: I18n.t("facility_accounts.index.label.account_type")
-        find('[data-test-id="account_search_button"]').click
-        # Wait for the loader to not be found, which is when the search results are shown
-        expect(page).to have_no_css('[data-test-id="account_search_button"]', text: "Please Wait...")
+        find(".account-search-form input[type='submit']").click
+
         expect(page).to have_content(active_account.to_s)
         expect(page).to have_no_content(expired_account.to_s)
         expect(page).to have_no_content(suspended_account.to_s)
@@ -92,9 +90,7 @@ RSpec.describe "Facility Accounts Tab" do
       it "should filter suspended accounts by account type" do
         click_link I18n.t("views.facility_accounts.accounts_tab_nav.suspended")
         select suspended_account.model_name.human, from: I18n.t("facility_accounts.index.label.account_type")
-        find('[data-test-id="account_search_button"]').click
-        # Wait for the loader to not be found, which is when the search results are shown
-        expect(page).to have_no_css('[data-test-id="account_search_button"]', text: "Please Wait...")
+        page.find(".account-search-form input[type='submit']").click
         expect(page).to have_content(suspended_account.to_s)
       end
     end
@@ -107,9 +103,9 @@ RSpec.describe "Facility Accounts Tab" do
       expect(page).to have_no_select("Account Type")
     end
 
-    it "should show the Hide Expired Accounts button" do
+    it "displays the Show Expired Accounts button" do
       visit facility_accounts_path(facility)
-      expect(page).to have_content("Hide Expired Accounts")
+      expect(page).to have_content("Show Expired Accounts")
     end
   end
 end

@@ -8,16 +8,17 @@
 - if SettingsHelper.feature_on?("accounts.account_tabs")
   = render "shared/accounts_tab_nav"
 
-= form_tag search_results_facility_accounts_path, id: "ajax_form", method: :get, class: "js--searchForm" do
+= form_tag facility_accounts_path, method: :get, class: "account-search-form" do
   = label_tag :search_term, text("facility_accounts.index.label.search_term")
   = hidden_field_tag :email, current_user.email, disabled: true
   = hidden_field_tag :format, params[:format], disabled: true
+  = hidden_field_tag :account_status, params[:account_status]
   - if SettingsHelper.feature_on?("accounts.account_tabs")
     = hidden_field_tag :suspended, params[:suspended]
-  %br
+
   .row
-    .col-md-4
-      = text_field_tag :search_term, nil, size: 30, class: "form-control"
+    .col-md-12
+      = text_field_tag :search_term, nil, size: 30, class: "form-control", value: params[:search_term]
 
   - if SettingsHelper.feature_on?("accounts.account_tabs")
     .row
@@ -32,16 +33,19 @@
           = select_tag :account_status,
           options_for_select([[I18n.t("account.statuses.active"), "active"], [I18n.t("account.statuses.expired"), "expired"]], params[:account_status]),
           { class: "form-control mb-2", include_blank: "" }
-  .row
-    .col-md-2
-      = submit_tag t(".search"), class: "btn btn-default", data: { test_id: "account_search_button" }
+  %div
+    = submit_tag t(".search"), class: "btn btn-default", data: { disable_with: t("shared.loading") }
 
 %hr
 
 %ul.list-inline
   - if SettingsHelper.feature_on?("accounts.edit_accounts") && current_ability.can?(:create, Account)
     %li= link_to t(".add_account"), new_account_user_search_facility_accounts_path, class: "btn-add"
-  - if !@accounts.blank? && SettingsHelper.feature_off?("accounts.account_tabs")
-    %li.toggle_expired_accts_btn--js.toggle_expired_btn.btn.btn-primary= t("views.facility_accounts.account_table.hide_text")
-#result
+  - if SettingsHelper.feature_off?("accounts.account_tabs")
+    %li.pull-right= toggle_expired_account_btn
+
+%div
+  - if filters_active? && @accounts.present?
+    = link_to text("reports.export_as_csv"), url_for(format: :csv), class: "js--exportSearchResults pull-right", data: { form: ".account-search-form" }
+
   = render "account_table"

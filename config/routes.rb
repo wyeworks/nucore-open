@@ -293,8 +293,6 @@ Rails.application.routes.draw do
     end
 
     resources :accounts, controller: "facility_accounts", only: [:index, :show] do
-      get "search_results", via: [:post], on: :collection
-
       if SettingsHelper.feature_on?("accounts.suspend_accounts")
         get "suspend",   to: "facility_accounts#suspend",   as: "suspend"
         get "unsuspend", to: "facility_accounts#unsuspend", as: "unsuspend"
