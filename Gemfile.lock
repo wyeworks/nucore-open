@@ -330,7 +330,8 @@ GEM
       railties (>= 3.2, < 9.0)
     globalid (1.4.0)
       activesupport (>= 6.1)
-    haml (6.3.0)
+    haml (7.3.0)
+      prism (>= 1.1.0)
       temple (>= 0.8.2)
       thor
       tilt
@@ -672,7 +673,7 @@ GEM
     synaccess_connect (0.3.1)
       nokogiri (>= 1.6)
     sysexits (1.2.0)
-    temple (0.10.4)
+    temple (0.10.6)
     terrapin (1.1.1)
       climate_control
     terser (1.2.8)
