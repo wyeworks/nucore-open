@@ -178,6 +178,7 @@ feature:
     set_statement_search_start_date: false
     show_reconcile_credit_cards: false
     show_reconciliation_deposit_number: <%= ENV.fetch("RECONCILIATION_DEPOSIT_NUMBER", false) %>
+    two_tier_reconciliation: false
 
   notifications:
     order_assignment_notifications: true

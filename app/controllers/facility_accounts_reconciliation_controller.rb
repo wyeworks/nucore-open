@@ -19,6 +19,11 @@ class FacilityAccountsReconciliationController < ApplicationController
                     .where(accounts: { type: account_class.to_s })
                     .includes(:order, :product, :statement)
 
+    if reconcile_by_statement?
+      @statements = TransactionSearch::StatementSearcher.new(order_details).options
+      return render :index_by_statement
+    end
+
     @search_form = TransactionSearch::SearchForm.new(params[:search])
 
     @search = TransactionSearch::Searcher.new(
@@ -31,10 +36,17 @@ class FacilityAccountsReconciliationController < ApplicationController
   end
 
   def update
+    return redirect_to([account_route.to_sym, :facility_accounts, redirect_params.merge(show_items: true)]) if params[:display_items]
+
+    if reconcile_whole_statement? && (error = whole_statement_error)
+      flash[:error] = error
+      return redirect_to([account_route.to_sym, :facility_accounts, redirect_params])
+    end
+
     reconciled_at = parse_iso_date(params[:reconciled_at])&.beginning_of_day
     reconciler = OrderDetails::Reconciler.new(
       unreconciled_details,
-      params[:order_detail],
+      order_detail_params,
       reconciled_at,
       update_params[:order_status],
       bulk_reconcile: update_params[:bulk_note_checkbox] == "1",
@@ -82,6 +94,38 @@ class FacilityAccountsReconciliationController < ApplicationController
       :bulk_note,
       :bulk_deposit_number,
     )
+  end
+
+  def reconcile_by_statement?
+    SettingsHelper.feature_on?("billing.two_tier_reconciliation") && params[:show_items].blank?
+  end
+
+  def reconcile_whole_statement?
+    params[:reconcile_statement].present?
+  end
+
+  def whole_statement_error
+    return text("facility_accounts_reconciliation.index_by_statement.statement_blank") if selected_statement_ids.blank?
+
+    if SettingsHelper.feature_on?("billing.show_reconciliation_deposit_number") && update_params[:bulk_deposit_number].blank?
+      text("facility_accounts_reconciliation.index_by_statement.deposit_number_blank")
+    end
+  end
+
+  def selected_statement_ids
+    Array(params.dig(:search, :statements)).compact_blank
+  end
+
+  def order_detail_params
+    return params[:order_detail] unless reconcile_whole_statement?
+
+    ids = unreconciled_details
+          .joins(:account)
+          .where(accounts: { type: account_class.to_s })
+          .where(statement_id: selected_statement_ids)
+          .ids
+
+    ActionController::Parameters.new(ids.index_with { { selected: "1" } }.transform_keys(&:to_s))
   end
 
   def authorize_mark_unrecoverable

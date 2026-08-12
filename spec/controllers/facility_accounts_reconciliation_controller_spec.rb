@@ -198,4 +198,90 @@ RSpec.describe FacilityAccountsReconciliationController do
       end
     end
   end
+
+  describe "two-tier reconciliation", feature_setting: { "billing.two_tier_reconciliation" => true, "billing.show_reconciliation_deposit_number" => true } do
+    let(:other_order) { create(:purchased_order, product:, account:) }
+    let(:other_order_detail) { other_order.order_details.first }
+    let(:order_details) { [order_detail, other_order_detail] }
+
+    before do
+      other_order_detail.change_status!(OrderStatus.complete)
+      other_order_detail.update(reviewed_at: 5.minutes.ago, statement:)
+      sign_in admin
+    end
+
+    describe "index" do
+      def perform(params = {})
+        get :index, params: { facility_id: facility.url_name, account_type: "ReconciliationTestAccount" }.merge(params)
+      end
+
+      it "renders the invoice selection page" do
+        perform
+        expect(response).to render_template(:index_by_statement)
+        expect(assigns(:statements)).to include(statement)
+      end
+
+      it "renders the individual items page when show_items is set" do
+        perform(show_items: true)
+        expect(response).to render_template(:index)
+      end
+
+      context "when the feature is off", feature_setting: { "billing.two_tier_reconciliation" => false } do
+        it "renders the individual items page" do
+          perform
+          expect(response).to render_template(:index)
+        end
+      end
+    end
+
+    describe "update" do
+      def perform(params = {})
+        post :update, params: {
+          facility_id: facility.url_name,
+          account_type: "ReconciliationTestAccount",
+          reconciled_at: Date.current.iso8601,
+          reconcile_statement: "Reconcile",
+          bulk_note_checkbox: "1",
+          bulk_note: "A bulk note",
+          bulk_deposit_number: "TX-123",
+          search: { statements: [statement.id.to_s] },
+        }.merge(params)
+      end
+
+      it "reconciles every order detail on the invoice" do
+        expect { perform }.to change {
+          order_details.map { |order_detail| order_detail.reload.state }
+        }.to(%w(reconciled reconciled))
+      end
+
+      it "applies the note and transaction id to every order detail" do
+        perform
+        order_details.each(&:reload)
+        expect(order_details.map(&:reconciled_note)).to all(eq("A bulk note"))
+        expect(order_details.map(&:deposit_number)).to all(eq("TX-123"))
+      end
+
+      it "does not reconcile when the transaction id is blank" do
+        expect { perform(bulk_deposit_number: "") }.not_to change {
+          order_detail.reload.state
+        }.from("complete")
+        expect(flash[:error]).to include("may not be blank")
+      end
+
+      it "does not reconcile when no invoice is selected" do
+        expect { perform(search: { statements: [""] }) }.not_to change {
+          order_detail.reload.state
+        }.from("complete")
+        expect(flash[:error]).to include("select an invoice")
+      end
+
+      it "redirects to the individual items page with the invoice pre-selected" do
+        expect { perform(reconcile_statement: nil, display_items: "Display Individual Items") }.not_to change {
+          order_detail.reload.state
+        }.from("complete")
+        expect(response.location).to include("show_items=true")
+        expect(response.location).to include("search%5Bstatements%5D%5B%5D=#{statement.id}")
+      end
+    end
+  end
 end

@@ -283,6 +283,13 @@ en:
       bulk_deposit_number: "Bulk !deposit_number_prefix! Number"
       bulk_deposit_number_prefix: "!deposit_number_prefix!"
       bulk_deposit_number_hint: "Please enter the !deposit_number_prefix! Number from your GL008"
+    index_by_statement:
+      head: Reconcile %{model}
+      statement: Invoice
+      submit: "Reconcile"
+      display_items: "Display Individual Items"
+      statement_blank: "Please select an invoice"
+      deposit_number_blank: "!deposit_number_prefix! Number may not be blank"
 
   facility_users:
     title: "!Facility! Staff"

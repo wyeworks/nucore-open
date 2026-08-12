@@ -1,0 +1,45 @@
+- content_for :h1 do
+  = current_facility
+
+- content_for :sidebar do
+  = render partial: "admin/shared/sidenav_billing", locals: { sidenav_tab: account_route }
+
+%h2= t(".head", model: account_class.model_name.human(count: 2))
+
+.col-md-12
+  = form_tag([:update, account_route.to_sym, FacilityAccount], method: :post) do
+    = hidden_field_tag :bulk_note_checkbox, "1"
+
+    .row.table-actions.form-horizontal
+      .form-group
+        = label_tag :search_statements, t(".statement"), class: "control-label col-md-2"
+        .col-md-4
+          = select_tag "search[statements][]",
+            options_from_collection_for_select(@statements, :id, :invoice_number, params.dig(:search, :statements)&.first),
+            include_blank: true,
+            id: :search_statements,
+            class: "form-control"
+
+    .row.table-actions.form-horizontal
+      .form-group
+        = label_tag :reconciled_at, OrderDetail.human_attribute_name(:reconciled_at), class: "control-label col-md-2"
+        .col-md-4
+          = date_field_tag :reconciled_at, Date.current, class: "form-control", max: Date.current
+
+    .row.table-actions.form-horizontal
+      .form-group
+        = label_tag :bulk_note, t("facility_accounts_reconciliation.index.bulk_note"), class: "control-label col-md-2"
+        .col-md-4
+          = text_field_tag :bulk_note, params[:bulk_note], class: "form-control", maxlength: 250
+
+    - if SettingsHelper.feature_on?("billing.show_reconciliation_deposit_number")
+      .row.table-actions.form-horizontal
+        .form-group
+          = label_tag :bulk_deposit_number, text("facility_accounts_reconciliation.index.bulk_deposit_number"), class: "control-label col-md-2"
+          .col-md-4
+            = text_field_tag :bulk_deposit_number, params[:bulk_deposit_number], class: "form-control"
+
+    .row.table-actions.form-horizontal
+      .col-md-12.text-right
+        = submit_tag t(".submit"), name: "reconcile_statement", class: "btn btn-primary", data: { disable_with: t(".submit") }
+        = submit_tag t(".display_items"), name: "display_items", class: "btn btn-default"
