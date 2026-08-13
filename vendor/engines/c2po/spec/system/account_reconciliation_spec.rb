@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Account Reconciliation", :js do
+RSpec.describe "Account Reconciliation", :js, feature_setting: { "billing.two_tier_reconciliation" => false } do
   include AccountsTestHelper
 
   let(:facility) { create(:setup_facility) }

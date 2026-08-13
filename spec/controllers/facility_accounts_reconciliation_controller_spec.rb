@@ -226,10 +226,21 @@ RSpec.describe FacilityAccountsReconciliationController do
         expect(response).to render_template(:index)
       end
 
+
       context "when the feature is off", feature_setting: { "billing.two_tier_reconciliation" => false } do
         it "renders the individual items page" do
           perform
           expect(response).to render_template(:index)
+        end
+      end
+
+      context "when there is nothing left to reconcile" do
+        before { order_details.each { |order_detail| order_detail.update!(statement: nil) } }
+
+        it "renders the invoice selection page without any invoices" do
+          perform
+          expect(response).to render_template(:index_by_statement)
+          expect(assigns(:statements)).to be_empty
         end
       end
     end
