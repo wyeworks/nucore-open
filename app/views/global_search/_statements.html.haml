@@ -34,4 +34,4 @@
         %td.currency
           = number_to_currency(statement.total_cost)
         %td
-          = statement.status
+          = Statement.human_attribute_name("status.#{statement.status}")
