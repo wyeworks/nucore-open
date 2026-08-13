@@ -226,7 +226,6 @@ RSpec.describe FacilityAccountsReconciliationController do
         expect(response).to render_template(:index)
       end
 
-
       context "when the feature is off", feature_setting: { "billing.two_tier_reconciliation" => false } do
         it "renders the individual items page" do
           perform
