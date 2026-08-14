@@ -27,7 +27,11 @@
         .form-group
           = label_tag :reconciled_at, OrderDetail.human_attribute_name(:reconciled_at), class: "control-label col-md-2"
           .col-md-4
-            = date_field_tag :reconciled_at, Date.current, class: "form-control", max: Date.current
+            = date_field_tag :reconciled_at,
+              Date.current,
+              class: "form-control",
+              min: @statements.map(&:created_at).min&.to_date,
+              max: Date.current
 
       .row.table-actions.form-horizontal
         .form-group

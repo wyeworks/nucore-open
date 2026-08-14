@@ -58,7 +58,7 @@ class FacilityAccountsReconciliationController < ApplicationController
       count = reconciler.count
       ReconciliationLogService.new(reconciler.order_details, current_user).log_events
       flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully updated" if count > 0
-      redirect_to([account_route.to_sym, :facility_accounts])
+      redirect_to([account_route.to_sym, :facility_accounts, { show_items: params[:show_items] }])
     else
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
       redirect_to([account_route.to_sym, :facility_accounts, redirect_params])
@@ -137,7 +137,8 @@ class FacilityAccountsReconciliationController < ApplicationController
   def redirect_params
     {
       search: params[:search]&.permit!,
-      page: params[:page]
+      page: params[:page],
+      show_items: params[:show_items]
     }
   end
 end

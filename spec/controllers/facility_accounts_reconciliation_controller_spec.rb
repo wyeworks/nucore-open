@@ -292,6 +292,19 @@ RSpec.describe FacilityAccountsReconciliationController do
         expect(response.location).to include("show_items=true")
         expect(response.location).to include("search%5Bstatements%5D%5B%5D=#{statement.id}")
       end
+
+      context "when reconciling from the individual items page" do
+        it "stays on the individual items page on success" do
+          perform(reconcile_statement: nil, show_items: true, order_detail: { order_detail.id.to_s => { selected: "1" } })
+          expect(response.location).to include("show_items=true")
+        end
+
+        it "stays on the individual items page on error" do
+          perform(reconcile_statement: nil, show_items: true, reconciled_at: "", order_detail: { order_detail.id.to_s => { selected: "1" } })
+          expect(flash[:error]).to be_present
+          expect(response.location).to include("show_items=true")
+        end
+      end
     end
   end
 end
