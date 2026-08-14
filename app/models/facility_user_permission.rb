@@ -42,6 +42,10 @@ class FacilityUserPermission < ApplicationRecord
     end
   end
 
+  def self.admin_only_permissions
+    ADMIN_ONLY_PERMISSIONS
+  end
+
   def no_permissions?
     active_permissions.blank?
   end
@@ -51,14 +55,14 @@ class FacilityUserPermission < ApplicationRecord
   end
 
   def active_permissions
-    PERMISSIONS.select { |perm| send(perm) }
+    self.class.all_permissions.select { |perm| send(perm) }
   end
 
   private
 
   def read_access_required_with_other_permissions
     return if read_access?
-    return if (PERMISSIONS - [:read_access]).none? { |perm| send(perm) }
+    return if (self.class.all_permissions - [:read_access]).none? { |perm| send(perm) }
 
     errors.add(:read_access, "must be granted when other permissions are active")
   end
