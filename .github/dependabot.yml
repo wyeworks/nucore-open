@@ -27,6 +27,7 @@ updates:
         - activemodel
         - activerecord
         - activestorage
+        - activesupport
     aws:
       update-types:
         - patch
