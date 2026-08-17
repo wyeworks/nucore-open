@@ -4,16 +4,6 @@ Because we use squash and merge, you should be able to see the changes by lookin
 at the [commit log](https://github.com/tablexi/nucore-open/commits/master). However, we have begun keeping track of breaking changes
 or optional rake tasks.
 
-### Addition of `two_tier_reconciliation` feature flag ([#6415](https://github.com/tablexi/nucore-open/pull/6415))
-
-Schools with `billing.two_tier_reconciliation: false` (the default) are not affected by this change.
-
-Schools with `billing.two_tier_reconciliation: true` get a two-tiered reconciliation flow. The reconciliation page (e.g. Reconcile Purchase Orders) opens on an invoice drop-down instead of the list of order details. Selecting an invoice and submitting reconciles every unreconciled order detail on it, applying the same reconciliation note and deposit number to all of them. A "Display Individual Items" button opens the previous per-item page with the invoice applied to the Statements filter, which can still be changed.
-
-When `billing.show_reconciliation_deposit_number` is also on, the deposit number (labeled per school through the `deposit_number_prefix` translation, e.g. "Transaction ID") is required to reconcile a whole invoice. It remains optional on the per-item page. When that flag is off, the field is not rendered and is not required, matching the previous behavior.
-
-Specs that exercise the per-item reconciliation page directly should set `feature_setting: { "billing.two_tier_reconciliation" => false }`, otherwise they will render the invoice drop-down instead.
-
 ### Addition of `PriceGroupDiscount` ([#3397](https://github.com/tablexi/nucore-open/pull/3397), [#3594](https://github.com/tablexi/nucore-open/pull/3594))
 
 Rather than one discount being set on a schedule rule, each global price group has its own discount (`PriceGroupDiscount`) for each schedule rule.
