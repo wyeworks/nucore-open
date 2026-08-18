@@ -78,7 +78,7 @@ RSpec.describe "Placing an order on behalf of" do
       end
     end
 
-    it "can backdate an order", :js do # js needed for More options expansion
+    it "can backdate an order", :js, feature_setting: { "pricing.hide_subsidy_from_customers" => false } do # js needed for More options expansion
       two_days_ago = I18n.l(2.days.ago.to_date, format: :usa)
       three_days_ago = I18n.l(3.days.ago.to_date, format: :usa)
       visit facility_path(facility)
