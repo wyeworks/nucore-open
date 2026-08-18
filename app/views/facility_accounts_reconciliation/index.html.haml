@@ -27,6 +27,7 @@
           = hidden_field_tag "search[#{key}]", value
     - if params[:page].present?
       = hidden_field_tag :page, params[:page]
+    = hidden_field_tag :show_items, params[:show_items] if params[:show_items].present?
     = render "action_row", date: true,
       unreconciled_order_details: @unreconciled_details,
       show_reconciliation_deposit_number: show_reconciliation_deposit_number,

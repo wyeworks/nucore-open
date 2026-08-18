@@ -85,6 +85,7 @@ Grouped under `feature.billing`.
 * `set_statement_search_start_date` By default, show statements from the last month on the "create Statements" tab
 * `show_reconcile_credit_cards`: Enable reconcile menu for Credit Cards.
 * `show_reconciliation_deposit_number`: Enable reconciliation deposit number field and show it in transaction listings.
+* `two_tier_reconciliation`: Open the reconciliation page on an invoice drop-down, so a whole invoice can be reconciled at once without listing its order details. The per-item page is still reachable from there. When `show_reconciliation_deposit_number` is also on, the deposit number is required to reconcile a whole invoice.
 
 ## Notifications
 

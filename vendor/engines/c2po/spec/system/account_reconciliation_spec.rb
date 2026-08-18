@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Account Reconciliation", :js do
+RSpec.describe "Account Reconciliation", :js, feature_setting: { "billing.two_tier_reconciliation" => false } do
   include AccountsTestHelper
 
   let(:facility) { create(:setup_facility) }
@@ -181,6 +181,63 @@ RSpec.describe "Account Reconciliation", :js do
       expect(page).to have_content("2 payments successfully updated")
       expect(order_detail.reload.reconciled_note).to eq("this is the bulk note")
       expect(orders.last.order_details.first.reload.reconciled_note).to eq("this is the bulk note")
+    end
+
+    context "with two-tier reconciliation", feature_setting: { "billing.two_tier_reconciliation" => true, "billing.show_reconciliation_deposit_number" => true } do
+      let(:extra_order) { create(:purchased_order, product: item, account: accounts.first) }
+      let(:extra_order_detail) { extra_order.order_details.first }
+
+      before do
+        extra_order_detail.to_complete!
+        extra_order_detail.update!(statement: statements.first)
+
+        visit purchase_orders_facility_accounts_path(facility)
+      end
+
+      it "reconciles every order on the selected invoice without listing them" do
+        expect(page).not_to have_content(order_number)
+
+        select statements.first.invoice_number, from: "Invoice"
+        fill_in "Reconciliation Date", with: 1.day.ago.to_date
+        fill_in "Bulk Note", with: "this is the bulk note"
+        fill_in "bulk_deposit_number", with: "TX-123"
+        click_button "Reconcile"
+
+        expect(page).to have_content("2 payments successfully updated")
+
+        [order_detail, extra_order_detail].each do |od|
+          expect(od.reload).to be_reconciled
+          expect(od.reconciled_note).to eq("this is the bulk note")
+          expect(od.deposit_number).to eq("TX-123")
+        end
+      end
+
+      it "does not reconcile without a transaction id" do
+        select statements.first.invoice_number, from: "Invoice"
+        fill_in "Reconciliation Date", with: 1.day.ago.to_date
+        click_button "Reconcile"
+
+        expect(page).to have_content("may not be blank")
+        expect(order_detail.reload).not_to be_reconciled
+      end
+
+      it "displays the individual items with the invoice filter pre-populated" do
+        select statements.first.invoice_number, from: "Invoice"
+        click_button "Display Individual Items"
+
+        expect(page).to have_content(order_number)
+        expect(page).not_to have_content(other_order_number)
+        expect(page).to have_css(".chosen-container", text: statements.first.invoice_number)
+      end
+
+      it "stays on the individual items page when the filter is re-submitted" do
+        select statements.first.invoice_number, from: "Invoice"
+        click_button "Display Individual Items"
+        click_button "Filter"
+
+        expect(page).to have_content(order_number)
+        expect(page).not_to have_content(other_order_number)
+      end
     end
 
     context "marking as unrecoverable" do
