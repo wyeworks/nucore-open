@@ -149,4 +149,25 @@ RSpec.describe PurchaseNotifier do
       end
     end
   end
+
+  describe "hiding the price breakdown from customers", feature_setting: { "pricing.hide_subsidy_from_customers" => true } do
+    describe ".order_receipt" do
+      before { described_class.order_receipt(order:, user:).deliver_now }
+
+      it "shows the customer only the total", :aggregate_failures do
+        expect(email.html_part.to_s).to include("Total")
+        expect(email.html_part.to_s).not_to include("Adjustment")
+        expect(email.text_part.to_s).not_to include("Adjustment")
+      end
+    end
+
+    describe ".order_notification" do
+      before { described_class.order_notification(order, "orders@example.net").deliver_now }
+
+      it "keeps the full breakdown for facility staff", :aggregate_failures do
+        expect(email.html_part.to_s).to include("Adjustment")
+        expect(email.text_part.to_s).to include("Adjustment")
+      end
+    end
+  end
 end
