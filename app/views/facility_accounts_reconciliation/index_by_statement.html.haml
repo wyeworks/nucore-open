@@ -7,8 +7,6 @@
 %h2= t(".head", model: account_class.model_name.human(count: 2))
 
 .col-md-12
-  - if @statements.none?
-    %p.notice= t("facility_accounts_reconciliation.index.none", model: account_class.model_name.human(count: 2).downcase)
   = form_tag([:update, account_route.to_sym, FacilityAccount], method: :post) do
     = hidden_field_tag :bulk_note_checkbox, "1"
 
@@ -49,3 +47,6 @@
       .col-md-12.text-right
         = submit_tag t(".submit"), name: "reconcile_statement", class: "btn btn-primary", data: { disable_with: t(".submit") }
         = submit_tag t(".display_items"), name: "display_items", class: "btn btn-default"
+
+  - if @statements.none?
+    %p.notice= t("facility_accounts_reconciliation.index.none", model: account_class.model_name.human(count: 2).downcase)
