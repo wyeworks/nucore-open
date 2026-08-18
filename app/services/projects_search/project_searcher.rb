@@ -5,7 +5,7 @@ module ProjectsSearch
   class ProjectSearcher < TransactionSearch::BaseSearcher
 
     def self.key
-      "projects"
+      :projects
     end
 
     def options
