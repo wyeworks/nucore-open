@@ -21,7 +21,8 @@ module OrderDetailsCsvExport
   private
 
   def show_price_breakdown_in_csv?
-    true
+    SettingsHelper.feature_off?("pricing.hide_subsidy_from_customers") ||
+      can?(:manage_billing, current_facility)
   end
 
 end

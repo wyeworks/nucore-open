@@ -125,7 +125,4 @@ class TransactionsController < ApplicationController
     redirect_to movable_transactions_transactions_path
   end
 
-  def show_price_breakdown_in_csv?
-    SettingsHelper.feature_off?("pricing.hide_subsidy_from_customers")
-  end
 end
