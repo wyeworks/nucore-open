@@ -62,7 +62,7 @@ Grouped under `feature.pricing`.
 * `can_manage_global_price_groups`: Enable global price groups management.
 * `external_price_group_subsidies`: Allow facility admins to mark external price groups as subsidies of global external groups. When enabled, external price groups can have a parent group, and they will show an "Adjustment" field instead of "Rate" in price policies (similar to internal price groups).
 * `facility_directors_can_manage_price_groups` Can facility directors manage price groups
-* `hide_subsidy_from_customers`: Hide the price/adjustment breakdown on customer-facing order pages (cart, order receipt, order detail) and on the customer copy of the order receipt email, so customers only see the total they owe. Administrative views and the facility staff order notification email are unaffected.
+* `hide_subsidy_from_customers`: Hide the price/adjustment breakdown on customer-facing order pages (cart, order receipt, order detail), on the customer copy of the order receipt email, and in the transaction history CSV export account owners and business administrators run for their own accounts, so customers only see the total they owe. Administrative views, administrative CSV exports, and the facility staff order notification email are unaffected.
 * `price_policy_requires_note`: Require note when adding price policies.
 * `user_based_price_groups_exclude_purchaser`: Exclude purchaser's price groups when picking the price group of an order detail.
 * `user_based_price_groups` Allow assigning users to specific price groups (Internal Base Rate, External, etc).  This would allow some users to potentially get cheaper (internal) rates even if they don't have access to internal accounts.
