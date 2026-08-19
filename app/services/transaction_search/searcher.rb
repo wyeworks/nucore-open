@@ -42,11 +42,6 @@ module TransactionSearch
       }
     end
 
-    # Shorthand method if you only want the default searchers
-    def self.search(order_details, params)
-      new.search(order_details, params)
-    end
-
     # Expects an array of `TransactionSearch::BaseSearcher`s
     def initialize(facility, *searchers, **kwargs)
       searchers_config = default_config.merge(kwargs)
