@@ -22,7 +22,7 @@ module ProjectsSearch
           Project.where(id: project_ids)
         end
 
-      projects.order(:name)
+      projects.includes(:facility).order(:name)
     end
 
     def search(params)
