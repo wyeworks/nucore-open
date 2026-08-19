@@ -55,6 +55,30 @@ RSpec.describe Reports::AccountTransactionsReport do
         end
       end
 
+      describe "with show_price_breakdown false" do
+        let(:report_options) { { show_price_breakdown: false } }
+        let(:rows) { CSV.parse(report.to_csv) }
+
+        it "omits the price and adjustment columns, keeping the total", :aggregate_failures do
+          expect(rows.first).to include(OrderDetail.human_attribute_name(:actual_total))
+          expect(rows.first).not_to include(OrderDetail.human_attribute_name(:actual_cost))
+          expect(rows.first).not_to include(OrderDetail.human_attribute_name(:actual_subsidy))
+        end
+
+        it "keeps every row the same width as the headers" do
+          expect(rows.map(&:size).uniq).to eq([rows.first.size])
+        end
+      end
+
+      describe "with show_price_breakdown defaulted" do
+        it "includes the price and adjustment columns", :aggregate_failures do
+          headers = CSV.parse_line(report.to_csv)
+
+          expect(headers).to include(OrderDetail.human_attribute_name(:actual_cost))
+          expect(headers).to include(OrderDetail.human_attribute_name(:actual_subsidy))
+        end
+      end
+
       describe "price group column" do
         let(:order_details) { OrderDetail.limit(1) }
         let(:order_detail) { order_details.first }

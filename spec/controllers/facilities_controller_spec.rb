@@ -375,6 +375,20 @@ RSpec.describe FacilitiesController do
         expect(response).to be_successful
         expect(response.body).to include("menu_billing")
       end
+
+      context "exporting as CSV", feature_setting: { granular_permissions: true, "pricing.hide_subsidy_from_customers" => true } do
+        it "keeps the price breakdown" do
+          sign_in permitted_user
+
+          expect do
+            get :transactions, params: { facility_id: facility.url_name, format: :csv }
+          end.to have_enqueued_job(CsvReportEmailJob).with(
+            Reports::AccountTransactionsReport.to_s,
+            anything,
+            hash_including(show_price_breakdown: true)
+          )
+        end
+      end
     end
 
     describe "GET #disputed_orders" do

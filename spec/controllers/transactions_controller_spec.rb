@@ -92,6 +92,37 @@ RSpec.describe TransactionsController do
     end
   end
 
+  describe "CSV export" do
+    let!(:account) { create(:setup_account, :with_account_owner, owner: user) }
+    let!(:order_detail) { create(:complete_order, product:, account:).order_details.first }
+
+    before { sign_in user }
+
+    def export
+      get :index, params: { format: :csv }
+    end
+
+    context "when subsidies are hidden from customers", feature_setting: { "pricing.hide_subsidy_from_customers" => true } do
+      it "queues a report without the price breakdown" do
+        expect { export }.to have_enqueued_job(CsvReportEmailJob).with(
+          Reports::AccountTransactionsReport.to_s,
+          anything,
+          hash_including(show_price_breakdown: false)
+        )
+      end
+    end
+
+    context "when subsidies are visible to customers", feature_setting: { "pricing.hide_subsidy_from_customers" => false } do
+      it "queues a report with the price breakdown" do
+        expect { export }.to have_enqueued_job(CsvReportEmailJob).with(
+          Reports::AccountTransactionsReport.to_s,
+          anything,
+          hash_including(show_price_breakdown: true)
+        )
+      end
+    end
+  end
+
   context "MovableTransactions concern", feature_setting: { "roles.move_transactions_account_roles" => true } do
     let(:user_a) { create(:user) }
     let(:user_b) { create(:user) }

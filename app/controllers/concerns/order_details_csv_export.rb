@@ -14,7 +14,14 @@ module OrderDetailsCsvExport
       order_detail_ids:,
       date_range_field: @date_range_field,
       label_key_prefix: @label_key_prefix,
+      show_price_breakdown: show_price_breakdown_in_csv?,
     )
+  end
+
+  private
+
+  def show_price_breakdown_in_csv?
+    true
   end
 
 end
