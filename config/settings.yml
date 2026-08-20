@@ -162,6 +162,7 @@ feature:
     can_manage_global_price_groups: true
     external_price_group_subsidies: false
     facility_directors_can_manage_price_groups: true
+    hide_subsidy_from_customers: false
     price_policy_requires_note: true
     user_based_price_groups: true
     user_based_price_groups_exclude_purchaser: false

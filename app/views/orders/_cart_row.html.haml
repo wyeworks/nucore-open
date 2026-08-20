@@ -39,12 +39,14 @@
             label: false
 
     - if order_detail.cost_estimated?
-      %td.currency= show_estimated_cost(order_detail)
-      - if @order.has_subsidies?
-        %td.currency= show_estimated_subsidy(order_detail)
+      - if show_price_breakdown?
+        %td.currency= show_estimated_cost(order_detail)
+        - if @order.has_subsidies?
+          %td.currency= show_estimated_subsidy(order_detail)
       %td.currency= show_estimated_total(order_detail)
     - else
-      %td.currency= text("shared.unassigned")
-      - if @order.has_subsidies?
+      - if show_price_breakdown?
         %td.currency= text("shared.unassigned")
+        - if @order.has_subsidies?
+          %td.currency= text("shared.unassigned")
       %td.currency= text("shared.unassigned")

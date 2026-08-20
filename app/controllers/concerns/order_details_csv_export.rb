@@ -14,7 +14,15 @@ module OrderDetailsCsvExport
       order_detail_ids:,
       date_range_field: @date_range_field,
       label_key_prefix: @label_key_prefix,
+      show_price_breakdown: show_price_breakdown_in_csv?,
     )
+  end
+
+  private
+
+  def show_price_breakdown_in_csv?
+    SettingsHelper.feature_off?("pricing.hide_subsidy_from_customers") ||
+      can?(:manage_billing, current_facility)
   end
 
 end

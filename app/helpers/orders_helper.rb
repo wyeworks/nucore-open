@@ -24,6 +24,10 @@ module OrdersHelper
     end
   end
 
+  def show_price_breakdown?
+    SettingsHelper.feature_off?("pricing.hide_subsidy_from_customers")
+  end
+
   def show_note_input_to_user?(order_detail)
     acting_as? || order_detail.product.user_notes_field_mode.visible?
   end
