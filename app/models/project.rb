@@ -43,7 +43,7 @@ class Project < ApplicationRecord
   end
 
   def cross_core?
-    orders.any?
+    orders_count > 0
   end
 
   def name
