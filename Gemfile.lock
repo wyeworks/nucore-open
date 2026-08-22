@@ -661,7 +661,7 @@ GEM
       bigdecimal
       logger
       ruby-ole
-    sprockets (4.3.0)
+    sprockets (4.4.0)
       concurrent-ruby (~> 1.1)
       logger
       rack (>= 2.2.4, < 4)
