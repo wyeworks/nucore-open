@@ -16,11 +16,9 @@ module PricePolicies
       return if start_at.blank? && end_at.blank? && duration.blank?
 
       if duration.present?
-        strategy_class.new(price_policy, start_at, end_at, duration:).calculate_estimate
-      else
-        return if start_at > end_at
-
-        strategy_class.new(price_policy, start_at, end_at).calculate
+        strategy_class.new(price_policy, duration:).calculate
+      elsif start_at <= end_at
+        strategy_class.new(price_policy, start_at:, end_at:).calculate
       end
     end
 

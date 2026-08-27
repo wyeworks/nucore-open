@@ -171,10 +171,13 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     end
 
     describe "#discount_factor" do
-      subject(:discount) do
+      let(:strategy) do
         PricePolicies::Strategy::PerMinute.new(
-          price_policy, start_at, end_at
-        ).discount_factor
+          price_policy, start_at:, end_at:
+        )
+      end
+      subject(:discount) do
+        strategy.instance_eval { discount_factor }
       end
 
       describe "when the entire time is within a zero discount" do
