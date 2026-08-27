@@ -5,7 +5,15 @@ require "rails_helper"
 RSpec.describe TimedServicePricePolicy do
   describe "#calculate_cost_and_subsidy_from_order_detail" do
     let(:product) { build_stubbed(:timed_service) }
-    let(:price_policy) { build_stubbed(:timed_service_price_policy, product: product, usage_rate: 60, usage_subsidy: 15) }
+    let(:price_policy) do
+      build_stubbed(
+        :timed_service_price_policy,
+        product: product,
+        usage_rate: 60,
+        usage_subsidy: 15,
+        minimum_cost: 10,
+      )
+    end
     subject(:costs) { price_policy.calculate_cost_and_subsidy_from_order_detail(order_detail) }
 
     describe "with an hour of usage" do
@@ -20,7 +28,7 @@ RSpec.describe TimedServicePricePolicy do
 
     describe "with 0 minutes of usage" do
       let(:order_detail) { build_stubbed(:order_detail, product: product, quantity: 0) }
-      it { is_expected.to eq(cost: 0, subsidy: 0) }
+      it { is_expected.to eq(cost: 10, subsidy: 2.5) }
     end
   end
 
