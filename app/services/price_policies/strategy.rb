@@ -113,6 +113,8 @@ module PricePolicies
     end
 
     # Charge usage per minute with a stepped (or tiered) rate
+    #
+    # If price policy does not have rates then it's equivalen to PerMinute
     class SteppedRate < BaseStrategy
       delegate :usage_rate, :usage_subsidy, to: :price_policy
 
@@ -121,6 +123,8 @@ module PricePolicies
         costs = with_discount(costs)
         with_minimum_cost(costs)
       end
+
+      private
 
       def build_intervals
         intervals = [
@@ -148,8 +152,6 @@ module PricePolicies
       def sorted_duration_rates
         @sorted_duration_rates ||= price_policy.duration_rates.sorted
       end
-
-      private
 
       def cost_and_subsidy_for(total_mins)
         result = build_intervals.reduce({ time_left: total_mins, cost: 0, subsidy: 0 }) do |acc, interval_data|
