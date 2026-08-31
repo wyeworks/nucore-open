@@ -14,6 +14,7 @@ en:
       default: "%m/%d/%Y"
       journal_line_reference: "%Y%m%d"
       timeline_navigation: "%a, %B %e, %Y"
+      filename_safe: "%m-%d-%Y"
       usa: "%m/%d/%Y"
       usa_filename_safe: "%m-%d-%Y"
       ymd: "%Y-%m-%d"
@@ -598,6 +599,8 @@ en:
     duplicate:
       success: Estimate successfully duplicated
       error: There was an error duplicating the estimate
+    pdf:
+      filename: "estimate-%{id}-%{facility}.pdf"
 
   facility_order_details:
     edit:
