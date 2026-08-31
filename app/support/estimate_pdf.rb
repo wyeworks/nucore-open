@@ -13,7 +13,7 @@ class EstimatePdf
 
   def filename
     I18n.t(
-      "facility_estimate.pdf.filename",
+      "facility_estimates.pdf.filename",
       id: estimate.id,
       facility: facility.abbreviation.gsub(/\s+/, "_"),
     )

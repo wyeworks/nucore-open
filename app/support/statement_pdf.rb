@@ -5,8 +5,12 @@ class StatementPdf
 
   attr_reader :statement
 
+  delegate :facility, :account, to: :statement
+
   def initialize(statement)
     @statement = statement
+    # TODO: remove account and facility instance variables in favour
+    # of delgate methods. Requires downstream repos to be updated
     @account = statement.account
     @facility = statement.facility
   end
