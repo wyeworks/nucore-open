@@ -103,7 +103,7 @@ module PricePolicies
       def calculate
         {
           cost: duration * usage_rate_daily,
-          subsidy: duration * price_policy.usage_subsidy_daily.to_f,
+          subsidy: duration * usage_subsidy_daily.to_f,
         }
       end
 
@@ -114,7 +114,7 @@ module PricePolicies
 
     # Charge usage per minute with a stepped (or tiered) rate
     #
-    # If price policy does not have rates then it's equivalen to PerMinute
+    # If price policy does not have rates then it's equivalent to PerMinute
     class SteppedRate < BaseStrategy
       delegate :usage_rate, :usage_subsidy, to: :price_policy
 
