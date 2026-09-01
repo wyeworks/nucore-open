@@ -33,6 +33,7 @@
         %th= OrderImport.human_attribute_name(:created_at)
         %th= OrderImport.human_attribute_name(:creator)
         %th= OrderImport.human_attribute_name(:processed_at)
+        %th= OrderImport.human_attribute_name(:upload_file)
         %th= OrderImport.human_attribute_name(:error_file)
     %tbody
       - @order_imports.each do |order_import|
@@ -44,6 +45,8 @@
               = l(order_import.processed_at, format: :usa)
             - else
               = text("in_process")
+          %td
+            = link_to(order_import.upload_file.name, order_import.upload_file.download_url)
           %td
             - if order_import.error_file_present?
               = link_to order_import.error_file.name, error_report_facility_order_import_path(current_facility, order_import)

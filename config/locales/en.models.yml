@@ -433,6 +433,7 @@ en:
         creator: Imported by
         error_file: Error report
         processed_at: Processed at
+        upload_file: Uploaded file
       order_status:
         parent: Status of
       journal:
