@@ -112,7 +112,7 @@ group :development do
   gem "coffeelint"
   gem "haml_lint", require: false
   gem "letter_opener"
-  gem "rack-mini-profiler", "~> 4.0"
+  gem "rack-mini-profiler", "~> 5.0"
   gem "rubocop", "1.89.0", require: false
   gem "rubocop-performance"
   gem "rubocop-rails"
