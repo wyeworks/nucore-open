@@ -21,13 +21,17 @@ class ExampleEstimatePdf < EstimatePdf
 
     pdf.font_size = 10.5
 
-    [
-      "<b>Creation Date:</b> #{I18n.l(estimate.created_at)}",
-      "<b>Expire Date:</b> #{I18n.l(estimate.expires_at)}",
-      "<b>Created for:</b> #{estimate.user_display_name}",
-      "<b>Note:</b> #{estimate.note}",
-    ].each do |line|
-      pdf.text line, inline_format: true
+    rows = [
+      [:created_at, I18n.l(estimate.created_at)],
+      [:expires_at, I18n.l(estimate.expires_at)],
+      [:user_display_name, estimate.user_display_name],
+    ]
+
+    rows << [:note, estimate.note] if estimate.note.present?
+
+    rows.each do |key, value|
+      label = Estimate.human_attribute_name(key)
+      pdf.text "<b>#{label}:</b> #{value}", inline_format: true
     end
     pdf.move_down(10)
   end
