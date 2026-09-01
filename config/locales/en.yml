@@ -600,7 +600,7 @@ en:
       success: Estimate successfully duplicated
       error: There was an error duplicating the estimate
     pdf:
-      filename: "estimate-%{id}-%{facility}.pdf"
+      filename: "%{facility}_estimate_%{id}.pdf"
 
   facility_order_details:
     edit:
