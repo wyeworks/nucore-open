@@ -74,7 +74,7 @@ class ExampleEstimatePdf < EstimatePdf
         estimate_detail_presenter.product_display,
         estimate_detail_presenter.quantity,
         estimate_detail_presenter.duration_display,
-        estimate_detail_presenter.unit_cost_disaply,
+        estimate_detail_presenter.unit_cost_display,
         estimate_detail_presenter.cost_display,
       ]
     end

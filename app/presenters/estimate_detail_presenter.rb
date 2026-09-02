@@ -27,7 +27,7 @@ class EstimateDetailPresenter < SimpleDelegator
     end
   end
 
-  def unit_cost_disaply
+  def unit_cost_display
     number_to_currency(price_policy&.unit_net_cost)
   end
 

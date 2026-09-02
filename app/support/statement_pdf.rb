@@ -10,7 +10,7 @@ class StatementPdf
   def initialize(statement)
     @statement = statement
     # TODO: remove account and facility instance variables in favour
-    # of delgate methods. Requires downstream repos to be updated
+    # of delegate methods. Requires downstream repos to be updated
     @account = statement.account
     @facility = statement.facility
   end

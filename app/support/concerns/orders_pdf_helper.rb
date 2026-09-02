@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 ##
-# Common sections sed for estimates and statements pdfs.
+# Common sections for estimates and statements pdfs.
 #
 # Assumes `facility` reader method is defined.
 module OrdersPdfHelper
@@ -23,5 +23,4 @@ module OrdersPdfHelper
       pdf.text "<b>#{contact_field.titleize}:</b> #{field_value}", inline_format: true
     end
   end
-
 end
