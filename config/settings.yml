@@ -48,6 +48,9 @@ statement_pdf:
   class_name: ExampleStatementPdf
   font_name: Roboto
 
+estimate_pdf:
+  class_name: ExampleEstimatePdf
+
 validator:
   class_name: "AccountValidator::ValidatorDefault"
   test:

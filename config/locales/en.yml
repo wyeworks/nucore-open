@@ -14,8 +14,8 @@ en:
       default: "%m/%d/%Y"
       journal_line_reference: "%Y%m%d"
       timeline_navigation: "%a, %B %e, %Y"
+      filename_safe: "%m-%d-%Y"
       usa: "%m/%d/%Y"
-      usa_filename_safe: "%m-%d-%Y"
       ymd: "%Y-%m-%d"
 
   time:
@@ -581,8 +581,8 @@ en:
       head: Add Estimate
       or: "or"
     show:
-      days: days
       download_csv: Download CSV
+      download_pdf: Download PDF
       recalculate: Recalculate
       duplicate: Duplicate Estimate
       updated_at_notice: "Prices last updated: %{updated_at}"
@@ -598,6 +598,8 @@ en:
     duplicate:
       success: Estimate successfully duplicated
       error: There was an error duplicating the estimate
+    pdf:
+      filename: "%{facility}_estimate_%{id}.pdf"
 
   facility_order_details:
     edit:

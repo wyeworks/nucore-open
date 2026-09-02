@@ -38,6 +38,11 @@ class FacilityEstimatesController < ApplicationController
                   type: "text/csv",
                   disposition: "attachment"
       end
+
+      if EstimatePdfFactory.defined?
+        @estimate_pdf = EstimatePdfFactory.build(@estimate)
+        format.pdf
+      end
     end
   end
 
