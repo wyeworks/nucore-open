@@ -66,7 +66,7 @@ module SangerSequencing
         initial_columns = (position == "A01" && sample.reserved?) ? ["PGEM_F", "CQLS"] : [sample.id.to_s, sample.submission.order_detail.user.username]
         initial_columns + additional_columns.values
       else
-        [sample.id.to_s,  sample.customer_sample_id.to_s] + additional_columns.values
+        [sample.id.to_s, sample.customer_sample_id.to_s] + additional_columns.values
       end
     end
 

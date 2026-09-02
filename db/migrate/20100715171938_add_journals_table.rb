@@ -15,8 +15,8 @@ class AddJournalsTable < ActiveRecord::Migration[4.2]
     end
 
     create_table :journaled_accounts do |t|
-      t.references :journal,        null: false
-      t.references :account,        null: false
+      t.references :journal, null: false
+      t.references :account, null: false
     end
   end
 
