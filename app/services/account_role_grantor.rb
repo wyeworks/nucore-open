@@ -31,7 +31,7 @@ class AccountRoleGrantor
 
         account_user.save!
       end
-    rescue ActiveRecord::RecordInvalid # rubocop:disable Lint/HandleExceptions
+    rescue ActiveRecord::RecordInvalid
       # do nothing
     end
     account_user

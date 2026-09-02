@@ -22,8 +22,8 @@ class InitialSchema < ActiveRecord::Migration[4.2]
       t.string   "url_name",          limit: 50,                                                  null: false
       t.string   "account"
       t.boolean  "is_active", precision: 1, scale: 0, null: false
-      t.datetime "created_at",                                                                       null: false
-      t.datetime "updated_at",                                                                       null: false
+      t.datetime "created_at", null: false
+      t.datetime "updated_at", null: false
       t.text     "description"
       t.string   "pers_affiliate_id" # Only here to support removing it in a later migration
     end
@@ -86,8 +86,8 @@ class InitialSchema < ActiveRecord::Migration[4.2]
       t.integer  "initial_order_status_id",                precision: 38, scale: 0
       t.boolean  "is_archived",                            precision: 1,  scale: 0, null: false
       t.boolean  "is_hidden",                              precision: 1,  scale: 0, null: false
-      t.datetime "created_at",                                                            null: false
-      t.datetime "updated_at",                                                            null: false
+      t.datetime "created_at", null: false
+      t.datetime "updated_at", null: false
       t.string   "relay_ip", limit: 15
       t.integer  "relay_port",                             precision: 38, scale: 0
       t.boolean  "auto_logout",                            precision: 1,  scale: 0
