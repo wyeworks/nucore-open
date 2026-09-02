@@ -31,7 +31,7 @@ RSpec.shared_examples_for "NonReservationProduct" do |product_type|
         expect(product.cheapest_price_policy(order_detail)).to eq(pp_g1)
       end
 
-      context "with user-based price groups enabled", feature_setting: { "pricing.user_based_price_groups" => true } do
+      context "with user-based price groups enabled", feature_setting: { "pricing.user_based_price_groups" => true, "pricing.user_based_price_groups_exclude_purchaser" => false } do
         it "should find the cheapest price policy including groups that belong to the user" do
           FactoryBot.create(:user_price_group_member, user: user, price_group: price_group3)
           FactoryBot.create(:user_price_group_member, user: user, price_group: price_group4)
@@ -150,7 +150,7 @@ RSpec.shared_examples_for "ReservationProduct" do |product_type|
       it "should find the cheapest price policy" do
         expect(product.cheapest_price_policy(order_detail)).to eq(pp_g1)
       end
-      context "with user-based price groups enabled", feature_setting: { "pricing.user_based_price_groups" => true } do
+      context "with user-based price groups enabled", feature_setting: { "pricing.user_based_price_groups" => true, "pricing.user_based_price_groups_exclude_purchaser" => false } do
         it "should find the cheapest price policy including groups that belong to the user" do
           FactoryBot.create(:user_price_group_member, user: user, price_group: price_group3)
           FactoryBot.create(:user_price_group_member, user: user, price_group: price_group4)
