@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Style/BarePercentLiterals, Style/RescueModifier, Layout/SpaceInsideStringInterpolation, Style/UnneededPercentQ
+# rubocop:disable-next Style/BarePercentLiterals, Style/RescueModifier, Layout/SpaceInsideStringInterpolation, Style/UnneededPercentQ
 module ActiveRecord
 
   module ConnectionAdapters
@@ -66,4 +66,3 @@ module ActiveRecord
   end
 
 end
-# rubocop:enable Style/BarePercentLiterals, Style/RescueModifier, Layout/SpaceInsideStringInterpolation, Style/UnneededPercentQ
