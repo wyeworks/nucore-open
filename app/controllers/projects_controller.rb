@@ -53,7 +53,11 @@ class ProjectsController < ApplicationController
       ProjectsSearch::CrossCoreFacilitySearcher,
     ]
 
-    @search = TransactionSearch::Searcher.new(*searchers).search(order_details, @search_form)
+    @search =
+      TransactionSearch::Searcher
+      .new(current_facility, *searchers)
+      .search(order_details, @search_form)
+
     @order_details = @search.order_details.includes(:order_status).reorder(sort_clause)
 
     respond_to do |format|
