@@ -29,6 +29,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     let(:usage_cost) do
       duration * usage_rate / 60.minutes
     end
+    let(:subject) { calculator.calculate(start_at:, end_at:) }
 
     before do
       price_group.price_group_discounts.update_all(discount_percent: 0)
@@ -47,9 +48,16 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
         let(:minimum_cost) { 0 }
 
         it "returns the usage cost" do
-          expect(subject[:cost]).to be_within(0.0001).of(
-            usage_cost
-          )
+          expect(subject[:cost]).to be_within(0.0001).of(usage_cost)
+        end
+      end
+
+      context "when minimum_cost is disabled" do
+        let(:minimum_cost) { 1000 }
+        subject { calculator.calculate(start_at:, end_at:, minimum_cost: false) }
+
+        it "returns the usage cost" do
+          expect(subject[:cost]).to be_within(0.0001).of(usage_cost)
         end
       end
     end
@@ -95,7 +103,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     let!(:weekend_schedule) { create(:schedule_rule, :weekend, :all_day, discount_percent: 25, product:) }
 
     describe "#calculate" do
-      subject(:costs) { calculator.calculate(start_at, end_at) }
+      subject(:costs) { calculator.calculate(start_at:, end_at:) }
 
       it_behaves_like "handles minimum cost and discounts"
 
@@ -241,7 +249,9 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
         let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) } # Thursday
         let(:end_at) { start_at - 1.hour }
 
-        it { is_expected.to be_nil }
+        it "raises argument error" do
+          expect { subject }.to raise_error(ArgumentError)
+        end
       end
     end
 
@@ -287,7 +297,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
 
     describe "#calculate with a duration (estimate path)" do
       let(:options) { { usage_rate: 60, usage_subsidy: 15 } }
-      subject(:costs) { calculator.calculate(nil, nil, 60) }
+      subject(:costs) { calculator.calculate(duration: 60) }
 
       it "uses the per-minute strategy" do
         expect(calculator_strategy).to be PricePolicies::Strategy::PerMinute
@@ -308,7 +318,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     end
 
     describe "#calculate" do
-      subject(:costs) { calculator.calculate(start_at, end_at) }
+      subject(:costs) { calculator.calculate(start_at:, end_at:) }
 
       describe "for external price group" do
         let(:price_group) { create(:price_group, is_internal: false) }
@@ -436,8 +446,8 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
           # 2 hours       @ $25   = $50      Duration rate - Minimum duration: 1 hour
           # 2 hours       @ $20   = $40      Duration rate - Minimum duration: 3 hours
           # 0.25 hours    @ $15   = $3.75    Duration rate - Minimum duration: 5 hours
-          expect(calculator.calculate(start_at, end_at)[:cost]).to eq(562.5)
-          expect(calculator.calculate(start_at, end_at)[:subsidy].round(4)).to eq(123.75)
+          expect(calculator.calculate(start_at:, end_at:)[:cost]).to eq(562.5)
+          expect(calculator.calculate(start_at:, end_at:)[:subsidy].round(4)).to eq(123.75)
         end
       end
 
@@ -456,7 +466,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     end
 
     describe "#calculate with a duration (estimate path)" do
-      subject(:costs) { calculator.calculate(nil, nil, duration_mins) }
+      subject(:costs) { calculator.calculate(duration: duration_mins) }
 
       describe "for external price group" do
         let(:price_group) { create(:price_group, is_internal: false) }
@@ -497,7 +507,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
   end
 
   context "when instrument has daily rate pricing" do
-    let(:subject) { calculator.calculate(start_at, end_at) }
+    let(:subject) { calculator.calculate(start_at:, end_at:) }
     let(:product) do
       create(
         :setup_instrument,
@@ -549,7 +559,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     end
 
     describe "#calculate with a duration (estimate path)" do
-      subject { calculator.calculate(nil, nil, duration_days) }
+      subject { calculator.calculate(duration: duration_days) }
 
       it "returns cost and subsidy for the daily rate" do
         is_expected.to eq(
@@ -568,7 +578,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
       create(:timed_service_price_policy, options.merge(product:, price_group:))
     end
 
-    subject(:costs) { calculator.calculate(nil, nil, 180) }
+    subject(:costs) { calculator.calculate(duration: 180) }
 
     context "with standard pricing" do
       let(:product) { create(:timed_service, facility:) }

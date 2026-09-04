@@ -5,21 +5,26 @@ module PricePolicies
   module Strategy
 
     class BaseStrategy
-      attr_reader :price_policy, :start_at, :end_at
+      attr_reader :price_policy, :start_at, :end_at, :handle_minimum_cost
 
       delegate :minimum_cost,
                :minimum_cost_subsidy,
                :product,
                to: :price_policy
 
-      def initialize(price_policy, start_at: nil, end_at: nil, duration: nil)
+      def initialize(price_policy, start_at: nil, end_at: nil, duration: nil, minimum_cost: true)
         @price_policy = price_policy
         @start_at = start_at
         @end_at = end_at
         @raw_duration = duration
+        @handle_minimum_cost = minimum_cost
 
         if [start_at, end_at, duration].all?(&:nil?)
           raise ArgumentError, "Must specify start_at, end_at or duration"
+        end
+
+        if [start_at, end_at].all?(&:present?) && start_at > end_at
+          raise ArgumentError, "Wrong arguments: start_at > end_at"
         end
       end
 
@@ -87,7 +92,8 @@ module PricePolicies
         }
 
         costs = with_discount(costs)
-        with_minimum_cost(costs)
+
+        handle_minimum_cost ? with_minimum_cost(costs) : costs
       end
     end
 
@@ -121,7 +127,8 @@ module PricePolicies
       def calculate
         costs = cost_and_subsidy_for(duration)
         costs = with_discount(costs)
-        with_minimum_cost(costs)
+
+        handle_minimum_cost ? with_minimum_cost(costs) : costs
       end
 
       private

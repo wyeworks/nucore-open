@@ -23,7 +23,11 @@ class TimedServicePricePolicy < PricePolicy
   end
 
   def estimate_cost_from_estimate_detail(estimate_detail)
-    costs = calculate_for_time(estimate_detail.duration)
+    costs =
+      PricePolicies::TimeBasedPriceCalculator
+      .new(self)
+      .calculate(duration:, minimum_cost: false)
+
     net_cost_for_one = costs[:cost] - costs[:subsidy]
 
     net_cost_for_one * estimate_detail.quantity
@@ -34,7 +38,9 @@ class TimedServicePricePolicy < PricePolicy
   def calculate_for_time(duration)
     return if restrict_purchase?
 
-    PricePolicies::TimeBasedPriceCalculator.new(self).calculate(nil, nil, duration)
+    PricePolicies::TimeBasedPriceCalculator
+      .new(self)
+      .calculate(duration:, minimum_cost: false)
   end
 
 end
