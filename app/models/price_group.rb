@@ -44,11 +44,12 @@ class PriceGroup < ApplicationRecord
     globals.find_by(name: Settings.price_group.name.external_2)
   end
 
-  def self.for_public_estimate(customer_type:, profit_status: nil)
-    return base if customer_type == "internal"
-    return secondary_external if profit_status == "non_profit" && secondary_external
-
-    external
+  def self.for_public_estimate(customer_type)
+    case customer_type
+    when "internal" then base
+    when "external_non_profit" then secondary_external || external
+    else external
+    end
   end
 
   def self.nonbillable

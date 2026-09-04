@@ -123,10 +123,8 @@ en:
       customer_type: I am
       internal: Internal
       external: External
-      profit_status: Organization type
-      for_profit: For-profit
-      non_profit: Non-profit
-      select_facility: Select facility
+      external_for_profit: External - for-profit
+      external_non_profit: External - non-profit
       choose_products: Choose products
       calculate: Calculate estimate
       results: Estimated cost

@@ -4,19 +4,13 @@
 %p= t(".intro")
 
 = form_tag estimate_path, method: :get do
-  .row
-    .col-md-3
+  .inline-form-controls
+    %div
       = label_tag :customer_type, t(".customer_type")
-      = select_tag :customer_type, options_for_select([[t(".internal"), "internal"], [t(".external"), "external"]], params[:customer_type]), class: "form-control"
-    - if PriceGroup.secondary_external
-      .col-md-3
-        = label_tag :profit_status, t(".profit_status")
-        = select_tag :profit_status, options_for_select([[t(".for_profit"), "for_profit"], [t(".non_profit"), "non_profit"]], params[:profit_status]), class: "form-control"
-    .col-md-3
+      = select_tag :customer_type, options_for_select(@customer_type_options, params[:customer_type]), class: "form-control", onchange: "this.form.submit();"
+    .margin_x
       = label_tag :facility_id, Facility.model_name.human
-      = select_tag :facility_id, options_from_collection_for_select(@facilities, :id, :name, params[:facility_id]), include_blank: true, class: "form-control"
-    .col-md-3
-      = submit_tag t(".select_facility"), class: "btn btn-default", name: nil
+      = select_tag :facility_id, options_from_collection_for_select(@facilities, :id, :name, params[:facility_id]), include_blank: true, class: "form-control", onchange: "this.form.submit();"
 
   - if @facility.present?
     %h3= t(".choose_products")
@@ -30,11 +24,15 @@
         - @products.each do |product|
           %tr
             %td= product.name
-            %td= number_field_tag "quantities[#{product.id}]", params.dig(:quantities, product.id.to_s), min: 0, style: "width: 6em;"
-            %td
-              - if product.order_quantity_as_time? || product.is_a?(Instrument)
-                = number_field_tag "durations[#{product.id}]", params.dig(:durations, product.id.to_s), min: 1, style: "width: 6em;"
-    = submit_tag t(".calculate"), class: "btn btn-primary", name: nil
+            - if @priced_product_ids.include?(product.id)
+              %td= number_field_tag "quantities[#{product.id}]", params.dig(:quantities, product.id.to_s), min: 0, style: "width: 6em;"
+              %td
+                - if product.time_unit.present?
+                  = number_field_tag "durations[#{product.id}]", params.dig(:durations, product.id.to_s), min: 1, style: "width: 6em;"
+                  = EstimateDetail.human_attribute_name("duration_unit.#{product.time_unit}", count: 2)
+            - else
+              %td.text-muted{ colspan: 2 }= t(".no_public_rate")
+  = submit_tag t(".calculate"), class: "btn btn-primary", name: nil
 
 - if @estimate.present?
   %h3= t(".results")
@@ -43,13 +41,15 @@
       %tr
         %th= Product.model_name.human
         %th= EstimateDetail.human_attribute_name(:quantity)
+        %th= EstimateDetail.human_attribute_name(:duration)
         %th.text-right= EstimateDetail.human_attribute_name(:cost)
     %tbody
-      - @estimate.estimate_details.each do |estimate_detail|
+      - @estimate.estimate_details.map { |detail| EstimateDetailPresenter.new(detail) }.each do |estimate_detail|
         %tr
-          %td= estimate_detail.product.name
+          %td= estimate_detail.product_display
           %td= estimate_detail.quantity
-          %td.text-right= estimate_detail.cost ? number_to_currency(estimate_detail.cost) : t(".no_public_rate")
+          %td= estimate_detail.duration_display
+          %td.text-right= estimate_detail.cost ? estimate_detail.cost_display : t(".no_public_rate")
   .text-right
     %strong= t(".total")
     %span= number_to_currency(@total)

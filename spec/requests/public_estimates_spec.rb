@@ -59,6 +59,31 @@ RSpec.describe "Public estimates" do
       expect(response.body).to_not include(bundle.name)
     end
 
+    it "prices the estimate with a second external group when one is configured" do
+      initial = Settings.price_group.name.external_2
+      Settings.price_group.name.external_2 = "External Non-Profit Rate"
+      non_profit = PriceGroup.setup_global(name: "External Non-Profit Rate", is_internal: false, display_order: 2)
+      create(:item_price_policy, product: item, price_group: non_profit, unit_cost: 25, unit_subsidy: 0)
+
+      get "/estimate", params: {
+        customer_type: "external_non_profit", facility_id: facility.id, quantities: { item.id.to_s => "2" }
+      }
+
+      expect(response.body).to include("$50.00")
+    ensure
+      Settings.price_group.name.external_2 = initial
+    end
+
+    it "offers no quantity field for a product with no rate for the selected price group" do
+      unpriced = create(:setup_item, facility:, name: "Unpriced Widget")
+
+      get "/estimate", params: { customer_type: "internal", facility_id: facility.id }
+
+      expect(response.body).to include(unpriced.name)
+      expect(response.body).to_not include(%(name="quantities[#{unpriced.id}]"))
+      expect(response.body).to include(%(name="quantities[#{item.id}]"))
+    end
+
     it "ignores products with no quantity" do
       get "/estimate", params: {
         customer_type: "internal", facility_id: facility.id, quantities: { item.id.to_s => "0" }

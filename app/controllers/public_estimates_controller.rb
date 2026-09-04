@@ -8,15 +8,32 @@ class PublicEstimatesController < ApplicationController
     @facilities = Facility.active.alphabetized
     @facility = @facilities.find_by(id: params[:facility_id])
     @products = @facility ? public_products : Product.none
-    @price_group = PriceGroup.for_public_estimate(
-      customer_type: params[:customer_type],
-      profit_status: params[:profit_status],
-    )
+    @customer_type_options = customer_type_options
+    @price_group = PriceGroup.for_public_estimate(params[:customer_type] || "internal")
+    @priced_product_ids = priced_product_ids
     @estimate = build_estimate if @price_group && requested_quantities.any?
     @total = @estimate.estimate_details.sum { |estimate_detail| estimate_detail.cost || 0 } if @estimate
   end
 
   private
+
+  def customer_type_options
+    return [[t(".internal"), "internal"], [t(".external"), "external"]] if PriceGroup.secondary_external.blank?
+
+    [
+      [t(".internal"), "internal"],
+      [t(".external_for_profit"), "external"],
+      [t(".external_non_profit"), "external_non_profit"],
+    ]
+  end
+
+  def priced_product_ids
+    return [] if @price_group.blank? || @products.empty?
+
+    PricePolicy.current_for_date(Time.current).purchaseable
+               .where(product_id: @products.map(&:id), price_group: @price_group)
+               .distinct.pluck(:product_id)
+  end
 
   def public_products
     @facility.products.active.available_for_estimates.where.not(type: "Bundle").alphabetized
@@ -38,6 +55,7 @@ class PublicEstimatesController < ApplicationController
         product:,
         quantity: quantity.to_i,
         duration: params.dig(:durations, product_id).presence,
+        duration_unit: product.time_unit,
       )
     end
 

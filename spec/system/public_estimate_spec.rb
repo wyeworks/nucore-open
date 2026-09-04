@@ -16,7 +16,7 @@ RSpec.describe "Building a public estimate", feature_setting: { public_estimates
 
     select "Internal", from: "customer_type"
     select facility.name, from: "facility_id"
-    click_button "Select facility"
+    click_button "Calculate estimate"
 
     fill_in "quantities[#{item.id}]", with: 4
     click_button "Calculate estimate"

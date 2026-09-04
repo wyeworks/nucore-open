@@ -247,11 +247,11 @@ RSpec.describe PriceGroup do
     after { Settings.price_group.name.external_2 = initial_secondary_external }
 
     it "returns the base group for internal customers" do
-      expect(described_class.for_public_estimate(customer_type: "internal")).to eq(described_class.base)
+      expect(described_class.for_public_estimate("internal")).to eq(described_class.base)
     end
 
     it "returns the external group for external customers" do
-      expect(described_class.for_public_estimate(customer_type: "external", profit_status: "for_profit"))
+      expect(described_class.for_public_estimate("external"))
         .to eq(described_class.external)
     end
 
@@ -263,7 +263,7 @@ RSpec.describe PriceGroup do
       end
 
       it "falls back to the external group for non-profit customers" do
-        expect(described_class.for_public_estimate(customer_type: "external", profit_status: "non_profit"))
+        expect(described_class.for_public_estimate("external_non_profit"))
           .to eq(described_class.external)
       end
     end
@@ -275,12 +275,12 @@ RSpec.describe PriceGroup do
       end
 
       it "returns it for non-profit customers" do
-        expect(described_class.for_public_estimate(customer_type: "external", profit_status: "non_profit"))
+        expect(described_class.for_public_estimate("external_non_profit"))
           .to eq(secondary_external)
       end
 
       it "still returns the external group for for-profit customers" do
-        expect(described_class.for_public_estimate(customer_type: "external", profit_status: "for_profit"))
+        expect(described_class.for_public_estimate("external"))
           .to eq(described_class.external)
       end
     end
