@@ -241,4 +241,49 @@ RSpec.describe PriceGroup do
     end
   end
 
+  describe ".for_public_estimate" do
+    let(:initial_secondary_external) { Settings.price_group.name.external_2 }
+
+    after { Settings.price_group.name.external_2 = initial_secondary_external }
+
+    it "returns the base group for internal customers" do
+      expect(described_class.for_public_estimate("internal")).to eq(described_class.base)
+    end
+
+    it "returns the external group for external customers" do
+      expect(described_class.for_public_estimate("external"))
+        .to eq(described_class.external)
+    end
+
+    context "when a second external group is not configured" do
+      before { Settings.price_group.name.external_2 = nil }
+
+      it "returns nil from .secondary_external" do
+        expect(described_class.secondary_external).to be_nil
+      end
+
+      it "falls back to the external group for non-profit customers" do
+        expect(described_class.for_public_estimate("external_non_profit"))
+          .to eq(described_class.external)
+      end
+    end
+
+    context "when a second external group is configured" do
+      let!(:secondary_external) do
+        Settings.price_group.name.external_2 = "External Non-Profit Rate"
+        described_class.setup_global(name: "External Non-Profit Rate", is_internal: false, display_order: 2)
+      end
+
+      it "returns it for non-profit customers" do
+        expect(described_class.for_public_estimate("external_non_profit"))
+          .to eq(secondary_external)
+      end
+
+      it "still returns the external group for for-profit customers" do
+        expect(described_class.for_public_estimate("external"))
+          .to eq(described_class.external)
+      end
+    end
+  end
+
 end

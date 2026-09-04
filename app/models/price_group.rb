@@ -38,6 +38,20 @@ class PriceGroup < ApplicationRecord
     globals.find_by(name: Settings.price_group.name.external)
   end
 
+  def self.secondary_external
+    return if Settings.price_group.name.external_2.blank?
+
+    globals.find_by(name: Settings.price_group.name.external_2)
+  end
+
+  def self.for_public_estimate(customer_type)
+    case customer_type
+    when "internal" then base
+    when "external_non_profit" then secondary_external || external
+    else external
+    end
+  end
+
   def self.nonbillable
     base
   end

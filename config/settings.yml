@@ -221,6 +221,7 @@ feature:
   granular_permissions: true
   kiosk_view: true
   show_estimates_option: true
+  public_estimates: false
   training_requests: true
 
 split_accounts:

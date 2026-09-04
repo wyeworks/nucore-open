@@ -15,6 +15,7 @@
     - if session_user.nil?
       %ul.nav.navbar-nav.navbar-right.hide-from-print
         = render "/shared/support"
+        = render "/shared/public_estimate_link"
         %li= link_to t("pages.login"), :new_user_session
     - else
       -# collapsed at < 979px
@@ -28,6 +29,7 @@
             %li.navbar-text= "#{acting_user.full_name} (#{acting_user.username})"
             %li.divider-vertical
             = render "/shared/support"
+            = render "/shared/public_estimate_link"
             %li= link_to t("pages.cart"), :cart, class: "js--cart_count", data: { url: orders_cart_count_url }
           - else
             - if UserPreference.options_for(current_user).any?
@@ -40,6 +42,7 @@
               %li.divider-vertical
             -# .visible-with-nav is visible > 979px
             = render "/shared/support"
+            = render "/shared/public_estimate_link"
             %li.visible-with-nav= link_to t("pages.cart"), :cart, class: "js--cart_count", data: { url: orders_cart_count_url }
             %li.divider-vertical
             = render "shared/message_summary"
