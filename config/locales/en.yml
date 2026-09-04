@@ -106,6 +106,7 @@ en:
     movable_transactions: My Movable Transactions
     notices: Notices
     support: Support
+    public_estimate: Get an Estimate
 
   affiliates:
     add: Add Affiliate
@@ -114,6 +115,23 @@ en:
     remove:
       confirm: "Really remove affiliate %{name}?"
       label: Remove
+
+  public_estimates:
+    show:
+      title: Estimate
+      intro: Estimate the cost of using our facilities. No account required.
+      customer_type: I am
+      internal: Internal
+      external: External
+      profit_status: Organization type
+      for_profit: For-profit
+      non_profit: Non-profit
+      select_facility: Select facility
+      choose_products: Choose products
+      calculate: Calculate estimate
+      results: Estimated cost
+      no_public_rate: No public rate available
+      total: 'Total:'
 
   bundle_products:
     new:

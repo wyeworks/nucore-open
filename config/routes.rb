@@ -12,6 +12,10 @@ Rails.application.routes.draw do
     match "/users/password/reset", to: "user_password#reset", as: "reset_password", via: [:get, :post]
   end
 
+  if SettingsHelper.feature_on?(:public_estimates) && SettingsHelper.feature_on?(:show_estimates_option)
+    get "estimate", to: "public_estimates#show"
+  end
+
   # root route
   root to: "public#index"
 
