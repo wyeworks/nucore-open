@@ -80,11 +80,17 @@ module InstrumentPricePolicyCalculations
   end
 
   def calculate_for_time(start_at, end_at)
-    PricePolicies::TimeBasedPriceCalculator.new(self).calculate(start_at, end_at)
+    PricePolicies::TimeBasedPriceCalculator
+      .new(self)
+      .calculate(start_at:, end_at:)
   end
 
   def calculate_for_estimated_time(duration, quantity = 1)
-    costs = PricePolicies::TimeBasedPriceCalculator.new(self).calculate(nil, nil, duration)
+    costs =
+      PricePolicies::TimeBasedPriceCalculator
+      .new(self)
+      .calculate(duration:, minimum_cost: false)
+
     net_cost_for_one = costs[:cost] - costs[:subsidy]
 
     net_cost_for_one * quantity

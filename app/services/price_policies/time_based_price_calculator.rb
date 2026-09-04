@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module PricePolicies
-
   class TimeBasedPriceCalculator
-
     attr_reader :price_policy
 
     delegate :product, to: :price_policy
@@ -12,16 +10,8 @@ module PricePolicies
       @price_policy = price_policy
     end
 
-    def calculate(start_at, end_at, duration = nil)
-      return if start_at.blank? && end_at.blank? && duration.blank?
-
-      if duration.present?
-        strategy_class.new(price_policy, start_at, end_at, duration:).calculate_estimate
-      else
-        return if start_at > end_at
-
-        strategy_class.new(price_policy, start_at, end_at).calculate
-      end
+    def calculate(...)
+      strategy_class.new(price_policy, ...).calculate
     end
 
     private
@@ -29,13 +19,11 @@ module PricePolicies
     def strategy_class
       if product.daily_booking?
         Strategy::PerDay
-      elsif product.duration_pricing_mode? && price_policy.duration_rates.present?
+      elsif product.duration_pricing_mode?
         Strategy::SteppedRate
       else
         Strategy::PerMinute
       end
     end
-
   end
-
 end
