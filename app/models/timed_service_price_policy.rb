@@ -26,7 +26,7 @@ class TimedServicePricePolicy < PricePolicy
     costs =
       PricePolicies::TimeBasedPriceCalculator
       .new(self)
-      .calculate(duration:, minimum_cost: false)
+      .calculate(duration: estimate_detail.duration, minimum_cost: false)
 
     net_cost_for_one = costs[:cost] - costs[:subsidy]
 
@@ -40,7 +40,7 @@ class TimedServicePricePolicy < PricePolicy
 
     PricePolicies::TimeBasedPriceCalculator
       .new(self)
-      .calculate(duration:, minimum_cost: false)
+      .calculate(duration:)
   end
 
 end
