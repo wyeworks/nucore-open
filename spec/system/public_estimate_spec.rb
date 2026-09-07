@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Building a public estimate", feature_setting: { public_estimates: true, reload_routes: true } do
+RSpec.describe "Building a public estimate", :js, feature_setting: { public_estimates: true, reload_routes: true } do
   let(:facility) { create(:setup_facility) }
   let!(:item) { create(:setup_item, facility:) }
   let!(:price_policy) do
@@ -14,9 +14,10 @@ RSpec.describe "Building a public estimate", feature_setting: { public_estimates
 
     click_link "Get an Estimate"
 
+    expect(page).to have_no_button("Calculate estimate")
+
     select "Internal", from: "customer_type"
     select facility.name, from: "facility_id"
-    click_button "Calculate estimate"
 
     fill_in "quantities[#{item.id}]", with: 4
     click_button "Calculate estimate"

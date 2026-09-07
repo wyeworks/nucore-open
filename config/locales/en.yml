@@ -121,10 +121,11 @@ en:
       title: Estimate
       intro: Estimate the cost of using our facilities. No account required.
       customer_type: I am
-      internal: Internal
-      external: External
-      external_for_profit: External - for-profit
-      external_non_profit: External - non-profit
+      customer_types:
+        base: Internal
+        external: External
+        external_2: External - non-profit
+        cancer_center: Cancer Center
       choose_products: Choose products
       calculate: Calculate estimate
       results: Estimated cost

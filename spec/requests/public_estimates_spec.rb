@@ -27,7 +27,7 @@ RSpec.describe "Public estimates" do
 
     it "prices the estimate for an internal customer" do
       get "/estimate", params: {
-        customer_type: "internal", facility_id: facility.id, quantities: { item.id.to_s => "2" }
+        customer_type: "base", facility_id: facility.id, quantities: { item.id.to_s => "2" }
       }
 
       expect(response.body).to include("$20.00")
@@ -41,16 +41,6 @@ RSpec.describe "Public estimates" do
       expect(response.body).to include("$80.00")
     end
 
-    it "reports products with no rate for the selected price group" do
-      unpriced = create(:setup_item, facility:)
-
-      get "/estimate", params: {
-        customer_type: "internal", facility_id: facility.id, quantities: { unpriced.id.to_s => "1" }
-      }
-
-      expect(response.body).to include("No public rate available")
-    end
-
     it "excludes bundles, which have no price policies of their own" do
       bundle = create(:bundle, facility:, bundle_products: [item])
 
@@ -61,32 +51,34 @@ RSpec.describe "Public estimates" do
 
     it "prices the estimate with a second external group when one is configured" do
       initial = Settings.price_group.name.external_2
+      initial_types = Settings.public_estimates.customer_types
       Settings.price_group.name.external_2 = "External Non-Profit Rate"
+      Settings.public_estimates.customer_types = %w[base external external_2]
       non_profit = PriceGroup.setup_global(name: "External Non-Profit Rate", is_internal: false, display_order: 2)
       create(:item_price_policy, product: item, price_group: non_profit, unit_cost: 25, unit_subsidy: 0)
 
       get "/estimate", params: {
-        customer_type: "external_non_profit", facility_id: facility.id, quantities: { item.id.to_s => "2" }
+        customer_type: "external_2", facility_id: facility.id, quantities: { item.id.to_s => "2" }
       }
 
       expect(response.body).to include("$50.00")
     ensure
       Settings.price_group.name.external_2 = initial
+      Settings.public_estimates.customer_types = initial_types
     end
 
-    it "offers no quantity field for a product with no rate for the selected price group" do
+    it "does not list a product with no rate for the selected price group" do
       unpriced = create(:setup_item, facility:, name: "Unpriced Widget")
 
-      get "/estimate", params: { customer_type: "internal", facility_id: facility.id }
+      get "/estimate", params: { customer_type: "base", facility_id: facility.id }
 
-      expect(response.body).to include(unpriced.name)
-      expect(response.body).to_not include(%(name="quantities[#{unpriced.id}]"))
-      expect(response.body).to include(%(name="quantities[#{item.id}]"))
+      expect(response.body).to include(item.name)
+      expect(response.body).to_not include(unpriced.name)
     end
 
     it "ignores products with no quantity" do
       get "/estimate", params: {
-        customer_type: "internal", facility_id: facility.id, quantities: { item.id.to_s => "0" }
+        customer_type: "base", facility_id: facility.id, quantities: { item.id.to_s => "0" }
       }
 
       expect(response.body).to_not include("Estimated cost")

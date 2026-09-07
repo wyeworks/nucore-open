@@ -10,6 +10,12 @@ price_group:
     external: 'External Rate'
     cancer_center: 'Cancer Center Rate'
 
+public_estimates:
+  # Keys from price_group.name. Each school can override this list.
+  customer_types:
+    - base
+    - external
+
 time_zone: "Central Time (US & Canada)"
 
 accounts:
