@@ -29,7 +29,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     let(:usage_cost) do
       duration * usage_rate / 60.minutes
     end
-    let(:subject) { calculator.calculate(start_at:, end_at:) }
+    subject { calculator.calculate(start_at:, end_at:) }
 
     before do
       price_group.price_group_discounts.update_all(discount_percent: 0)
@@ -507,7 +507,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
   end
 
   context "when instrument has daily rate pricing" do
-    let(:subject) { calculator.calculate(start_at:, end_at:) }
+    subject { calculator.calculate(start_at:, end_at:) }
     let(:product) do
       create(
         :setup_instrument,
