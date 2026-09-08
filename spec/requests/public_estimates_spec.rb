@@ -49,22 +49,30 @@ RSpec.describe "Public estimates" do
       expect(response.body).to_not include(bundle.name)
     end
 
-    it "prices the estimate with a second external group when one is configured" do
-      initial = Settings.price_group.name.external_2
+    it "prices the estimate with an extra configured customer type" do
       initial_types = Settings.public_estimates.customer_types
-      Settings.price_group.name.external_2 = "External Non-Profit Rate"
-      Settings.public_estimates.customer_types = %w[base external external_2]
-      non_profit = PriceGroup.setup_global(name: "External Non-Profit Rate", is_internal: false, display_order: 2)
-      create(:item_price_policy, product: item, price_group: non_profit, unit_cost: 25, unit_subsidy: 0)
+      Settings.public_estimates.customer_types = %w[base external cancer_center]
+      cancer_center = PriceGroup.setup_global(name: Settings.price_group.name.cancer_center, is_internal: false, display_order: 2)
+      create(:item_price_policy, product: item, price_group: cancer_center, unit_cost: 25, unit_subsidy: 0)
 
       get "/estimate", params: {
-        customer_type: "external_2", facility_id: facility.id, quantities: { item.id.to_s => "2" }
+        customer_type: "cancer_center", facility_id: facility.id, quantities: { item.id.to_s => "2" }
       }
 
       expect(response.body).to include("$50.00")
     ensure
-      Settings.price_group.name.external_2 = initial
       Settings.public_estimates.customer_types = initial_types
+    end
+
+    it "shows a print shortcut and the selected facility and customer type with the results" do
+      get "/estimate", params: {
+        customer_type: "external", facility_id: facility.id, quantities: { item.id.to_s => "1" }
+      }
+
+      printed = response.parsed_body.at_css(".show-for-print").text
+
+      expect(response.body).to include("window.print()")
+      expect(printed).to include(facility.name, "External")
     end
 
     it "does not list a product with no rate for the selected price group" do

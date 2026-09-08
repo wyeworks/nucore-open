@@ -8,7 +8,7 @@
     .inline-form-controls
       %div
         = label_tag :customer_type, t(".customer_type")
-        = select_tag :customer_type, options_for_select(@customer_type_options, params[:customer_type]), class: "form-control", onchange: "this.form.submit();"
+        = select_tag :customer_type, options_for_select(@customer_type_options, @customer_type), class: "form-control", onchange: "this.form.submit();"
       .margin_x
         = label_tag :facility_id, Facility.model_name.human
         = select_tag :facility_id, options_from_collection_for_select(@facilities, :id, :name, params[:facility_id]), include_blank: true, class: "form-control", onchange: "this.form.submit();"
@@ -34,6 +34,13 @@
 
 - if @estimate.present?
   %h3= t(".results")
+  .show-for-print
+    %p
+      %strong= "#{t('.customer_type')}:"
+      = t(".customer_types.#{@customer_type}")
+    %p
+      %strong= "#{Facility.model_name.human}:"
+      = @facility.name
   %table.table.table-striped
     %thead
       %tr
@@ -51,3 +58,5 @@
   .text-right
     %strong= t(".total")
     %span= number_to_currency(@total)
+  .hide-from-print
+    = button_tag t(".print"), type: "button", class: "btn btn-default", onclick: "window.print();"

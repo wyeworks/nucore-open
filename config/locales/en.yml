@@ -124,13 +124,13 @@ en:
       customer_types:
         base: Internal
         external: External
-        external_2: External - non-profit
         cancer_center: Cancer Center
       choose_products: Choose products
       calculate: Calculate estimate
       results: Estimated cost
       no_public_rate: No public rate available
       total: 'Total:'
+      print: Print estimate
 
   bundle_products:
     new:

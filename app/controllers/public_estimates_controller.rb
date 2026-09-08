@@ -7,8 +7,9 @@ class PublicEstimatesController < ApplicationController
   def show
     @facilities = Facility.active.alphabetized
     @facility = @facilities.find_by(id: params[:facility_id])
+    @customer_type = customer_type
     @customer_type_options = customer_type_options
-    @price_group = PriceGroup.for_public_estimate(customer_type)
+    @price_group = PriceGroup.for_public_estimate(@customer_type)
     @products = @facility ? priced_products : Product.none
     @estimate = build_estimate if @price_group && requested_quantities.any?
     @total = @estimate.estimate_details.sum { |estimate_detail| estimate_detail.cost || 0 } if @estimate
