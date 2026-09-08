@@ -78,7 +78,9 @@ RSpec.describe InstrumentPricePolicyCalculations do
 
     before do
       allow(PricePolicies::TimeBasedPriceCalculator).to receive(:new).with(policy).and_return(calculator)
-      allow(calculator).to receive(:calculate).with(nil, nil, 480).and_return(cost: 852, subsidy: 85.2)
+      allow(calculator).to(
+        receive(:calculate).with(duration: 480, minimum_cost: false).and_return(cost: 852, subsidy: 85.2)
+      )
     end
 
     it "stores the net cost (cost minus subsidy) per unit, times quantity" do
