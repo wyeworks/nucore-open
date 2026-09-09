@@ -5,6 +5,66 @@ require "rails_helper"
 RSpec.describe OrderDetailStoredFilesController do
   let(:user) { order_detail.user }
 
+  describe "downloading order files", feature_setting: { granular_permissions: true } do
+    let(:facility) { product.facility }
+    let(:product) { create(:setup_service) }
+    let(:order_detail) { create(:purchased_order, product:).order_details.first }
+    let(:user) { create(:user) }
+    let(:params) { { order_id: order_detail.order_id, order_detail_id: order_detail.id } }
+
+    let!(:permission) { create(:facility_user_permission, user:, facility:, read_access: true) }
+
+    before { sign_in user }
+
+    { sample_results: "sample_result", template_results: "template_result" }.each do |action, file_type|
+      describe "##{action}" do
+        subject(:download) { get action, params: params.merge(id: file.id) }
+
+        let(:file) { create(:stored_file, :results, order_detail:, file_type:) }
+
+        it "downloads with read_access" do
+          download
+          expect(response).to redirect_to(file.download_url)
+        end
+
+        it "denies access without facility permissions" do
+          permission.destroy!
+          expect { download }.to raise_error(CanCan::AccessDenied)
+        end
+      end
+    end
+
+    describe "#sample_results_zip" do
+      subject(:download) { get :sample_results_zip, params: params.merge(format: :zip) }
+
+      let!(:file) { create(:stored_file, :results, order_detail:) }
+
+      it "downloads the results as a ZIP with read_access" do
+        download
+        expect(response).to have_http_status(:ok)
+        expect(response.media_type).to eq("application/zip")
+        Zip::File.open_buffer(response.body) do |zip|
+          expect(zip.map(&:name)).to eq([file.name])
+          expect(zip.first.get_input_stream.read).to eq("c,s,v")
+        end
+      end
+
+      it "denies access without facility permissions" do
+        permission.destroy!
+        expect { download }.to raise_error(CanCan::AccessDenied)
+      end
+
+      it "denies access with read_access in another facility" do
+        permission.update!(facility: create(:facility))
+        expect { download }.to raise_error(CanCan::AccessDenied)
+      end
+
+      it "denies access with the feature disabled", feature_setting: { granular_permissions: false } do
+        expect { download }.to raise_error(CanCan::AccessDenied)
+      end
+    end
+  end
+
   describe "#order_file" do
     let(:product) { create(:setup_service, :with_order_form) }
     let(:order_detail) { order.order_details.first }
