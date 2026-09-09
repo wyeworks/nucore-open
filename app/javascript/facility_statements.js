@@ -15,12 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     saveBtn.addEventListener('click', function() {
       hiddenInput.value = parentInput.value.trim();
 
-      saveBtn.disabled = true;
-      const helperText = document.getElementsByClassName('js--statementHelper')[0];
-      if (helperText) helperText.hidden = false;
-
-      $(modal).modal('hide');
-
+      $.rails.disableFormElement($(saveBtn));
       // This is used by the parent statement form, so `journal` doesn't seem right.
       // However, the form is using that name.
       document.getElementById('journals_create_form').submit();

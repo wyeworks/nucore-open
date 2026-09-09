@@ -1,5 +1,8 @@
 = render "shared/transactions/headers"
 
+= content_for :head_content do
+  = javascript_include_tag "facility_statements"
+
 - content_for :h1 do
   = current_facility
 

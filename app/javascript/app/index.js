@@ -42,4 +42,3 @@ import './tab-counts';
 import './time_formatter';
 import './user_access_list';
 import './user_select';
-import './facility_statements';
