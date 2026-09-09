@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
-  const createBtn = document.getElementById('create_statement_btn');
+  const createBtn = document.querySelector('#journals_create_form input[type=submit]');
   const modal = document.getElementsByClassName('js--statementModal')[0];
   const saveBtn = document.getElementsByClassName('js--saveStatementButton')[0];
   const parentInput = document.getElementById("parent_invoice_number");
@@ -20,8 +20,6 @@ document.addEventListener("DOMContentLoaded", function() {
       if (helperText) helperText.hidden = false;
 
       $(modal).modal('hide');
-
-      createBtn.disabled = true;
 
       // This is used by the parent statement form, so `journal` doesn't seem right.
       // However, the form is using that name.

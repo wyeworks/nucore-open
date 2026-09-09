@@ -2,16 +2,16 @@ document.addEventListener("DOMContentLoaded", function() {
   const selectAllLink = document.querySelector(".js--select_all");
   const table = document.querySelector("table.js--transactions-table");
   const submitDiv = document.querySelector(".submit");
-  const journalCreationSubmitButton = document.querySelector(".js--journal-creation__submit");
+  const journalCreationSubmitButtons = document.querySelectorAll(".js--journal-submit");
   const journalCreationHelperText = document.querySelector(".js--journal-creation__helper");
   let earliestFulfilledAtDate;
 
   table.addEventListener("click", setEarliestFulfilledAtDate);
   selectAllLink.addEventListener("click", setEarliestFulfilledAtDate);
   submitDiv.addEventListener("click", handleModals);
-  if (journalCreationSubmitButton) {
+  journalCreationSubmitButtons.forEach(function(journalCreationSubmitButton) {
     journalCreationSubmitButton.addEventListener("click", handleSubmit);
-  }
+  })
 
   function setEarliestFulfilledAtDate(event) {
     const fulfilledAtDates = [];
@@ -45,9 +45,15 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   function handleSubmit(event) {
-    event.preventDefault();
-    event.target.disabled = true;
-    journalCreationHelperText.toggleAttribute("hidden");
+    disableSubmitBtns();
     document.getElementById("journals_create_form").submit();
   }
+
+  function disableSubmitBtns() {
+    $.rails.disableFormElement($(".js--journal-submit"));
+  }
+
+  $("#journals_create_form").submit(function(e) {
+    disableSubmitBtns();
+  });
 });

@@ -9,5 +9,6 @@
       .modal-footer
         %button.btn{ type: "button", data: { dismiss: "modal" } }
           = text("facility_journals.journal_creation_reminder_modal.cancel")
-        = submit_tag text("facility_journals.journal_creation_reminder_modal.proceed"), class: "btn btn-primary js--journal-creation__submit"
-        %span.js--journal-creation__helper{ hidden: true }= "Processing, please wait..."
+        %button.btn.btn-primary.js--journal-submit{ type: "button", data: { disable_with: t("shared.loading") } }
+          = text("facility_journals.journal_creation_reminder_modal.proceed")
+
