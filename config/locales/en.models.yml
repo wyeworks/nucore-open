@@ -275,6 +275,9 @@ en:
         days:
           one: Day
           other: Days
+        mins:
+          one: Minute
+          other: Minutes
       schedule_rule:
         start_time: Start Time
         end_time: End Time

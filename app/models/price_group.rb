@@ -38,6 +38,13 @@ class PriceGroup < ApplicationRecord
     globals.find_by(name: Settings.price_group.name.external)
   end
 
+  def self.for_public_estimate(customer_type)
+    name = Settings.price_group.name.to_h[customer_type.to_s.to_sym]
+    return if name.blank?
+
+    globals.find_by(name:)
+  end
+
   def self.nonbillable
     base
   end
