@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function() {
   const table = document.querySelector("table.js--transactions-table");
   const submitDiv = document.querySelector(".submit");
   const journalCreationSubmitButtons = document.querySelectorAll(".js--journal-submit");
-  const journalCreationHelperText = document.querySelector(".js--journal-creation__helper");
   let earliestFulfilledAtDate;
 
   table.addEventListener("click", setEarliestFulfilledAtDate);
