@@ -65,6 +65,48 @@ RSpec.describe OrderDetailStoredFilesController do
     end
   end
 
+  describe "order form authorization", feature_setting: { granular_permissions: true } do
+    let(:product) { create(:setup_service, :with_order_form) }
+    let(:order_detail) { create(:setup_order, product:).order_details.first }
+    let(:user) { create(:user) }
+    let(:params) { { order_id: order_detail.order_id, order_detail_id: order_detail.id } }
+
+    before do
+      create(:facility_user_permission, user:, facility: product.facility, read_access: true)
+      sign_in user
+    end
+
+    it "denies the upload form with only read_access" do
+      expect { get :order_file, params: }.to raise_error(CanCan::AccessDenied)
+    end
+
+    it "denies uploading with only read_access" do
+      file = Rack::Test::UploadedFile.new(Rails.root.join("spec", "files", "template1.txt"))
+      expect { post :upload_order_file, params: params.merge(stored_file: { file: }) }.to raise_error(CanCan::AccessDenied)
+    end
+
+    it "denies removing files with only read_access" do
+      file = create(:stored_file, :results, order_detail:, file_type: "template_result")
+      expect { get :remove_order_file, params: }.to raise_error(CanCan::AccessDenied)
+      expect(file.reload).to be_persisted
+    end
+  end
+
+  describe "#remove_order_file" do
+    let(:product) { create(:setup_service, :with_order_form) }
+    let(:order_detail) { create(:setup_order, product:).order_details.first }
+    let!(:file) { create(:stored_file, :results, order_detail:, file_type: "template_result") }
+
+    before { sign_in user }
+
+    it "allows the owner to remove an unpurchased order file" do
+      expect do
+        get :remove_order_file, params: { order_id: order_detail.order_id, order_detail_id: order_detail.id }
+      end.to change { order_detail.stored_files.count }.from(1).to(0)
+      expect(response).to redirect_to(order_path(order_detail.order))
+    end
+  end
+
   describe "#order_file" do
     let(:product) { create(:setup_service, :with_order_form) }
     let(:order_detail) { order.order_details.first }

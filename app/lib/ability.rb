@@ -471,8 +471,9 @@ class Ability
     if resource.is_a?(OrderDetail)
       project = resource.order.cross_core_project
 
-      if project.present?
-        can [:add_accessories, :new, :show, :update, :cancel, :template_results], OrderDetail if can_manage_cross_core_orders_at?(user, project.facility)
+      if project.present? && can_manage_cross_core_orders_at?(user, project.facility)
+        can [:add_accessories, :new, :show, :update, :cancel, :template_results], OrderDetail
+        can [:order_file, :upload_order_file, :remove_order_file], OrderDetail, order: { cross_core_project_id: project.id }
       end
     end
 
