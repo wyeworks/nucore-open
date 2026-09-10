@@ -74,7 +74,7 @@ class PublicEstimatesController < ApplicationController
       )
     end
 
-    estimate.estimate_details.each(&:assign_price_policy_and_cost)
+    estimate.estimate_details.each(&:set_price_policy)
     estimate
   end
 
