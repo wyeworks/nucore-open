@@ -50,6 +50,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   function disableSubmitBtns() {
     $.rails.disableFormElement($(".js--journal-submit"));
+    $.rails.disableFormElement($("#journals_create_form").find(":submit"));
   }
 
   $("#journals_create_form").submit(function(e) {
