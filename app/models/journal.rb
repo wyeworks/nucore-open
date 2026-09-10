@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require "set"
-
 class Journal < ApplicationRecord
-
   class CreationError < NUCore::Error; end
 
   module Overridable
@@ -41,6 +38,8 @@ class Journal < ApplicationRecord
 
   attr_accessor :order_details_for_creation
 
+  attribute :defer_journal_row_creation, default: false
+
   belongs_to :facility, optional: true
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
 
@@ -60,7 +59,9 @@ class Journal < ApplicationRecord
   validate :journal_date_cannot_be_before_last_fulfillment, on: :create, if: :has_order_details_for_creation?
   validates_with JournalDateMustBeAfterCutoffs, on: :create
   before_validation :set_facility_id, on: :create, if: :has_order_details_for_creation?
-  after_create :create_new_journal_rows, if: :has_order_details_for_creation?
+  after_create :create_new_journal_rows!, if: -> { has_order_details_for_creation? && !defer_journal_row_creation }
+
+  scope :pending, -> { where(is_successful: nil) }
 
   # Digs up journals pertaining to the passed in facilities
   #
@@ -174,6 +175,15 @@ class Journal < ApplicationRecord
 
   delegate :to_s, to: :id
 
+  def create_new_journal_rows!
+    row_errors = create_journal_rows!(@order_details_for_creation)
+    if row_errors.any?
+      row_errors.each { |e| errors.add(:base, e) }
+      destroy # so it's treated as a new record
+      raise ActiveRecord::RecordInvalid.new(self)
+    end
+  end
+
   private
 
   def should_check_fiscal_years?
@@ -209,14 +219,4 @@ class Journal < ApplicationRecord
                          @order_details_for_creation.first.order.facility_id
                        end
   end
-
-  def create_new_journal_rows
-    row_errors = create_journal_rows!(@order_details_for_creation)
-    if row_errors.any?
-      row_errors.each { |e| errors.add(:base, e) }
-      destroy # so it's treated as a new record
-      raise ActiveRecord::RecordInvalid.new(self)
-    end
-  end
-
 end
