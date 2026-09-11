@@ -13,5 +13,5 @@
         - if @journal_creation_reminder
           = link_to text("facility_journals.journal_90day_modal.submit_button"), "#journal-creation-reminder", class: "btn btn-primary", data: { toggle: "modal", dismiss: "modal" }
         - else
-          - submit_form = "event.preventDefault();document.getElementById('journals_create_form').submit();"
-          = submit_tag text("facility_journals.journal_90day_modal.submit_button"), class: "btn btn-primary", onclick: submit_form
+          %button.btn.btn-primary.js--journal-submit{ type: "button", data: { disable_with: t("shared.loading") } }
+            = text("facility_journals.journal_90day_modal.submit_button")
