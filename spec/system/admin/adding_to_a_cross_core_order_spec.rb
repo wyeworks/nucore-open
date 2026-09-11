@@ -251,8 +251,8 @@ RSpec.describe "Adding to an existing order for cross core", :js do
         click_button "Add to Cross-Core Order"
 
         expect(page).to have_content("#{cross_core_product_facility2.name} was successfully added to this order.")
-        expect(page).to have_content(facility2.to_s), count: 2
-        expect(page).to have_content(user.full_name), count: 2
+        expect(page).to have_content(facility2.to_s)
+        expect(page).to have_content(user.full_name)
 
         order.reload
 
@@ -296,8 +296,8 @@ RSpec.describe "Adding to an existing order for cross core", :js do
         click_button "Add to Cross-Core Order"
 
         expect(page).to have_content("#{cross_core_product_facility2.name} was successfully added to this order.")
-        expect(page).to have_content(facility2.to_s), count: 2
-        expect(page).to have_content(user.full_name), count: 2
+        expect(page).to have_content(facility2.to_s)
+        expect(page).to have_content(user.full_name)
 
         order.reload
 
