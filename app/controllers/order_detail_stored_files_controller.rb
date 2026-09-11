@@ -7,7 +7,7 @@ class OrderDetailStoredFilesController < ApplicationController
   customer_tab  :all
 
   before_action :init_order_detail
-  authorize_resource class: OrderDetail
+  authorize_resource class: OrderDetail, instance_name: :order_detail, id_param: :order_detail_id
 
   def sample_results
     redirect_to @order_detail.stored_files.sample_result.find(params[:id]).download_url, allow_other_host: true
