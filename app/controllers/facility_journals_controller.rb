@@ -13,7 +13,8 @@ class FacilityJournalsController < ApplicationController
   authorize_resource class: Journal
 
   before_action :init_journals, except: :create
-  before_action :enable_sorting, only: [:new]
+  before_action :enable_sorting, only: :new
+  after_action :restrict_referrer, only: :create
 
   layout lambda {
     action_name.in?(%w(new)) ? "two_column_head" : "two_column"
@@ -97,17 +98,25 @@ class FacilityJournalsController < ApplicationController
 
     new_journal_from_params
 
-    # The referer can have a crazy long query string depending on how many checkboxes
-    # are selected. We've seen Apache not like stuff like that and give a "malformed
-    # header from script. Bad header" error which causes the page to completely bomb out.
-    # (See Task #48311). This is just preventative.
-    referer = response.headers["Referer"]
-    response.headers["Referer"] = referer[0..referrer.index("?")] if referer.present?
+    Journal.transaction do
+      current_facility.lock!
 
-    if @journal.errors.blank? && @journal.save
+      if current_facility.journals.pending.exists?
+        flash[:error] = t("controllers.facility_journals.create.duplicate")
+        return redirect_to new_facility_journal_path
+      else
+        @journal.defer_journal_row_creation = true
+        @journal.save
+      end
+    end
+
+    @journal.create_new_journal_rows! if @journal.persisted?
+
+    if @journal.persisted?
       @journal.create_spreadsheet if Journals::JournalFormat.exists?(:xls)
-      flash[:notice] = I18n.t("controllers.facility_journals.create.notice")
       LogEvent.log(@journal, :create, current_user)
+
+      flash[:notice] = I18n.t("controllers.facility_journals.create.notice")
       redirect_to facility_journals_path(current_facility)
     else
       flash_error_messages
@@ -184,14 +193,23 @@ class FacilityJournalsController < ApplicationController
   def new_journal_from_params
     @journal = Journal.new(
       created_by: session_user.id,
-      journal_date: params[:journal_date],
-      order_details_for_creation:
+      journal_date: create_params[:journal_date],
+      order_details_for_creation:,
     )
   end
 
+  def create_params
+    params.permit(:journal_date, order_detail_ids: [])
+  end
+
   def order_details_for_creation
-    return [] unless params[:order_detail_ids].present?
-    OrderDetail.for_facility(current_facility).need_journal.includes(:account, :product, order: :user).where_ids_in(params[:order_detail_ids])
+    return [] unless create_params[:order_detail_ids].present?
+
+    OrderDetail
+      .for_facility(current_facility)
+      .need_journal
+      .includes(:account, :product, order: :user)
+      .where_ids_in(create_params[:order_detail_ids])
   end
 
   def set_pending_journals
@@ -227,4 +245,12 @@ class FacilityJournalsController < ApplicationController
     flash[:error] = msg.html_safe if msg.present?
   end
 
+  def restrict_referrer
+    # The referer can have a crazy long query string depending on how many checkboxes
+    # are selected. We've seen Apache not like stuff like that and give a "malformed
+    # header from script. Bad header" error which causes the page to completely bomb out.
+    # (See Task #48311). This is just preventative.
+    referer = response.headers["Referer"]
+    response.headers["Referer"] = referer[0..referrer.index("?")] if referer.present?
+  end
 end
