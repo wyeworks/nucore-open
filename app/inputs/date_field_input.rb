@@ -11,12 +11,14 @@
 # `date_field` renders any Date/Time/date-string value as ISO, so pass date
 # objects and let Rails format them — for value, min and max alike.
 class DateFieldInput < SimpleForm::Inputs::Base
+  DEFAULT_MAX_DATE = "2100-01-01"
+
   def input(_wrapper_options)
     html_options = input_html_options.dup
 
     html_options[:class] = [*html_options[:class], "form-control"].uniq.join(" ")
     html_options[:min] ||= options[:min_date]
-    html_options[:max] ||= options[:max_date]
+    html_options[:max] ||= options[:max_date] || DEFAULT_MAX_DATE
 
     @builder.date_field attribute_name, html_options
   end
