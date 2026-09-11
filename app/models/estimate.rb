@@ -33,6 +33,7 @@ class Estimate < ApplicationRecord
     details_to_copy = estimate_details.map(&:dup)
 
     details_to_copy.each do |detail|
+      detail.recalculate = true
       duplicated_estimate.estimate_details << detail
     end
 
@@ -45,7 +46,7 @@ class Estimate < ApplicationRecord
     success = true
 
     transaction do
-      if estimate_details.all?(&:assign_price_policy_and_cost)
+      if estimate_details.all?(&:set_price_policy)
         save!
       else
         success = false
