@@ -4,6 +4,7 @@
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
+import debounce from "debounce";
 import { Flash } from "./flash";
 
 class TabbableReports {
@@ -91,7 +92,7 @@ class TabbableReports {
 
   init_form() {
     $('.datepicker').datepicker();
-    return this.$element.find(':input').change(() => this.update_parameters());
+    return this.$element.find(':input').change(debounce(() => this.update_parameters(), 400));
   }
 
   update_href(tab) {
