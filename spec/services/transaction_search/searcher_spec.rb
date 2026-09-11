@@ -5,10 +5,11 @@ require "rails_helper"
 RSpec.describe TransactionSearch::Searcher, type: :service do
   describe "a basic searcher" do
     let(:item) { create(:setup_item) }
+    let(:facility) { item.facility }
     let(:order) { create(:purchased_order, product: item) }
     let(:order_detail) { order.order_details.first }
     let(:account) { order.account }
-    let(:searcher) { described_class.new(*searchers) }
+    let(:searcher) { described_class.new(facility, *searchers) }
     let(:searchers) do
       [
         TransactionSearch::AccountSearcher,
@@ -107,10 +108,12 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
   end
 
   describe "can toggle default searchers by key" do
+    let(:facility) { create(:facility) }
+
     it "can disable some searcher" do
       searcher_key = described_class.default_searchers.sample.key
 
-      searcher = described_class.new(searcher_key.to_sym => false)
+      searcher = described_class.new(facility, searcher_key.to_sym => false)
 
       expect(searcher.instance_eval { @searchers.map(&:key) }).not_to(
         include(searcher_key)
@@ -118,7 +121,7 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
     end
 
     it "can enable facilities searcher" do
-      searcher = described_class.new(facilities: true)
+      searcher = described_class.new(facility, facilities: true)
 
       expect(searcher.instance_eval { @searchers.map(&:key) }).to(
         include("facilities")
@@ -126,7 +129,7 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
     end
 
     it "disables facility searcher by default" do
-      searcher = described_class.new
+      searcher = described_class.new(facility)
 
       expect(searcher.instance_eval { @searchers.map(&:key) }).not_to(
         include("facilities")
