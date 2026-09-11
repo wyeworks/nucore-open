@@ -110,7 +110,6 @@ class FacilityJournalsController < ApplicationController
       end
     end
 
-    sleep 20
     @journal.create_new_journal_rows! if @journal.persisted?
 
     if @journal.persisted?
@@ -194,14 +193,23 @@ class FacilityJournalsController < ApplicationController
   def new_journal_from_params
     @journal = Journal.new(
       created_by: session_user.id,
-      journal_date: params[:journal_date],
+      journal_date: create_params[:journal_date],
       order_details_for_creation:,
     )
   end
 
+  def create_params
+    params.permit(:journal_date, order_detail_ids: [])
+  end
+
   def order_details_for_creation
-    return [] unless params[:order_detail_ids].present?
-    OrderDetail.for_facility(current_facility).need_journal.includes(:account, :product, order: :user).where_ids_in(params[:order_detail_ids])
+    return [] unless create_params[:order_detail_ids].present?
+
+    OrderDetail
+      .for_facility(current_facility)
+      .need_journal
+      .includes(:account, :product, order: :user)
+      .where_ids_in(create_params[:order_detail_ids])
   end
 
   def set_pending_journals
