@@ -5,9 +5,10 @@
         %th &nbsp;
         %th= OrderDetail.human_attribute_name(:product)
         %th.centered= OrderDetail.human_attribute_name(:quantity)
-        %th.currency= OrderDetail.human_attribute_name(:estimated_cost)
-        - if @order.has_subsidies?
-          %th.currency= OrderDetail.human_attribute_name(:estimated_subsidy)
+        - if show_price_breakdown?
+          %th.currency= OrderDetail.human_attribute_name(:estimated_cost)
+          - if @order.has_subsidies?
+            %th.currency= OrderDetail.human_attribute_name(:estimated_subsidy)
         %th.currency= OrderDetail.human_attribute_name(:estimated_total)
 
     %tbody
@@ -18,13 +19,14 @@
       %tr
         %td.currency{ colspan: "3" }
           %b= t(".td.total")
-        %td.currency
-          .responsive-header= OrderDetail.human_attribute_name(:estimated_cost)
-          %b= number_to_currency order.estimated_cost
-        - if order.has_subsidies?
+        - if show_price_breakdown?
           %td.currency
-            .responsive-header= OrderDetail.human_attribute_name(:estimated_subsidy)
-            %b= number_to_currency order.estimated_subsidy
+            .responsive-header= OrderDetail.human_attribute_name(:estimated_cost)
+            %b= number_to_currency order.estimated_cost
+          - if order.has_subsidies?
+            %td.currency
+              .responsive-header= OrderDetail.human_attribute_name(:estimated_subsidy)
+              %b= number_to_currency order.estimated_subsidy
         %td.currency
           .responsive-header= OrderDetail.human_attribute_name(:estimated_total)
           %b= number_to_currency order.estimated_total

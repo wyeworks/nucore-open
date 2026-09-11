@@ -1,0 +1,62 @@
+= content_for :h1 do
+  = t(".title")
+
+%p= t(".intro")
+
+= form_tag estimate_path, method: :get do
+  .hide-from-print
+    .inline-form-controls
+      %div
+        = label_tag :customer_type, t(".customer_type")
+        = select_tag :customer_type, options_for_select(@customer_type_options, @customer_type), class: "form-control", onchange: "this.form.submit();"
+      .margin_x
+        = label_tag :facility_id, Facility.model_name.human
+        = select_tag :facility_id, options_from_collection_for_select(@facilities, :id, :name, params[:facility_id]), include_blank: true, class: "form-control", onchange: "this.form.submit();"
+
+    - if @facility.present?
+      %h3= t(".choose_products")
+      %table.table
+        %thead
+          %tr
+            %th= Product.model_name.human
+            %th= EstimateDetail.human_attribute_name(:quantity)
+            %th= EstimateDetail.human_attribute_name(:duration)
+        %tbody
+          - @products.each do |product|
+            %tr
+              %td= product.name
+              %td= number_field_tag "quantities[#{product.id}]", params.dig(:quantities, product.id.to_s), min: 0, style: "width: 6em;"
+              %td
+                - if product.time_unit.present?
+                  = number_field_tag "durations[#{product.id}]", params.dig(:durations, product.id.to_s), min: 1, style: "width: 6em;"
+                  = EstimateDetail.human_attribute_name("duration_unit.#{product.time_unit}", count: 2)
+      = submit_tag t(".calculate"), class: "btn btn-primary", name: nil
+
+- if @estimate.present?
+  %h3= t(".results")
+  .show-for-print
+    %p
+      %strong= "#{t('.customer_type')}:"
+      = t(".customer_types.#{@customer_type}")
+    %p
+      %strong= "#{Facility.model_name.human}:"
+      = @facility.name
+  %table.table.table-striped
+    %thead
+      %tr
+        %th= Product.model_name.human
+        %th= EstimateDetail.human_attribute_name(:quantity)
+        %th= EstimateDetail.human_attribute_name(:duration)
+        %th.text-right= EstimateDetail.human_attribute_name(:cost)
+    %tbody
+      - @estimate.estimate_details.map { |detail| EstimateDetailPresenter.new(detail) }.each do |estimate_detail|
+        %tr
+          %td= estimate_detail.product_display
+          %td= estimate_detail.quantity
+          %td= estimate_detail.duration_display
+          %td.text-right= estimate_detail.cost ? estimate_detail.cost_display : t(".no_public_rate")
+  .text-right
+    %strong= t(".total")
+    %span= number_to_currency(@total)
+  .hide-from-print
+    = button_tag t(".print"), type: "button", class: "btn btn-default", onclick: "window.print();"

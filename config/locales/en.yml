@@ -14,8 +14,8 @@ en:
       default: "%m/%d/%Y"
       journal_line_reference: "%Y%m%d"
       timeline_navigation: "%a, %B %e, %Y"
+      filename_safe: "%m-%d-%Y"
       usa: "%m/%d/%Y"
-      usa_filename_safe: "%m-%d-%Y"
       ymd: "%Y-%m-%d"
 
   time:
@@ -106,6 +106,7 @@ en:
     movable_transactions: My Movable Transactions
     notices: Notices
     support: Support
+    public_estimate: Get an Estimate
 
   affiliates:
     add: Add Affiliate
@@ -114,6 +115,22 @@ en:
     remove:
       confirm: "Really remove affiliate %{name}?"
       label: Remove
+
+  public_estimates:
+    show:
+      title: Estimate
+      intro: Estimate the cost of using our facilities. No account required.
+      customer_type: I am
+      customer_types:
+        base: Internal
+        external: External
+        cancer_center: Cancer Center
+      choose_products: Choose products
+      calculate: Calculate estimate
+      results: Estimated cost
+      no_public_rate: No public rate available
+      total: 'Total:'
+      print: Print estimate
 
   bundle_products:
     new:
@@ -284,6 +301,13 @@ en:
       bulk_deposit_number: "Bulk !deposit_number_prefix! Number"
       bulk_deposit_number_prefix: "!deposit_number_prefix!"
       bulk_deposit_number_hint: "Please enter the !deposit_number_prefix! Number from your GL008"
+    index_by_statement:
+      head: Reconcile %{model}
+      statement: Invoice
+      submit: "Reconcile"
+      display_items: "Display Individual Items"
+      statement_blank: "Please select an invoice"
+      deposit_number_blank: "!deposit_number_prefix! Number may not be blank"
 
   facility_users:
     title: "!Facility! Staff"
@@ -574,8 +598,8 @@ en:
       head: Add Estimate
       or: "or"
     show:
-      days: days
       download_csv: Download CSV
+      download_pdf: Download PDF
       recalculate: Recalculate
       duplicate: Duplicate Estimate
       updated_at_notice: "Prices last updated: %{updated_at}"
@@ -591,6 +615,8 @@ en:
     duplicate:
       success: Estimate successfully duplicated
       error: There was an error duplicating the estimate
+    pdf:
+      filename: "%{facility}_estimate_%{id}.pdf"
 
   facility_order_details:
     edit:

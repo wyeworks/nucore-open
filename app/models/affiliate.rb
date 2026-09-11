@@ -8,11 +8,10 @@ class Affiliate < ApplicationRecord
   scope :destroyable, -> { where.not(id: self.OTHER.id) }
   scope :alphabetical, -> { order(:name) }
 
-  # rubocop:disable Naming/MethodName, Naming/MemoizedInstanceVariableName
+  # rubocop:disable-next Naming/MethodName, Naming/MemoizedInstanceVariableName
   def self.OTHER
     @other ||= find_or_create_by(name: "Other") { |a| a.subaffiliates_enabled = true }
   end
-  # rubocop:enable Naming/MethodName, Naming/MemoizedInstanceVariableName
 
   before_destroy { throw :abort if other? }
 

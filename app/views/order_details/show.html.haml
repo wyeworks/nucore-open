@@ -69,9 +69,10 @@
           %th= OrderDetail.human_attribute_name(:quantity)
           %th= OrderDetail.human_attribute_name(:product)
           %th= OrderDetail.human_attribute_name(:status)
-          %th.currency= t(".th.cost")
-          - if @order_detail.has_subsidies?
-            %th.currency= t(".th.adjust")
+          - if show_price_breakdown?
+            %th.currency= t(".th.cost")
+            - if @order_detail.has_subsidies?
+              %th.currency= t(".th.adjust")
           %th.currency= t(".th.total")
       %tbody
         %tr
@@ -92,18 +93,21 @@
           %td
             = order_detail_presenter.order_status_display_name
             = order_detail_status_badges(@order_detail)
+          - currency_columns = show_price_breakdown? ? (@order_detail.has_subsidies? ? 3 : 2) : 1
           - if @order_detail.cost_estimated?
-            %td.estimated_cost.currency= show_estimated_cost(@order_detail)
-            - if @order_detail.has_subsidies?
-              %td.estimated_cost.currency= show_estimated_subsidy(@order_detail)
+            - if show_price_breakdown?
+              %td.estimated_cost.currency= show_estimated_cost(@order_detail)
+              - if @order_detail.has_subsidies?
+                %td.estimated_cost.currency= show_estimated_subsidy(@order_detail)
             %td.estimated_cost.currency= show_estimated_total(@order_detail)
           - elsif @order_detail.price_policy.nil?
-            %td{ colspan: 2 }= t(".unassigned")
+            %td{ colspan: currency_columns }= t(".unassigned")
 
           - else
-            %td.actual_cost.currency= show_actual_cost(@order_detail)
-            - if @order_detail.has_subsidies?
-              %td.actual_cost.currency= show_actual_subsidy(@order_detail)
+            - if show_price_breakdown?
+              %td.actual_cost.currency= show_actual_cost(@order_detail)
+              - if @order_detail.has_subsidies?
+                %td.actual_cost.currency= show_actual_subsidy(@order_detail)
             %td.actual_cost.currency= show_actual_total(@order_detail)
 
 = render partial: "/price_display_footnote"

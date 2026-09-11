@@ -271,6 +271,13 @@ en:
         unit_cost: Unit Price
         duration: Duration
         duration_mins: Duration (hh:mm)
+      estimate_detail/duration_unit:
+        days:
+          one: Day
+          other: Days
+        mins:
+          one: Minute
+          other: Minutes
       schedule_rule:
         start_time: Start Time
         end_time: End Time
@@ -433,6 +440,7 @@ en:
         creator: Imported by
         error_file: Error report
         processed_at: Processed at
+        upload_file: Uploaded file
       order_status:
         parent: Status of
       journal:

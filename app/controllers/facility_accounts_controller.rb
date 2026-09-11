@@ -105,7 +105,7 @@ class FacilityAccountsController < ApplicationController
 
     respond_to do |format|
       format.pdf do
-        @statement_pdf = StatementPdfFactory.instance(@statement, download: true)
+        @statement_pdf = StatementPdfFactory.instance(@statement)
         render "statements/show"
       end
     end

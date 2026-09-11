@@ -22,6 +22,7 @@ class PurchaseNotifier < ApplicationMailer
   # Notifies the specified facility staff member if any order is placed within a facility
   def order_notification(order, recipient)
     @order = order
+    @show_price_breakdown = true
     attach_all_icals_from_order(@order)
     product_count = order.products.count
 
@@ -40,6 +41,7 @@ class PurchaseNotifier < ApplicationMailer
     @user = args[:user]
     @order = args[:order]
     @greeting = text("views.purchase_notifier.order_receipt.intro")
+    @show_price_breakdown = SettingsHelper.feature_off?("pricing.hide_subsidy_from_customers")
     attach_all_icals_from_order(@order)
     send_nucore_mail to: args[:user].email, subject: text("views.purchase_notifier.order_receipt.subject")
   end

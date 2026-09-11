@@ -35,8 +35,9 @@
       %th= OrderDetail.human_attribute_name(:quantity)
       %th= OrderDetail.human_attribute_name(:status)
       - label_key_prefix = display_cost_prefix_for_order(@order)
-      %th= OrderDetail.human_attribute_name("#{label_key_prefix}_cost")
-      %th= OrderDetail.human_attribute_name("#{label_key_prefix}_subsidy")
+      - if @show_price_breakdown
+        %th= OrderDetail.human_attribute_name("#{label_key_prefix}_cost")
+        %th= OrderDetail.human_attribute_name("#{label_key_prefix}_subsidy")
       %th= OrderDetail.human_attribute_name("#{label_key_prefix}_total")
       %th= OrderDetail.human_attribute_name(:note).pluralize
   %tbody
@@ -50,15 +51,16 @@
             = order_detail.reservation
         %td= order_detail.wrapped_quantity
         %td= order_detail.order_status_display_name
-        %td= order_detail.display_cost unless order_detail.canceled?
-        %td= order_detail.display_subsidy unless order_detail.canceled?
+        - if @show_price_breakdown
+          %td= order_detail.display_cost unless order_detail.canceled?
+          %td= order_detail.display_subsidy unless order_detail.canceled?
         %td= order_detail.display_total unless order_detail.canceled?
         %td
           - if order_detail.note.present?
             = order_detail.note
           = render_view_hook "after_note", order_detail: order_detail
     %tr
-      %td{colspan: 6}
+      %td{colspan: @show_price_breakdown ? 6 : 4}
         %strong= text(".total")
       %td.currency
         = number_to_currency(@order.total)

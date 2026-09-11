@@ -26,9 +26,10 @@
       %th.centered= OrderDetail.human_attribute_name(:id)
       %th= OrderDetail.human_attribute_name(:quantity)
       %th= OrderDetail.human_attribute_name(:product)
-      %th.currency= t('.th.cost')
-      - if @order.has_subsidies?
-        %th.currency= t('.th.adjust')
+      - if show_price_breakdown?
+        %th.currency= t('.th.cost')
+        - if @order.has_subsidies?
+          %th.currency= t('.th.adjust')
       %th.currency= t('.th.total')
   %tbody
     - OrderDetailPresenter.wrap(@order_details).each do |order_detail|
@@ -50,13 +51,14 @@
           - if order_detail.note.present?
             .order-detail-extra.order-detail-note= "Note: #{order_detail.note}"
           = render_view_hook "after_note", order_detail: order_detail
-        %td.currency= order_detail.wrapped_cost
-        - if @order.has_subsidies?
-          %td.currency= order_detail.wrapped_subsidy
+        - if show_price_breakdown?
+          %td.currency= order_detail.wrapped_cost
+          - if @order.has_subsidies?
+            %td.currency= order_detail.wrapped_subsidy
         %td.currency= order_detail.wrapped_total
   %tfoot
     %tr
-      - colspan = @order.has_subsidies? ? 5 : 4
+      - colspan = show_price_breakdown? ? (@order.has_subsidies? ? 5 : 4) : 3
       %td.hide-on-mobile{ colspan: colspan }
         %strong= t('.total')
       %td.currency

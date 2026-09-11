@@ -7,14 +7,13 @@ class EstimateDetail < ApplicationRecord
   belongs_to :product
   belongs_to :price_policy
 
+  after_validation :set_price_policy, if: -> { recalculate || price_policy_id.nil? }
+
   before_save :clear_duration_fields
-  before_create :assign_price_policy_and_cost
-  before_update :assign_price_policy_and_cost, if: :recalculate
 
   validates :quantity, presence: true, numericality: { greater_than: 0 }
   validates :duration, numericality: { greater_than: 0 }, allow_nil: true
   validates :duration_unit, inclusion: { in: TIME_UNITS }, allow_nil: true
-  validate :price_policy_exists
 
   delegate :user, to: :estimate
 
@@ -29,20 +28,21 @@ class EstimateDetail < ApplicationRecord
     end
   end
 
-  def assign_price_policy_and_cost
-    pp = product.cheapest_price_policy(self, Time.current)
+  def set_price_policy
+    return if errors.present?
 
-    if pp.blank?
-      errors.add(:base, I18n.t("activerecord.errors.models.estimate_detail.no_price_policy"))
-      return false
+    price_policy = product.cheapest_price_policy(self, Time.current)
+
+    if price_policy.blank?
+      errors.add(:base, :no_price_policy)
+
+      false
+    else
+      self.price_policy = price_policy
+      self.cost = price_policy.estimate_cost_from_estimate_detail(self)
+
+      true
     end
-
-    cost = pp.estimate_cost_from_estimate_detail(self)
-
-    self.price_policy = pp
-    self.cost = cost
-
-    true
   end
 
   private
@@ -51,16 +51,6 @@ class EstimateDetail < ApplicationRecord
     unless product.order_quantity_as_time? || product.is_a?(Instrument)
       self.duration = nil
       self.duration_unit = nil
-    end
-  end
-
-  def price_policy_exists
-    return if product.blank? || user.blank?
-    return if marked_for_destruction?
-
-    pp = product.cheapest_price_policy(self, Time.current)
-    if pp.blank?
-      errors.add(:base, I18n.t("activerecord.errors.models.estimate_detail.no_price_policy"))
     end
   end
 end

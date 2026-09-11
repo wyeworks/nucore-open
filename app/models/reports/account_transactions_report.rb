@@ -12,6 +12,7 @@ class Reports::AccountTransactionsReport
     @order_detail_ids = order_detail_ids
     @date_range_field = options[:date_range_field] || "fulfilled_at"
     @label_key_prefix = options[:label_key_prefix] || :actual
+    @show_price_breakdown = options.fetch(:show_price_breakdown, true)
   end
 
   def to_csv
@@ -74,8 +75,7 @@ class Reports::AccountTransactionsReport
       Reservation.human_attribute_name(:actual_end_at),
       OrderDetail.human_attribute_name(:quantity),
       OrderDetail.human_attribute_name(:user),
-      OrderDetail.human_attribute_name("#{@label_key_prefix}_cost"),
-      OrderDetail.human_attribute_name("#{@label_key_prefix}_subsidy"),
+      *price_breakdown_headers,
       OrderDetail.human_attribute_name("#{@label_key_prefix}_total"),
       "#{Account.model_name.human} #{Account.human_attribute_name(:description)}",
       Account.model_name.human,
@@ -119,8 +119,7 @@ class Reports::AccountTransactionsReport
       format_usa_datetime(order_detail.time_data.try(:actual_end_at)),
       order_detail_duration(order_detail),
       order_detail.order.user.full_name,
-      order_detail.display_cost,
-      order_detail.display_subsidy,
+      *price_breakdown_values(order_detail),
       order_detail.display_total,
       order_detail.account.description,
       order_detail.account.account_number,
@@ -145,6 +144,21 @@ class Reports::AccountTransactionsReport
       row
     end
 
+  end
+
+  def price_breakdown_headers
+    return [] unless @show_price_breakdown
+
+    [
+      OrderDetail.human_attribute_name("#{@label_key_prefix}_cost"),
+      OrderDetail.human_attribute_name("#{@label_key_prefix}_subsidy"),
+    ]
+  end
+
+  def price_breakdown_values(order_detail)
+    return [] unless @show_price_breakdown
+
+    [order_detail.display_cost, order_detail.display_subsidy]
   end
 
   def notices_for(order_detail)

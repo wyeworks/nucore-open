@@ -72,7 +72,7 @@ class OrderDetail < ApplicationRecord
   # allow access to the vestal data.
   # once that data is no longer needed, this line and the
   # associated class can be removed
-  has_many   :vestal_versions, as: :versioned
+  has_many :vestal_versions, as: :versioned
 
   delegate :edit_url, to: :external_service_receiver, allow_nil: true
   delegate :in_cart?, :facility, :user, to: :order # user is the ordered_for user, not ordered_by user

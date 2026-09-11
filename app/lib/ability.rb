@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# rubocop:disable Metrics/CyclomaticComplexity
+# rubocop:disable-next Metrics/CyclomaticComplexity
 class Ability
 
   include CanCan::Ability
@@ -514,4 +514,3 @@ class Ability
   end
 
 end
-# rubocop:enable Metrics/CyclomaticComplexity

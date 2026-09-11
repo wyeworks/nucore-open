@@ -18,12 +18,12 @@ class ChangeReservations < ActiveRecord::Migration[4.2]
 
   def self.down
     change_table :reservations do |t|
-      t.remove   :order_detail_id
-      t.remove   :instrument_id
-      t.remove   :reserve_start_at
-      t.remove   :reserve_end_at
-      t.remove   :actual_start_at
-      t.remove   :actual_end_at
+      t.remove :order_detail_id
+      t.remove :instrument_id
+      t.remove :reserve_start_at
+      t.remove :reserve_end_at
+      t.remove :actual_start_at
+      t.remove :actual_end_at
     end
     remove_foreign_key :reservations, :order_details
     remove_foreign_key :reservations, :products, name: "reservations_instrument_id_fk"

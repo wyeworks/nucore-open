@@ -82,7 +82,7 @@ class FacilityReservationsController < ApplicationController
   # GET /facilities/:facility_id/instruments/:instrument_id/reservations/new
   # for admin reservations
   def new
-    @instrument   = current_facility.instruments.find_by!(url_name: params[:instrument_id])
+    @instrument = current_facility.instruments.find_by!(url_name: params[:instrument_id])
     @reservation = @instrument.next_available_reservation ||
                    @instrument.admin_reservations.build(duration_mins: @instrument.min_reserve_mins)
     @reservation = @reservation.becomes(AdminReservation)

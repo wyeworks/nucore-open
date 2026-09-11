@@ -14,7 +14,7 @@ class SecureRoomPricePolicy < PricePolicy
     exit_at = order_detail.occupancy.exit_at
     return unless entry_at && exit_at
 
-    calculator.calculate(entry_at, exit_at)
+    calculator.calculate(start_at: entry_at, end_at: exit_at)
   end
 
   def charge_for

@@ -88,7 +88,7 @@ class ProductUsersController < ApplicationController
       LogEvent.log(product_user, :delete, session_user)
       flash[:notice] = text("destroy.success", model: downcase_product_type)
     else
-      flash[:error]  = text("destroy.failure", model: downcase_product_type)
+      flash[:error] = text("destroy.failure", model: downcase_product_type)
     end
 
     redirect_to action: :index

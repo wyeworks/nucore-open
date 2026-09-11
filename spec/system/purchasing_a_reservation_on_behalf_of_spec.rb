@@ -105,7 +105,7 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
   end
 
   describe "creating multiple reservations" do
-    it "can create reservations in the future" do
+    it "can create reservations in the future", feature_setting: { "pricing.hide_subsidy_from_customers" => false } do
       fill_in "order[order_details][][quantity]", with: "2"
       click_button "Create Order", match: :first
       choose account.to_s
@@ -126,7 +126,7 @@ RSpec.describe "Purchasing a reservation on behalf of another user" do
       expect(page).to have_css(".currency .actual_cost", count: 0)
     end
 
-    it "can create reservations in the past" do
+    it "can create reservations in the past", feature_setting: { "pricing.hide_subsidy_from_customers" => false } do
       fill_in "order[order_details][][quantity]", with: "2"
       click_button "Create Order", match: :first
       choose account.to_s

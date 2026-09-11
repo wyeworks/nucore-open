@@ -1,38 +1,27 @@
 # frozen_string_literal: true
 
 class ExampleStatementPdf < StatementPdf
+  include OrdersPdfHelper
 
   include TextHelpers::Translation
 
   def generate(pdf)
+    generate_facility_header(pdf)
+
     generate_document_header(pdf)
-    generate_contact_info(pdf) if @facility.has_contact_info?
-    generate_remittance_information(pdf) if @account.remittance_information.present?
+    generate_contact_info(pdf) if facility.has_contact_info?
+    generate_remittance_information(pdf) if account.remittance_information.present?
+
     generate_order_detail_rows(pdf)
+
     generate_document_footer(pdf)
   end
 
   private
 
-  def generate_contact_info(pdf)
-    pdf.text @facility.address if @facility.address
-    pdf.move_down(10)
-
-    %w(phone_number fax_number email).each do |contact_field|
-      field_value = @facility.send(contact_field.to_sym)
-      next if field_value.blank?
-      pdf.text "<b>#{contact_field.titleize}:</b> #{field_value}", inline_format: true
-    end
-  end
-
-  def generate_document_footer(pdf)
-    pdf.number_pages "Page <page> of <total>", at: [0, -15]
-  end
-
   def generate_document_header(pdf)
     pdf.font_size = 10.5
 
-    pdf.text @facility.to_s, size: 20, style: :bold
     pdf.text "Invoice ##{@statement.invoice_number}"
     pdf.text "Invoice Date: #{format_usa_date(@statement.invoice_date)}"
     pdf.text "Account: #{@account}"
@@ -68,7 +57,7 @@ class ExampleStatementPdf < StatementPdf
   def order_detail_rows
     @statement.order_details.includes(:product).order(fulfilled_at: :desc).map do |order_detail|
       [
-        format_usa_datetime(order_detail.fulfilled_at),
+        I18n.l(order_detail.fulfilled_at),
         "##{order_detail}: #{order_detail.product}" + (order_detail.note.blank? ? "" : "\n#{normalize_whitespace(order_detail.note)}"),
         OrderDetailPresenter.new(order_detail).wrapped_quantity,
         number_to_currency(order_detail.actual_total),

@@ -55,7 +55,7 @@ class FacilityUserPermissionsController < ApplicationController
 
   def permission_params
     allowed = FacilityUserPermission.all_permissions
-    allowed -= FacilityUserPermission::ADMIN_ONLY_PERMISSIONS unless current_user.administrator?
+    allowed -= FacilityUserPermission.admin_only_permissions unless current_user.administrator?
     allowed -= [:quoting] if SettingsHelper.feature_off?(:show_estimates_option)
 
     permitted = params.require(:facility_user_permission).permit(*allowed)

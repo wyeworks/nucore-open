@@ -19,8 +19,9 @@
   #{OrderDetail.human_attribute_name(:quantity)}: #{OrderDetailPresenter.new(order_detail).wrapped_quantity}
   #{OrderDetail.human_attribute_name(:status)}: #{OrderDetailPresenter.new(order_detail).order_status_display_name}
   - label_key_prefix = display_cost_prefix_for_order_detail(order_detail)
-  #{OrderDetail.human_attribute_name("#{label_key_prefix}_cost")}: #{OrderDetailPresenter.new(order_detail).display_cost unless order_detail.canceled?}
-  #{OrderDetail.human_attribute_name("#{label_key_prefix}_subsidy")}: #{OrderDetailPresenter.new(order_detail).display_subsidy unless order_detail.canceled?}
+  - if @show_price_breakdown
+    #{OrderDetail.human_attribute_name("#{label_key_prefix}_cost")}: #{OrderDetailPresenter.new(order_detail).display_cost unless order_detail.canceled?}
+    #{OrderDetail.human_attribute_name("#{label_key_prefix}_subsidy")}: #{OrderDetailPresenter.new(order_detail).display_subsidy unless order_detail.canceled?}
   #{OrderDetail.human_attribute_name("#{label_key_prefix}_total")}: #{OrderDetailPresenter.new(order_detail).display_total unless order_detail.canceled?}
   - if order_detail.note.present?
 

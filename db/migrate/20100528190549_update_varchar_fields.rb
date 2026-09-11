@@ -15,7 +15,7 @@ class UpdateVarcharFields < ActiveRecord::Migration[4.2]
     change_column :accounts, :account_number,  :string, limit: 50,  null: false
     change_column :accounts, :description,     :string, limit: 50,  null: false
 
-    change_column :order_statuses, :name,      :string, limit: 50,  null: false
+    change_column :order_statuses, :name,      :string, limit: 50, null: false
 
     change_column :products, :type,            :string, limit: 50,  null: false
     change_column :products, :name,            :string, limit: 200, null: false
@@ -23,11 +23,11 @@ class UpdateVarcharFields < ActiveRecord::Migration[4.2]
     change_column :products, :unit_size,       :string, limit: 50,  null: true
     change_column :products, :relay_ip,        :string, limit: 15,  null: true
 
-    change_column :price_groups, :name,        :string, limit: 50,  null: false
+    change_column :price_groups, :name,        :string, limit: 50, null: false
 
-    change_column :price_group_members, :type, :string, limit: 50,  null: false
+    change_column :price_group_members, :type, :string, limit: 50, null: false
 
-    change_column :price_policies, :type,      :string, limit: 50,  null: false
+    change_column :price_policies, :type,      :string, limit: 50, null: false
   end
 
   def self.down
@@ -42,15 +42,15 @@ class UpdateVarcharFields < ActiveRecord::Migration[4.2]
     change_column :accounts, :account_number,  :string, limit: 100,  null: false
     change_column :accounts, :description,     :string, limit: 200,  null: false
 
-    change_column :order_statuses, :name,      :string, limit: 200,  null: false
+    change_column :order_statuses, :name,      :string, limit: 200, null: false
 
-    change_column :products, :type,            :string, limit: 200,  null: false
+    change_column :products, :type,            :string, limit: 200, null: false
 
-    change_column :price_groups, :name,        :string, limit: 200,  null: false
+    change_column :price_groups, :name,        :string, limit: 200, null: false
 
-    change_column :price_group_members, :type, :string, limit: 200,  null: false
+    change_column :price_group_members, :type, :string, limit: 200, null: false
 
-    change_column :price_policies, :type,      :string, limit: 200,  null: false
+    change_column :price_policies, :type,      :string, limit: 200, null: false
   end
 
 end

@@ -241,4 +241,30 @@ RSpec.describe PriceGroup do
     end
   end
 
+  describe ".for_public_estimate" do
+    it "returns the group named by the matching price_group setting" do
+      expect(described_class.for_public_estimate("base")).to eq(described_class.base)
+      expect(described_class.for_public_estimate("external")).to eq(described_class.external)
+    end
+
+    it "returns nil for a key with no configured name" do
+      expect(described_class.for_public_estimate("external_2")).to be_nil
+      expect(described_class.for_public_estimate("nonsense")).to be_nil
+    end
+
+    context "when a school configures an extra key" do
+      let(:initial_name) { Settings.price_group.name.external_2 }
+      let!(:non_profit) do
+        Settings.price_group.name.external_2 = "External Non-Profit Rate"
+        described_class.setup_global(name: "External Non-Profit Rate", is_internal: false, display_order: 2)
+      end
+
+      after { Settings.price_group.name.external_2 = initial_name }
+
+      it "resolves that key to its group" do
+        expect(described_class.for_public_estimate("external_2")).to eq(non_profit)
+      end
+    end
+  end
+
 end

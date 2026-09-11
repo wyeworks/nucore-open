@@ -74,4 +74,39 @@ RSpec.describe "FacilityEstimatesController" do
       include_examples "products from all facilities"
     end
   end
+
+  describe "show" do
+    let(:facility) { create(:setup_facility) }
+    let(:estimate) { create(:estimate, facility:) }
+    let(:action) do
+      -> { get facility_estimate_path(facility, estimate) }
+    end
+
+    before { login_as create(:user, :administrator) }
+
+    it "includes download links" do
+      action.call
+
+      expect(response).to have_http_status(:ok)
+      expect(page).to have_text("Download CSV")
+      expect(page).to have_text("Download PDF") if EstimatePdfFactory.defined?
+    end
+
+    context "when format is pdf" do
+      let(:action) do
+        -> { get facility_estimate_path(facility, estimate, format: :pdf) }
+      end
+
+      before do
+        skip("Estimate Pdf not defined") unless EstimatePdfFactory.defined?
+      end
+
+      it "responds with a pdf" do
+        action.call
+
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to include("application/pdf")
+      end
+    end
+  end
 end

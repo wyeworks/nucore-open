@@ -14,4 +14,5 @@
   %div
     = hidden_field_tag :email, current_user.email, disabled: true
     = hidden_field_tag :format, params[:format], disabled: true
+    = hidden_field_tag :show_items, params[:show_items], disabled: params[:show_items].blank?
     = f.submit t("shared.filter"), class: "btn"
