@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe ReservationWindow do
   describe "max_window" do
     let(:instrument) { create(:setup_instrument) }
-    let(:reservation) { create(:reservation, product: instrument) }
+    let(:reservation) { create(:setup_reservation, product: instrument) }
     let(:instance) do
       described_class.new(reservation, create(:user))
     end
