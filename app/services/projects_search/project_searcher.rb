@@ -11,7 +11,7 @@ module ProjectsSearch
     def options
       projects =
         if current_facility.cross_facility?
-          Project.where(id: order_details.select("distinct project_id")).order(:name)
+          Project.where(id: order_details.select("project_id")).order(:name)
         else
           project_ids =
             current_facility
