@@ -226,6 +226,14 @@ RSpec.configure do |config|
     Account.config.account_types.delete TestAccount.name
   end
 
+  config.before :each, :test_account_internal do
+    Account.config.journal_account_types << TestAccount.name
+  end
+
+  config.after :each, :test_account_internal do
+    Account.config.journal_account_types.delete TestAccount.name
+  end
+
   config.around :each, :use_test_account do |example|
     test_view_path = Rails.root.join("spec/support/views")
     view_paths_before = ApplicationController.view_paths

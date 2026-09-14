@@ -110,7 +110,7 @@ class FacilityJournalsController < ApplicationController
       end
     end
 
-    @journal.create_new_journal_rows! if @journal.persisted?
+    @journal.create_new_journal_rows if @journal.persisted?
 
     if @journal.persisted?
       @journal.create_spreadsheet if Journals::JournalFormat.exists?(:xls)

@@ -175,13 +175,18 @@ class Journal < ApplicationRecord
 
   delegate :to_s, to: :id
 
-  def create_new_journal_rows!
+  def create_new_journal_rows
     row_errors = create_journal_rows!(@order_details_for_creation)
     if row_errors.any?
       row_errors.each { |e| errors.add(:base, e) }
       destroy # so it's treated as a new record
-      raise ActiveRecord::RecordInvalid.new(self)
     end
+  end
+
+  def create_new_journal_rows!
+    create_new_journal_rows
+
+    raise ActiveRecord::RecordInvalid.new(self) if errors.present?
   end
 
   private

@@ -52,7 +52,7 @@ RSpec.describe "facilities journals" do
       end
     end
 
-    context "on error" do
+    context "on error", :use_test_account, :test_account_internal do
       context "when duplicate pending" do
         before { create(:journal, facility:, is_successful: nil) }
 
@@ -68,6 +68,53 @@ RSpec.describe "facilities journals" do
           get response.location
 
           expect(page).to have_text(I18n.t("controllers.facility_journals.create.duplicate"))
+        end
+      end
+
+      context "when creation fail half way on journal rows creation" do
+        let(:other_product) { create(:setup_item, facility:) }
+        let(:account) do
+          create(:test_account, :with_account_owner, created_by: 1)
+        end
+        let(:other_account) do
+          create(:test_account, :with_account_owner, created_by: 1)
+        end
+        let(:order) { create(:complete_order, product: product, account:) }
+        let(:order2) do
+          create(:complete_order, product: other_product, account: other_account)
+        end
+        let(:order_details) do
+          OrderDetail.where(order_id: [order.id, order2.id]).tap do |order_details|
+            order_details.update_all(reviewed_at: 1.day.ago)
+          end
+        end
+        let(:params) do
+          {
+            journal_date: Date.today,
+            order_detail_ids: order_details.pluck(:id),
+          }
+        end
+
+        before do
+          # Force validation error on transactions from order 2
+          other_account.update(expires_at: 1.year.ago)
+        end
+
+        it "does not create a journal" do
+          expect { action.call }.not_to(
+            change { Journal.count }
+          )
+        end
+
+        it "includes creation error" do
+          action.call
+
+          expect(response).to have_http_status(:found)
+          expect(response.location).to eq(new_facility_journal_url(facility))
+
+          get response.location
+
+          expect(page).to have_text("account expired")
         end
       end
     end
