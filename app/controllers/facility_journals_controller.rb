@@ -14,7 +14,6 @@ class FacilityJournalsController < ApplicationController
 
   before_action :init_journals, except: :create
   before_action :enable_sorting, only: :new
-  after_action :restrict_referrer, only: :create
 
   layout lambda {
     action_name.in?(%w(new)) ? "two_column_head" : "two_column"
@@ -243,14 +242,5 @@ class FacilityJournalsController < ApplicationController
     end
 
     flash[:error] = msg.html_safe if msg.present?
-  end
-
-  def restrict_referrer
-    # The referer can have a crazy long query string depending on how many checkboxes
-    # are selected. We've seen Apache not like stuff like that and give a "malformed
-    # header from script. Bad header" error which causes the page to completely bomb out.
-    # (See Task #48311). This is just preventative.
-    referer = response.headers["Referer"]
-    response.headers["Referer"] = referer[0..referrer.index("?")] if referer.present?
   end
 end
