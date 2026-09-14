@@ -47,7 +47,7 @@ module ResearchSafetyAdapters
     def certification_data
       return @certification_data if @certification_data
 
-      @certification_data = JSON.parse(client.certifications_for(@user.email))
+      @certification_data = JSON.parse(client.certifications_for(@user))
       if @certification_data.dig("errors")
         error_message = @certification_data.dig("errors").map do |error|
           "(#{error["status"]}) #{error["title"]}: #{error["detail"]}"

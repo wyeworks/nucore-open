@@ -5,8 +5,7 @@ require "rails_helper"
 RSpec.describe ResearchSafetyAdapters::ScishieldApiClient do
   subject(:client) { described_class.new }
   let!(:user) { create(:user, email: "Todd.Miller@oregonstate.edu") }
-  let(:email) { user.email }
-  let(:api_endpoint) { client.api_endpoint(user.email) }
+  let(:api_endpoint) { client.api_endpoint(user) }
   let(:response) { File.expand_path("../fixtures/scishield/success.json", __dir__) }
   let(:empty_response) { File.expand_path("../fixtures/scishield/empty_success.json", __dir__) }
   let(:api_response) { response }
@@ -37,7 +36,7 @@ RSpec.describe ResearchSafetyAdapters::ScishieldApiClient do
 
     context "when the response is valid" do
       it "returns false" do
-        expect(client.invalid_response?(email)).to be_falsy
+        expect(client.invalid_response?(user)).to be_falsy
       end
     end
 
@@ -46,7 +45,7 @@ RSpec.describe ResearchSafetyAdapters::ScishieldApiClient do
         let(:http_status) { 500 }
 
         it "is invalid" do
-          expect(client.invalid_response?(email)).to be_truthy
+          expect(client.invalid_response?(user)).to be_truthy
         end
       end
     end
@@ -55,7 +54,7 @@ RSpec.describe ResearchSafetyAdapters::ScishieldApiClient do
       let(:api_response) { empty_response }
 
       it "is invalid" do
-        expect(client.invalid_response?(email)).to be_truthy
+        expect(client.invalid_response?(user)).to be_truthy
       end
     end
   end

@@ -17,15 +17,30 @@ RSpec.describe "Scishield timeout", safety_adapter_class: ResearchSafetyAdapters
       price_group: instrument.price_policies.first.price_group,
     )
   end
+  let(:client_double) do
+    ResearchSafetyAdapters::ScishieldApiClient.new
+  end
+  let(:synchronizer_double) do
+    ResearchSafetyAdapters::ScishieldTrainingSynchronizer.new
+  end
+
+  before do
+    allow(ResearchSafetyAdapters::ScishieldApiClient).to(
+      receive(:new).and_return(client_double)
+    )
+    allow(ResearchSafetyAdapters::ScishieldTrainingSynchronizer).to(
+      receive(:new).and_return(synchronizer_double)
+    )
+  end
 
   describe "api_unavailable?" do
     before do
       # Raise a Net::OpenTimeout error when calling ScishieldApiClient#invalid_response?
-      allow_any_instance_of(ResearchSafetyAdapters::ScishieldApiClient).to(
+      allow(client_double).to(
         receive(:invalid_response?).and_raise(Net::OpenTimeout)
       )
       # We just want to test the retry logic, so we'll set the retry_max to 2
-      allow_any_instance_of(ResearchSafetyAdapters::ScishieldTrainingSynchronizer).to(
+      allow(synchronizer_double).to(
         receive(:retry_max).and_return(2)
       )
     end
@@ -39,7 +54,7 @@ RSpec.describe "Scishield timeout", safety_adapter_class: ResearchSafetyAdapters
     before do
       # This will cause ResearchSafetyAdapters::ScishieldApiClient#certifications_for
       # to raise ResearchSafetyAdapters::ScishieldApiError
-      allow_any_instance_of(ResearchSafetyAdapters::ScishieldApiClient).to(
+      allow(client_double).to(
         receive(:training_api_request).and_raise(Net::OpenTimeout)
       )
     end

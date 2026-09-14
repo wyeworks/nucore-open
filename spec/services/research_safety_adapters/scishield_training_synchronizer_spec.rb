@@ -2,12 +2,11 @@ require "rails_helper"
 
 RSpec.describe ResearchSafetyAdapters::ScishieldTrainingSynchronizer do
   let!(:user) { create(:user, email: "Todd.Miller@oregonstate.edu") }
-  let(:email) { user.email }
   let(:synchronizer) { described_class.new }
   let(:response) { File.expand_path("../../fixtures/scishield/success.json", __dir__) }
   let(:course_names) { ["Lab Safety Training for Lab Workers", "OSU Fire Extinguisher Course (in person)", "Hazardous Waste Awareness Training"] }
   let(:satus_code) { nil }
-  let(:api_endpoint) { ResearchSafetyAdapters::ScishieldApiClient.new.api_endpoint(user.email) }
+  let(:api_endpoint) { ResearchSafetyAdapters::ScishieldApiClient.new.api_endpoint(user) }
 
   before do
     # In settings.yml, `synchronizer.batch_sleep_time` defaults to 20 seconds

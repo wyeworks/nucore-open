@@ -43,7 +43,7 @@ module ResearchSafetyAdapters
         # Test API responses for `batch_size` random users
         users.sample(batch_size).map do |user|
           puts "Testing user: #{user.email}"
-          response_is_invalid = api_client.invalid_response?(user.email)
+          response_is_invalid = api_client.invalid_response?(user)
           puts "Invalid response: #{response_is_invalid}"
           response_is_invalid
         end.all?

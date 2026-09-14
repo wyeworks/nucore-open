@@ -14,8 +14,8 @@ module ResearchSafetyAdapters
     PRIVATE_KEY = Rails.application.secrets.dig(:scishield, :rsa_private_key)
     API_ENDPOINT = Rails.application.secrets.dig(:scishield, :scishield_endpoint)
 
-    def invalid_response?(email)
-      response = training_api_request(email)
+    def invalid_response?(user)
+      response = training_api_request(user)
       http_status_error = response.code.match?(/5|403|404/)
       certification_data = JSON.parse(response.body)
       certification_data_error = certification_data.dig("data").nil?
@@ -52,23 +52,23 @@ module ResearchSafetyAdapters
       [KEY, KEY_ID, PRIVATE_KEY].all?(&:present?)
     end
 
-    def certifications_for(email)
-      response = training_api_request(email)
+    def certifications_for(user)
+      response = training_api_request(user)
       response.body
     rescue Net::OpenTimeout
       raise ScishieldApiError, I18n.t("services.research_safety_adapters.scishield_api_client.request_failed")
     end
 
-    def training_api_request(email)
-      uri = URI(api_endpoint(email))
+    def training_api_request(user)
+      uri = URI(api_endpoint(user))
       req = Net::HTTP::Get.new(uri)
       req["accept"] = "application/json"
       req["authorization"] = "UsersJwt #{token}"
       Net::HTTP.start(uri.host, uri.port, use_ssl: true) { |http| http.request(req) }
     end
 
-    def api_endpoint(email)
-      "#{API_ENDPOINT}?#{training_query(email)}"
+    def api_endpoint(user)
+      "#{API_ENDPOINT}?#{training_query(user)}"
     end
 
     # Builds a nested query
@@ -76,7 +76,9 @@ module ResearchSafetyAdapters
     # Returns a String
     #
     # "include=course_id&filter[status]=1&filter[user][condition][operator]=%3D&filter[user][condition][path]=user_id.mail&filter[user][condition][value]=Todd.Miller%40oregonstate.edu"
-    def training_query(email)
+    def training_query(user)
+      email = user.email
+
       Rack::Utils.build_nested_query(
         include: "course_id",
         filter: {

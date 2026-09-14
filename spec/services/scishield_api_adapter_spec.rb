@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe ResearchSafetyAdapters::ScishieldApiAdapter do
   subject(:adapter) { described_class.new(user) }
   let(:user) { create(:user, email: "research@osu.edu") }
-  let(:api_endpoint) { adapter.client.api_endpoint(user.email) }
+  let(:api_endpoint) { adapter.client.api_endpoint(user) }
 
   context "Scishield trainings do not exist in database" do
     describe "with a successful response" do
