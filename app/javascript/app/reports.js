@@ -4,6 +4,7 @@
  * DS207: Consider shorter variations of null checks
  * Full docs: https://github.com/decaffeinate/decaffeinate/blob/main/docs/suggestions.md
  */
+import debounce from "debounce";
 import { Flash } from "./flash";
 
 class TabbableReports {
@@ -76,7 +77,6 @@ class TabbableReports {
 
       load: (_, ui) => {
         this.update_export_all_link_visibility(ui.panel);
-        this.fix_bad_dates(ui.panel);
         return this.update_export_urls();
       }
     });
@@ -92,17 +92,11 @@ class TabbableReports {
 
   init_form() {
     $('.datepicker').datepicker();
-    return this.$element.find(':input').change(() => this.update_parameters());
+    return this.$element.find(':input').change(debounce(() => this.update_parameters(), 400));
   }
 
   update_href(tab) {
     return tab.find('a').attr('href', this.tab_url(tab));
-  }
-
-  // Make sure to update the date params in case they were empty or invalid
-  fix_bad_dates(panel) {
-    $('#date_start').val($(panel).find('.updated_values .date_start').text());
-    return $('#date_end').val($(panel).find('.updated_values .date_end').text());
   }
 
   init_pagination() {

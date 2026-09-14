@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@hotwired/stimulus": "^3.2.2",
-    "@hotwired/turbo-rails": "^8.0.23"
+    "@hotwired/turbo-rails": "^8.0.23",
+    "debounce": "^3.0.0"
   }
 }
