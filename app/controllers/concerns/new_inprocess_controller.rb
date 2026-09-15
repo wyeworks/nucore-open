@@ -8,17 +8,10 @@ module NewInprocessController
     order_details = new_or_in_process_orders.joins(:order)
 
     @search_form = TransactionSearch::SearchForm.new(params[:search], defaults: { date_range_field: "ordered_at", allowed_date_fields: ["ordered_at"] })
-    searchers = [
-      TransactionSearch::ProductSearcher,
-      TransactionSearch::OrderedForSearcher,
-      TransactionSearch::OrderStatusSearcher,
-      TransactionSearch::DateRangeSearcher,
-      TransactionSearch::CrossCoreSearcher,
-    ]
 
     @search =
       TransactionSearch::Searcher
-      .new(current_facility, *searchers)
+      .new(current_facility, *new_inprocess_searchers)
       .search(order_details, @search_form)
 
     @order_details = @search.order_details.includes(:order_status).joins_assigned_users.reorder(sort_clause)
@@ -32,6 +25,16 @@ module NewInprocessController
   end
 
   private
+
+  def new_inprocess_searchers
+    [
+      TransactionSearch::ProductSearcher,
+      TransactionSearch::OrderedForSearcher,
+      TransactionSearch::OrderStatusSearcher,
+      TransactionSearch::DateRangeSearcher,
+      TransactionSearch::CrossCoreSearcher,
+    ]
+  end
 
   def new_or_in_process_orders
     raise NotImplementedError
