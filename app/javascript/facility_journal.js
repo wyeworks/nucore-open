@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   }
 
-  function handleSubmit(event) {
+  function handleSubmit(_event) {
     disableSubmitBtns();
     document.getElementById("journals_create_form").submit();
   }
