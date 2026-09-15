@@ -65,6 +65,7 @@ en:
       create:
         notice: "The journal file has been created successfully"
         more_errors: "There are more errors. Please resolve those above to see those that remain."
+        duplicate: "There's already a pending journal for this facility"
       reconcile:
         success: "%{count} payment(s) successfully reconciled"
         errors:
