@@ -8,7 +8,7 @@ class Order < ApplicationRecord
   belongs_to :account, optional: true
   belongs_to :facility, optional: true
   belongs_to :order_import, optional: true
-  belongs_to :cross_core_project, class_name: "Project", optional: true
+  belongs_to :cross_core_project, class_name: "Project", optional: true, counter_cache: true
   has_many   :order_details, inverse_of: :order, dependent: :destroy
   has_many :products, through: :order_details
 

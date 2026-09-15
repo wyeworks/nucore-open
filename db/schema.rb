@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_07_14_194847) do
+ActiveRecord::Schema[8.0].define(version: 2026_08_19_140538) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -794,6 +794,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_07_14_194847) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "active", default: true, null: false
+    t.integer "orders_count", default: 0, null: false
     t.index ["facility_id", "name"], name: "index_projects_on_facility_id_and_name", unique: true
     t.index ["facility_id"], name: "index_projects_on_facility_id"
   end

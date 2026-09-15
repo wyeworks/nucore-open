@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe TransactionSearch::Searcher, :use_test_account do
-
   describe "suspended accounts filter" do
     let(:facility) { create(:setup_facility) }
     let(:user) { create(:user) }
@@ -19,7 +18,7 @@ RSpec.describe TransactionSearch::Searcher, :use_test_account do
       )
     end
     let(:searcher) do
-      described_class.new(suspended_accounts: true)
+      described_class.new(facility, suspended_accounts: true)
     end
     let(:searched_order_details) do
       searcher.search(
