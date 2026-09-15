@@ -1,12 +1,6 @@
 - if @earliest_journal_date
   = content_for :head_content do
     = javascript_include_tag "facility_journal"
-    :javascript
-      $(function(){
-        $("#journals_create_form").submit(function(e) {
-          $(e.target).find(":submit").attr("disabled", "true");
-        });
-      });
 
 - if @journal_creation_reminder
   = render "journal_creation_modal", reminder_message: @journal_creation_reminder.message

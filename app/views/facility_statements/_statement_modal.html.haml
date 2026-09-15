@@ -13,5 +13,5 @@
 
       .modal-footer
         %button.btn.btn-default{ type: "button", "data-dismiss" => "modal" }= text("views.facility_statements.statement_modal.cancel")
-        %button.btn.btn-primary.js--saveStatementButton{ type: "button" }= text("views.facility_statements.statement_modal.save")
-        %span.js--statementHelper{ hidden: true } Processing, please wait...
+        %button.btn.btn-primary.js--saveStatementButton{ type: "button", data: { disable_with: t("shared.loading") } }
+          = text("views.facility_statements.statement_modal.save")
