@@ -307,7 +307,7 @@ class Ability
 
   def account_administrator_abilities(user, resource, controller)
     if resource.is_a?(OrderDetail) && user.account_administrator_of?(resource.account)
-      can [:show, :update, :dispute], OrderDetail, account: { id: resource.account_id }
+      can [:show, :update, :dispute, :sample_results, :sample_results_zip, :template_results], OrderDetail, account: { id: resource.account_id }
     end
 
     if resource.is_a?(Account) && user.account_administrator_of?(resource)
@@ -472,8 +472,8 @@ class Ability
       project = resource.order.cross_core_project
 
       if project.present? && can_manage_cross_core_orders_at?(user, project.facility)
-        can [:add_accessories, :new, :show, :update, :cancel, :template_results], OrderDetail
-        can [:order_file, :upload_order_file, :remove_order_file], OrderDetail, order: { cross_core_project_id: project.id }
+        can [:add_accessories, :new, :show, :update, :cancel, :sample_results, :sample_results_zip,
+             :template_results, :order_file, :upload_order_file, :remove_order_file], OrderDetail, order: { cross_core_project_id: project.id }
       end
     end
 

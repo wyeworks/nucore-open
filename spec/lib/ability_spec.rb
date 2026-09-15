@@ -760,14 +760,15 @@ RSpec.describe Ability do
 
           it_is_allowed_to([:add_accessories, :new, :show, :update, :cancel, :template_results], OrderDetail)
 
-          [:order_file, :upload_order_file, :remove_order_file].each do |action|
+          [:sample_results, :sample_results_zip, :template_results, :order_file, :upload_order_file, :remove_order_file].each do |action|
             it { is_expected.to be_allowed_to(action, cross_core_order_detail) }
           end
 
-          it "does not allow order form access outside the authorized project" do
+          it "does not allow cross-core actions outside the authorized project" do
             unrelated_detail = build_stubbed(:order_detail, order: build_stubbed(:order, facility: other_facility))
 
-            [:order_file, :upload_order_file, :remove_order_file].each do |action|
+            [:add_accessories, :new, :show, :update, :cancel, :sample_results, :sample_results_zip,
+             :template_results, :order_file, :upload_order_file, :remove_order_file].each do |action|
               expect(ability).not_to be_allowed_to(action, unrelated_detail)
             end
           end
@@ -1074,10 +1075,42 @@ RSpec.describe Ability do
     end
 
     context "when managing order details of own account" do
-      let(:order) { build_stubbed(:order, facility: facility) }
-      let(:subject_resource) { build_stubbed(:order_detail, order: order, account: account) }
+      let(:order) { build_stubbed(:order, facility:, user: build_stubbed(:user)) }
+      let(:subject_resource) { build_stubbed(:order_detail, order:, account:) }
+      let(:other_detail) { build_stubbed(:order_detail, order:, account: build_stubbed(:account)) }
 
       it_is_allowed_to([:show, :update, :dispute], OrderDetail)
+
+      [:sample_results, :sample_results_zip, :template_results].each do |action|
+        it "allows #{action} only for the administered account" do
+          expect(ability).to be_allowed_to(action, subject_resource)
+          expect(ability).not_to be_allowed_to(action, other_detail)
+        end
+      end
+
+      context "as a business administrator" do
+        let(:account) { create(:setup_account) }
+
+        before { create(:account_user, :business_administrator, account:, user:) }
+
+        it "allows account file downloads" do
+          [:sample_results, :sample_results_zip, :template_results].each do |action|
+            expect(ability).to be_allowed_to(action, subject_resource)
+          end
+        end
+      end
+
+      context "as a purchaser" do
+        let(:account) { create(:setup_account) }
+
+        before { create(:account_user, :purchaser, account:, user:) }
+
+        it "does not allow downloading another user's order files" do
+          [:sample_results, :sample_results_zip, :template_results].each do |action|
+            expect(ability).not_to be_allowed_to(action, subject_resource)
+          end
+        end
+      end
     end
   end
 end
