@@ -54,6 +54,12 @@ RSpec.describe "facilities journals" do
 
     context "on error", :use_test_account, :test_account_internal do
       context "when duplicate pending" do
+        include TextHelpers::Translation
+
+        def translation_scope
+          ""
+        end
+
         before { create(:journal, facility:, is_successful: nil) }
 
         it "redirects to new" do
@@ -67,7 +73,7 @@ RSpec.describe "facilities journals" do
           action.call
           get response.location
 
-          expect(page).to have_text(I18n.t("controllers.facility_journals.create.duplicate"))
+          expect(page).to have_text(text("controllers.facility_journals.create.duplicate"))
         end
       end
 

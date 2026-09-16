@@ -101,7 +101,7 @@ class FacilityJournalsController < ApplicationController
       current_facility.lock!
 
       if current_facility.journals.pending.exists?
-        flash[:error] = t("controllers.facility_journals.create.duplicate")
+        flash[:error] = text("controllers.facility_journals.create.duplicate")
         return redirect_to new_facility_journal_path
       else
         @journal.defer_journal_row_creation = true
