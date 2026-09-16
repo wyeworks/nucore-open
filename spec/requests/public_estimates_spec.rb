@@ -51,7 +51,9 @@ RSpec.describe "Public estimates" do
 
     it "prices the estimate with an extra configured customer type" do
       initial_types = Settings.public_estimates.customer_types
+      initial_name = Settings.price_group.name.cancer_center
       Settings.public_estimates.customer_types = %w[base external cancer_center]
+      Settings.price_group.name.cancer_center = "Cancer Center Rate"
       cancer_center = PriceGroup.setup_global(name: Settings.price_group.name.cancer_center, is_internal: false, display_order: 2)
       create(:item_price_policy, product: item, price_group: cancer_center, unit_cost: 25, unit_subsidy: 0)
 
@@ -62,6 +64,7 @@ RSpec.describe "Public estimates" do
       expect(response.body).to include("$50.00")
     ensure
       Settings.public_estimates.customer_types = initial_types
+      Settings.price_group.name.cancer_center = initial_name
     end
 
     it "shows a print shortcut and the selected facility and customer type with the results" do
