@@ -163,8 +163,8 @@ class FacilityReservationsController < ApplicationController
     @display_datetime = parse_iso_date(params[:date])&.beginning_of_day || Time.current.beginning_of_day
 
     @schedules = current_facility.schedules_for_timeline(:facility_instruments)
-    instrument_ids = @schedules.flat_map { |schedule| schedule.facility_instruments.map(&:id) }
-    @reservations_by_instrument = Reservation.for_timeline(@display_datetime, instrument_ids).group_by(&:product)
+    @instruments = @schedules.flat_map(&:facility_instruments)
+    @reservations_by_instrument = Reservation.for_timeline(@display_datetime, @instruments.map(&:id)).group_by(&:product)
   end
 
   protected

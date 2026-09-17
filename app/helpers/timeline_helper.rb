@@ -2,6 +2,16 @@
 
 module TimelineHelper
 
+  def show_relay_controls?(instrument)
+    @display_datetime.today? && instrument.has_real_relay? && can?(:switch, Instrument)
+  end
+
+  def show_refresh_all_relays?(instruments)
+    return false unless can?(:switch, Instrument)
+
+    instruments.any? { |instrument| show_relay_controls?(instrument) }
+  end
+
   def reservation_classes(reservation, product = nil)
     classes = ["unit"]
     if reservation.product == product

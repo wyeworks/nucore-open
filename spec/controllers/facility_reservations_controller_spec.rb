@@ -273,6 +273,60 @@ RSpec.describe FacilityReservationsController do
         do_request
         expect(response.body).not_to include("relay_checkbox")
       end
+
+      it "shows the Refresh all relays button when an instrument has a relay" do
+        allow_any_instance_of(Instrument).to receive(:has_real_relay?).and_return(true)
+        do_request
+        expect(response.body).to include("refresh_all_relays")
+      end
+
+      it "does not show the refresh all relays button when no instrument has a relay" do
+        allow_any_instance_of(Instrument).to receive(:has_real_relay?).and_return(false)
+        do_request
+        expect(response.body).not_to include("refresh_all_relays")
+      end
+
+      it "does not show the refresh all relays button when the date is not today" do
+        @params[:date] = "2015-06-14"
+        allow_any_instance_of(Instrument).to receive(:has_real_relay?).and_return(true)
+        do_request
+        expect(response.body).not_to include("refresh_all_relays")
+      end
+    end
+
+    context "relay controls with granular permissions", feature_setting: { granular_permissions: true } do
+      let(:user) { create(:user) }
+
+      before :each do
+        allow_any_instance_of(Instrument).to receive(:has_real_relay?).and_return(true)
+        create(:facility_user_permission, user:, facility: @authable, **permissions)
+        sign_in user
+        @method = :get
+        @action = :timeline
+        @params = { facility_id: @authable.url_name }
+      end
+
+      describe "without the instrument management permission" do
+        let(:permissions) { { read_access: true } }
+
+        it "does not render the relay toggles or the refresh all button" do
+          do_request
+          expect(response.body).not_to include("relay_checkbox")
+          expect(response.body).not_to include("relay_refresh_btn")
+          expect(response.body).not_to include("refresh_all_relays")
+        end
+      end
+
+      describe "with the instrument management permission" do
+        let(:permissions) { { read_access: true, instrument_management: true } }
+
+        it "renders the relay toggles and the refresh all button" do
+          do_request
+          expect(response.body).to include("relay_checkbox")
+          expect(response.body).to include("relay_refresh_btn")
+          expect(response.body).to include("refresh_all_relays")
+        end
+      end
     end
 
     context "orders" do
