@@ -28,6 +28,8 @@ class TimedServicePricePolicy < PricePolicy
       .new(self)
       .calculate(duration: estimate_detail.duration, minimum_cost: false)
 
+    return unless costs
+
     net_cost_for_one = costs[:cost] - costs[:subsidy]
 
     net_cost_for_one * estimate_detail.quantity

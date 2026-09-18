@@ -14,19 +14,19 @@ RSpec.describe "Public estimates" do
 
   context "when the feature is enabled", feature_setting: { public_estimates: true, reload_routes: true } do
     it "is reachable without logging in" do
-      get "/estimate"
+      get estimate_path
 
       expect(response).to have_http_status(:ok)
     end
 
     it "lists the products of the selected facility" do
-      get "/estimate", params: { facility_id: facility.id }
+      get estimate_path, params: { facility_id: facility.id }
 
       expect(response.body).to include(item.name)
     end
 
     it "prices the estimate for an internal customer" do
-      get "/estimate", params: {
+      get estimate_path, params: {
         customer_type: "base", facility_id: facility.id, quantities: { item.id.to_s => "2" }
       }
 
@@ -34,7 +34,7 @@ RSpec.describe "Public estimates" do
     end
 
     it "prices the estimate for an external customer" do
-      get "/estimate", params: {
+      get estimate_path, params: {
         customer_type: "external", facility_id: facility.id, quantities: { item.id.to_s => "2" }
       }
 
@@ -44,7 +44,7 @@ RSpec.describe "Public estimates" do
     it "excludes bundles, which have no price policies of their own" do
       bundle = create(:bundle, facility:, bundle_products: [item])
 
-      get "/estimate", params: { facility_id: facility.id }
+      get estimate_path, params: { facility_id: facility.id }
 
       expect(response.body).to_not include(bundle.name)
     end
@@ -57,7 +57,7 @@ RSpec.describe "Public estimates" do
       cancer_center = PriceGroup.setup_global(name: Settings.price_group.name.cancer_center, is_internal: false, display_order: 2)
       create(:item_price_policy, product: item, price_group: cancer_center, unit_cost: 25, unit_subsidy: 0)
 
-      get "/estimate", params: {
+      get estimate_path, params: {
         customer_type: "cancer_center", facility_id: facility.id, quantities: { item.id.to_s => "2" }
       }
 
@@ -68,7 +68,7 @@ RSpec.describe "Public estimates" do
     end
 
     it "shows a print shortcut and the selected facility and customer type with the results" do
-      get "/estimate", params: {
+      get estimate_path, params: {
         customer_type: "external", facility_id: facility.id, quantities: { item.id.to_s => "1" }
       }
 
@@ -81,26 +81,40 @@ RSpec.describe "Public estimates" do
     it "does not list a product with no rate for the selected price group" do
       unpriced = create(:setup_item, facility:, name: "Unpriced Widget")
 
-      get "/estimate", params: { customer_type: "base", facility_id: facility.id }
+      get estimate_path, params: { customer_type: "base", facility_id: facility.id }
 
       expect(response.body).to include(item.name)
       expect(response.body).to_not include(unpriced.name)
     end
 
     it "ignores products with no quantity" do
-      get "/estimate", params: {
+      get estimate_path, params: {
         customer_type: "base", facility_id: facility.id, quantities: { item.id.to_s => "0" }
       }
 
       expect(response.body).to_not include("Estimated cost")
     end
+
+    context "when time based product duraiton is nil" do
+      let!(:timed_service) do
+        create(:timed_service, facility:)
+      end
+
+      it "ignores time based products with no duration" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          quantities: { timed_service.id.to_s => "1" },
+        }
+
+        expect(page).not_to have_text("Estimated cost")
+      end
+    end
   end
 
   context "when the feature is disabled", feature_setting: { public_estimates: false, reload_routes: true } do
-    it "does not route" do
-      get "/estimate"
-
-      expect(response).to have_http_status(:not_found)
+    it "does not define the route" do
+      expect(Rails.application.routes.url_helpers).not_to respond_to(:estimate_path)
     end
   end
 end

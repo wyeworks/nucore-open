@@ -10,8 +10,10 @@ module PricePolicies
       @price_policy = price_policy
     end
 
-    def calculate(...)
-      strategy_class.new(price_policy, ...).calculate
+    def calculate(**kwargs)
+      return if kwargs.compact_blank.blank?
+
+      strategy_class.new(price_policy, **kwargs).calculate
     end
 
     private

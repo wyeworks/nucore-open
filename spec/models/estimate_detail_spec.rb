@@ -5,12 +5,40 @@ require "rails_helper"
 RSpec.describe EstimateDetail do
   let(:facility) { create(:setup_facility) }
   let(:price_group) { facility.price_groups.first }
-  let!(:item) { create(:setup_item, facility:) }
-  let!(:item_price_policy) do
-    create(:item_price_policy, product: item, price_group:, unit_cost: 25, unit_subsidy: 5)
+
+  describe "create without duration" do
+    let(:timed_service) { create(:setup_timed_service, facility:) }
+    let(:estimate) do
+      Estimate.new(facility:, price_group:)
+    end
+    let(:estimate_detail) do
+      estimate.estimate_details.build(
+        product: timed_service,
+        duration_unit: timed_service.time_unit,
+        quantity: 1,
+      )
+    end
+
+    before do
+      create(:timed_service_price_policy, product: timed_service, price_group:, unit_cost: 25)
+    end
+
+    it "is not valid if duration is not specified" do
+      expect(estimate_detail).not_to be_valid
+    end
+
+    it "is valid if duration is not specified" do
+      estimate_detail.duration = 1
+
+      expect(estimate_detail).to be_valid
+    end
   end
 
   describe "#set_price_policy without a user" do
+    let!(:item) { create(:setup_item, facility:) }
+    let!(:item_price_policy) do
+      create(:item_price_policy, product: item, price_group:, unit_cost: 25, unit_subsidy: 5)
+    end
     let(:persisted_detail) do
       estimate = create(:estimate, facility:, price_group:)
       estimate.estimate_details.create!(product: item, quantity: 3)
