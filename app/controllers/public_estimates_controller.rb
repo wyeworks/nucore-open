@@ -66,15 +66,18 @@ class PublicEstimatesController < ApplicationController
       product = products[product_id]
       next if product.blank?
 
-      estimate.estimate_details.build(
+      estimate_detail = estimate.estimate_details.build(
         product:,
         quantity: quantity.to_i,
         duration: requested_durations[product_id].presence,
         duration_unit: product.time_unit,
       )
+
+      estimate.estimate_details.destroy unless estimate_detail.valid?
     end
 
-    estimate.estimate_details.each(&:set_price_policy)
+    estimate.estimate_details = estimate.estimate_details.to_a.filter(&:valid?)
+
     estimate
   end
 
