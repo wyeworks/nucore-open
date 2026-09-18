@@ -11,7 +11,7 @@ module PricePolicies
     end
 
     def calculate(**kwargs)
-      return if kwargs.compact_blank.blank?
+      return if kwargs.slice(:duration, :start_at, :end_at).compact_blank.blank?
 
       strategy_class.new(price_policy, **kwargs).calculate
     end

@@ -18,8 +18,10 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     let(:product) { create(:setup_instrument, skip_schedule_rules: true) }
     let(:price_group) { PriceGroup.base }
 
-    it "returns nil if args are nil" do
-      expect(calculator.calculate(duration: nil, start_at: nil, end_at: nil)).to be_nil
+    it "returns nil if time args are nil" do
+      expect(
+        calculator.calculate(duration: nil, start_at: nil, end_at: nil, minimum_cost: true),
+      ).to be_nil
     end
 
     it "returns nil if no args" do
