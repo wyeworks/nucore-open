@@ -2,6 +2,26 @@
 
 module TimelineHelper
 
+  def show_relay_controls?(instrument)
+    @display_datetime.today? && instrument.has_real_relay?
+  end
+
+  def show_refresh_all_relays?(instruments)
+    instruments.any? { |instrument| show_relay_controls?(instrument) }
+  end
+
+  def relay_toggle_options(instrument)
+    options = { disabled: true }
+
+    options[:data] = if can?(:switch, Instrument)
+                       { relay_url: facility_instrument_switch_path(instrument.facility, instrument) }
+                     else
+                       { readonly: true }
+                     end
+
+    options
+  end
+
   def reservation_classes(reservation, product = nil)
     classes = ["unit"]
     if reservation.product == product

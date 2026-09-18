@@ -30,9 +30,10 @@
         inline_label: true,
         label: false,
         wrapper_html: { class: "compressed-inline" }
-      %button.btn.btn-default.btn-sm#refresh_all_relays{ type: "button", title: t("instruments.timeline.refresh_all_statuses") }
-        %i.fa.fa-refresh
-        = t("instruments.timeline.refresh_all")
+      - if show_refresh_all_relays?(@instruments)
+        %button.btn.btn-default.btn-sm#refresh_all_relays{ type: "button", title: t("instruments.timeline.refresh_all_statuses") }
+          %i.fa.fa-refresh
+          = t("instruments.timeline.refresh_all")
 
 .clear
 .col-md-12.timeline-wrapper

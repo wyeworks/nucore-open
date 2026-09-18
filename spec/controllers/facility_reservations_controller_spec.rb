@@ -273,6 +273,7 @@ RSpec.describe FacilityReservationsController do
         do_request
         expect(response.body).not_to include("relay_checkbox")
       end
+
     end
 
     context "orders" do
