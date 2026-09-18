@@ -309,20 +309,32 @@ RSpec.describe FacilityReservationsController do
       describe "without the instrument management permission" do
         let(:permissions) { { read_access: true } }
 
-        it "does not render the relay toggles or the refresh all button" do
+        it "renders the relay toggles as read-only" do
           do_request
-          expect(response.body).not_to include("relay_checkbox")
-          expect(response.body).not_to include("relay_refresh_btn")
-          expect(response.body).not_to include("refresh_all_relays")
+          expect(response.body).to include("relay_checkbox")
+          expect(response.body).to include("data-readonly")
+          expect(response.body).not_to include("data-relay-url")
+        end
+
+        it "still renders the status refresh buttons" do
+          do_request
+          expect(response.body).to include("relay_refresh_btn")
+          expect(response.body).to include("refresh_all_relays")
         end
       end
 
       describe "with the instrument management permission" do
         let(:permissions) { { read_access: true, instrument_management: true } }
 
-        it "renders the relay toggles and the refresh all button" do
+        it "renders the relay toggles as switchable" do
           do_request
           expect(response.body).to include("relay_checkbox")
+          expect(response.body).to include("data-relay-url")
+          expect(response.body).not_to include("data-readonly")
+        end
+
+        it "renders the status refresh buttons" do
+          do_request
           expect(response.body).to include("relay_refresh_btn")
           expect(response.body).to include("refresh_all_relays")
         end

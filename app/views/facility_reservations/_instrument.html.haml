@@ -17,5 +17,5 @@
         %i.fa.fa-refresh
         %span.relay_updated_at
       .relay_checkbox
-        = check_box_tag "relay[#{instrument.id}]", 1, false, :disabled => true, :"data-relay-url" => facility_instrument_switch_path(instrument.facility, instrument)
+        = check_box_tag "relay[#{instrument.id}]", 1, false, relay_toggle_options(instrument)
         .loading_box

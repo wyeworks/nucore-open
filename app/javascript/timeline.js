@@ -63,7 +63,7 @@ $(function() {
 
   relayCheckboxes = $('.relay_checkbox :checkbox')
   if (relayCheckboxes.length > 0) {
-    relayCheckboxes.bind('click', function(e) {
+    relayCheckboxes.not('[data-readonly]').bind('click', function(e) {
       if (confirm("Are you sure you want to toggle the relay?")) {
         $(this).parent().addClass("loading");
         $.ajax({
@@ -81,8 +81,8 @@ $(function() {
       } else {
         return false;
       }
-    })
-    .toggleSwitch();
+    });
+    relayCheckboxes.toggleSwitch();
   }
 
   function loadRelayStatuses() {
@@ -111,7 +111,7 @@ $(function() {
       // No cached status - disable checkbox until status is refreshed
       $checkbox.prop("disabled", true);
     } else {
-      $checkbox.prop("disabled", false).prop("checked", stat.is_on);
+      $checkbox.prop("disabled", $checkbox.data("readonly") === true).prop("checked", stat.is_on);
     }
     $checkbox.parent().removeClass("loading");
     $checkbox.trigger("change");
