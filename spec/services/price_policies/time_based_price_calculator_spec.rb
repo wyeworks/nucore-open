@@ -14,6 +14,21 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
   end
   let(:options) { {} }
 
+  context "when missing arguments" do
+    let(:product) { create(:setup_instrument, skip_schedule_rules: true) }
+    let(:price_group) { PriceGroup.base }
+
+    it "returns nil if time args are nil" do
+      expect(
+        calculator.calculate(duration: nil, start_at: nil, end_at: nil, minimum_cost: true),
+      ).to be_nil
+    end
+
+    it "returns nil if no args" do
+      expect(calculator.calculate).to be_nil
+    end
+  end
+
   shared_examples "handles minimum cost and discounts" do
     let(:price_group) { PriceGroup.base }
     let(:options) do
