@@ -91,6 +91,8 @@ module InstrumentPricePolicyCalculations
       .new(self)
       .calculate(duration:, minimum_cost: false)
 
+    return unless costs
+
     net_cost_for_one = costs[:cost] - costs[:subsidy]
 
     net_cost_for_one * quantity
