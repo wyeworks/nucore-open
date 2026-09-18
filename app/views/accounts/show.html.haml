@@ -4,7 +4,7 @@
   = t('.head')
 
 = readonly_form_for :account do |f|
-  = f.input :account_number
+  = f.input :account_number, input_html: { value: @account.account_number_to_s }
   = f.input :type_string
   = f.input :description
   = f.input :expires_at, date_only: true
