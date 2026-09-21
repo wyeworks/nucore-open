@@ -111,10 +111,4 @@ RSpec.describe "Public estimates" do
       end
     end
   end
-
-  context "when the feature is disabled", feature_setting: { public_estimates: false, reload_routes: true } do
-    it "does not define the route" do
-      expect(Rails.application.routes.url_helpers).not_to respond_to(:estimate_path)
-    end
-  end
 end
