@@ -45,6 +45,7 @@ erd.*
 *.sublime-*
 .envrc
 .vscode
+.byebug_history
 
 /app/assets/builds/*
 !/app/assets/builds/.keep
