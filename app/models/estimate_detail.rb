@@ -13,6 +13,7 @@ class EstimateDetail < ApplicationRecord
 
   validates :quantity, presence: true, numericality: { greater_than: 0 }
   validates :duration, numericality: { greater_than: 0 }, allow_nil: true
+  validates :duration, presence: true, if: -> { duration_unit.present? }
   validates :duration_unit, inclusion: { in: TIME_UNITS }, allow_nil: true
 
   delegate :user, to: :estimate

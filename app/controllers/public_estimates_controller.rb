@@ -74,7 +74,8 @@ class PublicEstimatesController < ApplicationController
       )
     end
 
-    estimate.estimate_details.each(&:set_price_policy)
+    estimate.estimate_details = estimate.estimate_details.filter(&:valid?)
+
     estimate
   end
 
