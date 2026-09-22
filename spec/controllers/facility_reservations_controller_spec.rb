@@ -317,19 +317,19 @@ RSpec.describe FacilityReservationsController do
       end
 
       it "should show reservation" do
-        expect(response.body).to include "id='tooltip_reservation_#{@reservation.id}'"
+        expect(response.body).to have_css("#tooltip_reservation_#{@reservation.id}", visible: :all)
       end
 
       it "should not show unpaid reservation" do
-        expect(response.body).not_to include "id='tooltip_reservation_#{@unpurchased_reservation.id}'"
+        expect(response.body).to have_no_css("#tooltip_reservation_#{@unpurchased_reservation.id}", visible: :all)
       end
 
       it "should include canceled reservation" do
-        expect(response.body).to include "id='tooltip_reservation_#{@canceled_reservation.id}'"
+        expect(response.body).to have_css("#tooltip_reservation_#{@canceled_reservation.id}", visible: :all)
       end
 
       it "should include admin reservation" do
-        expect(response.body).to include "id='tooltip_admin_reservation_#{@admin_reservation.id}'"
+        expect(response.body).to have_css("#tooltip_admin_reservation_#{@admin_reservation.id}", visible: :all)
       end
     end
   end
