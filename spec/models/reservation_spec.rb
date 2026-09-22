@@ -1119,7 +1119,7 @@ RSpec.describe Reservation do
     assert @reservation.valid?
   end
 
-  it "allows starting of an instrument even though another reservation is running but over end time", :time_travel do
+  it "allows starting of an instrument even though another reservation is running but over end time" do
     now = Time.zone.now
     next_hour = now + 1.hour
     hour_ago = now - 1.hour
@@ -1132,7 +1132,7 @@ RSpec.describe Reservation do
   end
 
   describe "#start_reservation!" do
-    it "sets actual start time", :time_travel do
+    it "sets actual start time" do
       reservation.start_reservation!
       expect(reservation.actual_start_at).to eq(Time.current)
     end
