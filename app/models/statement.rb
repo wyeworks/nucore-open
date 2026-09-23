@@ -93,9 +93,11 @@ class Statement < ApplicationRecord
     order_details.unrecoverable.present? && canceled_at.blank?
   end
 
-  def can_cancel?
+  def pending?
     order_details.reconciled.empty? && canceled_at.blank?
   end
+
+  alias can_cancel? pending?
 
   def status
     if canceled_at
