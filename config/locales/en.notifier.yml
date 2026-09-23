@@ -52,7 +52,7 @@ en:
         body: |
           Thank you for using %{facility}.
 
-          Your invoice for payment source %{account} is attached and may also be viewed online after logging into !app_name!: %{app_url}
+          Your invoice #%{invoice_number} for payment source %{account} is attached and may also be viewed online after logging into !app_name!: %{app_url}
 
           If you have any questions, please do not hesitate to contact us at %{facility_mailto}.
 
@@ -64,7 +64,7 @@ en:
         body_html: |
           Thank you for using %{facility}.
 
-          Your invoice for payment source %{account} is attached and may also be viewed online after logging into [!app_name!](%{app_url}).
+          Your invoice #%{invoice_number} for payment source %{account} is attached and may also be viewed online after logging into [!app_name!](%{app_url}).
 
           If you have any questions, please do not hesitate to contact us at [%{facility_mailto}](mailto:%{facility_mailto}).
 

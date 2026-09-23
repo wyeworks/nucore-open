@@ -1,3 +1,11 @@
-<%= text("body", facility: @facility, account: @account, facility_mailto: @facility.email, app_url: facility_url(@facility), smart: false) %>
+<%= text(
+  "body",
+  facility: @facility,
+  account: @account,
+  facility_mailto: @facility.email,
+  app_url: facility_url(@facility),
+  smart: false,
+  invoice_number: @statement.invoice_number,
+) %>
 
 <%= render_view_hook("end") %>

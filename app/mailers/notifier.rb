@@ -70,7 +70,7 @@ class Notifier < ActionMailer::Base
       text(
         "views.notifier.statement.subject",
         facility: @facility,
-        statement: @statement,
+        invoice_number: @statement.invoice_number,
       ),
       nil,
       Settings.email.invoice_bcc
