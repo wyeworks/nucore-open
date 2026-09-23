@@ -1,0 +1,15 @@
+= content_for :h1 do
+  = t("pages.global_settings")
+
+= content_for :sidebar do
+  = render "admin/shared/sidenav_global", sidenav_tab: "admin_reports"
+
+%h2= t("pages.admin_reports")
+
+%p= text("description")
+
+- if @reports.empty?
+  %p.notice= text("none")
+- else
+  - @reports.each do |report|
+    %p= link_to text("reports.#{report.key}", default: report.key.titleize), admin_report_path(report.key)

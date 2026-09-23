@@ -10,5 +10,7 @@
   = tab t("pages.holidays"), holidays_path, sidenav_tab == "holidays"
   - if BulkImport.import_classes.present? && can?(:manage, BulkImport)
     = tab t("bulk_imports.index.title"), bulk_imports_path, sidenav_tab == "bulk_imports"
+  - if SettingsHelper.feature_on?(:admin_reports)
+    = tab t("pages.admin_reports"), admin_reports_path, sidenav_tab == "admin_reports"
 
   = render_view_hook "after", sidenav_tab: sidenav_tab
