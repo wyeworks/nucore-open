@@ -8,6 +8,7 @@ FactoryBot.define do
   factory :test_account do
     account_number { generate(:test_account_number) }
     description { "Some account description" }
+    created_by { 1 }
 
     trait :with_account_owner do
       transient do

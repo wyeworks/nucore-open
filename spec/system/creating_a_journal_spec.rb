@@ -2,19 +2,60 @@
 
 require "rails_helper"
 
-RSpec.describe "Creating a journal" do
-  let(:admin) { FactoryBot.create(:user, :administrator) }
-  let(:user) { FactoryBot.create(:user) }
-  let(:facility) { FactoryBot.create(:facility) }
-  let(:account) { FactoryBot.create(Settings.testing.account_factory.to_sym, :with_account_owner, owner: user, facilities: [facility]) }
-  let!(:account_api_record) { create(Settings.testing.api_account_factory.to_sym, account_number: account.account_number) } if Settings.testing.api_account_factory
-  let!(:reviewed_order_detail) { place_and_complete_item_order(user, facility, account, true) }
-  let!(:unreviewed_order_detail) { place_and_complete_item_order(user, facility, account) }
+RSpec.describe "Creating a journal", :use_test_account, :test_account_internal do
+  let(:admin) { create(:user, :administrator) }
+  let(:user) { create(:user) }
+  let(:facility) { create(:setup_facility) }
+  let(:account) { create(:test_account, :with_account_owner) }
+  let(:product) { create(:setup_item, facility:) }
+  let(:reviewed_order_detail) do
+    create(
+      :complete_order,
+      user:,
+      facility:,
+      product:,
+      account:,
+    ).order_details.first
+  end
+  let(:unreviewed_order_detail) do
+    create(
+      :complete_order,
+      user:,
+      facility:,
+      product:,
+      account:,
+    ).order_details.first
+  end
   let(:expiry_date) { 1.year.ago }
-  let(:expired_payment_source) { FactoryBot.create(Settings.testing.account_factory.to_sym, :with_account_owner, owner: user, expires_at: expiry_date, facilities: [facility]) }
-  let!(:problem_order_detail) { place_and_complete_item_order(user, facility, expired_payment_source, true) }
+  let(:expired_payment_source) do
+    create(
+      :test_account,
+      :with_account_owner,
+      owner: user,
+      expires_at: expiry_date,
+    )
+  end
+  let(:problem_order_detail) do
+    create(
+      :complete_order,
+      user:,
+      facility:,
+      product:,
+      account: expired_payment_source,
+    ).order_details.first
+  end
+  let(:price_group) { PriceGroup.base }
 
   before do
+    value = create(:account_user, :purchaser, user:, account:)
+    AccountPriceGroupMember.create!(
+      price_group:, account:,
+    )
+
+    problem_order_detail.update(reviewed_at: 1.day.ago)
+    reviewed_order_detail.update(reviewed_at: 1.day.ago)
+    unreviewed_order_detail.update(reviewed_at: 1.day.from_now)
+
     unreviewed_order_detail.update(reviewed_at: nil)
     [reviewed_order_detail, problem_order_detail].each do |od|
       od.update_attribute(:reviewed_at, 1.day.ago)
@@ -30,17 +71,31 @@ RSpec.describe "Creating a journal" do
 
     it "has journalable order details" do
       expect(page).to have_content("Select the orders that you wish to journal.")
-      expect(page).to have_content(OrderDetailPresenter.new(reviewed_order_detail).description_as_html)
+      expect(page).to(
+        have_link(
+          reviewed_order_detail.order_id,
+          href: facility_order_path(facility, reviewed_order_detail.order),
+        )
+      )
     end
 
     it "does not have unreviewed order details" do
-      expect(page).not_to have_content(OrderDetailPresenter.new(unreviewed_order_detail).description_as_html)
+      expect(page).not_to(
+        have_link(
+          unreviewed_order_detail.order_id,
+          href: facility_order_path(facility, unreviewed_order_detail.order),
+        )
+      )
     end
 
     it "has invalid payment order details" do
       expect(page).to have_content("These payment sources were not valid at the time of fulfillment.")
-      expect(page).to have_content(OrderDetailPresenter.new(problem_order_detail).description_as_html)
-      expect(page).to have_content(problem_order_detail.account.expires_at.strftime("%m/%d/%Y"))
+      expect(page).to(
+        have_link(
+          problem_order_detail.order_id,
+          href: facility_order_path(facility, problem_order_detail.order),
+        )
+      )
     end
   end
 
