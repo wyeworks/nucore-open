@@ -85,7 +85,7 @@ RSpec.describe FacilityAccountsReconciliationController do
       end
     end
 
-    describe "reconciliation date", :time_travel do
+    describe "reconciliation date" do
       describe "with a reconciliation date of today" do
         let(:reconciled_at) { Time.current }
 
