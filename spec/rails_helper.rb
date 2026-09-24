@@ -10,6 +10,12 @@ require "rspec/rails"
 require "shoulda/matchers"
 require "axe-rspec"
 
+require "webmock/rspec"
+require "paperclip/matchers"
+require "active_storage_validations/matchers"
+
+require "./spec/deprecation_toolkit_env"
+
 # Requires supporting files with custom matchers and macros, etc,
 # in ./support/ and its subdirectories.
 Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
@@ -24,8 +30,6 @@ FactoryBot::Strategy::Stub.next_id = 100_000
 Capybara::Node::Base.prepend(CapybaraStaleNodeRetry)
 
 RSpec.configure do |config|
-  include ActiveJob::TestHelper
-
   config.filter_rails_from_backtrace!
   config.filter_gems_from_backtrace("spring")
   # rspec-rails by default excludes stack traces from within vendor Lots of our
@@ -41,7 +45,7 @@ RSpec.configure do |config|
   config.before(:each, type: :system, js: true) do
     options = Selenium::WebDriver::Chrome::Options.new
     options.add_argument("--headless=new")
-    options.add_argument("--window-size=1366,768")
+    options.add_argument("--window-size=1366,1700")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
@@ -96,10 +100,20 @@ RSpec.configure do |config|
   require "capybara/email/rspec"
   Capybara.enable_aria_label = true
 
+  config.include ActiveSupport::Testing::TimeHelpers
+  config.include TimeTravelHelpers
+  config.include WaitForHelpers
+  config.include SelectFromChosen
+
+  config.include ActiveJob::TestHelper
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include CapybaraRequests, type: :request
   config.include FactoryBot::Syntax::Methods
+
+  # for testing attachment validations
+  config.include Paperclip::Shoulda::Matchers
+  config.include ActiveStorageValidations::Matchers
 
   config.around(:each, :feature_setting) do |example|
     example.metadata[:feature_setting].except(:reload_routes).each do |feature, value|
@@ -169,6 +183,24 @@ RSpec.configure do |config|
     # initialize price groups
     @nupg = PriceGroup.setup_global(name: Settings.price_group.name.base, is_internal: true, display_order: 1)
     PriceGroup.setup_global(name: Settings.price_group.name.external, is_internal: false, display_order: 3)
+  end
+
+  config.around(:each, :time_travel) do |example|
+    if defined?(now)
+      # Roll back any record created in the let(:now) block
+      ActiveRecord::Base.transaction do
+        # Travel to a specific time if the spec defines let(:now)
+        travel_to_and_return(now) { example.run }
+        raise ActiveRecord::Rollback
+      end
+    else
+      warn "Time travel filter requires `now` variable to be defined"
+      example.run
+    end
+  end
+
+  config.before(:each) do
+    next if self.class.metadata.slice(:time_travel, :skip_time_travel).values.any?
 
     # Because many specs rely on not crossing a fiscal year boundary we lock the
     # time globally. Rails's `travel_to` helper does not work well with nesting, so
@@ -186,7 +218,7 @@ RSpec.configure do |config|
     Time.use_zone(example.metadata[:time_zone]) { example.call }
   end
 
-  config.after(:all) { travel_back }
+  config.after(:each) { travel_back }
 
   # Javascript specs need to be able to talk to localhost
   config.around(:each, :js) do |example|

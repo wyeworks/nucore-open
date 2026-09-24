@@ -1270,7 +1270,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
       end
     end
 
-    context "switch_instrument", :time_travel do
+    context "switch_instrument" do
       before :each do
         @method = :get
         @action = :switch_instrument
