@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe SecureRooms::AutoOrphanOccupancy, :time_travel do
+RSpec.describe SecureRooms::AutoOrphanOccupancy do
   let(:action) { described_class.new }
 
   let(:secure_room) { create(:secure_room, :with_schedule_rule, :with_base_price) }

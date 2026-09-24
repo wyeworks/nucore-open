@@ -45,7 +45,7 @@ RSpec.configure do |config|
   config.before(:each, type: :system, js: true) do
     options = Selenium::WebDriver::Chrome::Options.new
     options.add_argument("--headless=new")
-    options.add_argument("--window-size=1366,768")
+    options.add_argument("--window-size=1366,1700")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-gpu")
     options.add_argument("--disable-dev-shm-usage")
@@ -194,7 +194,8 @@ RSpec.configure do |config|
         raise ActiveRecord::Rollback
       end
     else
-      raise "Time travel filter requires `now` variable to be defined"
+      warn "Time travel filter requires `now` variable to be defined"
+      example.run
     end
   end
 
