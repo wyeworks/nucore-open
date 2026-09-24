@@ -283,6 +283,7 @@ devise:
   unlock_strategy: :email
   minutes_to_unlock_in: 5
 
+# Report class names listed on Global Settings > Reports. Each school can override this list.
 admin_reports: []
 
 reports:
