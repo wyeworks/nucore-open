@@ -63,10 +63,15 @@ class Notifier < ActionMailer::Base
     @facility = args[:facility]
     @account = args[:account]
     @statement = args[:statement]
+
     attach_statement_pdf
     send_nucore_mail(
       args[:user].email,
-      text("views.notifier.statement.subject", facility: @facility),
+      text(
+        "views.notifier.statement.subject",
+        facility: @facility,
+        invoice_number: @statement.invoice_number,
+      ),
       nil,
       Settings.email.invoice_bcc
     ).tap { |email| log_statement_email(email) }

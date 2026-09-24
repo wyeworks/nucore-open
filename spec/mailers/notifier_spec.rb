@@ -9,51 +9,55 @@ RSpec.describe Notifier do
   let(:product) { create(:setup_instrument, facility:) }
   let(:user) { order.user }
 
-  if EngineManager.engine_loaded?(:c2po)
-    describe ".statement" do
-      let(:account) { create(:purchase_order_account, :with_account_owner) }
-      let(:statement) { create(:statement, facility:, account:) }
-      let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
-      let(:email_text) { email.text_part.to_s }
+  describe ".statement" do
+    before do
+      skip("Purchase order account not used") if Account.config.statement_account_types.exclude?("PurchaseOrderAccount")
+    end
 
-      let(:action) do
-        lambda do
-          Notifier.statement(
-            user:, facility:, account:, statement:,
-          ).deliver_now
+    let(:account) { create(:purchase_order_account, :with_account_owner) }
+    let(:statement) { create(:statement, facility:, account:) }
+    let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
+    let(:email_text) { email.text_part.to_s }
+
+    let(:action) do
+      lambda do
+        Notifier.statement(
+          user:, facility:, account:, statement:,
+        ).deliver_now
+      end
+    end
+
+    it "generates a statement email", :aggregate_failures do
+      action.call
+
+      expect(email.to).to eq [user.email]
+      expect(email.subject).to include(I18n.t(".Statement"))
+      expect(email_html).to include(statement.account.to_s)
+      expect(email_html).to include(statement.account.to_s)
+      expect(email_text).to include(statement.invoice_number)
+      expect(email_html).to include(statement.invoice_number)
+
+      if Settings.email.invoice_bcc
+        expect(email.bcc).to eq [Settings.email.invoice_bcc]
+      end
+    end
+
+    describe "email log event" do
+      context "when ff is off", feature_setting: { "billing.billing_log_events" => false } do
+        it "does not create a log event" do
+          expect { action.call }.to_not(
+            change { LogEvent.count }
+          )
         end
       end
 
-      it "generates a statement email", :aggregate_failures do
-        action.call
-
-        expect(email.to).to eq [user.email]
-        expect(email.subject).to include(I18n.t(".Statement"))
-        expect(email_html).to include(statement.account.to_s)
-        expect(email_text).to include(statement.account.to_s)
-
-        if Settings.email.invoice_bcc
-          expect(email.bcc).to eq [Settings.email.invoice_bcc]
-        end
-      end
-
-      describe "email log event" do
-        context "when ff is off", feature_setting: { "billing.billing_log_events" => false } do
-          it "does not create a log event" do
-            expect { action.call }.to_not(
-              change { LogEvent.count }
-            )
-          end
-        end
-
-        context "when ff is on", feature_setting: { "billing.billing_log_events" => true } do
-          it "creates a log event" do
-            expect { action.call }.to(
-              change do
-                LogEvent.where(event_type: :statement_email).count
-              end.by(1)
-            )
-          end
+      context "when ff is on", feature_setting: { "billing.billing_log_events" => true } do
+        it "creates a log event" do
+          expect { action.call }.to(
+            change do
+              LogEvent.where(event_type: :statement_email).count
+            end.by(1)
+          )
         end
       end
     end
