@@ -140,3 +140,4 @@ Not grouped, these flags live directly under `feature`.
 * `show_estimates_option`: Enable estimates menu entry on facility management.
 * `billing_log_events`: Enable billing logs on global menu.
 * `admin_skip_order_forms`: Allow admins to skip order forms when ordering for a User. This should be enabled for each Service.
+* `admin_reports`: Enable the Reports tab on Global Settings, listing the report classes in `Settings.admin_reports` (empty by default). Each report is emailed to the requesting user as a CSV.

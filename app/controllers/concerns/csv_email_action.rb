@@ -8,7 +8,7 @@ module CsvEmailAction
   # yield_email_and_respond_for_report do |email|
   #   CsvReportMailer.delay.csv_report_email(email, report)
   # end
-  def yield_email_and_respond_for_report
+  def yield_email_and_respond_for_report(fallback_location: url_for)
     csv_send_to_email = params[:email] || current_user.email
 
     yield csv_send_to_email
@@ -17,12 +17,12 @@ module CsvEmailAction
       render plain: I18n.t("controllers.reports.mail_queued", email: csv_send_to_email)
     else
       flash[:notice] = I18n.t("controllers.reports.mail_queued", email: csv_send_to_email)
-      redirect_back_or_to(url_for)
+      redirect_back_or_to(fallback_location)
     end
   end
 
-  def queue_csv_report_email(report_class, **report_args)
-    yield_email_and_respond_for_report do |email|
+  def queue_csv_report_email(report_class, fallback_location: url_for, **report_args)
+    yield_email_and_respond_for_report(fallback_location:) do |email|
       CsvReportEmailJob.perform_later(
         report_class.to_s, email, **report_args
       )

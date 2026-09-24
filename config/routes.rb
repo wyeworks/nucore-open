@@ -393,6 +393,7 @@ Rails.application.routes.draw do
   end
   resources :holidays, except: :show
   resources :log_events, only: :index
+  resources :admin_reports, only: %i[index show], param: :key, controller: "reports/admin_reports" if SettingsHelper.feature_on?(:admin_reports)
 
   resources :bulk_imports, only: %i[index show new create] do
     collection do

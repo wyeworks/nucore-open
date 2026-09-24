@@ -1,0 +1,7 @@
+en:
+  views:
+    reports:
+      admin_reports:
+        index:
+          description: Each report is emailed to you as a CSV file.
+          none: There are no reports available.

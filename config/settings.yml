@@ -221,6 +221,7 @@ feature:
   # Other
   active_storage: true
   active_storage_for_images_only: true
+  admin_reports: false
   admin_skip_order_forms: true
   bypass_kiosk_auth: false
   cross_facility_reports: false
@@ -281,6 +282,9 @@ devise:
   lock_strategy: :failed_attempts
   unlock_strategy: :email
   minutes_to_unlock_in: 5
+
+# Report class names listed on Global Settings > Reports. Each school can override this list.
+admin_reports: []
 
 reports:
   export_raw:
