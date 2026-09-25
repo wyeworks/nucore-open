@@ -6,7 +6,7 @@ module CsvEmailAction
 
   # Example usage:
   # yield_email_and_respond_for_report do |email|
-  #   CsvReportMailer.delay.csv_report_email(email, report)
+  #   CsvReportEmailJob.perform_later(report_class.to_s, email, **report_args)
   # end
   def yield_email_and_respond_for_report(fallback_location: url_for)
     csv_send_to_email = params[:email] || current_user.email
