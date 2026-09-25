@@ -11,10 +11,11 @@ module Reports
         facility: ->(relay) { relay.instrument.facility },
         instrument: ->(relay) { relay.instrument.name },
         active: ->(relay) { relay.instrument.is_archived? ? "Inactive" : "Active" },
-        type: :type,
+        type: ->(relay) { relay.class.to_s },
         ip: :ip,
         ip_port: :ip_port,
         outlet: :outlet,
+        secondary_outlet: :secondary_outlet,
         auto_logout_minutes: ->(relay) { relay.auto_logout ? relay.auto_logout_minutes : "None" },
       }
     end
@@ -34,8 +35,8 @@ module Reports
       text(".subject")
     end
 
-    def text_content
-      text(".body")
+    def column_headers
+      report_hash.keys.map { |key| text(".headers.#{key}", default: Relay.human_attribute_name(key)) }
     end
 
     protected

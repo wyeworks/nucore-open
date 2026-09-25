@@ -34,7 +34,7 @@ module Reports
     end
 
     def text_content
-      ""
+      I18n.t("reports.csv_export_body")
     end
 
     def to_csv

@@ -7,7 +7,7 @@ RSpec.describe Reports::RelayReport do
 
   let(:facility) { create(:setup_facility) }
   let!(:active_instrument) do
-    create(:setup_instrument, facility:, name: "A Microscope", relay: build(:relay_syna, ip_port: 8080, auto_logout: true, auto_logout_minutes: 15))
+    create(:setup_instrument, facility:, name: "A Microscope", relay: build(:relay_syna, ip_port: 8080, secondary_outlet: 2, auto_logout: true, auto_logout_minutes: 15))
   end
   let!(:archived_instrument) do
     create(:setup_instrument, facility:, name: "B Sequencer", is_archived: true, relay: build(:relay_synb, auto_logout: false))
@@ -20,14 +20,15 @@ RSpec.describe Reports::RelayReport do
 
   it "populates the report" do
     expect(report).to have_column_values(
-      "Facility Name" => [facility.to_s, facility.to_s],
-      "Instrument Name" => ["A Microscope", "B Sequencer"],
+      "Facility" => [facility.to_s, facility.to_s],
+      "Instrument" => ["A Microscope", "B Sequencer"],
       "Active/Inactive" => ["Active", "Inactive"],
-      "Relay Type" => ["RelaySynaccessRevA", "RelaySynaccessRevB"],
+      "Relay Type" => ["Synaccess Revision A", "Synaccess Revision B"],
       "Relay IP Address" => ["192.168.1.1", "192.168.1.1"],
       "Relay IP Port" => ["8080", ""],
-      "Outlet Number" => [active_instrument.relay.outlet.to_s, archived_instrument.relay.outlet.to_s],
-      "Auto Logout Minutes" => ["15", "None"],
+      "Outlet" => [active_instrument.relay.outlet.to_s, archived_instrument.relay.outlet.to_s],
+      "Secondary Outlet" => ["2", ""],
+      "Auto-Relay Shutoff After X Minutes" => ["15", "None"],
     )
   end
 
