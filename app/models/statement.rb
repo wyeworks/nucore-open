@@ -85,17 +85,23 @@ class Statement < ApplicationRecord
   end
 
   def reconciled?
-    order_details.unreconciled.empty? && canceled_at.blank?
+    order_details.unreconciled.empty? && !canceled?
   end
 
   # A statement is unrecoverable if it has at least one unrecoverable order detail
   def unrecoverable?
-    order_details.unrecoverable.present? && canceled_at.blank?
+    order_details.unrecoverable.any? && !canceled?
   end
 
-  def can_cancel?
-    order_details.reconciled.empty? && canceled_at.blank?
+  def canceled?
+    canceled_at.present?
   end
+
+  def pending?
+    !(canceled? || reconciled? || unrecoverable?)
+  end
+
+  alias can_cancel? pending?
 
   def status
     if canceled_at
