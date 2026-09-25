@@ -41,8 +41,8 @@ Rails.application.routes.draw do
     end
 
     if SettingsHelper.feature_on? "accounts.suspend_accounts"
-      get "suspend", to: "accounts#suspend", as: "suspend"
-      get "unsuspend", to: "accounts#unsuspend", as: "unsuspend"
+      post "suspend", to: "accounts#suspend", as: "suspend"
+      post "unsuspend", to: "accounts#unsuspend", as: "unsuspend"
     end
 
     resources :account_users, only: [:new, :destroy, :create, :index] do
@@ -298,8 +298,8 @@ Rails.application.routes.draw do
 
     resources :accounts, controller: "facility_accounts", only: [:index, :show] do
       if SettingsHelper.feature_on?("accounts.suspend_accounts")
-        get "suspend",   to: "facility_accounts#suspend",   as: "suspend"
-        get "unsuspend", to: "facility_accounts#unsuspend", as: "unsuspend"
+        post "suspend",   to: "facility_accounts#suspend",   as: "suspend"
+        post "unsuspend", to: "facility_accounts#unsuspend", as: "unsuspend"
       end
 
       get "/members", to: "facility_accounts#members", as: "members"

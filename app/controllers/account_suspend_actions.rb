@@ -2,7 +2,6 @@
 
 module AccountSuspendActions
 
-  # GET /facilities/:facility_id/accounts/:account_id/suspend
   def suspend
     if @account.suspend
       flash[:notice] = I18n.t("controllers.facility_accounts.suspend.success")
@@ -14,7 +13,6 @@ module AccountSuspendActions
     redirect_to open_or_facility_path("account", @account)
   end
 
-  # GET /facilities/:facility_id/accounts/:account_id/unsuspend
   def unsuspend
     if @account.unsuspend
       flash[:notice] = I18n.t("controllers.facility_accounts.unsuspend.success")

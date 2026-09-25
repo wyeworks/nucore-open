@@ -1,8 +1,13 @@
 - if SettingsHelper.feature_on? "accounts.suspend_accounts"
   - if @account.suspended?
     - if current_ability.can?(:unsuspend, @account)
-      = link_to t("shared.activate"), open_or_facility_path("account_unsuspend", @account), class: "btn btn-default"
-
+      = link_to t("shared.activate"),
+        open_or_facility_path("account_unsuspend", @account),
+        method: :post,
+        class: "btn btn-default"
   - else
     - if current_ability.can?(:suspend, @account)
-      = link_to t("shared.suspend"), open_or_facility_path("account_suspend", @account), class: "btn btn-default"
+      = link_to t("shared.suspend"),
+        open_or_facility_path("account_suspend", @account),
+        method: :post,
+        class: "btn btn-default"
