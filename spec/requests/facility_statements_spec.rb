@@ -61,6 +61,18 @@ RSpec.describe "Statements" do
           )
         end
       end
+
+      context "when statement unrecoverable" do
+        before { statement.order_details.update_all(state: :unrecoverable) }
+
+        it "does not send emails" do
+          get facility_statements_path(facility)
+
+          expect(page).not_to have_link(
+            "Resend", href: resend_emails_facility_statement_path(facility, statement),
+          )
+        end
+      end
     end
   end
 
@@ -93,6 +105,13 @@ RSpec.describe "Statements" do
       end
     end
 
+    context "when unrecoverable" do
+      before { statement.order_details.update_all(state: :unrecoverable) }
+
+      it "does not send emails" do
+        expect { action.call }.not_to have_enqueued_mail
+      end
+    end
   end
 
   describe "show" do
