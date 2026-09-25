@@ -100,7 +100,12 @@ class ReservationsController < ApplicationController
       return redirect_to reservations_status_path(status: "upcoming")
     end
 
-    @order_details = @order_details.paginate(page: params[:page])
+    @order_details = @order_details.paginate(page: params[:page]).preload(
+      :order_status,
+      order: :user,
+      product: [:facility, :alert, :relay, :current_offline_reservations],
+      reservation: { product: [:facility, :relay, :current_offline_reservations] },
+    )
 
     notices = @order_details.collect do |od|
       notice_for_reservation od.reservation
