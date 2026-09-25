@@ -23,6 +23,15 @@ RSpec.describe "Admin reports" do
         expect(response).to redirect_to(admin_reports_path)
       end
 
+      it "queues the relay report email" do
+        allow(Settings).to receive(:admin_reports).and_return(["Reports::RelayReport"])
+        get admin_reports_path
+
+        expect(response.body).to include("Instrument Relay Data")
+        expect { get admin_report_path("relay") }
+          .to have_enqueued_job(CsvReportEmailJob).with("Reports::RelayReport", admin.email)
+      end
+
       it "responds not found for an unknown report" do
         get admin_report_path("unknown")
 
