@@ -287,7 +287,7 @@ class Reservation < ApplicationRecord
   end
 
   def reserve_end_at_editable?
-    Time.current <= reserve_end_at && extendable? && actual_end_at.blank?
+    Time.current <= reserve_end_at && actual_end_at.blank? && extendable?
   end
 
   def extendable?

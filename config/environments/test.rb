@@ -27,6 +27,8 @@ Rails.application.configure do
     Bullet.add_safelist type: :n_plus_one_query, class_name: "BundleProduct", association: :product
     Bullet.add_safelist type: :n_plus_one_query, class_name: "Instrument", association: :facility
     Bullet.add_safelist type: :n_plus_one_query, class_name: "Instrument", association: :alert
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Instrument", association: :schedule
+    Bullet.add_safelist type: :n_plus_one_query, class_name: "Instrument", association: :schedule_rules
     Bullet.add_safelist type: :n_plus_one_query, class_name: "InstrumentPricePolicy", association: :duration_rates
     Bullet.add_safelist type: :n_plus_one_query, class_name: "InstrumentPricePolicy", association: :price_group
     Bullet.add_safelist type: :n_plus_one_query, class_name: "Item", association: :alert

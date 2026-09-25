@@ -6,7 +6,7 @@ module Products::SchedulingSupport
 
   included do
     belongs_to :schedule, inverse_of: :products
-    has_many :reservations, foreign_key: "product_id"
+    has_many :reservations, foreign_key: "product_id", inverse_of: :product
 
     before_save :create_default_schedule, unless: :schedule
     before_save :update_schedule_name, if: :name_changed?
