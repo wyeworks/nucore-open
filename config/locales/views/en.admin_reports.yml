@@ -5,3 +5,5 @@ en:
         index:
           description: Each report is emailed to you as a CSV file.
           none: There are no reports available.
+          reports:
+            relay: Instrument Relay Data

@@ -1203,6 +1203,18 @@ en:
       body: Your export is ready. Please see the attached file.
       user_status: User Status
       date_added: "Date Added"
+    relay:
+      subject: "!app_name! Relay Data Export"
+      body: Your export is ready. Please see the attached file.
+      headers:
+        facility: Facility Name
+        instrument: Instrument Name
+        active: Active/Inactive
+        type: Relay Type
+        ip: Relay IP Address
+        ip_port: Relay IP Port
+        outlet: Outlet Number
+        auto_logout_minutes: Auto Logout Minutes
 
   users:
     new_user:
