@@ -3,8 +3,6 @@
 require "rails_helper"
 
 RSpec.describe AsyncFileProcessing do
-  include ActiveJob::TestHelper
-
   class TestClass
 
     include ActiveModel::Model
@@ -46,7 +44,7 @@ RSpec.describe AsyncFileProcessing do
 
     describe "before job runs" do
       it "enqueues the job " do
-        expect { instance.enqueue }.to enqueue_a(FileProcessingJob)
+        expect { instance.enqueue }.to enqueue_job(FileProcessingJob)
       end
 
       it "sets the status to processing" do

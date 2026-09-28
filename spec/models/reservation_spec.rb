@@ -28,7 +28,7 @@ RSpec.describe Reservation do
     allow_any_instance_of(Reservation).to receive(:admin?).and_return(false)
   end
 
-  describe ".upcoming_offline", :time_travel do
+  describe ".upcoming_offline" do
     subject { described_class.upcoming_offline(1.year.from_now) }
     let(:now) { Time.current }
 
