@@ -36,7 +36,4 @@ RSpec.configure do |config|
   config.around(:each, :time_zone) do |example|
     Time.use_zone(example.metadata[:time_zone]) { example.call }
   end
-
-  # TODO: This might be called by TimelineHelper tear down
-  config.after(:each) { travel_back }
 end

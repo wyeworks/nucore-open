@@ -54,8 +54,8 @@ RSpec.configure do |config|
       # Some forms using remote: true return a 406 that is expected
       unless example.metadata[:ignore_js_errors]
         js_errors.each do |error|
-          if error.level == "SEVERE" || error.level == "WARNING"
-            STDERR.puts "JS error detected (#{error.level}): #{error.message}"
+          if ["SEVERE", "WARNING"].include?(error.level)
+            warn "JS error detected (#{error.level}): #{error.message}"
           end
         end
         expect(js_errors.map(&:level)).not_to include "SEVERE"

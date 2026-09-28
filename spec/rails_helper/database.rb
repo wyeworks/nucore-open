@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.configure do |config|
-  # TODO: use before :suite
   config.before(:all) do
     # users are not created within transactions, so delete them all here before running tests
     PriceGroupMember.delete_all
