@@ -98,7 +98,7 @@ class Statement < ApplicationRecord
   end
 
   def pending?
-    !(canceled? || reconciled? || unrecoverable?)
+    !canceled? && order_details.reconciled.none? && !unrecoverable?
   end
 
   alias can_cancel? pending?
