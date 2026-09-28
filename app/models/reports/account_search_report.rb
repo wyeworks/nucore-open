@@ -31,7 +31,15 @@ module Reports
     end
 
     def description
-      I18n.t("views.account_search_result_mailer.search_result.subject")
+      text("subject")
+    end
+
+    def text_content
+      text("body")
+    end
+
+    def translation_scope
+      "views.account_search_result_mailer.search_result"
     end
 
     private
