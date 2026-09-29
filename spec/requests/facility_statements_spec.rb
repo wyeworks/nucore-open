@@ -25,7 +25,7 @@ RSpec.describe "Statements" do
       )
     end
 
-    describe "resend action", feature_setting: { send_statement_emails: true } do
+    describe "resend action", feature_setting: { "notifications.send_statement_emails": true } do
       it "shows it if invoice unreconciled" do
         get facility_statements_path(facility)
 
@@ -76,7 +76,7 @@ RSpec.describe "Statements" do
     end
   end
 
-  describe "resend_emails", feature_setting: { send_statement_emails: true } do
+  describe "resend_emails", feature_setting: { "notifications.send_statement_emails": true } do
     let(:action) do
       -> { post resend_emails_facility_statement_path(facility, statement) }
     end
