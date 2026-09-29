@@ -3,6 +3,14 @@
 require "rails_helper"
 
 RSpec.describe Facility do
+  it "validates uniqueness of name" do
+    facility1 = create(:facility)
+    facility2 = build(:facility, name: facility1.name)
+
+    expect(facility2.valid?).to eq(false)
+    expect(facility2.errors).to be_added(:name, :taken, value: facility1.name)
+  end
+
   it "validates", :aggregate_failures do
     is_expected.to validate_presence_of(:name)
     is_expected.to validate_presence_of(:abbreviation)
