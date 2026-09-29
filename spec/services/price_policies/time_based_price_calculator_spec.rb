@@ -260,12 +260,12 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
         end
       end
 
-      describe "invalid times" do
+      describe "present but invalid times" do
         let(:start_at) { Time.zone.local(2017, 4, 27, 12, 0) } # Thursday
         let(:end_at) { start_at - 1.hour }
 
-        it "raises argument error" do
-          expect { subject }.to raise_error(ArgumentError)
+        it "returns nil" do
+          expect(subject).to be_nil
         end
       end
     end

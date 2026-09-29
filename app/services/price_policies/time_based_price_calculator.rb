@@ -10,10 +10,11 @@ module PricePolicies
       @price_policy = price_policy
     end
 
-    def calculate(**kwargs)
-      return if kwargs.slice(:duration, :start_at, :end_at).compact_blank.blank?
+    def calculate(duration: nil, start_at: nil, end_at: nil, **)
+      return if [start_at, end_at, duration].all?(&:blank?)
+      return if duration.blank? && start_at > end_at
 
-      strategy_class.new(price_policy, **kwargs).calculate
+      strategy_class.new(price_policy, duration:, start_at:, end_at:, **).calculate
     end
 
     private
