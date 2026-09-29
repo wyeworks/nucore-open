@@ -102,7 +102,7 @@ class FacilityJournalsController < ApplicationController
     new_journal_from_params
 
     Journal.transaction do
-      current_facility.lock!
+      Facility.where(id: current_facility.id).lock.load
 
       if current_facility.journals.pending.exists?
         flash[:error] = text("controllers.facility_journals.create.duplicate")
