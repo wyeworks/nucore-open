@@ -10,8 +10,14 @@ RSpec.describe Notifier do
   let(:user) { order.user }
 
   describe ".statement" do
+    include TextHelpers::Translation
+
     before do
       skip("Purchase order account not used") if Account.config.statement_account_types.exclude?("PurchaseOrderAccount")
+    end
+
+    def translation_scope
+      "views.notifier.statement"
     end
 
     let(:account) { create(:purchase_order_account, :with_account_owner) }
@@ -31,7 +37,7 @@ RSpec.describe Notifier do
       action.call
 
       expect(email.to).to eq [user.email]
-      expect(email.subject).to include(I18n.t(".Statement"))
+      expect(email.subject).to eq(text("subject", facility:, invoice_number: statement.invoice_number))
       expect(email_html).to include(statement.account.to_s)
       expect(email_html).to include(statement.account.to_s)
       expect(email_text).to include(statement.invoice_number)
