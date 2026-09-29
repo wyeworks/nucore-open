@@ -566,6 +566,12 @@ RSpec.describe Reservation do
         res.order.purchase!
         expect(@reservation1.reload.earliest_possible).to be_nil
       end
+
+      it "does not look for availability when the reservation already started" do
+        @reservation1.reserve_start_at = 1.hour.ago
+        expect(@reservation1.product).not_to receive(:next_available_reservation)
+        expect(@reservation1.earliest_possible).to be_nil
+      end
     end
 
     it "should be the same order" do

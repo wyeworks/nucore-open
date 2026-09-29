@@ -8,6 +8,7 @@ class CancellationFeeCalculator
   def initialize(original_order_detail)
     # Use a dupped version so that any changes don't get applied to the original
     @order_detail = original_order_detail.dup
+    @order_detail.product = original_order_detail.product
     @order_detail.time_data = original_order_detail.time_data.dup
     @order_detail.price_policy = original_order_detail.price_policy
   end
