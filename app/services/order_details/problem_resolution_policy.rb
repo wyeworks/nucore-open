@@ -8,6 +8,10 @@ module OrderDetails
       @order_detail = order_detail
     end
 
+    def notification_group
+      user_can_resolve? ? :resolvable : :non_resolvable
+    end
+
     def user_can_resolve?
       [
         order_detail.problem?,

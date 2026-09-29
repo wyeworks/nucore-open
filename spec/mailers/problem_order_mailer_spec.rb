@@ -54,6 +54,18 @@ RSpec.describe ProblemOrderMailer do
     end
   end
 
+  describe ".for_group" do
+    it "sends the resolution-option email to the resolvable group" do
+      expect(described_class.for_group(:resolvable, order_detail).html_part.to_s)
+        .to include(edit_problem_reservation_path(reservation))
+    end
+
+    it "sends the plain notification to the non-resolvable group" do
+      expect(described_class.for_group(:non_resolvable, order_detail).html_part.to_s)
+        .to include(order_order_detail_path(order_detail.order, order_detail))
+    end
+  end
+
   describe ".notify_user" do
     let(:mail) { described_class.notify_user(order_detail) }
 
