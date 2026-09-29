@@ -6,8 +6,4 @@ class ApplicationMailer < ActionMailer::Base
 
   helper TranslationHelper
 
-  def mail(arguments)
-    super
-  end
-
 end

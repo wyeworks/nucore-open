@@ -1,20 +1,20 @@
 # frozen_string_literal: true
 
-class Notifier < ActionMailer::Base
+class Notifier < ApplicationMailer
 
   include DateHelper
 
   helper ApplicationHelper
   helper ViewHookHelper
 
-  default from: Settings.email.from, content_type: "multipart/alternative"
+  default content_type: "multipart/alternative"
 
   # Welcome user, login credentials
   def new_user(user:, password:)
     attachments.inline["email_logo.png"] = File.read("#{Rails.root}#{Settings.email_logo_path}") if Settings.email_logo_path.present?
     @user = user
     @password = password
-    send_nucore_mail @user.email, text("views.notifier.new_user.subject")
+    mail(to: @user.email, subject: text("views.notifier.new_user.subject"))
   end
 
   # Changes to the user affecting the PI or department will alert their
@@ -25,7 +25,7 @@ class Notifier < ActionMailer::Base
     @created_by = args[:created_by]
     @role = AccountUserPresenter.localized_role(args[:role])
     send_to = args[:send_to]
-    send_nucore_mail send_to, text("views.notifier.user_update.subject", user: @user)
+    mail(to: send_to, subject: text("views.notifier.user_update.subject", user: @user))
   end
 
   # Any changes to the financial accounts will alert the PI(s), admin(s)
@@ -34,7 +34,7 @@ class Notifier < ActionMailer::Base
   def account_update(args)
     @user = args[:user]
     @account = args[:account]
-    send_nucore_mail args[:user].email, text("views.notifier.account_update.subject")
+    mail(to: args[:user].email, subject: text("views.notifier.account_update.subject"))
   end
 
   def review_orders(user:, accounts:, facility: Facility.cross_facility)
@@ -49,9 +49,9 @@ class Notifier < ActionMailer::Base
                        end
 
     @accounts_grouped_by_owner = accounts.group_by(&:owner_user)
-    send_nucore_mail(
-      @user.email,
-      text("views.notifier.review_orders.subject", abbreviation: @facility.abbreviation)
+    mail(
+      to: @user.email,
+      subject: text("views.notifier.review_orders.subject", abbreviation: @facility.abbreviation)
     ).tap { |email| log_review_orders_email(email) }
   end
 
@@ -65,15 +65,14 @@ class Notifier < ActionMailer::Base
     @statement = args[:statement]
 
     attach_statement_pdf
-    send_nucore_mail(
-      args[:user].email,
-      text(
+    mail(
+      to: args[:user].email,
+      subject: text(
         "views.notifier.statement.subject",
         facility: @facility,
         invoice_number: @statement.invoice_number,
       ),
-      nil,
-      Settings.email.invoice_bcc
+      bcc: Settings.email.invoice_bcc
     ).tap { |email| log_statement_email(email) }
   end
 
@@ -102,10 +101,6 @@ class Notifier < ActionMailer::Base
 
   def statement_pdf
     @statement_pdf ||= StatementPdfFactory.instance(@statement)
-  end
-
-  def send_nucore_mail(to, subject, template_name = nil, bcc = nil)
-    mail(subject: subject, to: to, template_name: template_name, bcc: bcc)
   end
 
   def log_review_orders_email(email)

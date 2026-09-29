@@ -1059,12 +1059,6 @@ Rails/ActionOrder:
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
-Rails/ApplicationMailer:
-  Exclude:
-    - 'app/mailers/notifier.rb'
-
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
 Rails/ApplicationRecord:
   Exclude:
     - 'vendor/engines/secure_rooms/db/migrate/20170525143813_add_token_to_secure_room.rb'

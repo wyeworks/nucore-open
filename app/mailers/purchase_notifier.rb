@@ -8,7 +8,7 @@ class PurchaseNotifier < ApplicationMailer
   helper OrdersHelper
   helper ViewHookHelper
 
-  default from: Settings.email.from, content_type: "multipart/alternative"
+  default content_type: "multipart/alternative"
 
   # Notifies the specified facility staff member if an order is placed including a product
   def product_order_notification(order_detail, recipient)
@@ -16,7 +16,7 @@ class PurchaseNotifier < ApplicationMailer
     @order_detail = OrderDetailPresenter.new(order_detail)
     attach_reservation_ical(order_detail.reservation) if order_detail.reservation.present?
     subject = text("views.purchase_notifier.product_order_notification.subject", product: order_detail.product)
-    send_nucore_mail to: recipient, subject:, reply_to: @order.created_by_user.email
+    mail(to: recipient, subject:, reply_to: @order.created_by_user.email)
   end
 
   # Notifies the specified facility staff member if any order is placed within a facility
@@ -32,7 +32,7 @@ class PurchaseNotifier < ApplicationMailer
       count: product_count,
       facility: order.facility.name,
     )
-    send_nucore_mail to: recipient, subject:, reply_to: @order.created_by_user.email, template_name: "order_receipt"
+    mail(to: recipient, subject:, reply_to: @order.created_by_user.email, template_name: "order_receipt")
   end
 
   # Custom order forms send out a confirmation email when filled out by a
@@ -43,7 +43,7 @@ class PurchaseNotifier < ApplicationMailer
     @greeting = text("views.purchase_notifier.order_receipt.intro")
     @show_price_breakdown = SettingsHelper.feature_off?("pricing.hide_subsidy_from_customers")
     attach_all_icals_from_order(@order)
-    send_nucore_mail to: args[:user].email, subject: text("views.purchase_notifier.order_receipt.subject")
+    mail(to: args[:user].email, subject: text("views.purchase_notifier.order_receipt.subject"))
   end
 
   private
@@ -59,14 +59,6 @@ class PurchaseNotifier < ApplicationMailer
     attachments[calendar.filename] = {
       mime_type: "text/calendar", content: [calendar.to_ical]
     }
-  end
-
-  def send_nucore_mail(to:, subject:, reply_to: nil, template_name: nil)
-    if reply_to
-      mail(subject:, to:, template_name:, reply_to:)
-    else
-      mail(subject:, to:, template_name:)
-    end
   end
 
 end
