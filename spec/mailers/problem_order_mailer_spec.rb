@@ -72,8 +72,11 @@ RSpec.describe ProblemOrderMailer do
 
     it_behaves_like "a problem order email"
 
-    it "links to the problem reservation resolution page" do
-      expect(mail.html_part.to_s).to include(edit_problem_reservation_path(reservation))
+    it "links to the problem reservation resolution page", :aggregate_failures do
+      resolution_path = edit_problem_reservation_path(reservation)
+
+      expect(mail.html_part.to_s).to include(resolution_path)
+      expect(mail.text_part.to_s).to include(resolution_path)
     end
   end
 end
