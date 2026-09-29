@@ -97,11 +97,13 @@ class FacilityStatementsController < ApplicationController
 
   # POST /facilities/:facility_id/statements/:id/resend_emails
   def resend_emails
-    if SettingsHelper.feature_on?("notifications.send_statement_emails")
-      statement = Statement.find(params[:id])
+    statement = Statement.find(params[:id])
+
+    if SettingsHelper.feature_on?("notifications.send_statement_emails") && statement.pending?
       statement.send_emails
       flash[:notice] = text("success_with_email_html", accounts: statement.account)
     end
+
     redirect_to action: :index
   end
 
