@@ -104,7 +104,7 @@ class ReservationsController < ApplicationController
       :order_status,
       order: :user,
       product: [:facility, :alert, :relay, :current_offline_reservations],
-      reservation: { product: [:facility, :relay, :current_offline_reservations] },
+      reservation: { product: [:facility, :relay, :current_offline_reservations, :schedule_rules] },
     )
 
     notices = @order_details.collect do |od|
