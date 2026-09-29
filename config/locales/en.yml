@@ -1173,6 +1173,7 @@ en:
   reports:
     export_raw_reports:
       date_range_too_large: "Date range can be up to %{days} days"
+    csv_export_body: Your export is ready. Please see the attached file.
     export_as_csv: "!reports.account_transactions.export!"
     fields:
       between: between
@@ -1203,6 +1204,10 @@ en:
       body: Your export is ready. Please see the attached file.
       user_status: User Status
       date_added: "Date Added"
+    relay:
+      subject: "!app_name! Relay Data Export"
+      headers:
+        active: Active/Inactive
 
   users:
     new_user:

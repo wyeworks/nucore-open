@@ -453,7 +453,9 @@ en:
       relay:
         type: Relay Type
         ip: Relay IP Address
+        ip_port: Relay IP Port
         port: Relay Port
+        secondary_outlet: Secondary Outlet
         username: Relay Username
         password: Relay Password
         auto_logout: Auto-Relay Shutoff?
