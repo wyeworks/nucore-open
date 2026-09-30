@@ -129,7 +129,6 @@ group :development, :test do
   gem "pry-rails"
   gem "pry-byebug"
   gem "rspec-rails"
-  gem "rspec-activejob"
   gem "selenium-webdriver"
   # Using GitHub version that supports Rack 3 for Rails 7.2
   gem "teaspoon", github: "jejacks0n/teaspoon"

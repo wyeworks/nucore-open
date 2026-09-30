@@ -567,9 +567,6 @@ GEM
       railties (>= 7.0)
     rexml (3.4.4)
     rollbar (3.8.0)
-    rspec-activejob (0.6.1)
-      activejob (>= 4.2)
-      rspec-mocks
     rspec-collection_matchers (1.2.1)
       rspec-expectations (>= 2.99.0.beta1)
     rspec-core (3.13.6)
@@ -807,7 +804,6 @@ DEPENDENCIES
   rake
   reline
   rollbar
-  rspec-activejob
   rspec-collection_matchers
   rspec-rails
   rspec_junit_formatter
