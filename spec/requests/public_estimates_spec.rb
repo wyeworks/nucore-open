@@ -134,6 +134,16 @@ RSpec.describe "Public estimates" do
         expect(response.body).to include("$90.00")
       end
 
+      it "labels the duration in minutes in the results" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          durations: { timed_service.id.to_s => "90" },
+        }
+
+        expect(response.body).to include("90 Minutes")
+      end
+
       it "ignores time based products with no duration" do
         get estimate_path, params: {
           customer_type: "base",
@@ -179,6 +189,17 @@ RSpec.describe "Public estimates" do
         }
 
         expect(response.body).to include("$150.00")
+      end
+
+      it "labels the billing unit as days in both the form and the results" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          durations: { instrument.id.to_s => "3" },
+        }
+
+        expect(response.body).to include("Days")
+        expect(response.body).to include("3 Days")
       end
     end
 
