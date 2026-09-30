@@ -115,20 +115,78 @@ RSpec.describe "Public estimates" do
       expect(response.body).to_not include("Estimated cost")
     end
 
-    context "when time based product duration is nil" do
-      let!(:timed_service) do
-        create(:timed_service, facility:)
+    context "with a timed service" do
+      let!(:timed_service) { create(:timed_service, facility:) }
+      let!(:timed_service_price_policy) do
+        create(
+          :timed_service_price_policy,
+          product: timed_service, price_group: PriceGroup.base, usage_rate: 60, usage_subsidy: 0
+        )
+      end
+
+      it "prices it from the duration alone" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          durations: { timed_service.id.to_s => "90" },
+        }
+
+        expect(response.body).to include("$90.00")
       end
 
       it "ignores time based products with no duration" do
         get estimate_path, params: {
           customer_type: "base",
           facility_id: facility.id,
-          quantities: { timed_service.id.to_s => "1" },
+          durations: { timed_service.id.to_s => "" },
         }
 
-        expect(page).not_to have_text("Estimated cost")
+        expect(response.body).to_not include("Estimated cost")
       end
+
+      it "ignores a quantity submitted for a time based product" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          quantities: { timed_service.id.to_s => "2" },
+        }
+
+        expect(response.body).to_not include("Estimated cost")
+      end
+
+      it "offers a duration input but no quantity input" do
+        get estimate_path, params: { customer_type: "base", facility_id: facility.id }
+
+        expect(response.parsed_body.at_css("input[name='durations[#{timed_service.id}]']")).to be_present
+        expect(response.parsed_body.at_css("input[name='quantities[#{timed_service.id}]']")).to be_nil
+      end
+    end
+
+    context "with a daily booking instrument" do
+      let!(:instrument) { create(:setup_instrument, :daily_booking, facility:) }
+      let!(:instrument_price_policy) do
+        create(
+          :instrument_price_policy,
+          product: instrument, price_group: PriceGroup.base, usage_rate_daily: 50, usage_subsidy_daily: 0
+        )
+      end
+
+      it "prices it from a number of days" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          durations: { instrument.id.to_s => "3" },
+        }
+
+        expect(response.body).to include("$150.00")
+      end
+    end
+
+    it "offers a quantity input but no duration input for an item" do
+      get estimate_path, params: { customer_type: "base", facility_id: facility.id }
+
+      expect(response.parsed_body.at_css("input[name='quantities[#{item.id}]']")).to be_present
+      expect(response.parsed_body.at_css("input[name='durations[#{item.id}]']")).to be_nil
     end
   end
 end

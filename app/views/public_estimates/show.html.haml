@@ -25,11 +25,15 @@
           - @products.each do |product|
             %tr
               %td= product.name
-              %td= number_field_tag "quantities[#{product.id}]", params.dig(:quantities, product.id.to_s), min: 0, style: "width: 6em;"
-              %td
-                - if product.time_unit.present?
+              - if product.duration_based?
+                %td
+                %td
                   = number_field_tag "durations[#{product.id}]", params.dig(:durations, product.id.to_s), min: 1, style: "width: 6em;"
                   = EstimateDetail.human_attribute_name("duration_unit.#{product.time_unit}", count: 2)
+              - else
+                %td
+                  = number_field_tag "quantities[#{product.id}]", params.dig(:quantities, product.id.to_s), min: 0, style: "width: 6em;"
+                %td
       = submit_tag t(".calculate"), class: "btn btn-primary", name: nil
 
 - if @estimate.present?
