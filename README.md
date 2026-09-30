@@ -185,18 +185,6 @@ _Known issue: if you run `db:setup` or all three in one rake command, the next t
 
 10. Play around! You're running NUcore!
 
-11. Run `delayed_job` to support in-browser email previews.
-
-    Run delayed jobs indefinitely in the background:
-    ```
-    ./script/delayed_job start
-    ```
-
-    Or run delayed jobs once for one-off jobs:
-    ```
-    ./script/delayed_job run
-    ```
-
 ### Test it
 
 NUcore uses [Rspec](http://rspec.info) to run tests. Try any of the following from NUcore's root directory.
@@ -232,6 +220,10 @@ NUcore uses [Rspec](http://rspec.info) to run tests. Try any of the following fr
     ```
     docker compose run app bundle exec rake teaspoon
     ```
+
+### Email previews
+
+On development, you can access email previews under <http://localhost:3000/rails/mailers/>.
 
 #### Github Actions
 
