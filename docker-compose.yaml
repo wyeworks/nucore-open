@@ -35,23 +35,6 @@ services:
       # - TEASPOON_RAILS_ENV=test
     tty: true
     stdin_open: true
-  delayed_job:
-    build:
-      context: .
-      target: develop
-    command: bundle exec rake jobs:work
-    depends_on:
-      - app
-    volumes:
-      - .:/app
-      - gem_cache:/gems
-    environment:
-      - MYSQL_HOST=db
-      - MYSQL_USER=root
-      - MYSQL_PASSWORD=root
-      - SMTP_HOST=mailcatcher
-    stdin_open: true
-    tty: true
   db:
     image: mysql:8
     environment:
