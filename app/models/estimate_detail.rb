@@ -21,11 +21,13 @@ class EstimateDetail < ApplicationRecord
   # Used to trigger before_update callback
   attribute :recalculate
 
+  attr_writer :price_groups
+
   def price_groups
     if product.nonbillable_mode?
       [PriceGroup.nonbillable]
     else
-      [estimate.price_group].compact
+      @price_groups || [estimate.price_group].compact
     end
   end
 

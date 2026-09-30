@@ -34,8 +34,12 @@ class PublicEstimatesController < ApplicationController
 
     facility_products.where(
       id: PricePolicy.current_for_date(Time.current).purchaseable
-                     .where(price_group: @price_group).select(:product_id),
+                     .where(price_group: price_groups_for_estimate).select(:product_id),
     )
+  end
+
+  def price_groups_for_estimate(_product = nil)
+    [@price_group].compact
   end
 
   def facility_products
@@ -68,6 +72,7 @@ class PublicEstimatesController < ApplicationController
 
       estimate.estimate_details.build(
         product:,
+        price_groups: price_groups_for_estimate(product),
         quantity: quantity.to_i,
         duration: requested_durations[product_id].presence,
         duration_unit: product.time_unit,
