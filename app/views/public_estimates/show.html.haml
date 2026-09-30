@@ -2,6 +2,7 @@
   = t(".title")
 
 %p= t(".intro")
+%p= t(".login_prompt", app_name: t("app_name"))
 
 = form_tag estimate_path, method: :get do
   .hide-from-print

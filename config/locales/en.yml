@@ -119,7 +119,14 @@ en:
   public_estimates:
     show:
       title: Estimate
-      intro: Estimate the cost of using our facilities. No account required.
+      intro: >-
+        These estimates are provided for planning purposes only. Actual charges may vary based on
+        customer type, applicable subsidies, facility policies, and the specific services required.
+        Users are encouraged to work directly with facility staff to verify eligibility and ensure
+        all necessary products and services have been included in the estimate.
+      login_prompt: >-
+        To receive an estimate that reflects your actual user type, please log in to %{app_name} or
+        request a %{app_name} account if you do not already have one.
       customer_type: I am
       customer_types:
         base: Internal
