@@ -147,7 +147,6 @@ group :test do
   gem "shoulda-matchers"
   gem "single_test"
   gem "webmock"
-  gem "deprecation_toolkit"
 end
 
 group :stage, :production do
