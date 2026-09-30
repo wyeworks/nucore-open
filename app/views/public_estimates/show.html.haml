@@ -37,33 +37,34 @@
       = submit_tag t(".calculate"), class: "btn btn-primary", name: nil
 
 - if @estimate.present?
-  %h3= t(".results")
-  %div
-    %p
-      %strong= "#{t('.customer_type')}:"
-      = t(".customer_types.#{@customer_type}")
-    %p
-      %strong= "#{Facility.model_name.human}:"
-      = @estimate.facility.name
-    %p
-      %strong= "#{Estimate.human_attribute_name(:note)}:"
-      = @estimate.note
-  %table.table.table-striped
-    %thead
-      %tr
-        %th= Product.model_name.human
-        %th= EstimateDetail.human_attribute_name(:quantity)
-        %th= EstimateDetail.human_attribute_name(:duration)
-        %th.text-right= EstimateDetail.human_attribute_name(:cost)
-    %tbody
-      - @estimate.estimate_details.map { |detail| EstimateDetailPresenter.new(detail) }.each do |estimate_detail|
+  .estimate-result
+    %h3= t(".results")
+    %div
+      %p
+        %strong= "#{t('.customer_type')}:"
+        = t(".customer_types.#{@customer_type}")
+      %p
+        %strong= "#{Facility.model_name.human}:"
+        = @estimate.facility.name
+      %p
+        %strong= "#{Estimate.human_attribute_name(:note)}:"
+        = @estimate.note
+    %table.table.table-striped
+      %thead
         %tr
-          %td= estimate_detail.product_display
-          %td= estimate_detail.quantity
-          %td= estimate_detail.duration_display
-          %td.text-right= estimate_detail.cost ? estimate_detail.cost_display : t(".no_public_rate")
-  .text-right
-    %strong= t(".total")
-    %span= number_to_currency(@total)
-  .hide-from-print
-    = button_tag t(".print"), type: "button", class: "btn btn-default", onclick: "window.print();"
+          %th= Product.model_name.human
+          %th= EstimateDetail.human_attribute_name(:quantity)
+          %th= EstimateDetail.human_attribute_name(:duration)
+          %th.text-right= EstimateDetail.human_attribute_name(:cost)
+      %tbody
+        - @estimate.estimate_details.map { |detail| EstimateDetailPresenter.new(detail) }.each do |estimate_detail|
+          %tr
+            %td= estimate_detail.product_display
+            %td= estimate_detail.quantity
+            %td= estimate_detail.duration_display
+            %td.text-right= estimate_detail.cost ? estimate_detail.cost_display : t(".no_public_rate")
+    .text-right
+      %strong= t(".total")
+      %span= number_to_currency(@total)
+    .hide-from-print
+      = button_tag t(".print"), type: "button", class: "btn btn-default", onclick: "window.print();"
