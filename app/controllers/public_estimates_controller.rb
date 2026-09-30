@@ -39,7 +39,7 @@ class PublicEstimatesController < ApplicationController
   end
 
   def facility_products
-    @facility.products.active.available_for_estimates.where.not(type: "Bundle").alphabetized
+    @facility.products.available_for_estimates.where.not(type: "Bundle").alphabetized
   end
 
   def requested_quantities

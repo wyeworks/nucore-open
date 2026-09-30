@@ -78,6 +78,26 @@ RSpec.describe "Public estimates" do
       expect(printed).to include(facility.name, "External")
     end
 
+    it "lists a hidden product and prices it" do
+      hidden = create(:setup_item, facility:, name: "Hidden Widget", is_hidden: true)
+      create(:item_price_policy, product: hidden, price_group: PriceGroup.base, unit_cost: 5, unit_subsidy: 0)
+
+      get estimate_path, params: {
+        customer_type: "base", facility_id: facility.id, quantities: { hidden.id.to_s => "3" }
+      }
+
+      expect(response.body).to include(hidden.name)
+      expect(response.body).to include("$15.00")
+    end
+
+    it "does not list an archived product" do
+      archived = create(:setup_item, facility:, name: "Archived Widget", is_archived: true)
+
+      get estimate_path, params: { customer_type: "base", facility_id: facility.id }
+
+      expect(response.body).to_not include(archived.name)
+    end
+
     it "does not list a product with no rate for the selected price group" do
       unpriced = create(:setup_item, facility:, name: "Unpriced Widget")
 
