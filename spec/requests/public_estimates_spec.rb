@@ -198,7 +198,6 @@ RSpec.describe "Public estimates" do
           durations: { instrument.id.to_s => "3" },
         }
 
-        expect(response.body).to include("Days")
         expect(response.body).to include("3 Days")
       end
     end
