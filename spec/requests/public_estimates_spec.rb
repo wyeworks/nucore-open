@@ -52,12 +52,11 @@ RSpec.describe "Public estimates" do
       expect(response.body).to_not include(bundle.name)
     end
 
-    context "when ther're extra customer types" do
+    context "when there're extra customer types" do
       let(:new_customer_types) { %w[base external cancer_center] }
 
       before do
         allow(Settings.public_estimates).to receive(:customer_types) { new_customer_types }
-        allow(Settings.price_group.name).to receive(:cancer_center) { "Cancer Center Rate" }
         cancer_center = PriceGroup.setup_global(name: Settings.price_group.name.cancer_center, is_internal: false, display_order: 2)
         create(:item_price_policy, product: item, price_group: cancer_center, unit_cost: 25, unit_subsidy: 0)
       end
@@ -108,14 +107,14 @@ RSpec.describe "Public estimates" do
       expect(estimate_result_html).to include("Test note for estimate")
     end
 
-    it "displays empty note when none is provided" do
+    it "does not display note when none is provided" do
       get estimate_path, params: {
         customer_type: "base",
         facility_id: facility.id,
         quantities: { item.id.to_s => "2" },
       }
 
-      expect(estimate_result_html).to include(Estimate.human_attribute_name(:note))
+      expect(estimate_result_html).not_to include(Estimate.human_attribute_name(:note))
     end
 
     context "when time based product duration is nil" do
