@@ -12,10 +12,6 @@
       .margin_x
         = label_tag :facility_id, Facility.model_name.human
         = select_tag :facility_id, options_from_collection_for_select(@facilities, :id, :name, params[:facility_id]), include_blank: true, class: "form-control", onchange: "this.form.submit();"
-    .inline-form-controls
-      %div
-        = label_tag Estimate.human_attribute_name(:note)
-        = textarea_tag :note, params[:note], class: "form-control", size: "40x4", maxlength: 300
 
     - if @facility.present?
       %h3= t(".choose_products")
@@ -34,7 +30,16 @@
                 - if product.time_unit.present?
                   = number_field_tag "durations[#{product.id}]", params.dig(:durations, product.id.to_s), min: 1, style: "width: 6em;"
                   = EstimateDetail.human_attribute_name("duration_unit.#{product.time_unit}", count: 2)
-      = submit_tag t(".calculate"), class: "btn btn-primary", name: nil
+
+      %div
+        %h3= t(".notes")
+        .row
+          .col-md-6
+            = textarea_tag :note, params[:note], class: "form-control", size: "40x4", maxlength: 300
+
+      %hr
+      %div
+        = submit_tag t(".calculate"), class: "btn btn-primary", name: nil
 
 - if @estimate.present?
   .estimate-result
@@ -46,9 +51,10 @@
       %p
         %strong= "#{Facility.model_name.human}:"
         = @estimate.facility.name
-      %p
-        %strong= "#{Estimate.human_attribute_name(:note)}:"
-        = @estimate.note
+      - if @estimate.note.present?
+        %p
+          %strong= "#{Estimate.human_attribute_name(:note)}:"
+          = @estimate.note
     %table.table.table-striped
       %thead
         %tr
