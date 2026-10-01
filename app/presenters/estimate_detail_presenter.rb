@@ -14,17 +14,15 @@ class EstimateDetailPresenter < SimpleDelegator
   end
 
   def duration_display
-    if duration_mins?
-      duration
-    elsif duration_days?
-      [
-        duration,
-        EstimateDetail.human_attribute_name(
-          "duration_unit.days",
-          count: duration,
-        ),
-      ].join(" ")
-    end
+    return duration if duration_mins?
+
+    duration_with_unit if duration_days?
+  end
+
+  def duration_with_unit
+    return if duration.blank? || duration_unit.blank?
+
+    [duration, EstimateDetail.duration_unit_label(duration_unit, count: duration)].join(" ")
   end
 
   def unit_cost_display

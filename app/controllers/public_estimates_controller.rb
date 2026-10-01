@@ -11,7 +11,7 @@ class PublicEstimatesController < ApplicationController
     @customer_type_options = customer_type_options
     @price_group = PriceGroup.for_public_estimate(@customer_type)
     @products = @facility ? priced_products : Product.none
-    @estimate = build_estimate if @price_group && requested_quantities.any?
+    @estimate = build_estimate if @price_group && requested_details.any?
     @total = @estimate.estimate_details.sum { |estimate_detail| estimate_detail.cost || 0 } if @estimate
   end
 
@@ -39,7 +39,7 @@ class PublicEstimatesController < ApplicationController
   end
 
   def facility_products
-    @facility.products.active.available_for_estimates.where.not(type: "Bundle").alphabetized
+    @facility.products.available_for_estimates.where.not(type: "Bundle").alphabetized
   end
 
   def requested_quantities
@@ -47,7 +47,23 @@ class PublicEstimatesController < ApplicationController
   end
 
   def requested_durations
-    @requested_durations ||= permitted_product_values(:durations)
+    @requested_durations ||= permitted_product_values(:durations).select { |_id, duration| duration.to_i.positive? }
+  end
+
+  def requested_details
+    @requested_details ||= @products.filter_map { |product| estimate_detail_attributes(product) }
+  end
+
+  def estimate_detail_attributes(product)
+    if product.duration_based?
+      duration = requested_durations[product.id.to_s]
+
+      { product:, quantity: 1, duration:, duration_unit: product.time_unit } if duration
+    else
+      quantity = requested_quantities[product.id.to_s]
+
+      { product:, quantity: quantity.to_i } if quantity
+    end
   end
 
   def permitted_product_values(key)
@@ -60,18 +76,8 @@ class PublicEstimatesController < ApplicationController
   def build_estimate
     estimate = Estimate.new(facility: @facility, price_group: @price_group)
 
-    products = @products.where(id: requested_quantities.keys).index_by { |product| product.id.to_s }
-
-    requested_quantities.each do |product_id, quantity|
-      product = products[product_id]
-      next if product.blank?
-
-      estimate.estimate_details.build(
-        product:,
-        quantity: quantity.to_i,
-        duration: requested_durations[product_id].presence,
-        duration_unit: product.time_unit,
-      )
+    requested_details.each do |attributes|
+      estimate.estimate_details.build(attributes)
     end
 
     estimate.estimate_details = estimate.estimate_details.filter(&:valid?)
