@@ -62,7 +62,7 @@ class PublicEstimatesController < ApplicationController
   end
 
   def build_estimate
-    estimate = Estimate.new(facility: @facility, price_group: @price_group)
+    estimate = Estimate.new(facility: @facility, price_group: @price_group, public_estimate: true)
 
     products = @products.where(id: requested_quantities.keys).index_by { |product| product.id.to_s }
 

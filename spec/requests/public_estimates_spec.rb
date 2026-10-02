@@ -26,6 +26,10 @@ RSpec.describe "Public estimates" do
     end
 
     it "prices the estimate for an internal customer" do
+      expect(Estimate).to receive(:new).with(
+        facility:, price_group: PriceGroup.base, public_estimate: true,
+      ).and_call_original
+
       get estimate_path, params: {
         customer_type: "base", facility_id: facility.id, quantities: { item.id.to_s => "2" }
       }

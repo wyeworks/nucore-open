@@ -3,6 +3,19 @@
 require "rails_helper"
 
 RSpec.describe Estimate do
+  describe "public estimate context" do
+    it "does not infer public context from an unsaved estimate without a user" do
+      expect(Estimate.new(user: nil).public_estimate).to be_nil
+    end
+
+    it "does not persist the public context" do
+      estimate = create(:estimate, public_estimate: true)
+
+      expect(estimate.public_estimate).to be true
+      expect(described_class.find(estimate.id).public_estimate).to be_nil
+    end
+  end
+
   describe "price policy validation" do
     let(:facility) { create(:setup_facility) }
     let(:product) { create(:item, facility:) }
