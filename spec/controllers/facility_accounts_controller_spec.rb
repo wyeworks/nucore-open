@@ -396,7 +396,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
     end
   end
 
-  context "with statements", :time_travel, if: Account.config.statements_enabled? do
+  context "with statements", if: Account.config.statements_enabled? do
     let!(:statements) { FactoryBot.create_list(:statement, 2, facility_id: facility.id, created_by: admin.id, account: account) }
 
     describe "show_statement" do

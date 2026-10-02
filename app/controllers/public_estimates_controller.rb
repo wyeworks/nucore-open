@@ -6,23 +6,31 @@ class PublicEstimatesController < ApplicationController
 
   def show
     @facilities = Facility.active.alphabetized
-    @facility = @facilities.find_by(id: params[:facility_id])
+    @facility = @facilities.find_by(id: permitted_params[:facility_id])
     @customer_type = customer_type
     @customer_type_options = customer_type_options
     @price_group = PriceGroup.for_public_estimate(@customer_type)
     @products = @facility ? priced_products : Product.none
-    @estimate = build_estimate if @price_group && requested_quantities.any?
+    @estimate = build_estimate if @price_group && requested_details.any?
     @total = @estimate.estimate_details.sum { |estimate_detail| estimate_detail.cost || 0 } if @estimate
   end
 
   private
 
+  def permitted_params
+    params.permit(
+      :facility_id,
+      :customer_type,
+      :note,
+    )
+  end
+
   def customer_types
-    Settings.public_estimates.customer_types.map(&:to_s)
+    Settings.public_estimates.customer_types
   end
 
   def customer_type
-    customer_types.include?(params[:customer_type]) ? params[:customer_type] : customer_types.first
+    customer_types.include?(permitted_params[:customer_type]) ? permitted_params[:customer_type] : customer_types.first
   end
 
   def customer_type_options
@@ -43,7 +51,7 @@ class PublicEstimatesController < ApplicationController
   end
 
   def facility_products
-    @facility.products.active.available_for_estimates.where.not(type: "Bundle").alphabetized
+    @facility.products.available_for_estimates.where.not(type: "Bundle").alphabetized
   end
 
   def requested_quantities
@@ -51,7 +59,23 @@ class PublicEstimatesController < ApplicationController
   end
 
   def requested_durations
-    @requested_durations ||= permitted_product_values(:durations)
+    @requested_durations ||= permitted_product_values(:durations).select { |_id, duration| duration.to_i.positive? }
+  end
+
+  def requested_details
+    @requested_details ||= @products.filter_map { |product| estimate_detail_attributes(product) }
+  end
+
+  def estimate_detail_attributes(product)
+    if product.duration_based?
+      duration = requested_durations[product.id.to_s]
+
+      { product:, quantity: 1, duration:, duration_unit: product.time_unit } if duration
+    else
+      quantity = requested_quantities[product.id.to_s]
+
+      { product:, quantity: quantity.to_i } if quantity
+    end
   end
 
   def permitted_product_values(key)
@@ -62,20 +86,13 @@ class PublicEstimatesController < ApplicationController
   end
 
   def build_estimate
-    estimate = Estimate.new(facility: @facility, price_group: @price_group, public_estimate: true)
+    estimate = Estimate.new(
+      facility: @facility, price_group: @price_group, note: permitted_params[:note], public_estimate: true,
+    )
 
-    products = @products.where(id: requested_quantities.keys).index_by { |product| product.id.to_s }
-
-    requested_quantities.each do |product_id, quantity|
-      product = products[product_id]
-      next if product.blank?
-
+    requested_details.each do |attributes|
       estimate.estimate_details.build(
-        product:,
-        price_groups: price_groups_for_estimate(product),
-        quantity: quantity.to_i,
-        duration: requested_durations[product_id].presence,
-        duration_unit: product.time_unit,
+        attributes.merge(price_groups: price_groups_for_estimate(attributes.fetch(:product))),
       )
     end
 

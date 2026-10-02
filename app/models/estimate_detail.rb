@@ -18,6 +18,10 @@ class EstimateDetail < ApplicationRecord
 
   delegate :user, to: :estimate
 
+  def self.duration_unit_label(unit, count: 2)
+    human_attribute_name("duration_unit.#{unit}", count:)
+  end
+
   # Used to trigger before_update callback
   attribute :recalculate
 

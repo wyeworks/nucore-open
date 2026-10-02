@@ -7,91 +7,49 @@ class ProblemNotificationSender
   def initialize(order_details, current_user, notification_groups: [])
     @order_details = order_details
     @current_user = current_user
-    @notification_groups = notification_groups
+    @notification_groups = notification_groups.map(&:to_sym)
   end
 
   def send_notifications
-    return if order_details.empty?
-
-    grouped_order_details = group_order_details_by_resolution_capability
-    sent_count = 0
-
-    notification_groups.each do |group|
-      group_details = grouped_order_details[group.to_sym] || []
-      next unless group_details.any?
-
-      group_details.each do |order_detail|
-        send_notification_for_order_detail(order_detail, group)
-        sent_count += 1
-      end
+    selected_order_details.each do |group, order_detail|
+      ProblemOrderMailer.for_group(group, order_detail).deliver_later
     end
-
-    log_bulk_notification_event(sent_count)
-    sent_count
+    log_bulk_notification_event(notified_order_details)
+    selected_order_details.count
   end
 
   def detailed_notification_count
-    return { emails: 0, users: 0 } if order_details.empty?
-
-    grouped_order_details = group_order_details_by_resolution_capability
-    selected_order_details = []
-
-    notification_groups.each do |group|
-      group_details = grouped_order_details[group.to_sym] || []
-      selected_order_details.concat(group_details) if group_details.any?
-    end
-
-    unique_users = selected_order_details.map(&:user).uniq
-
     {
       emails: selected_order_details.count,
-      users: unique_users.count
+      users: notified_order_details.map(&:user).uniq.count
     }
   end
 
   private
 
-  def group_order_details_by_resolution_capability
-    order_details.group_by do |order_detail|
-      if OrderDetails::ProblemResolutionPolicy.new(order_detail).user_can_resolve?
-        :resolvable
-      else
-        :non_resolvable
+  def selected_order_details
+    @selected_order_details ||=
+      order_details.filter_map do |order_detail|
+        group = OrderDetails::ProblemResolutionPolicy.new(order_detail).notification_group
+        [group, order_detail] if notification_groups.include?(group)
       end
-    end
   end
 
-  def send_notification_for_order_detail(order_detail, group)
-    if group.to_sym == :resolvable
-      ProblemOrderMailer.notify_user_with_resolution_option(order_detail).deliver_later
-    else
-      ProblemOrderMailer.notify_user(order_detail).deliver_later
-    end
+  def notified_order_details
+    selected_order_details.map { |_group, order_detail| order_detail }
   end
 
-  def log_bulk_notification_event(_sent_count)
-    grouped_order_details = group_order_details_by_resolution_capability
-
-    notified_users_data = {}
-
-    notification_groups.each do |group|
-      group_details = grouped_order_details[group.to_sym] || []
-      group_details.each do |order_detail|
-        user = order_detail.user
-        notified_users_data[user] ||= { order_detail_ids: [] }
-        notified_users_data[user][:order_detail_ids] << order_detail.id
-      end
-    end
-
-    notified_users_data.each do |user, data|
+  def log_bulk_notification_event(notified)
+    notified.group_by(&:user).each do |user, details|
       LogEvent.log(
         user,
         :bulk_problem_notification,
         current_user,
         metadata: {
-          order_detail_ids: data[:order_detail_ids].join(", ")
+          order_detail_ids: details.map(&:id).join(", ")
         }
       )
     end
   end
+
 end

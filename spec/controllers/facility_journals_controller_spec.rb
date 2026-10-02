@@ -126,7 +126,7 @@ RSpec.describe FacilityJournalsController do
           expect(@order_detail3.reload.order_status).to eq(reconciled)
         end
 
-        it "sets the reconciled_at for all order details to the journal date", :time_travel do
+        it "sets the reconciled_at for all order details to the journal date" do
           expect(@order_detail1.reload.reconciled_at).to eq(@journal.journal_date)
           expect(@order_detail3.reload.reconciled_at).to eq(@journal.journal_date)
         end

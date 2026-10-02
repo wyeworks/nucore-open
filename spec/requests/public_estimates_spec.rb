@@ -11,6 +11,9 @@ RSpec.describe "Public estimates" do
   let!(:external_price_policy) do
     create(:item_price_policy, product: item, price_group: PriceGroup.external, unit_cost: 40, unit_subsidy: 0)
   end
+  let(:estimate_result_html) do
+    response.parsed_body.at_css(".estimate-result")&.text
+  end
 
   context "when the feature is enabled", feature_setting: { public_estimates: true, reload_routes: true } do
     it "is reachable without logging in" do
@@ -27,7 +30,7 @@ RSpec.describe "Public estimates" do
 
     it "prices the estimate for an internal customer" do
       expect(Estimate).to receive(:new).with(
-        facility:, price_group: PriceGroup.base, public_estimate: true,
+        facility:, price_group: PriceGroup.base, note: nil, public_estimate: true,
       ).and_call_original
 
       get estimate_path, params: {
@@ -67,6 +70,31 @@ RSpec.describe "Public estimates" do
         expect(response.body).to include(custom_item.name, "$14.00")
         expect(response.body).not_to include(item.name)
       end
+
+      it "passes the requested product to the pricing hook" do
+        alternate_group = create(:price_group, facility:)
+        create(:item_price_policy, product: custom_item, price_group: alternate_group, unit_cost: 10, unit_subsidy: 9)
+        allow_any_instance_of(PublicEstimatesController).to receive(:price_groups_for_estimate)
+          .with(custom_item).and_return([alternate_group])
+
+        get estimate_path, params: {
+          customer_type: "base", facility_id: facility.id, quantities: { custom_item.id.to_s => "2" }
+        }
+
+        expect(estimate_result_html).to include(custom_item.name, "$2.00")
+      end
+
+      it "uses customized pricing for a duration-only detail and preserves the note" do
+        timed_service = create(:timed_service, facility:)
+        create(:timed_service_price_policy, product: timed_service, price_group: custom_group, usage_rate: 60, usage_subsidy: 24)
+
+        get estimate_path, params: {
+          customer_type: "base", facility_id: facility.id,
+          durations: { timed_service.id.to_s => "30" }, note: "Time-based pricing note",
+        }
+
+        expect(estimate_result_html).to include(timed_service.name, "$18.00", "30 Minutes", "Time-based pricing note")
+      end
     end
 
     it "prices the estimate for an external customer" do
@@ -85,22 +113,22 @@ RSpec.describe "Public estimates" do
       expect(response.body).to_not include(bundle.name)
     end
 
-    it "prices the estimate with an extra configured customer type" do
-      initial_types = Settings.public_estimates.customer_types
-      initial_name = Settings.price_group.name.cancer_center
-      Settings.public_estimates.customer_types = %w[base external cancer_center]
-      Settings.price_group.name.cancer_center = "Cancer Center Rate"
-      cancer_center = PriceGroup.setup_global(name: Settings.price_group.name.cancer_center, is_internal: false, display_order: 2)
-      create(:item_price_policy, product: item, price_group: cancer_center, unit_cost: 25, unit_subsidy: 0)
+    context "when there're extra customer types" do
+      let(:new_customer_types) { %w[base external cancer_center] }
 
-      get estimate_path, params: {
-        customer_type: "cancer_center", facility_id: facility.id, quantities: { item.id.to_s => "2" }
-      }
+      before do
+        allow(Settings.public_estimates).to receive(:customer_types) { new_customer_types }
+        cancer_center = PriceGroup.setup_global(name: Settings.price_group.name.cancer_center, is_internal: false, display_order: 2)
+        create(:item_price_policy, product: item, price_group: cancer_center, unit_cost: 25, unit_subsidy: 0)
+      end
 
-      expect(response.body).to include("$50.00")
-    ensure
-      Settings.public_estimates.customer_types = initial_types
-      Settings.price_group.name.cancer_center = initial_name
+      it "prices the estimate with an extra configured customer type" do
+        get estimate_path, params: {
+          customer_type: "cancer_center", facility_id: facility.id, quantities: { item.id.to_s => "2" }
+        }
+
+        expect(response.body).to include("$50.00")
+      end
     end
 
     it "shows a print shortcut and the selected facility and customer type with the results" do
@@ -108,10 +136,28 @@ RSpec.describe "Public estimates" do
         customer_type: "external", facility_id: facility.id, quantities: { item.id.to_s => "1" }
       }
 
-      printed = response.parsed_body.at_css(".show-for-print").text
-
       expect(response.body).to include("window.print()")
-      expect(printed).to include(facility.name, "External")
+      expect(estimate_result_html).to include(facility.name, "External")
+    end
+
+    it "lists a hidden product and prices it" do
+      hidden = create(:setup_item, facility:, name: "Hidden Widget", is_hidden: true)
+      create(:item_price_policy, product: hidden, price_group: PriceGroup.base, unit_cost: 5, unit_subsidy: 0)
+
+      get estimate_path, params: {
+        customer_type: "base", facility_id: facility.id, quantities: { hidden.id.to_s => "3" }
+      }
+
+      expect(response.body).to include(hidden.name)
+      expect(response.body).to include("$15.00")
+    end
+
+    it "does not list an archived product" do
+      archived = create(:setup_item, facility:, name: "Archived Widget", is_archived: true)
+
+      get estimate_path, params: { customer_type: "base", facility_id: facility.id }
+
+      expect(response.body).to_not include(archived.name)
     end
 
     it "does not list a product with no rate for the selected price group" do
@@ -131,20 +177,119 @@ RSpec.describe "Public estimates" do
       expect(response.body).to_not include("Estimated cost")
     end
 
-    context "when time based product duration is nil" do
-      let!(:timed_service) do
-        create(:timed_service, facility:)
+    it "displays the note in the estimate results" do
+      get estimate_path, params: {
+        customer_type: "base",
+        facility_id: facility.id,
+        quantities: { item.id.to_s => "2" },
+        note: "Test note for estimate",
+      }
+
+      expect(estimate_result_html).to include("Test note for estimate")
+    end
+
+    it "does not display note when none is provided" do
+      get estimate_path, params: {
+        customer_type: "base",
+        facility_id: facility.id,
+        quantities: { item.id.to_s => "2" },
+      }
+
+      expect(estimate_result_html).not_to include(Estimate.human_attribute_name(:note))
+    end
+
+    context "with a timed service" do
+      let!(:timed_service) { create(:timed_service, facility:) }
+      let!(:timed_service_price_policy) do
+        create(
+          :timed_service_price_policy,
+          product: timed_service, price_group: PriceGroup.base, usage_rate: 60, usage_subsidy: 0
+        )
+      end
+
+      it "prices it from the duration alone" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          durations: { timed_service.id.to_s => "90" },
+        }
+
+        expect(response.body).to include("$90.00")
+      end
+
+      it "labels the duration in minutes in the results" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          durations: { timed_service.id.to_s => "90" },
+        }
+
+        expect(response.body).to include("90 Minutes")
       end
 
       it "ignores time based products with no duration" do
         get estimate_path, params: {
           customer_type: "base",
           facility_id: facility.id,
-          quantities: { timed_service.id.to_s => "1" },
+          durations: { timed_service.id.to_s => "" },
         }
 
-        expect(page).not_to have_text("Estimated cost")
+        expect(response.body).to_not include("Estimated cost")
       end
+
+      it "ignores a quantity submitted for a time based product" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          quantities: { timed_service.id.to_s => "2" },
+        }
+
+        expect(response.body).to_not include("Estimated cost")
+      end
+
+      it "offers a duration input but no quantity input" do
+        get estimate_path, params: { customer_type: "base", facility_id: facility.id }
+
+        expect(response.parsed_body.at_css("input[name='durations[#{timed_service.id}]']")).to be_present
+        expect(response.parsed_body.at_css("input[name='quantities[#{timed_service.id}]']")).to be_nil
+      end
+    end
+
+    context "with a daily booking instrument" do
+      let!(:instrument) { create(:setup_instrument, :daily_booking, facility:) }
+      let!(:instrument_price_policy) do
+        create(
+          :instrument_price_policy,
+          product: instrument, price_group: PriceGroup.base, usage_rate_daily: 50, usage_subsidy_daily: 0
+        )
+      end
+
+      it "prices it from a number of days" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          durations: { instrument.id.to_s => "3" },
+        }
+
+        expect(response.body).to include("$150.00")
+      end
+
+      it "labels the billing unit as days in both the form and the results" do
+        get estimate_path, params: {
+          customer_type: "base",
+          facility_id: facility.id,
+          durations: { instrument.id.to_s => "3" },
+        }
+
+        expect(response.body).to include("3 Days")
+      end
+    end
+
+    it "offers a quantity input but no duration input for an item" do
+      get estimate_path, params: { customer_type: "base", facility_id: facility.id }
+
+      expect(response.parsed_body.at_css("input[name='quantities[#{item.id}]']")).to be_present
+      expect(response.parsed_body.at_css("input[name='durations[#{item.id}]']")).to be_nil
     end
   end
 end

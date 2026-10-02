@@ -185,18 +185,6 @@ _Known issue: if you run `db:setup` or all three in one rake command, the next t
 
 10. Play around! You're running NUcore!
 
-11. Run `delayed_job` to support in-browser email previews.
-
-    Run delayed jobs indefinitely in the background:
-    ```
-    ./script/delayed_job start
-    ```
-
-    Or run delayed jobs once for one-off jobs:
-    ```
-    ./script/delayed_job run
-    ```
-
 ### Test it
 
 NUcore uses [Rspec](http://rspec.info) to run tests. Try any of the following from NUcore's root directory.
@@ -232,6 +220,10 @@ NUcore uses [Rspec](http://rspec.info) to run tests. Try any of the following fr
     ```
     docker compose run app bundle exec rake teaspoon
     ```
+
+### Email previews
+
+On development, you can access email previews under <http://localhost:3000/rails/mailers/>.
 
 #### Github Actions
 
@@ -301,12 +293,6 @@ You can run specs in parallel during local development using the [`parallel_test
     ```
       bundle exec rake parallel:spec\['spec\/(?!features)'\]
     ```
-
-### Deprecation Toolkit
-
-It is possible to track deprecation warnings locally with [deprecation_toolkit](https://github.com/Shopify/deprecation_toolkit). If you set the `RECORD_DEPRECATIONS` environment variable, `deprecation_toolkit` will collect deprecation warnings in YAML files in the `deprecations/` folder when specs are run.
-
-`deprecation_toolkit` is configured in [`spec/deprecation_toolkit_env.rb`](spec/deprecation_toolkit_env.rb).
 
 ## Optional Modules
 

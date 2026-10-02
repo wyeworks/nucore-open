@@ -351,6 +351,10 @@ class Product < ApplicationRecord
     nil
   end
 
+  def duration_based?
+    time_unit.present?
+  end
+
   def activation_change_action
     archived_changed = saved_change_to_is_archived?
 

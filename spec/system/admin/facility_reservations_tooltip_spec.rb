@@ -2,13 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "Reservation Tooltips", :js do
-
-  # FullCalendar.io doesn't know about server time,
-  # and this spec isn't sensitive to fiscal year changes,
-  # so we're using system time instead of the global time lock.
-  before(:all) { travel_back }
-
+RSpec.describe "Reservation Tooltips", :js, :skip_time_travel do
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility: facility) }
   let(:reserve_start) { Time.current.change(hour: 12, min: 30) }
