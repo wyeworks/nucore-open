@@ -2,6 +2,7 @@
   = t(".title")
 
 %p= t(".intro")
+%p= t(".login_prompt", app_name: t("app_name"))
 
 = form_tag estimate_path, method: :get do
   .hide-from-print
@@ -25,18 +26,20 @@
           - @products.each do |product|
             %tr
               %td= product.name
-              %td= number_field_tag "quantities[#{product.id}]", params.dig(:quantities, product.id.to_s), min: 0, style: "width: 6em;"
-              %td
-                - if product.time_unit.present?
+              - if product.duration_based?
+                %td
+                %td
                   = number_field_tag "durations[#{product.id}]", params.dig(:durations, product.id.to_s), min: 1, style: "width: 6em;"
-                  = EstimateDetail.human_attribute_name("duration_unit.#{product.time_unit}", count: 2)
-
+                  = EstimateDetail.duration_unit_label(product.time_unit)
+              - else
+                %td
+                  = number_field_tag "quantities[#{product.id}]", params.dig(:quantities, product.id.to_s), min: 0, style: "width: 6em;"
+                %td
       %div
         %h3= t(".notes")
         .row
           .col-md-6
             = textarea_tag :note, params[:note], class: "form-control", size: "40x4", maxlength: 300
-
       %hr
       %div
         = submit_tag t(".calculate"), class: "btn btn-primary", name: nil
@@ -67,7 +70,7 @@
           %tr
             %td= estimate_detail.product_display
             %td= estimate_detail.quantity
-            %td= estimate_detail.duration_display
+            %td= estimate_detail.duration_with_unit
             %td.text-right= estimate_detail.cost ? estimate_detail.cost_display : t(".no_public_rate")
     .text-right
       %strong= t(".total")

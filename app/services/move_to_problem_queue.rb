@@ -24,11 +24,8 @@ class MoveToProblemQueue
     # TODO: Can probably remove this at some point, but it's a safety check for now
     raise "Trying to move Order ##{@order_detail} to problem queue, but it's not a problem" unless @order_detail.problem?
 
-    if OrderDetails::ProblemResolutionPolicy.new(@order_detail).user_can_resolve?
-      ProblemOrderMailer.notify_user_with_resolution_option(@order_detail).deliver_later
-    else
-      ProblemOrderMailer.notify_user(@order_detail).deliver_later
-    end
+    group = OrderDetails::ProblemResolutionPolicy.new(@order_detail).notification_group
+    ProblemOrderMailer.for_group(group, @order_detail).deliver_later
   end
 
 end

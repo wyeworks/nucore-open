@@ -2,24 +2,39 @@
 
 class ProblemOrderMailer < ApplicationMailer
 
+  def self.for_group(group, order_detail)
+    if group == :resolvable
+      notify_user_with_resolution_option(order_detail)
+    else
+      notify_user(order_detail)
+    end
+  end
+
   def notify_user(order_detail)
-    @order_detail = order_detail
-    @user = @order_detail.user
-    reply_to = @order_detail.facility.email || Settings.email.from
-    mail(to: @user.email, reply_to: reply_to, subject: text("notify_user.subject", facility: @order_detail.facility.abbreviation))
+    problem_order_email(order_detail)
   end
 
   def notify_user_with_resolution_option(order_detail)
-    @order_detail = order_detail
-    @user = @order_detail.user
-    reply_to = @order_detail.facility.email || Settings.email.from
-    mail(to: @user.email, reply_to: reply_to, subject: text("notify_user.subject", facility: @order_detail.facility.abbreviation))
+    problem_order_email(order_detail)
   end
 
   protected
 
   def translation_scope
     "views.problem_order_mailer"
+  end
+
+  private
+
+  def problem_order_email(order_detail)
+    @order_detail = order_detail
+    @user = order_detail.user
+
+    mail(
+      to: @user.email,
+      reply_to: order_detail.facility.email || Settings.email.from,
+      subject: text("notify_user.subject"),
+    )
   end
 
 end

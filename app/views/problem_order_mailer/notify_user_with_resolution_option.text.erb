@@ -4,7 +4,7 @@
   facility_email: @order_detail.facility.email,
   product: @order_detail.product.name,
   order_detail: @order_detail,
-  order_detail_link: order_order_detail_url(@order_detail.order, @order_detail),
+  order_detail_link: edit_problem_reservation_url(@order_detail.reservation),
   fulfillment_date: l(@order_detail.fulfilled_at.to_date, format: :usa),
   smart: false)
 %>

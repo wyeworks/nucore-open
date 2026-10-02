@@ -809,4 +809,26 @@ RSpec.describe Product do
       expect(product.activation_change_action).to eq(:deactivate)
     end
   end
+
+  describe "#duration_based?" do
+    it "is false for an item" do
+      expect(build(:setup_item)).to_not be_duration_based
+    end
+
+    it "is false for a service" do
+      expect(build(:setup_service)).to_not be_duration_based
+    end
+
+    it "is true for a timed service" do
+      expect(build(:setup_timed_service)).to be_duration_based
+    end
+
+    it "is true for an instrument" do
+      expect(build(:setup_instrument)).to be_duration_based
+    end
+
+    it "is true for a daily booking instrument" do
+      expect(build(:setup_instrument, :daily_booking)).to be_duration_based
+    end
+  end
 end
