@@ -128,6 +128,7 @@ en:
         To receive an estimate that reflects your actual user type, please log in to %{app_name} or
         request a %{app_name} account if you do not already have one.
       customer_type: I am
+      notes: Additional notes
       customer_types:
         base: Internal
         external: External

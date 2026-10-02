@@ -6,7 +6,7 @@ class PublicEstimatesController < ApplicationController
 
   def show
     @facilities = Facility.active.alphabetized
-    @facility = @facilities.find_by(id: params[:facility_id])
+    @facility = @facilities.find_by(id: permitted_params[:facility_id])
     @customer_type = customer_type
     @customer_type_options = customer_type_options
     @price_group = PriceGroup.for_public_estimate(@customer_type)
@@ -17,12 +17,20 @@ class PublicEstimatesController < ApplicationController
 
   private
 
+  def permitted_params
+    params.permit(
+      :facility_id,
+      :customer_type,
+      :note,
+    )
+  end
+
   def customer_types
-    Settings.public_estimates.customer_types.map(&:to_s)
+    Settings.public_estimates.customer_types
   end
 
   def customer_type
-    customer_types.include?(params[:customer_type]) ? params[:customer_type] : customer_types.first
+    customer_types.include?(permitted_params[:customer_type]) ? permitted_params[:customer_type] : customer_types.first
   end
 
   def customer_type_options
@@ -74,7 +82,7 @@ class PublicEstimatesController < ApplicationController
   end
 
   def build_estimate
-    estimate = Estimate.new(facility: @facility, price_group: @price_group)
+    estimate = Estimate.new(facility: @facility, price_group: @price_group, note: permitted_params[:note])
 
     requested_details.each do |attributes|
       estimate.estimate_details.build(attributes)
