@@ -29,11 +29,72 @@ RSpec.describe "Public estimates" do
     end
 
     it "prices the estimate for an internal customer" do
+      expect(Estimate).to receive(:new).with(
+        facility:, price_group: PriceGroup.base, note: nil, public_estimate: true,
+      ).and_call_original
+
       get estimate_path, params: {
         customer_type: "base", facility_id: facility.id, quantities: { item.id.to_s => "2" }
       }
 
       expect(response.body).to include("$20.00")
+    end
+
+    it "does not use another price group by default" do
+      subsidy_group = create(:price_group, facility:)
+      create(:item_price_policy, product: item, price_group: subsidy_group, unit_cost: 10, unit_subsidy: 8)
+
+      get estimate_path, params: {
+        customer_type: "base", facility_id: facility.id, quantities: { item.id.to_s => "2" }
+      }
+
+      expect(response.body).to include("$20.00")
+    end
+
+    context "with customized price groups" do
+      let(:custom_group) { create(:price_group, facility:) }
+      let!(:custom_item) { create(:setup_item, facility:) }
+
+      before do
+        create(:item_price_policy, product: custom_item, price_group: custom_group, unit_cost: 10, unit_subsidy: 3)
+        allow_any_instance_of(PublicEstimatesController).to receive(:price_groups_for_estimate).and_return([custom_group])
+      end
+
+      it "uses the pricing hook for product availability and calculation without saving" do
+        expect do
+          get estimate_path, params: {
+            customer_type: "base", facility_id: facility.id, quantities: { custom_item.id.to_s => "2" }
+          }
+        end.not_to change { [Estimate.count, EstimateDetail.count] }
+
+        expect(response.body).to include(custom_item.name, "$14.00")
+        expect(response.body).not_to include(item.name)
+      end
+
+      it "passes the requested product to the pricing hook" do
+        alternate_group = create(:price_group, facility:)
+        create(:item_price_policy, product: custom_item, price_group: alternate_group, unit_cost: 10, unit_subsidy: 9)
+        allow_any_instance_of(PublicEstimatesController).to receive(:price_groups_for_estimate)
+          .with(custom_item).and_return([alternate_group])
+
+        get estimate_path, params: {
+          customer_type: "base", facility_id: facility.id, quantities: { custom_item.id.to_s => "2" }
+        }
+
+        expect(estimate_result_html).to include(custom_item.name, "$2.00")
+      end
+
+      it "uses customized pricing for a duration-only detail and preserves the note" do
+        timed_service = create(:timed_service, facility:)
+        create(:timed_service_price_policy, product: timed_service, price_group: custom_group, usage_rate: 60, usage_subsidy: 24)
+
+        get estimate_path, params: {
+          customer_type: "base", facility_id: facility.id,
+          durations: { timed_service.id.to_s => "30" }, note: "Time-based pricing note",
+        }
+
+        expect(estimate_result_html).to include(timed_service.name, "$18.00", "30 Minutes", "Time-based pricing note")
+      end
     end
 
     it "prices the estimate for an external customer" do

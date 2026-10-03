@@ -66,6 +66,48 @@ RSpec.describe EstimateDetail do
       expect(anonymous_detail).not_to be_persisted
     end
 
+    context "with transient price groups" do
+      let(:subsidy_group) { create(:price_group, facility:) }
+      let!(:subsidy_policy) do
+        create(:item_price_policy, product: item, price_group: subsidy_group, unit_cost: 25, unit_subsidy: 15)
+      end
+
+      before do
+        anonymous_detail.price_groups = [subsidy_group]
+      end
+
+      it "uses the override without changing the estimate price group" do
+        expect(anonymous_detail.set_price_policy).to be true
+        expect(anonymous_detail.price_policy).to eq(subsidy_policy)
+        expect(anonymous_detail.cost).to eq(30)
+        expect(anonymous_detail.estimate.price_group).to eq(price_group)
+      end
+
+      it "does not fall back when the override is empty" do
+        anonymous_detail.price_groups = []
+
+        expect(anonymous_detail.set_price_policy).to be false
+      end
+
+      it "uses the estimate group again when the override is cleared" do
+        anonymous_detail.price_groups = nil
+
+        expect(anonymous_detail.set_price_policy).to be true
+        expect(anonymous_detail.price_policy).to eq(item_price_policy)
+      end
+
+      it "does not affect other estimate details" do
+        expect(persisted_detail.price_groups).to eq([price_group])
+        expect(persisted_detail.cost).to eq(60)
+      end
+
+      it "preserves nonbillable pricing regardless of the override" do
+        anonymous_detail.product = build(:item, facility:, billing_mode: "Nonbillable")
+
+        expect(anonymous_detail.price_groups).to eq([PriceGroup.nonbillable])
+      end
+    end
+
     it "returns false when no price policy matches the price group" do
       other_item = create(:setup_item, facility:)
       detail = Estimate.new(facility:, price_group:).estimate_details.build(product: other_item, quantity: 1)

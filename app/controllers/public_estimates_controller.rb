@@ -42,8 +42,12 @@ class PublicEstimatesController < ApplicationController
 
     facility_products.where(
       id: PricePolicy.current_for_date(Time.current).purchaseable
-                     .where(price_group: @price_group).select(:product_id),
+                     .where(price_group: price_groups_for_estimate).select(:product_id),
     )
+  end
+
+  def price_groups_for_estimate(_product = nil)
+    [@price_group].compact
   end
 
   def facility_products
@@ -82,10 +86,14 @@ class PublicEstimatesController < ApplicationController
   end
 
   def build_estimate
-    estimate = Estimate.new(facility: @facility, price_group: @price_group, note: permitted_params[:note])
+    estimate = Estimate.new(
+      facility: @facility, price_group: @price_group, note: permitted_params[:note], public_estimate: true,
+    )
 
     requested_details.each do |attributes|
-      estimate.estimate_details.build(attributes)
+      estimate.estimate_details.build(
+        attributes.merge(price_groups: price_groups_for_estimate(attributes.fetch(:product))),
+      )
     end
 
     estimate.estimate_details = estimate.estimate_details.filter(&:valid?)
