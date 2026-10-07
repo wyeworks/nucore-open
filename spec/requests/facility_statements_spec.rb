@@ -124,6 +124,70 @@ RSpec.describe "Statements" do
     end
   end
 
+  describe "Unreconcile button on show" do
+    let(:unreconcile_path) { unreconcile_facility_statement_path(facility, statement) }
+
+    def unreconcile_button
+      get facility_statement_path(facility, statement)
+      page.has_button?("Unreconcile")
+    end
+
+    shared_examples_for "a hidden Unreconcile button" do
+      it "does not show the button" do
+        expect(unreconcile_button).to be false
+      end
+    end
+
+    context "when the statement is reconciled", feature_setting: { "billing.allow_mass_unreconciling" => true } do
+      before { statement.order_details.update_all(state: :reconciled) }
+
+      context "as a global administrator" do
+        before { login_as create(:user, :administrator) }
+
+        it "shows the button" do
+          expect(unreconcile_button).to be true
+        end
+
+        it "posts to the unreconcile path" do
+          get facility_statement_path(facility, statement)
+
+          expect(page).to have_css("form[action='#{unreconcile_path}'][method='post']")
+        end
+      end
+
+      context "as a facility director" do
+        before { login_as create(:user, :facility_director, facility:) }
+
+        it_behaves_like "a hidden Unreconcile button"
+      end
+    end
+
+    context "when the feature is off", feature_setting: { "billing.allow_mass_unreconciling" => false } do
+      before do
+        statement.order_details.update_all(state: :reconciled)
+        login_as create(:user, :administrator)
+      end
+
+      it_behaves_like "a hidden Unreconcile button"
+    end
+
+    context "when the statement is not reconciled", feature_setting: { "billing.allow_mass_unreconciling" => true } do
+      before { login_as create(:user, :administrator) }
+
+      it_behaves_like "a hidden Unreconcile button"
+    end
+
+    context "when the statement is canceled", feature_setting: { "billing.allow_mass_unreconciling" => true } do
+      before do
+        statement.order_details.update_all(state: :reconciled)
+        statement.touch(:canceled_at)
+        login_as create(:user, :administrator)
+      end
+
+      it_behaves_like "a hidden Unreconcile button"
+    end
+  end
+
   describe "unreconcile" do
     let(:action) { -> { post unreconcile_facility_statement_path(facility, statement) } }
 
@@ -138,9 +202,7 @@ RSpec.describe "Statements" do
       )
     end
 
-    context "when the feature is off", feature_setting: { "billing.allow_mass_unreconciling" => false } do
-      before { login_as create(:user, :administrator) }
-
+    shared_examples_for "an unreconcile that is not permitted" do
       it "denies access" do
         action.call
 
@@ -150,25 +212,41 @@ RSpec.describe "Statements" do
       it "leaves the order detail reconciled" do
         action.call
 
-        expect(order_detail.reload.state).to eq("reconciled")
+        order_detail.reload
+        expect(order_detail.state).to eq("reconciled")
+        expect(order_detail.deposit_number).to eq("TX-1")
+        expect(order_detail.reconciled_note).to eq("Reconciled manually")
       end
+
+      it "logs nothing" do
+        expect { action.call }.not_to change(LogEvent, :count)
+      end
+    end
+
+    context "when the feature is off", feature_setting: { "billing.allow_mass_unreconciling" => false } do
+      before { login_as create(:user, :administrator) }
+
+      it_behaves_like "an unreconcile that is not permitted"
     end
 
     context "when the feature is on", feature_setting: { "billing.allow_mass_unreconciling" => true } do
       context "as a facility director" do
         before { login_as create(:user, :facility_director, facility:) }
 
-        it "denies access" do
-          action.call
+        it_behaves_like "an unreconcile that is not permitted"
+      end
 
-          expect(response).to have_http_status(:forbidden)
+      context "with the billing_journals granular permission", feature_setting: { granular_permissions: true } do
+        let(:user) { create(:user) }
+
+        before do
+          FacilityUserPermission.create!(
+            user:, facility:, read_access: true, billing_journals: true
+          )
+          login_as user
         end
 
-        it "leaves the order detail reconciled" do
-          action.call
-
-          expect(order_detail.reload.state).to eq("reconciled")
-        end
+        it_behaves_like "an unreconcile that is not permitted"
       end
 
       context "as a global administrator" do
