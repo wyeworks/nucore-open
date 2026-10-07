@@ -123,4 +123,105 @@ RSpec.describe "Statements" do
       expect(page).to have_content(order_detail.order_number)
     end
   end
+
+  describe "unreconcile" do
+    let(:action) { -> { post unreconcile_facility_statement_path(facility, statement) } }
+
+    before do
+      order_detail.update!(actual_cost: 10, actual_subsidy: 0)
+      order_detail.update!(
+        state: "reconciled",
+        order_status: OrderStatus.reconciled,
+        reconciled_at: 1.day.ago,
+        deposit_number: "TX-1",
+        reconciled_note: "Reconciled manually",
+      )
+    end
+
+    context "when the feature is off", feature_setting: { "billing.allow_mass_unreconciling" => false } do
+      before { login_as create(:user, :administrator) }
+
+      it "denies access" do
+        action.call
+
+        expect(response).to have_http_status(:forbidden)
+      end
+
+      it "leaves the order detail reconciled" do
+        action.call
+
+        expect(order_detail.reload.state).to eq("reconciled")
+      end
+    end
+
+    context "when the feature is on", feature_setting: { "billing.allow_mass_unreconciling" => true } do
+      context "as a facility director" do
+        before { login_as create(:user, :facility_director, facility:) }
+
+        it "denies access" do
+          action.call
+
+          expect(response).to have_http_status(:forbidden)
+        end
+
+        it "leaves the order detail reconciled" do
+          action.call
+
+          expect(order_detail.reload.state).to eq("reconciled")
+        end
+      end
+
+      context "as a global administrator" do
+        let(:admin) { create(:user, :administrator) }
+
+        before { login_as admin }
+
+        it "unreconciles the order detail" do
+          action.call
+
+          order_detail.reload
+          expect(order_detail.state).to eq("complete")
+          expect(order_detail.reconciled_at).to be_nil
+          expect(order_detail.deposit_number).to be_nil
+          expect(order_detail.reconciled_note).to be_nil
+        end
+
+        it "leaves the statement unreconciled" do
+          action.call
+
+          expect(statement.reload.status).to eq(:unreconciled)
+        end
+
+        it "logs the action with the cleared fields" do
+          action.call
+
+          log_event = LogEvent.where(loggable: statement, event_type: :unreconciled).last
+          expect(log_event.user).to eq(admin)
+          expect(log_event.metadata["deposit_numbers"]).to eq(["TX-1"])
+          expect(log_event.metadata["reconciled_notes"]).to eq(["Reconciled manually"])
+        end
+
+        it "redirects back to the statement with a notice" do
+          action.call
+
+          expect(response).to redirect_to(facility_statement_path(facility, statement))
+          expect(flash[:notice]).to eq("1 payment(s) successfully unreconciled")
+        end
+
+        context "when nothing on the statement is reconciled" do
+          before do
+            order_detail.update!(state: "complete", order_status: OrderStatus.complete)
+          end
+
+          it "flashes an error and logs nothing" do
+            expect { action.call }.not_to change(LogEvent, :count)
+
+            expect(flash[:error]).to eq(
+              "No orders on this statement were eligible to unreconcile"
+            )
+          end
+        end
+      end
+    end
+  end
 end

@@ -55,6 +55,10 @@ en:
       success_with_email_html: Notifications sent successfully to:<br/>%{accounts}'
       cancel_success: "!Statement! has been canceled"
       cancel_fail: "Unable to cancel !statement!"
+      unreconcile:
+        success: "%{count} order detail(s) successfully unreconciled"
+        errors:
+          none_eligible: "No orders on this !statement_downcase! were eligible to unreconcile"
 
     facility_journals:
       update:
