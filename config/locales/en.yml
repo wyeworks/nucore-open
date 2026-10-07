@@ -815,6 +815,7 @@ en:
       download: Download
     resend: Resend
     cancel: Cancel
+    unreconcile: Unreconcile
     closed_at: Closed At
     closed_by: Closed By
     closed_on: Closed At/By
