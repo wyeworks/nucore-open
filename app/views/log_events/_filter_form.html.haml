@@ -12,7 +12,7 @@
       = select_tag(:events,
         options_for_select(event_type_options, params[:events]),
         multiple: true,
-        class: "js--chosen",
+        class: "js--chosen chosen-full-width",
         data: { placeholder: text(:event_placeholder) })
     - if local_assigns[:exclude_query_field]
       .col-md-3
