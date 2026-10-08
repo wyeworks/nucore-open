@@ -70,6 +70,13 @@ RSpec.describe "log_events", type: :request do
 
     context "statement unreconciled events" do
       let(:statement) { create(:statement, facility:) }
+      let(:deposit_number_label) { OrderDetail.human_attribute_name(:deposit_number) }
+      let(:reconciled_note_label) { OrderDetail.human_attribute_name(:reconciled_note) }
+      let(:csv) do
+        Reports::LogEventsReport.new(
+          start_date: nil, end_date: nil, events: ["statement.unreconciled"], query: nil
+        ).to_csv
+      end
 
       before do
         LogEvent.destroy_all
@@ -91,14 +98,14 @@ RSpec.describe "log_events", type: :request do
       it "renders the Transaction IDs and Reconciliation Notes that were cleared" do
         get log_events_path
 
-        expect(page).to have_content(
-          "#{OrderDetail.human_attribute_name(:deposit_number)}: TX-1, TX-2",
-          normalize_ws: true,
-        )
-        expect(page).to have_content(
-          "#{OrderDetail.human_attribute_name(:reconciled_note)}: Paid late",
-          normalize_ws: true,
-        )
+        expect(page).to have_content("#{deposit_number_label}: TX-1, TX-2", normalize_ws: true)
+        expect(page).to have_content("#{reconciled_note_label}: Paid late", normalize_ws: true)
+      end
+
+      it "exports the cleared fields" do
+        expect(csv).to include(statement.invoice_number)
+        expect(csv).to include("#{deposit_number_label}: TX-1, TX-2")
+        expect(csv).to include("#{reconciled_note_label}: Paid late")
       end
 
       context "when the event has no metadata" do
@@ -111,9 +118,11 @@ RSpec.describe "log_events", type: :request do
           get log_events_path
 
           expect(page).to have_content("#{I18n.t('Statement')} unreconciled")
-          expect(page).not_to have_content(
-            "#{OrderDetail.human_attribute_name(:deposit_number)}:"
-          )
+          expect(page).not_to have_content("#{deposit_number_label}:")
+        end
+
+        it "exports the object column without a trailing separator" do
+          expect(csv).to include(",#{statement.to_log_s},")
         end
       end
     end
