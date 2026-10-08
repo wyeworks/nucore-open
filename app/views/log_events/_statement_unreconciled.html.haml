@@ -1,0 +1,14 @@
+- deposit_numbers = log_event.metadata["deposit_numbers"] || []
+- reconciled_notes = log_event.metadata["reconciled_notes"] || []
+
+- if deposit_numbers.any?
+  %br
+  %small.text-muted
+    %strong= "#{OrderDetail.human_attribute_name(:deposit_number)}:"
+    = deposit_numbers.join(", ")
+
+- if reconciled_notes.any?
+  %br
+  %small.text-muted
+    %strong= "#{OrderDetail.human_attribute_name(:reconciled_note)}:"
+    = reconciled_notes.join("; ")

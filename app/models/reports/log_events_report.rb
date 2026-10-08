@@ -12,7 +12,7 @@ module Reports
       "user.create", "user.suspended", "user.unsuspended",
       "user.default_price_group_changed",
       "account.suspended", "account.unsuspended",
-      "journal.create", "statement.create",
+      "journal.create", "statement.create", "statement.unreconciled",
       "user_role.create", "user_role.delete",
       "facility_user_permission.create", "facility_user_permission.update",
       "facility_user_permission.delete",

@@ -417,6 +417,7 @@ en:
         journal_or_statement_date: Journal/Statement Date
         statement_date: Invoice date created
         note: Note
+        deposit_number: Deposit Number
         order_status: Order Status
         ordered_at: Ordered Date
         ordered_by: Ordered By

@@ -67,5 +67,55 @@ RSpec.describe "log_events", type: :request do
         expect(page).to_not have_content(some_user.first_name)
       end
     end
+
+    context "statement unreconciled events" do
+      let(:statement) { create(:statement, facility:) }
+
+      before do
+        LogEvent.destroy_all
+        LogEvent.log(
+          statement, :unreconciled, admin,
+          metadata: { deposit_numbers: ["TX-1", "TX-2"], reconciled_notes: ["Paid late"] }
+        )
+
+        login_as admin
+      end
+
+      it "renders the event" do
+        get log_events_path
+
+        expect(page).to have_content("#{I18n.t('Statement')} unreconciled")
+        expect(page).to have_content(statement.invoice_number)
+      end
+
+      it "renders the Transaction IDs and Reconciliation Notes that were cleared" do
+        get log_events_path
+
+        expect(page).to have_content(
+          "#{OrderDetail.human_attribute_name(:deposit_number)}: TX-1, TX-2",
+          normalize_ws: true,
+        )
+        expect(page).to have_content(
+          "#{OrderDetail.human_attribute_name(:reconciled_note)}: Paid late",
+          normalize_ws: true,
+        )
+      end
+
+      context "when the event has no metadata" do
+        before do
+          LogEvent.destroy_all
+          LogEvent.log(statement, :unreconciled, admin)
+        end
+
+        it "still renders the row" do
+          get log_events_path
+
+          expect(page).to have_content("#{I18n.t('Statement')} unreconciled")
+          expect(page).not_to have_content(
+            "#{OrderDetail.human_attribute_name(:deposit_number)}:"
+          )
+        end
+      end
+    end
   end
 end
