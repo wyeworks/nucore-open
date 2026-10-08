@@ -236,7 +236,8 @@ RSpec.describe "Statements" do
         it_behaves_like "an unreconcile that is not permitted"
       end
 
-      context "with the billing_journals granular permission", feature_setting: { granular_permissions: true } do
+      context "with the billing_journals granular permission",
+              feature_setting: { "billing.allow_mass_unreconciling" => true, granular_permissions: true } do
         let(:user) { create(:user) }
 
         before do
@@ -283,7 +284,7 @@ RSpec.describe "Statements" do
           action.call
 
           expect(response).to redirect_to(facility_statement_path(facility, statement))
-          expect(flash[:notice]).to eq("1 payment(s) successfully unreconciled")
+          expect(flash[:notice]).to eq("1 order detail(s) successfully unreconciled")
         end
 
         context "when nothing on the statement is reconciled" do
