@@ -153,6 +153,14 @@ RSpec.describe "Statements" do
 
           expect(page).to have_css("form[action='#{unreconcile_path}'][method='post']")
         end
+
+        it "disables the button on submit" do
+          get facility_statement_path(facility, statement)
+
+          expect(page).to have_css(
+            "form[action='#{unreconcile_path}'] button[type='submit'][data-disable-with]"
+          )
+        end
       end
 
       context "as a facility director" do

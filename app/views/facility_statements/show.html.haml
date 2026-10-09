@@ -18,7 +18,8 @@
   .mb-3
     = button_to t("statements.unreconcile"),
       unreconcile_facility_statement_path(current_facility, @statement),
-      class: "btn btn-primary"
+      class: "btn btn-primary",
+      data: { disable_with: t("shared.loading") }
 
 = render_view_hook("actions")
 
