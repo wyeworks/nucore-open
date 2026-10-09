@@ -14,6 +14,13 @@
     input_html: { value: Statement.human_attribute_name("status.#{@statement.status}") }
   = render_view_hook("readonly_form", form: f)
 
+- if @statement.reconciled? && SettingsHelper.feature_on?("billing.allow_mass_unreconciling") && can?(:unreconcile, OrderDetail)
+  .mb-3
+    = button_to t("statements.unreconcile"),
+      unreconcile_facility_statement_path(current_facility, @statement),
+      class: "btn btn-primary",
+      data: { disable_with: t("shared.loading") }
+
 = render_view_hook("actions")
 
 = render "shared/order_details_table",

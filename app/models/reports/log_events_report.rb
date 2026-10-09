@@ -12,7 +12,7 @@ module Reports
       "user.create", "user.suspended", "user.unsuspended",
       "user.default_price_group_changed",
       "account.suspended", "account.unsuspended",
-      "journal.create", "statement.create",
+      "journal.create", "statement.create", "statement.unreconciled",
       "user_role.create", "user_role.delete",
       "facility_user_permission.create", "facility_user_permission.update",
       "facility_user_permission.delete",
@@ -40,7 +40,7 @@ module Reports
       {
         event_time: :created_at,
         event: ->(log_event) { text(log_event.locale_tag, log_event.metadata.symbolize_keys) },
-        object: ->(log_event) { log_event.loggable_to_s },
+        object: ->(log_event) { object_column(log_event) },
         facility: ->(log_event) { log_event.facility },
         user: :user,
       }
@@ -69,6 +69,13 @@ module Reports
     end
 
     protected
+
+    def object_column(log_event)
+      [
+        log_event.loggable_to_s,
+        LogEventMetadataPresenter.new(log_event).to_s,
+      ].compact_blank.join(" ")
+    end
 
     def translation_scope
       "views.log_events.index"

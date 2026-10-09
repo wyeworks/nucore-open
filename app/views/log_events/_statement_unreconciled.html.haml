@@ -1,0 +1,5 @@
+- LogEventMetadataPresenter.new(log_event).details.each do |label, value|
+  %br
+  %small.text-muted
+    %strong= "#{label}:"
+    = value

@@ -26,7 +26,9 @@
       %tr
         %td= format_usa_datetime(log_event.event_time)
         %td= text(log_event.locale_tag, log_event.metadata.symbolize_keys)
-        %td= log_event.loggable_to_s
+        %td
+          = log_event.loggable_to_s
+          = render_if_exists "#{log_event.loggable_type.downcase.underscore}_#{log_event.event_type}", log_event: log_event
         %td= log_event.facility
         %td= log_event.user.try(:to_s)
 

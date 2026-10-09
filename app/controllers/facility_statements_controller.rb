@@ -124,6 +124,28 @@ class FacilityStatementsController < ApplicationController
     redirect_to action: :index
   end
 
+  # POST /facilities/:facility_id/statements/:id/unreconcile
+  def unreconcile
+    raise CanCan::AccessDenied unless SettingsHelper.feature_on?("billing.allow_mass_unreconciling")
+
+    authorize! :unreconcile, OrderDetail
+
+    statement = Statement.find(params[:id])
+
+    unreconciler = Statements::Unreconciler.new(statement, current_user)
+    count = unreconciler.unreconcile
+
+    if count > 0
+      flash[:notice] = text("unreconcile.success", count:)
+    elsif unreconciler.errors.any?
+      flash[:error] = unreconciler.errors.join("<br />").html_safe
+    else
+      flash[:error] = text("unreconcile.errors.none_eligible")
+    end
+
+    redirect_to [current_facility, statement]
+  end
+
   # GET /facilities/:facility_id/statements/:id
   def show
     @statement = Statement.find(params[:id])

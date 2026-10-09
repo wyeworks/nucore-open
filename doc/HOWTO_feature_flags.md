@@ -72,7 +72,7 @@ Grouped under `feature.pricing`.
 Grouped under `feature.billing`.
 
 * `account_reference_field` Store a reference field on accounts. Dartmouth uses this if there is something special about the account. Like is the account shared with an outside source or they only want the account used for particular reasons. It’s mainly for the odd exception that an account maybe flagged for.
-* `allow_mass_unreconciling`: Allow to unreconcile transactions in bulk.
+* `allow_mass_unreconciling`: Allow to unreconcile transactions in bulk. Enables both the "Unreconcile Orders" buttons on a journal and the "Unreconcile" button on a statement, which unreconciles every order on that invoice at once. Global Administrators only in either case.
 * `billing_table_price_groups`: Show price group column on transactions tables.
 * `charge_full_price_on_cancellation` Allow option to charge full price on cancelation
 * `default_journal_cutoff_time` Journal cutoff time

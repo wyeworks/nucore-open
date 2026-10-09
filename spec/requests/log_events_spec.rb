@@ -67,5 +67,64 @@ RSpec.describe "log_events", type: :request do
         expect(page).to_not have_content(some_user.first_name)
       end
     end
+
+    context "statement unreconciled events" do
+      let(:statement) { create(:statement, facility:) }
+      let(:deposit_number_label) { OrderDetail.human_attribute_name(:deposit_number) }
+      let(:reconciled_note_label) { OrderDetail.human_attribute_name(:reconciled_note) }
+      let(:csv) do
+        Reports::LogEventsReport.new(
+          start_date: nil, end_date: nil, events: ["statement.unreconciled"], query: nil
+        ).to_csv
+      end
+
+      before do
+        LogEvent.destroy_all
+        LogEvent.log(
+          statement, :unreconciled, admin,
+          metadata: { deposit_numbers: ["TX-1", "TX-2"], reconciled_notes: ["Paid late"] }
+        )
+
+        login_as admin
+      end
+
+      it "renders the event" do
+        get log_events_path
+
+        expect(page).to have_content("#{I18n.t('Statement')} unreconciled")
+        expect(page).to have_content(statement.invoice_number)
+      end
+
+      it "renders the Transaction IDs and Reconciliation Notes that were cleared" do
+        get log_events_path
+
+        expect(page).to have_content("#{deposit_number_label}: TX-1, TX-2", normalize_ws: true)
+        expect(page).to have_content("#{reconciled_note_label}: Paid late", normalize_ws: true)
+      end
+
+      it "exports the cleared fields" do
+        expect(csv).to include(statement.invoice_number)
+        expect(csv).to include("#{deposit_number_label}: TX-1, TX-2")
+        expect(csv).to include("#{reconciled_note_label}: Paid late")
+      end
+
+      context "when the event has no metadata" do
+        before do
+          LogEvent.destroy_all
+          LogEvent.log(statement, :unreconciled, admin)
+        end
+
+        it "still renders the row" do
+          get log_events_path
+
+          expect(page).to have_content("#{I18n.t('Statement')} unreconciled")
+          expect(page).not_to have_content("#{deposit_number_label}:")
+        end
+
+        it "exports the object column without a trailing separator" do
+          expect(csv).to include(",#{statement.to_log_s},")
+        end
+      end
+    end
   end
 end

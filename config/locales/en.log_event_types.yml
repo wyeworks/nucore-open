@@ -14,6 +14,7 @@ en:
     statement:
       create: "!Statement! created"
       closed: "!Statement! closed"
+      unreconciled: "!Statement! unreconciled"
       statement_email: "!Statement! Email"
       notification:
         sent: "Notification sent"

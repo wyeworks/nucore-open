@@ -370,6 +370,7 @@ Rails.application.routes.draw do
     resources :statements, controller: "facility_statements", only: [:index, :new, :show, :create] do
       post "resend_emails", on: :member
       post "cancel", on: :member
+      post "unreconcile", on: :member
     end
 
     get "general_reports/raw", to: "reports/export_raw_reports#export_all", as: "export_raw_reports"
