@@ -35,17 +35,17 @@ class OrderImport < ApplicationRecord
   #
 
   def process_upload!
-    init_error_report
+    imported = false
 
-    if fail_on_error?
-      handle_save_nothing_on_error
-    else
-      handle_save_clean_orders
+    with_lock do
+      next if processed?
+
+      import_upload
+      imported = true
     end
 
-    store_error_report if result.failed?
-    self.processed_at = Time.zone.now
-    save!
+    send_notifications(orders_to_notify) if imported
+    imported
   end
 
   def result
@@ -89,13 +89,27 @@ class OrderImport < ApplicationRecord
     self.error_report = nil
   end
 
+  def import_upload
+    init_error_report
+
+    if fail_on_error?
+      handle_save_nothing_on_error
+    else
+      handle_save_clean_orders
+    end
+
+    store_error_report if result.failed?
+    self.processed_at = Time.zone.now
+    save!
+  end
+
   def handle_save_clean_orders # TODO: refactor and rename
     rows_by_order_key.each do |order_key, rows|
       reset_error_mode
       processed_rows = []
 
-      # one transaction per order_key (per order effectively)
-      Order.transaction do
+      # one savepoint per order_key (per order effectively)
+      Order.transaction(requires_new: true) do
         processed_rows += rows.map { |row| process_row(row).to_csv }
 
         if error_mode?
@@ -108,14 +122,12 @@ class OrderImport < ApplicationRecord
         end
       end
 
-      if !error_mode? && send_receipts?
-        send_notifications([order_cache[order_key]])
-      end
+      orders_to_notify << order_cache[order_key] if !error_mode? && send_receipts?
     end
   end
 
   def handle_save_nothing_on_error # TODO: refactor and rename
-    Order.transaction do
+    Order.transaction(requires_new: true) do
       begin
         csv.each do |row|
           row_importer = import_row(row)
@@ -137,7 +149,7 @@ class OrderImport < ApplicationRecord
     end
 
     if result.succeeded?
-      send_notifications(processed_orders) if send_receipts?
+      orders_to_notify.concat(processed_orders.to_a) if send_receipts?
       discard_error_report
     end
   end
@@ -165,6 +177,10 @@ class OrderImport < ApplicationRecord
 
   def order_cache
     @order_cache ||= OrderCache.new
+  end
+
+  def orders_to_notify
+    @orders_to_notify ||= []
   end
 
   def process_row(row)
@@ -235,9 +251,9 @@ class OrderImport < ApplicationRecord
 
     attr_accessor :successes, :failures
 
-    def initialize
-      self.successes = 0
-      self.failures = 0
+    def initialize(successes: 0, failures: 0)
+      self.successes = successes
+      self.failures = failures
     end
 
     def failed?

@@ -334,14 +334,15 @@ RSpec.describe OrderImport, :time_travel do
         allow_any_instance_of(OrderRowImporter).to receive(:import).and_raise("Something unknown happened")
         import.upload_file.file = generate_import_file
         import.upload_file.save!
-        import.process_upload!
       end
 
       it "produces an error report" do
+        import.process_upload!
         expect(import.error_file_content).to include("Failed to import row")
       end
 
       it "sets error flags" do
+        import.process_upload!
         expect(import).to be_error_mode
         expect(import.result).to be_failed
       end
@@ -355,6 +356,19 @@ RSpec.describe OrderImport, :time_travel do
         end
 
         import.process_upload!
+      end
+    end
+
+    context "when the import was already processed" do
+      before do
+        import.upload_file.file = generate_import_file
+        import.upload_file.save!
+        import.process_upload!
+      end
+
+      it "does not process the upload again" do
+        expect(OrderRowImporter).not_to receive(:new)
+        expect(import.process_upload!).to be(false)
       end
     end
 

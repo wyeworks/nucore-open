@@ -4,21 +4,30 @@ require "rails_helper"
 
 RSpec.describe Reports::OrderImport do
   let(:order_import) { OrderImport.new }
-  let(:report_import) { described_class.new(order_import) }
+  let(:successes) { 0 }
+  let(:failures) { 0 }
+  let(:report_import) { described_class.new(order_import:, successes:, failures:) }
 
   describe "#text_content" do
-    it "displays a success message if successful" do
-      order_import.result.successes = 1
-      expect(report_import.text_content).to include "The import completed successfully"
+    context "when successful" do
+      let(:successes) { 1 }
+
+      it "displays a success message" do
+        expect(report_import.text_content).to include "The import completed successfully"
+      end
     end
 
     it "displays a blank message if blank" do
       expect(report_import.text_content).to eq I18n.t("reports.order_import.blank")
     end
 
-    it "displays a failure message if there are failures" do
-      order_import.result.failures = 1
-      expect(report_import.text_content).to include "The import failed."
+    context "when there are failures" do
+      let(:successes) { 2 }
+      let(:failures) { 1 }
+
+      it "displays a failure message with the results" do
+        expect(report_import.text_content).to include "The import failed. 2 line item(s) would have been created successfully, but 1 failed."
+      end
     end
   end
 end

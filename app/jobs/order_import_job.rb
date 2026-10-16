@@ -2,11 +2,13 @@
 
 class OrderImportJob < ApplicationJob
   def perform(order_import, report_recipient)
-    order_import.process_upload!
-    report = Reports::OrderImport.new(order_import)
+    return unless order_import.process_upload!
 
-    CsvReportMailer
-      .csv_report_email(report_recipient, report)
-      .deliver_now
+    CsvReportEmailJob.perform_later(
+      "Reports::OrderImport",
+      report_recipient,
+      order_import:,
+      **order_import.result.to_h,
+    )
   end
 end

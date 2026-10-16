@@ -2,8 +2,9 @@
 
 class Reports::OrderImport
 
-  def initialize(order_import)
+  def initialize(order_import:, successes:, failures:)
     @order_import = order_import
+    @result = ::OrderImport::Result.new(successes:, failures:)
   end
 
   def description
@@ -16,12 +17,12 @@ class Reports::OrderImport
 
   def text_content
     case
-    when @order_import.result.blank?
+    when @result.blank?
       I18n.t("reports.order_import.blank")
-    when @order_import.result.failed?
-      I18n.t(failure_message_key, **@order_import.result.to_h)
+    when @result.failed?
+      I18n.t(failure_message_key, **@result.to_h)
     else
-      I18n.t("reports.order_import.success", **@order_import.result.to_h)
+      I18n.t("reports.order_import.success", **@result.to_h)
     end
   end
 
