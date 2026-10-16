@@ -388,6 +388,85 @@ RSpec.describe FacilityReservationsController do
         expect(assigns[:order_detail]).to be_estimated_cost_changed
       end
     end
+
+    context "with a daily booking instrument" do
+      let(:daily_instrument) do
+        create(
+          :setup_instrument, :daily_booking,
+          facility: @authable,
+          facility_account: @facility_account,
+        )
+      end
+      let(:reservation) do
+        create(:reservation, :daily, product: daily_instrument)
+      end
+      let(:order_detail) do
+        create(
+          :order_detail,
+          account:,
+          reservation:,
+          order: @order,
+          product: daily_instrument,
+        )
+      end
+
+      before :each do
+        product.reload
+        order_detail.set_default_status!
+        @params = {
+          facility_id: @authable.url_name,
+          order_id: @order.id,
+          order_detail_id: order_detail.id,
+          id: reservation.id,
+        }
+      end
+
+      before do
+        maybe_grant_always_sign_in :director
+      end
+
+      describe "edit" do
+        before :each do
+          @method = :get
+          @action = :edit
+        end
+
+        it "renders the duration_days field and month-view calendar" do
+          do_request
+
+          expect(response.body).to have_css("input[name='reservation[duration_days]']")
+          expect(response.body).to have_css("#calendar[data-default-view='month']")
+        end
+      end
+
+      describe "update" do
+        let(:start_at) { reservation.start_at }
+
+        before :each do
+          @method = :put
+          @action = :update
+          @params.merge!(
+            reservation: {
+              duration_days: "3",
+            }
+          )
+        end
+
+        it "responds ok" do
+          do_request
+
+          expect(response).to have_http_status(:ok)
+        end
+
+        it "calculates reserve_end_at from duration_days" do
+          do_request
+
+          expect(reservation.reload.reserve_end_at).to(
+            eq(reservation.reserve_start_at + 3.days)
+          )
+        end
+      end
+    end
   end
 
   describe "#tab_counts" do

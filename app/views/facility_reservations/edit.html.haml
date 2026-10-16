@@ -4,9 +4,14 @@
     var minTime         = #{@instrument.first_available_hour};
     var maxTime         = #{@instrument.last_available_hour+1};
     var currentReservationId = #{@reservation.id};
-  - unless @order_detail.complete?
-    :javascript
-      var initialDate = "#{@reservation.reserve_start_at.strftime('%Y-%m-%d')}";
+    var dailyBooking = #{@instrument.daily_booking?};
+
+    var reserveMinimum  = #{@instrument.min_reserve_mins || 0};
+    var reserveMaximum  = #{@instrument.max_reserve_mins || 0};
+    var initialDate = "#{@reservation&.reserve_start_at&.iso8601}";
+    var reserveInterval = #{@instrument.reserve_interval || 1};
+    var dailyBooking = #{@instrument.daily_booking?};
+
   = render "shared/headers/calendar"
   = javascript_include_tag "reservations.js"
 
@@ -15,19 +20,14 @@
 
 %h2= @instrument.name
 
-= simple_form_for(@reservation, url: facility_order_order_detail_reservation_path, html: {method: :put}) do |f|
+= simple_form_for @reservation,
+  url: facility_order_order_detail_reservation_path,
+  html: { method: :put, class: "js--reservationForm",
+    data: { reservation_id: @reservation.id, admin_view: true } } do |f|
   = f.error_messages
 
   - if @reservation.admin_editable?
-    .datetime-block
-      = f.input :reserve_start_date, as: :date_field,
-        min_date: @max_days_ago.days.from_now, max_date: @max_window.days.from_now,
-        input_html: { value: @reservation.reserve_start_at }
-      .form-group
-        .controls
-          .string.optional.control-label &nbsp;
-          = time_select f, :reserve_start
-      = f.input :duration_mins, input_html: { class: "timeinput" }
+    = render "reservations/reservation_fields", f: f, admin_edit: true
   - else
     = f.input :reserve_start_date, label: "Reservation", as: :readonly, input_html: { value: @reservation.reserve_to_s }
 
@@ -36,7 +36,7 @@
   - if @reservation.can_edit_actuals?
     .datetime-block
       = f.input :actual_start_date, as: :date_field,
-        min_date: @max_days_ago.days.from_now, max_date: Date.current,
+        min_date: @reservation_window.max_days_ago, max_date: Date.current,
         input_html: { value: @reservation.actual_start_at }
       .form-group
         .controls
@@ -64,4 +64,4 @@
 #overlay
   #spinner
     #hide
-      #calendar
+      #calendar{ data: reservations_calendar_config }

@@ -62,7 +62,7 @@ class FacilityReservationsController < ApplicationController
         @reservation.save_as_user!(session_user)
         @order_detail.save!
         flash.now[:notice] = "The reservation has been updated successfully.#{additional_notice}"
-      rescue StandardError
+      rescue ActiveRecord::RecordInvalid => e
         flash.now[:error] = "An error was encountered while updating the reservation."
         raise ActiveRecord::Rollback
       end
@@ -175,6 +175,7 @@ class FacilityReservationsController < ApplicationController
                                         :reserve_start_min,
                                         :reserve_start_meridian,
                                         :duration_mins,
+                                        :duration_days,
                                         :reserve_start_at,
                                         :reserve_end_at)
   end
@@ -231,12 +232,9 @@ class FacilityReservationsController < ApplicationController
                     .includes(:reservation)
   end
 
+  # initialize calendar time constraints
   def set_windows
-    @max_window = 365
-    @max_days_ago = -365
-    # initialize calendar time constraints
-    @min_date     = Time.zone.now.strftime("%Y%m%d")
-    @max_date     = (Time.zone.now + @max_window.days).strftime("%Y%m%d")
+    @reservation_window = ReservationWindow.new(@reservation, current_user)
   end
 
 end

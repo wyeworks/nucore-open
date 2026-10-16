@@ -3,6 +3,7 @@ var ReservationCalendar = function() {}
 ReservationCalendar.prototype = {
   init: function($calendar, $reservationForm, readOnly) {
     this.id = $reservationForm.data("reservation-id") || "new";
+    this.adminView = $reservationForm.data("admin-view");
     this.$calendar = $calendar;
     this.$reservationForm = $reservationForm;
 
@@ -29,7 +30,7 @@ ReservationCalendar.prototype = {
     }
     this.currentEvent = {
       id: "_currentEvent",
-      title: "My Reservation",
+      title: this.adminView ? "Reservation" : "My Reservation",
       start: start,
       end: end,
       className: 'current-event',
