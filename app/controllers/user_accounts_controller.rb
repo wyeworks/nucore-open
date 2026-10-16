@@ -5,6 +5,7 @@ class UserAccountsController < ApplicationController
   layout "two_column"
 
   before_action :init_current_facility
+  before_action :require_cross_facility, only: [:edit, :update]
   load_resource class: "User", id_param: :user_id, instance_name: :user
   authorize_resource class: AccountUser
   before_action { @active_tab = "admin_users" }
@@ -32,6 +33,10 @@ class UserAccountsController < ApplicationController
   end
 
   private
+
+  def require_cross_facility
+    raise ActiveRecord::RecordNotFound unless current_facility.cross_facility?
+  end
 
   def user_params
     params.require(:user).permit(account_users_attributes: [:id, :_destroy])

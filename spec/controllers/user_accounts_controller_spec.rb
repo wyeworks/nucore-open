@@ -23,17 +23,17 @@ RSpec.describe UserAccountsController do
   end
 
   context "PATCH to :update" do
-    let(:director) { create(:user, :facility_director, facility: facility) }
+    let(:account_manager) { create(:user, :account_manager) }
     let(:purchaser) { create(:user) }
     let(:owner) { create(:user) }
     let(:account) { create(:account, :with_account_owner, owner: owner) }
 
     describe "removing the account owner" do
       before do
-        sign_in director
+        sign_in account_manager
         patch :update,
           params: {
-            facility_id: facility.url_name,
+            facility_id: "all",
             user_id: owner.id,
             user: { account_users_attributes: {"0" => { _destroy: "1", id: account.owner.id } } },
           }
@@ -49,13 +49,13 @@ RSpec.describe UserAccountsController do
     end
 
     describe "removing a purchaser" do
-      let!(:account_user) { AccountUser.grant(purchaser, AccountUser::ACCOUNT_PURCHASER, account, by: director) }
+      let!(:account_user) { AccountUser.grant(purchaser, AccountUser::ACCOUNT_PURCHASER, account, by: account_manager) }
 
       before :each do
-        sign_in director
+        sign_in account_manager
         patch :update,
           params: {
-            facility_id: facility.url_name,
+            facility_id: "all",
             user_id: purchaser.id,
             user: { account_users_attributes: {"0" => { _destroy: "1", id: account_user.id } } },
           }
@@ -67,16 +67,44 @@ RSpec.describe UserAccountsController do
 
       it "soft-deletes the account_user" do
         expect(account_user.reload.deleted_at).to be_present
-        expect(account_user.deleted_by).to eq(director.id)
+        expect(account_user.deleted_by).to eq(account_manager.id)
       end
 
       it "redirects back to the user’s accounts page" do
-        expect(response).to redirect_to(facility_user_accounts_path(facility, purchaser))
+        expect(response).to redirect_to(facility_user_accounts_path(Facility.cross_facility, purchaser))
       end
 
       it "adds a log event" do
-        expect(LogEvent.find_by(loggable: account_user, event_type: :delete, user: director)).to be_present
+        expect(LogEvent.find_by(loggable: account_user, event_type: :delete, user: account_manager)).to be_present
       end
+    end
+  end
+
+  describe "editing memberships from a single facility" do
+    let(:director) { create(:user, :facility_director, facility: facility) }
+    let(:member) { create(:user) }
+    let(:account) { create(:account, :with_account_owner) }
+    let!(:account_user) { AccountUser.grant(member, AccountUser::ACCOUNT_PURCHASER, account, by: director) }
+
+    before { sign_in director }
+
+    it "does not expose the edit form" do
+      expect do
+        get :edit, params: { facility_id: facility.url_name, user_id: member.id }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+    end
+
+    it "does not update memberships" do
+      expect do
+        patch :update,
+              params: {
+                facility_id: facility.url_name,
+                user_id: member.id,
+                user: { account_users_attributes: { "0" => { _destroy: "1", id: account_user.id } } },
+              }
+      end.to raise_error(ActiveRecord::RecordNotFound)
+
+      expect(account_user.reload.deleted_at).to be_blank
     end
   end
 end
