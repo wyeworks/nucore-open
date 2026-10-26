@@ -133,7 +133,7 @@ RSpec.describe OrdersController do
 
       context "when add_to_cart is set in the session" do
         before(:each) do
-          session[:add_to_cart] = [{ product_id: added_item_id }]
+          session[:add_to_cart] = [{ "product_id" => added_item_id, "quantity" => 1 }]
         end
 
         context "and the product exists" do
@@ -308,7 +308,7 @@ RSpec.describe OrdersController do
     shared_examples_for "it uses add_to_cart to determine redirects" do
       context "when add_to_cart is set in the session" do
         before(:each) do
-          session[:add_to_cart] = [{ product_id: item.id }]
+          session[:add_to_cart] = [{ "product_id" => item.id, "quantity" => 1 }]
           do_request
         end
 
@@ -999,7 +999,7 @@ RSpec.describe OrdersController do
 
       it "sets the session with contents of params[:order][:order_details]" do
         expect(session[:add_to_cart]).not_to be_empty
-        expect(session[:add_to_cart].map(&:to_h)).to match_array([{ "product_id" => @item.id.to_s, "quantity" => "1" }])
+        expect(session[:add_to_cart]).to eq([{ "product_id" => @item.id, "quantity" => 1 }])
       end
     end
 
