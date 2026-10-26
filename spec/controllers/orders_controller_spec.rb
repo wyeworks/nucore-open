@@ -175,6 +175,122 @@ RSpec.describe OrdersController do
         end
       end
     end
+
+    describe "the payment source errors" do
+      let!(:account_without_price_group) { create_nufs_account_with_owner(:staff) }
+
+      before { sign_in @staff }
+
+      it "does not flag an account that can purchase everything in the cart" do
+        do_request
+        expect(assigns(:accounts)).to include(account)
+        expect(assigns(:errors)).not_to have_key(account.id)
+      end
+
+      it "flags an account that cannot purchase a product in the cart" do
+        do_request
+        expect(assigns(:errors)[account_without_price_group.id]).to be_present
+      end
+
+      context "when add_to_cart is set in the session" do
+        let(:added_item) { create(:setup_item, facility: facility) }
+
+        before { session[:add_to_cart] = [{ product_id: added_item.id }] }
+
+        it "validates the product being added" do
+          expect(account.validate_against_product(item, @staff)).to be_nil
+
+          do_request
+          expect(assigns(:errors)[account.id]).to be_present
+        end
+      end
+
+      context "when add_to_cart is an empty array" do
+        before { session[:add_to_cart] = [] }
+
+        it "falls back to the order details without raising" do
+          do_request
+          is_expected.to render_template "choose_account"
+          expect(assigns(:product)).to eq(order.order_details.first.product)
+        end
+      end
+
+      context "with a nonbillable order detail in the cart" do
+        let(:nonbillable_item) { create(:setup_item, facility: facility, billing_mode: "Nonbillable") }
+        let(:nonbillable_order) do
+          @staff.orders.create(attributes_for(:order, created_by: @staff.id)).tap do |new_order|
+            new_order.add(nonbillable_item, 1)
+          end
+        end
+
+        before do
+          nonbillable_order
+          nonbillable_item.update!(is_archived: true)
+          session[:add_to_cart] = [{ product_id: item.id }]
+          @params = { id: nonbillable_order.id, order_id: nonbillable_order.id }
+        end
+
+        it "does not validate the nonbillable order detail" do
+          expect(account.validate_against_product(nonbillable_item, @staff)).to be_present
+
+          do_request
+          is_expected.to render_template "choose_account"
+          expect(assigns(:accounts)).to include(account)
+          expect(assigns(:errors)).not_to have_key(account.id)
+        end
+      end
+    end
+
+    describe "the products handed to AccountProductErrorsFinder" do
+      before { sign_in @staff }
+
+      def expect_products(products)
+        expect(AccountProductErrorsFinder)
+          .to receive(:new).with(anything, products, @staff).and_call_original
+      end
+
+      it "uses the order detail products when add_to_cart is not set" do
+        expect_products([item])
+        do_request
+      end
+
+      it "collapses order details that share a product" do
+        order.add(item, 1)
+        expect(order.reload.order_details.size).to be > 1
+
+        expect_products([item])
+        do_request
+      end
+
+      context "when add_to_cart is set in the session" do
+        let(:added_item) { create(:setup_item, facility: facility) }
+
+        before { session[:add_to_cart] = [{ product_id: added_item.id }] }
+
+        it "puts the product being added ahead of the order detail products" do
+          expect_products([added_item, item])
+          do_request
+        end
+
+        context "and it is already in the cart" do
+          let(:added_item) { item }
+
+          it "is listed once" do
+            expect_products([item])
+            do_request
+          end
+        end
+      end
+
+      context "when add_to_cart is an empty array" do
+        before { session[:add_to_cart] = [] }
+
+        it "does not prepend the fallback product" do
+          expect_products([item])
+          do_request
+        end
+      end
+    end
   end
 
   describe "POST #choose_account" do

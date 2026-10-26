@@ -208,21 +208,7 @@ class OrdersController < ApplicationController
       flash.now[:error] = add_account_result[:error_message] if add_account_result && add_account_result[:error_message]
       flash.now[:error] = I18n.t("controllers.orders.choose_account.missing_account") if account.blank? && request.post?
       @accounts = AvailableAccountsFinder.new(acting_user, @product.facility).accounts
-      @errors   = {}
-      details   = payment_relevant_order_details
-      @accounts.each do |account|
-        if session[:add_to_cart] &&
-           (ods = session[:add_to_cart].presence) &&
-           (product_id = ods.first[:product_id])
-          error = account.validate_against_product(find_cart_product(product_id), acting_user)
-          @errors[account.id] = error if error
-        end
-        next if @errors[account.id]
-        details.each do |od|
-          error = account.validate_against_product(od.product, acting_user)
-          @errors[account.id] = error if error
-        end
-      end
+      @errors = AccountProductErrorsFinder.new(@accounts, payment_relevant_products, acting_user).errors
     end
   end
 
@@ -333,6 +319,12 @@ class OrdersController < ApplicationController
 
   def payment_relevant_order_details
     @order.order_details.reject { |od| od.product.nonbillable_mode? }
+  end
+
+  def payment_relevant_products
+    products = payment_relevant_order_details.map(&:product)
+    products.unshift(@product) if session[:add_to_cart].present?
+    products.uniq(&:id)
   end
 
   def needs_payment_source_selection?(items)
