@@ -24,6 +24,10 @@ module Reports
       @class_name.constantize
     end
 
+    def filters
+      report_class.try(:filters) || []
+    end
+
   end
 
 end

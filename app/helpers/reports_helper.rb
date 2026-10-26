@@ -4,6 +4,20 @@ module ReportsHelper
 
   include DateHelper
 
+  FISCAL_YEARS_BACK = 5
+
+  def current_fiscal_year
+    SettingsHelper.fiscal_year_end.year
+  end
+
+  def fiscal_year_options
+    ((current_fiscal_year - FISCAL_YEARS_BACK)..(current_fiscal_year + 1)).to_a.reverse
+  end
+
+  def admin_report_name(report)
+    I18n.t("views.reports.admin_reports.reports.#{report.key}", default: report.key.titleize)
+  end
+
   def to_hours(minutes, precision = 2)
     (minutes / 60.0).round(precision)
   end

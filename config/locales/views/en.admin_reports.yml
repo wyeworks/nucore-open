@@ -5,5 +5,12 @@ en:
         index:
           description: Each report is emailed to you as a CSV file.
           none: There are no reports available.
-          reports:
-            relay: Instrument Relay Data
+        show:
+          description: The report will be emailed to you as a CSV file.
+          submit: Email Report
+        reports:
+          relay: Instrument Relay Data
+          price_list: Price List
+        filters:
+          fiscal_year:
+            label: Fiscal Year

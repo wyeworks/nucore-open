@@ -1,0 +1,5 @@
+.form-group
+  = label_tag :fiscal_year, text("label")
+  .row
+    .col-sm-2
+      = select_tag :fiscal_year, options_for_select(fiscal_year_options, current_fiscal_year), class: "form-control"

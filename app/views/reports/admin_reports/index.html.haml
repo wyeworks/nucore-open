@@ -12,4 +12,4 @@
   %p.notice= text("none")
 - else
   - @reports.each do |report|
-    %p= link_to text("reports.#{report.key}", default: report.key.titleize), admin_report_path(report.key)
+    %p= link_to admin_report_name(report), admin_report_path(report.key)

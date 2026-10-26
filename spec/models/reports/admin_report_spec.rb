@@ -19,6 +19,26 @@ RSpec.describe Reports::AdminReport do
     it "returns nil for an unknown key" do
       expect(described_class.find("unknown")).to be_nil
     end
+
+    it "has no filters when the report class does not declare any" do
+      expect(described_class.find("global_user_roles").filters).to be_empty
+    end
+  end
+
+  context "with a report that declares filters" do
+    let(:class_names) { ["Reports::FilteredTestReport"] }
+
+    before do
+      stub_const("Reports::FilteredTestReport", Class.new do
+        def self.filters
+          [:fiscal_year]
+        end
+      end)
+    end
+
+    it "exposes the declared filters" do
+      expect(described_class.find("filtered_test").filters).to eq([:fiscal_year])
+    end
   end
 
   context "with no registered reports" do
