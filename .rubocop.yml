@@ -47,6 +47,14 @@ Rails/ApplicationRecord:
     - "db/migrate/*.rb"
     - "vendor/engines/*/db/migrate/*.rb"
 
+Rails/Output:
+  inherit_mode:
+    merge:
+      - Exclude
+  Exclude:
+    - "db/migrate/*.rb"
+    - "vendor/engines/*/db/migrate/*.rb"
+
 Rails/CreateTableWithTimestamps:
   Exclude:
     - "db/migrate/20100101000000_initial_schema.rb"

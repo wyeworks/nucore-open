@@ -1309,11 +1309,6 @@ Rails/Output:
     - 'app/models/price_group.rb'
     - 'app/services/research_safety_adapters/scishield_training_synchronizer.rb'
     - 'app/support/auto_canceler.rb'
-    - 'db/migrate/20110428204746_migrate_and_drop_account_transactions.rb'
-    - 'db/migrate/20111219213559_migrate_relays.rb'
-    - 'db/migrate/20120502223446_alter_journal_rows_remove_nu.rb'
-    - 'db/migrate/20120510172358_add_bi_table.rb'
-    - 'db/migrate/20120622185758_move_can_purchase_into_price_policy.rb'
 
 # Offense count: 36
 Rails/OutputSafety:
