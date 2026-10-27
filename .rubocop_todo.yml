@@ -1114,23 +1114,6 @@ Rails/CompactBlank:
     - 'app/services/users/convert_external_to_internal_user.rb'
     - 'vendor/engines/sanger_sequencing/app/presenters/sanger_sequencing/well_plate_presenter.rb'
 
-# Offense count: 18
-# Configuration parameters: Include.
-# Include: db/**/*.rb
-Rails/CreateTableWithTimestamps:
-  Exclude:
-    - 'db/migrate/20100101000000_initial_schema.rb'
-    - 'db/migrate/20100423185710_create_order_details.rb'
-    - 'db/migrate/20100528230902_add_product_users_table.rb'
-    - 'db/migrate/20100715171938_add_journals_table.rb'
-    - 'db/migrate/20100719192104_add_table_statement_accounts.rb'
-    - 'db/migrate/20100812170701_add_budgeted_chart_string.rb'
-    - 'db/migrate/20101015210647_edits_for_invoicing_and_journaling_refacting.rb'
-    - 'db/migrate/20101018221409_bundle_related_updates.rb'
-    - 'db/migrate/20110216002247_create_user_roles.rb'
-    - 'db/migrate/20120209231652_create_product_accessories.rb'
-    - 'db/migrate/20120510172358_add_bi_table.rb'
-
 # Offense count: 81
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle, AllowToTime.
