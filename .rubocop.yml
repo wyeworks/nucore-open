@@ -83,9 +83,17 @@ Rails/NotNullColumn:
     - "db/migrate/20120502223446_alter_journal_rows_remove_nu.rb"
     - "db/migrate/20131205230514_alter_schedule_rules_drop_duration_mins.rb"
 
+Rails/WhereNotWithMultipleConditions:
+  inherit_mode:
+    merge:
+      - Exclude
+  Exclude:
+    - "db/migrate/20170501201633_add_canceled_to_order_detail.rb"
+
 Lint/SuppressedException:
   Exclude:
     - "db/migrate/20100701232820_change_order_detail_status.rb"
+
 Rails/HasAndBelongsToMany:
   Enabled: false
 

@@ -1503,7 +1503,6 @@ Rails/WhereNot:
 # Configuration parameters: Severity.
 Rails/WhereNotWithMultipleConditions:
   Exclude:
-    - 'db/migrate/20170501201633_add_canceled_to_order_detail.rb'
     - 'lib/tasks/backfill_billable_minutes.rake'
 
 # Offense count: 18
