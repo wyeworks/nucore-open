@@ -44,6 +44,17 @@ RSpec.describe Reservations::CalendarPresenter do
 
     it { is_expected.not_to include(:email, :orderId, :orderNote) }
     it { is_expected.not_to include(title: order.user.full_name) }
+
+    it "includes only the owner's name for the owner" do
+      calendar_object = presenter.as_calendar_object(user: order.user)
+
+      expect(calendar_object).to include(title: order.user.full_name)
+      expect(calendar_object).not_to include(:email, :orderId, :orderNote)
+    end
+
+    it "does not include the owner's name for another user" do
+      expect(presenter.as_calendar_object(user: build(:user))).not_to include(title: order.user.full_name)
+    end
   end
 
   context "with an offline reservation" do

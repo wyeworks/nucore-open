@@ -47,7 +47,10 @@ module Reservations
       class_names << "canceled" if canceled?
       ret[:className] = class_names if class_names.any?
 
-      return ret if options[:with_details].blank?
+      if options[:with_details].blank?
+        ret[:title] = order.user.full_name if options[:user].present? && order.user == options[:user]
+        return ret
+      end
 
       ret.merge(
         title: order.user.full_name,

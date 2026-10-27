@@ -58,7 +58,7 @@ class CalendarEventsPresenter
   def calendar_opts
     {
       start_at:, end_at:, instrument_id: instrument.id,
-    }.merge(params.slice(:with_details, :discriminate))
+    }.merge(params.slice(:with_details, :discriminate, :user))
   end
 
   def monthly_view?

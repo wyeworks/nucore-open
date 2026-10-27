@@ -54,6 +54,21 @@ RSpec.describe "Reservation Tooltips", :js, :skip_time_travel do
     end
   end
 
+  context "When the instrument does not show reservation details" do
+    it "Includes the customer's name in the reservation calendar" do
+      visit facility_order_order_detail_reservation_path(facility, order, order_detail, reservation)
+
+      expect(page).to have_css(".fc-title", text: order.user.full_name)
+    end
+
+    it "Includes other customers' names in the edit reservation calendar" do
+      other_reservation = create(:purchased_reservation, product: instrument, reserve_start_at: reserve_start + 2.hours)
+      visit edit_facility_order_order_detail_reservation_path(facility, order, order_detail, reservation)
+
+      expect(page).to have_css(".fc-title", text: other_reservation.order.user.full_name)
+    end
+  end
+
   context "When show order note is NOT enabled for the facility" do
     let(:facility) { create(:setup_facility, show_order_note: false) }
 

@@ -33,6 +33,13 @@ RSpec.describe "Public instrument schedule", :js, :skip_time_travel do
       expect(page).not_to have_content(customer.full_name)
     end
 
+    it "shows the customer's own name to the customer" do
+      login_as customer
+      visit facility_instrument_public_schedule_path(facility, instrument)
+
+      expect(page).to have_css(".fc-title", text: customer.full_name)
+    end
+
     it "shows the customer's name to facility staff" do
       login_as create(:user, :staff, facility:)
       visit facility_instrument_public_schedule_path(facility, instrument)

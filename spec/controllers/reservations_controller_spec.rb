@@ -423,6 +423,15 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
         expect(response_values).not_to include(*personal_details)
       end
 
+      it "shows only their own name to a customer when customers cannot see details",
+         feature_setting: { "reservations.show_details_to_customers": false } do
+        sign_in customer
+        do_request
+
+        expect(response_values).to include(customer.full_name)
+        expect(response_values).not_to include(customer.email, creator.full_name)
+      end
+
       it "shows them to facility staff when customers cannot see them",
          feature_setting: { "reservations.show_details_to_customers": false } do
         maybe_grant_always_sign_in :staff
