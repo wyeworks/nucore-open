@@ -38,20 +38,52 @@ RSpec.describe Reservations::CalendarPresenter do
     end
   end
 
+  context "with a normal reservation with order without details" do
+    let(:reservation) { build(:setup_reservation) }
+    let(:order) { reservation.order }
+
+    it { is_expected.not_to include(:email, :orderId, :orderNote) }
+    it { is_expected.not_to include(title: order.user.full_name) }
+
+    it "includes only the owner's name for the owner" do
+      calendar_object = presenter.as_calendar_object(user: order.user)
+
+      expect(calendar_object).to include(title: order.user.full_name)
+      expect(calendar_object).not_to include(:email, :orderId, :orderNote)
+    end
+
+    it "does not include the owner's name for another user" do
+      expect(presenter.as_calendar_object(user: build(:user))).not_to include(title: order.user.full_name)
+    end
+  end
+
   context "with an offline reservation" do
-    let(:reservation) { build(:offline_reservation, product:) }
+    let(:creator) { build(:user) }
+    let(:reservation) { build(:offline_reservation, product:, created_by: creator) }
 
     it { is_expected.to include(:id, :product, :title, :start, :end) }
     it { is_expected.to include(className: "unavailable") }
+    it { is_expected.not_to include(:email) }
     it { expect(presenter).to be_a(Reservations::OfflineCalendarPresenter) }
+
+    it "includes the creator's name if with_details" do
+      expect(presenter.as_calendar_object(with_details: true)).to include(email: creator.full_name)
+    end
   end
 
   context "with an admin hold reservation" do
-    let(:reservation) { build(:admin_reservation, product:) }
+    let(:creator) { build(:user) }
+    let(:reservation) { build(:admin_reservation, product:, created_by: creator, user_note: "Maintenance") }
 
     it { is_expected.to include(:id, :product, :title, :start, :end) }
     it { is_expected.to include(className: "unavailable") }
+    it { is_expected.to include(userNote: "Maintenance") }
+    it { is_expected.not_to include(:email) }
     it { expect(presenter).to be_a(Reservations::FallbackCalendarPresenter) }
+
+    it "includes the creator's name if with_details" do
+      expect(presenter.as_calendar_object(with_details: true)).to include(email: creator.full_name)
+    end
 
     context "when expires_mins_before is present" do
       before do

@@ -209,6 +209,7 @@ feature:
     accessory_independent_order_status: false
     add_accessories_before_reservation_starts: false
     auto_end_reservations_on_next_start: false
+    show_details_to_customers: true
     walkup_reservations: true
 
   products:

@@ -312,6 +312,16 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
     end
 
     describe "showing details" do
+      describe "as an anonymous user" do
+        it "is false even if I request details and the instrument is configured to show them" do
+          instrument.update!(show_details: true)
+          @params[:with_details] = "true"
+          do_request
+
+          expect(assigns(:show_details)).to be_falsy
+        end
+      end
+
       describe "as a guest" do
         before { sign_in @guest }
 
@@ -333,6 +343,15 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
           @params[:with_details] = "true"
           do_request
           expect(assigns(:show_details)).to be_truthy
+        end
+
+        it "is false if I request details and customers cannot see them",
+           feature_setting: { "reservations.show_details_to_customers": false } do
+          instrument.update!(show_details: true)
+          @params[:with_details] = "true"
+          do_request
+
+          expect(assigns(:show_details)).to be_falsy
         end
       end
 
@@ -357,6 +376,68 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
 
           expect(assigns(:show_details)).to be_falsy
         end
+
+        it "is true if I request details and customers cannot see them",
+           feature_setting: { "reservations.show_details_to_customers": false } do
+          @params[:with_details] = "true"
+          do_request
+
+          expect(assigns(:show_details)).to be_truthy
+        end
+      end
+    end
+
+    describe "personal details in the response" do
+      let(:customer) { create(:user) }
+      let(:creator) { create(:user) }
+      let!(:customer_reservation) { create(:purchased_reservation, product: instrument, user: customer) }
+      let!(:admin_reservation) do
+        create(:admin_reservation, product: instrument, created_by: creator, reserve_start_at: customer_reservation.reserve_end_at)
+      end
+      let(:personal_details) { [customer.full_name, customer.email, creator.full_name] }
+      let(:response_values) { response.parsed_body.flat_map(&:values) }
+
+      before do
+        instrument.update!(show_details: true)
+        @params.merge!(start: Time.current.iso8601, end: 2.days.from_now.iso8601, with_details: "true")
+      end
+
+      it "hides them from an anonymous user" do
+        do_request
+
+        expect(response_values).not_to include(*personal_details)
+      end
+
+      it "shows them to a signed in user" do
+        sign_in @guest
+        do_request
+
+        expect(response_values).to include(*personal_details)
+      end
+
+      it "hides them from a signed in user when customers cannot see them",
+         feature_setting: { "reservations.show_details_to_customers": false } do
+        sign_in @guest
+        do_request
+
+        expect(response_values).not_to include(*personal_details)
+      end
+
+      it "shows only their own name to a customer when customers cannot see details",
+         feature_setting: { "reservations.show_details_to_customers": false } do
+        sign_in customer
+        do_request
+
+        expect(response_values).to include(customer.full_name)
+        expect(response_values).not_to include(customer.email, creator.full_name)
+      end
+
+      it "shows them to facility staff when customers cannot see them",
+         feature_setting: { "reservations.show_details_to_customers": false } do
+        maybe_grant_always_sign_in :staff
+        do_request
+
+        expect(response_values).to include(*personal_details)
       end
     end
 

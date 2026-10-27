@@ -67,7 +67,7 @@ class ReservationsController < ApplicationController
       @rules = @rules.available_to_user(acting_user)
     end
 
-    @show_details = params[:with_details] == "true" && (@instrument.show_details? || can?(:administer, Reservation))
+    @show_details = params[:with_details] == "true" && show_reservation_details?
 
     discriminate = params[:discriminate] == "true" && can?(:administer, Reservation)
 
@@ -82,6 +82,7 @@ class ReservationsController < ApplicationController
             end_at: @end_at,
             with_details: @show_details,
             discriminate:,
+            user: acting_user,
             view: params[:view]
           ).to_json
         )
@@ -357,6 +358,14 @@ class ReservationsController < ApplicationController
     else
       @reservation
     end
+  end
+
+  def show_reservation_details?
+    return true if can?(:administer, Reservation)
+
+    current_user.present? &&
+      @instrument.show_details? &&
+      SettingsHelper.feature_on?("reservations.show_details_to_customers")
   end
 
   # TODO: you shouldn't be able to edit reservations that have passed or are outside of the cancellation period (check to make sure order has been placed)

@@ -126,8 +126,8 @@ RSpec.describe Reservations::Rendering do
       end
 
       context "without details requested" do
-        it "returns a hash without extra details about the order" do
-          expect(reservation.as_calendar_object).to eq(base_hash.merge(title: "Admin Hold", email: user.full_name, userNote: reservation.user_note))
+        it "returns a hash without the creator's name" do
+          expect(reservation.as_calendar_object).to eq(base_hash.merge(title: "Admin Hold", userNote: reservation.user_note))
         end
       end
     end
