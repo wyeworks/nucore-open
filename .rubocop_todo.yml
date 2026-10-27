@@ -715,12 +715,6 @@ Lint/SharedMutableDefault:
   Exclude:
     - 'app/presenters/view_hook.rb'
 
-# Offense count: 1
-# Configuration parameters: AllowComments, AllowNil.
-Lint/SuppressedException:
-  Exclude:
-    - 'db/migrate/20100701232820_change_order_detail_status.rb'
-
 # Offense count: 10
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
