@@ -3,6 +3,7 @@
 class FacilityAccountsReconciliationController < ApplicationController
 
   include DateHelper
+  include OrderDetailReconciliation
 
   admin_tab :all
   layout "two_column"
@@ -46,10 +47,10 @@ class FacilityAccountsReconciliationController < ApplicationController
 
     reconciled_at = parse_iso_date(params[:reconciled_at])&.beginning_of_day
     reconciler = OrderDetails::Reconciler.new(
-      unreconciled_details,
-      order_detail_params,
-      reconciled_at,
-      update_params[:order_status],
+      order_details: order_details_to_reconcile,
+      order_detail_attributes:,
+      reconciled_at:,
+      order_status: update_params[:order_status],
       bulk_reconcile: update_params[:bulk_note_checkbox] == "1",
       bulk_note: update_params[:bulk_note],
       bulk_deposit_number: update_params[:bulk_deposit_number],
@@ -117,16 +118,23 @@ class FacilityAccountsReconciliationController < ApplicationController
     Array(params.dig(:search, :statements)).compact_blank
   end
 
-  def order_detail_params
-    return params[:order_detail] unless reconcile_whole_statement?
+  def reconciliation_params
+    return ActionController::Parameters.new if reconcile_whole_statement?
 
-    ids = unreconciled_details
-          .joins(:account)
-          .where(accounts: { type: account_class.to_s })
-          .where(statement_id: selected_statement_ids)
-          .ids
+    super
+  end
 
-    ActionController::Parameters.new(ids.index_with { { selected: "1" } }.transform_keys(&:to_s))
+  def order_details_to_reconcile
+    return unreconciled_details.where(id: statement_order_details.select(:id)) if reconcile_whole_statement?
+
+    unreconciled_details.where(id: selected_order_detail_ids)
+  end
+
+  def statement_order_details
+    unreconciled_details
+      .joins(:account)
+      .where(accounts: { type: account_class.to_s })
+      .where(statement_id: selected_statement_ids)
   end
 
   def authorize_mark_unrecoverable

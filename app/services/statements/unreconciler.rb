@@ -43,16 +43,8 @@ module Statements
 
     def reconciler
       @reconciler ||= OrderDetails::Reconciler.new(
-        statement.order_details,
-        selected_params,
-        nil,
-      )
-    end
-
-    def selected_params
-      ActionController::Parameters.new(
-        reconciled_order_details.map { |order_detail| order_detail.id.to_s }
-                                .index_with { { selected: "1" } }
+        order_details: reconciled_order_details,
+        reconciled_at: nil,
       )
     end
 

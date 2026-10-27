@@ -3,6 +3,7 @@
 class FacilityJournalsController < ApplicationController
 
   include CSVHelper
+  include OrderDetailReconciliation
   include OrderDetailsCsvExport
   include SortableBillingTable
 
@@ -163,10 +164,9 @@ class FacilityJournalsController < ApplicationController
 
   def process_reconciliation(action, order_status = nil)
     reconciler = OrderDetails::Reconciler.new(
-      @journal.order_details,
-      params[:order_detail],
-      @journal.journal_date,
-      order_status
+      order_details: @journal.order_details.where(id: selected_order_detail_ids),
+      reconciled_at: @journal.journal_date,
+      order_status:,
     )
 
     count = if action == :reconcile

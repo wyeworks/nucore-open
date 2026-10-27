@@ -486,6 +486,23 @@ RSpec.describe FacilityJournalsController do
       end
     end
 
+    describe "when submitting attributes the journals page does not offer" do
+      let(:order_detail_params) do
+        {
+          @order_detail1.id.to_s => { selected: "1", reconciled_note: "Should not apply", deposit_number: "TX-9" },
+        }
+      end
+
+      it "reconciles without assigning them" do
+        perform
+
+        @order_detail1.reload
+        expect(@order_detail1.state).to eq("reconciled")
+        expect(@order_detail1.reconciled_note).to be_nil
+        expect(@order_detail1.deposit_number).to be_nil
+      end
+    end
+
     describe "when submitting an order detail on another journal" do
       let(:journal2) { create(:journal, facility: facility, created_by: @admin.id, journal_date: 2.days.ago) }
       before { journal2.create_journal_rows!([@order_detail2]) }
