@@ -68,6 +68,21 @@ Rails/CreateTableWithTimestamps:
     - "db/migrate/20110216002247_create_user_roles.rb"
     - "db/migrate/20120209231652_create_product_accessories.rb"
     - "db/migrate/20120510172358_add_bi_table.rb"
+
+Rails/NotNullColumn:
+  Exclude:
+    - "db/migrate/20100428152408_remove_facility_from_order.rb"
+    - "db/migrate/20100430222700_change_reservations.rb"
+    - "db/migrate/20100707185202_add_statement_fields.rb"
+    - "db/migrate/20100708195447_alter_account_transactions_add_fields.rb"
+    - "db/migrate/20100715223533_add_balance_to_journaled_accounts.rb"
+    - "db/migrate/20100914171717_add_facility_account_to_account_transactions.rb"
+    - "db/migrate/20100930180831_add_facility_account_id_to_journaled_accounts.rb"
+    - "db/migrate/20101011184759_add_price_group_type_to_price_groups.rb"
+    - "db/migrate/20101015210647_edits_for_invoicing_and_journaling_refacting.rb"
+    - "db/migrate/20120502223446_alter_journal_rows_remove_nu.rb"
+    - "db/migrate/20131205230514_alter_schedule_rules_drop_duration_mins.rb"
+
 Rails/HasAndBelongsToMany:
   Enabled: false
 
