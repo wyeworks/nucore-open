@@ -338,7 +338,11 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
           expect(assigns(:show_details)).to be_falsy
         end
 
-        it "is true if I request details and it is not configured" do
+        it "is true if I request details and it is not configured",
+           feature_setting: {
+             "reservations.auto_end_reservations_on_next_start": false,
+             "reservations.show_details_to_customers": true,
+           } do
           instrument.update!(show_details: true)
           @params[:with_details] = "true"
           do_request
@@ -408,7 +412,11 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
         expect(response_values).not_to include(*personal_details)
       end
 
-      it "shows them to a signed in user" do
+      it "shows them to a signed in user",
+         feature_setting: {
+           "reservations.auto_end_reservations_on_next_start": false,
+           "reservations.show_details_to_customers": true,
+         } do
         sign_in @guest
         do_request
 

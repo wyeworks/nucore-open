@@ -17,7 +17,8 @@ RSpec.describe "Public instrument schedule", :js, :skip_time_travel do
     expect(page).not_to have_content(customer.full_name)
   end
 
-  it "shows the customer's name to a signed in user" do
+  it "shows the customer's name to a signed in user",
+     feature_setting: { "reservations.show_details_to_customers": true } do
     login_as create(:user)
     visit facility_instrument_public_schedule_path(facility, instrument)
 
