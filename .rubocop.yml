@@ -70,6 +70,9 @@ Rails/CreateTableWithTimestamps:
     - "db/migrate/20120510172358_add_bi_table.rb"
 
 Rails/NotNullColumn:
+  inherit_mode:
+    merge:
+      - Exclude
   Exclude:
     - "db/migrate/20100428152408_remove_facility_from_order.rb"
     - "db/migrate/20100430222700_change_reservations.rb"
@@ -91,6 +94,9 @@ Rails/WhereNotWithMultipleConditions:
     - "db/migrate/20170501201633_add_canceled_to_order_detail.rb"
 
 Lint/SuppressedException:
+  inherit_mode:
+    merge:
+      - Exclude
   Exclude:
     - "db/migrate/20100701232820_change_order_detail_status.rb"
 
