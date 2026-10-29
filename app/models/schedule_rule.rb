@@ -63,6 +63,7 @@ class ScheduleRule < ApplicationRecord
 
   def end_time_is_after_start_time
     return if start_hour.nil? || end_hour.nil? || start_min.nil? || end_min.nil?
+
     errors.add(:base, "End time must be after start time") if (end_hour < start_hour) || (end_hour == start_hour && end_min <= start_min)
   end
 
@@ -74,13 +75,16 @@ class ScheduleRule < ApplicationRecord
 
   def no_overlap_with_existing_rules
     return if product.blank?
+
     rules = product.schedule_rules.reject { |r| r.id == id } # select all rules except self
     Date::ABBR_DAYNAMES.each do |day|
       # skip unless this rule occurs on this day
       next unless send("on_#{day.downcase}?")
+
       # check all existing rules for this day
       rules.select { |r| r.send("on_#{day.downcase}?") }.each do |rule|
         next if start_time_int == rule.end_time_int || end_time_int == rule.start_time_int # start and end times may touch
+
         if start_time_int.between?(rule.start_time_int, rule.end_time_int) ||
            end_time_int.between?(rule.start_time_int, rule.end_time_int) ||
            (start_time_int < rule.start_time_int && end_time_int > rule.end_time_int)
@@ -214,6 +218,7 @@ class ScheduleRule < ApplicationRecord
       end
 
       next if not_start_hour == 24 && not_start_min == 0
+
       # build not rule for last part of day
       not_rule = ScheduleRule.new("on_#{day.downcase}" => true, :unavailable => true)
       not_rule.start_hour = not_start_hour
@@ -240,6 +245,7 @@ class ScheduleRule < ApplicationRecord
     end_at = end_at.change(sec: 0)
 
     return 0 unless end_at > start_at
+
     total_mins = TimeRange.new(start_at, end_at).duration_mins
 
     minutes_overlap(start_at, end_at).fdiv total_mins

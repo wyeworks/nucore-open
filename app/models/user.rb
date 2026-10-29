@@ -240,8 +240,8 @@ class User < ApplicationRecord
     price_group_members.find_or_create_by!(price_group: default_price_group)
   end
 
-  def lock_access!(opts = { })
+  def lock_access!(opts = {})
     super
-    LogEvent.log(self, :access_locked, self, metadata: {cause: "Too many login attempts"})
+    LogEvent.log(self, :access_locked, self, metadata: { cause: "Too many login attempts" })
   end
 end

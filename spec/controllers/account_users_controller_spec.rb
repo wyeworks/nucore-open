@@ -71,7 +71,8 @@ RSpec.describe AccountUsersController do
       expect(assigns(:account_user).log_events.size).to eq(1)
       expect(assigns(:account_user).log_events.first).to have_attributes(
         loggable: assigns(:account_user), event_type: "create",
-        user_id: a_truthy_value)
+        user_id: a_truthy_value
+      )
       expect(@purchaser.reload).to be_purchaser_of(@authable)
       is_expected.to set_flash
       assert_redirected_to(account_account_users_path(@authable))
@@ -89,7 +90,8 @@ RSpec.describe AccountUsersController do
       FactoryBot.create(
         :account_user, user_role: AccountUser::ACCOUNT_PURCHASER,
                        account:, user: purchaser,
-                       created_by: owner.id)
+                       created_by: owner.id
+      )
     end
 
     it "does not allow the purchaser" do
@@ -109,8 +111,9 @@ RSpec.describe AccountUsersController do
       it "adds the log event" do
         expect { do_request }.to change(account_user.log_events, :count).by(1)
         expect(account_user.log_events.last).to have_attributes(
-        loggable: assigns(:account_user), event_type: "delete",
-        user_id: owner.id)
+          loggable: assigns(:account_user), event_type: "delete",
+          user_id: owner.id
+        )
       end
 
       it "sets the flash and redirects" do

@@ -99,6 +99,7 @@ class OrderDetailBatchUpdater
 
   def notify_newly_assigned_users(order_details)
     return unless SettingsHelper.feature_on?("notifications.order_assignment_notifications")
+
     OrderAssignmentMailer.notify_assigned_user(order_details).deliver_later
   end
 

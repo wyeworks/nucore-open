@@ -77,7 +77,7 @@ RSpec.describe "Adding to an existing order for cross core", :js do
   context "when it does not require an order form" do
     let(:product) { create(:setup_service, :with_facility_account) }
     let!(:cross_core_product_facility2) { create(:setup_service, :with_facility_account, facility: facility2, cross_core_ordering_available: true) }
-    let!(:service_price_policy) { create(:service_price_policy, product: cross_core_product_facility2, price_group: external_price_group ) }
+    let!(:service_price_policy) { create(:service_price_policy, product: cross_core_product_facility2, price_group: external_price_group) }
 
     before do
       visit facility_order_path(facility, order)
@@ -107,10 +107,9 @@ RSpec.describe "Adding to an existing order for cross core", :js do
       let(:user) { create(:user, :facility_administrator, facility:) }
       let!(:current_price_policy) do
         create(:item_price_policy,
-          product: instrument,
-          price_group:,
-          start_date: 1.day.ago,
-        )
+               product: instrument,
+               price_group:,
+               start_date: 1.day.ago,)
       end
 
       describe "with one reservation" do
@@ -159,10 +158,9 @@ RSpec.describe "Adding to an existing order for cross core", :js do
 
         before do
           create(:item_price_policy,
-            product: product2,
-            price_group:,
-            start_date: 1.day.ago,
-          )
+                 product: product2,
+                 price_group:,
+                 start_date: 1.day.ago,)
 
           visit facility_order_path(facility, order)
           select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
@@ -214,10 +212,9 @@ RSpec.describe "Adding to an existing order for cross core", :js do
     let!(:cross_core_product_facility2) { create(:setup_item, :with_facility_account, facility: facility2, cross_core_ordering_available: true) }
     let!(:current_price_policy) do
       create(:item_price_policy,
-        product: cross_core_product_facility2,
-        price_group:,
-        start_date: 1.day.ago,
-      )
+             product: cross_core_product_facility2,
+             price_group:,
+             start_date: 1.day.ago,)
     end
 
     before do

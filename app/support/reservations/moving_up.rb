@@ -21,6 +21,7 @@ module Reservations::MovingUp
     )
 
     return nil if next_res.nil? || next_res.reserve_start_at >= reserve_start_at
+
     next_res
   end
 

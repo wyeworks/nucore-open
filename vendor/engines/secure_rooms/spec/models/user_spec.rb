@@ -6,7 +6,6 @@ RSpec.describe User do
   subject!(:user) { create(:user, :netid, card_number:) }
   let(:card_number) { "abcXYZ" }
 
-
   describe "validations" do
     let!(:other_user) { create(:user, :netid, card_number: "", i_class_number: "") }
 
@@ -14,7 +13,7 @@ RSpec.describe User do
     it { is_expected.to validate_uniqueness_of(:i_class_number).case_insensitive }
 
     it "doesn't error on empty string" do
-      expect{ create(:user, :netid, card_number: "", i_class_number: "") }.not_to raise_error
+      expect { create(:user, :netid, card_number: "", i_class_number: "") }.not_to raise_error
     end
   end
 

@@ -180,9 +180,9 @@ RSpec.describe OrderStatus do
     it "returns the root record and its children" do
       child_status = create(:order_status, parent: described_class.canceled)
       expect(described_class.canceled.self_and_descendants).to eq([
-        described_class.canceled,
+                                                                    described_class.canceled,
         child_status,
-      ])
+                                                                  ])
     end
   end
 end

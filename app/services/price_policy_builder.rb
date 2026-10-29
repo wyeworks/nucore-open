@@ -50,6 +50,7 @@ class PricePolicyBuilder
       policy
     end
     return new_price_policies if price_policies != new_price_policies
+
     make_all_price_policies_purchaseable
 
     price_policies
@@ -128,6 +129,7 @@ class PricePolicyBuilder
 
   def price_policies_for_start_date
     return [] if start_date.blank?
+
     product.price_policies.for_date(start_date)
   end
 

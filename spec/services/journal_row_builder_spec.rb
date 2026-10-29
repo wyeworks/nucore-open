@@ -34,8 +34,7 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
       build(:journal,
             facility:,
             created_by: 1,
-            journal_date:,
-           )
+            journal_date:,)
     end
 
     let(:facility) { create(:setup_facility) }
@@ -54,10 +53,10 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
         rows = builder.build.journal_rows
         expect(rows.size).to eq(3)
         expect(rows).to match([
-          have_attributes(
-            order_detail: order.order_details.first,
-            amount: be_positive,
-          ),
+                                have_attributes(
+                                  order_detail: order.order_details.first,
+                                  amount: be_positive,
+                                ),
           have_attributes(
             order_detail: order2.order_details.first,
           ),
@@ -66,7 +65,7 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
             amount: - (order.order_details.first.actual_cost + order2.order_details.first.actual_cost),
             description: product.name,
           ),
-        ])
+                              ])
       end
     end
 
@@ -80,11 +79,11 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
         rows = builder.build.journal_rows
         expect(rows.size).to eq(4)
         expect(rows).to match([
-          having_attributes(
-            order_detail: order.order_details.first,
-            amount: be_positive,
-            account_id: order.order_details.first.account_id,
-          ),
+                                having_attributes(
+                                  order_detail: order.order_details.first,
+                                  amount: be_positive,
+                                  account_id: order.order_details.first.account_id,
+                                ),
           having_attributes(
             order_detail: nil,
             amount: -1 * order.order_details.first.actual_cost,
@@ -102,7 +101,7 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
             account_id: nil,
             description: product.name,
           ),
-        ])
+                              ])
       end
     end
   end

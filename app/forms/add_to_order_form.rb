@@ -242,7 +242,7 @@ class AddToOrderForm
                         user_id: parent_order.user_id,
                         created_by: created_by.id,
                         cross_core_project: @order_project,
-                     )
+                      )
                     else
                       parent_order
                     end

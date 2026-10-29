@@ -36,6 +36,7 @@ class AccountBuilder
   #
   def self.for(account_type)
     return self if account_type.blank?
+
     begin
       klass = "#{account_type}_builder".classify
       klass.constantize
@@ -120,6 +121,7 @@ class AccountBuilder
   # params hash if the `account_params_key` is missing.
   def account_params
     return ActionController::Parameters.new unless params.key?(account_params_key)
+
     permitted = send("account_params_for_#{action}")
     params.require(account_params_key).permit(*permitted)
   end

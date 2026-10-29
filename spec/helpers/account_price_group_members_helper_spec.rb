@@ -19,7 +19,7 @@ RSpec.describe AccountPriceGroupMembersHelper do
       limit = 25
       text = "<p class='notice'>#{count - limit} more payment sources exist, try refining your search.</p>"
 
-       expect(additional_results_notice(count: 120, limit: 25)).to eq text
+      expect(additional_results_notice(count: 120, limit: 25)).to eq text
     end
   end
 end

@@ -61,6 +61,7 @@ class KioskReservationsController < ApplicationController
     # It's important that the order_detail be the same object as the one in @order.order_details.first
     @order_detail = @order.order_details.find { |od| od.id.to_i == params[:order_detail_id].to_i }
     raise ActiveRecord::RecordNotFound if @order_detail.blank?
+
     @reservation = @order_detail.reservation
     @instrument = @order_detail.product
     @facility = @instrument.facility

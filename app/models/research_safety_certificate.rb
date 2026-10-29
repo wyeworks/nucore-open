@@ -21,5 +21,3 @@ class ResearchSafetyCertificate < ApplicationRecord
 
   scope :ordered, -> { order(:name) }
 end
-
-

@@ -189,6 +189,7 @@ class Product < ApplicationRecord
   def email
     # If notifications.product_specific_contacts is off, always return the facility's email
     return facility.email unless SettingsHelper.feature_on?("notifications.product_specific_contacts")
+
     contact_email.presence || facility.try(:email)
   end
 
@@ -356,6 +357,7 @@ class Product < ApplicationRecord
     archived_changed = saved_change_to_is_archived?
 
     return unless archived_changed
+
     old_archived, new_archived = archived_changed ? saved_change_to_is_archived : [is_archived, is_archived]
 
     return if old_archived == new_archived

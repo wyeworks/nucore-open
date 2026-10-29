@@ -37,7 +37,8 @@ class ReservationCalendar < SimpleDelegator
       "ical.description",
       facility: facility.name,
       product: product.name,
-      order_number: order_detail.order_number)
+      order_number: order_detail.order_number
+    )
   end
 
   def filename

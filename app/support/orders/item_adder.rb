@@ -64,7 +64,7 @@ class Orders::ItemAdder
   end
 
   # If the service has a survey or order form, a quantity of more than one will
-    # result in
+  # result in
   def add_instruments(product, quantity, attributes)
     Array.new(quantity) do
       create_order_detail({ product:, quantity: 1 }.merge(attributes))

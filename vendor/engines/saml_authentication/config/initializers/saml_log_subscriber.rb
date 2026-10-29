@@ -10,6 +10,7 @@ module SamlAuthentication
     def fetching_metadata(event)
       render(event, "Fetching metadata from #{event.payload[:location]}")
     end
+
     private
 
     def render(event, string, display_color: GREEN)

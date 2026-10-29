@@ -27,7 +27,7 @@ module ActiveRecord
       # upgrading activerecord-oracle_enhanced-adapter to 1.7, which should
       # coincide with an upgrade to Rails 5.
 
-      def quote(value, column = nil) #:nodoc:
+      def quote(value, column = nil) # :nodoc:
         if value && column
           case column.type
           when :text, :binary

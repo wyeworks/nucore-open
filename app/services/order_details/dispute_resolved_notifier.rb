@@ -14,7 +14,7 @@ module OrderDetails
         users_to_notify.each do |user|
           OrderDetailDisputeMailer.dispute_resolved(order_detail: __getobj__, user:).deliver_later
         end
-        LogEvent.log( __getobj__, :resolve, @current_user)
+        LogEvent.log(__getobj__, :resolve, @current_user)
       end
     end
 

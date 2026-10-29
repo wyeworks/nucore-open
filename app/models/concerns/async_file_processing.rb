@@ -33,6 +33,7 @@ module AsyncFileProcessing
 
   def enqueue
     return unless save
+
     FileProcessingJob.perform_later(self)
   end
 

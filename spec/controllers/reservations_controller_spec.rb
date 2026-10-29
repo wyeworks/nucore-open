@@ -1685,7 +1685,8 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
     let(:reservation) do
       @instrument.reservations.create!(
         reserve_start_at: start, order_detail: @order_detail,
-        duration_mins: 60, split_times: true)
+        duration_mins: 60, split_times: true
+      )
     end
 
     before(:example) do

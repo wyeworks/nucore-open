@@ -67,6 +67,7 @@ module ApplicationHelper
 
   def menu_facilities
     return [] unless session_user
+
     session_user.operable_facilities
   end
 

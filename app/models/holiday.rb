@@ -4,7 +4,7 @@ class Holiday < ApplicationRecord
   validates_presence_of :date
 
   scope :future, -> { where(date: Time.current.to_date..Float::INFINITY) }
-  scope :on, -> (date) { where(date: date..date.end_of_day) }
+  scope :on, ->(date) { where(date: date..date.end_of_day) }
 
   def self.allow_access?(user, product, start_date)
     return true if user.blank?

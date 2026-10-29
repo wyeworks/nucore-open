@@ -47,7 +47,6 @@ class UserFinder
   def relation
     conditions = searchable_columns.map { |column| arel_table[column].lower.matches(@search_term) }
 
-
     conditions << concat_condition.matches(@search_term)
 
     scope = User.where(conditions.inject(&:or))

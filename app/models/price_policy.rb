@@ -112,6 +112,7 @@ class PricePolicy < ApplicationRecord
 
   def order_review_product?
     return true unless product
+
     !product.skip_order_review?
   end
 
@@ -141,6 +142,7 @@ class PricePolicy < ApplicationRecord
   # by this PricePolicy's +PriceGroup+, false otherwise.
   def restrict_purchase
     return false unless price_group && product
+
     !can_purchase?
   end
 
@@ -232,6 +234,7 @@ class PricePolicy < ApplicationRecord
 
   def subsidy_less_than_rate
     return unless defined?(rate_field)
+
     errors.add(subsidy_field, :subsidy_greater_than_cost) if self[rate_field] && self[subsidy_field] && self[subsidy_field] > self[rate_field]
   end
 

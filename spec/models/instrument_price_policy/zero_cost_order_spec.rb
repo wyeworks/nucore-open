@@ -8,9 +8,9 @@ RSpec.describe InstrumentPricePolicy do
     expect(@instrument.price_policies.count).to eq(1)
     @price_policy = @instrument.price_policies.first
     @price_policy.update(usage_rate: 0,
-                                    usage_subsidy: 0,
-                                    minimum_cost: 0,
-                                    cancellation_cost: 0)
+                         usage_subsidy: 0,
+                         minimum_cost: 0,
+                         cancellation_cost: 0)
 
     @reservation = FactoryBot.create(:purchased_reservation, product: @instrument,
                                                              reserve_start_at: 1.day.ago, reserve_end_at: 1.day.ago + 1.hour)

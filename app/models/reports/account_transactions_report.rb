@@ -98,7 +98,6 @@ class Reports::AccountTransactionsReport
     else
       headers
     end
-
   end
 
   def build_row(order_detail)
@@ -142,7 +141,6 @@ class Reports::AccountTransactionsReport
     else
       row
     end
-
   end
 
   def price_breakdown_headers

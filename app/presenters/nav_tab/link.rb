@@ -15,6 +15,7 @@ class NavTab::Link
 
   def active?(controller)
     return false if controller.active_tab != @tab
+
     controller.cross_facility? ? @cross_facility : !@cross_facility
   end
 

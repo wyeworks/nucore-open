@@ -3,6 +3,7 @@
 class FaviconPresenter
   def self.favicons
     return @favicons if defined?(@favicons)
+
     pngs = Dir.glob("app/assets/images/favicons/*.png").map do |png|
       rel = png.include?("apple-touch-icon") ? "apple-touch-icon" : "shortcut icon"
       { path: "favicons/" + File.basename(png), rel:, type: "image/png" }

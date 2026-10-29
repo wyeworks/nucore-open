@@ -42,6 +42,7 @@ class FacilitiesController < ApplicationController
   def show
     return redirect_to(facilities_path) if current_facility.try(:cross_facility?)
     raise ActiveRecord::RecordNotFound unless current_facility.try(:is_active?)
+
     @columns = "columns" if SettingsHelper.feature_on?("style_display.product_list_columns")
     @active_tab = SettingsHelper.feature_on?("style_display.use_manage") ? "use" : "home"
 
@@ -72,6 +73,7 @@ class FacilitiesController < ApplicationController
       @active_facilities = facilities.active
       @inactive_facilities = facilities.inactive
       raise ActiveRecord::RecordNotFound if facilities.empty?
+
       if facilities.size == 1
         redirect_to dashboard_facility_path(facilities.first)
       end

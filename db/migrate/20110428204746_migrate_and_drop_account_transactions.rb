@@ -16,6 +16,7 @@ class MigrateAndDropAccountTransactions < ActiveRecord::Migration[4.2]
         journal = j_row.journal
 
         next unless journal.open? || journal.is_successful? == true
+
         od.journal = journal
 
         if journal.is_successful? == true

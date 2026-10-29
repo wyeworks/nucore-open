@@ -2,6 +2,7 @@
 
 class Reports::InstrumentUtilizationReport
   attr_accessor :key_length
+
   def initialize(reservations)
     @reservations = reservations
   end
@@ -44,6 +45,7 @@ class Reports::InstrumentUtilizationReport
     include ActionView::Helpers::NumberHelper
 
     attr_accessor :quantity, :reserved_mins, :actual_mins
+
     def initialize(quantity, reserved_mins, actual_mins)
       @quantity = quantity
       @reserved_mins = reserved_mins
@@ -64,6 +66,7 @@ class Reports::InstrumentUtilizationReport
 
     def safe_divide(a, b)
       return 0.0 if b.zero?
+
       a.to_f / b.to_f
     end
 

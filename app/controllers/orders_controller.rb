@@ -183,10 +183,10 @@ class OrdersController < ApplicationController
   # POST /orders/:id/choose_account
   def choose_account
     @product = if session[:add_to_cart].blank?
-              @order.order_details[0].try(:product)
-            else
-              find_cart_product(session[:add_to_cart].first[:product_id])
-            end
+                 @order.order_details[0].try(:product)
+               else
+                 find_cart_product(session[:add_to_cart].first[:product_id])
+               end
     # For nonbillable products, we don't ask the user to choose an account
     # POST requests are sent from the form on the choose_account page,
     # so we need to assign the account selected by the user to the order
@@ -307,7 +307,7 @@ class OrdersController < ApplicationController
       redirect_to orders_status_path(status: "pending")
       return
     end
-    @order_details = @order_details. order("order_details.created_at DESC").paginate(page: params[:page])
+    @order_details = @order_details.order("order_details.created_at DESC").paginate(page: params[:page])
   end
 
   private
@@ -353,16 +353,16 @@ class OrdersController < ApplicationController
     result = { success:, redirect_path: nil, error_message: nil }
     if success
       result[:redirect_path] = if session[:add_to_cart].nil?
-        cart_path
-      else
-        add_order_path(@order)
-      end
+                                 cart_path
+                               else
+                                 add_order_path(@order)
+                               end
     else
       result[:error_message] = if account.nil?
-        "Please select a payment method."
-      else
-        "An error was encountered while selecting a payment method."
-      end
+                                 "Please select a payment method."
+                               else
+                                 "An error was encountered while selecting a payment method."
+                               end
     end
     result
   end
@@ -389,6 +389,7 @@ class OrdersController < ApplicationController
 
   def order_params
     return ActionController::Parameters.new if params[:order].blank?
+
     if acting_as?
       params[:order].permit(*(self.class.permitted_params + self.class.permitted_acting_as_params))
     else
@@ -432,7 +433,7 @@ class OrdersController < ApplicationController
 
   def invalid_for_orderer_message
     text("models.order.account_invalid_for_orderer",
-      clear_cart_link: clear_order_path(@order),
-      change_payment_source_link: choose_account_order_path(@order))
+         clear_cart_link: clear_order_path(@order),
+         change_payment_source_link: choose_account_order_path(@order))
   end
 end

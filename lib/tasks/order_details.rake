@@ -31,7 +31,7 @@ namespace :order_details do
     # Change this query for when we need to recalculate prices for just a subset of Order details
     # Changes to this should be marked with the ticket number in the git commit message
     query = facility.order_details.where("fulfilled_at >= ? and fulfilled_at < ?",
-                        Time.zone.local(2020, 9, 1), Time.zone.now.end_of_day)
+                                         Time.zone.local(2020, 9, 1), Time.zone.now.end_of_day)
 
     only_completed = query.where(state: "complete", journal_id: nil, statement_id: nil)
                           .joins(:order).where(orders: { state: "purchased" })

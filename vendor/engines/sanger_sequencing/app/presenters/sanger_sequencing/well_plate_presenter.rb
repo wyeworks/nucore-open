@@ -5,6 +5,7 @@ module SangerSequencing
     include TextHelpers::Translation
 
     attr_reader :well_plate, :plate_mode
+
     delegate :samples, to: :well_plate
 
     def initialize(well_plate, plate_mode)

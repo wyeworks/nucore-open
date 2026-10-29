@@ -5,8 +5,10 @@ class AutoCanceler
 
   def cancel_reservations
     return if cancelable_reservations.none?
+
     cancelable_reservations.each do |res|
       next if res.order_detail.blank?
+
       cancel_reservation(res)
     end
   end

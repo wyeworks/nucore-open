@@ -21,6 +21,7 @@ class ApplicationController < ActionController::Base
 
   # Navigation tabs configuration
   attr_accessor :active_tab
+
   include NavTab
 
   # return whatever facility is indicated by the :facility_id or :id url parameter
@@ -123,6 +124,7 @@ class ApplicationController < ActionController::Base
 
   def acting_as?
     return false if session_user.nil?
+
     !acting_user.equal?(session_user)
   end
 

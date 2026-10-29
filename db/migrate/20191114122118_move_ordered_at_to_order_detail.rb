@@ -25,7 +25,7 @@ class MoveOrderedAtToOrderDetail < ActiveRecord::Migration[5.0]
           FROM order_details
           WHERE order_details.order_id = orders.id
         )
-      SQL
+    SQL
 
     change_table :order_details do |t|
       t.remove :ordered_at

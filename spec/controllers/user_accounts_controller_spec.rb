@@ -32,11 +32,11 @@ RSpec.describe UserAccountsController do
       before do
         sign_in account_manager
         patch :update,
-          params: {
-            facility_id: "all",
-            user_id: owner.id,
-            user: { account_users_attributes: {"0" => { _destroy: "1", id: account.owner.id } } },
-          }
+              params: {
+                facility_id: "all",
+                user_id: owner.id,
+                user: { account_users_attributes: { "0" => { _destroy: "1", id: account.owner.id } } },
+              }
       end
 
       it "does not destroy" do
@@ -54,11 +54,11 @@ RSpec.describe UserAccountsController do
       before :each do
         sign_in account_manager
         patch :update,
-          params: {
-            facility_id: "all",
-            user_id: purchaser.id,
-            user: { account_users_attributes: {"0" => { _destroy: "1", id: account_user.id } } },
-          }
+              params: {
+                facility_id: "all",
+                user_id: purchaser.id,
+                user: { account_users_attributes: { "0" => { _destroy: "1", id: account_user.id } } },
+              }
       end
 
       it "updates the user’s active accounts" do

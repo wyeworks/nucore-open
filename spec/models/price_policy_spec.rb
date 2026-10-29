@@ -72,8 +72,7 @@ RSpec.describe PricePolicy do
       pp = FactoryBot.create(:item_price_policy,
                              price_group_id: @price_group.id,
                              product_id: @item.id, start_date:,
-                             expire_date:
-                            )
+                             expire_date:)
       expect(pp.expire_date).not_to be_nil
       expect(pp.expire_date).to eq(expire_date)
     end

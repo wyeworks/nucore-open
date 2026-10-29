@@ -158,5 +158,3 @@ RSpec.describe DownloadableFile do
     end
   end
 end
-
-

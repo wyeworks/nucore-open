@@ -85,6 +85,7 @@ class Journal < ApplicationRecord
 
   def add_spreadsheet(file_path)
     return false unless File.exist?(file_path)
+
     update_attribute(:file, File.open(file_path))
   end
 
@@ -170,6 +171,7 @@ class Journal < ApplicationRecord
 
   def journal_date_cannot_be_before_last_fulfillment
     return unless journal_date.present?
+
     last_fulfilled = @order_details_for_creation.collect(&:fulfilled_at).max
     errors.add(:journal_date, :cannot_be_before_last_fulfillment) if journal_date.end_of_day < last_fulfilled
   end

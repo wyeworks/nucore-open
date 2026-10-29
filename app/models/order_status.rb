@@ -121,7 +121,7 @@ class OrderStatus < ApplicationRecord
 
     def initial_statuses(facility, product: nil)
       statuses = new_status.self_and_descendants
-        .or(in_process.self_and_descendants)
+                           .or(in_process.self_and_descendants)
 
       if SettingsHelper.feature_on?("products.item_initial_order_status_complete") && product.is_a?(Item)
         statuses = statuses.or(complete.self_and_descendants)
@@ -132,11 +132,11 @@ class OrderStatus < ApplicationRecord
 
     def non_protected_statuses(facility)
       new_status.self_and_descendants
-        .or(in_process.self_and_descendants)
-        .or(canceled.self_and_descendants)
-        .or(unrecoverable.self_and_descendants)
-        .or(complete.self_and_descendants)
-        .for_facility(facility).sorted
+                .or(in_process.self_and_descendants)
+                .or(canceled.self_and_descendants)
+                .or(unrecoverable.self_and_descendants)
+                .or(complete.self_and_descendants)
+                .for_facility(facility).sorted
     end
   end
 end

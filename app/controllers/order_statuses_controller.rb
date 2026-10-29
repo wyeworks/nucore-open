@@ -18,7 +18,7 @@ class OrderStatusesController < ApplicationController
 
   # GET /order_statuses
   def index
-    @order_statuses       = current_facility.order_statuses.sorted
+    @order_statuses = current_facility.order_statuses.sorted
   end
 
   # GET /order_statuses/new

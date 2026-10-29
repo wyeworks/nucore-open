@@ -236,7 +236,8 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?("a
       FactoryBot.create(
         :account_user, user_role: AccountUser::ACCOUNT_PURCHASER,
                        account:, user: purchaser,
-                       created_by: account.owner_user.id)
+                       created_by: account.owner_user.id
+      )
     end
 
     it "does not allow the staff" do
@@ -257,8 +258,9 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?("a
       it "adds the log event" do
         expect { do_request }.to change(account_user.log_events, :count).by(1)
         expect(account_user.log_events.last).to have_attributes(
-        loggable: assigns(:account_user), event_type: "delete",
-        user_id: director.id)
+          loggable: assigns(:account_user), event_type: "delete",
+          user_id: director.id
+        )
       end
 
       it "sets the flash and redirects" do

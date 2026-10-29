@@ -5,6 +5,7 @@ module Reservations
     def to_s
       return unless present? # some reservations might not exist for the order_detail
       return super unless reserve_start_at && reserve_end_at
+
       range = TimeRange.new(display_start_at, display_end_at).to_s
       range += " (Canceled)" if canceled?
       range

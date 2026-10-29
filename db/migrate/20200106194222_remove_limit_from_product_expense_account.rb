@@ -1,4 +1,3 @@
-
 class RemoveLimitFromProductExpenseAccount < ActiveRecord::Migration[5.0]
   def up
     change_column :products, :account, :string, limit: nil

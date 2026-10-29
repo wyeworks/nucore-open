@@ -101,7 +101,7 @@ class ProjectsController < ApplicationController
   def cross_core_order_details
     projects = Project.for_facility(current_facility)
     OrderDetail.cross_core
-      .where(orders: { cross_core_project_id: projects })
+               .where(orders: { cross_core_project_id: projects })
   end
 
   def sort_lookup_hash

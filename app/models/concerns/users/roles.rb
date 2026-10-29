@@ -54,11 +54,13 @@ module Users
 
     def operator_of?(facility)
       return false if facility.blank?
+
       user_roles.operator?(facility) || administrator?
     end
 
     def manager_of?(facility)
       return false if facility.blank?
+
       user_roles.manager?(facility) || administrator?
     end
 

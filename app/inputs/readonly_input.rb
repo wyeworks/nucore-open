@@ -23,6 +23,7 @@ class ReadonlyInput < SimpleForm::Inputs::Base
 
   def process_datetime(datetime)
     return nil if datetime.blank?
+
     begin
       if options[:date_only]
         format_usa_date(datetime)

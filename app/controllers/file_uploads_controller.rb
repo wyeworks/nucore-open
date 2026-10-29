@@ -147,6 +147,7 @@ class FileUploadsController < ApplicationController
         unless @product.stored_files.template.all?(&:destroy)
           raise ActiveRecord::Rollback
         end
+
         @file.save!
         @flash_notice = "Order File Template uploaded"
         @redirect_to = product_survey_path(current_facility, @product.parameterize, @product)

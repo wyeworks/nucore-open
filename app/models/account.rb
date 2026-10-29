@@ -288,6 +288,7 @@ class Account < ApplicationRecord
 
   def affiliate_to_s
     return "" unless affiliate
+
     if affiliate.subaffiliates_enabled?
       "#{affiliate.name}: #{affiliate_other}"
     else

@@ -11,7 +11,7 @@ module ReservationsHelper
     new_order_order_detail_accessory_path(reservation.order_detail.order, reservation.order_detail)
   end
 
-  def kiosk_reservation_pick_accessories_path(reservation, switch=nil)
+  def kiosk_reservation_pick_accessories_path(reservation, switch = nil)
     new_order_order_detail_kiosk_accessory_path(reservation.order_detail.order, reservation.order_detail, switch:)
   end
 

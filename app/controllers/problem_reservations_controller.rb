@@ -46,6 +46,7 @@ class ProblemReservationsController < ApplicationController
     @order_detail = @reservation.order_detail
 
     raise ActiveRecord::RecordNotFound unless editable? || resolved?
+
     authorize! :update, @reservation
   end
 

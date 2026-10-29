@@ -40,7 +40,7 @@ RSpec.describe "Launching Kiosk View", feature_setting: { kiosk_view: true } do
   end
 
   context "with Kiosk view disabled" do
-    let(:facility) { create(:setup_facility, kiosk_enabled: false ) }
+    let(:facility) { create(:setup_facility, kiosk_enabled: false) }
 
     it "cannot launch the Kiosk View" do
       visit timeline_facility_reservations_path(facility)

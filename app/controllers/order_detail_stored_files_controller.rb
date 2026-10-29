@@ -28,6 +28,7 @@ class OrderDetailStoredFilesController < ApplicationController
   def order_file
     @original_order_id = params[:original_order_id]
     raise ActiveRecord::RecordNotFound if @order_detail.product.stored_files.template.empty?
+
     @file = @order_detail.stored_files.new(file_type: "template_result")
   end
 

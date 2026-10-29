@@ -28,6 +28,7 @@ class Accessories::Accessorizer
 
   def build_accessory_order_detail(accessory, options = {})
     return nil unless valid_accessory?(accessory)
+
     od = @order_detail.child_order_details.build(detail_attributes(accessory, options))
     decorated_od = decorate(od)
     decorated_od.update_quantity

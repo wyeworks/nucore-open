@@ -47,11 +47,11 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
       it "puts the right accounts on the added details" do
         order_import.process_upload!
         expect(order.reload.order_details).to match([
-          anything, # this is the original detail
+                                                      anything, # this is the original detail
           having_attributes(account:, note: "Add to 1", reference_id: "123456789"),
           having_attributes(account: account2, note: "Add to 2", reference_id: "123456000"),
           having_attributes(account: nonbillable_account, note: "Add to 3", reference_id: "123456700"),
-        ])
+                                                    ])
       end
 
       it "adds to the second order" do
@@ -63,12 +63,12 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
         expect { order_import.process_upload! }.to change(Order, :count).by(4)
 
         expect(Order.all.to_a - existing).to match([
-          having_attributes(
-            order_details: [
-              having_attributes(account:, note: "New 1"),
-              having_attributes(account:, note: "New 1-2 - Miscased"),
-            ],
-          ),
+                                                     having_attributes(
+                                                       order_details: [
+                                                         having_attributes(account:, note: "New 1"),
+                                                         having_attributes(account:, note: "New 1-2 - Miscased"),
+                                                       ],
+                                                     ),
           having_attributes(
             order_details: [
               having_attributes(account: account2, note: "New 2 - Different Account"),
@@ -85,7 +85,7 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
               having_attributes(account: nonbillable_account, note: "New 3-2"),
             ],
           ),
-        ])
+                                                   ])
       end
     end
 

@@ -29,6 +29,7 @@ class OrderDetail < ApplicationRecord
 
   # Used to mark a dispute as resolved
   attr_accessor :resolve_dispute
+
   before_validation :mark_dispute_resolved, if: :resolve_dispute
 
   after_validation :reset_dispute
@@ -188,7 +189,6 @@ class OrderDetail < ApplicationRecord
     ordered_at
       .unreconciled
       .where(journal_id: nil)
-
   end
 
   scope :in_review, lambda {
@@ -295,6 +295,7 @@ class OrderDetail < ApplicationRecord
   scope :for_users, ->(user_ids) { joins(:order).where(orders: { user_id: user_ids }) unless user_ids.blank? }
   scope :for_owners, lambda { |owners|
     return if owners.blank?
+
     joins(account: :account_users)
       .where(account_users: { user_role: AccountUser::ACCOUNT_OWNER,
                               user_id: owners })
@@ -309,10 +310,12 @@ class OrderDetail < ApplicationRecord
   scope :action_in_date_range, lambda { |action, start_date, end_date|
     valid = TransactionSearch::DateRangeSearcher::FIELDS.map(&:to_sym) + [:journal_date]
     raise ArgumentError.new("Invalid action: #{action}. Must be one of: #{valid}") unless valid.include? action.to_sym
+
     logger.debug("searching #{action} between #{start_date} and #{end_date}")
     search = all
 
     return journaled_or_statemented_in_date_range(start_date, end_date) if action.to_sym == :journal_or_statement_date
+
     search = search.joins(:journal) if action.to_sym == :journal_date
 
     # If we're searching on fulfilled_at, ignore any order details that don't have a fulfilled date
@@ -473,6 +476,7 @@ class OrderDetail < ApplicationRecord
     # if we're setting it to complete, automatically set the actuals for a reservation
     if reservation
       raise NUCore::PurchaseException.new(t_model_error(Reservation, "cannot_be_completed_in_future")) if reservation.reserve_end_at > event_time
+
       reservation.assign_actuals_off_reserve unless reservation.product.reservation_only?
       reservation.save!
     end
@@ -608,6 +612,7 @@ class OrderDetail < ApplicationRecord
   def validate_reservation
     return nil unless product.is_a?(Instrument)
     return "Please make a reservation" if reservation.nil?
+
     reservation.reserved_by_admin = @being_purchased_by_admin
     return "There is a problem with your reservation" unless reservation.valid? && reservation.valid_before_purchase?
   end
@@ -716,6 +721,7 @@ class OrderDetail < ApplicationRecord
 
     # is account valid for facility
     return unless product.facility.can_pay_with_account?(account)
+
     assign_actual_price
   end
 
@@ -724,8 +730,10 @@ class OrderDetail < ApplicationRecord
     pp = product.cheapest_price_policy(self, date)
 
     return unless pp
+
     costs = pp.calculate_cost_and_subsidy_from_order_detail(self)
     return unless costs
+
     self.price_policy_id = pp.id
     self.actual_cost     = costs[:cost]
     self.actual_subsidy  = costs[:subsidy]
@@ -788,6 +796,7 @@ class OrderDetail < ApplicationRecord
 
       # must set canceled_at after calling #can_cancel?
       return false unless update(canceled_at: Time.current)
+
       clear_statement if cancellation_fee == 0
       cancel_with_fee order_status
     end
@@ -907,7 +916,7 @@ class OrderDetail < ApplicationRecord
                 when Instrument then "has an incomplete reservation."
                 when Service then "has an incomplete order form."
                 else; "is incomplete."
-      end
+                end
 
       notice.html_safe
     else
@@ -976,6 +985,7 @@ class OrderDetail < ApplicationRecord
 
   def self.where_order_number(query)
     return nil unless /\A(?<order_id>\d+)-(?<id>\d+)\z/ =~ query
+
     where(id:, order_id:)
   end
 

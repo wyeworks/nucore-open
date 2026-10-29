@@ -55,6 +55,7 @@ class Statement < ApplicationRecord
 
   def self.find_by_statement_id(query)
     return nil unless /\A(?<id>\d+)\z/ =~ query
+
     find_by(id:)
   end
 
@@ -143,12 +144,12 @@ class Statement < ApplicationRecord
 
   def send_emails
     account.notify_users.each do |user|
-        Notifier.statement(
-          user:,
-          facility:,
-          account:,
-          statement: self,
-        ).deliver_later
+      Notifier.statement(
+        user:,
+        facility:,
+        account:,
+        statement: self,
+      ).deliver_later
     end
   end
 

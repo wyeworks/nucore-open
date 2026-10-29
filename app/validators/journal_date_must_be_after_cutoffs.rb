@@ -19,6 +19,7 @@ class JournalDateMustBeAfterCutoffs < ActiveModel::Validator
 
     def validate
       return unless journal_date.present?
+
       add_error if first_valid_date && first_valid_date > journal_date.beginning_of_day
     end
 

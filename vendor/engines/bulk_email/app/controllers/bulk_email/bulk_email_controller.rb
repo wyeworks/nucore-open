@@ -57,6 +57,7 @@ module BulkEmail
     # need to be set to keep that state in the redisplayed form.
     def populate_flow_state_params
       return if params[:bulk_email_delivery_form].blank?
+
       search_criteria = JSON.parse(params[:bulk_email_delivery_form][:search_criteria])
       params.merge!(search_criteria.slice("bulk_email", "start_date", "end_date", "products", "facilities"))
       params.merge!(params[:bulk_email_delivery_form].permit(:product_id, :recipient_ids))
@@ -124,6 +125,7 @@ module BulkEmail
 
     def user_type_selected?(user_type)
       return false if params[:bulk_email].blank?
+
       params[:bulk_email][:user_types].include?(user_type.to_s)
     end
   end

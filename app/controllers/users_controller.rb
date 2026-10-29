@@ -227,6 +227,7 @@ class UsersController < ApplicationController
 
   def username_lookup(username)
     return nil if username.blank?
+
     username_database_lookup(username.strip) || service_username_lookup(username.strip)
   end
 

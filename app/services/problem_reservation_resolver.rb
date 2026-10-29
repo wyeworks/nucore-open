@@ -2,6 +2,7 @@
 
 class ProblemReservationResolver
   attr_reader :reservation
+
   delegate :order_detail, to: :reservation
 
   def initialize(reservation)

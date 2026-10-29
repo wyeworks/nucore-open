@@ -57,6 +57,7 @@ class FacilityOrderDetailsController < ApplicationController
 
   def process_account_change
     return if params[:order_detail][:account_id].to_i == @order_detail.account_id
+
     @order_detail.account = Account.find(params[:order_detail][:account_id])
     @order_detail.statement = nil
     @order_detail.save!
@@ -73,6 +74,7 @@ class FacilityOrderDetailsController < ApplicationController
   def init_order_detail
     @order = Order.find(params[:order_id])
     raise ActiveRecord::RecordNotFound unless @order
+
     @order_detail = @order.order_details.find(params[:id] || params[:order_detail_id])
   end
 end

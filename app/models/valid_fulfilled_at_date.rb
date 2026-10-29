@@ -43,6 +43,7 @@ class ValidFulfilledAtDate
 
   def valid_format
     return if @string.blank?
+
     errors.add(:base, :invalid) unless to_time
   end
 

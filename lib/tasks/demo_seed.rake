@@ -15,7 +15,7 @@ namespace :demo do
     canceled   = OrderStatus.find_or_create_by!(name: "Canceled")
     complete   = OrderStatus.find_or_create_by!(name: "Complete")
     reconciled = OrderStatus.find_or_create_by!(name: "Reconciled")
-    unrecoverable  = OrderStatus.find_or_create_by!(name: "Unrecoverable")
+    unrecoverable = OrderStatus.find_or_create_by!(name: "Unrecoverable")
 
     facility = Facility.find_or_create_by!(url_name: "example") do |example_facility|
       example_facility.name = "Example Facility"
@@ -233,7 +233,7 @@ namespace :demo do
 
     unless bundle
       bundle = Bundle.create!(facility_id: facility.id,
-                              account:  Settings.accounts.product_default,
+                              account: Settings.accounts.product_default,
                               name: "Example Bundle",
                               url_name: "example-bundle",
                               description: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>",
@@ -362,9 +362,9 @@ namespace :demo do
     user_student2 = User.find_by(username: "sst456@example.com")
     unless user_student2
       user_student2 = User.new(username: "sst456@example.com",
-                              email: "sst456@example.com",
-                              first_name: "Greg",
-                              last_name: "Student")
+                               email: "sst456@example.com",
+                               first_name: "Greg",
+                               last_name: "Student")
       user_student2.password = "P@ssw0rd!!"
       user_student2.save!
     end
@@ -416,9 +416,9 @@ namespace :demo do
     user_director2 = User.find_by(username: "ddi456@example.com")
     unless user_director2
       user_director2 = User.new(username: "ddi456@example.com",
-                               email: "ddi456@example.com",
-                               first_name: "Eric",
-                               last_name: "Facililty Director")
+                                email: "ddi456@example.com",
+                                first_name: "Eric",
+                                last_name: "Facililty Director")
       user_director2.password = "P@ssw0rd!!"
       user_director2.save
       UserRole.grant(user_director2, UserRole::FACILITY_DIRECTOR, facility2)
@@ -676,6 +676,7 @@ namespace :demo do
     # create a valid order detail (with price policy and costs)
     products = [@service, @instrument, @item, @bundle]
     return nil if products.empty?
+
     i = 1
     begin
       product = products[rand(products.length)]
@@ -731,7 +732,7 @@ namespace :demo do
                           when Instrument then InstrumentPricePolicy.first
                           when Item then ItemPricePolicy.first
                           when Service then ServicePricePolicy.first
-                        end
+                          end
 
         od.order_status_id ||= od.product.initial_order_status_id
         od.save!

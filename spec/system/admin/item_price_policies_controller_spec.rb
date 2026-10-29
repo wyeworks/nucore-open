@@ -16,7 +16,7 @@ RSpec.describe ItemPricePoliciesController, :js do
     facility.price_groups.destroy_all # get rid of the price groups created by the factories
   end
 
-  it "can set up price policies", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true }  do
+  it "can set up price policies", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
     visit facility_items_path(facility, item)
     click_link item.name
     click_link "Pricing"
@@ -37,7 +37,7 @@ RSpec.describe ItemPricePoliciesController, :js do
     expect(page).to have_content("This is my note")
   end
 
-  it "can allow only some groups to purchase", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true }  do
+  it "can allow only some groups to purchase", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
     visit facility_items_path(facility, item)
     click_link item.name
     click_link "Pricing"

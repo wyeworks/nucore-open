@@ -37,6 +37,7 @@ module Products::SchedulingSupport
     # if the user has no schedule rules, there will be no time that they can
     # move the reservation to
     return nil unless rules.any?
+
     reservation_in_week(after, duration, rules, options)
   end
 

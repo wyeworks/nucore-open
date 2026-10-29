@@ -12,10 +12,10 @@ class BudgetedChartString < ApplicationRecord
 
   def self.import(filename)
     file = begin
-             File.open(filename, "r")
-           rescue
-             nil
-           end
+      File.open(filename, "r")
+    rescue
+      nil
+    end
     if file.blank?
       puts "error: Invalid file #{filename}"
       return

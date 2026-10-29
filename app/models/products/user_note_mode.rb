@@ -32,6 +32,7 @@ module Products
     def initialize(raw_value)
       @raw_value = raw_value
       raise ArgumentError, "Invalid value: #{raw_value}" unless self.class.valid?(raw_value)
+
       freeze
     end
 

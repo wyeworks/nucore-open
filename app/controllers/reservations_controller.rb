@@ -334,6 +334,7 @@ class ReservationsController < ApplicationController
     # It's important that the order_detail be the same object as the one in @order.order_details.first
     @order_detail = @order.order_details.find { |od| od.id.to_i == params[:order_detail_id].to_i }
     raise ActiveRecord::RecordNotFound if @order_detail.blank?
+
     @reservation = @order_detail.reservation
     @instrument = @order_detail.product
     @facility = @instrument.facility
@@ -418,6 +419,7 @@ class ReservationsController < ApplicationController
   # JS library which uses unix timestamps for the parameters. This allows us to handle both.
   def parse_time_param(string_value)
     return unless string_value
+
     Time.zone.parse(string_value)
   rescue ArgumentError
     Time.zone.at(string_value.to_i)

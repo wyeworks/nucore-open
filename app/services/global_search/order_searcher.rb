@@ -20,7 +20,7 @@ module GlobalSearch
                    search_external query
                  when /\A\d+\z/
                    OrderDetail.where("order_details.id = :id OR order_details.order_id = :id", id: query)
-      end
+                 end
 
       relation ? relation.joins(:order).purchased : []
     end

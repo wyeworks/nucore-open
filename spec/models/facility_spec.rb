@@ -179,7 +179,7 @@ RSpec.describe Facility do
   describe "show_multi_add_products?" do
     let(:user) { create(:user) }
     let(:facility) { create(:facility, accepts_multi_add: true) }
-    let!(:hidden_product) {  create(:item, :without_validation, facility:, is_archived: false, is_hidden: true) }
+    let!(:hidden_product) { create(:item, :without_validation, facility:, is_archived: false, is_hidden: true) }
 
     it "returns false with no user" do
       expect(facility.show_multi_add_products?(Product.all, nil)).to eq false

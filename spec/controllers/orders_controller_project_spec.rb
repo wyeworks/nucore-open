@@ -27,7 +27,7 @@ RSpec.describe OrdersController do
 
         it "sets the project_id" do
           assigns[:order].order_details.each do |order_detail|
-            expect(order_detail.project_id). to eq(project_id)
+            expect(order_detail.project_id).to eq(project_id)
           end
         end
       end
@@ -37,7 +37,7 @@ RSpec.describe OrdersController do
 
         it "has no project_id" do
           assigns[:order].order_details.each do |order_detail|
-            expect(order_detail.project_id). to be_blank
+            expect(order_detail.project_id).to be_blank
           end
         end
       end
@@ -51,7 +51,7 @@ RSpec.describe OrdersController do
 
         it "has no project_id" do
           assigns[:order].order_details.each do |order_detail|
-            expect(order_detail.project_id). to be_blank
+            expect(order_detail.project_id).to be_blank
           end
         end
       end

@@ -38,7 +38,7 @@ RSpec.describe TimedServicePricePoliciesController, :js do
     expect(page).to have_content("This is my note")
   end
 
-  it "can allow only some groups to purchase", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true }  do
+  it "can allow only some groups to purchase", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
     visit facility_timed_services_path(facility, timed_service)
     click_link timed_service.name
     click_link "Pricing"

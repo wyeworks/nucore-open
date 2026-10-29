@@ -66,11 +66,13 @@ module PricePolicies
 
     def minimum_cost_subsidy
       return unless has_minimum_cost?
+
       minimum_cost * subsidy_ratio
     end
 
     def subsidized_minimum_cost
       return unless has_minimum_cost?
+
       minimum_cost - minimum_cost_subsidy
     end
 
@@ -86,6 +88,7 @@ module PricePolicies
 
     def subsidy_ratio
       return 0 if usage_rate.zero?
+
       usage_subsidy / usage_rate
     end
 

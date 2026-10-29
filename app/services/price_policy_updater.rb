@@ -8,6 +8,7 @@ class PricePolicyUpdater
   def self.destroy_all_for_product!(product, start_date)
     price_policies = product.price_policies.for_date(start_date)
     raise ActiveRecord::RecordNotFound if price_policies.none?
+
     new(product, price_policies, start_date).destroy_all!
   end
 

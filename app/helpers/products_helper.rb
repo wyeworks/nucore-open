@@ -21,7 +21,7 @@ module ProductsHelper
   def options_for_relay
     [
       if SettingsHelper.feature_on?("products.disable_relay_synaccess_rev_a")
-          nil
+        nil
       else
         [RelaySynaccessRevA, RelaySynaccessRevA.name]
       end,
@@ -49,10 +49,10 @@ module ProductsHelper
     return unless product.respond_to? :reservations
 
     opts = if product.facility.show_instrument_availability?
-      public_calendar_availability_options(product, availability)
-    else
-      { class: ["fa fa-calendar fa-lg fa-fw"], title: t("instruments.public_schedule.icon") }
-    end
+             public_calendar_availability_options(product, availability)
+           else
+             { class: ["fa fa-calendar fa-lg fa-fw"], title: t("instruments.public_schedule.icon") }
+           end
 
     link_to "", facility_instrument_public_schedule_path(product.facility, product), opts
   end

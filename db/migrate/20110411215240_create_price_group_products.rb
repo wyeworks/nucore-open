@@ -42,7 +42,7 @@ class CreatePriceGroupProducts < ActiveRecord::Migration[4.2]
                 when ItemPricePolicy then policy.item
                 when ServicePricePolicy then policy.service
                 when InstrumentPricePolicy then policy.instrument
-              end
+                end
 
       pgp = PriceGroupProduct.find_by(price_group_id: policy.price_group.id, product_id: product.id)
 

@@ -26,6 +26,7 @@ class FacilityUserReservationsController < ApplicationController
 
     unless reservation.canceled?
       raise ActiveRecord::RecordNotFound unless reservation.can_cancel?
+
       cancel_with_fee!
     end
 

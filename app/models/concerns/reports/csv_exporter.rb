@@ -76,7 +76,7 @@ module Reports
                    row.public_send(callable)
                  else
                    callable.call(row)
-        end
+                 end
 
         if result.is_a?(DateTime)
           format_usa_datetime(result)

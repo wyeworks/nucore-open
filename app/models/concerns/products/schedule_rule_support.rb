@@ -10,16 +10,19 @@ module Products::ScheduleRuleSupport
 
   def can_purchase?(group_ids = nil)
     return false if schedule_rules.empty?
+
     super
   end
 
   def first_available_hour
     return 0 unless schedule_rules.any?
+
     schedule_rules.min_by(&:start_hour).start_hour
   end
 
   def last_available_hour
     return 23 unless schedule_rules.any?
+
     max_rule = schedule_rules.max_by(&:hour_floor)
     max_rule.end_min.zero? ? max_rule.end_hour - 1 : max_rule.end_hour
   end

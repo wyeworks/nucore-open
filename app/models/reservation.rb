@@ -46,6 +46,7 @@ class Reservation < ApplicationRecord
 
   def canceled?
     return false unless order_detail
+
     order_detail.canceled_at?
   end
 
@@ -267,6 +268,7 @@ class Reservation < ApplicationRecord
 
   def can_start_early?
     return false unless in_grace_period?
+
     # no other reservation ongoing; no res between now and reserve_start;
 
     Reservation
@@ -322,6 +324,7 @@ class Reservation < ApplicationRecord
   # TODO: does this need to be more robust?
   def can_edit_actuals?
     return false if order_detail.nil?
+
     complete?
   end
 
@@ -368,6 +371,7 @@ class Reservation < ApplicationRecord
 
   def update_billable_minutes
     return unless persisted? && order_detail&.persisted?
+
     update_column(:billable_minutes, calculated_billable_minutes)
   end
 

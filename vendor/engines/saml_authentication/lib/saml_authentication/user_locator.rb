@@ -15,7 +15,6 @@ module SamlAuthentication
 
         model.find_by(username:) || model.find_by(email:)
       end
-
     end
   end
 end

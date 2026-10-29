@@ -22,6 +22,7 @@ class AllOrderDetailsValidator
   # This class should only be initialized through the `.build` method
   def initialize(order_details)
     raise "Should not be initialized directly. Use the `.build` factory method instead" unless order_detail_validator_class
+
     @order_details = order_details
   end
 

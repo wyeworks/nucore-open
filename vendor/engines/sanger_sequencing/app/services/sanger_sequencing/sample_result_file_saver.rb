@@ -43,6 +43,7 @@ module SangerSequencing
 
     def sample
       return @sample if defined?(@sample)
+
       @sample = @batch.samples.find_by(id: sample_id)
     end
 
@@ -54,6 +55,7 @@ module SangerSequencing
 
     def has_valid_sample
       return unless filename_has_sample_id?
+
       errors.add(:sample, :blank, id: sample_id) unless sample
     end
 

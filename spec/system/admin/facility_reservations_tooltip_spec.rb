@@ -9,7 +9,7 @@ RSpec.describe "Reservation Tooltips", :js, :skip_time_travel do
   let!(:reservation) { create(:purchased_reservation, reserve_start_at: reserve_start, product: instrument, order_detail:) }
   let(:instrument) { create(:setup_instrument, facility:) }
   let(:account) { create(:account, :with_account_owner, owner: director) }
-  let(:order) { create(:setup_order, account:, product: instrument, order_detail_attributes: { note: "This is an order detail note" } ) }
+  let(:order) { create(:setup_order, account:, product: instrument, order_detail_attributes: { note: "This is an order detail note" }) }
   let(:order_detail) { order.order_details.first }
 
   before(:each) { login_as director }

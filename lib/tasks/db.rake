@@ -13,6 +13,7 @@ namespace :db do
   desc "Drop database for current RAILS_ENV"
   task oracle_drop: :environment do
     next unless db_allow_task?
+
     config = Rails.configuration.database_configuration[Rails.env]
     connect_string = "#{config['username']}/#{config['password']}@#{config['database']}"
     Dir.chdir(Rails.root.join("db")) do

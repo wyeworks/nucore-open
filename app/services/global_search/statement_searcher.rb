@@ -10,6 +10,7 @@ module GlobalSearch
 
     def search
       return [] unless Account.config.statements_enabled?
+
       Array(Statement.send(search_method, parsed_query))
     end
 

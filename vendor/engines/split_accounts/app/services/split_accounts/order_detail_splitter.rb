@@ -92,6 +92,7 @@ module SplitAccounts
 
     def build_split_time_data(split_order_detail, split)
       return unless order_detail.time_data.present?
+
       split_time_data = SplitTimeDataDecorator.new(order_detail.time_data.dup)
       time_data_splitter.split(order_detail.time_data, split_time_data, split)
       # Warning: if `id` is set on the order_detail when this assignment happens,
@@ -107,6 +108,7 @@ module SplitAccounts
 
     def apply_time_data_remainders
       return unless order_detail.time_data.present?
+
       applier = RemainderApplier.new(order_detail.time_data, split_order_details.map(&:time_data), splits)
       applier.apply_remainders(time_data_splitter)
     end

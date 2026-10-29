@@ -10,6 +10,7 @@ module Reservations::RelaySupport
     return false unless actual_end_at.nil?     # already turned off
     return false if reserve_end_at < Time.zone.now # reservation is already over (missed reservation)
     return can_start_early? if reserve_start_at > Time.zone.now
+
     true
   end
 
@@ -20,6 +21,7 @@ module Reservations::RelaySupport
     return false unless actual_end_at.nil?    # already ended
     return false if actual_start_at.nil?      # hasn't been started yet
     return false if order_detail.complete?
+
     true
   end
 

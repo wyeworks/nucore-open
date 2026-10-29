@@ -28,7 +28,6 @@ class ProductUserImport < ApplicationRecord
       failures << "Uploaded CSV file must include a 'Username' column.  Please try again."
     end
 
-
     if new_product_users_added?
       save!
       successes.map! do |product_user|

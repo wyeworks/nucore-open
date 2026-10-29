@@ -59,6 +59,7 @@ class OrderDetailPresenter < SimpleDelegator
 
   def display_subsidy
     return unless has_subsidies?
+
     number_to_currency(actual_subsidy) || number_to_currency(estimated_subsidy) || empty_display
   end
 

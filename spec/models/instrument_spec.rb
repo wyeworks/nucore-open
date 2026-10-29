@@ -16,8 +16,7 @@ RSpec.describe Instrument do
           facility:,
           min_reserve_mins:,
           max_reserve_mins:,
-          reserve_interval:,
-         )
+          reserve_interval:,)
   end
 
   it "should create using factory" do
@@ -179,7 +178,7 @@ RSpec.describe Instrument do
       context "replace with new control_mechanism: 'relay' (Timer with relay)" do
         context "when validations not met" do
           before :each do
-            @updated = @instrument.replace_relay({type: "RelaySynaccessRevA" }, "relay")
+            @updated = @instrument.replace_relay({ type: "RelaySynaccessRevA" }, "relay")
           end
 
           it "relay should have errors" do
@@ -809,7 +808,7 @@ RSpec.describe Instrument do
         context "and is started" do
           before :each do
             reservation.update(reserved_by_admin: true,
-                                          actual_start_at: 30.minutes.ago)
+                               actual_start_at: 30.minutes.ago)
           end
 
           it { is_expected.not_to be_walkup_available }
@@ -817,7 +816,7 @@ RSpec.describe Instrument do
           context "but it was ended already" do
             before :each do
               reservation.update(reserved_by_admin: true,
-                                            actual_end_at: 10.minutes.ago)
+                                 actual_end_at: 10.minutes.ago)
             end
 
             it { is_expected.to be_walkup_available }

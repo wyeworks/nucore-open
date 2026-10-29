@@ -255,8 +255,7 @@ RSpec.describe InstrumentsController, type: :controller do
       @params.merge!(
         instrument: attributes_for(:instrument,
                                    no_relay: true,
-                                   facility_account_id: facility.facility_accounts.first.id,
-                                  ),
+                                   facility_account_id: facility.facility_accounts.first.id,),
       )
     end
 

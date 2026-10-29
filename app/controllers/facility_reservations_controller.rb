@@ -32,6 +32,7 @@ class FacilityReservationsController < ApplicationController
     @instrument   = @order_detail.product
 
     raise ActiveRecord::RecordNotFound unless @reservation == Reservation.find(params[:id])
+
     set_windows
 
     redirect_to facility_order_order_detail_reservation_path(current_facility, @order, @order_detail, @reservation) if @reservation.locked?
@@ -44,6 +45,7 @@ class FacilityReservationsController < ApplicationController
     @reservation  = @order_detail.reservation
     @instrument   = @order_detail.product
     raise ActiveRecord::RecordNotFound if @reservation != Reservation.find(params[:id]) || @reservation.locked?
+
     set_windows
 
     @reservation.assign_times_from_params(reservation_params)
@@ -115,6 +117,7 @@ class FacilityReservationsController < ApplicationController
     @instrument  = current_facility.instruments.find_by!(url_name: params[:instrument_id])
     @reservation = @instrument.reservations.find(params[:reservation_id])
     raise ActiveRecord::RecordNotFound unless @reservation.order_detail_id.nil?
+
     render layout: "two_column"
   end
 

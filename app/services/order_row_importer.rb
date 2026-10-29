@@ -32,6 +32,7 @@ class OrderRowImporter
   ].lazy.map { |k| header(k) }
 
   attr_accessor :order_import, :order
+
   delegate :id, to: :order, prefix: true
   delegate :facility, to: :order_import
 

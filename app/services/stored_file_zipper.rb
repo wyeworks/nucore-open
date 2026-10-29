@@ -9,6 +9,7 @@ class StoredFileZipper
 
   def read
     return @read if @read
+
     zip_io = build_zip
     zip_io.rewind
     @read = zip_io.read

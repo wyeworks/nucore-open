@@ -64,7 +64,7 @@ module SangerSequencing
                      { success: true }
                    else
                      { success: false, error: saver.errors.full_messages.to_sentence }
-        end
+                   end
 
         respond_to do |format|
           format.json { render json: response }

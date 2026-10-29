@@ -77,6 +77,7 @@ class ProductApprover
 
   def update_product_user_access_group(product_user, product_access_group)
     return if product_user.product_access_group == product_access_group
+
     product_user.product_access_group = product_access_group
     product_user.save
   end

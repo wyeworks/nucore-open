@@ -14,7 +14,6 @@ module C2po
     config.autoload_paths << File.join(File.dirname(__FILE__), "../lib")
     config.eager_load_paths << File.join(File.dirname(__FILE__), "../lib")
 
-
     config.to_prepare do
       # Include extensions
       Facility.facility_account_validators << C2po::C2poAccountValidator

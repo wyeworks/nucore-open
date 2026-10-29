@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "engine_manager"
 
 Teaspoon.configure do |config|
@@ -137,7 +138,7 @@ Teaspoon.configure do |config|
 
   config.suite :engines do |suite|
     engine_names = EngineManager.loaded_nucore_engines.map { |e| e.name.underscore.split("/engine").first }
-    spec_paths = engine_names.map { |engine_name| "vendor/engines/#{engine_name}/spec/javascripts"}
+    spec_paths = engine_names.map { |engine_name| "vendor/engines/#{engine_name}/spec/javascripts" }
     suite.matcher = "{#{spec_paths.join(',')}}/**/*_spec.{js,js.coffee,coffee}"
   end
 

@@ -47,7 +47,7 @@ RSpec.describe "Managing JournalCreationReminder" do
       fill_in "Ending Date", with: 1.year.from_now.to_date
       click_button "Submit"
       expect(page).to have_content("Reminder successfully updated")
-      expect(page).to have_content("FY#{1.year.from_now.to_s[2,2]}")
+      expect(page).to have_content("FY#{1.year.from_now.to_s[2, 2]}")
       expect(page.current_path).to eq journal_creation_reminders_path
     end
 

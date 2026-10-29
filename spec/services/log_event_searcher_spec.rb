@@ -162,7 +162,7 @@ RSpec.describe LogEventSearcher do
   describe "finding statement" do
     let(:account) { create(:account, :with_account_owner, account_number: "12345") }
     let(:facility) { create(:setup_facility) }
-    let(:statement) { create(:statement, facility:, account:)}
+    let(:statement) { create(:statement, facility:, account:) }
     let!(:log_event) { create(:log_event, loggable: statement, event_type: :create) }
 
     it "finds the statement" do

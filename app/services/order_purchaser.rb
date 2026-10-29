@@ -30,6 +30,7 @@ class OrderPurchaser
 
     validate_order!
     return unless do_additional_validations
+
     purchase_order!
 
     order_in_the_past! if order_in_past?
@@ -44,6 +45,7 @@ class OrderPurchaser
   def purchase_cross_core!
     validate_order!
     return unless do_additional_validations
+
     purchase_order!
 
     # This is only going to notify emails set for the product.

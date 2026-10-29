@@ -103,10 +103,9 @@ RSpec.describe OrderRowImporter do
 
       let!(:account) do
         create(Settings.testing.account_factory.to_sym,
-          :with_account_owner,
-          owner: user,
-          expires_at: 1.month.ago,
-        )
+               :with_account_owner,
+               owner: user,
+               expires_at: 1.month.ago,)
       end
 
       context "when the order occurred before the account expires" do

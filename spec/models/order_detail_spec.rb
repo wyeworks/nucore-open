@@ -39,8 +39,7 @@ RSpec.describe OrderDetail do
              unit_cost: 10.00,
              unit_subsidy: 2.00,
              price_group:,
-             start_date: 8.years.ago,
-            )
+             start_date: 8.years.ago,)
     end
 
     let!(:current_price_policy) do
@@ -49,8 +48,7 @@ RSpec.describe OrderDetail do
              unit_cost: 20.00,
              unit_subsidy: 3.00,
              price_group:,
-             start_date: 6.weeks.ago,
-            )
+             start_date: 6.weeks.ago,)
     end
   end
 
@@ -485,8 +483,7 @@ RSpec.describe OrderDetail do
                facility:,
                user:,
                created_by: user.id,
-               account:,
-              )
+               account:,)
       end
 
       let(:order_details) do
@@ -504,8 +501,7 @@ RSpec.describe OrderDetail do
       let(:reservation_for_instrument_with_actuals_and_price_policy) do
         create(:reservation,
                order_detail: order_detail_with_actuals_and_price_policy,
-               product: instrument_with_actuals_and_price_policy,
-              )
+               product: instrument_with_actuals_and_price_policy,)
       end
 
       def create_price_policy(params)
@@ -528,23 +524,19 @@ RSpec.describe OrderDetail do
 
         create(:reservation,
                product: instrument_without_actuals,
-               order_detail: order_detail_without_actuals,
-              )
+               order_detail: order_detail_without_actuals,)
         create(:reservation,
                product: instrument_without_actuals_without_price_policy,
-               order_detail: order_detail_without_actuals_without_price_policy,
-              )
+               order_detail: order_detail_without_actuals_without_price_policy,)
         create(:reservation,
                product: instrument_with_actuals,
-               order_detail: order_detail_with_actuals,
-              )
+               order_detail: order_detail_with_actuals,)
 
         create(:reservation,
                product: instrument_with_actuals_and_price_policy,
                reserve_start_at: reservation_for_instrument_with_actuals_and_price_policy.reserve_start_at + 1.hour,
                duration_mins: 60,
-               order_detail: order_detail_without_price_policy,
-              )
+               order_detail: order_detail_without_price_policy,)
 
         travel_and_return(2.days) do
           order_details.each do |order_detail|
@@ -1290,7 +1282,7 @@ RSpec.describe OrderDetail do
       let!(:unpurchased_order_detail) { create(:setup_order, product:).order_details.first }
       let!(:new_order_detail) { create(:purchased_order, product:).order_details.first }
       let!(:completed_order_detail) { create(:complete_order, product:).order_details.first }
-      let!(:journaled_order)  { create(:complete_order, product:).order_details.first }
+      let!(:journaled_order) { create(:complete_order, product:).order_details.first }
       before { journaled_order.update!(journal: create(:journal)) }
 
       it "includes everything but the unpurchased and journaled" do
@@ -1590,32 +1582,28 @@ RSpec.describe OrderDetail do
       create(:instrument_overage_price_policy,
              cancellation_cost: 100,
              price_group:,
-             product: instrument,
-            )
+             product: instrument,)
     end
 
     let(:instrument_reservation_price_policy) do
       create(:instrument_price_policy,
              cancellation_cost: 100,
              price_group:,
-             product: instrument,
-            )
+             product: instrument,)
     end
 
     let(:instrument_usage_price_policy) do
       create(:instrument_usage_price_policy,
              cancellation_cost: 100,
              price_group:,
-             product: instrument,
-            )
+             product: instrument,)
     end
 
     let(:reservation) do
       create(:reservation,
              reserve_start_at: 4.hours.from_now,
              reserve_end_at: 5.hours.from_now,
-             product: instrument,
-            )
+             product: instrument,)
     end
 
     before :each do

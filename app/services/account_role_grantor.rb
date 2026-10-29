@@ -40,6 +40,7 @@ class AccountRoleGrantor
 
   def destroy_old_account_user(account_user)
     return unless account_user
+
     # Use update_columns to skip validations and callbacks, since removing an owner
     # would fail the "account must have owner" validation
     account_user.update_columns(deleted_at: Time.current, deleted_by: by.id)

@@ -44,7 +44,6 @@ class ProductUserImportsController < ApplicationController
   def import_exception_alert(exception)
     Rails.logger.error "#{exception.message}\n#{exception.backtrace.join("\n")}"
     flash[:error] = text("controllers.product_user_imports.create.error", error: exception.message)
-
   end
 
   def import_success_alert(import)

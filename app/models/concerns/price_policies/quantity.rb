@@ -27,6 +27,7 @@ module PricePolicies
 
     def estimate_cost_and_subsidy(qty = 1)
       return nil if restrict_purchase?
+
       {
         cost: unit_cost * qty,
         subsidy: unit_subsidy * qty,

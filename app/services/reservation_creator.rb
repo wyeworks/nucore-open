@@ -59,6 +59,7 @@ class ReservationCreator
 
   def reservation
     return @reservation if defined?(@reservation)
+
     @reservation = @order_detail.build_reservation
     @reservation.assign_attributes(reservation_create_params)
     @reservation.assign_times_from_params(reservation_create_params)

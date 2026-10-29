@@ -449,8 +449,8 @@ RSpec.describe OrderManagement::OrderDetailsController do
           context "with a cancellation fee and was completed" do
             before :each do
               reservation.update(reserve_start_at: 24.hours.ago,
-                                            actual_start_at: nil,
-                                            actual_end_at: nil)
+                                 actual_start_at: nil,
+                                 actual_end_at: nil)
 
               travel_and_return(7.days) do
                 order_detail.change_status!(OrderStatus.complete)
@@ -862,8 +862,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
                               price_group:,
                               unit_cost: 19,
                               start_date: 30.days.ago,
-                              expire_date: 28.days.ago,
-                             )
+                              expire_date: 28.days.ago,)
           end
           before { order_detail.backdate_to_complete!(29.days.ago) }
 
@@ -1257,9 +1256,9 @@ RSpec.describe OrderManagement::OrderDetailsController do
         it "preserves a manually-set actual_cost when editing other fields" do
           order_detail.change_status!(OrderStatus.complete)
           order_detail.update_columns(actual_cost: 50.0, actual_subsidy: 0.0,
-                                       estimated_cost: 60.0, estimated_subsidy: 0.0,
-                                       price_change_reason: "manual override",
-                                       price_changed_by_user_id: create(:user).id)
+                                      estimated_cost: 60.0, estimated_subsidy: 0.0,
+                                      price_change_reason: "manual override",
+                                      price_changed_by_user_id: create(:user).id)
           @params[:order_detail] = { note: "OM user editing note" }
 
           do_request

@@ -101,6 +101,7 @@ module BulkEmail
 
     def selected_user_types
       return [] unless has_search_fields? && search_fields[:bulk_email].present?
+
       search_fields[:bulk_email][:user_types].map(&:to_sym)
     end
 
@@ -128,6 +129,7 @@ module BulkEmail
 
     def parse_search_field_date(date_field)
       return if search_fields[date_field].blank?
+
       parse_iso_date(search_fields[date_field])
     end
   end

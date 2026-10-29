@@ -10,7 +10,8 @@ class Recurrence
   def initialize(start_at, end_at, until_time: nil)
     @until_time = until_time
     @schedule = IceCube::Schedule.new(
-      start_at, end_time: end_at)
+      start_at, end_time: end_at
+    )
   end
 
   def daily

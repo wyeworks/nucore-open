@@ -43,9 +43,7 @@ class Ability
     Projects::AbilityExtension.new(self).extend(user, resource)
   end
 
-
   private
-
 
   # This method is the only role-specific method called for administrators because `can :manage, :all`
   # grants all abilities.  If an administrator has another role, calling its role-specific method could
@@ -71,7 +69,6 @@ class Ability
 
     cannot(:switch_to, User) { |target_user| !target_user.active? }
   end
-
 
   def all_role_abilities(user, resource, controller)
     can :list, Facility if user.user_roles_facilities.size > 0 && controller.is_a?(FacilitiesController)
@@ -108,7 +105,6 @@ class Ability
     end
   end
 
-
   def account_manager_abilities(user, resource)
     return unless user.account_manager?
 
@@ -123,7 +119,6 @@ class Ability
       end
     end
   end
-
 
   def global_billing_administrator_abilities(user, resource)
     return unless user.global_billing_administrator?
@@ -144,7 +139,6 @@ class Ability
       can [:manage, :duplicate, :recalculate], Estimate
     end
   end
-
 
   def facility_director_abilities(user, resource, controller)
     if resource.is_a?(PriceGroup) && user.facility_director_of?(resource.facility)
@@ -183,7 +177,6 @@ class Ability
     end
   end
 
-
   def facility_administrator_abilities(user, resource, controller)
     if resource.is_a?(PriceGroup) && user.facility_administrator_of?(resource.facility)
       if !resource.global?
@@ -208,7 +201,6 @@ class Ability
       can [:manage, :duplicate, :recalculate], Estimate
     end
   end
-
 
   def facility_billing_administrator_abilities(user, resource, controller)
     if resource.is_a?(OrderDetail) && user.facility_billing_administrator_of?(resource.facility)
@@ -242,7 +234,6 @@ class Ability
       end
     end
   end
-
 
   def facility_senior_staff_abilities(user, resource, controller)
     if resource.is_a?(TrainingRequest) && user.facility_senior_staff_of?(resource.product.facility)
@@ -281,7 +272,6 @@ class Ability
     end
   end
 
-
   def facility_staff_abilities(user, resource, controller)
     cross_core_abilities(user, resource, controller)
 
@@ -302,7 +292,6 @@ class Ability
       operator_abilities_for_facility(user, resource, controller)
     end
   end
-
 
   def account_administrator_abilities(user, resource, controller)
     if resource.is_a?(OrderDetail) && user.account_administrator_of?(resource.account)
@@ -350,7 +339,7 @@ class Ability
     ], Reservation
 
     can(:destroy, Reservation, &:admin?)
-    cannot :manage, OfflineReservation  # ideally we don't use `cannot` as it adds a dependency on the order of assigning abilities for multiple roles
+    cannot :manage, OfflineReservation # ideally we don't use `cannot` as it adds a dependency on the order of assigning abilities for multiple roles
 
     can %i[
       administer
@@ -392,7 +381,6 @@ class Ability
 
     can [:index, :create, :destroy], ProductResearchSafetyCertificationRequirement
   end
-
 
   def manager_abilities_for_facility(user, facility, controller)
     operator_abilities_for_facility(user, facility, controller)
@@ -438,11 +426,9 @@ class Ability
     can [:activate, :deactivate], ExternalService
   end
 
-
   def user_has_facility_role?(user)
     (user.user_roles.map(&:role) & UserRole.facility_roles).any?
   end
-
 
   def editable_global_group?(resource)
     resource.global? && resource.admin_editable?
@@ -507,7 +493,6 @@ class Ability
     SettingsHelper.feature_on?(:granular_permissions) &&
       user.facility_user_permissions.exists?(order_management: true)
   end
-
 
   def ability_extender
     @extender ||= AbilityExtensionManager.new(self)

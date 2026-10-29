@@ -952,8 +952,8 @@ RSpec.describe Reservation do
       before :each do
         # Actual start must be in the past
         existing_user_reservation.update! reserve_start_at: 30.minutes.ago,
-                                                     reserve_end_at: 30.minutes.from_now,
-                                                     actual_start_at: 30.minutes.ago
+                                          reserve_end_at: 30.minutes.from_now,
+                                          actual_start_at: 30.minutes.ago
 
         new_user_reservation.assign_attributes reserve_start_at: 30.minutes.ago,
                                                reserve_end_at: 30.minutes.from_now

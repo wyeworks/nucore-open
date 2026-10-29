@@ -531,8 +531,7 @@ RSpec.describe Ability do
           build(:stored_file,
                 file_type:,
                 order_detail:,
-                product:,
-               )
+                product:,)
         end
         let(:order_detail) { order.order_details.first }
         let(:order) { create(:purchased_order, product:) }

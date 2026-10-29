@@ -43,10 +43,10 @@ class InstrumentSchedulePositionsController < ApplicationController
                  .positioned
                  .joins(facility: :instruments)
                  .merge(
-                    Instrument
-                    .active
-                    .in_active_facility
-                    .for_facility(current_facility),
+                   Instrument
+                   .active
+                   .in_active_facility
+                   .for_facility(current_facility),
                  )
                  .distinct
   end

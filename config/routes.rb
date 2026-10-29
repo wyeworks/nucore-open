@@ -209,7 +209,7 @@ Rails.application.routes.draw do
           put "cancel"
         end
       end
-      get "access_list",  to: "users#access_list"
+      get "access_list", to: "users#access_list"
       post "access_list/approvals", to: "users#access_list_approvals"
 
       resource :accounts, controller: "user_accounts", only: [:show, :edit, :update]
@@ -455,7 +455,7 @@ Rails.application.routes.draw do
         get "/move",               to: "reservations#earliest_move_possible"
         post "/move",              to: "reservations#move",              as: "move_reservation"
         get "/switch_instrument",  to: "reservations#switch_instrument", as: "switch_instrument"
-        get "/kiosk_switch_instrument",  to: "kiosk_reservations#switch_instrument", as: "kiosk_switch_instrument"
+        get "/kiosk_switch_instrument", to: "kiosk_reservations#switch_instrument", as: "kiosk_switch_instrument"
         get "begin", to: "kiosk_reservations#begin", as: "kiosk_begin"
         get "stop", to: "kiosk_reservations#stop", as: "kiosk_stop"
       end

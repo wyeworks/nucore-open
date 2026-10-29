@@ -87,6 +87,7 @@ class OrderImportsController < ApplicationController
 
   def process_order_import!
     raise "Please upload a valid import file" if upload_file.blank?
+
     @order_import = create_order_import!
     OrderImportJob.perform_later(@order_import, report_recipient)
     flash[:notice] = t("controllers.order_imports.create.job_is_queued", email: report_recipient)

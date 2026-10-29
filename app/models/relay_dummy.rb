@@ -3,6 +3,7 @@
 class RelayDummy < Relay
   def get_status
     return @active unless @active.nil?
+
     instrument.instrument_status&.is_on?
   end
 

@@ -22,7 +22,7 @@ module SangerSequencing
                           BlankSample.new
                         else
                           @samples ? @samples.find { |s| s.id.to_i == id.to_i } : Sample.find(id)
-        end
+                        end
       end
     end
 

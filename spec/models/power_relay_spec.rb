@@ -82,6 +82,7 @@ RSpec.describe SomeRelay do
       allow(relay_connection).to receive(:status) do
         call_count += 1
         raise NetBooter::Error if call_count == 1
+
         true
       end
       expect(relay.query_status).to eq(true)

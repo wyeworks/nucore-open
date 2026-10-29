@@ -96,8 +96,7 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
     let(:reservation) do
       FactoryBot.create(:completed_reservation,
                         user:,
-                        product: instrument,
-                       )
+                        product: instrument,)
     end
     let(:order_detail) { reservation.order_detail }
     before do

@@ -4,16 +4,19 @@ module Nucore
   module Database
     def self.oracle?
       return @is_oracle if defined?(@is_oracle)
+
       @is_oracle = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "oracle_enhanced"
     end
 
     def self.mysql?
       return @is_mysql if defined?(@is_mysql)
+
       @is_mysql = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "mysql2"
     end
 
     def self.postgresql?
       return @is_postgresql if defined?(@is_postgresql)
+
       @is_postgresql = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "postgresql"
     end
 
