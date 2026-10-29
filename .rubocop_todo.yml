@@ -76,11 +76,6 @@ Lint/DuplicateMethods:
 Lint/EmptyBlock:
   Enabled: false
 
-# Offense count: 1
-Lint/FloatComparison:
-  Exclude:
-    - 'lib/tasks/schedule_rules.rake'
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Lint/IncompatibleIoSelectWithFiberScheduler:
@@ -117,12 +112,6 @@ Lint/MissingSuper:
 Lint/SafeNavigationConsistency:
   Exclude:
     - 'app/controllers/quick_reservations_controller.rb'
-
-# Offense count: 2
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'app/controllers/orders_controller.rb'
-    - 'app/models/full_text_search/oracle_searcher.rb'
 
 # Offense count: 1
 Lint/SharedMutableDefault:
@@ -426,15 +415,6 @@ Rails/FilePath:
 Rails/FindEach:
   Enabled: false
 
-# Offense count: 2
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/HasAndBelongsToMany:
-  Exclude:
-    - 'app/models/product_access_group.rb'
-    - 'app/models/schedule_rule.rb'
-    - 'vendor/engines/sanger_sequencing/app/models/sanger_sequencing/sanger_product.rb'
-
 # Offense count: 73
 # Configuration parameters: Include.
 # Include: app/models/**/*.rb
@@ -652,12 +632,6 @@ Rails/TimeZone:
     - 'lib/daemons/recurring_tasks.rb'
     - 'spec/support/time_travel_helpers.rb'
 
-# Offense count: 1
-# Configuration parameters: TransactionMethods.
-Rails/TransactionExitStatement:
-  Exclude:
-    - 'app/services/order_detail_batch_updater.rb'
-
 # Offense count: 10
 # Configuration parameters: Include.
 # Include: app/models/**/*.rb
@@ -874,12 +848,6 @@ Style/HashFetchChain:
 Style/HashLikeCase:
   Exclude:
     - 'vendor/engines/secure_rooms/app/presenters/secure_rooms/scan_response_presenter.rb'
-
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/HashTransformKeys:
-  Exclude:
-    - 'app/inputs/transaction_chosen_input.rb'
 
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
