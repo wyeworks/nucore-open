@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TimelineHelper
-
   def show_relay_controls?(instrument)
     @display_datetime.today? && instrument.has_real_relay?
   end
@@ -98,5 +97,4 @@ module TimelineHelper
   def display_status_class(order_detail)
     order_detail.canceled_at ? "canceled" : order_detail.order_status.to_s.downcase
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductUser < ApplicationRecord
-
   acts_as_paranoid
 
   belongs_to :user

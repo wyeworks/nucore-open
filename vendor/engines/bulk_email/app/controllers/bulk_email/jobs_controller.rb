@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class JobsController < ApplicationController
-
     admin_tab :all
     layout "two_column"
 
@@ -23,7 +21,5 @@ module BulkEmail
       job = BulkEmail::Job.where(facility: current_facility).find(params[:id])
       @bulk_email_job = BulkEmail::JobDecorator.new(job)
     end
-
   end
-
 end

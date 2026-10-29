@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ConvertExternalServiceReceiverData < ActiveRecord::Migration[4.2]
-
   def up
     ExternalServiceReceiver.find_each do |receiver|
       show_url = receiver.response_data
@@ -17,5 +16,4 @@ class ConvertExternalServiceReceiverData < ActiveRecord::Migration[4.2]
       receiver.update_attribute :response_data, parsed[:show_url]
     end
   end
-
 end

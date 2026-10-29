@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   class AttributeSplitter
-
     attr_reader :splittable_attributes
 
     def initialize(*splittable_attributes)
@@ -28,7 +26,5 @@ module SplitAccounts
       amount = value.to_d * percent.to_d / 100
       amount.floor(2)
     end
-
   end
-
 end

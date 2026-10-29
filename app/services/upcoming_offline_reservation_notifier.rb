@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UpcomingOfflineReservationNotifier
-
   def notify
     Reservation.upcoming_offline(1.day.from_now).each do |reservation|
       UpcomingOfflineReservationMailer
@@ -9,5 +8,4 @@ class UpcomingOfflineReservationNotifier
         .deliver_later
     end
   end
-
 end

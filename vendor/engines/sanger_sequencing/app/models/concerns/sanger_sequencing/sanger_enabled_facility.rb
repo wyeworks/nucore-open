@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   module SangerEnabledFacility
-
     extend ActiveSupport::Concern
 
     included do
@@ -15,7 +13,5 @@ module SangerSequencing
 
       accepts_nested_attributes_for :sanger_sequencing_primers, allow_destroy: true
     end
-
   end
-
 end

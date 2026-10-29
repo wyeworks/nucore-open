@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe FacilityUserPermissionsHelper do
-
   describe "sorted_permissions_with_labels" do
     it "puts read_access first and the rest alphabetized by display name" do
       expect(helper.sorted_permissions_with_labels.first).to eq([:read_access, "Read Access"])
@@ -22,5 +21,4 @@ RSpec.describe FacilityUserPermissionsHelper do
       expect(helper.permission_summary(permission)).to eq("Read Access, Billing Journals, Payment Source Management")
     end
   end
-
 end

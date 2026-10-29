@@ -194,7 +194,6 @@ RSpec.describe Reports::PriceListReport do
       expect(base_column(report_header(:step_2_rate))).to eq(["80.0"])
       expect(base_column(report_header(:step_3_rate))).to eq(["50.0"])
     end
-
   end
 
   describe "a stepped instrument whose steps have no subsidy" do

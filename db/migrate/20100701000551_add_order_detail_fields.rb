@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddOrderDetailFields < ActiveRecord::Migration[4.2]
-
   def self.up
     change_table :order_details do |t|
       t.integer   :account_id
@@ -24,5 +23,4 @@ class AddOrderDetailFields < ActiveRecord::Migration[4.2]
     remove_column :order_details, :updated_at
     remove_column :order_details, :created_at
   end
-
 end

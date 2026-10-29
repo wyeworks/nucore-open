@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe ProductUserImport do
-
   let!(:admin) { create(:user, :administrator) }
   let!(:user_1) { create(:user) }
   let!(:user_2) { create(:user) }

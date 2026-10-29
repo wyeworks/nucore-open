@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Notification < ApplicationRecord
-
   belongs_to :user
   belongs_to :subject, polymorphic: true
 
@@ -21,5 +20,4 @@ class Notification < ApplicationRecord
       notice: subject.to_notice(self, user),
     )
   end
-
 end

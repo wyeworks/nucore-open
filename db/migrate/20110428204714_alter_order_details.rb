@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AlterOrderDetails < ActiveRecord::Migration[4.2]
-
   def self.up
     change_table :order_details do |t|
       t.column :fulfilled_at, :datetime
@@ -21,5 +20,4 @@ class AlterOrderDetails < ActiveRecord::Migration[4.2]
       t.remove :reconciled_note
     end
   end
-
 end

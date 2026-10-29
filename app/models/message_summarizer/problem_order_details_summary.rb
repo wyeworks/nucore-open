@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MessageSummarizer::ProblemOrderDetailsSummary < MessageSummarizer::FacilityMessageSummary
-
   private
 
   def allowed?
@@ -19,5 +18,4 @@ class MessageSummarizer::ProblemOrderDetailsSummary < MessageSummarizer::Facilit
   def path
     controller.show_problems_facility_orders_path(facility)
   end
-
 end

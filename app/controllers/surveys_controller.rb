@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SurveysController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as, except: :complete
   before_action :init_current_facility
@@ -56,5 +55,4 @@ class SurveysController < ApplicationController
   def init_service
     @service = current_facility.services.find_by!(url_name: params[:service_id])
   end
-
 end

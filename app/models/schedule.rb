@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Schedule < ApplicationRecord
-
   include Nucore::Database::SortHelper
 
   belongs_to :facility
@@ -35,5 +34,4 @@ class Schedule < ApplicationRecord
   def display_order_name
     shared? ? display_name : name
   end
-
 end

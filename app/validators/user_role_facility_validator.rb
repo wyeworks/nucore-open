@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserRoleFacilityValidator < ActiveModel::Validator
-
   def validate(record)
     if record.facility_id.present?
       if record.global_role?
@@ -13,5 +12,4 @@ class UserRoleFacilityValidator < ActiveModel::Validator
       end
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AdminReservation < Reservation
-
   CATEGORIES = %w(
     maintenance
     training
@@ -35,5 +34,4 @@ class AdminReservation < Reservation
   def set_billable_minutes
     self.billable_minutes = nil
   end
-
 end

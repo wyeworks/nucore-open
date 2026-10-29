@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe GlobalSearch::OrderSearcher do
-
   subject(:results) { searcher.results }
 
   let(:facility) { nil }
@@ -40,5 +39,4 @@ RSpec.describe GlobalSearch::OrderSearcher do
       end
     end
   end
-
 end

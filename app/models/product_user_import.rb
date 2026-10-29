@@ -3,7 +3,6 @@
 require "csv"
 
 class ProductUserImport < ApplicationRecord
-
   include DownloadableFile
 
   belongs_to :product
@@ -69,5 +68,4 @@ class ProductUserImport < ApplicationRecord
     @parsed_import_file ||=
       CSV.parse(read_attached_file, headers: true, skip_lines: /^,*$/)
   end
-
 end

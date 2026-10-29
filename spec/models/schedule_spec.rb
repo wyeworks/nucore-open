@@ -98,5 +98,4 @@ RSpec.describe Schedule do
       expect(Schedule.active).not_to include archived_instrument.schedule
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreatePaymentsReceived < ActiveRecord::Migration[4.2]
-
   def up
     create_table :payments do |t|
       t.references :account, null: false
@@ -23,5 +22,4 @@ class CreatePaymentsReceived < ActiveRecord::Migration[4.2]
   def down
     drop_table :payments
   end
-
 end

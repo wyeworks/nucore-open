@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ViewHookHelper
-
   # Look up the current path and render the view hooks for a specific placement
   def render_view_hook(placement, args = {})
     # Taken from translation helper shortcut (e.g. `t(".locale")`), this takes the
@@ -16,5 +15,4 @@ module ViewHookHelper
     path = @virtual_path.gsub(%r{/_?}, ".")
     ViewHook.find(path, placement).any?
   end
-
 end

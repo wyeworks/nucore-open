@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module FacilityUserPermissionsHelper
-
   def permission_summary(permission)
     sorted_permissions_with_labels.filter_map do |perm, label|
       label if permission.public_send(perm)
@@ -21,5 +20,4 @@ module FacilityUserPermissionsHelper
     classes << "js--#{perm.to_s.camelize(:lower)}Checkbox" if %i[product_creation product_edition].include?(perm)
     classes.join(" ")
   end
-
 end

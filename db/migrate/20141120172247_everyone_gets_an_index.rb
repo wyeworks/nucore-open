@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class EveryoneGetsAnIndex < ActiveRecord::Migration[4.2]
-
   def change
     add_index :account_users,       :user_id
     add_index :orders,              :facility_id
@@ -27,5 +26,4 @@ class EveryoneGetsAnIndex < ActiveRecord::Migration[4.2]
     add_index :statement_rows, :order_detail_id
     add_index :statements, :account_id
   end
-
 end

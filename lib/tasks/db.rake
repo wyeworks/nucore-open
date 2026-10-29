@@ -59,5 +59,4 @@ namespace :db do
 
     ActiveRecord::Base.connection.execute("purge recyclebin")
   end
-
 end

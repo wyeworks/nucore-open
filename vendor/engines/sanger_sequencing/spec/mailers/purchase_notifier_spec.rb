@@ -30,5 +30,4 @@ RSpec.describe PurchaseNotifier, type: :mailer do
       expect(mailer.body.encoded).to include(submission.samples.first.customer_sample_id)
     end
   end
-
 end

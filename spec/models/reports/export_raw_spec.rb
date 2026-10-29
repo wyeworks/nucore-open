@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Reports::ExportRaw do
-
   let(:user) { FactoryBot.create(:user) }
   let(:facility) { FactoryBot.create(:setup_facility, name: "My Facility", abbreviation: "MF") }
   let(:account) { FactoryBot.create(:account, :with_account_owner, owner: user) }

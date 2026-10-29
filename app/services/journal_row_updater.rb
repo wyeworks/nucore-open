@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class JournalRowUpdater
-
   attr_accessor :order_detail, :journal_rows
 
   def initialize(order_detail)
@@ -33,5 +32,4 @@ class JournalRowUpdater
     account = order_detail.account
     account && account.recreate_journal_rows_on_order_detail_update?
   end
-
 end

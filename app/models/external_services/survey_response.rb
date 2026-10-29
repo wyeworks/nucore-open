@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SurveyResponse
-
   attr_reader :params
 
   def initialize(params)
@@ -43,5 +42,4 @@ class SurveyResponse
     params[:order_detail].transform_keys! { |k| k.sub("orderDetail", "").underscore }
     params[:order_detail].permit(:note, :reference_id, :quantity)
   end
-
 end

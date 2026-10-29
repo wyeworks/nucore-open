@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class ReportsController < ApplicationController
-
     include ReportsHelper
     include CSVHelper
 
@@ -121,7 +119,5 @@ module Reports
       set_csv_headers(filename)
       render template: "reports/report", layout: false
     end
-
   end
-
 end

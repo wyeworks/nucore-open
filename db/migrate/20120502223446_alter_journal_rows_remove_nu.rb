@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AlterJournalRowsRemoveNu < ActiveRecord::Migration[4.2]
-
   def self.up
     if Nucore::Database.oracle?
       puts <<-WARN
@@ -25,5 +24,4 @@ class AlterJournalRowsRemoveNu < ActiveRecord::Migration[4.2]
       t.column :program, :string, limit: 4
     end
   end
-
 end

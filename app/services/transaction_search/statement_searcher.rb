@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class StatementSearcher < BaseSearcher
-
     def options
       # Uses a subquery: SELECT "STATEMENTS".* FROM "STATEMENTS"
       # WHERE "STATEMENTS"."ID" IN (SELECT DISTINCT "ORDER_DETAILS"."STATEMENT_ID" FROM "ORDER_DETAILS" ...
@@ -26,5 +24,4 @@ module TransactionSearch
       I18n.t("Statements")
     end
   end
-
 end

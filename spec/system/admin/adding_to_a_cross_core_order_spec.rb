@@ -312,7 +312,5 @@ RSpec.describe "Adding to an existing order for cross core", :js do
         expect(page).to have_content(project_total)
       end
     end
-
   end
-
 end

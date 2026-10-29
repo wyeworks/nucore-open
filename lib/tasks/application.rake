@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 namespace :daemon do
-
   desc "start daemon found in lib/daemons"
   task :start, [:daemon_name] do |_t, args|
     manage_daemon(args.daemon_name, "start")
@@ -21,5 +20,4 @@ namespace :daemon do
     daemon = File.expand_path(File.join("..", "daemons", "#{daemon_name}.rb"), File.dirname(__FILE__))
     system "ruby #{daemon} #{state}"
   end
-
 end

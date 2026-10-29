@@ -2,7 +2,6 @@
 
 # Controller for managing recharge chart string accounts.
 class FacilityFacilityAccountsController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -87,5 +86,4 @@ class FacilityFacilityAccountsController < ApplicationController
   def update_params
     params.require(:facility_account).permit(:is_active)
   end
-
 end

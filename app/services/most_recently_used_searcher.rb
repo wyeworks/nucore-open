@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MostRecentlyUsedSearcher
-
   attr_reader :user
 
   def initialize(user)
@@ -27,5 +26,4 @@ class MostRecentlyUsedSearcher
   def recent_order_details
     user.order_details.ordered_at.order(Arel.sql("MAX(ordered_at) DESC"))
   end
-
 end

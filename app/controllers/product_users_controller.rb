@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductUsersController < ApplicationController
-
   include SearchHelper
   include CsvEmailAction
   include BelongsToProductController
@@ -133,5 +132,4 @@ class ProductUsersController < ApplicationController
   def init_product_user
     @product_user = @product.product_users.build # for CanCan auth
   end
-
 end

@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Managing Instrument Offline Reservations" do
-
   before { login_as administrator }
 
   let(:administrator) { FactoryBot.create(:user, :administrator) }

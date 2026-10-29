@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MessageSummarizer::MessageSummary
-
   attr_reader :controller
 
   def initialize(controller)
@@ -53,5 +52,4 @@ class MessageSummarizer::MessageSummary
   def label
     "#{I18n.t(i18n_key)} (#{count})"
   end
-
 end

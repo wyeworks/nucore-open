@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SecureRoomPricePolicy < PricePolicy
-
   include PricePolicies::Usage
 
   def estimate_cost_and_subsidy_from_order_detail(order_detail)
@@ -30,5 +29,4 @@ class SecureRoomPricePolicy < PricePolicy
   def calculator
     PricePolicies::TimeBasedPriceCalculator.new(self)
   end
-
 end

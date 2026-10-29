@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "Managing recharge accounts (FacilityFacilityAccountsController)" do
-
   let(:facility) { FactoryBot.create(:facility) }
   let!(:director) { FactoryBot.create(:user, :facility_director, facility: facility) }
   let(:default_revenue_account) { Settings.accounts.revenue_account_default }

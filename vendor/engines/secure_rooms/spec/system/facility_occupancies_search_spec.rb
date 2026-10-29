@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Facility Orders Search" do
-
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let(:secure_room) { create(:secure_room, :with_schedule_rule, :with_base_price, facility:) }

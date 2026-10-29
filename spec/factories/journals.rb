@@ -18,7 +18,6 @@ FactoryBot.define do
         product do
           FactoryBot.create(:setup_item, facility: facility, facility_account: facility_account)
         end
-
       end
 
       after(:build) do |_journal, evaluator|

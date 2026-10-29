@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AllOrderDetailsValidator
-
   cattr_accessor :order_detail_validator_class
   attr_reader :order_details
 
@@ -38,5 +37,4 @@ class AllOrderDetailsValidator
   def error_message
     I18n.t(order_detail_validator_class.name.underscore, scope: "validators.all_details_on_order_validator")
   end
-
 end

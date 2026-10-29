@@ -3,9 +3,7 @@
 require "saml_authentication/saml_attributes"
 
 module SamlAuthentication
-
   class UserUpdater
-
     def initialize(skip_attributes: [], **_args)
       @skip_attributes = Array(skip_attributes)
     end
@@ -17,7 +15,5 @@ module SamlAuthentication
       )
       user.update!(attributes)
     end
-
   end
-
 end

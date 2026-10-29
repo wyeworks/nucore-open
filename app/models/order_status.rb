@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderStatus < ApplicationRecord
-
   has_many :order_details
   belongs_to :facility, optional: true
   belongs_to :parent, class_name: "OrderStatus", optional: true
@@ -112,7 +111,6 @@ class OrderStatus < ApplicationRecord
   end
 
   class << self
-
     def root_statuses
       roots.sort_by(&:position)
     end
@@ -140,7 +138,5 @@ class OrderStatus < ApplicationRecord
         .or(complete.self_and_descendants)
         .for_facility(facility).sorted
     end
-
   end
-
 end

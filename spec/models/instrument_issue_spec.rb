@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe InstrumentIssue do
-
   describe "validations" do
     it { is_expected.to validate_presence_of(:message) }
     it { is_expected.to validate_presence_of(:user) }
@@ -59,5 +58,4 @@ RSpec.describe InstrumentIssue do
       end
     end
   end
-
 end

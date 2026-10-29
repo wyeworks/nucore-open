@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module FacilityEstimatesHelper
-
   def header_display_date(object, field)
     header_display(object, field) do |value|
       value = format_usa_date(value)

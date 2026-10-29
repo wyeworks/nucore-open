@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe EmailEvent do
-
   describe ".notify" do
     let(:user) { FactoryBot.create(:user) }
 
@@ -60,11 +59,9 @@ RSpec.describe EmailEvent do
 
     it "takes an arbitrary object with a to_s method" do
       class TestingClass
-
         def to_s
           "test_me"
         end
-
       end
 
       expect(described_class.key_for([:test, TestingClass.new])).to eq("test/test_me")

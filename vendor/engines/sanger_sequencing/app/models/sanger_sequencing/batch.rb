@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class Batch < ApplicationRecord
-
     DEFAULT_PRODUCT_GROUP_NAME = [nil, ""].freeze
 
     self.table_name = "sanger_sequencing_batches"
@@ -40,7 +38,5 @@ module SangerSequencing
     def sample_at(well_plate_index, cell_name)
       well_plates[well_plate_index][cell_name]
     end
-
   end
-
 end

@@ -47,5 +47,4 @@ RSpec.describe InstrumentPricePolicy do
       expect(@order_detail.price_policy).to eq(@price_policy)
     end
   end
-
 end

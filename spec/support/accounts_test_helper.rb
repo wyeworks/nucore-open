@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module AccountsTestHelper
-
   def skip_if_account_cannot_be_created(account_type)
     return if Account.config.creation_enabled_types.include?(
       to_account_class(account_type))
@@ -33,5 +32,4 @@ module AccountsTestHelper
 
     "#{account_type}Account"
   end
-
 end

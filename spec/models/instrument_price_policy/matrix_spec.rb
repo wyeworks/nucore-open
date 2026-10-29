@@ -153,7 +153,6 @@ RSpec.describe InstrumentPricePolicy do
       let(:usage)   { { cost: 105, subsidy: 0 } }
       let(:overage) { { cost: 120, subsidy: 0 } }
     end
-
   end
 
   context "with a subsidized price" do
@@ -206,7 +205,6 @@ RSpec.describe InstrumentPricePolicy do
       let(:usage)   { { cost: 105, subsidy: 35 } }
       let(:overage) { { cost: 120, subsidy: 40 } }
     end
-
   end
 
   context "with a minimum cost" do
@@ -259,6 +257,5 @@ RSpec.describe InstrumentPricePolicy do
       let(:usage)   { { cost: 105, subsidy: 0 } }
       let(:overage) { { cost: 120, subsidy: 0 } }
     end
-
   end
 end

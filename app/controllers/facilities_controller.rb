@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilitiesController < ApplicationController
-
   customer_tab :index, :list, :show
   admin_tab :edit, :manage, :update, :transactions,
             :reassign_chart_strings, :movable_transactions,
@@ -234,5 +233,4 @@ class FacilitiesController < ApplicationController
     else "two_column"
     end
   end
-
 end

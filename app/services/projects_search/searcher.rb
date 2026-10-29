@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module ProjectsSearch
-
   class Searcher
-
     # Do not modify this array directly. Use `ProjectsSearch.register` instead.
     # There is some additional setup that needs to happen (adding an attr_accessor
     # to SearchForm) that `register` handles.
@@ -45,7 +43,6 @@ module ProjectsSearch
     private
 
     class Results
-
       attr_reader :projects
 
       # Return an array of options for a given key
@@ -65,9 +62,6 @@ module ProjectsSearch
           [searcher.key, searcher.options]
         end
       end
-
     end
-
   end
-
 end

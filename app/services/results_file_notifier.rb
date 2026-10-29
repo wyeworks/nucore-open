@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ResultsFileNotifier
-
   attr_reader :file
 
   def initialize(file)
@@ -24,5 +23,4 @@ class ResultsFileNotifier
     # changing this key
     [:results_file, :file_uploaded, :order_detail, file.order_detail]
   end
-
 end

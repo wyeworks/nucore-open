@@ -1,5 +1,4 @@
 class ProductDisplayGroupPositionsController < ApplicationController
-
   layout "two_column"
 
   admin_tab :all
@@ -27,5 +26,4 @@ class ProductDisplayGroupPositionsController < ApplicationController
   def update_params
     params.require(:product_display_group_positions).permit(product_display_group_ids: [])
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class JournalCutoffDatesController < ApplicationController
-
   load_and_authorize_resource
 
   layout "two_column"
@@ -53,5 +52,4 @@ class JournalCutoffDatesController < ApplicationController
   def journal_cutoff_date_params
     params.require(:journal_cutoff_date).permit(cutoff_date: [:date, :hour, :minute, :ampm])
   end
-
 end

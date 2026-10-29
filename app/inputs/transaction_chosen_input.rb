@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
-
   disable :required
 
   def input(wrapper_options = nil)
@@ -80,5 +79,4 @@ class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
   def placeholder_label
     "Select #{options[:label].downcase}"
   end
-
 end

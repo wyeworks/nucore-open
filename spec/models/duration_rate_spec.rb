@@ -25,7 +25,6 @@ RSpec.describe DurationRate do
   let!(:external_duration_rate_3) { create(:duration_rate, price_policy: external_price_policy, min_duration_hours: 3, rate: 9 / 60.0) }
 
   describe "#set_rate_from_base" do
-
     context "when the price group is base internal" do
       it "does not change the rate" do
         expect { base_duration_rate_2.set_rate_from_base }
@@ -51,5 +50,4 @@ RSpec.describe DurationRate do
       end
     end
   end
-
 end

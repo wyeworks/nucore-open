@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ValidFulfilledAtDate
-
   include ActiveModel::Validations
   include DateHelper
 
@@ -54,5 +53,4 @@ class ValidFulfilledAtDate
   def not_in_future
     errors.add(:base, :in_future) if to_time > Time.current.end_of_day
   end
-
 end

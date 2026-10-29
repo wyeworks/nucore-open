@@ -57,7 +57,6 @@ if Account.config.statements_enabled?
     end
 
     context "index" do
-
       before :each do
         @method = :get
         @action = :index
@@ -325,7 +324,6 @@ if Account.config.statements_enabled?
     end
 
     context "show" do
-
       before :each do
         @method = :get
         @action = :show
@@ -335,7 +333,6 @@ if Account.config.statements_enabled?
       it_should_allow_managers_only { expect(assigns(:statement)).to eq(@statement) }
 
       it_should_deny_all [:staff, :senior_staff]
-
     end
 
     context "with granular permissions", feature_setting: { granular_permissions: true } do
@@ -403,6 +400,5 @@ if Account.config.statements_enabled?
         end
       end
     end
-
   end
 end

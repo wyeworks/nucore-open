@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderImportsController < ApplicationController
-
   include ActionView::Helpers::TextHelper
 
   admin_tab     :all
@@ -109,5 +108,4 @@ class OrderImportsController < ApplicationController
   def upload_file
     @upload_file ||= create_params.delete(:upload_file)
   end
-
 end

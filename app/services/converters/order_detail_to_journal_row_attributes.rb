@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Converters
-
   class OrderDetailToJournalRowAttributes
-
     attr_accessor :journal, :order_detail, :total
 
     def initialize(journal, order_detail, options = {})
@@ -22,7 +20,5 @@ module Converters
         journal: journal,
       }
     end
-
   end
-
 end

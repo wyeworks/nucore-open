@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddBiTable < ActiveRecord::Migration[4.2]
-
   def self.up
     if Nucore::Database.oracle?
       create_table :bi_netids do |t|
@@ -28,5 +27,4 @@ class AddBiTable < ActiveRecord::Migration[4.2]
     remove_index :bi_netids, :facility_id
     drop_table :bi_netids
   end
-
 end

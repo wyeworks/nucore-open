@@ -1,7 +1,5 @@
 module Converters
-
   class DoubleEntryOrderDetailToJournalRowAttributes
-
     attr_accessor :journal, :order_detail, :total
 
     def initialize(journal, order_detail, options = {})
@@ -51,7 +49,5 @@ module Converters
         description: order_detail.product.to_s,
       }
     end
-
   end
-
 end

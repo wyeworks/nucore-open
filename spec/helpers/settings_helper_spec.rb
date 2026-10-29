@@ -38,5 +38,4 @@ RSpec.describe SettingsHelper do
       expect { SettingsHelper.feature_on?(:nonexistent_feature) }.to raise_error(KeyError)
     end
   end
-
 end

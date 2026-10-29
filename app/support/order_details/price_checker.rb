@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetails::PriceChecker
-
   include ActionView::Helpers::NumberHelper
 
   def initialize(order_detail, options = {})
@@ -30,5 +29,4 @@ class OrderDetails::PriceChecker
   def price_group_name
     @order_detail.price_group.try(:name) || @order_detail.estimated_price_group.try(:name)
   end
-
 end

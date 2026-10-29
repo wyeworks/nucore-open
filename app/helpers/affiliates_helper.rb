@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module AffiliatesHelper
-
   def delete_affiliate_link(affiliate)
     link_to(
       I18n.t("affiliates.remove.label"),
@@ -27,5 +26,4 @@ module AffiliatesHelper
         ]
       end
   end
-
 end

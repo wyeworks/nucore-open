@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SplitProductManagementInFacilityUserPermissions < ActiveRecord::Migration[8.0]
-
   class FacilityUserPermission < ActiveRecord::Base
   end
 
@@ -24,5 +23,4 @@ class SplitProductManagementInFacilityUserPermissions < ActiveRecord::Migration[
     remove_column :facility_user_permissions, :product_creation
     remove_column :facility_user_permissions, :product_edition
   end
-
 end

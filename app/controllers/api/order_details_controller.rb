@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::OrderDetailsController < ApplicationController
-
   skip_before_action :authenticate_user!
 
   respond_to :json
@@ -33,5 +32,4 @@ class Api::OrderDetailsController < ApplicationController
   def order_detail_not_found
     render json: { error: "not found" }, status: 404
   end
-
 end

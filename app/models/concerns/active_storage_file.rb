@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ActiveStorageFile
-
   extend ActiveSupport::Concern
 
   included do
@@ -70,5 +69,4 @@ module ActiveStorageFile
       super
     end
   end
-
 end

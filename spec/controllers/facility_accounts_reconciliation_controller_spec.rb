@@ -3,11 +3,8 @@
 require "rails_helper"
 
 RSpec.describe FacilityAccountsReconciliationController do
-
   class ReconciliationTestAccount < Account
-
     extend ReconcilableAccount
-
   end
 
   FactoryBot.define do

@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module OrderDetails
-
     module ParamUpdaterExtension
-
       extend ActiveSupport::Concern
 
       included do
@@ -18,9 +15,6 @@ module SecureRooms
           ],
         )
       end
-
     end
-
   end
-
 end

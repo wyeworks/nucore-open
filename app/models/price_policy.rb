@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PricePolicy < ApplicationRecord
-
   include Nucore::Database::DateHelper
 
   belongs_to :price_group
@@ -249,5 +248,4 @@ class PricePolicy < ApplicationRecord
       policy.save
     end
   end
-
 end

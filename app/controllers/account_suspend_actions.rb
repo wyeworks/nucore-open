@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module AccountSuspendActions
-
   def suspend
     if @account.suspend
       flash[:notice] = I18n.t("controllers.facility_accounts.suspend.success")
@@ -23,5 +22,4 @@ module AccountSuspendActions
 
     redirect_to open_or_facility_path("account", @account)
   end
-
 end

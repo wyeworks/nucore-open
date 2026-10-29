@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Statement < ApplicationRecord
-
   has_many :order_details, inverse_of: :statement
   has_many :statement_rows, dependent: :destroy
   has_many :payments, inverse_of: :statement
@@ -207,5 +206,4 @@ class Statement < ApplicationRecord
   def has_order_details?
     order_details.any?
   end
-
 end

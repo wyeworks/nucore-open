@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderRowImporter
-
   include DateHelper
 
   cattr_accessor(:importable_product_types) { [Item, Service, TimedService] }
@@ -320,5 +319,4 @@ class OrderRowImporter
   def project
     facility.projects.active.find_by name: field(:project_name)
   end
-
 end

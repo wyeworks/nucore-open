@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Reservations::DurationChangeValidations do
-
   subject(:validator) { described_class.new(reservation) }
   let(:reservation) { create :setup_reservation }
 

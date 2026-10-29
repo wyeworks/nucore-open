@@ -34,5 +34,4 @@ FactoryBot.define do
   factory :price_group_product do
     reservation_window { 1 }
   end
-
 end

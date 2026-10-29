@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class LogEventsReport
-
     include Reports::CsvExporter
 
     ALLOWED_EVENTS = [
@@ -84,7 +82,5 @@ module Reports
     def whitelist_events(events)
       Array(events).select { |event| event.in?(ALLOWED_EVENTS) }
     end
-
   end
-
 end

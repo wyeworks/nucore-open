@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Reservation < ApplicationRecord
-
   acts_as_paranoid # soft deletes
   has_paper_trail
 
@@ -422,5 +421,4 @@ class Reservation < ApplicationRecord
   def calculated_billable_minutes
     set_billable_minutes? ? billable_duration_mins : nil
   end
-
 end

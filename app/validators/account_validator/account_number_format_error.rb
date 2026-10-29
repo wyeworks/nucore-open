@@ -5,7 +5,6 @@
 # on the validator. This is used to copy errors from the Validator
 # to the model itself.
 class  AccountValidator::AccountNumberFormatError < AccountValidator::ValidatorError
-
   attr_accessor :errors
   def initialize(errors)
     self.errors = errors
@@ -17,5 +16,4 @@ class  AccountValidator::AccountNumberFormatError < AccountValidator::ValidatorE
       model.errors.add(attribute, error.type, message: error.message)
     end
   end
-
 end

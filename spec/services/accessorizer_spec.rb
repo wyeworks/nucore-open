@@ -28,7 +28,6 @@ RSpec.describe Accessories::Accessorizer do
 
   describe "unpurchased_accessory_order_details" do
     context "when no accessories have been added" do
-
       it "has both accessories as avaiable" do
         expect(accessorizer.unpurchased_accessories).to eq([quantity_accessory, auto_scaled_accessory])
       end
@@ -181,7 +180,6 @@ RSpec.describe Accessories::Accessorizer do
           accessorizer.update_accessorizer_attributes(params)
         end
       end
-
     end
 
     context "order status assignment" do

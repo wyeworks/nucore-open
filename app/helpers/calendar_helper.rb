@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module CalendarHelper
-
   def product_calendar_view(product)
     if product.daily_booking?
       "month"
@@ -24,5 +23,4 @@ module CalendarHelper
       opts,
     )
   end
-
 end

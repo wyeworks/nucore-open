@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductsCommonController < ApplicationController
-
   customer_tab  :show
   admin_tab     :create, :destroy, :new, :edit, :index, :update, :manage
   skip_before_action :authenticate_user!, only: [:show]
@@ -155,5 +154,4 @@ class ProductsCommonController < ApplicationController
     product_class.to_s.underscore
   end
   helper_method :singular_object_name
-
 end

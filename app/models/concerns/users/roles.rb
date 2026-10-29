@@ -4,9 +4,7 @@
 # Mix this module into the +User+ class to include
 # convenience methods for testing the role status of users.
 module Users
-
   module Roles
-
     # Creates methods #administrator?, #facility_staff?, etc.
     # Each returns true if #user_roles has the role for any facility.
     UserRole.global_roles.each do |role|
@@ -100,7 +98,5 @@ module Users
     def account_administrator_of?(account)
       owner_of?(account) || business_administrator_of?(account)
     end
-
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class AdminReservationQuerier
-
     attr_reader :facility, :start_time, :end_time
 
     def initialize(facility:, start_time:, end_time:)
@@ -21,7 +19,5 @@ module Reports
         .where("reserve_end_at IS NULL OR reserve_end_at >= ?", start_time)
         .where("reserve_start_at <= ?", end_time)
     end
-
   end
-
 end

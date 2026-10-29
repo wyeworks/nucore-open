@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module FormHelper
-
   def readonly_form_for(record_name, record = nil, options = {}, &block)
     if record.is_a?(Hash) && record.extractable_options?
       options = record
@@ -26,5 +25,4 @@ module FormHelper
   def scheduling_group_options(access_groups, selected_access_group)
     options_from_collection_for_select(access_groups, :id, :name, selected_access_group.try(:id))
   end
-
 end

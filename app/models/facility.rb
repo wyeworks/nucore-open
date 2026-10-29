@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Facility < ApplicationRecord
-
   if SettingsHelper.feature_on?("style_display.facility_tile_list_admin") || SettingsHelper.feature_on?("style_display.facility_tile_list")
     # Migration is required if Paperclip is being used (see CHANGELOG)
     include DownloadableFiles::Image
@@ -177,5 +176,4 @@ class Facility < ApplicationRecord
     next_number = max_number ? max_number + 1 : 1
     self.journal_mask = format("C%0#{next_number < 100 ? 2 : 3}d", next_number)
   end
-
 end

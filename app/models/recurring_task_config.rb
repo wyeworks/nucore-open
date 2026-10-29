@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RecurringTaskConfig
-
   extend Enumerable
 
   # A convenience method to allow calling #each
@@ -38,5 +37,4 @@ class RecurringTaskConfig
       start_time.min % frequency == 0
     end
   end
-
 end

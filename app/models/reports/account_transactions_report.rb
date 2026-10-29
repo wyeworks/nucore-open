@@ -3,7 +3,6 @@
 require "csv"
 
 class Reports::AccountTransactionsReport
-
   include ApplicationHelper
   include ERB::Util
   include TextHelpers::Translation
@@ -178,5 +177,4 @@ class Reports::AccountTransactionsReport
       order_detail.order.cross_core_project.facility.abbreviation
     end
   end
-
 end

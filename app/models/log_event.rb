@@ -72,5 +72,4 @@ class LogEvent < ApplicationRecord
       loggable.to_s
     end
   end
-
 end

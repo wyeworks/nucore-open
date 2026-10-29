@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Users::ConvertExternalToInternalUser do
-
   describe "successful conversion" do
     let(:user) { create(:user, :external, email: "external@example.org", username: "external@example.org") }
     let(:converter) { described_class.new(user.email, "netid") }
@@ -67,5 +66,4 @@ RSpec.describe Users::ConvertExternalToInternalUser do
       expect { converter.convert! }.to raise_error(/not found in directory/)
     end
   end
-
 end

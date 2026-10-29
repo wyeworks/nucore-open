@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Holiday < ApplicationRecord
-
   validates_presence_of :date
 
   scope :future, -> { where(date: Time.current.to_date..Float::INFINITY) }
@@ -18,5 +17,4 @@ class Holiday < ApplicationRecord
 
     false
   end
-
 end

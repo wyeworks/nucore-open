@@ -207,5 +207,4 @@ RSpec.describe StatementCreator do
       end
     end
   end
-
 end

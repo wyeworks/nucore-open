@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TimedServicePricePolicy < PricePolicy
-
   include PricePolicies::Usage
 
   def estimate_cost_and_subsidy_from_order_detail(order_detail)
@@ -44,5 +43,4 @@ class TimedServicePricePolicy < PricePolicy
       .new(self)
       .calculate(duration:)
   end
-
 end

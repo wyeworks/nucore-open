@@ -3,13 +3,10 @@
 require "rails_helper"
 
 class SomeRelay < Relay
-
   include PowerRelay
-
 end
 
 RSpec.describe SomeRelay do
-
   it { is_expected.to validate_presence_of :ip }
   it { is_expected.to validate_presence_of :outlet }
   it { is_expected.to validate_presence_of :username }

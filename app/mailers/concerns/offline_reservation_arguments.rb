@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module OfflineReservationArguments
-
   extend ActiveSupport::Concern
 
   included do
@@ -28,5 +27,4 @@ module OfflineReservationArguments
       ""
     end
   end
-
 end

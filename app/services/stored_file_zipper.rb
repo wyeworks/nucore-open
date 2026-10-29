@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StoredFileZipper
-
   attr_reader :files
 
   def initialize(files)
@@ -39,5 +38,4 @@ class StoredFileZipper
       file.name
     end
   end
-
 end

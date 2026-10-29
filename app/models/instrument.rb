@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Instrument < Product
-
   include Products::RelaySupport
   include Products::ScheduleRuleSupport
   include Products::SchedulingSupport
@@ -147,5 +146,4 @@ class Instrument < Product
       self.max_reserve_days = nil
     end
   end
-
 end

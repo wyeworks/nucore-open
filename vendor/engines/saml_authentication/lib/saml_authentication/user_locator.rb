@@ -3,9 +3,7 @@
 require "saml_authentication/saml_attributes"
 
 module SamlAuthentication
-
   class UserLocator
-
     def call(model, saml_response, _auth_value)
       ActiveSupport::Notifications.instrument "find_user.saml_authentication" do |payload|
         attributes = SamlAttributes.new(saml_response)
@@ -19,7 +17,5 @@ module SamlAuthentication
       end
 
     end
-
   end
-
 end

@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe DateTimeInput::Model do
-
   # Super won't work within the same class, so create a basic superclass.
   let(:ar_faker_clazz) do
     Class.new do

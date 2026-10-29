@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module UsersHelper
-
   # Builds the text for the creation success flash notice
   def creation_success_flash_text(user, facility)
     html(
@@ -40,5 +39,4 @@ module UsersHelper
       " at [#{email}](mailto:#{email})"
     end
   end
-
 end

@@ -27,7 +27,6 @@ RSpec.describe SurveysController do
   end
 
   context "deactivate" do
-
     before(:each) do
       @method = :put
       @action = :deactivate
@@ -36,11 +35,9 @@ RSpec.describe SurveysController do
     it_should_allow_managers_only :redirect do
       test_change_state(false)
     end
-
   end
 
   context "activate" do
-
     before(:each) do
       @method = :put
       @action = :activate
@@ -49,7 +46,6 @@ RSpec.describe SurveysController do
     it_should_allow_managers_only :redirect do
       test_change_state(true)
     end
-
   end
 
   context "complete" do
@@ -101,7 +97,6 @@ RSpec.describe SurveysController do
         expect(@order_detail.reload.order).to eq @clone
         expect { order.reload }.to raise_error ActiveRecord::RecordNotFound
       end
-
     end
   end
 
@@ -135,5 +130,4 @@ RSpec.describe SurveysController do
     @price_policy = FactoryBot.create(:item_price_policy, product: @product, price_group: @price_group)
     @order_detail = FactoryBot.create(:order_detail, order: @order, product: @product, price_policy: @price_policy)
   end
-
 end

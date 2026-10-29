@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetailsController < ApplicationController
-
   customer_tab  :all
 
   before_action :check_acting_as
@@ -134,5 +133,4 @@ class OrderDetailsController < ApplicationController
       reservations_path
     end
   end
-
 end

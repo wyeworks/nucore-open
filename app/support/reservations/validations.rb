@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Reservations::Validations
-
   extend ActiveSupport::Concern
 
   included do
@@ -256,5 +255,4 @@ module Reservations::Validations
       schedule_rules.cover?(reserve_start_at, reserve_end_at)
     end
   end
-
 end

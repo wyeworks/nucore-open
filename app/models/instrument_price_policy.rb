@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentPricePolicy < PricePolicy
-
   include InstrumentPricePolicyCalculations
   include PricePolicies::Usage
 
@@ -36,5 +35,4 @@ class InstrumentPricePolicy < PricePolicy
       reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW,
     ) unless pgp
   end
-
 end

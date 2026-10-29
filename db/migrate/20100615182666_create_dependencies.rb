@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateDependencies < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :dependencies do |t|
       # Context
@@ -22,5 +21,4 @@ class CreateDependencies < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :dependencies
   end
-
 end

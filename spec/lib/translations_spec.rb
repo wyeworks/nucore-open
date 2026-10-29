@@ -57,5 +57,4 @@ RSpec.describe "Translation loading" do
       end
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductResearchSafetyCertificationRequirementsController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -54,5 +53,4 @@ class ProductResearchSafetyCertificationRequirementsController < ApplicationCont
   def product_research_safety_certification_requirement_params
     params.require(:product_research_safety_certification_requirement).permit(:nu_safety_certificate_id)
   end
-
 end

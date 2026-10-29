@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Journals
-
   class JournalFormat
-
     attr_reader :key
 
     def self.find(key)
@@ -39,7 +37,5 @@ module Journals
     def mime_type
       @mime_type || key
     end
-
   end
-
 end

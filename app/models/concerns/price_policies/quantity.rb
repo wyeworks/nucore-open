@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module PricePolicies
-
   module Quantity
-
     extend ActiveSupport::Concern
 
     included do
@@ -52,7 +50,5 @@ module PricePolicies
     def subsidy_field
       :unit_subsidy
     end
-
   end
-
 end

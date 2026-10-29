@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SerializableFacility < SimpleDelegator
-
   include GlobalID::Identification
 
   def id
@@ -15,5 +14,4 @@ class SerializableFacility < SimpleDelegator
       Facility.find(id)
     end
   end
-
 end

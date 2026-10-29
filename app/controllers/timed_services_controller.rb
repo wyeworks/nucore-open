@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TimedServicesController < ProductsCommonController
-
   def create
     if resource_params[:pricing_mode] == TimedService::Pricing::DURATION && cannot?(:create_duration_billing, TimedService)
       flash.now[:error] = t("controllers.timed_services.create.duration_billing_not_authorized")
@@ -21,5 +20,4 @@ class TimedServicesController < ProductsCommonController
 
     params
   end
-
 end

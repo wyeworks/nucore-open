@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class EmailArchiver
-
   attr_reader :mail_message, :log_event
 
   def initialize(mail_message:, log_event:)
@@ -26,5 +25,4 @@ class EmailArchiver
       log_event&.persisted? &&
       !log_event.email_file_present?
   end
-
 end

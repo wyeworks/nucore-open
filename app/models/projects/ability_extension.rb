@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Projects
-
   class AbilityExtension
-
     attr_reader :ability
 
     def initialize(ability)
@@ -34,7 +32,5 @@ module Projects
         end
       end
     end
-
   end
-
 end

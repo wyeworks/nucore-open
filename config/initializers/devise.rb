@@ -136,5 +136,4 @@ Devise.setup do |config|
   # config.default_url_options do
   #   { :locale => I18n.locale }
   # end
-
 end

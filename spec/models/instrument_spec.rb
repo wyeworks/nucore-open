@@ -718,10 +718,8 @@ RSpec.describe Instrument do
         it "should not be purchasable" do
           expect(@instrument).not_to be_can_purchase(@user.price_groups.map(&:id))
         end
-
       end
     end
-
   end
 
   describe "walkup_available?" do

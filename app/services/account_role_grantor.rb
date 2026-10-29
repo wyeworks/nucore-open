@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountRoleGrantor
-
   attr_reader :account, :by
 
   def initialize(account, by:)
@@ -45,5 +44,4 @@ class AccountRoleGrantor
     # would fail the "account must have owner" validation
     account_user.update_columns(deleted_at: Time.current, deleted_by: by.id)
   end
-
 end

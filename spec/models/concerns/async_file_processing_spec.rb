@@ -4,7 +4,6 @@ require "rails_helper"
 
 RSpec.describe AsyncFileProcessing do
   class TestClass
-
     include ActiveModel::Model
     include ActiveRecord::AttributeAssignment
     include GlobalID::Identification
@@ -36,7 +35,6 @@ RSpec.describe AsyncFileProcessing do
 
     def process_file!
     end
-
   end
 
   describe "#enqueue" do

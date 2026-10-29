@@ -20,7 +20,6 @@ RSpec.describe Reservation do
     it "should have a new price group" do
       expect(facility.price_groups).not_to be_empty
     end
-
   end
 
   describe "instrument setup" do
@@ -131,6 +130,5 @@ RSpec.describe Reservation do
         expect(reservation.order.reload.state).to eq("purchased")
       end
     end
-
   end
 end

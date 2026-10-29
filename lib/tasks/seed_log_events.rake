@@ -5,11 +5,8 @@
 # data
 
 namespace :log_events do
-
   task seed: :environment do
-
     Account.transaction do
-
       Account.all.each do |account|
         next if LogEvent.where(loggable: account).present?
         LogEvent.log(
@@ -38,9 +35,6 @@ namespace :log_events do
         next if LogEvent.where(loggable: user).present?
         LogEvent.log(user, :create, nil, event_time: user.created_at)
       end
-
     end
-
   end
-
 end

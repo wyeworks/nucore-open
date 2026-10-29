@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Rack::Attack
-
   throttle("req/ip", limit: Settings.rack_attack.req_limit, period: Settings.rack_attack.req_period) do |req|
     req.ip unless req.path.start_with?("/assets")
   end
@@ -20,7 +19,6 @@ class Rack::Attack
       [Rails.public_path.join("429.html").read],
     ]
   end
-
 end
 
 Rack::Attack.enabled = Settings.rack_attack&.enabled || false

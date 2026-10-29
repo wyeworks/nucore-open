@@ -1,20 +1,16 @@
 # frozen_string_literal: true
 
 module Reports
-
   module CsvExporter
-
     extend ActiveSupport::Concern
 
     include DateHelper
     include TextHelpers::Translation
 
     module ClassMethods
-
       def transformers
         @transformers ||= []
       end
-
     end
 
     def date_start
@@ -104,7 +100,5 @@ module Reports
     def transformers
       self.class.transformers
     end
-
   end
-
 end

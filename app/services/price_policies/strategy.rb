@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module PricePolicies
-
   module Strategy
-
     class BaseStrategy
       attr_reader :price_policy, :start_at, :end_at, :handle_minimum_cost
 
@@ -178,7 +176,5 @@ module PricePolicies
         { cost: result[:cost], subsidy: result[:subsidy] }
       end
     end
-
   end
-
 end

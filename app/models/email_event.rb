@@ -2,7 +2,6 @@
 
 # Never instantiate this class directly. Use the `notify` method.
 class EmailEvent < ApplicationRecord
-
   belongs_to :user
   validates :user, presence: true
   validates :key, presence: true, uniqueness: { scope: :user_id, case_sensitive: false }
@@ -31,5 +30,4 @@ class EmailEvent < ApplicationRecord
   def self.key_for(keys)
     Array(keys).join("/")
   end
-
 end

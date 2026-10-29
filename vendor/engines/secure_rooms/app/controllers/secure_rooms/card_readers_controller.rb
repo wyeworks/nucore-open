@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class CardReadersController < ApplicationController
-
     admin_tab :all
 
     layout "two_column"
@@ -68,7 +66,5 @@ module SecureRooms
         :description, :card_reader_number, :control_device_number, :direction_in
       )
     end
-
   end
-
 end

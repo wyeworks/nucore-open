@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountsController < ApplicationController
-
   customer_tab  :all
   before_action :check_acting_as
   before_action :init_account, only: [:show, :user_search, :suspend, :unsuspend]
@@ -41,5 +40,4 @@ class AccountsController < ApplicationController
   def ability_resource
     @account
   end
-
 end

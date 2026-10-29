@@ -3,7 +3,6 @@
 require "zip"
 
 class OrderDetailStoredFilesController < ApplicationController
-
   customer_tab  :all
 
   before_action :init_order_detail
@@ -95,5 +94,4 @@ class OrderDetailStoredFilesController < ApplicationController
       redirect_to facility_order_path(@order_detail.facility, order)
     end
   end
-
 end

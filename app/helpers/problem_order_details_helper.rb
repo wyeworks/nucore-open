@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ProblemOrderDetailsHelper
-
   def problem_order_date_header(show_reservation_start_at)
     if show_reservation_start_at
       t(".th.actual_start")
@@ -20,5 +19,4 @@ module ProblemOrderDetailsHelper
 
     format_usa_datetime(date)
   end
-
 end

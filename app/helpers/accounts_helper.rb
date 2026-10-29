@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module AccountsHelper
-
   def toggle_expired_account_btn
     toggle_params = request.query_parameters.dup.except(:page)
 
@@ -92,5 +91,4 @@ module AccountsHelper
       human_date(expires_at)
     end
   end
-
 end

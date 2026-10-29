@@ -39,7 +39,6 @@ RSpec.describe "Facility Accounts Tab" do
   end
 
   context "when the feature flag is on", feature_setting: { "accounts.account_tabs" => true } do
-
     before do
       visit facility_accounts_path(facility)
     end
@@ -94,7 +93,6 @@ RSpec.describe "Facility Accounts Tab" do
         expect(page).to have_content(suspended_account.to_s)
       end
     end
-
   end
 
   context "when the feature flag is off", feature_setting: { "accounts.account_tabs" => false } do

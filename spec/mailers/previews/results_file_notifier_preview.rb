@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ResultsFileNotifierPreview < ActionMailer::Preview
-
   def file_uploaded
     file = FactoryBot.build(
       :stored_file,
@@ -12,5 +11,4 @@ class ResultsFileNotifierPreview < ActionMailer::Preview
 
     ResultsFileNotifierMailer.file_uploaded(file)
   end
-
 end

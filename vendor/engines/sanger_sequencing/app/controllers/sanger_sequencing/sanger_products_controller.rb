@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class SangerProductsController < BaseController
     before_action :set_resources
     before_action { @active_tab = "admin_products" }
@@ -49,5 +48,4 @@ module SangerSequencing
       @sanger_product = @product.sanger_product || @product.create_sanger_product
     end
   end
-
 end

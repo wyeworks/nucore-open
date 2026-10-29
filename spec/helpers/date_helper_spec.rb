@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe DateHelper do
-
   describe "#parse_usa_import_date" do
     context "with bad dates" do
       %w(05012012 garbage 11/31/2012 5-Apr-13 31/1/2014 2014-Jan-1 3/3/13).each do |date_string|
@@ -40,7 +39,6 @@ RSpec.describe DateHelper do
   end
 
   describe "#parse_usa_date" do
-
     context "given bad dates" do
       ["05012012", "somegarbage", "11/31/2012", nil, "9/", "5/1/20114", "1/4/16"].each do |bad_date_string|
         it "does not raise error for: #{bad_date_string}" do
@@ -108,7 +106,6 @@ RSpec.describe DateHelper do
         expect(parse_usa_date("2012-05-01", "4:19 PM")).to eq(Time.zone.parse("2012-05-01 16:19"))
       end
     end
-
   end
 
   describe "#human_date"
@@ -135,5 +132,4 @@ RSpec.describe DateHelper do
       expect(time_ceil(Time.zone.parse("2013-08-15 12:05"), 1.hour)).to eq(Time.zone.parse("2013-08-15 13:00"))
     end
   end
-
 end

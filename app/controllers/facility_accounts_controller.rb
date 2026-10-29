@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityAccountsController < ApplicationController
-
   include AccountSuspendActions
   include SearchHelper
   include CsvEmailAction
@@ -222,5 +221,4 @@ class FacilityAccountsController < ApplicationController
       { account_status: "active" }
     end
   end
-
 end

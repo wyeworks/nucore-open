@@ -15,7 +15,6 @@
 #
 # The order of the extensions matters as they run in the order you add them.
 class AbilityExtensionManager
-
   def self.extensions
     @extensions ||= []
   end
@@ -31,5 +30,4 @@ class AbilityExtensionManager
       extension.constantize.new(ability).extend(user, resource)
     end
   end
-
 end

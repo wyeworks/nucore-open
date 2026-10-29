@@ -130,5 +130,4 @@ RSpec.describe FullTextSearch::OracleSearcher, if: Nucore::Database.oracle? do
       it { is_expected.to contain_exactly(item) }
     end
   end
-
 end

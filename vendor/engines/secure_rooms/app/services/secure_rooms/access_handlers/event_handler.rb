@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module AccessHandlers
-
     class EventHandler
-
       def self.process(verdict)
         Event.create!(
           occurred_at: Time.current,
@@ -17,9 +14,6 @@ module SecureRooms
           card_number: verdict.user&.card_number || verdict.card_number,
         )
       end
-
     end
-
   end
-
 end

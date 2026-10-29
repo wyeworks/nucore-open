@@ -85,7 +85,6 @@ RSpec.describe(
 
         expect(page).to have_content("Sorry, you don't have permission to access this page")
       end
-
     end
 
     context "with authorized user" do

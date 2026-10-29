@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductForCart
-
   include TextHelpers::Translation
 
   attr_accessor :error_message, :error_path
@@ -126,5 +125,4 @@ class ProductForCart
     return false if session_user.nil?
     !acting_user.equal?(session_user)
   end
-
 end

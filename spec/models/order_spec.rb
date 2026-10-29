@@ -117,7 +117,6 @@ RSpec.describe Order do
     it "should not validate_order if there are no order_details" do
       expect(@order.validate_order!).to be false
     end
-
   end
 
   context "purchase state transition" do
@@ -245,7 +244,6 @@ RSpec.describe Order do
       @order.invalidate!
       expect(@order.validate_order!).to be false
     end
-
   end
 
   context do # 'add, clear, adjust' do
@@ -272,7 +270,6 @@ RSpec.describe Order do
     end
 
     context "#add" do
-
       context "bundle" do
         before :each do
           # make a bundle

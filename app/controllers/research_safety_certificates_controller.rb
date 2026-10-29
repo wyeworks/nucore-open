@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ResearchSafetyCertificatesController < GlobalSettingsController
-
   before_action :load_certificate, only: [:edit, :update, :destroy]
 
   def index
@@ -55,5 +54,4 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
   def load_certificate
     @certificate = ResearchSafetyCertificate.find(params[:id])
   end
-
 end

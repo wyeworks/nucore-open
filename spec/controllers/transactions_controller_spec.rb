@@ -8,7 +8,6 @@ RSpec.describe TransactionsController do
   let(:user) { FactoryBot.create(:user) }
 
   describe "GET #in_review", billing_review_period: 7.days do
-
     before(:each) do
       sign_in user
       get action, params: params
@@ -50,9 +49,7 @@ RSpec.describe TransactionsController do
           expect(assigns(:recently_reviewed)).to eq(order_details)
         end
       end
-
     end
-
   end
 
   context "mark as reviewed" do

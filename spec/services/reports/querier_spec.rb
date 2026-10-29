@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Reports::Querier do
-
   let(:user) { FactoryBot.create(:user) }
   let(:item) { FactoryBot.create(:setup_item) }
   let(:facility) { item.facility }
@@ -37,5 +36,4 @@ RSpec.describe Reports::Querier do
       expect(querier.perform).not_to include(merge_order_detail)
     end
   end
-
 end

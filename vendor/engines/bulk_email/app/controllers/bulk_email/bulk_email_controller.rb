@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class BulkEmailController < ApplicationController
-
     include CSVHelper
 
     admin_tab :all
@@ -128,7 +126,5 @@ module BulkEmail
       return false if params[:bulk_email].blank?
       params[:bulk_email][:user_types].include?(user_type.to_s)
     end
-
   end
-
 end

@@ -6,7 +6,6 @@
 # account_number - chart string for the account
 # revenue_account - an account code that signals the type of transaction expected
 class FacilityAccount < ApplicationRecord
-
   include Accounts::AccountNumberSectionable
 
   belongs_to :facility
@@ -66,5 +65,4 @@ class FacilityAccount < ApplicationRecord
       return false
     end
   end
-
 end

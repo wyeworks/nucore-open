@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   module Admin
-
     class BatchesController < AdminController
-
       admin_tab :all
       layout "two_column", only: [:index]
       before_action { @active_tab = "admin_sanger_sequencing" }
@@ -119,9 +116,6 @@ module SangerSequencing
           reserved_cells: [], well_plate_data: {}
         )
       end
-
     end
-
   end
-
 end

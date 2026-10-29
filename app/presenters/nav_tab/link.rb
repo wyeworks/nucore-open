@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class NavTab::Link
-
   include ActionView::Helpers::UrlHelper
 
   attr_reader :subnav, :text, :url
@@ -30,5 +29,4 @@ class NavTab::Link
   def to_html
     url.present? ? link_to(text, url) : text
   end
-
 end

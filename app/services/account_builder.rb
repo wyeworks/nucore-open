@@ -11,7 +11,6 @@
 #   account = factory.new(...).build
 #
 class AccountBuilder
-
   attr_reader :action, :account, :account_params,
               :account_type, :current_user, :facility, :owner_user, :params
 
@@ -221,5 +220,4 @@ class AccountBuilder
         Affiliate.find_by(id: account_params[:affiliate_id])
       end
   end
-
 end

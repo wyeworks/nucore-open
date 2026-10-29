@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductResearchSafetyCertificationRequirement < ApplicationRecord
-
   # This class was formerly in an NU-specific engine.
   # TODO: Rename the table
   self.table_name = "nu_product_cert_requirements"
@@ -15,5 +14,4 @@ class ProductResearchSafetyCertificationRequirement < ApplicationRecord
   validates :product, presence: true
   validates :research_safety_certificate, presence: true
   validates :research_safety_certificate, uniqueness: { scope: [:deleted_at, :product_id], case_sensitive: false }
-
 end

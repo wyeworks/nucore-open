@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Notifier < ApplicationMailer
-
   include DateHelper
 
   helper ApplicationHelper
@@ -150,5 +149,4 @@ class Notifier < ApplicationMailer
     archiver = EmailArchiver.new(mail_message: email, log_event:)
     archiver.archive!
   end
-
 end

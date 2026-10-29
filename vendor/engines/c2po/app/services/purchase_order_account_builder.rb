@@ -3,7 +3,6 @@
 # Contains overrides for building a `PurchaseOrderAccount` from params.
 # Dynamically called via the `AccountBuilder.for()` factory.
 class PurchaseOrderAccountBuilder < AccountBuilder
-
   # Needs to be overridable by engines
   cattr_accessor(:permitted_account_params) { [] }
 
@@ -53,5 +52,4 @@ class PurchaseOrderAccountBuilder < AccountBuilder
     account.expires_at = account.expires_at.try(:end_of_day)
     account
   end
-
 end

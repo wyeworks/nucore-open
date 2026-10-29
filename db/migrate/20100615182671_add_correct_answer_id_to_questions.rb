@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddCorrectAnswerIdToQuestions < ActiveRecord::Migration[4.2]
-
   def self.up
     add_column :questions, :correct_answer_id, :integer
   end
@@ -9,5 +8,4 @@ class AddCorrectAnswerIdToQuestions < ActiveRecord::Migration[4.2]
   def self.down
     remove_column :questions, :correct_answer_id
   end
-
 end

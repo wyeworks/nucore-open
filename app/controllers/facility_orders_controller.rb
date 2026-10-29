@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityOrdersController < ApplicationController
-
   include SortableColumnController
   include NewInprocessController
   include ProblemOrderDetailsController
@@ -169,5 +168,4 @@ class FacilityOrdersController < ApplicationController
     orders_with_only_one_order_detail = @order.cross_core_project.orders.select { |order| order.order_details.count == 1 }
     orders_with_only_one_order_detail.filter { |order| order.order_details.first.product.is_a?(Instrument) && order.order_details.first.reservation.nil? }.pluck(:id)
   end
-
 end

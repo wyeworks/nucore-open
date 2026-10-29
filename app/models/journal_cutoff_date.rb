@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class JournalCutoffDate < ApplicationRecord
-
   include DateTimeInput::Model
 
   date_time_inputable :cutoff_date
@@ -56,5 +55,4 @@ class JournalCutoffDate < ApplicationRecord
       where("#{section}(cutoff_date) = ?", time)
     end
   end
-
 end

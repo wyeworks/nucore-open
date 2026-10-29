@@ -3,7 +3,6 @@
 require "net/http"
 
 class Relay < ApplicationRecord
-
   belongs_to :instrument, inverse_of: :relay
 
   validates_presence_of :instrument_id, on: :update
@@ -78,5 +77,4 @@ class Relay < ApplicationRecord
     scope = scope.where("relays.id != ?", id) if persisted?
     errors.add(:outlet, :taken) if scope.exists?
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module OrdersHelper
-
   def display_cost_prefix_for_order(order)
     case
     when order.order_details.with_actual_costs.present?
@@ -31,5 +30,4 @@ module OrdersHelper
   def show_note_input_to_user?(order_detail)
     acting_as? || order_detail.product.user_notes_field_mode.visible?
   end
-
 end

@@ -1,17 +1,13 @@
 # frozen_string_literal: true
 
 module Nucore
-
   module Database
-
     module SortHelper
-
       def self.included(base)
         base.extend ClassMethods
       end
 
       module ClassMethods
-
         # MySQL by default will sort with nulls coming before anything with a value.
         # Oracle and PostgreSQL by default put the nulls at the end in ASC mode
         def order_by_asc_nulls_first(field)
@@ -34,11 +30,7 @@ module Nucore
                      end
           order(Arel.sql(sanitize_sql_for_order(order_by)))
         end
-
       end
-
     end
-
   end
-
 end

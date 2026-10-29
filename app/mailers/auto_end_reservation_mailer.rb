@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AutoEndReservationMailer < ApplicationMailer
-
   def notify_auto_ended(reservation, _ended_by_user)
     @reservation = reservation
     @order_detail = reservation.order_detail
@@ -25,5 +24,4 @@ class AutoEndReservationMailer < ApplicationMailer
   def translation_scope
     "views.auto_end_reservation_mailer"
   end
-
 end

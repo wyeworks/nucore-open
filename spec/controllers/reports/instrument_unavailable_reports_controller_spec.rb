@@ -69,7 +69,6 @@ RSpec.describe Reports::InstrumentUnavailableReportsController do
           it_behaves_like "it sets the required instance variables"
 
           it "generates the expected rows" do
-
             expect(assigns(:rows)).to match_array [
               [instruments.first.to_s,  "Admin",   "",             1, "24.00"],
               [instruments.first.to_s,  "Offline", "Out of Order", 2, "72.00"],

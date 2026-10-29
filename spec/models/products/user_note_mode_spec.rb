@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Products::UserNoteMode do
-
   describe "hidden" do
     subject(:mode) { described_class["hidden"] }
 

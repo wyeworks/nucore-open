@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderPurchaseValidator
-
   # The AllOrderDetailsValidator will validate each individual OrderDetail
   # within the order using the NotePresenceValidator.
   cattr_accessor(:additional_validations) do
@@ -33,5 +32,4 @@ class OrderPurchaseValidator
   def invalid?
     !valid?
   end
-
 end

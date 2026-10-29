@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PurchaseOrderAccount < Account
-
   extend ReconcilableAccount
 
   include AffiliateAccount
@@ -33,5 +32,4 @@ class PurchaseOrderAccount < Account
       facilities.first.name
     end
   end
-
 end

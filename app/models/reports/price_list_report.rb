@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class PriceListReport
-
     include Reports::CsvExporter
 
     RATE_PRECISION = 2
@@ -227,7 +225,5 @@ module Reports
       @sorted_duration_rates ||= {}
       @sorted_duration_rates[policy.id] ||= policy.duration_rates.sort_by(&:min_duration_hours)
     end
-
   end
-
 end

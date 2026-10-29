@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Reports::OrderImport
-
   def initialize(order_import:, successes:, failures:)
     @order_import = order_import
     @result = ::OrderImport::Result.new(successes:, failures:)
@@ -43,5 +42,4 @@ class Reports::OrderImport
       "reports.order_import.fail_continue_on_error"
     end
   end
-
 end

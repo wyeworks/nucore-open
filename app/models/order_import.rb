@@ -3,7 +3,6 @@
 require "csv"
 
 class OrderImport < ApplicationRecord
-
   belongs_to :facility, optional: true
   belongs_to :upload_file, class_name: "StoredFile", dependent: :destroy, required: true
   belongs_to :error_file, class_name: "StoredFile", dependent: :destroy, optional: true
@@ -252,7 +251,6 @@ class OrderImport < ApplicationRecord
   end
 
   class Result
-
     attr_accessor :successes, :failures
 
     def initialize(successes: 0, failures: 0)
@@ -275,11 +273,9 @@ class OrderImport < ApplicationRecord
     def to_h
       { successes: successes, failures: failures }
     end
-
   end
 
   class OrderCache
-
     def initialize
       @orders = {}
     end
@@ -295,7 +291,5 @@ class OrderImport < ApplicationRecord
     def fetch_all_orders
       Order.where(id: @orders.values)
     end
-
   end
-
 end

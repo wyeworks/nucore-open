@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module ProjectsSearch
-
   class SearchForm
-
     include ActiveModel::Model
 
     attr_accessor :actives, :cross_cores, :current_facility_id
@@ -34,7 +32,5 @@ module ProjectsSearch
     def default_params
       {}
     end
-
   end
-
 end

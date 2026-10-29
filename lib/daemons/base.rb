@@ -9,7 +9,6 @@ require "daemons"
 # so that you don't have to think about it.
 # http://daemons.rubyforge.org/
 class Daemons::Base
-
   include Daemons
 
   #
@@ -62,5 +61,4 @@ class Daemons::Base
   def monitor?
     !ARGV.include?("--no-monitor")
   end
-
 end

@@ -69,5 +69,4 @@ RSpec.describe AccountMembershipCloner, type: :service do
       expect { cloner.perform }.to_not change(AccountUser, :count)
     end
   end
-
 end

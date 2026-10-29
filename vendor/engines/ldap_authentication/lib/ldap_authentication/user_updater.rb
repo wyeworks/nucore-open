@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module LdapAuthentication
-
   class UserUpdater < SimpleDelegator
-
     def update_from_ldap
       entry = UserEntry.find(username)
       # Something has gone horribly wrong if the user is not found here.
@@ -19,7 +17,5 @@ module LdapAuthentication
         information: "Could not update User #{username} because of validation errors",
       )
     end
-
   end
-
 end

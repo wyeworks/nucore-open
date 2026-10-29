@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class NotificationSender
-
   attr_reader :errors, :current_facility
 
   def initialize(current_facility, params)
@@ -97,5 +96,4 @@ class NotificationSender
       end
     end
   end
-
 end

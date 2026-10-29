@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module SettingsHelper
-
   def self.fiscal_year_end(date = nil)
     date ||= Time.zone.now
     (fiscal_year_beginning(date) + 1.year - 1.day).end_of_day
@@ -58,5 +57,4 @@ module SettingsHelper
     end
     current
   end
-
 end

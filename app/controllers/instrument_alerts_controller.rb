@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentAlertsController < ApplicationController
-
   admin_tab :all
   layout "two_column"
 
@@ -36,5 +35,4 @@ class InstrumentAlertsController < ApplicationController
   def instrument_alert_params
     params.require(:instrument_alert).permit(:note)
   end
-
 end

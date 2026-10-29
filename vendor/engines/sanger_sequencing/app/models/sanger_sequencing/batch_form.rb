@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class BatchForm
-
     extend ActiveModel::Translation
 
     include ActiveModel::Attributes
@@ -87,7 +85,5 @@ module SangerSequencing
     def submitted_sample_ids
       batch.well_plates_raw.flat_map(&:values).map(&:to_s).select { |id| id =~ /\A\d+\z/ }
     end
-
   end
-
 end

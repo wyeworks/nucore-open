@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ExternalServiceReceiver < ApplicationRecord
-
   belongs_to :external_service
   belongs_to :receiver, polymorphic: true
 
@@ -36,5 +35,4 @@ class ExternalServiceReceiver < ApplicationRecord
   rescue TypeError, JSON::ParserError
     {}
   end
-
 end

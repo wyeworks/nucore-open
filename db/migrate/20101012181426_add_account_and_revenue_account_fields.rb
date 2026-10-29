@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddAccountAndRevenueAccountFields < ActiveRecord::Migration[4.2]
-
   def self.up
     add_column :products, :account, :integer, null: true
     add_column :facility_accounts, :revenue_account, :integer, null: true
@@ -15,5 +14,4 @@ class AddAccountAndRevenueAccountFields < ActiveRecord::Migration[4.2]
     remove_column :products, :account
     remove_column :facility_accounts, :revenue_account
   end
-
 end

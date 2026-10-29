@@ -16,7 +16,6 @@ RSpec.describe FacilityUsersController do
   end
 
   context "index" do
-
     before :each do
       @method = :get
       @action = :index
@@ -28,11 +27,9 @@ RSpec.describe FacilityUsersController do
       expect(assigns(:users)).to include @staff
       expect(assigns(:users)).to include user unless user == @admin
     end
-
   end
 
   context "destroy" do
-
     before :each do
       @method = :delete
       @action = :destroy
@@ -55,22 +52,18 @@ RSpec.describe FacilityUsersController do
       user_role = UserRole.deleted.find_by(user: @staff, facility: facility)
       expect(LogEvent).to be_exists(loggable: user_role, event_type: :delete, user: director)
     end
-
   end
 
   context "search" do
-
     before :each do
       @method = :get
       @action = :search
     end
 
     it_should_allow_managers_only { is_expected.to render_template("search") }
-
   end
 
   context "map_user" do
-
     before :each do
       @method = :post
       @action = :map_user
@@ -105,7 +98,5 @@ RSpec.describe FacilityUsersController do
         end.not_to change(LogEvent, :count)
       end
     end
-
   end
-
 end

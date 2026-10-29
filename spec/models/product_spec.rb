@@ -18,11 +18,9 @@ RSpec.describe Product do
     let(:user) { create(:user) }
 
     class TestProduct < Product
-
       def requires_account?
         false
       end
-
     end
 
     before(:example) do
@@ -186,7 +184,6 @@ RSpec.describe Product do
       end
 
       context "product specific enabled", feature_setting: { "notifications.product_specific_contacts": true } do
-
         it "should return the product's email if it has it" do
           expect(@product.email).to eq("product@example.com")
         end
@@ -214,7 +211,6 @@ RSpec.describe Product do
       end
 
       context "product specific disabled", feature_setting: { "notifications.product_specific_contacts": false } do
-
         it "should return the facility's email address even if the product has an email" do
           expect(@product.email).to eq("facility@example.com")
         end
@@ -238,7 +234,6 @@ RSpec.describe Product do
 
     context "can_purchase?" do
       class TestPricePolicy < PricePolicy
-
         def rate_field
           :unit_cost
         end
@@ -246,7 +241,6 @@ RSpec.describe Product do
         def note
           "I am a note and I am present"
         end
-
       end
 
       before :each do

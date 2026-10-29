@@ -19,7 +19,6 @@ RSpec.describe BundleProductsController do
   end
 
   context "index" do
-
     before(:each) do
       @method = :get
       @action = :index
@@ -32,11 +31,9 @@ RSpec.describe BundleProductsController do
       expect(assigns(:bundle_products)).to all be_kind_of(BundleProduct)
       is_expected.to render_template("index")
     end
-
   end
 
   context "create" do
-
     before(:each) do
       @method = :post
       @action = :create
@@ -58,11 +55,9 @@ RSpec.describe BundleProductsController do
       is_expected.to set_flash
       assert_redirected_to facility_bundle_bundle_products_url(@authable, @bundle)
     end
-
   end
 
   context "new" do
-
     before(:each) do
       @method = :get
       @action = :new
@@ -76,11 +71,9 @@ RSpec.describe BundleProductsController do
       expect(assigns(:bundle_product)).to be_new_record
       is_expected.to render_template("new")
     end
-
   end
 
   context "edit" do
-
     before(:each) do
       @method = :get
       @action = :edit
@@ -93,11 +86,9 @@ RSpec.describe BundleProductsController do
       assert_init_bundle
       is_expected.to render_template("edit")
     end
-
   end
 
   context "update" do
-
     before(:each) do
       @method = :put
       @action = :update
@@ -120,11 +111,9 @@ RSpec.describe BundleProductsController do
       is_expected.to set_flash
       assert_redirected_to facility_bundle_bundle_products_url(@authable, @bundle)
     end
-
   end
 
   context "destroy" do
-
     before(:each) do
       @method = :delete
       @action = :destroy
@@ -146,12 +135,10 @@ RSpec.describe BundleProductsController do
       is_expected.to set_flash
       assert_redirected_to facility_bundle_bundle_products_url(@authable, @bundle)
     end
-
   end
 
   def assert_init_bundle
     expect(assigns(:bundle)).to_not be_nil
     expect(assigns(:bundle)).to eq(@bundle)
   end
-
 end

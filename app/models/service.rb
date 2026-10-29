@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Service < Product
-
   has_many :service_price_policies, foreign_key: :product_id
   has_many :external_service_passers, as: :passer
   has_many :external_services, through: :external_service_passers
@@ -29,5 +28,4 @@ class Service < Product
   def requires_merge?
     active_survey? || active_template?
   end
-
 end

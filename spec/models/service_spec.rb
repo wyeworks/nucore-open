@@ -4,7 +4,6 @@ require "rails_helper"
 require "product_shared_examples"
 
 RSpec.describe Service do
-
   context "factory" do
     it "can create using a factory" do
       @facility = FactoryBot.create(:facility)
@@ -44,5 +43,4 @@ RSpec.describe Service do
       expect(service.active_survey).to eq(url_service)
     end
   end
-
 end

@@ -2,7 +2,6 @@
 
 # Keeper of this app's loaded engines
 class EngineManager
-
   def self.loaded_engines
     Rails.application.railties
          .select { |r| r.class < Rails::Engine }
@@ -30,5 +29,4 @@ class EngineManager
       base.view_paths = paths
     end
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-
   class NamePresenter < SimpleDelegator
-
     def initialize(user, suspended_label: true, username_label: false)
       super(user)
       @suspended_label = suspended_label
@@ -44,7 +42,5 @@ module Users
     def suspended_label?
       @suspended_label
     end
-
   end
-
 end

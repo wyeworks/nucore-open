@@ -13,11 +13,9 @@
 # > product.contact_emails.map { |email| email }
 #   => ["email1@example.com", "email2@example.com"]
 module EmailListAttribute
-
   extend ActiveSupport::Concern
 
   module ClassMethods
-
     def email_list_attribute(attribute_name)
       define_method(attribute_name) do
         CsvArrayString.new(self[attribute_name])
@@ -35,7 +33,5 @@ module EmailListAttribute
         end
       end
     end
-
   end
-
 end

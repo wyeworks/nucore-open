@@ -2,7 +2,6 @@
 
 if defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter)
   ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter.class_eval do
-
     # The following patched methods address issues with thread safety in specs:
     # RuntimeError: executing in another thread
     # see https://github.com/rsim/oracle-enhanced/pull/2287
@@ -38,7 +37,6 @@ if defined?(ActiveRecord::ConnectionAdapters::OracleEnhancedAdapter)
     end
     alias_method :primary_keys_without_lock, :primary_keys
     alias_method :primary_keys, :primary_keys_with_lock
-
   end
 
   # OCI8 does not realize that SafeBuffer is a type of string, so we need to

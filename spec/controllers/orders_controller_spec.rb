@@ -9,10 +9,8 @@ RSpec.describe OrdersController do
   before(:all) { create_users }
 
   class DummyNotifier
-
     def deliver_later
     end
-
   end
 
   it "routes properly" do

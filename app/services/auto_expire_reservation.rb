@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AutoExpireReservation
-
   def perform
     order_details.find_each do |order_detail|
       order_detail.transaction do
@@ -38,5 +37,4 @@ class AutoExpireReservation
                                             exception: e, information: "Failed expire reservation order detail ##{order_detail}")
     raise ActiveRecord::Rollback
   end
-
 end

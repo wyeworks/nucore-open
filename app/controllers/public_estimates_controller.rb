@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PublicEstimatesController < ApplicationController
-
   skip_before_action :authenticate_user!
 
   def show
@@ -92,5 +91,4 @@ class PublicEstimatesController < ApplicationController
 
     estimate
   end
-
 end

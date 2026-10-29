@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-
   class ConvertExternalToInternalUser
-
     attr_reader :logger
 
     class DefaultLookup
@@ -45,7 +43,5 @@ module Users
 
       new_user_details.attributes.select { |_k, v| v.present? }
     end
-
   end
-
 end

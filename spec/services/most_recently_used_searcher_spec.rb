@@ -35,7 +35,6 @@ RSpec.describe MostRecentlyUsedSearcher do
           expect(recently_used_facilities.length).to eq 5
         end
       end
-
     end
   end
 
@@ -71,8 +70,6 @@ RSpec.describe MostRecentlyUsedSearcher do
           expect(recently_used_products.length).to eq 5
         end
       end
-
     end
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class Account < ApplicationRecord
-
   module Overridable
-
     # Consider creating a default price gorup, when `user_based_price_groups` is
     # set to `false`. Currently Dartmouth is the only school with this feature
     # flag set to false, and they do this in their account_extension.rb
@@ -14,7 +12,6 @@ class Account < ApplicationRecord
     def account_price_groups
       price_group_members.collect(&:price_group)
     end
-
   end
 
   include Overridable
@@ -316,5 +313,4 @@ class Account < ApplicationRecord
   def missing_owner?
     account_users.none? { |au| au.active? && au.owner? }
   end
-
 end

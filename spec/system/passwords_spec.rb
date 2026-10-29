@@ -82,7 +82,6 @@ RSpec.describe "Passwords", :aggregate_failures, feature_setting: { "users_authe
     end
 
     describe "as the external user" do
-
       before do
         fill_in "Email", with: external_user.email
         click_button "Submit"

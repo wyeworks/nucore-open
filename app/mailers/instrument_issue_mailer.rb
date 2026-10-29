@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentIssueMailer < ApplicationMailer
-
   def create(product:, user:, order_detail:, message:, recipients:)
     @product = product
     @user = user
@@ -18,5 +17,4 @@ class InstrumentIssueMailer < ApplicationMailer
   def translation_scope
     "views.#{self.class.name.underscore}"
   end
-
 end

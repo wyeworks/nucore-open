@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TimeData
-
   class NullTimeData
-
     def order_completable?
       true
     end
@@ -18,7 +16,5 @@ module TimeData
 
     def force_dirty!
     end
-
   end
-
 end

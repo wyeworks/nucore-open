@@ -48,7 +48,6 @@ RSpec.describe MoveToProblemQueue do
           described_class.move!(order_detail, cause: :cause)
         end
       end
-
     end
   end
 

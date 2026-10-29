@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateFacilityUserPermissions < ActiveRecord::Migration[8.0]
-
   def change
     create_table :facility_user_permissions do |t|
       t.references :user, null: false, type: :integer, foreign_key: true
@@ -21,5 +20,4 @@ class CreateFacilityUserPermissions < ActiveRecord::Migration[8.0]
 
     add_index :facility_user_permissions, [:user_id, :facility_id], unique: true
   end
-
 end

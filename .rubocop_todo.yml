@@ -198,20 +198,6 @@ Layout/EmptyLinesAroundAttributeAccessor:
     - 'vendor/engines/sanger_sequencing/app/presenters/sanger_sequencing/receipt_submission_presenter.rb'
     - 'vendor/engines/sanger_sequencing/app/presenters/sanger_sequencing/well_plate_presenter.rb'
 
-# Offense count: 331
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, no_empty_lines
-Layout/EmptyLinesAroundBlockBody:
-  Enabled: false
-
-# Offense count: 1618
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines, beginning_only, ending_only
-Layout/EmptyLinesAroundClassBody:
-  Enabled: false
-
 # Offense count: 4
 # This cop supports safe autocorrection (--autocorrect).
 Layout/EmptyLinesAroundMethodBody:
@@ -220,13 +206,6 @@ Layout/EmptyLinesAroundMethodBody:
     - 'app/models/order_detail.rb'
     - 'app/models/reports/account_transactions_report.rb'
     - 'vendor/engines/saml_authentication/lib/saml_authentication/user_locator.rb'
-
-# Offense count: 769
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: empty_lines, empty_lines_except_namespace, empty_lines_special, no_empty_lines
-Layout/EmptyLinesAroundModuleBody:
-  Enabled: false
 
 # Offense count: 11
 # This cop supports safe autocorrection (--autocorrect).

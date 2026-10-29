@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RelayDataprobe < Relay
-
   include PowerRelay
 
   private
@@ -13,5 +12,4 @@ class RelayDataprobe < Relay
   def relay_connection
     @relay_connection ||= Dataprobe::Ipio.new(host, connection_options)
   end
-
 end

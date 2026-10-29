@@ -277,9 +277,7 @@ RSpec.describe Statement do
             expect(statement).not_to be_display_cross_core_messsage
           end
         end
-
       end
-
     end
   end
 

@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 module ResearchSafetyAdapters
-
   class ScishieldApiError < StandardError
   end
 
   class ScishieldApiClient
-
     require "jwt"
 
     KEY = Rails.application.secrets.dig(:scishield, :key)
@@ -92,5 +90,4 @@ module ResearchSafetyAdapters
       )
     end
   end
-
 end

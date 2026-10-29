@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class InstrumentUnavailableReport
-
     QUANTITY_INDEX = 3
     HOURS_INDEX = 4
 
@@ -77,7 +75,5 @@ module Reports
                                     start_time: start_time,
                                     end_time: end_time)
     end
-
   end
-
 end

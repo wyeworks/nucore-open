@@ -62,7 +62,6 @@ RSpec.describe User do
           expect(described_class.for_card_number(card_number)).to eq(user)
         end
       end
-
     end
   end
 end

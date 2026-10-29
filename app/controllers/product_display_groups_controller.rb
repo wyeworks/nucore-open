@@ -67,5 +67,4 @@ class ProductDisplayGroupsController < ApplicationController
       join.update_column(:position, position)
     end
   end
-
 end

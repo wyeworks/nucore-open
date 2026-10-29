@@ -7,7 +7,6 @@
 #
 # http://thepugautomatic.com/2012/08/abort-mail-delivery-with-rails-3-interceptors/
 class StagingMailInterceptor
-
   attr_accessor :message
 
   # Public: A hook invoked by Rails when delivering an email. Initializes and
@@ -131,5 +130,4 @@ class StagingMailInterceptor
   def settings
     Settings.email.fake || raise("Settings.email.fake is not configured!")
   end
-
 end

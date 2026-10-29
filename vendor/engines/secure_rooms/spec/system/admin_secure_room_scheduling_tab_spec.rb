@@ -48,5 +48,4 @@ RSpec.describe "Secure room Scheduling Tab" do
       expect(page).to have_content("Price Group Discounts")
     end
   end
-
 end

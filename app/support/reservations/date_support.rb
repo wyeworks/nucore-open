@@ -3,7 +3,6 @@
 # Support for reading/writing reservation and actual start and
 # end times using values split across text inputs
 module Reservations::DateSupport
-
   extend ActiveSupport::Concern
 
   included do
@@ -261,5 +260,4 @@ module Reservations::DateSupport
   def reserve_time_range
     TimeRange.new(reserve_start_at, reserve_end_at)
   end
-
 end

@@ -65,7 +65,5 @@ RSpec.describe GlobalSearch::ProductSearcher do
 
       it { is_expected.to be_empty }
     end
-
   end
-
 end

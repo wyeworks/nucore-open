@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ProblemOrderDetailsController
-
   include OrderDetailsCsvExport
 
   extend ActiveSupport::Concern
@@ -102,5 +101,4 @@ module ProblemOrderDetailsController
   def authorize_show_problems
     authorize! :show_problems, Order
   end
-
 end

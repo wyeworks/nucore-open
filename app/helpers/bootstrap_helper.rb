@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module BootstrapHelper
-
   def modal_close_button
     content_tag :button, "x",
                 :class => "close",
@@ -34,5 +33,4 @@ module BootstrapHelper
   def tooltip_icon(icon_class, tooltip)
     content_tag :i, "", class: icon_class, data: { toggle: "tooltip" }, title: tooltip
   end
-
 end

@@ -26,5 +26,4 @@ RSpec.describe "Visiting my files", feature_setting: { "orders.my_files": true, 
   it "has my files" do
     expect(page).to have_link(order_detail.to_s)
   end
-
 end

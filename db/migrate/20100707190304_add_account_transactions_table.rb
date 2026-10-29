@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddAccountTransactionsTable < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table   :account_transactions do |t|
       t.references :account,            null: false
@@ -20,5 +19,4 @@ class AddAccountTransactionsTable < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :account_transactions
   end
-
 end

@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module AccessHandlers
-
     class OrderHandler
-
       attr_reader :order, :order_detail, :occupancy
 
       def self.process(occupancy)
@@ -78,9 +75,6 @@ module SecureRooms
           quantity: 1,
         )
       end
-
     end
-
   end
-
 end

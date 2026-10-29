@@ -125,5 +125,4 @@ RSpec.describe OrderDetailNoticePresenter do
       expect(text).to include("In Dispute")
     end
   end
-
 end

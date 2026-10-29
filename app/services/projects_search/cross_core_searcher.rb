@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ProjectsSearch
-
   class CrossCoreSearcher < BaseSearcher
     def options
       ["no", "yes"]
@@ -36,7 +35,5 @@ module ProjectsSearch
     def single_facility_projects
       Project.for_single_facility(@current_facility_id)
     end
-
   end
-
 end

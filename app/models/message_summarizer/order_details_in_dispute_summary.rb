@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MessageSummarizer::OrderDetailsInDisputeSummary < MessageSummarizer::FacilityMessageSummary
-
   private
 
   def allowed?
@@ -19,5 +18,4 @@ class MessageSummarizer::OrderDetailsInDisputeSummary < MessageSummarizer::Facil
   def path
     controller.facility_disputed_orders_path(facility)
   end
-
 end

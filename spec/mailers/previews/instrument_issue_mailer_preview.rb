@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentIssueMailerPreview < ActionMailer::Preview
-
   def create
     reservation = Nucore::Database.random(Reservation.user)
     InstrumentIssueMailer.create(
@@ -12,5 +11,4 @@ class InstrumentIssueMailerPreview < ActionMailer::Preview
       recipients: InstrumentIssue.new(product: reservation.product).recipients,
     )
   end
-
 end

@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe ChargeMode do
-
   describe ".for_order_detail" do
     subject(:charge_for) { described_class.for_order_detail(order_detail) }
 
@@ -40,7 +39,5 @@ RSpec.describe ChargeMode do
         it { is_expected.to eq("overage") }
       end
     end
-
   end
-
 end

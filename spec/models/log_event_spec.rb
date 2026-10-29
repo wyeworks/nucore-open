@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe LogEvent do
-
   describe "loggable" do
     describe "with a user" do
       let(:user) { create(:user) }

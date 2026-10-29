@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StatementRow < ApplicationRecord
-
   belongs_to :statement
   belongs_to :order_detail
 
@@ -21,5 +20,4 @@ class StatementRow < ApplicationRecord
   def amount
     order_detail.total
   end
-
 end

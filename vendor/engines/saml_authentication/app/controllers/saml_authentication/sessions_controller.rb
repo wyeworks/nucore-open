@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SamlAuthentication
-
   class SessionsController < Devise::SamlSessionsController
-
     before_action :store_logging_out_username, only: :destroy
     after_action :store_winning_strategy, only: :create
 
@@ -87,7 +85,5 @@ module SamlAuthentication
     def store_winning_strategy
       warden.session(resource_name)[:strategy] = :saml_authenticatable
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AdminReservationForm
-
   include ActiveModel::Validations
   include DateHelper
 

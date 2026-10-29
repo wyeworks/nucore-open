@@ -55,6 +55,5 @@ RSpec.describe EmailArchiver do
         expect(result).to be_nil
       end
     end
-
   end
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module GlobalSearch
-
   class OrderSearcher < Base
-
     include Nucore::Database::CaseSensitivityHelper
 
     def template
@@ -35,7 +33,5 @@ module GlobalSearch
     def search_external(query)
       insensitive_where OrderDetail.joins(:external_service_receiver), "external_service_receivers.external_id", query
     end
-
   end
-
 end

@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe ReservationCalendar, :aggregate_failures do
-
   let(:order) { build_stubbed(:order) }
   let(:order_detail) { build_stubbed(:order_detail, order: order) }
   let(:reservation) do
@@ -28,7 +27,6 @@ RSpec.describe ReservationCalendar, :aggregate_failures do
   end
 
   describe "#as_ical" do
-
     it "generates an ical file" do
       expect(ical.events.size).to eq(1)
       event = ical.events.first
@@ -40,7 +38,5 @@ RSpec.describe ReservationCalendar, :aggregate_failures do
       expect(event.url.to_s).to eq("")
       expect(event.ip_class).to eq("PRIVATE")
     end
-
   end
-
 end

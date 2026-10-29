@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UpdateProductTableForBundles < ActiveRecord::Migration[4.2]
-
   def self.up
     change_column :products, :initial_order_status_id, :integer, null: true
     change_column :products, :facility_account_id,     :integer, null: true
@@ -14,5 +13,4 @@ class UpdateProductTableForBundles < ActiveRecord::Migration[4.2]
   def self.down
     raise ActiveRecord::IrreversibleMigration
   end
-
 end

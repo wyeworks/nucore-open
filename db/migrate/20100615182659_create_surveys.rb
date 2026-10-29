@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateSurveys < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :surveys do |t|
       # Content
@@ -31,5 +30,4 @@ class CreateSurveys < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :surveys
   end
-
 end

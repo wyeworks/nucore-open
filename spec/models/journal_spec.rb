@@ -373,5 +373,4 @@ RSpec.describe Journal do
       expect(described_class.for_facilities([create(:facility)])).not_to include(journal)
     end
   end
-
 end

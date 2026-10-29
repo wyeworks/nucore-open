@@ -43,5 +43,4 @@ RSpec.describe "Creating an admin reservation" do
     expect(page).to have_content "10/19/#{fiscal_year} 9:30 AM - 10:00 AM"
     expect(page).to have_content "10/20/#{fiscal_year} 9:30 AM - 10:00 AM"
   end
-
 end

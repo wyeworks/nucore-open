@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddGlobalBooleanColumnToPriceGroups < ActiveRecord::Migration[7.0]
-
   def up
     change_table :price_groups do |t|
       add_column :price_groups, :global, :boolean, null: false, default: false
@@ -26,5 +25,4 @@ class AddGlobalBooleanColumnToPriceGroups < ActiveRecord::Migration[7.0]
       remove_column :price_groups, :global
     end
   end
-
 end

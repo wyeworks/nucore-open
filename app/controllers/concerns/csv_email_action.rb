@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module CsvEmailAction
-
   extend ActiveSupport::Concern
 
   # Example usage:
@@ -28,5 +27,4 @@ module CsvEmailAction
       )
     end
   end
-
 end

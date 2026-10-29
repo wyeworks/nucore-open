@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class JournalRow < ApplicationRecord
-
   belongs_to :journal
   belongs_to :order_detail, autosave: false
 
@@ -14,5 +13,4 @@ class JournalRow < ApplicationRecord
   def update_amount
     update(amount: order_detail.actual_cost)
   end
-
 end

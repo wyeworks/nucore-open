@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PricePolicyBuilder
-
   attr_reader :product, :start_date
 
   delegate :facility, to: :product
@@ -166,5 +165,4 @@ class PricePolicyBuilder
       usage_subsidy_daily: product.daily_booking? ? 0 : nil,
     }
   end
-
 end

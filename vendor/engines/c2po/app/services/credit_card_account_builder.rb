@@ -3,7 +3,6 @@
 # Contains overrides for building a `CreditCardAccount` from params.
 # Dynamically called via the `AccountBuilder.for()` factory.
 class CreditCardAccountBuilder < AccountBuilder
-
   protected
 
   # Override strong_params for `build` account.
@@ -48,5 +47,4 @@ class CreditCardAccountBuilder < AccountBuilder
       account.expires_at = Date.civil(account.expiration_year.to_i, account.expiration_month.to_i).end_of_month.end_of_day
     end
   end
-
 end

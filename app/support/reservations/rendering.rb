@@ -2,7 +2,6 @@
 
 # Support for displaying Reservations in various formats
 module Reservations::Rendering
-
   extend ActiveSupport::Concern
 
   included do
@@ -33,5 +32,4 @@ module Reservations::Rendering
   def calendar_presenter
     Reservations::CalendarPresenter.build(self)
   end
-
 end

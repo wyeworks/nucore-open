@@ -58,5 +58,4 @@ RSpec.describe FullTextSearch::MysqlSearcher, if: Nucore::Database.mysql? do
       is_expected.to eq([item, item2])
     end
   end
-
 end

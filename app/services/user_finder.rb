@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserFinder
-
   include SearchHelper
 
   class_attribute :searchable_columns

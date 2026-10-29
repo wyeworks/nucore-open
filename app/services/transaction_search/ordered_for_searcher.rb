@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class OrderedForSearcher < BaseSearcher
-
     def options
       User.select(:id, :first_name, :last_name)
           .where(id: order_details.joins(:order).distinct.select("orders.user_id"))
@@ -21,7 +19,5 @@ module TransactionSearch
     def label
       Order.human_attribute_name(:user)
     end
-
   end
-
 end

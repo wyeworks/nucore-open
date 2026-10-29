@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module AccessHandlers
-
     class OccupancyHandler
-
       attr_reader :event
 
       def self.process(event)
@@ -78,9 +75,6 @@ module SecureRooms
       def exiting?
         event.egress?
       end
-
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderUncanceler
-
   def initialize
     @complete_status = OrderStatus.complete
     @canceled_status = OrderStatus.canceled
@@ -42,5 +41,4 @@ class OrderUncanceler
       end
     end
   end
-
 end

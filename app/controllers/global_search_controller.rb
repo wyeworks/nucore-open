@@ -24,5 +24,4 @@ class GlobalSearchController < ApplicationController
                    [GlobalSearch::ProductSearcher.new(acting_user, current_facility, params[:search])]
                  end
   end
-
 end

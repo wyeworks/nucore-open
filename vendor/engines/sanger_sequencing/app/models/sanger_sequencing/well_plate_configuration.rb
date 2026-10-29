@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class WellPlateConfiguration
-
     attr_reader :reserved_cells
 
     def initialize(reserved_cells: [])
@@ -19,5 +17,4 @@ module SangerSequencing
       CONFIGS[key] || CONFIGS[:default]
     end
   end
-
 end

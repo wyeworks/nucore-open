@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddCanceledToOrderDetail < ActiveRecord::Migration[4.2]
-
   class Reservation < ActiveRecord::Base
     belongs_to :order_detail
   end
@@ -24,5 +23,4 @@ class AddCanceledToOrderDetail < ActiveRecord::Migration[4.2]
     remove_column :order_details, :canceled_by, :integer
     remove_column :order_details, :canceled_reason, :string
   end
-
 end

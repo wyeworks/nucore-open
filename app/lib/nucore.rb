@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module NUCore
-
   class PermissionDenied < RuntimeError
   end
 
@@ -23,5 +22,4 @@ module NUCore
   end
 
   class BulkImporterError < NUCore::Error; end
-
 end

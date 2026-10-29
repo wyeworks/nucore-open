@@ -53,7 +53,6 @@ RSpec.describe User do
   end
 
   describe "price groups", feature_setting: { "pricing.user_based_price_groups" => true } do
-
     it "is a member of any explicitly mapped price groups" do
       pg = FactoryBot.create(:price_group, facility: facility)
       UserPriceGroupMember.create(user: user, price_group: pg)

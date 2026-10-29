@@ -24,5 +24,4 @@ RSpec.describe "Disputing an order" do
     expect(page).to have_content("Your purchase has been disputed")
     expect(current_path).to eq(in_review_transactions_path)
   end
-
 end

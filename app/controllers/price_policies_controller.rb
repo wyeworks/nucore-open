@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PricePoliciesController < ApplicationController
-
   include DateHelper
 
   admin_tab     :all
@@ -189,5 +188,4 @@ class PricePoliciesController < ApplicationController
       build_duration_rates
     end
   end
-
 end

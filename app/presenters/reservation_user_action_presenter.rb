@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReservationUserActionPresenter
-
   attr_accessor :reservation, :controller
   delegate :order_detail, :order, :facility, :product, :admin?,
            :can_switch_instrument?, :can_switch_instrument_on?, :can_switch_instrument_off?,
@@ -164,5 +163,4 @@ class ReservationUserActionPresenter
   def modal_display?
     @redirect_to_order_id.present?
   end
-
 end

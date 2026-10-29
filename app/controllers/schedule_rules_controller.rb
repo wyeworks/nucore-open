@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ScheduleRulesController < ApplicationController
-
   include BelongsToProductController
 
   before_action :init_schedule_rule, only: [:edit, :update, :destroy]
@@ -124,5 +123,4 @@ class ScheduleRulesController < ApplicationController
 
     @product.schedule_rules.build(attrs)
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module PaperclipFile
-
   extend ActiveSupport::Concern
 
   included do
@@ -54,5 +53,4 @@ module PaperclipFile
   def clean_up_paperclip_errors
     errors.delete(:file) if errors[:file] == errors[:file_file_size]
   end
-
 end

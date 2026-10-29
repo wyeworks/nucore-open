@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class OrderStatusSearcher < BaseSearcher
-
     def options
       # Unlike the other lookups, this query is much faster this way than using a subquery
       OrderStatus.find_by_sql(order_details.joins(:order_status)
@@ -20,7 +18,5 @@ module TransactionSearch
         h[:facility] = order_status.facility_id if order_status.facility_id
       end
     end
-
   end
-
 end

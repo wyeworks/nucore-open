@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ReportsHelper
-
   include DateHelper
 
   FISCAL_YEARS_BACK = 5
@@ -55,5 +54,4 @@ module ReportsHelper
     attrs.delete_if { |ray| ray[0] =~ /._id$|^id$|^updated_at$|^created_at$|._by$/ }
     attrs.sort_by { |a| a[0] }
   end
-
 end

@@ -41,5 +41,4 @@ RSpec.describe SecureRooms::AccessRules::HolidayAccessRule do
       it { is_expected.to be_pass }
     end
   end
-
 end

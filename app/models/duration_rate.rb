@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class DurationRate < ApplicationRecord
-
   SIXTY_MIN = 60.0
 
   belongs_to :price_policy, required: true
@@ -74,5 +73,4 @@ class DurationRate < ApplicationRecord
   def requires_subsidy?
     price_group.subsidy_only?
   end
-
 end

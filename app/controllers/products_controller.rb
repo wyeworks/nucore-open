@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductsController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as, except: [:index]
   before_action :init_current_facility

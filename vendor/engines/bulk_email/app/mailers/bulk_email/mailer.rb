@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class Mailer < ApplicationMailer
-
     def send_mail(recipient:, subject:, body:, reply_to: nil, facility:)
       @recipient = recipient
       @body = body
@@ -18,7 +16,5 @@ module BulkEmail
       address.display_name = @facility.name if @facility.try(:single_facility?)
       address
     end
-
   end
-
 end

@@ -37,5 +37,4 @@ FactoryBot.define do
       dispute_reason { "No, sir. I don't like it." }
     end
   end
-
 end

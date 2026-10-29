@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserSuspensionController < ApplicationController
-
   admin_tab     :all
   before_action :init_current_facility
   load_and_authorize_resource :user, id_param: :user_id
@@ -26,5 +25,4 @@ class UserSuspensionController < ApplicationController
   def suspension_params
     params.require(:user).permit(:suspension_note)
   end
-
 end

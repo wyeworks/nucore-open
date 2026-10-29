@@ -6,9 +6,7 @@ require "saml_authentication/devise_configurator"
 require "saml_authentication/saml_authenticatable_with_custom_error"
 
 module SamlAuthentication
-
   class Engine < Rails::Engine
-
     config.to_prepare do
       next if Settings.saml.blank?
 
@@ -29,7 +27,5 @@ module SamlAuthentication
 
       SamlAuthentication::DeviseConfigurator.new.configure!
     end
-
   end
-
 end

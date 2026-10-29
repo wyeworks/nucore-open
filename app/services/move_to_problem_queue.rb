@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MoveToProblemQueue
-
   def self.move!(order_detail, force: false, user: nil, cause:)
     new(order_detail, force: force, user: user, cause: cause).move!
   end
@@ -27,5 +26,4 @@ class MoveToProblemQueue
     group = OrderDetails::ProblemResolutionPolicy.new(@order_detail).notification_group
     ProblemOrderMailer.for_group(group, @order_detail).deliver_later
   end
-
 end

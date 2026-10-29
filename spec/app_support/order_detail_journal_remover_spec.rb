@@ -52,5 +52,4 @@ RSpec.describe OrderDetailJournalRemover do
       end
     end
   end
-
 end

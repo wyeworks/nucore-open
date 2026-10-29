@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountProductErrorsFinder
-
   def initialize(accounts, products, user)
     @accounts = accounts
     @products = products
@@ -25,5 +24,4 @@ class AccountProductErrorsFinder
 
     nil
   end
-
 end

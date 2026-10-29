@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PurchaseNotifierPreview < ActionMailer::Preview
-
   def product_order_notification
     order_detail = OrderDetail.purchased.last
     recipient = User.last
@@ -19,5 +18,4 @@ class PurchaseNotifierPreview < ActionMailer::Preview
       recipient,
     )
   end
-
 end

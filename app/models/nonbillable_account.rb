@@ -79,5 +79,4 @@ class NonbillableAccount < Account
       email: Settings.nonbillable_user.email,
     }
   end
-
 end

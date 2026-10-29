@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentSchedulePositionsController < ApplicationController
-
   layout "two_column"
 
   admin_tab :all
@@ -51,5 +50,4 @@ class InstrumentSchedulePositionsController < ApplicationController
                  )
                  .distinct
   end
-
 end

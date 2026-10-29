@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module SamlAuthentication
-
   # Overrides DeviseSamlAuthenticatable::DefaultIdpEntityIdReader.
   #
   # The default IdpEntityIdReader triggers an error on SLO because that request to
@@ -11,7 +10,6 @@ module SamlAuthentication
   # Ideally, we will issue a PR to the devise_saml_authenticatable gem with these
   # changes so it is corrected upstream.
   class IdpEntityIdReader
-
     def self.entity_id(params)
       if params[:action] == "idp_sign_out" && params[:SAMLResponse]
         OneLogin::RubySaml::Logoutresponse.new(
@@ -40,7 +38,5 @@ module SamlAuthentication
         ).issuers.first
       end
     end
-
   end
-
 end

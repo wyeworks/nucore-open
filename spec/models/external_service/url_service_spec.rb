@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe UrlService do
-
   let(:url_service) do
     described_class.create(
       location: "http://www.survey.com/survey1",

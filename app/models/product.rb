@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
 class Product < ApplicationRecord
-
   include TextHelpers::Translation
   include EmailListAttribute
   include FullTextSearch::Model
 
   module Pricing
-
     SCHEDULE_RULE = "Schedule Rule"
     SCHEDULE_DAILY = "Schedule Rule (Daily Booking only)"
     DURATION = "Duration"
-
   end
 
   PRICING_MODES = [Pricing::SCHEDULE_RULE].freeze
@@ -393,5 +390,4 @@ class Product < ApplicationRecord
   def start_time_disabled_daily_booking_only
     self.start_time_disabled = start_time_disabled && daily_booking?
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Orders::ItemAdder
-
   # timed services default to 1 minute (arbitrary)
   DEFAULT_TIMED_SERVICES_DURATION = 1
 
@@ -119,5 +118,4 @@ class Orders::ItemAdder
     )
     @order.order_details.create!(options)
   end
-
 end

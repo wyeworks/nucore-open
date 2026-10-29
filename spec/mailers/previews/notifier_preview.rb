@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class NotifierPreview < ActionMailer::Preview
-
   def user_update
     Notifier.user_update(
       account: Account.first,
@@ -44,5 +43,4 @@ class NotifierPreview < ActionMailer::Preview
     order_detail = Nucore::Database.random(OrderDetail.complete)
     Notifier.order_detail_status_changed(order_detail)
   end
-
 end

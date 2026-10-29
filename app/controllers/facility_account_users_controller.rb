@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityAccountUsersController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -93,5 +92,4 @@ class FacilityAccountUsersController < ApplicationController
   def existing_member_becoming_owner?
     create_params[:user_role] == AccountUser::ACCOUNT_OWNER && @account.account_users.map(&:user_id).include?(@user.id)
   end
-
 end

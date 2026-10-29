@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class BaseSearcher
-
     attr_reader :order_details, :current_facility, :config
 
     def self.key
@@ -48,7 +46,5 @@ module TransactionSearch
     def search(_params)
       raise NotImplementedError
     end
-
   end
-
 end

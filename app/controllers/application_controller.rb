@@ -4,7 +4,6 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
-
   include DateHelper
 
   helper :all # include all helpers, all the time
@@ -190,5 +189,4 @@ class ApplicationController < ActionController::Base
   def render_acting_error
     render "errors/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
   end
-
 end

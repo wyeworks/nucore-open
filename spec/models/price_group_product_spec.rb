@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe PriceGroupProduct do
-
   before :each do
     @facility = FactoryBot.create(:facility)
     @facility_account = FactoryBot.create(:facility_account, facility: @facility)
@@ -29,5 +28,4 @@ RSpec.describe PriceGroupProduct do
     item = @facility.items.create(FactoryBot.attributes_for(:item, facility_account_id: @facility_account.id))
     expect(PriceGroupProduct.new(product: item, price_group: @price_group)).not_to validate_presence_of :reservation_window
   end
-
 end

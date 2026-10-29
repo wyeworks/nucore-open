@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module OrderDetails
-
   class DisputeResolvedNotifier < SimpleDelegator
-
     attr_accessor :current_user
 
     def initialize(order_detail, current_user: nil)
@@ -25,7 +23,5 @@ module OrderDetails
     def users_to_notify
       ([dispute_by] + account.administrators).compact.uniq
     end
-
   end
-
 end

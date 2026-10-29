@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-
   class ConvertInternalToExternalUser
-
     attr_reader :logger
 
     def initialize(username, dryrun: false, logger: Rails.logger)
@@ -41,7 +39,5 @@ module Users
 
       chars.shuffle.join
     end
-
   end
-
 end

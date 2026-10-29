@@ -3,7 +3,6 @@
 require "csv"
 
 module Reports
-
   class ProductAccessListCsvReport
     include DateHelper
     include TextHelpers::Translation
@@ -72,5 +71,4 @@ module Reports
       user.suspended? ? "Suspended" : "Expired"
     end
   end
-
 end

@@ -2,7 +2,6 @@
 
 module Formio
   class SubmissionsController < ApplicationController
-
     layout "formio"
 
     def show
@@ -58,6 +57,5 @@ module Formio
     def extra_prefill_data
       {}
     end
-
   end
 end

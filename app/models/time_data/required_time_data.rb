@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TimeData
-
   class RequiredTimeData
-
     def order_completable?
       false
     end
@@ -16,7 +14,5 @@ module TimeData
     def blank?
       true
     end
-
   end
-
 end

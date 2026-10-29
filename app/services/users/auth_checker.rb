@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Users
-
   class AuthChecker
-
     def initialize(user, password)
       @user = user
       @password = password
@@ -36,7 +34,5 @@ module Users
     def bypass_kiosk_auth?
       SettingsHelper.feature_on?(:bypass_kiosk_auth)
     end
-
   end
-
 end

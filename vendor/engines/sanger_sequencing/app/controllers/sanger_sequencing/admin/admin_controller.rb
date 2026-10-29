@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   module Admin
-
     class AdminController < SangerSequencing::BaseController
-
       check_authorization
 
       # For the sake of `authorize_resource`, we want to use the sanger_ability
@@ -19,9 +16,6 @@ module SangerSequencing
       def sanger_ability
         SangerSequencing::Ability.new(current_user, current_facility)
       end
-
     end
-
   end
-
 end

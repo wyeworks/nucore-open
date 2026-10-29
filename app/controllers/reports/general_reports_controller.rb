@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class GeneralReportsController < ReportsController
-
     helper_method(:export_csv_report_path)
 
     include StatusFilterParams
@@ -85,7 +83,5 @@ module Reports
         batch_size: 5_000,
       ).perform
     end
-
   end
-
 end

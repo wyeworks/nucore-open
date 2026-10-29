@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class EndReservationOnly
-
   def perform
     order_details.each do |od|
       od.transaction do
@@ -36,5 +35,4 @@ class EndReservationOnly
                                             exception: e, information: "Failed expire reservation order detail with id: #{od.id}")
     raise ActiveRecord::Rollback
   end
-
 end

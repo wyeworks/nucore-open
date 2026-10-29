@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetailPresenter < SimpleDelegator
-
   include ActionView::Helpers::NumberHelper
   include ActionView::Helpers::TagHelper
 
@@ -136,5 +135,4 @@ class OrderDetailPresenter < SimpleDelegator
   def empty_display
     "Unassigned"
   end
-
 end

@@ -112,5 +112,4 @@ RSpec.describe "facility_billing_log_events", type: :request do
       end
     end
   end
-
 end

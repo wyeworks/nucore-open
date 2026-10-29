@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe JournalRow do
-
   describe "validations" do
     it { is_expected.to validate_presence_of(:journal_id) }
     it { is_expected.to validate_presence_of(:amount) }
@@ -28,5 +27,4 @@ RSpec.describe JournalRow do
       expect(journal_row.fulfilled_at).to eq(one_day_ago)
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RenameFilesTable < ActiveRecord::Migration[4.2]
-
   def self.up
     rename_table :files, :file_uploads
   end
@@ -9,5 +8,4 @@ class RenameFilesTable < ActiveRecord::Migration[4.2]
   def self.down
     rename_table :file_uploads, :files
   end
-
 end

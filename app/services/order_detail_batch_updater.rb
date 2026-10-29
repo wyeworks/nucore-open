@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetailBatchUpdater
-
   # TODO: Extracted from the OrderDetail model almost as-is and needs refactoring
 
   attr_accessor :facility, :msg_hash, :msg_type, :order_detail_ids, :user, :params
@@ -165,5 +164,4 @@ class OrderDetailBatchUpdater
       "There was an error updating the selected #{msg_type}. #{e.message}"
     raise ActiveRecord::Rollback
   end
-
 end

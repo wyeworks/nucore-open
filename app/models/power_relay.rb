@@ -2,7 +2,6 @@
 
 # Including class must implement #relay_connection
 module PowerRelay
-
   extend ActiveSupport::Concern
 
   MAXIMUM_OUTLETS = 16
@@ -133,5 +132,4 @@ module PowerRelay
       end
     end
   end
-
 end

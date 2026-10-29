@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Products::SchedulingSupport
-
   extend ActiveSupport::Concern
 
   included do
@@ -140,7 +139,6 @@ module Products::SchedulingSupport
   end
 
   class ReservationFinder
-
     def initialize(time, rule, options = {})
       @time       = time
       @rule       = rule
@@ -193,7 +191,5 @@ module Products::SchedulingSupport
     def day_end
       Time.zone.local(@time.year, @time.month, @time.day, @rule.end_hour, @rule.end_min, 0)
     end
-
   end
-
 end

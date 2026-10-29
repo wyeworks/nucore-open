@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AvailableAccountsFinder
-
   def initialize(user, facility, current: nil, current_user: nil)
     @user = user
     @current_user = current_user
@@ -17,5 +16,4 @@ class AvailableAccountsFinder
     accounts
   end
   alias to_a accounts
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductAccessGroupsController < ApplicationController
-
   include BelongsToProductController
 
   admin_tab :all
@@ -58,5 +57,4 @@ class ProductAccessGroupsController < ApplicationController
   def product_access_group_params
     params.require(:product_access_group).permit(:name, :allow_holiday_access)
   end
-
 end

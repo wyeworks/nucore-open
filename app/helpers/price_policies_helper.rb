@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module PricePoliciesHelper
-
   def price_policy_path(price_policy_or_product, url_date)
     product = price_policy_or_product.respond_to?(:product) ? price_policy_or_product.product : price_policy_or_product
     [current_facility, product, :price_policy, id: url_date]
@@ -39,5 +38,4 @@ module PricePoliciesHelper
     price_group_key = "price_policy_#{price_group.id}"
     params[price_group_key].present? && params[price_group_key][key]
   end
-
 end

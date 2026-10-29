@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class CardReader < ApplicationRecord
-
     MAC_ADDRESS_FORMAT = /\A([0-9A-F]{2}:){5}([0-9A-F]{2})\z/
 
     belongs_to :secure_room, foreign_key: :product_id
@@ -59,7 +57,5 @@ module SecureRooms
     def clean_mac_address
       self.control_device_number = control_device_number.to_s.upcase.tr("-", ":")
     end
-
   end
-
 end

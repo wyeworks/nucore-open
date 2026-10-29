@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityUserPermission < ApplicationRecord
-
   belongs_to :user
   belongs_to :facility
 
@@ -70,5 +69,4 @@ class FacilityUserPermission < ApplicationRecord
   def grant_product_edition_when_product_creation_granted
     self.product_edition = true if product_creation?
   end
-
 end

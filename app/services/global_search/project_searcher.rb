@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module GlobalSearch
-
   class ProjectSearcher < ::GlobalSearch::Base
-
     def template
       "projects"
     end
@@ -27,7 +25,5 @@ module GlobalSearch
     def search
       query_object.where("lower(name) LIKE ?", "%#{query.downcase}%").or(Project.where(id: query))
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddFieldsToAccounts < ActiveRecord::Migration[4.2]
-
   class Account < ActiveRecord::Base
   end
 
@@ -42,5 +41,4 @@ class AddFieldsToAccounts < ActiveRecord::Migration[4.2]
     remove_column :accounts, :updated_at
     remove_column :accounts, :updated_by
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class DateRangeSearcher < BaseSearcher
     include DateHelper
     extend TextHelpers::Translation
@@ -45,7 +44,5 @@ module TransactionSearch
       field = params.try(:[], :field)
       FIELDS.include?(field.to_s) ? field.to_s : "fulfilled_at"
     end
-
   end
-
 end

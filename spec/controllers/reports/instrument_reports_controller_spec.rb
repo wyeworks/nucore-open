@@ -47,5 +47,4 @@ RSpec.describe Reports::InstrumentReportsController do
 
     # further testing in spec/models/reports/instrument_utilization_report_spec.rb
   end
-
 end

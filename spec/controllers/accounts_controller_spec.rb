@@ -19,7 +19,6 @@ RSpec.describe AccountsController do
   end
 
   context "index" do
-
     before(:each) do
       @method = :get
       @action = :index
@@ -48,7 +47,6 @@ RSpec.describe AccountsController do
   end
 
   context "show" do
-
     before :each do
       @method = :get
       @action = :show
@@ -66,7 +64,6 @@ RSpec.describe AccountsController do
   end
 
   context "user_search" do
-
     before :each do
       @method = :get
       @action = :user_search
@@ -81,7 +78,6 @@ RSpec.describe AccountsController do
       expect(assigns(:account)).to eq(@authable)
       expect(response).to render_template("account_users/user_search")
     end
-
   end
 
   context "suspension", if: SettingsHelper.feature_on?("accounts.suspend_accounts") do
@@ -143,5 +139,4 @@ RSpec.describe AccountsController do
       end
     end
   end
-
 end

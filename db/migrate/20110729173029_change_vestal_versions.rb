@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ChangeVestalVersions < ActiveRecord::Migration[4.2]
-
   def self.up
     add_column :versions, :reason_for_update, :string
     add_column :versions, :reverted_from, :integer
@@ -30,5 +29,4 @@ class ChangeVestalVersions < ActiveRecord::Migration[4.2]
     rename_column :versions, :modifications, :data_changes
     remove_columns :versions, :reason_for_update, :reverted_from, :commit_label
   end
-
 end

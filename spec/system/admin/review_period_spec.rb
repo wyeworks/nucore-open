@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Review period - Sending notifications and marking as reviewed", billing_review_period: 7.days do
-
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let(:item) { create(:setup_item, facility:) }
@@ -168,5 +167,4 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
       expect(page).to have_content("Notifications sent successfully")
     end
   end
-
 end

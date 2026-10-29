@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentIssue
-
   include ActiveModel::Model
 
   attr_accessor :message, :user, :product, :order_detail
@@ -32,5 +31,4 @@ class InstrumentIssue
       all.uniq
     end
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRoomsApi
-
   class EventsController < SecureRoomsApi::ApiController
-
     def create
       SecureRooms::AlarmEvent.create!(
         alarm_event_params.merge(
@@ -37,7 +35,5 @@ module SecureRoomsApi
       format_str = "%H:%M:%S %Z %m/%d/%Y"
       DateTime.strptime(time_str, format_str)
     end
-
   end
-
 end

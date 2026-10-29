@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module PricePolicies
-
   module Usage
-
     extend ActiveSupport::Concern
 
     included do
@@ -112,7 +110,5 @@ module PricePolicies
         self.usage_subsidy = nil
       end
     end
-
   end
-
 end

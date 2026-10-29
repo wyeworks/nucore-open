@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module HashHelper
-
   # Inserts one hash into another after it finds a specific key
   # original_hash = { a: 1, b: 2, c: 3, d: 4 }
   # additions = { e: 5, f: 6 }
@@ -13,5 +12,4 @@ module HashHelper
       new_hash.merge!(additions) if k == after_column
     end
   end
-
 end

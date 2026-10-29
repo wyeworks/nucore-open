@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrdersController < ApplicationController
-
   customer_tab  :all
 
   before_action :check_acting_as,          except: %i[cart cart_order_details_count add choose_account show remove purchase update_or_purchase receipt update]
@@ -436,5 +435,4 @@ class OrdersController < ApplicationController
       clear_cart_link: clear_order_path(@order),
       change_payment_source_link: choose_account_order_path(@order))
   end
-
 end

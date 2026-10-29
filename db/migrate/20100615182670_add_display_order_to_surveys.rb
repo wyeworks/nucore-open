@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddDisplayOrderToSurveys < ActiveRecord::Migration[4.2]
-
   def self.up
     add_column :surveys, :display_order, :integer
   end
@@ -9,5 +8,4 @@ class AddDisplayOrderToSurveys < ActiveRecord::Migration[4.2]
   def self.down
     remove_column :surveys, :display_order
   end
-
 end

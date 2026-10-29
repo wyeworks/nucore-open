@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe InstrumentPricePolicy do
-
   subject(:policy) { build :instrument_price_policy }
 
   %w(minimum_cost cancellation_cost).each do |attr|

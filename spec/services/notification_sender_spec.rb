@@ -119,7 +119,6 @@ RSpec.describe NotificationSender, :aggregate_failures do
           expect(notification_sender.account_ids_to_notify).to match_array(accounts.map(&:id))
           expect(order_details.map(&:reload)).to be_all(&:reviewed_at?)
         end
-
       end
 
       context "when an order_detail ID is invalid" do

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MessageSummarizer::NotificationsSummary < MessageSummarizer::MessageSummary
-
   def in_context?
     any?
   end
@@ -27,5 +26,4 @@ class MessageSummarizer::NotificationsSummary < MessageSummarizer::MessageSummar
   def user
     controller.current_user
   end
-
 end

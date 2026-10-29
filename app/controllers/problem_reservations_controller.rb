@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProblemReservationsController < ApplicationController
-
   customer_tab :all
 
   before_action :load_and_authorize_reservation
@@ -53,5 +52,4 @@ class ProblemReservationsController < ApplicationController
   def ability_resource
     @reservation
   end
-
 end

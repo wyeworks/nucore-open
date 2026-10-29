@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
-
   class Reservation < ActiveRecord::Base
   end
 
@@ -31,5 +30,4 @@ class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
       add_index :reservations, :order_detail_id, name: "i_reservations_order_detail_id", tablespace: "bc_nucore"
     end
   end
-
 end

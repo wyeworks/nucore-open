@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe AccountBuilder, type: :service do
-
   describe ".new" do
     let(:instance) { described_class.new(options) }
 
@@ -246,5 +245,4 @@ RSpec.describe AccountBuilder, type: :service do
       expect(builder.update.description).to eq(params[:nufs_account][:description])
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateResponseSets < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :response_sets do |t|
       # Context
@@ -22,5 +21,4 @@ class CreateResponseSets < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :response_sets
   end
-
 end

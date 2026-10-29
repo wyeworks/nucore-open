@@ -1,5 +1,4 @@
 class CloneAccountMembershipsController < ApplicationController
-
   admin_tab :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -58,5 +57,4 @@ class CloneAccountMembershipsController < ApplicationController
   def clone_account_membership_params
     params.permit(:user_to_clone_id, account_user_ids: [])
   end
-
 end

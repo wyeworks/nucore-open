@@ -3,7 +3,6 @@
 # Contains overrides for building a `NufsAccount` from params.
 # Dynamically called via the `AccountBuilder.for()` factory.
 class NufsAccountBuilder < AccountBuilder
-
   protected
 
   # Override strong_params for `build` account.
@@ -35,5 +34,4 @@ class NufsAccountBuilder < AccountBuilder
   rescue AccountValidator::ValidatorError => e
     account.errors.add(:base, e.message)
   end
-
 end

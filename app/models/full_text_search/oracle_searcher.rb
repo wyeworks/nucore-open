@@ -1,7 +1,5 @@
 module FullTextSearch
-
   class OracleSearcher < BaseSearcher
-
     # Example: search([:name, :description], "spinning disk")
     def search(fields, query)
       # By wrapping each portion in {}, it escapes what's inside so it handles special
@@ -23,7 +21,5 @@ module FullTextSearch
         relation.order(Arel.sql("SCORE(#{label}) DESC"))
       end
     end
-
   end
-
 end

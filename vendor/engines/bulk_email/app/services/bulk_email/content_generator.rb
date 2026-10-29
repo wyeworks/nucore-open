@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class ContentGenerator
-
     include TextHelpers::Translation
 
     attr_reader :facility, :subject_product
@@ -45,7 +43,5 @@ module BulkEmail
              scope: "bulk_email.product_unavailable_reason_statements",
              default: :other)
     end
-
   end
-
 end

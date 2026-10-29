@@ -1,5 +1,4 @@
 class AccountMembershipCloner
-
   PROTECTED_USER_ROLE = AccountUser::ACCOUNT_OWNER
   ALT_FOR_PROTECTED_ROLE = AccountUser::ACCOUNT_ADMINISTRATOR
 
@@ -51,5 +50,4 @@ class AccountMembershipCloner
   def create_log_event(account_user)
     LogEvent.log(account_user, :create, @acting_user)
   end
-
 end

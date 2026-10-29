@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PriceGroup < ApplicationRecord
-
   acts_as_paranoid
 
   belongs_to :facility

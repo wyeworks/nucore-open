@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PricePolicyUpdater
-
   def self.update_all(product, price_policies, start_date, expire_date, params)
     new(product, price_policies, start_date, expire_date, params).update_all
   end
@@ -117,5 +116,4 @@ class PricePolicyUpdater
       attributes << :full_price_cancellation if SettingsHelper.feature_on?("billing.charge_full_price_on_cancellation")
     end
   end
-
 end

@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   # When an order detail is tied to a split account, return a collection of
   # spoofed split order details. The split order details are read-only and
   # should never get persisted.
   class OrderDetailSplitter
-
     attr_accessor :order_detail, :account, :splits, :split_order_details
 
     # By default, for performance reasons, we won't also split timedata
@@ -118,7 +116,5 @@ module SplitAccounts
         split_order_detail.public_send("#{association}=", order_detail.public_send(association))
       end
     end
-
   end
-
 end

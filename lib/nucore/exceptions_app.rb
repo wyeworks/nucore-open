@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Nucore
-
   class ExceptionsApp
     def initialize(app)
       @app = app
@@ -23,5 +22,4 @@ module Nucore
       request.set_header "CONTENT_TYPE", "text/html"
     end
   end
-
 end

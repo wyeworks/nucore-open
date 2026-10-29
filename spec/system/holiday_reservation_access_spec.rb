@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Reserving an instrument on a holiday" do
-
   let(:user) { create(:user) }
   let!(:instrument) { create(:setup_instrument, restrict_holiday_access: true) }
   let(:facility) { instrument.facility }
@@ -55,5 +54,4 @@ RSpec.describe "Reserving an instrument on a holiday" do
       end
     end
   end
-
 end

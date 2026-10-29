@@ -20,7 +20,6 @@ RSpec.describe FileUploadsController do
   end
 
   context "index" do
-
     before :each do
       @method = :get
       @action = :index
@@ -37,7 +36,6 @@ RSpec.describe FileUploadsController do
   end
 
   context "create" do
-
     before(:each) do
       @method = :post
       @action = :create
@@ -71,11 +69,9 @@ RSpec.describe FileUploadsController do
       do_request
       expect(@service.reload.stored_files.collect(&:created_by)).to include(@admin.id)
     end
-
   end
 
   context "upload_sample_results" do
-
     before :each do
       @method = :post
       @action = :upload_sample_results
@@ -113,11 +109,9 @@ RSpec.describe FileUploadsController do
         end
       end
     end
-
   end
 
   context "product_survey" do
-
     before :each do
       @method = :get
       @action = :product_survey
@@ -131,11 +125,9 @@ RSpec.describe FileUploadsController do
       expect(assigns[:survey]).to be_kind_of ExternalService
       expect(assigns[:survey]).to be_new_record
     end
-
   end
 
   context "create_product_survey" do
-
     before :each do
       @method = :post
       @action = :create_product_survey
@@ -168,11 +160,9 @@ RSpec.describe FileUploadsController do
       is_expected.to set_flash
       assert_redirected_to product_survey_path(@authable, @service.parameterize, @service)
     end
-
   end
 
   context "destroy" do
-
     before :each do
       @method = :delete
       @action = :destroy
@@ -209,7 +199,6 @@ RSpec.describe FileUploadsController do
       it_should_allow_all(facility_operators) do
         is_expected.to respond_with :redirect
       end
-
     end
   end
 

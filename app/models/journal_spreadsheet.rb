@@ -3,7 +3,6 @@
 require "spreadsheet"
 
 class JournalSpreadsheet
-
   def self.template_file
     "#{Rails.root}/public/templates/nucore.journal.template.xls"
   end
@@ -48,5 +47,4 @@ class JournalSpreadsheet
 
     output_file
   end
-
 end

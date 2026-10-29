@@ -51,5 +51,4 @@ class UserAccountsController < ApplicationController
     accounts.select(&:owner?).each { |au| au.reload }
     accounts.reject!(&:owner?)
   end
-
 end

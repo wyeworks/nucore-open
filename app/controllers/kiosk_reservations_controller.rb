@@ -7,7 +7,6 @@
 # The user should be prompted to login before action is taken,
 # then logged out and redirected back to the Kiosk View.
 class KioskReservationsController < ApplicationController
-
   skip_before_action :authenticate_user!
   before_action :check_kiosk_enabled, only: :index
   before_action :check_acting_as, only: [:switch_instrument]
@@ -105,5 +104,4 @@ class KioskReservationsController < ApplicationController
 
     raise NUCore::PermissionDenied
   end
-
 end

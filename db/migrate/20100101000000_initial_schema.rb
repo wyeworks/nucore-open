@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InitialSchema < ActiveRecord::Migration[4.2]
-
   def self.up
     # This migration is handling the fact that the initial commits on nucore
     # had a schema.rb that already had many of the migrations (up to 20110216205725)
@@ -126,5 +125,4 @@ class InitialSchema < ActiveRecord::Migration[4.2]
 
     add_foreign_key "schedule_rules", "products", column: "instrument_id"
   end
-
 end

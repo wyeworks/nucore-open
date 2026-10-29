@@ -117,5 +117,4 @@ RSpec.describe Holiday do
       end
     end
   end
-
 end

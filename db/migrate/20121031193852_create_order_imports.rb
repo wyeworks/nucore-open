@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateOrderImports < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :order_imports do |t|
       t.column :upload_file_id, :integer, null: false
@@ -24,5 +23,4 @@ class CreateOrderImports < ActiveRecord::Migration[4.2]
 
     drop_table :order_imports
   end
-
 end

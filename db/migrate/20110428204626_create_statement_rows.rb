@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateStatementRows < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :statement_rows do |t|
       t.column :statement_id, :integer, null: false
@@ -14,5 +13,4 @@ class CreateStatementRows < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :statement_rows
   end
-
 end

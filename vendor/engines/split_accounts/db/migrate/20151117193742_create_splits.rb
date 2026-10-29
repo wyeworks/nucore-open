@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateSplits < ActiveRecord::Migration[4.2]
-
   def up
     create_table :splits do |t|
       t.integer :parent_split_account_id, null: false
@@ -17,5 +16,4 @@ class CreateSplits < ActiveRecord::Migration[4.2]
   def down
     drop_table :splits
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reservations
-
   class TimesPresenter < DelegateClass(Reservation)
-
     def to_s
       return unless present? # some reservations might not exist for the order_detail
       return super unless reserve_start_at && reserve_end_at
@@ -23,7 +21,5 @@ module Reservations
         TimeRange.new(actual_start_at, actual_end_at).to_s
       end
     end
-
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class Ability
-
     include CanCan::Ability
 
     def initialize(user, facility = nil)
@@ -25,7 +23,5 @@ module SangerSequencing
       permission = user.facility_user_permissions.find_by(facility: facility)
       permission&.read_access? && permission.product_edition?
     end
-
   end
-
 end

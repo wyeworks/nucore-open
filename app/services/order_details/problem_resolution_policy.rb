@@ -1,7 +1,5 @@
 module OrderDetails
-
   class ProblemResolutionPolicy
-
     attr_reader :order_detail
 
     def initialize(order_detail)
@@ -27,7 +25,5 @@ module OrderDetails
         order_detail.product.problems_resolvable_by_user?,
       ].all?
     end
-
   end
-
 end

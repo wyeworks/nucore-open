@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class WellPlate
-
     # Mapping is a cell to a sample id
     # e.g. { "A01" => nil, "B01" => 12345 }
     def initialize(mapping, samples: nil)
@@ -29,7 +27,6 @@ module SangerSequencing
     end
 
     class ReservedSample
-
       attr_accessor :id
 
       def reserved?
@@ -43,11 +40,9 @@ module SangerSequencing
       def as_json(_options = nil)
         "reserved"
       end
-
     end
 
     class BlankSample
-
       attr_accessor :id
 
       def reserved?
@@ -65,9 +60,6 @@ module SangerSequencing
       def as_json(_options = nil)
         ""
       end
-
     end
-
   end
-
 end

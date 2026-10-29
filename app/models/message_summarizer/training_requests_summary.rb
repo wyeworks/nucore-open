@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MessageSummarizer::TrainingRequestsSummary < MessageSummarizer::FacilityMessageSummary
-
   private
 
   def allowed?
@@ -23,5 +22,4 @@ class MessageSummarizer::TrainingRequestsSummary < MessageSummarizer::FacilityMe
   def path
     controller.facility_training_requests_path(facility)
   end
-
 end

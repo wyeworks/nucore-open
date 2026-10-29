@@ -5,7 +5,6 @@ require "rails_helper"
 RSpec.describe SamlAuthentication::SessionsController, type: :controller do
   # Utility class to expose some private methods of SamlMessage
   class SamlEncoder < OneLogin::RubySaml::SamlMessage
-
     def self.decode(saml)
       new.send(:decode_raw_saml, saml)
     end
@@ -16,7 +15,6 @@ RSpec.describe SamlAuthentication::SessionsController, type: :controller do
       # Since this is a controller spec we don't have the automatic url-decoding step on params.
       CGI.unescape(encoded)
     end
-
   end
 
   describe "#create" do

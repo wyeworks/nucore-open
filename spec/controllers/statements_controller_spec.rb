@@ -4,7 +4,6 @@ require "rails_helper"
 require "controller_spec_helper"
 
 RSpec.describe StatementsController do
-
   before(:all) do
     create_users
   end

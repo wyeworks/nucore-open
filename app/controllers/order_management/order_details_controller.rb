@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderManagement::OrderDetailsController < ApplicationController
-
   include OrderDetailFileDownload
 
   PRICE_ADJUSTMENT_ATTRIBUTES = %i[actual_cost actual_subsidy price_change_reason].freeze

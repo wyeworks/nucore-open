@@ -102,7 +102,6 @@ RSpec.describe TimedServicePricePoliciesController, :js do
       expect(page).to have_content("$40.00\n$10.00\n= $30.00")
       expect(page).to have_content("$30.00\n$5.00\n= $25.00")
     end
-
   end
 
   describe "with required note enabled", feature_setting: { "pricing.price_policy_requires_note" => true, "pricing.facility_directors_can_manage_price_groups" => true } do

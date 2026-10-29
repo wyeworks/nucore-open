@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class LogEventsController < GlobalSettingsController
-
   include CsvEmailAction
 
   def index
@@ -37,5 +36,4 @@ class LogEventsController < GlobalSettingsController
   def report
     @report ||= report_class.new(**report_args)
   end
-
 end

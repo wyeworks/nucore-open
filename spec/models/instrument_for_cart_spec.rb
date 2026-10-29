@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe InstrumentForCart do
-
   let(:facility) { FactoryBot.create(:setup_facility) }
   let(:instrument) { FactoryBot.create(:instrument, facility: facility, no_relay: true) }
   let(:user) { FactoryBot.create(:user) }
@@ -11,7 +10,6 @@ RSpec.describe InstrumentForCart do
   let(:instrument_for_cart) { InstrumentForCart.new(instrument, user, ability) }
 
   context "#purchasable_by?" do
-
     context "when the acting user is not present" do
       it "sets error_path to the sign-in page" do
         instrument_for_cart.purchasable_by?(nil)
@@ -34,7 +32,5 @@ RSpec.describe InstrumentForCart do
         expect(instrument_for_cart.error_path).to be_blank
       end
     end
-
   end
-
 end

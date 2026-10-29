@@ -33,5 +33,4 @@ RSpec.describe "Adding/Removing Facility Staff" do
       expect(current_path).to eq(facility_facility_users_path(facility))
     end
   end
-
 end

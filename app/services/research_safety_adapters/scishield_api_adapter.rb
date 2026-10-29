@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module ResearchSafetyAdapters
-
   class ScishieldApiAdapter
-
     attr_reader :client
 
     def self.user_attributes
@@ -57,7 +55,5 @@ module ResearchSafetyAdapters
 
       @certification_data
     end
-
   end
-
 end

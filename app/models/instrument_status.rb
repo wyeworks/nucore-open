@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentStatus < ApplicationRecord
-
   belongs_to :instrument, inverse_of: :instrument_status
 
   validates_numericality_of :instrument_id
@@ -78,5 +77,4 @@ class InstrumentStatus < ApplicationRecord
 
     valid_instruments.map(&:id).sort # Sort to avoid deadlocks
   end
-
 end

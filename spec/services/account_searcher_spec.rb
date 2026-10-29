@@ -181,5 +181,4 @@ RSpec.describe AccountSearcher do
       end
     end
   end
-
 end

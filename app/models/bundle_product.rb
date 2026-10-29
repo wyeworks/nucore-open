@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class BundleProduct < ApplicationRecord
-
   belongs_to :bundle, foreign_key: :bundle_product_id
   belongs_to :product
 
@@ -22,5 +21,4 @@ class BundleProduct < ApplicationRecord
   def timed_service_product?
     product.is_a?(TimedService)
   end
-
 end

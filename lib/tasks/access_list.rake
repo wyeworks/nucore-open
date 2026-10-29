@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 namespace :access_list do
-
   # `rake access_list:import[filename.csv]`
   # Row format:
   # Product Name,Schedule Group Name,Username
@@ -35,5 +34,4 @@ namespace :access_list do
       puts "Dry run complete: #{product_users.count} would have been created"
     end
   end
-
 end

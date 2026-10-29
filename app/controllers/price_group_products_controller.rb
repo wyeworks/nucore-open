@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PriceGroupProductsController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -68,5 +67,4 @@ class PriceGroupProductsController < ApplicationController
     end
     @price_group_product = @price_group_products.empty? ? PriceGroupProduct.new : @price_group_products.first # for CanCan authorization
   end
-
 end

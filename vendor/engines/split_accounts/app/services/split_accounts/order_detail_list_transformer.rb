@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   class OrderDetailListTransformer
-
     attr_reader :order_details
 
     def initialize(order_details = [])
@@ -58,7 +56,5 @@ module SplitAccounts
         end
       end
     end
-
   end
-
 end

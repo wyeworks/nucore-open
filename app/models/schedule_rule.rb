@@ -256,5 +256,4 @@ class ScheduleRule < ApplicationRecord
     end
     overlap_mins
   end
-
 end

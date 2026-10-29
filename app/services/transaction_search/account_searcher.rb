@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   ##
   # Filter order details given:
   # - :accounts: accounts ids

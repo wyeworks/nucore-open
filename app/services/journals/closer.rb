@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Journals::Closer
-
   attr_reader :journal, :params
 
   def initialize(journal, params)
@@ -82,5 +81,4 @@ class Journals::Closer
       OrderDetailNoticesUpdateJob.perform_later(order_detail)
     end
   end
-
 end

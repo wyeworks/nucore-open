@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Reports::InstrumentUtilizationReport
-
   attr_accessor :key_length
   def initialize(reservations)
     @reservations = reservations
@@ -41,7 +40,6 @@ class Reports::InstrumentUtilizationReport
   end
 
   class DataRow
-
     include ReportsHelper
     include ActionView::Helpers::NumberHelper
 
@@ -77,7 +75,6 @@ class Reports::InstrumentUtilizationReport
        to_hours(actual_mins, 1),
        format_percent(percent.actual_mins)]
     end
-
   end
 
   private
@@ -85,5 +82,4 @@ class Reports::InstrumentUtilizationReport
   def sorted_data
     @data.sort { |(a, _), (b, _)| a.compact <=> b.compact }
   end
-
 end

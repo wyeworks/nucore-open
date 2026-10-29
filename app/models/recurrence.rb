@@ -3,7 +3,6 @@
 # Recurrence.new(30.days.ago, 30.days.ago + 1.hour).weekdays.take(10).map { |t| [t.start_time, t.end_time] }
 # Recurrence.new(30.days.ago, 30.days.ago + 1.hour, until_time: 10.days.ago).weekdays.map { |t| [t.start_time, t.end_time] }
 class Recurrence
-
   include Enumerable
 
   delegate :each, to: :to_enum
@@ -37,5 +36,4 @@ class Recurrence
   def to_enum
     @schedule.all_occurrences_enumerator
   end
-
 end

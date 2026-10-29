@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddTypeToReservations < ActiveRecord::Migration[4.2]
-
   class Reservation < ActiveRecord::Base
   end
 
@@ -17,5 +16,4 @@ class AddTypeToReservations < ActiveRecord::Migration[4.2]
     remove_column :reservations, :type
     change_column :reservations, :reserve_end_at, :datetime, null: false
   end
-
 end

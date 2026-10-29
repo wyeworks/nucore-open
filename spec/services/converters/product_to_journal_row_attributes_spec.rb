@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Converters::ProductToJournalRowAttributes, type: :service do
-
   let(:converter) { described_class.new(journal, product, total) }
   let(:journal) { build_stubbed(:journal) }
   let(:product) do
@@ -29,7 +28,6 @@ RSpec.describe Converters::ProductToJournalRowAttributes, type: :service do
     let(:returned) { converter.convert }
 
     context "for the journal row attributes" do
-
       it "sets account" do
         expect(returned[:account]).to eq(product.facility_account.revenue_account_for_journal)
       end
@@ -47,5 +45,4 @@ RSpec.describe Converters::ProductToJournalRowAttributes, type: :service do
       end
     end
   end
-
 end

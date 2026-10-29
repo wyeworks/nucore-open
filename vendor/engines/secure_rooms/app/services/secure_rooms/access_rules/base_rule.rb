@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module AccessRules
-
     class BaseRule
-
       attr_reader :user, :card_reader, :params
 
       delegate :secure_room, to: :card_reader
@@ -39,9 +36,6 @@ module SecureRooms
       def deny!(reason, options = {})
         Verdict.new(:deny, reason, @user, @card_reader, options)
       end
-
     end
-
   end
-
 end

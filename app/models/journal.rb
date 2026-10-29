@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class Journal < ApplicationRecord
-
   module Overridable
-
     def create_spreadsheet
       rows = journal_rows
       return false if rows.empty?
@@ -29,7 +27,6 @@ class Journal < ApplicationRecord
     def spreadsheet_filename
       Rails.root.join("tmp/journal.spreadsheet.#{Time.current.strftime('%Y%m%dT%H%M%S')}.xls")
     end
-
   end
 
   include DownloadableFile

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module OrderDetails
-
   class Reconciler
-
     include ActiveModel::Validations
 
     attr_reader :persist_errors, :count, :order_details, :reconciled_at
@@ -115,7 +113,5 @@ module OrderDetails
         errors.add(:reconciled_at, :after_all_journal_dates)
       end
     end
-
   end
-
 end

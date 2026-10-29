@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReservationsController < ApplicationController
-
   customer_tab :all
   skip_before_action :authenticate_user!, only: [:index]
   before_action :check_acting_as, only: [:switch_instrument, :list]

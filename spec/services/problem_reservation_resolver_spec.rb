@@ -54,7 +54,5 @@ RSpec.describe ProblemReservationResolver do
       expect(resolver.resolve(actual_end_at: problem_reservation.actual_start_at)).to be_falsy
       expect(problem_reservation.errors).to be_added(:actual_duration_mins, :zero_duration)
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetails::ParamUpdater
-
   def self.permitted_attributes
     @permitted_attributes ||=
       [
@@ -155,5 +154,4 @@ class OrderDetails::ParamUpdater
       @order_detail.errors.add(field, message)
     end
   end
-
 end

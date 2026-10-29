@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module C2po
-
   C2PO_ACCOUNT_TYPES = %w(CreditCardAccount PurchaseOrderAccount).freeze
 
   C2PO_ACCOUNT_TYPES_APPENDER = proc do
@@ -12,7 +11,6 @@ module C2po
   end.freeze
 
   class Engine < Rails::Engine
-
     config.autoload_paths << File.join(File.dirname(__FILE__), "../lib")
     config.eager_load_paths << File.join(File.dirname(__FILE__), "../lib")
 
@@ -49,7 +47,5 @@ module C2po
         FactoryBot.definition_file_paths << File.expand_path("../../spec/factories", __FILE__)
       end
     end
-
   end
-
 end

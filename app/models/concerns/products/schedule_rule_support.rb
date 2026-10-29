@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Products::ScheduleRuleSupport
-
   extend ActiveSupport::Concern
 
   included do
@@ -32,5 +31,4 @@ module Products::ScheduleRuleSupport
       schedule_rules
     end
   end
-
 end

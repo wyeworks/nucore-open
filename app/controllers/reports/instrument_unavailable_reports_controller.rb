@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class InstrumentUnavailableReportsController < ReportsController
-
     helper_method(:export_csv_report_path)
 
     def self.reports
@@ -45,7 +43,5 @@ module Reports
       @reporter ||=
         InstrumentUnavailableReport.new(current_facility, @date_start, @date_end)
     end
-
   end
-
 end

@@ -123,7 +123,6 @@ RSpec.describe FacilityReservationsController do
       before { maybe_grant_always_sign_in :director }
 
       context "when the reservation is valid" do
-
         it "sets admin_note" do
           do_request
           expect(assigns[:reservation].admin_note).to eq "Testing"
@@ -183,7 +182,6 @@ RSpec.describe FacilityReservationsController do
         do_request
         expect(assigns[:order_details]).to eq([@order_detail_reservation])
       end
-
     end
 
     context "export" do
@@ -273,7 +271,6 @@ RSpec.describe FacilityReservationsController do
         do_request
         expect(response.body).not_to include("relay_checkbox")
       end
-
     end
 
     context "orders" do

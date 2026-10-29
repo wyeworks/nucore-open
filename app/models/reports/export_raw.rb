@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class ExportRaw
-
     include CsvExporter
 
     REQUIRED_ARGS = [:date_start, :date_end, :facility_url_name, :order_status_ids].freeze
@@ -202,7 +200,5 @@ module Reports
         order_detail.canceled_by_user&.full_name(suspended_label: false)
       end
     end
-
   end
-
 end

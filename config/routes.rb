@@ -99,7 +99,6 @@ Rails.application.routes.draw do
         get :list, action: :index
         get :user_search
       end
-
     end
 
     resource "instrument_schedule_position", only: [:edit, :update, :show]

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityAccountOrdersController < ApplicationController
-
   admin_tab :all
 
   before_action { @active_tab = "admin_users" }
@@ -20,5 +19,4 @@ class FacilityAccountOrdersController < ApplicationController
       .order(ordered_at: :desc)
       .paginate(page: params[:page])
   end
-
 end

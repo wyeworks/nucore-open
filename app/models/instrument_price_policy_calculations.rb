@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module InstrumentPricePolicyCalculations
-
   def estimate_cost_and_subsidy_from_order_detail(order_detail)
     reservation = order_detail.reservation
     estimate_cost_and_subsidy reservation.reserve_start_at, reservation.reserve_end_at if reservation
@@ -97,5 +96,4 @@ module InstrumentPricePolicyCalculations
 
     net_cost_for_one * quantity
   end
-
 end

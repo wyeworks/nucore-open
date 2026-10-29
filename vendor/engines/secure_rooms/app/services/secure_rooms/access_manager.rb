@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class AccessManager
-
     PROCESSING_CHAIN = [
       SecureRooms::AccessHandlers::EventHandler,
       SecureRooms::AccessHandlers::OccupancyHandler,
@@ -16,7 +14,5 @@ module SecureRooms
         result || break
       end
     end
-
   end
-
 end

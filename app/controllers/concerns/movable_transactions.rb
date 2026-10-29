@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module MovableTransactions
-
   extend ActiveSupport::Concern
 
   included do
@@ -88,5 +87,4 @@ module MovableTransactions
   def redirect_to_movable_transactions
     raise NotImplementedError
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class ProblemOccupancyMessageSummary < MessageSummarizer::FacilityMessageSummary
-
     private
 
     def allowed?
@@ -21,7 +19,5 @@ module SecureRooms
     def path
       controller.show_problems_facility_occupancies_path(facility)
     end
-
   end
-
 end

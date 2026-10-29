@@ -3,9 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Relay do
-
   context "with relay" do
-
     before :each do
       @facility = create(:setup_facility)
       @facility_account = @facility.facility_accounts.first
@@ -41,7 +39,6 @@ RSpec.describe Relay do
         @relay.ip = "gatekeeper.cns.umass.edu"
         expect(@relay).to be_valid
       end
-
     end
 
     it "should alias host to ip" do
@@ -49,7 +46,6 @@ RSpec.describe Relay do
     end
 
     context "dummy relay" do
-
       before :each do
         @relay.destroy
         expect(@relay).to be_destroyed
@@ -65,9 +61,6 @@ RSpec.describe Relay do
         @relay.deactivate
         expect(@relay.get_status).to eq(false)
       end
-
     end
-
   end
-
 end

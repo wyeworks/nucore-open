@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Statements
-
   class Unreconciler
-
     attr_reader :count, :errors
 
     def initialize(statement, user)
@@ -63,7 +61,5 @@ module Statements
     def distinct_values(field)
       reconciled_order_details.filter_map { |order_detail| order_detail.public_send(field)&.strip.presence }.uniq
     end
-
   end
-
 end

@@ -87,7 +87,6 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
           ),
         ])
       end
-
     end
 
     describe "when a row would mix billing modes on a nonbillable order" do

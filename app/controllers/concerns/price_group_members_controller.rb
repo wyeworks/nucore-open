@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module PriceGroupMembersController
-
   extend ActiveSupport::Concern
 
   included do
@@ -65,5 +64,4 @@ module PriceGroupMembersController
     @price_group = current_facility.price_groups.find(params[:price_group_id])
     @price_group_ability = Ability.new(current_user, @price_group, self)
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PurchaseNotifier < ApplicationMailer
-
   include DateHelper
 
   helper ApplicationHelper
@@ -60,5 +59,4 @@ class PurchaseNotifier < ApplicationMailer
       mime_type: "text/calendar", content: [calendar.to_ical]
     }
   end
-
 end

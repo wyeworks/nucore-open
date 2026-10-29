@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module AccessRules
-
     class AccountSelectionRule < BaseRule
-
       def evaluate
         accounts = user.accounts_for_product(card_reader.secure_room)
         selected_account = accounts.find { |account| account.id == requested_account_id }
@@ -24,9 +21,6 @@ module SecureRooms
       def requested_account_id
         params[:requested_account_id].to_i
       end
-
     end
-
   end
-
 end

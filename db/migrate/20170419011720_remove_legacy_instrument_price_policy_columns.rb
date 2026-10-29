@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RemoveLegacyInstrumentPricePolicyColumns < ActiveRecord::Migration[4.2]
-
   COLUMNS = {
     usage_mins: [:integer, after: :usage_rate],
     reservation_rate: [:decimal, precision: 12, scale: 4, after: :usage_mins],
@@ -40,5 +39,4 @@ class RemoveLegacyInstrumentPricePolicyColumns < ActiveRecord::Migration[4.2]
 
     remove_column :price_policies, :legacy_rates
   end
-
 end

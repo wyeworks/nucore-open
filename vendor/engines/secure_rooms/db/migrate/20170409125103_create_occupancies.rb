@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateOccupancies < ActiveRecord::Migration[4.2]
-
   def change
     create_table :secure_rooms_occupancies do |t|
       t.references :product, null: false, index: true, foreign_key: true
@@ -21,5 +20,4 @@ class CreateOccupancies < ActiveRecord::Migration[4.2]
     add_foreign_key :secure_rooms_occupancies, :secure_rooms_events, column: :entry_event_id
     add_foreign_key :secure_rooms_occupancies, :secure_rooms_events, column: :exit_event_id
   end
-
 end

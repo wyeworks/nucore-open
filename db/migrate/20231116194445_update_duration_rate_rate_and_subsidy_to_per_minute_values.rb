@@ -10,5 +10,4 @@ class UpdateDurationRateRateAndSubsidyToPerMinuteValues < ActiveRecord::Migratio
   def down
     DurationRate.update_all("rate = rate * 60.0, subsidy = subsidy * 60.0")
   end
-
 end

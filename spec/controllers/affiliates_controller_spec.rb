@@ -104,7 +104,6 @@ RSpec.describe AffiliatesController do
 
       it("fails gracefully if given a bad id") { bad_id_test }
     end
-
   end
 
   def bad_id_test

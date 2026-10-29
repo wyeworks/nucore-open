@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateOrderDetails < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :statements do |t|
     end
@@ -44,5 +43,4 @@ class CreateOrderDetails < ActiveRecord::Migration[4.2]
     drop_table :reservations
     drop_table :statements
   end
-
 end

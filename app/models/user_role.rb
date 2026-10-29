@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserRole < ApplicationRecord
-
   acts_as_paranoid
 
   belongs_to :user
@@ -20,7 +19,6 @@ class UserRole < ApplicationRecord
   scope :director_and_admins, -> { where(role: [FACILITY_DIRECTOR, FACILITY_ADMINISTRATOR]) }
 
   module AssociationExtension
-
     def operator?(facility)
       any? { |ur| ur.facility == facility && ur.in?(facility_roles) }
     end
@@ -32,7 +30,6 @@ class UserRole < ApplicationRecord
     def staff?(facility)
       any? { |ur| ur.facility == facility && ur.in?(facility_staff) }
     end
-
   end
 
   def self.account_manager
@@ -117,5 +114,4 @@ class UserRole < ApplicationRecord
       role,
     ].join(" ")
   end
-
 end

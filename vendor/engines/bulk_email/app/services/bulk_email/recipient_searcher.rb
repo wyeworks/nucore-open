@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class RecipientSearcher
-
     include DateHelper
     include ActionView::Helpers::FormTagHelper
 
@@ -132,7 +130,5 @@ module BulkEmail
       return if search_fields[date_field].blank?
       parse_iso_date(search_fields[date_field])
     end
-
   end
-
 end

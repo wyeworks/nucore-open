@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Survey
-
   attr_reader :service, :params
 
   def initialize(service, params)
@@ -27,5 +26,4 @@ class Survey
     esp_id = params[:external_service_passer_id]
     @external_service_passer ||= service.external_service_passers.find(esp_id)
   end
-
 end

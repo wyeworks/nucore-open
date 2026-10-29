@@ -199,5 +199,4 @@ FactoryBot.define do
       allows_training_requests { false }
     end
   end
-
 end

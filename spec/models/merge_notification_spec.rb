@@ -25,7 +25,6 @@ RSpec.describe MergeNotification do
   end
 
   context "scopes" do
-
     before :each do
       @subject2 = create_merge_notification_subject
       MergeNotification.create_for! @user, @subject2
@@ -44,7 +43,5 @@ RSpec.describe MergeNotification do
       expect(notices.size).to eq(1)
       expect(notices.first.subject).to eq(@subject)
     end
-
   end
-
 end

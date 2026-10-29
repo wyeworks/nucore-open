@@ -34,7 +34,6 @@ RSpec.describe ProductUsersController do
       expect(assigns[:product_users]).to be_nil
       expect(flash[:notice]).not_to be_empty
     end
-
   end
 
   describe "create" do

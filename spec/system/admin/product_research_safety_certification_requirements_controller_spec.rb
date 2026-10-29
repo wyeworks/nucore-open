@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Managing Certificates" do
-
   let(:product) { FactoryBot.create(:setup_item) }
   let(:facility) { product.facility }
   let(:staff_member) { FactoryBot.create(:user, :staff, facility: facility) }

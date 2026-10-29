@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class SampleResultFileSaver
-
     include ActiveModel::Validations
 
     FILENAME_FORMAT = /\A(\d+)_.+/
@@ -80,7 +78,5 @@ module SangerSequencing
         errors.add(error.attribute, error.type, message: error.message)
       end
     end
-
   end
-
 end

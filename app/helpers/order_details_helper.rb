@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module OrderDetailsHelper
-
   def can_edit_fulfilled_at?(order_detail, user)
     return true if order_detail.complete? && user.administrator?
 
@@ -14,5 +13,4 @@ module OrderDetailsHelper
       can?(:mark_unrecoverable, OrderDetail) ? ["Unrecoverable", :unrecoverable] : nil,
     ].compact
   end
-
 end

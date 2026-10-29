@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StatementCreator
-
   include DateHelper
 
   attr_accessor :order_detail_ids, :errors, :to_statement, :account_statements, :session_user, :current_facility, :parent_invoice_number, :invoice_date

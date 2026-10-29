@@ -30,7 +30,5 @@ RSpec.describe AdminReservationExpirer do
       expirer.expire!
       expect(never_expires_admin_reservation.reload).not_to be_paranoia_destroyed
     end
-
   end
-
 end

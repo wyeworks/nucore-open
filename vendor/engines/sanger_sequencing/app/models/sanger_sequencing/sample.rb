@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class Sample < ApplicationRecord
-
     self.table_name = "sanger_sequencing_samples"
     belongs_to :submission, inverse_of: :samples
 
@@ -18,7 +16,5 @@ module SangerSequencing
     def results_files
       submission.order_detail.sample_results_files.select { |file| file.name.start_with?("#{id}_") }
     end
-
   end
-
 end

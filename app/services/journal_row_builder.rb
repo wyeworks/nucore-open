@@ -3,7 +3,6 @@
 # Ported from Journal model.
 # We should improve upon this logic.
 class JournalRowBuilder
-
   attr_reader :order_details, :journal, :journal_rows, :errors, :options,
               :product_recharges
 
@@ -162,5 +161,4 @@ class JournalRowBuilder
       OrderDetailNoticesUpdateJob.perform_later(order_detail)
     end
   end
-
 end

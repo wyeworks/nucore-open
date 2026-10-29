@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StatementsController < ApplicationController
-
   customer_tab  :all
   before_action :check_acting_as
   before_action :init_account
@@ -47,5 +46,4 @@ class StatementsController < ApplicationController
     @statement = Statement.find_by!(id: params[:id], account_id: @account.id)
     @facility = @statement.facility
   end
-
 end

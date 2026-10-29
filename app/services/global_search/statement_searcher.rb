@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module GlobalSearch
-
   class StatementSearcher < Base
-
     def template
       "statements"
     end
@@ -39,7 +37,5 @@ module GlobalSearch
         Ability.new(user, statement.account),
       ]
     end
-
   end
-
 end

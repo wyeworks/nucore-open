@@ -5,7 +5,6 @@
 # the UI but not in specs
 ####################################################################
 class Reservations::DurationChangeValidations
-
   include ActiveModel::Validations
   include ActiveModel::Validations::Callbacks
 
@@ -55,5 +54,4 @@ class Reservations::DurationChangeValidations
   def was_reserve_start_at_editable?(reservation)
     Reservation.find(reservation.id).reserve_start_at_editable?
   end
-
 end

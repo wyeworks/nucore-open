@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityAccountsReconciliationController < ApplicationController
-
   include DateHelper
   include OrderDetailReconciliation
 

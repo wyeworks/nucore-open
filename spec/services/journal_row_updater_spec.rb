@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe JournalRowUpdater, type: :service do
-
   let(:updater) { described_class.new(order_detail) }
   let(:order_detail) { build_stubbed(:order_detail, account: account, journal_rows: journal_rows) }
   let(:account) { NufsAccount.new }
@@ -18,5 +17,4 @@ RSpec.describe JournalRowUpdater, type: :service do
       expect(updater.journal_rows).to eq(journal_rows)
     end
   end
-
 end

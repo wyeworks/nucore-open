@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UpcomingOfflineReservationMailer < ApplicationMailer
-
   include OfflineReservationArguments
 
   attr_reader :reservation
@@ -21,5 +20,4 @@ class UpcomingOfflineReservationMailer < ApplicationMailer
     text("views.upcoming_offline_reservation_mailer.subject",
          instrument: reservation.product)
   end
-
 end

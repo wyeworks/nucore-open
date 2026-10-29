@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateValidations < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :validations do |t|
       # Context
@@ -20,5 +19,4 @@ class CreateValidations < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :validations
   end
-
 end

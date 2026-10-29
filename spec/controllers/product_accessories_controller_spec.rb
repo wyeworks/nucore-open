@@ -96,7 +96,6 @@ RSpec.describe ProductAccessoriesController do
       end
 
       context "with quantity-based accessory" do
-
         before do
           expect(instrument.accessories).to be_empty
           do_request

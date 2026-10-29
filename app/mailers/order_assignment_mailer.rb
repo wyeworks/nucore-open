@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderAssignmentMailer < ApplicationMailer
-
   def notify_assigned_user(order_details)
     @order_details = Array(order_details)
     return if @order_details.blank?
@@ -17,5 +16,4 @@ class OrderAssignmentMailer < ApplicationMailer
   def translation_scope
     "views.order_assignment_mailer"
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TrainingRequest < ApplicationRecord
-
   belongs_to :user
   belongs_to :product
 
@@ -17,5 +16,4 @@ class TrainingRequest < ApplicationRecord
   def self.from_product_user(product_user)
     where(user_id: product_user.user_id, product_id: product_user.product_id)
   end
-
 end

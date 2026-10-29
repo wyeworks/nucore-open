@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
 module Nucore
-
   module Database
-
     module WhereIdsIn
-
       extend ActiveSupport::Concern
 
       module ClassMethods
-
         # Oracle has a limit of 1000 items in a WHERE IN clause. Use this in
         # place of `where(id: ids)` when there might be more than 1000 ids.
         # Example: facility.order_details.complete.where_ids_in(ids)
@@ -39,11 +35,7 @@ module Nucore
             find(ids)
           end
         end
-
       end
-
     end
-
   end
-
 end

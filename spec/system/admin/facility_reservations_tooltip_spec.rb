@@ -110,5 +110,4 @@ RSpec.describe "Reservation Tooltips", :js, :skip_time_travel do
       expect(page.body).not_to include("This is an order detail note")
     end
   end
-
 end

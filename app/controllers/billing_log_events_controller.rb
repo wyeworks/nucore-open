@@ -6,5 +6,4 @@ class BillingLogEventsController < GlobalSettingsController
   def admin_tab?
     true
   end
-
 end

@@ -141,5 +141,4 @@ RSpec.describe SurveyResponse do
       expect { survey_response.save! }.to change { order_detail.reload.quantity }
     end
   end
-
 end

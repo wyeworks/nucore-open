@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class Engine < ::Rails::Engine
-
     config.to_prepare do
       NavTab::LinkCollection.send :include, SangerSequencing::LinkCollectionExtension
 
@@ -44,7 +42,5 @@ module SangerSequencing
         sanger_sequencing/submissions.css
       ]
     end
-
   end
-
 end

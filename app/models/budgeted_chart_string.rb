@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class BudgetedChartString < ApplicationRecord
-
   include Nucore::Database::DateHelper
 
   validates_presence_of :fund, :dept, :starts_at, :expires_at
@@ -89,5 +88,4 @@ class BudgetedChartString < ApplicationRecord
       end
     end
   end
-
 end

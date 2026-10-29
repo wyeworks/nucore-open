@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   module Admin
-
     class PrimersController < AdminController
       admin_tab :all
       layout "two_column"
@@ -35,9 +33,6 @@ module SangerSequencing
           sanger_sequencing_primers_attributes: %i[id _destroy name],
         )
       end
-
     end
-
   end
-
 end

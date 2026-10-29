@@ -22,5 +22,4 @@ RSpec.describe RelaySynaccessRevB do
     relay.ip_port = 9100
     expect(relay.get_status).to eq(true)
   end
-
 end

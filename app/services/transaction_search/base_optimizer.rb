@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class BaseOptimizer
-
     attr_reader :order_details
 
     def initialize(order_details)
@@ -13,7 +11,5 @@ module TransactionSearch
     def optimize
       raise NotImplementedError
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountFacilityJoinsForm
-
   include ActiveModel::Model
 
   attr_accessor :account, :current_facility
@@ -32,5 +31,4 @@ class AccountFacilityJoinsForm
 
     errors.add(:facility_ids, :missing_current_facility)
   end
-
 end

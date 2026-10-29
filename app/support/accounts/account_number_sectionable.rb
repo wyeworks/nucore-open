@@ -1,15 +1,12 @@
 # frozen_string_literal: true
 
 module Accounts::AccountNumberSectionable
-
   extend ActiveSupport::Concern
 
   module ClassMethods
-
     def account_number_field_names
       new.account_number_fields.keys
     end
-
   end
 
   def account_number_fields
@@ -47,5 +44,4 @@ module Accounts::AccountNumberSectionable
       account_number_parts&.dig(part) || account_number_fields[part][:default]
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityStatementsController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action { @facility = current_facility }
@@ -160,5 +159,4 @@ class FacilityStatementsController < ApplicationController
   def can_set_invoice_date?
     can?(:set_invoice_date, Statement)
   end
-
 end

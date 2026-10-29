@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   class AbilityExtension
-
     attr_reader :ability
 
     def initialize(ability)
@@ -23,7 +21,5 @@ module SplitAccounts
     def valid_roles
       Settings.split_accounts.create_roles
     end
-
   end
-
 end

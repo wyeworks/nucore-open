@@ -15,7 +15,6 @@ RSpec.describe TimelineHelper do
       eight_pm = Time.zone.now.beginning_of_day.change(hour: 8)
       expect(datetime_left_position(@display_datetime, eight_pm)).to eq("#{(480 * TimelineHelper::MINUTE_TO_PIXEL_RATIO).floor}px")
     end
-
   end
 
   context "datetime_width" do
@@ -66,5 +65,4 @@ RSpec.describe TimelineHelper do
       expect(spans_midnight_class(@reservation_spans_tomorrow.reserve_start_at, @reservation_spans_tomorrow.reserve_end_at)).to eq(["runs_into_tomorrow"])
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProblemNotificationSender
-
   attr_reader :order_details, :current_user, :notification_groups
 
   def initialize(order_details, current_user, notification_groups: [])
@@ -51,5 +50,4 @@ class ProblemNotificationSender
       )
     end
   end
-
 end

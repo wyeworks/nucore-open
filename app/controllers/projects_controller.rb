@@ -132,5 +132,4 @@ class ProjectsController < ApplicationController
       current_facility
     end
   end
-
 end

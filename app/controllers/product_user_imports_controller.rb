@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductUserImportsController < ApplicationController
-
   include ActionView::Helpers::TextHelper
 
   admin_tab     :all
@@ -78,5 +77,4 @@ class ProductUserImportsController < ApplicationController
   def init_product
     @product = current_facility.products.find_by!(url_name: params[:product_id])
   end
-
 end

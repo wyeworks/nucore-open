@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UpdateDecimalPrecision < ActiveRecord::Migration[4.2]
-
   def self.up
     change_column :schedule_rules, :discount_percent,    :decimal, precision: 10, scale: 2, null: false, default: 0
 
@@ -37,5 +36,4 @@ class UpdateDecimalPrecision < ActiveRecord::Migration[4.2]
     change_column :order_details, :total_cost,           :decimal, precision: 8, scale: 2, null: true
     change_column :order_details, :total_subsidy,        :decimal, precision: 8, scale: 2, null: true
   end
-
 end

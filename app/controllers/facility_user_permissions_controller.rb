@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityUserPermissionsController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -75,5 +74,4 @@ class FacilityUserPermissionsController < ApplicationController
   def check_granular_permissions_enabled
     raise ActionController::RoutingError, "Granular permissions are not enabled" unless SettingsHelper.feature_on?(:granular_permissions)
   end
-
 end

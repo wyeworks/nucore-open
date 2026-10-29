@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderResearchSafetyCertificationValidator
-
   include TextHelpers::Translation
 
   attr_reader :order_details
@@ -54,5 +53,4 @@ class OrderResearchSafetyCertificationValidator
     cert_names = missing_certs.map(&:name).join(", ")
     html("missing_html", certificates: cert_names, inline: true)
   end
-
 end

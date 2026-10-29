@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OfflineCancellationMailer < ApplicationMailer
-
   include OfflineReservationArguments
 
   attr_reader :reservation
@@ -20,5 +19,4 @@ class OfflineCancellationMailer < ApplicationMailer
       product: reservation.product,
     )
   end
-
 end

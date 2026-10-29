@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SchemaCleanup < ActiveRecord::Migration[4.2]
-
   def up
     change_column :affiliates, :created_at, :datetime, null: false
     change_column :affiliates, :updated_at, :datetime, null: false
@@ -89,5 +88,4 @@ class SchemaCleanup < ActiveRecord::Migration[4.2]
     change_column :versions, :created_at, :datetime, null: true
     change_column :versions, :updated_at, :datetime, null: true
   end
-
 end

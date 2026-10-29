@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateCardReaders < ActiveRecord::Migration[4.2]
-
   def change
     create_table :secure_rooms_card_readers do |t|
       t.references :product, null: false
@@ -15,5 +14,4 @@ class CreateCardReaders < ActiveRecord::Migration[4.2]
 
     add_index :secure_rooms_card_readers, :product_id
   end
-
 end

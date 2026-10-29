@@ -7,9 +7,7 @@
 # along with the has_many clause in OrderDetail
 
 class VestalVersion < ApplicationRecord
-
   belongs_to :versioned, polymorphic: true
 
   serialize :modifications, coder: JSON
-
 end

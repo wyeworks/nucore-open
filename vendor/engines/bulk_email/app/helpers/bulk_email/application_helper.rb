@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   module ApplicationHelper
-
     include Rails.application.routes.url_helpers
 
     def admin_instrument_send_mail_path(instrument)
@@ -52,7 +50,5 @@ module BulkEmail
         data: { start_date: start_date, end_date: end_date },
       )
     end
-
   end
-
 end

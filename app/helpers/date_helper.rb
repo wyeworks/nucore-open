@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module DateHelper
-
   USA_DATE_FORMAT = %r(\A\d{1,2}/\d{1,2}/\d{4}\z)
 
   def usa_formatted_date?(date_string)
@@ -122,5 +121,4 @@ module DateHelper
   def parse_mmddyyyy_in_current_zone!(date_string)
     DateTime.strptime(date_string, "%m/%d/%Y").to_date.beginning_of_day
   end
-
 end

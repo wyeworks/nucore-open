@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module OrderDetailsCsvExport
-
   extend ActiveSupport::Concern
   include CsvEmailAction
 
@@ -24,5 +23,4 @@ module OrderDetailsCsvExport
     SettingsHelper.feature_off?("pricing.hide_subsidy_from_customers") ||
       can?(:manage_billing, current_facility)
   end
-
 end

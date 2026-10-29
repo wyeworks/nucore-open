@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Reservations
-
   class CalendarPresenter < DelegateClass(Reservation)
     def as_calendar_object(_options = {})
       {
@@ -77,5 +76,4 @@ module Reservations
       end
     end
   end
-
 end

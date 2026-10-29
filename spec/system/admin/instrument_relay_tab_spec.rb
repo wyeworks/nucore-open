@@ -218,11 +218,9 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
 
         expect(instrument.relay).to be_a(RelayDummy)
       end
-
     end
 
     context "from relay to reservation only" do
-
       it "deletes the relay" do
         select "Reservation only", from: "Control mechanism"
 
@@ -239,7 +237,6 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
 
         expect(Relay.exists?(instrument_id: nil)).to be false
       end
-
     end
 
     context "from reservation only to timer" do

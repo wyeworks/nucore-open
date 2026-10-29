@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderPurchaser
-
   attr_reader :acting_as, :order, :order_in_past, :params, :user
   attr_accessor :backdate_to
 
@@ -160,5 +159,4 @@ class OrderPurchaser
       false
     end
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class AbilityExtension
-
     attr_reader :ability
 
     def initialize(ability)
@@ -66,7 +64,5 @@ module SecureRooms
 
       user.facility_user_permissions.find_by(facility: resource)&.order_management?
     end
-
   end
-
 end

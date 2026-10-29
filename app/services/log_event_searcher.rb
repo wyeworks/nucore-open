@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class LogEventSearcher
-
   def self.beginning_of_time
     10.years.ago
   end
@@ -90,5 +89,4 @@ class LogEventSearcher
 
     LogEvent.where(loggable_type: "Statement", loggable_id: statements.unscope(:order))
   end
-
 end

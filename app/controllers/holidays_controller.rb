@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class HolidaysController < ApplicationController
-
   load_and_authorize_resource
 
   layout "two_column"
@@ -43,5 +42,4 @@ class HolidaysController < ApplicationController
   def holiday_params
     params.require(:holiday).permit(:date)
   end
-
 end

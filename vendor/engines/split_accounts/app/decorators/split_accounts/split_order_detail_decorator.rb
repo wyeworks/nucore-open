@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   # This decorator permits us to assign decimals to quantity (rather than ints)
   # when dealing with simulated split order details.
   class SplitOrderDetailDecorator < SimpleDelegator
-
     attr_accessor :quantity_override, :split
     attr_writer :time_data
 
@@ -37,7 +35,5 @@ module SplitAccounts
     def self.composite_primary_key?
       OrderDetail.composite_primary_key?
     end
-
   end
-
 end

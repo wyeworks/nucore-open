@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class AccountPresenter
-
     include ActiveModel::Serializers::JSON
 
     attr_reader :account
@@ -31,7 +29,5 @@ module SecureRooms
     def owner_name
       account.owner_user_name
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddToOrderForm
-
   include ActiveModel::Model
   include TextHelpers::Translation
   include DateHelper
@@ -294,5 +293,4 @@ class AddToOrderForm
       order_detail.ordered_at = order_detail.manual_fulfilled_at_time || Time.current
     end
   end
-
 end

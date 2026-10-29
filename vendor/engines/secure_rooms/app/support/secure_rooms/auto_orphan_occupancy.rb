@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class AutoOrphanOccupancy
-
     def perform
       long_running_occupancies.each do |occupancy|
         occupancy.transaction do
@@ -31,7 +29,5 @@ module SecureRooms
                                               exception: e, information: "Failed orphan occupancy #{occupancy.id}")
       raise ActiveRecord::Rollback
     end
-
   end
-
 end

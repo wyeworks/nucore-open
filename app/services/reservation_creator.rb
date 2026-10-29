@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReservationCreator
-
   attr_reader :order, :order_detail, :params, :error
 
   delegate :merged_order?, :instrument_only_order?, to: :status_q
@@ -167,5 +166,4 @@ class ReservationCreator
     accessorizer = Accessories::Accessorizer.new(@order_detail)
     accessorizer.update_accessorizer_attributes(accessory_params)
   end
-
 end

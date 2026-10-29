@@ -141,7 +141,6 @@ RSpec.describe "All Transactions Search", :js do
           order_detail: statemented_order_detail,
         )
         statemented_order_detail.update_columns(statement_id: statement.id)
-
       end
 
       it "can filter orders" do

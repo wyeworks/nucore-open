@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserPreferencesController < ApplicationController
-
   before_action :check_acting_as
 
   def index
@@ -26,5 +25,4 @@ class UserPreferencesController < ApplicationController
   def user_preference_params
     params.require(:user_preference).permit(:value)
   end
-
 end

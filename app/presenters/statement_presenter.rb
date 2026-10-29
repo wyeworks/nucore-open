@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StatementPresenter < SimpleDelegator
-
   include Rails.application.routes.url_helpers
   include DateHelper
 
@@ -52,5 +51,4 @@ class StatementPresenter < SimpleDelegator
                            []
                          end
   end
-
 end

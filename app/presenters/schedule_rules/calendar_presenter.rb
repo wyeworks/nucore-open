@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ScheduleRules
-
   class CalendarPresenter
     include ActionView::Helpers::NumberHelper
 
@@ -84,7 +83,5 @@ module ScheduleRules
         schedule_rule.product_access_groups.join(", ")
       end
     end
-
   end
-
 end

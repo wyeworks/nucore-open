@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe AccountConfig, type: :model do
-
   let(:instance) { described_class.new }
 
   describe "#account_types" do

@@ -41,5 +41,4 @@ RSpec.describe ResultsFileNotifier do
       expect { notifier.notify }.not_to enqueue_mail
     end
   end
-
 end

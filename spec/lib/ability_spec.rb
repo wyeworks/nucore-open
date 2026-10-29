@@ -1059,7 +1059,6 @@ RSpec.describe Ability do
       it { is_expected.not_to be_allowed_to(:act_as, facility) }
       it { is_expected.not_to be_allowed_to(:send_bulk_emails, facility) }
     end
-
   end
 
   describe "account administrator" do

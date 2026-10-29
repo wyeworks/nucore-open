@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class WellPlatePresenter
-
     include TextHelpers::Translation
 
     attr_reader :well_plate, :plate_mode
@@ -84,7 +82,5 @@ module SangerSequencing
     def well_plate_alternative_csv_format?
       SettingsHelper.feature_on?("products.well_plate_alternative_csv_format")
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreatePriceGroupProducts < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :price_group_products do |t|
       t.integer :price_group_id, null: false
@@ -54,5 +53,4 @@ class CreatePriceGroupProducts < ActiveRecord::Migration[4.2]
 
     drop_table :price_group_products
   end
-
 end

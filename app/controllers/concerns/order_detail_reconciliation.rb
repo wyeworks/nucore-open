@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module OrderDetailReconciliation
-
   extend ActiveSupport::Concern
 
   private
@@ -25,5 +24,4 @@ module OrderDetailReconciliation
       .permit(selected_order_detail_ids.index_with { permitted_order_detail_attributes })
       .to_h
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class CardNumberAbility
-
     include CanCan::Ability
 
     def initialize(user, facility)
@@ -14,7 +12,5 @@ module SecureRooms
       	can :edit, User
       end
     end
-
   end
-
 end

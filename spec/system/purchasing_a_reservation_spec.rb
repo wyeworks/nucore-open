@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Purchasing a reservation" do
-
   let!(:instrument) { FactoryBot.create(:setup_instrument, user_notes_field_mode: "optional") }
   let!(:facility) { instrument.facility }
   let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user) }
@@ -126,11 +125,9 @@ RSpec.describe "Purchasing a reservation" do
 
       expect(page).to have_content("My Reservations")
     end
-
   end
 
   describe "ordering over an administrative hold" do
-
     describe "when you create a reservation" do
       context "admin hold is not expired" do
         let!(:admin_reservation) { create(:admin_reservation, product: instrument, reserve_start_at: 30.minutes.from_now, duration: 1.hour) }

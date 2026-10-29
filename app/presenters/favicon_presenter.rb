@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FaviconPresenter
-
   def self.favicons
     return @favicons if defined?(@favicons)
     pngs = Dir.glob("app/assets/images/favicons/*.png").map do |png|
@@ -13,5 +12,4 @@ class FaviconPresenter
     end
     @favicons = pngs + svgs
   end
-
 end

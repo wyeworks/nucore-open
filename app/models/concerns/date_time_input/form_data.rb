@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module DateTimeInput
-
   class FormData
-
     extend DateHelper
 
     def initialize(time)
@@ -67,7 +65,5 @@ module DateTimeInput
         ampm: ampm,
       }
     end
-
   end
-
 end

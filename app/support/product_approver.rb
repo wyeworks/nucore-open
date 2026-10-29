@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class ProductApprover
-
   class Stats
-
     attr_reader :access_groups_changed, :granted_product_users, :revoked_product_users
 
     def initialize
@@ -39,7 +37,6 @@ class ProductApprover
     def grants_changed?
       granted + revoked > 0
     end
-
   end
 
   def initialize(all_products, user, approver)
@@ -98,5 +95,4 @@ class ProductApprover
   def get_product_user(product)
     product.product_users.find_by(user_id: @user.id)
   end
-
 end

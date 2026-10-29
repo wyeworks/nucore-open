@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AdjustOrder < ActiveRecord::Migration[4.2]
-
   def self.up
     change_table :orders do |t|
       t.change :account_id, :integer, null: true
@@ -17,5 +16,4 @@ class AdjustOrder < ActiveRecord::Migration[4.2]
       t.change :ordered_at, :datetime, null: false
     end
   end
-
 end

@@ -2,7 +2,6 @@
 
 # rubocop:disable-next Metrics/CyclomaticComplexity
 class Ability
-
   include CanCan::Ability
 
   #
@@ -513,5 +512,4 @@ class Ability
   def ability_extender
     @extender ||= AbilityExtensionManager.new(self)
   end
-
 end

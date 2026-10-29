@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class NavTab::LinkCollection
-
   include Rails.application.routes.url_helpers
   include TranslationHelper
 
@@ -206,5 +205,4 @@ class NavTab::LinkCollection
   def home
     NavTab::Link.new(tab: :home, url: root_path)
   end
-
 end

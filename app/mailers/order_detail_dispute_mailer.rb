@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetailDisputeMailer < ApplicationMailer
-
   helper DateHelper
 
   def dispute_resolved(order_detail:, user:)
@@ -18,5 +17,4 @@ class OrderDetailDisputeMailer < ApplicationMailer
   def translation_scope
     "views.order_detail_dispute_mailer.dispute_resolved"
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddFacilityAccountToAccountTransactions < ActiveRecord::Migration[4.2]
-
   def self.up
     change_table :account_transactions do |t|
       t.references :facility_account, null: false
@@ -12,5 +11,4 @@ class AddFacilityAccountToAccountTransactions < ActiveRecord::Migration[4.2]
   def self.down
     remove_column :account_transactions, :facility_account_id
   end
-
 end

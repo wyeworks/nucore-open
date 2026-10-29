@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityReservationsController < ApplicationController
-
   include SortableColumnController
   include NewInprocessController
   include ProblemOrderDetailsController
@@ -236,5 +235,4 @@ class FacilityReservationsController < ApplicationController
   def set_windows
     @reservation_window = ReservationWindow.new(@reservation, current_user)
   end
-
 end

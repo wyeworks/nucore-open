@@ -104,7 +104,6 @@ namespace :order_details do
   desc "remove list of order details"
   task clean_up_orders: :environment do
     class OrderDetailCleaner
-
       def self.remove_order(order_detail)
         order = order_detail.order
         journal = order_detail.journal
@@ -134,7 +133,6 @@ namespace :order_details do
         end
         puts "Done"
       end
-
     end
 
     OrderDetailCleaner.remove_orders("lib/tasks/orders_to_remove.txt")

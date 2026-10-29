@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateResponses < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :responses do |t|
       # Context
@@ -33,5 +32,4 @@ class CreateResponses < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :responses
   end
-
 end

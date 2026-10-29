@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateAffiliates < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :affiliates do |t|
       t.string :name
@@ -14,5 +13,4 @@ class CreateAffiliates < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :affiliates
   end
-
 end

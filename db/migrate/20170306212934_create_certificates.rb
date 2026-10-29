@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateCertificates < ActiveRecord::Migration[4.2]
-
   def change
     create_table :nu_safety_certificates do |t|
       t.string :name, null: false
@@ -15,5 +14,4 @@ class CreateCertificates < ActiveRecord::Migration[4.2]
     add_foreign_key :nu_safety_certificates, :users, column: :deleted_by_id
     add_index :nu_safety_certificates, :deleted_by_id
   end
-
 end

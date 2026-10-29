@@ -37,7 +37,6 @@ RSpec.describe Reservation do
 
       context "and a user reservation exists starting now" do
         context "when the order_detail.state is :new" do
-
           context "when it is purchased (not in the cart)" do
             let!(:reservation) do
               FactoryBot.create(:purchased_reservation,
@@ -673,7 +672,6 @@ RSpec.describe Reservation do
     end
 
     context "moving" do
-
       before(:each) { @morning = Time.zone.parse("#{Date.today} 10:31:00") }
 
       context "when the reserved instrument is online" do
@@ -773,7 +771,6 @@ RSpec.describe Reservation do
     end
 
     context "requires_but_missing_actuals?" do
-
       it "should be true when there is a usage rate but no actuals" do
         # @instrument_pp.update!(:usage_rate => 5)
 
@@ -839,7 +836,6 @@ RSpec.describe Reservation do
 
         expect(@reservation1).not_to be_requires_but_missing_actuals
       end
-
     end
 
     context "ordered_on_behalf_of?" do
@@ -858,7 +854,6 @@ RSpec.describe Reservation do
         @admin_reservation = FactoryBot.create(:reservation, product: @instrument)
         expect(@admin_reservation).not_to be_ordered_on_behalf_of
       end
-
     end
   end
 
@@ -1271,7 +1266,6 @@ RSpec.describe Reservation do
   end
 
   context "basic reservation rules" do
-
     it "should not allow reservations starting before now" do
       @earlier = Date.today - 1
       @reservation = @instrument.reservations.create(reserve_start_date: @earlier, reserve_start_hour: 10,
@@ -1402,7 +1396,6 @@ RSpec.describe Reservation do
           end
         end
       end
-
     end
   end
 
@@ -1662,7 +1655,6 @@ RSpec.describe Reservation do
       end
 
       context "when the reservation end_time is within cutoff_hours from now" do
-
         context "when the reservation is started" do
           it { expect(reservation).to be_extendable }
         end

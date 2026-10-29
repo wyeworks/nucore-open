@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Products
-
   class UserNoteMode
-
     VALID_MODES = %w(hidden optional required).freeze
 
     attr_reader :raw_value
@@ -60,7 +58,6 @@ module Products
     end
 
     class InvalidUserNoteMode
-
       def initialize(raw_value)
         @raw_value = raw_value
       end
@@ -72,9 +69,6 @@ module Products
       def to_s
         to_label
       end
-
     end
-
   end
-
 end

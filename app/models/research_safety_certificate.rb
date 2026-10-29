@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ResearchSafetyCertificate < ApplicationRecord
-
   include ActiveModel::ForbiddenAttributesProtection
 
   # This class was formerly in an NU-specific engine.
@@ -21,7 +20,6 @@ class ResearchSafetyCertificate < ApplicationRecord
   has_many :products, through: :product_certification_requirements
 
   scope :ordered, -> { order(:name) }
-
 end
 
 

@@ -1,5 +1,4 @@
 class InstrumentsDashboardController < ApplicationController
-
   layout "plain", only: :public_dashboard
 
   admin_tab :all
@@ -32,5 +31,4 @@ class InstrumentsDashboardController < ApplicationController
   def authenticate_token
     raise ActiveRecord::RecordNotFound unless current_facility.dashboard_enabled? && params[:token] == current_facility.dashboard_token
   end
-
 end

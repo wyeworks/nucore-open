@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Accessories::ChildUpdater
-
   def initialize(order_detail)
     @order_detail = order_detail
   end
@@ -45,5 +44,4 @@ class Accessories::ChildUpdater
     child.account = @order_detail.account
     decorated_child.update_quantity
   end
-
 end

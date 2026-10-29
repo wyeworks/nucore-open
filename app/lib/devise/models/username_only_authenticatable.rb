@@ -8,26 +8,18 @@ require "devise/strategies/database_authenticatable"
 # This will allow you to log in as any user.
 
 module Devise
-
   module Models
-
     module UsernameOnlyAuthenticatable
-
       def valid_password?(_password)
         true
       end
-
     end
-
   end
 
   module Strategies
-
     class UsernameOnlyAuthenticatable < DatabaseAuthenticatable
     end
-
   end
-
 end
 
 Warden::Strategies.add(:username_only_authenticatable, Devise::Strategies::UsernameOnlyAuthenticatable)

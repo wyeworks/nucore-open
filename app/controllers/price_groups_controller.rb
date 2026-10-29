@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PriceGroupsController < ApplicationController
-
   # TODO: refactor to use PriceGroupMembersController concern, maybe with a new name?
 
   admin_tab     :all
@@ -148,5 +147,4 @@ class PriceGroupsController < ApplicationController
     @price_group = current_facility.price_groups.find(params[:id])
     @price_group_ability = Ability.new(current_user, @price_group, self)
   end
-
 end

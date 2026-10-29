@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReadonlyInput < SimpleForm::Inputs::Base
-
   include DateHelper
   include ActionView::Helpers::SanitizeHelper
 
@@ -38,5 +37,4 @@ class ReadonlyInput < SimpleForm::Inputs::Base
   def process_boolean(value)
     value ? I18n.t("boolean.true") : I18n.t("boolean.false")
   end
-
 end

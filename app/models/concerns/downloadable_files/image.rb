@@ -1,7 +1,5 @@
 module DownloadableFiles
-
   module Image
-
     extend ActiveSupport::Concern
 
     if SettingsHelper.feature_on?(:active_storage_for_images_only)
@@ -37,7 +35,5 @@ module DownloadableFiles
         download_url
       end
     end
-
   end
-
 end

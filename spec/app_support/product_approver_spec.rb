@@ -45,7 +45,6 @@ RSpec.describe ProductApprover do
   end
 
   context "#update_approvals" do
-
     def verify_approvals(approved_products)
       all_products.each do |product|
         if approved_products.include?(product)

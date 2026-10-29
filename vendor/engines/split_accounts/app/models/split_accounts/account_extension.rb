@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   module AccountExtension
-
     extend ActiveSupport::Concern
 
     included do
@@ -41,7 +39,5 @@ module SplitAccounts
     def splits
       []
     end
-
   end
-
 end

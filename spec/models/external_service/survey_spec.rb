@@ -36,5 +36,4 @@ RSpec.describe Survey do
     survey.deactivate
     expect(external_service_passer.reload).to_not be_active
   end
-
 end

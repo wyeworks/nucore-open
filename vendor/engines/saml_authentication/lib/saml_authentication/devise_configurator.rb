@@ -6,9 +6,7 @@ require "saml_authentication/idp_entity_id_reader"
 require "saml_authentication/attribute_map_resolver"
 
 module SamlAuthentication
-
   class DeviseConfigurator
-
     def configure!
       OneLogin::RubySaml::Logging.logger.info "Configuring SAML..."
       Devise.setup do |config|
@@ -83,7 +81,5 @@ module SamlAuthentication
       settings.security[:digest_method] = XMLSecurity::Document::SHA256
       settings.security[:signature_method] = XMLSecurity::Document::RSA_SHA256
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OptionalRequiredNotesField < ActiveRecord::Migration[4.2]
-
   class Product < ActiveRecord::Base
   end
 
@@ -25,5 +24,4 @@ class OptionalRequiredNotesField < ActiveRecord::Migration[4.2]
 
     remove_column :products, :user_notes_field_mode
   end
-
 end

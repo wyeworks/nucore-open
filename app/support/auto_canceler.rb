@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AutoCanceler
-
   AdminStruct = Struct.new(:id)
 
   def cancel_reservations
@@ -49,5 +48,4 @@ class AutoCanceler
     admin.id = 0
     admin
   end
-
 end

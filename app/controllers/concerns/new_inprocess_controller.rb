@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module NewInprocessController
-
   include OrderDetailsCsvExport
 
   def index
@@ -52,5 +51,4 @@ module NewInprocessController
       "payment_source" => "accounts.description",
     }
   end
-
 end

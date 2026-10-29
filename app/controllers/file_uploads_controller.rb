@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FileUploadsController < ApplicationController
-
   admin_tab           :all
   before_action       :check_acting_as
   before_action       :init_current_facility
@@ -186,5 +185,4 @@ class FileUploadsController < ApplicationController
     end
     @file = @product.stored_files.new(file_type: "template")
   end
-
 end

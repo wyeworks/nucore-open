@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountUser < ApplicationRecord
-
   # Don't exclude them by default. Instead, make sure we're using the `active` scope
   acts_as_paranoid without_default_scope: true
 
@@ -104,5 +103,4 @@ class AccountUser < ApplicationRecord
   def to_log_s
     "#{account} / #{user}"
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class DeliveryForm
-
     include ActiveModel::Model
 
     attr_accessor :custom_subject, :custom_message, :custom_reply_to, :recipient_ids, :product_id, :search_criteria
@@ -88,7 +86,5 @@ module BulkEmail
     rescue JSON::ParserError, TypeError
       {}
     end
-
   end
-
 end

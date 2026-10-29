@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe PriceGroup do
-
   let(:facility) { create(:facility) }
   let(:price_group) { create(:price_group, facility:) }
 
@@ -37,7 +36,6 @@ RSpec.describe PriceGroup do
   end
 
   context "can_purchase?" do
-
     before :each do
       @facility_account = create(:facility_account, facility: @facility)
       @product = create(:item, facility: @facility, facility_account: @facility_account)
@@ -51,7 +49,6 @@ RSpec.describe PriceGroup do
       PriceGroupProduct.create!(price_group: @price_group, product: @product)
       expect(@price_group).to be_can_purchase @product
     end
-
   end
 
   describe "to_log_s" do
@@ -266,5 +263,4 @@ RSpec.describe PriceGroup do
       end
     end
   end
-
 end

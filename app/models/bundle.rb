@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Bundle < Product
-
   has_many :bundle_products, foreign_key: :bundle_product_id
   has_many :products, through: :bundle_products
 
@@ -39,5 +38,4 @@ class Bundle < Product
   def requires_account?
     false
   end
-
 end

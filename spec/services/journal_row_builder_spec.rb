@@ -3,13 +3,11 @@
 require "rails_helper"
 
 RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :service do
-
   let(:builder) { described_class.new(journal, order_details) }
   let(:order_details) { build_stubbed_list(:order_detail, 2) }
   let(:journal) { build_stubbed(:journal) }
 
   describe "initialize" do
-
     it "assigns journal" do
       expect(builder.journal).to eq(journal)
     end
@@ -29,11 +27,9 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
     it "assigns empty product_recharges" do
       expect(builder.product_recharges).to eq({})
     end
-
   end
 
   describe "#build" do
-
     let(:journal) do
       build(:journal,
             facility: facility,
@@ -54,7 +50,6 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
     end
 
     context "when using the default builders (one row per order detail, plus one recharge per product)" do
-
       it "builds two journal_rows for the order_detail and one for the product" do
         rows = builder.build.journal_rows
         expect(rows.size).to eq(3)
@@ -73,7 +68,6 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
           ),
         ])
       end
-
     end
 
     context "when using a double entry order detail builder and a null product builder" do
@@ -111,7 +105,6 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
         ])
       end
     end
-
   end
 
   describe "#valid?" do
@@ -129,5 +122,4 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
       end
     end
   end
-
 end

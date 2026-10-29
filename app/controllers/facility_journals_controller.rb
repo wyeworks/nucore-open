@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityJournalsController < ApplicationController
-
   include CSVHelper
   include OrderDetailReconciliation
   include OrderDetailsCsvExport

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserPresenter < SimpleDelegator
-
   include ActionView::Helpers::FormOptionsHelper
 
   delegate :global, to: :user_roles, prefix: true
@@ -35,5 +34,4 @@ class UserPresenter < SimpleDelegator
   def global_roles
     user_roles_global.pluck(:role).uniq
   end
-
 end

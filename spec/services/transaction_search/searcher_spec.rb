@@ -104,7 +104,6 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
         expect(result.order_details).to be_empty
       end
     end
-
   end
 
   describe "can toggle default searchers by key" do
@@ -136,5 +135,4 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       )
     end
   end
-
 end

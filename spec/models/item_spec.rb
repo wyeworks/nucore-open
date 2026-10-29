@@ -62,5 +62,4 @@ RSpec.describe Item do
       end
     end
   end
-
 end

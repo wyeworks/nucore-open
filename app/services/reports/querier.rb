@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class Querier
-
     # This seems to be ideal for NU/Oracle, but we can consider tweaking for MySQL
     BATCH_SIZE = 500
 
@@ -47,7 +45,5 @@ module Reports
     def preloads
       [:product, :order_status, :account] + Array(options[:preloads])
     end
-
   end
-
 end

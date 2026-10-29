@@ -12,7 +12,6 @@ RSpec.describe NextAvailableReservationFinder do
     let(:instrument) { build(:instrument, min_reserve_mins: 0) }
 
     describe "without a next available reservation" do
-
       before do
         expect(instrument).to receive(:next_available_reservation).and_return(nil)
       end

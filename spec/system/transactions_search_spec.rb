@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Transactions Search" do
-
   let(:facility) { create(:setup_facility) }
   let(:item) { create(:setup_item, facility: facility) }
   let(:item2) { create(:setup_item, facility: facility) }
@@ -36,7 +35,6 @@ RSpec.describe "Transactions Search" do
   end
 
   context "in review" do
-
     let!(:orders_in_review) do
       accounts.map do |account|
         [create(:complete_order, product: item, account: account),
@@ -60,5 +58,4 @@ RSpec.describe "Transactions Search" do
       expect(page).not_to have_css("td", text: accounts.last.description, count: 2)
     end
   end
-
 end

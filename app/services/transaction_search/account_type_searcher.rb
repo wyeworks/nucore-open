@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class AccountTypeSearcher < BaseSearcher
-
     def options
       Account.config.creation_enabled_types.map(&:constantize)
     end
@@ -19,7 +17,5 @@ module TransactionSearch
     def label
       Account.human_attribute_name(:type_string)
     end
-
   end
-
 end

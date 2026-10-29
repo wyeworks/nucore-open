@@ -46,5 +46,4 @@ RSpec.describe OrderDetails::DisputeResolvedNotifier do
       )
     end
   end
-
 end

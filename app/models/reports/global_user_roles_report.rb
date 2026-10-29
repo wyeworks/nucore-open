@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class GlobalUserRolesReport
-
     include Reports::CsvExporter
 
     attr_reader :users
@@ -38,7 +36,5 @@ module Reports
     def translation_scope
       "global_user_roles.index"
     end
-
   end
-
 end
