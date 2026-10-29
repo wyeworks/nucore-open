@@ -2,7 +2,7 @@
 
 class AddGlobalBooleanColumnToPriceGroups < ActiveRecord::Migration[7.0]
   def up
-    change_table :price_groups do |t|
+    change_table :price_groups do |_t|
       add_column :price_groups, :global, :boolean, null: false, default: false
       if Nucore::Database.oracle?
         execute <<-SQL
@@ -21,7 +21,7 @@ class AddGlobalBooleanColumnToPriceGroups < ActiveRecord::Migration[7.0]
   end
 
   def down
-    change_table :price_groups do |t|
+    change_table :price_groups do |_t|
       remove_column :price_groups, :global
     end
   end

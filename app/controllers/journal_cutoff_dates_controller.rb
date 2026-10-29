@@ -17,7 +17,7 @@ class JournalCutoffDatesController < ApplicationController
 
   def create
     if @journal_cutoff_date.save
-      redirect_to journal_cutoff_dates_path, notice: t("journal_cutoff_dates.create.success")
+      redirect_to journal_cutoff_dates_path, notice: t(".success")
     else
       render :new
     end
@@ -28,7 +28,7 @@ class JournalCutoffDatesController < ApplicationController
 
   def update
     if @journal_cutoff_date.update(journal_cutoff_date_params)
-      redirect_to journal_cutoff_dates_path, notice: t("journal_cutoff_dates.update.success")
+      redirect_to journal_cutoff_dates_path, notice: t(".success")
     else
       render :edit
     end
@@ -36,7 +36,7 @@ class JournalCutoffDatesController < ApplicationController
 
   def destroy
     @journal_cutoff_date.destroy
-    redirect_to journal_cutoff_dates_path, notice: t("journal_cutoff_dates.destroy.success")
+    redirect_to journal_cutoff_dates_path, notice: t(".success")
   end
 
   private

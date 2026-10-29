@@ -31,7 +31,7 @@ class JournalCutoffDate < ApplicationRecord
                 .year_equal(cutoff_date.year)
 
     # Do not conflict with itself
-    query = query.where("id != ?", id) if persisted?
+    query = query.where.not(id:) if persisted?
 
     if query.exists?
       errors.add(:cutoff_date, :month_taken, month: I18n.l(cutoff_date, format: "%B"))

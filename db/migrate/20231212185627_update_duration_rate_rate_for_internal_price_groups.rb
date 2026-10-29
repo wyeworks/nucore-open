@@ -8,5 +8,6 @@ class UpdateDurationRateRateForInternalPriceGroups < ActiveRecord::Migration[7.0
   end
 
   # no-op
-  def down; end
+  def down
+  end
 end

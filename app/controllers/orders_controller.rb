@@ -91,21 +91,19 @@ class OrdersController < ApplicationController
     end
 
     ## handle a single instrument reservation
-    if items.size == 1 && (quantity = items.first[:quantity].to_i) == 1 # only one od w/ quantity of 1
-      if first_product.respond_to?(:reservations) # and product is reservable
+    if items.size == 1 && (quantity = items.first[:quantity].to_i) == 1 && first_product.respond_to?(:reservations) # and product is reservable
 
-        # make a new cart w/ instrument (unless this order is empty.. then use that one)
-        @order = acting_user.cart(session_user, @order.order_details.empty?)
+      # make a new cart w/ instrument (unless this order is empty.. then use that one)
+      @order = acting_user.cart(session_user, @order.order_details.empty?)
 
-        # wipe out stale account info in temp cart to avoid account related errors
-        @order.account = nil
-        @order.account_id = nil
+      # wipe out stale account info in temp cart to avoid account related errors
+      @order.account = nil
+      @order.account_id = nil
 
-        @order.add(first_product, 1)
+      @order.add(first_product, 1)
 
-        # bypass cart kicking user over to new reservation screen
-        return redirect_to new_order_order_detail_reservation_path(@order.id, @order.order_details.first)
-      end
+      # bypass cart kicking user over to new reservation screen
+      return redirect_to new_order_order_detail_reservation_path(@order.id, @order.order_details.first)
     end
 
     if needs_payment_source_selection?(items)
@@ -128,10 +126,10 @@ class OrdersController < ApplicationController
         rescue NUCore::MixedBillingMode
           @order.errors.add(:base, "#{@product.name} cannot be added to your cart because it's billing mode does not match the current products in the cart; please clear your cart or place a separate order.")
         rescue => e
-          if !@order.has_valid_payment?
-            @order.errors.add(:base, invalid_for_orderer_message)
-          else
+          if @order.has_valid_payment?
             @order.errors.add(:base, "An error was encountered while adding the product #{@product}.")
+          else
+            @order.errors.add(:base, invalid_for_orderer_message)
           end
           Rails.logger.error(e.message)
           Rails.logger.error(e.backtrace.join("\n"))
@@ -162,12 +160,10 @@ class OrdersController < ApplicationController
         end
       end
     # remove single products
+    elsif order_detail.destroy
+      flash[:notice] = "The product has been removed."
     else
-      if order_detail.destroy
-        flash[:notice] = "The product has been removed."
-      else
-        flash[:error] = "An error was encountered while removing the product."
-      end
+      flash[:error] = "An error was encountered while removing the product."
     end
 
     redirect_to params[:redirect_to].presence || order_path(@order)
@@ -297,7 +293,7 @@ class OrdersController < ApplicationController
   def index
     # new or in process
     @order_details = session_user.order_details.item_and_service_orders
-    @available_statuses = %w(pending all)
+    @available_statuses = %w[pending all]
     case params[:status]
     when "pending"
       @order_details = @order_details.new_or_inprocess
@@ -340,13 +336,11 @@ class OrdersController < ApplicationController
     if account
       success = true
       @order.transaction do
-        begin
-          @order.invalidate
-          @order.update!(account_id: account.id)
-        rescue ActiveRecord::ActiveRecordError => e
-          success = false
-          raise ActiveRecord::Rollback
-        end
+        @order.invalidate
+        @order.update!(account_id: account.id)
+      rescue ActiveRecord::ActiveRecordError => e
+        success = false
+        raise ActiveRecord::Rollback
       end
     end
 

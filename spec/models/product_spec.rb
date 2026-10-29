@@ -14,7 +14,7 @@ RSpec.describe Product do
     let(:access_group) { create(:product_access_group, product:) }
     let(:facility) { @facility }
     let!(:product_user) { product.product_users.create(product:, user:, approved_by: user.id) }
-    let(:schedule_rule) { product.schedule_rules.create(attributes_for :schedule_rule) }
+    let(:schedule_rule) { product.schedule_rules.create(attributes_for(:schedule_rule)) }
     let(:user) { create(:user) }
 
     class TestProduct < Product

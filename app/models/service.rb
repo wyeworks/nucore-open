@@ -17,7 +17,7 @@ class Service < Product
 
   # returns true if there is at least 1 active survey; false otherwise
   def active_survey?
-    !active_survey.blank?
+    active_survey.present?
   end
 
   # returns true if there is an active template... false otherwise

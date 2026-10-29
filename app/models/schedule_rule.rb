@@ -85,12 +85,12 @@ class ScheduleRule < ApplicationRecord
       rules.select { |r| r.send("on_#{day.downcase}?") }.each do |rule|
         next if start_time_int == rule.end_time_int || end_time_int == rule.start_time_int # start and end times may touch
 
-        if start_time_int.between?(rule.start_time_int, rule.end_time_int) ||
-           end_time_int.between?(rule.start_time_int, rule.end_time_int) ||
-           (start_time_int < rule.start_time_int && end_time_int > rule.end_time_int)
-          # overlap
-          errors.add(:base, "This rule conflicts with an existing rule on #{day}")
-        end
+        next unless start_time_int.between?(rule.start_time_int, rule.end_time_int) ||
+                    end_time_int.between?(rule.start_time_int, rule.end_time_int) ||
+                    (start_time_int < rule.start_time_int && end_time_int > rule.end_time_int)
+
+        # overlap
+        errors.add(:base, "This rule conflicts with an existing rule on #{day}")
       end
     end
   end
@@ -104,21 +104,21 @@ class ScheduleRule < ApplicationRecord
   end
 
   def start_time_int
-    start_hour * 100 + start_min
+    (start_hour * 100) + start_min
   end
 
   # multiplying by 100 means 8:00 is 800 -- it's time on a clock face minus the formatting and meridian
 
   def end_time_int
-    end_hour * 100 + end_min
+    (end_hour * 100) + end_min
   end
 
   def start_time
-    "#{start_hour}:#{sprintf '%02d', start_min}"
+    "#{start_hour}:#{format '%02d', start_min}"
   end
 
   def end_time
-    "#{end_hour}:#{sprintf '%02d', end_min}"
+    "#{end_hour}:#{format '%02d', end_min}"
   end
 
   def time_range
@@ -138,7 +138,7 @@ class ScheduleRule < ApplicationRecord
   def cover?(dt)
     return false unless on_day?(dt)
 
-    dt_int = dt.hour * 100 + dt.min
+    dt_int = (dt.hour * 100) + dt.min
     dt_int >= start_time_int && dt_int <= end_time_int
   end
 
@@ -255,7 +255,7 @@ class ScheduleRule < ApplicationRecord
     overlap_mins = 0
     # TODO: rewrite to be more efficient; don't iterate over every minute
     while start_at < end_at
-      if start_at.hour * 100 + start_at.min >= start_time_int && start_at.hour * 100 + start_at.min < end_time_int && on_day?(start_at)
+      if (start_at.hour * 100) + start_at.min >= start_time_int && (start_at.hour * 100) + start_at.min < end_time_int && on_day?(start_at)
         overlap_mins += 1
       end
       start_at += 60

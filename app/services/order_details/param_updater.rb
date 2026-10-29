@@ -17,19 +17,21 @@ class OrderDetails::ParamUpdater
         :unrecoverable_note,
         :deposit_number,
         :reference_id,
-        reservation: %i[
-          reserve_start_date
-          reserve_start_hour
-          reserve_start_min
-          reserve_start_meridian
-          duration_mins
-          duration_days
-          actual_start_date
-          actual_start_hour
-          actual_start_min
-          actual_start_meridian
-          actual_duration_mins
-        ],
+        {
+          reservation: %i[
+            reserve_start_date
+            reserve_start_hour
+            reserve_start_min
+            reserve_start_meridian
+            duration_mins
+            duration_days
+            actual_start_date
+            actual_start_hour
+            actual_start_min
+            actual_start_meridian
+            actual_duration_mins
+          ],
+        },
       ]
   end
 
@@ -41,7 +43,7 @@ class OrderDetails::ParamUpdater
 
   def assign_attributes(params)
     params = params.dup
-    params.delete(:quantity) unless params[:quantity].to_s =~ /\A\d+\z/
+    params.delete(:quantity) unless /\A\d+\z/.match?(params[:quantity].to_s)
 
     assign_self_and_reservation_attributes(permitted_params(params))
     # As of Rails 5.2.4, if nothing changes on the association (e.g. submitting the
@@ -125,8 +127,8 @@ class OrderDetails::ParamUpdater
     reservation_attrs = params.delete :reservation
     @order_detail.assign_attributes(params)
 
-    if @order_detail.time_data.is_a?(Reservation)
-      @order_detail.reservation.assign_times_from_params reservation_attrs if reservation_attrs
+    if @order_detail.time_data.is_a?(Reservation) && reservation_attrs
+      @order_detail.reservation.assign_times_from_params reservation_attrs
     end
   end
 

@@ -28,7 +28,7 @@ if Nucore::Database.oracle?
   end
 
   RSpec::Matchers.define :contain_string_in_sql do |expected|
-    expected = expected.tr("\`", "\"").upcase
+    expected = expected.tr("`", "\"").upcase
     match do |actual|
       actual.to_sql.upcase.include? expected
     end

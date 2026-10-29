@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 class AdminReservation < Reservation
-  CATEGORIES = %w(
+  CATEGORIES = %w[
     maintenance
     training
     reserved_for_staff
     instrument_unavailable
     other
-  ).freeze
+  ].freeze
 
   belongs_to :product
 

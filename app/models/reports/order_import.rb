@@ -15,10 +15,9 @@ class Reports::OrderImport
   end
 
   def text_content
-    case
-    when @result.blank?
+    if @result.blank?
       I18n.t("reports.order_import.blank")
-    when @result.failed?
+    elsif @result.failed?
       I18n.t(failure_message_key, **@result.to_h)
     else
       I18n.t("reports.order_import.success", **@result.to_h)

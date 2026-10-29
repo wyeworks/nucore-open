@@ -12,12 +12,14 @@ RSpec.describe OrderManagement::OrderDetailsController do
       reserve_start_meridian: reserve_start_at.strftime("%p"),
     }
 
-    params.merge!(
-      actual_start_date: actual_start_at.to_date.iso8601,
-      actual_start_hour: actual_start_at.strftime("%l"),
-      actual_start_min: actual_start_at.strftime("%M"),
-      actual_start_meridian: actual_start_at.strftime("%p"),
-    ) if actual_start_at
+    if actual_start_at
+      params.merge!(
+        actual_start_date: actual_start_at.to_date.iso8601,
+        actual_start_hour: actual_start_at.strftime("%l"),
+        actual_start_min: actual_start_at.strftime("%M"),
+        actual_start_meridian: actual_start_at.strftime("%p"),
+      )
+    end
 
     params
   end

@@ -490,7 +490,7 @@ RSpec.describe FacilityReservationsController do
     before(:each) do
       @method = :get
       @action = :tab_counts
-      @params.merge!(tabs: %w(new_or_in_process_orders problem_order_details))
+      @params.merge!(tabs: %w[new_or_in_process_orders problem_order_details])
     end
 
     it_should_allow_operators_only

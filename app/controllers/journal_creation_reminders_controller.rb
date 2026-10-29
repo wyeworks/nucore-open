@@ -17,7 +17,7 @@ class JournalCreationRemindersController < ApplicationController
 
   def create
     if @journal_creation_reminder.save
-      redirect_to journal_creation_reminders_path, notice: t("journal_creation_reminders.create.success")
+      redirect_to journal_creation_reminders_path, notice: t(".success")
     else
       render :new
     end
@@ -28,7 +28,7 @@ class JournalCreationRemindersController < ApplicationController
 
   def update
     if @journal_creation_reminder.update(journal_creation_reminder_params)
-      redirect_to journal_creation_reminders_path, notice: t("journal_creation_reminders.update.success")
+      redirect_to journal_creation_reminders_path, notice: t(".success")
     else
       render :edit
     end
@@ -36,7 +36,7 @@ class JournalCreationRemindersController < ApplicationController
 
   def destroy
     @journal_creation_reminder.destroy
-    redirect_to journal_creation_reminders_path, notice: t("journal_creation_reminders.destroy.success")
+    redirect_to journal_creation_reminders_path, notice: t(".success")
   end
 
   private

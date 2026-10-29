@@ -690,14 +690,14 @@ RSpec.describe OrdersController do
         switch_to @staff
         @params[:order_date] = 1.day.ago.to_date.iso8601
         do_request
-        expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date yesterday)
+        expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date(yesterday))
       end
 
       it "sets ordered_at to now if not acting_as" do
         maybe_grant_always_sign_in :director
         @params[:order_date] = 1.day.ago.to_date.iso8601
         do_request
-        expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date Time.current)
+        expect(assigns[:order].order_details.map(&:ordered_at)).to all(match_date(Time.current))
       end
 
       it "does not set ordered_at when quantities change" do
@@ -1114,7 +1114,7 @@ RSpec.describe OrdersController do
         do_request
 
         expect(response).to redirect_to "/orders/#{@order.id}"
-        is_expected.to set_flash.to /removed/
+        is_expected.to set_flash.to(/removed/)
 
         expect(@order.reload.order_details.size).to eq(0)
         expect(@order.reload.account).to eq(nil)
@@ -1129,7 +1129,7 @@ RSpec.describe OrdersController do
       do_request
 
       expect(response).to redirect_to overridden_redirect
-      is_expected.to set_flash.to /removed/
+      is_expected.to set_flash.to(/removed/)
     end
 
     context "when removing last item from a merge order" do
@@ -1143,7 +1143,7 @@ RSpec.describe OrdersController do
 
         expect { do_request }.not_to raise_error
         expect(response).to redirect_to "/orders/#{@order.id}"
-        is_expected.to set_flash.to /removed/
+        is_expected.to set_flash.to(/removed/)
 
         expect { @order.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
@@ -1271,7 +1271,7 @@ RSpec.describe OrdersController do
     it_should_require_login
 
     it_should_allow :staff, "to clear the cart and redirect back to cart" do
-      @order.order_details.size == 0
+      @order.order_details.size
       assert_redirected_to order_path(@order)
     end
   end

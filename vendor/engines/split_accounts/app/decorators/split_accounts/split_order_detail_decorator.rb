@@ -21,7 +21,7 @@ module SplitAccounts
 
     # Let it pretend to be a real OrderDetail
     def is_a?(klass)
-      __getobj__.class.object_id == klass.object_id
+      __getobj__.class.equal?(klass)
     end
 
     def self.primary_key

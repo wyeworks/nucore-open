@@ -31,7 +31,7 @@ class LogEventSearcher
   end
 
   def dates
-    [(start_date || LogEventSearcher.beginning_of_time), (end_date || Date.current)]
+    [start_date || LogEventSearcher.beginning_of_time, end_date || Date.current]
   end
 
   def filter_date

@@ -114,7 +114,10 @@ class Order < ApplicationRecord
   def account_is_active?
     # For importing, we check if the account was active/valid at time of fulfillment
     if @import_fulfillment_date.present?
-      order_details.all? { |od| f = od.fulfilled_at || @import_fulfillment_date; f < account.expires_at }
+      order_details.all? do |od|
+        f = od.fulfilled_at || @import_fulfillment_date
+        f < account.expires_at
+      end
     else
       account.active?
     end
@@ -161,7 +164,7 @@ class Order < ApplicationRecord
   ## TODO: this doesn't pass errors up to the caller.. does it need to?
   def update_details(order_detail_updates)
     order_details_to_update = order_detail_updates.keys.map(&:to_i)
-    selected_order_details = self.order_details.select { |od| od.id.in?(order_details_to_update) }
+    selected_order_details = order_details.select { |od| od.id.in?(order_details_to_update) }
     selected_order_details.each do |order_detail|
       updates = order_detail_updates[order_detail.id]
       # reset quantity (if present)

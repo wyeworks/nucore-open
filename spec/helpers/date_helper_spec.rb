@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe DateHelper do
   describe "#parse_usa_import_date" do
     context "with bad dates" do
-      %w(05012012 garbage 11/31/2012 5-Apr-13 31/1/2014 2014-Jan-1 3/3/13).each do |date_string|
+      %w[05012012 garbage 11/31/2012 5-Apr-13 31/1/2014 2014-Jan-1 3/3/13].each do |date_string|
         it "considers '#{date_string}' a bad date" do
           expect(parse_usa_import_date(date_string)).to be_nil
         end
@@ -13,7 +13,7 @@ RSpec.describe DateHelper do
     end
 
     context "with valid dates" do
-      %w(1/1/2014 3/31/2014 10/2/2014 12/31/2014).each do |date_string|
+      %w[1/1/2014 3/31/2014 10/2/2014 12/31/2014].each do |date_string|
         it "considers '#{date_string}' a valid date" do
           expect(parse_usa_import_date(date_string)).to be_present
         end

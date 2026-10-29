@@ -15,7 +15,7 @@ module BulkEmail
     end
 
     def self.user_types
-      %i(customers authorized_users account_owners problem_reservation).tap do |user_types|
+      %i[customers authorized_users account_owners problem_reservation].tap do |user_types|
         if SettingsHelper.feature_on?(:training_requests)
           user_types.insert(2, :training_requested)
         end

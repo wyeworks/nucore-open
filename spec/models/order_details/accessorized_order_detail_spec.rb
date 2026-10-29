@@ -179,12 +179,12 @@ RSpec.describe OrderDetail do
 
     # Ensure
     it "builds the details in the right order" do
-      expect(order_details.order(:id).pluck(:note)).to eq(%w(original interim accessory))
+      expect(order_details.order(:id).pluck(:note)).to eq(%w[original interim accessory])
       expect(order_details.order(:id).pluck(:parent_order_detail_id)).to eq([nil, nil, order_detail.id])
     end
 
     it "puts the parent together with its child with the parent before the child" do
-      expect(order_details.ordered_by_parents.pluck(:note)).to eq(%w(original accessory interim))
+      expect(order_details.ordered_by_parents.pluck(:note)).to eq(%w[original accessory interim])
     end
   end
 end

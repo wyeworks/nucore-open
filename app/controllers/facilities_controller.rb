@@ -47,11 +47,11 @@ class FacilitiesController < ApplicationController
     @active_tab = SettingsHelper.feature_on?("style_display.use_manage") ? "use" : "home"
 
     @product_scope = Product.alphabetized
-    if acting_as? || session_user.try(:operator_of?, current_facility)
-      @product_scope = @product_scope.not_archived
-    else
-      @product_scope = @product_scope.active # Active also excludes hidden
-    end
+    @product_scope = if acting_as? || session_user.try(:operator_of?, current_facility)
+                       @product_scope.not_archived
+                     else
+                       @product_scope.active # Active also excludes hidden
+                     end
 
     @product_display_groups = current_facility.product_display_groups.sorted
     @product_display_groups = @product_display_groups.to_a + ProductDisplayGroup.fake_groups_by_type(current_facility.products.without_display_group)
@@ -190,7 +190,7 @@ class FacilitiesController < ApplicationController
   end
 
   cattr_accessor(:permitted_facility_params) do
-    %i(
+    %i[
       abbreviation
       accepts_multi_add
       address
@@ -211,7 +211,7 @@ class FacilitiesController < ApplicationController
       payment_url
       file
       remove_file
-    )
+    ]
   end
 
   def initialize_chart_string_reassignment_form

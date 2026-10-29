@@ -13,7 +13,7 @@ module ActiveStorageFile
       assign_first = new_attributes.extract!(:name, :file_type)
 
       super(assign_first) unless assign_first.empty?
-      super(new_attributes)
+      super
     end
   end
 
@@ -59,7 +59,7 @@ module ActiveStorageFile
   end
 
   def file=(attachable)
-    attachable_is_a_file = (attachable.is_a?(StringIO) || attachable.is_a?(File))
+    attachable_is_a_file = attachable.is_a?(StringIO) || attachable.is_a?(File)
 
     if attachable_is_a_file
       filename = try(:name) || "untitled"

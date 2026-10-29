@@ -6,8 +6,7 @@ class AddToOrderForm
   include DateHelper
 
   attr_reader :original_order, :current_facility
-  attr_accessor :quantity, :product_id, :order_status_id, :note, :duration, :created_by, :fulfilled_at, :account_id, :reference_id, :facility_id
-  attr_accessor :error_message
+  attr_accessor :quantity, :product_id, :order_status_id, :note, :duration, :created_by, :fulfilled_at, :account_id, :reference_id, :facility_id, :error_message
 
   validates :account_id, presence: true
   validates :account, presence: true, if: :account_id

@@ -18,8 +18,8 @@ module Reservations::Validations
              unless: :admin?
 
     validates_each [:actual_start_at, :actual_end_at] do |record, attr, value|
-      if value
-        record.errors.add(attr.to_s, "cannot be in the future") if Time.zone.now < value
+      if value && (Time.zone.now < value)
+        record.errors.add(attr.to_s, "cannot be in the future")
       end
     end
 
@@ -42,11 +42,11 @@ module Reservations::Validations
   # Validation Methods
 
   def starts_before_ends
-    if reserve_start_at && reserve_end_at
-      errors.add(:duration_mins, :zero_duration) if reserve_end_at <= reserve_start_at
+    if reserve_start_at && reserve_end_at && (reserve_end_at <= reserve_start_at)
+      errors.add(:duration_mins, :zero_duration)
     end
-    if actual_start_at && actual_end_at
-      errors.add(:actual_duration_mins, :zero_duration) if actual_end_at <= actual_start_at
+    if actual_start_at && actual_end_at && (actual_end_at <= actual_start_at)
+      errors.add(:actual_duration_mins, :zero_duration)
     end
   end
 
@@ -204,8 +204,8 @@ module Reservations::Validations
   end
 
   def in_the_future
-    if reserve_start_at_changed?
-      errors.add(:reserve_start_at, :in_past) unless in_the_future?
+    if reserve_start_at_changed? && !in_the_future?
+      errors.add(:reserve_start_at, :in_past)
     end
   end
 

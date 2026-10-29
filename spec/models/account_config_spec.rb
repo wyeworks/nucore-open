@@ -14,7 +14,7 @@ RSpec.describe AccountConfig, type: :model do
 
   describe "#global_account_types" do
     it "returns difference of account_types and facility_account_types" do
-      allow(instance).to receive(:account_types).and_return %w(FooAccount BarAccount)
+      allow(instance).to receive(:account_types).and_return %w[FooAccount BarAccount]
       allow(instance).to receive(:facility_account_types).and_return ["FooAccount"]
       expect(instance.global_account_types).to contain_exactly("BarAccount")
     end
@@ -72,7 +72,7 @@ RSpec.describe AccountConfig, type: :model do
   describe "#multiple_account_types?" do
     context "when more than one account_types" do
       it "returns true" do
-        allow(instance).to receive(:account_types).and_return(%w(FooAccount BarAccount))
+        allow(instance).to receive(:account_types).and_return(%w[FooAccount BarAccount])
         expect(instance.multiple_account_types?).to eq(true)
       end
     end

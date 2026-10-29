@@ -65,10 +65,10 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  config.bucketeer_aws_access_key_id = ENV["BUCKETEER_AWS_ACCESS_KEY_ID"]
-  config.bucketeer_aws_secret_access_key = ENV["BUCKETEER_AWS_SECRET_ACCESS_KEY"]
-  config.bucketeer_aws_region = ENV["BUCKETEER_AWS_REGION"]
-  config.aws_bucket_name = ENV["BUCKETEER_BUCKET_NAME"]
+  config.bucketeer_aws_access_key_id = ENV.fetch("BUCKETEER_AWS_ACCESS_KEY_ID", nil)
+  config.bucketeer_aws_secret_access_key = ENV.fetch("BUCKETEER_AWS_SECRET_ACCESS_KEY", nil)
+  config.bucketeer_aws_region = ENV.fetch("BUCKETEER_AWS_REGION", nil)
+  config.aws_bucket_name = ENV.fetch("BUCKETEER_BUCKET_NAME", nil)
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
@@ -96,7 +96,7 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'

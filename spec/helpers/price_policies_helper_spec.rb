@@ -13,7 +13,7 @@ RSpec.describe PricePoliciesHelper do
     context "when the instrument is reservation-only" do
       before { allow(instrument).to receive(:reservation_only?).and_return(true) }
 
-      it { expect(options).to eq([%w(Reservation reservation)]) }
+      it { expect(options).to eq([%w[Reservation reservation]]) }
     end
 
     context "when the instrument is not reservation-only" do
@@ -21,7 +21,7 @@ RSpec.describe PricePoliciesHelper do
 
       it do
         expect(options).to match_array([
-                                         %w(Overage overage), %w(Reservation reservation), %w(Usage usage)
+                                         %w[Overage overage], %w[Reservation reservation], %w[Usage usage]
                                        ])
       end
     end

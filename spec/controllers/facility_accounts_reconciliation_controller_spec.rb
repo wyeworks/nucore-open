@@ -121,7 +121,7 @@ RSpec.describe FacilityAccountsReconciliationController do
 
         it "has a flash message" do
           perform
-          expect(flash[:error]).to include("must be after all journal or #{I18n.t("statement_downcase")} dates")
+          expect(flash[:error]).to include("must be after all journal or #{I18n.t('statement_downcase')} dates")
         end
       end
 
@@ -304,7 +304,7 @@ RSpec.describe FacilityAccountsReconciliationController do
       it "reconciles every order detail on the invoice" do
         expect { perform }.to change {
           order_details.map { |order_detail| order_detail.reload.state }
-        }.to(%w(reconciled reconciled))
+        }.to(%w[reconciled reconciled])
       end
 
       it "applies the note and transaction id to every order detail" do

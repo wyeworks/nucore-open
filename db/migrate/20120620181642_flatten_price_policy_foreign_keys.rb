@@ -18,7 +18,7 @@ class FlattenPricePolicyForeignKeys < ActiveRecord::Migration[4.2]
     add_column :price_policies, :service_id, :integer, after: :type
     add_column :price_policies, :instrument_id, :integer, after: :type
     PricePolicy.all.each do |pp|
-      key = pp.type.gsub(/PricePolicy/, "").downcase
+      key = pp.type.gsub("PricePolicy", "").downcase
       pp.send(:"#{key}_id=", pp.product_id)
       pp.save false
     end

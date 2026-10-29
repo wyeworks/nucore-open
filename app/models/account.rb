@@ -145,9 +145,7 @@ class Account < ApplicationRecord
   end
 
   # A collection of users to be notified when transaction notifications are sent.
-  def administrators
-    account_users.administrators
-  end
+  delegate :administrators, to: :account_users
 
   # If desired, override this in a subclass with the `User` who auto-disputes
   # transactions of the given account type. For example, this happens with
@@ -188,7 +186,7 @@ class Account < ApplicationRecord
   end
 
   def suspended?
-    !suspended_at.blank?
+    suspended_at.present?
   end
 
   def expired?

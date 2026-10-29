@@ -23,8 +23,6 @@ class UserFinder
   def self.search(search_term, limit: nil, actives_only: false)
     if search_term.present?
       new(search_term, actives_only:, limit:).result
-    else
-      nil
     end
   end
 

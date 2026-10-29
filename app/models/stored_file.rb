@@ -7,9 +7,9 @@ class StoredFile < ApplicationRecord
   belongs_to              :creator, class_name: "User", foreign_key: "created_by"
   belongs_to              :order_detail, optional: true
   validates_presence_of   :name, :file_type, :created_by
-  validates_presence_of   :product_id,      if: ->(o) { o.file_type == "info" || o.file_type == "template" }
-  validates_presence_of   :order_detail_id, if: ->(o) { o.file_type == "template_result" || o.file_type == "sample_result" }
-  validates_inclusion_of  :file_type, in: %w(info user_info template template_result sample_result import_error import_upload)
+  validates_presence_of   :product_id,      if: ->(o) { ["info", "template"].include?(o.file_type) }
+  validates_presence_of   :order_detail_id, if: ->(o) { ["template_result", "sample_result"].include?(o.file_type) }
+  validates_inclusion_of  :file_type, in: %w[info user_info template template_result sample_result import_error import_upload]
   validates :name, uniqueness: { scope: :order_detail_id, case_sensitive: false }, if: :order_detail_id?
   if SettingsHelper.feature_on?(:active_storage)
     validates :file, size: { less_than: 10.megabytes, message: "must be less than 10 MB" }, if: ->(o) { o.file_type == "user_info" }

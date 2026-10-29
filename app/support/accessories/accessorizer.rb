@@ -44,7 +44,7 @@ class Accessories::Accessorizer
   end
 
   def update_order_detail(od, params)
-    if %w(true 1).include? params[:enabled]
+    if %w[true 1].include? params[:enabled]
       assign_attributes_and_save(od, params)
     else
       od.destroy

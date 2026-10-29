@@ -4,7 +4,7 @@ require "csv"
 
 class OrderImport < ApplicationRecord
   belongs_to :facility, optional: true
-  belongs_to :upload_file, class_name: "StoredFile", dependent: :destroy, required: true
+  belongs_to :upload_file, class_name: "StoredFile", dependent: :destroy, optional: false
   belongs_to :error_file, class_name: "StoredFile", dependent: :destroy, optional: true
   belongs_to :creator, class_name: "User", foreign_key: :created_by
 
@@ -280,9 +280,7 @@ class OrderImport < ApplicationRecord
       @orders = {}
     end
 
-    def []=(order_key, order_id)
-      @orders[order_key] = order_id
-    end
+    delegate :[]=, to: :@orders
 
     def [](order_key)
       Order.find(@orders[order_key]) if @orders[order_key].present?

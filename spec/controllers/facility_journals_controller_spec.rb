@@ -270,7 +270,7 @@ RSpec.describe FacilityJournalsController do
 
         it "has an error" do
           do_request
-          expect(assigns(:journal).errors.full_messages.join).to match /#{error_message}/i
+          expect(assigns(:journal).errors.full_messages.join).to match(/#{error_message}/i)
         end
       end
 

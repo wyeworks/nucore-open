@@ -3,9 +3,9 @@
 FactoryBot.define do
   factory :schedule_rule do
     start_hour { 9 }
-    start_min { 00 }
+    start_min { 0o0 }
     end_hour { 17 }
-    end_min { 00 }
+    end_min { 0o0 }
     on_sun { true }
     on_mon { true }
     on_tue { true }

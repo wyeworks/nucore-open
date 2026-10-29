@@ -9,9 +9,9 @@ class Holiday < ApplicationRecord
   def self.allow_access?(user, product, start_date)
     return true if user.blank?
     return true if product.blank?
-    return true if !product.restrict_holiday_access?
+    return true unless product.restrict_holiday_access?
     return true if start_date.blank?
-    return true if self.on(start_date.to_date).blank?
+    return true if on(start_date.to_date).blank?
     return true if user.can_override_restrictions?(product)
     return true if product.access_group_for_user(user)&.allow_holiday_access
 

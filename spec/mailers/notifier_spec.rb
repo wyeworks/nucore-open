@@ -22,7 +22,7 @@ RSpec.describe Notifier do
 
     let(:account) { create(:purchase_order_account, :with_account_owner) }
     let(:statement) { create(:statement, facility:, account:) }
-    let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
+    let(:email_html) { email.html_part.to_s.gsub("&nbsp;", " ") } # Markdown changes some whitespace to &nbsp;
     let(:email_text) { email.text_part.to_s }
 
     let(:action) do
@@ -73,7 +73,7 @@ RSpec.describe Notifier do
     let(:accounts) do
       create_list(:setup_account, 2, owner: user, facility:)
     end
-    let(:email_html) { email.html_part.to_s.gsub(/&nbsp;/, " ") } # Markdown changes some whitespace to &nbsp;
+    let(:email_html) { email.html_part.to_s.gsub("&nbsp;", " ") } # Markdown changes some whitespace to &nbsp;
     let(:email_text) { email.text_part.to_s }
     let(:action) do
       lambda do
@@ -124,8 +124,8 @@ RSpec.describe Notifier do
     end
     let(:email_html) do
       email.html_part.to_s
-           .gsub(/&nbsp;/, " ") # Markdown changes some whitespace to &nbsp;
-           .gsub(/&ldquo;/, "\"").gsub(/&rdquo;/, "\"") # Translate quotes
+           .gsub("&nbsp;", " ") # Markdown changes some whitespace to &nbsp;
+           .gsub("&ldquo;", "\"").gsub("&rdquo;", "\"") # Translate quotes
     end
     let(:email_text) { email.text_part.to_s }
     let(:admin_user) { create(:user) }

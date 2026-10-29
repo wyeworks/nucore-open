@@ -192,7 +192,7 @@ RSpec.describe FacilitiesController do
       @params = { id: facility.url_name }
     end
 
-    it_should_allow_all ([:guest] + facility_operators) do
+    it_should_allow_all([:guest] + facility_operators) do
       expect(@controller.current_facility).to eq(facility)
       expect(response).to be_successful.and render_template("facilities/show")
     end
@@ -290,7 +290,7 @@ RSpec.describe FacilitiesController do
         before :each do
           FactoryBot.create(:instrument, facility: @authable, facility_account:)
         end
-        it_should_allow_all (facility_operators - [:admin]) do
+        it_should_allow_all(facility_operators - [:admin]) do
           expect(assigns(:facilities)).to eq([@authable])
           expect(assigns(:operable_facilities)).to eq([@authable])
           expect(response).to redirect_to(dashboard_facility_path(@authable))
@@ -298,7 +298,7 @@ RSpec.describe FacilitiesController do
       end
       context "has no instruments" do
         # admin won't be redirected since their operable facilities is something more
-        it_should_allow_all (facility_operators - [:admin]) do
+        it_should_allow_all(facility_operators - [:admin]) do
           expect(assigns(:facilities)).to eq([@authable])
           expect(assigns(:operable_facilities)).to eq([@authable])
           expect(response).to redirect_to(dashboard_facility_path(@authable))

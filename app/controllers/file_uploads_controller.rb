@@ -43,7 +43,7 @@ class FileUploadsController < ApplicationController
 
     if @file.save
       flash[:notice] = "File uploaded"
-      redirect_to [current_facility, @product, :file_uploads, file_type: @file.file_type]
+      redirect_to [current_facility, @product, :file_uploads, { file_type: @file.file_type }]
     else
       render :index
     end
@@ -71,7 +71,7 @@ class FileUploadsController < ApplicationController
       errors = @upload.errors.map(&:message).to_sentence
       respond_to do |format|
         format.json { render json: { error: errors } }
-        format.html { render plain: errors, status: 400 }
+        format.html { render plain: errors, status: :bad_request }
       end
     end
   end
@@ -114,7 +114,7 @@ class FileUploadsController < ApplicationController
     elsif @file.file_type == "template"
       redirect_to(@return_to || product_survey_path(current_facility, @product.parameterize, @product))
     else
-      redirect_to(@return_to || [current_facility, @product, :file_uploads, file_type: @file.file_type])
+      redirect_to(@return_to || [current_facility, @product, :file_uploads, { file_type: @file.file_type }])
     end
   end
 
@@ -143,18 +143,16 @@ class FileUploadsController < ApplicationController
   def create_product_survey_from_file
     @file = @product.stored_files.new(create_params.merge(created_by: session_user.id, name: "Order Form Template"))
     @file.transaction do
-      begin
-        unless @product.stored_files.template.all?(&:destroy)
-          raise ActiveRecord::Rollback
-        end
-
-        @file.save!
-        @flash_notice = "Order File Template uploaded"
-        @redirect_to = product_survey_path(current_facility, @product.parameterize, @product)
-      rescue => e
-        @file.errors.add(:base, "Order File Template delete error: #{e.message}")
+      unless @product.stored_files.template.all?(&:destroy)
         raise ActiveRecord::Rollback
       end
+
+      @file.save!
+      @flash_notice = "Order File Template uploaded"
+      @redirect_to = product_survey_path(current_facility, @product.parameterize, @product)
+    rescue => e
+      @file.errors.add(:base, "Order File Template delete error: #{e.message}")
+      raise ActiveRecord::Rollback
     end
     @survey = UrlService.new
   end

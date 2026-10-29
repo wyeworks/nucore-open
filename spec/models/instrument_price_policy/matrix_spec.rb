@@ -64,24 +64,24 @@ RSpec.describe InstrumentPricePolicy do
       describe "overage" do
         include_context "overage"
         it "calculates cost and subsidy" do
-          expect(subject[:cost].round 2).to eq overage[:cost]
-          expect(subject[:subsidy].round 2).to eq overage[:subsidy]
+          expect(subject[:cost].round(2)).to eq overage[:cost]
+          expect(subject[:subsidy].round(2)).to eq overage[:subsidy]
         end
       end
 
       describe "usage" do
         include_context "usage"
         it "calculates cost and subsidy" do
-          expect(subject[:cost].round 2).to eq usage[:cost]
-          expect(subject[:subsidy].round 2).to eq usage[:subsidy]
+          expect(subject[:cost].round(2)).to eq usage[:cost]
+          expect(subject[:subsidy].round(2)).to eq usage[:subsidy]
         end
       end
 
       describe "reservation" do
         include_context "reservation"
         it "calculates cost and subsidy" do
-          expect(subject[:cost].round 2).to eq reservation_cost[:cost]
-          expect(subject[:subsidy].round 2).to eq reservation_cost[:subsidy]
+          expect(subject[:cost].round(2)).to eq reservation_cost[:cost]
+          expect(subject[:subsidy].round(2)).to eq reservation_cost[:subsidy]
         end
       end
     end

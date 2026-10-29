@@ -6,9 +6,9 @@ class RecurringTaskConfig
   # A convenience method to allow calling #each
   # and other enumerable methods (#to_a) to get
   # the list of task params.
-  def self.each(&block)
+  def self.each(&)
     recurring_tasks.each do |task_params|
-      block.call(RecurringTask.new(*task_params))
+      yield(RecurringTask.new(*task_params))
     end
   end
 

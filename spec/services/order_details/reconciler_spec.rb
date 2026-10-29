@@ -117,7 +117,7 @@ RSpec.describe OrderDetails::Reconciler do
       it "reconciles only those order details" do
         reconciler.reconcile_all
 
-        expect(order_details.map { |od| od.reload.state }).to eq(%w(reconciled reconciled complete))
+        expect(order_details.map { |od| od.reload.state }).to eq(%w[reconciled reconciled complete])
       end
     end
 
@@ -127,7 +127,7 @@ RSpec.describe OrderDetails::Reconciler do
       it "reconciles only those order details" do
         reconciler.reconcile_all
 
-        expect(order_details.map { |od| od.reload.state }).to eq(%w(reconciled reconciled complete))
+        expect(order_details.map { |od| od.reload.state }).to eq(%w[reconciled reconciled complete])
       end
     end
 

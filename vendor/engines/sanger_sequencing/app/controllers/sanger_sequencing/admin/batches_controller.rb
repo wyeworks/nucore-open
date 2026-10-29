@@ -28,7 +28,7 @@ module SangerSequencing
       def create
         # Allow-listing should happen in the form object
         if @batch.update_form_attributes(create_params.merge(created_by: current_user, facility: current_facility))
-          redirect_to [current_facility, :sanger_sequencing, :admin, :batches, group: @batch.group], notice: text("create.success")
+          redirect_to [current_facility, :sanger_sequencing, :admin, :batches, { group: @batch.group }], notice: text("create.success")
         else
           @submissions = Submission.ready_for_batch.for_facility(current_facility)
           flash.now[:alert] = @batch.errors.full_messages.to_sentence

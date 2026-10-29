@@ -59,11 +59,7 @@ module SamlAuthentication
 
     # SP is NUcore. User is already logged out by the sessions#delete call
     def sp_initiated_sign_out
-      if Devise.saml_sign_out_success_url
-        redirect_to Devise.saml_sign_out_success_url
-      else
-        redirect_to action: :new
-      end
+      redirect_to Devise.saml_sign_out_success_url || { action: :new }
     end
 
     def idp_initiated_sign_out

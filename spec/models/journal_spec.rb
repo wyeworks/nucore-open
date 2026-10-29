@@ -150,7 +150,7 @@ RSpec.describe Journal do
 
     it "is invalid" do
       expect(journal).not_to be_valid
-      expect(journal.errors[:journal_date].to_s).to match /may not be blank/
+      expect(journal.errors[:journal_date].to_s).to match(/may not be blank/)
     end
   end
 

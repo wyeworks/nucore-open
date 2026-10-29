@@ -10,13 +10,13 @@ RSpec.describe AccountMembershipCloner, type: :service do
   let(:purchaser_account) { create(:account, :with_account_owner) }
   let(:purchaser_account_to_not_clone) { create(:account, :with_account_owner) }
 
-  let(:cloner) {
+  let(:cloner) do
     described_class.new(
       account_users_to_clone:,
       clone_to_user: new_user,
       acting_user:,
     )
-  }
+  end
 
   before do
     create(:account_user, :business_administrator, user: original_user, account: business_admin_account)

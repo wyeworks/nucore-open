@@ -19,7 +19,7 @@ FactoryBot.define do
   end
 
   factory :setup_secure_room, class: SecureRoom, parent: :setup_product do
-    after(:create) do |product, evaluator|
+    after(:create) do |product, _evaluator|
       create(:schedule_rule, product:)
       product.reload
     end

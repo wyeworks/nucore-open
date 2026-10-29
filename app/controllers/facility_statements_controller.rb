@@ -9,7 +9,7 @@ class FacilityStatementsController < ApplicationController
   load_and_authorize_resource class: Statement
 
   layout lambda {
-    action_name.in?(%w(new)) ? "two_column_head" : "two_column"
+    action_name.in?(%w[new]) ? "two_column_head" : "two_column"
   }
 
   include CsvEmailAction

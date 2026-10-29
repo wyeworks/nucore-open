@@ -746,7 +746,7 @@ RSpec.describe Reservation do
       end
 
       context "with schedule rules" do
-        let(:tomorrow_noon) { 1.day.from_now.change(hour: 12, min: 00) }
+        let(:tomorrow_noon) { 1.day.from_now.change(hour: 12, min: 0o0) }
         before do
           ScheduleRule.destroy_all
           @instrument.schedule_rules.reload

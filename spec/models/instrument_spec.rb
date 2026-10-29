@@ -56,7 +56,7 @@ RSpec.describe Instrument do
       end
 
       context "is not a multiple" do
-        let(:min_reserve_mins) { reserve_interval * 4 + 1 }
+        let(:min_reserve_mins) { (reserve_interval * 4) + 1 }
 
         it "is is not valid" do
           expect(instrument).not_to be_valid
@@ -83,7 +83,7 @@ RSpec.describe Instrument do
       end
 
       context "is not a multiple" do
-        let(:max_reserve_mins) { reserve_interval * 4 + 1 }
+        let(:max_reserve_mins) { (reserve_interval * 4) + 1 }
 
         it "is not valid" do
           expect(instrument).not_to be_valid
@@ -482,7 +482,7 @@ RSpec.describe Instrument do
     end
 
     it "should find next available reservation with 5 minute interval rule, without any pending reservations" do
-      expect(@rule.product.update_attribute :reserve_interval, 5).to be true
+      expect(@rule.product.update_attribute(:reserve_interval, 5)).to be true
       # find next reservation after 12 am at 9 am
       @next_reservation = @instrument.next_available_reservation(after: Time.zone.now.beginning_of_day)
       assert_equal Time.zone.now.day, @next_reservation.reserve_start_at.day

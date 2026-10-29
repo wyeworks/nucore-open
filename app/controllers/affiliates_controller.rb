@@ -24,7 +24,7 @@ class AffiliatesController < GlobalSettingsController
       @affiliate = Affiliate.find(id.to_i)
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "Affiliate with id #{id} not found!"
-      return redirect_to affiliates_path
+      redirect_to affiliates_path
     end
   end
 

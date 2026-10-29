@@ -3,7 +3,7 @@
 module PricePoliciesHelper
   def price_policy_path(price_policy_or_product, url_date)
     product = price_policy_or_product.respond_to?(:product) ? price_policy_or_product.product : price_policy_or_product
-    [current_facility, product, :price_policy, id: url_date]
+    [current_facility, product, :price_policy, { id: url_date }]
   end
 
   def price_policies_path

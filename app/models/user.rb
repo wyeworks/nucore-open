@@ -121,9 +121,9 @@ class User < ApplicationRecord
     if errors.empty?
       clear_reset_password_token
       save!
-      return true
+      true
     else
-      return false
+      false
     end
   end
 

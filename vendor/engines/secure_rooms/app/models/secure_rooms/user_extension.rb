@@ -14,11 +14,11 @@ module SecureRooms
 
       # MySQL uniqueness constraints don't apply to NULL values
       def card_number=(value)
-        super value.presence
+        super(value.presence)
       end
 
       def i_class_number=(value)
-        super value.presence
+        super(value.presence)
       end
     end
   end

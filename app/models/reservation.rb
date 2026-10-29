@@ -57,7 +57,7 @@ class Reservation < ApplicationRecord
   # Scopes
   #####
 
-  scope :admin_and_offline, -> { where(type: %w(AdminReservation OfflineReservation)) }
+  scope :admin_and_offline, -> { where(type: %w[AdminReservation OfflineReservation]) }
   scope :purchased, -> { joins(order_detail: :order).merge(Order.purchased) }
 
   def self.active
@@ -90,7 +90,7 @@ class Reservation < ApplicationRecord
 
   def self.not_this_reservation(reservation)
     if reservation.id
-      where("reservations.id <> ?", reservation.id)
+      where.not(reservations: { id: reservation.id })
     else
       all
     end
@@ -151,7 +151,7 @@ class Reservation < ApplicationRecord
       .not_ended
       .merge(OrderDetail.purchased)
       .joins(:order_detail)
-      .where(order_details: { state: %w(new inprocess), problem: false })
+      .where(order_details: { state: %w[new inprocess], problem: false })
       .where("reserve_start_at <= ?", start_at_limit)
   end
 
@@ -395,7 +395,7 @@ class Reservation < ApplicationRecord
   private
 
   def auto_save_order_detail
-    if (%w(actual_start_at actual_end_at reserve_start_at reserve_end_at) & saved_changes.keys).any?
+    if (%w[actual_start_at actual_end_at reserve_start_at reserve_end_at] & saved_changes.keys).any?
       order_detail.save
     end
   end

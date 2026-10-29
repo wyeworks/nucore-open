@@ -27,9 +27,9 @@ module DateTimeInput
     end
 
     def self.check_time_param!(param)
-      if %w(hour minute ampm).all? { |k| param.key? k }
+      if %w[hour minute ampm].all? { |k| param.key? k }
         true
-      elsif %w(hour minute ampm).none? { |k| param.key? k }
+      elsif %w[hour minute ampm].none? { |k| param.key? k }
         false
       else
         raise ArgumentError, "Must have all or none of [:hour, :minute, :ampm] keys"

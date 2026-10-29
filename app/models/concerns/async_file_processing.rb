@@ -25,7 +25,7 @@ module AsyncFileProcessing
   extend ActiveSupport::Concern
 
   included do
-    validates :status, inclusion: { in: %w(processing successful failed) }
+    validates :status, inclusion: { in: %w[processing successful failed] }
     validate :only_one_in_queue_at_a_time, on: :create
   end
 

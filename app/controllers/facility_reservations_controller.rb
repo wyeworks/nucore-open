@@ -59,14 +59,12 @@ class FacilityReservationsController < ApplicationController
     end
 
     Reservation.transaction do
-      begin
-        @reservation.save_as_user!(session_user)
-        @order_detail.save!
-        flash.now[:notice] = "The reservation has been updated successfully.#{additional_notice}"
-      rescue ActiveRecord::RecordInvalid
-        flash.now[:error] = "An error was encountered while updating the reservation."
-        raise ActiveRecord::Rollback
-      end
+      @reservation.save_as_user!(session_user)
+      @order_detail.save!
+      flash.now[:notice] = "The reservation has been updated successfully.#{additional_notice}"
+    rescue ActiveRecord::RecordInvalid
+      flash.now[:error] = "An error was encountered while updating the reservation."
+      raise ActiveRecord::Rollback
     end
 
     render action: "edit"

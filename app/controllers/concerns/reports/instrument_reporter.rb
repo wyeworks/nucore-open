@@ -6,7 +6,7 @@ module Reports
       reservations = Reservation.where("orders.facility_id = ?", current_facility.id)
                                 .where("fulfilled_at >= ?", @date_start)
                                 .where("fulfilled_at <= ?", @date_end)
-                                .where(order_details: { state: %w(complete reconciled) })
+                                .where(order_details: { state: %w[complete reconciled] })
                                 .joins(:order_detail)
                                 .where(order_details: { canceled_at: nil })
                                 .joins(order_detail: :order)

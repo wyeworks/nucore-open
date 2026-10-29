@@ -110,9 +110,9 @@ class PricePolicyBuilder
   end
 
   def original_price_policies_hash
-    original_price_policies.map do |price_policy|
-      [price_policy.price_group, price_policy]
-    end.to_h
+    original_price_policies.index_by do |price_policy|
+      price_policy.price_group
+    end
   end
 
   def original_price_policies_editable?

@@ -10,7 +10,5 @@ module DownloadableFile
     include PaperclipFile
   end
 
-  def file_present?
-    file.present?
-  end
+  delegate :present?, to: :file, prefix: true
 end

@@ -14,9 +14,7 @@ module TransactionSearch
       @config = config
     end
 
-    def key
-      self.class.key
-    end
+    delegate :key, to: :class
 
     def multipart?
       false

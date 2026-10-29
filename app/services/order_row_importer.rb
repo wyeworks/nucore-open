@@ -44,9 +44,7 @@ class OrderRowImporter
     I18n.t(header, scope: "#{name.underscore}.headers", default: header.to_s.titleize)
   end
 
-  def header(header)
-    self.class.header(header)
-  end
+  delegate :header, to: :class
 
   def self.headers_to_s
     HEADERS.to_a.join(",")
@@ -138,24 +136,22 @@ class OrderRowImporter
 
   def add_to_order
     ActiveRecord::Base.transaction do
-      begin
-        @order = field(:order_number).present? ? existing_order : @order_import.fetch_or_create_order!(self)
+      @order = field(:order_number).present? ? existing_order : @order_import.fetch_or_create_order!(self)
 
-        # The order adding feature has some quirky behavior because of the "order form"
-        # feature: if you add multiple of a timed service, it creates multiple line items
-        # in your cart. Also, in the "add to order" feature, there is a separate `duration`
-        # field. To account for this idiosyncrasy, we need to handle it as a special case.
-        if product.quantity_as_time?
-          @order_details = order.add(product, 1, to_add_attributes.merge(duration: field(:quantity)))
-        else
-          @order_details = order.add(product, field(:quantity), to_add_attributes)
-        end
-        purchase_order! unless order.purchased?
-        backdate_order_details_to_complete!
-      rescue ActiveRecord::RecordInvalid => e
-        add_error(e.message)
-        raise ActiveRecord::Rollback
-      end
+      # The order adding feature has some quirky behavior because of the "order form"
+      # feature: if you add multiple of a timed service, it creates multiple line items
+      # in your cart. Also, in the "add to order" feature, there is a separate `duration`
+      # field. To account for this idiosyncrasy, we need to handle it as a special case.
+      @order_details = if product.quantity_as_time?
+                         order.add(product, 1, to_add_attributes.merge(duration: field(:quantity)))
+                       else
+                         order.add(product, field(:quantity), to_add_attributes)
+                       end
+      purchase_order! unless order.purchased?
+      backdate_order_details_to_complete!
+    rescue ActiveRecord::RecordInvalid => e
+      add_error(e.message)
+      raise ActiveRecord::Rollback
     end
   end
 

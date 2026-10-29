@@ -8,7 +8,7 @@ namespace :engines do
       path = "vendor/engines/#{engine_name}/db/migrate"
       raise "Invalid engine '#{engine_name}'" unless Dir.exist?(path)
 
-      ActiveRecord::Migrator.migrations(path).reverse.each do |migration|
+      ActiveRecord::Migrator.migrations(path).reverse_each do |migration|
         ActiveRecord::Migrator.run(:down, path, migration.version)
       end
 

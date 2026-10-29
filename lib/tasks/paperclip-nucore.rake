@@ -46,7 +46,7 @@ namespace :paperclip do
   namespace :mime do
     desc "Derive MIME types from file extensions"
     task update_from_file_extensions: :environment do
-      (Journal.where("file_file_name IS NOT NULL") + StoredFile.where("file_file_name IS NOT NULL")).each do |file|
+      (Journal.where.not(file_file_name: nil) + StoredFile.where.not(file_file_name: nil)).each do |file|
         print "#{file.class} #{file.id}: #{file.file_file_name} "
 
         extension = File.extname(file.file_file_name).sub(/^\./, "")

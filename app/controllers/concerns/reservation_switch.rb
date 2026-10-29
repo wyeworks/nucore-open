@@ -4,10 +4,9 @@ module ReservationSwitch
   extend ActiveSupport::Concern
 
   def switch_instrument!(switch)
-    case
-    when switch == "on"
+    if switch == "on"
       switch_instrument_on!
-    when switch == "off"
+    elsif switch == "off"
       switch_instrument_off!
     end
   rescue AASM::InvalidTransition => e
@@ -39,7 +38,7 @@ module ReservationSwitch
   end
 
   def switch_value_present?
-    params[:switch] && (params[:switch] == "on" || params[:switch] == "off")
+    params[:switch] && ["on", "off"].include?(params[:switch])
   end
 
   def switch_off_success

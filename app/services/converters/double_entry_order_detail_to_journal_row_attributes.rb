@@ -34,7 +34,7 @@ module Converters
         order_detail:,
         account_id: order_detail.account_id,
         journal:,
-        # Note: this is the expense account, not the Account association
+        # NOTE: this is the expense account, not the Account association
         account: order_detail.product.account,
         amount: total,
         description: order_detail.long_description,

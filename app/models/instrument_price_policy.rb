@@ -29,10 +29,12 @@ class InstrumentPricePolicy < PricePolicy
   def ensure_reservation_window
     pgp = PriceGroupProduct.find_by(price_group_id: price_group.id, product_id: product.id)
 
-    PriceGroupProduct.create(
-      price_group:,
-      product:,
-      reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW,
-    ) unless pgp
+    unless pgp
+      PriceGroupProduct.create(
+        price_group:,
+        product:,
+        reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW,
+      )
+    end
   end
 end

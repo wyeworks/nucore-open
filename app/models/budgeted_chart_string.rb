@@ -43,8 +43,7 @@ class BudgetedChartString < ApplicationRecord
                                    starts_at: Time.zone.now - 1.week, expires_at: Time.zone.now + 1.year)
         while line = file.readline.strip
           # parse, import line
-          case
-          when /^\d{4,4}\|/.match?(line)
+          if /^\d{4,4}\|/.match?(line)
             # chart string with fiscal year
             tokens = line.split("|").map { |s| s.delete("-") }
             # build start_at, expires_at from fiscal year
@@ -57,7 +56,7 @@ class BudgetedChartString < ApplicationRecord
             project = tokens[3]
             activity = tokens[4]
             account = tokens[5]
-          when /\d{2,2}-[A-Z]{3,3}-\d{2,2}\|\d{2,2}-[A-Z]{3,3}-\d{2,2}$/.match?(line)
+          elsif /\d{2,2}-[A-Z]{3,3}-\d{2,2}\|\d{2,2}-[A-Z]{3,3}-\d{2,2}$/.match?(line)
             # chart string with start and expire dates
             tokens = line.split("|").map { |s| s.delete("-") }
             # parse fields
@@ -75,11 +74,11 @@ class BudgetedChartString < ApplicationRecord
           end
           bcs = BudgetedChartString.create(fund:, dept:, project:, activity:, account:,
                                            starts_at:, expires_at:)
-          if !bcs.valid?
+          if bcs.valid?
+            imported += 1
+          else
             puts "error: invalid account - #{line}"
             invalid += 1
-          else
-            imported += 1
           end
         end
       rescue EOFError

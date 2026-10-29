@@ -13,7 +13,7 @@ class MoveCanPurchaseIntoPricePolicy < ActiveRecord::Migration[4.2]
       price_policies = PricePolicy.find_all_by_price_group_id_and_product_id(pgp.price_group_id, pgp.product_id)
       if price_policies.any?
         price_policies.each do |pp|
-          Rails.logger.debug "updating can_purchase #{pp.id}"
+          Rails.logger.debug { "updating can_purchase #{pp.id}" }
           # don't do validation
           pp.update_attribute(:can_purchase, 1)
         end

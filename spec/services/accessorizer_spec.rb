@@ -103,7 +103,7 @@ RSpec.describe Accessories::Accessorizer do
           expect(results.first.product).to eq(quantity_accessory)
           expect(results.first.enabled).to be true
           expect(results.first.quantity).to eq(3)
-          expect(allow_any_instance_of(OrderDetail).to receive(:assign_estimated_price))
+          expect(allow_any_instance_of(OrderDetail).to(receive(:assign_estimated_price)))
         end
 
         context "with a note" do

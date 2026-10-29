@@ -84,10 +84,8 @@ class Ability
              order_file upload_order_file remove_order_file], OrderDetail, order: { user_id: user.id }
     end
 
-    if resource.is_a?(PriceGroup)
-      if user_has_facility_role?(user) && editable_global_group?(resource)
-        can :read, UserPriceGroupMember
-      end
+    if resource.is_a?(PriceGroup) && user_has_facility_role?(user) && editable_global_group?(resource)
+      can :read, UserPriceGroupMember
     end
 
     if resource.is_a?(Reservation)
@@ -141,10 +139,8 @@ class Ability
   end
 
   def facility_director_abilities(user, resource, controller)
-    if resource.is_a?(PriceGroup) && user.facility_director_of?(resource.facility)
-      if !resource.global?
-        can :manage, [AccountPriceGroupMember, UserPriceGroupMember]
-      end
+    if resource.is_a?(PriceGroup) && user.facility_director_of?(resource.facility) && !resource.global?
+      can :manage, [AccountPriceGroupMember, UserPriceGroupMember]
     end
 
     if resource.is_a?(TrainingRequest) && user.facility_director_of?(resource.product.facility)
@@ -178,10 +174,8 @@ class Ability
   end
 
   def facility_administrator_abilities(user, resource, controller)
-    if resource.is_a?(PriceGroup) && user.facility_administrator_of?(resource.facility)
-      if !resource.global?
-        can :manage, [AccountPriceGroupMember, UserPriceGroupMember]
-      end
+    if resource.is_a?(PriceGroup) && user.facility_administrator_of?(resource.facility) && !resource.global?
+      can :manage, [AccountPriceGroupMember, UserPriceGroupMember]
     end
 
     if resource.is_a?(Reservation) && user.facility_administrator_of?(resource.product.facility)
@@ -202,7 +196,7 @@ class Ability
     end
   end
 
-  def facility_billing_administrator_abilities(user, resource, controller)
+  def facility_billing_administrator_abilities(user, resource, _controller)
     if resource.is_a?(OrderDetail) && user.facility_billing_administrator_of?(resource.facility)
       can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
     end
@@ -293,7 +287,7 @@ class Ability
     end
   end
 
-  def account_administrator_abilities(user, resource, controller)
+  def account_administrator_abilities(user, resource, _controller)
     if resource.is_a?(OrderDetail) && user.account_administrator_of?(resource.account)
       can %i[show update dispute sample_results sample_results_zip template_results], OrderDetail, account: { id: resource.account_id }
     end
@@ -309,7 +303,7 @@ class Ability
     end
   end
 
-  def operator_abilities_for_facility(user, resource, controller)
+  def operator_abilities_for_facility(_user, _resource, controller)
     can :manage, [
       AccountPriceGroupMember,
       OrderDetail,
@@ -448,8 +442,8 @@ class Ability
     elsif controller.is_a?(ReservationsController) && resource.is_a?(Reservation)
       project = resource.order_detail.order.cross_core_project
 
-      if project.present?
-        can :manage, Reservation if can_manage_cross_core_orders_at?(user, project.facility)
+      if project.present? && can_manage_cross_core_orders_at?(user, project.facility)
+        can :manage, Reservation
       end
     end
 

@@ -97,7 +97,7 @@ class KioskReservationsController < ApplicationController
                else
                  :error
                end
-    render template, status: 406, layout: false
+    render template, status: :not_acceptable, layout: false
   end
 
   def check_kiosk_enabled

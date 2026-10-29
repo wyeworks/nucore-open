@@ -50,7 +50,7 @@ RSpec.describe EmailEvent do
     end
 
     it "accepts an array of strings" do
-      expect(described_class.key_for(%w(test abc))).to eq("test/abc")
+      expect(described_class.key_for(%w[test abc])).to eq("test/abc")
     end
 
     it "accepts strings and symbols" do

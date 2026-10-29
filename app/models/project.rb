@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Project < ApplicationRecord
-  belongs_to :facility, foreign_key: :facility_id
+  belongs_to :facility
   has_many :order_details, inverse_of: :project
   has_many :orders, inverse_of: :cross_core_project, foreign_key: :cross_core_project_id
 

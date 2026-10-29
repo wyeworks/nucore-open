@@ -4,12 +4,12 @@ class AdminReservationForm
   include ActiveModel::Validations
   include DateHelper
 
-  REPEAT_OPTIONS = %w(
+  REPEAT_OPTIONS = %w[
     daily
     weekdays_only
     weekly
     monthly
-  ).freeze
+  ].freeze
 
   delegate :to_key, to: :reservation
   delegate :category, :reserve_start_date, :reserve_start_hour,

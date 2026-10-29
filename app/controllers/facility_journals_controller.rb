@@ -16,7 +16,7 @@ class FacilityJournalsController < ApplicationController
   before_action :enable_sorting, only: :new
 
   layout lambda {
-    action_name.in?(%w(new)) ? "two_column_head" : "two_column"
+    action_name.in?(%w[new]) ? "two_column_head" : "two_column"
   }
 
   def initialize

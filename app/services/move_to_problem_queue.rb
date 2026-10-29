@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class MoveToProblemQueue
-  def self.move!(order_detail, force: false, user: nil, cause:)
+  def self.move!(order_detail, cause:, force: false, user: nil)
     new(order_detail, force:, user:, cause:).move!
   end
 
-  def initialize(order_detail, force: false, user: nil, cause:)
+  def initialize(order_detail, cause:, force: false, user: nil)
     @order_detail = order_detail
     @force = force
     @user = user

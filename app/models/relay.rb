@@ -73,8 +73,8 @@ class Relay < ApplicationRecord
     return unless host.present?
 
     scope = Relay.unscoped.where(host:, outlet:, ip_port:)
-    scope = scope.joins(:instrument).where("products.schedule_id != ?", instrument.schedule_id) if instrument.try(:schedule_id)
-    scope = scope.where("relays.id != ?", id) if persisted?
+    scope = scope.joins(:instrument).where.not(products: { schedule_id: instrument.schedule_id }) if instrument.try(:schedule_id)
+    scope = scope.where.not(relays: { id: }) if persisted?
     errors.add(:outlet, :taken) if scope.exists?
   end
 end

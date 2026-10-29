@@ -39,7 +39,7 @@ class NufsAccount < Account
     @components = validator.components
 
     @components.each do |k, v|
-      self.class.class_eval "attr_accessor :#{k}" unless respond_to? k
+      self.class.class_eval "attr_accessor :#{k}", __FILE__, __LINE__ unless respond_to? k
       send("#{k}=", v)
     end
 

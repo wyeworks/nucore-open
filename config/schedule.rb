@@ -21,6 +21,6 @@ every :day, at: "12:30am", roles: [:db] do
 end
 
 require "active_support/core_ext/numeric/time"
-instance_eval(File.read(File.expand_path("../schedule_custom.rb", __FILE__)), "schedule_custom.rb")
+instance_eval(File.read(File.expand_path("schedule_custom.rb", __dir__)), "schedule_custom.rb")
 
 # Learn more: http://github.com/javan/whenever

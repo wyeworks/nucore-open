@@ -40,8 +40,6 @@ module ProjectsSearch
       end
     end
 
-    private
-
     class Results
       attr_reader :projects
 

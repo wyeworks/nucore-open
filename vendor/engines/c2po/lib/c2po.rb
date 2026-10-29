@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module C2po
-  C2PO_ACCOUNT_TYPES = %w(CreditCardAccount PurchaseOrderAccount).freeze
+  C2PO_ACCOUNT_TYPES = %w[CreditCardAccount PurchaseOrderAccount].freeze
 
   C2PO_ACCOUNT_TYPES_APPENDER = proc do
     Account.config.account_types.concat C2po::C2PO_ACCOUNT_TYPES
@@ -43,7 +43,7 @@ module C2po
 
     initializer "model_core.factories", after: "factory_girl.set_factory_paths" do
       if defined?(FactoryBot)
-        FactoryBot.definition_file_paths << File.expand_path("../../spec/factories", __FILE__)
+        FactoryBot.definition_file_paths << File.expand_path("../spec/factories", __dir__)
       end
     end
   end

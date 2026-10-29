@@ -156,9 +156,9 @@ RSpec.describe ScheduleRule do
     assert @rule.valid?
 
     @rule.start_hour = 9
-    @rule.start_min = 00
+    @rule.start_min = 0o0
     @rule.end_hour = 9
-    @rule.end_min = 00
+    @rule.end_min = 0o0
     expect(@rule).not_to be_valid
 
     @rule.end_hour = 8

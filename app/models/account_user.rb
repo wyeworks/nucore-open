@@ -4,8 +4,8 @@ class AccountUser < ApplicationRecord
   # Don't exclude them by default. Instead, make sure we're using the `active` scope
   acts_as_paranoid without_default_scope: true
 
-  belongs_to :user, required: true
-  belongs_to :account, inverse_of: :account_users, required: true
+  belongs_to :user, optional: false
+  belongs_to :account, inverse_of: :account_users, optional: false
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
   has_many :log_events, as: :loggable
 
@@ -51,10 +51,9 @@ class AccountUser < ApplicationRecord
   # The facility under which the selected role is
   # granted by +user+
   def self.selectable_user_roles(granting_user = nil, facility = nil)
-    case
-    when granting_user.blank? || facility.blank?
+    if granting_user.blank? || facility.blank?
       user_roles - [ACCOUNT_OWNER]
-    when granting_user.account_manager? || granting_user.manager_of?(facility)
+    elsif granting_user.account_manager? || granting_user.manager_of?(facility)
       user_roles
     else
       user_roles - [ACCOUNT_OWNER]

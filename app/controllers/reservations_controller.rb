@@ -221,12 +221,10 @@ class ReservationsController < ApplicationController
     success = true
 
     Reservation.transaction do
-      begin
-        save_reservation_and_order_detail
-      rescue ActiveRecord::RecordInvalid => e
-        success = false
-        raise ActiveRecord::Rollback
-      end
+      save_reservation_and_order_detail
+    rescue ActiveRecord::RecordInvalid => e
+      success = false
+      raise ActiveRecord::Rollback
     end
 
     if mergeable && success
@@ -234,7 +232,7 @@ class ReservationsController < ApplicationController
       redirect_to facility_order_path(@order_detail.facility, @order_detail.order.merge_order || @order_detail.order)
     elsif success
       flash[:notice] = I18n.t("controllers.reservations.update.success")
-      redirect_to (@order.purchased? ? reservations_path : cart_path)
+      redirect_to(@order.purchased? ? reservations_path : cart_path)
     else
       render_edit
     end

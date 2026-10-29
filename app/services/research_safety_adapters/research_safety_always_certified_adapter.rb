@@ -8,7 +8,7 @@ module ResearchSafetyAdapters
       @user = user
     end
 
-    def certified?(certificate)
+    def certified?(_certificate)
       true
     end
   end

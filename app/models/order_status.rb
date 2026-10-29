@@ -9,19 +9,17 @@ class OrderStatus < ApplicationRecord
   validates_presence_of :name
   validates_uniqueness_of :name, scope: [:parent_id, :facility_id], case_sensitive: false
   validates_each :parent_id do |model, attr, value|
-    begin
-      model.errors.add(attr, "must be a root") unless value.nil? || OrderStatus.unscoped.find(value).root?
-    rescue => e
-      model.errors.add(attr, "must be a valid root")
-    end
+    model.errors.add(attr, "must be a root") unless value.nil? || OrderStatus.unscoped.find(value).root?
+  rescue => e
+    model.errors.add(attr, "must be a valid root")
   end
 
-  NEW = "New".freeze
-  IN_PROCESS = "In Process".freeze
-  CANCELED = "Canceled".freeze
-  COMPLETE = "Complete".freeze
-  RECONCILED = "Reconciled".freeze
-  UNRECOVERABLE = "Unrecoverable".freeze
+  NEW = "New"
+  IN_PROCESS = "In Process"
+  CANCELED = "Canceled"
+  COMPLETE = "Complete"
+  RECONCILED = "Reconciled"
+  UNRECOVERABLE = "Unrecoverable"
 
   ROOT_STATUS_ORDER = [NEW, IN_PROCESS, CANCELED, COMPLETE, RECONCILED, UNRECOVERABLE].freeze
 

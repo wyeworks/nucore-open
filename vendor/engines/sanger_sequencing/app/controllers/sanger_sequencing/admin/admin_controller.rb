@@ -7,9 +7,9 @@ module SangerSequencing
 
       # For the sake of `authorize_resource`, we want to use the sanger_ability
       # But then we we get to the view rendering we'll want the default current_ability
-      def self.authorize_sanger_resource(*args)
+      def self.authorize_sanger_resource(*)
         before_action { @current_ability = sanger_ability }
-        authorize_resource(*args)
+        authorize_resource(*)
         before_action { @current_ability = nil }
       end
 

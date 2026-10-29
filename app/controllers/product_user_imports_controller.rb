@@ -12,10 +12,10 @@ class ProductUserImportsController < ApplicationController
     begin
       import = create_product_user_import!
       import.process_upload!
-      if !import.failed?
-        flash[:notice] = import_success_alert(import)
-      else
+      if import.failed?
         flash[:error] = import_failed_alert(import)
+      else
+        flash[:notice] = import_success_alert(import)
       end
     rescue => e
       import_exception_alert(e)

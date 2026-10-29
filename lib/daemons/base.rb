@@ -48,10 +48,10 @@ class Daemons::Base
   #   The work that the daemon should do. You do not
   #   have to wrap the work in an infinite loop because
   #   this method will do so for you.
-  def start
+  def start(&)
     run_proc(name, daemon_opts) do
       require File.join(@rails_root, "config", "environment")
-      loop { yield }
+      loop(&)
     end
   end
 

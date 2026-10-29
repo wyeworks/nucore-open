@@ -22,7 +22,7 @@ module SangerSequencing
     scope :purchased, -> { joins(order_detail: :order).merge(Order.purchased).merge(OrderDetail.order(ordered_at: :desc)) }
     scope :for_facility, ->(facility) { where(orders: { facility_id: facility.id }) }
 
-    BATCHABLE_STATES = %w(new inprocess complete).freeze
+    BATCHABLE_STATES = %w[new inprocess complete].freeze
     scope :ready_for_batch, lambda {
       purchased
         .merge(OrderDetail.where(state: BATCHABLE_STATES))

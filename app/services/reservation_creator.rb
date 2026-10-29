@@ -19,41 +19,39 @@ class ReservationCreator
     end
 
     Reservation.transaction do
-      begin
-        update_order_account
+      update_order_account
 
-        # merge state can change after call to #save! due to OrderDetail#move_to_original_merge_order
-        to_be_merged = @order_detail.order.to_be_merged?
+      # merge state can change after call to #save! due to OrderDetail#move_to_original_merge_order
+      to_be_merged = @order_detail.order.to_be_merged?
 
-        raise ActiveRecord::RecordInvalid, @order_detail unless reservation_and_order_valid?(session_user)
+      raise ActiveRecord::RecordInvalid, @order_detail unless reservation_and_order_valid?(session_user)
 
-        validator = OrderPurchaseValidator.new(@order_detail)
-        raise OrderPurchaseValidatorError, @order_detail if validator.invalid?
+      validator = OrderPurchaseValidator.new(@order_detail)
+      raise OrderPurchaseValidatorError, @order_detail if validator.invalid?
 
-        save_reservation_and_order_detail(session_user)
+      save_reservation_and_order_detail(session_user)
 
-        if to_be_merged
-          # The purchase_order_path or cart_path will handle the backdating, but we need
-          # to do this here for merged reservations.
-          backdate_reservation_if_necessary(session_user)
+      if to_be_merged
+        # The purchase_order_path or cart_path will handle the backdating, but we need
+        # to do this here for merged reservations.
+        backdate_reservation_if_necessary(session_user)
 
-          purchase_original_cross_core_order
+        purchase_original_cross_core_order
 
-          @success = :merged_order
-        elsif @order.order_details.where(parent_order_detail_id: nil).one?
-          @success = :instrument_only_order
-        else
-          @success = :default
-        end
-      rescue OrderPurchaseValidatorError => e
-        @error = e.message
-        raise ActiveRecord::Rollback
-      rescue ActiveRecord::RecordInvalid => e
-        raise ActiveRecord::Rollback
-      rescue => e
-        @error = I18n.t("orders.purchase.error", message: e.message).html_safe
-        raise ActiveRecord::Rollback
+        @success = :merged_order
+      elsif @order.order_details.where(parent_order_detail_id: nil).one?
+        @success = :instrument_only_order
+      else
+        @success = :default
       end
+    rescue OrderPurchaseValidatorError => e
+      @error = e.message
+      raise ActiveRecord::Rollback
+    rescue ActiveRecord::RecordInvalid => e
+      raise ActiveRecord::Rollback
+    rescue => e
+      @error = I18n.t("orders.purchase.error", message: e.message).html_safe
+      raise ActiveRecord::Rollback
     end
   end
 

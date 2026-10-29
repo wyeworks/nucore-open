@@ -48,7 +48,7 @@ module ResearchSafetyAdapters
       @certification_data = JSON.parse(client.certifications_for(@user.email))
       if @certification_data.dig("errors")
         error_message = @certification_data.dig("errors").map do |error|
-          "(#{error["status"]}) #{error["title"]}: #{error["detail"]}"
+          "(#{error['status']}) #{error['title']}: #{error['detail']}"
         end.join("\n")
         raise error_message
       end

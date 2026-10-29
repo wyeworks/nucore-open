@@ -13,9 +13,7 @@ module ProjectsSearch
       @current_facility_id = current_facility_id
     end
 
-    def key
-      self.class.key
-    end
+    delegate :key, to: :class
 
     def label_method
       nil

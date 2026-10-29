@@ -33,9 +33,7 @@ module PaperclipFile
     Paperclip.io_adapters.for(file).read
   end
 
-  def file_path
-    file.path
-  end
+  delegate :path, to: :file, prefix: true
 
   def update_filename(value)
     file.instance_write(:file_name, value)

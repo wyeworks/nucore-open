@@ -180,7 +180,7 @@ RSpec.describe OrderDetail do
     describe ".reassign_account!" do
       context "the account is valid for all order_details" do
         it "reassigns them" do
-          @user_accounts.reverse.each do |account|
+          @user_accounts.reverse_each do |account|
             expect { OrderDetail.reassign_account!(account, [@order_detail]) }
               .to change { @order_detail.account }.to account
           end

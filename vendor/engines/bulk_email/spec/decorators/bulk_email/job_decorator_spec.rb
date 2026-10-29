@@ -8,11 +8,11 @@ RSpec.describe BulkEmail::JobDecorator do
   let(:facility) { FactoryBot.create(:setup_facility) }
   let(:products) { FactoryBot.create_list(:setup_instrument, 2, facility:) }
   let(:product_id) { nil }
-  let(:recipients) { %w(a@example.net b@example.com) }
+  let(:recipients) { %w[a@example.net b@example.com] }
   let(:selected_product_ids) { nil }
   let(:start_date) { "1/1/2015" }
   let(:end_date) { "12/31/2015" }
-  let(:user_types) { %w(customers authorized_users account_owners) }
+  let(:user_types) { %w[customers authorized_users account_owners] }
 
   let(:search_criteria) do
     {

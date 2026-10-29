@@ -31,7 +31,7 @@ class MigrateAndDropAccountTransactions < ActiveRecord::Migration[4.2]
       od.save!
     end
 
-    OrderDetail.where(state: %w(inprocess new)).each do |od|
+    OrderDetail.where(state: %w[inprocess new]).each do |od|
       od.estimated_cost = od.actual_cost
       od.estimated_subsidy = od.actual_subsidy
       od.actual_cost = nil

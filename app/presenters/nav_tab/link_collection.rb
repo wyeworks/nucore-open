@@ -15,7 +15,7 @@ class NavTab::LinkCollection
   end
 
   def self.tab_methods
-    @tab_methods ||= %i(
+    @tab_methods ||= %i[
       admin_orders
       admin_reservations
       admin_billing
@@ -25,7 +25,7 @@ class NavTab::LinkCollection
       admin_projects
       admin_estimates
       admin_facility
-    )
+    ]
   end
 
   def admin

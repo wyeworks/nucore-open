@@ -94,7 +94,7 @@ RSpec.describe OrderRowImporter do
       before { subject.import }
 
       it "has the error message '#{message}'" do
-        expect(subject.errors).to include(match /#{message}/)
+        expect(subject.errors).to include(match(/#{message}/))
       end
     end
 
@@ -635,7 +635,7 @@ RSpec.describe OrderRowImporter do
   end
 
   context "order key construction" do
-    let(:expected_order_key) { %w(column1 column2 column5) }
+    let(:expected_order_key) { %w[column1 column2 column5] }
 
     describe ".order_key_for_row" do
       it "builds an array based on the expected fields" do
@@ -651,7 +651,7 @@ RSpec.describe OrderRowImporter do
   end
 
   describe "#row_with_errors" do
-    let(:errors) { %w(one two three) }
+    let(:errors) { %w[one two three] }
     let(:row) do
       {
         "Netid / Email" => username,

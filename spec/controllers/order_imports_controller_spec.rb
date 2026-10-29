@@ -22,7 +22,7 @@ RSpec.describe OrderImportsController do
     end
 
     it_should_allow_managers_only do
-      expect(assigns :order_import).to be_new_record
+      expect(assigns(:order_import)).to be_new_record
       is_expected.to render_template "new"
     end
   end

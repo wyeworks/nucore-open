@@ -244,7 +244,7 @@ class PricePolicy < ApplicationRecord
                                                   price_group_id:,
                                                   product_id:)
 
-    existing_policies = existing_policies.where("id != ?", id) unless id.nil?
+    existing_policies = existing_policies.where.not(id:) unless id.nil?
 
     existing_policies.each do |policy|
       policy.expire_date = (start_date - 1.day).end_of_day

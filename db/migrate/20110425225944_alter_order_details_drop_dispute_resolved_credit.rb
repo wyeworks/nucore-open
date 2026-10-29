@@ -2,7 +2,7 @@
 
 class AlterOrderDetailsDropDisputeResolvedCredit < ActiveRecord::Migration[4.2]
   def self.up
-    details = OrderDetail.where("dispute_resolved_credit IS NOT NULL")
+    details = OrderDetail.where.not(dispute_resolved_credit: nil)
 
     details.each do |detail|
       detail.actual_cost = detail_actual_cost - detail.dispute_resolved_credit

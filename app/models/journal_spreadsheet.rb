@@ -27,7 +27,7 @@ class JournalSpreadsheet
         yield line, row
       else
         line[0] = row.account
-        line[1] = sprintf("%.2f", row.amount)
+        line[1] = format("%.2f", row.amount)
         line[2] = row.description
         line[3] =
           if row.fulfilled_at.present?

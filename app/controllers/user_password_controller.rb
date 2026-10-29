@@ -42,7 +42,7 @@ class UserPasswordController < ApplicationController
   def no_user_allowed
     if current_user
       redirect_to action: :edit_current
-      return false
+      false
     end
   end
 end

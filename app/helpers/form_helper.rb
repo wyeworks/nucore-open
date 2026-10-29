@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 module FormHelper
-  def readonly_form_for(record_name, record = nil, options = {}, &block)
+  def readonly_form_for(record_name, record = nil, options = {}, &)
     if record.is_a?(Hash) && record.extractable_options?
       options = record
       record = nil
     end
     record ||= instance_variable_get("@#{record_name}")
     options[:builder] = ReadonlyFormBuilder
-    simple_fields_for(record_name, record, options, &block)
+    simple_fields_for(record_name, record, options, &)
   end
 
-  def modelless_form_for(options = {}, &block)
+  def modelless_form_for(options = {}, &)
     options[:builder] = ModelLessFormBuilder
-    simple_form_for(options[:object] || "", options, &block)
+    simple_form_for(options[:object] || "", options, &)
   end
 
   def scheduling_group_select(product, user)

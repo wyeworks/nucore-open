@@ -6,10 +6,8 @@ class UserRoleFacilityValidator < ActiveModel::Validator
       if record.global_role?
         record.errors.add(:role, I18n.t("activerecord.errors.models.user_role.global_cannot_have_facility", role: record.role))
       end
-    else
-      if record.facility_role?
-        record.errors.add(:role, I18n.t("activerecord.errors.models.user_role.role_must_have_facility", role: record.role))
-      end
+    elsif record.facility_role?
+      record.errors.add(:role, I18n.t("activerecord.errors.models.user_role.role_must_have_facility", role: record.role))
     end
   end
 end

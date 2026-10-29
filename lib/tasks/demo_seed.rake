@@ -68,7 +68,7 @@ namespace :demo do
 
     Settings.price_group.name.to_hash.each do |k, v|
       price_group = PriceGroup.setup_global(
-        name: v, is_internal: (k == :base || k == :cancer_center),
+        name: v, is_internal: [:base, :cancer_center].include?(k),
       )
 
       if k == :base
@@ -231,8 +231,7 @@ namespace :demo do
 
     bundle = Bundle.find_by(url_name: "example-bundle")
 
-    unless bundle
-      bundle = Bundle.create!(facility_id: facility.id,
+    bundle ||= Bundle.create!(facility_id: facility.id,
                               account: Settings.accounts.product_default,
                               name: "Example Bundle",
                               url_name: "example-bundle",
@@ -241,7 +240,6 @@ namespace :demo do
                               is_archived: false,
                               is_hidden: false,
                               facility_account_id: fa.id)
-    end
 
     BundleProduct.create(bundle:, product: item, quantity: 1)
     BundleProduct.create(bundle:, product: service, quantity: 1)
@@ -573,8 +571,7 @@ namespace :demo do
     if EngineManager.engine_loaded? :c2po
       ccaccount = CreditCardAccount.find_by(account_number: "xxxx-xxxx-xxxx-xxxx")
 
-      unless ccaccount
-        ccaccount = CreditCardAccount.create!(account_number: "xxxx-xxxx-xxxx-xxxx",
+      ccaccount ||= CreditCardAccount.create!(account_number: "xxxx-xxxx-xxxx-xxxx",
                                               description: "Paul PI's Credit Card",
                                               expires_at: Time.zone.now + 1.year,
                                               name_on_card: "Paul PI",
@@ -585,12 +582,10 @@ namespace :demo do
                                               affiliate_other: "Some Affiliate",
                                               facilities: [facility],
                                               account_users_attributes:)
-      end
 
       poaccount = PurchaseOrderAccount.find_by(account_number: "12345")
 
-      unless poaccount
-        poaccount = PurchaseOrderAccount.create!(account_number: "12345",
+      poaccount ||= PurchaseOrderAccount.create!(account_number: "12345",
                                                  description: "Paul PI's Purchase Order",
                                                  expires_at: Time.zone.now + 1.year,
                                                  created_by: user_director.id,
@@ -599,13 +594,12 @@ namespace :demo do
                                                  affiliate_other: "Some Affiliate",
                                                  remittance_information: "Billing Dept\nEdward External\n1702 E Research Dr\nAuburn, AL 36830",
                                                  account_users_attributes:)
-      end
     end
 
     # purchased orders, complete, statements sent, 3 months ago
     sleep 2
     (1..10).each do |_i|
-      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - (rand(30) + 65).days) # 94-65 days in the past
+      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - rand(65..94).days) # 94-65 days in the past
       order.reload
       order.order_details.each do |od|
         # enter actuals for instruments
@@ -624,7 +618,7 @@ namespace :demo do
     # purchased orders, complete, statements sent, 2 months ago
     sleep 2
     (1..10).each do |_i|
-      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - (rand(30) + 32).days) # 61 - 32 days in the past
+      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - rand(32..61).days) # 61 - 32 days in the past
       order.reload
       order.order_details.each do |od|
         # enter actuals for instruments
@@ -643,7 +637,7 @@ namespace :demo do
     # purchased orders, complete details, no statement
     sleep 2
     (1..10).each do |_i|
-      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - (rand(30) + 1).days) # 30 - 1 days in past
+      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - rand(1..30).days) # 30 - 1 days in past
       order.reload
       order.order_details.each do |od|
         # enter actuals for instruments
@@ -670,7 +664,7 @@ namespace :demo do
                      user_id: user.id,
                      facility_id: facility.id,
                      created_by: user.id)
-    ordered_at = args[:ordered_at] || Time.zone.now - 60 * 60 * 24 * (rand(30) + 1)
+    ordered_at = args[:ordered_at] || (Time.zone.now - (60 * 60 * 24 * rand(1..30)))
     # create at least one order detail.  20% chance to create an additional detail.
 
     # create a valid order detail (with price policy and costs)
@@ -681,7 +675,7 @@ namespace :demo do
     begin
       product = products[rand(products.length)]
       if product.is_a?(Bundle)
-        created_at = (ordered_at - (60 * rand(60) + 1))
+        created_at = (ordered_at - ((60 * rand(60)) + 1))
         group_id   = (o.order_details.collect { |od| od.group_id || 0 }.max || 0) + 1
         product.bundle_products.each do |bp|
           od = OrderDetail.create!(
@@ -711,8 +705,8 @@ namespace :demo do
           actual_subsidy: 0,
           estimated_cost: rand(2),
           estimated_subsidy: 0,
-          quantity: product.is_a?(Item) ? (rand(3) + 1) : 1,
-          created_at: (ordered_at - (60 * rand(60) + 1)),
+          quantity: product.is_a?(Item) ? rand(1..3) : 1,
+          created_at: (ordered_at - ((60 * rand(60)) + 1)),
           order_status_id: product.initial_order_status.id,
           ordered_at:,
         )

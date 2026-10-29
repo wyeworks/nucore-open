@@ -21,9 +21,9 @@ class TrainingRequestsController < ApplicationController
     @training_request = TrainingRequest.new(user: current_user, product: @product)
     if @training_request.save
       trigger_email_to_facility_staff
-      flash[:notice] = t("training_requests.create.success", product: @product)
+      flash[:notice] = t(".success", product: @product)
     else
-      flash[:error] = t("training_requests.create.failure", product: @product)
+      flash[:error] = t(".failure", product: @product)
     end
     redirect_to facility_path(current_facility)
   end
@@ -38,9 +38,9 @@ class TrainingRequestsController < ApplicationController
   # DELETE /facilities/:facility_id/training_requests/:id
   def destroy
     if @training_request.destroy
-      flash[:notice] = t("training_requests.destroy.success", **flash_arguments)
+      flash[:notice] = t(".success", **flash_arguments)
     else
-      flash[:error] = t("training_requests.destroy.failure", **flash_arguments)
+      flash[:error] = t(".failure", **flash_arguments)
     end
     redirect_to facility_training_requests_path(current_facility)
   end
