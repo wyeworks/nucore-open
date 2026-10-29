@@ -11,8 +11,8 @@ RSpec.describe OrderDetails::Reconciler do
       OrderDetail.create!(product: product, quantity: 1, actual_cost: 1, actual_subsidy: 0, state: "complete", statement:, order_id: order.id, created_by_user: user)
     end
   end
-  let(:params) { order_details.to_h { |od| [od.id.to_s, ActionController::Parameters.new(selected: "1", reconciled: "1")] } }
-  let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled") }
+  let(:order_detail_attributes) { {} }
+  let(:reconciler) { described_class.new(order_details:, order_detail_attributes:, reconciled_at: Time.current, order_status: "reconciled") }
   let(:account) { create(:account, :with_account_owner, type: Account.config.statement_account_types.first) }
   let(:statement) { create(:statement, facility: product.facility, account:, created_by_user: user) }
 
@@ -27,10 +27,10 @@ RSpec.describe OrderDetails::Reconciler do
       context "bulk note checkbox checked" do
         let(:reconciler) do
           described_class.new(
-            OrderDetail.all,
-            params,
-            Time.current,
-            "reconciled",
+            order_details:,
+            order_detail_attributes:,
+            reconciled_at: Time.current,
+            order_status: "reconciled",
             bulk_reconcile: true,
             bulk_note: "this is a bulk note",
             bulk_deposit_number: "CRT1234567",
@@ -49,12 +49,12 @@ RSpec.describe OrderDetails::Reconciler do
       context "bulk note when bulk_reconcile blank" do
         let(:reconciler) do
           described_class.new(
-            OrderDetail.all,
-            params,
-            Time.current,
-            "reconciled",
+            order_details:,
+            order_detail_attributes:,
+            reconciled_at: Time.current,
+            order_status: "reconciled",
             bulk_note: "this is a bulk note",
-            bulk_deposit_number: "CRT1234567"
+            bulk_deposit_number: "CRT1234567",
           )
         end
 
@@ -70,8 +70,7 @@ RSpec.describe OrderDetails::Reconciler do
 
     context "with NO bulk note" do
       context "with reconciled note set" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled") }
-        let(:params) { order_details.to_h { |od| [od.id.to_s, ActionController::Parameters.new(selected: "1", reconciled: "1", reconciled_note: "note #{od.id}")] } }
+        let(:order_detail_attributes) { order_details.to_h { |od| [od.id.to_s, { "reconciled_note" => "note #{od.id}" }] } }
 
         it "adds the note to the appropriate order details" do
           reconciler.reconcile_all
@@ -82,8 +81,6 @@ RSpec.describe OrderDetails::Reconciler do
       end
 
       context "with NO reconciled note set" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled") }
-
         it "does not set a value" do
           reconciler.reconcile_all
           order_details.each do |od|
@@ -94,7 +91,6 @@ RSpec.describe OrderDetails::Reconciler do
       end
 
       context "with previous reconciled note value, no new value set" do
-        let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "reconciled") }
         before(:each) do
           order_details.each do |od|
             od.update!(reconciled_note: "rec note #{od.id}", deposit_number: "CRT0000123")
@@ -112,8 +108,93 @@ RSpec.describe OrderDetails::Reconciler do
     end
   end
 
+  describe "the order details to act on" do
+    let(:number_of_order_details) { 3 }
+
+    context "when given an array of order details" do
+      let(:reconciler) { described_class.new(order_details: order_details.first(2), reconciled_at: Time.current) }
+
+      it "reconciles only those order details" do
+        reconciler.reconcile_all
+
+        expect(order_details.map { |od| od.reload.state }).to eq(%w(reconciled reconciled complete))
+      end
+    end
+
+    context "when given an ActiveRecord::Relation" do
+      let(:reconciler) { described_class.new(order_details: OrderDetail.where(id: order_details.first(2)), reconciled_at: Time.current) }
+
+      it "reconciles only those order details" do
+        reconciler.reconcile_all
+
+        expect(order_details.map { |od| od.reload.state }).to eq(%w(reconciled reconciled complete))
+      end
+    end
+
+    context "when given a readonly relation" do
+      let(:reconciler) { described_class.new(order_details: OrderDetail.where(id: order_details).readonly(true), reconciled_at: Time.current) }
+
+      it "still saves the order details" do
+        expect(reconciler.reconcile_all).to eq(3)
+      end
+    end
+
+    context "when given an empty relation" do
+      let(:reconciler) { described_class.new(order_details: OrderDetail.none, reconciled_at: Time.current) }
+
+      it "reconciles nothing without erroring" do
+        expect(reconciler.reconcile_all).to eq(0)
+        expect(reconciler.full_errors).to be_empty
+      end
+    end
+  end
+
+  describe "order_detail_attributes" do
+    let(:number_of_order_details) { 1 }
+    let(:order_detail) { order_details.first }
+
+    context "when keyed by string" do
+      let(:order_detail_attributes) { { order_detail.id.to_s => { "reconciled_note" => "a note" } } }
+
+      it "applies the attributes" do
+        reconciler.reconcile_all
+
+        expect(order_detail.reload.reconciled_note).to eq("a note")
+      end
+    end
+
+    context "when keyed by integer" do
+      let(:order_detail_attributes) { { order_detail.id => { "reconciled_note" => "a note" } } }
+
+      it "applies the attributes" do
+        reconciler.reconcile_all
+
+        expect(order_detail.reload.reconciled_note).to eq("a note")
+      end
+    end
+
+    context "when an order detail has no entry" do
+      let(:order_detail_attributes) { { -1 => { "reconciled_note" => "a note" } } }
+
+      it "reconciles it without assigning anything" do
+        expect(reconciler.reconcile_all).to eq(1)
+        expect(order_detail.reload.reconciled_note).to be_nil
+      end
+    end
+
+    context "when given unpermitted ActionController::Parameters" do
+      let(:order_detail_attributes) do
+        ActionController::Parameters.new(order_detail.id.to_s => { reconciled_note: "a note" })
+      end
+
+      it "raises rather than mass-assigning" do
+        expect { reconciler }.to raise_error(ActionController::UnfilteredParameters)
+      end
+    end
+  end
+
   describe "marking as 'Unrecoverable'" do
-    let(:reconciler) { described_class.new(OrderDetail.all, params, Time.current, "unrecoverable") }
+    let(:reconciler) { described_class.new(order_details:, order_detail_attributes:, reconciled_at: Time.current, order_status: "unrecoverable") }
     let(:number_of_order_details) { 5 }
 
     it "marks all the orders as 'Unrecoverable'" do
@@ -128,10 +209,8 @@ RSpec.describe OrderDetails::Reconciler do
     end
 
     context "when orders have reconciled_note" do
-      before do
-        params.values.each_with_index do |od_params, idx|
-          od_params["unrecoverable_note"] = "note #{idx}"
-        end
+      let(:order_detail_attributes) do
+        order_details.each_with_index.to_h { |od, idx| [od.id.to_s, { "unrecoverable_note" => "note #{idx}" }] }
       end
 
       it "set individual reconcile notes" do
@@ -146,10 +225,10 @@ RSpec.describe OrderDetails::Reconciler do
     context "when bulk_reconcile is true" do
       let(:reconciler) do
         described_class.new(
-          OrderDetail.all,
-          params,
-          Time.current,
-          "unrecoverable",
+          order_details:,
+          order_detail_attributes:,
+          reconciled_at: Time.current,
+          order_status: "unrecoverable",
           bulk_reconcile: true,
           bulk_note:,
         )
@@ -167,10 +246,7 @@ RSpec.describe OrderDetails::Reconciler do
   describe "#unreconcile_all" do
     let(:order) { create(:complete_order, product:) }
     let(:order_detail) { order.order_details.first }
-    let(:params) do
-      ActionController::Parameters.new(order_detail.id.to_s => { selected: "1" })
-    end
-    let(:reconciler) { described_class.new(OrderDetail.all, params, nil) }
+    let(:reconciler) { described_class.new(order_details: [order_detail], reconciled_at: nil) }
 
     before do
       order_detail.update!(

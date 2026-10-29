@@ -197,6 +197,52 @@ RSpec.describe FacilityAccountsReconciliationController do
         end
       end
     end
+
+    describe "per order detail attributes" do
+      let(:reconciled_at) { Time.current }
+
+      def perform_with(order_detail_attributes, extra_params = {})
+        post :update, params: {
+          facility_id: facility.url_name,
+          account_type: "ReconciliationTestAccount",
+          reconciled_at: formatted_reconciled_at,
+          order_detail: { order_detail.id.to_s => { selected: "1" }.merge(order_detail_attributes) },
+        }.merge(extra_params)
+      end
+
+      it "assigns the reconciled note and the deposit number" do
+        perform_with(reconciled_note: "A note", deposit_number: "TX-9")
+
+        order_detail.reload
+        expect(order_detail.reconciled_note).to eq("A note")
+        expect(order_detail.deposit_number).to eq("TX-9")
+      end
+
+      it "assigns the unrecoverable note when marking unrecoverable" do
+        perform_with({ unrecoverable_note: "Written off" }, order_status: "unrecoverable")
+
+        order_detail.reload
+        expect(order_detail.state).to eq("unrecoverable")
+        expect(order_detail.unrecoverable_note).to eq("Written off")
+      end
+
+      it "ignores attributes that are not permitted" do
+        expect { perform_with(reconciled_note: "A note", actual_cost: "9999") }
+          .not_to change { order_detail.reload.actual_cost }
+
+        expect(order_detail.reload.reconciled_note).to eq("A note")
+      end
+
+      it "ignores attributes submitted for an order detail that was not selected" do
+        perform_with({ reconciled_note: "A note" }, order_detail: {
+                       order_detail.id.to_s => { selected: "0", reconciled_note: "Should not apply" },
+                     })
+
+        order_detail.reload
+        expect(order_detail.state).to eq("complete")
+        expect(order_detail.reconciled_note).to be_nil
+      end
+    end
   end
 
   describe "two-tier reconciliation", feature_setting: { "billing.two_tier_reconciliation" => true, "billing.show_reconciliation_deposit_number" => true } do
@@ -269,6 +315,15 @@ RSpec.describe FacilityAccountsReconciliationController do
         order_details.each(&:reload)
         expect(order_details.map(&:reconciled_note)).to all(eq("A bulk note"))
         expect(order_details.map(&:deposit_number)).to all(eq("TX-123"))
+      end
+
+      it "ignores per order detail attributes, which the invoice page never submits" do
+        perform(bulk_note: "", order_detail: {
+                  order_detail.id.to_s => { selected: "1", reconciled_note: "Should not apply" },
+                })
+
+        expect(order_detail.reload.state).to eq("reconciled")
+        expect(order_detail.reconciled_note).to be_nil
       end
 
       it "does not reconcile when the transaction id is blank" do

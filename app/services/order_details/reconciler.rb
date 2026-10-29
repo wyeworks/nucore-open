@@ -13,20 +13,19 @@ module OrderDetails
     validate :all_journals_and_statements_must_be_before_reconciliation_date, if: -> { reconciled_at.present? && reconciling? }
 
     def initialize(
-      order_detail_scope,
-      params,
-      reconciled_at,
-      order_status = nil,
+      order_details:,
+      reconciled_at:,
+      order_status: nil,
+      order_detail_attributes: {},
       bulk_reconcile: false,
       **kwargs
     )
-      @params = params || ActionController::Parameters.new
       @order_status = order_status || "reconciled"
-      @order_detail_scope = order_detail_scope.readonly(false)
+      @order_details = writable(order_details)
+      @order_detail_attributes = (order_detail_attributes || {}).to_h.transform_keys(&:to_i)
       @reconciled_at = reconciled_at
       @bulk_note = kwargs[:bulk_note] if bulk_reconcile
       @bulk_deposit_number = kwargs[:bulk_deposit_number] if bulk_reconcile
-      @order_details = load_selected_order_details
     end
 
     def reconcile_all
@@ -40,9 +39,9 @@ module OrderDetails
           next if @order_status == "reconciled" && order_detail.reconciled?
           next if @order_status == "unrecoverable" && order_detail.unrecoverable?
 
-          params = @params[order_detail.id.to_s] || {}
+          attributes = @order_detail_attributes.fetch(order_detail.id, {})
           begin
-            update_status(order_detail, params)
+            update_status(order_detail, attributes)
             @count += 1
           rescue => e
             @persist_errors << "Order ##{order_detail.id}: #{e.message}"
@@ -81,20 +80,16 @@ module OrderDetails
 
     private
 
-    def load_selected_order_details
-      return [] if @params.blank?
-
-      selected_ids = @params.select { |_, p| p[:selected] == "1" }.keys
-
-      @order_detail_scope.where(id: selected_ids)
+    def writable(order_details)
+      order_details.respond_to?(:readonly) ? order_details.readonly(false) : order_details
     end
 
     def reconciling?
       @order_status == "reconciled"
     end
 
-    def update_status(order_detail, params)
-      order_detail.assign_attributes(allowed(params))
+    def update_status(order_detail, attributes)
+      order_detail.assign_attributes(attributes)
 
       if @order_status == "reconciled"
         order_detail.reconciled_at = @reconciled_at
@@ -109,21 +104,13 @@ module OrderDetails
       end
     end
 
-    def allowed(params)
-      params.except(:reconciled).permit(
-        :reconciled_note,
-        :unrecoverable_note,
-        :deposit_number,
-      )
-    end
-
     def reconciliation_must_be_in_past
       return unless reconciled_at.present?
       errors.add(:reconciled_at, :must_be_in_past) if reconciled_at > Time.current.end_of_day
     end
 
     def all_journals_and_statements_must_be_before_reconciliation_date
-      return unless reconciled_at.present? && @order_details.present?
+      return if reconciled_at.blank? || @order_details.blank?
       if @order_details.any? { |od| od.journal_or_statement_date.beginning_of_day > reconciled_at }
         errors.add(:reconciled_at, :after_all_journal_dates)
       end
