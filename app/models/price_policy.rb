@@ -207,9 +207,9 @@ class PricePolicy < ApplicationRecord
     price_group   = self.price_group
     unless product.nil? || price_group.nil?
       pp = if id.nil?
-             PricePolicy.find_by(price_group_id: price_group.id, product_id: product.id, start_date: start_date)
+             PricePolicy.find_by(price_group_id: price_group.id, product_id: product.id, start_date:)
            else
-             PricePolicy.where(price_group_id: price_group.id, product_id: product.id, start_date: start_date).where.not(id: id).first
+             PricePolicy.where(price_group_id: price_group.id, product_id: product.id, start_date:).where.not(id:).first
            end
       errors.add("start_date", "conflicts with an existing price rule") unless pp.nil?
     end
@@ -238,8 +238,8 @@ class PricePolicy < ApplicationRecord
   def truncate_existing_policies
     logger.debug("Truncating existing policies")
     existing_policies = PricePolicy.current.where(type: self.class.name,
-                                                  price_group_id: price_group_id,
-                                                  product_id: product_id)
+                                                  price_group_id:,
+                                                  product_id:)
 
     existing_policies = existing_policies.where("id != ?", id) unless id.nil?
 

@@ -228,14 +228,14 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?("a
       delete :destroy, params: { facility_id: facility.url_name, account_id: account.id, id: account_user.id }
     end
 
-    let(:staff) { FactoryBot.create(:user, :staff, facility: facility) }
-    let(:director) { FactoryBot.create(:user, :facility_director, facility: facility) }
+    let(:staff) { FactoryBot.create(:user, :staff, facility:) }
+    let(:director) { FactoryBot.create(:user, :facility_director, facility:) }
     let(:purchaser) { create(:user) }
 
     let(:account_user) do
       FactoryBot.create(
         :account_user, user_role: AccountUser::ACCOUNT_PURCHASER,
-                       account: account, user: purchaser,
+                       account:, user: purchaser,
                        created_by: account.owner_user.id)
     end
 

@@ -4,10 +4,10 @@ require "rails_helper"
 
 RSpec.describe AutoEndReservationMailer do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:setup_instrument, facility: facility, contact_email: "default@example.com") }
+  let(:instrument) { create(:setup_instrument, facility:, contact_email: "default@example.com") }
   let(:user) { create(:user) }
   let(:ended_by_user) { create(:user) }
-  let(:reservation) { create(:purchased_reservation, product: instrument, user: user, actual_end_at: Time.current) }
+  let(:reservation) { create(:purchased_reservation, product: instrument, user:, actual_end_at: Time.current) }
   let(:mail) { described_class.notify_auto_ended(reservation, ended_by_user) }
 
   describe "#notify_auto_ended" do

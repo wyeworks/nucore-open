@@ -11,7 +11,7 @@ RSpec.describe Reports::ExportRaw, :time_travel do
     create(
       :occupancy,
       :with_order_detail,
-      user: user,
+      user:,
       account:,
       entry_at: Time.zone.parse("2016-02-01 08:30"),
       exit_at: Time.zone.parse("2016-02-01 09:35"),

@@ -3,8 +3,8 @@
 class ProductUserCreator
   def self.create(user:, product:, approver:)
     product_user = ProductUser.new(
-      product: product,
-      user: user,
+      product:,
+      user:,
       approved_by: approver.id,
       approved_at: Time.zone.now,
     )

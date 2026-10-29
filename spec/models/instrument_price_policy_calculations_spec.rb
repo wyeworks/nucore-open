@@ -387,7 +387,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
     before(:each) { allow(policy.product).to receive(:min_cancel_hours).and_return 3 }
 
     describe "when it's inside the minimum cancellation window" do
-      let(:reservation) { double reserve_start_at: now + 30.minutes, order_detail: order_detail }
+      let(:reservation) { double reserve_start_at: now + 30.minutes, order_detail: }
       let(:order_detail) { double canceled_at: now }
 
       specify { expect(policy).to be_cancellation_penalty(reservation) }
@@ -400,7 +400,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
     end
 
     describe "when it's outside the minimum calcellation window" do
-      let(:reservation) { double reserve_start_at: now + 4.hours, order_detail: order_detail }
+      let(:reservation) { double reserve_start_at: now + 4.hours, order_detail: }
       let(:order_detail) { double canceled_at: now }
 
       specify { expect(policy).not_to be_cancellation_penalty(reservation) }

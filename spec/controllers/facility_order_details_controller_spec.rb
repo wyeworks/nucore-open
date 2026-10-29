@@ -70,7 +70,7 @@ RSpec.describe FacilityOrderDetailsController do
                             ordered_at: Time.current,
                             fulfilled_at: Time.current,
                             account: @account,
-                            journal: journal)
+                            journal:)
         end
 
         before :each do

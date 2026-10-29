@@ -37,7 +37,7 @@ class SurveysController < ApplicationController
 
     if request.xhr?
       # send the supplied string to the browser with a MIME type of text/javascript
-      render :js => "window.location = '#{params[:referer]}'"
+      render js: "window.location = '#{params[:referer]}'"
     else
       # TO DO: Remove logging when the other consumers of this code path are better understood.
       # This action should not be available via GET, but we need to know more before making that change.

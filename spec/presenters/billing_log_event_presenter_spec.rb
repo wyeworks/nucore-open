@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe BillingLogEventPresenter do
-  let(:log_event) { LogEvent.new(event_type: event_type, loggable_type: loggable_type, metadata: metadata) }
+  let(:log_event) { LogEvent.new(event_type:, loggable_type:, metadata:) }
   let(:event_type) { nil }
   let(:loggable_type) { nil }
   let(:metadata) { {} }

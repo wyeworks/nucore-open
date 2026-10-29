@@ -4,22 +4,22 @@ require "rails_helper"
 
 RSpec.describe "Transactions Search" do
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:setup_item, facility: facility) }
-  let(:item2) { create(:setup_item, facility: facility) }
+  let(:item) { create(:setup_item, facility:) }
+  let(:item2) { create(:setup_item, facility:) }
   let(:user) { create(:user) }
   let(:accounts) { create_list(:setup_account, 2, owner: user) }
   let!(:orders) do
     accounts.map do |account|
-      [create(:purchased_order, product: item, account: account),
-       create(:purchased_order, product: item2, account: account)]
+      [create(:purchased_order, product: item, account:),
+       create(:purchased_order, product: item2, account:)]
     end.flatten
   end
 
   context "index" do
     let!(:completed_orders) do
       accounts.map do |account|
-        [create(:complete_order, product: item, account: account),
-         create(:complete_order, product: item2, account: account)]
+        [create(:complete_order, product: item, account:),
+         create(:complete_order, product: item2, account:)]
       end.flatten
     end
 
@@ -37,8 +37,8 @@ RSpec.describe "Transactions Search" do
   context "in review" do
     let!(:orders_in_review) do
       accounts.map do |account|
-        [create(:complete_order, product: item, account: account),
-         create(:complete_order, product: item2, account: account)]
+        [create(:complete_order, product: item, account:),
+         create(:complete_order, product: item2, account:)]
       end.flatten
     end
 

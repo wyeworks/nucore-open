@@ -42,9 +42,9 @@ RSpec.describe Instrument do
     let(:max_reserve_mins) { 1000 }
 
     before do
-      instrument.assign_attributes(reserve_interval: reserve_interval,
-                                   min_reserve_mins: min_reserve_mins,
-                                   max_reserve_mins: max_reserve_mins)
+      instrument.assign_attributes(reserve_interval:,
+                                   min_reserve_mins:,
+                                   max_reserve_mins:)
     end
 
     describe "min reservation" do
@@ -117,8 +117,8 @@ RSpec.describe Instrument do
   describe "shared schedules" do
     subject(:instrument) do
       FactoryBot.build(:instrument,
-                       facility: facility,
-                       schedule: schedule)
+                       facility:,
+                       schedule:)
     end
 
     context "when no schedule is defined" do
@@ -130,7 +130,7 @@ RSpec.describe Instrument do
     end
 
     context "when a schedule is defined" do
-      let(:schedule) { FactoryBot.create(:schedule, facility: facility) }
+      let(:schedule) { FactoryBot.create(:schedule, facility:) }
 
       it "does not create a new schedule" do
         expect { instrument.save! }
@@ -165,7 +165,7 @@ RSpec.describe Instrument do
   context "updating nested relay with replace_relay" do
     before :each do
       @instrument = FactoryBot.create(:instrument,
-                                      facility: facility,
+                                      facility:,
                                       no_relay: true)
     end
 
@@ -334,7 +334,7 @@ RSpec.describe Instrument do
     before(:each) do
       # create instrument, min reserve time is 60 minutes, max is 60 minutes
       @instrument = FactoryBot.create(:instrument,
-                                      facility: facility,
+                                      facility:,
                                       min_reserve_mins: 60,
                                       max_reserve_mins: 60)
       assert @instrument.valid?
@@ -602,10 +602,10 @@ RSpec.describe Instrument do
 
   context "last reserve dates, days from now" do
     before(:each) do
-      @price_group = FactoryBot.create(:price_group, facility: facility)
+      @price_group = FactoryBot.create(:price_group, facility:)
       # create instrument, min reserve time is 60 minutes, max is 60 minutes
       @instrument = FactoryBot.create(:instrument,
-                                      facility: facility,
+                                      facility:,
                                       min_reserve_mins: 60,
                                       max_reserve_mins: 60)
       @price_group_product = FactoryBot.create(:price_group_product, product: @instrument, price_group: @price_group)
@@ -639,10 +639,10 @@ RSpec.describe Instrument do
 
     before :each do
       @instrument = FactoryBot.create(:instrument,
-                                      facility: facility)
-      @price_group = FactoryBot.create(:price_group, facility: facility)
+                                      facility:)
+      @price_group = FactoryBot.create(:price_group, facility:)
       @user = FactoryBot.create(:user)
-      @price_group_member = create(:account_price_group_member, account: account, price_group: @price_group)
+      @price_group_member = create(:account_price_group_member, account:, price_group: @price_group)
       @user.reload
       @price_policy = FactoryBot.create(:instrument_price_policy, product: @instrument, price_group: @price_group)
       # TODO: remove this line

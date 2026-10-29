@@ -17,7 +17,7 @@ class EmailEvent < ApplicationRecord
   # end
   #
   def self.notify(user, keys, wait: 24.hours)
-    event = find_or_initialize_by(user: user, key: key_for(keys))
+    event = find_or_initialize_by(user:, key: key_for(keys))
 
     if event.last_sent_at.blank? || event.last_sent_at < wait.ago
       # if a race condition makes event invalid now, we don't yield

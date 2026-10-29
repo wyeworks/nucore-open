@@ -237,7 +237,7 @@ class UsersController < ApplicationController
   def save_user_success(user)
     flash[:notice] = creation_success_flash_text(user, current_facility)
 
-    Notifier.new_user(user: user, password: user.password).deliver_later
+    Notifier.new_user(user:, password: user.password).deliver_later
     redirect_to facility_users_path(user: user.id)
   end
 

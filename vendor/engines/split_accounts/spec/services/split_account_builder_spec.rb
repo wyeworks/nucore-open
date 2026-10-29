@@ -20,7 +20,7 @@ RSpec.describe SplitAccounts::SplitAccountBuilder, :enable_split_accounts do
         facility: build_stubbed(:facility),
         owner_user: build_stubbed(:user),
         current_user: build_stubbed(:user),
-        params: params,
+        params:,
       }
     end
 

@@ -17,7 +17,7 @@ RSpec.describe DownloadableFile do
   end
 
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:item, facility: facility) }
+  let(:item) { create(:item, facility:) }
   let(:user) { create(:user) }
   let(:file_path) { "#{Rails.root}/spec/files/template1.txt" }
   let(:uploaded_file) { File.open(file_path) }

@@ -6,7 +6,7 @@ RSpec.describe MoveToProblemQueue do
   let(:mailer) { double("mail object", deliver_later: true) }
   let(:order) { FactoryBot.build(:order, :purchased) }
   let(:reservation) { FactoryBot.build(:reservation) }
-  let(:order_detail) { FactoryBot.build(:order_detail, order: order, reservation: reservation, product: product) }
+  let(:order_detail) { FactoryBot.build(:order_detail, order:, reservation:, product:) }
   before do
     expect(order_detail).to receive_messages(
       complete!: true,

@@ -42,15 +42,15 @@ end
 # [_account_]
 #   The account under which the order is placed
 def place_product_order(ordered_by, facility, product, account = nil, purchased = true)
-  @price_group = FactoryBot.create(:price_group, facility: facility)
+  @price_group = FactoryBot.create(:price_group, facility:)
 
-  o_attrs = { created_by: ordered_by.id, facility: facility }
+  o_attrs = { created_by: ordered_by.id, facility: }
   o_attrs[:account_id] = account.id if account
   o_attrs[:state] = "purchased" if purchased
   @order = ordered_by.orders.create(FactoryBot.attributes_for(:order, o_attrs))
 
   FactoryBot.create(:user_price_group_member, user: ordered_by, price_group: @price_group)
-  create(:account_price_group_member, account: account, price_group: @price_group) if account.present?
+  create(:account_price_group_member, account:, price_group: @price_group) if account.present?
   @item_pp = product.send(:"#{product.class.name.underscore.downcase}_price_policies").create(FactoryBot.attributes_for(:"#{product.class.name.underscore.downcase}_price_policy", price_group_id: @price_group.id))
   @item_pp.reload.restrict_purchase = false
   od_attrs = { product_id: product.id }
@@ -75,7 +75,7 @@ end
 # [_reviewed_]
 #   true if the completed order should also be marked as reviewed, false by default
 def place_and_complete_item_order(ordered_by, facility, account = nil, reviewed = false)
-  @facility_account = FactoryBot.create(:facility_account, facility: facility)
+  @facility_account = FactoryBot.create(:facility_account, facility:)
   @item = facility.items.create(FactoryBot.attributes_for(:item, facility_account_id: @facility_account.id))
   place_product_order(ordered_by, facility, @item, account)
 
@@ -118,7 +118,7 @@ def place_reservation_for_instrument(ordered_by, instrument, account, reserve_st
   instrument.schedule_rules.create(FactoryBot.attributes_for(:schedule_rule)) if instrument.schedule_rules.empty?
   res_attrs = {
     reserve_start_at: reserve_start,
-    order_detail: order_detail,
+    order_detail:,
     duration_mins: 60,
     split_times: true,
   }
@@ -145,7 +145,7 @@ def place_reservation(facility, order_detail, reserve_start, extra_reservation_a
   # create instrument, min reserve time is 60 minutes, max is 60 minutes
   @instrument ||= FactoryBot.create(
     :instrument,
-    facility: facility,
+    facility:,
     min_reserve_mins: 60,
     max_reserve_mins: 60)
 
@@ -154,7 +154,7 @@ def place_reservation(facility, order_detail, reserve_start, extra_reservation_a
 
   res_attrs = {
     reserve_start_at: reserve_start,
-    order_detail: order_detail,
+    order_detail:,
     duration_mins: 60,
     split_times: true,
   }
@@ -191,18 +191,18 @@ end
 def setup_reservation(facility, account, user)
   # create instrument, min reserve time is 60 minutes, max is 60 minutes
   @instrument = FactoryBot.create(:instrument,
-                                  facility: facility,
+                                  facility:,
                                   min_reserve_mins: 60,
                                   max_reserve_mins: 60)
   assert @instrument.valid?
-  @price_group = FactoryBot.create(:price_group, facility: facility)
+  @price_group = FactoryBot.create(:price_group, facility:)
   FactoryBot.create(:price_group_product, product: @instrument, price_group: @price_group)
   # add rule, available every day from 9 to 5, 60 minutes duration
   @instrument.schedule_rules << FactoryBot.build(:schedule_rule, end_hour: 23)
   # create price policy with default window of 1 day
   @instrument.instrument_price_policies.create(FactoryBot.attributes_for(:instrument_price_policy).update(price_group_id: @price_group.id))
   # create order, order detail
-  @order = user.orders.create(FactoryBot.attributes_for(:order, created_by: user.id, account: account))
+  @order = user.orders.create(FactoryBot.attributes_for(:order, created_by: user.id, account:))
   @order.add(@instrument, 1)
   @order_detail = @order.order_details.first
 end
@@ -244,8 +244,8 @@ end
 # - @account
 # - @pg_member
 def setup_user_for_purchase(user, price_group)
-  @account          = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: user))
-  @pg_member        = FactoryBot.create(:user_price_group_member, user: user, price_group: price_group)
+  @account          = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user:))
+  @pg_member        = FactoryBot.create(:user_price_group_member, user:, price_group:)
   create(:account_price_group_member, account: @account, price_group: PriceGroup.base)
 end
 
@@ -264,8 +264,8 @@ end
 
 def setup_account(factory, facility, user)
   FactoryBot.create(factory,
-                    facility: facility,
-                    account_users_attributes: account_users_attributes_hash(user: user),
+                    facility:,
+                    account_users_attributes: account_users_attributes_hash(user:),
                    )
 end
 
@@ -282,6 +282,6 @@ end
 def add_account_for_user(user_sym, product, price_group = PriceGroup.base)
   nufs_account = create_nufs_account_with_owner(user_sym)
   define_open_account(product.account, nufs_account.account_number)
-  create(:account_price_group_member, account: nufs_account, price_group: price_group)
+  create(:account_price_group_member, account: nufs_account, price_group:)
   nufs_account
 end

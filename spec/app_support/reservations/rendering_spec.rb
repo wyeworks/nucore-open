@@ -6,10 +6,10 @@ RSpec.describe Reservations::Rendering do
   subject(:reservation) do
     build_stubbed(
       :reservation,
-      reserve_start_at: reserve_start_at,
-      reserve_end_at: reserve_end_at,
-      actual_start_at: actual_start_at,
-      actual_end_at: actual_end_at,
+      reserve_start_at:,
+      reserve_end_at:,
+      actual_start_at:,
+      actual_end_at:,
     )
   end
 
@@ -77,7 +77,7 @@ RSpec.describe Reservations::Rendering do
     context "with an order" do
       let(:facility) { build_stubbed(:facility) }
       let(:order_detail) { build_stubbed(:order_detail, note: "Note to self...") }
-      let(:order) { build_stubbed(:order, user: user, facility: facility, order_details: [order_detail]) }
+      let(:order) { build_stubbed(:order, user:, facility:, order_details: [order_detail]) }
       let(:user) { build_stubbed(:user) }
 
       before { allow(reservation).to receive(:order).and_return(order) }

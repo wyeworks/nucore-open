@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.describe "Facility Orders Search" do
   let(:facility) { create(:setup_facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
-  let(:item) { create(:setup_item, facility: facility) }
-  let(:item2) { create(:setup_item, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
+  let(:item) { create(:setup_item, facility:) }
+  let(:item2) { create(:setup_item, facility:) }
   let(:accounts) { create_list(:setup_account, 2) }
 
   before do
@@ -16,14 +16,14 @@ RSpec.describe "Facility Orders Search" do
   context "same facility orders" do
     let!(:orders) do
       accounts.map do |account|
-        [create(:purchased_order, product: item, account: account),
-         create(:purchased_order, product: item2, account: account)]
+        [create(:purchased_order, product: item, account:),
+         create(:purchased_order, product: item2, account:)]
       end.flatten
     end
     let!(:completed_orders) do
       accounts.map do |account|
-        [create(:complete_order, product: item, account: account),
-         create(:complete_order, product: item2, account: account)]
+        [create(:complete_order, product: item, account:),
+         create(:complete_order, product: item2, account:)]
       end.flatten
     end
 

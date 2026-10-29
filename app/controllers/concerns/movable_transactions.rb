@@ -67,7 +67,7 @@ module MovableTransactions
 
   def bulk_reassignment_failure(reassignment_error)
     flash[:alert] = I18n.t("controllers.facilities.bulk_reassignment.move.failure",
-                           reassignment_error: reassignment_error,
+                           reassignment_error:,
                            order_detail_id: reassignment_error.record.id)
   end
 

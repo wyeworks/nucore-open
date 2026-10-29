@@ -7,15 +7,15 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
 
   describe "adding to existing orders" do
     let!(:user) { create(:user, username: "sst123@example.com") }
-    let!(:item) { create(:setup_item, name: "Example Item", facility: facility) }
-    let!(:nonbillable_item) { create(:setup_item, name: "Nonbillable Item", billing_mode: Product.billing_modes.last, facility: facility) }
+    let!(:item) { create(:setup_item, name: "Example Item", facility:) }
+    let!(:nonbillable_item) { create(:setup_item, name: "Nonbillable Item", billing_mode: Product.billing_modes.last, facility:) }
     let!(:account) { create(:nufs_account, :with_account_owner, owner: user) }
     let!(:account2) { create(:nufs_account, :with_account_owner, owner: user) }
     let!(:original_account) { create(:nufs_account, :with_account_owner, owner: user) }
-    let!(:order) { create(:purchased_order, product: item, account: original_account, user: user, created_by: user.id) }
-    let!(:order2) { create(:purchased_order, product: item, account: original_account, user: user, created_by: user.id) }
+    let!(:order) { create(:purchased_order, product: item, account: original_account, user:, created_by: user.id) }
+    let!(:order2) { create(:purchased_order, product: item, account: original_account, user:, created_by: user.id) }
     let(:file) { create(:csv_stored_file, file: StringIO.new(body)) }
-    let(:order_import) { described_class.new(facility: facility, created_by: user.id, upload_file: file) }
+    let(:order_import) { described_class.new(facility:, created_by: user.id, upload_file: file) }
     let(:two_weeks_ago) { I18n.l(15.days.ago.to_date, format: :usa) }
     let(:yesterday) { I18n.l(1.day.ago.to_date, format: :usa) }
     let(:today) { I18n.l(Time.current.to_date, format: :usa) }
@@ -48,7 +48,7 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
         order_import.process_upload!
         expect(order.reload.order_details).to match([
           anything, # this is the original detail
-          having_attributes(account: account, note: "Add to 1", reference_id: "123456789"),
+          having_attributes(account:, note: "Add to 1", reference_id: "123456789"),
           having_attributes(account: account2, note: "Add to 2", reference_id: "123456000"),
           having_attributes(account: nonbillable_account, note: "Add to 3", reference_id: "123456700"),
         ])
@@ -65,8 +65,8 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
         expect(Order.all.to_a - existing).to match([
           having_attributes(
             order_details: [
-              having_attributes(account: account, note: "New 1"),
-              having_attributes(account: account, note: "New 1-2 - Miscased"),
+              having_attributes(account:, note: "New 1"),
+              having_attributes(account:, note: "New 1-2 - Miscased"),
             ],
           ),
           having_attributes(
@@ -96,7 +96,7 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
         create(:purchased_order,
                product: nonbillable_item,
                account: nonbillable_account,
-               user: user,
+               user:,
                created_by: user.id)
       end
 

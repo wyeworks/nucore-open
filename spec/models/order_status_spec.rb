@@ -44,7 +44,7 @@ RSpec.describe OrderStatus do
 
   describe ".initial_statuses" do
     let!(:facility_status) do
-      create(:order_status, facility: facility, parent: described_class.new_status, name: "Brand New")
+      create(:order_status, facility:, parent: described_class.new_status, name: "Brand New")
     end
 
     let!(:other_status) do
@@ -131,7 +131,7 @@ RSpec.describe OrderStatus do
 
   describe ".non_protected_statuses" do
     let!(:facility_status) do
-      create(:order_status, facility: facility, parent: described_class.canceled, name: "Due to Bad Weather")
+      create(:order_status, facility:, parent: described_class.canceled, name: "Due to Bad Weather")
     end
 
     let!(:other_status) do

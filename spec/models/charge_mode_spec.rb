@@ -7,7 +7,7 @@ RSpec.describe ChargeMode do
     subject(:charge_for) { described_class.for_order_detail(order_detail) }
 
     describe "it has an assigned price policy" do
-      let(:order_detail) { build(:order_detail, price_policy: price_policy) }
+      let(:order_detail) { build(:order_detail, price_policy:) }
 
       describe "for an item" do
         let(:price_policy) { build(:item_price_policy) }

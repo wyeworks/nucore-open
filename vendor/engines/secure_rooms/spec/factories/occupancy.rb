@@ -31,7 +31,7 @@ FactoryBot.define do
 
     trait :with_order_detail do
       association :secure_room, :with_schedule_rule, :with_base_price
-      order_detail { FactoryBot.create(:setup_order, product: secure_room, user: user, account: account).order_details.first }
+      order_detail { FactoryBot.create(:setup_order, product: secure_room, user:, account:).order_details.first }
 
       after(:create) do |occupancy|
         ProductUser.find_or_create_by!(user: occupancy.user, product: occupancy.secure_room, approved_by: 0)

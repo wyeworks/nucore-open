@@ -7,7 +7,7 @@ RSpec.describe Reports::GeneralReportsController do
   let(:item) { FactoryBot.create(:setup_item) }
   let!(:order) { FactoryBot.create(:purchased_order, product: item) }
   let!(:no_project_order) { FactoryBot.create(:purchased_order, product: item) }
-  let(:project) { FactoryBot.create(:project, facility: facility) }
+  let(:project) { FactoryBot.create(:project, facility:) }
   let(:administrator) { FactoryBot.create(:user, :administrator) }
 
   describe "the project report" do

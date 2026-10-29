@@ -15,7 +15,7 @@ module BulkEmail
     def readonly_text(content)
       return if content.blank?
       rows = content.count("\n") + 1
-      template.content_tag(:textarea, content, input_html_options.merge(disabled: true, rows: rows))
+      template.content_tag(:textarea, content, input_html_options.merge(disabled: true, rows:))
     end
   end
 end

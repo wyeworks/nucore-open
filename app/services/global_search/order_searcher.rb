@@ -27,7 +27,7 @@ module GlobalSearch
 
     def search_full(query)
       order_id, order_detail_id = query.split("-")
-      OrderDetail.where(id: order_detail_id, order_id: order_id)
+      OrderDetail.where(id: order_detail_id, order_id:)
     end
 
     def search_external(query)

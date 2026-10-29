@@ -137,7 +137,7 @@ class OrderDetails::ParamUpdater
 
   def change_order_status(new_order_status_id, apply_cancel_fee)
     new_order_status = OrderStatus.find(new_order_status_id)
-    @order_detail.update_order_status!(@editing_user, new_order_status, admin: true, apply_cancel_fee: apply_cancel_fee)
+    @order_detail.update_order_status!(@editing_user, new_order_status, admin: true, apply_cancel_fee:)
     @order_detail.notify_purchaser_of_order_status
     true
   rescue => e

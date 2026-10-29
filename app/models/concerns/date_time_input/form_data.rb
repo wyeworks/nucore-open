@@ -59,10 +59,10 @@ module DateTimeInput
 
     def to_h
       {
-        date: date,
-        hour: hour,
-        minute: minute,
-        ampm: ampm,
+        date:,
+        hour:,
+        minute:,
+        ampm:,
       }
     end
   end

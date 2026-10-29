@@ -153,7 +153,7 @@ class OrderDetail < ApplicationRecord
 
   def self.for_facility_id(facility_id = nil)
     if facility_id.present?
-      joins(:order).where(orders: { facility_id: facility_id })
+      joins(:order).where(orders: { facility_id: })
     else
       all
     end
@@ -443,7 +443,7 @@ class OrderDetail < ApplicationRecord
 
     if reservation && order_status.root_canceled?
       cancel_reservation(updated_by,
-                         order_status: order_status,
+                         order_status:,
                          admin: options[:admin],
                          admin_with_cancel_fee: options[:apply_cancel_fee])
     else
@@ -563,7 +563,7 @@ class OrderDetail < ApplicationRecord
     return false unless order && account_id
     return false if product.nonbillable_mode? && account.is_a?(NonbillableAccount)
 
-    errors.add("account_id", "is not valid for the orderer") unless AccountUser.find_by(user_id: order.user_id, account_id: account_id, deleted_at: nil)
+    errors.add("account_id", "is not valid for the orderer") unless AccountUser.find_by(user_id: order.user_id, account_id:, deleted_at: nil)
   end
 
   def customer_account_changeable?
@@ -976,7 +976,7 @@ class OrderDetail < ApplicationRecord
 
   def self.where_order_number(query)
     return nil unless /\A(?<order_id>\d+)-(?<id>\d+)\z/ =~ query
-    where(id: id, order_id: order_id)
+    where(id:, order_id:)
   end
 
   def to_log_s

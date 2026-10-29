@@ -21,7 +21,7 @@ RSpec.describe Reports::InstrumentDayReport do
   let(:friday) { Time.zone.local(2017, 7, 14, 12, 0) }
 
   context "with actual reservations" do
-    let(:product1_reservations) { build_stubbed_list(:reservation, 3, reserve_start_at: tuesday, duration_mins: 35, actual_start_at: tuesday, actual_duration_mins: 60, product: product) }
+    let(:product1_reservations) { build_stubbed_list(:reservation, 3, reserve_start_at: tuesday, duration_mins: 35, actual_start_at: tuesday, actual_duration_mins: 60, product:) }
     let(:product2_reservations) { build_stubbed_list(:reservation, 2, reserve_start_at: friday, duration_mins: 25, actual_start_at: friday, actual_duration_mins: 15, product: product2) }
     let(:reservations) { product1_reservations + product2_reservations }
 
@@ -57,7 +57,7 @@ RSpec.describe Reports::InstrumentDayReport do
   end
 
   context "with zero length actuals" do
-    let(:product1_reservations) { build_stubbed_list(:reservation, 3, duration_mins: 35, actual_start_at: tuesday, actual_duration_mins: 0, product: product) }
+    let(:product1_reservations) { build_stubbed_list(:reservation, 3, duration_mins: 35, actual_start_at: tuesday, actual_duration_mins: 0, product:) }
     let(:product2_reservations) { build_stubbed_list(:reservation, 2, duration_mins: 35, actual_start_at: friday, actual_duration_mins: 0, product: product2) }
     let(:reservations) { product1_reservations + product2_reservations }
     let(:report_on) { :actual_hours }
@@ -72,7 +72,7 @@ RSpec.describe Reports::InstrumentDayReport do
   describe "with a problem reservation" do
     let(:reservations) do
       build_stubbed_list(:reservation, 3, reserve_start_at: tuesday, duration_mins: 30,
-                                          actual_start_at: tuesday, actual_end_at: nil, product: product)
+                                          actual_start_at: tuesday, actual_end_at: nil, product:)
     end
 
     describe "reserved_hours" do

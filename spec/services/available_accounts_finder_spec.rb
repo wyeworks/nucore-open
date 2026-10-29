@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe AvailableAccountsFinder do
-  subject(:accounts) { described_class.new(user, facility, current: current).accounts }
+  subject(:accounts) { described_class.new(user, facility, current:).accounts }
 
   let(:user) { FactoryBot.create(:user) }
   let(:facility) { FactoryBot.create(:facility) }
@@ -34,12 +34,12 @@ RSpec.describe AvailableAccountsFinder do
     end
 
     context "with a different current user" do
-      subject(:accounts) { described_class.new(user, facility, current: current, current_user: current_user).accounts }
+      subject(:accounts) { described_class.new(user, facility, current:, current_user:).accounts }
 
       let(:current_user) { FactoryBot.create(:user) }
       let!(:other_chartstring) { FactoryBot.create(:nufs_account, :with_account_owner, owner: current_user) }
 
-      before { FactoryBot.create(:account_user, :business_administrator, user: user, account: other_chartstring) }
+      before { FactoryBot.create(:account_user, :business_administrator, user:, account: other_chartstring) }
 
       describe "for any facility" do
         it { is_expected.to contain_exactly(chartstring, other_chartstring) }

@@ -38,16 +38,16 @@ RSpec.describe Order do
   context "total cost" do
     let(:account) { create(:nufs_account, :with_account_owner, owner: user) }
     let(:facility) { create(:facility) }
-    let(:facility_account) { create(:facility_account, facility: facility) }
-    let(:item) { create(:item, facility: facility, facility_account: facility_account) }
-    let(:order) { create(:order, user: user, created_by: user.id) }
-    let(:price_group) { create(:price_group, facility: facility) }
-    let!(:price_policy) { create(:item_price_policy, product: item, price_group: price_group) }
+    let(:facility_account) { create(:facility_account, facility:) }
+    let(:item) { create(:item, facility:, facility_account:) }
+    let(:order) { create(:order, user:, created_by: user.id) }
+    let(:price_group) { create(:price_group, facility:) }
+    let!(:price_policy) { create(:item_price_policy, product: item, price_group:) }
     let(:user) { create(:user) }
 
     context "actual" do
-      let!(:order_detail_1) { create(:order_detail, order: order, product: item, account: account, actual_cost: 10, actual_subsidy: 5, price_policy: price_policy) }
-      let!(:order_detail_2) { create(:order_detail, order: order, product: item, account: account, actual_cost: 12, actual_subsidy: 0, price_policy: price_policy) }
+      let!(:order_detail_1) { create(:order_detail, order:, product: item, account:, actual_cost: 10, actual_subsidy: 5, price_policy:) }
+      let!(:order_detail_2) { create(:order_detail, order:, product: item, account:, actual_cost: 12, actual_subsidy: 0, price_policy:) }
       let(:cost) { 22 }
       let(:subsidy) { 5 }
       let(:total) { cost - subsidy }
@@ -65,22 +65,22 @@ RSpec.describe Order do
       end
 
       it "does not include canceled state order details in its total" do
-        create(:order_detail, :canceled, order: order, product: item, account: account, actual_cost: 5, actual_subsidy: 0, price_policy: price_policy)
+        create(:order_detail, :canceled, order:, product: item, account:, actual_cost: 5, actual_subsidy: 0, price_policy:)
 
         expect(order.total).to eq total
       end
 
       it "does include canceled with fee order details in its total" do
-        create(:order_detail, :canceled_with_cost, order: order, product: item, account: account, actual_cost: 5, actual_subsidy: 0, price_policy: price_policy)
+        create(:order_detail, :canceled_with_cost, order:, product: item, account:, actual_cost: 5, actual_subsidy: 0, price_policy:)
 
         expect(order.total).to eq total + 5
       end
     end
 
     context "estimated" do
-      let!(:order_detail_1) { create(:order_detail, order: order, product: item, account: account, estimated_cost: 10, estimated_subsidy: 5, price_policy: price_policy) }
-      let!(:order_detail_2) { create(:order_detail, order: order, product: item, account: account, estimated_cost: 12, estimated_subsidy: 0, price_policy: price_policy) }
-      let!(:canceled_order_detail) { create(:order_detail, order: order, product: item, account: account, estimated_cost: 8, estimated_subsidy: 2, price_policy: price_policy, state: "canceled") }
+      let!(:order_detail_1) { create(:order_detail, order:, product: item, account:, estimated_cost: 10, estimated_subsidy: 5, price_policy:) }
+      let!(:order_detail_2) { create(:order_detail, order:, product: item, account:, estimated_cost: 12, estimated_subsidy: 0, price_policy:) }
+      let!(:canceled_order_detail) { create(:order_detail, order:, product: item, account:, estimated_cost: 8, estimated_subsidy: 2, price_policy:, state: "canceled") }
 
       it "should have the expected estimated_cost" do
         expect(order.estimated_cost).to eq 22

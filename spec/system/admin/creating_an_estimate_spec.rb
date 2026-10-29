@@ -16,7 +16,7 @@ RSpec.describe(
   let!(:bundle) { create(:bundle, facility:, bundle_products: [item, instrument]) }
   let(:other_facility) { create(:setup_facility) }
   let!(:other_item) { create(:setup_item, facility: other_facility, cross_core_ordering_available: true) }
-  let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group: price_group) }
+  let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group:) }
   let!(:item_without_price_policy) { create(:setup_item, facility:) }
 
   before { login_as director }

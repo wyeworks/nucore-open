@@ -110,11 +110,11 @@ module PowerRelay
     {
       options: {
         instrument: instrument&.name,
-        type: type,
-        host: host,
-        ip_port: ip_port,
-        outlet: outlet,
-        secondary_outlet: secondary_outlet,
+        type:,
+        host:,
+        ip_port:,
+        outlet:,
+        secondary_outlet:,
       }.merge(connection_options.except(:username, :password)),
     }
   end

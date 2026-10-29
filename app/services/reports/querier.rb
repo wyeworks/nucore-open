@@ -26,14 +26,14 @@ module Reports
     def order_details
       return OrderDetail.none if order_status_id.blank?
 
-      OrderDetail.where(order_status_id: order_status_id)
+      OrderDetail.where(order_status_id:)
                  .for_facility(current_facility)
                  .action_in_date_range(date_range_field, date_range_start, date_range_end)
                  .joins(:order, :account)
                  .includes(*includes)
                  .preload(*preloads)
                  .merge(Order.purchased)
-                 .find_each(batch_size: batch_size)
+                 .find_each(batch_size:)
     end
 
     private

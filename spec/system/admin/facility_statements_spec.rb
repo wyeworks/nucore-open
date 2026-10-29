@@ -37,7 +37,7 @@ RSpec.describe "Facility Statement Admin" do
     let(:account) { accounts.first }
     let(:order_detail) { order_details.first }
     let!(:parent_statement) do
-      create(:statement, account: account, facility: facility, created_by: director.id)
+      create(:statement, account:, facility:, created_by: director.id)
     end
 
     before do

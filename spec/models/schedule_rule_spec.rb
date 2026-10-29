@@ -4,11 +4,11 @@ require "rails_helper"
 
 RSpec.describe ScheduleRule do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:instrument, facility: facility) }
+  let(:instrument) { create(:instrument, facility:) }
 
   it "should create using factory" do
     instrument = FactoryBot.create(:instrument,
-                                   facility: facility)
+                                   facility:)
     rule = FactoryBot.create(:schedule_rule, product: instrument)
     expect(rule).to be_valid
   end
@@ -446,7 +446,7 @@ RSpec.describe ScheduleRule do
 
   # for the unlikley case where the price group discount doesn't exist, should return 0
   describe "#discount_for_price_group" do
-    let(:price_group) { create(:price_group, facility: facility) }
+    let(:price_group) { create(:price_group, facility:) }
     let(:schedule_rule) { build(:schedule_rule, discount_percent: nil) }
 
     it "returns 0 if no price group discount is found" do

@@ -5,8 +5,8 @@ require "rails_helper"
 RSpec.describe TrainingRequestsController, feature_setting: { training_requests: true, reload_routes: true } do
   let(:facility) { FactoryBot.create(:setup_facility) }
   let(:product) do
-    FactoryBot.create(:setup_item, facility: facility,
-                                   requires_approval: true, training_request_contacts: training_request_contacts)
+    FactoryBot.create(:setup_item, facility:,
+                                   requires_approval: true, training_request_contacts:)
   end
   let(:training_request_contacts) { "test@example.com, test2@example.com" }
   let(:user) { FactoryBot.create(:user) }
@@ -73,7 +73,7 @@ RSpec.describe TrainingRequestsController, feature_setting: { training_requests:
       end
 
       describe "but the user has a request pending already" do
-        before { TrainingRequest.create!(user: user, product: product) }
+        before { TrainingRequest.create!(user:, product:) }
 
         it "does not create the training request" do
           expect { do_request }.not_to change(TrainingRequest, :count)

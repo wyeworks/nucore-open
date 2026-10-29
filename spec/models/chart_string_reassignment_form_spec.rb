@@ -6,9 +6,9 @@ RSpec.describe ChartStringReassignmentForm do
   let(:account_owner) { create(:user) }
   let(:accounts) { create_list(:setup_account, users.count, owner: account_owner) }
   let(:order_details) do
-    orders.map { |order| create(:order_detail, order: order, product: product) }
+    orders.map { |order| create(:order_detail, order:, product:) }
   end
-  let(:orders) { create_list(:purchased_order, users.count, product: product) }
+  let(:orders) { create_list(:purchased_order, users.count, product:) }
   let(:product) { create(:setup_item) }
   let(:users) { create_list(:user, 9) }
 

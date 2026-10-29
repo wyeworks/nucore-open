@@ -7,7 +7,7 @@ RSpec.describe StatementPdf do
   let(:account) { create(:nufs_account, :with_account_owner) }
   let(:user) { create(:user) }
   let(:invoice_date) { 3.days.ago.to_date }
-  let(:statement) { create(:statement, facility: facility, account: account, created_by: user.id, invoice_date: invoice_date) }
+  let(:statement) { create(:statement, facility:, account:, created_by: user.id, invoice_date:) }
   let(:pdf) { StatementPdfFactory.instance(statement) }
 
   describe "#filename" do

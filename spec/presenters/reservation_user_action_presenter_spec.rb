@@ -6,10 +6,10 @@ RSpec.describe ReservationUserActionPresenter do
   include Rails.application.routes.url_helpers
 
   let(:facility) { build_stubbed(:facility) }
-  let(:instrument) { build_stubbed(:instrument, facility: facility) }
-  let(:order) { build_stubbed(:order, facility: facility, user: user) }
-  let(:order_detail) { build_stubbed(:order_detail, order: order, product: instrument) }
-  let(:reservation) { build_stubbed(:reservation, order_detail: order_detail, product: instrument) }
+  let(:instrument) { build_stubbed(:instrument, facility:) }
+  let(:order) { build_stubbed(:order, facility:, user:) }
+  let(:order_detail) { build_stubbed(:order_detail, order:, product: instrument) }
+  let(:reservation) { build_stubbed(:reservation, order_detail:, product: instrument) }
   let(:template) { double("template") }
   let(:user) { build_stubbed(:user) }
 

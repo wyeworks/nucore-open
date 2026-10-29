@@ -7,9 +7,9 @@ RSpec.describe Order do
 
   before(:each) do
     @facility = FactoryBot.create(:setup_facility)
-    @price_group = FactoryBot.create(:price_group, facility: facility)
+    @price_group = FactoryBot.create(:price_group, facility:)
     @order_status = FactoryBot.create(:order_status)
-    @service = FactoryBot.create(:service, facility: facility, initial_order_status: @order_status)
+    @service = FactoryBot.create(:service, facility:, initial_order_status: @order_status)
     @service_pp = FactoryBot.create(:service_price_policy, product: @service, price_group: @price_group)
     @user = FactoryBot.create(:user)
     @pg_member = FactoryBot.create(:user_price_group_member, user: @user, price_group: @price_group)

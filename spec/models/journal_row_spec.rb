@@ -23,7 +23,7 @@ RSpec.describe JournalRow do
     it "delegates to the order detail do" do
       one_day_ago = 1.day.ago
       order_detail = OrderDetail.new(fulfilled_at: one_day_ago)
-      journal_row = described_class.new(order_detail: order_detail)
+      journal_row = described_class.new(order_detail:)
       expect(journal_row.fulfilled_at).to eq(one_day_ago)
     end
   end

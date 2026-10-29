@@ -9,7 +9,7 @@ class InstrumentIssueMailer < ApplicationMailer
     @order_number = @order_detail.order_number
     @order_detail_link = manage_facility_order_order_detail_url(@order_detail.facility, @order_detail.order, @order_detail)
     reply_to = @user.email
-    mail(to: recipients, reply_to: reply_to, subject: text("create.subject", product: product))
+    mail(to: recipients, reply_to:, subject: text("create.subject", product:))
   end
 
   protected

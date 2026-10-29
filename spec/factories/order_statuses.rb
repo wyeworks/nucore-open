@@ -8,9 +8,9 @@ FactoryBot.define do
 
     initialize_with do
       OrderStatus.find_or_create_by(
-        facility: facility,
-        name: name,
-        parent: parent,
+        facility:,
+        name:,
+        parent:,
       )
     end
   end

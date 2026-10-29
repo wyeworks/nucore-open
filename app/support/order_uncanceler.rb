@@ -29,7 +29,7 @@ class OrderUncanceler
           canceled_reason: nil,
           order_status: @complete_status,
           state: "complete",
-          fulfilled_at: fulfilled_at)
+          fulfilled_at:)
 
         order_detail.assign_price_policy
         order_detail.save!

@@ -7,8 +7,8 @@ RSpec.describe OrderManagement::OrderDetailsController do
   let(:facility) { order.facility }
   let(:item) { FactoryBot.create(:setup_item) }
   let(:order) { FactoryBot.create(:purchased_order, product: item) }
-  let(:active_project) { FactoryBot.create(:project, facility: facility) }
-  let(:inactive_project) { FactoryBot.create(:project, :inactive, facility: facility) }
+  let(:active_project) { FactoryBot.create(:project, facility:) }
+  let(:inactive_project) { FactoryBot.create(:project, :inactive, facility:) }
 
   describe "PUT #update" do
     def perform_request
@@ -16,7 +16,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
         facility_id: facility.url_name,
         order_id: order.id,
         id: order_detail.id,
-        order_detail: { project_id: project_id },
+        order_detail: { project_id: },
       }
     end
 

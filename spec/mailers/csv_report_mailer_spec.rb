@@ -12,7 +12,7 @@ RSpec.describe CsvReportMailer do
              filename: "test.csv",
              to_csv: "1,2,3\n",
              description: subject_line,
-             text_content: text_content,
+             text_content:,
              has_attachment?: true,
             )
     end

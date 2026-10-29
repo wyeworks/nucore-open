@@ -4,20 +4,20 @@ RSpec.shared_examples_for "A product supporting ProductAccessGroupsController" d
   render_views
 
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:product) { FactoryBot.create(product_sym, facility: facility) }
-  let(:senior_staff) { FactoryBot.create(:user, :senior_staff, facility: facility) }
-  let(:params) { { facility_id: facility.url_name, :"#{product_sym}_id" => product.url_name } }
+  let(:product) { FactoryBot.create(product_sym, facility:) }
+  let(:senior_staff) { FactoryBot.create(:user, :senior_staff, facility:) }
+  let(:params) { { facility_id: facility.url_name, "#{product_sym}_id": product.url_name } }
 
   context "index" do
-    let(:staff) { FactoryBot.create(:user, :staff, facility: facility) }
+    let(:staff) { FactoryBot.create(:user, :staff, facility:) }
 
-    let(:product2) { FactoryBot.create(product_sym, facility: facility) }
-    let!(:product_groups) { FactoryBot.create_list(:product_access_group, 2, product: product) }
+    let(:product2) { FactoryBot.create(product_sym, facility:) }
+    let!(:product_groups) { FactoryBot.create_list(:product_access_group, 2, product:) }
     let!(:other_product_group) { FactoryBot.create(:product_access_group, product: product2) }
 
     before :each do
       sign_in staff
-      get :index, params: params
+      get :index, params:
     end
 
     it "succeeds and renders" do
@@ -34,7 +34,7 @@ RSpec.shared_examples_for "A product supporting ProductAccessGroupsController" d
   context "new" do
     before :each do
       sign_in senior_staff
-      get :new, params: params
+      get :new, params:
     end
 
     it "succeeds and renders" do
@@ -87,7 +87,7 @@ RSpec.shared_examples_for "A product supporting ProductAccessGroupsController" d
   end
 
   context "edit" do
-    let!(:product_access_group) { FactoryBot.create(:product_access_group, product: product) }
+    let!(:product_access_group) { FactoryBot.create(:product_access_group, product:) }
 
     before do
       sign_in senior_staff
@@ -102,7 +102,7 @@ RSpec.shared_examples_for "A product supporting ProductAccessGroupsController" d
   end
 
   context "update" do
-    let(:product_access_group) { FactoryBot.create(:product_access_group, product: product) }
+    let(:product_access_group) { FactoryBot.create(:product_access_group, product:) }
 
     before :each do
       sign_in senior_staff
@@ -140,7 +140,7 @@ RSpec.shared_examples_for "A product supporting ProductAccessGroupsController" d
   end
 
   context "destroy" do
-    let(:product_access_group) { FactoryBot.create(:product_access_group, product: product) }
+    let(:product_access_group) { FactoryBot.create(:product_access_group, product:) }
     before :each do
       sign_in senior_staff
       delete :destroy, params: params.merge(id: product_access_group.id)

@@ -7,9 +7,9 @@ RSpec.describe OrderDetail do
 
   let(:account) { setup_account(:purchase_order_account, facility, user) }
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:item, facility: facility) }
-  let(:order) { create(:setup_order, account: account, product: item) }
-  let(:original_statement) { create(:statement, facility: facility, created_by: user.id, account: account) }
+  let(:item) { create(:item, facility:) }
+  let(:order) { create(:setup_order, account:, product: item) }
+  let(:original_statement) { create(:statement, facility:, created_by: user.id, account:) }
   let(:user) { create :user }
 
   before :each do
@@ -42,15 +42,15 @@ RSpec.describe OrderDetail do
   end
 
   context "update account" do
-    let(:base_price_group) { create(:price_group, name: "Base", facility: facility) }
+    let(:base_price_group) { create(:price_group, name: "Base", facility:) }
     let!(:base_price_policy) { create :item_price_policy, unit_cost: 20, product: item, price_group: base_price_group }
-    let(:discount_price_group) { create(:price_group, name: "Discount", facility: facility) }
+    let(:discount_price_group) { create(:price_group, name: "Discount", facility:) }
     let!(:discount_price_policy) { create :item_price_policy, unit_cost: 10, product: item, price_group: discount_price_group }
 
     before :each do
       create :price_group_product, product: item, price_group: base_price_group, reservation_window: nil
-      AccountPriceGroupMember.create! price_group: base_price_group, account: account
-      AccountPriceGroupMember.create! price_group: discount_price_group, account: account
+      AccountPriceGroupMember.create!(price_group: base_price_group, account:)
+      AccountPriceGroupMember.create! price_group: discount_price_group, account:
     end
 
     context "account is valid for the facility" do
@@ -184,7 +184,7 @@ RSpec.describe OrderDetail do
     end
 
     context "account is invalid for the facility" do
-      let(:cc_account) { create(:credit_card_account, account_users_attributes: account_users_attributes_hash(user: user)) }
+      let(:cc_account) { create(:credit_card_account, account_users_attributes: account_users_attributes_hash(user:)) }
 
       before :each do
         order_detail.facility.update(accepts_cc: false)

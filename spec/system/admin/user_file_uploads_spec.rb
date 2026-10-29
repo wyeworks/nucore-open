@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "user file uploads" do
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:admin) { create(:user, :facility_administrator, facility: facility) }
+  let(:admin) { create(:user, :facility_administrator, facility:) }
   let(:user) { create(:user) }
   let!(:file) { create(:stored_file, file_type: "user_info", name: "file 1", user_id: user.id, creator: admin) }
 

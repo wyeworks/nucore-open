@@ -46,7 +46,7 @@ RSpec.describe Schedule do
   end
 
   context "two instruments on a schedule" do
-    let(:instruments) { FactoryBot.create_list(:setup_instrument, 2, schedule: schedule) }
+    let(:instruments) { FactoryBot.create_list(:setup_instrument, 2, schedule:) }
 
     context "with a reservation placed" do
       let!(:reservation) do
@@ -87,8 +87,8 @@ RSpec.describe Schedule do
 
   describe "active scope" do
     let(:facility) { FactoryBot.create(:setup_facility) }
-    let!(:instrument) { FactoryBot.create(:setup_instrument, facility: facility) }
-    let!(:archived_instrument) { FactoryBot.create(:setup_instrument, facility: facility, is_archived: true) }
+    let!(:instrument) { FactoryBot.create(:setup_instrument, facility:) }
+    let!(:archived_instrument) { FactoryBot.create(:setup_instrument, facility:, is_archived: true) }
 
     it "should include non-archived schedule" do
       expect(Schedule.active).to include instrument.schedule

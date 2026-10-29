@@ -195,7 +195,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
         let!(:reservation) do
           instrument.reservations.create(
             reserve_start_at: now,
-            order_detail: order_detail,
+            order_detail:,
             duration_mins: 60,
             split_times: true,
           )
@@ -209,7 +209,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
       context "when reservations exist before the start date" do
         let!(:reservation) do
           instrument.reservations.create(reserve_start_at: now - 1.day,
-                                         order_detail: order_detail,
+                                         order_detail:,
                                          duration_mins: 60,
                                          split_times: true)
         end
@@ -222,7 +222,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
       context "when reservations exist after the end date" do
         let!(:reservation) do
           instrument.reservations.create(reserve_start_at: now + 3.days,
-                                         order_detail: order_detail,
+                                         order_detail:,
                                          duration_mins: 60,
                                          split_times: true)
         end
@@ -289,7 +289,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
     end
 
     describe "shared scheduling" do
-      let(:instrument2) {  FactoryBot.create(:setup_instrument, facility: facility, schedule: instrument.schedule) }
+      let(:instrument2) {  FactoryBot.create(:setup_instrument, facility:, schedule: instrument.schedule) }
       let(:reservation1) { FactoryBot.create(:purchased_reservation, product: instrument) }
       let(:reservation2) do
         FactoryBot.create(:purchased_reservation,
@@ -858,7 +858,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
         expect(@order.account).to be_nil
         expect(@order_detail.account).to be_nil
         @instrument.price_policies.first.update usage_rate: 240
-        @price_group2 = FactoryBot.create(:price_group, facility: facility)
+        @price_group2 = FactoryBot.create(:price_group, facility:)
         @pg_account        = FactoryBot.create(:account_price_group_member, account: @account, price_group: @price_group2)
         @price_policy2     = create :instrument_price_policy, product: @instrument, price_group_id: @price_group2.id, usage_rate: 120, usage_subsidy: 15
         sign_in @guest
@@ -1006,7 +1006,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
         let(:next_reservation) do
           Reservation.new reserve_start_at: Time.zone.parse("2013-08-15 12:02"),
                           reserve_end_at: Time.zone.parse("2013-08-15 12:17"),
-                          product: create(:setup_instrument, reserve_interval: reserve_interval)
+                          product: create(:setup_instrument, reserve_interval:)
         end
 
         it "should default the duration mins to minimum duration" do
@@ -1262,7 +1262,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
 
         before(:each) do
           @params.deep_merge!(
-            reservation: { reserve_start_date: reserve_start_date },
+            reservation: { reserve_start_date: },
           )
         end
 
@@ -1345,7 +1345,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
 
   describe "#move" do
     let(:reservation) do
-      create(:reservation, :tomorrow, product: instrument, order_detail: order_detail)
+      create(:reservation, :tomorrow, product: instrument, order_detail:)
     end
 
     before(:each) do

@@ -218,7 +218,7 @@ class Account < ApplicationRecord
     if respond_to?(:account_open?)
       accts = product.is_a?(Bundle) ? product.products.collect(&:account) : [product.account]
       accts.uniq.each do |acct|
-        return I18n.t("not_open", model: type_string, scope: "activerecord.errors.models.account") unless account_open?(acct, fulfillment_time: fulfillment_time)
+        return I18n.t("not_open", model: type_string, scope: "activerecord.errors.models.account") unless account_open?(acct, fulfillment_time:)
       end
     end
 
@@ -265,7 +265,7 @@ class Account < ApplicationRecord
                            .readonly(false)
                            .to_a
 
-    details.each { |od| od.update(reviewed_at: Time.zone.now + Settings.billing.review_period, statement: statement) }
+    details.each { |od| od.update(reviewed_at: Time.zone.now + Settings.billing.review_period, statement:) }
   end
 
   def can_be_used_by?(user)

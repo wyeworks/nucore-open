@@ -22,7 +22,7 @@ class InstrumentSchedulePositionsController < ApplicationController
     Schedule.transaction do
       @schedules.each do |schedule|
         position = params[:instrument_schedule_position][:schedule_ids].index(schedule.id.to_s)
-        schedule.update!(position: position)
+        schedule.update!(position:)
       end
     end
     redirect_to facility_instrument_schedule_position_path, notice: text("success")

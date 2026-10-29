@@ -116,7 +116,7 @@ RSpec.describe FacilityAccountsController, :enable_split_accounts do
   end
 
   describe "as a facility admin" do
-    let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :facility_director, facility:) }
 
     include_examples "allows editing"
     include_examples "allows suspending"
@@ -148,7 +148,7 @@ RSpec.describe FacilityAccountsController, :enable_split_accounts do
   end
 
   describe "as a staff member" do
-    let(:user) { FactoryBot.create(:user, :staff, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :staff, facility:) }
 
     describe "show" do
       let(:split_account) { FactoryBot.create(:split_account) }

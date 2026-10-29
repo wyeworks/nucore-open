@@ -10,11 +10,11 @@ RSpec.describe "Editing an estimate", :js do
   let!(:item) { create(:setup_item, facility:) }
   let!(:item_price_policy) { create(:item_price_policy, product: item, price_group:) }
   let!(:other_item) { create(:setup_item, facility:) }
-  let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group: price_group) }
+  let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group:) }
   let!(:instrument) { create(:setup_instrument, facility:) }
   let!(:instrument_price_policy) { create(:instrument_price_policy, product: instrument, price_group:) }
 
-  let(:estimate) { create(:estimate, facility:, user: user, created_by_user: director, description: "Original Estimate", note: "Original note", price_group:) }
+  let(:estimate) { create(:estimate, facility:, user:, created_by_user: director, description: "Original Estimate", note: "Original note", price_group:) }
   let!(:estimate_detail1) { create(:estimate_detail, estimate:, product: item) }
   let!(:estimate_detail2) { create(:estimate_detail, estimate:, product: instrument, duration: 90) }
 

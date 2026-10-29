@@ -6,7 +6,7 @@ RSpec.describe ProductUserImport do
   let!(:admin) { create(:user, :administrator) }
   let!(:user_1) { create(:user) }
   let!(:user_2) { create(:user) }
-  let!(:product_user) { create(:product_user, product: product, user: admin) }
+  let!(:product_user) { create(:product_user, product:, user: admin) }
   let(:product) { create(:setup_item) }
   let(:file) { StringIO.new(body) }
   let(:body) { "c,s,v" }
@@ -14,8 +14,8 @@ RSpec.describe ProductUserImport do
   subject(:import) do
     ProductUserImport.new(
       creator: admin,
-      file: file,
-      product: product,
+      file:,
+      product:,
     )
   end
 

@@ -64,7 +64,7 @@ module ActiveStorageFile
     if attachable_is_a_file
       filename = try(:name) || "untitled"
       content_type = try(:file_type) || "text/csv"
-      super({ io: attachable, filename: filename, content_type: content_type })
+      super({ io: attachable, filename:, content_type: })
     else
       super
     end

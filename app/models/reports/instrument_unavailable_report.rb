@@ -61,7 +61,7 @@ module Reports
 
     def row_duration_in_seconds(row)
       ReservationRowDurationCalculator
-        .new(row, start_time: start_time, end_time: end_time)
+        .new(row, start_time:, end_time:)
         .duration_in_seconds
     end
 
@@ -71,9 +71,9 @@ module Reports
 
     def querier
       @querier ||=
-        AdminReservationQuerier.new(facility: facility,
-                                    start_time: start_time,
-                                    end_time: end_time)
+        AdminReservationQuerier.new(facility:,
+                                    start_time:,
+                                    end_time:)
     end
   end
 end

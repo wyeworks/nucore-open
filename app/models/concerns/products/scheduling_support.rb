@@ -129,7 +129,7 @@ module Products::SchedulingSupport
   end
 
   def create_default_schedule
-    self.schedule = Schedule.create(name: "#{name} Schedule", facility: facility)
+    self.schedule = Schedule.create(name: "#{name} Schedule", facility:)
   end
 
   def update_schedule_name

@@ -4,9 +4,9 @@ require "rails_helper"
 
 RSpec.describe "Viewing Occupancies" do
   let(:facility) { create(:setup_facility) }
-  let(:secure_room) { create(:secure_room, facility: facility) }
-  let(:second_secure_room) { create(:secure_room, facility: facility) }
-  let(:facility_staff) { create(:user, :staff, facility: facility) }
+  let(:secure_room) { create(:secure_room, facility:) }
+  let(:second_secure_room) { create(:secure_room, facility:) }
+  let(:facility_staff) { create(:user, :staff, facility:) }
   before { login_as facility_staff }
 
   context "with no Occupancies" do
@@ -18,9 +18,9 @@ RSpec.describe "Viewing Occupancies" do
   end
 
   context "with Occupancies" do
-    let!(:active_occupancy) { create(:occupancy, :active, secure_room: secure_room) }
-    let!(:orphan_occupancy) { create(:occupancy, :orphan, secure_room: secure_room) }
-    let!(:complete_occupancy) { create(:occupancy, :complete, secure_room: secure_room) }
+    let!(:active_occupancy) { create(:occupancy, :active, secure_room:) }
+    let!(:orphan_occupancy) { create(:occupancy, :orphan, secure_room:) }
+    let!(:complete_occupancy) { create(:occupancy, :complete, secure_room:) }
     let!(:second_room_active_occupancy) { create(:occupancy, :active, secure_room: second_secure_room) }
 
     it "can view only the current Occupancies" do

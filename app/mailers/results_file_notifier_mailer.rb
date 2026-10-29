@@ -7,6 +7,6 @@ class ResultsFileNotifierMailer < ApplicationMailer
     product_email = product.email
     reply_to = product_email || SettingsHelper.setting("email.from")
 
-    mail(reply_to: reply_to, to: @order_detail.user.email, subject: text("results_file_notifier_mailer.file_uploaded.subject"))
+    mail(reply_to:, to: @order_detail.user.email, subject: text("results_file_notifier_mailer.file_uploaded.subject"))
   end
 end

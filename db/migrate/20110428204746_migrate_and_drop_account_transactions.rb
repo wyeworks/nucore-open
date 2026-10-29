@@ -65,7 +65,7 @@ class MigrateAndDropAccountTransactions < ActiveRecord::Migration[4.2]
 
         at_rows.each do |at_row|
           od = OrderDetail.find(at_row.order_detail_id)
-          StatementRow.create!(order_detail: od, statement: statement, amount: at_row.transaction_amount)
+          StatementRow.create!(order_detail: od, statement:, amount: at_row.transaction_amount)
           od.statement = statement
           od.save!
         end

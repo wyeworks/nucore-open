@@ -185,14 +185,14 @@ class User < ApplicationRecord
   end
 
   def full_name(suspended_label: true)
-    Users::NamePresenter.new(self, suspended_label: suspended_label).full_name
+    Users::NamePresenter.new(self, suspended_label:).full_name
   end
 
   alias to_s full_name
   alias name full_name
 
   def last_first_name(suspended_label: true)
-    Users::NamePresenter.new(self, suspended_label: suspended_label).last_first_name
+    Users::NamePresenter.new(self, suspended_label:).last_first_name
   end
 
   # Devise uses this method for determining if a user is allowed to log in. It

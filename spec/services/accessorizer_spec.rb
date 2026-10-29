@@ -42,7 +42,7 @@ RSpec.describe Accessories::Accessorizer do
     end
 
     context "when the order already has an accessory" do
-      let(:child_order_detail) { build_stubbed :order_detail, product: quantity_accessory, order: order }
+      let(:child_order_detail) { build_stubbed :order_detail, product: quantity_accessory, order: }
 
       it "only has auto_scaled_accessory as an available accessory" do
         expect(accessorizer.unpurchased_accessories).to eq([auto_scaled_accessory])
@@ -58,7 +58,7 @@ RSpec.describe Accessories::Accessorizer do
 
   describe "accessory_order_details" do
     context "and it already has an order detail" do
-      let(:child_order_detail) { build_stubbed :order_detail, product: quantity_accessory, order: order }
+      let(:child_order_detail) { build_stubbed :order_detail, product: quantity_accessory, order: }
 
       it "returns the existing detail and builds an orderdetail for the other" do
         od = double "existing", product_accessory: product
@@ -158,7 +158,7 @@ RSpec.describe Accessories::Accessorizer do
       end
 
       context "updating" do
-        let(:child_order_detail) { build(:order_detail, product: quantity_accessory, order: order, quantity: 1) }
+        let(:child_order_detail) { build(:order_detail, product: quantity_accessory, order:, quantity: 1) }
 
         it "updates the attributes" do
           results = accessorizer.update_accessorizer_attributes(params).order_details
@@ -169,7 +169,7 @@ RSpec.describe Accessories::Accessorizer do
       end
 
       context "removing" do
-        let(:child_order_detail) { build_stubbed :order_detail, product: quantity_accessory, order: order, quantity: 1 }
+        let(:child_order_detail) { build_stubbed :order_detail, product: quantity_accessory, order:, quantity: 1 }
 
         let(:params) do
           ActionController::Parameters.new(quantity_accessory.id.to_s => { enabled: "false", quantity: "3" })

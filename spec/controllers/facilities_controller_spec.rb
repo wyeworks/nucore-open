@@ -16,7 +16,7 @@ RSpec.describe FacilitiesController do
 
   let(:facility) { FactoryBot.create(:facility) }
   let(:inactive_facility) { FactoryBot.create(:facility, is_active: false) }
-  let(:facility_account) { FactoryBot.create(:facility_account, facility: facility) }
+  let(:facility_account) { FactoryBot.create(:facility_account, facility:) }
 
   before(:each) do
     @authable = facility
@@ -198,7 +198,7 @@ RSpec.describe FacilitiesController do
     end
 
     describe "daily view link" do
-      let!(:instrument) { create(:instrument, facility: facility, facility_account: facility_account) }
+      let!(:instrument) { create(:instrument, facility:, facility_account:) }
 
       describe "with the feature on", feature_setting: { "style_display.daily_view" => true, reload_routes: true } do
         it "includes link to daily view" do
@@ -219,11 +219,11 @@ RSpec.describe FacilitiesController do
       end
 
       describe "product_display_groups" do
-        let!(:product1) { create(:item, facility: facility) }
-        let!(:product2) { create(:item, facility: facility) }
-        let!(:not_in_group) { create(:item, facility: facility) }
-        let!(:product_display_group1) { create(:product_display_group, position: 2, name: "Second", products: [product1], facility: facility) }
-        let!(:product_display_group2) { create(:product_display_group, position: 1, name: "First", products: [product2], facility: facility) }
+        let!(:product1) { create(:item, facility:) }
+        let!(:product2) { create(:item, facility:) }
+        let!(:not_in_group) { create(:item, facility:) }
+        let!(:product_display_group1) { create(:product_display_group, position: 2, name: "Second", products: [product1], facility:) }
+        let!(:product_display_group2) { create(:product_display_group, position: 1, name: "First", products: [product2], facility:) }
 
         it "returns the product groups in the right order" do
           do_request
@@ -288,7 +288,7 @@ RSpec.describe FacilitiesController do
       end
       context "has instruments" do
         before :each do
-          FactoryBot.create(:instrument, facility: @authable, facility_account: facility_account)
+          FactoryBot.create(:instrument, facility: @authable, facility_account:)
         end
         it_should_allow_all (facility_operators - [:admin]) do
           expect(assigns(:facilities)).to eq([@authable])

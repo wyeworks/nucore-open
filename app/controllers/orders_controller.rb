@@ -350,7 +350,7 @@ class OrdersController < ApplicationController
       end
     end
 
-    result = { success: success, redirect_path: nil, error_message: nil }
+    result = { success:, redirect_path: nil, error_message: nil }
     if success
       result[:redirect_path] = if session[:add_to_cart].nil?
         cart_path
@@ -401,7 +401,7 @@ class OrdersController < ApplicationController
       acting_as: acting_as?,
       order: @order,
       order_in_past: facility_ability.can?(:order_in_past, @order),
-      params: params,
+      params:,
       user: session_user,
     )
   end

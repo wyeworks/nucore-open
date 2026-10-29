@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe UserRole do
   describe "validations" do
-    subject(:user_role) { described_class.new(user: user, role: role, facility: facility) }
+    subject(:user_role) { described_class.new(user:, role:, facility:) }
     let(:user) { create(:user) }
 
     context "when the role is Global Billing Administrator" do
@@ -93,7 +93,7 @@ RSpec.describe UserRole do
 
     context "when a user has an existing role" do
       let(:facility) { create(:facility) }
-      let(:user) { create(:user, :staff, facility: facility) }
+      let(:user) { create(:user, :staff, facility:) }
 
       context "when adding a duplicate role" do
         let(:role) { user.user_roles.first.role }

@@ -35,7 +35,7 @@ class AccountMembershipCloner
   def create_account_user(account_id:, original_role:)
     AccountUser.create!(
       user: @clone_to_user,
-      account_id: account_id,
+      account_id:,
       created_by_user: @acting_user,
       user_role: assign_user_role(original_role),
     )

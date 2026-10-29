@@ -12,7 +12,7 @@ module ArchivedEmailSupport
 
     email_file.attach(
       io: StringIO.new(email_content),
-      filename: filename,
+      filename:,
       content_type: "message/rfc822",
     )
   end

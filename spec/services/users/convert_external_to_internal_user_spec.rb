@@ -35,7 +35,7 @@ RSpec.describe Users::ConvertExternalToInternalUser do
   describe "when the lookup updates the email and name" do
     class TestUpdatingLookup
       def call(username)
-        User.new(username: username, email: "newemail@example.org", first_name: "New")
+        User.new(username:, email: "newemail@example.org", first_name: "New")
       end
     end
 

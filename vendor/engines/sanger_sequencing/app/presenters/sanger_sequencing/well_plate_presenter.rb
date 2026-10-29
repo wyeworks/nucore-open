@@ -43,7 +43,7 @@ module SangerSequencing
 
     def plate_text(key)
       default = "default.#{key}".to_sym
-      text("#{plate_mode}.#{key}", default: default)
+      text("#{plate_mode}.#{key}", default:)
     end
 
     def cleaned_cells

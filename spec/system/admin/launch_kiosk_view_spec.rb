@@ -4,12 +4,12 @@ require "rails_helper"
 
 RSpec.describe "Launching Kiosk View", feature_setting: { kiosk_view: true } do
   let(:facility) { create(:setup_facility, kiosk_enabled: true) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
 
   before { login_as director }
 
   context "with active reservations" do
-    let(:instrument) { create(:setup_instrument, :timer, facility: facility) }
+    let(:instrument) { create(:setup_instrument, :timer, facility:) }
 
     before { create(:purchased_reservation, :running, product: instrument) }
 

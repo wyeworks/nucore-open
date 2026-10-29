@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "Managing Certificates" do
   let(:product) { FactoryBot.create(:setup_item) }
   let(:facility) { product.facility }
-  let(:staff_member) { FactoryBot.create(:user, :staff, facility: facility) }
+  let(:staff_member) { FactoryBot.create(:user, :staff, facility:) }
 
   before { login_as staff_member } # should this be a different access level?
 
@@ -24,7 +24,7 @@ RSpec.describe "Managing Certificates" do
     end
 
     it "does not display certificates in dropdown that have already been added", :aggregate_failures do
-      FactoryBot.create(:product_certification_requirement, research_safety_certificate: certificate, product: product)
+      FactoryBot.create(:product_certification_requirement, research_safety_certificate: certificate, product:)
       visit facility_product_product_research_safety_certification_requirements_path(facility, product)
 
       within "#new_product_research_safety_certification_requirement" do
@@ -36,7 +36,7 @@ RSpec.describe "Managing Certificates" do
 
   describe "deleting a certification requirement", :aggregate_failures do
     let!(:certificate) { FactoryBot.create(:research_safety_certificate) }
-    let!(:product_certification_requirement) { FactoryBot.create(:product_certification_requirement, research_safety_certificate: certificate, product: product) }
+    let!(:product_certification_requirement) { FactoryBot.create(:product_certification_requirement, research_safety_certificate: certificate, product:) }
 
     before do
       visit facility_product_product_research_safety_certification_requirements_path(facility, product)

@@ -12,8 +12,8 @@ RSpec.describe Reservations::DurationChangeValidations do
       create(
         :setup_reservation,
         product: instrument,
-        reserve_start_at: reserve_start_at,
-        reserve_end_at: reserve_end_at,
+        reserve_start_at:,
+        reserve_end_at:,
       )
     end
 

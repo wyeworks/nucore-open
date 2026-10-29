@@ -12,7 +12,7 @@ class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
                                                .pluck(:order_detail_id)
 
     order_details_with_multiple_reservations.each do |order_detail_id|
-      Reservation.where(order_detail_id: order_detail_id).last.destroy
+      Reservation.where(order_detail_id:).last.destroy
     end
     if Nucore::Database.oracle?
       begin

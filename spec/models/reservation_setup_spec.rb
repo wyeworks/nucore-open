@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Reservation do
   let(:instrument) { FactoryBot.create(:setup_instrument) }
   let(:user) { FactoryBot.create(:user) }
-  let(:reservation) { FactoryBot.create(:purchased_reservation, user: user, product: :instrument) }
+  let(:reservation) { FactoryBot.create(:purchased_reservation, user:, product: :instrument) }
 
   describe "facility setup" do
     let(:facility) { FactoryBot.create(:setup_facility) }
@@ -83,7 +83,7 @@ RSpec.describe Reservation do
 
   describe "order setup" do
     let(:product) { FactoryBot.create(:setup_instrument) }
-    let(:order) { FactoryBot.create(:setup_order, product: product) }
+    let(:order) { FactoryBot.create(:setup_order, product:) }
 
     it "should have an order detail" do
       expect(order.order_details).not_to be_empty

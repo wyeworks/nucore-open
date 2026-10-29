@@ -12,7 +12,7 @@ class AutoEndReservationMailer < ApplicationMailer
 
     mail(
       to: @user.email,
-      reply_to: reply_to,
+      reply_to:,
       subject: text("notify_auto_ended.subject",
                     facility: @facility.abbreviation,
                     product: @product.name),

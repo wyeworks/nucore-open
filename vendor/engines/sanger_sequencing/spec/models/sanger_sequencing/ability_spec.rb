@@ -37,7 +37,7 @@ RSpec.describe SangerSequencing::Ability do
   end
 
   describe "facility staff" do
-    let(:user) { create(:user, :staff, facility: facility) }
+    let(:user) { create(:user, :staff, facility:) }
 
     it_is_allowed_to([:index, :show], SangerSequencing::Submission)
     it_is_allowed_to(:manage, SangerSequencing::Batch)
@@ -46,7 +46,7 @@ RSpec.describe SangerSequencing::Ability do
   end
 
   describe "facility administrator" do
-    let(:user) { create(:user, :facility_administrator, facility: facility) }
+    let(:user) { create(:user, :facility_administrator, facility:) }
 
     it_is_allowed_to([:index, :show], SangerSequencing::Submission)
     it_is_allowed_to(:manage, SangerSequencing::Batch)

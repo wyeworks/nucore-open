@@ -34,7 +34,7 @@ class SurveyResponse
     # new survey services (i.e. form.io) provide the edit URL
     # old survey services (i.e. Surveyor) have the edit URL inferred
     edit_url = params[:survey_edit_url] || "#{show_url}/take"
-    { show_url: show_url, edit_url: edit_url }.to_json
+    { show_url:, edit_url: }.to_json
   end
 
   def sanitized_order_detail_params

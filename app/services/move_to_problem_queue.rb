@@ -2,7 +2,7 @@
 
 class MoveToProblemQueue
   def self.move!(order_detail, force: false, user: nil, cause:)
-    new(order_detail, force: force, user: user, cause: cause).move!
+    new(order_detail, force:, user:, cause:).move!
   end
 
   def initialize(order_detail, force: false, user: nil, cause:)

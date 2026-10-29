@@ -22,7 +22,7 @@ namespace :access_list do
       user = User.find_by!(username: row[2])
 
       puts "Adding #{user} to #{product}: #{group&.name}"
-      product_users << ProductUser.new(product: product, user: user, product_access_group: group, approved_by: 0)
+      product_users << ProductUser.new(product:, user:, product_access_group: group, approved_by: 0)
     end
 
     if args[:for_real]

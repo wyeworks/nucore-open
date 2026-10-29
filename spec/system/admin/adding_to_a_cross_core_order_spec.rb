@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe "Adding to an existing order for cross core", :js do
   let(:facility) { product.facility }
-  let(:order) { create(:purchased_order, product: product, ordered_at: 1.week.ago) }
-  let(:user) { create(:user, :staff, facility: facility) }
+  let(:order) { create(:purchased_order, product:, ordered_at: 1.week.ago) }
+  let(:user) { create(:user, :staff, facility:) }
   let!(:other_account) { create(:nufs_account, :with_account_owner, owner: order.user, description: "Other Account") }
   let(:facility2) { create(:setup_facility) }
   let!(:facility2_credit_card_account) { create(:account, :with_account_owner, type: "CreditCardAccount", owner: order.user, description: "Credit Card Account", facility: facility2) }

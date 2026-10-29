@@ -29,7 +29,7 @@ class OrderStatus < ApplicationRecord
   cattr_accessor(:ordered_root_statuses) { ROOT_STATUS_ORDER.dup }
 
   scope :for_facility, ->(facility) { where(facility_id: [nil, facility&.id]) }
-  scope :by_name, ->(name) { find_by(name: name) }
+  scope :by_name, ->(name) { find_by(name:) }
   scope :by_names, ->(names) { where(name: names) }
 
   # This one is different because `new` is a reserved keyword
@@ -66,7 +66,7 @@ class OrderStatus < ApplicationRecord
   end
 
   def self_and_descendants
-    self.class.where(parent_id: id).or(self.class.where(id: id))
+    self.class.where(parent_id: id).or(self.class.where(id:))
   end
 
   def self.canceled_statuses_for_facility(facility)

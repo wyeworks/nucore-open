@@ -243,8 +243,8 @@ namespace :demo do
                               facility_account_id: fa.id)
     end
 
-    BundleProduct.create(bundle: bundle, product: item, quantity: 1)
-    BundleProduct.create(bundle: bundle, product: service, quantity: 1)
+    BundleProduct.create(bundle:, product: item, quantity: 1)
+    BundleProduct.create(bundle:, product: service, quantity: 1)
 
     @item          = item
     @service       = service
@@ -267,7 +267,7 @@ namespace :demo do
 
     PriceGroup.globals.each do |price_group|
       sr.price_group_discounts.create(
-        price_group: price_group,
+        price_group:,
         discount_percent: 0,
       )
     end
@@ -486,7 +486,7 @@ namespace :demo do
     nufs_account_attributes = {
       expires_at: 1.year.from_now,
       created_by: user_director.id,
-      account_users_attributes: account_users_attributes,
+      account_users_attributes:,
     }
     account_purchaser_attributes = {
       user_id: user_student2.id,
@@ -548,7 +548,7 @@ namespace :demo do
         split_account = builder.new(account_type: "SplitAccounts::SplitAccount",
                                     current_user: user_director,
                                     owner_user: user_pi,
-                                    params: params).build
+                                    params:).build
 
         split_account.account_users.build(user_id: user_student.id,
                                           user_role: "Purchaser",
@@ -559,7 +559,7 @@ namespace :demo do
         split_account = builder.new(account_type: "SplitAccounts::SplitAccount",
                                     current_user: user_director2,
                                     owner_user: user_pi,
-                                    params: params).build
+                                    params:).build
 
         split_account.account_users.build(user_id: user_student2.id,
                                           user_role: "Purchaser",
@@ -584,7 +584,7 @@ namespace :demo do
                                               affiliate_id: other_affiliate.id,
                                               affiliate_other: "Some Affiliate",
                                               facilities: [facility],
-                                              account_users_attributes: account_users_attributes)
+                                              account_users_attributes:)
       end
 
       poaccount = PurchaseOrderAccount.find_by(account_number: "12345")
@@ -598,7 +598,7 @@ namespace :demo do
                                                  affiliate_id: other_affiliate.id,
                                                  affiliate_other: "Some Affiliate",
                                                  remittance_information: "Billing Dept\nEdward External\n1702 E Research Dr\nAuburn, AL 36830",
-                                                 account_users_attributes: account_users_attributes)
+                                                 account_users_attributes:)
       end
     end
 
@@ -692,11 +692,11 @@ namespace :demo do
             estimated_cost: rand(2),
             estimated_subsidy: 0,
             quantity: bp.quantity,
-            created_at: created_at,
+            created_at:,
             bundle_product_id: product.id,
-            group_id: group_id,
+            group_id:,
             order_status_id: bp.product.initial_order_status.id,
-            ordered_at: ordered_at,
+            ordered_at:,
           )
           od.account = account
           od.save!
@@ -713,7 +713,7 @@ namespace :demo do
           quantity: product.is_a?(Item) ? (rand(3) + 1) : 1,
           created_at: (ordered_at - (60 * rand(60) + 1)),
           order_status_id: product.initial_order_status.id,
-          ordered_at: ordered_at,
+          ordered_at:,
         )
 
         # create a reservation

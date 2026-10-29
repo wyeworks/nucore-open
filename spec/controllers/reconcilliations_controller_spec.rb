@@ -6,7 +6,7 @@ require "controller_spec_helper"
 RSpec.describe ReconcilliationsController do
   let(:user) { FactoryBot.create(:user) }
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:item) { FactoryBot.create(:item, facility: facility) }
+  let(:item) { FactoryBot.create(:item, facility:) }
   let(:account) { FactoryBot.create(:setup_account, owner: user) }
   let(:order_detail) { place_and_complete_item_order(user, facility, account) }
 
@@ -44,7 +44,7 @@ RSpec.describe ReconcilliationsController do
     end
 
     context "for a user that is not an administrator" do
-      let(:director) { create(:user, :facility_director, facility: facility) }
+      let(:director) { create(:user, :facility_director, facility:) }
 
       before :each do
         sign_in director

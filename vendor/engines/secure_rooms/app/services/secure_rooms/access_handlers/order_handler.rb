@@ -70,7 +70,7 @@ module SecureRooms
         @order_detail = order.order_details.create!(
           account: occupancy.account,
           product: occupancy.secure_room,
-          occupancy: occupancy,
+          occupancy:,
           created_by_user: occupancy.user,
           quantity: 1,
         )

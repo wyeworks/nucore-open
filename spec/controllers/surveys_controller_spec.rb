@@ -13,7 +13,7 @@ RSpec.describe SurveysController do
   let(:order_status) { create :order_status }
   let(:service) { create :service, facility: authable, initial_order_status_id: order_status.id }
   let(:external_service) { UrlService.create! location: "http://ext.service.com" }
-  let(:external_service_passer) { ExternalServicePasser.create! passer: service, external_service: external_service }
+  let(:external_service_passer) { ExternalServicePasser.create! passer: service, external_service: }
   let(:external_service2) { UrlService.create! location: "http://ext.service2.com" }
   let(:external_service_passer2) { ExternalServicePasser.create! passer: service, external_service: external_service2 }
 

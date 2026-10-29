@@ -8,7 +8,7 @@ RSpec.describe OrderResearchSafetyCertificationValidator do
   let(:product_one) { FactoryBot.create(:setup_item) }
   let(:certificate_a) { FactoryBot.create(:product_certification_requirement, product: product_one).research_safety_certificate }
   let(:user) { FactoryBot.create(:user) }
-  let(:order_by_user) { FactoryBot.create(:order, user: user, created_by: created_by.id) }
+  let(:order_by_user) { FactoryBot.create(:order, user:, created_by: created_by.id) }
   let(:created_by) { user }
   let!(:order_detail_one) { FactoryBot.create(:order_detail, order: order_by_user, product: product_one) }
 

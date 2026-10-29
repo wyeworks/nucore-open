@@ -54,7 +54,7 @@ class Journals::Closer
       journal.order_details.update_all(
         state: "reconciled",
         order_status_id: OrderStatus.reconciled.id,
-        reconciled_at: reconciled_at,
+        reconciled_at:,
         updated_at: Time.current,
       )
     else

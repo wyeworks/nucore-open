@@ -7,7 +7,7 @@ class UpcomingOfflineReservationMailer < ApplicationMailer
 
   def send_offline_instrument_warning(reservation)
     @reservation = reservation
-    mail(to: recipient.email, subject: subject)
+    mail(to: recipient.email, subject:)
   end
 
   private

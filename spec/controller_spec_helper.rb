@@ -30,7 +30,7 @@ end
 def do_request(params = nil)
   params ||= @params
   if @method == :xhr
-    get @action, params: params, xhr: true
+    get @action, params:, xhr: true
   else
     method(@method).call(@action, params: params.to_h)
   end
@@ -241,7 +241,7 @@ def grant_role(user, authable = nil)
     UserRole.grant(user, UserRole::FACILITY_DIRECTOR, authable)
     expect(user.reload).to be_facility_director_of(authable)
   when "staff"
-    UserRole.create!(user: user, role: UserRole::FACILITY_STAFF, facility: authable) unless user.facility_staff_of?(authable)
+    UserRole.create!(user:, role: UserRole::FACILITY_STAFF, facility: authable) unless user.facility_staff_of?(authable)
     expect(user.reload).to be_facility_staff_of(authable)
   when "owner"
     # Creating a NufsAccount requires an owner to be present, and some pre-Rails3 tests try to add the same user

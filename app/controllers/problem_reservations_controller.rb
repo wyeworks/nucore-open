@@ -14,7 +14,7 @@ class ProblemReservationsController < ApplicationController
   end
 
   def update
-    if problem_reservation_resolver.resolve(update_params.merge(current_user: current_user))
+    if problem_reservation_resolver.resolve(update_params.merge(current_user:))
       if @order_detail.accessories?
         redirect_to new_order_order_detail_accessory_path(@order_detail.order, @order_detail), notice: text("update.success")
       else

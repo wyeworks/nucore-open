@@ -51,7 +51,7 @@ RSpec.describe OrderDetail do
   end
 
   context "quantity based accessory" do
-    let(:accessory) { create(:accessory, parent: instrument, facility: facility) }
+    let(:accessory) { create(:accessory, parent: instrument, facility:) }
 
     let!(:accessory_order_detail) { accessorizer.add_accessory(accessory) }
     it_behaves_like "an accessory's order detail"
@@ -69,7 +69,7 @@ RSpec.describe OrderDetail do
   end
 
   context "manual scaled accessory" do
-    let(:accessory) { create(:time_based_accessory, parent: instrument, scaling_type: "manual", facility: facility) }
+    let(:accessory) { create(:time_based_accessory, parent: instrument, scaling_type: "manual", facility:) }
     let(:accessory_order_detail) { accessorizer.add_accessory(accessory) }
 
     it_behaves_like "an accessory's order detail"
@@ -108,7 +108,7 @@ RSpec.describe OrderDetail do
   end
 
   context "auto scaled accessory" do
-    let(:accessory) { create(:time_based_accessory, parent: instrument, scaling_type: "auto", facility: facility) }
+    let(:accessory) { create(:time_based_accessory, parent: instrument, scaling_type: "auto", facility:) }
     # reload in order to avoid timestamp truncation causing false-positives on `changes`
     let!(:accessory_order_detail) { accessorizer.add_accessory(accessory).reload }
 
@@ -155,7 +155,7 @@ RSpec.describe OrderDetail do
   end
 
   context "accessory does not have a price policy" do
-    let(:accessory) { create(:accessory, parent: instrument, facility: facility) }
+    let(:accessory) { create(:accessory, parent: instrument, facility:) }
     let(:accessory_order_detail) { accessorizer.add_accessory(accessory) }
     before :each do
       accessory.price_policies.destroy_all
@@ -171,7 +171,7 @@ RSpec.describe OrderDetail do
   end
 
   describe "sorting" do
-    let(:accessory) { create(:accessory, parent: instrument, facility: facility) }
+    let(:accessory) { create(:accessory, parent: instrument, facility:) }
     let(:order) { order_detail.order }
     let(:order_details) { order.order_details }
     let!(:interim_order_detail) { order.add(accessory, 1, note: "interim") }

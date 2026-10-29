@@ -24,7 +24,7 @@ RSpec.describe Facility do
 
   context "when finding problem orders and reservations" do
     subject(:facility) { order.facility }
-    let(:order) { create(:purchased_order, product: product) }
+    let(:order) { create(:purchased_order, product:) }
 
     def convert_to_problem_order(order)
       order.order_details.each do |order_detail|
@@ -75,7 +75,7 @@ RSpec.describe Facility do
     let(:products) { create_list(:instrument_requiring_approval, 3) }
 
     before(:each) do
-      products.each { |product| create(:training_request, product: product) }
+      products.each { |product| create(:training_request, product:) }
     end
 
     it "scopes training requests to a facility" do
@@ -88,10 +88,10 @@ RSpec.describe Facility do
 
   describe ".director_and_admins" do
     let(:facility) { create(:facility) }
-    let!(:staff) { create(:user, :staff, facility: facility) }
-    let!(:senior_staff) { create(:user, :senior_staff, facility: facility) }
-    let!(:admin) { create(:user, :facility_administrator, facility: facility) }
-    let!(:director) { create(:user, :facility_director, facility: facility) }
+    let!(:staff) { create(:user, :staff, facility:) }
+    let!(:senior_staff) { create(:user, :senior_staff, facility:) }
+    let!(:admin) { create(:user, :facility_administrator, facility:) }
+    let!(:director) { create(:user, :facility_director, facility:) }
 
     it "returns only the director and administrators" do
       expect(facility.director_and_admins).to contain_exactly(admin, director)
@@ -127,7 +127,7 @@ RSpec.describe Facility do
   describe "#order_statuses" do
     let(:facility) { FactoryBot.create(:facility) }
     let(:other_facility) { FactoryBot.create(:facility) }
-    let!(:my_order_statuses) { FactoryBot.create_list(:order_status, 3, facility: facility) }
+    let!(:my_order_statuses) { FactoryBot.create_list(:order_status, 3, facility:) }
     let!(:other_order_statuses) { FactoryBot.create_list(:order_status, 3, facility: other_facility) }
 
     it "returns only statuses belonging to its own facility or no facility" do
@@ -179,7 +179,7 @@ RSpec.describe Facility do
   describe "show_multi_add_products?" do
     let(:user) { create(:user) }
     let(:facility) { create(:facility, accepts_multi_add: true) }
-    let!(:hidden_product) {  create(:item, :without_validation, facility: facility, is_archived: false, is_hidden: true) }
+    let!(:hidden_product) {  create(:item, :without_validation, facility:, is_archived: false, is_hidden: true) }
 
     it "returns false with no user" do
       expect(facility.show_multi_add_products?(Product.all, nil)).to eq false

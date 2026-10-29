@@ -5,7 +5,7 @@ require "controllers/shared_examples"
 
 RSpec.describe FacilityUserReservationsController do
   let(:facility) { instrument.facility }
-  let(:facility_director) { FactoryBot.create(:user, :facility_director, facility: facility) }
+  let(:facility_director) { FactoryBot.create(:user, :facility_director, facility:) }
   let(:instrument) { FactoryBot.create(:setup_instrument, min_cancel_hours: 9999) }
   let(:price_policies) { instrument.price_policies }
   let(:user) { FactoryBot.create(:user) }
@@ -13,7 +13,7 @@ RSpec.describe FacilityUserReservationsController do
   context "GET #index" do
     let(:order_details) { reservations.map(&:order_detail) }
     let!(:reservations) do
-      FactoryBot.create_list(:purchased_reservation, 3, :daily, product: instrument, user: user)
+      FactoryBot.create_list(:purchased_reservation, 3, :daily, product: instrument, user:)
     end
 
     context "when not logged in" do
@@ -38,7 +38,7 @@ RSpec.describe FacilityUserReservationsController do
   context "PUT #cancel" do
     let(:order_detail) { reservation.order_detail }
     let!(:reservation) do
-      FactoryBot.create(:purchased_reservation, product: instrument, user: user)
+      FactoryBot.create(:purchased_reservation, product: instrument, user:)
     end
 
     shared_examples_for "it can cancel the reservation" do

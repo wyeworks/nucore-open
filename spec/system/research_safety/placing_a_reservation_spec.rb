@@ -14,7 +14,7 @@ RSpec.describe "Placing a reservation with a certification requirement" do
   let!(:account_price_group_member) do
     create(
       :account_price_group_member,
-      account: account,
+      account:,
       price_group: instrument.price_policies.first.price_group,
     )
   end
@@ -51,7 +51,7 @@ RSpec.describe "Placing a reservation with a certification requirement" do
     end
 
     describe "ordering on behalf, and the user does not have certifications" do
-      let(:facility_staff) { create(:user, :staff, facility: facility) }
+      let(:facility_staff) { create(:user, :staff, facility:) }
 
       before do
         stub_research_safety_lookup(user)

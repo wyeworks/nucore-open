@@ -35,7 +35,7 @@ RSpec.describe "Creating a SecureRoom" do
     let!(:facility_price_group) { PriceGroup.find_by(facility_id: facility.id) }
     let(:base_price_group) { PriceGroup.base }
     let(:external_price_group) { PriceGroup.external }
-    let(:secure_room) { create(:secure_room, facility: facility) }
+    let(:secure_room) { create(:secure_room, facility:) }
 
     before do
       visit manage_facility_secure_room_path(secure_room.facility, secure_room)

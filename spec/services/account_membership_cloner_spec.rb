@@ -12,9 +12,9 @@ RSpec.describe AccountMembershipCloner, type: :service do
 
   let(:cloner) {
     described_class.new(
-      account_users_to_clone: account_users_to_clone,
+      account_users_to_clone:,
       clone_to_user: new_user,
-      acting_user: acting_user,
+      acting_user:,
     )
   }
 

@@ -97,7 +97,7 @@ RSpec.describe AccountBuilder, type: :service do
         current_user: build_stubbed(:user),
         facility: build_stubbed(:facility),
         owner_user: build_stubbed(:user),
-        params: params,
+        params:,
       }
     end
     let(:params) { {} }
@@ -210,9 +210,9 @@ RSpec.describe AccountBuilder, type: :service do
     let(:builder) { described_class.new(options) }
     let(:options) do
       {
-        account: account,
+        account:,
         current_user: build_stubbed(:user),
-        params: params,
+        params:,
       }
     end
 

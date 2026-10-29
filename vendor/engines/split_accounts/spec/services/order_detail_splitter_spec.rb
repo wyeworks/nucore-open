@@ -24,7 +24,7 @@ RSpec.describe SplitAccounts::OrderDetailSplitter, type: :service do
                                    estimated_cost: BigDecimal("29.99"),
                                    estimated_subsidy: BigDecimal("39.99"),
                                    account: split_account,
-                                   order: order,
+                                   order:,
                                    note: "this is a note")
     end
 
@@ -95,7 +95,7 @@ RSpec.describe SplitAccounts::OrderDetailSplitter, type: :service do
     let(:instrument) { build_stubbed(:instrument) }
 
     let(:order_detail) do
-      build_stubbed(:order_detail, reservation: reservation,
+      build_stubbed(:order_detail, reservation:,
                                    created_by: 1,
                                    quantity: 1,
                                    actual_cost: BigDecimal("9.99"),
@@ -169,7 +169,7 @@ RSpec.describe SplitAccounts::OrderDetailSplitter, type: :service do
       end
     end
 
-    let(:reservation) { create(:completed_reservation, user: user) }
+    let(:reservation) { create(:completed_reservation, user:) }
     let(:order_detail) { reservation.order_detail }
 
     it "does not do anything to the reservation" do

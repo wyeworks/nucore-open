@@ -9,13 +9,13 @@ RSpec.describe SangerSequencing::LinkCollectionExtension do
   let(:ability) { Ability.new(user, facility) }
 
   describe "facility staff" do
-    let(:user) { create(:user, :staff, facility: facility) }
+    let(:user) { create(:user, :staff, facility:) }
 
     it { is_expected.to be_a(NavTab::Link) }
   end
 
   describe "facility administrator" do
-    let(:user) { create(:user, :facility_administrator, facility: facility) }
+    let(:user) { create(:user, :facility_administrator, facility:) }
 
     it { is_expected.to be_a(NavTab::Link) }
   end

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe Ability do
   subject(:ability) { Ability.new(user, subject_resource, stub_controller) }
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:instrument_requiring_approval, facility: facility) }
+  let(:instrument) { create(:instrument_requiring_approval, facility:) }
   let(:stub_controller) { OpenStruct.new }
   let(:subject_resource) { facility }
 
@@ -25,10 +25,10 @@ RSpec.describe Ability do
 
   shared_examples_for "it can destroy admistrative reservations" do
     let(:order) { build_stubbed(:order) }
-    let(:order_detail) { build_stubbed(:order_detail, order: order) }
+    let(:order_detail) { build_stubbed(:order_detail, order:) }
 
     context "with a regular reservation" do
-      let(:reservation) { Reservation.new(order_detail: order_detail) }
+      let(:reservation) { Reservation.new(order_detail:) }
 
       it { is_expected.not_to be_allowed_to(:destroy, reservation) }
     end
@@ -116,7 +116,7 @@ RSpec.describe Ability do
 
     context "managing price groups" do
       context "when the price group has a facility" do
-        let(:subject_resource) { create(:price_group, facility: facility) }
+        let(:subject_resource) { create(:price_group, facility:) }
 
         it { is_expected.to be_allowed_to(:manage, UserPriceGroupMember) }
       end
@@ -264,7 +264,7 @@ RSpec.describe Ability do
   end
 
   describe "facility administrator" do
-    let(:user) { create(:user, :facility_administrator, facility: facility) }
+    let(:user) { create(:user, :facility_administrator, facility:) }
 
     it_is_allowed_to(%i[bring_online create edit new update], OfflineReservation)
     it { is_expected.to be_allowed_to(:manage, Account) }
@@ -297,11 +297,11 @@ RSpec.describe Ability do
   end
 
   describe "facility director" do
-    let(:user) { create(:user, :facility_director, facility: facility) }
+    let(:user) { create(:user, :facility_director, facility:) }
 
     context "managing price groups" do
       context "when the price group has a facility" do
-        let(:subject_resource) { create(:price_group, facility: facility) }
+        let(:subject_resource) { create(:price_group, facility:) }
 
         it { is_expected.to be_allowed_to(:manage, UserPriceGroupMember) }
       end
@@ -369,7 +369,7 @@ RSpec.describe Ability do
   end
 
   describe "facility billing administrator" do
-    let(:user) { create(:user, :facility_billing_administrator, facility: facility) }
+    let(:user) { create(:user, :facility_billing_administrator, facility:) }
 
     it_is_allowed_to(:manage, Journal)
     it_is_allowed_to(:manage, Statement)
@@ -457,7 +457,7 @@ RSpec.describe Ability do
 
     it { is_expected.not_to be_allowed_to(:manage, Reservation) }
     context "when managing reservations" do
-      let(:instrument) { create(:instrument, facility: facility) }
+      let(:instrument) { create(:instrument, facility:) }
       let(:subject_resource) { create(:reservation, product: instrument) }
 
       it { is_expected.to be_allowed_to(:read, ProductAccessory) }
@@ -465,15 +465,15 @@ RSpec.describe Ability do
     end
 
     context "when managing order details" do
-      let(:order) { build_stubbed(:order, facility: facility) }
-      let(:subject_resource) { build_stubbed(:order_detail, order: order) }
+      let(:order) { build_stubbed(:order, facility:) }
+      let(:subject_resource) { build_stubbed(:order_detail, order:) }
 
       it { is_expected.to be_allowed_to(:manage, OrderDetail) }
     end
   end
 
   describe "senior staff" do
-    let(:user) { create(:user, :senior_staff, facility: facility) }
+    let(:user) { create(:user, :senior_staff, facility:) }
 
     it_behaves_like "it has common staff abilities"
     it { is_expected.to be_allowed_to(:show_problems, Reservation) }
@@ -494,7 +494,7 @@ RSpec.describe Ability do
   end
 
   describe "staff" do
-    let(:user) { create(:user, :staff, facility: facility) }
+    let(:user) { create(:user, :staff, facility:) }
 
     it_behaves_like "it has common staff abilities"
     it { is_expected.not_to be_allowed_to(:show_problems, Reservation) }
@@ -529,14 +529,14 @@ RSpec.describe Ability do
 
         let(:stored_file) do
           build(:stored_file,
-                file_type: file_type,
-                order_detail: order_detail,
-                product: product,
+                file_type:,
+                order_detail:,
+                product:,
                )
         end
         let(:order_detail) { order.order_details.first }
-        let(:order) { create(:purchased_order, product: product) }
-        let(:product) { create(:setup_instrument, facility: facility) }
+        let(:order) { create(:purchased_order, product:) }
+        let(:product) { create(:setup_instrument, facility:) }
 
         context "for an order belonging to the user" do
           let(:user) { order.user }
@@ -557,7 +557,7 @@ RSpec.describe Ability do
     end
 
     context "when the user has notifications" do
-      let(:order) { create(:purchased_order, product: product) }
+      let(:order) { create(:purchased_order, product:) }
       let(:product) { create(:instrument_requiring_approval) }
 
       before(:each) do

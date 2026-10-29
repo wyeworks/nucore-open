@@ -22,7 +22,7 @@ RSpec.describe OrderDetailBatchUpdater do
   let(:order_detail) { order.order_details.first }
   let(:order_status_id) { "" }
   let(:params) do
-    { assigned_user_id: assigned_user_id, order_status_id: order_status_id }
+    { assigned_user_id:, order_status_id: }
   end
   let(:user) { create(:user) }
 
@@ -296,16 +296,16 @@ RSpec.describe OrderDetailBatchUpdater do
           [order_detail.id],
           facility,
           user,
-          { project_id: project_id },
+          { project_id: },
           record_type,
         )
       end
 
       shared_examples_for "batch updating project_id" do
-        let(:other_project) { create(:project, facility: facility) }
+        let(:other_project) { create(:project, facility:) }
 
         context "when project_id is already set" do
-          let(:existing_project) { create(:project, facility: facility) }
+          let(:existing_project) { create(:project, facility:) }
 
           before { order_detail.update_attribute(:project_id, existing_project.id) }
 

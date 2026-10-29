@@ -12,7 +12,7 @@ module SangerSequencing
 
     def to_s
       return "" unless submission
-      render("sanger_sequencing/purchase_notifier/samples_table", submission: submission, caption: caption)
+      render("sanger_sequencing/purchase_notifier/samples_table", submission:, caption:)
     end
 
     private

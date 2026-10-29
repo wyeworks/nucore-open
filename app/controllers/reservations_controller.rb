@@ -398,14 +398,14 @@ class ReservationsController < ApplicationController
     return unless reservation
 
     if reservation.can_switch_instrument_off? # do you need to click stop
-      I18n.t("reservations.notices.can_switch_off", reservation: reservation)
+      I18n.t("reservations.notices.can_switch_off", reservation:)
     elsif reservation.can_switch_instrument_on? # do you need to begin your reservation
-      I18n.t("reservations.notices.can_switch_on", reservation: reservation)
+      I18n.t("reservations.notices.can_switch_on", reservation:)
     elsif reservation.canceled?
     # no message
     # do you have a reservation for today that hasn't ended
     elsif upcoming_today? reservation
-      I18n.t("reservations.notices.upcoming", reservation: reservation)
+      I18n.t("reservations.notices.upcoming", reservation:)
     end
   end
 

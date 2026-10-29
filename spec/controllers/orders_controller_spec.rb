@@ -35,8 +35,8 @@ RSpec.describe OrdersController do
 
   before(:each) do
     @authable = facility
-    @price_group = FactoryBot.create(:price_group, facility: facility)
-    @item = FactoryBot.create(:item, facility: facility)
+    @price_group = FactoryBot.create(:price_group, facility:)
+    @item = FactoryBot.create(:item, facility:)
     @account = add_account_for_user(:staff, @item, @price_group)
     @order = @staff.orders.create(FactoryBot.attributes_for(:order, created_by: @staff.id, account: @account))
 
@@ -121,7 +121,7 @@ RSpec.describe OrdersController do
 
       context "and an empty cart" do
         before(:each) do
-          new_order = @staff.orders.create(attributes_for(:order, created_by: @staff.id, account: account))
+          new_order = @staff.orders.create(attributes_for(:order, created_by: @staff.id, account:))
           expect(new_order.order_details).to be_empty
 
           @params = { id: new_order.id }
@@ -191,7 +191,7 @@ RSpec.describe OrdersController do
       end
 
       context "when add_to_cart is set in the session" do
-        let(:added_item) { create(:setup_item, facility: facility) }
+        let(:added_item) { create(:setup_item, facility:) }
 
         before { session[:add_to_cart] = [{ product_id: added_item.id }] }
 
@@ -214,7 +214,7 @@ RSpec.describe OrdersController do
       end
 
       context "with a nonbillable order detail in the cart" do
-        let(:nonbillable_item) { create(:setup_item, facility: facility, billing_mode: "Nonbillable") }
+        let(:nonbillable_item) { create(:setup_item, facility:, billing_mode: "Nonbillable") }
         let(:nonbillable_order) do
           @staff.orders.create(attributes_for(:order, created_by: @staff.id)).tap do |new_order|
             new_order.add(nonbillable_item, 1)
@@ -261,7 +261,7 @@ RSpec.describe OrdersController do
       end
 
       context "when add_to_cart is set in the session" do
-        let(:added_item) { create(:setup_item, facility: facility) }
+        let(:added_item) { create(:setup_item, facility:) }
 
         before { session[:add_to_cart] = [{ product_id: added_item.id }] }
 
@@ -822,7 +822,7 @@ RSpec.describe OrdersController do
         end
 
         context "for a reservation-only instrument" do
-          let(:instrument) { FactoryBot.create(:setup_instrument, facility: facility) }
+          let(:instrument) { FactoryBot.create(:setup_instrument, facility:) }
 
           before { setup_past_reservation }
 
@@ -834,7 +834,7 @@ RSpec.describe OrdersController do
         end
 
         context "for a non reservation-only instrument" do
-          let(:instrument) { FactoryBot.create(:setup_instrument, :timer, facility: facility) }
+          let(:instrument) { FactoryBot.create(:setup_instrument, :timer, facility:) }
 
           before { setup_past_reservation }
 
@@ -1202,7 +1202,7 @@ RSpec.describe OrdersController do
       @instrument_pp = @instrument.instrument_price_policies.create(FactoryBot.attributes_for(:instrument_price_policy, price_group_id: @price_group.id))
       @instrument_pp.restrict_purchase = false
       define_open_account(@instrument.account, @account.account_number)
-      @service = FactoryBot.create(:service, facility: facility)
+      @service = FactoryBot.create(:service, facility:)
       @method = :get
       @action = :show
     end

@@ -29,12 +29,12 @@ RSpec.describe BulkEmail::RecipientSearcher do
 
   let(:facility) { FactoryBot.create(:setup_facility) }
 
-  let(:product) { FactoryBot.create(:setup_item, facility: facility) }
-  let(:product2) { FactoryBot.create(:setup_item, facility: facility, is_hidden: true) }
-  let(:product3) { FactoryBot.create(:setup_item, facility: facility, is_archived: true) }
+  let(:product) { FactoryBot.create(:setup_item, facility:) }
+  let(:product2) { FactoryBot.create(:setup_item, facility:, is_hidden: true) }
+  let(:product3) { FactoryBot.create(:setup_item, facility:, is_archived: true) }
 
-  let(:account) { FactoryBot.create(:setup_account, owner: owner) }
-  let(:price_group) { FactoryBot.create(:price_group, facility: facility) }
+  let(:account) { FactoryBot.create(:setup_account, owner:) }
+  let(:price_group) { FactoryBot.create(:price_group, facility:) }
   let(:iso_today) { Time.current.strftime("%Y-%m-%d") }
 
   let(:params) do
@@ -50,9 +50,9 @@ RSpec.describe BulkEmail::RecipientSearcher do
     FactoryBot.create(:setup_order,
                       :purchased,
                       created_by: purchaser.id,
-                      product: product,
+                      product:,
                       user: purchaser,
-                      account: account,
+                      account:,
                       ordered_at: Time.current)
   end
 
@@ -98,18 +98,18 @@ RSpec.describe BulkEmail::RecipientSearcher do
     context "filtered by ordered dates" do
       let!(:od_yesterday) do
         travel_and_return(-1.days) do
-          place_order(purchaser: purchaser, product: product, account: account)
+          place_order(purchaser:, product:, account:)
         end
       end
 
       let!(:od_tomorrow) do
         travel_and_return(1.day) do
-          place_order(purchaser: purchaser2, product: product2, account: account)
+          place_order(purchaser: purchaser2, product: product2, account:)
         end
       end
 
       let!(:od_today) do
-        place_order(purchaser: purchaser3, product: product, account: account)
+        place_order(purchaser: purchaser3, product:, account:)
       end
 
       before(:each) do
@@ -155,7 +155,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
     context "when filtering by reservation dates" do
       let(:instrument) do
         FactoryBot.create(:instrument,
-                          facility: facility,
+                          facility:,
                           min_reserve_mins: 60,
                           max_reserve_mins: 60)
       end
@@ -213,9 +213,9 @@ RSpec.describe BulkEmail::RecipientSearcher do
     context "filtered by products" do
       let!(:order_details) do
         [
-          place_order(purchaser: purchaser, product: product, account: account),
-          place_order(purchaser: purchaser2, product: product2, account: account),
-          place_order(purchaser: purchaser3, product: product3, account: account),
+          place_order(purchaser:, product:, account:),
+          place_order(purchaser: purchaser2, product: product2, account:),
+          place_order(purchaser: purchaser3, product: product3, account:),
         ]
       end
 
@@ -251,8 +251,8 @@ RSpec.describe BulkEmail::RecipientSearcher do
       let!(:product_facility2) { FactoryBot.create(:item, facility: facility2) }
       let!(:order_details) do
         [
-          place_order(purchaser: purchaser, product: product, account: account),
-          place_order(purchaser: purchaser2, product: product_facility2, account: account),
+          place_order(purchaser:, product:, account:),
+          place_order(purchaser: purchaser2, product: product_facility2, account:),
         ]
       end
 
@@ -290,9 +290,9 @@ RSpec.describe BulkEmail::RecipientSearcher do
       account3 = FactoryBot.create(:setup_account, owner: owner3)
 
       [
-        place_order(purchaser: purchaser, product: product, account: account),
-        place_order(purchaser: purchaser, product: product2, account: account2),
-        place_order(purchaser: purchaser, product: product3, account: account3),
+        place_order(purchaser:, product:, account:),
+        place_order(purchaser:, product: product2, account: account2),
+        place_order(purchaser:, product: product3, account: account3),
       ]
     end
 
@@ -320,7 +320,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
       account3 = FactoryBot.create(:setup_account, owner: owner3)
 
       [
-        place_order(purchaser: purchaser, product: product, account: account),
+        place_order(purchaser:, product:, account:),
         place_order(purchaser: purchaser2, product: product2, account: account2),
         place_order(purchaser: purchaser3, product: product3, account: account3),
       ]
@@ -357,8 +357,8 @@ RSpec.describe BulkEmail::RecipientSearcher do
       # Users 1 and 2 have access to product1
       # Users 2 and 3 have access to product2
       # User 4 has access to product3, which is inactive and requires no approval
-      ProductUser.create(product: product, user: user, approved_by: owner.id, approved_at: Time.current)
-      ProductUser.create(product: product, user: user2, approved_by: owner.id, approved_at: Time.current)
+      ProductUser.create(product:, user:, approved_by: owner.id, approved_at: Time.current)
+      ProductUser.create(product:, user: user2, approved_by: owner.id, approved_at: Time.current)
       ProductUser.create(product: product2, user: user2, approved_by: owner.id, approved_at: Time.current)
       ProductUser.create(product: product2, user: user3, approved_by: owner.id, approved_at: Time.current)
       ProductUser.create(product: product3, user: user4, approved_by: owner.id, approved_at: Time.current)
@@ -468,8 +468,8 @@ RSpec.describe BulkEmail::RecipientSearcher do
 
     context "when a user is both a customer and authorized_user" do
       before(:each) do
-        ProductUser.create(product: product, user: purchaser, approved_by: 1)
-        place_order(purchaser: purchaser, product: product, account: account)
+        ProductUser.create(product:, user: purchaser, approved_by: 1)
+        place_order(purchaser:, product:, account:)
       end
 
       it "returns the user only once" do

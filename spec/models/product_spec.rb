@@ -11,9 +11,9 @@ RSpec.describe Product do
   describe "with everything configured" do
     subject(:product) { create(:instrument_requiring_approval) }
 
-    let(:access_group) { create(:product_access_group, product: product) }
+    let(:access_group) { create(:product_access_group, product:) }
     let(:facility) { @facility }
-    let!(:product_user) { product.product_users.create(product: product, user: user, approved_by: user.id) }
+    let!(:product_user) { product.product_users.create(product:, user:, approved_by: user.id) }
     let(:schedule_rule) { product.schedule_rules.create(attributes_for :schedule_rule) }
     let(:user) { create(:user) }
 
@@ -28,7 +28,7 @@ RSpec.describe Product do
     end
 
     it "should not create using factory" do
-      @product = FactoryBot.create(:item, facility: facility)
+      @product = FactoryBot.create(:item, facility:)
       expect(@product.errors[:type]).not_to be_nil
     end
 
@@ -125,12 +125,12 @@ RSpec.describe Product do
 
     context "with overlapping price policies" do
       subject(:product) { create(:setup_instrument) }
-      let!(:order) { FactoryBot.create(:setup_order, product: product) }
+      let!(:order) { FactoryBot.create(:setup_order, product:) }
       let!(:order_detail) { order.order_details.first }
       let!(:price_policy) do
         FactoryBot.create(
           :instrument_price_policy,
-          product: product,
+          product:,
           price_group: product.price_groups.last,
           start_date: Time.zone.now,
           expire_date: Time.zone.now + 1.day,
@@ -141,7 +141,7 @@ RSpec.describe Product do
         FactoryBot.create(
           :instrument_price_policy,
           start_date: 1.day.ago.beginning_of_day,
-          product: product,
+          product:,
           price_group: price_policy.price_group,
           usage_rate: 10 / 60.0,
         )
@@ -541,7 +541,7 @@ RSpec.describe Product do
 
       context "when a product's url_name exists in another facility" do
         let(:other_facility) { create(:facility) }
-        let(:new_product) { build(:instrument_requiring_approval, url_name: "product_name", facility: facility) }
+        let(:new_product) { build(:instrument_requiring_approval, url_name: "product_name", facility:) }
 
         before :each do
           create(:facility_account, facility: other_facility)

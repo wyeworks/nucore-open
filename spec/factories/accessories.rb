@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :instrument_with_accessory, parent: :setup_instrument do
     transient do
-      accessory { create :setup_item, facility: facility }
+      accessory { create :setup_item, facility: }
     end
 
     after(:create) do |instrument, evaluator|
@@ -13,7 +13,7 @@ FactoryBot.define do
 
   factory :accessory, parent: :setup_item do
     transient do
-      parent { create :setup_instrument, facility: facility }
+      parent { create :setup_instrument, facility: }
       scaling_type { "quantity" }
     end
 
@@ -24,7 +24,7 @@ FactoryBot.define do
 
   factory :time_based_accessory, parent: :setup_timed_service do
     transient do
-      parent { create :setup_instrument, facility: facility }
+      parent { create :setup_instrument, facility: }
       scaling_type { "auto" }
     end
 

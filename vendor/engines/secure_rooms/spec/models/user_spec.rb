@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe User do
-  subject!(:user) { create(:user, :netid, card_number: card_number) }
+  subject!(:user) { create(:user, :netid, card_number:) }
   let(:card_number) { "abcXYZ" }
 
 

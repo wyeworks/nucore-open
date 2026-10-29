@@ -175,7 +175,7 @@ class FacilityJournalsController < ApplicationController
             end
 
     if count > 0
-      flash[:notice] = I18n.t("controllers.facility_journals.#{action}.success", count: count)
+      flash[:notice] = I18n.t("controllers.facility_journals.#{action}.success", count:)
       if reconciler.full_errors.any?
         flash[:error] = reconciler.full_errors.join("<br />").html_safe
       end

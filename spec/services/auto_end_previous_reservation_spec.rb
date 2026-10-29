@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe AutoEndPreviousReservation do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:setup_instrument, :timer, facility: facility) }
+  let(:instrument) { create(:setup_instrument, :timer, facility:) }
   let(:current_user) { create(:user) }
   let(:previous_user) { create(:user) }
 

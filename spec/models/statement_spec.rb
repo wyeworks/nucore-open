@@ -3,15 +3,15 @@
 require "rails_helper"
 
 RSpec.describe Statement do
-  subject(:statement) { create(:statement, account: account, created_by: user.id, facility: facility) }
+  subject(:statement) { create(:statement, account:, created_by: user.id, facility:) }
 
-  let(:account) { create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: user)) }
+  let(:account) { create(:nufs_account, account_users_attributes: account_users_attributes_hash(user:)) }
   let(:facility) { create(:facility) }
   let(:user) { create(:user) }
 
   context "when missing required attributes" do
     context "without created_by" do
-      let(:invalid_statement) { Statement.new(created_by: nil, facility: facility) }
+      let(:invalid_statement) { Statement.new(created_by: nil, facility:) }
 
       it "should be invalid" do
         expect(invalid_statement).to_not be_valid
@@ -71,7 +71,7 @@ RSpec.describe Statement do
   end
 
   context "when canceled" do
-    subject(:statement) { create(:statement, account: account, created_by: user.id, facility: facility, canceled_at: Time.current) }
+    subject(:statement) { create(:statement, account:, created_by: user.id, facility:, canceled_at: Time.current) }
 
     it "should not be reconciled" do
       expect(statement).to_not be_reconciled
@@ -222,7 +222,7 @@ RSpec.describe Statement do
       end
 
       describe "with partial payment" do
-        let!(:payments) { FactoryBot.create(:payment, account: statement.account, statement: statement, amount: statement.total_cost / 2) }
+        let!(:payments) { FactoryBot.create(:payment, account: statement.account, statement:, amount: statement.total_cost / 2) }
 
         it "is not paid_in_full" do
           expect(statement).not_to be_paid_in_full
@@ -230,7 +230,7 @@ RSpec.describe Statement do
       end
 
       describe "with multiple payments totaling to the total amount" do
-        let!(:payments) { FactoryBot.create_list(:payment, 2, account: statement.account, statement: statement, amount: statement.total_cost / 2) }
+        let!(:payments) { FactoryBot.create_list(:payment, 2, account: statement.account, statement:, amount: statement.total_cost / 2) }
 
         it "is paid_in_full" do
           statement.instance_variable_set(:@total_payments, nil) if statement.respond_to?(:total_payments)
@@ -269,7 +269,7 @@ RSpec.describe Statement do
         context "with a cross core project that has no relation to the current facility" do
           before :each do
             order_detail_from_unrelated_facility = cross_core_orders[4].order_details.first
-            other_facility_statement = create(:statement, account: account, created_by: user.id, facility: facility3)
+            other_facility_statement = create(:statement, account:, created_by: user.id, facility: facility3)
             other_facility_statement.add_order_detail(order_detail_from_unrelated_facility)
           end
 
@@ -284,7 +284,7 @@ RSpec.describe Statement do
   describe "invoice_date validations" do
     context "when invoice_date is in the future" do
       let(:future_date) { 1.day.from_now.to_date }
-      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: future_date) }
+      let(:statement) { build(:statement, account:, created_by: user.id, facility:, invoice_date: future_date) }
 
       it "is invalid" do
         statement.valid?
@@ -296,7 +296,7 @@ RSpec.describe Statement do
       let(:fulfillment_date) { 5.days.ago }
       let(:invoice_date) { 10.days.ago.to_date }
       let(:order_detail) { place_and_complete_item_order(user, facility, account, true) }
-      let(:statement) { build(:statement, account: account, created_by: user.id, facility: facility, invoice_date: invoice_date) }
+      let(:statement) { build(:statement, account:, created_by: user.id, facility:, invoice_date:) }
 
       before do
         order_detail.update(fulfilled_at: fulfillment_date)
@@ -313,7 +313,7 @@ RSpec.describe Statement do
       let(:fulfillment_date) { 5.days.ago }
       let(:invoice_date) { fulfillment_date.to_date }
       let(:order_detail) { place_and_complete_item_order(user, facility, account, true) }
-      let(:statement) { build(:statement, account:, created_by: user.id, facility: facility, invoice_date: invoice_date) }
+      let(:statement) { build(:statement, account:, created_by: user.id, facility:, invoice_date:) }
 
       before do
         order_detail.update(fulfilled_at: fulfillment_date)
@@ -327,7 +327,7 @@ RSpec.describe Statement do
 
     context "when invoice_date is today" do
       let(:invoice_date) { Time.current.to_date }
-      let(:statement) { build(:statement, account:, created_by: user.id, facility: facility, invoice_date: invoice_date) }
+      let(:statement) { build(:statement, account:, created_by: user.id, facility:, invoice_date:) }
 
       it "is valid" do
         expect(statement).to be_valid
@@ -337,7 +337,7 @@ RSpec.describe Statement do
 
   describe "set_default_invoice_date callback" do
     context "on create" do
-      let(:statement) { build(:statement, account:, created_by: user.id, facility: facility, invoice_date: nil) }
+      let(:statement) { build(:statement, account:, created_by: user.id, facility:, invoice_date: nil) }
 
       it "sets invoice_date to current date if not provided" do
         statement.save!

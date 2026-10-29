@@ -3,11 +3,11 @@
 require "rails_helper"
 
 RSpec.describe ProductApprover do
-  let(:all_products) { create_list(:instrument_requiring_approval, 10, facility: facility) }
+  let(:all_products) { create_list(:instrument_requiring_approval, 10, facility:) }
   let(:approver) { create(:user) }
-  let(:expert_access_group) { create(:product_access_group, name: "Expert", product: product) }
+  let(:expert_access_group) { create(:product_access_group, name: "Expert", product:) }
   let(:facility) { create(:setup_facility) }
-  let(:novice_access_group) { create(:product_access_group, name: "Novice", product: product) }
+  let(:novice_access_group) { create(:product_access_group, name: "Novice", product:) }
   let(:product) { all_products.first }
   let(:product_approver) { ProductApprover.new(all_products, user, approver) }
   let(:product_user) { product.find_product_user(user) }
@@ -16,7 +16,7 @@ RSpec.describe ProductApprover do
 
   def set_up_access_list
     schedule_rule.product_access_groups = [expert_access_group, novice_access_group]
-    product.product_users.create(product: product, user: user, approved_by: user.id)
+    product.product_users.create(product:, user:, approved_by: user.id)
     product_user.product_access_group = novice_access_group
     product_user.save
   end

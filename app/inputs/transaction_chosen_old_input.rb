@@ -14,7 +14,7 @@ class TransactionChosenOldInput < SimpleForm::Inputs::Base # CollectionSelectInp
     # which were slowing down the page.
     collection_size = collection_items.to_a.size
 
-    select_options = { :multiple => true, :"data-placeholder" => placeholder_label }
+    select_options = { multiple: true, "data-placeholder": placeholder_label }
 
     # If there is only one possible value, then we want to show it, and not allow
     # selection, but only if it's not a nullable field

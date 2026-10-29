@@ -33,7 +33,7 @@ RSpec.describe Payment do
   end
 
   describe "amount" do
-    subject(:payment) { described_class.new(amount: amount) }
+    subject(:payment) { described_class.new(amount:) }
     before { payment.valid? }
 
     context "positive amount" do

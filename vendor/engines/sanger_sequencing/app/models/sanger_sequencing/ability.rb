@@ -7,7 +7,7 @@ module SangerSequencing
     def initialize(user, facility = nil)
       return unless user
 
-      can [:show, :create, :update, :create_sample], Submission, user: user
+      can([:show, :create, :update, :create_sample], Submission, user:)
 
       if facility && (user.operator_of?(facility) || granted_product_edition?(user, facility))
         can [:index, :show], Submission
@@ -20,7 +20,7 @@ module SangerSequencing
     def granted_product_edition?(user, facility)
       return false unless SettingsHelper.feature_on?(:granular_permissions)
 
-      permission = user.facility_user_permissions.find_by(facility: facility)
+      permission = user.facility_user_permissions.find_by(facility:)
       permission&.read_access? && permission.product_edition?
     end
   end

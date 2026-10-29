@@ -12,7 +12,7 @@ RSpec.describe UrlService do
 
   let(:service) { create :setup_service }
   let(:order) { create :setup_order, product: service }
-  let(:order_detail) { create :order_detail, order: order, product: service, quantity: 3 }
+  let(:order_detail) { create :order_detail, order:, product: service, quantity: 3 }
 
   let(:facility) { order_detail.product.facility }
   let(:product) { order_detail.product }

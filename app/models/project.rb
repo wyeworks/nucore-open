@@ -28,7 +28,7 @@ class Project < ApplicationRecord
   scope :for_single_facility, lambda { |facility|
     left_outer_joins(:orders)
       .where(orders: { cross_core_project_id: nil })
-      .where(facility: facility)
+      .where(facility:)
   }
 
   def to_s

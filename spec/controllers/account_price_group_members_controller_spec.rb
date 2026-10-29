@@ -7,7 +7,7 @@ RSpec.describe AccountPriceGroupMembersController do
   render_views
 
   let(:facility) { @authable }
-  let(:price_group) { FactoryBot.create(:price_group, facility: facility) }
+  let(:price_group) { FactoryBot.create(:price_group, facility:) }
 
   before(:all) { create_users }
 
@@ -109,7 +109,7 @@ RSpec.describe AccountPriceGroupMembersController do
       @method = :delete
       @action = :destroy
       @account = create_nufs_account_with_owner
-      @account_price_group_member = AccountPriceGroupMember.create!(price_group: price_group, account: @account)
+      @account_price_group_member = AccountPriceGroupMember.create!(price_group:, account: @account)
       @params = { facility_id: @authable.url_name, price_group_id: price_group.id, id: @account_price_group_member.id }
     end
 

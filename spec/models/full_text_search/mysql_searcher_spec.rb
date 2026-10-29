@@ -7,7 +7,7 @@ RSpec.describe FullTextSearch::MysqlSearcher, if: Nucore::Database.mysql? do
   before(:context) do
     facility = Facility.new(name: "name", abbreviation: "EF", url_name: "facility", is_active: true, short_description: "abc", journal_mask: "C01")
     facility.save(validate: false)
-    item = Item.new(url_name: "lsc-andor", name: "LSC Andor Spinning Disk", facility: facility)
+    item = Item.new(url_name: "lsc-andor", name: "LSC Andor Spinning Disk", facility:)
     item.save(validate: false)
   end
 
@@ -45,7 +45,7 @@ RSpec.describe FullTextSearch::MysqlSearcher, if: Nucore::Database.mysql? do
   context "when it matches multiple words, but not exactly" do
     before(:context) do
       facility = Facility.find_by(url_name: "facility")
-      Item.new(name: "LSC Nikon A1RSi", facility: facility, url_name: "lsc_nikon").save(validate: false)
+      Item.new(name: "LSC Nikon A1RSi", facility:, url_name: "lsc_nikon").save(validate: false)
     end
     after(:context) do
       Item.find_by(url_name: "lsc_nikon").destroy

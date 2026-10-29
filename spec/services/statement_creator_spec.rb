@@ -8,7 +8,7 @@ RSpec.describe StatementCreator do
   let(:account) do
     FactoryBot.create(
       :nufs_account,
-      account_users_attributes: [FactoryBot.attributes_for(:account_user, user: user)],
+      account_users_attributes: [FactoryBot.attributes_for(:account_user, user:)],
       type: Account.config.statement_account_types.first,
     )
   end

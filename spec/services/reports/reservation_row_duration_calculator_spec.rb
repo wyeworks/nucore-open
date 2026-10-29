@@ -5,14 +5,14 @@ require "rails_helper"
 RSpec.describe Reports::ReservationRowDurationCalculator do
   let(:calculator) do
     described_class.new(reservation,
-                        start_time: start_time,
-                        end_time: end_time)
+                        start_time:,
+                        end_time:)
   end
 
   let(:reservation) do
     FactoryBot.build(:offline_reservation,
-                     reserve_start_at: reserve_start_at,
-                     reserve_end_at: reserve_end_at)
+                     reserve_start_at:,
+                     reserve_end_at:)
   end
 
   let(:start_time) { Date.new(2016, 1, 1).beginning_of_day }

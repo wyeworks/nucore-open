@@ -56,7 +56,7 @@ module BulkEmail
 
     def deliver(recipient)
       Mailer
-        .send_mail(recipient: recipient, subject: subject, body: body, reply_to: reply_to, facility: SerializableFacility.new(facility))
+        .send_mail(recipient:, subject:, body:, reply_to:, facility: SerializableFacility.new(facility))
         .deliver_later
     end
 

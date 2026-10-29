@@ -7,14 +7,14 @@ RSpec.describe Ability do
   let(:facility) { FactoryBot.create(:facility) }
 
   describe "facility staff" do
-    let(:user) { FactoryBot.create(:user, :staff, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :staff, facility:) }
 
     it_is_allowed_to([:index, :dashboard, :tab_counts], SecureRooms::Occupancy)
     it_is_not_allowed_to([:show_problems, :assign_price_policies_to_problem_orders], SecureRooms::Occupancy)
   end
 
   describe "facility senior staff" do
-    let(:user) { FactoryBot.create(:user, :senior_staff, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :senior_staff, facility:) }
 
     it_is_allowed_to([:index, :dashboard, :tab_counts], SecureRooms::Occupancy)
     it_is_not_allowed_to(:assign_price_policies_to_problem_orders, SecureRooms::Occupancy)
@@ -22,21 +22,21 @@ RSpec.describe Ability do
   end
 
   describe "facility billing administrator" do
-    let(:user) { FactoryBot.create(:user, :facility_billing_administrator, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :facility_billing_administrator, facility:) }
 
     it_is_allowed_to([:index, :dashboard, :tab_counts], SecureRooms::Occupancy)
     it_is_not_allowed_to([:show_problems, :assign_price_policies_to_problem_orders], SecureRooms::Occupancy)
   end
 
   describe "facility administrator" do
-    let(:user) { FactoryBot.create(:user, :facility_administrator, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :facility_administrator, facility:) }
 
     it_is_allowed_to(%i[index dashboard tab_counts show_problems
                       assign_price_policies_to_problem_orders], SecureRooms::Occupancy)
   end
 
   describe "facility director" do
-    let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :facility_director, facility:) }
     it_is_allowed_to(%i[index dashboard tab_counts show_problems
                       assign_price_policies_to_problem_orders], SecureRooms::Occupancy)
   end

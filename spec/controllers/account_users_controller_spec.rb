@@ -88,7 +88,7 @@ RSpec.describe AccountUsersController do
     let(:account_user) do
       FactoryBot.create(
         :account_user, user_role: AccountUser::ACCOUNT_PURCHASER,
-                       account: account, user: purchaser,
+                       account:, user: purchaser,
                        created_by: owner.id)
     end
 

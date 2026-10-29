@@ -33,19 +33,19 @@ FactoryBot.define do
 
     trait :account_manager do
       after(:create) do |user, _|
-        UserRole.create!(user: user, role: UserRole::ACCOUNT_MANAGER)
+        UserRole.create!(user:, role: UserRole::ACCOUNT_MANAGER)
       end
     end
 
     trait :administrator do
       after(:create) do |user, _|
-        UserRole.create!(user: user, role: UserRole::ADMINISTRATOR)
+        UserRole.create!(user:, role: UserRole::ADMINISTRATOR)
       end
     end
 
     trait :global_billing_administrator do
       after(:create) do |user, _|
-        UserRole.create!(user: user, role: UserRole::GLOBAL_BILLING_ADMINISTRATOR)
+        UserRole.create!(user:, role: UserRole::GLOBAL_BILLING_ADMINISTRATOR)
       end
     end
 
@@ -86,7 +86,7 @@ FactoryBot.define do
 
       after(:create) do |user, evaluator|
         UserRole.create!(
-          user: user,
+          user:,
           role: UserRole::FACILITY_ADMINISTRATOR,
           facility: evaluator.facility,
         )
@@ -98,7 +98,7 @@ FactoryBot.define do
 
       after(:create) do |user, evaluator|
         UserRole.create!(
-          user: user,
+          user:,
           role: UserRole::FACILITY_DIRECTOR,
           facility: evaluator.facility,
         )
@@ -110,7 +110,7 @@ FactoryBot.define do
 
       after(:create) do |user, evaluator|
         UserRole.create!(
-          user: user,
+          user:,
           role: UserRole::FACILITY_SENIOR_STAFF,
           facility: evaluator.facility,
         )
@@ -122,7 +122,7 @@ FactoryBot.define do
 
       after(:create) do |user, evaluator|
         UserRole.create!(
-          user: user,
+          user:,
           role: UserRole::FACILITY_STAFF,
           facility: evaluator.facility,
         )
@@ -134,7 +134,7 @@ FactoryBot.define do
 
       after(:create) do |user, evaluator|
         UserRole.create!(
-          user: user,
+          user:,
           role: UserRole::FACILITY_BILLING_ADMINISTRATOR,
           facility: evaluator.facility,
         )

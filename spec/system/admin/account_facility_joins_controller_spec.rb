@@ -14,7 +14,7 @@ RSpec.describe AccountFacilityJoinsController, feature_setting: { "accounts.edit
   end
 
   let(:facility) { create(:facility) }
-  let(:facility_specific_account) { create(:account, :with_account_owner, facility: facility) }
+  let(:facility_specific_account) { create(:account, :with_account_owner, facility:) }
   let(:global_account) { create(:nufs_account, :with_account_owner) }
 
   describe "as a global admin" do
@@ -48,7 +48,7 @@ RSpec.describe AccountFacilityJoinsController, feature_setting: { "accounts.edit
   end
 
   describe "as a facility admin" do
-    before { login_as create(:user, :facility_administrator, facility: facility) }
+    before { login_as create(:user, :facility_administrator, facility:) }
 
     it_behaves_like "raises specified error", -> { visit edit_facility_account_account_facility_joins_path(facility, facility_specific_account) }, CanCan::AccessDenied
   end

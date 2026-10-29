@@ -45,11 +45,11 @@ RSpec.describe FacilityUsersController do
     end
 
     it "logs events" do
-      director = create(:user, :facility_director, facility: facility)
+      director = create(:user, :facility_director, facility:)
       sign_in director
 
       delete :destroy, params: { facility_id: facility.url_name, id: @staff.id }
-      user_role = UserRole.deleted.find_by(user: @staff, facility: facility)
+      user_role = UserRole.deleted.find_by(user: @staff, facility:)
       expect(LogEvent).to be_exists(loggable: user_role, event_type: :delete, user: director)
     end
   end
@@ -80,18 +80,18 @@ RSpec.describe FacilityUsersController do
     end
 
     describe "as a director" do
-      let(:director) { create(:user, :facility_director, facility: facility) }
+      let(:director) { create(:user, :facility_director, facility:) }
       before { sign_in director }
 
       it "logs an event" do
         post :map_user, params: @params
 
-        user_role = UserRole.find_by(user: @staff, facility: facility)
+        user_role = UserRole.find_by(user: @staff, facility:)
         expect(LogEvent).to be_exists(loggable: user_role, event_type: :create, user: director)
       end
 
       it "does not log an event if it's a duplicate role" do
-        create(:user_role, :facility_staff, user: @staff, facility: facility)
+        create(:user_role, :facility_staff, user: @staff, facility:)
 
         expect do
           post :map_user, params: @params

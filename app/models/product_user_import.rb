@@ -51,7 +51,7 @@ class ProductUserImport < ApplicationRecord
   def import_row(row)
     row_username = row["Username"]
     user = User.find_by(username: row_username)
-    new_product_user = ProductUserCreator.create(user: user, product: product, approver: creator)
+    new_product_user = ProductUserCreator.create(user:, product:, approver: creator)
 
     if new_product_user.persisted?
       successes << new_product_user

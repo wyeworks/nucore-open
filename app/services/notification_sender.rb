@@ -59,13 +59,13 @@ class NotificationSender
     order_details_not_found = @order_detail_ids.map(&:to_i) - order_details.pluck(:id)
 
     order_details_not_found.each do |order_detail_id|
-      @errors << I18n.t("controllers.facility_notifications.send_notifications.order_error", order_detail_id: order_detail_id)
+      @errors << I18n.t("controllers.facility_notifications.send_notifications.order_error", order_detail_id:)
     end
   end
 
   def mark_order_details_as_reviewed
     order_details.each do |order_detail|
-      order_detail.update(reviewed_at: reviewed_at)
+      order_detail.update(reviewed_at:)
     end
   end
 

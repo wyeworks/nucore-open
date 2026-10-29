@@ -11,8 +11,8 @@ RSpec.describe JournalRowUpdater, type: :service do
     let(:account) { FactoryBot.create(:split_account, owner: user) }
     # Original costs: actual: 20, subsidy: 10
     let(:order_detail) { place_and_complete_item_order(user, facility, account, true) }
-    let(:journal) { FactoryBot.create(:journal, is_successful: false, facility: facility) }
-    let(:journal2) { FactoryBot.create(:journal, is_successful: false, facility: facility) }
+    let(:journal) { FactoryBot.create(:journal, is_successful: false, facility:) }
+    let(:journal2) { FactoryBot.create(:journal, is_successful: false, facility:) }
 
     before do
       journal.create_journal_rows!([order_detail])

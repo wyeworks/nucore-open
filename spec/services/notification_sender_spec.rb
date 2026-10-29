@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe NotificationSender, :aggregate_failures do
   subject(:notification_sender) { described_class.new(facility, notification_params) }
 
-  let(:notification_params) { { order_detail_ids: order_detail_ids } }
+  let(:notification_params) { { order_detail_ids: } }
   let(:facility) { item.facility }
   let(:item) { FactoryBot.create(:setup_item, :with_facility_account) }
   let(:order_detail_ids) { order_details.map(&:id) }
@@ -24,7 +24,7 @@ RSpec.describe NotificationSender, :aggregate_failures do
       let(:account) { FactoryBot.create(:setup_account, owner: account_owner) }
 
       context "when send $0 checkbox is checked" do
-        let(:notification_params) { { order_detail_ids: order_detail_ids, notify_zero_dollar_orders: "1" } }
+        let(:notification_params) { { order_detail_ids:, notify_zero_dollar_orders: "1" } }
         let(:order_details) { [place_product_order(account_owner, facility, item, account)] }
 
         before { order_details.first.update!(actual_cost: 0) }
@@ -34,7 +34,7 @@ RSpec.describe NotificationSender, :aggregate_failures do
             .to receive(:review_orders)
             .with(user: account_owner,
                   accounts: [account],
-                  facility: facility)
+                  facility:)
             .once
             .and_return(delivery)
 
@@ -65,7 +65,7 @@ RSpec.describe NotificationSender, :aggregate_failures do
             .to receive(:review_orders)
             .with(user: account_owner,
                   accounts: [account],
-                  facility: facility)
+                  facility:)
             .once
             .and_return(delivery)
 
@@ -79,7 +79,7 @@ RSpec.describe NotificationSender, :aggregate_failures do
             .to receive(:review_orders)
             .with(user: account_owner,
                   accounts: [account],
-                  facility: facility)
+                  facility:)
             .once
             .and_return(delivery)
 
@@ -108,9 +108,9 @@ RSpec.describe NotificationSender, :aggregate_failures do
           account_owners.each do |user|
             expect(Notifier)
               .to receive(:review_orders)
-              .with(user: user,
+              .with(user:,
                     accounts: match_array(AccountUser.where(user_id: user.id).map(&:account)),
-                    facility: facility)
+                    facility:)
               .once
               .and_return(delivery)
           end

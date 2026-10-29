@@ -142,7 +142,7 @@ RSpec.describe OrderImportsController do
         created_by: @director.id,
         upload_file: stored_file,
         error_file: stored_file,
-        facility: facility,
+        facility:,
       )
     end
 

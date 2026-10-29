@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe ProblemReservationsController do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:setup_instrument, :timer, :always_available, facility: facility, problems_resolvable_by_user: true) }
+  let(:instrument) { create(:setup_instrument, :timer, :always_available, facility:, problems_resolvable_by_user: true) }
   let(:problem_reservation) { create(:purchased_reservation, product: instrument, reserve_start_at: 2.hours.ago, reserve_end_at: 1.hour.ago, actual_start_at: 1.hour.ago, actual_end_at: nil) }
   before { MoveToProblemQueue.move!(problem_reservation.order_detail, force: true, cause: :reservation_started) }
 
@@ -29,7 +29,7 @@ RSpec.describe ProblemReservationsController do
   end
 
   describe "as a facility director" do
-    before { sign_in create(:user, :facility_director, facility: facility) }
+    before { sign_in create(:user, :facility_director, facility:) }
 
     it_behaves_like "raises specified error", -> { get :edit, params: { id: problem_reservation } }, ActiveRecord::RecordNotFound
   end

@@ -54,7 +54,7 @@ class StatementCreator
         @to_statement[od.account] ||= []
         @to_statement[od.account] << od
       rescue => e
-        @errors << I18n.t("controllers.facility_statements.order_error", order_detail_id: order_detail_id)
+        @errors << I18n.t("controllers.facility_statements.order_error", order_detail_id:)
       end
     end
   end

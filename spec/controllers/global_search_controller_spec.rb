@@ -37,7 +37,7 @@ end
 RSpec.describe GlobalSearchController do
   before(:all) { create_users }
   let!(:product) { FactoryBot.create(:setup_item) }
-  let!(:order) { FactoryBot.create(:purchased_order, product: product) }
+  let!(:order) { FactoryBot.create(:purchased_order, product:) }
   let!(:order_detail) { order.order_details.first }
   let!(:facility) { order.facility }
   let(:order_detail_results) do
@@ -135,7 +135,7 @@ RSpec.describe GlobalSearchController do
     context "when signed in as facility admin, but order was placed for the user in a different facility" do
       let(:facility2) { FactoryBot.create :setup_facility }
       let!(:product) { FactoryBot.create(:setup_item, facility: facility2) }
-      let!(:order) { FactoryBot.create(:purchased_order, product: product) }
+      let!(:order) { FactoryBot.create(:purchased_order, product:) }
       let!(:order_detail) { order.order_details.first }
       let(:user) { order.user }
       before :each do
@@ -192,7 +192,7 @@ RSpec.describe GlobalSearchController do
       end
 
       it "should not return an unpurchased order" do
-        order2 = FactoryBot.create(:setup_order, product: product)
+        order2 = FactoryBot.create(:setup_order, product:)
         get :index, params: { search: order2.id.to_s }
         expect(order_detail_results).to be_empty
       end
@@ -217,7 +217,7 @@ RSpec.describe GlobalSearchController do
 
       context "when searching by external id" do
         let(:external_id) { "CX-2323" }
-        let!(:external_service_receiver) { create :external_service_receiver, external_id: external_id }
+        let!(:external_service_receiver) { create :external_service_receiver, external_id: }
 
         it "finds the correct order detail and renders the index page" do
           get :index, params: { search: external_id }

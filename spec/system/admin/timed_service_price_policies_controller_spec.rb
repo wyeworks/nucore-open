@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe TimedServicePricePoliciesController, :js do
   let(:facility) { create(:setup_facility) }
-  let!(:timed_service) { create(:timed_service, facility: facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let!(:timed_service) { create(:timed_service, facility:) }
+  let(:director) { create(:user, :facility_director, facility:) }
 
   let(:base_price_group) { PriceGroup.base }
   let(:external_price_group) { PriceGroup.external }
@@ -59,7 +59,7 @@ RSpec.describe TimedServicePricePoliciesController, :js do
 
   context "with duration pricing mode" do
     let!(:timed_service) do
-      create(:timed_service, facility: facility, pricing_mode: TimedService::Pricing::DURATION)
+      create(:timed_service, facility:, pricing_mode: TimedService::Pricing::DURATION)
     end
 
     it "can set up stepped price policies", :aggregate_failures, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do

@@ -20,7 +20,7 @@ RSpec.describe FacilityJournalsController do
     @order_detail2.update(reviewed_at: nil)
 
     @account2 = create(:nufs_account, :with_account_owner, owner: user)
-    @authable_account2 = FactoryBot.create(:facility_account, facility: facility)
+    @authable_account2 = FactoryBot.create(:facility_account, facility:)
     @order_detail3 = place_and_complete_item_order(user, facility, @account2, true)
 
     [@order_detail1, @order_detail3].each do |od|
@@ -33,7 +33,7 @@ RSpec.describe FacilityJournalsController do
   before(:each) do
     @authable = create(:facility)
     @account = create(:nufs_account, :with_account_owner, owner: @admin)
-    @journal = create(:journal, facility: facility, created_by: @admin.id, journal_date: 2.days.ago.change(usec: 0))
+    @journal = create(:journal, facility:, created_by: @admin.id, journal_date: 2.days.ago.change(usec: 0))
   end
 
   describe "#index" do
@@ -41,7 +41,7 @@ RSpec.describe FacilityJournalsController do
       @method = :get
       @action = :index
       @params = { facility_id: facility.url_name }
-      @pending_journal = create(:journal, facility: facility, created_by: @admin.id, journal_date: Time.zone.now, is_successful: nil)
+      @pending_journal = create(:journal, facility:, created_by: @admin.id, journal_date: Time.zone.now, is_successful: nil)
     end
 
     it_should_deny_all [:staff, :senior_staff]
@@ -246,7 +246,7 @@ RSpec.describe FacilityJournalsController do
       @action = :create
       @params = {
         facility_id: facility.url_name,
-        journal_date: journal_date,
+        journal_date:,
       }
     end
 
@@ -504,7 +504,7 @@ RSpec.describe FacilityJournalsController do
     end
 
     describe "when submitting an order detail on another journal" do
-      let(:journal2) { create(:journal, facility: facility, created_by: @admin.id, journal_date: 2.days.ago) }
+      let(:journal2) { create(:journal, facility:, created_by: @admin.id, journal_date: 2.days.ago) }
       before { journal2.create_journal_rows!([@order_detail2]) }
 
       let(:order_detail_params) do

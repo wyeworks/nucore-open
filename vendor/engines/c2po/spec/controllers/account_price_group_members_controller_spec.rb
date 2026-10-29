@@ -10,12 +10,12 @@ RSpec.describe AccountPriceGroupMembersController do
     before { allow(AccountValidator::ValidatorFactory).to receive(:instance).and_return(AccountValidator::ValidatorDefault.new) }
 
     let(:partial_account_number) { build(:nufs_account).account_number[0..-4] }
-    let(:price_group) { create(:price_group, facility: facility) }
+    let(:price_group) { create(:price_group, facility:) }
     let!(:global_account) { create(:nufs_account, :with_account_owner, account_number: "#{partial_account_number}234") }
-    let!(:facility_purchase_order) { create(:purchase_order_account, :with_account_owner, account_number: "#{partial_account_number}894", facility: facility) }
+    let!(:facility_purchase_order) { create(:purchase_order_account, :with_account_owner, account_number: "#{partial_account_number}894", facility:) }
     let!(:other_facility_purchase_order) { create(:purchase_order_account, :with_account_owner, account_number: "#{partial_account_number}542", facility: create(:facility)) }
 
-    let(:user) { create(:user, :facility_administrator, facility: facility) }
+    let(:user) { create(:user, :facility_administrator, facility:) }
 
     it "limits the results to global and the facility" do
       sign_in user

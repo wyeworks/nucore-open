@@ -124,15 +124,15 @@ Teaspoon.configure do |config|
     selenium_options.merge!(
       {
         url: "http://#{ENV['SELENIUM_HOST']}:#{ENV['SELENIUM_PORT']}/wd/hub",
-        http_client: http_client,
+        http_client:,
       },
     )
     client_driver = :remote
   end
 
   config.driver_options = {
-    client_driver: client_driver,
-    selenium_options: selenium_options,
+    client_driver:,
+    selenium_options:,
   }
 
   config.suite :engines do |suite|

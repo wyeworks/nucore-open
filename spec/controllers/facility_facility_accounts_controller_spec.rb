@@ -14,18 +14,18 @@ RSpec.describe FacilityFacilityAccountsController do
   end
 
   let(:facility) { create(:facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
   let(:admin) { create(:user, :administrator) }
-  let(:senior_staff) { create(:user, :senior_staff, facility: facility) }
+  let(:senior_staff) { create(:user, :senior_staff, facility:) }
 
   let(:params) { { facility_id: facility.url_name } }
 
   describe "GET #index" do
-    let!(:facility_account) { create(:facility_account, facility: facility) }
+    let!(:facility_account) { create(:facility_account, facility:) }
 
     it "allows a director" do
       sign_in director
-      get :index, params: params
+      get(:index, params:)
 
       is_expected.to render_template "index"
       expect(assigns(:accounts)).to eq([facility_account])
@@ -34,14 +34,14 @@ RSpec.describe FacilityFacilityAccountsController do
     it "denies senior staff" do
       sign_in senior_staff
 
-      expect { get :index, params: params }.to raise_error(CanCan::AccessDenied)
+      expect { get :index, params: }.to raise_error(CanCan::AccessDenied)
     end
   end
 
   describe "GET #new" do
     it "allows an authorized user" do
       sign_in admin
-      get :new, params: params
+      get(:new, params:)
 
       is_expected.to render_template "new"
       expect(assigns(:facility_account)).to be_new_record
@@ -50,7 +50,7 @@ RSpec.describe FacilityFacilityAccountsController do
     it "denies senior staff" do
       sign_in senior_staff
 
-      expect { get :new, params: params }.to raise_error(CanCan::AccessDenied)
+      expect { get :new, params: }.to raise_error(CanCan::AccessDenied)
     end
   end
 
@@ -63,14 +63,14 @@ RSpec.describe FacilityFacilityAccountsController do
       it "creates the account if it is open" do
         expect_any_instance_of(AccountValidator::ValidatorFactory.validator_class).to receive(:account_is_open!).and_return(true)
 
-        expect { put :create, params: params }.to change(FacilityAccount, :count).by(1)
+        expect { put :create, params: }.to change(FacilityAccount, :count).by(1)
         expect(response).to redirect_to(facility_facility_accounts_path)
       end
 
       it "renders errors if the account is not open" do
         expect_any_instance_of(AccountValidator::ValidatorFactory.validator_class).to receive(:account_is_open!).and_raise(AccountValidator::ValidatorError, "not open")
 
-        expect { post :create, params: params }.not_to change(FacilityAccount, :count)
+        expect { post :create, params: }.not_to change(FacilityAccount, :count)
         expect(assigns(:facility_account)).to be_new_record
         expect(assigns(:facility_account).errors[:base]).to include("not open")
       end
@@ -79,17 +79,17 @@ RSpec.describe FacilityFacilityAccountsController do
     it "denies senior staff" do
       sign_in senior_staff
 
-      expect { get :create, params: params }.to raise_error(CanCan::AccessDenied)
+      expect { get :create, params: }.to raise_error(CanCan::AccessDenied)
     end
   end
 
   describe "GET #edit" do
-    let!(:facility_account) { create(:facility_account, facility: facility) }
+    let!(:facility_account) { create(:facility_account, facility:) }
     let(:params) { super().merge(id: facility_account.id) }
 
     it "allows a director to edit" do
       sign_in director
-      get :edit, params: params
+      get(:edit, params:)
 
       is_expected.to render_template "edit"
       expect(assigns(:facility_account)).to eq(facility_account)
@@ -98,12 +98,12 @@ RSpec.describe FacilityFacilityAccountsController do
     it "denies senior staff" do
       sign_in senior_staff
 
-      expect { get :edit, params: params }.to raise_error(CanCan::AccessDenied)
+      expect { get :edit, params: }.to raise_error(CanCan::AccessDenied)
     end
   end
 
   describe "PUT #update" do
-    let!(:facility_account) { create(:facility_account, facility: facility, is_active: false) }
+    let!(:facility_account) { create(:facility_account, facility:, is_active: false) }
     let(:params) do
       super().merge(id: facility_account.id, facility_account: { is_active: true })
     end
@@ -112,20 +112,20 @@ RSpec.describe FacilityFacilityAccountsController do
       allow_any_instance_of(AccountValidator::ValidatorFactory.validator_class).to receive(:account_is_open!).and_return(true)
 
       sign_in director
-      expect { put :update, params: params }.to change { facility_account.reload.active? }.to be(true)
+      expect { put :update, params: }.to change { facility_account.reload.active? }.to be(true)
     end
 
     it "prevents the director from updating it even if it is invalid" do
       allow_any_instance_of(AccountValidator::ValidatorFactory.validator_class).to receive(:account_is_open!).and_raise(AccountValidator::ValidatorError, "not open")
 
       sign_in director
-      expect { put :update, params: params }.to change { facility_account.reload.active? }.to be(true)
+      expect { put :update, params: }.to change { facility_account.reload.active? }.to be(true)
     end
 
     it "denies senior staff" do
       sign_in senior_staff
 
-      expect { put :update, params: params }.to raise_error(CanCan::AccessDenied)
+      expect { put :update, params: }.to raise_error(CanCan::AccessDenied)
     end
   end
 end

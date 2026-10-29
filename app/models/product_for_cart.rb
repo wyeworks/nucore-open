@@ -112,7 +112,7 @@ class ProductForCart
       email: product.email,
       facility: product.facility,
       product_name: product.name,
-      product_type: product_type,
+      product_type:,
       product_type_plural: product_type.pluralize,
     }
   end

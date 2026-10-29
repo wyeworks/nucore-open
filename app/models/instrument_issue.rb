@@ -14,10 +14,10 @@ class InstrumentIssue
     return false unless valid?
 
     InstrumentIssueMailer.create(
-      product: product,
-      user: user,
-      message: message,
-      order_detail: order_detail,
+      product:,
+      user:,
+      message:,
+      order_detail:,
       recipients: recipients.to_a,
     ).deliver_later
   end

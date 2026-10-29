@@ -15,8 +15,8 @@ class Notification < ApplicationRecord
 
   def self.create_for!(user, subject)
     create!(
-      user: user,
-      subject: subject,
+      user:,
+      subject:,
       notice: subject.to_notice(self, user),
     )
   end

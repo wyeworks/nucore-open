@@ -16,7 +16,7 @@ RSpec.describe InstrumentsDashboardController do
     end
 
     it "allows facility staff" do
-      sign_in create(:user, :staff, facility: facility)
+      sign_in create(:user, :staff, facility:)
       do_request
       expect(response).to be_successful
     end

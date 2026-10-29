@@ -70,9 +70,9 @@ class FacilityAccountsController < ApplicationController
   def update
     @account = AccountBuilder.for(@account.class).new(
       account: @account,
-      current_user: current_user,
+      current_user:,
       owner_user: @owner_user,
-      params: params,
+      params:,
     ).update
 
     if @account.save
@@ -153,9 +153,9 @@ class FacilityAccountsController < ApplicationController
     @account = AccountBuilder.for(current_account_type).new(
       account_type: current_account_type,
       facility: current_facility,
-      current_user: current_user,
+      current_user:,
       owner_user: @owner_user,
-      params: params,
+      params:,
     ).build
   end
 

@@ -8,7 +8,7 @@ class OfflineCancellationMailer < ApplicationMailer
   def send_notification(reservation)
     @reservation = reservation
     @instrument = reservation.product
-    mail(to: reservation.user.email, subject: subject)
+    mail(to: reservation.user.email, subject:)
   end
 
   private

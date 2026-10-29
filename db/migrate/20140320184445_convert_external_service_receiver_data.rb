@@ -4,7 +4,7 @@ class ConvertExternalServiceReceiverData < ActiveRecord::Migration[4.2]
   def up
     ExternalServiceReceiver.find_each do |receiver|
       show_url = receiver.response_data
-      new_data = { show_url: show_url, edit_url: "#{show_url}/take" }
+      new_data = { show_url:, edit_url: "#{show_url}/take" }
       receiver.update_attribute :response_data, new_data.to_json
     end
   end

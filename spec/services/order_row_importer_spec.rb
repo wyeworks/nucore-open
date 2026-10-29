@@ -8,8 +8,8 @@ RSpec.describe OrderRowImporter do
   let(:account) { create(Settings.testing.account_factory.to_sym, :with_account_owner, owner: user) }
   let!(:account_api_record) { create(Settings.testing.api_account_factory.to_sym, account_number: account.account_number) } if Settings.testing.api_account_factory
   let(:facility) { create(:setup_facility) }
-  let(:order_import) { build(:order_import, creator: user, facility: facility) }
-  let(:service) { create(:setup_service, facility: facility) }
+  let(:order_import) { build(:order_import, creator: user, facility:) }
+  let(:service) { create(:setup_service, facility:) }
   let(:user) { create(:user) }
   let(:project) { create(:project, facility:) }
 
@@ -347,15 +347,15 @@ RSpec.describe OrderRowImporter do
 
     context "when the product is a service" do
       let(:chart_string) { account.account_number }
-      let(:price_group) { create(:price_group, facility: facility) }
+      let(:price_group) { create(:price_group, facility:) }
       let(:product) { service }
       let(:product_name) { product.name }
       let(:username) { user.username }
 
       before(:each) do
-        create(:user_price_group_member, user: user, price_group: price_group)
+        create(:user_price_group_member, user:, price_group:)
         product.service_price_policies.create(
-          attributes_for(:service_price_policy, price_group: price_group),
+          attributes_for(:service_price_policy, price_group:),
         )
       end
 
@@ -376,7 +376,7 @@ RSpec.describe OrderRowImporter do
 
     context "when the product is a timed service" do
       let(:chart_string) { account.account_number }
-      let(:product) { create(:setup_timed_service, facility: facility) }
+      let(:product) { create(:setup_timed_service, facility:) }
       let(:username) { user.username }
 
       describe "happy path" do
@@ -411,15 +411,15 @@ RSpec.describe OrderRowImporter do
 
     describe "when the product is an instrument" do
       let(:chart_string) { account.account_number }
-      let(:price_group) { create(:price_group, facility: facility) }
-      let(:product) { create(:setup_instrument, facility: facility) }
+      let(:price_group) { create(:price_group, facility:) }
+      let(:product) { create(:setup_instrument, facility:) }
       let(:product_name) { product.name }
       let(:username) { user.username }
 
       before(:each) do
-        create(:user_price_group_member, user: user, price_group: price_group)
+        create(:user_price_group_member, user:, price_group:)
         product.instrument_price_policies.create(
-          attributes_for(:instrument_price_policy, price_group: price_group),
+          attributes_for(:instrument_price_policy, price_group:),
         )
       end
 
@@ -560,7 +560,7 @@ RSpec.describe OrderRowImporter do
       end
 
       context "happy path" do
-        let!(:existing_order) { create(:purchased_order, product: service, user: user, account: account) }
+        let!(:existing_order) { create(:purchased_order, product: service, user:, account:) }
 
         it "adds to the existing order" do
           expect { subject.import }.to change(OrderDetail, :count).by(1).and change(Order, :count).by(0)
@@ -576,14 +576,14 @@ RSpec.describe OrderRowImporter do
       end
 
       context "when the order is not purchased" do
-        let!(:existing_order) { create(:setup_order, product: service, user: user, account: account) }
+        let!(:existing_order) { create(:setup_order, product: service, user:, account:) }
 
         it_behaves_like "an order was not created"
         it_behaves_like "it has an error message", "The order has not been purchased"
       end
 
       context "when the order is part of a different facility" do
-        let!(:existing_order) { create(:purchased_order, product: other_facility_product, user: user, account: account) }
+        let!(:existing_order) { create(:purchased_order, product: other_facility_product, user:, account:) }
         let(:other_facility) { create(:setup_facility) }
         let(:other_facility_product) { create(:setup_item, facility: other_facility) }
 
@@ -592,10 +592,10 @@ RSpec.describe OrderRowImporter do
       end
 
       context "when the user is wrong" do
-        let!(:existing_order) { create(:purchased_order, product: service, account: account, user: other_user) }
+        let!(:existing_order) { create(:purchased_order, product: service, account:, user: other_user) }
         let(:other_user) do
           create(:user, username: "otheruser") do |other_user|
-            other_user.account_users << AccountUser.new(account: account, user_role: AccountUser::ACCOUNT_PURCHASER, created_by: 0)
+            other_user.account_users << AccountUser.new(account:, user_role: AccountUser::ACCOUNT_PURCHASER, created_by: 0)
           end
         end
 

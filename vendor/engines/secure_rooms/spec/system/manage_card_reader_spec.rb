@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe "Managing CardReaders" do
   let(:facility) { create(:setup_facility) }
-  let(:secure_room) { create(:secure_room, facility: facility) }
-  let(:facility_staff) { create(:user, :senior_staff, facility: facility) }
+  let(:secure_room) { create(:secure_room, facility:) }
+  let(:facility_staff) { create(:user, :senior_staff, facility:) }
   before { login_as facility_staff }
 
   it "can create a card reader" do
@@ -26,7 +26,7 @@ RSpec.describe "Managing CardReaders" do
   end
 
   context "with existing card reader" do
-    let!(:card_reader) { create(:card_reader, secure_room: secure_room) }
+    let!(:card_reader) { create(:card_reader, secure_room:) }
 
     it "can edit a card reader" do
       visit facility_secure_room_card_readers_path(facility, secure_room)
@@ -56,7 +56,7 @@ RSpec.describe "Managing CardReaders" do
   end
 
   context "with granular permissions", feature_setting: { granular_permissions: true } do
-    let!(:card_reader) { create(:card_reader, secure_room: secure_room) }
+    let!(:card_reader) { create(:card_reader, secure_room:) }
     let(:user) { create(:user) }
 
     before { login_as user }

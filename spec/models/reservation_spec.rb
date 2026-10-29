@@ -11,18 +11,18 @@ RSpec.describe Reservation do
       reserve_start_meridian: "am",
       duration_mins: 60,
       split_times: true,
-      order_detail: order_detail,
+      order_detail:,
     )
   end
 
   let(:facility) { create(:setup_facility) }
-  let(:facility_account) { create(:facility_account, facility: facility) }
+  let(:facility_account) { create(:facility_account, facility:) }
   let(:instrument) { @instrument }
   let(:order) { FactoryBot.create(:setup_order, product: instrument) }
-  let(:order_detail) { FactoryBot.create(:order_detail, account: order.account, order: order, product: instrument) }
+  let(:order_detail) { FactoryBot.create(:order_detail, account: order.account, order:, product: instrument) }
 
   before(:each) do
-    @instrument = create(:instrument, facility: facility, reserve_interval: 15)
+    @instrument = create(:instrument, facility:, reserve_interval: 15)
     # add rule, available every day from 12 am to 5 pm, 60 minutes duration
     @rule = FactoryBot.create(:schedule_rule, product: @instrument, start_hour: 0, end_hour: 17)
     allow_any_instance_of(Reservation).to receive(:admin?).and_return(false)
@@ -371,13 +371,13 @@ RSpec.describe Reservation do
   end
 
   describe "#canceled?" do
-    let(:price_group) { create(:price_group, facility: facility) }
-    let!(:instrument_pp) { FactoryBot.create(:instrument_price_policy, product: instrument, price_group: price_group) }
+    let(:price_group) { create(:price_group, facility:) }
+    let!(:instrument_pp) { FactoryBot.create(:instrument_price_policy, product: instrument, price_group:) }
     let(:user) { FactoryBot.create(:user) }
-    let(:account) { FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: user)) }
-    let!(:account_price_group_memeber) { create(:account_price_group_member, account: account, price_group: price_group) }
-    let(:order) { user.orders.create(attributes_for(:order, created_by: user.id, account: account, facility: facility)) }
-    let!(:order_detail) { FactoryBot.create(:order_detail, order: order, product_id: instrument.id, account: account, quantity: 1) }
+    let(:account) { FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user:)) }
+    let!(:account_price_group_memeber) { create(:account_price_group_member, account:, price_group:) }
+    let(:order) { user.orders.create(attributes_for(:order, created_by: user.id, account:, facility:)) }
+    let!(:order_detail) { FactoryBot.create(:order_detail, order:, product_id: instrument.id, account:, quantity: 1) }
 
     subject(:reservation) do
       instrument.reservations.create(reserve_start_date: (Date.today + 1.day).to_s,
@@ -403,12 +403,12 @@ RSpec.describe Reservation do
     let(:instrument) { @instrument }
 
     before :each do
-      @price_group = create(:price_group, facility: facility)
+      @price_group = create(:price_group, facility:)
       @instrument_pp = FactoryBot.create(:instrument_price_policy, product: @instrument, price_group: @price_group)
       @user          = FactoryBot.create(:user)
       @account       = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @user))
       create(:account_price_group_member, account: @account, price_group: @price_group)
-      @order = @user.orders.create(attributes_for(:order, created_by: @user.id, account: @account, facility: facility))
+      @order = @user.orders.create(attributes_for(:order, created_by: @user.id, account: @account, facility:))
       order_attrs    = FactoryBot.attributes_for(:order_detail, product_id: @instrument.id, quantity: 1)
       @detail1       = @order.order_details.create(order_attrs.merge(account: @account))
       @detail2       = @order.order_details.create(order_attrs)
@@ -555,7 +555,7 @@ RSpec.describe Reservation do
         @instrument.update(max_reserve_mins: nil, reserve_interval: 1)
         @instrument.schedule_rules.update_all(start_hour: 0, end_hour: 24)
         # Make sure there is no time between now and the reservation
-        order = @user.orders.create(attributes_for(:order, created_by: @user.id, account: @account, facility: facility))
+        order = @user.orders.create(attributes_for(:order, created_by: @user.id, account: @account, facility:))
         order_attrs   = attributes_for(:order_detail, product_id: @instrument.id, quantity: 1, account: @account)
         detail1       = order.order_details.create(order_attrs)
         res = @instrument.reservations.create(reserve_start_at: Time.zone.now, reserve_end_at: @reservation1.reserve_start_at, order_detail: detail1)
@@ -665,7 +665,7 @@ RSpec.describe Reservation do
 
       expect(@reservation2).not_to be_does_not_conflict_with_other_user_reservation
 
-      @instrument2 = create(:instrument, facility: facility, facility_account: facility_account)
+      @instrument2 = create(:instrument, facility:, facility_account:)
 
       @reservation2.product = @instrument2
       expect(@reservation2).to be_does_not_conflict_with_other_user_reservation
@@ -908,7 +908,7 @@ RSpec.describe Reservation do
 
     context "scheduling over admin reservations" do
       let(:user) { FactoryBot.create(:user) }
-      let(:admin_user) { FactoryBot.create(:user, :staff, facility: facility) }
+      let(:admin_user) { FactoryBot.create(:user, :staff, facility:) }
       let(:new_user_reservation) do
         instrument.reservations.build(
           reserve_start_at: 1.day.from_now.change(hour: 11, min: 0),
@@ -1322,15 +1322,15 @@ RSpec.describe Reservation do
         let(:user) { create(:user) }
         let(:account) { create(:nufs_account, :with_account_owner, owner: user) }
         let(:instrument) { @instrument }
-        let(:order) { create(:order, user: user, created_by: user.id, account: account, facility: facility) }
-        let(:order_detail) { create(:order_detail, order: order, product: instrument) }
+        let(:order) { create(:order, user:, created_by: user.id, account:, facility:) }
+        let(:order_detail) { create(:order_detail, order:, product: instrument) }
         let(:reservation) do
           Reservation.new(reserve_start_date: Date.today + 1,
                           reserve_start_hour: 5,
                           reserve_start_min: 1,
                           reserve_start_meridian: "pm",
                           duration_mins: 60,
-                          order_detail: order_detail,
+                          order_detail:,
                           product: instrument,
                           split_times: true)
         end
@@ -1357,7 +1357,7 @@ RSpec.describe Reservation do
         end
 
         describe "a user who is approved, but not in the schedule group" do
-          let!(:product_user) { ProductUser.create!(user: user, product: instrument, approved_by: user.id) }
+          let!(:product_user) { ProductUser.create!(user:, product: instrument, approved_by: user.id) }
 
           it "does not allow the user" do
             expect(reservation).to be_invalid
@@ -1366,7 +1366,7 @@ RSpec.describe Reservation do
         end
 
         describe "a user who is approved and part of the schedule group" do
-          let!(:product_user) { ProductUser.create!(user: user, product: instrument, product_access_group: product_access_group, approved_by: user.id) }
+          let!(:product_user) { ProductUser.create!(user:, product: instrument, product_access_group:, approved_by: user.id) }
           it "allows a user who is approved and part of the schedule group" do
             expect(reservation).to be_valid
           end
@@ -1376,7 +1376,7 @@ RSpec.describe Reservation do
           let(:admin) { create(:user, :administrator) }
           before :each do
             # user is approved, but not in the schedule group
-            ProductUser.create!(user: user, product: instrument, approved_by: user.id)
+            ProductUser.create!(user:, product: instrument, approved_by: user.id)
           end
 
           it "should allow an administrator to save in one of the restricted scheduling rules" do
@@ -1407,7 +1407,7 @@ RSpec.describe Reservation do
       @nupg_pgp = FactoryBot.create(:price_group_product, product: @instrument, price_group: @nupg)
 
       # Setup a price group with an account for this user
-      @price_group1 = FactoryBot.create(:price_group, facility: facility)
+      @price_group1 = FactoryBot.create(:price_group, facility:)
       @pg1_pgp = FactoryBot.create(:price_group_product, product: @instrument, price_group: @price_group1)
       @account1 = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @user))
       @account_price_group_member1 = AccountPriceGroupMember.create(FactoryBot.attributes_for(:account_price_group_member).merge(account: @account1, price_group: @price_group1))

@@ -8,7 +8,7 @@ RSpec.describe MessageSummarizer do
   let(:controller) { FacilitiesController.new }
   let(:current_facility) { facility }
   let(:facility) { order.facility }
-  let(:order) { create(:purchased_order, product: product) }
+  let(:order) { create(:purchased_order, product:) }
   let(:order_detail) { order.order_details.first }
   let(:product) { create(:instrument_requiring_approval) }
   let(:user) { create(:user) }
@@ -113,7 +113,7 @@ RSpec.describe MessageSummarizer do
     before { order_detail.update_attribute(:dispute_at, 1.day.ago) }
 
     context "and the user can access disputed order details" do
-      let(:user) { create(:user, :facility_director, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility:) }
 
       context "when in a manager context" do
         let(:admin_tab?) { true }
@@ -140,7 +140,7 @@ RSpec.describe MessageSummarizer do
     before(:each) { set_problem_order }
 
     context "and the user can access problem orders" do
-      let(:user) { create(:user, :facility_director, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility:) }
 
       context "when in a manager context" do
         let(:admin_tab?) { true }
@@ -156,7 +156,7 @@ RSpec.describe MessageSummarizer do
     end
 
     context "and the user cannot access problem orders" do
-      let(:user) { create(:user, :staff, facility: facility) }
+      let(:user) { create(:user, :staff, facility:) }
       it_behaves_like "the notices tab is not visible"
     end
   end
@@ -165,7 +165,7 @@ RSpec.describe MessageSummarizer do
     before(:each) { set_problem_order }
 
     context "and the user can access problem reservations" do
-      let(:user) { create(:user, :facility_director, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility:) }
 
       context "when in a manager context" do
         let(:admin_tab?) { true }
@@ -181,7 +181,7 @@ RSpec.describe MessageSummarizer do
     end
 
     context "and the user cannot access problem reservations" do
-      let(:user) { create(:user, :staff, facility: facility) }
+      let(:user) { create(:user, :staff, facility:) }
       it_behaves_like "the notices tab is not visible"
     end
   end
@@ -255,7 +255,7 @@ RSpec.describe MessageSummarizer do
     end
 
     context "when a training request exists" do
-      before { create(:training_request, product: product) }
+      before { create(:training_request, product:) }
 
       context "with product_edition" do
         let(:permission_attrs) { { read_access: true, product_edition: true } }
@@ -267,10 +267,10 @@ RSpec.describe MessageSummarizer do
   end
 
   context "when a training request exists" do
-    before { create(:training_request, product: product) }
+    before { create(:training_request, product:) }
 
     context "and the user can manage training requests" do
-      let(:user) { create(:user, :staff, facility: facility) }
+      let(:user) { create(:user, :staff, facility:) }
 
       context "when in a manager context" do
         let(:admin_tab?) { true }

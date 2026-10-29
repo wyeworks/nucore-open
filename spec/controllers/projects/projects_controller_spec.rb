@@ -21,7 +21,7 @@ RSpec.describe ProjectsController, type: :controller do
   let(:facility) { FactoryBot.create(:facility) }
 
   describe "GET #edit" do
-    let(:project) { FactoryBot.create(:project, facility: facility) }
+    let(:project) { FactoryBot.create(:project, facility:) }
 
     def do_request
       get :edit, params: { facility_id: facility.url_name, id: project.id }
@@ -33,7 +33,7 @@ RSpec.describe ProjectsController, type: :controller do
 
     describe "when logged in" do
       shared_examples_for "it allows edit views" do |role|
-        let(:user) { FactoryBot.create(:user, role, facility: facility) }
+        let(:user) { FactoryBot.create(:user, role, facility:) }
 
         before(:each) do
           sign_in user
@@ -65,7 +65,7 @@ RSpec.describe ProjectsController, type: :controller do
 
     describe "when logged in" do
       shared_examples_for "it allows new views" do |role|
-        let(:user) { FactoryBot.create(:user, role, facility: facility) }
+        let(:user) { FactoryBot.create(:user, role, facility:) }
 
         before(:each) do
           sign_in user
@@ -87,7 +87,7 @@ RSpec.describe ProjectsController, type: :controller do
   end
 
   describe "GET #show" do
-    let(:project) { FactoryBot.create(:project, facility: facility) }
+    let(:project) { FactoryBot.create(:project, facility:) }
 
     def do_request
       get :show, params: { facility_id: facility.url_name, id: project.id }
@@ -99,7 +99,7 @@ RSpec.describe ProjectsController, type: :controller do
 
     describe "when logged in" do
       shared_examples_for "it allows show views" do |role|
-        let(:user) { FactoryBot.create(:user, role, facility: facility) }
+        let(:user) { FactoryBot.create(:user, role, facility:) }
 
         before(:each) do
           sign_in user
@@ -124,7 +124,7 @@ RSpec.describe ProjectsController, type: :controller do
     def do_request
       post :create, params: {
         facility_id: facility.url_name,
-        project: { name: name, description: description },
+        project: { name:, description: },
       }
     end
 
@@ -138,7 +138,7 @@ RSpec.describe ProjectsController, type: :controller do
     describe "when logged in" do
       shared_examples_for "it allows project creation" do |role|
         let(:created_project) { Project.last }
-        let(:user) { FactoryBot.create(:user, role, facility: facility) }
+        let(:user) { FactoryBot.create(:user, role, facility:) }
 
         before(:each) do
           sign_in user
@@ -163,7 +163,7 @@ RSpec.describe ProjectsController, type: :controller do
 
   describe "PUT #update" do
     let(:active?) { true }
-    let(:project) { FactoryBot.create(:project, name: "Old name", facility: facility) }
+    let(:project) { FactoryBot.create(:project, name: "Old name", facility:) }
     let(:new_description) { "New project description" }
     let(:new_name) { "New project name" }
 
@@ -185,7 +185,7 @@ RSpec.describe ProjectsController, type: :controller do
 
     describe "when logged in" do
       shared_examples_for "it allows update" do |role|
-        let(:user) { FactoryBot.create(:user, role, facility: facility) }
+        let(:user) { FactoryBot.create(:user, role, facility:) }
 
         before(:each) do
           sign_in user

@@ -8,11 +8,11 @@ RSpec.describe "Placing an item order" do
   let(:facility) { product.facility }
   let!(:price_policy) do
     create(:item_price_policy,
-           price_group: PriceGroup.base, product: product,
+           price_group: PriceGroup.base, product:,
            unit_cost: 33.25)
   end
   let!(:account_price_group_member) do
-    create(:account_price_group_member, account: account, price_group: price_policy.price_group)
+    create(:account_price_group_member, account:, price_group: price_policy.price_group)
   end
   let(:user) { create(:user) }
 
@@ -63,7 +63,7 @@ RSpec.describe "Placing an item order" do
   end
 
   describe "adding a bundle" do
-    let(:bundle) { create(:bundle, facility: facility) }
+    let(:bundle) { create(:bundle, facility:) }
 
     def add_to_cart
       visit facility_bundle_path(facility.url_name, bundle.url_name)
@@ -73,11 +73,11 @@ RSpec.describe "Placing an item order" do
     end
 
     describe "that has multiple items" do
-      let!(:product2) { create(:setup_item, facility: facility) }
+      let!(:product2) { create(:setup_item, facility:) }
 
       before do
         create(:item_price_policy, price_group: PriceGroup.base, product: product2)
-        bundle.bundle_products.create!(product: product, quantity: 2)
+        bundle.bundle_products.create!(product:, quantity: 2)
         bundle.bundle_products.create!(product: product2, quantity: 3)
       end
 
@@ -140,7 +140,7 @@ RSpec.describe "Placing an item order" do
 
       before do
         create(:timed_service_price_policy, price_group: PriceGroup.base, product: timed_service)
-        bundle.bundle_products.create!(product: timed_service, quantity: quantity)
+        bundle.bundle_products.create!(product: timed_service, quantity:)
       end
 
       it "adds one editable line item per quantity" do
@@ -154,7 +154,7 @@ RSpec.describe "Placing an item order" do
     end
 
     describe "that has a multiple of instruments" do
-      let!(:instrument) { create(:setup_instrument, facility: facility) }
+      let!(:instrument) { create(:setup_instrument, facility:) }
       let!(:price_policy) do
         create(:instrument_price_policy,
                price_group: PriceGroup.base, product: instrument)
@@ -194,9 +194,9 @@ RSpec.describe "Placing an item order" do
   describe "when the order's account payment source is invalid" do
     let(:other_user) { create(:user) }
     let(:account) { create(:nufs_account, :with_account_owner, owner: other_user) }
-    let!(:account_user) { create(:account_user, :purchaser, account: account, user: user) }
+    let!(:account_user) { create(:account_user, :purchaser, account:, user:) }
     let!(:other_account) { create(:nufs_account, :with_account_owner, owner: other_user) }
-    let!(:other_account_user) { create(:account_user, :purchaser, account: other_account, user: user) }
+    let!(:other_account_user) { create(:account_user, :purchaser, account: other_account, user:) }
     let!(:other_account_price_group_member) do
       create(:account_price_group_member, account: other_account, price_group: price_policy.price_group)
     end

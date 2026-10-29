@@ -20,7 +20,7 @@ RSpec.describe OrderDetail do
     before do
       purchaser.price_groups << purchaser_price_group
       account_owner.price_groups << owner_price_group
-      create(:account_user, :purchaser, account: account, user: purchaser)
+      create(:account_user, :purchaser, account:, user: purchaser)
     end
 
     context "when feature is disabled", feature_setting: { "pricing.user_based_price_groups_exclude_purchaser" => false } do

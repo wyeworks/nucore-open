@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe "Importing Approved Users", :js do
   let(:facility) { create(:setup_facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
-  let(:instrument) { create(:instrument_requiring_approval, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
+  let(:instrument) { create(:instrument_requiring_approval, facility:) }
   let!(:user_1) { create(:user, username: "ddavidson") }
   let!(:user_2) { create(:user, username: "jjacobson") }
 

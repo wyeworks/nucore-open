@@ -85,7 +85,7 @@ RSpec.describe "facilities journals" do
         let(:other_account) do
           create(:test_account, :with_account_owner, created_by: 1)
         end
-        let(:order) { create(:complete_order, product: product, account:) }
+        let(:order) { create(:complete_order, product:, account:) }
         let(:order2) do
           create(:complete_order, product: other_product, account: other_account)
         end

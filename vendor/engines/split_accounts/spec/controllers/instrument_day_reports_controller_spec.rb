@@ -5,7 +5,7 @@ require_relative "../split_accounts_spec_helper"
 
 RSpec.describe Reports::InstrumentDayReportsController, :enable_split_accounts do
   let(:account) { FactoryBot.create(:split_account, owner: user) }
-  let(:instrument) { FactoryBot.create(:setup_instrument, :always_available, facility: facility) }
+  let(:instrument) { FactoryBot.create(:setup_instrument, :always_available, facility:) }
   let(:facility) { FactoryBot.create(:setup_facility) }
   let!(:reservation) do
     # This is a Thursday
@@ -19,7 +19,7 @@ RSpec.describe Reports::InstrumentDayReportsController, :enable_split_accounts d
   let(:user) { reservation.order_detail.account.owner_user }
   let(:admin) { FactoryBot.create(:user, :administrator) }
 
-  before { reservation.order_detail.update!(account: account) }
+  before { reservation.order_detail.update!(account:) }
   before { sign_in admin }
 
   def do_request(action)

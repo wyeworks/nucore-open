@@ -26,6 +26,6 @@ class AccountFacilityJoinsController < ApplicationController
 
   def init_account
     @account = Account.for_facility(current_facility).per_facility.find(params[:account_id])
-    @account_facility_joins_form = AccountFacilityJoinsForm.new(account: @account, current_facility: current_facility)
+    @account_facility_joins_form = AccountFacilityJoinsForm.new(account: @account, current_facility:)
   end
 end

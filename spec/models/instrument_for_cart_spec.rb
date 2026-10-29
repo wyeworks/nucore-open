@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe InstrumentForCart do
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:instrument) { FactoryBot.create(:instrument, facility: facility, no_relay: true) }
+  let(:instrument) { FactoryBot.create(:instrument, facility:, no_relay: true) }
   let(:user) { FactoryBot.create(:user) }
   let(:ability) { Ability.new(user, facility, ApplicationController.new) }
   let(:instrument_for_cart) { InstrumentForCart.new(instrument, user, ability) }

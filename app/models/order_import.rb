@@ -210,7 +210,7 @@ class OrderImport < ApplicationRecord
 
   def send_notifications(orders)
     orders.each do |order|
-      PurchaseNotifier.order_receipt(user: order.user, order: order).deliver_later
+      PurchaseNotifier.order_receipt(user: order.user, order:).deliver_later
     end
   end
 
@@ -230,7 +230,7 @@ class OrderImport < ApplicationRecord
 
     if SettingsHelper.feature_on?(:active_storage)
       error_file.file.attach(
-        io: io,
+        io:,
         filename: "error_report.csv",
         content_type: "text/csv",
       )
@@ -271,7 +271,7 @@ class OrderImport < ApplicationRecord
     end
 
     def to_h
-      { successes: successes, failures: failures }
+      { successes:, failures: }
     end
   end
 

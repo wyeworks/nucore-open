@@ -15,13 +15,13 @@ RSpec.describe SecureRoomsApi::ScansController do
 
     let(:card_number) { "123456" }
     let(:secure_room) { create(:secure_room, :with_schedule_rule) }
-    let(:card_reader) { create(:card_reader, tablet_token: "TABLETID", secure_room: secure_room, control_device_number: "FF:FF:FF:FF:FF:FF") }
-    let(:user) { create(:user, card_number: card_number) }
+    let(:card_reader) { create(:card_reader, tablet_token: "TABLETID", secure_room:, control_device_number: "FF:FF:FF:FF:FF:FF") }
+    let(:user) { create(:user, card_number:) }
 
     describe "negative responses" do
       before do
         post :scan, params: {
-          card_number: card_number,
+          card_number:,
           reader_identifier: card_reader.card_reader_number,
           controller_identifier: card_reader.control_device_number,
         }
@@ -66,7 +66,7 @@ RSpec.describe SecureRoomsApi::ScansController do
             card_number: user.card_number,
             reader_identifier: card_reader.card_reader_number,
             controller_identifier: card_reader.control_device_number,
-            account_identifier: account_identifier,
+            account_identifier:,
           }
         end
 

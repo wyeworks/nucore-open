@@ -6,7 +6,7 @@ module Users
 
     class DefaultLookup
       def call(username)
-        User.new(username: username)
+        User.new(username:)
       end
     end
 

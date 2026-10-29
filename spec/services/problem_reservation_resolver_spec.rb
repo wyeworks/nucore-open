@@ -3,7 +3,7 @@ require "rails_helper"
 
 RSpec.describe ProblemReservationResolver do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility: facility, problems_resolvable_by_user: true) }
+  let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility:, problems_resolvable_by_user: true) }
   let(:user) { create(:user) }
   let!(:problem_reservation) do
     create(
@@ -28,7 +28,7 @@ RSpec.describe ProblemReservationResolver do
         problem_resolved_at: be_present,
         problem_resolved_by: user,
       )
-      log_event = LogEvent.find_by(loggable: problem_reservation.order_detail, event_type: :resolve_from_problem_queue, user: user)
+      log_event = LogEvent.find_by(loggable: problem_reservation.order_detail, event_type: :resolve_from_problem_queue, user:)
       expect(log_event).to be_present
     end
 

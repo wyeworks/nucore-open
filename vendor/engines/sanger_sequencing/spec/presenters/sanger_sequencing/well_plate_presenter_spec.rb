@@ -25,7 +25,7 @@ RSpec.describe SangerSequencing::WellPlatePresenter, feature_setting: { "product
       }
     end
 
-    let(:well_plate) { SangerSequencing::WellPlate.new(mapping, samples: samples) }
+    let(:well_plate) { SangerSequencing::WellPlate.new(mapping, samples:) }
     let(:sample_rows) { presenter.sample_rows }
 
     describe "for a default sanger plate" do

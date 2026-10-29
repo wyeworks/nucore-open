@@ -13,7 +13,7 @@ module SamlAuthentication
         username = attributes[:username]
         email = attributes[:email]
 
-        model.find_by(username: username) || model.find_by(email: email)
+        model.find_by(username:) || model.find_by(email:)
       end
 
     end

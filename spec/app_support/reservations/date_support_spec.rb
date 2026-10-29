@@ -6,10 +6,10 @@ RSpec.describe Reservations::DateSupport do
   subject(:reservation) do
     build_stubbed(
       :reservation,
-      reserve_start_at: reserve_start_at,
-      reserve_end_at: reserve_end_at,
-      actual_start_at: actual_start_at,
-      actual_end_at: actual_end_at,
+      reserve_start_at:,
+      reserve_end_at:,
+      actual_start_at:,
+      actual_end_at:,
     )
   end
 

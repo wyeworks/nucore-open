@@ -38,7 +38,7 @@ class AddToOrderForm
 
     true
   rescue AASM::InvalidTransition
-    @error_message = text("invalid_status", product: product, status: order_status)
+    @error_message = text("invalid_status", product:, status: order_status)
     false
   rescue ActiveRecord::RecordInvalid => e
     @error_message = e.record.errors.full_messages.to_sentence
@@ -215,10 +215,10 @@ class AddToOrderForm
   def params
     {
       note: note.presence,
-      duration: duration,
+      duration:,
       created_by: created_by.id,
-      account: account,
-      reference_id: reference_id,
+      account:,
+      reference_id:,
     }
   end
 
@@ -238,7 +238,7 @@ class AddToOrderForm
                       Order.create!(
                         merge_with_order_id: parent_order.id,
                         facility_id: parent_order.facility_id,
-                        account_id: account_id,
+                        account_id:,
                         user_id: parent_order.user_id,
                         created_by: created_by.id,
                         cross_core_project: @order_project,

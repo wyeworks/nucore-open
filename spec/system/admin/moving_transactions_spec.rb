@@ -4,13 +4,13 @@ require "rails_helper"
 
 RSpec.describe "Moving transactions between accounts" do
   let(:facility) { create(:setup_facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
-  let(:item) { create(:setup_item, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
+  let(:item) { create(:setup_item, facility:) }
   let(:user) { create(:user) }
   let(:accounts) { create_list(:setup_account, 2, :with_account_owner, owner: user) }
   let(:other_account) { create(:setup_account) }
   let(:orders) do
-    (accounts + [other_account]).map { |account| create(:complete_order, product: item, account: account) }
+    (accounts + [other_account]).map { |account| create(:complete_order, product: item, account:) }
   end
   let!(:order_details) { orders.flat_map(&:order_details) }
   let(:chart_strings_name_upcase) { I18n.t("Chart_strings") }

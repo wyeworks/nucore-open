@@ -65,7 +65,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
       context "remove a user from the price group" do
         it "soft delete the price group memeber and logs it" do
-          user_price_group_member = create(:user_price_group_member, price_group: price_group, user: user)
+          user_price_group_member = create(:user_price_group_member, price_group:, user:)
           visit users_facility_price_group_path(facility, price_group)
           expect { click_link "Remove" }.to change(PriceGroupMember, :count).by(-1)
           log_event = LogEvent.find_by(loggable: user_price_group_member, event_type: :delete)
@@ -78,8 +78,8 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
         let(:user_not_found) { create(:user, first_name: "Jane", last_name: "Holmes", username: "jholmes") }
 
         before do
-          create(:user_price_group_member, price_group: price_group, user: user_not_found)
-          create(:user_price_group_member, price_group: price_group, user: user_searchable)
+          create(:user_price_group_member, price_group:, user: user_not_found)
+          create(:user_price_group_member, price_group:, user: user_searchable)
           visit users_facility_price_group_path(facility, price_group)
         end
 

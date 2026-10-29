@@ -81,7 +81,7 @@ class Notifier < ApplicationMailer
     status = order_detail_status_name_for_mail(order_detail)
     mail(
       to: order_detail.order.user.email,
-      subject: text("views.notifier.order_detail_status_changed.subject", facility: facility, status: status),
+      subject: text("views.notifier.order_detail_status_changed.subject", facility:, status:),
     )
   end
 

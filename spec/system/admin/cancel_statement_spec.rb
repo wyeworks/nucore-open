@@ -18,7 +18,7 @@ RSpec.describe "canceling statements" do
   end
   let(:order_detail) { order.order_details.first }
 
-  before(:each) { order_detail.update(statement: statement) }
+  before(:each) { order_detail.update(statement:) }
 
   context "as an admin" do
     before do

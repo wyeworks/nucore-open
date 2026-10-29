@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "Fixing a problem reservation" do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility: facility, problems_resolvable_by_user: true) }
+  let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility:, problems_resolvable_by_user: true) }
 
   before { login_as reservation.user }
 

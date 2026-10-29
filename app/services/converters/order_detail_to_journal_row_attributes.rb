@@ -16,8 +16,8 @@ module Converters
         account: order_detail.product.account,
         amount: total,
         description: order_detail.long_description,
-        order_detail: order_detail,
-        journal: journal,
+        order_detail:,
+        journal:,
       }
     end
   end

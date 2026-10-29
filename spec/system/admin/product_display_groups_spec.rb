@@ -2,10 +2,10 @@ require "rails_helper"
 
 RSpec.describe "ProductDisplayGroups" do
   let(:facility) { create(:setup_facility) }
-  let!(:items) { create_list(:item, 2, facility: facility) }
+  let!(:items) { create_list(:item, 2, facility:) }
 
   describe "as a director" do
-    let(:director) { create(:user, :facility_director, facility: facility) }
+    let(:director) { create(:user, :facility_director, facility:) }
 
     before do
       login_as director
@@ -27,7 +27,7 @@ RSpec.describe "ProductDisplayGroups" do
       visit new_facility_product_display_group_path(facility)
 
       # As if it were added in another tab
-      other_group = create(:product_display_group, facility: facility)
+      other_group = create(:product_display_group, facility:)
       other_group.products << items.first
 
       select items.first.name, from: "Products"
@@ -37,7 +37,7 @@ RSpec.describe "ProductDisplayGroups" do
     end
 
     describe "editing" do
-      let!(:display_group) { create(:product_display_group, name: "My group", facility: facility, products: items.take(1)) }
+      let!(:display_group) { create(:product_display_group, name: "My group", facility:, products: items.take(1)) }
 
       it "can edit the group's name" do
         visit facility_products_path(facility)
@@ -85,7 +85,7 @@ RSpec.describe "ProductDisplayGroups" do
         visit edit_facility_product_display_group_path(facility, display_group)
 
         # As if it were done in another tab
-        other_group = create(:product_display_group, facility: facility)
+        other_group = create(:product_display_group, facility:)
         other_group.products << items.second
 
         select items.second.name, from: "Products"
@@ -96,8 +96,8 @@ RSpec.describe "ProductDisplayGroups" do
     end
 
     describe "destroy" do
-      let!(:display_group) { create(:product_display_group, name: "My group", facility: facility, products: [product]) }
-      let(:product) { create(:item, facility: facility) }
+      let!(:display_group) { create(:product_display_group, name: "My group", facility:, products: [product]) }
+      let(:product) { create(:item, facility:) }
 
       it "can remove the group and makes the product ungrouped" do
         visit facility_products_path(facility)
@@ -110,8 +110,8 @@ RSpec.describe "ProductDisplayGroups" do
     end
 
     describe "re-ordering" do
-      let!(:display_group) { create(:product_display_group, name: "First", position: 0, facility: facility) }
-      let!(:display_group2) { create(:product_display_group, name: "Second", position: 1, facility: facility) }
+      let!(:display_group) { create(:product_display_group, name: "First", position: 0, facility:) }
+      let!(:display_group2) { create(:product_display_group, name: "Second", position: 1, facility:) }
 
       it "can reorder the groups", :js do
         visit facility_product_display_groups_path(facility)
@@ -128,8 +128,8 @@ RSpec.describe "ProductDisplayGroups" do
   end
 
   describe "as facility staff" do
-    let(:staff) { create(:user, :staff, facility: facility) }
-    let!(:display_group) { create(:product_display_group, name: "My group", facility: facility) }
+    let(:staff) { create(:user, :staff, facility:) }
+    let!(:display_group) { create(:product_display_group, name: "My group", facility:) }
     before do
       login_as staff
     end

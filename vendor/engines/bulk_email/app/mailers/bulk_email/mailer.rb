@@ -6,7 +6,7 @@ module BulkEmail
       @recipient = recipient
       @body = body
       @facility = facility
-      options = { from: sender, to: recipient.email, subject: subject }
+      options = { from: sender, to: recipient.email, subject: }
       options[:reply_to] = reply_to if reply_to.present?
       mail(options)
     end

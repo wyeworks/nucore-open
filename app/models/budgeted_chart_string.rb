@@ -73,8 +73,8 @@ class BudgetedChartString < ApplicationRecord
             puts "error: skipping - #{line}"
             skipped += 1
           end
-          bcs = BudgetedChartString.create(fund: fund, dept: dept, project: project, activity: activity, account: account,
-                                           starts_at: starts_at, expires_at: expires_at)
+          bcs = BudgetedChartString.create(fund:, dept:, project:, activity:, account:,
+                                           starts_at:, expires_at:)
           if !bcs.valid?
             puts "error: invalid account - #{line}"
             invalid += 1

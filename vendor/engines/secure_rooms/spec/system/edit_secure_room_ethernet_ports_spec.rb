@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "Secure Room Ethernet Ports" do
     let(:facility) { FactoryBot.create(:setup_facility) }
     let(:user) { FactoryBot.create(:user, :administrator) }
-    let(:room) { FactoryBot.create(:secure_room, name: "test room", facility: facility) }
+    let(:room) { FactoryBot.create(:secure_room, name: "test room", facility:) }
 
     before do
       login_as user

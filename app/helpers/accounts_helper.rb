@@ -49,7 +49,7 @@ module AccountsHelper
   end
 
   def show_account_facilities_tab?(ability, account)
-    SettingsHelper.feature_on?("accounts.multi_facility_accounts") && account.per_facility? && ability.can?(:edit, AccountFacilityJoinsForm.new(account: account))
+    SettingsHelper.feature_on?("accounts.multi_facility_accounts") && account.per_facility? && ability.can?(:edit, AccountFacilityJoinsForm.new(account:))
   end
 
   def use_custom_reconciliation_features?(account_class = nil)

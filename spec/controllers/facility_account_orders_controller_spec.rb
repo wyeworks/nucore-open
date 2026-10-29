@@ -6,10 +6,10 @@ RSpec.describe FacilityAccountOrdersController do
   render_views
 
   let(:facility) { create(:setup_facility) }
-  let(:product) { create(:setup_item, facility: facility) }
+  let(:product) { create(:setup_item, facility:) }
   let(:account) { create(:account, :with_account_owner) }
   let(:admin) { create(:user, :administrator) }
-  let!(:purchased_order) { create(:purchased_order, product: product, account: account) }
+  let!(:purchased_order) { create(:purchased_order, product:, account:) }
 
   it "renders" do
     sign_in admin

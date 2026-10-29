@@ -26,7 +26,7 @@ RSpec.describe UserAccountsController do
     let(:account_manager) { create(:user, :account_manager) }
     let(:purchaser) { create(:user) }
     let(:owner) { create(:user) }
-    let(:account) { create(:account, :with_account_owner, owner: owner) }
+    let(:account) { create(:account, :with_account_owner, owner:) }
 
     describe "removing the account owner" do
       before do
@@ -81,7 +81,7 @@ RSpec.describe UserAccountsController do
   end
 
   describe "editing memberships from a single facility" do
-    let(:director) { create(:user, :facility_director, facility: facility) }
+    let(:director) { create(:user, :facility_director, facility:) }
     let(:member) { create(:user) }
     let(:account) { create(:account, :with_account_owner) }
     let!(:account_user) { AccountUser.grant(member, AccountUser::ACCOUNT_PURCHASER, account, by: director) }

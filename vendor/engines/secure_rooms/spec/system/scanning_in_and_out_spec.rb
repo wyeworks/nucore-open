@@ -15,18 +15,18 @@ RSpec.describe "Scanning in and out", type: :controller do
   end
 
   let(:secure_room) { create(:secure_room, :with_schedule_rule, :with_base_price) }
-  let!(:in_reader) { create(:card_reader, secure_room: secure_room, ingress: true) }
+  let!(:in_reader) { create(:card_reader, secure_room:, ingress: true) }
 
   let(:user) { create(:user, card_number: "123456") }
   let(:account) { create(:nufs_account, :with_account_owner, owner: user) }
 
   before do
     create(:account_price_group_member, account:, price_group: PriceGroup.base)
-    secure_room.product_users.create!(user: user, approved_by: 0)
+    secure_room.product_users.create!(user:, approved_by: 0)
   end
 
   describe "with a room having both in and out" do
-    let!(:out_reader) { create(:card_reader, ingress: false, secure_room: secure_room) }
+    let!(:out_reader) { create(:card_reader, ingress: false, secure_room:) }
 
     describe "scanning in" do
       before do

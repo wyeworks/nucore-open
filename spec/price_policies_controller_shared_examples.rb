@@ -14,12 +14,12 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
     UserPriceGroupMember.delete_all
     PriceGroup.delete_all
 
-    @price_group = FactoryBot.create(:price_group, facility: facility)
-    @price_group2 = FactoryBot.create(:price_group, facility: facility)
+    @price_group = FactoryBot.create(:price_group, facility:)
+    @price_group2 = FactoryBot.create(:price_group, facility:)
     @product = create(product_type, facility: @authable)
     @price_policy = make_price_policy(@price_group)
     expect(@price_policy).to be_valid
-    @params = { :facility_id => @authable.url_name, :"#{product_type}_id" => @product.url_name }
+    @params = { facility_id: @authable.url_name, "#{product_type}_id": @product.url_name }
   end
 
   context "index" do
@@ -125,7 +125,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
           end
 
           it "leaves can_purchase as false if there isn't an existing policy for the group, but there are policies" do
-            @price_group3 = FactoryBot.create(:price_group, facility: facility)
+            @price_group3 = FactoryBot.create(:price_group, facility:)
 
             do_request
             expect(assigns[:price_policies].size).to eq 3
@@ -220,8 +220,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
     before :each do
       facility.price_groups.map(&:id).each do |id|
         @params.merge!(
-          :"price_policy_#{id}" =>
-            attributes_for(:"#{@product_type}_price_policy"),
+          "price_policy_#{id}":             attributes_for(:"#{@product_type}_price_policy"),
         )
       end
     end
@@ -415,7 +414,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
           end
 
           context "when creating a new price group" do
-            let!(:new_price_group) { FactoryBot.create(:price_group, facility: facility) }
+            let!(:new_price_group) { FactoryBot.create(:price_group, facility:) }
             let(:new_price_policy) do
               product
                 .price_policies
@@ -556,7 +555,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
   end
 
   def make_price_policy(price_group, extra_attr = {})
-    create :"#{@product_type}_price_policy", extra_attr.merge(price_group: price_group, product: @product)
+    create :"#{@product_type}_price_policy", extra_attr.merge(price_group:, product: @product)
   end
 
   def set_policy_date(time_in_future = 0)

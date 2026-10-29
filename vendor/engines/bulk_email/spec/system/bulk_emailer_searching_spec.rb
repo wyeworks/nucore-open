@@ -9,7 +9,7 @@ RSpec.describe "Bulk email search", feature_setting: { training_requests: true, 
   let(:user) { training_request.user }
 
   describe "single facility context" do
-    let(:director) { create(:user, :facility_director, facility: facility) }
+    let(:director) { create(:user, :facility_director, facility:) }
     before { login_as director }
 
     it "can trigger an email" do

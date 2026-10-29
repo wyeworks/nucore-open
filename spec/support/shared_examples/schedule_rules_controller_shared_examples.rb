@@ -4,13 +4,13 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
   render_views
 
   let(:facility) { create(:setup_facility) }
-  let(:product) { create(product_sym, facility: facility) }
-  let(:senior_staff) { create(:user, :senior_staff, facility: facility) }
+  let(:product) { create(product_sym, facility:) }
+  let(:senior_staff) { create(:user, :senior_staff, facility:) }
 
-  let(:product_params) { { facility_id: facility.url_name, :"#{product_sym}_id" => product.url_name } }
+  let(:product_params) { { facility_id: facility.url_name, "#{product_sym}_id": product.url_name } }
 
   describe "index" do
-    let(:staff) { create(:user, :staff, facility: facility) }
+    let(:staff) { create(:user, :staff, facility:) }
 
     before do
       sign_in staff

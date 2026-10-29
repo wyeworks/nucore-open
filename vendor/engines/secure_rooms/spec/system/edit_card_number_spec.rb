@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe "User's Card Number" do
   let(:facility) { FactoryBot.create(:facility) }
   let(:card_user) { FactoryBot.create(:user) }
-  let(:staff_user) { FactoryBot.create(:user, :staff, facility: facility) }
+  let(:staff_user) { FactoryBot.create(:user, :staff, facility:) }
 
   describe "update" do
     before do

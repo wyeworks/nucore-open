@@ -6,7 +6,7 @@ RSpec.describe JournalCutoffDate do
   it { is_expected.to validate_presence_of(:cutoff_date) }
 
   describe "cutoff_date" do
-    subject(:hash) { described_class.new(cutoff_date: cutoff_date).cutoff_date_date_time_data.to_h }
+    subject(:hash) { described_class.new(cutoff_date:).cutoff_date_date_time_data.to_h }
     describe "am" do
       let(:cutoff_date) { Time.zone.parse("2016-01-01 08:45") }
       it { is_expected.to eq(date: Date.new(2016, 1, 1), hour: 8, minute: 45, ampm: "AM") }
@@ -86,7 +86,7 @@ RSpec.describe JournalCutoffDate do
   end
 
   describe "#last_valid_date" do
-    subject(:last_valid_date) { described_class.new(cutoff_date: cutoff_date).last_valid_date }
+    subject(:last_valid_date) { described_class.new(cutoff_date:).last_valid_date }
 
     describe "early in the month" do
       let(:cutoff_date) { Time.zone.parse("2016-04-02") }

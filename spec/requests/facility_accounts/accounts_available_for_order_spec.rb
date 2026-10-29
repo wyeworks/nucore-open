@@ -4,12 +4,12 @@ require "rails_helper"
 
 RSpec.describe "listing the payment sources available for an order" do
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:setup_item, facility: facility) }
+  let(:item) { create(:setup_item, facility:) }
   let(:customer) { create(:user) }
   let(:account) do
     create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: customer))
   end
-  let!(:order) { create(:purchased_order, product: item, account: account, user: customer) }
+  let!(:order) { create(:purchased_order, product: item, account:, user: customer) }
 
   def get_available_accounts
     get accounts_available_for_order_facility_accounts_path(facility, format: :json),
@@ -35,7 +35,7 @@ RSpec.describe "listing the payment sources available for an order" do
   end
 
   describe "as a facility director" do
-    let(:director) { create(:user, :facility_director, facility: facility) }
+    let(:director) { create(:user, :facility_director, facility:) }
 
     before { login_as director }
 

@@ -13,7 +13,7 @@ module Nucore
         return if object.blank?
         return if (count = object.errors.count).zero?
 
-        I18n.with_options(:scope => [:activerecord, :errors, :template]) do |locale|
+        I18n.with_options(scope: [:activerecord, :errors, :template]) do |locale|
           header_message = locale.t(
             :header, count:, model: object.model_name.human
           )

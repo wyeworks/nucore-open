@@ -31,7 +31,7 @@ RSpec.describe SecureRooms::AccessHandlers::EventHandler, type: :service do
 
     context "when the verdict does not have a user" do
       let(:verdict) do
-        SecureRooms::AccessRules::Verdict.new(:deny, :user_not_found, nil, card_reader, card_number: card_number)
+        SecureRooms::AccessRules::Verdict.new(:deny, :user_not_found, nil, card_reader, card_number:)
       end
 
       describe "resulting Event" do
@@ -53,8 +53,8 @@ RSpec.describe SecureRooms::AccessHandlers::EventHandler, type: :service do
           :selected_account,
           user,
           card_reader,
-          accounts: accounts,
-          selected_account: selected_account,
+          accounts:,
+          selected_account:,
         )
       end
 

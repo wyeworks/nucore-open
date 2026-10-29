@@ -8,7 +8,7 @@ ActiveRecord::Base.class_eval do
     validates attr_name, length: { in: 3..50 }
     validates attr_name, format: { with: /\A[\w-]+\z/, message: "may contain letters, digits, dashes and underscores only" }
     if scope.present?
-      validates attr_name, uniqueness: { scope: scope, case_sensitive: false }
+      validates attr_name, uniqueness: { scope:, case_sensitive: false }
     else
       validates attr_name, uniqueness: { case_sensitive: false }
     end

@@ -74,14 +74,14 @@ RSpec.describe SangerSequencing::BatchForm do
     describe "facility checking" do
       include_context "Setup Sanger Service"
 
-      let!(:purchased_order) { FactoryBot.create(:purchased_order, product: service, account: account) }
-      let!(:purchased_order2) { FactoryBot.create(:purchased_order, product: service, account: account) }
+      let!(:purchased_order) { FactoryBot.create(:purchased_order, product: service, account:) }
+      let!(:purchased_order2) { FactoryBot.create(:purchased_order, product: service, account:) }
       let!(:purchased_submission) { FactoryBot.create(:sanger_sequencing_submission, order_detail: purchased_order.order_details.first, sample_count: 50) }
       let!(:purchased_submission2) { FactoryBot.create(:sanger_sequencing_submission, order_detail: purchased_order2.order_details.first, sample_count: 50) }
 
       let(:params) do
         { submission_ids: "#{purchased_submission.id},#{purchased_submission2.id}",
-          facility: facility }
+          facility: }
       end
 
       describe "when all facilities match" do

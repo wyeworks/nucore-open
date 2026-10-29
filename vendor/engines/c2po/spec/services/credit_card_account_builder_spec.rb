@@ -9,9 +9,9 @@ RSpec.describe CreditCardAccountBuilder, type: :service do
       account_params_key: "credit_card_account",
       account_type: "CreditCardAccount",
       current_user: user,
-      facility: facility,
+      facility:,
       owner_user: user,
-      params: params,
+      params:,
     }
   end
   let(:params) do
@@ -22,7 +22,7 @@ RSpec.describe CreditCardAccountBuilder, type: :service do
         expiration_year: 1.year.from_now.year,
         description: "A Credit Card",
         affiliate_id: affiliate.try(:id),
-        affiliate_other: affiliate_other,
+        affiliate_other:,
         remittance_information: "Bill To goes here",
       },
     )

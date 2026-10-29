@@ -51,7 +51,7 @@ RSpec.describe AccessoriesController do
         auto_accessory
         manual_accessory
 
-        sign_in FactoryBot.create(:user, :facility_director, facility: facility)
+        sign_in FactoryBot.create(:user, :facility_director, facility:)
       end
 
       describe "a completed reservation" do
@@ -111,7 +111,7 @@ RSpec.describe AccessoriesController do
       before :each do
         accessory = manual_accessory
         instrument.product_accessories.first.soft_delete
-        instrument.product_accessories.create(accessory: accessory, scaling_type: "auto")
+        instrument.product_accessories.create(accessory:, scaling_type: "auto")
 
         expect(instrument.reload.product_accessories.count).to eq(1)
         expect(ProductAccessory.where(product_id: instrument.id, accessory_id: accessory.id).count).to eq(2)

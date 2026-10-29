@@ -11,7 +11,7 @@ RSpec.describe "Training Requests", feature_setting: { training_requests: true, 
   end
 
   describe "with an unrestricted item" do
-    let!(:item) { create(:setup_item, facility: facility) }
+    let!(:item) { create(:setup_item, facility:) }
     before do
       create(:item_price_policy, product: item, price_group: PriceGroup.base)
     end
@@ -24,7 +24,7 @@ RSpec.describe "Training Requests", feature_setting: { training_requests: true, 
   end
 
   describe "with a restricted item" do
-    let!(:item) { create(:setup_item, requires_approval: true, facility: facility) }
+    let!(:item) { create(:setup_item, requires_approval: true, facility:) }
 
     it "can submit a training request" do
       visit facility_path(facility.url_name)
@@ -37,7 +37,7 @@ RSpec.describe "Training Requests", feature_setting: { training_requests: true, 
   end
 
   describe "with a restricted item, but requests are disabled" do
-    let!(:item) { create(:setup_item, requires_approval: true, allows_training_requests: false, facility: facility) }
+    let!(:item) { create(:setup_item, requires_approval: true, allows_training_requests: false, facility:) }
 
     it "just has a link if requests are disabled" do
       visit facility_path(facility.url_name)
@@ -48,7 +48,7 @@ RSpec.describe "Training Requests", feature_setting: { training_requests: true, 
   end
 
   describe "with an unrestricted instrument" do
-    let!(:instrument) { create(:setup_instrument, facility: facility) }
+    let!(:instrument) { create(:setup_instrument, facility:) }
     before do
       create(:instrument_price_policy, product: instrument, price_group: PriceGroup.base)
     end
@@ -62,7 +62,7 @@ RSpec.describe "Training Requests", feature_setting: { training_requests: true, 
   end
 
   describe "with a restricted instrument" do
-    let!(:instrument) { create(:setup_instrument, requires_approval: true, facility: facility) }
+    let!(:instrument) { create(:setup_instrument, requires_approval: true, facility:) }
 
     it "can submit a training request" do
       visit facility_path(facility.url_name)
@@ -75,7 +75,7 @@ RSpec.describe "Training Requests", feature_setting: { training_requests: true, 
   end
 
   describe "with a restricted instrument, but requests are disabled" do
-    let!(:instrument) { create(:setup_instrument, requires_approval: true, allows_training_requests: false, facility: facility) }
+    let!(:instrument) { create(:setup_instrument, requires_approval: true, allows_training_requests: false, facility:) }
 
     it "just has a link if requests are disabled" do
       visit facility_path(facility.url_name)

@@ -228,16 +228,16 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
     end
 
     it "denies senior staff" do
-      sign_in create(:user, :senior_staff, facility: facility)
+      sign_in create(:user, :senior_staff, facility:)
       expect { get :index, params: { facility_id: facility.url_name } }.to raise_error(CanCan::AccessDenied)
     end
 
     describe "as the director" do
       let(:owner) { create(:user, first_name: "Owner", last_name: "User") }
-      let!(:account) { create(:nufs_account, :with_account_owner, owner: owner) }
+      let!(:account) { create(:nufs_account, :with_account_owner, owner:) }
 
       before do
-        sign_in create(:user, :facility_director, facility: facility)
+        sign_in create(:user, :facility_director, facility:)
       end
 
       it "finds an account by a partial account number" do
@@ -397,7 +397,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
   end
 
   context "with statements", if: Account.config.statements_enabled? do
-    let!(:statements) { FactoryBot.create_list(:statement, 2, facility_id: facility.id, created_by: admin.id, account: account) }
+    let!(:statements) { FactoryBot.create_list(:statement, 2, facility_id: facility.id, created_by: admin.id, account:) }
 
     describe "show_statement" do
       before :each do
@@ -420,7 +420,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
       end
 
       it "does not allow an account admin" do
-        user = create(:user, :business_administrator, account: account)
+        user = create(:user, :business_administrator, account:)
         sign_in user
         expect { do_request }.to raise_error(CanCan::AccessDenied)
       end
@@ -434,10 +434,10 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
     end
 
     describe "statements" do
-      let!(:other_facility_statement) { FactoryBot.create(:statement, created_by: admin.id, account: account) }
+      let!(:other_facility_statement) { FactoryBot.create(:statement, created_by: admin.id, account:) }
 
       describe "a single facility" do
-        let(:director) { FactoryBot.create(:user, :facility_director, facility: facility) }
+        let(:director) { FactoryBot.create(:user, :facility_director, facility:) }
 
         before do
           sign_in director

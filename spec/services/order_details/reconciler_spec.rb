@@ -5,10 +5,10 @@ require "rails_helper"
 RSpec.describe OrderDetails::Reconciler do
   let(:product) { create(:setup_item) }
   let(:user) { create(:user) }
-  let!(:order) { create(:order, user: user, created_by_user: user) }
+  let!(:order) { create(:order, user:, created_by_user: user) }
   let(:order_details) do
     Array.new(number_of_order_details).map do
-      OrderDetail.create!(product: product, quantity: 1, actual_cost: 1, actual_subsidy: 0, state: "complete", statement:, order_id: order.id, created_by_user: user)
+      OrderDetail.create!(product:, quantity: 1, actual_cost: 1, actual_subsidy: 0, state: "complete", statement:, order_id: order.id, created_by_user: user)
     end
   end
   let(:order_detail_attributes) { {} }

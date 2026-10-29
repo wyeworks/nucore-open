@@ -82,7 +82,7 @@ class UserRole < ApplicationRecord
   #   the facility that you want to grant permissions on.
   #   Leave nil when creating administrators
   def self.grant(user, role, facility = nil)
-    create!(user: user, role: role, facility: facility)
+    create!(user:, role:, facility:)
   end
 
   validates_presence_of :user_id

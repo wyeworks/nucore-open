@@ -18,7 +18,7 @@ FactoryBot.define do
     after :build do |esr|
       service = create :setup_service
       order = create :purchased_order, product: service
-      esr.receiver = create :order_detail, order: order, product: service
+      esr.receiver = create :order_detail, order:, product: service
     end
   end
 end

@@ -17,11 +17,11 @@ RSpec.describe "Resolving a disputed order" do
       :order_detail,
       :disputed,
       product: item,
-      order: order,
+      order:,
       dispute_by: owner,
       dispute_reason: "Testing, testing",
       fulfilled_at: Date.today,
-      account: account,
+      account:,
     )
   end
 

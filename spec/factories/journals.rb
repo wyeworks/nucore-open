@@ -12,11 +12,11 @@ FactoryBot.define do
       transient do
         quantities { [1] }
 
-        facility_account { FactoryBot.create(:facility_account, facility: facility) }
-        order { FactoryBot.create(:purchased_order, product: product) }
+        facility_account { FactoryBot.create(:facility_account, facility:) }
+        order { FactoryBot.create(:purchased_order, product:) }
 
         product do
-          FactoryBot.create(:setup_item, facility: facility, facility_account: facility_account)
+          FactoryBot.create(:setup_item, facility:, facility_account:)
         end
       end
 
@@ -28,7 +28,7 @@ FactoryBot.define do
           if order_detail.present?
             order_detail.update_attribute(:quantity, quantity)
           else
-            order_details.create(FactoryBot.attributes_for(:order_detail, product: evaluator.product, quantity: quantity))
+            order_details.create(FactoryBot.attributes_for(:order_detail, product: evaluator.product, quantity:))
           end
         end
 

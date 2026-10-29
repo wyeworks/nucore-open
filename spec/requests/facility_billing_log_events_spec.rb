@@ -67,7 +67,7 @@ RSpec.describe "facility_billing_log_events", type: :request do
       include_context "billing statements with deposit numbers"
 
       def get_index_with_params(params = {})
-        get facility_billing_log_events_path(Facility.cross_facility), params: params
+        get facility_billing_log_events_path(Facility.cross_facility), params:
       end
 
       before do

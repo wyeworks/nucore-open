@@ -6,17 +6,17 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
   let(:builder) { described_class.new(journal, order.order_details) }
 
   describe "#build" do
-    let(:journal) { build(:journal, facility: facility, created_by: 1) }
+    let(:journal) { build(:journal, facility:, created_by: 1) }
 
     let(:facility) { create(:setup_facility) }
-    let(:secure_room) { create(:secure_room, facility: facility) }
+    let(:secure_room) { create(:secure_room, facility:) }
     let(:order) { create(:purchased_order, product: secure_room) }
 
     let!(:occupancy) do
       create(
         :occupancy,
         :complete,
-        secure_room: secure_room,
+        secure_room:,
         order_detail: order.order_details.first,
         account: order.account,
       )

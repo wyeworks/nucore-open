@@ -5,12 +5,12 @@ require "rails_helper"
 RSpec.describe "Managing an order detail" do
   let(:facility) { create(:setup_facility) }
   let!(:account) { create(:setup_account, :with_account_owner, facility: order_detail.facility, owner: order_detail.user) }
-  let(:instrument) { create(:setup_instrument, :timer, facility: facility) }
+  let(:instrument) { create(:setup_instrument, :timer, facility:) }
   let(:reservation) { create(:purchased_reservation, product: instrument) }
   let(:order_detail) { reservation.order_detail }
   let(:order) { reservation.order }
   let(:administrator) { create(:user, :administrator) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
   let(:logged_in_user) { director }
 
   before do
@@ -72,12 +72,12 @@ RSpec.describe "Managing an order detail" do
     end
 
     context "for a duration based pricing instrument", :js do
-      let(:instrument) { create(:setup_instrument, facility: facility, pricing_mode: "Duration", skip_price_policies: true) }
+      let(:instrument) { create(:setup_instrument, facility:, pricing_mode: "Duration", skip_price_policies: true) }
       let(:base_group_price_policy) { create(:instrument_price_policy, product: instrument, usage_rate: 100, price_group: PriceGroup.base) }
       let(:cancer_center_price_group) { create(:price_group, :cancer_center) }
       let(:cancer_center_price_policy) { create(:instrument_price_policy, product: instrument, usage_rate: 100, usage_subsidy: 10, price_group: cancer_center_price_group) }
 
-      let(:account) { create(:setup_account, owner: director, facility: facility) }
+      let(:account) { create(:setup_account, owner: director, facility:) }
       let!(:base_duration_rates) do
         [
           create(:duration_rate, min_duration_hours: 2, rate: 30, price_policy: base_group_price_policy),
@@ -92,10 +92,10 @@ RSpec.describe "Managing an order detail" do
           create(:duration_rate, min_duration_hours: 6, rate: 45, subsidy: 30, price_policy: cancer_center_price_policy),
         ]
       end
-      let!(:account_price_group_member) { create(:account_price_group_member, account: account, price_group: cancer_center_price_group) }
+      let!(:account_price_group_member) { create(:account_price_group_member, account:, price_group: cancer_center_price_group) }
 
-      let(:order_detail) { create(:purchased_order, product: instrument, account: account).order_details.first }
-      let!(:reservation) { create(:setup_reservation, product: instrument, order_detail: order_detail) }
+      let(:order_detail) { create(:purchased_order, product: instrument, account:).order_details.first }
+      let!(:reservation) { create(:setup_reservation, product: instrument, order_detail:) }
 
       before do
         account.reload
@@ -116,7 +116,7 @@ RSpec.describe "Managing an order detail" do
   end
 
   describe "order detail with missing form" do
-    let(:service) { create(:setup_service, :with_order_form, facility: facility) }
+    let(:service) { create(:setup_service, :with_order_form, facility:) }
     let!(:order) { create(:purchased_order, product: service) }
     let(:order_detail) { order.order_details.first }
 
@@ -137,7 +137,7 @@ RSpec.describe "Managing an order detail" do
   end
 
   describe "order detail with missing survey" do
-    let(:service) { create(:setup_service, facility: facility) }
+    let(:service) { create(:setup_service, facility:) }
     let!(:order) { create(:purchased_order, product: service) }
     let(:order_detail) { order.order_details.first }
 
@@ -159,7 +159,7 @@ RSpec.describe "Managing an order detail" do
   end
 
   describe "editing a problem order detail with a reservation" do
-    let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility: facility) }
+    let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility:) }
     let!(:reservation) do
       create(
         :purchased_reservation,
@@ -194,7 +194,7 @@ RSpec.describe "Managing an order detail" do
 
   describe "canceling order details" do
     context "canceling an item" do
-      let(:item) { create(:setup_item, facility: facility) }
+      let(:item) { create(:setup_item, facility:) }
       let(:order) { create(:purchased_order, product: item) }
       let(:order_detail) { order.order_details.first }
 
@@ -214,11 +214,11 @@ RSpec.describe "Managing an order detail" do
     end
 
     describe "Setting completed order to Unrecoverable" do
-      let(:item) { create(:setup_item, facility: facility) }
+      let(:item) { create(:setup_item, facility:) }
       let(:order) { create(:complete_order, product: item) }
       let(:order_detail) do
         order.order_details.first.tap do |od|
-          od.update!(reviewed_at: 5.days.ago, dispute_at: 3.days.ago, dispute_reason: "asdsfa", statement: statement)
+          od.update!(reviewed_at: 5.days.ago, dispute_at: 3.days.ago, dispute_reason: "asdsfa", statement:)
         end
       end
 
@@ -307,7 +307,7 @@ RSpec.describe "Managing an order detail" do
 
   describe "resolving a dispute", :js do
     describe "a simple order detail" do
-      let(:item) { create(:setup_item, facility: facility) }
+      let(:item) { create(:setup_item, facility:) }
       let(:order) { create(:complete_order, product: item) }
       let(:order_detail) do
         order.order_details.first.tap do |od|
@@ -328,8 +328,8 @@ RSpec.describe "Managing an order detail" do
     end
 
     describe "and it has an accessory" do
-      let(:product) { FactoryBot.create(:instrument_with_accessory, facility: facility) }
-      let(:reservation) { FactoryBot.create(:completed_reservation, product: product) }
+      let(:product) { FactoryBot.create(:instrument_with_accessory, facility:) }
+      let(:reservation) { FactoryBot.create(:completed_reservation, product:) }
       let(:order_detail) do
         reservation.order_detail.tap do |od|
           od.update!(reviewed_at: 5.days.ago, dispute_at: 3.days.ago, dispute_reason: "asdsfa")
@@ -351,7 +351,7 @@ RSpec.describe "Managing an order detail" do
   end
 
   describe "reconciling an order" do
-    let(:item) { create(:setup_item, facility: facility) }
+    let(:item) { create(:setup_item, facility:) }
     let(:order) { create(:complete_order, product: item) }
     let(:order_detail) { order.order_details.first }
 

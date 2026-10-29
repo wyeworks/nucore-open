@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe AddToOrderForm do
-  let(:order) { create(:complete_order, product: product, ordered_at: 1.week.ago) }
+  let(:order) { create(:complete_order, product:, ordered_at: 1.week.ago) }
   let(:product) { create(:setup_item, :with_facility_account) }
   subject(:form) { described_class.new(order) }
 
@@ -30,7 +30,7 @@ RSpec.describe AddToOrderForm do
 
     describe "when there were multiple items in the original cart" do
       let(:second_order_detail) do
-        create(:order_detail, :purchased, order: order, ordered_at: order.order_details.first.ordered_at, product: product)
+        create(:order_detail, :purchased, order:, ordered_at: order.order_details.first.ordered_at, product:)
       end
       before do
         order.reload
@@ -54,11 +54,11 @@ RSpec.describe AddToOrderForm do
       let(:other_account) { create(:nufs_account, :with_account_owner, owner: order.user, description: "Other Account") }
       let(:other_product) { create(:setup_item, facility: product.facility) }
       let!(:second_order_detail) do
-        create(:order_detail, :purchased, order: order, account: other_account, product: product, note: "somenote", ordered_at: 1.day.ago, created_at: 5.minutes.from_now)
+        create(:order_detail, :purchased, order:, account: other_account, product:, note: "somenote", ordered_at: 1.day.ago, created_at: 5.minutes.from_now)
       end
       # Oracle can have out of sequence IDs due to its caching of allocated values in the sequence.
       let!(:out_of_order_order_detail) do
-        create(:order_detail, :purchased, order: order, product: product, created_at: 1.minute.from_now)
+        create(:order_detail, :purchased, order:, product:, created_at: 1.minute.from_now)
       end
 
       before { order.reload }

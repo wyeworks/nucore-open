@@ -60,7 +60,7 @@ FactoryBot.define do
 
       after(:create) do |bundle, evaluator|
         evaluator.bundle_products.each do |product|
-          BundleProduct.create!(bundle: bundle, product: product, quantity: 1)
+          BundleProduct.create!(bundle:, product:, quantity: 1)
         end
       end
     end
@@ -94,7 +94,7 @@ FactoryBot.define do
 
     after(:create) do |product|
       FactoryBot.create(:price_group_product,
-                        product: product,
+                        product:,
                         price_group: product.facility.price_groups.last)
     end
 
@@ -103,13 +103,13 @@ FactoryBot.define do
 
     factory :setup_timed_service, class: TimedService do
       after(:create) do |product|
-        create(:timed_service_price_policy, product: product, price_group: product.facility.price_groups.last)
+        create(:timed_service_price_policy, product:, price_group: product.facility.price_groups.last)
       end
     end
 
     factory :setup_item, class: Item do
       after(:create) do |product|
-        create(:item_price_policy, product: product, price_group: product.facility.price_groups.last) if product.default_mode?
+        create(:item_price_policy, product:, price_group: product.facility.price_groups.last) if product.default_mode?
       end
     end
 
@@ -121,7 +121,7 @@ FactoryBot.define do
 
     trait :with_order_form do
       after(:create) do |product|
-        create(:stored_file, :template, product: product)
+        create(:stored_file, :template, product:)
       end
     end
 

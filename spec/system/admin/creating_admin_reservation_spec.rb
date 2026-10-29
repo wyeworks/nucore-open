@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe "Creating an admin reservation" do
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:director) { FactoryBot.create(:user, :facility_director, facility: facility) }
-  let(:instrument) { FactoryBot.create(:setup_instrument, facility: facility) }
+  let(:director) { FactoryBot.create(:user, :facility_director, facility:) }
+  let(:instrument) { FactoryBot.create(:setup_instrument, facility:) }
 
   before { login_as director }
   let(:fiscal_year) { SettingsHelper.fiscal_year_beginning.year }

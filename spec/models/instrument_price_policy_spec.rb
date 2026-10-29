@@ -113,9 +113,9 @@ RSpec.describe InstrumentPricePolicy do
   it "returns the date for upcoming policies" do
     instrument = policy.product
     price_group = policy.price_group
-    create :instrument_price_policy, start_date: Time.current.beginning_of_day, price_group: price_group, product: instrument
-    ipp2 = create :instrument_price_policy, start_date: Time.current.beginning_of_day + 7.days, price_group: price_group, product: instrument
-    ipp3 = create :instrument_price_policy, start_date: Time.current.beginning_of_day + 14.days, price_group: price_group, product: instrument
+    create :instrument_price_policy, start_date: Time.current.beginning_of_day, price_group:, product: instrument
+    ipp2 = create :instrument_price_policy, start_date: Time.current.beginning_of_day + 7.days, price_group:, product: instrument
+    ipp3 = create :instrument_price_policy, start_date: Time.current.beginning_of_day + 14.days, price_group:, product: instrument
 
     expect(described_class.next_date(instrument).to_date).to eq ipp2.start_date.to_date
     next_dates = described_class.next_dates instrument

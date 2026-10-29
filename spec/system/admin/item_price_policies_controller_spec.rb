@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe ItemPricePoliciesController, :js do
   let(:facility) { create(:setup_facility) }
-  let!(:item) { create(:item, facility: facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let!(:item) { create(:item, facility:) }
+  let(:director) { create(:user, :facility_director, facility:) }
 
   let(:base_price_group) { PriceGroup.base }
   let(:external_price_group) { PriceGroup.external }

@@ -5,7 +5,7 @@ RSpec.describe "Viewing a user's safety certifications" do
 
   let(:user) { FactoryBot.create(:user) }
   let(:facility) { FactoryBot.create(:facility) }
-  let(:admin) { FactoryBot.create(:user, :facility_director, facility: facility) }
+  let(:admin) { FactoryBot.create(:user, :facility_director, facility:) }
 
   before { login_as admin }
 

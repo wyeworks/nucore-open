@@ -4,12 +4,12 @@ require "rails_helper"
 
 RSpec.describe ProductUser do
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:setup_item, facility: facility, requires_approval: true) }
+  let(:item) { create(:setup_item, facility:, requires_approval: true) }
   let(:user) { create(:user) }
 
   context "when creating with valid attributes" do
     subject(:product_user) do
-      ProductUser.create(product: item, user: user, approved_by: user.id)
+      ProductUser.create(product: item, user:, approved_by: user.id)
     end
 
     it "is valid" do

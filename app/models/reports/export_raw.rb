@@ -156,7 +156,7 @@ module Reports
       Reports::Querier.new(
         order_status_id: order_status_ids,
         current_facility: facility,
-        date_range_field: date_range_field,
+        date_range_field:,
         date_range_start: date_start,
         date_range_end: date_end,
         includes: [:reservation, :statement, order: [:user]],

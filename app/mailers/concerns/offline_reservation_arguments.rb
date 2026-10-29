@@ -22,7 +22,7 @@ module OfflineReservationArguments
 
   def facility_contact_text(email)
     if email.present?
-      text("views.offline_cancellation_mailer.send_notification.facility_contact", email: email)
+      text("views.offline_cancellation_mailer.send_notification.facility_contact", email:)
     else
       ""
     end

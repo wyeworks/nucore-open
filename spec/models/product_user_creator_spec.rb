@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe ProductUserCreator do
   def create_product_user
-    ProductUserCreator.create(user: user, product: product, approver: approver)
+    ProductUserCreator.create(user:, product:, approver:)
   end
 
   let(:user) { create(:user) }
@@ -20,7 +20,7 @@ RSpec.describe ProductUserCreator do
 
     context "when there is a pending training request" do
       let!(:training_request) do
-        create(:training_request, user: user, product: product)
+        create(:training_request, user:, product:)
       end
 
       it "sets the requested_at time" do
@@ -44,7 +44,7 @@ RSpec.describe ProductUserCreator do
     end
 
     describe "when the user is already approved" do
-      before { ProductUser.create!(user: user, product: product, approved_by: 0) }
+      before { ProductUser.create!(user:, product:, approved_by: 0) }
       let(:duplicate_product_user) { create_product_user }
 
       it "does not save" do

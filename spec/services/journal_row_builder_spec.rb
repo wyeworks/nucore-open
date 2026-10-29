@@ -32,18 +32,18 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
   describe "#build" do
     let(:journal) do
       build(:journal,
-            facility: facility,
+            facility:,
             created_by: 1,
-            journal_date: journal_date,
+            journal_date:,
            )
     end
 
     let(:facility) { create(:setup_facility) }
     let(:journal_date) { Time.zone.now }
-    let(:order) { create(:purchased_order, product: product) }
-    let(:order2) { create(:purchased_order, product: product) }
+    let(:order) { create(:purchased_order, product:) }
+    let(:order2) { create(:purchased_order, product:) }
     let(:order_details) { order.order_details + order2.order_details }
-    let(:product) { create(:setup_item, facility: facility) }
+    let(:product) { create(:setup_item, facility:) }
 
     before do
       order_details.each(&:to_complete!)

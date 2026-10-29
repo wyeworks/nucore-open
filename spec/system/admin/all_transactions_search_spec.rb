@@ -6,9 +6,9 @@ RSpec.describe "All Transactions Search", :js do
   # Defined in spec/support/contexts/cross_core_context.rb
   include_context "cross core orders"
 
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
   let!(:orders) do
-    accounts.map { |account| create(:complete_order, product: item, account: account) }
+    accounts.map { |account| create(:complete_order, product: item, account:) }
   end
 
   let(:order_detail) { orders.first.order_details.first }

@@ -6,12 +6,12 @@ require_relative "../../support/shared_contexts/setup_sanger_service"
 RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_enabled: false } do
   include_context "Setup Sanger Service"
 
-  let!(:purchased_order) { create(:purchased_order, product: service, account: account) }
-  let!(:purchased_order2) { create(:purchased_order, product: service, account: account) }
+  let!(:purchased_order) { create(:purchased_order, product: service, account:) }
+  let!(:purchased_order2) { create(:purchased_order, product: service, account:) }
   let!(:purchased_submission) { create(:sanger_sequencing_submission, order_detail: purchased_order.order_details.first, sample_count: 50) }
   let!(:purchased_submission2) { create(:sanger_sequencing_submission, order_detail: purchased_order2.order_details.first, sample_count: 50) }
 
-  let(:facility_staff) { create(:user, :staff, facility: facility) }
+  let(:facility_staff) { create(:user, :staff, facility:) }
 
   before { login_as facility_staff }
 

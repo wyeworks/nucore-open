@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe BundleProduct do
-  subject(:bundle_product) { FactoryBot.build(:bundle_product, product: product) }
+  subject(:bundle_product) { FactoryBot.build(:bundle_product, product:) }
 
   describe "#quantity" do
     context "with a non-TimedService" do
