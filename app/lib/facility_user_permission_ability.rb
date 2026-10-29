@@ -128,13 +128,13 @@ class FacilityUserPermissionAbility
     can :mark_unrecoverable, OrderDetail, { order: { facility_id: facility.id } }
 
     can %i[administer assign_price_policies_to_problem_orders batch_update
-         create index order_in_past send_receipt show tab_counts update], Order
+           create index order_in_past send_receipt show tab_counts update], Order
 
     can :manage, Reservation if resource.is_a?(Reservation)
 
     can %i[administer assign_price_policies_to_problem_orders batch_update
-         cancel edit index show tab_counts
-         timeline update], Reservation
+           cancel edit index show tab_counts
+           timeline update], Reservation
 
     can :show_problems, [Order, Reservation]
 
@@ -163,8 +163,8 @@ class FacilityUserPermissionAbility
     can :manage, Reservation if resource.is_a?(Reservation)
 
     can %i[administer assign_price_policies_to_problem_orders batch_update
-         cancel create edit edit_admin index show tab_counts
-         timeline update update_admin], Reservation
+           cancel create edit edit_admin index show tab_counts
+           timeline update update_admin], Reservation
     can(:destroy, Reservation, &:admin?)
     can :read, ProductAccessory
     can :manage, ProductNotification, facility_id: facility.id
@@ -196,8 +196,8 @@ class FacilityUserPermissionAbility
 
     if controller.is_a?(UsersController)
       can %i[read create new new_external search
-           access_list access_list_approvals edit update
-           unexpire orders accounts], User
+             access_list access_list_approvals edit update
+             unexpire orders accounts], User
     end
   end
 

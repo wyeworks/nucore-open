@@ -34,7 +34,7 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
       build(:journal,
             facility:,
             created_by: 1,
-            journal_date:,)
+            journal_date:)
     end
 
     let(:facility) { create(:setup_facility) }
@@ -57,14 +57,14 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
                                   order_detail: order.order_details.first,
                                   amount: be_positive,
                                 ),
-          have_attributes(
-            order_detail: order2.order_details.first,
-          ),
-          have_attributes(
-            order_detail: nil,
-            amount: - (order.order_details.first.actual_cost + order2.order_details.first.actual_cost),
-            description: product.name,
-          ),
+                                have_attributes(
+                                  order_detail: order2.order_details.first,
+                                ),
+                                have_attributes(
+                                  order_detail: nil,
+                                  amount: - (order.order_details.first.actual_cost + order2.order_details.first.actual_cost),
+                                  description: product.name,
+                                ),
                               ])
       end
     end
@@ -84,23 +84,23 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
                                   amount: be_positive,
                                   account_id: order.order_details.first.account_id,
                                 ),
-          having_attributes(
-            order_detail: nil,
-            amount: -1 * order.order_details.first.actual_cost,
-            account_id: nil,
-            description: product.name,
-          ),
-          having_attributes(
-            order_detail: order2.order_details.first,
-            amount: be_positive,
-            account_id: order2.order_details.first.account_id,
-          ),
-          having_attributes(
-            order_detail: nil,
-            amount: -1 * order2.order_details.first.actual_cost,
-            account_id: nil,
-            description: product.name,
-          ),
+                                having_attributes(
+                                  order_detail: nil,
+                                  amount: -1 * order.order_details.first.actual_cost,
+                                  account_id: nil,
+                                  description: product.name,
+                                ),
+                                having_attributes(
+                                  order_detail: order2.order_details.first,
+                                  amount: be_positive,
+                                  account_id: order2.order_details.first.account_id,
+                                ),
+                                having_attributes(
+                                  order_detail: nil,
+                                  amount: -1 * order2.order_details.first.actual_cost,
+                                  account_id: nil,
+                                  description: product.name,
+                                ),
                               ])
       end
     end

@@ -16,7 +16,7 @@ RSpec.describe Instrument do
           facility:,
           min_reserve_mins:,
           max_reserve_mins:,
-          reserve_interval:,)
+          reserve_interval:)
   end
 
   it "should create using factory" do

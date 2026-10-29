@@ -20,7 +20,7 @@ class OrderUncanceler
           fulfilled_at = order_detail.reservation.reserve_end_at
           order_detail.reservation.update!(
             actual_start_at: order_detail.reservation.reserve_start_at,
-            actual_end_at: order_detail.reservation.reserve_end_at
+            actual_end_at: order_detail.reservation.reserve_end_at,
           )
         end
 
@@ -30,7 +30,7 @@ class OrderUncanceler
           canceled_reason: nil,
           order_status: @complete_status,
           state: "complete",
-          fulfilled_at:
+          fulfilled_at:,
         )
 
         order_detail.assign_price_policy

@@ -13,7 +13,7 @@ RSpec.describe "canceling statements" do
     create(:complete_order,
            product: item,
            quantity: 3,
-           account: po_account,)
+           account: po_account)
   end
   let(:order_detail) { order.order_details.first }
 

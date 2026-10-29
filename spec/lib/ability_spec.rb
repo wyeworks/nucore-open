@@ -531,7 +531,7 @@ RSpec.describe Ability do
           build(:stored_file,
                 file_type:,
                 order_detail:,
-                product:,)
+                product:)
         end
         let(:order_detail) { order.order_details.first }
         let(:order) { create(:purchased_order, product:) }
@@ -767,7 +767,7 @@ RSpec.describe Ability do
             unrelated_detail = build_stubbed(:order_detail, order: build_stubbed(:order, facility: other_facility))
 
             %i[add_accessories new show update cancel sample_results sample_results_zip
-             template_results order_file upload_order_file remove_order_file].each do |action|
+               template_results order_file upload_order_file remove_order_file].each do |action|
               expect(ability).not_to be_allowed_to(action, unrelated_detail)
             end
           end
@@ -946,8 +946,8 @@ RSpec.describe Ability do
         let(:stub_controller) { UsersController.new }
 
         it_is_allowed_to(%i[read create new new_external search
-                          access_list access_list_approvals edit update
-                          unexpire orders accounts], User)
+                            access_list access_list_approvals edit update
+                            unexpire orders accounts], User)
       end
 
       it { is_expected.not_to be_allowed_to(:manage, FacilityUserPermission) }

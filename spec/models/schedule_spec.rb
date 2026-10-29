@@ -29,7 +29,7 @@ RSpec.describe Schedule do
         reservation2 = FactoryBot.build(:setup_reservation,
                                         product: instrument,
                                         reserve_start_at: first_reservation_time + 30.minutes,
-                                        reserve_end_at: first_reservation_time + 1.hour + 30.minutes,)
+                                        reserve_end_at: first_reservation_time + 1.hour + 30.minutes)
         expect(reservation2).not_to be_valid
       end
 
@@ -37,7 +37,7 @@ RSpec.describe Schedule do
         reservation2 = FactoryBot.build(:setup_reservation,
                                         product: instrument,
                                         reserve_start_at: first_reservation_time + 1.hour,
-                                        reserve_end_at: first_reservation_time + 2.hours,)
+                                        reserve_end_at: first_reservation_time + 2.hours)
         expect(reservation2).to be_valid
       end
     end
@@ -58,7 +58,7 @@ RSpec.describe Schedule do
         reservation2 = FactoryBot.build(:setup_reservation,
                                         product: instruments[1],
                                         reserve_start_at: first_reservation_time + 30.minutes,
-                                        reserve_end_at: first_reservation_time + 1.hour + 30.minutes,)
+                                        reserve_end_at: first_reservation_time + 1.hour + 30.minutes)
         expect(reservation2).not_to be_valid
       end
 

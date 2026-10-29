@@ -207,7 +207,7 @@ RSpec.describe Reservations::DurationChangeValidations do
       before do
         reservation.assign_attributes(
           reserve_start_at: 1.minute.from_now,
-          reserve_end_at: 61.minutes.from_now
+          reserve_end_at: 61.minutes.from_now,
         )
         reservation.save(validate: false)
 
@@ -221,7 +221,7 @@ RSpec.describe Reservations::DurationChangeValidations do
       before do
         reservation.assign_attributes(
           reserve_start_at: 30.minutes.ago,
-          reserve_end_at: 30.minutes.from_now
+          reserve_end_at: 30.minutes.from_now,
         )
         reservation.save(validate: false)
 
@@ -243,7 +243,7 @@ RSpec.describe Reservations::DurationChangeValidations do
       before do
         reservation.assign_attributes(
           reserve_start_at: 61.minutes.ago,
-          reserve_end_at: 1.minute.ago
+          reserve_end_at: 1.minute.ago,
         )
         reservation.save(validate: false)
 
@@ -266,7 +266,7 @@ RSpec.describe Reservations::DurationChangeValidations do
         reservation.assign_attributes(
           reserve_start_at: 1.minute.from_now,
           reserve_end_at: 61.minutes.from_now,
-          actual_start_at: 1.minute.ago
+          actual_start_at: 1.minute.ago,
         )
         reservation.save(validate: false)
 

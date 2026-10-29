@@ -48,9 +48,9 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
         order_import.process_upload!
         expect(order.reload.order_details).to match([
                                                       anything, # this is the original detail
-          having_attributes(account:, note: "Add to 1", reference_id: "123456789"),
-          having_attributes(account: account2, note: "Add to 2", reference_id: "123456000"),
-          having_attributes(account: nonbillable_account, note: "Add to 3", reference_id: "123456700"),
+                                                      having_attributes(account:, note: "Add to 1", reference_id: "123456789"),
+                                                      having_attributes(account: account2, note: "Add to 2", reference_id: "123456000"),
+                                                      having_attributes(account: nonbillable_account, note: "Add to 3", reference_id: "123456700"),
                                                     ])
       end
 
@@ -69,22 +69,22 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
                                                          having_attributes(account:, note: "New 1-2 - Miscased"),
                                                        ],
                                                      ),
-          having_attributes(
-            order_details: [
-              having_attributes(account: account2, note: "New 2 - Different Account"),
-              having_attributes(account: account2, note: "New 2-2", fulfilled_at: 1.day.ago.beginning_of_day),
-              having_attributes(account: account2, note: "New 2-3 - Different fulfilled", fulfilled_at: Time.current.beginning_of_day),
-            ],
-          ),
-          having_attributes(
-            order_details: [having_attributes(account: account2, note: "New 3 - Different Order Date")],
-          ),
-          having_attributes(
-            order_details: [
-              having_attributes(account: nonbillable_account, note: "New 3"),
-              having_attributes(account: nonbillable_account, note: "New 3-2"),
-            ],
-          ),
+                                                     having_attributes(
+                                                       order_details: [
+                                                         having_attributes(account: account2, note: "New 2 - Different Account"),
+                                                         having_attributes(account: account2, note: "New 2-2", fulfilled_at: 1.day.ago.beginning_of_day),
+                                                         having_attributes(account: account2, note: "New 2-3 - Different fulfilled", fulfilled_at: Time.current.beginning_of_day),
+                                                       ],
+                                                     ),
+                                                     having_attributes(
+                                                       order_details: [having_attributes(account: account2, note: "New 3 - Different Order Date")],
+                                                     ),
+                                                     having_attributes(
+                                                       order_details: [
+                                                         having_attributes(account: nonbillable_account, note: "New 3"),
+                                                         having_attributes(account: nonbillable_account, note: "New 3-2"),
+                                                       ],
+                                                     ),
                                                    ])
       end
     end

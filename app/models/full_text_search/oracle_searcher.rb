@@ -8,7 +8,7 @@ module FullTextSearch
       formatted_query = query.to_s
                              .gsub(/[{}]/, "") # remove any existing curly braces
                              .split
-                             .map { |s|"{#{s}}" }
+                             .map { |s| "{#{s}}" }
                              .join(",")
 
       return @scope.none if formatted_query.blank?

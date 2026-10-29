@@ -81,7 +81,7 @@ class Ability
 
     if resource.is_a?(OrderDetail)
       can %i[add_accessories sample_results sample_results_zip show update cancel template_results
-           order_file upload_order_file remove_order_file], OrderDetail, order: { user_id: user.id }
+             order_file upload_order_file remove_order_file], OrderDetail, order: { user_id: user.id }
     end
 
     if resource.is_a?(PriceGroup)
@@ -458,7 +458,7 @@ class Ability
 
       if project.present? && can_manage_cross_core_orders_at?(user, project.facility)
         can %i[add_accessories new show update cancel sample_results sample_results_zip
-             template_results order_file upload_order_file remove_order_file], OrderDetail, order: { cross_core_project_id: project.id }
+               template_results order_file upload_order_file remove_order_file], OrderDetail, order: { cross_core_project_id: project.id }
       end
     end
 

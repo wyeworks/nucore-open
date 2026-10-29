@@ -24,7 +24,7 @@ RSpec.describe Item do
         item = build(:item,
                      facility:,
                      facility_account:,
-                     initial_order_status: complete_status,)
+                     initial_order_status: complete_status)
 
         expect(item).to be_valid
         expect(item.initial_order_status).to eq(complete_status)
@@ -33,7 +33,7 @@ RSpec.describe Item do
       it "can still be created with default (New) status" do
         item = build(:item,
                      facility:,
-                     facility_account:,)
+                     facility_account:)
 
         expect(item).to be_valid
         expect(item.initial_order_status.name).to eq("New")
@@ -44,7 +44,7 @@ RSpec.describe Item do
       it "uses default (New) status when not specified" do
         item = build(:item,
                      facility:,
-                     facility_account:,)
+                     facility_account:)
 
         expect(item).to be_valid
         expect(item.initial_order_status.name).to eq("New")

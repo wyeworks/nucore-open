@@ -862,7 +862,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
                               price_group:,
                               unit_cost: 19,
                               start_date: 30.days.ago,
-                              expire_date: 28.days.ago,)
+                              expire_date: 28.days.ago)
           end
           before { order_detail.backdate_to_complete!(29.days.ago) }
 

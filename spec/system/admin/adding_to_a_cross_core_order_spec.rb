@@ -109,7 +109,7 @@ RSpec.describe "Adding to an existing order for cross core", :js do
         create(:item_price_policy,
                product: instrument,
                price_group:,
-               start_date: 1.day.ago,)
+               start_date: 1.day.ago)
       end
 
       describe "with one reservation" do
@@ -160,7 +160,7 @@ RSpec.describe "Adding to an existing order for cross core", :js do
           create(:item_price_policy,
                  product: product2,
                  price_group:,
-                 start_date: 1.day.ago,)
+                 start_date: 1.day.ago)
 
           visit facility_order_path(facility, order)
           select_from_chosen facility2.name, from: "add_to_order_form[facility_id]"
@@ -214,7 +214,7 @@ RSpec.describe "Adding to an existing order for cross core", :js do
       create(:item_price_policy,
              product: cross_core_product_facility2,
              price_group:,
-             start_date: 1.day.ago,)
+             start_date: 1.day.ago)
     end
 
     before do

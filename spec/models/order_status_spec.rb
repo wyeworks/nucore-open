@@ -181,7 +181,7 @@ RSpec.describe OrderStatus do
       child_status = create(:order_status, parent: described_class.canceled)
       expect(described_class.canceled.self_and_descendants).to eq([
                                                                     described_class.canceled,
-        child_status,
+                                                                    child_status,
                                                                   ])
     end
   end

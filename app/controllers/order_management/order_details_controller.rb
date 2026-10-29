@@ -130,9 +130,9 @@ class OrderManagement::OrderDetailsController < ApplicationController
     if @order_detail.complete?
       @order_statuses = OrderStatus.by_names([
                                                OrderStatus::COMPLETE,
-        OrderStatus::CANCELED,
-        OrderStatus::UNRECOVERABLE,
-        OrderStatus::RECONCILED,
+                                               OrderStatus::CANCELED,
+                                               OrderStatus::UNRECOVERABLE,
+                                               OrderStatus::RECONCILED,
                                              ]).to_a
 
       # Add potentially missing custom status

@@ -699,7 +699,7 @@ RSpec.describe FacilityJournalsController do
                    state: "reconciled",
                    order_status: OrderStatus.reconciled,
                    fulfilled_at: 1.day.ago,
-                   reconciled_at: 1.day.ago,)
+                   reconciled_at: 1.day.ago)
           end
 
           let!(:accessory_not_in_journal) do
@@ -711,7 +711,7 @@ RSpec.describe FacilityJournalsController do
                    state: "reconciled",
                    order_status: OrderStatus.reconciled,
                    fulfilled_at: 1.day.ago,
-                   reconciled_at: 1.day.ago,)
+                   reconciled_at: 1.day.ago)
           end
 
           before do

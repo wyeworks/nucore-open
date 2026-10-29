@@ -124,7 +124,7 @@ RSpec.describe Reservations::DateSupport do
           reserve_start_hour: "9",
           reserve_start_min: "0",
           reserve_start_meridian: "AM",
-          duration_mins: "60"
+          duration_mins: "60",
         )
       end
 

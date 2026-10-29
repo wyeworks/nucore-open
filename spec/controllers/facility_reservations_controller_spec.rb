@@ -19,7 +19,7 @@ RSpec.describe FacilityReservationsController do
     @facility_account = FactoryBot.create(:facility_account, facility: @authable)
     @product = FactoryBot.create(:instrument,
                                  facility_account: @facility_account,
-                                 facility: @authable,)
+                                 facility: @authable)
     @schedule_rule = FactoryBot.create(:schedule_rule, product: @product)
     @product.reload
     @account = create_nufs_account_with_owner :director
@@ -28,7 +28,7 @@ RSpec.describe FacilityReservationsController do
                                user: @director,
                                created_by: @director.id,
                                account: @account,
-                               state: "purchased",)
+                               state: "purchased")
 
     @reservation = FactoryBot.create(:reservation, product: @product)
     expect(@reservation).not_to be_new_record
@@ -280,7 +280,7 @@ RSpec.describe FacilityReservationsController do
                                     user: @director,
                                     created_by: @director.id,
                                     account: @account,
-                                    state: "new",)
+                                    state: "new")
         # make sure the reservations are happening today
         @reservation.update!(reserve_start_at: Time.zone.now, reserve_end_at: 1.hour.from_now)
 
@@ -368,7 +368,7 @@ RSpec.describe FacilityReservationsController do
         @params.merge!(reservation: {
                          reserve_start_at: @reservation.reserve_start_at,
                          reserve_end_at: @reservation.reserve_end_at - 15.minutes,
-                       },)
+                       })
       end
 
       it "should update estimated cost" do
