@@ -1,8 +1,6 @@
 en:
   views:
     notifier:
-      account_update:
-        subject: "!app_name! Payment Method Updated"
       new_user:
         subject: "Welcome to !app_name!"
         intro: |

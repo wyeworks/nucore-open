@@ -28,15 +28,6 @@ class Notifier < ApplicationMailer
     mail(to: send_to, subject: text("views.notifier.user_update.subject", user: @user))
   end
 
-  # Any changes to the financial accounts will alert the PI(s), admin(s)
-  # when it is not them making the change. Adding someone to any role of a
-  # financial account as well. Roles: Order, Admin, PI.
-  def account_update(args)
-    @user = args[:user]
-    @account = args[:account]
-    mail(to: args[:user].email, subject: text("views.notifier.account_update.subject"))
-  end
-
   def review_orders(user:, accounts:, facility: Facility.cross_facility)
     @user = user
     @accounts = accounts
