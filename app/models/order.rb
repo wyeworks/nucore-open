@@ -11,7 +11,7 @@ class Order < ApplicationRecord
   has_many   :order_details, inverse_of: :order, dependent: :destroy
   has_many :products, through: :order_details
 
-  validates_presence_of :user_id, :created_by
+  validates :user_id, :created_by, presence: true
 
   after_save :update_order_detail_accounts, if: :saved_change_to_account_id?
 
@@ -72,7 +72,7 @@ class Order < ApplicationRecord
     # @import_fulfillment_date will be nil unless called from OrderRowImporter
     @import_fulfillment_date = import_fulfillment_date
     _validate_order!
-  rescue AASM::InvalidTransition => e
+  rescue AASM::InvalidTransition
     false
   end
 

@@ -69,7 +69,7 @@ module LdapAuthentication
       tries = 0
       begin
         yield
-      rescue Net::LDAP::Error => e
+      rescue Net::LDAP::Error
         tries += 1
         tries >= max_attempts ? raise : retry
       end

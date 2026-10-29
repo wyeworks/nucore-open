@@ -560,7 +560,7 @@ RSpec.describe Reservation do
         detail1       = order.order_details.create(order_attrs)
         res = @instrument.reservations.create(reserve_start_at: Time.zone.now, reserve_end_at: @reservation1.reserve_start_at, order_detail: detail1)
         detail2 = order.order_details.create(order_attrs)
-        res2 = @instrument.reservations.create(reserve_start_at: @reservation1.reserve_end_at, reserve_end_at: @reservation1.reserve_end_at + 1.day, order_detail: detail2)
+        @instrument.reservations.create(reserve_start_at: @reservation1.reserve_end_at, reserve_end_at: @reservation1.reserve_end_at + 1.day, order_detail: detail2)
         res.order.validate_order!
         res.order.purchase!
         expect(@reservation1.reload.earliest_possible).to be_nil
@@ -1217,7 +1217,7 @@ RSpec.describe Reservation do
 
       it "does nothing" do
         expect { reservation.start_reservation! }
-          .to_not change { complete.reload.attributes }
+          .to_not(change { complete.reload.attributes })
       end
 
       it "does not trigger an email" do
@@ -1238,7 +1238,7 @@ RSpec.describe Reservation do
 
       it "does nothing" do
         expect { reservation.start_reservation! }
-          .to_not change { problem.reload.attributes }
+          .to_not(change { problem.reload.attributes })
       end
 
       it "does not trigger an email" do
@@ -1451,7 +1451,7 @@ RSpec.describe Reservation do
 
     it "should have actuals" do
       reservation.actual_start_at = Time.zone.now
-      reservation.actual_end_at = Time.zone.now + 1.minute
+      reservation.actual_end_at = 1.minute.from_now
       expect(reservation).to be_has_actuals
     end
   end
@@ -1521,7 +1521,7 @@ RSpec.describe Reservation do
     end
 
     it "returns reservations from a single day" do
-      expect(Reservation.for_date(Time.zone.now - 1.day))
+      expect(Reservation.for_date(1.day.ago))
         .to contain_all [@yeserday_reservation]
     end
 
@@ -1531,7 +1531,7 @@ RSpec.describe Reservation do
     end
 
     it "returns a reservation that spans days when looking up the later date" do
-      expect(Reservation.for_date(Time.zone.now + 1.day))
+      expect(Reservation.for_date(1.day.from_now))
         .to contain_all [@tomorrow_reservation, @spans_day_reservation]
     end
   end

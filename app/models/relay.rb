@@ -5,7 +5,7 @@ require "net/http"
 class Relay < ApplicationRecord
   belongs_to :instrument, inverse_of: :relay
 
-  validates_presence_of :instrument_id, on: :update
+  validates :instrument_id, presence: { on: :update }
   validate :unique_host_and_schedule
 
   alias_attribute :host, :ip

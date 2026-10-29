@@ -343,9 +343,7 @@ RSpec.shared_examples_for PricePoliciesController do |product_type, params_modif
           note: "This is a note",
         )
 
-        if @params_modifier.respond_to?(:before_update)
-          @params_modifier.before_update(@params)
-        end
+        @params_modifier.before_update(@params) if @params_modifier.respond_to?(:before_update)
       end
 
       context "when facility_directors_can_manage_price_groups on", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do

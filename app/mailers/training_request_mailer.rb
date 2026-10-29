@@ -5,8 +5,8 @@ class TrainingRequestMailer < ApplicationMailer
     @user = user
     @product = product
     reply_to = @user.email
-    if @product.training_request_contacts.any?
-      mail(to: @product.training_request_contacts, reply_to:, subject: t("training_request_mailer.notify_facility_staff.subject", facility: @product.facility))
-    end
+    return unless @product.training_request_contacts.any?
+
+    mail(to: @product.training_request_contacts, reply_to:, subject: t("training_request_mailer.notify_facility_staff.subject", facility: @product.facility))
   end
 end

@@ -18,6 +18,10 @@ module SangerSequencing
                         .paginate(page: params[:page])
       end
 
+      def show
+        @submissions = @batch.submissions.purchased # purchased to get the same sorting
+      end
+
       def new
         @submissions = Submission.ready_for_batch
                                  .includes(:samples, order_detail: :product)
@@ -34,10 +38,6 @@ module SangerSequencing
           flash.now[:alert] = @batch.errors.full_messages.to_sentence
           render :new
         end
-      end
-
-      def show
-        @submissions = @batch.submissions.purchased # purchased to get the same sorting
       end
 
       def well_plate

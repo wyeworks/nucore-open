@@ -22,12 +22,6 @@ Gemspec/RequiredRubyVersion:
     - 'vendor/engines/secure_rooms/secure_rooms.gemspec'
     - 'vendor/engines/split_accounts/split_accounts.gemspec'
 
-# Offense count: 39
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowedMethods, AllowedPatterns.
-Lint/AmbiguousBlockAssociation:
-  Enabled: false
-
 # Offense count: 4
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowSafeAssignment.
@@ -142,12 +136,6 @@ Lint/UnusedMethodArgument:
   Exclude:
     - 'app/models/account.rb'
     - 'app/models/nonbillable_account.rb'
-
-# Offense count: 87
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AutoCorrect.
-Lint/UselessAssignment:
-  Enabled: false
 
 # Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -362,14 +350,6 @@ Rails/ActionControllerFlashBeforeRender:
     - 'app/controllers/product_user_imports_controller.rb'
     - 'app/controllers/single_reservations_controller.rb'
 
-# Offense count: 28
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: ExpectedOrder, Include.
-# ExpectedOrder: index, show, new, edit, create, update, destroy
-# Include: app/controllers/**/*.rb
-Rails/ActionOrder:
-  Enabled: false
-
 # Offense count: 18
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: NilOrEmpty, NotPresent, UnlessPresent.
@@ -416,11 +396,6 @@ Rails/CompactBlank:
 # Configuration parameters: EnforcedStyle, AllowToTime.
 # SupportedStyles: strict, flexible
 Rails/Date:
-  Enabled: false
-
-# Offense count: 74
-# This cop supports safe autocorrection (--autocorrect).
-Rails/DurationArithmetic:
   Enabled: false
 
 # Offense count: 38
@@ -663,13 +638,6 @@ Rails/UniqueValidationWithoutIndex:
     - 'app/models/research_safety_certificate.rb'
     - 'app/models/training_request.rb'
 
-# Offense count: 81
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/Validation:
-  Enabled: false
-
 # Offense count: 8
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Rails/WhereEquals:
@@ -820,12 +788,6 @@ Style/GlobalStdStream:
     - 'lib/tasks/users.rake'
     - 'spec/rails_helper.rb'
 
-# Offense count: 149
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: MinBodyLength, AllowConsecutiveConditionals.
-Style/GuardClause:
-  Enabled: false
-
 # Offense count: 5
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowSplatArgument.
@@ -880,11 +842,6 @@ Style/IdenticalConditionalBranches:
     - 'app/controllers/reservations_controller.rb'
     - 'app/controllers/single_reservations_controller.rb'
     - 'app/services/research_safety_adapters/scishield_training_synchronizer.rb'
-
-# Offense count: 147
-# This cop supports safe autocorrection (--autocorrect).
-Style/IfUnlessModifier:
-  Enabled: false
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).

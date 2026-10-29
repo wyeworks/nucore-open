@@ -10,13 +10,13 @@ module SangerSequencing
     end
 
     def admin_sanger_sequencing
-      if single_facility? && facility.sanger_sequencing_enabled? && sanger_ability.can?(:index, SangerSequencing::Submission)
-        NavTab::Link.new(
-          tab: :admin_sanger_sequencing,
-          text: I18n.t("sanger_sequencing.name"),
-          url: facility_sanger_sequencing_admin_submissions_path(facility),
-        )
-      end
+      return unless single_facility? && facility.sanger_sequencing_enabled? && sanger_ability.can?(:index, SangerSequencing::Submission)
+
+      NavTab::Link.new(
+        tab: :admin_sanger_sequencing,
+        text: I18n.t("sanger_sequencing.name"),
+        url: facility_sanger_sequencing_admin_submissions_path(facility),
+      )
     end
 
     private

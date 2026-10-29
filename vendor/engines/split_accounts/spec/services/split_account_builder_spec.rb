@@ -44,8 +44,8 @@ RSpec.describe SplitAccounts::SplitAccountBuilder, :enable_split_accounts do
         )
       end
 
-      let(:subaccount_1) { create(:setup_account, expires_at: (Time.zone.now + 1.month).change(usec: 0)) }
-      let(:subaccount_2) { create(:setup_account, expires_at: (Time.zone.now + 2.months).change(usec: 0)) }
+      let(:subaccount_1) { create(:setup_account, expires_at: 1.month.from_now.change(usec: 0)) }
+      let(:subaccount_2) { create(:setup_account, expires_at: 2.months.from_now.change(usec: 0)) }
 
       it "is a split account" do
         expect(account).to be_a SplitAccounts::SplitAccount

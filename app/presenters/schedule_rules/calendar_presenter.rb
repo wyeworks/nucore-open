@@ -79,9 +79,9 @@ module ScheduleRules
     end
 
     def product_access_groups
-      if schedule_rule.product_access_groups.any?
-        schedule_rule.product_access_groups.join(", ")
-      end
+      return unless schedule_rule.product_access_groups.any?
+
+      schedule_rule.product_access_groups.join(", ")
     end
   end
 end

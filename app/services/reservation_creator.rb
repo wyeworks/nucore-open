@@ -47,7 +47,7 @@ class ReservationCreator
     rescue OrderPurchaseValidatorError => e
       @error = e.message
       raise ActiveRecord::Rollback
-    rescue ActiveRecord::RecordInvalid => e
+    rescue ActiveRecord::RecordInvalid
       raise ActiveRecord::Rollback
     rescue => e
       @error = I18n.t("orders.purchase.error", message: e.message).html_safe
@@ -115,12 +115,12 @@ class ReservationCreator
     # If the account has changed, we need to re-do validations on the order. We're
     # only saving the changes if the reservation is part of a cart. Otherwise, we
     # just modify the object in-memory for redisplay.
-    if account != @order.account
-      @order.invalidate if @order.persisted?
-      @order.account = account
-      @order_detail.account = account if @order_detail
-      @order.save! if @order.persisted?
-    end
+    return unless account != @order.account
+
+    @order.invalidate if @order.persisted?
+    @order.account = account
+    @order_detail.account = account if @order_detail
+    @order.save! if @order.persisted?
   end
 
   def backdate_reservation_if_necessary(session_user)
@@ -147,16 +147,16 @@ class ReservationCreator
   def purchase_original_cross_core_order
     original_order = Order.find(@order.merge_with_order_id)
 
-    if original_order.order_details.one? && original_order.cross_core_project.present?
-      order_purchaser = OrderPurchaser.new(
-        order: original_order,
-        acting_as: original_order.user,
-        order_in_past: nil,
-        params: ActionController::Parameters.new({}),
-        user: original_order.created_by,
-      )
-      order_purchaser.purchase_cross_core!
-    end
+    return unless original_order.order_details.one? && original_order.cross_core_project.present?
+
+    order_purchaser = OrderPurchaser.new(
+      order: original_order,
+      acting_as: original_order.user,
+      order_in_past: nil,
+      params: ActionController::Parameters.new({}),
+      user: original_order.created_by,
+    )
+    order_purchaser.purchase_cross_core!
   end
 
   def process_accessories

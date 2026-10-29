@@ -11,9 +11,9 @@ class ScheduleRule < ApplicationRecord
 
   attr_accessor :unavailable # virtual attribute
 
-  validates_presence_of :product_id
-  validates_numericality_of :start_hour, :end_hour, only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 24
-  validates_numericality_of :start_min,  :end_min, only_integer: true, greater_than_or_equal_to: 0, less_than: 60
+  validates :product_id, presence: true
+  validates :start_hour, :end_hour, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 24 }
+  validates :start_min,  :end_min, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than: 60 }
 
   validate :at_least_one_day_selected, :end_time_is_after_start_time, :end_time_is_valid, :no_overlap_with_existing_rules
 
@@ -68,9 +68,9 @@ class ScheduleRule < ApplicationRecord
   end
 
   def end_time_is_valid
-    if end_hour == 24 && end_min.to_i != 0
-      errors.add(:base, "End time is invalid")
-    end
+    return unless end_hour == 24 && end_min.to_i != 0
+
+    errors.add(:base, "End time is invalid")
   end
 
   def no_overlap_with_existing_rules
@@ -255,9 +255,7 @@ class ScheduleRule < ApplicationRecord
     overlap_mins = 0
     # TODO: rewrite to be more efficient; don't iterate over every minute
     while start_at < end_at
-      if (start_at.hour * 100) + start_at.min >= start_time_int && (start_at.hour * 100) + start_at.min < end_time_int && on_day?(start_at)
-        overlap_mins += 1
-      end
+      overlap_mins += 1 if (start_at.hour * 100) + start_at.min >= start_time_int && (start_at.hour * 100) + start_at.min < end_time_int && on_day?(start_at)
       start_at += 60
     end
     overlap_mins

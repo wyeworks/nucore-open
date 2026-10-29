@@ -9,9 +9,9 @@ module BulkEmail
     end
 
     def extend(user, resource)
-      if user.manager_of?(resource) || user.facility_senior_staff_of?(resource)
-        ability.can(:send_bulk_emails, resource)
-      end
+      return unless user.manager_of?(resource) || user.facility_senior_staff_of?(resource)
+
+      ability.can(:send_bulk_emails, resource)
     end
   end
 end

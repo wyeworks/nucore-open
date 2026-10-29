@@ -34,12 +34,12 @@ class Facility < ApplicationRecord
   has_many :estimates, inverse_of: :facility
   has_many :product_notifications, dependent: :destroy
 
-  validates_presence_of :name, :short_description, :abbreviation
+  validates :name, :short_description, :abbreviation, presence: true
   validate_url_name :url_name
-  validates_uniqueness_of :name
-  validates_uniqueness_of :abbreviation, :journal_mask, case_sensitive: false
-  validates_format_of :abbreviation, with: /\A[a-zA-Z\d\-.\s]+\z/, message: "may include letters, numbers, hyphens, spaces, or periods only"
-  validates_format_of :journal_mask, with: /\AC\d{2,3}\z/, message: "must be in the format C## or C###"
+  validates :name, uniqueness: true
+  validates :abbreviation, :journal_mask, uniqueness: { case_sensitive: false }
+  validates :abbreviation, format: { with: /\A[a-zA-Z\d\-.\s]+\z/, message: "may include letters, numbers, hyphens, spaces, or periods only" }
+  validates :journal_mask, format: { with: /\AC\d{2,3}\z/, message: "must be in the format C## or C###" }
 
   validates :order_notification_recipient,
             format: URI::MailTo::EMAIL_REGEXP,

@@ -344,7 +344,7 @@ RSpec.describe Instrument do
     end
 
     it "should not allow reservation in the past" do
-      @reservation = @instrument.reservations.create(reserve_start_at: Time.zone.now - 1.hour, reserve_end_at: Time.zone.now)
+      @reservation = @instrument.reservations.create(reserve_start_at: 1.hour.ago, reserve_end_at: Time.zone.now)
       assert @reservation.errors[:reserve_start_at]
     end
 
@@ -466,7 +466,7 @@ RSpec.describe Instrument do
       assert_equal 0, @next_reservation.reserve_start_at.min
       # find next reservation after 4:01 pm today at 9 am tomorrow
       @next_reservation = @instrument.next_available_reservation(after: Time.zone.now.beginning_of_day + 16.hours + 1.minute)
-      assert_equal (Time.zone.now + 1.day).day, @next_reservation.reserve_start_at.day
+      assert_equal 1.day.from_now.day, @next_reservation.reserve_start_at.day
       assert_equal 9, @next_reservation.reserve_start_at.hour
       assert_equal 0, @next_reservation.reserve_start_at.min
     end
@@ -506,7 +506,7 @@ RSpec.describe Instrument do
       before { @rule.product.update_attribute :cutoff_hours, 10 }
 
       it "finds the next available reservation with cutoff hours" do
-        assert_equal (Time.zone.now + 1.day).day, next_reservation.reserve_start_at.day
+        assert_equal 1.day.from_now.day, next_reservation.reserve_start_at.day
         assert_equal 9, next_reservation.reserve_start_at.hour
         assert_equal 0, next_reservation.reserve_start_at.min
       end
@@ -628,7 +628,7 @@ RSpec.describe Instrument do
       @price_policy2 = @instrument.instrument_price_policies.new(@options)
       @price_policy2.save(validate: false) # save without validations
       assert_equal 15, @instrument.max_reservation_window
-      assert_equal (Time.zone.now + 15.days).to_date, @instrument.last_reserve_date
+      assert_equal 15.days.from_now.to_date, @instrument.last_reserve_date
     end
   end
 

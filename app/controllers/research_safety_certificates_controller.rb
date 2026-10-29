@@ -11,6 +11,9 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
     @certificate = ResearchSafetyCertificate.new
   end
 
+  def edit
+  end
+
   def create
     @certificate = ResearchSafetyCertificate.new(certificate_params)
 
@@ -20,9 +23,6 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
     else
       render :new
     end
-  end
-
-  def edit
   end
 
   def update

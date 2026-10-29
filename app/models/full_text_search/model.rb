@@ -13,9 +13,7 @@ module FullTextSearch
     end
 
     included do
-      if Nucore::Database.oracle?
-        has_context_index
-      end
+      has_context_index if Nucore::Database.oracle?
       scope :full_text, ->(fields, query) { FullTextSearch::Model.full_text_searcher.new(self).search(fields, query) }
     end
   end

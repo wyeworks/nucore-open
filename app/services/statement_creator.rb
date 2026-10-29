@@ -29,10 +29,10 @@ class StatementCreator
   end
 
   def send_statement_emails
-    if SettingsHelper.feature_on?("notifications.send_statement_emails")
-      account_statements.each do |_account, statement|
-        statement.send_emails
-      end
+    return unless SettingsHelper.feature_on?("notifications.send_statement_emails")
+
+    account_statements.each do |_account, statement|
+      statement.send_emails
     end
   end
 
@@ -48,12 +48,12 @@ class StatementCreator
 
   def set_order_details_to_statement
     order_detail_ids.each do |order_detail_id|
-      od = nil
+      nil
       begin
         od = OrderDetail.need_statement(current_facility).readonly(false).find(order_detail_id)
         @to_statement[od.account] ||= []
         @to_statement[od.account] << od
-      rescue => e
+      rescue
         @errors << I18n.t("controllers.facility_statements.order_error", order_detail_id:)
       end
     end
@@ -68,9 +68,7 @@ class StatementCreator
         created_by: session_user.id,
       }
 
-      if invoice_date.present?
-        statement_attrs[:invoice_date] = invoice_date
-      end
+      statement_attrs[:invoice_date] = invoice_date if invoice_date.present?
 
       statement_id = validate_parent_statement
       statement_attrs[:parent_statement_id] = statement_id if statement_id.present?
@@ -94,17 +92,17 @@ class StatementCreator
   end
 
   def validate_parent_statement
-    if parent_invoice_number.present? && SettingsHelper.feature_on?("billing.reference_statement_invoice_number")
-      parent_statement = Statement.find_by(
-        invoice_number: parent_invoice_number,
-        parent_statement_id: nil,
-      )
+    return unless parent_invoice_number.present? && SettingsHelper.feature_on?("billing.reference_statement_invoice_number")
 
-      if parent_statement.present?
-        parent_statement.id
-      else
-        @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
-      end
+    parent_statement = Statement.find_by(
+      invoice_number: parent_invoice_number,
+      parent_statement_id: nil,
+    )
+
+    if parent_statement.present?
+      parent_statement.id
+    else
+      @errors << I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: parent_invoice_number)
     end
   end
 end

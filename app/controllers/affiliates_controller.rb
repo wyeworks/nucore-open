@@ -9,14 +9,6 @@ class AffiliatesController < GlobalSettingsController
     @affiliate = Affiliate.new
   end
 
-  def create
-    @affiliate = Affiliate.create(affiliate_params)
-    return render action: :new unless @affiliate.errors.empty?
-
-    flash[:notice] = "Affiliate #{@affiliate.name} created"
-    redirect_to affiliates_path
-  end
-
   def edit
     id = params[:id]
 
@@ -26,6 +18,14 @@ class AffiliatesController < GlobalSettingsController
       flash[:error] = "Affiliate with id #{id} not found!"
       redirect_to affiliates_path
     end
+  end
+
+  def create
+    @affiliate = Affiliate.create(affiliate_params)
+    return render action: :new unless @affiliate.errors.empty?
+
+    flash[:notice] = "Affiliate #{@affiliate.name} created"
+    redirect_to affiliates_path
   end
 
   def update

@@ -20,12 +20,12 @@ class FacilityEstimatesController < ApplicationController
 
     @estimates = @estimates.where(expires_at: Time.current..) if params[:hide_expired] == "1"
 
-    if params[:search].present?
-      search_query = params[:search].strip
-      @estimates = @estimates.where("LOWER(description) LIKE ?", "%#{search_query.downcase}%")
+    return unless params[:search].present?
 
-      @estimates = @estimates.or(Estimate.where(id: search_query)) if search_query.match?(/^\d+$/)
-    end
+    search_query = params[:search].strip
+    @estimates = @estimates.where("LOWER(description) LIKE ?", "%#{search_query.downcase}%")
+
+    @estimates = @estimates.or(Estimate.where(id: search_query)) if search_query.match?(/^\d+$/)
   end
 
   def show
@@ -61,6 +61,10 @@ class FacilityEstimatesController < ApplicationController
     set_collections_for_select
   end
 
+  def edit
+    set_collections_for_select
+  end
+
   def create
     @estimate = current_facility.estimates.new(
       facility_estimate_params.merge(created_by_id: current_user.id),
@@ -74,10 +78,6 @@ class FacilityEstimatesController < ApplicationController
       flash.now[:error] = t(".error")
       render action: :new
     end
-  end
-
-  def edit
-    set_collections_for_select
   end
 
   def update
@@ -148,18 +148,14 @@ class FacilityEstimatesController < ApplicationController
         duration_unit _destroy recalculate
       ]
     )
-    if raw_params[:custom_name].present? && raw_params[:user_id].blank?
-      raw_params[:user_id] = nil
-    end
+    raw_params[:user_id] = nil if raw_params[:custom_name].present? && raw_params[:user_id].blank?
     raw_params
   end
 
   def load_estimate
     base_scope = current_facility.estimates
 
-    unless params[:action].in?(%w[duplicate])
-      base_scope = base_scope.includes(estimate_details: :product)
-    end
+    base_scope = base_scope.includes(estimate_details: :product) unless params[:action].in?(%w[duplicate])
 
     @estimate = base_scope.find(params[:id])
   end

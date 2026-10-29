@@ -48,19 +48,16 @@ class Orders::ItemAdder
     billing_modes << product.billing_mode
     @order.order_details.each { |od| billing_modes << od.product.billing_mode }
 
-    if billing_modes.count > 1 && billing_modes.include?("Nonbillable") && nonbillable_account?
-      raise NUCore::MixedBillingMode
-    end
+    return unless billing_modes.count > 1 && billing_modes.include?("Nonbillable") && nonbillable_account?
+
+    raise NUCore::MixedBillingMode
   end
 
   def check_for_mixed_facility!(product)
-    if product.facility != @order.facility
-      if @order.order_details.length > 0
-        raise NUCore::MixedFacilityCart
-      else
-        @order.update(facility: product.facility)
-      end
-    end
+    return unless product.facility != @order.facility
+    raise NUCore::MixedFacilityCart if @order.order_details.length > 0
+
+    @order.update(facility: product.facility)
   end
 
   # If the service has a survey or order form, a quantity of more than one will

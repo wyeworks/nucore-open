@@ -29,6 +29,11 @@ class FacilityFacilityAccountsController < ApplicationController
     )
   end
 
+  # GET /facilities/:facility_id/facility_accounts/:id/edit(.:format)
+  def edit
+    @facility_account = current_facility.facility_accounts.find(params[:id])
+  end
+
   # POST /facilities/:facility_id/facility_accounts(.:format)
   def create
     @facility_account = form_class.new(
@@ -42,11 +47,6 @@ class FacilityFacilityAccountsController < ApplicationController
     else
       render action: "new"
     end
-  end
-
-  # GET /facilities/:facility_id/facility_accounts/:id/edit(.:format)
-  def edit
-    @facility_account = current_facility.facility_accounts.find(params[:id])
   end
 
   # PUT /facilities/:facility_id/facility_accounts/:id(.:format)

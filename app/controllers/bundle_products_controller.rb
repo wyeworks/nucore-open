@@ -21,6 +21,15 @@ class BundleProductsController < ApplicationController
     @bundle_products = @bundle.bundle_products.alphabetized
   end
 
+  # GET /facilities/:facility_id/bundles/:bundle_id/bundle_products/new
+  def new
+    @bundle_product = @bundle.bundle_products.new(quantity: 1)
+  end
+
+  # GET /facilities/:facility_id/bundles/:bundle_id/bundle_products/:id/edit
+  def edit
+  end
+
   # POST /facilities/:facility_id/bundles/:bundle_id/bundle_products
   def create
     if @bundle_product.save
@@ -29,15 +38,6 @@ class BundleProductsController < ApplicationController
     else
       render action: "new"
     end
-  end
-
-  # GET /facilities/:facility_id/bundles/:bundle_id/bundle_products/new
-  def new
-    @bundle_product = @bundle.bundle_products.new(quantity: 1)
-  end
-
-  # GET /facilities/:facility_id/bundles/:bundle_id/bundle_products/:id/edit
-  def edit
   end
 
   # PUT /facilities/:facility_id/bundles/:bundle_id/bundle_products/:id

@@ -39,9 +39,16 @@ class PricePoliciesController < ApplicationController
     @price_policies = PricePolicyBuilder.get_new_policies_based_on_most_recent(
       @product,
       @start_date,
-      force_new_policies = @product.duration_pricing_mode?,
+      @product.duration_pricing_mode?,
     )
 
+    raise ActiveRecord::RecordNotFound if @price_policies.blank?
+
+    build_stepped_billing_fields
+  end
+
+  # GET /facilities/:facility_id/{product_type}/:product_id/price_policies/:id/edit
+  def edit
     raise ActiveRecord::RecordNotFound if @price_policies.blank?
 
     build_stepped_billing_fields
@@ -71,13 +78,6 @@ class PricePoliciesController < ApplicationController
 
       render :edit
     end
-  end
-
-  # GET /facilities/:facility_id/{product_type}/:product_id/price_policies/:id/edit
-  def edit
-    raise ActiveRecord::RecordNotFound if @price_policies.blank?
-
-    build_stepped_billing_fields
   end
 
   # DELETE /facilities/:facility_id/{product_type}/:product_id/price_policies/:id
@@ -183,9 +183,9 @@ class PricePoliciesController < ApplicationController
   end
 
   def build_stepped_billing_fields
-    if @product.duration_pricing_mode?
-      build_min_durations
-      build_duration_rates
-    end
+    return unless @product.duration_pricing_mode?
+
+    build_min_durations
+    build_duration_rates
   end
 end

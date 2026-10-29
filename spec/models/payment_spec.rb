@@ -9,9 +9,7 @@ RSpec.describe Payment do
       has_presence_validation = Payment._validators[:source].any? { |v| v.kind == :presence }
       has_inclusion_validation = Payment._validators[:source].any? { |v| v.kind == :inclusion }
 
-      unless has_presence_validation && has_inclusion_validation
-        skip "Source validations have been removed"
-      end
+      skip "Source validations have been removed" unless has_presence_validation && has_inclusion_validation
     end
 
     it { is_expected.to validate_presence_of :source }

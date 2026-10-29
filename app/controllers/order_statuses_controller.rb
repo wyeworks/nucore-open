@@ -60,7 +60,7 @@ class OrderStatusesController < ApplicationController
       @order_status.order_details.each { |os| os.update_attribute(:order_status, parent_status) }
       @order_status.destroy
       flash[:notice] = "The order status was successfully removed."
-    rescue => e
+    rescue
       flash[:error] = "An error was encountered while removing the order status."
       raise ActiveRecord::Rollback
     end

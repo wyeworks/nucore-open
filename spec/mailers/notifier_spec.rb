@@ -43,9 +43,7 @@ RSpec.describe Notifier do
       expect(email_text).to include(statement.invoice_number)
       expect(email_html).to include(statement.invoice_number)
 
-      if Settings.email.invoice_bcc
-        expect(email.bcc).to eq [Settings.email.invoice_bcc]
-      end
+      expect(email.bcc).to eq [Settings.email.invoice_bcc] if Settings.email.invoice_bcc
     end
 
     describe "email log event" do

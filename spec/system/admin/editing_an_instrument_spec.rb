@@ -85,9 +85,9 @@ RSpec.describe "Editing an instrument" do
 
         check("Start Time Disabled")
 
-        expect { click_button("Save") }.to_not change {
+        expect { click_button("Save") }.to_not(change do
           reservation.reload.reserve_start_at
-        }
+        end)
         expect(page).to have_content("Instrument was successfully updated")
       end
     end

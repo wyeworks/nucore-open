@@ -15,15 +15,15 @@ class JournalCutoffDatesController < ApplicationController
     @journal_cutoff_date.cutoff_date = default_next_cutoff
   end
 
+  def edit
+  end
+
   def create
     if @journal_cutoff_date.save
       redirect_to journal_cutoff_dates_path, notice: t(".success")
     else
       render :new
     end
-  end
-
-  def edit
   end
 
   def update

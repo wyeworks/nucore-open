@@ -225,7 +225,7 @@ RSpec.describe FacilityAccountsReconciliationController do
 
       it "ignores attributes that are not permitted" do
         expect { perform_with(reconciled_note: "A note", actual_cost: "9999") }
-          .not_to change { order_detail.reload.actual_cost }
+          .not_to(change { order_detail.reload.actual_cost })
 
         expect(order_detail.reload.reconciled_note).to eq("A note")
       end

@@ -254,7 +254,7 @@ RSpec.describe OrderDetailsController do
         let(:params) { { actual_cost: 113, product_id: 999, user_id: 111, dispute_reason: "Dispute" } }
 
         it "is successful, but does not change any fields" do
-          expect { perform }.not_to change { order_detail.reload.attributes }
+          expect { perform }.not_to(change { order_detail.reload.attributes })
           expect(response).to be_redirect
         end
       end
@@ -314,7 +314,7 @@ RSpec.describe OrderDetailsController do
         end
 
         it "does not update the account" do
-          expect { perform_update }.not_to change { order_detail.reload.account }
+          expect { perform_update }.not_to(change { order_detail.reload.account })
         end
       end
 

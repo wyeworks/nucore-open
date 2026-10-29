@@ -35,8 +35,8 @@ class JournalCreationReminder < ApplicationRecord
   private
 
   def starts_before_ends
-    if starts_at && ends_at && (ends_at <= starts_at)
-      errors.add(:starts_at, :start_after_end)
-    end
+    return unless starts_at && ends_at && (ends_at <= starts_at)
+
+    errors.add(:starts_at, :start_after_end)
   end
 end

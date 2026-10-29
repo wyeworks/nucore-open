@@ -9,40 +9,38 @@ class UserPasswordController < ApplicationController
   def edit_current
     @user = current_user
 
-    unless @user.password_updatable?
-      render(:no_password, layout: "application") && return
-    end
+    render(:no_password, layout: "application") && return unless @user.password_updatable?
 
-    if request.post? && @user.update_password_confirm_current(params[:user])
-      @user.clean_up_passwords
-      flash[:notice] = I18n.t("user_password.edit.success")
-      redirect_to new_user_session_path
-    end
+    return unless request.post? && @user.update_password_confirm_current(params[:user])
+
+    @user.clean_up_passwords
+    flash[:notice] = I18n.t("user_password.edit.success")
+    redirect_to new_user_session_path
   end
 
   def reset
-    if request.post? && params[:user]
-      @user = User.find_by("LOWER(email) = LOWER(?)", params[:user][:email])
-      if @user
-        if @user.password_updatable?
-          @user.send_reset_password_instructions
-          flash[:notice] = I18n.t("user_password.reset.success", email: @user.email)
-          redirect_to new_user_session_path
-        else
-          flash.now[:error] = I18n.t("activerecord.errors.models.user.password_not_updatable")
-        end
+    return unless request.post? && params[:user]
+
+    @user = User.find_by("LOWER(email) = LOWER(?)", params[:user][:email])
+    if @user
+      if @user.password_updatable?
+        @user.send_reset_password_instructions
+        flash[:notice] = I18n.t("user_password.reset.success", email: @user.email)
+        redirect_to new_user_session_path
       else
-        flash.now[:error] = I18n.t("user_password.reset.not_found", email: params[:user][:email])
+        flash.now[:error] = I18n.t("activerecord.errors.models.user.password_not_updatable")
       end
+    else
+      flash.now[:error] = I18n.t("user_password.reset.not_found", email: params[:user][:email])
     end
   end
 
   private
 
   def no_user_allowed
-    if current_user
-      redirect_to action: :edit_current
-      false
-    end
+    return unless current_user
+
+    redirect_to action: :edit_current
+    false
   end
 end

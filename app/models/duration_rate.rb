@@ -54,18 +54,18 @@ class DurationRate < ApplicationRecord
   def rate_lesser_than_or_equal_to_base_rate
     return unless price_policy.usage_rate && rate
 
-    if rate > price_policy.usage_rate
-      errors.add(:base, "Rate must be lesser than or equal to Base rate")
-    end
+    return unless rate > price_policy.usage_rate
+
+    errors.add(:base, "Rate must be lesser than or equal to Base rate")
   end
 
   def subsidy_lesser_than_or_equal_to_rate
     return unless requires_subsidy?
     return unless rate && subsidy
 
-    if subsidy > rate
-      errors.add(:base, "Subsidy must be lesser than or equal to step rate")
-    end
+    return unless subsidy > rate
+
+    errors.add(:base, "Subsidy must be lesser than or equal to step rate")
   end
 
   def requires_subsidy?

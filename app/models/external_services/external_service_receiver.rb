@@ -4,7 +4,7 @@ class ExternalServiceReceiver < ApplicationRecord
   belongs_to :external_service
   belongs_to :receiver, polymorphic: true
 
-  validates_presence_of :external_service_id, :receiver_id, :response_data
+  validates :external_service_id, :receiver_id, :response_data, presence: true
 
   def show_url
     url = parsed_response_data[:show_url]

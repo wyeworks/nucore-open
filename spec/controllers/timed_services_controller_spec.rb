@@ -58,7 +58,7 @@ RSpec.describe TimedServicesController, type: :controller do
       it "does not change the pricing mode after creation" do
         sign_in(user)
 
-        expect { do_request }.not_to change { timed_service.reload.pricing_mode }
+        expect { do_request }.not_to(change { timed_service.reload.pricing_mode })
         expect(timed_service.reload).not_to be_duration_pricing_mode
       end
     end
@@ -127,7 +127,7 @@ RSpec.describe TimedServicesController, type: :controller do
         it "does not allow user to create duration billing timed service" do
           sign_in(user)
 
-          expect { do_request }.to_not change { TimedService.count }
+          expect { do_request }.to_not(change { TimedService.count })
           expect(@response.body).to(
             include(I18n.t("controllers.timed_services.create.duration_billing_not_authorized")),
           )

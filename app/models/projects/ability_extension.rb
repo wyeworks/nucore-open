@@ -10,13 +10,9 @@ module Projects
 
     def extend(user, resource)
       if resource.is_a?(Facility)
-        if user.operator_of?(resource) && !user.facility_billing_administrator_of?(resource)
-          ability.can(%i[create index new edit update show], Project)
-        end
+        ability.can(%i[create index new edit update show], Project) if user.operator_of?(resource) && !user.facility_billing_administrator_of?(resource)
 
-        if user.facility_staff_or_manager_of?(resource) || user.facility_director_of?(resource)
-          ability.can :cross_core_orders, Project
-        end
+        ability.can :cross_core_orders, Project if user.facility_staff_or_manager_of?(resource) || user.facility_director_of?(resource)
       elsif resource.is_a?(Project)
         if user.facility_staff_or_manager_of_any_facility?
           ability.can [:show, :edit, :update], Project do |project|

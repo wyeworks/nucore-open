@@ -347,7 +347,7 @@ RSpec.describe OrdersController do
         let(:other_account) { create(:setup_account) }
 
         it "does not change the account while flashing an error message" do
-          expect { do_request }.not_to change { order.reload.account }
+          expect { do_request }.not_to(change { order.reload.account })
           expect(flash[:error]).to include("error was encountered")
         end
       end
@@ -357,11 +357,11 @@ RSpec.describe OrdersController do
       before { @params.merge!(account_id: account.id) }
 
       it "does not change the account associated with the order" do
-        expect { do_request }.not_to change { order.reload.account }
+        expect { do_request }.not_to(change { order.reload.account })
       end
 
       it "does not change the account associated with the order_detail" do
-        expect { do_request }.not_to change { order_detail.reload.account }
+        expect { do_request }.not_to(change { order_detail.reload.account })
       end
 
       it_behaves_like "it uses add_to_cart to determine redirects"
@@ -562,7 +562,7 @@ RSpec.describe OrdersController do
 
         context "when ordering" do
           it "sends receipts" do
-            expect(PurchaseNotifier).to receive(:order_receipt).once { DummyNotifier.new }
+            expect(PurchaseNotifier).to(receive(:order_receipt).once { DummyNotifier.new })
             do_request
           end
         end
@@ -607,7 +607,7 @@ RSpec.describe OrdersController do
             before { @params[:send_notification] = "1" }
 
             it "sends receipts" do
-              expect(PurchaseNotifier).to receive(:order_receipt).once { DummyNotifier.new }
+              expect(PurchaseNotifier).to(receive(:order_receipt).once { DummyNotifier.new })
               do_request
             end
           end
@@ -630,7 +630,7 @@ RSpec.describe OrdersController do
           let(:facility) { create(:setup_facility, :with_order_notification) }
 
           it "sends order notifications" do
-            expect(PurchaseNotifier).to receive(:order_notification).once { DummyNotifier.new }
+            expect(PurchaseNotifier).to(receive(:order_notification).once { DummyNotifier.new })
             do_request
           end
 

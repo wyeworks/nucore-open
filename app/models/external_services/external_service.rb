@@ -3,7 +3,7 @@
 #
 # Represents a 3rd party service in use by the system
 class ExternalService < ApplicationRecord
-  validates_presence_of :location
+  validates :location, presence: true
 
   def self.matching_location(value)
     where("location like ?", "%#{value}%")

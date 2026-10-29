@@ -13,9 +13,9 @@ class PriceGroup < ApplicationRecord
   has_many   :account_price_group_members, class_name: "AccountPriceGroupMember"
   has_many   :price_group_discounts, dependent: :destroy
 
-  validates_presence_of   :facility_id, unless: :global?
-  validates_presence_of   :name
-  validates_uniqueness_of :name, scope: :facility_id, case_sensitive: false, unless: :deleted_at?
+  validates :facility_id, presence: { unless: :global? }
+  validates :name, presence: true
+  validates :name, uniqueness: { scope: :facility_id, case_sensitive: false, unless: :deleted_at? }
 
   default_scope -> { order(is_internal: :desc, display_order: :asc, name: :asc) }
 

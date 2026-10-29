@@ -49,6 +49,10 @@ class FacilityAccountsController < ApplicationController
   def new
   end
 
+  # GET /facilities/:facility_id/accounts/:id/edit
+  def edit
+  end
+
   # POST /facilities/:facility_id/accounts
   def create
     # The builder might add some errors to base. If those exist,
@@ -60,10 +64,6 @@ class FacilityAccountsController < ApplicationController
     else
       render action: "new"
     end
-  end
-
-  # GET /facilities/:facility_id/accounts/:id/edit
-  def edit
   end
 
   # PUT /facilities/:facility_id/accounts/:id
@@ -172,9 +172,9 @@ class FacilityAccountsController < ApplicationController
   end
 
   def set_account_types
-    if SettingsHelper.feature_on?("accounts.account_tabs")
-      @account_types = Account.config.account_types
-    end
+    return unless SettingsHelper.feature_on?("accounts.account_tabs")
+
+    @account_types = Account.config.account_types
   end
 
   def export_accounts_csv

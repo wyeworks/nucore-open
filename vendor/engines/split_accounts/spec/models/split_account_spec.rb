@@ -247,7 +247,7 @@ RSpec.describe SplitAccounts::SplitAccount, :enable_split_accounts, type: :model
       context "when subaccount unexpires" do
         before do
           split_account
-          expired_subaccount.expires_at = Time.current + 1.year
+          expired_subaccount.expires_at = 1.year.from_now
           expired_subaccount.save
         end
 

@@ -29,9 +29,9 @@ class OrdersController < ApplicationController
   end
 
   def protect_purchased_orders
-    if @order.state == "purchased"
-      redirect_to(receipt_order_path(@order)) && return
-    end
+    return unless @order.state == "purchased"
+
+    redirect_to(receipt_order_path(@order)) && return
   end
 
   # GET /orders/cart
@@ -48,6 +48,24 @@ class OrdersController < ApplicationController
         render json: { data: { count: order_details_count } }
       end
     end
+  end
+
+  # GET /orders
+  # all my orders
+  def index
+    # new or in process
+    @order_details = session_user.order_details.item_and_service_orders
+    @available_statuses = %w[pending all]
+    case params[:status]
+    when "pending"
+      @order_details = @order_details.new_or_inprocess
+    when "all"
+      @order_details = @order_details.purchased
+    else
+      redirect_to orders_status_path(status: "pending")
+      return
+    end
+    @order_details = @order_details.order("order_details.created_at DESC").paginate(page: params[:page])
   end
 
   # GET /orders/:id
@@ -91,7 +109,7 @@ class OrdersController < ApplicationController
     end
 
     ## handle a single instrument reservation
-    if items.size == 1 && (quantity = items.first[:quantity].to_i) == 1 && first_product.respond_to?(:reservations) # and product is reservable
+    if items.size == 1 && items.first[:quantity].to_i == 1 && first_product.respond_to?(:reservations) # and product is reservable
 
       # make a new cart w/ instrument (unless this order is empty.. then use that one)
       @order = acting_user.cart(session_user, @order.order_details.empty?)
@@ -169,10 +187,10 @@ class OrdersController < ApplicationController
     redirect_to params[:redirect_to].presence || order_path(@order)
 
     # clear out account on the order if its now empty
-    if !@order.destroyed? && @order.order_details.reload.empty?
-      @order.account_id = nil
-      @order.save!
-    end
+    return unless !@order.destroyed? && @order.order_details.reload.empty?
+
+    @order.account_id = nil
+    @order.save!
   end
 
   # GET  /orders/:id/choose_account
@@ -288,24 +306,6 @@ class OrdersController < ApplicationController
     @accounts = @order_details.collect(&:account).uniq
   end
 
-  # GET /orders
-  # all my orders
-  def index
-    # new or in process
-    @order_details = session_user.order_details.item_and_service_orders
-    @available_statuses = %w[pending all]
-    case params[:status]
-    when "pending"
-      @order_details = @order_details.new_or_inprocess
-    when "all"
-      @order_details = @order_details.purchased
-    else
-      redirect_to orders_status_path(status: "pending")
-      return
-    end
-    @order_details = @order_details.order("order_details.created_at DESC").paginate(page: params[:page])
-  end
-
   private
 
   def find_cart_product(product_id)
@@ -338,7 +338,7 @@ class OrdersController < ApplicationController
       @order.transaction do
         @order.invalidate
         @order.update!(account_id: account.id)
-      rescue ActiveRecord::ActiveRecordError => e
+      rescue ActiveRecord::ActiveRecordError
         success = false
         raise ActiveRecord::Rollback
       end

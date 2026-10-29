@@ -16,7 +16,7 @@ class Statement < ApplicationRecord
   belongs_to :parent_statement, class_name: "Statement", optional: true
   has_many :child_statements, class_name: "Statement", foreign_key: :parent_statement_id
 
-  validates_numericality_of :account_id, :facility_id, :created_by, only_integer: true
+  validates :account_id, :facility_id, :created_by, numericality: { only_integer: true }
   validates :parent_statement, presence: true, if: :parent_statement_id
   validates :invoice_date, presence: true
   validate :invoice_date_cannot_be_in_future, if: :invoice_date?
@@ -50,7 +50,7 @@ class Statement < ApplicationRecord
   scope :for_facilities, ->(facilities) { where(facility: facilities) if facilities.present? }
 
   def total_cost
-    statement_rows.inject(0) { |sum, row| sum += row.amount }
+    statement_rows.inject(0) { |sum, row| sum + row.amount }
   end
 
   def self.find_by_statement_id(query)
@@ -71,9 +71,7 @@ class Statement < ApplicationRecord
       .order(invoice_number: :desc)
       .pick(:invoice_number)
 
-    if highest_invoice_number.blank?
-      return 2
-    end
+    return 2 if highest_invoice_number.blank?
 
     highest_invoice_number.split("-").last.to_i + 1
   end
@@ -199,9 +197,9 @@ class Statement < ApplicationRecord
     earliest_fulfillment = order_details.filter_map(&:fulfilled_at).min
     return unless earliest_fulfillment
 
-    if invoice_date < earliest_fulfillment.to_date
-      errors.add(:invoice_date, :cannot_be_before_fulfillment)
-    end
+    return unless invoice_date < earliest_fulfillment.to_date
+
+    errors.add(:invoice_date, :cannot_be_before_fulfillment)
   end
 
   def has_order_details?

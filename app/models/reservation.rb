@@ -395,9 +395,9 @@ class Reservation < ApplicationRecord
   private
 
   def auto_save_order_detail
-    if (%w[actual_start_at actual_end_at reserve_start_at reserve_end_at] & saved_changes.keys).any?
-      order_detail.save
-    end
+    return unless (%w[actual_start_at actual_end_at reserve_start_at reserve_end_at] & saved_changes.keys).any?
+
+    order_detail.save
   end
 
   def in_grace_period?(at = Time.current)

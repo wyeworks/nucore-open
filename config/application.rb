@@ -62,9 +62,7 @@ module Nucore
           all_secrets = YAML.safe_load(ERB.new(File.read(secrets_file)).result, aliases: true) || {}
           env_secrets = all_secrets[Rails.env]
 
-          if env_secrets
-            secrets.merge!(env_secrets.deep_symbolize_keys)
-          end
+          secrets.merge!(env_secrets.deep_symbolize_keys) if env_secrets
         end
 
         secrets

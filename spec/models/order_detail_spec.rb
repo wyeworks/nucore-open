@@ -129,7 +129,7 @@ RSpec.describe OrderDetail do
 
           it "it does not assign a price policy" do
             expect { order_detail.assign_price_policy }
-              .not_to change { order_detail.price_policy }
+              .not_to(change { order_detail.price_policy })
           end
         end
 
@@ -151,7 +151,7 @@ RSpec.describe OrderDetail do
       context "when no compatible price policies exist" do
         it "it does not assign a price policy" do
           expect { order_detail.assign_price_policy }
-            .not_to change { order_detail.price_policy }
+            .not_to(change { order_detail.price_policy })
         end
       end
     end
@@ -684,7 +684,7 @@ RSpec.describe OrderDetail do
 
           it "does not update fulfilled_at on resolution" do
             expect { assign_price_policy }
-              .not_to change { order_detail.fulfilled_at }
+              .not_to(change { order_detail.fulfilled_at })
           end
 
           context "when assigning a price policy" do
@@ -1692,7 +1692,7 @@ RSpec.describe OrderDetail do
             context "admin does not waive the fee" do
               it "remains on its statement" do
                 expect { cancel_order_detail(admin: true, apply_cancel_fee: true) }
-                  .not_to change { order_detail.statement }
+                  .not_to(change { order_detail.statement })
               end
             end
           end
@@ -1980,7 +1980,7 @@ RSpec.describe OrderDetail do
     it "finds the items" do
       od2 = order_detail.dup.tap(&:save)
       od3 = order_detail.dup.tap(&:save)
-      od4 = order_detail.dup.tap(&:save) # not looked up
+      order_detail.dup.tap(&:save) # not looked up
 
       expect(described_class.where_ids_in([order_detail.id, od2.id, od3.id], batch_size: 2))
         .to contain_exactly(order_detail, od2, od3)

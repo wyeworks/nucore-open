@@ -269,11 +269,11 @@ RSpec.describe OrderDetails::Reconciler do
     end
 
     it "does not move fulfilled_at" do
-      expect { reconciler.unreconcile_all }.not_to change { order_detail.reload.fulfilled_at }
+      expect { reconciler.unreconcile_all }.not_to(change { order_detail.reload.fulfilled_at })
     end
 
     it "does not reprice the order detail" do
-      expect { reconciler.unreconcile_all }.not_to change { order_detail.reload.actual_cost }
+      expect { reconciler.unreconcile_all }.not_to(change { order_detail.reload.actual_cost })
     end
 
     context "when the price has changed since the order was fulfilled" do
@@ -284,7 +284,7 @@ RSpec.describe OrderDetails::Reconciler do
       end
 
       it "does not reprice the order detail" do
-        expect { reconciler.unreconcile_all }.not_to change { order_detail.reload.actual_cost }
+        expect { reconciler.unreconcile_all }.not_to(change { order_detail.reload.actual_cost })
       end
     end
 
@@ -294,7 +294,7 @@ RSpec.describe OrderDetails::Reconciler do
       end
 
       it "does not clear the cost" do
-        expect { reconciler.unreconcile_all }.not_to change { order_detail.reload.actual_cost }
+        expect { reconciler.unreconcile_all }.not_to(change { order_detail.reload.actual_cost })
       end
 
       it "does not turn it into a problem order" do

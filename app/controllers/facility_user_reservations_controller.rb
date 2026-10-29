@@ -43,9 +43,7 @@ class FacilityUserReservationsController < ApplicationController
 
   def cancel_with_fee!
     @order_detail.transaction do
-      unless @order_detail.cancel_reservation(session_user, admin: true, admin_with_cancel_fee: true)
-        raise ActiveRecord::Rollback
-      end
+      raise ActiveRecord::Rollback unless @order_detail.cancel_reservation(session_user, admin: true, admin_with_cancel_fee: true)
     end
   end
 

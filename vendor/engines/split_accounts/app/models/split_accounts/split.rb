@@ -15,15 +15,15 @@ module SplitAccounts
     validate :not_split_subaccount
 
     def not_self_referential
-      if parent_split_account == subaccount
-        errors.add(:subaccount, :not_self_referential)
-      end
+      return unless parent_split_account == subaccount
+
+      errors.add(:subaccount, :not_self_referential)
     end
 
     def not_split_subaccount
-      if subaccount.is_a?(SplitAccounts::SplitAccount)
-        errors.add(:subaccount, :not_split_subaccount)
-      end
+      return unless subaccount.is_a?(SplitAccounts::SplitAccount)
+
+      errors.add(:subaccount, :not_split_subaccount)
     end
 
     def self.available_subaccounts

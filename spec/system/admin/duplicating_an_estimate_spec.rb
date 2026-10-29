@@ -20,7 +20,7 @@ RSpec.describe "Estimate Duplication", :js do
   it "can duplicate an estimate" do
     visit facility_estimate_path(facility, estimate)
 
-    previous_cost = estimate.total_cost
+    estimate.total_cost
     new_price = 50
     item_price_policy.update(unit_cost: new_price)
 

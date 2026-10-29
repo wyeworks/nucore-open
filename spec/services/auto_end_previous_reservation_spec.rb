@@ -62,7 +62,7 @@ RSpec.describe AutoEndPreviousReservation do
           it "does not modify the reservation" do
             expect do
               subject
-            end.not_to change { previous_reservation.reload.actual_end_at }
+            end.not_to(change { previous_reservation.reload.actual_end_at })
           end
         end
 
@@ -72,7 +72,7 @@ RSpec.describe AutoEndPreviousReservation do
           it "does not modify the reservation" do
             expect do
               subject
-            end.not_to change { previous_reservation.reload.actual_end_at }
+            end.not_to(change { previous_reservation.reload.actual_end_at })
           end
         end
 
@@ -82,7 +82,7 @@ RSpec.describe AutoEndPreviousReservation do
           it "does not modify the reservation" do
             expect do
               subject
-            end.not_to change { previous_reservation.reload.actual_end_at }
+            end.not_to(change { previous_reservation.reload.actual_end_at })
           end
 
           it "does not send notification email" do

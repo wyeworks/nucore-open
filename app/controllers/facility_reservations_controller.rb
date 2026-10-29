@@ -19,6 +19,27 @@ class FacilityReservationsController < ApplicationController
     @active_tab = "admin_reservations"
   end
 
+  # GET /facilities/:facility_id/orders/:order_id/order_details/:order_detail_id/reservations/:id
+  def show
+    @order        = Order.find(params[:order_id])
+    @order_detail = OrderDetail.find(params[:order_detail_id])
+    @reservation  = @order_detail.reservation
+    @instrument   = @order_detail.product
+  end
+
+  # GET /facilities/:facility_id/instruments/:instrument_id/reservations/new
+  # for admin reservations
+  def new
+    @instrument = current_facility.instruments.find_by!(url_name: params[:instrument_id])
+    @reservation = @instrument.next_available_reservation ||
+                   @instrument.admin_reservations.build(duration_mins: @instrument.min_reserve_mins)
+    @reservation = @reservation.becomes(AdminReservation)
+    @reservation.round_reservation_times
+    @reservation_form = AdminReservationForm.new(@reservation)
+    @reservation_form.repeat_end_date = @reservation.reserve_end_at
+
+    render layout: "two_column"
+  end
   # GET /facilities/:facility_id/reservations
   # Provided by NewInprocessController
   # def index
@@ -36,6 +57,24 @@ class FacilityReservationsController < ApplicationController
     set_windows
 
     redirect_to facility_order_order_detail_reservation_path(current_facility, @order, @order_detail, @reservation) if @reservation.locked?
+  end
+
+  # POST /facilities/:facility_id/instruments/:instrument_id/reservations
+  # for admin reservations
+  def create
+    @instrument =
+      current_facility.instruments.find_by!(url_name: params[:instrument_id])
+    @reservation = @instrument.admin_reservations.new
+    @reservation_form = AdminReservationForm.new(@reservation)
+    @reservation_form.assign_attributes(admin_reservation_params.merge(created_by: current_user))
+    @reservation_form.assign_times_from_params(admin_reservation_params)
+
+    if @reservation_form.save
+      flash[:notice] = "The reservation has been created successfully."
+      redirect_to facility_instrument_schedule_url
+    else
+      render action: "new", layout: "two_column"
+    end
   end
 
   # PUT /facilities/:facility_id/orders/:order_id/order_details/:order_detail_id/reservations/:id
@@ -68,46 +107,6 @@ class FacilityReservationsController < ApplicationController
     end
 
     render action: "edit"
-  end
-
-  # GET /facilities/:facility_id/orders/:order_id/order_details/:order_detail_id/reservations/:id
-  def show
-    @order        = Order.find(params[:order_id])
-    @order_detail = OrderDetail.find(params[:order_detail_id])
-    @reservation  = @order_detail.reservation
-    @instrument   = @order_detail.product
-  end
-
-  # GET /facilities/:facility_id/instruments/:instrument_id/reservations/new
-  # for admin reservations
-  def new
-    @instrument = current_facility.instruments.find_by!(url_name: params[:instrument_id])
-    @reservation = @instrument.next_available_reservation ||
-                   @instrument.admin_reservations.build(duration_mins: @instrument.min_reserve_mins)
-    @reservation = @reservation.becomes(AdminReservation)
-    @reservation.round_reservation_times
-    @reservation_form = AdminReservationForm.new(@reservation)
-    @reservation_form.repeat_end_date = @reservation.reserve_end_at
-
-    render layout: "two_column"
-  end
-
-  # POST /facilities/:facility_id/instruments/:instrument_id/reservations
-  # for admin reservations
-  def create
-    @instrument =
-      current_facility.instruments.find_by!(url_name: params[:instrument_id])
-    @reservation = @instrument.admin_reservations.new
-    @reservation_form = AdminReservationForm.new(@reservation)
-    @reservation_form.assign_attributes(admin_reservation_params.merge(created_by: current_user))
-    @reservation_form.assign_times_from_params(admin_reservation_params)
-
-    if @reservation_form.save
-      flash[:notice] = "The reservation has been created successfully."
-      redirect_to facility_instrument_schedule_url
-    else
-      render action: "new", layout: "two_column"
-    end
   end
 
   # GET /facilities/:facility_id/instruments/:instrument_id/reservations/:id/edit_admin

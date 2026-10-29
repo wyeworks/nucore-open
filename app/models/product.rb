@@ -253,9 +253,7 @@ class Product < ApplicationRecord
     return false if price_policies.for_price_groups(group_ids).empty?
 
     # if there are current rules, but the user is not part of them
-    if price_policies.current.any?
-      return price_policies.current.for_price_groups(group_ids).where(can_purchase: true).any?
-    end
+    return price_policies.current.for_price_groups(group_ids).where(can_purchase: true).any? if price_policies.current.any?
 
     # if there are no current price policies, find the most recent price policy for each group.
     # if one of those can purchase, then allow the purchase

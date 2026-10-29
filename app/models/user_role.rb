@@ -85,11 +85,11 @@ class UserRole < ApplicationRecord
     create!(user:, role:, facility:)
   end
 
-  validates_presence_of :user_id
-  validates_inclusion_of :role, in: ->(_roles) { valid_roles }, message: "is not a valid value"
-  validates_uniqueness_of :role,
-                          scope: [:facility_id, :user_id],
-                          case_sensitive: false
+  validates :user_id, presence: true
+  validates :role, inclusion: { in: ->(_roles) { valid_roles }, message: "is not a valid value" }
+  validates :role,
+            uniqueness: { scope: [:facility_id, :user_id],
+                          case_sensitive: false }
   validates_with UserRoleFacilityValidator
 
   def facility_role?

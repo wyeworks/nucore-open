@@ -171,8 +171,8 @@ class Reports::AccountTransactionsReport
   end
 
   def originating_cross_core_facility(order_detail)
-    if order_detail.cross_core_for_originating_facility?
-      order_detail.order.cross_core_project.facility.abbreviation
-    end
+    return unless order_detail.cross_core_for_originating_facility?
+
+    order_detail.order.cross_core_project.facility.abbreviation
   end
 end

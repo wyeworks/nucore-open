@@ -16,9 +16,7 @@ module TabCountHelper
 
   def display_tab(title, link, args)
     active = tab_active?(args[:action])
-    if active
-      title << " (#{@order_details.try(:total_entries) || @order_details.count})"
-    end
+    title << " (#{@order_details.try(:total_entries) || @order_details.count})" if active
     content_tag(:li, class: active ? "active" : nil) do
       link_to title, link, id: ACTIONS_TO_COUNT_TYPE[args[:action]], class: "js-tab-counts"
     end

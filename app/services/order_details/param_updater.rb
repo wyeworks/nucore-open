@@ -75,9 +75,7 @@ class OrderDetails::ParamUpdater
 
     @order_detail.transaction do
       assign_price_changed_by_user
-      if @order_detail.reservation.present?
-        @order_detail.reservation.save_as_user(@editing_user) || raise(ActiveRecord::Rollback)
-      end
+      @order_detail.reservation.save_as_user(@editing_user) || raise(ActiveRecord::Rollback) if @order_detail.reservation.present?
       if order_status_id && order_status_id.to_i != @order_detail.order_status_id
         change_order_status(order_status_id, @options[:cancel_fee]) || raise(ActiveRecord::Rollback)
       else
@@ -127,9 +125,9 @@ class OrderDetails::ParamUpdater
     reservation_attrs = params.delete :reservation
     @order_detail.assign_attributes(params)
 
-    if @order_detail.time_data.is_a?(Reservation) && reservation_attrs
-      @order_detail.reservation.assign_times_from_params reservation_attrs
-    end
+    return unless @order_detail.time_data.is_a?(Reservation) && reservation_attrs
+
+    @order_detail.reservation.assign_times_from_params reservation_attrs
   end
 
   def assign_policy_and_prices
@@ -142,7 +140,7 @@ class OrderDetails::ParamUpdater
     @order_detail.update_order_status!(@editing_user, new_order_status, admin: true, apply_cancel_fee:)
     @order_detail.notify_purchaser_of_order_status
     true
-  rescue => e
+  rescue
     @order_detail.errors.add(:base, :changing_status)
   end
 

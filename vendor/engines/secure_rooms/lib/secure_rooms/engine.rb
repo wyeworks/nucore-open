@@ -52,9 +52,7 @@ module SecureRooms
     end
 
     initializer "model_core.factories", after: "factory_bot.set_factory_paths" do
-      if defined?(FactoryBot)
-        FactoryBot.definition_file_paths << File.expand_path("../../spec/factories", __dir__)
-      end
+      FactoryBot.definition_file_paths << File.expand_path("../../spec/factories", __dir__) if defined?(FactoryBot)
     end
   end
 end

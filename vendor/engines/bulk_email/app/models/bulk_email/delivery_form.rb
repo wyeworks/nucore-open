@@ -28,11 +28,11 @@ module BulkEmail
     end
 
     def deliver_all
-      if valid?
-        BulkEmail::Job.transaction do
-          recipients.each { |recipient| deliver(recipient) }
-          record_delivery
-        end
+      return unless valid?
+
+      BulkEmail::Job.transaction do
+        recipients.each { |recipient| deliver(recipient) }
+        record_delivery
       end
     end
 

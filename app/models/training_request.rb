@@ -4,7 +4,7 @@ class TrainingRequest < ApplicationRecord
   belongs_to :user
   belongs_to :product
 
-  validates_presence_of :user, :product
+  validates :user, :product, presence: true
   validates :user_id, uniqueness: { scope: :product_id, case_sensitive: false }
 
   validates_with ProductRequiresApprovalValidator

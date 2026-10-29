@@ -100,9 +100,9 @@ class TransactionsController < ApplicationController
   end
 
   def authorize_account
-    unless current_user.account_administrator_of?(Account.find(params[:account_id]))
-      raise ActiveRecord::RecordNotFound
-    end
+    return if current_user.account_administrator_of?(Account.find(params[:account_id]))
+
+    raise ActiveRecord::RecordNotFound
   end
 
   def initialize_chart_string_reassignment_form

@@ -24,9 +24,9 @@ class KioskReservationsController < ApplicationController
 
     @reservations_by_instrument = todays_reservations.group_by(&:product)
 
-    if params[:refresh]
-      render partial: "reservations_table", locals: { reservations: @actionable_reservations }
-    end
+    return unless params[:refresh]
+
+    render partial: "reservations_table", locals: { reservations: @actionable_reservations }
   end
 
   def begin
@@ -67,11 +67,9 @@ class KioskReservationsController < ApplicationController
     @facility = @instrument.facility
   rescue ActiveRecord::RecordNotFound
     flash[:error] = text("order_detail_removed")
-    if @order
-      redirect_to action: :index
-    else
-      raise
-    end
+    raise unless @order
+
+    redirect_to action: :index
   end
 
   def load_and_check_resources

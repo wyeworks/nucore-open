@@ -107,17 +107,17 @@ class OrderDetail < ApplicationRecord
     journal_date || statement_date
   end
 
-  validates_presence_of :product_id, :created_by
-  validates_numericality_of :quantity, only_integer: true, greater_than_or_equal_to: 1
-  validates_numericality_of :actual_cost, greater_than_or_equal_to: 0, if: ->(o) { o.actual_cost_changed? && !o.actual_cost.nil? }
-  validates_numericality_of :actual_subsidy, greater_than_or_equal_to: 0, if: ->(o) { o.actual_subsidy_changed? && !o.actual_cost.nil? }
-  validates_numericality_of :actual_total, greater_than_or_equal_to: 0, allow_nil: true
-  validates_presence_of :dispute_reason, if: :dispute_at
-  validates_presence_of :dispute_resolved_at, :dispute_resolved_reason, if: proc { dispute_resolved_reason.present? || dispute_resolved_at.present? }
+  validates :product_id, :created_by, presence: true
+  validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :actual_cost, numericality: { greater_than_or_equal_to: 0, if: ->(o) { o.actual_cost_changed? && !o.actual_cost.nil? } }
+  validates :actual_subsidy, numericality: { greater_than_or_equal_to: 0, if: ->(o) { o.actual_subsidy_changed? && !o.actual_cost.nil? } }
+  validates :actual_total, numericality: { greater_than_or_equal_to: 0, allow_nil: true }
+  validates :dispute_reason, presence: { if: :dispute_at }
+  validates :dispute_resolved_at, :dispute_resolved_reason, presence: { if: proc { dispute_resolved_reason.present? || dispute_resolved_at.present? } }
   # only do this validation if it hasn't been ordered yet. Update errors caused by notification sending
   # were being triggered on orders where the orderer had been removed from the account.
   validate :account_usable_by_order_owner?, if: ->(order_detail) { order_detail.account_id_changed? || order_detail.order.nil? || order_detail.ordered_at.blank? }
-  validates_length_of :note, maximum: 1000, allow_blank: true, allow_nil: true
+  validates :note, length: { maximum: 1000, allow_blank: true }
   validate :valid_manual_fulfilled_at
   validates :price_change_reason, presence: true, length: { minimum: 10, allow_blank: true }, if: :pricing_note_required?
   validate :project_must_be_active, if: :project_id_changed?
@@ -972,15 +972,15 @@ class OrderDetail < ApplicationRecord
   end
 
   def price_change_reason_option
-    if price_change_reason.present?
-      Settings.order_detail_price_change_reason_options.include?(price_change_reason) ? price_change_reason : "Other"
-    end
+    return unless price_change_reason.present?
+
+    Settings.order_detail_price_change_reason_options.include?(price_change_reason) ? price_change_reason : "Other"
   end
 
   def notify_purchaser_of_order_status
-    if product.email_purchasers_on_order_status_changes? && !reconciled?
-      Notifier.order_detail_status_changed(self).deliver_later
-    end
+    return unless product.email_purchasers_on_order_status_changes? && !reconciled?
+
+    Notifier.order_detail_status_changed(self).deliver_later
   end
 
   def self.where_order_number(query)
@@ -1107,7 +1107,7 @@ class OrderDetail < ApplicationRecord
       self.dispute_resolved_at = Time.zone.now
       self.reviewed_at         = Time.zone.now
     else
-      resolve_dispute = "0"
+      "0"
     end
   end
 
@@ -1118,17 +1118,17 @@ class OrderDetail < ApplicationRecord
   end
 
   def reset_dispute
-    if dispute_resolved_at_changed? && errors.any?
-      self.dispute_resolved_at = dispute_resolved_at_was
-      self.reviewed_at = reviewed_at_was
-    end
+    return unless dispute_resolved_at_changed? && errors.any?
+
+    self.dispute_resolved_at = dispute_resolved_at_was
+    self.reviewed_at = reviewed_at_was
   end
 
   def clear_statement
-    if statement.present?
-      statement.remove_order_detail(self)
-      self.statement = nil
-    end
+    return unless statement.present?
+
+    statement.remove_order_detail(self)
+    self.statement = nil
   end
 
   def set_reconciled_at
@@ -1148,8 +1148,8 @@ class OrderDetail < ApplicationRecord
   end
 
   def project_must_be_active
-    if project.present? && !project.active?
-      errors.add(:project_id, :project_is_inactive)
-    end
+    return unless project.present? && !project.active?
+
+    errors.add(:project_id, :project_is_inactive)
   end
 end

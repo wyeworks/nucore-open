@@ -115,18 +115,16 @@ class PriceGroupsController < ApplicationController
                                 .includes(:user)
                                 .joins(:user)
 
-    if search_term.present?
-      @user_members = @user_members.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: search_term.downcase)
-    end
+    @user_members = @user_members.where("LOWER(users.last_name) LIKE :search OR LOWER(users.first_name) LIKE :search OR LOWER(users.username) LIKE :search", search: search_term.downcase) if search_term.present?
 
     @user_members = @user_members.merge(User.sort_last_first)
     @user_members = paginate(@user_members)
   end
 
   def can_see_price_group_users!
-    unless SettingsHelper.feature_on?("pricing.user_based_price_groups") && @price_group_ability.can?(:read, UserPriceGroupMember)
-      raise ActiveRecord::RecordNotFound
-    end
+    return if SettingsHelper.feature_on?("pricing.user_based_price_groups") && @price_group_ability.can?(:read, UserPriceGroupMember)
+
+    raise ActiveRecord::RecordNotFound
   end
 
   def price_group_params

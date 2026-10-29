@@ -8,7 +8,7 @@ class OrderImport < ApplicationRecord
   belongs_to :error_file, class_name: "StoredFile", dependent: :destroy, optional: true
   belongs_to :creator, class_name: "User", foreign_key: :created_by
 
-  validates_presence_of :upload_file, :created_by
+  validates :upload_file, :created_by, presence: true
   attr_accessor :error_report
 
   delegate :download_url, to: :error_file, prefix: true, allow_nil: true
@@ -151,10 +151,10 @@ class OrderImport < ApplicationRecord
       raise ActiveRecord::Rollback if result.failed?
     end
 
-    if result.succeeded?
-      orders_to_notify.concat(processed_orders.to_a) if send_receipts?
-      discard_error_report
-    end
+    return unless result.succeeded?
+
+    orders_to_notify.concat(processed_orders.to_a) if send_receipts?
+    discard_error_report
   end
 
   def import_row(row) # TODO: refactor

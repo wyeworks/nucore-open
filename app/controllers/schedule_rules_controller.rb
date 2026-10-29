@@ -39,6 +39,11 @@ class ScheduleRulesController < ApplicationController
     partition_price_group_discounts
   end
 
+  # GET /schedule_rules/1/edit
+  def edit
+    partition_price_group_discounts
+  end
+
   # POST /schedule_rules
   def create
     @schedule_rule = @product.schedule_rules.new(schedule_rule_params)
@@ -49,11 +54,6 @@ class ScheduleRulesController < ApplicationController
     else
       render action: "new"
     end
-  end
-
-  # GET /schedule_rules/1/edit
-  def edit
-    partition_price_group_discounts
   end
 
   # PUT /schedule_rules/1
@@ -82,9 +82,7 @@ class ScheduleRulesController < ApplicationController
 
   def schedule_rule_params
     permitted_kwargs = { product_access_group_ids: [] }
-    if can?(:edit, PriceGroupDiscount)
-      permitted_kwargs[:price_group_discounts_attributes] = [:discount_percent, :price_group_id, :id]
-    end
+    permitted_kwargs[:price_group_discounts_attributes] = [:discount_percent, :price_group_id, :id] if can?(:edit, PriceGroupDiscount)
 
     params
       .require(:schedule_rule)
@@ -93,9 +91,7 @@ class ScheduleRulesController < ApplicationController
         :on_sun, :on_mon, :on_tue, :on_wed, :on_thu, :on_fri, :on_sat,
         **permitted_kwargs
       ).tap do |schedule_rule_params|
-        if @product.start_time_disabled?
-          schedule_rule_params.merge! ScheduleRule.full_day_attributes
-        end
+        schedule_rule_params.merge! ScheduleRule.full_day_attributes if @product.start_time_disabled?
       end
   end
 

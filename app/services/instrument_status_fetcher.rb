@@ -33,9 +33,7 @@ class InstrumentStatusFetcher
     return nil unless instrument.relay&.networked_relay?
 
     # When relays are disabled, save status as "on" without polling
-    unless SettingsHelper.relays_enabled_for_admin?
-      return InstrumentStatus.set_status_for(instrument, is_on: true)
-    end
+    return InstrumentStatus.set_status_for(instrument, is_on: true) unless SettingsHelper.relays_enabled_for_admin?
 
     InstrumentStatus.with_lock_for(instrument) do
       instrument.relay.get_status
@@ -57,9 +55,7 @@ class InstrumentStatusFetcher
     status = instrument.instrument_status
 
     # If relays are disabled, return last status or create a new "on" status
-    unless SettingsHelper.relays_enabled_for_admin?
-      return status || InstrumentStatus.new(on: true, instrument:)
-    end
+    return status || InstrumentStatus.new(on: true, instrument:) unless SettingsHelper.relays_enabled_for_admin?
 
     # Return last status or unknown state if none exists
     status || InstrumentStatus.new(instrument:, is_on: nil)

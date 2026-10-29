@@ -132,13 +132,13 @@ RSpec.describe SurveyResponse do
       expect_any_instance_of(OrderDetail).to_not receive :quantity=
       expect_any_instance_of(OrderDetail).to_not receive :note=
       expect_any_instance_of(OrderDetail).to_not receive :reference_id=
-      expect { survey_response.save! }.not_to change { order_detail.reload }
+      expect { survey_response.save! }.not_to(change { order_detail.reload })
     end
 
     it "updates quantity when order_detail params not present" do
       params[:order_detail] = {}
       params[:quantity] += 2
-      expect { survey_response.save! }.to change { order_detail.reload.quantity }
+      expect { survey_response.save! }.to(change { order_detail.reload.quantity })
     end
   end
 end

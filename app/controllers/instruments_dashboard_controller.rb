@@ -13,9 +13,9 @@ class InstrumentsDashboardController < ApplicationController
   end
 
   def public_dashboard
-    if params[:refresh]
-      render partial: "dashboard", locals: { reservations: @reservations }
-    end
+    return unless params[:refresh]
+
+    render partial: "dashboard", locals: { reservations: @reservations }
   end
 
   private

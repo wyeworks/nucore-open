@@ -16,9 +16,7 @@ class CreateSangerSequencingSubmissions < ActiveRecord::Migration[4.2]
       t.timestamps
     end
 
-    if Nucore::Database.mysql?
-      execute "ALTER TABLE sanger_sequencing_samples AUTO_INCREMENT = 11111"
-    end
+    execute "ALTER TABLE sanger_sequencing_samples AUTO_INCREMENT = 11111" if Nucore::Database.mysql?
 
     add_index :sanger_sequencing_samples, :submission_id
   end

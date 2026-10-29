@@ -16,19 +16,11 @@ class GlobalUserRolesController < GlobalSettingsController
     end
   end
 
-  def destroy
-    destroy_all_global_roles
-    redirect_to global_user_roles_url
-  end
-
   def edit
-    if @user == current_user
-      flash[:error] = translate("self_not_allowed", action: "change")
-      redirect_to global_user_roles_url
-    end
-  end
+    return unless @user == current_user
 
-  def search
+    flash[:error] = translate("self_not_allowed", action: "change")
+    redirect_to global_user_roles_url
   end
 
   def update
@@ -44,6 +36,14 @@ class GlobalUserRolesController < GlobalSettingsController
     flash[:error] = translate("update.failure", user: @user.username)
   ensure
     redirect_to global_user_roles_url
+  end
+
+  def destroy
+    destroy_all_global_roles
+    redirect_to global_user_roles_url
+  end
+
+  def search
   end
 
   private

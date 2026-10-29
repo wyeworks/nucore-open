@@ -83,9 +83,9 @@ class JournalRowBuilder
 
   # Validate the order_detail hasn't already been journaled
   def validate_order_detail_unjournaled(order_detail)
-    if order_detail.journal_id.present?
-      @errors << "#{order_detail} is already journaled in journal #{order_detail.journal_id}"
-    end
+    return unless order_detail.journal_id.present?
+
+    @errors << "#{order_detail} is already journaled in journal #{order_detail.journal_id}"
   end
 
   # Validate each journal_row account. This is necessary because an order_detail

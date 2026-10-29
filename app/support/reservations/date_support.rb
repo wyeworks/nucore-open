@@ -198,9 +198,7 @@ module Reservations::DateSupport
     # need to be reset to nil so the individual pieces will
     # take precedence, but only reset them if we're going to overwrite them
 
-    if reserve_attrs.keys.any? { |k| k.to_s.start_with?("reserve_start") }
-      self.reserve_start_at = nil
-    end
+    self.reserve_start_at = nil if reserve_attrs.keys.any? { |k| k.to_s.start_with?("reserve_start") }
     if reserve_attrs.keys.any? { |k| k.to_s.start_with?("reserve_end") } ||
        reserve_attrs.key?(:duration_mins) ||
        reserve_attrs.key?(:duration_days)
@@ -227,9 +225,9 @@ module Reservations::DateSupport
   def set_reserve_start_at
     return if reserve_start_at.present?
 
-    if @reserve_start_date && @reserve_start_hour && @reserve_start_min && @reserve_start_meridian
-      self.reserve_start_at = parse_usa_date(@reserve_start_date, "#{@reserve_start_hour}:#{@reserve_start_min.to_s.rjust(2, '0')} #{@reserve_start_meridian}")
-    end
+    return unless @reserve_start_date && @reserve_start_hour && @reserve_start_min && @reserve_start_meridian
+
+    self.reserve_start_at = parse_usa_date(@reserve_start_date, "#{@reserve_start_hour}:#{@reserve_start_min.to_s.rjust(2, '0')} #{@reserve_start_meridian}")
   end
 
   # set reserve_end_at based on duration_mins
@@ -246,9 +244,9 @@ module Reservations::DateSupport
   def set_actual_start_at
     return if actual_start_at.present?
 
-    if @actual_start_date && @actual_start_hour && @actual_start_min && @actual_start_meridian
-      self.actual_start_at = parse_usa_date(@actual_start_date, "#{@actual_start_hour}:#{@actual_start_min.to_s.rjust(2, '0')} #{@actual_start_meridian}")
-    end
+    return unless @actual_start_date && @actual_start_hour && @actual_start_min && @actual_start_meridian
+
+    self.actual_start_at = parse_usa_date(@actual_start_date, "#{@actual_start_hour}:#{@actual_start_min.to_s.rjust(2, '0')} #{@actual_start_meridian}")
   end
 
   def set_actual_end_at

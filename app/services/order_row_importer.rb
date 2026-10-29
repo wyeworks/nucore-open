@@ -122,14 +122,14 @@ class OrderRowImporter
   end
 
   def add_error(message, options = {})
-    if message.present?
-      if message.is_a?(Symbol)
-        options = options.reverse_merge(scope: "#{self.class.name.underscore}.errors")
-        message = I18n.t(message, **options)
-      end
+    return unless message.present?
 
-      @errors.add(message)
+    if message.is_a?(Symbol)
+      options = options.reverse_merge(scope: "#{self.class.name.underscore}.errors")
+      message = I18n.t(message, **options)
     end
+
+    @errors.add(message)
   end
 
   private
@@ -264,14 +264,12 @@ class OrderRowImporter
   end
 
   def validate_product_is_importable
-    unless product.class.in?(importable_product_types)
-      add_error(:invalid_product_type, type: product.class.model_name.human)
-    end
+    add_error(:invalid_product_type, type: product.class.model_name.human) unless product.class.in?(importable_product_types)
 
-    if product.is_a?(Service)
-      add_error(:requires_survey, type: product.class.model_name.human) if product.active_survey?
-      add_error(:requires_template, type: product.class.model_name.human) if product.active_template?
-    end
+    return unless product.is_a?(Service)
+
+    add_error(:requires_survey, type: product.class.model_name.human) if product.active_survey?
+    add_error(:requires_template, type: product.class.model_name.human) if product.active_template?
   end
 
   def validate_account
@@ -304,9 +302,9 @@ class OrderRowImporter
   end
 
   def validate_project_name
-    if field(:project_name).present? && project.nil?
-      add_error(:project_not_found)
-    end
+    return unless field(:project_name).present? && project.nil?
+
+    add_error(:project_not_found)
   end
 
   # TODO: This may be now unsued and could be removed

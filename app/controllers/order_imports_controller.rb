@@ -30,11 +30,9 @@ class OrderImportsController < ApplicationController
   end
 
   def error_report
-    if order_import.error_file_present?
-      redirect_to order_import.error_file_download_url, allow_other_host: true
-    else
-      raise ActiveRecord::RecordNotFound
-    end
+    raise ActiveRecord::RecordNotFound unless order_import.error_file_present?
+
+    redirect_to order_import.error_file_download_url, allow_other_host: true
   end
 
   private
@@ -42,9 +40,7 @@ class OrderImportsController < ApplicationController
   def create_params
     attributes = [:upload_file, :send_receipts]
 
-    if SettingsHelper.feature_off?("orders.import_always_fail_on_error")
-      attributes << :fail_on_error
-    end
+    attributes << :fail_on_error if SettingsHelper.feature_off?("orders.import_always_fail_on_error")
 
     params.require(:order_import).permit(*attributes)
   end

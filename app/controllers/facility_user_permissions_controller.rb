@@ -60,9 +60,7 @@ class FacilityUserPermissionsController < ApplicationController
     permitted = params.require(:facility_user_permission).permit(*allowed)
 
     other_flags = (FacilityUserPermission.all_permissions - [:read_access]).map(&:to_s)
-    if other_flags.any? { |flag| ActiveModel::Type::Boolean.new.cast(permitted[flag]) }
-      permitted[:read_access] = true
-    end
+    permitted[:read_access] = true if other_flags.any? { |flag| ActiveModel::Type::Boolean.new.cast(permitted[flag]) }
 
     permitted
   end

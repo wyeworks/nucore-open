@@ -73,9 +73,9 @@ module ApplicationHelper
 
   def render_if_exists(partial, options = {})
     # The third argument `true` checks for partials (prefixed with _)
-    if lookup_context.template_exists?(partial, lookup_context.prefixes, true)
-      render partial, options
-    end
+    return unless lookup_context.template_exists?(partial, lookup_context.prefixes, true)
+
+    render partial, options
   end
 
   def responsive?

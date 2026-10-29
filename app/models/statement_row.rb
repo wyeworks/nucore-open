@@ -4,7 +4,7 @@ class StatementRow < ApplicationRecord
   belongs_to :statement
   belongs_to :order_detail
 
-  validates_presence_of :order_detail_id, :statement_id
+  validates :order_detail_id, :statement_id, presence: true
 
   before_destroy { @parent_statement = statement }
 

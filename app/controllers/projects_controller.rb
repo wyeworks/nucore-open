@@ -65,6 +65,10 @@ class ProjectsController < ApplicationController
     end
   end
 
+  def show
+    @order_details = @project.order_details.order(ordered_at: :desc).paginate(page: params[:page])
+  end
+
   def new
   end
 
@@ -72,16 +76,12 @@ class ProjectsController < ApplicationController
     true
   end
 
-  def create
-    @project = current_facility.projects.new(project_params)
-    render action: :new unless save_project
-  end
-
   def edit
   end
 
-  def show
-    @order_details = @project.order_details.order(ordered_at: :desc).paginate(page: params[:page])
+  def create
+    @project = current_facility.projects.new(project_params)
+    render action: :new unless save_project
   end
 
   def update
@@ -118,11 +118,11 @@ class ProjectsController < ApplicationController
   end
 
   def save_project
-    if @project.save
-      flash[:notice] =
-        text(".#{action_name}.success", project_name: @project.name)
-      redirect_to facility_project_path(current_facility, @project)
-    end
+    return unless @project.save
+
+    flash[:notice] =
+      text(".#{action_name}.success", project_name: @project.name)
+    redirect_to facility_project_path(current_facility, @project)
   end
 
   def ability_resource

@@ -25,7 +25,7 @@ FactoryBot.define do
     end
 
     trait :with_exit do
-      exit_event { create(:event, occurred_at: Time.current + 2.hours) }
+      exit_event { create(:event, occurred_at: 2.hours.from_now) }
       exit_at { exit_event.occurred_at }
     end
 

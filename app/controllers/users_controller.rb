@@ -41,6 +41,10 @@ class UsersController < ApplicationController
     render layout: false
   end
 
+  # GET /facilities/:facility_id/users/:id
+  def show
+  end
+
   # GET /facilities/:facility_id/users/new
   def new
     redirect_to action: :new_external if SettingsHelper.feature_off?("users_authentication.lookup_netids")
@@ -49,6 +53,11 @@ class UsersController < ApplicationController
   # GET /facilities/:facility_id/users/new_external
   def new_external
     @user = User.new(email: params[:email], username: params[:email])
+    @user_form = user_form_class.new(@user)
+  end
+
+  # GET /facilities/:facility_id/users/:id/edit
+  def edit
     @user_form = user_form_class.new(@user)
   end
 
@@ -83,10 +92,6 @@ class UsersController < ApplicationController
                           .paginate(page: params[:page])
   end
 
-  # GET /facilities/:facility_id/users/:id
-  def show
-  end
-
   # GET /facilities/:facility_id/users/:user_id/access_list
   def access_list
     # Unsupported in cross-facility mode
@@ -108,11 +113,6 @@ class UsersController < ApplicationController
 
     update_access_list_approvals
     redirect_to facility_user_access_list_path(current_facility, @user)
-  end
-
-  # GET /facilities/:facility_id/users/:id/edit
-  def edit
-    @user_form = user_form_class.new(@user)
   end
 
   # PUT /facilities/:facility_id/users/:id
@@ -202,11 +202,11 @@ class UsersController < ApplicationController
         LogEvent.log(product_user, :delete, current_user)
       end
     end
-    if update_approvals.access_groups_changed?
-      add_flash(:notice,
-                I18n.t("controllers.users.access_list.scheduling_group_update.notice",
-                       update_count: update_approvals.access_groups_changed))
-    end
+    return unless update_approvals.access_groups_changed?
+
+    add_flash(:notice,
+              I18n.t("controllers.users.access_list.scheduling_group_update.notice",
+                     update_count: update_approvals.access_groups_changed))
   end
 
   def update_approvals

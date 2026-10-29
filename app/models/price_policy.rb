@@ -205,27 +205,27 @@ class PricePolicy < ApplicationRecord
 
   # TODO: Refactor
   def start_date_is_unique
-    type          = self.class.name.downcase.gsub(/pricepolicy$/, "")
-    price_group   = self.price_group
-    unless product.nil? || price_group.nil?
-      pp = if id.nil?
-             PricePolicy.find_by(price_group_id: price_group.id, product_id: product.id, start_date:)
-           else
-             PricePolicy.where(price_group_id: price_group.id, product_id: product.id, start_date:).where.not(id:).first
-           end
-      errors.add("start_date", "conflicts with an existing price rule") unless pp.nil?
-    end
+    self.class.name.downcase.gsub(/pricepolicy$/, "")
+    price_group = self.price_group
+    return if product.nil? || price_group.nil?
+
+    pp = if id.nil?
+           PricePolicy.find_by(price_group_id: price_group.id, product_id: product.id, start_date:)
+         else
+           PricePolicy.where(price_group_id: price_group.id, product_id: product.id, start_date:).where.not(id:).first
+         end
+    errors.add("start_date", "conflicts with an existing price rule") unless pp.nil?
   end
 
   def expire_date_within_fiscal_year
-    if expire_date.present? && start_date.present?
-      gen_exp_date = SettingsHelper.fiscal_year_end(start_date)
-      outside_fiscal_year = gen_exp_date < expire_date || expire_date <= start_date
+    return unless expire_date.present? && start_date.present?
 
-      if outside_fiscal_year
-        errors.add(:expire_date, "must be after #{start_date.to_date} and before #{gen_exp_date.to_date}")
-      end
-    end
+    gen_exp_date = SettingsHelper.fiscal_year_end(start_date)
+    outside_fiscal_year = gen_exp_date < expire_date || expire_date <= start_date
+
+    return unless outside_fiscal_year
+
+    errors.add(:expire_date, "must be after #{start_date.to_date} and before #{gen_exp_date.to_date}")
   end
 
   def set_default_subsidy

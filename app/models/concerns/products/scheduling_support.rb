@@ -134,9 +134,9 @@ module Products::SchedulingSupport
   end
 
   def update_schedule_name
-    if schedule.name == "#{name_was} Schedule"
-      schedule.update(name: "#{name} Schedule")
-    end
+    return unless schedule.name == "#{name_was} Schedule"
+
+    schedule.update(name: "#{name} Schedule")
   end
 
   class ReservationFinder

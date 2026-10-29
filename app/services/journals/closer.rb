@@ -64,11 +64,9 @@ class Journals::Closer
 
   def rollback_on_fail
     Journal.transaction requires_new: true do
-      if yield
-        true
-      else
-        raise ActiveRecord::Rollback
-      end
+      raise ActiveRecord::Rollback unless yield
+
+      true
     end
   end
 

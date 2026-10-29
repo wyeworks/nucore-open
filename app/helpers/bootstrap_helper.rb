@@ -16,13 +16,13 @@ module BootstrapHelper
     data.merge!(options[:data]) if options[:data]
     class_name = "#{class_name} #{options[:class_name]}" if options[:class_name]
 
-    if request.xhr?
-      content_tag :button,
-                  options[:text] || "Cancel",
-                  data:,
-                  class: class_name,
-                  type: "button"
-    end
+    return unless request.xhr?
+
+    content_tag :button,
+                options[:text] || "Cancel",
+                data:,
+                class: class_name,
+                type: "button"
   end
 
   def status_badge(order_detail)

@@ -14,11 +14,22 @@ class FacilityProductNotificationsController < ApplicationController
 
   before_action :load_instruments, only: [:new, :edit]
 
+  def index
+    @product_notifications =
+      current_facility
+      .product_notifications
+      .includes(:products)
+      .paginate(page: params[:page])
+  end
+
   def show
   end
 
   def new
     @product_notification = ProductNotification.new
+  end
+
+  def edit
   end
 
   def create
@@ -32,9 +43,6 @@ class FacilityProductNotificationsController < ApplicationController
     end
   end
 
-  def edit
-  end
-
   def update
     if @product_notification.update(facility_product_notification_params)
       flash[:notice] = t(".success")
@@ -44,14 +52,6 @@ class FacilityProductNotificationsController < ApplicationController
       load_instruments
       render :edit
     end
-  end
-
-  def index
-    @product_notifications =
-      current_facility
-      .product_notifications
-      .includes(:products)
-      .paginate(page: params[:page])
   end
 
   def destroy

@@ -17,19 +17,10 @@ class ProductAccessGroupsController < ApplicationController
   def index
   end
 
-  def edit
-  end
-
   def new
   end
 
-  def update
-    if @product_access_group.update(product_access_group_params)
-      flash[:notice] = "#{ProductAccessGroup.model_name.human} was successfully updated"
-      redirect_to [current_facility, @product, ProductAccessGroup]
-    else
-      render action: :edit
-    end
+  def edit
   end
 
   def create
@@ -39,6 +30,15 @@ class ProductAccessGroupsController < ApplicationController
       redirect_to [current_facility, @product, ProductAccessGroup]
     else
       render action: :new
+    end
+  end
+
+  def update
+    if @product_access_group.update(product_access_group_params)
+      flash[:notice] = "#{ProductAccessGroup.model_name.human} was successfully updated"
+      redirect_to [current_facility, @product, ProductAccessGroup]
+    else
+      render action: :edit
     end
   end
 

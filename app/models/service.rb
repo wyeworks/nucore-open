@@ -5,7 +5,7 @@ class Service < Product
   has_many :external_service_passers, as: :passer
   has_many :external_services, through: :external_service_passers
 
-  validates_presence_of :initial_order_status_id
+  validates :initial_order_status_id, presence: true
 
   def active_survey
     @active_survey ||=

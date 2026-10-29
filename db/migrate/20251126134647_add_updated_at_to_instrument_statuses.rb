@@ -14,9 +14,7 @@ class AddUpdatedAtToInstrumentStatuses < ActiveRecord::Migration[8.0]
     # Remove any existing index on instrument_id alone (Oracle creates these for FKs)
     existing_indexes = connection.indexes(:instrument_statuses)
     existing_indexes.each do |idx|
-      if idx.columns == ["instrument_id"]
-        remove_index :instrument_statuses, name: idx.name
-      end
+      remove_index :instrument_statuses, name: idx.name if idx.columns == ["instrument_id"]
     end
 
     # Add unique index on instrument_id to enforce one row per instrument

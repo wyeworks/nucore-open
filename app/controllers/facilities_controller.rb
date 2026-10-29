@@ -74,9 +74,7 @@ class FacilitiesController < ApplicationController
       @inactive_facilities = facilities.inactive
       raise ActiveRecord::RecordNotFound if facilities.empty?
 
-      if facilities.size == 1
-        redirect_to dashboard_facility_path(facilities.first)
-      end
+      redirect_to dashboard_facility_path(facilities.first) if facilities.size == 1
     end
   end
 

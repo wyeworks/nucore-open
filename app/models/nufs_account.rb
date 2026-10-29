@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class NufsAccount < Account
-  validates_uniqueness_of :account_number, message: "already exists", case_sensitive: false
-  validates_presence_of :expires_at
+  validates :account_number, uniqueness: { message: "already exists", case_sensitive: false }
+  validates :expires_at, presence: true
 
   validate { validate_account_number }
 

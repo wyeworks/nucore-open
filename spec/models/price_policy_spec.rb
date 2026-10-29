@@ -21,7 +21,7 @@ RSpec.describe PricePolicy do
       FactoryBot.create(
         :instrument_price_policy,
         start_date: Time.zone.now,
-        expire_date: Time.zone.now + 1.day,
+        expire_date: 1.day.from_now,
       )
     end
     let!(:overlapping_price_policy) do

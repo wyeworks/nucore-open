@@ -6,9 +6,7 @@ class EstimateDetailPresenter < SimpleDelegator
   def product_display
     parts = [product.name]
 
-    if product.facility != estimate.facility
-      parts << "(#{product.facility.name})"
-    end
+    parts << "(#{product.facility.name})" if product.facility != estimate.facility
 
     parts.join(" ")
   end

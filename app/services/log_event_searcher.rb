@@ -23,9 +23,7 @@ class LogEventSearcher
     result = result.merge(filter_event) if events.present?
     result = result.merge(filter_query) if query.present?
 
-    if invoice_number.present? || payment_source.present?
-      result = result.merge(filter_statements)
-    end
+    result = result.merge(filter_statements) if invoice_number.present? || payment_source.present?
 
     result
   end

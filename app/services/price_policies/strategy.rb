@@ -17,13 +17,11 @@ module PricePolicies
         @raw_duration = duration
         @handle_minimum_cost = minimum_cost
 
-        if [start_at, end_at, duration].all?(&:nil?)
-          raise ArgumentError, "Must specify start_at, end_at or duration"
-        end
+        raise ArgumentError, "Must specify start_at, end_at or duration" if [start_at, end_at, duration].all?(&:nil?)
 
-        if [start_at, end_at].all?(&:present?) && start_at > end_at
-          raise ArgumentError, "Wrong arguments: start_at > end_at"
-        end
+        return unless [start_at, end_at].all?(&:present?) && start_at > end_at
+
+        raise ArgumentError, "Wrong arguments: start_at > end_at"
       end
 
       # Calculate cost and subsidy based on price policy

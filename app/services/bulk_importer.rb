@@ -78,9 +78,7 @@ class BulkImporter
       save_execution(:done_errors)
     end
   rescue => e
-    unless e.is_a?(ActiveRecord::AdapterError)
-      save_failure(e.message || e.to_s)
-    end
+    save_failure(e.message || e.to_s) unless e.is_a?(ActiveRecord::AdapterError)
 
     raise
   end

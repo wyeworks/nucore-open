@@ -109,7 +109,7 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
 
       it "does not add the billing-mode-mismatched product to the order" do
         expect { order_import.process_upload! }
-          .not_to change { nonbillable_order.reload.order_details.count }
+          .not_to(change { nonbillable_order.reload.order_details.count })
       end
 
       it "completes the import without raising" do

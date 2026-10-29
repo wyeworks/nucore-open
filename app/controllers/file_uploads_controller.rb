@@ -143,9 +143,7 @@ class FileUploadsController < ApplicationController
   def create_product_survey_from_file
     @file = @product.stored_files.new(create_params.merge(created_by: session_user.id, name: "Order Form Template"))
     @file.transaction do
-      unless @product.stored_files.template.all?(&:destroy)
-        raise ActiveRecord::Rollback
-      end
+      raise ActiveRecord::Rollback unless @product.stored_files.template.all?(&:destroy)
 
       @file.save!
       @flash_notice = "Order File Template uploaded"

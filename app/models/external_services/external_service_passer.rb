@@ -8,7 +8,7 @@ class ExternalServicePasser < ApplicationRecord
   belongs_to :external_service
   belongs_to :passer, polymorphic: true
 
-  validates_presence_of :external_service_id, :passer_id
+  validates :external_service_id, :passer_id, presence: true
 
   scope :actives, -> { where(active: true) }
 end

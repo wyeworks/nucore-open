@@ -112,9 +112,9 @@ module OrderDetails
     def all_journals_and_statements_must_be_before_reconciliation_date
       return if reconciled_at.blank? || @order_details.blank?
 
-      if @order_details.any? { |od| od.journal_or_statement_date.beginning_of_day > reconciled_at }
-        errors.add(:reconciled_at, :after_all_journal_dates)
-      end
+      return unless @order_details.any? { |od| od.journal_or_statement_date.beginning_of_day > reconciled_at }
+
+      errors.add(:reconciled_at, :after_all_journal_dates)
     end
   end
 end

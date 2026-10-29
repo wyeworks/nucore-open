@@ -18,9 +18,7 @@ module Reservations::Validations
              unless: :admin?
 
     validates_each [:actual_start_at, :actual_end_at] do |record, attr, value|
-      if value && (Time.zone.now < value)
-        record.errors.add(attr.to_s, "cannot be in the future")
-      end
+      record.errors.add(attr.to_s, "cannot be in the future") if value && (Time.zone.now < value)
     end
 
     validate :holiday_access
@@ -42,12 +40,10 @@ module Reservations::Validations
   # Validation Methods
 
   def starts_before_ends
-    if reserve_start_at && reserve_end_at && (reserve_end_at <= reserve_start_at)
-      errors.add(:duration_mins, :zero_duration)
-    end
-    if actual_start_at && actual_end_at && (actual_end_at <= actual_start_at)
-      errors.add(:actual_duration_mins, :zero_duration)
-    end
+    errors.add(:duration_mins, :zero_duration) if reserve_start_at && reserve_end_at && (reserve_end_at <= reserve_start_at)
+    return unless actual_start_at && actual_end_at && (actual_end_at <= actual_start_at)
+
+    errors.add(:actual_duration_mins, :zero_duration)
   end
 
   def starts_before_cutoff
@@ -70,10 +66,10 @@ module Reservations::Validations
   def does_not_conflict_with_other_user_reservation
     res = conflicting_user_reservation
 
-    if res
-      msg = res.order.try(:==, order) ? :conflict_in_cart : :conflict
-      errors.add(:base, msg)
-    end
+    return unless res
+
+    msg = res.order.try(:==, order) ? :conflict_in_cart : :conflict
+    errors.add(:base, msg)
   end
 
   #
@@ -152,9 +148,7 @@ module Reservations::Validations
       diff = reserve_end_at - reserve_start_at # in seconds
 
       # If this is updating because we're in the grace period, use the old value for checking duration
-      if in_grace_period? && actual_start_at && reserve_start_at_changed? && reserve_start_at_was
-        diff = reserve_end_at - reserve_start_at_was
-      end
+      diff = reserve_end_at - reserve_start_at_was if in_grace_period? && actual_start_at && reserve_start_at_changed? && reserve_start_at_was
 
       diff <= product.max_reserve_mins.minutes
     end
@@ -204,9 +198,9 @@ module Reservations::Validations
   end
 
   def in_the_future
-    if reserve_start_at_changed? && !in_the_future?
-      errors.add(:reserve_start_at, :in_past)
-    end
+    return unless reserve_start_at_changed? && !in_the_future?
+
+    errors.add(:reserve_start_at, :in_past)
   end
 
   # checks that the reservation is within the longest window for the groups the user is in

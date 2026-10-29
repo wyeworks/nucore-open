@@ -24,12 +24,12 @@ module SangerSequencing
       @permitted_submission_params ||= []
     end
 
+    def show
+    end
+
     def new
       number_of_samples.times { @submission.create_prefilled_sample } if @submission.samples.none?
       render :edit
-    end
-
-    def show
     end
 
     def edit

@@ -28,9 +28,7 @@ module EmailListAttribute
       validate do |record|
         # A simple validation that just makes sure there's an @ symbol in between
         # some characters.
-        unless public_send(attribute_name).all? { |email| email =~ /.@\w/ }
-          record.errors.add(attribute_name, :invalid)
-        end
+        record.errors.add(attribute_name, :invalid) unless public_send(attribute_name).all? { |email| email =~ /.@\w/ }
       end
     end
   end

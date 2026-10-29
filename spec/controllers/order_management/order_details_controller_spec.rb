@@ -540,7 +540,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
             it "still has a price policy" do
               expect { do_request }
-                .to_not change { order_detail.reload.price_policy.present? }
+                .to_not(change { order_detail.reload.price_policy.present? })
             end
 
             it_behaves_like "it was removed from its statement"
@@ -577,7 +577,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
               it "still has a price policy" do
                 expect { do_request }
-                  .to_not change { order_detail.reload.price_policy.present? }
+                  .to_not(change { order_detail.reload.price_policy.present? })
               end
 
               it "is priced according to the price policy" do
@@ -589,7 +589,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
 
               it "remains on its statement" do
                 expect { do_request }
-                  .to_not change { order_detail.reload.statement }
+                  .to_not(change { order_detail.reload.statement })
               end
             end
 
@@ -776,7 +776,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
                     note: "i am a note",
                   }
 
-                  expect { do_request }.not_to change { order_detail.reload.price_changed_by_user }
+                  expect { do_request }.not_to(change { order_detail.reload.price_changed_by_user })
                 end
               end
 
@@ -1128,7 +1128,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
               price_change_reason: "trying to override the price",
             }
 
-            expect { do_request }.not_to change { order_detail.reload.actual_cost }
+            expect { do_request }.not_to(change { order_detail.reload.actual_cost })
           end
 
           it "does not require a price change reason when a price is submitted" do

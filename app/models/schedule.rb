@@ -18,7 +18,7 @@ class Schedule < ApplicationRecord
     has_many :reservations
   end
 
-  validates_presence_of :facility
+  validates :facility, presence: true
 
   scope :active, -> { where(id: Instrument.not_archived.with_schedule.select(:schedule_id)) }
 

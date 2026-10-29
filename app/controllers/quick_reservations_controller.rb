@@ -58,9 +58,7 @@ class QuickReservationsController < ApplicationController
       end
 
       if order_purchaser.success?
-        if @reservation.can_switch_instrument_on?
-          @reservation.start_reservation!
-        end
+        @reservation.start_reservation! if @reservation.can_switch_instrument_on?
 
         if @reservation.started?
           flash[:notice] = "Reservation started"
@@ -86,9 +84,7 @@ class QuickReservationsController < ApplicationController
 
   # POST /facilities/:facility_id/instruments/:instrument_id/quick_reservations/start
   def start
-    if @reservation&.movable_to_now? && @reservation&.move_to_earliest
-      @reservation&.start_reservation!
-    end
+    @reservation&.start_reservation! if @reservation&.movable_to_now? && @reservation&.move_to_earliest
 
     if @reservation&.started?
       flash[:notice] = "Reservation started"

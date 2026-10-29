@@ -108,9 +108,9 @@ class FacilityAccountsReconciliationController < ApplicationController
   def whole_statement_error
     return text("facility_accounts_reconciliation.index_by_statement.statement_blank") if selected_statement_ids.blank?
 
-    if SettingsHelper.feature_on?("billing.show_reconciliation_deposit_number") && update_params[:bulk_deposit_number].blank?
-      text("facility_accounts_reconciliation.index_by_statement.deposit_number_blank")
-    end
+    return unless SettingsHelper.feature_on?("billing.show_reconciliation_deposit_number") && update_params[:bulk_deposit_number].blank?
+
+    text("facility_accounts_reconciliation.index_by_statement.deposit_number_blank")
   end
 
   def selected_statement_ids

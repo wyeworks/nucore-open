@@ -145,9 +145,9 @@ class OrderManagement::OrderDetailsController < ApplicationController
       @order_statuses = OrderStatus.non_protected_statuses(current_facility)
     end
 
-    unless @order_detail.unrecoverable? || can?(:mark_unrecoverable, OrderDetail)
-      @order_statuses.reject! { |status| status.name == OrderStatus::UNRECOVERABLE }
-    end
+    return if @order_detail.unrecoverable? || can?(:mark_unrecoverable, OrderDetail)
+
+    @order_statuses.reject! { |status| status.name == OrderStatus::UNRECOVERABLE }
   end
 
   def edit_disabled?

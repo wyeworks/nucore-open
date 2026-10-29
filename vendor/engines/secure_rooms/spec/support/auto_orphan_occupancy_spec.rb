@@ -104,7 +104,7 @@ RSpec.describe SecureRooms::AutoOrphanOccupancy do
       end
 
       it "does not orphan the occupancy" do
-        expect { action.perform }.not_to change { occupancy.reload.orphan? }
+        expect { action.perform }.not_to(change { occupancy.reload.orphan? })
       end
 
       it "does not involve the order handler" do
@@ -126,7 +126,7 @@ RSpec.describe SecureRooms::AutoOrphanOccupancy do
       end
 
       it "does not orphan the occupancy" do
-        expect { action.perform }.not_to change { occupancy.reload.orphan? }
+        expect { action.perform }.not_to(change { occupancy.reload.orphan? })
       end
 
       it "does not involve the order handler" do

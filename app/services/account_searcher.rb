@@ -23,9 +23,7 @@ class AccountSearcher
   end
 
   def apply_account_filters(scope, filter_params)
-    if filter_params[:account_type].present?
-      scope = scope.where(type: filter_params[:account_type])
-    end
+    scope = scope.where(type: filter_params[:account_type]) if filter_params[:account_type].present?
 
     scope =
       if filter_params[:suspended] == "true"

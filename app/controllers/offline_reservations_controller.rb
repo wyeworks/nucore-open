@@ -15,6 +15,9 @@ class OfflineReservationsController < ApplicationController
     @reservation = @instrument.offline_reservations.new
   end
 
+  def edit
+  end
+
   def create
     @reservation = @instrument.offline_reservations.new(create_params)
     @reservation.assign_attributes(created_by: current_user)
@@ -37,9 +40,6 @@ class OfflineReservationsController < ApplicationController
     end
 
     redirect_to facility_instrument_schedule_path
-  end
-
-  def edit
   end
 
   def update

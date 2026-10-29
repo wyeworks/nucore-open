@@ -8,9 +8,7 @@ class ServicesController < ProductsCommonController
   def permitted_params
     params = super + %i[admin_skip_order_form]
 
-    if current_facility.sanger_sequencing_enabled?
-      params += %i[sanger_sequencing_enabled]
-    end
+    params += %i[sanger_sequencing_enabled] if current_facility.sanger_sequencing_enabled?
 
     params
   end
@@ -38,16 +36,16 @@ class ServicesController < ProductsCommonController
       .matching_location(new_sanger_sequencing_submission_path)
       .first
 
-    if sanger_external_service.blank?
-      Service.transaction do
-        external_service = UrlService.find_or_create_by(
-          location: new_sanger_sequencing_submission_url,
-        )
-        ExternalServicePasser.create!(
-          external_service:,
-          passer: @product,
-        )
-      end
+    return if sanger_external_service.present?
+
+    Service.transaction do
+      external_service = UrlService.find_or_create_by(
+        location: new_sanger_sequencing_submission_url,
+      )
+      ExternalServicePasser.create!(
+        external_service:,
+        passer: @product,
+      )
     end
   end
 end

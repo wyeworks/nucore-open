@@ -78,9 +78,9 @@ class NavTab::LinkCollection
   end
 
   def admin_billing
-    if single_facility? && (ability.can?(:manage_billing, facility) || ability.can?(:transactions, facility))
-      NavTab::Link.new(tab: :admin_billing, url: billing_tab_landing_path)
-    end
+    return unless single_facility? && (ability.can?(:manage_billing, facility) || ability.can?(:transactions, facility))
+
+    NavTab::Link.new(tab: :admin_billing, url: billing_tab_landing_path)
   end
 
   def admin_only
@@ -90,35 +90,35 @@ class NavTab::LinkCollection
   end
 
   def admin_orders
-    if single_facility? && ability.can?(:administer, Order)
-      NavTab::Link.new(tab: :admin_orders, url: facility_orders_path(facility))
-    end
+    return unless single_facility? && ability.can?(:administer, Order)
+
+    NavTab::Link.new(tab: :admin_orders, url: facility_orders_path(facility))
   end
 
   def admin_products
-    if single_facility? && ability.can?(:administer, Product)
-      NavTab::Link.new(tab: :admin_products, url: facility_products_path(facility))
-    end
+    return unless single_facility? && ability.can?(:administer, Product)
+
+    NavTab::Link.new(tab: :admin_products, url: facility_products_path(facility))
   end
 
   cattr_accessor(:report_tab_subnav) { [:general_reports, :instrument_utilization_reports] }
 
   def admin_reports
-    if single_facility? && ability.can?(:manage, Reports::ReportsController)
-      NavTab::Link.new(
-        tab: :admin_reports,
-        subnav: report_tab_subnav.map { |method_name| send(method_name) },
-      )
-    end
+    return unless single_facility? && ability.can?(:manage, Reports::ReportsController)
+
+    NavTab::Link.new(
+      tab: :admin_reports,
+      subnav: report_tab_subnav.map { |method_name| send(method_name) },
+    )
   end
 
   def admin_reservations
-    if single_facility? && ability.can?(:administer, Reservation)
-      NavTab::Link.new(
-        tab: :admin_reservations,
-        url: timeline_facility_reservations_path(facility),
-      )
-    end
+    return unless single_facility? && ability.can?(:administer, Reservation)
+
+    NavTab::Link.new(
+      tab: :admin_reservations,
+      url: timeline_facility_reservations_path(facility),
+    )
   end
 
   def admin_users
@@ -128,9 +128,9 @@ class NavTab::LinkCollection
       ability.can?(:manage, Account),
     ].any?
 
-    if single_facility? && has_permission
-      NavTab::Link.new(tab: :admin_users, url: facility_users_path(facility))
-    end
+    return unless single_facility? && has_permission
+
+    NavTab::Link.new(tab: :admin_users, url: facility_users_path(facility))
   end
 
   def admin_facility
@@ -144,23 +144,23 @@ class NavTab::LinkCollection
   end
 
   def admin_projects
-    if single_facility? && ability.can?(:index, Project)
-      NavTab::Link.new(
-        tab: :admin_projects,
-        text: Project.model_name.human(count: 2),
-        url: facility_projects_path(facility),
-      )
-    end
+    return unless single_facility? && ability.can?(:index, Project)
+
+    NavTab::Link.new(
+      tab: :admin_projects,
+      text: Project.model_name.human(count: 2),
+      url: facility_projects_path(facility),
+    )
   end
 
   def admin_estimates
-    if single_facility? && ability.can?(:index, Estimate) && SettingsHelper.feature_on?(:show_estimates_option)
-      NavTab::Link.new(
-        tab: :admin_estimates,
-        text: Estimate.model_name.human(count: 2),
-        url: facility_estimates_path(facility),
-      )
-    end
+    return unless single_facility? && ability.can?(:index, Estimate) && SettingsHelper.feature_on?(:show_estimates_option)
+
+    NavTab::Link.new(
+      tab: :admin_estimates,
+      text: Estimate.model_name.human(count: 2),
+      url: facility_estimates_path(facility),
+    )
   end
 
   def billing_tab_landing_path

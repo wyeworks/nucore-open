@@ -13,22 +13,22 @@ class InstrumentRelaysController < ApplicationController
   def index
   end
 
-  # GET /facilities/:facility_id/instrument/:instrument_id/relays/:id/edit
-  def edit
-    @relay = @product.relay
-  end
-
-  def update
-    handle_relay("edit")
-  end
-
   # GET /facilities/:facility_id/instrument/:instrument_id/relays/new
   def new
     @relay = @product.build_relay
   end
 
+  # GET /facilities/:facility_id/instrument/:instrument_id/relays/:id/edit
+  def edit
+    @relay = @product.relay
+  end
+
   def create
     handle_relay("new")
+  end
+
+  def update
+    handle_relay("edit")
   end
 
   private
@@ -39,9 +39,7 @@ class InstrumentRelaysController < ApplicationController
     control_mechanism = params[:relay][:control_mechanism]
     @relay = @product.replace_relay(relay_params, control_mechanism)
 
-    if @relay&.valid? || (@relay.nil? && old_id.present?)
-      LogEvent.log(@product, :relay_update, current_user, metadata: { control_mechanism: })
-    end
+    LogEvent.log(@product, :relay_update, current_user, metadata: { control_mechanism: }) if @relay&.valid? || (@relay.nil? && old_id.present?)
 
     @relay ||= Relay.new
     if @relay.valid?

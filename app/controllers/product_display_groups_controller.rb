@@ -13,6 +13,9 @@ class ProductDisplayGroupsController < ApplicationController
   def new
   end
 
+  def edit
+  end
+
   def create
     if @product_display_group.save
       set_positions
@@ -24,9 +27,6 @@ class ProductDisplayGroupsController < ApplicationController
       flash.now[:alert] = error.presence || text("create.error")
       render :new
     end
-  end
-
-  def edit
   end
 
   def update
@@ -41,7 +41,7 @@ class ProductDisplayGroupsController < ApplicationController
   # it `invalid?`. The error is raised on attribute assignment. This should only
   # be an edge case/race condition with multiple tabs, so rescuing the error seemed
   # to be the simplest solution rather than other convoluted logic to work around the issue.
-  rescue ActiveRecord::RecordInvalid => e
+  rescue ActiveRecord::RecordInvalid
     flash.now[:alert] = @product_display_group.associated_errors.flat_map(&:full_messages).to_sentence
     render :edit
   end

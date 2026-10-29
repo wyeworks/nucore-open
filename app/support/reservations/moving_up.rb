@@ -30,11 +30,10 @@ module Reservations::MovingUp
     if earliest_found
       self.reserve_start_at = earliest_found.reserve_start_at.change(sec: 0)
       self.reserve_end_at = earliest_found.reserve_end_at.change(sec: 0)
-      if save
-        return true
-      else
-        errors.add(:base, :move_failed)
-      end
+      return true if save
+
+      errors.add(:base, :move_failed)
+
     else
       errors.add(:base, :cannot_move)
     end

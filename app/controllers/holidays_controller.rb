@@ -13,15 +13,15 @@ class HolidaysController < ApplicationController
   def new
   end
 
+  def edit
+  end
+
   def create
     if @holiday.save
       redirect_to holidays_path, notice: t(".success")
     else
       render :new
     end
-  end
-
-  def edit
   end
 
   def update

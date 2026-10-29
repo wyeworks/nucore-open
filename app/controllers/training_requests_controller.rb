@@ -10,6 +10,13 @@ class TrainingRequestsController < ApplicationController
 
   load_and_authorize_resource
 
+  # GET /facilities/:facility_id/training_requests
+  def index
+    @training_requests = current_facility.training_requests.includes(:product, :user).order(sort_clause)
+
+    render layout: "two_column"
+  end
+
   # GET /facilities/:facility_id/products/:product_id/training_requests/new
   def new
     load_product
@@ -26,13 +33,6 @@ class TrainingRequestsController < ApplicationController
       flash[:error] = t(".failure", product: @product)
     end
     redirect_to facility_path(current_facility)
-  end
-
-  # GET /facilities/:facility_id/training_requests
-  def index
-    @training_requests = current_facility.training_requests.includes(:product, :user).order(sort_clause)
-
-    render layout: "two_column"
   end
 
   # DELETE /facilities/:facility_id/training_requests/:id

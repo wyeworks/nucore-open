@@ -46,6 +46,11 @@ class FacilityStatementsController < ApplicationController
     (params[:statement_search_form] || empty_params).permit(:date_range_start, :date_range_end, :status, accounts: [], account_admins: [], facilities: [])
   end
 
+  # GET /facilities/:facility_id/statements/:id
+  def show
+    @statement = Statement.find(params[:id])
+  end
+
   # GET /facilities/:facility_id/statements/new
   def new
     order_details = OrderDetail.need_statement(@facility)
@@ -61,9 +66,9 @@ class FacilityStatementsController < ApplicationController
     @date_range_field = @search_form.date_params[:field]
     @order_details = @search.order_details.reorder(sort_clause)
 
-    if can_set_invoice_date?
-      @action_date_field = { invoice_date: Time.current.to_date }
-    end
+    return unless can_set_invoice_date?
+
+    @action_date_field = { invoice_date: Time.current.to_date }
   end
 
   # POST /facilities/:facility_id/statements
@@ -75,9 +80,7 @@ class FacilityStatementsController < ApplicationController
       parent_invoice_number: params[:parent_invoice_number],
     }
 
-    if can_set_invoice_date? && params[:invoice_date].present?
-      creator_params[:invoice_date] = params[:invoice_date]
-    end
+    creator_params[:invoice_date] = params[:invoice_date] if can_set_invoice_date? && params[:invoice_date].present?
 
     @statement_creator = StatementCreator.new(creator_params)
 
@@ -143,11 +146,6 @@ class FacilityStatementsController < ApplicationController
     end
 
     redirect_to [current_facility, statement]
-  end
-
-  # GET /facilities/:facility_id/statements/:id
-  def show
-    @statement = Statement.find(params[:id])
   end
 
   private

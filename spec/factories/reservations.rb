@@ -7,9 +7,7 @@ FactoryBot.define do
     end
 
     after(:build) do |reservation, evaluator|
-      if evaluator.duration.present? && reservation.reserve_start_at.present?
-        reservation.reserve_end_at = reservation.reserve_start_at + evaluator.duration
-      end
+      reservation.reserve_end_at = reservation.reserve_start_at + evaluator.duration if evaluator.duration.present? && reservation.reserve_start_at.present?
     end
 
     reserve_start_at { Time.zone.parse("#{Date.today} 10:00:00") + 1.day }

@@ -65,8 +65,8 @@ class Account < ApplicationRecord
     where(id: OrderDetail.for_facility(facility).select(:account_id).distinct)
   }
 
-  validates_presence_of :account_number, :description, :expires_at, :created_by, :type
-  validates_length_of :description, maximum: 50
+  validates :account_number, :description, :expires_at, :created_by, :type, presence: true
+  validates :description, length: { maximum: 50 }
 
   validate { errors.add(:base, :missing_owner) if missing_owner? }
 

@@ -47,7 +47,7 @@ RSpec.describe ProductDisplayGroup do
   it "does not affect the relay of an instrument" do
     facility = create(:setup_facility)
     instrument = create(:setup_instrument, facility:, relay: build(:relay))
-    group = create(:product_display_group, facility:, products: [instrument])
+    create(:product_display_group, facility:, products: [instrument])
     expect(instrument.reload.relay).to be_present
   end
 

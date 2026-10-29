@@ -32,7 +32,7 @@ RSpec.describe Cart do
     context "destroy_all_instrument_only_carts" do
       let(:all_orders) { Order.all }
       before :each do
-        Cart.destroy_all_instrument_only_carts(Time.zone.now + 2.minutes)
+        Cart.destroy_all_instrument_only_carts(2.minutes.from_now)
       end
 
       it "should have removed only the orders it should have" do

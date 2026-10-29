@@ -41,9 +41,7 @@ RSpec.describe "Billing mode workflows" do
 
         visit facility_transactions_path(facility)
 
-        unless statements_table_viewhooks_present?
-          expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
-        end
+        expect(page).to have_selector("tr td.nowrap", text: "Reconciled") unless statements_table_viewhooks_present?
       end
     end
 
@@ -75,9 +73,7 @@ RSpec.describe "Billing mode workflows" do
 
       visit facility_transactions_path(facility)
 
-      unless statements_table_viewhooks_present?
-        expect(page).to have_selector("tr td.nowrap", text: "Reconciled")
-      end
+      expect(page).to have_selector("tr td.nowrap", text: "Reconciled") unless statements_table_viewhooks_present?
     end
   end
 end
