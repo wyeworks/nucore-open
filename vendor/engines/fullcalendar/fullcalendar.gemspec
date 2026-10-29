@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.description = "FullCalendar for Rails Asset Pipeline."
 
   s.files = Dir["{app,config,db,lib}/**/*", "Rakefile", "README.md"]
-  s.test_files = Dir["test/**/*"]
 
   s.add_dependency "momentjs-rails"
+  s.metadata["rubygems_mfa_required"] = "true"
 end

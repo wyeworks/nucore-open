@@ -16,5 +16,5 @@ Gem::Specification.new do |s|
   s.description = "Optional Secure Room feature for NUcore"
 
   s.files = Dir["{app,config,db,lib}/**/*", "README.md"]
-  s.test_files = Dir["spec/**/*"]
+  s.metadata["rubygems_mfa_required"] = "true"
 end

@@ -6,43 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 16
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: TreatCommentsAsGroupSeparators, ConsiderPunctuation, Include.
-# Include: **/*.gemfile, **/Gemfile, **/gems.rb
-Bundler/OrderedGems:
-  Exclude:
-    - 'Gemfile'
-
-# Offense count: 5
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Severity, Include.
-# Include: **/*.gemspec
-Gemspec/DeprecatedAttributeAssignment:
-  Exclude:
-    - 'vendor/engines/fine_uploader/fine_uploader.gemspec'
-    - 'vendor/engines/fullcalendar/fullcalendar.gemspec'
-    - 'vendor/engines/ldap_authentication/ldap_authentication.gemspec'
-    - 'vendor/engines/saml_authentication/saml_authentication.gemspec'
-    - 'vendor/engines/secure_rooms/secure_rooms.gemspec'
-
-# Offense count: 10
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Severity, Include.
-# Include: **/*.gemspec
-Gemspec/RequireMFA:
-  Exclude:
-    - 'vendor/engines/bulk_email/bulk_email.gemspec'
-    - 'vendor/engines/c2po/c2po.gemspec'
-    - 'vendor/engines/dataprobe/dataprobe.gemspec'
-    - 'vendor/engines/fine_uploader/fine_uploader.gemspec'
-    - 'vendor/engines/fullcalendar/fullcalendar.gemspec'
-    - 'vendor/engines/ldap_authentication/ldap_authentication.gemspec'
-    - 'vendor/engines/saml_authentication/saml_authentication.gemspec'
-    - 'vendor/engines/sanger_sequencing/sanger_sequencing.gemspec'
-    - 'vendor/engines/secure_rooms/secure_rooms.gemspec'
-    - 'vendor/engines/split_accounts/split_accounts.gemspec'
-
 # Offense count: 10
 # Configuration parameters: Severity, Include.
 # Include: **/*.gemspec

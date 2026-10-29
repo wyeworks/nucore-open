@@ -14,4 +14,5 @@ Gem::Specification.new do |s|
   s.description = ""
 
   s.files = Dir["{app,config,db,lib}/**/*", "spec/factories/**/*"]
+  s.metadata["rubygems_mfa_required"] = "true"
 end
