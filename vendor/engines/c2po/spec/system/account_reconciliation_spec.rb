@@ -252,7 +252,7 @@ RSpec.describe "Account Reconciliation", :js, feature_setting: { "billing.two_ti
 
           expect(page).to have_select(
             "order_status",
-            options: ["Reconciled"]
+            options: ["Reconciled"],
           )
         end
       end

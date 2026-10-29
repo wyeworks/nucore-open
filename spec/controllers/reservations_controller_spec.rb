@@ -70,7 +70,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
           anything,
           anything,
           anything,
-          a_hash_including(discriminate: false)
+          a_hash_including(discriminate: false),
         )
 
         do_request
@@ -83,7 +83,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
           anything,
           anything,
           anything,
-          a_hash_including(discriminate: true)
+          a_hash_including(discriminate: true),
         )
 
         do_request
@@ -644,7 +644,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
           reserve_start_min: "0",
           reserve_start_meridian: "am",
           duration_mins: "60",
-        }
+        },
       }
     end
 
@@ -789,7 +789,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
 
       it_should_allow_all [:guest], "to receive an error that they are trying to reserve outside of the window" do
         expect(assigns[:reservation].errors[:base]).to(
-          include(a_string_matching(/The reservation must be within the next \d+ days/))
+          include(a_string_matching(/The reservation must be within the next \d+ days/)),
         )
         expect(response).to render_template(:new)
       end
@@ -1453,7 +1453,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
         context "when cannot switch reservation" do
           before do
             allow_any_instance_of(Reservation).to(
-              receive(:can_switch_instrument_on?) { false }
+              receive(:can_switch_instrument_on?) { false },
             )
 
             sign_in @guest

@@ -533,7 +533,7 @@ RSpec.describe Instrument do
         :daily_booking,
         :always_available,
         facility:,
-        min_reserve_days: 2
+        min_reserve_days: 2,
       )
     end
 
@@ -542,14 +542,14 @@ RSpec.describe Instrument do
       duration =  instrument.min_reserve_days.days
 
       reservation = instrument.next_available_reservation(
-        after:, duration:
+        after:, duration:,
       )
 
       expect(reservation).to be_present
       expect(reservation.save).to be true
 
       second_reservation = instrument.next_available_reservation(
-        after:, duration:
+        after:, duration:,
       )
 
       expect(second_reservation).to be_present
@@ -990,7 +990,7 @@ RSpec.describe Instrument do
         min_reserve_mins: 10,
         max_reserve_mins: 10,
         min_reserve_days: 1,
-        max_reserve_days: 20
+        max_reserve_days: 20,
       )
       instrument.save!
 

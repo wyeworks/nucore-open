@@ -8,7 +8,7 @@ class FacilityEstimatesController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   load_and_authorize_resource class: Estimate
-  before_action :load_estimate, only: [:show, :edit, :recalculate, :update, :duplicate]
+  before_action :load_estimate, only: %i[show edit recalculate update duplicate]
   before_action :set_users, only: [:search]
 
   def index
@@ -63,7 +63,7 @@ class FacilityEstimatesController < ApplicationController
 
   def create
     @estimate = current_facility.estimates.new(
-      facility_estimate_params.merge(created_by_id: current_user.id)
+      facility_estimate_params.merge(created_by_id: current_user.id),
     )
 
     if @estimate.save
@@ -143,9 +143,9 @@ class FacilityEstimatesController < ApplicationController
     raw_params = params.require(:estimate).permit(
       :description, :price_group_id, :user_id,
       :custom_name, :note, :expires_at,
-      estimate_details_attributes: [
-        :id, :product_id, :quantity, :duration,
-        :duration_unit, :_destroy, :recalculate,
+      estimate_details_attributes: %i[
+        id product_id quantity duration
+        duration_unit _destroy recalculate
       ]
     )
     if raw_params[:custom_name].present? && raw_params[:user_id].blank?

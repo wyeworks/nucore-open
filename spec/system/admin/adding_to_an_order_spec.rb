@@ -21,7 +21,7 @@ RSpec.describe "Adding to an existing order" do
       visit facility_order_path(facility, order)
 
       expect(page).to(
-        have_select("Product", options: ["", product.name])
+        have_select("Product", options: ["", product.name]),
       )
 
       select second_facility.name, from: Facility.model_name.human
@@ -29,7 +29,7 @@ RSpec.describe "Adding to an existing order" do
 
       expect(page).to have_content("Product can't be blank")
       expect(page).to(
-        have_select("Product", options: ["", cross_product.name])
+        have_select("Product", options: ["", cross_product.name]),
       )
     end
   end
@@ -244,7 +244,7 @@ RSpec.describe "Adding to an existing order" do
       let(:product) do
         create(
           :setup_item,
-          :with_facility_account
+          :with_facility_account,
         )
       end
       let!(:instrument) do
@@ -252,7 +252,7 @@ RSpec.describe "Adding to an existing order" do
           :setup_instrument,
           :always_available,
           facility:,
-          pricing_mode: Instrument::Pricing::SCHEDULE_DAILY
+          pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
         )
       end
       let(:order_detail) do
@@ -272,7 +272,7 @@ RSpec.describe "Adding to an existing order" do
         "new daily reservation",
         after_submit: proc do
           expect(Reservation.last.product).to eq(instrument)
-        end
+        end,
       )
     end
   end

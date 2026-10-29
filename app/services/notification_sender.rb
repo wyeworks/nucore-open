@@ -79,7 +79,7 @@ class NotificationSender
 
     accounts_by_user.each do |user, accounts|
       Notifier.review_orders(
-        user:, accounts:, **args
+        user:, accounts:, **args,
       ).deliver_later
     end
   end

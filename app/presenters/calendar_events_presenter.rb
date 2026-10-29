@@ -30,12 +30,12 @@ class CalendarEventsPresenter
   def unavailable_events
     inverse_rules = ScheduleRule.unavailable(schedule_rules)
     unavailable_calendar_opts = calendar_opts.merge(
-      use_dates: monthly_view?
+      use_dates: monthly_view?,
     )
 
     schedule_rule_events = ScheduleRules::CalendarPresenter.events(
       inverse_rules,
-      unavailable_calendar_opts
+      unavailable_calendar_opts,
     )
 
     if monthly_view?
@@ -57,7 +57,7 @@ class CalendarEventsPresenter
 
   def calendar_opts
     {
-      start_at:, end_at:, instrument_id: instrument.id,
+      start_at:, end_at:, instrument_id: instrument.id
     }.merge(params.slice(:with_details, :discriminate, :user))
   end
 

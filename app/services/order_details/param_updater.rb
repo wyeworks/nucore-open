@@ -18,18 +18,18 @@ class OrderDetails::ParamUpdater
         :unrecoverable_note,
         :deposit_number,
         :reference_id,
-        reservation: [
-          :reserve_start_date,
-          :reserve_start_hour,
-          :reserve_start_min,
-          :reserve_start_meridian,
-          :duration_mins,
-          :duration_days,
-          :actual_start_date,
-          :actual_start_hour,
-          :actual_start_min,
-          :actual_start_meridian,
-          :actual_duration_mins,
+        reservation: %i[
+          reserve_start_date
+          reserve_start_hour
+          reserve_start_min
+          reserve_start_meridian
+          duration_mins
+          duration_days
+          actual_start_date
+          actual_start_hour
+          actual_start_min
+          actual_start_meridian
+          actual_duration_mins
         ],
       ]
   end

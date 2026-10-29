@@ -12,7 +12,7 @@ RSpec.shared_examples "csv email action" do
     expect { action.call }.to(
       enqueue_job(CsvReportEmailJob).with do |report_name|
         expect(report_name).to eq(report_class.to_s)
-      end
+      end,
     )
   end
 end

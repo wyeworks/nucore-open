@@ -27,7 +27,7 @@ RSpec.describe "All Transactions Search", :js do
       allow_any_instance_of(AccountConfig).to(
         receive(:creation_enabled_types).and_wrap_original do |method|
           (method.call + [some_account.type.to_s]).uniq
-        end
+        end,
       )
     end
 
@@ -96,7 +96,7 @@ RSpec.describe "All Transactions Search", :js do
         expect(
           sorted_order_details.map do |od|
             I18n.l(od.fulfilled_at.to_date, format: :usa)
-          end
+          end,
         ).to appear_in_order
       end
     end
@@ -116,7 +116,7 @@ RSpec.describe "All Transactions Search", :js do
         expect(
           sorted_order_details.map do |od|
             I18n.l(od.ordered_at.to_date, format: :usa)
-          end
+          end,
         ).to appear_in_order
       end
     end
@@ -157,7 +157,7 @@ RSpec.describe "All Transactions Search", :js do
         expect(
           sorted_order_details.map do |od|
             I18n.l(od.journal_or_statement_date.to_date, format: :usa)
-          end
+          end,
         ).to appear_in_order
       end
     end

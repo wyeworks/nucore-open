@@ -224,7 +224,7 @@ Rails.application.routes.draw do
 
     resources :facility_accounts,
               controller: "facility_facility_accounts",
-              only: [:index, :new, :create, :edit, :update], path: "#{I18n.t('facility_downcase')}_accounts"
+              only: %i[index new create edit update], path: "#{I18n.t('facility_downcase')}_accounts"
 
     resources :orders, controller: "facility_orders", only: [:index, :update, :show] do
       member do
@@ -326,7 +326,7 @@ Rails.application.routes.draw do
 
     ######
 
-    resources :journals, controller: "facility_journals", only: [:index, :new, :create, :update, :show] do
+    resources :journals, controller: "facility_journals", only: %i[index new create update show] do
       post "reconcile", to: "facility_journals#reconcile"
       post "unreconcile", to: "facility_journals#unreconcile"
     end
@@ -343,7 +343,7 @@ Rails.application.routes.draw do
       resources :account_price_group_members, only: [:new, :destroy, :create]
     end
 
-    resources :estimates, controller: "facility_estimates", only: [:index, :new, :create, :show, :edit, :update] do
+    resources :estimates, controller: "facility_estimates", only: %i[index new create show edit update] do
       collection do
         get "search"
         get "add_product_to_estimate"

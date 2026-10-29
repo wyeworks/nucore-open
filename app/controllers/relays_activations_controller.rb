@@ -12,7 +12,7 @@ class RelaysActivationsController < ApplicationController
   rescue NetBooter::Error => e
     ActiveSupport::Notifications.instrument(
         "background_error",
-        exception: e
+        exception: e,
     )
     redirect_to facility_instruments_path(current_facility), flash: { alert: text("connection_error") }
   end

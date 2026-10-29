@@ -12,7 +12,7 @@ class BulkImport < ApplicationRecord
     presence: true,
     inclusion: {
       in: ->(bulk_imp) { bulk_imp.class.import_types },
-    }
+    },
   )
 
   enum(

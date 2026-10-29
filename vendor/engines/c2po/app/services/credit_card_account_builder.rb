@@ -8,27 +8,27 @@ class CreditCardAccountBuilder < AccountBuilder
 
   # Override strong_params for `build` account.
   def account_params_for_build
-    [
-      :account_number,
-      :description,
-      :affiliate_id,
-      :affiliate_other,
-      :remittance_information,
-      :expiration_month,
-      :expiration_year,
-      :name_on_card,
+    %i[
+      account_number
+      description
+      affiliate_id
+      affiliate_other
+      remittance_information
+      expiration_month
+      expiration_year
+      name_on_card
     ]
   end
 
   # Override strong_params for `update` account.
   def account_params_for_update
-    [
-      :description,
-      :affiliate_id,
-      :affiliate_other,
-      :remittance_information,
-      :expiration_month,
-      :expiration_year,
+    %i[
+      description
+      affiliate_id
+      affiliate_other
+      remittance_information
+      expiration_month
+      expiration_year
     ]
   end
 

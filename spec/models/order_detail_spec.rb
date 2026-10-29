@@ -2103,7 +2103,7 @@ RSpec.describe OrderDetail do
       it "is invalid" do
         expect(subject).to_not be_valid
         expect(subject.errors.messages).to(
-          match(a_hash_including(note_field => Array))
+          match(a_hash_including(note_field => Array)),
         )
       end
     end

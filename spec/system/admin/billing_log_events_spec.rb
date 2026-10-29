@@ -15,7 +15,7 @@ RSpec.describe "email log_events page" do
     double(
       "Email",
       to: "random@example.com",
-      subject: "Some Subject"
+      subject: "Some Subject",
     )
   end
 
@@ -27,7 +27,7 @@ RSpec.describe "email log_events page" do
       LogEvent.log_email(
         loggable,
         event_type,
-        email
+        email,
       )
     end
   end

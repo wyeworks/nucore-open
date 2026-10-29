@@ -31,6 +31,6 @@ PriceGroup.reset_column_information
   PriceGroup.setup_global(
     name: pg_data[:name],
     is_internal: pg_data[:is_internal],
-    admin_editable: pg_data[:admin_editable]
+    admin_editable: pg_data[:admin_editable],
   )
 end

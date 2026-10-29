@@ -49,7 +49,7 @@ RSpec.describe AutoEndPreviousReservation do
           log_event = LogEvent.find_by(
             loggable: previous_reservation.order_detail,
             event_type: :auto_ended_by_next_reservation,
-            user: current_user
+            user: current_user,
           )
 
           expect(log_event).to be_present

@@ -25,7 +25,7 @@ RSpec.describe "FacilityReservationsController" do
       action.call(reservation)
 
       expect(ProductNotifications::SlotAvailableService).to(
-        have_received(:from_reservation).with(reservation)
+        have_received(:from_reservation).with(reservation),
       )
     end
 

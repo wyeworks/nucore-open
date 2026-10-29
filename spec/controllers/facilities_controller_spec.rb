@@ -385,7 +385,7 @@ RSpec.describe FacilitiesController do
           end.to have_enqueued_job(CsvReportEmailJob).with(
             Reports::AccountTransactionsReport.to_s,
             anything,
-            hash_including(show_price_breakdown: true)
+            hash_including(show_price_breakdown: true),
           )
         end
       end

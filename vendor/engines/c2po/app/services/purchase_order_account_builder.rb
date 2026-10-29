@@ -11,29 +11,29 @@ class PurchaseOrderAccountBuilder < AccountBuilder
 
   # Override strong_params for `build` account.
   def account_params_for_build
-    [
-      :account_number,
-      :description,
-      :affiliate_id,
-      :affiliate_other,
-      :remittance_information,
-      :formatted_expires_at,
-      :outside_contact_info,
-      :ar_number,
+    %i[
+      account_number
+      description
+      affiliate_id
+      affiliate_other
+      remittance_information
+      formatted_expires_at
+      outside_contact_info
+      ar_number
     ] + (SettingsHelper.feature_on?("accounts.purchase_order_monetary_cap") ? [:monetary_cap] : []) + permitted_account_params
   end
 
   # Override strong_params for `update` account.
   def account_params_for_update
-    [
-      :account_number,
-      :description,
-      :affiliate_id,
-      :affiliate_other,
-      :remittance_information,
-      :formatted_expires_at,
-      :outside_contact_info,
-      :ar_number,
+    %i[
+      account_number
+      description
+      affiliate_id
+      affiliate_other
+      remittance_information
+      formatted_expires_at
+      outside_contact_info
+      ar_number
     ] + (SettingsHelper.feature_on?("accounts.purchase_order_monetary_cap") ? [:monetary_cap] : []) + permitted_account_params
   end
 

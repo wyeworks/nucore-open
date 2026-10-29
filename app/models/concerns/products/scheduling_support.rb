@@ -27,7 +27,7 @@ module Products::SchedulingSupport
       product: self,
       reserve_start_at: time,
       reserve_end_at: time + reservation_length.minutes,
-      blackout: true # so it's not considered an admin and allowed to overlap
+      blackout: true, # so it's not considered an admin and allowed to overlap
     )
     reservation.valid?(:walkup_available)
   end

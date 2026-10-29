@@ -625,7 +625,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
           expect { do_request }.to(
             change do
               order_detail.reload.unrecoverable_note
-            end.from(nil).to("Some note")
+            end.from(nil).to("Some note"),
           )
         end
       end
@@ -932,7 +932,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
           context "when assignment notifications are on", feature_setting: { "notifications.order_assignment_notifications": true } do
             it "sends a notification to the assigned user" do
               expect { do_request }.to(
-                have_enqueued_mail(OrderAssignmentMailer, :notify_assigned_user)
+                have_enqueued_mail(OrderAssignmentMailer, :notify_assigned_user),
               )
             end
           end
@@ -985,7 +985,7 @@ RSpec.describe OrderManagement::OrderDetailsController do
                   end.from([]).to([
                                     [dispute_by.email],
                                     [order_detail.account.owner_user.email],
-                                  ])
+                                  ]),
                 )
               end
 

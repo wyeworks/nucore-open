@@ -80,13 +80,13 @@ RSpec.describe Ability do
 
     shared_examples_for "correct User permissions" do
       context "when create_users feature is on", feature_setting: { "users_authentication.create_users" => true } do
-        it_is_allowed_to([:new, :create, :read, :index, :accounts, :search], User)
-        it_is_not_allowed_to([:switch_to, :edit, :update, :suspend, :unsuspend, :orders], User)
+        it_is_allowed_to(%i[new create read index accounts search], User)
+        it_is_not_allowed_to(%i[switch_to edit update suspend unsuspend orders], User)
       end
 
       context "when create_users feature is off", feature_setting: { "users_authentication.create_users" => false } do
         it_is_allowed_to([:read, :index, :accounts, :search], User)
-        it_is_not_allowed_to([:new, :create, :edit, :update, :switch_to, :suspend, :unsuspend, :orders], User)
+        it_is_not_allowed_to(%i[new create edit update switch_to suspend unsuspend orders], User)
       end
     end
 
@@ -94,7 +94,7 @@ RSpec.describe Ability do
       let(:facility) { Facility.cross_facility }
 
       it { is_expected.to be_allowed_to(:manage_accounts, facility) }
-      it_is_allowed_to([:new, :create, :read, :edit, :update, :suspend, :unsuspend], Account)
+      it_is_allowed_to(%i[new create read edit update suspend unsuspend], Account)
       it { is_expected.to be_allowed_to(:manage, AccountUser) }
 
       it_behaves_like "correct User permissions"
@@ -153,7 +153,7 @@ RSpec.describe Ability do
     context "in a single facility" do
       let(:internal_user) { FactoryBot.create(:user) }
       let(:external_user) { FactoryBot.create(:user, :external) }
-      it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
+      it_is_allowed_to(%i[bring_online create edit new update], OfflineReservation)
       it { is_expected.to be_allowed_to(:manage, User) }
       it { is_expected.to be_allowed_to(:manage_accounts, facility) }
       it { is_expected.to be_allowed_to(:manage_billing, facility) }
@@ -266,7 +266,7 @@ RSpec.describe Ability do
   describe "facility administrator" do
     let(:user) { create(:user, :facility_administrator, facility: facility) }
 
-    it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
+    it_is_allowed_to(%i[bring_online create edit new update], OfflineReservation)
     it { is_expected.to be_allowed_to(:manage, Account) }
     it { is_expected.to be_allowed_to(:manage, FacilityAccount) }
     it { is_expected.to be_allowed_to(:read, Notification) }
@@ -319,7 +319,7 @@ RSpec.describe Ability do
       end
     end
 
-    it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
+    it_is_allowed_to(%i[bring_online create edit new update], OfflineReservation)
     it { is_expected.to be_allowed_to(:manage, Account) }
     it { is_expected.to be_allowed_to(:manage, FacilityAccount) }
     it { is_expected.to be_allowed_to(:manage, TrainingRequest) }
@@ -375,8 +375,8 @@ RSpec.describe Ability do
     it_is_allowed_to(:manage, Statement)
     it_is_allowed_to(:manage, OrderDetail)
     it_is_allowed_to(:manage, Account)
-    it_is_not_allowed_to([:create, :edit, :update, :suspend, :switch_to], User)
-    it_is_allowed_to([:accounts, :index, :orders, :show, :administer], User)
+    it_is_not_allowed_to(%i[create edit update suspend switch_to], User)
+    it_is_allowed_to(%i[accounts index orders show administer], User)
 
     context "in a single facility" do
       let(:subject_resource) { facility }
@@ -384,7 +384,7 @@ RSpec.describe Ability do
       it_is_allowed_to([:list, :dashboard, :show], Facility)
       it_is_allowed_to([:index, :show, :timeline], Reservation)
       it_is_not_allowed_to([:edit, :update, :destroy], Reservation)
-      it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
+      it_is_allowed_to(%i[administer index view_details schedule show], Product)
       it_is_not_allowed_to([:edit, :update, :destroy], Product)
       it_is_allowed_to([:show, :index], PriceGroup)
       it_is_not_allowed_to([:create, :edit, :update, :destroy], PriceGroup)
@@ -403,7 +403,7 @@ RSpec.describe Ability do
 
       it { is_expected.to be_allowed_to(:manage_users, subject_resource) }
       it { is_expected.to be_allowed_to(:manage_billing, subject_resource) }
-      it_is_allowed_to([:accounts, :index, :orders, :show, :administer], User)
+      it_is_allowed_to(%i[accounts index orders show administer], User)
       it_is_not_allowed_to([:create, :edit, :update, :switch_to], User)
       it_is_allowed_to([:send_receipt, :show], Order)
       it_is_not_allowed_to([:update, :edit, :new, :destroy], Order)
@@ -422,7 +422,7 @@ RSpec.describe Ability do
 
       it { is_expected.not_to be_allowed_to(:manage_users, subject_resource) }
       it { is_expected.not_to be_allowed_to(:manage_billing, subject_resource) }
-      it_is_not_allowed_to([:accounts, :index, :orders, :show, :create, :switch_to], User)
+      it_is_not_allowed_to(%i[accounts index orders show create switch_to], User)
       it_is_not_allowed_to([:send_receipt, :show], Order)
 
       %i(disputed_orders manage_billing movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions).each do |action|
@@ -478,7 +478,7 @@ RSpec.describe Ability do
     it_behaves_like "it has common staff abilities"
     it { is_expected.to be_allowed_to(:show_problems, Reservation) }
     it { is_expected.to be_allowed_to(:show_problems, Order) }
-    it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
+    it_is_allowed_to(%i[bring_online create edit new update], OfflineReservation)
     it { is_expected.to be_allowed_to(:manage, TrainingRequest) }
     it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
     it { is_expected.to be_allowed_to(:manage, ProductAccessGroup) }
@@ -498,7 +498,7 @@ RSpec.describe Ability do
 
     it_behaves_like "it has common staff abilities"
     it { is_expected.not_to be_allowed_to(:show_problems, Reservation) }
-    it_is_not_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
+    it_is_not_allowed_to(%i[bring_online create edit new update], OfflineReservation)
     it { is_expected.to be_allowed_to(:create, TrainingRequest) }
     it_behaves_like "it can not manage training requests"
     it_is_not_allowed_to([:create, :update, :destroy], ScheduleRule)
@@ -600,7 +600,7 @@ RSpec.describe Ability do
       it_is_allowed_to([:administer, :index, :show], Order)
       it { is_expected.to be_allowed_to(:show, OrderDetail) }
       it_is_allowed_to([:administer, :index, :show, :timeline], Reservation)
-      it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
+      it_is_allowed_to(%i[administer index view_details schedule show], Product)
       it_is_allowed_to([:show, :index], PriceGroup)
       it_is_allowed_to([:index], StoredFile)
       it_is_allowed_to([:index, :cross_core_orders], Project)
@@ -670,8 +670,8 @@ RSpec.describe Ability do
         FacilityUserPermission.find_by(user:, facility:).update!(product_creation: true)
       end
 
-      it_is_allowed_to([:new, :create, :update, :edit, :destroy], Product)
-      it_is_allowed_to([:new, :create, :update, :edit, :destroy], BundleProduct)
+      it_is_allowed_to(%i[new create update edit destroy], Product)
+      it_is_allowed_to(%i[new create update edit destroy], BundleProduct)
       it { is_expected.to be_allowed_to(:manage, Schedule) }
       it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
       it { is_expected.to be_allowed_to(:manage, StoredFile) }
@@ -687,7 +687,7 @@ RSpec.describe Ability do
       it_is_allowed_to([:update, :edit, :destroy], Product)
       it { is_expected.not_to be_allowed_to(:new, Product) }
       it { is_expected.not_to be_allowed_to(:create, Product) }
-      it_is_allowed_to([:new, :create, :update, :edit, :destroy], BundleProduct)
+      it_is_allowed_to(%i[new create update edit destroy], BundleProduct)
       it { is_expected.to be_allowed_to(:manage, Schedule) }
       it { is_expected.to be_allowed_to(:manage, ScheduleRule) }
       it { is_expected.to be_allowed_to(:manage, StoredFile) }
@@ -715,8 +715,8 @@ RSpec.describe Ability do
       end
 
       it_is_allowed_to([:update, :edit, :mark_unrecoverable], OrderDetail)
-      it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order)
-      it_is_allowed_to([:administer, :assign_price_policies_to_problem_orders, :batch_update, :cancel, :edit, :index, :show, :tab_counts, :timeline, :update], Reservation)
+      it_is_allowed_to(%i[administer assign_price_policies_to_problem_orders batch_update create index order_in_past send_receipt show tab_counts update], Order)
+      it_is_allowed_to(%i[administer assign_price_policies_to_problem_orders batch_update cancel edit index show tab_counts timeline update], Reservation)
       it { is_expected.to be_allowed_to(:act_as, facility) }
       it { is_expected.to be_allowed_to(:read, Notification) }
       it { is_expected.to be_allowed_to(:transactions, facility) }
@@ -758,17 +758,17 @@ RSpec.describe Ability do
         context "when managing cross-core order details" do
           let(:subject_resource) { cross_core_order_detail }
 
-          it_is_allowed_to([:add_accessories, :new, :show, :update, :cancel, :template_results], OrderDetail)
+          it_is_allowed_to(%i[add_accessories new show update cancel template_results], OrderDetail)
 
-          [:sample_results, :sample_results_zip, :template_results, :order_file, :upload_order_file, :remove_order_file].each do |action|
+          %i[sample_results sample_results_zip template_results order_file upload_order_file remove_order_file].each do |action|
             it { is_expected.to be_allowed_to(action, cross_core_order_detail) }
           end
 
           it "does not allow cross-core actions outside the authorized project" do
             unrelated_detail = build_stubbed(:order_detail, order: build_stubbed(:order, facility: other_facility))
 
-            [:add_accessories, :new, :show, :update, :cancel, :sample_results, :sample_results_zip,
-             :template_results, :order_file, :upload_order_file, :remove_order_file].each do |action|
+            %i[add_accessories new show update cancel sample_results sample_results_zip
+             template_results order_file upload_order_file remove_order_file].each do |action|
               expect(ability).not_to be_allowed_to(action, unrelated_detail)
             end
           end
@@ -860,7 +860,7 @@ RSpec.describe Ability do
       it_is_allowed_to(:manage, Statement)
       it_is_allowed_to(:manage, OrderDetail)
       it_is_allowed_to([:send_receipt, :show], Order)
-      it_is_allowed_to([:accounts, :index, :orders, :show, :administer], User)
+      it_is_allowed_to(%i[accounts index orders show administer], User)
       it { is_expected.to be_allowed_to(:manage, AccountUser) }
 
       %i(disputed_orders movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions).each do |action|
@@ -878,9 +878,9 @@ RSpec.describe Ability do
         FacilityUserPermission.find_by(user:, facility:).update!(instrument_management: true)
       end
 
-      it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
+      it_is_allowed_to(%i[bring_online create edit new update], OfflineReservation)
       it { is_expected.to be_allowed_to(:switch, Instrument) }
-      it_is_allowed_to([:create, :edit_admin, :update_admin, :timeline, :index, :show], Reservation)
+      it_is_allowed_to(%i[create edit_admin update_admin timeline index show], Reservation)
       it { is_expected.to be_allowed_to(:read, ProductAccessory) }
       it { is_expected.to be_allowed_to(:manage, ProductNotification, facility_id: facility.id) }
 
@@ -903,7 +903,7 @@ RSpec.describe Ability do
         FacilityUserPermission.find_by(user:, facility:).update!(order_management: true, instrument_management: true)
       end
 
-      it_is_allowed_to([:bring_online, :create, :edit, :new, :update], OfflineReservation)
+      it_is_allowed_to(%i[bring_online create edit new update], OfflineReservation)
       it_is_allowed_to([:update, :edit, :mark_unrecoverable], OrderDetail)
       it { is_expected.to be_allowed_to(:act_as, facility) }
       it { is_expected.to be_allowed_to(:switch, Instrument) }
@@ -946,9 +946,9 @@ RSpec.describe Ability do
       context "when accessing UsersController" do
         let(:stub_controller) { UsersController.new }
 
-        it_is_allowed_to([:read, :create, :new, :new_external, :search,
-                          :access_list, :access_list_approvals, :edit, :update,
-                          :unexpire, :orders, :accounts], User)
+        it_is_allowed_to(%i[read create new new_external search
+                          access_list access_list_approvals edit update
+                          unexpire orders accounts], User)
       end
 
       it { is_expected.not_to be_allowed_to(:manage, FacilityUserPermission) }
@@ -1017,8 +1017,8 @@ RSpec.describe Ability do
       it_is_allowed_to([:list, :dashboard, :show], Facility)
       it_is_allowed_to([:administer, :index, :show, :tab_counts], Order)
       it_is_allowed_to([:show], OrderDetail)
-      it_is_allowed_to([:administer, :index, :show, :timeline, :tab_counts], Reservation)
-      it_is_allowed_to([:administer, :index, :view_details, :schedule, :show], Product)
+      it_is_allowed_to(%i[administer index show timeline tab_counts], Reservation)
+      it_is_allowed_to(%i[administer index view_details schedule show], Product)
       it_is_allowed_to([:index], Project)
       it_is_allowed_to(:read, PriceGroupProduct)
       it_is_allowed_to(:index, StoredFile)
@@ -1071,7 +1071,7 @@ RSpec.describe Ability do
 
       it_is_allowed_to([:manage], Account)
       it_is_allowed_to([:manage], AccountUser)
-      it_is_allowed_to [:show, :suspend, :unsuspend, :user_search, :user_accounts, :statements, :show_statement, :index], Statement
+      it_is_allowed_to %i[show suspend unsuspend user_search user_accounts statements show_statement index], Statement
     end
 
     context "when managing order details of own account" do

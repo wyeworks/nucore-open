@@ -26,7 +26,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
       create(
         :sanger_sequencing_submission,
         order_detail: purchased_order.order_details.first,
-        sample_count: 14
+        sample_count: 14,
       )
     end
     let(:batch) { submission.reload.batch }
@@ -69,7 +69,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
       create(
         :sanger_sequencing_submission,
         order_detail: purchased_order.order_details.first,
-        sample_count: 14
+        sample_count: 14,
       )
     end
     let(:batch) { submission.reload.batch }
@@ -106,7 +106,7 @@ RSpec.describe "Creating a batch", :js, feature_setting: { sanger_sequencing_ena
 
     it(
       "does not show the input when the flag is off",
-      feature_setting: { "products.sanger_enabled_service": false }
+      feature_setting: { "products.sanger_enabled_service": false },
     ) do
       visit new_facility_sanger_sequencing_admin_batch_path(facility)
 

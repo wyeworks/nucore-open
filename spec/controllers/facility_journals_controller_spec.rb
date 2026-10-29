@@ -543,13 +543,13 @@ RSpec.describe FacilityJournalsController do
         order_detail_params = {
           @order_detail1.id.to_s => { "selected" => "1" },
           @order_detail2.id.to_s => { "selected" => "1" },
-          @order_detail3.id.to_s => { "selected" => "1" }
+          @order_detail3.id.to_s => { "selected" => "1" },
         }
       end
       post :unreconcile, params: {
         facility_id: facility.url_name,
         journal_id: journal.id,
-        order_detail: order_detail_params
+        order_detail: order_detail_params,
       }
     end
 
@@ -699,7 +699,7 @@ RSpec.describe FacilityJournalsController do
                    state: "reconciled",
                    order_status: OrderStatus.reconciled,
                    fulfilled_at: 1.day.ago,
-                   reconciled_at: 1.day.ago
+                   reconciled_at: 1.day.ago,
                   )
           end
 
@@ -712,7 +712,7 @@ RSpec.describe FacilityJournalsController do
                    state: "reconciled",
                    order_status: OrderStatus.reconciled,
                    fulfilled_at: 1.day.ago,
-                   reconciled_at: 1.day.ago
+                   reconciled_at: 1.day.ago,
                   )
           end
 
@@ -734,7 +734,7 @@ RSpec.describe FacilityJournalsController do
             post :unreconcile, params: {
               facility_id: facility.url_name,
               journal_id: journal.id,
-              order_detail: params
+              order_detail: params,
             }
 
             parent_order.reload

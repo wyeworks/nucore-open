@@ -24,7 +24,7 @@ class ProductDisplayGroup < ApplicationRecord
     Product.orderable_types.map do |type|
       Fake.new(
         name: type.constantize.model_name.human(count: :many),
-        products: products.where(type:)
+        products: products.where(type:),
       )
     end
   end

@@ -167,7 +167,7 @@ module Reports
           :assigned_user, :price_changed_by_user, :canceled_by_user, :problem_resolved_by,
           order: [:facility, :cross_core_project],
           account: [:affiliate, :owner_user],
-          price_policy: [:price_group],
+          price_policy: [:price_group]
         ],
         transformer_options: { time_data: true, reporting: true },
       ).perform

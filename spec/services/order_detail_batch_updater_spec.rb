@@ -121,7 +121,7 @@ RSpec.describe OrderDetailBatchUpdater do
           context "when the assignment notifications are on", feature_setting: { "notifications.order_assignment_notifications": true } do
             it "sends the assignee one notification" do
               expect { updater.update! }.to(
-                enqueue_mail(OrderAssignmentMailer, :notify_assigned_user)
+                enqueue_mail(OrderAssignmentMailer, :notify_assigned_user),
               )
             end
           end
@@ -244,7 +244,7 @@ RSpec.describe OrderDetailBatchUpdater do
 
         it "does not call the service" do
           expect(ProductNotifications::SlotAvailableService).not_to(
-            receive(:from_reservation)
+            receive(:from_reservation),
           )
 
           updater.update!
@@ -267,7 +267,7 @@ RSpec.describe OrderDetailBatchUpdater do
             skip "Only applies to orders with reservations" if order_detail.reservation.blank?
 
             expect(ProductNotifications::SlotAvailableService).to(
-              receive_message_chain("from_reservation.notify_later")
+              receive_message_chain("from_reservation.notify_later"),
             )
 
             updater.update!
@@ -279,7 +279,7 @@ RSpec.describe OrderDetailBatchUpdater do
 
           it "does not call the service" do
             expect(ProductNotifications::SlotAvailableService).not_to(
-              receive(:from_reservation)
+              receive(:from_reservation),
             )
 
             updater.update!

@@ -50,7 +50,7 @@ module Reports
     end
 
     def formatted_compact_date_range
-      [date_start, date_end].compact.map { |d| d.strftime('%Y%m%d') }.join("-")
+      [date_start, date_end].compact.map { |d| d.strftime("%Y%m%d") }.join("-")
     end
 
     def column_headers

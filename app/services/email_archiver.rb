@@ -15,7 +15,7 @@ class EmailArchiver
     email_content = mail_message.to_s
     filename = "email_#{Time.current.strftime('%Y%m%d_%H%M%S')}.eml"
     log_event.attach_email(email_content, filename:)
-  rescue StandardError
+  rescue
     nil
   end
 

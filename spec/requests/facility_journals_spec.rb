@@ -47,7 +47,7 @@ RSpec.describe "facilities journals" do
 
       it "creates a pending journal" do
         expect { action.call }.to(
-          change { facility.journals.count }.by(1)
+          change { facility.journals.count }.by(1),
         )
       end
     end
@@ -108,7 +108,7 @@ RSpec.describe "facilities journals" do
 
         it "does not create a journal" do
           expect { action.call }.not_to(
-            change { Journal.count }
+            change { Journal.count },
           )
         end
 

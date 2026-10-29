@@ -18,7 +18,7 @@ module Reservations::MovingUp
       options: {
         exclude: self, user:,
         until: reserve_start_at
-      }
+      },
     )
 
     return nil if next_res.nil? || next_res.reserve_start_at >= reserve_start_at

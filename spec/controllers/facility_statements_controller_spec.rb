@@ -193,7 +193,7 @@ if Account.config.statements_enabled?
           grant_and_sign_in(@user)
 
           expect { do_request }.to(
-            have_enqueued_mail(Notifier, :statement).twice
+            have_enqueued_mail(Notifier, :statement).twice,
           )
         end
       end

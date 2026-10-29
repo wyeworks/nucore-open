@@ -107,7 +107,7 @@ RSpec.describe TransactionsController do
         expect { export }.to have_enqueued_job(CsvReportEmailJob).with(
           Reports::AccountTransactionsReport.to_s,
           anything,
-          hash_including(show_price_breakdown: false)
+          hash_including(show_price_breakdown: false),
         )
       end
     end
@@ -117,7 +117,7 @@ RSpec.describe TransactionsController do
         expect { export }.to have_enqueued_job(CsvReportEmailJob).with(
           Reports::AccountTransactionsReport.to_s,
           anything,
-          hash_including(show_price_breakdown: true)
+          hash_including(show_price_breakdown: true),
         )
       end
     end
@@ -139,7 +139,7 @@ RSpec.describe TransactionsController do
       it "succeeds because User A administers both accounts" do
         post :move_transactions, params: {
           order_detail_ids: [order_detail.id],
-          account_id: account_b.id
+          account_id: account_b.id,
         }
 
         expect(response).to redirect_to(movable_transactions_transactions_path)
@@ -157,7 +157,7 @@ RSpec.describe TransactionsController do
         expect do
           post :move_transactions, params: {
             order_detail_ids: [order_detail.id],
-            account_id: account_b.id
+            account_id: account_b.id,
           }
         end.to raise_error(ActiveRecord::RecordNotFound)
 

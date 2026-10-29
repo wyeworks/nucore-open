@@ -10,7 +10,7 @@ module UsersHelper
       user_link: facility_user_path(facility, user),
       price_group: price_group_name(user),
       app_name: t("app_name"),
-      support_contact:
+      support_contact:,
     )
   end
 
@@ -24,7 +24,7 @@ module UsersHelper
     elsif name == PriceGroup.external.name
       "external"
     else
-      name.parameterize(separator: '_')
+      name.parameterize(separator: "_")
     end
   end
 

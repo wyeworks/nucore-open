@@ -36,14 +36,14 @@ class LogEvent < ApplicationRecord
       metadata: {
         to: email.to,
         subject: email.subject,
-        **metadata
-      }
+        **metadata,
+      },
     )
   end
 
   def self.with_events(events)
     events
-      .map { |event| event.rpartition('.') }
+      .map { |event| event.rpartition(".") }
       .map { |type, _, event_type| { loggable_type: type&.camelize, event_type: } }
       .map(&:compact_blank)
       .map { |cond| where(cond) }

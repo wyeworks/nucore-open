@@ -16,7 +16,7 @@ RSpec.describe ProductUserImport do
     ProductUserImport.new(
       creator: admin,
       file: file,
-      product: product
+      product: product,
     )
   end
 

@@ -37,7 +37,7 @@ class CloneAccountMembershipsController < ApplicationController
       flash[:error] = text(
         "error",
         account: cloner.error.record.account,
-        message: cloner.error.message
+        message: cloner.error.message,
       )
 
       redirect_to new_facility_user_clone_account_membership_path(user_to_clone_id: @clone_to_user.id)

@@ -12,7 +12,7 @@ RSpec.describe ProblemReservationResolver do
       reserve_start_at: 2.hours.ago,
       reserve_end_at: 1.hour.ago,
       actual_start_at: 1.hour.ago,
-      actual_end_at: nil
+      actual_end_at: nil,
     )
   end
   subject(:resolver) { described_class.new(problem_reservation) }

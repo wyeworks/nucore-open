@@ -40,7 +40,7 @@ class Product < ApplicationRecord
     dependent: :destroy,
     class_name: "InstrumentAlert",
     foreign_key: :instrument_id,
-    inverse_of: :instrument
+    inverse_of: :instrument,
   )
   has_many :current_offline_reservations, -> { current }, class_name: "OfflineReservation"
 

@@ -47,7 +47,7 @@ class InstrumentSchedulePositionsController < ApplicationController
                     Instrument
                     .active
                     .in_active_facility
-                    .for_facility(current_facility)
+                    .for_facility(current_facility),
                  )
                  .distinct
   end

@@ -66,7 +66,7 @@ class StatementCreator
       statement_attrs = {
         facility: order_details.first.facility,
         account_id: account.id,
-        created_by: session_user.id
+        created_by: session_user.id,
       }
 
       if invoice_date.present?

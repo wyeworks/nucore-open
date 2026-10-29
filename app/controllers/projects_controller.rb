@@ -42,7 +42,7 @@ class ProjectsController < ApplicationController
         cross_core_facilties: "other",
         order_statuses: default_order_statuses(order_details),
         current_facility_id: current_facility.id,
-      }
+      },
     )
 
     searchers = [

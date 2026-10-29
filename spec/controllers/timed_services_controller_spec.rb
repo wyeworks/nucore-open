@@ -129,7 +129,7 @@ RSpec.describe TimedServicesController, type: :controller do
 
           expect { do_request }.to_not change { TimedService.count }
           expect(@response.body).to(
-            include(I18n.t("controllers.timed_services.create.duration_billing_not_authorized"))
+            include(I18n.t("controllers.timed_services.create.duration_billing_not_authorized")),
           )
         end
       end

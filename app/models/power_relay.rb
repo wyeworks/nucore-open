@@ -116,7 +116,7 @@ module PowerRelay
         ip_port: ip_port,
         outlet: outlet,
         secondary_outlet: secondary_outlet,
-      }.merge(connection_options.except(:username, :password))
+      }.merge(connection_options.except(:username, :password)),
     }
   end
 

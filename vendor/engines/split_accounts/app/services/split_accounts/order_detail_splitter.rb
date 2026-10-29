@@ -34,12 +34,12 @@ module SplitAccounts
     private
 
     def order_detail_attribute_splitter
-      attributes = [
-        :quantity,
-        :actual_cost,
-        :actual_subsidy,
-        :estimated_cost,
-        :estimated_subsidy,
+      attributes = %i[
+        quantity
+        actual_cost
+        actual_subsidy
+        estimated_cost
+        estimated_subsidy
       ]
       attributes += [:calculated_cost, :calculated_subsidy] if @reporting
       AttributeSplitter.new(*attributes)
@@ -55,14 +55,14 @@ module SplitAccounts
     end
 
     def associations_to_copy
-      [
-        :product,
-        :journal,
-        :statement,
-        :order_status,
-        :price_policy,
-        :created_by_user,
-        :order,
+      %i[
+        product
+        journal
+        statement
+        order_status
+        price_policy
+        created_by_user
+        order
       ]
     end
 

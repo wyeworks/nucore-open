@@ -67,23 +67,23 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
             order_details: [
               having_attributes(account: account, note: "New 1"),
               having_attributes(account: account, note: "New 1-2 - Miscased"),
-            ]
+            ],
           ),
           having_attributes(
             order_details: [
               having_attributes(account: account2, note: "New 2 - Different Account"),
               having_attributes(account: account2, note: "New 2-2", fulfilled_at: 1.day.ago.beginning_of_day),
-              having_attributes(account: account2, note: "New 2-3 - Different fulfilled", fulfilled_at: Time.current.beginning_of_day)
-            ]
+              having_attributes(account: account2, note: "New 2-3 - Different fulfilled", fulfilled_at: Time.current.beginning_of_day),
+            ],
           ),
           having_attributes(
-            order_details: [having_attributes(account: account2, note: "New 3 - Different Order Date")]
+            order_details: [having_attributes(account: account2, note: "New 3 - Different Order Date")],
           ),
           having_attributes(
             order_details: [
               having_attributes(account: nonbillable_account, note: "New 3"),
               having_attributes(account: nonbillable_account, note: "New 3-2"),
-            ]
+            ],
           ),
         ])
       end

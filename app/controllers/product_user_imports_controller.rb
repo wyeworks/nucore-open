@@ -38,7 +38,7 @@ class ProductUserImportsController < ApplicationController
       create_params.merge(
         creator: session_user,
         product: @product,
-      )
+      ),
     )
   end
 

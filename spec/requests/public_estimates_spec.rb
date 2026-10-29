@@ -124,7 +124,7 @@ RSpec.describe "Public estimates" do
       let!(:timed_service_price_policy) do
         create(
           :timed_service_price_policy,
-          product: timed_service, price_group: PriceGroup.base, usage_rate: 60, usage_subsidy: 0
+          product: timed_service, price_group: PriceGroup.base, usage_rate: 60, usage_subsidy: 0,
         )
       end
 
@@ -181,7 +181,7 @@ RSpec.describe "Public estimates" do
       let!(:instrument_price_policy) do
         create(
           :instrument_price_policy,
-          product: instrument, price_group: PriceGroup.base, usage_rate_daily: 50, usage_subsidy_daily: 0
+          product: instrument, price_group: PriceGroup.base, usage_rate_daily: 50, usage_subsidy_daily: 0,
         )
       end
 

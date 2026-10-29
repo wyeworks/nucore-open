@@ -11,7 +11,7 @@ module OrderDetailsHelper
   def reconcile_statuses
     [
       ["Reconciled", :reconciled],
-      can?(:mark_unrecoverable, OrderDetail) ? ["Unrecoverable", :unrecoverable] : nil
+      can?(:mark_unrecoverable, OrderDetail) ? ["Unrecoverable", :unrecoverable] : nil,
     ].compact
   end
 

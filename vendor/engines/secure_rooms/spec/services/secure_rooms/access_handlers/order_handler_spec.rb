@@ -113,7 +113,7 @@ RSpec.describe SecureRooms::AccessHandlers::OrderHandler, type: :service do
 
         it "triggers an email" do
           expect { described_class.process(occupancy) }.to(
-            enqueue_mail(ProblemOrderMailer, :notify_user)
+            enqueue_mail(ProblemOrderMailer, :notify_user),
           )
         end
       end

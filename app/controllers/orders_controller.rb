@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
 
   customer_tab  :all
 
-  before_action :check_acting_as,          except: [:cart, :cart_order_details_count, :add, :choose_account, :show, :remove, :purchase, :update_or_purchase, :receipt, :update]
+  before_action :check_acting_as,          except: %i[cart cart_order_details_count add choose_account show remove purchase update_or_purchase receipt update]
   before_action :init_order,               except: [:cart, :cart_order_details_count, :index, :receipt]
   before_action :protect_purchased_orders, except: [:cart, :cart_order_details_count, :receipt, :index]
   before_action :load_statuses, only: [:show, :update, :purchase, :update_or_purchase]

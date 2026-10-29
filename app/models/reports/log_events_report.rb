@@ -26,7 +26,7 @@ module Reports
       "price_group.create", "price_group.delete",
       "product.activate", "product.deactivate",
       "product.create", "product.relay_update",
-      "order_import.created",
+      "order_import.created"
     ].freeze
 
     def initialize(start_date:, end_date:, events:, query:)

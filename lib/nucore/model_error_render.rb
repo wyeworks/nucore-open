@@ -15,7 +15,7 @@ module Nucore
 
         I18n.with_options(:scope => [:activerecord, :errors, :template]) do |locale|
           header_message = locale.t(
-            :header, count:, model: object.model_name.human,
+            :header, count:, model: object.model_name.human
           )
           message = locale.t(:body)
 

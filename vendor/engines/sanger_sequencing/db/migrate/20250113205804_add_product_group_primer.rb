@@ -7,7 +7,7 @@ class AddProductGroupPrimer < ActiveRecord::Migration[4.2]
       :needs_primer,
       :boolean,
       default: false,
-      null: false
+      null: false,
     )
   end
 end

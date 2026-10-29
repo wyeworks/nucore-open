@@ -39,7 +39,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
     updater = OrderDetails::ParamUpdater.new(
       @order_detail,
       user: session_user,
-      cancel_fee: params[:with_cancel_fee] == "1"
+      cancel_fee: params[:with_cancel_fee] == "1",
     )
 
     if updater.update_param_attributes(update_params)

@@ -151,7 +151,7 @@ class ScheduleRule < ApplicationRecord
 
   def discount_for_price_group(price_group)
     pgd = price_group_discounts.where(
-      price_group: effective_price_group(price_group)
+      price_group: effective_price_group(price_group),
     ).first
 
     pgd&.discount_percent.to_f

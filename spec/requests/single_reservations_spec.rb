@@ -24,7 +24,7 @@ RSpec.describe "SingleReservationsController" do
       it "finds next available with that value" do
         expect(NextAvailableReservationFinder).to(
           receive(:new)
-          .with(instrument, start_at:)
+          .with(instrument, start_at:),
         ).and_call_original
 
         action.call(start_at:)
@@ -36,7 +36,7 @@ RSpec.describe "SingleReservationsController" do
         it "finds next available with start_at nil" do
           expect(NextAvailableReservationFinder).to(
             receive(:new)
-            .with(instrument, start_at: nil)
+            .with(instrument, start_at: nil),
           ).and_call_original
 
           action.call(start_at:)

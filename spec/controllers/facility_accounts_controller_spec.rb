@@ -49,7 +49,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
           expect(AccountSearcher).to receive(:new).with(
             nil,
             scope: anything,
-            filter_params: { account_status: "active" }
+            filter_params: { account_status: "active" },
           ).and_call_original
 
           do_request
@@ -61,7 +61,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
           expect(AccountSearcher).to receive(:new).with(
             nil,
             scope: anything,
-            filter_params: { suspended: "false" }
+            filter_params: { suspended: "false" },
           ).and_call_original
 
           do_request
@@ -309,8 +309,8 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
               hash_including(
                 search_term: nil,
                 filter_params: { suspended: "false" },
-              )
-            )
+              ),
+            ),
           )
         end
 
@@ -324,8 +324,8 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
               hash_including(
                 search_term: nil,
                 filter_params: hash_including(suspended: "true"),
-              )
-            )
+              ),
+            ),
           )
         end
 
@@ -339,8 +339,8 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
               hash_including(
                 search_term: nil,
                 filter_params: hash_including(account_status: "active"),
-              )
-            )
+              ),
+            ),
           )
         end
 
@@ -354,8 +354,8 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
               hash_including(
                 search_term: nil,
                 filter_params: hash_including(account_type: "NufsAccount"),
-              )
-            )
+              ),
+            ),
           )
         end
       end
@@ -371,8 +371,8 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
               hash_including(
                 search_term: "ACTIVE",
                 filter_params: hash_including(account_status: "active"),
-              )
-            )
+              ),
+            ),
           )
         end
       end

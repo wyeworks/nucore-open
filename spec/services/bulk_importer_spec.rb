@@ -39,7 +39,7 @@ RSpec.describe BulkImporter do
 
     it "sets status to done" do
       expect { subject.load! }.to(
-        change(bulk_import, :status).from('new').to('done')
+        change(bulk_import, :status).from("new").to("done"),
       )
     end
 
@@ -60,7 +60,7 @@ RSpec.describe BulkImporter do
 
       it "sets status to done_errors" do
         expect { subject.load! }.to(
-          change(bulk_import, :status).from("new").to("done_errors")
+          change(bulk_import, :status).from("new").to("done_errors"),
         )
       end
 
@@ -71,7 +71,7 @@ RSpec.describe BulkImporter do
           eq([
                "#1: Error loading val1",
                "#2: Error loading val3",
-             ])
+             ]),
         )
       end
     end
@@ -154,7 +154,7 @@ RSpec.describe BulkImporter do
           expect(BulkImport).to receive(:transaction)
 
           expect { subject.load! }.to(
-            change(bulk_import, :status).from("new").to("done")
+            change(bulk_import, :status).from("new").to("done"),
           )
         end
       end
@@ -174,7 +174,7 @@ RSpec.describe BulkImporter do
 
         it "sets errors to failed" do
           expect { subject.load! }.to(
-            change(bulk_import, :status).from("new").to("failed")
+            change(bulk_import, :status).from("new").to("failed"),
           )
         end
 

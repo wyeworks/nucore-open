@@ -25,7 +25,7 @@ module Nucore
 
     config.action_dispatch.rescue_responses.merge!(
       "NUCore::PermissionDenied" => :forbidden,
-      "CanCan::AccessDenied" => :forbidden
+      "CanCan::AccessDenied" => :forbidden,
     )
 
     config.exceptions_app = routes

@@ -51,7 +51,7 @@ class Notifier < ApplicationMailer
     @accounts_grouped_by_owner = accounts.group_by(&:owner_user)
     mail(
       to: @user.email,
-      subject: text("views.notifier.review_orders.subject", abbreviation: @facility.abbreviation)
+      subject: text("views.notifier.review_orders.subject", abbreviation: @facility.abbreviation),
     ).tap { |email| log_review_orders_email(email) }
   end
 
@@ -72,7 +72,7 @@ class Notifier < ApplicationMailer
         facility: @facility,
         invoice_number: @statement.invoice_number,
       ),
-      bcc: Settings.email.invoice_bcc
+      bcc: Settings.email.invoice_bcc,
     ).tap { |email| log_statement_email(email) }
   end
 
@@ -82,7 +82,7 @@ class Notifier < ApplicationMailer
     status = order_detail_status_name_for_mail(order_detail)
     mail(
       to: order_detail.order.user.email,
-      subject: text("views.notifier.order_detail_status_changed.subject", facility: facility, status: status)
+      subject: text("views.notifier.order_detail_status_changed.subject", facility: facility, status: status),
     )
   end
 
@@ -123,7 +123,7 @@ class Notifier < ApplicationMailer
         accounts_ids: @accounts.map(&:id),
         facility_id: @facility.id,
         order_ids:,
-      }
+      },
     )
   end
 
@@ -135,8 +135,8 @@ class Notifier < ApplicationMailer
       :statement_email,
       email,
       metadata: {
-        facility_id: @facility&.id
-      }
+        facility_id: @facility&.id,
+      },
     )
 
     archive_statement_email(email, log_event)

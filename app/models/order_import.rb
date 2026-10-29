@@ -233,7 +233,7 @@ class OrderImport < ApplicationRecord
       error_file.file.attach(
         io: io,
         filename: "error_report.csv",
-        content_type: "text/csv"
+        content_type: "text/csv",
       )
     else
       error_file.file = io

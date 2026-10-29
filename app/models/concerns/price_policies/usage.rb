@@ -20,7 +20,7 @@ module PricePolicies
         :usage_subsidy,
         :usage_subsidy_daily,
         :minimum_cost,
-        numericality: { allow_blank: true, greater_than_or_equal_to: 0 }
+        numericality: { allow_blank: true, greater_than_or_equal_to: 0 },
       )
 
       validate :daily_subsidy_less_than_rate, if: :daily_booking?

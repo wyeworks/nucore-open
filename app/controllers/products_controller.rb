@@ -38,7 +38,7 @@ class ProductsController < ApplicationController
   end
 
   def set_facility_products
-    is_estimate = params[:is_estimate] == 'true'
+    is_estimate = params[:is_estimate] == "true"
     original_facility = params[:original_facility]&.to_i
     query = current_facility.products
 
@@ -54,7 +54,7 @@ class ProductsController < ApplicationController
       {
         id: p.id,
         name: p.name,
-        time_based: p.order_quantity_as_time?
+        time_based: p.order_quantity_as_time?,
       }
     end
   end

@@ -32,7 +32,7 @@ module Journals
     def options
       {
         mime_type: Mime[mime_type],
-        filename: @filename || "journal.#{key}"
+        filename: @filename || "journal.#{key}",
       }
     end
 

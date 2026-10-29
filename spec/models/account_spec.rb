@@ -421,7 +421,7 @@ RSpec.describe Account do
 
     it "can assign price groups to the relation" do
       expect { account.price_groups_relation << PriceGroup.last }.to(
-        change(AccountPriceGroupMember, :count)
+        change(AccountPriceGroupMember, :count),
       )
     end
   end

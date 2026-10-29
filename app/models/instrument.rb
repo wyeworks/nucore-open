@@ -79,7 +79,7 @@ class Instrument < Product
     PriceGroup.globals.find_each do |price_group|
       price_group_products.create!(
         price_group:,
-        reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW
+        reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW,
       )
     end
   end

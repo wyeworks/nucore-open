@@ -38,7 +38,7 @@ RSpec.describe ResearchSafetyAdapters::ScishieldTrainingSynchronizer do
       stub_request(:get, api_endpoint)
         .to_return(
           status: status_code,
-          body: File.new(response)
+          body: File.new(response),
         )
     end
 

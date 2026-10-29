@@ -73,7 +73,7 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
 
       check "Send $0 Notifications?"
       expect { click_button "Send Notifications" }.to(
-        enqueue_mail(Notifier, :review_orders).twice
+        enqueue_mail(Notifier, :review_orders).twice,
       )
 
       within(".notice") do
@@ -162,7 +162,7 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
       check("order_detail_ids[]", option: order_detail.id)
 
       expect { click_button "Send Notifications" }.to(
-        enqueue_mail(Notifier, :review_orders)
+        enqueue_mail(Notifier, :review_orders),
       )
 
       expect(page).to have_content("Notifications sent successfully")

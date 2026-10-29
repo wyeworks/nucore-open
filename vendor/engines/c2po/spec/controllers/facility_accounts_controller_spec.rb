@@ -171,7 +171,7 @@ RSpec.describe FacilityAccountsController do
 
       before do
         skip if Account.config.facility_account_globally_managed_types.include?(
-          account_type
+          account_type,
         )
       end
 

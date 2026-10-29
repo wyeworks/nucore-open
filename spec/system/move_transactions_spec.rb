@@ -18,7 +18,7 @@ RSpec.describe "Move Transactions", :js, feature_setting: { "roles.move_transact
     [
       create(:complete_order, product: item, account: source_account).order_details.first,
       create(:complete_order, product: item, account: source_account).order_details.first,
-      create(:complete_order, product: item, account: source_account).order_details.first
+      create(:complete_order, product: item, account: source_account).order_details.first,
     ]
   end
 

@@ -1646,11 +1646,6 @@ Style/DocumentDynamicEvalDefinition:
   Exclude:
     - 'app/models/nufs_account.rb'
 
-# Offense count: 980
-# Configuration parameters: AllowedConstants.
-Style/Documentation:
-  Enabled: false
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
@@ -1744,14 +1739,6 @@ Style/FormatString:
     - 'spec/factories/facility_accounts.rb'
     - 'vendor/engines/sanger_sequencing/app/models/sanger_sequencing/submission.rb'
     - 'vendor/engines/sanger_sequencing/spec/models/sanger_sequencing/submission_spec.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: MaxUnannotatedPlaceholdersAllowed, Mode, AllowedMethods, AllowedPatterns.
-# SupportedStyles: annotated, template, unannotated
-# AllowedMethods: redirect
-Style/FormatStringToken:
-  EnforcedStyle: template
 
 # Offense count: 91
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -2010,12 +1997,6 @@ Style/NumericLiteralPrefix:
     - 'spec/models/reservation_spec.rb'
     - 'spec/models/schedule_rule_spec.rb'
 
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Strict, AllowedNumbers, AllowedPatterns.
-Style/NumericLiterals:
-  MinDigits: 6
-
 # Offense count: 54
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle, AllowedMethods, AllowedPatterns.
@@ -2072,13 +2053,6 @@ Style/PercentLiteralDelimiters:
 Style/Proc:
   Exclude:
     - 'config/deploy.rb'
-
-# Offense count: 14
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: .
-# SupportedStyles: same_as_string_literals, single_quotes, double_quotes
-Style/QuotedSymbols:
-  EnforcedStyle: double_quotes
 
 # Offense count: 25
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -2248,13 +2222,6 @@ Style/RegexpLiteral:
   Exclude:
     - 'app/helpers/translation_helper.rb'
 
-# Offense count: 51
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: implicit, explicit
-Style/RescueStandardError:
-  Enabled: false
-
 # Offense count: 20
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: ConvertCodeThatCanStartToReturnNil, AllowedMethods, MaxChainLength.
@@ -2342,13 +2309,6 @@ Style/StringConcatenation:
     - 'vendor/engines/bulk_email/spec/controllers/bulk_email/bulk_email_controller_spec.rb'
     - 'vendor/engines/split_accounts/app/models/split_accounts/reports/export_raw_transformer.rb'
 
-# Offense count: 19062
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, ConsistentQuotesInMultiline.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiterals:
-  Enabled: false
-
 # Offense count: 10
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
@@ -2374,13 +2334,6 @@ Style/SuperWithArgsParentheses:
   Exclude:
     - 'vendor/engines/secure_rooms/app/models/secure_rooms/user_extension.rb'
 
-# Offense count: 367
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, MinSize.
-# SupportedStyles: percent, brackets
-Style/SymbolArray:
-  Enabled: false
-
 # Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowMethodsWithArguments, AllowedMethods, AllowedPatterns, AllowComments.
@@ -2397,35 +2350,6 @@ Style/SymbolProc:
 Style/TernaryParentheses:
   Exclude:
     - 'vendor/engines/sanger_sequencing/app/presenters/sanger_sequencing/well_plate_presenter.rb'
-
-# Offense count: 437
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, no_comma
-Style/TrailingCommaInArguments:
-  Enabled: false
-
-# Offense count: 118
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, diff_comma, no_comma
-Style/TrailingCommaInArrayLiteral:
-  Enabled: false
-
-# Offense count: 269
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyleForMultiline.
-# SupportedStylesForMultiline: comma, consistent_comma, diff_comma, no_comma
-Style/TrailingCommaInHashLiteral:
-  Enabled: false
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: WordRegex.
-# SupportedStyles: percent, brackets
-Style/WordArray:
-  EnforcedStyle: percent
-  MinSize: 6
 
 # Offense count: 6
 # This cop supports unsafe autocorrection (--autocorrect-all).

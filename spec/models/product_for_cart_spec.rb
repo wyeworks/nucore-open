@@ -137,7 +137,7 @@ RSpec.describe ProductForCart do
       create(
         :account_user, :purchaser,
         account:, user: other_user,
-        created_by_user: user,
+        created_by_user: user
       )
       account.price_groups << PriceGroup.base
     end
@@ -146,7 +146,7 @@ RSpec.describe ProductForCart do
       before do
         UserRole.create!(
           user:, facility:,
-          role: UserRole::FACILITY_STAFF,
+          role: UserRole::FACILITY_STAFF
         )
       end
 

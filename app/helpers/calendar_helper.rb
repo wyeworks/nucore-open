@@ -21,7 +21,7 @@ module CalendarHelper
     facility_instrument_reservations_path(
       facility,
       product,
-      opts
+      opts,
     )
   end
 

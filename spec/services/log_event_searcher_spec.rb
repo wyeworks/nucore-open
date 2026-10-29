@@ -45,16 +45,16 @@ RSpec.describe LogEventSearcher do
 
     it "filters on event type" do
       expect(
-        search(events: ["account.create"])
+        search(events: ["account.create"]),
       ).to match_array([log_1])
       expect(
-        search(events: ["account_user.create"])
+        search(events: ["account_user.create"]),
       ).to match_array([log_2])
       expect(
-        search(events: ["user.create"])
+        search(events: ["user.create"]),
       ).to match_array([log_3])
       expect(
-        search(events: ["user.create", "account_user.create"])
+        search(events: ["user.create", "account_user.create"]),
       ).to match_array([log_2, log_3])
     end
   end

@@ -9,7 +9,7 @@ class Api::OrderDetailsController < ApplicationController
 
   http_basic_authenticate_with(
     name: Rails.application.secrets.api[:basic_auth_name],
-    password: Rails.application.secrets.api[:basic_auth_password]
+    password: Rails.application.secrets.api[:basic_auth_password],
   )
 
   # Qualtrics requires that we use a query parameter rather than being part of

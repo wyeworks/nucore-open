@@ -121,7 +121,7 @@ class InstrumentsController < ProductsCommonController
 
     if @product.start_time_disabled?
       @product.schedule_rules.update_all(
-        ScheduleRule.full_day_attributes
+        ScheduleRule.full_day_attributes,
       )
       flash[:info] = t("controllers.instruments.create.schedule_rules_updated")
     else

@@ -11,7 +11,7 @@ module TransactionSearch
   class AccountSearcher < BaseSearcher
     def options
       accounts = accounts_relation.where(
-        id: order_details.distinct.select(:account_id)
+        id: order_details.distinct.select(:account_id),
       )
       if account_ids
         accounts = accounts.or(Account.where(id: account_ids))

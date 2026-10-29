@@ -7,7 +7,7 @@ class ResultsFileNotifierPreview < ActionMailer::Preview
       :stored_file,
       :results,
       creator: User.first,
-      order_detail: OrderDetail.first
+      order_detail: OrderDetail.first,
     )
 
     ResultsFileNotifierMailer.file_uploaded(file)

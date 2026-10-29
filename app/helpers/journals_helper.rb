@@ -2,7 +2,7 @@
 
 module JournalsHelper
   def journal_status_options(_journal)
-    [nil, 'succeeded', 'succeeded_errors', 'failed'].map do |status|
+    [nil, "succeeded", "succeeded_errors", "failed"].map do |status|
       if status.present?
         [t("facility_journals.status_options.#{status}"), status]
       else

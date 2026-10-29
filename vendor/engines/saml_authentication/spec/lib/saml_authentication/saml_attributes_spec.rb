@@ -29,7 +29,7 @@ RSpec.describe SamlAuthentication::SamlAttributes do
       "User.email" => ["sst123@example.com"],
       "User.FirstName" => ["Sam"],
       "User.LastName" => ["Student"],
-      "memberOf" => [""]
+      "memberOf" => [""],
     )
   end
 

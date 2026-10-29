@@ -184,7 +184,7 @@ RSpec.describe AccountConfig, type: :model do
       allow(account_type_double).to receive(:to_s).and_return(some_account_type)
 
       allow_any_instance_of(String).to receive(:constantize).and_return(
-        account_type_double
+        account_type_double,
       )
 
       instance.statement_account_types << some_account_type.dup

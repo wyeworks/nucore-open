@@ -28,9 +28,9 @@ RSpec.describe "Managing Certificates" do
       FactoryBot.create(:product_certification_requirement, research_safety_certificate: certificate, product: product)
       visit facility_product_product_research_safety_certification_requirements_path(facility, product)
 
-      within '#new_product_research_safety_certification_requirement' do
-        expect(page).to have_selector('option', text: other_certificate.name)
-        expect(page).not_to have_selector('option', text: certificate.name)
+      within "#new_product_research_safety_certification_requirement" do
+        expect(page).to have_selector("option", text: other_certificate.name)
+        expect(page).not_to have_selector("option", text: certificate.name)
       end
     end
   end

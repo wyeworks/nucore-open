@@ -229,8 +229,8 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
             price_group_discounts_attributes: {
               id: price_group_discount.id,
               discount_percent: price_group_discount.discount_percent + 1,
-            }
-          }
+            },
+          },
         )
       end
       let(:action) do
@@ -246,7 +246,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
       context "when product pricing disabled" do
         it "cannot update price group discount" do
           expect { action.call }.not_to(
-            change { price_group_discount.reload.discount_percent }
+            change { price_group_discount.reload.discount_percent },
           )
         end
       end
@@ -258,7 +258,7 @@ RSpec.shared_examples_for "A product supporting ScheduleRulesController" do |pro
 
         it "can update price group discount" do
           expect { action.call }.to(
-            change { price_group_discount.reload.discount_percent }.by(1)
+            change { price_group_discount.reload.discount_percent }.by(1),
           )
         end
       end

@@ -123,8 +123,8 @@ RSpec.describe ServicesController do
         ExternalServicePasser.create(
           passer: @service,
           external_service: UrlService.create(
-            location: new_sanger_sequencing_submission_path
-          )
+            location: new_sanger_sequencing_submission_path,
+          ),
         )
 
         expect { do_request }.to_not change {

@@ -13,7 +13,7 @@ class LogEventsController < GlobalSettingsController
       format.csv do
         queue_csv_report_email(
           report_class,
-          **report_args
+          **report_args,
         )
       end
     end

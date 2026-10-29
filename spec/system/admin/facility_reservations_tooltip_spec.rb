@@ -24,14 +24,14 @@ RSpec.describe "Reservation Tooltips", :js, :skip_time_travel do
     it "Includes the order note in the tooltip for the instrument reservation calendar" do
       visit facility_instrument_schedule_path(facility, instrument)
 
-      page.find('.fc-title').hover
+      page.find(".fc-title").hover
       expect(page.body).to include("This is an order detail note")
     end
 
     it "Includes the order note in the tooltip for the Admin Hold calendar" do
       visit new_facility_instrument_reservation_path(facility, instrument)
 
-      page.find('.fc-title').hover
+      page.find(".fc-title").hover
       expect(page.body).to include("This is an order detail note")
     end
 
@@ -81,14 +81,14 @@ RSpec.describe "Reservation Tooltips", :js, :skip_time_travel do
     it "Does not include the order note in the tooltip for the instrument reservation calendar" do
       visit facility_instrument_schedule_path(facility, instrument)
 
-      page.find('.fc-title').hover
+      page.find(".fc-title").hover
       expect(page.body).not_to include("This is an order detail note")
     end
 
     it "Does not include the order note in the tooltip for the Admin Hold calendar" do
       visit new_facility_instrument_reservation_path(facility, instrument)
 
-      page.find('.fc-title').hover
+      page.find(".fc-title").hover
       expect(page.body).not_to include("This is an order detail note")
     end
 

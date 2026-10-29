@@ -22,11 +22,11 @@ RSpec.describe "Scishield timeout", safety_adapter_class: ResearchSafetyAdapters
     before do
       # Raise a Net::OpenTimeout error when calling ScishieldApiClient#invalid_response?
       allow_any_instance_of(ResearchSafetyAdapters::ScishieldApiClient).to(
-        receive(:invalid_response?).and_raise(Net::OpenTimeout)
+        receive(:invalid_response?).and_raise(Net::OpenTimeout),
       )
       # We just want to test the retry logic, so we'll set the retry_max to 2
       allow_any_instance_of(ResearchSafetyAdapters::ScishieldTrainingSynchronizer).to(
-        receive(:retry_max).and_return(2)
+        receive(:retry_max).and_return(2),
       )
     end
 
@@ -40,7 +40,7 @@ RSpec.describe "Scishield timeout", safety_adapter_class: ResearchSafetyAdapters
       # This will cause ResearchSafetyAdapters::ScishieldApiClient#certifications_for
       # to raise ResearchSafetyAdapters::ScishieldApiError
       allow_any_instance_of(ResearchSafetyAdapters::ScishieldApiClient).to(
-        receive(:training_api_request).and_raise(Net::OpenTimeout)
+        receive(:training_api_request).and_raise(Net::OpenTimeout),
       )
     end
 

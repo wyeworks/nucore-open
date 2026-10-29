@@ -73,12 +73,12 @@ RSpec.describe FacilityAccountsReconciliationController do
               selected: "1",
               reconciled_note: "A note",
             },
-          }
+          },
         }
 
         location = response.redirect_url
         expect(location).to include(
-          url_helpers.reconciliation_tests_facility_accounts_path(facility)
+          url_helpers.reconciliation_tests_facility_accounts_path(facility),
         )
         expect(location).to include("search%5Baccounts%5D%5B%5D=#{account.id}")
         expect(location).to include("page=2")

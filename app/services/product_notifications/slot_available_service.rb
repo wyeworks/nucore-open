@@ -40,7 +40,7 @@ module ProductNotifications
           ProductNotificationMailer.slot_available(
             product, user,
             start_time, end_time,
-            subject: product_notification.email_subject.presence,
+            subject: product_notification.email_subject.presence
           ).deliver_later
         end
       end

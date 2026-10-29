@@ -15,8 +15,8 @@ class OrderDetails::PriceChecker
     updater.assign_attributes(params)
     @order_detail.assign_price_policy
 
-    fields = [:estimated_cost, :estimated_subsidy, :estimated_total,
-              :actual_cost,    :actual_subsidy,    :actual_total]
+    fields = %i[estimated_cost estimated_subsidy estimated_total
+              actual_cost actual_subsidy actual_total]
 
     results = fields.collect { |f| [f, number_with_precision(@order_detail.send(f), precision: 2)] }
 

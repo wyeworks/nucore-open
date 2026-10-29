@@ -74,7 +74,7 @@ class QuickReservationsController < ApplicationController
       redirect_to facility_instrument_quick_reservation_path(
         @facility,
         @instrument,
-        @reservation
+        @reservation,
       )
     else
       # failed to save reservation
@@ -99,7 +99,7 @@ class QuickReservationsController < ApplicationController
       redirect_to facility_instrument_quick_reservation_path(
         @facility,
         @instrument,
-        @startable.reservation
+        @startable.reservation,
       )
     end
   end

@@ -131,7 +131,7 @@ RSpec.describe OrderDetailsController do
 
           it "triggers an email" do
             expect { put :cancel, params: { order_id: order.id, id: order_detail.id } }.to(
-              have_enqueued_mail(CancellationMailer, :notify_facility)
+              have_enqueued_mail(CancellationMailer, :notify_facility),
             )
           end
         end

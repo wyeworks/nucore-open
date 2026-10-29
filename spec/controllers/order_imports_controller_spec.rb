@@ -52,7 +52,7 @@ RSpec.describe OrderImportsController do
 
         it "creates an order import" do
           expect { do_request }.to(
-            change { OrderImport.count }.by(1)
+            change { OrderImport.count }.by(1),
           )
         end
 
@@ -63,7 +63,7 @@ RSpec.describe OrderImportsController do
                 user:,
                 event_type: :created,
               ).count
-            end.by(1)
+            end.by(1),
           )
         end
 
@@ -77,13 +77,13 @@ RSpec.describe OrderImportsController do
 
         it "does not create an order import" do
           expect { do_request }.to_not(
-            change { OrderImport.count }
+            change { OrderImport.count },
           )
         end
 
         it "does not create a log event" do
           expect { do_request }.to_not(
-            change { LogEvent.count }
+            change { LogEvent.count },
           )
         end
       end
@@ -129,7 +129,7 @@ RSpec.describe OrderImportsController do
 
       it "ignores fail on error param and saves it to true" do
         expect { do_request }.to(
-          change(OrderImport.where(fail_on_error: true), :count).by(1)
+          change(OrderImport.where(fail_on_error: true), :count).by(1),
         )
       end
     end

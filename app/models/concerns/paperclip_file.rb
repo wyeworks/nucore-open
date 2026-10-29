@@ -7,7 +7,7 @@ module PaperclipFile
   included do
     has_attached_file :file, PaperclipSettings.config.merge(
       validate_media_type: false,
-      s3_url_options: { response_content_disposition: "attachment" } # this is ignored when using local storage
+      s3_url_options: { response_content_disposition: "attachment" }, # this is ignored when using local storage
     )
 
     # TODO: Limit attachment types for safe uploads

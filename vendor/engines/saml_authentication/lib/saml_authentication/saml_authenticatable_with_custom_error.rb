@@ -38,7 +38,7 @@ module Devise
         I18n.t(
           "devise.failure.saml_invalid",
           username: failed_auth_user_attributes[:username]&.first,
-          email: failed_auth_user_attributes[:email]&.first
+          email: failed_auth_user_attributes[:email]&.first,
         )
       end
 

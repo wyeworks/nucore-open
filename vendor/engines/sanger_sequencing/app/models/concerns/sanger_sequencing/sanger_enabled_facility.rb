@@ -10,7 +10,7 @@ module SangerSequencing
       has_many(
         :sanger_sequencing_primers,
         class_name: "SangerSequencing::Primer",
-        inverse_of: :facility
+        inverse_of: :facility,
       )
 
       accepts_nested_attributes_for :sanger_sequencing_primers, allow_destroy: true

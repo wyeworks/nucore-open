@@ -188,7 +188,7 @@ RSpec.describe Statement do
 
         it "includes reconcile notes" do
           expect(subject).to(
-            match(["Some note", "Some other note"])
+            match(["Some note", "Some other note"]),
           )
         end
 

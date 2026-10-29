@@ -445,7 +445,7 @@ RSpec.describe FacilityReservationsController do
           @params.merge!(
             reservation: {
               duration_days: "3",
-            }
+            },
           )
         end
 
@@ -459,7 +459,7 @@ RSpec.describe FacilityReservationsController do
           do_request
 
           expect(reservation.reload.reserve_end_at).to(
-            eq(reservation.reserve_start_at + 3.days)
+            eq(reservation.reserve_start_at + 3.days),
           )
         end
       end
@@ -470,7 +470,7 @@ RSpec.describe FacilityReservationsController do
         create(
           :setup_instrument, :daily_booking,
           facility: @authable,
-          facility_account: @facility_account,
+          facility_account: @facility_account
         )
       end
 
@@ -484,7 +484,7 @@ RSpec.describe FacilityReservationsController do
           :setup_instrument, :daily_booking,
           facility: @authable,
           facility_account: @facility_account,
-          start_time_disabled: true,
+          start_time_disabled: true
         )
       end
 

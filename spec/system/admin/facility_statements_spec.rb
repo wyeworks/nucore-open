@@ -182,8 +182,8 @@ RSpec.describe "Facility Statement Admin" do
     it "sends a csv in an email" do
       expect { click_link "Export as CSV" }.to(
         enqueue_job(CsvReportEmailJob).with(
-          Reports::StatementSearchReport.to_s, director.email, Hash,
-        )
+          Reports::StatementSearchReport.to_s, director.email, Hash
+        ),
       )
 
       perform_enqueued_jobs
@@ -201,7 +201,7 @@ RSpec.describe "Facility Statement Admin" do
         created_at: 9.days.ago,
         order_details: order_details.slice(..3),
         account:,
-        facility:
+        facility:,
       )
     end
 

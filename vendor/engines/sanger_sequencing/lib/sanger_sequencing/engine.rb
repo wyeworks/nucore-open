@@ -12,7 +12,7 @@ module SangerSequencing
       ViewHook.add_hook(
         "admin.shared.tabnav_product",
         "additional_tabs",
-        "sanger_sequencing/admin/shared/tabnav_product/sanger"
+        "sanger_sequencing/admin/shared/tabnav_product/sanger",
       )
 
       Facility.include SangerSequencing::SangerEnabledFacility

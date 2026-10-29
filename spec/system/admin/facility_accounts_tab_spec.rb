@@ -25,7 +25,7 @@ RSpec.describe "Facility Accounts Tab" do
     create(
       account_type1.underscore,
       :with_account_owner,
-      suspended_at: 1.day.ago
+      suspended_at: 1.day.ago,
     )
   end
   let(:product) { create(:setup_item, facility:) }

@@ -23,13 +23,13 @@ class OrderRowImporter
 
   HEADERS = order_import_headers.lazy.map { |k| header(k) }
 
-  REQUIRED_HEADERS = [
-    :user,
-    :chart_string,
-    :product_name,
-    :quantity,
-    :order_date,
-    :fulfillment_date,
+  REQUIRED_HEADERS = %i[
+    user
+    chart_string
+    product_name
+    quantity
+    order_date
+    fulfillment_date
   ].lazy.map { |k| header(k) }
 
   attr_accessor :order_import, :order
@@ -204,7 +204,7 @@ class OrderRowImporter
 
   def validate_headers
     missing_headers = REQUIRED_HEADERS.to_a - @row.headers
-    add_error(:missing_headers, headers: missing_headers.join(' | ')) if missing_headers.present?
+    add_error(:missing_headers, headers: missing_headers.join(" | ")) if missing_headers.present?
   end
 
   def has_valid_fields?

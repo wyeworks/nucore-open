@@ -19,7 +19,7 @@ RSpec.describe Reservations::CalendarPresenter do
         :orderId,
         :orderNote,
         title: order.user.full_name,
-        email: order.user.email
+        email: order.user.email,
       )
     end
   end
@@ -33,7 +33,7 @@ RSpec.describe Reservations::CalendarPresenter do
 
     it "keeps the other-instrument class when discriminating" do
       expect(
-        presenter.as_calendar_object(discriminate: true, instrument_id: reservation.product_id + 1)
+        presenter.as_calendar_object(discriminate: true, instrument_id: reservation.product_id + 1),
       ).to include(className: ["other-instrument", "canceled"])
     end
   end

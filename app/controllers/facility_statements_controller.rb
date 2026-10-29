@@ -73,7 +73,7 @@ class FacilityStatementsController < ApplicationController
       order_detail_ids: params[:order_detail_ids],
       session_user:,
       current_facility:,
-      parent_invoice_number: params[:parent_invoice_number]
+      parent_invoice_number: params[:parent_invoice_number],
     }
 
     if can_set_invoice_date? && params[:invoice_date].present?

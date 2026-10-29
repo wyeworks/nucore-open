@@ -148,7 +148,7 @@ class Statement < ApplicationRecord
           user:,
           facility:,
           account:,
-          statement: self
+          statement: self,
         ).deliver_later
     end
   end

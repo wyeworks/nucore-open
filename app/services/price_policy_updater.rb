@@ -63,7 +63,7 @@ class PricePolicyUpdater
         duration_rate_params.each do |key, dr|
           values_are_blank = dr["rate"].blank? && dr["subsidy"].blank?
           rate_exists = DurationRate.where(id: dr[:id]).present?
-          duration_rate_params[key].merge! ({ _destroy: '1' }) if values_are_blank && rate_exists
+          duration_rate_params[key].merge! ({ _destroy: "1" }) if values_are_blank && rate_exists
         end
       end
     end
@@ -104,13 +104,13 @@ class PricePolicyUpdater
       :unit_cost,
       :unit_subsidy,
       {
-        duration_rates_attributes: [
-          :id,
-          :subsidy,
-          :rate,
-          :price_policy_id,
-          :min_duration_hours,
-          :_destroy,
+        duration_rates_attributes: %i[
+          id
+          subsidy
+          rate
+          price_policy_id
+          min_duration_hours
+          _destroy
         ],
       },
     ].tap do |attributes|

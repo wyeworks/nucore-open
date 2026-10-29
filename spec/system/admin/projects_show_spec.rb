@@ -94,7 +94,7 @@ RSpec.describe "Projects show" do
         it "navigates to original order" do
           within("table.js--transactions-table") do
             find_link(
-              href: facility_order_path(facility, originating_order_facility1.id)
+              href: facility_order_path(facility, originating_order_facility1.id),
             ).click
           end
 

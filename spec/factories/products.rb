@@ -129,7 +129,7 @@ FactoryBot.define do
       after(:create) do |product|
         ExternalServicePasser.create(
           external_service: UrlService.create(location: "/some/survey/path"),
-          passer: product, active: true,
+          passer: product, active: true
         )
       end
     end

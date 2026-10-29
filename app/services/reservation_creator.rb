@@ -51,7 +51,7 @@ class ReservationCreator
         raise ActiveRecord::Rollback
       rescue ActiveRecord::RecordInvalid => e
         raise ActiveRecord::Rollback
-      rescue StandardError => e
+      rescue => e
         @error = I18n.t("orders.purchase.error", message: e.message).html_safe
         raise ActiveRecord::Rollback
       end
@@ -93,7 +93,7 @@ class ReservationCreator
           reservation_params.merge!(
             reserve_start_hour: 0,
             reserve_start_min: 0,
-            reserve_start_meridian: "AM"
+            reserve_start_meridian: "AM",
           )
         end
       end
@@ -155,7 +155,7 @@ class ReservationCreator
         acting_as: original_order.user,
         order_in_past: nil,
         params: ActionController::Parameters.new({}),
-        user: original_order.created_by
+        user: original_order.created_by,
       )
       order_purchaser.purchase_cross_core!
     end

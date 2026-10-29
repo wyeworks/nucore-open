@@ -45,16 +45,16 @@ RSpec.describe "Editing an estimate", :js do
     # 1 more remove button for the new item
     expect(page).to have_content("Remove", count: 3)
 
-    within '#estimate_estimate_details' do
-      other_item_row = all('tr').last
-      columns = other_item_row.all('td')
+    within "#estimate_estimate_details" do
+      other_item_row = all("tr").last
+      columns = other_item_row.all("td")
       first_column_text = columns[0].text
       expect(first_column_text).to eq other_item.name
 
       2.times do
-        first_row = all('tr').first
-        columns = first_row.all('td')
-        remove_button = columns[3].find('.remove-estimate-detail')
+        first_row = all("tr").first
+        columns = first_row.all("td")
+        remove_button = columns[3].find(".remove-estimate-detail")
         remove_button.click
       end
     end

@@ -110,7 +110,7 @@ RSpec.describe StatementCreator do
           it "adds error for non-existent parent statement" do
             creator_with_nonexistent.create
             expect(creator_with_nonexistent.errors).to include(
-              I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: non_existent_invoice)
+              I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: non_existent_invoice),
             )
           end
         end

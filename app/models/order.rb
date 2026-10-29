@@ -77,7 +77,7 @@ class Order < ApplicationRecord
     false
   end
 
-  [:total, :cost, :subsidy, :estimated_total, :estimated_cost, :estimated_subsidy].each do |method_name|
+  %i[total cost subsidy estimated_total estimated_cost estimated_subsidy].each do |method_name|
     define_method(method_name) { order_details.non_canceled.map(&method_name).compact.sum }
   end
 

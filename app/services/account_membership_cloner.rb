@@ -38,7 +38,7 @@ class AccountMembershipCloner
       user: @clone_to_user,
       account_id: account_id,
       created_by_user: @acting_user,
-      user_role: assign_user_role(original_role)
+      user_role: assign_user_role(original_role),
     )
   end
 

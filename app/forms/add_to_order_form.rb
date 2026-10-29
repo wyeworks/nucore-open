@@ -91,7 +91,7 @@ class AddToOrderForm
           "data-accounts-path": Rails.application.routes.url_helpers.accounts_available_for_order_facility_accounts_path(f, format: :json),
           "data-original-order-facility": @original_order.facility_id,
           "data-original-order": @original_order.id,
-        }
+        },
       ]
     end
   end
@@ -146,7 +146,7 @@ class AddToOrderForm
     Project.transaction do
       @order_project ||= Project.new(
         name: "#{current_facility.abbreviation}-#{original_order.id}",
-        facility_id: current_facility.id
+        facility_id: current_facility.id,
       )
 
       # Update original order's order details to be included in the project
@@ -260,7 +260,7 @@ class AddToOrderForm
       account_id:,
       user_id: original_order.user_id,
       created_by: created_by.id,
-      cross_core_project: @order_project
+      cross_core_project: @order_project,
     )
   end
 

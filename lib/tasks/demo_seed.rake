@@ -68,7 +68,7 @@ namespace :demo do
 
     Settings.price_group.name.to_hash.each do |k, v|
       price_group = PriceGroup.setup_global(
-        name: v, is_internal: (k == :base || k == :cancer_center)
+        name: v, is_internal: (k == :base || k == :cancer_center),
       )
 
       if k == :base
@@ -268,7 +268,7 @@ namespace :demo do
     PriceGroup.globals.each do |price_group|
       sr.price_group_discounts.create(
         price_group: price_group,
-        discount_percent: 0
+        discount_percent: 0,
       )
     end
 

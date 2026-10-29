@@ -87,7 +87,7 @@ RSpec.describe Reservations::Validations do
           :setup_reservation,
           product:,
           reserve_start_at: start_at,
-          reserve_end_at: end_at
+          reserve_end_at: end_at,
         )
       end
       let(:product) { create :setup_instrument, :daily_booking }
@@ -104,7 +104,7 @@ RSpec.describe Reservations::Validations do
           create(
             :schedule_rule,
             product:,
-            "on_#{start_at_wday}" => false
+            "on_#{start_at_wday}" => false,
           )
         end
 
@@ -126,7 +126,7 @@ RSpec.describe Reservations::Validations do
               :schedule_rule,
               :unavailable,
               product:,
-              "on_#{start_at_wday}" => true
+              "on_#{start_at_wday}" => true,
             )
           end
 
@@ -158,7 +158,7 @@ RSpec.describe Reservations::Validations do
         :setup_reservation,
         product:,
         reserve_start_at: start_at,
-        reserve_end_at: end_at
+        reserve_end_at: end_at,
       )
     end
 

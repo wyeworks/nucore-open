@@ -116,7 +116,7 @@ module SangerSequencing
       def create_params
         params.require(:batch).permit(
           :group, :column_order, :submission_ids,
-          reserved_cells: [], well_plate_data: {},
+          reserved_cells: [], well_plate_data: {}
         )
       end
 

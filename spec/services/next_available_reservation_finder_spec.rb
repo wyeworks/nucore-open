@@ -36,7 +36,7 @@ RSpec.describe NextAvailableReservationFinder do
       create(
         :setup_instrument,
         :always_available,
-        :daily_booking
+        :daily_booking,
       )
     end
 
@@ -87,7 +87,7 @@ RSpec.describe NextAvailableReservationFinder do
     it "calls next available reservation after start_at" do
       expect(instrument).to(
         receive(:next_available_reservation)
-        .with(a_hash_including(after: start_at))
+        .with(a_hash_including(after: start_at)),
       )
 
       finder.next_available_for(user, user)

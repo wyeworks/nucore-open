@@ -584,7 +584,7 @@ RSpec.describe OrdersController do
                 have_enqueued_email(
                   PurchaseNotifier,
                   :product_order_notification,
-                ).exactly(recipients.length)
+                ).exactly(recipients.length),
               )
             end
           end

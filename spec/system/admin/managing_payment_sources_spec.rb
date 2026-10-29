@@ -126,7 +126,7 @@ RSpec.describe "Managing accounts" do
           :with_account_owner,
           owner:,
           facility:,
-          expires_at: 75.years.from_now - 1.day
+          expires_at: 75.years.from_now - 1.day,
         )
       end
 
@@ -156,7 +156,7 @@ RSpec.describe "Managing accounts" do
           :with_account_owner,
           owner:,
           facility:,
-          expires_at: 75.years.from_now + 1.day
+          expires_at: 75.years.from_now + 1.day,
         )
       end
 

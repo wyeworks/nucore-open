@@ -18,7 +18,7 @@ class ArchivedEmailsController < ApplicationController
       @log_event.email_content,
       filename: download_filename,
       type: "message/rfc822",
-      disposition: "attachment"
+      disposition: "attachment",
     )
   end
 
@@ -32,7 +32,7 @@ class ArchivedEmailsController < ApplicationController
         attachment.body.decoded,
         filename: attachment.filename,
         type: attachment.content_type,
-        disposition: "attachment"
+        disposition: "attachment",
       )
     else
       redirect_with_error("attachment_not_found")
@@ -68,7 +68,7 @@ class ArchivedEmailsController < ApplicationController
       {
         filename: attachment.filename,
         size: attachment.body.decoded.size,
-        content_type: attachment.content_type
+        content_type: attachment.content_type,
       }
     end
   end

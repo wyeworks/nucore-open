@@ -19,7 +19,7 @@ if defined?(Rollbar)
       "ActionController::UnknownHttpMethod" => "ignore",
       "ActionDispatch::Http::MimeNegotiation::InvalidType" => "ignore",
       "CanCan::AccessDenied" => "ignore",
-      "NUCore::PermissionDenied" => "ignore"
+      "NUCore::PermissionDenied" => "ignore",
     )
 
     # By default, Rollbar will try to call the `current_user` controller method

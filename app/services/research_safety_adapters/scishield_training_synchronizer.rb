@@ -26,7 +26,7 @@ module ResearchSafetyAdapters
 
             puts "#{trainings_added} trainings added for user id #{user_id}"
           end
-        rescue StandardError => e
+        rescue => e
           msg = "Rolling back transaction, ScishieldTrainingSynchronizer error: #{e.message}"
 
           Rails.logger.error(msg)

@@ -83,8 +83,8 @@ class ReservationsController < ApplicationController
             with_details: @show_details,
             discriminate:,
             user: acting_user,
-            view: params[:view]
-          ).to_json
+            view: params[:view],
+          ).to_json,
         )
       end
     end

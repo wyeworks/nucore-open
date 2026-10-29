@@ -150,7 +150,7 @@ RSpec.describe "FacilityProductNotifications" do
           expect { action.call }.to(
             change do
               ProductNotification.where(product_notification_attributes).count
-            end.by(1)
+            end.by(1),
           )
         end
 
@@ -183,7 +183,7 @@ RSpec.describe "FacilityProductNotifications" do
           action.call
 
           expect(ProductNotification.last.products).to(
-            contain_exactly(instrument)
+            contain_exactly(instrument),
           )
         end
 
@@ -260,7 +260,7 @@ RSpec.describe "FacilityProductNotifications" do
             product_notification: {
               name: "Updated Name",
               reservation_days: 20,
-            }
+            },
           }
         end
 
@@ -305,7 +305,7 @@ RSpec.describe "FacilityProductNotifications" do
               name: notification.name,
               reservation_days: notification.reservation_days,
               user_ids: [],
-            }
+            },
           }
         end
 
@@ -403,7 +403,7 @@ RSpec.describe "FacilityProductNotifications" do
         expect { action.call }.to(
           change do
             ProductNotification.find_by(id: notification.id)
-          end.to(nil)
+          end.to(nil),
         )
       end
 
@@ -412,7 +412,7 @@ RSpec.describe "FacilityProductNotifications" do
 
         expect(response).to have_http_status(:found)
         expect(response.location).to eq(
-          list_facility_product_notifications_url(facility)
+          list_facility_product_notifications_url(facility),
         )
       end
 

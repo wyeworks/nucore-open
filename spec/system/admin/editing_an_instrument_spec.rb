@@ -32,7 +32,7 @@ RSpec.describe "Editing an instrument" do
         create(
           :schedule_rule,
           product: instrument,
-          start_hour: 9, start_min: 0, end_hour: 17, end_min: 0,
+          start_hour: 9, start_min: 0, end_hour: 17, end_min: 0
         )
       end
 
@@ -48,9 +48,9 @@ RSpec.describe "Editing an instrument" do
         expect { click_button("Save") }.to change {
           schedule_rule_times(schedule_rule.reload)
         }.from(
-          schedule_rule_times(schedule_rule)
+          schedule_rule_times(schedule_rule),
         ).to(
-          ScheduleRule.full_day_attributes.with_indifferent_access
+          ScheduleRule.full_day_attributes.with_indifferent_access,
         )
 
         expect(page).to have_content("Instrument was successfully updated")

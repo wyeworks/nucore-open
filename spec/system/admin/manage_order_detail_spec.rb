@@ -31,12 +31,12 @@ RSpec.describe "Managing an order detail" do
 
     it "shows the custom status in the select box" do
       visit manage_facility_order_order_detail_path(
-        facility, order, order_detail,
+        facility, order, order_detail
       )
 
       expect(page).to have_select(
         "order_detail[order_status_id]",
-        with_selected: "- Custom"
+        with_selected: "- Custom",
       )
     end
   end
@@ -167,7 +167,7 @@ RSpec.describe "Managing an order detail" do
         reserve_start_at: 2.hours.ago,
         reserve_end_at: 1.hour.ago,
         actual_start_at: 1.hour.ago,
-        actual_end_at: nil
+        actual_end_at: nil,
       )
     end
 
@@ -231,7 +231,7 @@ RSpec.describe "Managing an order detail" do
           visit manage_facility_order_order_detail_path(facility, order, order_detail)
 
           expect(page).to(
-            have_select("Status", options: ["Complete", "Canceled"])
+            have_select("Status", options: ["Complete", "Canceled"]),
           )
         end
 
@@ -244,7 +244,7 @@ RSpec.describe "Managing an order detail" do
           visit manage_facility_order_order_detail_path(facility, order, order_detail)
 
           expect(page).to(
-            have_select("Status", selected: "Unrecoverable")
+            have_select("Status", selected: "Unrecoverable"),
           )
 
           click_button "Save"

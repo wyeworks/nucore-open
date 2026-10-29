@@ -40,7 +40,7 @@ module Estimates
             estimate_detail.quantity,
             format_duration(estimate_detail),
             unit_price.presence && helpers.number_to_currency(unit_price),
-            helpers.number_to_currency(estimate_detail.cost)
+            helpers.number_to_currency(estimate_detail.cost),
           ]
         end
 

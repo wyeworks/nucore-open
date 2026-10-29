@@ -151,7 +151,7 @@ class PricePolicyBuilder
       unit_subsidy: 0,
       can_purchase: true,
       charge_for: "reservation",
-      note: "Price rule automatically created because of billing mode"
+      note: "Price rule automatically created because of billing mode",
     )
   end
 

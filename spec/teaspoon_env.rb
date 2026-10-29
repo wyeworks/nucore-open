@@ -115,7 +115,7 @@ Teaspoon.configure do |config|
   client_driver = :chrome
   # Using a standalone chrome container for testing.
   # https://github.com/jejacks0n/teaspoon/wiki/Using-docker-compose-with-selenium-standalone-%2A
-  if ENV['SELENIUM_HOST']
+  if ENV["SELENIUM_HOST"]
     docker_ip = `hostname -i`.strip
     config.server_host = docker_ip
     config.server_port = ENV["TEST_APP_PORT"]
@@ -125,14 +125,14 @@ Teaspoon.configure do |config|
       {
         url: "http://#{ENV['SELENIUM_HOST']}:#{ENV['SELENIUM_PORT']}/wd/hub",
         http_client: http_client,
-      }
+      },
     )
     client_driver = :remote
   end
 
   config.driver_options = {
     client_driver: client_driver,
-    selenium_options: selenium_options
+    selenium_options: selenium_options,
   }
 
   config.suite :engines do |suite|

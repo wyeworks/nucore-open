@@ -65,7 +65,7 @@ RSpec.describe "Purchasing a reservation" do
       feature_setting: {
         "pricing.user_based_price_groups" => true,
         "pricing.user_based_price_groups_exclude_purchaser" => true,
-      }
+      },
     ) do
       context "when account HAS price groups configured" do
         before do
@@ -271,7 +271,7 @@ RSpec.describe "Purchasing a reservation" do
       create(
         :setup_instrument,
         :always_available,
-        pricing_mode: Instrument::Pricing::SCHEDULE_DAILY
+        pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
       )
     end
     let(:reservation_path) do
@@ -306,7 +306,7 @@ RSpec.describe "Purchasing a reservation" do
         create(
           :user,
           :facility_administrator,
-          facility:
+          facility:,
         )
       end
       let(:note) { "Some note about the reservation" }
@@ -325,7 +325,7 @@ RSpec.describe "Purchasing a reservation" do
         after_submit: proc do
           expect(page).to have_content(note)
           expect(user.reservations.count).to eq(1)
-        end
+        end,
       )
 
       context "when start time is fixed" do
@@ -341,7 +341,7 @@ RSpec.describe "Purchasing a reservation" do
           after_submit: proc do
             expect(page).to have_content(note)
             expect(user.reservations.count).to eq(1)
-          end
+          end,
         )
       end
     end
@@ -373,7 +373,7 @@ RSpec.describe "Purchasing a reservation" do
         click_button("Create")
 
         expect(page).to have_content(
-          I18n.t("activerecord.errors.models.reservation.attributes.base.no_schedule_rule")
+          I18n.t("activerecord.errors.models.reservation.attributes.base.no_schedule_rule"),
         )
       end
 
@@ -418,7 +418,7 @@ RSpec.describe "Purchasing a reservation" do
 
     before do
       instrument.price_group_products.where.not(
-        price_group: other_price_group.id
+        price_group: other_price_group.id,
       ).destroy_all
     end
 

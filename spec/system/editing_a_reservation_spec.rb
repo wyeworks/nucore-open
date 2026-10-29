@@ -28,7 +28,7 @@ RSpec.describe "Editing your own reservation" do
 
     it "renders an error when user submits an empty start date" do
       visit edit_order_order_detail_reservation_path(
-        order, order_detail, reservation,
+        order, order_detail, reservation
       )
 
       fill_in("Reserve Start", with: "")
@@ -190,7 +190,7 @@ RSpec.describe "Editing your own reservation" do
           user:,
           reserve_start_at: new_reserve_start_at,
           reserve_end_at: new_reserve_start_at + 1.day,
-          product: instrument
+          product: instrument,
         )
 
         expect(invalid_reservation).to_not be_valid
@@ -216,7 +216,7 @@ RSpec.describe "Editing your own reservation" do
 
           # Move the reservation right after other reservation
           expect(reservation.reload.reserve_start_at).to(
-            eq(other_reservation.reserve_end_at)
+            eq(other_reservation.reserve_end_at),
           )
         end
       end
@@ -233,7 +233,7 @@ RSpec.describe "Editing your own reservation" do
 
           # Move the reservation right after other reservation
           expect(reservation.reload.reserve_start_at).to(
-            eq(other_reservation.reserve_end_at)
+            eq(other_reservation.reserve_end_at),
           )
         end
       end
@@ -259,7 +259,7 @@ RSpec.describe "Editing your own reservation" do
           # Move the reservation just in between other reservation and
           # unavailable period
           expect(reservation.reload.reserve_start_at).to eq(
-            other_reservation.reserve_end_at
+            other_reservation.reserve_end_at,
           )
           expect(reservation.reserve_end_at).to eq unavailable_period_start
         end
@@ -278,7 +278,7 @@ RSpec.describe "Editing your own reservation" do
           # Move the reservation just in between other reservation and
           # unavailable period
           expect(reservation.reload.reserve_start_at).to eq(
-            conflict_reservation.reserve_end_at
+            conflict_reservation.reserve_end_at,
           )
         end
       end

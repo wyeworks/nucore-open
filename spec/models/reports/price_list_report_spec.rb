@@ -66,7 +66,7 @@ RSpec.describe Reports::PriceListReport do
           product_header(:facility, Facility.model_name.human),
           report_header(:product_type),
           product_header(:name, Product.model_name.human),
-        ]
+        ],
       )
     end
 

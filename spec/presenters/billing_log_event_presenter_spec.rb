@@ -88,7 +88,7 @@ RSpec.describe BillingLogEventPresenter do
     let(:metadata) do
       {
         "reconciled_notes" => ["Note 1", "Note 2"],
-        "unrecoverable_notes" => ["Bad note"]
+        "unrecoverable_notes" => ["Bad note"],
       }
     end
 
@@ -96,7 +96,7 @@ RSpec.describe BillingLogEventPresenter do
       expected_notes = [
         "Reconciled: Note 1",
         "Reconciled: Note 2",
-        "Unrecoverable: Bad note"
+        "Unrecoverable: Bad note",
       ]
       expect(subject.all_reconciliation_notes).to eq(expected_notes)
     end
@@ -108,7 +108,7 @@ RSpec.describe BillingLogEventPresenter do
     let(:metadata) do
       {
         "reconciled_notes" => ["Note 1", "Note 2"],
-        "unrecoverable_notes" => ["Bad note"]
+        "unrecoverable_notes" => ["Bad note"],
       }
     end
 

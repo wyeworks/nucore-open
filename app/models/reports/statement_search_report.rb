@@ -16,7 +16,7 @@ module Reports
       @search_params =
         begin
           current_facility = Facility.by_url_name(
-            raw_search_params[:current_facility]
+            raw_search_params[:current_facility],
           )
           raw_search_params.merge(current_facility:)
         end
@@ -92,7 +92,7 @@ module Reports
         statement.invoice_number,
         format_usa_date(statement.invoice_date),
         format_usa_date(statement.created_at.to_date),
-        statement.account.notify_users.map(&:full_name).join(', '),
+        statement.account.notify_users.map(&:full_name).join(", "),
         statement.account,
         statement.facility,
         statement.order_details.count,

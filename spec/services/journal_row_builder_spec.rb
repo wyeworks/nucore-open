@@ -107,7 +107,7 @@ RSpec.describe JournalRowBuilder, :default_journal_row_converters, type: :servic
             amount: -1 * order2.order_details.first.actual_cost,
             account_id: nil,
             description: product.name,
-          )
+          ),
         ])
       end
     end

@@ -65,7 +65,7 @@ class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
 
   def dataify(hash)
     Hash[
-      hash.map { |k, v| ["data-#{k.to_s.dasherize}", v] }
+      hash.map { |k, v| ["data-#{k.to_s.dasherize}", v] },
     ]
   end
 

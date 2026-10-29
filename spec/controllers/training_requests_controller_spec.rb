@@ -60,7 +60,7 @@ RSpec.describe TrainingRequestsController, feature_setting: { training_requests:
 
         it "sends an email" do
           expect { do_request }.to(
-            have_enqueued_mail(TrainingRequestMailer, :notify_facility_staff)
+            have_enqueued_mail(TrainingRequestMailer, :notify_facility_staff),
           )
         end
 

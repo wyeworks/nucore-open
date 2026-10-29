@@ -21,7 +21,7 @@ module TransactionSearcherHelper
       label_method: searcher.label_method,
       data_attrs: searcher.method(:data_attrs),
       input_html: { id: searcher.key, class: "quarter-width" },
-      include_blank: false
+      include_blank: false,
     )
   end
 

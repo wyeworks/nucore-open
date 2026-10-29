@@ -159,7 +159,7 @@ RSpec.describe "bulk imports" do
     let(:file) do
       Tempfile.create.tap do |file|
         file.write(
-          <<~CSV
+          <<~CSV,
             Col1,Col2
             val1,val2
           CSV
@@ -171,7 +171,7 @@ RSpec.describe "bulk imports" do
         bulk_import: {
           import_type:,
           file: Rack::Test::UploadedFile.new(file.path, "text/csv"),
-        }
+        },
       }
     end
     let(:action) do
@@ -203,7 +203,7 @@ RSpec.describe "bulk imports" do
           action.call
         end.to(
           enqueue_job(BulkImportJob)
-          .with(an_instance_of(BulkImport))
+          .with(an_instance_of(BulkImport)),
         )
       end
     end
@@ -229,7 +229,7 @@ RSpec.describe "bulk imports" do
 
       it "does not create a record" do
         expect { action.call }.not_to(
-          change(BulkImport, :count)
+          change(BulkImport, :count),
         )
       end
     end

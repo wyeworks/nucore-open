@@ -36,7 +36,7 @@ RSpec.describe Estimate do
         subject.valid?
 
         expect(subject.errors).to(
-          be_added("estimate_details.base", :no_price_policy)
+          be_added("estimate_details.base", :no_price_policy),
         )
       end
     end
