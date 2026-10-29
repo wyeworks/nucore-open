@@ -715,12 +715,6 @@ Lint/SharedMutableDefault:
   Exclude:
     - 'app/presenters/view_hook.rb'
 
-# Offense count: 1
-# Configuration parameters: AllowComments, AllowNil.
-Lint/SuppressedException:
-  Exclude:
-    - 'db/migrate/20100701232820_change_order_detail_status.rb'
-
 # Offense count: 10
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
@@ -1057,12 +1051,6 @@ Rails/ActionControllerFlashBeforeRender:
 Rails/ActionOrder:
   Enabled: false
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Rails/ApplicationRecord:
-  Exclude:
-    - 'vendor/engines/secure_rooms/db/migrate/20170525143813_add_token_to_secure_room.rb'
-
 # Offense count: 7
 # This cop supports safe autocorrection (--autocorrect).
 Rails/BelongsTo:
@@ -1113,23 +1101,6 @@ Rails/CompactBlank:
     - 'app/services/transaction_search/searcher.rb'
     - 'app/services/users/convert_external_to_internal_user.rb'
     - 'vendor/engines/sanger_sequencing/app/presenters/sanger_sequencing/well_plate_presenter.rb'
-
-# Offense count: 18
-# Configuration parameters: Include.
-# Include: db/**/*.rb
-Rails/CreateTableWithTimestamps:
-  Exclude:
-    - 'db/migrate/20100101000000_initial_schema.rb'
-    - 'db/migrate/20100423185710_create_order_details.rb'
-    - 'db/migrate/20100528230902_add_product_users_table.rb'
-    - 'db/migrate/20100715171938_add_journals_table.rb'
-    - 'db/migrate/20100719192104_add_table_statement_accounts.rb'
-    - 'db/migrate/20100812170701_add_budgeted_chart_string.rb'
-    - 'db/migrate/20101015210647_edits_for_invoicing_and_journaling_refacting.rb'
-    - 'db/migrate/20101018221409_bundle_related_updates.rb'
-    - 'db/migrate/20110216002247_create_user_roles.rb'
-    - 'db/migrate/20120209231652_create_product_accessories.rb'
-    - 'db/migrate/20120510172358_add_bi_table.rb'
 
 # Offense count: 81
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1297,24 +1268,6 @@ Rails/NegateInclude:
     - 'app/services/available_accounts_finder.rb'
     - 'lib/daemons/base.rb'
 
-# Offense count: 17
-# Configuration parameters: Database, Include.
-# SupportedDatabases: mysql
-# Include: db/**/*.rb
-Rails/NotNullColumn:
-  Exclude:
-    - 'db/migrate/20100428152408_remove_facility_from_order.rb'
-    - 'db/migrate/20100430222700_change_reservations.rb'
-    - 'db/migrate/20100707185202_add_statement_fields.rb'
-    - 'db/migrate/20100708195447_alter_account_transactions_add_fields.rb'
-    - 'db/migrate/20100715223533_add_balance_to_journaled_accounts.rb'
-    - 'db/migrate/20100914171717_add_facility_account_to_account_transactions.rb'
-    - 'db/migrate/20100930180831_add_facility_account_id_to_journaled_accounts.rb'
-    - 'db/migrate/20101011184759_add_price_group_type_to_price_groups.rb'
-    - 'db/migrate/20101015210647_edits_for_invoicing_and_journaling_refacting.rb'
-    - 'db/migrate/20120502223446_alter_journal_rows_remove_nu.rb'
-    - 'db/migrate/20131205230514_alter_schedule_rules_drop_duration_mins.rb'
-
 # Offense count: 25
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: Include.
@@ -1326,11 +1279,6 @@ Rails/Output:
     - 'app/models/price_group.rb'
     - 'app/services/research_safety_adapters/scishield_training_synchronizer.rb'
     - 'app/support/auto_canceler.rb'
-    - 'db/migrate/20110428204746_migrate_and_drop_account_transactions.rb'
-    - 'db/migrate/20111219213559_migrate_relays.rb'
-    - 'db/migrate/20120502223446_alter_journal_rows_remove_nu.rb'
-    - 'db/migrate/20120510172358_add_bi_table.rb'
-    - 'db/migrate/20120622185758_move_can_purchase_into_price_policy.rb'
 
 # Offense count: 36
 Rails/OutputSafety:
@@ -1555,7 +1503,6 @@ Rails/WhereNot:
 # Configuration parameters: Severity.
 Rails/WhereNotWithMultipleConditions:
   Exclude:
-    - 'db/migrate/20170501201633_add_canceled_to_order_detail.rb'
     - 'lib/tasks/backfill_billable_minutes.rake'
 
 # Offense count: 18

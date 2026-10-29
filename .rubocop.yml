@@ -47,6 +47,59 @@ Rails/ApplicationRecord:
     - "db/migrate/*.rb"
     - "vendor/engines/*/db/migrate/*.rb"
 
+Rails/Output:
+  inherit_mode:
+    merge:
+      - Exclude
+  Exclude:
+    - "db/migrate/*.rb"
+    - "vendor/engines/*/db/migrate/*.rb"
+
+Rails/CreateTableWithTimestamps:
+  Exclude:
+    - "db/migrate/20100101000000_initial_schema.rb"
+    - "db/migrate/20100423185710_create_order_details.rb"
+    - "db/migrate/20100528230902_add_product_users_table.rb"
+    - "db/migrate/20100715171938_add_journals_table.rb"
+    - "db/migrate/20100719192104_add_table_statement_accounts.rb"
+    - "db/migrate/20100812170701_add_budgeted_chart_string.rb"
+    - "db/migrate/20101015210647_edits_for_invoicing_and_journaling_refacting.rb"
+    - "db/migrate/20101018221409_bundle_related_updates.rb"
+    - "db/migrate/20110216002247_create_user_roles.rb"
+    - "db/migrate/20120209231652_create_product_accessories.rb"
+    - "db/migrate/20120510172358_add_bi_table.rb"
+
+Rails/NotNullColumn:
+  inherit_mode:
+    merge:
+      - Exclude
+  Exclude:
+    - "db/migrate/20100428152408_remove_facility_from_order.rb"
+    - "db/migrate/20100430222700_change_reservations.rb"
+    - "db/migrate/20100707185202_add_statement_fields.rb"
+    - "db/migrate/20100708195447_alter_account_transactions_add_fields.rb"
+    - "db/migrate/20100715223533_add_balance_to_journaled_accounts.rb"
+    - "db/migrate/20100914171717_add_facility_account_to_account_transactions.rb"
+    - "db/migrate/20100930180831_add_facility_account_id_to_journaled_accounts.rb"
+    - "db/migrate/20101011184759_add_price_group_type_to_price_groups.rb"
+    - "db/migrate/20101015210647_edits_for_invoicing_and_journaling_refacting.rb"
+    - "db/migrate/20120502223446_alter_journal_rows_remove_nu.rb"
+    - "db/migrate/20131205230514_alter_schedule_rules_drop_duration_mins.rb"
+
+Rails/WhereNotWithMultipleConditions:
+  inherit_mode:
+    merge:
+      - Exclude
+  Exclude:
+    - "db/migrate/20170501201633_add_canceled_to_order_detail.rb"
+
+Lint/SuppressedException:
+  inherit_mode:
+    merge:
+      - Exclude
+  Exclude:
+    - "db/migrate/20100701232820_change_order_detail_status.rb"
+
 Rails/HasAndBelongsToMany:
   Enabled: false
 
