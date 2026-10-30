@@ -11,7 +11,7 @@ module SamlAuthentication
     def handle_validation_error(exception)
       ::Rails.logger.warn "There was an error trying to log in the SAML user '#{exception}'"
 
-      flash[:alert] = I18n.t("devise.failure.saml_update_failed").html_safe
+      flash[:alert] = I18n.t("devise.failure.saml_update_failed")
       redirect_to new_user_session_path
     end
 

@@ -78,7 +78,7 @@ class OrdersController < ApplicationController
 
     @order.errors.add(:base, invalid_for_orderer_message)
 
-    flash.now[:error] = "There are errors in your order:<br>#{@order.errors.full_messages.join('<br>')}".html_safe
+    flash.now[:error] = "There are errors in your order:<br>#{@order.errors.full_messages.join('<br>')}"
   end
 
   # PUT /orders/:id/clear
@@ -153,7 +153,7 @@ class OrdersController < ApplicationController
       end
 
       if @order.errors.any?
-        flash[:error] = "There were errors adding to your cart:<br>#{@order.errors.full_messages.join('<br>')}".html_safe
+        flash[:error] = "There were errors adding to your cart:<br>#{@order.errors.full_messages.join('<br>')}"
         raise ActiveRecord::Rollback
       end
     end
@@ -252,7 +252,7 @@ class OrdersController < ApplicationController
         flash.now[:notice] = "Cart has been updated"
       else
         logger.debug "errors #{@order.errors.full_messages}"
-        flash.now[:error] = @order.errors.full_messages.join("<br/>").html_safe
+        flash.now[:error] = @order.errors.full_messages.join("<br/>")
       end
       render :show
     end
@@ -284,11 +284,11 @@ class OrdersController < ApplicationController
         redirect_to receipt_order_path(@order)
       end
     else
-      flash.now[:error] = order_purchaser.errors.join("<br/>").html_safe if order_purchaser.errors.present?
+      flash.now[:error] = order_purchaser.errors.join("<br/>") if order_purchaser.errors.present?
       render :show
     end
   rescue => e
-    flash.now[:error] = I18n.t("orders.purchase.error", message: e.message).html_safe
+    flash.now[:error] = I18n.t("orders.purchase.error", message: e.message)
     @order.reload.invalidate!
     render :show
   end

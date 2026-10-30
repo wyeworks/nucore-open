@@ -136,7 +136,7 @@ class FacilityJournalsController < ApplicationController
       set_pending_journals
 
       # move error messages for pending journal into the flash
-      flash.now[:error] = @journal.errors.full_messages.join("<br/>").html_safe if @pending_journal.errors.any?
+      flash.now[:error] = @journal.errors.full_messages.join("<br/>") if @pending_journal.errors.any?
 
       @earliest_journal_date = params[:journal_date] || @earliest_journal_date
       render action: :index
@@ -172,9 +172,9 @@ class FacilityJournalsController < ApplicationController
 
     if count > 0
       flash[:notice] = I18n.t("controllers.facility_journals.#{action}.success", count:)
-      flash[:error] = reconciler.full_errors.join("<br />").html_safe if reconciler.full_errors.any?
+      flash[:error] = reconciler.full_errors.join("<br />") if reconciler.full_errors.any?
     elsif reconciler.full_errors.any?
-      flash[:error] = reconciler.full_errors.join("<br />").html_safe
+      flash[:error] = reconciler.full_errors.join("<br />")
     else
       flash[:error] = I18n.t("controllers.facility_journals.#{action}.errors.none_eligible")
     end
@@ -234,6 +234,6 @@ class FacilityJournalsController < ApplicationController
       end
     end
 
-    flash[:error] = msg.html_safe if msg.present?
+    flash[:error] = msg if msg.present?
   end
 end

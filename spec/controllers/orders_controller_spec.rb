@@ -193,7 +193,7 @@ RSpec.describe OrdersController do
       context "when add_to_cart is set in the session" do
         let(:added_item) { create(:setup_item, facility:) }
 
-        before { session[:add_to_cart] = [{ product_id: added_item.id }] }
+        before { session[:add_to_cart] = [{ "product_id" => added_item.id, "quantity" => 1 }] }
 
         it "validates the product being added" do
           expect(account.validate_against_product(item, @staff)).to be_nil
@@ -224,7 +224,7 @@ RSpec.describe OrdersController do
         before do
           nonbillable_order
           nonbillable_item.update!(is_archived: true)
-          session[:add_to_cart] = [{ product_id: item.id }]
+          session[:add_to_cart] = [{ "product_id" => item.id, "quantity" => 1 }]
           @params = { id: nonbillable_order.id, order_id: nonbillable_order.id }
         end
 
@@ -263,7 +263,7 @@ RSpec.describe OrdersController do
       context "when add_to_cart is set in the session" do
         let(:added_item) { create(:setup_item, facility:) }
 
-        before { session[:add_to_cart] = [{ product_id: added_item.id }] }
+        before { session[:add_to_cart] = [{ "product_id" => added_item.id, "quantity" => 1 }] }
 
         it "puts the product being added ahead of the order detail products" do
           expect_products([added_item, item])

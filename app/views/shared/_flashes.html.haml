@@ -1,10 +1,10 @@
 - if flash[:error]
-  .alert.alert-danger= flash[:error]
+  .alert.alert-danger= sanitize(flash[:error])
 - if flash[:notice]
-  .notice= flash[:notice]
+  .notice= sanitize(flash[:notice])
 - if flash[:info]
-  .alert.alert-info= flash[:info]
+  .alert.alert-info= sanitize(flash[:info])
 - if flash[:alert]
-  .alert.alert-danger= flash[:alert]
+  .alert.alert-danger= sanitize(flash[:alert])
 
 #js--flash= # for use in AJAXY flashes
