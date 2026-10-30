@@ -6,8 +6,6 @@ import './calendar';
 import './cart';
 import './checkbox_form';
 import './collapsable';
-import './datepicker-data';
-import './datepicker-validate';
 import './detail_notes';
 import './disabling_by_checkbox';
 import './estimate_products_table';

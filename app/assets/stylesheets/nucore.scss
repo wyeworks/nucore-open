@@ -273,12 +273,6 @@ li.nav-spacer {
   padding: 0 0 12px 6px;
 }
 
-#ui-datepicker-div {
-  /* modal is z-index of 1050.
-   * !important needed to keep from being hidden behind fullcalendar */
-  z-index: 1051 !important;
-}
-
 .document {
   background: image-url("icon_file.jpg") no-repeat 0 0;
   line-height:24px;
