@@ -5,10 +5,10 @@ require "rails_helper"
 RSpec.describe SangerSequencing::SampleResultFileSaver do
   let(:user) { FactoryBot.create(:user) }
   let(:facility) { FactoryBot.create(:facility) }
-  let(:product) { FactoryBot.build(:service, facility: facility).tap { |s| s.save(validate: false) } }
-  let(:order) { FactoryBot.build(:order, user: user, created_by: user.id).tap { |o| o.save(validate: false) } }
-  let(:order_detail) { FactoryBot.build(:order_detail, order: order, product: product).tap { |od| od.save(validate: false) } }
-  let(:submission) { FactoryBot.create(:sanger_sequencing_submission, order_detail: order_detail, sample_count: 2) }
+  let(:product) { FactoryBot.build(:service, facility:).tap { |s| s.save(validate: false) } }
+  let(:order) { FactoryBot.build(:order, user:, created_by: user.id).tap { |o| o.save(validate: false) } }
+  let(:order_detail) { FactoryBot.build(:order_detail, order:, product:).tap { |od| od.save(validate: false) } }
+  let(:submission) { FactoryBot.create(:sanger_sequencing_submission, order_detail:, sample_count: 2) }
   let(:batch) { FactoryBot.create(:sanger_sequencing_batch, submissions: [submission]) }
 
   let(:saver) { described_class.new(batch, user, params) }
@@ -41,7 +41,7 @@ RSpec.describe SangerSequencing::SampleResultFileSaver do
   describe "with a filename that already exists" do
     let(:sample_id) { submission.samples.first.id }
     let(:filename) { File.join(Rails.root, "tmp", "#{sample_id}_file.txt") }
-    let!(:existing_file) { FactoryBot.create(:stored_file, :results, order_detail: order_detail, name: "#{sample_id}_file.txt") }
+    let!(:existing_file) { FactoryBot.create(:stored_file, :results, order_detail:, name: "#{sample_id}_file.txt") }
 
     before do
       original_file = File.join(SangerSequencing::Engine.root, "spec/support/file_fixtures/SAMPLE_ID_file_name.txt")

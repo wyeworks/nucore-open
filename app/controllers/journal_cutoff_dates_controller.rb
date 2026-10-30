@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class JournalCutoffDatesController < ApplicationController
-
   load_and_authorize_resource
 
   layout "two_column"
@@ -47,11 +46,10 @@ class JournalCutoffDatesController < ApplicationController
 
     hour, min = Settings.financial.default_journal_cutoff_time.split(":")
     # in_time_zone is necessary to get beginning_of_month to respect timezones
-    max_future_time.in_time_zone.next_month.beginning_of_month.change(hour: hour, min: min)
+    max_future_time.in_time_zone.next_month.beginning_of_month.change(hour:, min:)
   end
 
   def journal_cutoff_date_params
     params.require(:journal_cutoff_date).permit(cutoff_date: [:date, :hour, :minute, :ampm])
   end
-
 end

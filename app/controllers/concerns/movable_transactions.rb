@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module MovableTransactions
-
   extend ActiveSupport::Concern
 
   included do
@@ -68,7 +67,7 @@ module MovableTransactions
 
   def bulk_reassignment_failure(reassignment_error)
     flash[:alert] = I18n.t("controllers.facilities.bulk_reassignment.move.failure",
-                           reassignment_error: reassignment_error,
+                           reassignment_error:,
                            order_detail_id: reassignment_error.record.id)
   end
 
@@ -88,5 +87,4 @@ module MovableTransactions
   def redirect_to_movable_transactions
     raise NotImplementedError
   end
-
 end

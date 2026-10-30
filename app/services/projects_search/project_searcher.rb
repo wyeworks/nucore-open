@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module ProjectsSearch
-
   class ProjectSearcher < TransactionSearch::BaseSearcher
-
     def self.key
       :projects
     end
@@ -36,7 +34,5 @@ module ProjectsSearch
     def label
       Project.model_name.human(count: 2)
     end
-
   end
-
 end

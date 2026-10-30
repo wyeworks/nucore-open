@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class DropSurveyor < ActiveRecord::Migration[4.2]
-
   def self.up
     drop_table :answers
     drop_table :dependencies
@@ -20,5 +19,4 @@ class DropSurveyor < ActiveRecord::Migration[4.2]
   def self.down
     raise ActiveRecord::IrreversibleMigration
   end
-
 end

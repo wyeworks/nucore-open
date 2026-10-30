@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductUsersController < ApplicationController
-
   include SearchHelper
   include CsvEmailAction
   include BelongsToProductController
@@ -63,6 +62,7 @@ class ProductUsersController < ApplicationController
   # GET /facilities/:facility_id/services/service_id/users/new
   def new
     return unless params[:user]
+
     product_user = ProductUserCreator.create(user: User.find(params[:user]), product: @product, approver: session_user)
     if product_user.persisted?
       LogEvent.log(product_user, :create, session_user)
@@ -133,5 +133,4 @@ class ProductUsersController < ApplicationController
   def init_product_user
     @product_user = @product.product_users.build # for CanCan auth
   end
-
 end

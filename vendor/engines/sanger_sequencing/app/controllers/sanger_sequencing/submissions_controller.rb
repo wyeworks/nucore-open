@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class SubmissionsController < BaseController
-
     NEW_IDS_COUNT = 5
 
     customer_tab :all
@@ -103,7 +101,5 @@ module SangerSequencing
     rescue ArgumentError
       5
     end
-
   end
-
 end

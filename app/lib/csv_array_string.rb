@@ -6,7 +6,6 @@
 # CsvArrayString.new("test, test2, ,, test3").to_a
 #   => ["test", "test2", "test3"]
 class CsvArrayString < SimpleDelegator
-
   include Enumerable
 
   delegate :each, to: :to_a
@@ -19,5 +18,4 @@ class CsvArrayString < SimpleDelegator
   def to_s
     to_a.join(", ")
   end
-
 end

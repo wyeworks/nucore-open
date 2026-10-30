@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductsCommonController < ApplicationController
-
   customer_tab  :show
   admin_tab     :create, :destroy, :new, :edit, :index, :update, :manage
   skip_before_action :authenticate_user!, only: [:show]
@@ -118,16 +117,16 @@ class ProductsCommonController < ApplicationController
   end
 
   def default_permitted_params
-    [
-      :name, :url_name, :contact_email, :description,
-      :facility_account_id, :account, :initial_order_status_id,
-      :requires_approval, :allows_training_requests, :is_archived, :is_hidden, :email_purchasers_on_order_status_changes,
-      :user_notes_field_mode, :user_notes_label, :show_details,
-      :schedule_id, :reserve_interval,
-      :min_reserve_mins, :max_reserve_mins, :min_cancel_hours,
-      :auto_cancel_mins, :lock_window, :cutoff_hours,
-      :problems_resolvable_by_user, :restrict_holiday_access, :billing_mode,
-      :pricing_mode, :cross_core_ordering_available
+    %i[
+      name url_name contact_email description
+      facility_account_id account initial_order_status_id
+      requires_approval allows_training_requests is_archived is_hidden email_purchasers_on_order_status_changes
+      user_notes_field_mode user_notes_label show_details
+      schedule_id reserve_interval
+      min_reserve_mins max_reserve_mins min_cancel_hours
+      auto_cancel_mins lock_window cutoff_hours
+      problems_resolvable_by_user restrict_holiday_access billing_mode
+      pricing_mode cross_core_ordering_available
     ]
   end
 
@@ -155,5 +154,4 @@ class ProductsCommonController < ApplicationController
     product_class.to_s.underscore
   end
   helper_method :singular_object_name
-
 end

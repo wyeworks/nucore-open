@@ -11,7 +11,7 @@ RSpec.describe OrderDetailNoticesUpdateJob do
     expect { described_class.perform_now(order_detail) }.not_to(
       change do
         order_detail.versions.count
-      end
+      end,
     )
   end
 
@@ -21,7 +21,7 @@ RSpec.describe OrderDetailNoticesUpdateJob do
     expect { described_class.perform_now(order_detail) }.not_to(
       change do
         order_detail.reload.updated_at
-      end
+      end,
     )
 
     expect(order_detail.problem).to be false

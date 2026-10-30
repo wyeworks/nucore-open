@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   module Admin
-
     class BatchesController < AdminController
-
       admin_tab :all
       layout "two_column", only: [:index]
       before_action { @active_tab = "admin_sanger_sequencing" }
@@ -67,7 +64,7 @@ module SangerSequencing
                      { success: true }
                    else
                      { success: false, error: saver.errors.full_messages.to_sentence }
-        end
+                   end
 
         respond_to do |format|
           format.json { render json: response }
@@ -116,12 +113,9 @@ module SangerSequencing
       def create_params
         params.require(:batch).permit(
           :group, :column_order, :submission_ids,
-          reserved_cells: [], well_plate_data: {},
+          reserved_cells: [], well_plate_data: {}
         )
       end
-
     end
-
   end
-
 end

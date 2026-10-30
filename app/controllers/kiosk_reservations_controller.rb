@@ -7,7 +7,6 @@
 # The user should be prompted to login before action is taken,
 # then logged out and redirected back to the Kiosk View.
 class KioskReservationsController < ApplicationController
-
   skip_before_action :authenticate_user!
   before_action :check_kiosk_enabled, only: :index
   before_action :check_acting_as, only: [:switch_instrument]
@@ -62,6 +61,7 @@ class KioskReservationsController < ApplicationController
     # It's important that the order_detail be the same object as the one in @order.order_details.first
     @order_detail = @order.order_details.find { |od| od.id.to_i == params[:order_detail_id].to_i }
     raise ActiveRecord::RecordNotFound if @order_detail.blank?
+
     @reservation = @order_detail.reservation
     @instrument = @order_detail.product
     @facility = @instrument.facility
@@ -105,5 +105,4 @@ class KioskReservationsController < ApplicationController
 
     raise NUCore::PermissionDenied
   end
-
 end

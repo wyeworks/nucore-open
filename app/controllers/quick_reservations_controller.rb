@@ -12,6 +12,7 @@ class QuickReservationsController < ApplicationController
   def show
     @reservation = current_user.reservations.find params[:id]
     raise ActiveRecord::RecordNotFound unless @reservation
+
     redirect_to new_facility_instrument_quick_reservation_path(@facility, @instrument) if @reservation.actual_end_at
     @order = @reservation.order
     @order_detail = @order.order_details.first
@@ -74,7 +75,7 @@ class QuickReservationsController < ApplicationController
       redirect_to facility_instrument_quick_reservation_path(
         @facility,
         @instrument,
-        @reservation
+        @reservation,
       )
     else
       # failed to save reservation
@@ -99,7 +100,7 @@ class QuickReservationsController < ApplicationController
       redirect_to facility_instrument_quick_reservation_path(
         @facility,
         @instrument,
-        @startable.reservation
+        @startable.reservation,
       )
     end
   end

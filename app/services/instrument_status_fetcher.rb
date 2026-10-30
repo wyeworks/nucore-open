@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentStatusFetcher
-
   def initialize(facility, instrument_ids = nil)
     @facility = facility
     @instrument_ids = instrument_ids
@@ -65,5 +64,4 @@ class InstrumentStatusFetcher
     # Return last status or unknown state if none exists
     status || InstrumentStatus.new(instrument:, is_on: nil)
   end
-
 end

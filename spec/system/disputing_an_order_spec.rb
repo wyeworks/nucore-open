@@ -5,8 +5,8 @@ require "rails_helper"
 RSpec.describe "Disputing an order" do
   let(:item) { create(:setup_item) }
   let(:owner) { create(:user) }
-  let(:account) { create(:account, :with_account_owner, owner: owner) }
-  let(:order) { create(:complete_order, product: item, account: account) }
+  let(:account) { create(:account, :with_account_owner, owner:) }
+  let(:order) { create(:complete_order, product: item, account:) }
   let(:order_detail) { order.order_details.first }
 
   before do
@@ -24,5 +24,4 @@ RSpec.describe "Disputing an order" do
     expect(page).to have_content("Your purchase has been disputed")
     expect(current_path).to eq(in_review_transactions_path)
   end
-
 end

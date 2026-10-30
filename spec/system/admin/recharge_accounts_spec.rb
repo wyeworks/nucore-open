@@ -1,9 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Managing recharge accounts (FacilityFacilityAccountsController)" do
-
   let(:facility) { FactoryBot.create(:facility) }
-  let!(:director) { FactoryBot.create(:user, :facility_director, facility: facility) }
+  let!(:director) { FactoryBot.create(:user, :facility_director, facility:) }
   let(:default_revenue_account) { Settings.accounts.revenue_account_default }
   # Use this so schools can override their own formats
   let(:dummy_account) { build(:facility_account) }
@@ -26,7 +25,7 @@ RSpec.describe "Managing recharge accounts (FacilityFacilityAccountsController)"
   end
 
   describe "editing an existing" do
-    let!(:facility_account) { FactoryBot.create(:facility_account, facility: facility) }
+    let!(:facility_account) { FactoryBot.create(:facility_account, facility:) }
 
     it "cannot edit most fields, but can mark it as inactive" do
       login_as director

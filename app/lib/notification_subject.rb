@@ -5,7 +5,6 @@
 # In addition to the defined methods it makes the named route methods used in
 # controllers and views available to including models
 module NotificationSubject
-
   include Rails.application.routes.url_helpers
 
   #
@@ -20,5 +19,4 @@ module NotificationSubject
   def default_url_options
     ActionMailer::Base.default_url_options
   end
-
 end

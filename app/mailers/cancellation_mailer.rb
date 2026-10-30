@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CancellationMailer < ApplicationMailer
-
   def notify_facility(order_detail)
     @order_detail = order_detail
     @product = order_detail.product
@@ -25,5 +24,4 @@ class CancellationMailer < ApplicationMailer
     }
   end
   helper_method :interpolation_args
-
 end

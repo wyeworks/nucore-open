@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetailUpdateParamHashExtractor
-
   attr_reader :params
 
   def initialize(params)
@@ -30,5 +29,4 @@ class OrderDetailUpdateParamHashExtractor
       memo[id][:manual_fulfilled_at] = fulfilled_at if fulfilled_at
     end
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class ProductSearcher < BaseSearcher
-
     def options
       # Uses a subquery, i.e. SELECT "PRODUCTS".* FROM "PRODUCTS"
       # WHERE "PRODUCTS"."ID" IN (SELECT distinct order_details.product_id FROM "ORDER_DETAILS" ...
@@ -21,7 +19,5 @@ module TransactionSearch
         product_type: product.type.downcase,
       }
     end
-
   end
-
 end

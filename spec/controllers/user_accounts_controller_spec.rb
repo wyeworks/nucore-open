@@ -26,17 +26,17 @@ RSpec.describe UserAccountsController do
     let(:account_manager) { create(:user, :account_manager) }
     let(:purchaser) { create(:user) }
     let(:owner) { create(:user) }
-    let(:account) { create(:account, :with_account_owner, owner: owner) }
+    let(:account) { create(:account, :with_account_owner, owner:) }
 
     describe "removing the account owner" do
       before do
         sign_in account_manager
         patch :update,
-          params: {
-            facility_id: "all",
-            user_id: owner.id,
-            user: { account_users_attributes: {"0" => { _destroy: "1", id: account.owner.id } } },
-          }
+              params: {
+                facility_id: "all",
+                user_id: owner.id,
+                user: { account_users_attributes: { "0" => { _destroy: "1", id: account.owner.id } } },
+              }
       end
 
       it "does not destroy" do
@@ -54,11 +54,11 @@ RSpec.describe UserAccountsController do
       before :each do
         sign_in account_manager
         patch :update,
-          params: {
-            facility_id: "all",
-            user_id: purchaser.id,
-            user: { account_users_attributes: {"0" => { _destroy: "1", id: account_user.id } } },
-          }
+              params: {
+                facility_id: "all",
+                user_id: purchaser.id,
+                user: { account_users_attributes: { "0" => { _destroy: "1", id: account_user.id } } },
+              }
       end
 
       it "updates the user’s active accounts" do
@@ -81,7 +81,7 @@ RSpec.describe UserAccountsController do
   end
 
   describe "editing memberships from a single facility" do
-    let(:director) { create(:user, :facility_director, facility: facility) }
+    let(:director) { create(:user, :facility_director, facility:) }
     let(:member) { create(:user) }
     let(:account) { create(:account, :with_account_owner) }
     let!(:account_user) { AccountUser.grant(member, AccountUser::ACCOUNT_PURCHASER, account, by: director) }

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class Engine < ::Rails::Engine
-
     isolate_namespace SecureRooms
 
     config.to_prepare do
@@ -58,7 +56,5 @@ module SecureRooms
         FactoryBot.definition_file_paths << File.expand_path("../../../spec/factories", __FILE__)
       end
     end
-
   end
-
 end

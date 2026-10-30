@@ -10,7 +10,6 @@
 # validation rules. See +AccountValidator::ValidatorFactory+ for details
 # on how to do that.
 class AccountValidator::ValidatorDefault
-
   #
   # Returns the payment source format that is
   # considered valid. Example: '123-456-7890'
@@ -58,5 +57,4 @@ class AccountValidator::ValidatorDefault
   def components_exist?
     true
   end
-
 end

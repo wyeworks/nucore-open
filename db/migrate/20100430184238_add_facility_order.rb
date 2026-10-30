@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddFacilityOrder < ActiveRecord::Migration[4.2]
-
   def self.up
     change_table :orders do |t|
       t.references :facility
@@ -15,5 +14,4 @@ class AddFacilityOrder < ActiveRecord::Migration[4.2]
       t.remove :facility_id
     end
   end
-
 end

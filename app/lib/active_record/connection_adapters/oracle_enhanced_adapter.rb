@@ -2,11 +2,8 @@
 
 # rubocop:disable-next Style/BarePercentLiterals, Style/RescueModifier, Layout/SpaceInsideStringInterpolation
 module ActiveRecord
-
   module ConnectionAdapters
-
     class OracleEnhancedAdapter
-
       # This method is near-verbatim from https://github.com/rsim/oracle-enhanced/tree/v1.6.7
       # The only difference is under the value.acts_like?(:time) condition to
       # patch a bug where it assumed that no fractional seconds meant the value
@@ -30,7 +27,7 @@ module ActiveRecord
       # upgrading activerecord-oracle_enhanced-adapter to 1.7, which should
       # coincide with an upgrade to Rails 5.
 
-      def quote(value, column = nil) #:nodoc:
+      def quote(value, column = nil) # :nodoc:
         if value && column
           case column.type
           when :text, :binary
@@ -60,9 +57,6 @@ module ActiveRecord
           super
         end
       end
-
     end
-
   end
-
 end

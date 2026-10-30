@@ -15,7 +15,7 @@ module AccountPriceGroupMembersHelper
     # the case that one of these has been inappropriately deleted.
     if count.nil? || limit.nil?
       if defined?(Rollbar)
-        Rollbar.info("Argument missing in additional_results_notice", count: count, limit: limit)
+        Rollbar.info("Argument missing in additional_results_notice", count:, limit:)
       end
     elsif count > limit
       t("account_price_group_members.search_results.notice_html", count: count - limit)

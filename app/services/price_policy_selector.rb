@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PricePolicySelector
-
   def initialize(product, detail, date = Time.zone.now)
     @product = product
     @detail = detail
@@ -68,5 +67,4 @@ class PricePolicySelector
       end
     end
   end
-
 end

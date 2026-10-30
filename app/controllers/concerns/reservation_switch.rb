@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ReservationSwitch
-
   extend ActiveSupport::Concern
 
   def switch_instrument!(switch)
@@ -46,5 +45,4 @@ module ReservationSwitch
   def switch_off_success
     "The instrument has been deactivated successfully"
   end
-
 end

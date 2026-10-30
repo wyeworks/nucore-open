@@ -5,17 +5,16 @@ require "rails_helper"
 RSpec.describe Journal do
   subject(:journal) do
     build(:journal,
-          facility: facility,
+          facility:,
           created_by: 1,
-          journal_date: journal_date,
-         )
+          journal_date:)
   end
 
   let(:facility) { create(:facility) }
-  let(:facility_account) { create(:facility_account, facility: facility) }
+  let(:facility_account) { create(:facility_account, facility:) }
   let(:journal_date) { Time.zone.now }
-  let(:order) { create(:purchased_order, product: product) }
-  let(:product) { create(:setup_item, facility: facility, facility_account: facility_account) }
+  let(:order) { create(:purchased_order, product:) }
+  let(:product) { create(:setup_item, facility:, facility_account:) }
 
   describe "validations" do
     it { is_expected.to validate_length_of(:reference).is_at_most(50) }
@@ -316,9 +315,9 @@ RSpec.describe Journal do
       allow(Settings.financial).to receive(:fiscal_year_begins).and_return("06-01")
       @owner = FactoryBot.create(:user)
       @account = FactoryBot.create(:nufs_account, :with_account_owner, owner: @owner)
-      @facility_account = FactoryBot.create(:facility_account, facility: facility)
-      @item = FactoryBot.create(:item, facility: facility, facility_account_id: @facility_account.id)
-      @price_group = FactoryBot.create(:price_group, facility: facility)
+      @facility_account = FactoryBot.create(:facility_account, facility:)
+      @item = FactoryBot.create(:item, facility:, facility_account_id: @facility_account.id)
+      @price_group = FactoryBot.create(:price_group, facility:)
       FactoryBot.create(:user_price_group_member, user: @owner, price_group: @price_group)
       @pp = @item.item_price_policies.create(FactoryBot.attributes_for(:item_price_policy, price_group_id: @price_group.id))
 
@@ -373,5 +372,4 @@ RSpec.describe Journal do
       expect(described_class.for_facilities([create(:facility)])).not_to include(journal)
     end
   end
-
 end

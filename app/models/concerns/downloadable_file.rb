@@ -2,7 +2,6 @@
 
 # If Paperclip is used, then a migration is required for the model that includes this module
 module DownloadableFile
-
   extend ActiveSupport::Concern
 
   if SettingsHelper.feature_on?(:active_storage)
@@ -14,5 +13,4 @@ module DownloadableFile
   def file_present?
     file.present?
   end
-
 end

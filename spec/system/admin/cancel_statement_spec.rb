@@ -11,14 +11,13 @@ RSpec.describe "canceling statements" do
   let(:account_owner) { po_account.owner_user }
   let!(:order) do
     create(:complete_order,
-      product: item,
-      quantity: 3,
-      account: po_account
-    )
+           product: item,
+           quantity: 3,
+           account: po_account)
   end
   let(:order_detail) { order.order_details.first }
 
-  before(:each) { order_detail.update(statement: statement) }
+  before(:each) { order_detail.update(statement:) }
 
   context "as an admin" do
     before do

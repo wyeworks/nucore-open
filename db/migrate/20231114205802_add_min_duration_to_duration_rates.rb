@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddMinDurationToDurationRates < ActiveRecord::Migration[7.0]
-
   class DurationRate < ApplicationRecord
     belongs_to :rate_start
   end
@@ -19,5 +18,4 @@ class AddMinDurationToDurationRates < ActiveRecord::Migration[7.0]
   def down
     remove_column :duration_rates, :min_duration_hours
   end
-
 end

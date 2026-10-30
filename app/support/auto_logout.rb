@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AutoLogout
-
   def perform
     order_details.find_each do |od|
       next unless should_auto_logout?(od)
@@ -49,5 +48,4 @@ class AutoLogout
                                             exception: e, information: "Error on Order # #{order_detail} - #{e}")
     raise ActiveRecord::Rollback
   end
-
 end

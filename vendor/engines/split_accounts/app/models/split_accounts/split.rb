@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   class Split < ApplicationRecord
-
     belongs_to :parent_split_account, class_name: "SplitAccounts::SplitAccount", foreign_key: :parent_split_account_id, inverse_of: :splits
     belongs_to :subaccount, class_name: "Account", foreign_key: :subaccount_id, inverse_of: :parent_splits
 
@@ -31,7 +29,5 @@ module SplitAccounts
     def self.available_subaccounts
       Account.excluding_split_accounts.global.active
     end
-
   end
-
 end

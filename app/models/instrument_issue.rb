@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentIssue
-
   include ActiveModel::Model
 
   attr_accessor :message, :user, :product, :order_detail
@@ -15,10 +14,10 @@ class InstrumentIssue
     return false unless valid?
 
     InstrumentIssueMailer.create(
-      product: product,
-      user: user,
-      message: message,
-      order_detail: order_detail,
+      product:,
+      user:,
+      message:,
+      order_detail:,
       recipients: recipients.to_a,
     ).deliver_later
   end
@@ -32,5 +31,4 @@ class InstrumentIssue
       all.uniq
     end
   end
-
 end

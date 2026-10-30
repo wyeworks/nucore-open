@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Account do
-  let(:account) { create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: user)) }
+  let(:account) { create(:nufs_account, account_users_attributes: account_users_attributes_hash(user:)) }
   let(:facility) { facility_a }
   let(:facility_a) { create(:facility) }
   let(:facility_b) { create(:facility) }
@@ -66,7 +66,7 @@ RSpec.describe Account do
     before do
       account.update(
         affiliate_id: affiliate.try(:id),
-        affiliate_other: affiliate_other,
+        affiliate_other:,
       )
     end
 
@@ -204,7 +204,7 @@ RSpec.describe Account do
     it "autosaves the association to the account owner" do
       user = FactoryBot.create(:user)
       account = FactoryBot.build(:account)
-      account_user = account.account_users.build(user: user, user_role: AccountUser::ACCOUNT_OWNER, created_by_user: user)
+      account_user = account.account_users.build(user:, user_role: AccountUser::ACCOUNT_OWNER, created_by_user: user)
 
       expect(account.save).to be_truthy
       expect(account_user).to be_persisted
@@ -334,13 +334,13 @@ RSpec.describe Account do
 
   it "should update order details with statement" do
     facility = FactoryBot.create(:facility)
-    facility_account = FactoryBot.create(:facility_account, facility: facility)
+    facility_account = FactoryBot.create(:facility_account, facility:)
     user = FactoryBot.create(:user)
-    item = FactoryBot.create(:item, facility: facility, facility_account: facility_account)
-    account = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: user))
-    order = user.orders.create(FactoryBot.attributes_for(:order, created_by: user.id, facility: facility))
+    item = FactoryBot.create(:item, facility:, facility_account:)
+    account = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user:))
+    order = user.orders.create(FactoryBot.attributes_for(:order, created_by: user.id, facility:))
     order_detail = order.order_details.create!(FactoryBot.attributes_for(:order_detail, reviewed_at: (Time.zone.now - 1.day)).update(product_id: item.id, account_id: account.id))
-    statement = Statement.create(facility: facility, created_by: 1, account: account)
+    statement = Statement.create(facility:, created_by: 1, account:)
     account.update_order_details_with_statement(statement)
     expect(order_detail.reload.statement).to eq(statement)
   end
@@ -387,14 +387,14 @@ RSpec.describe Account do
 
       def create_po_for(user, facility, deleted_at = nil)
         account = create(:purchase_order_account,
-                         facility: facility,
+                         facility:,
                          account_users: [build(:account_user, user_role: "Owner", user: create(:user))])
 
         create(:account_user,
-               user: user,
-               deleted_at: deleted_at,
+               user:,
+               deleted_at:,
                user_role: AccountUser::ACCOUNT_PURCHASER,
-               account: account)
+               account:)
 
         account
       end
@@ -408,7 +408,7 @@ RSpec.describe Account do
     end
 
     describe "and there is a deleted owner" do
-      before { FactoryBot.create(:account_user, :inactive, user: owner, account: account) }
+      before { FactoryBot.create(:account_user, :inactive, user: owner, account:) }
 
       it "only has the one account" do
         expect(Account.for_user(owner)).to eq([account])
@@ -421,7 +421,7 @@ RSpec.describe Account do
 
     it "can assign price groups to the relation" do
       expect { account.price_groups_relation << PriceGroup.last }.to(
-        change(AccountPriceGroupMember, :count)
+        change(AccountPriceGroupMember, :count),
       )
     end
   end

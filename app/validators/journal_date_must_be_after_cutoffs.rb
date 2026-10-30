@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class JournalDateMustBeAfterCutoffs < ActiveModel::Validator
-
   def validate(record)
     Validator.new(record).validate
   end
@@ -9,7 +8,6 @@ class JournalDateMustBeAfterCutoffs < ActiveModel::Validator
   # This class is so we can encapsulate `record` in an instance variable so it's
   # not necessary to pass it around as an argument everywhere.
   class Validator
-
     include DateHelper
 
     delegate :journal_date, :errors, to: :record
@@ -21,6 +19,7 @@ class JournalDateMustBeAfterCutoffs < ActiveModel::Validator
 
     def validate
       return unless journal_date.present?
+
       add_error if first_valid_date && first_valid_date > journal_date.beginning_of_day
     end
 
@@ -41,7 +40,5 @@ class JournalDateMustBeAfterCutoffs < ActiveModel::Validator
     def first_valid_date
       @first_valid_date ||= JournalCutoffDate.first_valid_date
     end
-
   end
-
 end

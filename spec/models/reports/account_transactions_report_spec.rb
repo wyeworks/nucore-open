@@ -115,7 +115,7 @@ RSpec.describe Reports::AccountTransactionsReport do
             OrderDetail.human_attribute_name(:dispute_at),
             OrderDetail.human_attribute_name(:dispute_reason),
             OrderDetail.human_attribute_name(:dispute_resolved_at),
-            OrderDetail.human_attribute_name(:dispute_resolved_reason)
+            OrderDetail.human_attribute_name(:dispute_resolved_reason),
           )
         end
       end
@@ -126,7 +126,7 @@ RSpec.describe Reports::AccountTransactionsReport do
             OrderDetail.human_attribute_name(:dispute_at),
             OrderDetail.human_attribute_name(:dispute_reason),
             OrderDetail.human_attribute_name(:dispute_resolved_at),
-            OrderDetail.human_attribute_name(:dispute_resolved_reason)
+            OrderDetail.human_attribute_name(:dispute_resolved_reason),
           )
         end
       end

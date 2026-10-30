@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountRoleGrantor
-
   attr_reader :account, :by
 
   def initialize(account, by:)
@@ -11,8 +10,8 @@ class AccountRoleGrantor
 
   def grant(user, role)
     account_user = AccountUser.new(
-      account: account,
-      user: user,
+      account:,
+      user:,
       deleted_at: nil,
       user_role: role,
       created_by_user: by,
@@ -24,7 +23,7 @@ class AccountRoleGrantor
         destroy_old_account_user(account.owner) if role == AccountUser::ACCOUNT_OWNER
 
         # Delete any previous role the user might have had
-        old_account_user = AccountUser.find_by(account: account, user: user, deleted_at: nil)
+        old_account_user = AccountUser.find_by(account:, user:, deleted_at: nil)
         destroy_old_account_user(old_account_user) if old_account_user
 
         account.account_users.reload
@@ -41,9 +40,9 @@ class AccountRoleGrantor
 
   def destroy_old_account_user(account_user)
     return unless account_user
+
     # Use update_columns to skip validations and callbacks, since removing an owner
     # would fail the "account must have owner" validation
     account_user.update_columns(deleted_at: Time.current, deleted_by: by.id)
   end
-
 end

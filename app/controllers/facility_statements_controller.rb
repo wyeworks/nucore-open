@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityStatementsController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action { @facility = current_facility }
@@ -73,7 +72,7 @@ class FacilityStatementsController < ApplicationController
       order_detail_ids: params[:order_detail_ids],
       session_user:,
       current_facility:,
-      parent_invoice_number: params[:parent_invoice_number]
+      parent_invoice_number: params[:parent_invoice_number],
     }
 
     if can_set_invoice_date? && params[:invoice_date].present?
@@ -160,5 +159,4 @@ class FacilityStatementsController < ApplicationController
   def can_set_invoice_date?
     can?(:set_invoice_date, Statement)
   end
-
 end

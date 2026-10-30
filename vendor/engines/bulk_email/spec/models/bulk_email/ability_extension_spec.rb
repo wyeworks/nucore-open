@@ -35,22 +35,22 @@ RSpec.describe BulkEmail::AbilityExtension do
   end
 
   describe "facility administrator" do
-    let(:user) { FactoryBot.create(:user, :facility_administrator, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :facility_administrator, facility:) }
     it_behaves_like "it may send bulk email"
   end
 
   describe "facility director" do
-    let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :facility_director, facility:) }
     it_behaves_like "it may send bulk email"
   end
 
   describe "senior staff" do
-    let(:user) { FactoryBot.create(:user, :senior_staff, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :senior_staff, facility:) }
     it_behaves_like "it may send bulk email"
   end
 
   describe "staff" do
-    let(:user) { FactoryBot.create(:user, :staff, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :staff, facility:) }
     it_behaves_like "it may not send bulk email"
   end
 

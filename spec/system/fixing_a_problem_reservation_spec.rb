@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe "Fixing a problem reservation" do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility: facility, problems_resolvable_by_user: true) }
+  let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility:, problems_resolvable_by_user: true) }
 
   before { login_as reservation.user }
 
@@ -18,7 +18,7 @@ RSpec.describe "Fixing a problem reservation" do
         reserve_start_at: 2.hours.ago,
         reserve_end_at: 1.hour.ago,
         actual_start_at: 1.hour.ago,
-        actual_end_at: nil
+        actual_end_at: nil,
       )
     end
     before { MoveToProblemQueue.move!(reservation.order_detail, cause: :reservation_started) }

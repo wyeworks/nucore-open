@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AlterPricePolicies < ActiveRecord::Migration[4.2]
-
   def self.up
     remove_column(:price_policies, :reservation_window)
     remove_column(:price_policies, :restrict_purchase)
@@ -23,5 +22,4 @@ class AlterPricePolicies < ActiveRecord::Migration[4.2]
     add_column(:price_policies, :reservation_window, :integer)
     add_column(:price_policies, :restrict_purchase, :boolean)
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Accessories::Accessorizer
-
   def initialize(order_detail)
     @order_detail = order_detail
   end
@@ -29,6 +28,7 @@ class Accessories::Accessorizer
 
   def build_accessory_order_detail(accessory, options = {})
     return nil unless valid_accessory?(accessory)
+
     od = @order_detail.child_order_details.build(detail_attributes(accessory, options))
     decorated_od = decorate(od)
     decorated_od.update_quantity
@@ -161,5 +161,4 @@ class Accessories::Accessorizer
       build_accessory_order_detail(accessory)
     end
   end
-
 end

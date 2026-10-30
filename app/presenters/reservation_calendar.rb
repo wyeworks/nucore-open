@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReservationCalendar < SimpleDelegator
-
   attr_accessor :url, :ical
 
   def initialize(reservation, url: nil)
@@ -38,11 +37,11 @@ class ReservationCalendar < SimpleDelegator
       "ical.description",
       facility: facility.name,
       product: product.name,
-      order_number: order_detail.order_number)
+      order_number: order_detail.order_number,
+    )
   end
 
   def filename
     "reservation_cal_#{order_detail.order_number}.ics"
   end
-
 end

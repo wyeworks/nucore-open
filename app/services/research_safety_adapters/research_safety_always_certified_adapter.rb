@@ -3,9 +3,7 @@
 # This is the default adapter and should only be used for demo/initial implementation
 # purposes. It should be replaced by an actual call to an API or other lookup.
 module ResearchSafetyAdapters
-
   class ResearchSafetyAlwaysCertifiedAdapter
-
     def initialize(user)
       @user = user
     end
@@ -13,7 +11,5 @@ module ResearchSafetyAdapters
     def certified?(certificate)
       true
     end
-
   end
-
 end

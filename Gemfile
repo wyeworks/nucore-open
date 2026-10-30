@@ -20,8 +20,8 @@ gem "net-pop"
 gem "tzinfo-data"
 
 # Ruby 3.4 not longer includes these gems
-gem 'mutex_m'
-gem 'csv'
+gem "mutex_m"
+gem "csv"
 
 # Ruby 3.4 warns it won't be included in the future
 gem "benchmark"

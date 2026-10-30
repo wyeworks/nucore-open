@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module GlobalSearch
-
   class StatementSearcher < Base
-
     def template
       "statements"
     end
@@ -12,6 +10,7 @@ module GlobalSearch
 
     def search
       return [] unless Account.config.statements_enabled?
+
       Array(Statement.send(search_method, parsed_query))
     end
 
@@ -39,7 +38,5 @@ module GlobalSearch
         Ability.new(user, statement.account),
       ]
     end
-
   end
-
 end

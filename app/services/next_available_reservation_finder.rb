@@ -15,7 +15,7 @@ class NextAvailableReservationFinder
     next_available = product.next_available_reservation(
       after: start_at,
       duration: default_duration,
-      options:
+      options:,
     )
     next_available ||= default_reservation
     next_available.round_reservation_times

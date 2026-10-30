@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TranslationHelper
-
   def t_manage_models(clazz)
     I18n.t("pages.manage", model: clazz.model_name.human(count: :many))
   end
@@ -31,5 +30,4 @@ module TranslationHelper
   def strip_br(string)
     string.gsub(/<br\/?>/, "")
   end
-
 end

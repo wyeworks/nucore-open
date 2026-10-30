@@ -130,7 +130,7 @@ RSpec.describe OrderDetailPresenter do
 
   describe "#wrapped_total" do
     subject { presented.wrapped_total }
-    let(:order) { FactoryBot.create(:setup_order, product: product) }
+    let(:order) { FactoryBot.create(:setup_order, product:) }
     let(:order_detail) { order.order_details.first }
     let(:product) { FactoryBot.create(:setup_item) }
 

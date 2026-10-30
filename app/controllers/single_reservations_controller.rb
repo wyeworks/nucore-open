@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SingleReservationsController < ApplicationController
-
   customer_tab  :all
   load_resource :facility, find_by: :url_name
   load_resource :instrument, through: :facility, find_by: :url_name

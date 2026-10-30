@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Affiliate < ApplicationRecord
-
   validates_presence_of :name
   validates_uniqueness_of :name, case_sensitive: false
 
@@ -18,5 +17,4 @@ class Affiliate < ApplicationRecord
   def other?
     self == self.class.OTHER
   end
-
 end

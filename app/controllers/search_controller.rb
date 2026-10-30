@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SearchController < ApplicationController
-
   before_action :check_acting_as
 
   ## return users of portal 'nucore'
@@ -40,5 +39,4 @@ class SearchController < ApplicationController
         Facility.cross_facility
       end
   end
-
 end

@@ -33,6 +33,33 @@ Style/WordArray:
 Style/HashSyntax:
   EnforcedShorthandSyntax: always
 
+Style/StringLiterals:
+  EnforcedStyle: double_quotes
+
+Style/SymbolArray:
+  MinSize: 5
+
+Style/RescueStandardError:
+  EnforcedStyle: implicit
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/Documentation:
+  Enabled: false
+
+Style/FormatStringToken:
+  EnforcedStyle: template
+
+Style/NumericLiterals:
+  MinDigits: 6
+
 Style/CollectionQuerying:
   Enabled: false
 

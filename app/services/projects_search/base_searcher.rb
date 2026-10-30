@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module ProjectsSearch
-
   class BaseSearcher
-
     attr_reader :projects
 
     def self.key
@@ -39,7 +37,5 @@ module ProjectsSearch
     def search(_params)
       raise NotImplementedError
     end
-
   end
-
 end

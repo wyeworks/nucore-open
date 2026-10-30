@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class Event < ApplicationRecord
-
     belongs_to :secure_room, foreign_key: :product_id
     belongs_to :account
     belongs_to :card_reader
@@ -16,7 +14,5 @@ module SecureRooms
     def success?
       outcome == "grant"
     end
-
   end
-
 end

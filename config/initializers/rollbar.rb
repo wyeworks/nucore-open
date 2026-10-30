@@ -12,14 +12,14 @@ if defined?(Rollbar)
     config.enabled = config.access_token.present? && !Rails.env.test?
 
     config.exception_level_filters.merge!(
-      "ActiveRecord::RecordNotFound"       => "ignore",
-      "ActionController::RoutingError"     => "ignore",
+      "ActiveRecord::RecordNotFound" => "ignore",
+      "ActionController::RoutingError" => "ignore",
       "AbstractController::ActionNotFound" => "ignore",
-      "ActionController::UnknownFormat"    => "ignore",
+      "ActionController::UnknownFormat" => "ignore",
       "ActionController::UnknownHttpMethod" => "ignore",
       "ActionDispatch::Http::MimeNegotiation::InvalidType" => "ignore",
       "CanCan::AccessDenied" => "ignore",
-      "NUCore::PermissionDenied" => "ignore"
+      "NUCore::PermissionDenied" => "ignore",
     )
 
     # By default, Rollbar will try to call the `current_user` controller method

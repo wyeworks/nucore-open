@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 class FixProductColumnOnResultsFiles < ActiveRecord::Migration[4.2]
-
   class StoredFile < ActiveRecord::Base
-
     belongs_to :order_detail
-
   end
 
   def up
@@ -18,5 +15,4 @@ class FixProductColumnOnResultsFiles < ActiveRecord::Migration[4.2]
   def down
     # do nothing
   end
-
 end

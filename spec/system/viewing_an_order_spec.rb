@@ -5,9 +5,9 @@ require "rails_helper"
 RSpec.describe "Viewing an order" do
   let(:facility) { product.facility }
   let(:product) { create(:setup_item, :with_facility_account) }
-  let(:order) { create(:purchased_order, product: product) }
+  let(:order) { create(:purchased_order, product:) }
   let!(:order_detail) { order.order_details.first }
-  let(:user) { create(:user, :staff, facility: facility) }
+  let(:user) { create(:user, :staff, facility:) }
 
   before do
     login_as user

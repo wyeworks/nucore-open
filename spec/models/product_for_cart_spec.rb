@@ -34,11 +34,11 @@ RSpec.describe ProductForCart do
       end
 
       context "and it is a bundle" do
-        let(:bundle) { create(:bundle, facility: facility) }
+        let(:bundle) { create(:bundle, facility:) }
         let(:bundle_product) { BundleProduct.new(bundle: @bundle, product: item, quantity: 1) }
         let(:product_for_cart) { described_class.new(bundle, user, ability) }
 
-        before(:each) { BundleProduct.create(bundle: bundle, product: item, quantity: 1) }
+        before(:each) { BundleProduct.create(bundle:, product: item, quantity: 1) }
 
         context "and none of its products have pricing policies" do
           before(:each) { item.price_policies.delete_all }
@@ -137,7 +137,7 @@ RSpec.describe ProductForCart do
       create(
         :account_user, :purchaser,
         account:, user: other_user,
-        created_by_user: user,
+        created_by_user: user
       )
       account.price_groups << PriceGroup.base
     end
@@ -146,7 +146,7 @@ RSpec.describe ProductForCart do
       before do
         UserRole.create!(
           user:, facility:,
-          role: UserRole::FACILITY_STAFF,
+          role: UserRole::FACILITY_STAFF
         )
       end
 

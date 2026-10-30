@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class BudgetedChartString < ApplicationRecord
-
   include Nucore::Database::DateHelper
 
   validates_presence_of :fund, :dept, :starts_at, :expires_at
@@ -13,10 +12,10 @@ class BudgetedChartString < ApplicationRecord
 
   def self.import(filename)
     file = begin
-             File.open(filename, "r")
-           rescue
-             nil
-           end
+      File.open(filename, "r")
+    rescue
+      nil
+    end
     if file.blank?
       puts "error: Invalid file #{filename}"
       return
@@ -74,8 +73,8 @@ class BudgetedChartString < ApplicationRecord
             puts "error: skipping - #{line}"
             skipped += 1
           end
-          bcs = BudgetedChartString.create(fund: fund, dept: dept, project: project, activity: activity, account: account,
-                                           starts_at: starts_at, expires_at: expires_at)
+          bcs = BudgetedChartString.create(fund:, dept:, project:, activity:, account:,
+                                           starts_at:, expires_at:)
           if !bcs.valid?
             puts "error: invalid account - #{line}"
             invalid += 1
@@ -89,5 +88,4 @@ class BudgetedChartString < ApplicationRecord
       end
     end
   end
-
 end

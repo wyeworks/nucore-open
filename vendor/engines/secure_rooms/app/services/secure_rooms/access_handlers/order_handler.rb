@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module AccessHandlers
-
     class OrderHandler
-
       attr_reader :order, :order_detail, :occupancy
 
       def self.process(occupancy)
@@ -73,14 +70,11 @@ module SecureRooms
         @order_detail = order.order_details.create!(
           account: occupancy.account,
           product: occupancy.secure_room,
-          occupancy: occupancy,
+          occupancy:,
           created_by_user: occupancy.user,
           quantity: 1,
         )
       end
-
     end
-
   end
-
 end

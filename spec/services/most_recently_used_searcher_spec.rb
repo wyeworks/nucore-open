@@ -16,9 +16,9 @@ RSpec.describe MostRecentlyUsedSearcher do
     end
 
     context "when the user has orders" do
-      let!(:old_order) { create(:setup_order, :purchased, account: account, product: products.first, user: user, ordered_at: 1.week.ago) }
-      let!(:new_order) { create(:setup_order, :purchased, account: account, product: products.second, user: user, ordered_at: 1.day.ago) }
-      let!(:unpurchased_order) { create(:setup_order, account: account, product: products.third, user: user) }
+      let!(:old_order) { create(:setup_order, :purchased, account:, product: products.first, user:, ordered_at: 1.week.ago) }
+      let!(:new_order) { create(:setup_order, :purchased, account:, product: products.second, user:, ordered_at: 1.day.ago) }
+      let!(:unpurchased_order) { create(:setup_order, account:, product: products.third, user:) }
 
       it "returns facilities that the user has ordered from" do
         expect(recently_used_facilities).to contain_exactly(new_order.facility, old_order.facility)
@@ -27,7 +27,7 @@ RSpec.describe MostRecentlyUsedSearcher do
       context "when there are orders in more facilities than the limit" do
         before(:each) do
           products.each_with_index do |product, i|
-            create(:setup_order, :purchased, account: account, product: product, user: user, ordered_at: i.days.ago)
+            create(:setup_order, :purchased, account:, product:, user:, ordered_at: i.days.ago)
           end
         end
 
@@ -35,7 +35,6 @@ RSpec.describe MostRecentlyUsedSearcher do
           expect(recently_used_facilities.length).to eq 5
         end
       end
-
     end
   end
 
@@ -52,9 +51,9 @@ RSpec.describe MostRecentlyUsedSearcher do
     end
 
     context "when the user has orders" do
-      let!(:old_order) { create(:setup_order, :purchased, account: account, product: products.first, user: user, ordered_at: 1.week.ago) }
-      let!(:new_order) { create(:setup_order, :purchased, account: account, product: products.second, user: user, ordered_at: 1.day.ago) }
-      let!(:unpurchased_order) { create(:setup_order, account: account, product: products.third, user: user) }
+      let!(:old_order) { create(:setup_order, :purchased, account:, product: products.first, user:, ordered_at: 1.week.ago) }
+      let!(:new_order) { create(:setup_order, :purchased, account:, product: products.second, user:, ordered_at: 1.day.ago) }
+      let!(:unpurchased_order) { create(:setup_order, account:, product: products.third, user:) }
 
       it "returns products that the user has ordered" do
         expect(recently_used_products).to contain_exactly(new_order.order_details.first.product, old_order.order_details.first.product)
@@ -63,7 +62,7 @@ RSpec.describe MostRecentlyUsedSearcher do
       context "when there are more recently used products than the limit" do
         before(:each) do
           products.each_with_index do |product, i|
-            create(:setup_order, :purchased, account: account, product: product, user: user, ordered_at: i.days.ago)
+            create(:setup_order, :purchased, account:, product:, user:, ordered_at: i.days.ago)
           end
         end
 
@@ -71,8 +70,6 @@ RSpec.describe MostRecentlyUsedSearcher do
           expect(recently_used_products.length).to eq 5
         end
       end
-
     end
   end
-
 end

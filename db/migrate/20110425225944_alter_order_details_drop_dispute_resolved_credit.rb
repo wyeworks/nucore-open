@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AlterOrderDetailsDropDisputeResolvedCredit < ActiveRecord::Migration[4.2]
-
   def self.up
     details = OrderDetail.where("dispute_resolved_credit IS NOT NULL")
 
@@ -16,5 +15,4 @@ class AlterOrderDetailsDropDisputeResolvedCredit < ActiveRecord::Migration[4.2]
   def self.down
     add_column :order_details, :dispute_resolved_credit, :decimal, precision: 10, scale: 2
   end
-
 end

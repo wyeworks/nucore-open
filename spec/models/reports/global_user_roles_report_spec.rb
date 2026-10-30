@@ -3,8 +3,7 @@
 require "rails_helper"
 
 RSpec.describe Reports::GlobalUserRolesReport do
-
-  subject(:report) { described_class.new(users: users) }
+  subject(:report) { described_class.new(users:) }
   let(:users) { create_list(:user, 3, :global_billing_administrator) }
   let(:report_users) { report.report_data_query }
 
@@ -28,5 +27,4 @@ RSpec.describe Reports::GlobalUserRolesReport do
 
     expect(report.users.to_a).to eq(User.sort_last_first.to_a)
   end
-
 end

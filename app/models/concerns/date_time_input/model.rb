@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
 module DateTimeInput
-
   module Model
-
     extend ActiveSupport::Concern
 
     module ClassMethods
-
       def date_time_inputable(attribute)
         define_method("#{attribute}=") do |input|
           if input.is_a?(Hash)
@@ -21,9 +18,6 @@ module DateTimeInput
           FormData.new(public_send(attribute))
         end
       end
-
     end
-
   end
-
 end

@@ -1,20 +1,16 @@
 # frozen_string_literal: true
 
 module Reports
-
   module CsvExporter
-
     extend ActiveSupport::Concern
 
     include DateHelper
     include TextHelpers::Translation
 
     module ClassMethods
-
       def transformers
         @transformers ||= []
       end
-
     end
 
     def date_start
@@ -50,7 +46,7 @@ module Reports
     end
 
     def formatted_compact_date_range
-      [date_start, date_end].compact.map { |d| d.strftime('%Y%m%d') }.join("-")
+      [date_start, date_end].compact.map { |d| d.strftime("%Y%m%d") }.join("-")
     end
 
     def column_headers
@@ -80,7 +76,7 @@ module Reports
                    row.public_send(callable)
                  else
                    callable.call(row)
-        end
+                 end
 
         if result.is_a?(DateTime)
           format_usa_datetime(result)
@@ -104,7 +100,5 @@ module Reports
     def transformers
       self.class.transformers
     end
-
   end
-
 end

@@ -6,7 +6,7 @@ RSpec::Matchers.define :have_content_i do |expected|
   end
 
   failure_message do |actual|
-     "expected to find text #{expected.inspect} (case ignored) in #{actual.text.inspect}"
+    "expected to find text #{expected.inspect} (case ignored) in #{actual.text.inspect}"
   end
 
   failure_message_when_negated do |actual|

@@ -15,7 +15,7 @@ RSpec.describe "Order show" do
       reserve_start_at: 4.days.ago,
       reserve_end_at: 1.day.ago,
       actual_start_at: 4.days.ago,
-      actual_end_at: 1.day.ago
+      actual_end_at: 1.day.ago,
     )
   end
   let(:facility_administrator) { create(:user, :facility_administrator, facility:) }

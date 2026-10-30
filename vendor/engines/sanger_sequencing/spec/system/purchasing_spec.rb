@@ -143,10 +143,10 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           click_link "Complete Online Order Form"
 
           expect(page).to have_field(
-            "sanger_sequencing_submission[samples_attributes][0][customer_sample_id]"
+            "sanger_sequencing_submission[samples_attributes][0][customer_sample_id]",
           )
           expect(page).to_not have_field(
-            "sanger_sequencing_submission[samples_attributes][0][primer_name]"
+            "sanger_sequencing_submission[samples_attributes][0][primer_name]",
           )
 
           click_button("Save Submission")
@@ -166,7 +166,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           click_link "Complete Online Order Form"
 
           expect(page).to have_field(
-            "sanger_sequencing_submission[samples_attributes][0][primer_name]"
+            "sanger_sequencing_submission[samples_attributes][0][primer_name]",
           )
 
           fill_in("sanger_sequencing_submission[samples_attributes][0][primer_name]", with: "Water")
@@ -176,7 +176,7 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           # The primer name is copied when adding a new sample row
           expect(page).to have_field(
             "sanger_sequencing_submission[samples_attributes][1][primer_name]",
-            with: "Water"
+            with: "Water",
           )
 
           click_link("Add")
@@ -189,13 +189,13 @@ RSpec.describe "Purchasing a Sanger Sequencing service", :aggregate_failures do
           # Copy the primer name to samples below second sample
           expect(page).to have_field(
             "sanger_sequencing_submission[samples_attributes][2][primer_name]",
-            with: "Juice"
+            with: "Juice",
           )
 
           # First row, above second sample remains untouched
           expect(page).to have_field(
             "sanger_sequencing_submission[samples_attributes][0][primer_name]",
-            with: "Water"
+            with: "Water",
           )
 
           click_link("Add")

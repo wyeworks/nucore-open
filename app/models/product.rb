@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
 class Product < ApplicationRecord
-
   include TextHelpers::Translation
   include EmailListAttribute
   include FullTextSearch::Model
 
   module Pricing
-
     SCHEDULE_RULE = "Schedule Rule"
     SCHEDULE_DAILY = "Schedule Rule (Daily Booking only)"
     DURATION = "Duration"
-
   end
 
   PRICING_MODES = [Pricing::SCHEDULE_RULE].freeze
@@ -40,7 +37,7 @@ class Product < ApplicationRecord
     dependent: :destroy,
     class_name: "InstrumentAlert",
     foreign_key: :instrument_id,
-    inverse_of: :instrument
+    inverse_of: :instrument,
   )
   has_many :current_offline_reservations, -> { current }, class_name: "OfflineReservation"
 
@@ -192,6 +189,7 @@ class Product < ApplicationRecord
   def email
     # If notifications.product_specific_contacts is off, always return the facility's email
     return facility.email unless SettingsHelper.feature_on?("notifications.product_specific_contacts")
+
     contact_email.presence || facility.try(:email)
   end
 
@@ -359,6 +357,7 @@ class Product < ApplicationRecord
     archived_changed = saved_change_to_is_archived?
 
     return unless archived_changed
+
     old_archived, new_archived = archived_changed ? saved_change_to_is_archived : [is_archived, is_archived]
 
     return if old_archived == new_archived
@@ -393,5 +392,4 @@ class Product < ApplicationRecord
   def start_time_disabled_daily_booking_only
     self.start_time_disabled = start_time_disabled && daily_booking?
   end
-
 end

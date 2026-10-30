@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class RelayReport
-
     include Reports::CsvExporter
 
     def default_report_hash
@@ -44,7 +42,5 @@ module Reports
     def translation_scope
       "reports.relay"
     end
-
   end
-
 end

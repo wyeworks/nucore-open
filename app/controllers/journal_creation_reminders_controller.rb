@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class JournalCreationRemindersController < ApplicationController
-
   load_and_authorize_resource
 
   layout "two_column"
@@ -45,5 +44,4 @@ class JournalCreationRemindersController < ApplicationController
   def journal_creation_reminder_params
     params.require(:journal_creation_reminder).permit(:message, :starts_at, :ends_at)
   end
-
 end

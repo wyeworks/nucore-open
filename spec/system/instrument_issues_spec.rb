@@ -4,10 +4,10 @@ require "rails_helper"
 
 RSpec.describe do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:instrument, facility: facility) }
+  let(:instrument) { create(:instrument, facility:) }
   let(:user) { create(:user) }
   let(:order) { create(:setup_order, product: instrument) }
-  let!(:facility_director) { create(:user, :facility_director, facility: facility) }
+  let!(:facility_director) { create(:user, :facility_director, facility:) }
 
   describe "when logged in" do
     before { login_as user }

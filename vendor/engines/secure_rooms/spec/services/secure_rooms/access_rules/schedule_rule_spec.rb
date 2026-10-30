@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe SecureRooms::AccessRules::ScheduleRule do
   let(:user) { create(:user) }
   let(:secure_room) { create(:secure_room) }
-  let(:card_reader) { build(:card_reader, secure_room: secure_room) }
+  let(:card_reader) { build(:card_reader, secure_room:) }
   let!(:product_user) { ProductUser.create!(product: secure_room, user_id: user.id, approved_by: 0) }
 
   subject(:result) do

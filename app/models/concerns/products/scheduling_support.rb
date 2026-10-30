@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Products::SchedulingSupport
-
   extend ActiveSupport::Concern
 
   included do
@@ -27,7 +26,7 @@ module Products::SchedulingSupport
       product: self,
       reserve_start_at: time,
       reserve_end_at: time + reservation_length.minutes,
-      blackout: true # so it's not considered an admin and allowed to overlap
+      blackout: true, # so it's not considered an admin and allowed to overlap
     )
     reservation.valid?(:walkup_available)
   end
@@ -38,6 +37,7 @@ module Products::SchedulingSupport
     # if the user has no schedule rules, there will be no time that they can
     # move the reservation to
     return nil unless rules.any?
+
     reservation_in_week(after, duration, rules, options)
   end
 
@@ -130,7 +130,7 @@ module Products::SchedulingSupport
   end
 
   def create_default_schedule
-    self.schedule = Schedule.create(name: "#{name} Schedule", facility: facility)
+    self.schedule = Schedule.create(name: "#{name} Schedule", facility:)
   end
 
   def update_schedule_name
@@ -140,7 +140,6 @@ module Products::SchedulingSupport
   end
 
   class ReservationFinder
-
     def initialize(time, rule, options = {})
       @time       = time
       @rule       = rule
@@ -193,7 +192,5 @@ module Products::SchedulingSupport
     def day_end
       Time.zone.local(@time.year, @time.month, @time.day, @rule.end_hour, @rule.end_min, 0)
     end
-
   end
-
 end

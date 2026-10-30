@@ -36,7 +36,7 @@ RSpec.describe PricePolicyBuilder do
 
       %w[service item].each do |product_type|
         context "when product is a #{product_type}" do
-          let(:product) { create(product_type.to_sym, facility: facility, billing_mode: "Skip Review") }
+          let(:product) { create(product_type.to_sym, facility:, billing_mode: "Skip Review") }
           let!(:price_groups) { create_list(:price_group, 2) }
 
           it_behaves_like "a correctly created PricePolicy"
@@ -45,7 +45,7 @@ RSpec.describe PricePolicyBuilder do
     end
 
     context "when product is not a Service or Item" do
-      let(:product) { create(:instrument, facility: facility, billing_mode: "Skip Review") }
+      let(:product) { create(:instrument, facility:, billing_mode: "Skip Review") }
       let!(:price_groups) { create_list(:price_group, 2) }
       let(:usage_rate) { 0 }
 
@@ -55,7 +55,7 @@ RSpec.describe PricePolicyBuilder do
     context "when product is an Instrument with Daily Booking pricing mode" do
       let(:product) do
         create(:instrument,
-               facility: facility,
+               facility:,
                billing_mode: "Skip Review",
                pricing_mode: Instrument::Pricing::SCHEDULE_DAILY)
       end
@@ -90,7 +90,7 @@ RSpec.describe PricePolicyBuilder do
 
       %w[service item].each do |product_type|
         context "when product is a #{product_type}" do
-          let(:product) { create(product_type.to_sym, facility: facility, billing_mode: "Nonbillable") }
+          let(:product) { create(product_type.to_sym, facility:, billing_mode: "Nonbillable") }
 
           it_behaves_like "a correctly created PricePolicy"
         end
@@ -98,7 +98,7 @@ RSpec.describe PricePolicyBuilder do
     end
 
     context "when product is not a Service or Item" do
-      let(:product) { create(:instrument, facility: facility, billing_mode: "Nonbillable") }
+      let(:product) { create(:instrument, facility:, billing_mode: "Nonbillable") }
       let(:usage_rate) { 0 }
 
       it_behaves_like "a correctly created PricePolicy"

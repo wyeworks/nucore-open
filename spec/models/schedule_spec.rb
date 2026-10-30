@@ -29,8 +29,7 @@ RSpec.describe Schedule do
         reservation2 = FactoryBot.build(:setup_reservation,
                                         product: instrument,
                                         reserve_start_at: first_reservation_time + 30.minutes,
-                                        reserve_end_at: first_reservation_time + 1.hour + 30.minutes,
-                                       )
+                                        reserve_end_at: first_reservation_time + 1.hour + 30.minutes)
         expect(reservation2).not_to be_valid
       end
 
@@ -38,15 +37,14 @@ RSpec.describe Schedule do
         reservation2 = FactoryBot.build(:setup_reservation,
                                         product: instrument,
                                         reserve_start_at: first_reservation_time + 1.hour,
-                                        reserve_end_at: first_reservation_time + 2.hours,
-                                       )
+                                        reserve_end_at: first_reservation_time + 2.hours)
         expect(reservation2).to be_valid
       end
     end
   end
 
   context "two instruments on a schedule" do
-    let(:instruments) { FactoryBot.create_list(:setup_instrument, 2, schedule: schedule) }
+    let(:instruments) { FactoryBot.create_list(:setup_instrument, 2, schedule:) }
 
     context "with a reservation placed" do
       let!(:reservation) do
@@ -60,8 +58,7 @@ RSpec.describe Schedule do
         reservation2 = FactoryBot.build(:setup_reservation,
                                         product: instruments[1],
                                         reserve_start_at: first_reservation_time + 30.minutes,
-                                        reserve_end_at: first_reservation_time + 1.hour + 30.minutes,
-                                       )
+                                        reserve_end_at: first_reservation_time + 1.hour + 30.minutes)
         expect(reservation2).not_to be_valid
       end
 
@@ -87,8 +84,8 @@ RSpec.describe Schedule do
 
   describe "active scope" do
     let(:facility) { FactoryBot.create(:setup_facility) }
-    let!(:instrument) { FactoryBot.create(:setup_instrument, facility: facility) }
-    let!(:archived_instrument) { FactoryBot.create(:setup_instrument, facility: facility, is_archived: true) }
+    let!(:instrument) { FactoryBot.create(:setup_instrument, facility:) }
+    let!(:archived_instrument) { FactoryBot.create(:setup_instrument, facility:, is_archived: true) }
 
     it "should include non-archived schedule" do
       expect(Schedule.active).to include instrument.schedule
@@ -98,5 +95,4 @@ RSpec.describe Schedule do
       expect(Schedule.active).not_to include archived_instrument.schedule
     end
   end
-
 end

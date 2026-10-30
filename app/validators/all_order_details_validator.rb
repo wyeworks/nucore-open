@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AllOrderDetailsValidator
-
   cattr_accessor :order_detail_validator_class
   attr_reader :order_details
 
@@ -23,6 +22,7 @@ class AllOrderDetailsValidator
   # This class should only be initialized through the `.build` method
   def initialize(order_details)
     raise "Should not be initialized directly. Use the `.build` factory method instead" unless order_detail_validator_class
+
     @order_details = order_details
   end
 
@@ -38,5 +38,4 @@ class AllOrderDetailsValidator
   def error_message
     I18n.t(order_detail_validator_class.name.underscore, scope: "validators.all_details_on_order_validator")
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module FacilityOrdersHelper
-
   def order_detail_badges(order_detail)
     OrderDetailNoticePresenter.new(order_detail).badges_to_html
   end
@@ -29,5 +28,4 @@ module FacilityOrdersHelper
       end
     end
   end
-
 end

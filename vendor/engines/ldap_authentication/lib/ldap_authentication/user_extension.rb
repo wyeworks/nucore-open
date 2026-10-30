@@ -3,9 +3,7 @@
 require "ldap_authentication/user_updater"
 
 module LdapAuthentication
-
   module UserExtension
-
     extend ActiveSupport::Concern
 
     class_methods do
@@ -20,7 +18,5 @@ module LdapAuthentication
     def after_ldap_authentication
       UserUpdater.new(self).update_from_ldap
     end
-
   end
-
 end

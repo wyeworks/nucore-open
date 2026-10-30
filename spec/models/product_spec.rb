@@ -11,18 +11,16 @@ RSpec.describe Product do
   describe "with everything configured" do
     subject(:product) { create(:instrument_requiring_approval) }
 
-    let(:access_group) { create(:product_access_group, product: product) }
+    let(:access_group) { create(:product_access_group, product:) }
     let(:facility) { @facility }
-    let!(:product_user) { product.product_users.create(product: product, user: user, approved_by: user.id) }
+    let!(:product_user) { product.product_users.create(product:, user:, approved_by: user.id) }
     let(:schedule_rule) { product.schedule_rules.create(attributes_for :schedule_rule) }
     let(:user) { create(:user) }
 
     class TestProduct < Product
-
       def requires_account?
         false
       end
-
     end
 
     before(:example) do
@@ -30,7 +28,7 @@ RSpec.describe Product do
     end
 
     it "should not create using factory" do
-      @product = FactoryBot.create(:item, facility: facility)
+      @product = FactoryBot.create(:item, facility:)
       expect(@product.errors[:type]).not_to be_nil
     end
 
@@ -66,8 +64,7 @@ RSpec.describe Product do
         create_list(:instrument_price_policy, 3,
                     product: instrument,
                     start_date: 3.days.ago,
-                    expire_date: 3.days.from_now
-                  )
+                    expire_date: 3.days.from_now)
       end
 
       let!(:past_price_policies) do
@@ -75,8 +72,7 @@ RSpec.describe Product do
           create(:instrument_price_policy,
                  product: instrument,
                  start_date: n.months.ago,
-                 expire_date: n.months.ago + 2.weeks,
-                )
+                 expire_date: n.months.ago + 2.weeks)
         end
       end
 
@@ -85,8 +81,7 @@ RSpec.describe Product do
           create(:instrument_price_policy,
                  product: instrument,
                  start_date: n.months.from_now,
-                 expire_date: n.months.from_now + 2.weeks,
-                )
+                 expire_date: n.months.from_now + 2.weeks)
         end
       end
 
@@ -127,12 +122,12 @@ RSpec.describe Product do
 
     context "with overlapping price policies" do
       subject(:product) { create(:setup_instrument) }
-      let!(:order) { FactoryBot.create(:setup_order, product: product) }
+      let!(:order) { FactoryBot.create(:setup_order, product:) }
       let!(:order_detail) { order.order_details.first }
       let!(:price_policy) do
         FactoryBot.create(
           :instrument_price_policy,
-          product: product,
+          product:,
           price_group: product.price_groups.last,
           start_date: Time.zone.now,
           expire_date: Time.zone.now + 1.day,
@@ -143,7 +138,7 @@ RSpec.describe Product do
         FactoryBot.create(
           :instrument_price_policy,
           start_date: 1.day.ago.beginning_of_day,
-          product: product,
+          product:,
           price_group: price_policy.price_group,
           usage_rate: 10 / 60.0,
         )
@@ -186,7 +181,6 @@ RSpec.describe Product do
       end
 
       context "product specific enabled", feature_setting: { "notifications.product_specific_contacts": true } do
-
         it "should return the product's email if it has it" do
           expect(@product.email).to eq("product@example.com")
         end
@@ -214,7 +208,6 @@ RSpec.describe Product do
       end
 
       context "product specific disabled", feature_setting: { "notifications.product_specific_contacts": false } do
-
         it "should return the facility's email address even if the product has an email" do
           expect(@product.email).to eq("facility@example.com")
         end
@@ -238,7 +231,6 @@ RSpec.describe Product do
 
     context "can_purchase?" do
       class TestPricePolicy < PricePolicy
-
         def rate_field
           :unit_cost
         end
@@ -246,7 +238,6 @@ RSpec.describe Product do
         def note
           "I am a note and I am present"
         end
-
       end
 
       before :each do
@@ -547,7 +538,7 @@ RSpec.describe Product do
 
       context "when a product's url_name exists in another facility" do
         let(:other_facility) { create(:facility) }
-        let(:new_product) { build(:instrument_requiring_approval, url_name: "product_name", facility: facility) }
+        let(:new_product) { build(:instrument_requiring_approval, url_name: "product_name", facility:) }
 
         before :each do
           create(:facility_account, facility: other_facility)

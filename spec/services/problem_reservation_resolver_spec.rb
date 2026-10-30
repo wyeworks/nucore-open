@@ -1,9 +1,10 @@
 # frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe ProblemReservationResolver do
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility: facility, problems_resolvable_by_user: true) }
+  let(:instrument) { create(:setup_instrument, :timer, :always_available, charge_for: :usage, facility:, problems_resolvable_by_user: true) }
   let(:user) { create(:user) }
   let!(:problem_reservation) do
     create(
@@ -12,7 +13,7 @@ RSpec.describe ProblemReservationResolver do
       reserve_start_at: 2.hours.ago,
       reserve_end_at: 1.hour.ago,
       actual_start_at: 1.hour.ago,
-      actual_end_at: nil
+      actual_end_at: nil,
     )
   end
   subject(:resolver) { described_class.new(problem_reservation) }
@@ -28,7 +29,7 @@ RSpec.describe ProblemReservationResolver do
         problem_resolved_at: be_present,
         problem_resolved_by: user,
       )
-      log_event = LogEvent.find_by(loggable: problem_reservation.order_detail, event_type: :resolve_from_problem_queue, user: user)
+      log_event = LogEvent.find_by(loggable: problem_reservation.order_detail, event_type: :resolve_from_problem_queue, user:)
       expect(log_event).to be_present
     end
 
@@ -54,7 +55,5 @@ RSpec.describe ProblemReservationResolver do
       expect(resolver.resolve(actual_end_at: problem_reservation.actual_start_at)).to be_falsy
       expect(problem_reservation.errors).to be_added(:actual_duration_mins, :zero_duration)
     end
-
   end
-
 end

@@ -133,7 +133,6 @@ RSpec.describe ProblemNotificationSender do
         end
       end
     end
-
   end
 
   describe "#detailed_notification_count" do

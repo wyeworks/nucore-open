@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class ContentGenerator
-
     include TextHelpers::Translation
 
     attr_reader :facility, :subject_product
@@ -40,12 +38,11 @@ module BulkEmail
 
     def reason_statement
       return if subject_product.blank? || subject_product.online?
+
       I18n.t(subject_product.offline_category,
              product_name: subject_product.name,
              scope: "bulk_email.product_unavailable_reason_statements",
              default: :other)
     end
-
   end
-
 end

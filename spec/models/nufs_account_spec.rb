@@ -28,6 +28,5 @@ RSpec.describe NufsAccount do
     it "should not be limited to a single facility" do
       expect(NufsAccount.per_facility?).to be false
     end
-
   end
 end

@@ -3,7 +3,6 @@
 # Contains overrides for building a `PurchaseOrderAccount` from params.
 # Dynamically called via the `AccountBuilder.for()` factory.
 class PurchaseOrderAccountBuilder < AccountBuilder
-
   # Needs to be overridable by engines
   cattr_accessor(:permitted_account_params) { [] }
 
@@ -11,29 +10,29 @@ class PurchaseOrderAccountBuilder < AccountBuilder
 
   # Override strong_params for `build` account.
   def account_params_for_build
-    [
-      :account_number,
-      :description,
-      :affiliate_id,
-      :affiliate_other,
-      :remittance_information,
-      :formatted_expires_at,
-      :outside_contact_info,
-      :ar_number,
+    %i[
+      account_number
+      description
+      affiliate_id
+      affiliate_other
+      remittance_information
+      formatted_expires_at
+      outside_contact_info
+      ar_number
     ] + (SettingsHelper.feature_on?("accounts.purchase_order_monetary_cap") ? [:monetary_cap] : []) + permitted_account_params
   end
 
   # Override strong_params for `update` account.
   def account_params_for_update
-    [
-      :account_number,
-      :description,
-      :affiliate_id,
-      :affiliate_other,
-      :remittance_information,
-      :formatted_expires_at,
-      :outside_contact_info,
-      :ar_number,
+    %i[
+      account_number
+      description
+      affiliate_id
+      affiliate_other
+      remittance_information
+      formatted_expires_at
+      outside_contact_info
+      ar_number
     ] + (SettingsHelper.feature_on?("accounts.purchase_order_monetary_cap") ? [:monetary_cap] : []) + permitted_account_params
   end
 
@@ -53,5 +52,4 @@ class PurchaseOrderAccountBuilder < AccountBuilder
     account.expires_at = account.expires_at.try(:end_of_day)
     account
   end
-
 end

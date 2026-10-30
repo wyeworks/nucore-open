@@ -35,5 +35,4 @@ RSpec.describe Recurrence do
       expect(repeats[1] - repeats[0]).to be <= 31.days
     end
   end
-
 end

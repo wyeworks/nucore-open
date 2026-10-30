@@ -55,5 +55,4 @@ RSpec.describe Reports::InstrumentDayReportsController do
       row[1..-1].all? { |data| expect(Float(data)).to be_is_a(Numeric) }
     end
   end
-
 end

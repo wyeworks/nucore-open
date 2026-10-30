@@ -169,17 +169,17 @@ RSpec.describe OrderDetailStoredFilesController do
     before { sign_in user }
 
     describe "while in the cart" do
-      let(:order) { create(:setup_order, product: product) }
+      let(:order) { create(:setup_order, product:) }
 
       it "has access" do
-        get :order_file, params: params
+        get(:order_file, params:)
         expect(response).to be_successful
       end
     end
 
     describe "adding to an existing order" do
-      let(:order) { create(:purchased_order, product: product) }
-      let(:user) { create(:user, :staff, facility: facility) }
+      let(:order) { create(:purchased_order, product:) }
+      let(:user) { create(:user, :staff, facility:) }
       let(:merge_order) { create(:merge_order, merge_with_order: order) }
 
       it "has access" do
@@ -193,19 +193,19 @@ RSpec.describe OrderDetailStoredFilesController do
     let(:product) { create(:setup_service, :with_order_form) }
     let(:order_detail) { order.order_details.first }
     let(:facility) { order.facility }
-    let(:order) { create(:setup_order, product: product) }
+    let(:order) { create(:setup_order, product:) }
 
     let(:params) { { order_id: order.id, order_detail_id: order_detail.id } }
     before { sign_in user }
 
     it "can upload the file" do
       file = Rack::Test::UploadedFile.new(Rails.root.join("spec", "files", "template1.txt"))
-      post :upload_order_file, params: params.merge(stored_file: { file: file })
+      post :upload_order_file, params: params.merge(stored_file: { file: })
       expect(order_detail.stored_files.count).to eq(1)
     end
 
     it "gets an error if there is no file" do
-      post :upload_order_file, params: params
+      post(:upload_order_file, params:)
 
       error_options = SettingsHelper.feature_on?(:active_storage) ? { validator_type: :attached } : {}
 

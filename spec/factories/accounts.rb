@@ -53,8 +53,8 @@ FactoryBot.define do
       FactoryBot.create(
         :order_detail,
         product: evaluator.product,
-        order: order,
-        account: account,
+        order:,
+        account:,
       )
     end
   end

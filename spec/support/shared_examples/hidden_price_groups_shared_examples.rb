@@ -1,5 +1,5 @@
 RSpec.shared_examples "with hidden price groups" do |item_type|
-  let!(:price_group_to_hide) { create(:price_group, facility: facility) }
+  let!(:price_group_to_hide) { create(:price_group, facility:) }
 
   it "hides price policies related to that price group" do
     visit send("facility_#{item_type}_price_policies_path", facility, item)

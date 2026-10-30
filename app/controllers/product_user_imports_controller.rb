@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductUserImportsController < ApplicationController
-
   include ActionView::Helpers::TextHelper
 
   admin_tab     :all
@@ -38,14 +37,13 @@ class ProductUserImportsController < ApplicationController
       create_params.merge(
         creator: session_user,
         product: @product,
-      )
+      ),
     )
   end
 
   def import_exception_alert(exception)
     Rails.logger.error "#{exception.message}\n#{exception.backtrace.join("\n")}"
     flash[:error] = text("controllers.product_user_imports.create.error", error: exception.message)
-
   end
 
   def import_success_alert(import)
@@ -78,5 +76,4 @@ class ProductUserImportsController < ApplicationController
   def init_product
     @product = current_facility.products.find_by!(url_name: params[:product_id])
   end
-
 end

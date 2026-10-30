@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StandardizeCanceledSpelling < ActiveRecord::Migration[4.2]
-
   def up
     ActiveRecord::Base.transaction do
       change_spelling(OrderDetail, :state, "cancelled", "canceled")
@@ -23,5 +22,4 @@ class StandardizeCanceledSpelling < ActiveRecord::Migration[4.2]
   def change_spelling(model, property, from, to)
     model.where(property => from).update_all(property => to)
   end
-
 end

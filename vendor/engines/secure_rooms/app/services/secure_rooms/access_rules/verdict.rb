@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module AccessRules
-
     class Verdict
-
       include TextHelpers::Translation
 
       attr_reader(
@@ -57,9 +54,6 @@ module SecureRooms
       def translate_reason(key)
         text(key) if key.present?
       end
-
     end
-
   end
-
 end

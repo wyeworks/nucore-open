@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Converters::OrderDetailToJournalRowAttributes, type: :service do
-
   let(:converter) { described_class.new(journal, order_detail) }
   let(:journal) { build_stubbed(:journal) }
   let(:order_detail) do
@@ -47,5 +46,4 @@ RSpec.describe Converters::OrderDetailToJournalRowAttributes, type: :service do
       end
     end
   end
-
 end

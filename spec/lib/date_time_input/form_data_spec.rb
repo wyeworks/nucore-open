@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe DateTimeInput::FormData do
-
   describe ".from_param" do
     let(:form_data) { described_class.from_param(hash) }
     subject(:output_time) { form_data.to_time }
@@ -109,5 +108,4 @@ RSpec.describe DateTimeInput::FormData do
       end
     end
   end
-
 end

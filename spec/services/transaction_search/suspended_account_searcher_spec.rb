@@ -52,10 +52,10 @@ RSpec.describe TransactionSearch::Searcher, :use_test_account do
 
       it "filters out orders with suspended accounts" do
         expect(searched_order_details).not_to include(
-          *suspended_account.order_details.to_a
+          *suspended_account.order_details.to_a,
         )
         expect(searched_order_details).to include(
-          *account.order_details.to_a
+          *account.order_details.to_a,
         )
       end
     end
@@ -69,7 +69,7 @@ RSpec.describe TransactionSearch::Searcher, :use_test_account do
 
       it "does not filter orders" do
         expect(searched_order_details).to include(
-          *facility.order_details.to_a
+          *facility.order_details.to_a,
         )
       end
     end

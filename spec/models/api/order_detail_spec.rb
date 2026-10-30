@@ -6,7 +6,7 @@ RSpec.describe Api::OrderDetail do
   subject { Api::OrderDetail.new(order_detail) }
 
   let(:order) { double(Order, user: ordered_for) }
-  let(:order_detail) { double(OrderDetail, account: account, order: order, order_number: "12-3") }
+  let(:order_detail) { double(OrderDetail, account:, order:, order_number: "12-3") }
   let(:ordered_for) { build(:user, id: 2) }
 
   describe "#to_h" do

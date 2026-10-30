@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe ProductPresenter do
-
   describe "to_s" do
     subject(:presenter) { described_class.new(product) }
 

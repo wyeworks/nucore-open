@@ -3,7 +3,6 @@
 # Support for finding the next available time and moving a reservation
 # up to that next time slot
 module Reservations::MovingUp
-
   #
   # Returns a new reservation with the reserve_*_at times updated
   # to the next accommodating time slot on the calendar from NOW. Returns nil
@@ -18,10 +17,11 @@ module Reservations::MovingUp
       options: {
         exclude: self, user:,
         until: reserve_start_at
-      }
+      },
     )
 
     return nil if next_res.nil? || next_res.reserve_start_at >= reserve_start_at
+
     next_res
   end
 
@@ -46,5 +46,4 @@ module Reservations::MovingUp
     product.online? &&
       !(canceled? || order_detail.complete? || in_grace_period? || earliest_possible.nil?) # TODO: refactor?
   end
-
 end

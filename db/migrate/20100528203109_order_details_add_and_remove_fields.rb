@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetailsAddAndRemoveFields < ActiveRecord::Migration[4.2]
-
   def self.up
     # Oracle will drop the foreign key as part of the remove_column
     remove_foreign_key :order_details, :order_statuses if Nucore::Database.mysql?
@@ -24,5 +23,4 @@ class OrderDetailsAddAndRemoveFields < ActiveRecord::Migration[4.2]
     remove_column :order_details, :estimated_cost
     remove_column :order_details, :estimated_subsidy
   end
-
 end

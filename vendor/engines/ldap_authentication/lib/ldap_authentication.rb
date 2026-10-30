@@ -6,7 +6,6 @@ require "ldap_authentication/null_connection"
 require "ldap_authentication/engine"
 
 module LdapAuthentication
-
   def self.configured?
     config.present?
   end
@@ -60,5 +59,4 @@ module LdapAuthentication
     yaml = YAML.safe_load(parsed, permitted_classes: [], permitted_symbols: [], aliases: true) || {}
     yaml.fetch(Rails.env, {})
   end
-
 end

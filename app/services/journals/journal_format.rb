@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Journals
-
   class JournalFormat
-
     attr_reader :key
 
     def self.find(key)
@@ -32,14 +30,12 @@ module Journals
     def options
       {
         mime_type: Mime[mime_type],
-        filename: @filename || "journal.#{key}"
+        filename: @filename || "journal.#{key}",
       }
     end
 
     def mime_type
       @mime_type || key
     end
-
   end
-
 end

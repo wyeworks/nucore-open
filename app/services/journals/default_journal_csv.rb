@@ -1,7 +1,5 @@
 module Journals
-
   class DefaultJournalCsv
-
     include Reports::CsvExporter
 
     def initialize(journal)
@@ -33,7 +31,5 @@ module Journals
     def column_headers
       report_hash.keys.map { |header| header.to_s.titleize }
     end
-
   end
-
 end

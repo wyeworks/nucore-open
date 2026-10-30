@@ -10,5 +10,4 @@ RSpec.describe ServicePricePoliciesController do
   before(:all) { create_users }
 
   it_should_behave_like PricePoliciesController, :service
-
 end

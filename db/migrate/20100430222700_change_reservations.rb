@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ChangeReservations < ActiveRecord::Migration[4.2]
-
   def self.up
     change_table :reservations do |t|
       t.references  :order_detail
@@ -28,5 +27,4 @@ class ChangeReservations < ActiveRecord::Migration[4.2]
     remove_foreign_key :reservations, :order_details
     remove_foreign_key :reservations, :products, name: "reservations_instrument_id_fk"
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddStatementFields < ActiveRecord::Migration[4.2]
-
   def self.up
     add_column :statements, :account_id,  :integer,  null: false
     add_column :statements, :facility_id, :integer,  null: false
@@ -19,5 +18,4 @@ class AddStatementFields < ActiveRecord::Migration[4.2]
     remove_column :statements, :created_by
     remove_column :statements, :created_at
   end
-
 end

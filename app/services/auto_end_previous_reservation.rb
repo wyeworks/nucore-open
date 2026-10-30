@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AutoEndPreviousReservation
-
   def initialize(product, current_user)
     @product = product
     @current_user = current_user
@@ -38,5 +37,4 @@ class AutoEndPreviousReservation
     LogEvent.log(reservation.order_detail, :auto_ended_by_next_reservation, @current_user,
                  metadata: { cause: :auto_end_on_next_start })
   end
-
 end

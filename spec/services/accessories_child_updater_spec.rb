@@ -6,7 +6,7 @@ RSpec.describe Accessories::ChildUpdater do
   let(:order) { Order.new }
   let(:order_detail) do
     build_stubbed :order_detail,
-                  order: order,
+                  order:,
                   child_order_details: [],
                   attributes: {
                     order_id: order.id,
@@ -14,7 +14,7 @@ RSpec.describe Accessories::ChildUpdater do
   end
 
   describe "update_children" do
-    let(:child_order_detail) { build(:order_detail, order: order) }
+    let(:child_order_detail) { build(:order_detail, order:) }
     before { allow(order_detail).to receive(:child_order_details).and_return [child_order_detail] }
 
     it "updates the child" do
@@ -33,7 +33,7 @@ RSpec.describe Accessories::ChildUpdater do
     let!(:child_order_detail) do
       order_detail
         .child_order_details
-        .create(attributes_for(:order_detail, order_status: OrderStatus.new_status, product: product, order: order))
+        .create(attributes_for(:order_detail, order_status: OrderStatus.new_status, product:, order:))
     end
 
     context "when accessory_independent_order_status feature is enabled", feature_setting: { "reservations.accessory_independent_order_status": true } do

@@ -2,6 +2,6 @@
 
 FactoryBot.define do
   factory :product_display_group do
-    sequence(:name) { |n| "Product Group #{n}"}
+    sequence(:name) { |n| "Product Group #{n}" }
   end
 end

@@ -1,21 +1,22 @@
 # frozen_string_literal: true
 
 module Nucore
-
   module Database
-
     def self.oracle?
       return @is_oracle if defined?(@is_oracle)
+
       @is_oracle = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "oracle_enhanced"
     end
 
     def self.mysql?
       return @is_mysql if defined?(@is_mysql)
+
       @is_mysql = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "mysql2"
     end
 
     def self.postgresql?
       return @is_postgresql if defined?(@is_postgresql)
+
       @is_postgresql = ActiveRecord::Base.connection_db_config.configuration_hash[:adapter] == "postgresql"
     end
 
@@ -43,7 +44,6 @@ module Nucore
     end
 
     module DateHelper
-
       def self.included(base)
         base.extend ClassMethods
       end
@@ -52,17 +52,12 @@ module Nucore
       Y2K_CUTOFF = 86
 
       module ClassMethods
-
         def parse_2_digit_year_date(date_string)
           day, month, year = date_string.match(/\A(\d{1,2})\-?([A-Z]{3})\-?(\d\d)\z/).captures
           year = year.to_i >= Y2K_CUTOFF ? "19#{year}" : "20#{year}"
           Time.zone.parse("#{day} #{month} #{year}")
         end
-
       end
-
     end
-
   end
-
 end

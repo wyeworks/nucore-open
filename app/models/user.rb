@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class User < ApplicationRecord
-
   include ::Users::Roles
   include Nucore::Database::WhereIdsIn
 
@@ -186,14 +185,14 @@ class User < ApplicationRecord
   end
 
   def full_name(suspended_label: true)
-    Users::NamePresenter.new(self, suspended_label: suspended_label).full_name
+    Users::NamePresenter.new(self, suspended_label:).full_name
   end
 
   alias to_s full_name
   alias name full_name
 
   def last_first_name(suspended_label: true)
-    Users::NamePresenter.new(self, suspended_label: suspended_label).last_first_name
+    Users::NamePresenter.new(self, suspended_label:).last_first_name
   end
 
   # Devise uses this method for determining if a user is allowed to log in. It
@@ -241,8 +240,8 @@ class User < ApplicationRecord
     price_group_members.find_or_create_by!(price_group: default_price_group)
   end
 
-  def lock_access!(opts = { })
+  def lock_access!(opts = {})
     super
-    LogEvent.log(self, :access_locked, self, metadata: {cause: "Too many login attempts"})
+    LogEvent.log(self, :access_locked, self, metadata: { cause: "Too many login attempts" })
   end
 end

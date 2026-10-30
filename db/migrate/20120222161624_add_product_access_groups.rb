@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddProductAccessGroups < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :product_access_groups do |t|
       t.references :product, null: false
@@ -23,5 +22,4 @@ class AddProductAccessGroups < ActiveRecord::Migration[4.2]
     drop_table :product_access_schedule_rules
     remove_column :product_users, :product_access_group_id
   end
-
 end

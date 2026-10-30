@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module AbilityHelper
-
   # A convenience method to help clarify permissions for various user roles.
   # Useful for developer debugging, this method is not actually invoked anywhere.
   #
@@ -26,5 +25,4 @@ module AbilityHelper
     end
     results
   end
-
 end

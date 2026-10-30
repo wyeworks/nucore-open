@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Review period - Sending notifications and marking as reviewed", billing_review_period: 7.days do
-
   let(:facility) { create(:setup_facility) }
   let(:director) { create(:user, :facility_director, facility:) }
   let(:item) { create(:setup_item, facility:) }
@@ -73,7 +72,7 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
 
       check "Send $0 Notifications?"
       expect { click_button "Send Notifications" }.to(
-        enqueue_mail(Notifier, :review_orders).twice
+        enqueue_mail(Notifier, :review_orders).twice,
       )
 
       within(".notice") do
@@ -162,11 +161,10 @@ RSpec.describe "Review period - Sending notifications and marking as reviewed", 
       check("order_detail_ids[]", option: order_detail.id)
 
       expect { click_button "Send Notifications" }.to(
-        enqueue_mail(Notifier, :review_orders)
+        enqueue_mail(Notifier, :review_orders),
       )
 
       expect(page).to have_content("Notifications sent successfully")
     end
   end
-
 end

@@ -3,7 +3,6 @@
 require "csv"
 
 class ProductUserImport < ApplicationRecord
-
   include DownloadableFile
 
   belongs_to :product
@@ -29,7 +28,6 @@ class ProductUserImport < ApplicationRecord
       failures << "Uploaded CSV file must include a 'Username' column.  Please try again."
     end
 
-
     if new_product_users_added?
       save!
       successes.map! do |product_user|
@@ -52,7 +50,7 @@ class ProductUserImport < ApplicationRecord
   def import_row(row)
     row_username = row["Username"]
     user = User.find_by(username: row_username)
-    new_product_user = ProductUserCreator.create(user: user, product: product, approver: creator)
+    new_product_user = ProductUserCreator.create(user:, product:, approver: creator)
 
     if new_product_user.persisted?
       successes << new_product_user
@@ -69,5 +67,4 @@ class ProductUserImport < ApplicationRecord
     @parsed_import_file ||=
       CSV.parse(read_attached_file, headers: true, skip_lines: /^,*$/)
   end
-
 end

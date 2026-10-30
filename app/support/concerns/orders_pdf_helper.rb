@@ -20,6 +20,7 @@ module OrdersPdfHelper
     %w(phone_number fax_number email).each do |contact_field|
       field_value = facility.send(contact_field.to_sym)
       next if field_value.blank?
+
       pdf.text "<b>#{contact_field.titleize}:</b> #{field_value}", inline_format: true
     end
   end

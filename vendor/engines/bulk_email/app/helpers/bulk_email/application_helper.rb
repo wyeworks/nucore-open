@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   module ApplicationHelper
-
     include Rails.application.routes.url_helpers
 
     def admin_instrument_send_mail_path(instrument)
@@ -47,12 +45,10 @@ module BulkEmail
 
       link_to(
         text(translation_key, scope: "bulk_email.dates.range"),
-        request.query_parameters.merge(start_date: start_date, end_date: end_date),
+        request.query_parameters.merge(start_date:, end_date:),
         class: "js--bulk-email-date-range-selector",
-        data: { start_date: start_date, end_date: end_date },
+        data: { start_date:, end_date: },
       )
     end
-
   end
-
 end

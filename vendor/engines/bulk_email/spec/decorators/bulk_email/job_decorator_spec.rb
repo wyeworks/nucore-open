@@ -6,7 +6,7 @@ RSpec.describe BulkEmail::JobDecorator do
   subject(:job) { described_class.new(undecorated_job) }
 
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:products) { FactoryBot.create_list(:setup_instrument, 2, facility: facility) }
+  let(:products) { FactoryBot.create_list(:setup_instrument, 2, facility:) }
   let(:product_id) { nil }
   let(:recipients) { %w(a@example.net b@example.com) }
   let(:selected_product_ids) { nil }
@@ -26,8 +26,8 @@ RSpec.describe BulkEmail::JobDecorator do
 
   let(:undecorated_job) do
     FactoryBot.build_stubbed(:bulk_email_job,
-                             recipients: recipients,
-                             search_criteria: search_criteria)
+                             recipients:,
+                             search_criteria:)
   end
 
   describe "#sender" do

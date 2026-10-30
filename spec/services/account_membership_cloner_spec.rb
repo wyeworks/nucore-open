@@ -12,9 +12,9 @@ RSpec.describe AccountMembershipCloner, type: :service do
 
   let(:cloner) {
     described_class.new(
-      account_users_to_clone: account_users_to_clone,
+      account_users_to_clone:,
       clone_to_user: new_user,
-      acting_user: acting_user,
+      acting_user:,
     )
   }
 
@@ -69,5 +69,4 @@ RSpec.describe AccountMembershipCloner, type: :service do
       expect { cloner.perform }.to_not change(AccountUser, :count)
     end
   end
-
 end

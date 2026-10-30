@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserForm < SimpleDelegator
-
   include ActiveModel::Validations
 
   def model_name
@@ -72,5 +71,4 @@ class UserForm < SimpleDelegator
 
     chars.shuffle.join
   end
-
 end

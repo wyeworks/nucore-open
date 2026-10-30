@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreatePriceGroupProducts < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :price_group_products do |t|
       t.integer :price_group_id, null: false
@@ -43,7 +42,7 @@ class CreatePriceGroupProducts < ActiveRecord::Migration[4.2]
                 when ItemPricePolicy then policy.item
                 when ServicePricePolicy then policy.service
                 when InstrumentPricePolicy then policy.instrument
-              end
+                end
 
       pgp = PriceGroupProduct.find_by(price_group_id: policy.price_group.id, product_id: product.id)
 
@@ -54,5 +53,4 @@ class CreatePriceGroupProducts < ActiveRecord::Migration[4.2]
 
     drop_table :price_group_products
   end
-
 end

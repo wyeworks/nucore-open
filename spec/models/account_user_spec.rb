@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe AccountUser do
-
   context "when creating through Account" do
     subject(:account) { build(:nufs_account, :with_account_owner) }
 
@@ -47,7 +46,7 @@ RSpec.describe AccountUser do
 
     context "when creating another role for the user for the account" do
       subject(:account_user) do
-        build(:account_user, :purchaser, account: account, user: user)
+        build(:account_user, :purchaser, account:, user:)
       end
 
       it "is invalid" do
@@ -63,12 +62,12 @@ RSpec.describe AccountUser do
     let(:user) { create(:user) }
 
     before(:each) do
-      create(:account_user, :purchaser, :inactive, account: account, user: user)
+      create(:account_user, :purchaser, :inactive, account:, user:)
     end
 
     context "when creating an identical active role" do
       subject(:account_user) do
-        build(:account_user, :purchaser, account: account, user: user)
+        build(:account_user, :purchaser, account:, user:)
       end
 
       it { is_expected.to be_valid }
@@ -80,8 +79,8 @@ RSpec.describe AccountUser do
     let(:user) { create(:user) }
 
     it "can have multiple inactive roles for an account" do
-      create(:account_user, :purchaser, :inactive, account: account, user: user)
-      old = build(:account_user, :purchaser, :inactive, account: account, user: user)
+      create(:account_user, :purchaser, :inactive, account:, user:)
+      old = build(:account_user, :purchaser, :inactive, account:, user:)
       expect(old).to be_valid
     end
   end
@@ -91,7 +90,7 @@ RSpec.describe AccountUser do
 
     context "when attempting to add another owner" do
       subject(:account_user) do
-        build(:account_user, :owner, account: account, user: user)
+        build(:account_user, :owner, account:, user:)
       end
       let(:user) { create(:user) }
 
@@ -107,8 +106,8 @@ RSpec.describe AccountUser do
     let!(:account) { create(:nufs_account, :with_account_owner) }
 
     it "in valid" do
-      create(:account_user, :owner, :inactive, account: account, user: create(:user))
-      old = build(:account_user, :owner, :inactive, account: account, user: create(:user))
+      create(:account_user, :owner, :inactive, account:, user: create(:user))
+      old = build(:account_user, :owner, :inactive, account:, user: create(:user))
 
       expect(old).to be_valid
     end
@@ -119,7 +118,7 @@ RSpec.describe AccountUser do
 
     context "when supplying a user who will grant the role" do
       context "who is a facility director (manager)" do
-        let(:user) { create(:user, :facility_director, facility: facility) }
+        let(:user) { create(:user, :facility_director, facility:) }
 
         context "and a facility" do
           subject(:roles) { described_class.selectable_user_roles(user, facility) }
@@ -169,7 +168,7 @@ RSpec.describe AccountUser do
       expect(result).to be_persisted
       expect(result).to have_attributes(
         user: new_purchaser,
-        account: account,
+        account:,
         user_role: AccountUser::ACCOUNT_PURCHASER,
         created_by_user: account_manager,
       )

@@ -4,21 +4,21 @@ require "rails_helper"
 
 RSpec.describe "Editing an occupancy" do
   let(:facility) { create(:setup_facility) }
-  let(:secure_room) { create(:secure_room, facility: facility) }
+  let(:secure_room) { create(:secure_room, facility:) }
   let!(:policy) { create(:secure_room_price_policy, product: secure_room, usage_rate: 60, price_group: order_detail.account.price_groups.first) }
   let(:order) { create(:purchased_order, product: secure_room) }
   let!(:order_detail) { order.order_details.first }
 
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
   let!(:occupancy) do
     create(
       :occupancy,
       *traits,
-      secure_room: secure_room,
-      order_detail: order_detail,
+      secure_room:,
+      order_detail:,
       account: order_detail.account,
-      entry_at: entry_at,
-      exit_at: exit_at,
+      entry_at:,
+      exit_at:,
     )
   end
 

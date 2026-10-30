@@ -255,8 +255,7 @@ RSpec.describe InstrumentsController, type: :controller do
       @params.merge!(
         instrument: attributes_for(:instrument,
                                    no_relay: true,
-                                   facility_account_id: facility.facility_accounts.first.id,
-                                  ),
+                                   facility_account_id: facility.facility_accounts.first.id),
       )
     end
 
@@ -330,7 +329,7 @@ RSpec.describe InstrumentsController, type: :controller do
 
           expect { do_request }.to_not change { Instrument.count }
           expect(@response.body).to(
-            include(I18n.t("controllers.instruments.create.daily_booking_not_authorized"))
+            include(I18n.t("controllers.instruments.create.daily_booking_not_authorized")),
           )
         end
       end
@@ -373,7 +372,7 @@ RSpec.describe InstrumentsController, type: :controller do
 
           expect { do_request }.to_not change { Instrument.count }
           expect(@response.body).to(
-            include(I18n.t("controllers.instruments.create.duration_billing_not_authorized"))
+            include(I18n.t("controllers.instruments.create.duration_billing_not_authorized")),
           )
         end
       end
@@ -595,7 +594,7 @@ RSpec.describe InstrumentsController, type: :controller do
             instrument_status: a_hash_including(
               instrument_id: @instrument_with_relay.id,
               name: @instrument_with_relay.name,
-            )
+            ),
           )
         end
       end

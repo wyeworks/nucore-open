@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 module PaperclipFile
-
   extend ActiveSupport::Concern
 
   included do
     has_attached_file :file, PaperclipSettings.config.merge(
       validate_media_type: false,
-      s3_url_options: { response_content_disposition: "attachment" } # this is ignored when using local storage
+      s3_url_options: { response_content_disposition: "attachment" }, # this is ignored when using local storage
     )
 
     # TODO: Limit attachment types for safe uploads
@@ -54,5 +53,4 @@ module PaperclipFile
   def clean_up_paperclip_errors
     errors.delete(:file) if errors[:file] == errors[:file_file_size]
   end
-
 end

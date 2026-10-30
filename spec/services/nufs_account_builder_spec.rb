@@ -18,7 +18,7 @@ RSpec.describe NufsAccountBuilder, type: :service do
         facility: build_stubbed(:facility),
         owner_user: build_stubbed(:user),
         current_user: build_stubbed(:user),
-        params: params,
+        params:,
       }
     end
 

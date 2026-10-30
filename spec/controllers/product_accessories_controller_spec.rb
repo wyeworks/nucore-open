@@ -10,8 +10,8 @@ RSpec.describe ProductAccessoriesController do
 
   let(:instrument) { FactoryBot.create(:setup_instrument) }
   let(:facility) { instrument.facility }
-  let(:accessory) { FactoryBot.create(:setup_item, facility: facility) }
-  let(:timed_service) { FactoryBot.create(:setup_timed_service, facility: facility) }
+  let(:accessory) { FactoryBot.create(:setup_item, facility:) }
+  let(:timed_service) { FactoryBot.create(:setup_timed_service, facility:) }
 
   before :each do
     @authable = facility
@@ -19,10 +19,10 @@ RSpec.describe ProductAccessoriesController do
   end
 
   describe "index" do
-    let!(:unchosen_accessory) { FactoryBot.create(:setup_item, facility: facility) }
-    let!(:inactive_product) { FactoryBot.create(:setup_item, is_archived: true, facility: facility) }
-    let!(:hidden_product) { FactoryBot.create(:setup_item, is_hidden: true, facility: facility) }
-    let!(:bundle) { FactoryBot.create(:bundle, facility: facility) }
+    let!(:unchosen_accessory) { FactoryBot.create(:setup_item, facility:) }
+    let!(:inactive_product) { FactoryBot.create(:setup_item, is_archived: true, facility:) }
+    let!(:hidden_product) { FactoryBot.create(:setup_item, is_hidden: true, facility:) }
+    let!(:bundle) { FactoryBot.create(:bundle, facility:) }
 
     before :each do
       @method = :get
@@ -96,7 +96,6 @@ RSpec.describe ProductAccessoriesController do
       end
 
       context "with quantity-based accessory" do
-
         before do
           expect(instrument.accessories).to be_empty
           do_request

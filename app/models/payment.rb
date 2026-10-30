@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Payment < ApplicationRecord
-
   belongs_to :account, inverse_of: :payments
   belongs_to :statement, inverse_of: :payments, optional: true
   belongs_to :paid_by, class_name: "User", optional: true
@@ -25,5 +24,4 @@ class Payment < ApplicationRecord
             numericality: { other_than: 0, message: "may not be 0" }
 
   validates :processing_fee, presence: true, numericality: true, allow_nil: false
-
 end

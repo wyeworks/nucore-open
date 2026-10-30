@@ -10,9 +10,9 @@ RSpec.shared_examples_for "it supports order_detail POST #batch_update" do
     it_should_allow_operators_only :redirect
 
     context "when batch-assigning facility staff" do
-      let(:admin) { FactoryBot.create(:user, :facility_administrator, facility: facility) }
-      let(:assignee) { FactoryBot.create(:user, :staff, facility: facility) }
-      let(:orders) { FactoryBot.create_list(:purchased_order, 3, product: product) }
+      let(:admin) { FactoryBot.create(:user, :facility_administrator, facility:) }
+      let(:assignee) { FactoryBot.create(:user, :staff, facility:) }
+      let(:orders) { FactoryBot.create_list(:purchased_order, 3, product:) }
       let(:order_details) { orders.flat_map(&:order_details) }
 
       before do
@@ -31,7 +31,7 @@ RSpec.shared_examples_for "it supports order_detail POST #batch_update" do
       context "when assignment notifications are on", feature_setting: { "notifications.order_assignment_notifications": true } do
         it "sends the assignee one notification" do
           expect { do_request }.to(
-            have_enqueued_mail(OrderAssignmentMailer, :notify_assigned_user)
+            have_enqueued_mail(OrderAssignmentMailer, :notify_assigned_user),
           )
         end
       end

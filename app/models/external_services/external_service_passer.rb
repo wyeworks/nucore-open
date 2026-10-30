@@ -5,7 +5,6 @@
 # and a class that passes off work to that service
 # (the passer).
 class ExternalServicePasser < ApplicationRecord
-
   belongs_to :external_service
   belongs_to :passer, polymorphic: true
 

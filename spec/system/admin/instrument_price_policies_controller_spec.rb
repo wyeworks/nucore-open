@@ -454,7 +454,7 @@ RSpec.describe InstrumentPricePoliciesController do
         expect(page).to have_field(
           "price_policy_#{external_subsidy_group.id}[usage_rate_daily]",
           with: "2000",
-          type: :hidden
+          type: :hidden,
         )
 
         fill_in("note", with: "Daily external subsidy")
@@ -553,7 +553,7 @@ RSpec.describe InstrumentPricePoliciesController do
 
       find_field(
         "price_policy_#{cancer_center.id}[usage_rate_daily]",
-        type: "hidden"
+        type: "hidden",
       ).tap do |hidden_input|
         expect(hidden_input.value).to eq("100")
       end
@@ -564,7 +564,7 @@ RSpec.describe InstrumentPricePoliciesController do
       click_button("Add Pricing Rules")
 
       expect(page).to(
-        have_current_path(facility_instrument_price_policies_path(facility, instrument))
+        have_current_path(facility_instrument_price_policies_path(facility, instrument)),
       )
       expect(page).to have_content("Price Rules were successfully created.")
 
@@ -584,7 +584,7 @@ RSpec.describe InstrumentPricePoliciesController do
           create(
             :instrument_price_policy,
             product: instrument,
-            price_group:
+            price_group:,
           )
         end
       end
@@ -611,10 +611,10 @@ RSpec.describe InstrumentPricePoliciesController do
           change do
             base_price_policy.reload.usage_rate_daily
           end.from(
-            base_price_policy.usage_rate_daily
+            base_price_policy.usage_rate_daily,
           ).to(
-            new_rate
-          )
+            new_rate,
+          ),
         )
 
         expect(page).to have_content("Price Rules were successfully updated.")

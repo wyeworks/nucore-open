@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MessageSummarizer
-
   include Enumerable
 
   delegate :each, to: :visible_summaries
@@ -45,5 +44,4 @@ class MessageSummarizer
   def message_count
     @message_count ||= visible_summaries.sum(&:count)
   end
-
 end

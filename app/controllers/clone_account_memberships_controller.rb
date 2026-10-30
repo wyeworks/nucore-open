@@ -1,5 +1,4 @@
 class CloneAccountMembershipsController < ApplicationController
-
   admin_tab :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -37,7 +36,7 @@ class CloneAccountMembershipsController < ApplicationController
       flash[:error] = text(
         "error",
         account: cloner.error.record.account,
-        message: cloner.error.message
+        message: cloner.error.message,
       )
 
       redirect_to new_facility_user_clone_account_membership_path(user_to_clone_id: @clone_to_user.id)
@@ -58,5 +57,4 @@ class CloneAccountMembershipsController < ApplicationController
   def clone_account_membership_params
     params.permit(:user_to_clone_id, account_user_ids: [])
   end
-
 end

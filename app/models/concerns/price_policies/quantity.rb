@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module PricePolicies
-
   module Quantity
-
     extend ActiveSupport::Concern
 
     included do
@@ -29,6 +27,7 @@ module PricePolicies
 
     def estimate_cost_and_subsidy(qty = 1)
       return nil if restrict_purchase?
+
       {
         cost: unit_cost * qty,
         subsidy: unit_subsidy * qty,
@@ -52,7 +51,5 @@ module PricePolicies
     def subsidy_field
       :unit_subsidy
     end
-
   end
-
 end

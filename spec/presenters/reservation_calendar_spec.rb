@@ -3,9 +3,8 @@
 require "rails_helper"
 
 RSpec.describe ReservationCalendar, :aggregate_failures do
-
   let(:order) { build_stubbed(:order) }
-  let(:order_detail) { build_stubbed(:order_detail, order: order) }
+  let(:order_detail) { build_stubbed(:order_detail, order:) }
   let(:reservation) do
     build_stubbed(:reservation,
                   reserve_start_date: 1.day.from_now.to_date,
@@ -14,8 +13,8 @@ RSpec.describe ReservationCalendar, :aggregate_failures do
                   reserve_start_meridian: "am",
                   duration_mins: 60,
                   split_times: true,
-                  order: order,
-                  order_detail: order_detail)
+                  order:,
+                  order_detail:)
   end
   let(:calendar) { ReservationCalendar.new(reservation) }
   let(:facility) { build(:facility, name: "Facility", abbreviation: "FA") }
@@ -28,7 +27,6 @@ RSpec.describe ReservationCalendar, :aggregate_failures do
   end
 
   describe "#as_ical" do
-
     it "generates an ical file" do
       expect(ical.events.size).to eq(1)
       event = ical.events.first
@@ -40,7 +38,5 @@ RSpec.describe ReservationCalendar, :aggregate_failures do
       expect(event.url.to_s).to eq("")
       expect(event.ip_class).to eq("PRIVATE")
     end
-
   end
-
 end

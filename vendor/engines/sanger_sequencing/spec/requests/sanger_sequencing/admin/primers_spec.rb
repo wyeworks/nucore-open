@@ -49,7 +49,7 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { "products.s
 
       it(
         "does not render mange primers link if ff is disabeld",
-        feature_setting: { "products.sanger_enabled_service": false }
+        feature_setting: { "products.sanger_enabled_service": false },
       ) do
         action.call
 
@@ -83,7 +83,7 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { "products.s
       proc do |sanger_sequencing_primers_attributes = []|
         put(
           facility_sanger_sequencing_admin_primers_path(facility),
-          params: { facility: { sanger_sequencing_primers_attributes: } }
+          params: { facility: { sanger_sequencing_primers_attributes: } },
         )
       end
     end
@@ -98,7 +98,7 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { "products.s
 
         expect(response).to have_http_status(:found)
         expect(response.location).to eq(
-          facility_sanger_sequencing_admin_primers_url(facility)
+          facility_sanger_sequencing_admin_primers_url(facility),
         )
 
         get response.location
@@ -109,7 +109,7 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { "products.s
         expect { action.call([{ name: "Tomato" }]) }.to(
           change do
             facility.sanger_sequencing_primers.where(name: "Tomato").count
-          end.from(0).to(1)
+          end.from(0).to(1),
         )
 
         expect(response).to have_http_status(:found)
@@ -121,7 +121,7 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { "products.s
         expect { action.call([{ id: primer.id, _destroy: true }]) }.to(
           change do
             facility.sanger_sequencing_primers.where(name: primer.name).count
-          end.from(1).to(0)
+          end.from(1).to(0),
         )
 
         expect(response).to have_http_status(:found)
@@ -133,7 +133,7 @@ RSpec.describe "sanger_sequencing/admin/primers", feature_setting: { "products.s
         expect { action.call([{ id: primer.id, name: "Cucumber" }]) }.to(
           change do
             primer.reload.name
-          end.from("Banana").to("Cucumber")
+          end.from("Banana").to("Cucumber"),
         )
 
         expect(response).to have_http_status(:found)

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateProjects < ActiveRecord::Migration[4.2]
-
   def change
     create_table :projects do |t|
       t.string :name, null: false
@@ -15,5 +14,4 @@ class CreateProjects < ActiveRecord::Migration[4.2]
     add_index :projects, :facility_id
     add_foreign_key :projects, :facilities
   end
-
 end

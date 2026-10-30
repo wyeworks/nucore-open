@@ -68,5 +68,4 @@ class ExampleStatementPdf < StatementPdf
   def translation_scope
     "statement_pdf"
   end
-
 end

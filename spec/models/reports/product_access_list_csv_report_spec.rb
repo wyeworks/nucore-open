@@ -22,7 +22,7 @@ RSpec.describe Reports::ProductAccessListCsvReport do
 
     context "with one of each status of product users" do
       let(:facility) { create(:setup_facility) }
-      let(:instrument) { create(:setup_instrument, facility: facility, requires_approval: true) }
+      let(:instrument) { create(:setup_instrument, facility:, requires_approval: true) }
       let(:admin) { create(:user, :administrator) }
       let(:active_user) { create(:user, username: "active@example.edu") }
       let(:suspended_user) { create(:user, :suspended, username: "suspended@example.edu") }

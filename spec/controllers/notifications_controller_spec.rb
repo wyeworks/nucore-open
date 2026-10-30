@@ -74,5 +74,4 @@ RSpec.describe NotificationsController do
   #    end
   #  end
   # end
-
 end

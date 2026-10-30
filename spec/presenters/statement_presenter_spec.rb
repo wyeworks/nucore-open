@@ -8,7 +8,7 @@ RSpec.describe StatementPresenter do
   let(:created_at) { Time.zone.local(2015, 10, 14, 17, 41) }
   let(:creator) { create(:user) }
   let(:facility) { statement.facility }
-  let(:statement) { create(:statement, created_at: created_at, created_by: creator.id) }
+  let(:statement) { create(:statement, created_at:, created_by: creator.id) }
   let(:user1) { create(:user, :administrator) }
   let(:user2) { create(:user, :administrator) }
 

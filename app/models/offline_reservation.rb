@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OfflineReservation < Reservation
-
   CATEGORIES = I18n.t("offline_reservations.categories").keys.map(&:to_s).freeze
 
   validates :admin_note, presence: true
@@ -42,5 +41,4 @@ class OfflineReservation < Reservation
   def set_billable_minutes
     self.billable_minutes = nil
   end
-
 end

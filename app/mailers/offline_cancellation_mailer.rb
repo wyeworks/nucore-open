@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OfflineCancellationMailer < ApplicationMailer
-
   include OfflineReservationArguments
 
   attr_reader :reservation
@@ -9,7 +8,7 @@ class OfflineCancellationMailer < ApplicationMailer
   def send_notification(reservation)
     @reservation = reservation
     @instrument = reservation.product
-    mail(to: reservation.user.email, subject: subject)
+    mail(to: reservation.user.email, subject:)
   end
 
   private
@@ -20,5 +19,4 @@ class OfflineCancellationMailer < ApplicationMailer
       product: reservation.product,
     )
   end
-
 end

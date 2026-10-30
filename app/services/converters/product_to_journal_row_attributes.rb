@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Converters
-
   class ProductToJournalRowAttributes
-
     attr_accessor :journal, :product, :total
 
     def initialize(journal, product, total)
@@ -20,7 +18,5 @@ module Converters
         journal_id: journal.try(:id),
       }
     end
-
   end
-
 end

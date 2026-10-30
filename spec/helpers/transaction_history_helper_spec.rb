@@ -13,7 +13,7 @@ RSpec.describe TransactionHistoryHelper do
     let(:search_fields) { nil }
 
     context "when given order_statuses" do
-      let(:order_statuses) { create_list(:order_status, 3, facility: facility) }
+      let(:order_statuses) { create_list(:order_status, 3, facility:) }
 
       it { expect(parsed_result.errors).to be_blank }
       it { expect(option_nodes.count).to eq(order_statuses.count) }

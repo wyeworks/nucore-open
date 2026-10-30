@@ -9,7 +9,7 @@ RSpec.describe FacilityAccountsController do
   render_views
 
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:setup_item, facility: facility) }
+  let(:item) { create(:setup_item, facility:) }
   let(:account_owner) { @owner }
   let(:purchaser) { @purchaser }
 
@@ -24,8 +24,8 @@ RSpec.describe FacilityAccountsController do
     let(:other_product) { create(:setup_item, facility: other_facility) }
 
     let!(:nufs_account) { create(:nufs_account, :with_order, product: item) }
-    let!(:credit_card_account) { create(:credit_card_account, :with_order, facility: facility, product: item) }
-    let!(:account_without_order) { create(:credit_card_account, :with_account_owner, facility: facility) }
+    let!(:credit_card_account) { create(:credit_card_account, :with_order, facility:, product: item) }
+    let!(:account_without_order) { create(:credit_card_account, :with_account_owner, facility:) }
     let!(:other_facility_account) { create(:credit_card_account, :with_order, facility: other_facility, product: other_product) }
 
     before { sign_in create(:user, :administrator) }
@@ -44,7 +44,7 @@ RSpec.describe FacilityAccountsController do
   end
 
   context "GET #edit" do
-    let(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility: facility) }
+    let(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility:) }
 
     before do
       @method = :get
@@ -78,7 +78,7 @@ RSpec.describe FacilityAccountsController do
 
   context "PUT #update" do
     context "with affiliate" do
-      let(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility: facility) }
+      let(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility:) }
 
       before do
         @method = :put
@@ -122,13 +122,13 @@ RSpec.describe FacilityAccountsController do
 
   describe "GET #new" do
     describe "as a facility director" do
-      let(:director) { FactoryBot.create(:user, :facility_director, facility: facility) }
+      let(:director) { FactoryBot.create(:user, :facility_director, facility:) }
 
       before do
         sign_in director
         get :new, params: {
           facility_id: facility.url_name,
-          account_type: account_type,
+          account_type:,
           owner_user_id: account_owner.id,
         }
       end
@@ -164,14 +164,14 @@ RSpec.describe FacilityAccountsController do
         sign_in account_manager
         get :new, params: {
           facility_id: "all",
-          account_type: account_type,
+          account_type:,
           owner_user_id: account_owner.id,
         }
       end
 
       before do
         skip if Account.config.facility_account_globally_managed_types.include?(
-          account_type
+          account_type,
         )
       end
 
@@ -264,7 +264,7 @@ RSpec.describe FacilityAccountsController do
   context "GET #show" do
     context "when the multi_facility_accounts feature is turned off", feature_setting: { "accounts.multi_facility_accounts" => false, reload_routes: true } do
       let(:admin) { @admin }
-      let(:purchase_order) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility: facility) }
+      let(:purchase_order) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility:) }
 
       before do
         sign_in admin

@@ -17,9 +17,7 @@ Paperclip.options[:content_type_mappings] = {
 }
 
 class PaperclipSettings
-
   def self.config
     Settings.paperclip.to_hash
   end
-
 end

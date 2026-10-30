@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class SampleResultFileSaver
-
     include ActiveModel::Validations
 
     FILENAME_FORMAT = /\A(\d+)_.+/
@@ -25,7 +23,7 @@ module SangerSequencing
       return false unless valid?
 
       @stored_file = StoredFile.new(name: filename,
-                                    file: file,
+                                    file:,
                                     file_type: "sample_result",
                                     created_by: current_user.id,
                                     order_detail: sample.submission.order_detail,
@@ -45,6 +43,7 @@ module SangerSequencing
 
     def sample
       return @sample if defined?(@sample)
+
       @sample = @batch.samples.find_by(id: sample_id)
     end
 
@@ -56,6 +55,7 @@ module SangerSequencing
 
     def has_valid_sample
       return unless filename_has_sample_id?
+
       errors.add(:sample, :blank, id: sample_id) unless sample
     end
 
@@ -80,7 +80,5 @@ module SangerSequencing
         errors.add(error.attribute, error.type, message: error.message)
       end
     end
-
   end
-
 end

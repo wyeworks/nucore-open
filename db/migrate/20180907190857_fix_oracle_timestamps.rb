@@ -3,7 +3,6 @@
 # In Rails <= 4.2, Rails mapped the Oracle `DATE` to Ruby's `DateTime`. As of Rails 5
 # `DATE` maps to `Date`. We need to change it
 class FixOracleTimestamps < ActiveRecord::Migration[5.0]
-
   def change
     return unless Nucore::Database.oracle?
 
@@ -26,5 +25,4 @@ class FixOracleTimestamps < ActiveRecord::Migration[5.0]
       end
     end
   end
-
 end

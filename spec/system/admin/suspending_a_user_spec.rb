@@ -30,7 +30,7 @@ RSpec.describe "User suspension", feature_setting: { "users_authentication.creat
   end
 
   describe "as a facility admin" do
-    let(:admin) { create(:user, :facility_administrator, facility: facility) }
+    let(:admin) { create(:user, :facility_administrator, facility:) }
 
     it "cannot suspend user" do
       login_as admin

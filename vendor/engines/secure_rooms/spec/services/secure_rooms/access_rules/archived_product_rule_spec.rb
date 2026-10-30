@@ -10,7 +10,7 @@ RSpec.describe SecureRooms::AccessRules::ArchivedProductRule, type: :service do
     )
   end
   let(:card_user) { build :user }
-  let(:card_reader) { build :card_reader, secure_room: secure_room }
+  let(:card_reader) { build :card_reader, secure_room: }
 
   subject(:result) { rule.call }
 

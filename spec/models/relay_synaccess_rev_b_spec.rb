@@ -8,19 +8,18 @@ RSpec.describe RelaySynaccessRevB do
 
   it "talks on port 80 by default" do
     stub_request(:get, "http://192.168.10.20/status.xml").with(
-      basic_auth: ["admin", "admin"]
-    ).to_return(body: body, status: 200)
+      basic_auth: ["admin", "admin"],
+    ).to_return(body:, status: 200)
 
     expect(relay.get_status).to eq(true)
   end
 
   it "can talk to another port" do
     stub_request(:get, "http://192.168.10.20:9100/status.xml").with(
-      basic_auth: ["admin", "admin"]
-    ).to_return(body: body, status: 200)
+      basic_auth: ["admin", "admin"],
+    ).to_return(body:, status: 200)
 
     relay.ip_port = 9100
     expect(relay.get_status).to eq(true)
   end
-
 end

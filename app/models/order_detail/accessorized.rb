@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module OrderDetail::Accessorized
-
   extend ActiveSupport::Concern
 
   included do
@@ -16,14 +15,12 @@ module OrderDetail::Accessorized
   end
 
   module ClassMethods
-
     # Puts parent orders first, followed by their children. Children are ordered by id
     def ordered_by_parents
       order(Arel.sql("COALESCE(order_details.parent_order_detail_id, order_details.id)"))
         .order_by_asc_nulls_first(:parent_order_detail_id)
         .order(:id)
     end
-
   end
 
   def accessories?
@@ -45,6 +42,7 @@ module OrderDetail::Accessorized
     return unless child_order_details.any?
     # Skip updating children during unreconciliation to prevent unreconciling orders outside a journal
     return if saved_change_to_state? && state_before_last_save == "reconciled" && state == "complete"
+
     accessorizer = Accessories::ChildUpdater.new(self)
     @updated_children = accessorizer.update_children
   end
@@ -58,5 +56,4 @@ module OrderDetail::Accessorized
   def decorated_self
     @decorated_self ||= Accessories::Scaling.decorate(self)
   end
-
 end

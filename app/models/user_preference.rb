@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserPreference < ApplicationRecord
-
   belongs_to :user
   validates :value, presence: true
   validates :name, presence: true, uniqueness: { scope: :user_id, case_sensitive: false }
@@ -25,5 +24,4 @@ class UserPreference < ApplicationRecord
   def option
     self.class.options_for(user).find { |opt| opt.name == name }
   end
-
 end

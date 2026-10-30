@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ReassignChartStringsHelper
-
   def available_account_select_tag(form, accounts)
     form.input :account_id,
                as: :select,
@@ -15,5 +14,4 @@ module ReassignChartStringsHelper
                  },
                }
   end
-
 end

@@ -44,9 +44,9 @@ class FacilityUserPermissionAbility
     can :show, OrderDetail
     can [:sample_results, :sample_results_zip, :template_results], OrderDetail, order: { facility_id: facility.id }
 
-    can [:administer, :index, :show, :timeline, :tab_counts], Reservation
+    can %i[administer index show timeline tab_counts], Reservation
 
-    can [:administer, :index, :view_details, :schedule, :show], Product
+    can %i[administer index view_details schedule show], Product
     can :read, ProductDisplayGroup
     can :read, Schedule
     can :index, [BundleProduct, ScheduleRule, ProductAccessory, ProductAccessGroup]
@@ -82,9 +82,9 @@ class FacilityUserPermissionAbility
     can :manage_billing, facility
     can :manage, [Journal, Statement, OrderDetail]
     can [:send_receipt, :show], Order
-    can [:accounts, :index, :orders, :show, :administer], User
+    can %i[accounts index orders show administer], User
     can :manage, AccountUser
-    can [:disputed_orders, :movable_transactions, :transactions, :reassign_chart_strings, :move_transactions], Facility
+    can %i[disputed_orders movable_transactions transactions reassign_chart_strings move_transactions], Facility
     can :manage, Account do |account|
       account.global? || account.account_facility_joins.any? { |af| af.facility_id == facility.id }
     end
@@ -127,14 +127,14 @@ class FacilityUserPermissionAbility
     can [:update, :order_file, :upload_order_file, :remove_order_file], OrderDetail, { order: { facility_id: facility.id } }
     can :mark_unrecoverable, OrderDetail, { order: { facility_id: facility.id } }
 
-    can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
-         :create, :index, :order_in_past, :send_receipt, :show, :tab_counts, :update], Order
+    can %i[administer assign_price_policies_to_problem_orders batch_update
+           create index order_in_past send_receipt show tab_counts update], Order
 
     can :manage, Reservation if resource.is_a?(Reservation)
 
-    can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
-         :cancel, :edit, :index, :show, :tab_counts,
-         :timeline, :update], Reservation
+    can %i[administer assign_price_policies_to_problem_orders batch_update
+           cancel edit index show tab_counts
+           timeline update], Reservation
 
     can :show_problems, [Order, Reservation]
 
@@ -162,9 +162,9 @@ class FacilityUserPermissionAbility
 
     can :manage, Reservation if resource.is_a?(Reservation)
 
-    can [:administer, :assign_price_policies_to_problem_orders, :batch_update,
-         :cancel, :create, :edit, :edit_admin, :index, :show, :tab_counts,
-         :timeline, :update, :update_admin], Reservation
+    can %i[administer assign_price_policies_to_problem_orders batch_update
+           cancel create edit edit_admin index show tab_counts
+           timeline update update_admin], Reservation
     can(:destroy, Reservation, &:admin?)
     can :read, ProductAccessory
     can :manage, ProductNotification, facility_id: facility.id
@@ -195,9 +195,9 @@ class FacilityUserPermissionAbility
     can :manage, User if controller.is_a?(FacilityUsersController)
 
     if controller.is_a?(UsersController)
-      can [:read, :create, :new, :new_external, :search,
-           :access_list, :access_list_approvals, :edit, :update,
-           :unexpire, :orders, :accounts], User
+      can %i[read create new new_external search
+             access_list access_list_approvals edit update
+             unexpire orders accounts], User
     end
   end
 

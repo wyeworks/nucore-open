@@ -1,7 +1,5 @@
 module FullTextSearch
-
   module Model
-
     extend ActiveSupport::Concern
 
     mattr_accessor :full_text_searcher do
@@ -20,7 +18,5 @@ module FullTextSearch
       end
       scope :full_text, ->(fields, query) { FullTextSearch::Model.full_text_searcher.new(self).search(fields, query) }
     end
-
   end
-
 end

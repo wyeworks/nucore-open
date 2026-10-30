@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 module ResearchSafetyAdapters
-
   class ScishieldApiError < StandardError
   end
 
   class ScishieldApiClient
-
     require "jwt"
 
     KEY = Rails.application.secrets.dig(:scishield, :key)
@@ -31,7 +29,7 @@ module ResearchSafetyAdapters
       payload = {
         iat: now - iat_offset,
         exp: now + 3600,
-        drupal: { uid: KEY }
+        drupal: { uid: KEY },
       }
       rsa_private = OpenSSL::PKey::RSA.new(unescape(PRIVATE_KEY))
       @token = JWT.encode(payload, rsa_private, "RS256", { kid: KEY_ID })
@@ -85,12 +83,11 @@ module ResearchSafetyAdapters
             condition: {
               path: "user_id.mail",
               operator: "=",
-              value: email
-            }
-          }
-        }
+              value: email,
+            },
+          },
+        },
       )
     end
   end
-
 end

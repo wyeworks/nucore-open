@@ -37,7 +37,6 @@ RSpec.describe AdminReservationForm do
   end
 
   describe "build_recurring_reservations" do
-
     context "weekdays_only" do
       before do
         form.assign_attributes(repeats: "1", repeat_frequency: "weekdays_only", repeat_end_date: SpecDateHelper.format_usa_date(start_date + 7.days))

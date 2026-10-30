@@ -39,21 +39,25 @@ class NonbillableAccount < Account
 
   def set_account_number
     return if account_number
+
     self.account_number = "non-billable-account"
   end
 
   def set_description
     return if description
+
     self.description = "Nonbillable Account"
   end
 
   def set_expries_at
     return if expires_at
+
     self.expires_at = 75.years.from_now
   end
 
   def set_created_by
     return if created_by
+
     self.created_by = nonbillable_account_owner.id
   end
 
@@ -79,5 +83,4 @@ class NonbillableAccount < Account
       email: Settings.nonbillable_user.email,
     }
   end
-
 end

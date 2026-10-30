@@ -104,7 +104,6 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
         expect(result.order_details).to be_empty
       end
     end
-
   end
 
   describe "can toggle default searchers by key" do
@@ -116,7 +115,7 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       searcher = described_class.new(facility, searcher_key.to_sym => false)
 
       expect(searcher.instance_eval { @searchers.map(&:key) }).not_to(
-        include(searcher_key)
+        include(searcher_key),
       )
     end
 
@@ -124,7 +123,7 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       searcher = described_class.new(facility, facilities: true)
 
       expect(searcher.instance_eval { @searchers.map(&:key) }).to(
-        include("facilities")
+        include("facilities"),
       )
     end
 
@@ -132,9 +131,8 @@ RSpec.describe TransactionSearch::Searcher, type: :service do
       searcher = described_class.new(facility)
 
       expect(searcher.instance_eval { @searchers.map(&:key) }).not_to(
-        include("facilities")
+        include("facilities"),
       )
     end
   end
-
 end

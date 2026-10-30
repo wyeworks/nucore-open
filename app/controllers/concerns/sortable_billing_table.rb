@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module SortableBillingTable
-
   extend ActiveSupport::Concern
 
   include SortableColumnController
@@ -41,5 +40,4 @@ module SortableBillingTable
   def order_detail_date_range_field
     @date_range_field || "fulfilled_at"
   end
-
 end

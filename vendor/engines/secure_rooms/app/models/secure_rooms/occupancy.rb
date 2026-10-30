@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class Occupancy < ApplicationRecord
-
     include DateTimeInput::Model
 
     belongs_to :secure_room, foreign_key: :product_id
@@ -108,7 +106,5 @@ module SecureRooms
         errors.add(:exit_at, :blank)
       end
     end
-
   end
-
 end

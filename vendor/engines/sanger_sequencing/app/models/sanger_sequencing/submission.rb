@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class Submission < ApplicationRecord
-
     self.table_name = "sanger_sequencing_submissions"
 
     validates :savable_samples, length: { minimum: 1 }, on: :update
@@ -70,7 +68,5 @@ module SangerSequencing
     def savable_samples
       samples.reject(&:marked_for_destruction?)
     end
-
   end
-
 end

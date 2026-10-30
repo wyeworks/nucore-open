@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class ReceiptSubmissionPresenter
-
     attr_reader :view_context, :order_detail
+
     delegate :render, :link_to, to: :view_context
 
     def initialize(view_context, order_detail)
@@ -14,7 +13,8 @@ module SangerSequencing
 
     def to_s
       return "" unless submission
-      render("sanger_sequencing/purchase_notifier/samples_table", submission: submission, caption: caption)
+
+      render("sanger_sequencing/purchase_notifier/samples_table", submission:, caption:)
     end
 
     private
@@ -28,9 +28,8 @@ module SangerSequencing
 
     def submission
       return @submission if defined?(@submission)
+
       @submission = SangerSequencing::Submission.find_by(order_detail_id: order_detail.id)
     end
-
   end
-
 end

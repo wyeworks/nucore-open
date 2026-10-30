@@ -82,22 +82,22 @@ RSpec.describe OrderDetailNoticePresenter do
         receive_messages(
           problem?: true,
           problem_description_key: :missing_price_policy,
-        )
+        ),
       )
 
       expect(presenter.badges_to_html).to(
-        have_html_badge("Missing Price Policy").with_level(:important)
+        have_html_badge("Missing Price Policy").with_level(:important),
       )
       expect(presenter.badges_to_text).to eq("Missing Price Policy")
     end
 
     it "detects problem flag without problem description" do
       allow(order_detail).to(
-        receive_messages(problem?: true, problem_description_key: nil)
+        receive_messages(problem?: true, problem_description_key: nil),
       )
 
       expect(presenter.badges_to_html).to(
-        have_html_badge("Problem out of sync").with_level(:important)
+        have_html_badge("Problem out of sync").with_level(:important),
       )
       expect(presenter.badges_to_text).to eq("Problem out of sync")
     end
@@ -125,5 +125,4 @@ RSpec.describe OrderDetailNoticePresenter do
       expect(text).to include("In Dispute")
     end
   end
-
 end

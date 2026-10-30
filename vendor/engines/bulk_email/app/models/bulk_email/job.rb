@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class Job < ApplicationRecord
-
     self.table_name = "bulk_email_jobs"
 
     belongs_to :facility, foreign_key: :facility_id
@@ -17,7 +15,5 @@ module BulkEmail
               :body,
               :recipients,
               :search_criteria, presence: true
-
   end
-
 end

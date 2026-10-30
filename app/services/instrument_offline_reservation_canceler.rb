@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentOfflineReservationCanceler
-
   def cancel!
     Reservation.upcoming_offline(Time.current).each do |reservation|
       reservation.transaction do
@@ -21,5 +20,4 @@ class InstrumentOfflineReservationCanceler
   def cancel_reservation(reservation)
     reservation.order_detail.cancel_reservation(admin_user, admin: true, canceled_reason: "The instrument was offline")
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   class Engine < Rails::Engine
-
     def self.enable!
       # Concat class variables in main rails app
       Account.config.account_types << "SplitAccounts::SplitAccount"
@@ -56,7 +54,5 @@ module SplitAccounts
     initializer "split_accounts.assets.precompile" do |app|
       app.config.assets.precompile << "split_accounts/split_account_splits.js"
     end
-
   end
-
 end

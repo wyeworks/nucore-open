@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class ProductApprover
-
   class Stats
-
     attr_reader :access_groups_changed, :granted_product_users, :revoked_product_users
 
     def initialize
@@ -39,7 +37,6 @@ class ProductApprover
     def grants_changed?
       granted + revoked > 0
     end
-
   end
 
   def initialize(all_products, user, approver)
@@ -80,6 +77,7 @@ class ProductApprover
 
   def update_product_user_access_group(product_user, product_access_group)
     return if product_user.product_access_group == product_access_group
+
     product_user.product_access_group = product_access_group
     product_user.save
   end
@@ -87,7 +85,7 @@ class ProductApprover
   private
 
   def create_product_user(product)
-    ProductUserCreator.create(product: product, user: @user, approver: @approver)
+    ProductUserCreator.create(product:, user: @user, approver: @approver)
   end
 
   def destroy_product_user(product)
@@ -98,5 +96,4 @@ class ProductApprover
   def get_product_user(product)
     product.product_users.find_by(user_id: @user.id)
   end
-
 end

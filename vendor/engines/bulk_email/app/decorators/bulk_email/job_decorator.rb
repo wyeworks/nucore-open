@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class JobDecorator < SimpleDelegator
-
     include DateHelper
 
     def to_model
@@ -58,7 +56,5 @@ module BulkEmail
         .map(&:to_i)
         .uniq
     end
-
   end
-
 end

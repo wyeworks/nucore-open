@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "facility_billing_log_events", type: :request do
   let(:some_user) { create(:user, first_name: "Socrates") }
@@ -16,7 +16,7 @@ RSpec.describe "facility_billing_log_events", type: :request do
       double(
         "Email",
         to: "random@example.com",
-        subject: "Some Subject"
+        subject: "Some Subject",
       )
     end
 
@@ -32,7 +32,7 @@ RSpec.describe "facility_billing_log_events", type: :request do
         LogEvent.log_email(
           loggable,
           event_type,
-          email
+          email,
         )
       end
     end
@@ -67,7 +67,7 @@ RSpec.describe "facility_billing_log_events", type: :request do
       include_context "billing statements with deposit numbers"
 
       def get_index_with_params(params = {})
-        get facility_billing_log_events_path(Facility.cross_facility), params: params
+        get facility_billing_log_events_path(Facility.cross_facility), params:
       end
 
       before do
@@ -112,5 +112,4 @@ RSpec.describe "facility_billing_log_events", type: :request do
       end
     end
   end
-
 end

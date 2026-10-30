@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Instrument < Product
-
   include Products::RelaySupport
   include Products::ScheduleRuleSupport
   include Products::SchedulingSupport
@@ -79,7 +78,7 @@ class Instrument < Product
     PriceGroup.globals.find_each do |price_group|
       price_group_products.create!(
         price_group:,
-        reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW
+        reservation_window: PriceGroupProduct::DEFAULT_RESERVATION_WINDOW,
       )
     end
   end
@@ -147,5 +146,4 @@ class Instrument < Product
       self.max_reserve_days = nil
     end
   end
-
 end

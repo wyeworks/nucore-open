@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Products::RelaySupport
-
   extend ActiveSupport::Concern
 
   included do

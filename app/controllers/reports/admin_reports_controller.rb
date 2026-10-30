@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class AdminReportsController < GlobalSettingsController
-
     include CsvEmailAction
 
     def index
@@ -37,7 +35,5 @@ module Reports
 
       params.permit(*report.filters).to_h.symbolize_keys.compact_blank
     end
-
   end
-
 end

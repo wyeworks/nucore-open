@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddAccountUsersTable < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :account_users do |t|
       t.references :account,    null: false
@@ -18,5 +17,4 @@ class AddAccountUsersTable < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :account_users
   end
-
 end

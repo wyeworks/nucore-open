@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateTrainingRequests < ActiveRecord::Migration[4.2]
-
   def change
     create_table :training_requests do |t|
       t.references :user
@@ -12,5 +11,4 @@ class CreateTrainingRequests < ActiveRecord::Migration[4.2]
     add_index :training_requests, :user_id
     add_index :training_requests, :product_id
   end
-
 end

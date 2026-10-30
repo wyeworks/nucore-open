@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class KioskAccessoriesController < ApplicationController
-
   skip_before_action :authenticate_user!
   load_resource :order
   load_resource :order_detail, through: :order
@@ -70,5 +69,4 @@ class KioskAccessoriesController < ApplicationController
     @product = @order_detail.product
     @reservation = Reservation.find(@order_detail.reservation.id)
   end
-
 end

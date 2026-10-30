@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe Reports::ExportRaw do
-
   let(:user) { FactoryBot.create(:user) }
   let(:facility) { FactoryBot.create(:setup_facility, name: "My Facility", abbreviation: "MF") }
   let(:account) { FactoryBot.create(:account, :with_account_owner, owner: user) }
@@ -41,7 +40,7 @@ RSpec.describe Reports::ExportRaw do
   end
 
   describe "for an item" do
-    let(:item) { FactoryBot.create(:setup_item, facility: facility) }
+    let(:item) { FactoryBot.create(:setup_item, facility:) }
     let(:order_detail) do
       place_product_order(user, facility, item, account).tap do |od|
         od.complete!
@@ -93,8 +92,8 @@ RSpec.describe Reports::ExportRaw do
       it { is_expected.to have_column("Invoice Number").with_value("") }
 
       describe "with a statement" do
-        let(:statement) { create(:statement, facility: facility, created_by: 0, account: account) }
-        before { order_detail.update(statement: statement) }
+        let(:statement) { create(:statement, facility:, created_by: 0, account:) }
+        before { order_detail.update(statement:) }
         it { is_expected.to have_column("Invoice Number").with_value(statement.invoice_number) }
       end
     end
@@ -117,7 +116,7 @@ RSpec.describe Reports::ExportRaw do
   end
 
   describe "for a timed service" do
-    let(:timed_service) { FactoryBot.create(:setup_timed_service, facility: facility) }
+    let(:timed_service) { FactoryBot.create(:setup_timed_service, facility:) }
     let(:order_detail) do
       place_product_order(user, facility, timed_service, account).tap do |od|
         od.complete!
@@ -164,7 +163,7 @@ RSpec.describe Reports::ExportRaw do
 
   describe "with a reservation", :time_travel do
     let(:now) { Time.zone.parse("2016-02-01 10:30") }
-    let(:instrument) { FactoryBot.create(:setup_instrument, :always_available, facility: facility) }
+    let(:instrument) { FactoryBot.create(:setup_instrument, :always_available, facility:) }
     let(:reservation) do
       FactoryBot.create(:completed_reservation,
                         product: instrument,
@@ -263,8 +262,8 @@ RSpec.describe Reports::ExportRaw do
   end
 
   describe "with a bundle" do
-    let(:items) { FactoryBot.create_list(:setup_item, 2, facility: facility) }
-    let(:bundle) { FactoryBot.create(:bundle, facility: facility, bundle_products: items) }
+    let(:items) { FactoryBot.create_list(:setup_item, 2, facility:) }
+    let(:bundle) { FactoryBot.create(:bundle, facility:, bundle_products: items) }
 
     let!(:order) { FactoryBot.create(:purchased_order, product: bundle) }
     let(:order_detail) { order.order_details.first }
@@ -278,7 +277,7 @@ RSpec.describe Reports::ExportRaw do
   end
 
   describe "when building a row raises an error" do
-    let(:item) { create(:setup_item, facility: facility) }
+    let(:item) { create(:setup_item, facility:) }
     let!(:order_detail) { place_product_order(user, facility, item, account).tap(&:complete!) }
 
     it "keeps the row column-aligned with the error in the first cell" do

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityAccountValidator
-
   attr_reader :facility, :account
 
   def initialize(facility, account)
@@ -12,5 +11,4 @@ class FacilityAccountValidator
   def valid?
     raise NotImplementedError
   end
-
 end

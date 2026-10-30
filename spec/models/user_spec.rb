@@ -5,9 +5,9 @@ require "rails_helper"
 RSpec.describe User do
   subject(:user) { create(:user, :netid) }
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:item, facility: facility) }
-  let(:price_group) { create(:price_group, facility: facility) }
-  let(:price_policy) { create(:item_price_policy, product: item, price_group: price_group) }
+  let(:item) { create(:item, facility:) }
+  let(:price_group) { create(:price_group, facility:) }
+  let(:price_policy) { create(:item_price_policy, product: item, price_group:) }
 
   it { is_expected.to accept_nested_attributes_for(:account_users) }
 
@@ -53,16 +53,15 @@ RSpec.describe User do
   end
 
   describe "price groups", feature_setting: { "pricing.user_based_price_groups" => true } do
-
     it "is a member of any explicitly mapped price groups" do
-      pg = FactoryBot.create(:price_group, facility: facility)
-      UserPriceGroupMember.create(user: user, price_group: pg)
+      pg = FactoryBot.create(:price_group, facility:)
+      UserPriceGroupMember.create(user:, price_group: pg)
       expect(user.price_groups.include?(pg)).to eq(true)
     end
 
     it "belongs to price groups of accounts" do
-      cc = create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: user))
-      pg = FactoryBot.create(:price_group, facility: facility)
+      cc = create(:nufs_account, account_users_attributes: account_users_attributes_hash(user:))
+      pg = FactoryBot.create(:price_group, facility:)
       AccountPriceGroupMember.create(account: cc, price_group: pg)
       expect(user.account_price_groups.include?(pg)).to be true
     end
@@ -70,10 +69,10 @@ RSpec.describe User do
     it "belongs to price groups of the account owner" do
       owner = create(:user)
       cc = create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: owner))
-      pg = FactoryBot.create(:price_group, facility: facility)
+      pg = FactoryBot.create(:price_group, facility:)
       UserPriceGroupMember.create(user: owner, price_group: pg)
 
-      cc.account_users.create(user: user, created_by: owner.id, user_role: "Purchaser")
+      cc.account_users.create(user:, created_by: owner.id, user_role: "Purchaser")
 
       expect(user.account_price_groups.include?(pg)).to be true
     end
@@ -122,11 +121,11 @@ RSpec.describe User do
   end
 
   describe "#accounts_for_product" do
-    let(:account) { create(:nufs_account, account_users_attributes: [attributes_for(:account_user, user: user)]) }
+    let(:account) { create(:nufs_account, account_users_attributes: [attributes_for(:account_user, user:)]) }
 
     before(:each) do
       price_policy.reload.restrict_purchase = false
-      create(:account_price_group_member, account: account, price_group: price_group)
+      create(:account_price_group_member, account:, price_group:)
     end
 
     it "does not have an account because there is no price group" do
@@ -146,7 +145,7 @@ RSpec.describe User do
     context "when the user is on the access list for a product" do
       let(:product) { create(:instrument_requiring_approval) }
 
-      before { create(:product_user, product: product, user: user) }
+      before { create(:product_user, product:, user:) }
 
       it { expect(user.approval_dates_by_product).to have_key(product.id) }
     end
@@ -157,10 +156,10 @@ RSpec.describe User do
   end
 
   describe "#cart" do
-    let(:order) { user.orders.create(attributes_for(:order, created_by: user.id, facility: facility)) }
+    let(:order) { user.orders.create(attributes_for(:order, created_by: user.id, facility:)) }
 
     before(:each) do
-      create(:user_price_group_member, user: user, price_group: price_group)
+      create(:user_price_group_member, user:, price_group:)
       price_policy.reload.restrict_purchase = false
       order.order_details.create(attributes_for(:order_detail, product_id: item.id))
     end
@@ -197,12 +196,12 @@ RSpec.describe User do
   end
 
   describe ".find_users_by_facility" do
-    let!(:facility_director) { create(:user, :facility_director, facility: facility) }
-    let!(:staff) { create(:user, :staff, facility: facility) }
+    let!(:facility_director) { create(:user, :facility_director, facility:) }
+    let!(:staff) { create(:user, :staff, facility:) }
     let!(:normal_user) { create(:user) }
     let!(:other_facilitly_director) { create(:user, :facility_director, facility: create(:facility)) }
     let!(:facility_admin_and_director) do
-      create(:user, :facility_director, :facility_administrator, facility: facility)
+      create(:user, :facility_director, :facility_administrator, facility:)
     end
 
     it "finds just the users for that facility" do

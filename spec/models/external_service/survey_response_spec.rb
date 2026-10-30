@@ -121,8 +121,8 @@ RSpec.describe SurveyResponse do
       }
 
       expect { survey_response.save! }.to change { order_detail.reload.note }.to("note")
-        .and change { order_detail.reload.reference_id }.to("123")
-        .and change { order_detail.reload.quantity }.to(5)
+                                                                             .and change { order_detail.reload.reference_id }.to("123")
+                                                                                                                             .and change { order_detail.reload.quantity }.to(5)
       expect(order_detail.reload.order_status).to eq nil
     end
 
@@ -141,5 +141,4 @@ RSpec.describe SurveyResponse do
       expect { survey_response.save! }.to change { order_detail.reload.quantity }
     end
   end
-
 end

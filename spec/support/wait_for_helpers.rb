@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module WaitForHelpers
-
   def wait_for(timeout = nil, &block)
     return if block.nil?
 
@@ -21,5 +20,4 @@ module WaitForHelpers
   def finished_all_ajax_requests?
     page.evaluate_script("jQuery.active").zero?
   end
-
 end

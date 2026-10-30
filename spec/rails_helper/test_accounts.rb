@@ -9,7 +9,7 @@ RSpec.configure do |config|
         else
           AccountValidator::ValidatorFactory.validator_class.new(account_number, *args)
         end
-      end
+      end,
     )
     Account.config.account_types << TestAccount.name
   end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ValidFulfilledAtDate
-
   include ActiveModel::Validations
   include DateHelper
 
@@ -44,6 +43,7 @@ class ValidFulfilledAtDate
 
   def valid_format
     return if @string.blank?
+
     errors.add(:base, :invalid) unless to_time
   end
 
@@ -54,5 +54,4 @@ class ValidFulfilledAtDate
   def not_in_future
     errors.add(:base, :in_future) if to_time > Time.current.end_of_day
   end
-
 end

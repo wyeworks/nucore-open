@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class InstrumentReportsController < ReportsController
-
     helper_method(:export_csv_report_path)
 
     include InstrumentReporter
@@ -56,7 +54,5 @@ module Reports
       reservation = @report_data.first
       @headers += report_attributes(reservation, reservation.product)
     end
-
   end
-
 end

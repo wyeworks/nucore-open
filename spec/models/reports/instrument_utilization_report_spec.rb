@@ -12,7 +12,7 @@ RSpec.describe Reports::InstrumentUtilizationReport do
   end
 
   context "with actual reservations" do
-    let(:product1_reservations) { build_stubbed_list(:reservation, 3, duration_mins: 35, actual_duration_mins: 15, product: product) }
+    let(:product1_reservations) { build_stubbed_list(:reservation, 3, duration_mins: 35, actual_duration_mins: 15, product:) }
     let(:product2_reservations) { build_stubbed_list(:reservation, 2, duration_mins: 25, actual_duration_mins: 5, product: product2) }
     let(:reservations) { product1_reservations + product2_reservations }
 
@@ -29,7 +29,7 @@ RSpec.describe Reports::InstrumentUtilizationReport do
   end
 
   context "with zero length actuals" do
-    let(:product1_reservations) { build_stubbed_list(:reservation, 3, duration_mins: 35, actual_duration_mins: 0, product: product) }
+    let(:product1_reservations) { build_stubbed_list(:reservation, 3, duration_mins: 35, actual_duration_mins: 0, product:) }
     let(:product2_reservations) { build_stubbed_list(:reservation, 2, duration_mins: 35, actual_duration_mins: 0, product: product2) }
     let(:reservations) { product1_reservations + product2_reservations }
 
@@ -48,7 +48,7 @@ RSpec.describe Reports::InstrumentUtilizationReport do
   describe "with a problem reservation" do
     let(:reservations) do
       build_stubbed_list(:reservation, 3, duration_mins: 30,
-                                          actual_start_at: 1.hour.ago, actual_end_at: nil, product: product)
+                                          actual_start_at: 1.hour.ago, actual_end_at: nil, product:)
     end
 
     it "has the correct row" do

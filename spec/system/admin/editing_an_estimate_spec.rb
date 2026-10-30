@@ -10,11 +10,11 @@ RSpec.describe "Editing an estimate", :js do
   let!(:item) { create(:setup_item, facility:) }
   let!(:item_price_policy) { create(:item_price_policy, product: item, price_group:) }
   let!(:other_item) { create(:setup_item, facility:) }
-  let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group: price_group) }
+  let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group:) }
   let!(:instrument) { create(:setup_instrument, facility:) }
   let!(:instrument_price_policy) { create(:instrument_price_policy, product: instrument, price_group:) }
 
-  let(:estimate) { create(:estimate, facility:, user: user, created_by_user: director, description: "Original Estimate", note: "Original note", price_group:) }
+  let(:estimate) { create(:estimate, facility:, user:, created_by_user: director, description: "Original Estimate", note: "Original note", price_group:) }
   let!(:estimate_detail1) { create(:estimate_detail, estimate:, product: item) }
   let!(:estimate_detail2) { create(:estimate_detail, estimate:, product: instrument, duration: 90) }
 
@@ -45,16 +45,16 @@ RSpec.describe "Editing an estimate", :js do
     # 1 more remove button for the new item
     expect(page).to have_content("Remove", count: 3)
 
-    within '#estimate_estimate_details' do
-      other_item_row = all('tr').last
-      columns = other_item_row.all('td')
+    within "#estimate_estimate_details" do
+      other_item_row = all("tr").last
+      columns = other_item_row.all("td")
       first_column_text = columns[0].text
       expect(first_column_text).to eq other_item.name
 
       2.times do
-        first_row = all('tr').first
-        columns = first_row.all('td')
-        remove_button = columns[3].find('.remove-estimate-detail')
+        first_row = all("tr").first
+        columns = first_row.all("td")
+        remove_button = columns[3].find(".remove-estimate-detail")
         remove_button.click
       end
     end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TimeTravelHelpers
-
   def travel(duration, safe: false, &block)
     warn "Use of Rails's #travel is unsafe in NUcore due to the global time-lock. Use `travel_and_return` instead #{caller(1..1)}" unless safe
     # Based on Rail's implementation. Calling `super` here would end up calling
@@ -28,5 +27,4 @@ module TimeTravelHelpers
     yield
     travel_to(current_time, safe: true)
   end
-
 end

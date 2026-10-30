@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   ##
   # Model that holds Sanger module configuration
   # for a product
   class SangerProduct < ApplicationRecord
-
     # sanger_sequencing_product_groups is too long of a table name for Oracle
     self.table_name = "sanger_seq_product_groups"
     GROUPS = WellPlateConfiguration::CONFIGS.keys
@@ -16,7 +14,7 @@ module SangerSequencing
     has_and_belongs_to_many(
       :primers,
       class_name: "SangerSequencing::Primer",
-      join_table: "san_seq_sanger_prods_primers"
+      join_table: "san_seq_sanger_prods_primers",
     )
 
     accepts_nested_attributes_for :primers, allow_destroy: true
@@ -38,5 +36,4 @@ module SangerSequencing
       primers.by_name.pluck(:name)
     end
   end
-
 end

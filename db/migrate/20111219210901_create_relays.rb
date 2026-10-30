@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateRelays < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :relays do |t|
       t.integer "instrument_id"
@@ -21,5 +20,4 @@ class CreateRelays < ActiveRecord::Migration[4.2]
     remove_index :relays, :instrument_id
     drop_table :relays
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module SortableColumnController
-
   extend ActiveSupport::Concern
 
   included do
@@ -27,5 +26,4 @@ module SortableColumnController
   def sort_column
     sort_lookup_hash.key?(params[:sort]) ? params[:sort] : sort_lookup_hash.keys.first
   end
-
 end

@@ -30,8 +30,8 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
   describe "with an item" do
     before { item.price_policies.update_all(unit_cost: 11, unit_subsidy: 1) }
 
-    let(:item) { FactoryBot.create(:setup_item, facility: facility) }
-    let(:order) { create(:complete_order, product: item, account: account) }
+    let(:item) { FactoryBot.create(:setup_item, facility:) }
+    let(:order) { create(:complete_order, product: item, account:) }
     let(:order_detail) do
       order.order_details.first.tap do |order_detail|
         order_detail.update!(
@@ -61,11 +61,11 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
   end
 
   describe "with a reservation", :time_travel do
-    let(:instrument) { FactoryBot.create(:setup_instrument, :always_available, facility: facility) }
+    let(:instrument) { FactoryBot.create(:setup_instrument, :always_available, facility:) }
     let(:now) { Time.zone.parse("2016-02-01 10:30") }
     let(:reservation) do
       FactoryBot.create(:completed_reservation,
-                        user: user,
+                        user:,
                         product: instrument,
                         reserve_start_at: Time.zone.parse("2016-02-01 08:30"),
                         reserve_end_at: Time.zone.parse("2016-02-01 09:30"),
@@ -74,7 +74,7 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
     end
     let(:order_detail) { reservation.order_detail }
 
-    before { order_detail.update!(account: account) }
+    before { order_detail.update!(account:) }
 
     it "splits the fields correctly" do
       expect(report).to have_column_values(
@@ -92,17 +92,16 @@ RSpec.describe Reports::ExportRaw, :enable_split_accounts do
   # There was a bug from the Rails 5 upgrade where reservations on split accounts
   # got deleted. We want to make sure the reports don't break on them.
   describe "with a broken reservation" do
-    let(:instrument) { FactoryBot.create(:setup_instrument, :always_available, facility: facility) }
+    let(:instrument) { FactoryBot.create(:setup_instrument, :always_available, facility:) }
     let(:reservation) do
       FactoryBot.create(:completed_reservation,
-                        user: user,
-                        product: instrument,
-                       )
+                        user:,
+                        product: instrument)
     end
     let(:order_detail) { reservation.order_detail }
     before do
       instrument.price_policies.each { |pp| pp.update(start_date: 3.days.ago, usage_rate: 60) }
-      order_detail.update!(account: account)
+      order_detail.update!(account:)
       reservation.really_destroy!
     end
 

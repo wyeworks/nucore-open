@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Users::AuthChecker do
-
   describe "#authenticated?" do
     context "with an external user", feature_setting: { bypass_kiosk_auth: false } do
       let(:user) { create(:user, :external, email: "external@example.org", username: "external@example.org") }
@@ -86,7 +85,5 @@ RSpec.describe Users::AuthChecker do
         end
       end
     end
-
   end
-
 end

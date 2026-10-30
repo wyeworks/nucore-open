@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PricePolicyBuilder
-
   attr_reader :product, :start_date
 
   delegate :facility, to: :product
@@ -51,6 +50,7 @@ class PricePolicyBuilder
       policy
     end
     return new_price_policies if price_policies != new_price_policies
+
     make_all_price_policies_purchaseable
 
     price_policies
@@ -129,6 +129,7 @@ class PricePolicyBuilder
 
   def price_policies_for_start_date
     return [] if start_date.blank?
+
     product.price_policies.for_date(start_date)
   end
 
@@ -151,7 +152,7 @@ class PricePolicyBuilder
       unit_subsidy: 0,
       can_purchase: true,
       charge_for: "reservation",
-      note: "Price rule automatically created because of billing mode"
+      note: "Price rule automatically created because of billing mode",
     )
   end
 
@@ -166,5 +167,4 @@ class PricePolicyBuilder
       usage_subsidy_daily: product.daily_booking? ? 0 : nil,
     }
   end
-
 end

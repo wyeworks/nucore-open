@@ -34,8 +34,7 @@ RSpec.describe OrderImport, :time_travel do
   let(:account) do
     create(:nufs_account,
            description: "dummy account",
-           account_users_attributes:,
-          )
+           account_users_attributes:)
   end
 
   let(:account_users_attributes) do
@@ -61,14 +60,12 @@ RSpec.describe OrderImport, :time_travel do
   let(:item) do
     facility.items.create!(attributes_for(:item,
                                           facility_account_id: facility_account.id,
-                                          name: "Example Item",
-                                         ))
+                                          name: "Example Item"))
   end
   let(:service) do
     facility.services.create!(attributes_for(:service,
                                              facility_account_id: facility_account.id,
-                                             name: "Example Service",
-                                            ))
+                                             name: "Example Service"))
   end
   let(:stored_file) do
     StoredFile.create!(
@@ -88,12 +85,10 @@ RSpec.describe OrderImport, :time_travel do
     create(:account_price_group_member, account:, price_group:)
     item.item_price_policies.create!(attributes_for(:item_price_policy,
                                                     price_group_id: price_group.id,
-                                                    start_date: fiscal_year_beginning,
-                                                   ))
+                                                    start_date: fiscal_year_beginning))
     service.service_price_policies.create!(attributes_for(:service_price_policy,
                                                           price_group_id: price_group.id,
-                                                          start_date: fiscal_year_beginning,
-                                                         ))
+                                                          start_date: fiscal_year_beginning))
   end
 
   describe "#to_s" do

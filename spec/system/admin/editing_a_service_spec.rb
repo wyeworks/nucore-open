@@ -30,7 +30,7 @@ RSpec.describe "Editing a Service" do
         visit manage_facility_service_path(facility, service)
 
         expect(page).to have_content(
-          Service.human_attribute_name(:admin_skip_order_form)
+          Service.human_attribute_name(:admin_skip_order_form),
         )
 
         click_link "Edit"
@@ -47,7 +47,7 @@ RSpec.describe "Editing a Service" do
         visit manage_facility_service_path(facility, service)
 
         expect(page).not_to have_content(
-          Service.human_attribute_name(:admin_skip_order_form)
+          Service.human_attribute_name(:admin_skip_order_form),
         )
 
         click_link "Edit"

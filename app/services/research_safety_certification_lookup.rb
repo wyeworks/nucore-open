@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ResearchSafetyCertificationLookup
-
   # Replace the value of this attribute in your ENV or settings.yml
   # to connect to the school's custom API.
   cattr_accessor(:adapter_class) { Settings.research_safety_adapter.class_name.constantize }
@@ -47,5 +46,4 @@ class ResearchSafetyCertificationLookup
   def adapter
     @adapter ||= self.class.adapter(@user)
   end
-
 end

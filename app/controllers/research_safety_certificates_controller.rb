@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ResearchSafetyCertificatesController < GlobalSettingsController
-
   before_action :load_certificate, only: [:edit, :update, :destroy]
 
   def index
@@ -16,7 +15,7 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
     @certificate = ResearchSafetyCertificate.new(certificate_params)
 
     if @certificate.save
-      flash[:notice] = text('create.notice', certificate_name: @certificate.name)
+      flash[:notice] = text("create.notice", certificate_name: @certificate.name)
       redirect_to action: :index
     else
       render :new
@@ -28,7 +27,7 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
 
   def update
     if @certificate.update(certificate_params)
-      flash[:notice] = text('update.notice', certificate_name: @certificate.name)
+      flash[:notice] = text("update.notice", certificate_name: @certificate.name)
       redirect_to action: :index
     else
       render :edit
@@ -38,9 +37,9 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
   def destroy
     if @certificate.destroy
       @certificate.update(deleted_by_id: current_user.id)
-      flash[:notice] = text('destroy.notice', certificate_name: @certificate.name)
+      flash[:notice] = text("destroy.notice", certificate_name: @certificate.name)
     else
-      flash[:error] = text('destroy.error', certificate_name: @certificate.name)
+      flash[:error] = text("destroy.error", certificate_name: @certificate.name)
     end
 
     redirect_to action: :index
@@ -55,5 +54,4 @@ class ResearchSafetyCertificatesController < GlobalSettingsController
   def load_certificate
     @certificate = ResearchSafetyCertificate.find(params[:id])
   end
-
 end

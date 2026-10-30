@@ -25,22 +25,21 @@ RSpec.describe DurationRate do
   let!(:external_duration_rate_3) { create(:duration_rate, price_policy: external_price_policy, min_duration_hours: 3, rate: 9 / 60.0) }
 
   describe "#set_rate_from_base" do
-
     context "when the price group is base internal" do
       it "does not change the rate" do
         expect { base_duration_rate_2.set_rate_from_base }
           .not_to change(base_duration_rate_2, :rate)
-        end
       end
+    end
 
     context "when the price group is internal but not master" do
       it "sets the rate to the base rate" do
         old_rate = cancer_center_duration_rate_1.rate
 
         expect { cancer_center_duration_rate_1.set_rate_from_base }
-        .to change(cancer_center_duration_rate_1, :rate)
-        .from(old_rate)
-        .to(cancer_center_price_policy.usage_rate)
+          .to change(cancer_center_duration_rate_1, :rate)
+          .from(old_rate)
+          .to(cancer_center_price_policy.usage_rate)
       end
     end
 
@@ -51,5 +50,4 @@ RSpec.describe DurationRate do
       end
     end
   end
-
 end

@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe GlobalSearch::StatementSearcher do
-
   describe "#results" do
     subject(:results) { described_class.new(user, facility, query).results }
 

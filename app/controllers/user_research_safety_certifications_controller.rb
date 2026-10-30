@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserResearchSafetyCertificationsController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -28,5 +27,4 @@ class UserResearchSafetyCertificationsController < ApplicationController
   def current_ability
     ::Ability.new(current_user, current_facility, UsersController.new)
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductNotificationsController < ApplicationController
-
   admin_tab :all
   before_action { @active_tab = "admin_products" }
   before_action :init_current_facility
@@ -39,5 +38,4 @@ class ProductNotificationsController < ApplicationController
       :issue_report_recipients,
     )
   end
-
 end

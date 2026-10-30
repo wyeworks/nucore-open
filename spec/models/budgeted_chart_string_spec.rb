@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe BudgetedChartString do
-
   it "should require fund" do
     is_expected.to validate_presence_of(:fund)
   end

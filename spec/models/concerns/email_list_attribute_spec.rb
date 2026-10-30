@@ -3,9 +3,7 @@
 require "rails_helper"
 
 RSpec.describe EmailListAttribute do
-
   class TestEmailListAttribute
-
     include ActiveModel::Validations
 
     attr_accessor :emails
@@ -22,7 +20,6 @@ RSpec.describe EmailListAttribute do
     def [](key)
       instance_variable_get("@#{key}")
     end
-
   end
 
   describe "setting the values" do

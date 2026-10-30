@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StatementSearchForm
-
   include DateHelper
   include ActiveModel::Model
 
@@ -58,5 +57,4 @@ class StatementSearchForm
     # Oracle throws an error if there is an ORDER in a subquery and Statements have a default scope/order
     Statement.for_facility(current_facility).unscope(:order)
   end
-
 end

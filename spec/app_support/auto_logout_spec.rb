@@ -174,8 +174,8 @@ RSpec.describe AutoLogout, :time_travel do
 
   describe "ignores other problem reservations" do
     let!(:product) { create(:setup_instrument, min_reserve_mins: 1) }
-    let!(:reservation_problem) { create(:purchased_reservation, :yesterday, product: product, actual_start_at: 1.day.ago, actual_end_at: nil) }
-    let!(:reservation_running) { create(:purchased_reservation, product: product, reserve_start_at: 30. minutes.ago, reserve_end_at: 11.minutes.ago, actual_start_at: 30.minutes.ago) }
+    let!(:reservation_problem) { create(:purchased_reservation, :yesterday, product:, actual_start_at: 1.day.ago, actual_end_at: nil) }
+    let!(:reservation_running) { create(:purchased_reservation, product:, reserve_start_at: 30.minutes.ago, reserve_end_at: 11.minutes.ago, actual_start_at: 30.minutes.ago) }
 
     include_context "all instruments return a relay"
 

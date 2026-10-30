@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TimeRange
-
   attr_reader :start_at, :end_at
 
   def initialize(start_at, end_at)
@@ -15,6 +14,7 @@ class TimeRange
 
   def duration_mins
     return unless start_at && end_at
+
     # For the sake of charging, NU asked for us to strip seconds from
     # calculations so that displayed time ranges and prices always lined up.
     # e.g. 4:17-4:18 should get priced at one minute, even if the actual time
@@ -52,5 +52,4 @@ class TimeRange
 
     I18n.localize(time, **options)
   end
-
 end

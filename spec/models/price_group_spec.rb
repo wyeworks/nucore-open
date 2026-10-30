@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe PriceGroup do
-
   let(:facility) { create(:facility) }
   let(:price_group) { create(:price_group, facility:) }
 
@@ -37,7 +36,6 @@ RSpec.describe PriceGroup do
   end
 
   context "can_purchase?" do
-
     before :each do
       @facility_account = create(:facility_account, facility: @facility)
       @product = create(:item, facility: @facility, facility_account: @facility_account)
@@ -51,19 +49,18 @@ RSpec.describe PriceGroup do
       PriceGroupProduct.create!(price_group: @price_group, product: @product)
       expect(@price_group).to be_can_purchase @product
     end
-
   end
 
   describe "to_log_s" do
     it "should be loggable with account price groups" do
       account = create(:setup_account)
-      account_price_group_member = create(:account_price_group_member, price_group: @price_group, account: account)
+      account_price_group_member = create(:account_price_group_member, price_group: @price_group, account:)
       expect(account_price_group_member.to_log_s).to include(account.to_s)
     end
 
     it "should be loggable with user price groups" do
       user = create(:user)
-      account_price_group_member = create(:user_price_group_member, price_group: @price_group, user: user)
+      account_price_group_member = create(:user_price_group_member, price_group: @price_group, user:)
       expect(account_price_group_member.to_log_s).to include(user.to_s)
     end
   end
@@ -200,7 +197,7 @@ RSpec.describe PriceGroup do
 
     it "should be able to delete a price group with price group members" do
       user = create(:user)
-      user_price_group_member = create(:user_price_group_member, price_group: @price_group, user: user)
+      user_price_group_member = create(:user_price_group_member, price_group: @price_group, user:)
       @price_group.destroy
       expect { PriceGroup.find(@price_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect(PriceGroup.with_deleted.find(@price_group.id)).to be_present
@@ -208,7 +205,7 @@ RSpec.describe PriceGroup do
 
     it "should be able to delete a price group with price group accounts" do
       account = create(:setup_account)
-      account_price_group_member = create(:account_price_group_member, price_group: @price_group, account: account)
+      account_price_group_member = create(:account_price_group_member, price_group: @price_group, account:)
       @price_group.destroy
       expect { PriceGroup.find(@price_group.id) }.to raise_error(ActiveRecord::RecordNotFound)
       expect(PriceGroup.with_deleted.find(@price_group.id)).to be_present
@@ -266,5 +263,4 @@ RSpec.describe PriceGroup do
       end
     end
   end
-
 end

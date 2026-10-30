@@ -4,7 +4,6 @@ require_relative "../../saml_spec_helper.rb"
 require "saml_authentication/saml_attributes"
 
 RSpec.describe SamlAuthentication::SamlAttributes do
-
   include_context "With SAML response"
 
   subject(:attributes) { described_class.new(saml_response) }
@@ -29,8 +28,7 @@ RSpec.describe SamlAuthentication::SamlAttributes do
       "User.email" => ["sst123@example.com"],
       "User.FirstName" => ["Sam"],
       "User.LastName" => ["Student"],
-      "memberOf" => [""]
+      "memberOf" => [""],
     )
   end
-
 end

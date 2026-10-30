@@ -16,7 +16,7 @@ RSpec.describe SecureRooms::AccessRules::OperatorRule, type: :service do
   subject(:response) { rule.call }
 
   context "user is facility operator" do
-    let(:card_user) { create(:user, :facility_administrator, facility: facility) }
+    let(:card_user) { create(:user, :facility_administrator, facility:) }
 
     it { is_expected.to have_result_code(:grant) }
   end
@@ -33,7 +33,7 @@ RSpec.describe SecureRooms::AccessRules::OperatorRule, type: :service do
     it { is_expected.to have_result_code(:pass) }
 
     describe "and also an operator of the facility" do
-      before { card_user.user_roles.create!(role: UserRole::FACILITY_DIRECTOR, facility: facility) }
+      before { card_user.user_roles.create!(role: UserRole::FACILITY_DIRECTOR, facility:) }
 
       it { is_expected.to have_result_code(:grant) }
     end
@@ -45,7 +45,7 @@ RSpec.describe SecureRooms::AccessRules::OperatorRule, type: :service do
     it { is_expected.to have_result_code(:pass) }
 
     describe "and also an operator of the facility" do
-      before { card_user.user_roles.create!(role: UserRole::FACILITY_DIRECTOR, facility: facility) }
+      before { card_user.user_roles.create!(role: UserRole::FACILITY_DIRECTOR, facility:) }
 
       it { is_expected.to have_result_code(:grant) }
     end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class Searcher
-
     # Do not modify this array directly. Use `TransactionSearch.register` instead.
     # There is some additional setup that needs to happen (adding an attr_accessor
     # to SearchForm) that `register` handles.
@@ -101,7 +99,6 @@ module TransactionSearch
     end
 
     class Results
-
       attr_reader :order_details
 
       # Return an array of options for a given key
@@ -121,9 +118,6 @@ module TransactionSearch
           [searcher.key, searcher.options]
         end.with_indifferent_access
       end
-
     end
-
   end
-
 end

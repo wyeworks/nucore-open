@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CurrencyInput < SimpleForm::Inputs::Base
-
   include ActionView::Helpers::NumberHelper
 
   def input(_wrapper_options)
@@ -21,5 +20,4 @@ class CurrencyInput < SimpleForm::Inputs::Base
     value = input_html_options[:value] || object.send(attribute_name)
     input_html_options[:value] = number_with_precision(value, precision: 2)
   end
-
 end

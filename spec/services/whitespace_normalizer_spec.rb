@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe WhitespaceNormalizer do
-
   it "changes spaces and tabs" do
     input = "a test\tof tabs"
     expect(described_class.normalize(input)).to eq("a test of tabs")

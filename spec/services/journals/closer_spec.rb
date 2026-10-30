@@ -30,15 +30,15 @@ RSpec.describe Journals::Closer do
       expect { subject.perform(status) }.to(
         change do
           journal.is_successful
-        end.from(nil).to(is_successful)
+        end.from(nil).to(is_successful),
       )
     end
 
     it "enqueues order detail notice updates" do
       expect { subject.perform(status) }.to(
         have_enqueued_job(OrderDetailNoticesUpdateJob).exactly(
-          journal.order_details.count
-        )
+          journal.order_details.count,
+        ),
       )
     end
   end

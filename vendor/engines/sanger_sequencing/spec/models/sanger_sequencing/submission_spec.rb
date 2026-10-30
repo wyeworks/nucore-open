@@ -54,7 +54,7 @@ RSpec.describe SangerSequencing::Submission do
 
     context "when it's blank" do
       it "returns submissions for nil and default groups" do
-        submissions = described_class.purchased.for_product_group('')
+        submissions = described_class.purchased.for_product_group("")
 
         expect(submissions.count(&has_group(nil))).to eq 1
         expect(submissions.count(&has_group("default"))).to eq 1

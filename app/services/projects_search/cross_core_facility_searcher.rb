@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ProjectsSearch
-
   class CrossCoreFacilitySearcher < TransactionSearch::BaseSearcher
     include TextHelpers::Translation
 
@@ -45,5 +44,4 @@ module ProjectsSearch
       ""
     end
   end
-
 end

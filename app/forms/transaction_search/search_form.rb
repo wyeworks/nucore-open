@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class SearchForm
-
     include ActiveModel::Model
 
     attr_accessor :date_range_field, :date_range_start, :date_range_end, :allowed_date_fields
@@ -50,7 +48,5 @@ module TransactionSearch
         allowed_date_fields: TransactionSearch::DateRangeSearcher::FIELDS,
       }
     end
-
   end
-
 end

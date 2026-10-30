@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ProblemOrderDetailsController
-
   include OrderDetailsCsvExport
 
   extend ActiveSupport::Concern
@@ -86,7 +85,7 @@ module ProblemOrderDetailsController
     permitted_params = params.permit(order_detail_ids: [], notification_groups: [])
     [
       permitted_params[:order_detail_ids] || [],
-      permitted_params[:notification_groups] || []
+      permitted_params[:notification_groups] || [],
     ]
   end
 
@@ -95,12 +94,11 @@ module ProblemOrderDetailsController
     ProblemNotificationSender.new(
       order_details,
       current_user,
-      notification_groups: notification_groups.map(&:to_sym)
+      notification_groups: notification_groups.map(&:to_sym),
     )
   end
 
   def authorize_show_problems
     authorize! :show_problems, Order
   end
-
 end

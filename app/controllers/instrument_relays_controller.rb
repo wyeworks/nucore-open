@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentRelaysController < ApplicationController
-
   admin_tab :all
   before_action :check_acting_as
   before_action :init_instrument

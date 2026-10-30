@@ -5,9 +5,9 @@ require "rails_helper"
 RSpec.describe InstrumentStatusFetcher do
   let(:facility) { create(:setup_facility) }
   let!(:relay) { create(:relay_syna, instrument: instrument_with_relay) }
-  let!(:instrument_with_relay) { create(:instrument, no_relay: true, facility: facility) }
-  let!(:instrument_with_dummy_relay) { create(:instrument, facility: facility) }
-  let!(:reservation_only_instrument) { create(:instrument, no_relay: true, facility: facility) }
+  let!(:instrument_with_relay) { create(:instrument, no_relay: true, facility:) }
+  let!(:instrument_with_dummy_relay) { create(:instrument, facility:) }
+  let!(:reservation_only_instrument) { create(:instrument, no_relay: true, facility:) }
   subject(:fetcher) { described_class.new(facility) }
 
   before do

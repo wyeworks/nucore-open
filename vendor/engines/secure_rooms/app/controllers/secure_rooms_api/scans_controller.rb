@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRoomsApi
-
   class ScansController < SecureRoomsApi::ApiController
-
     rescue_from ActiveRecord::RecordNotFound, with: :render_not_found
 
     before_action :load_user_and_reader
@@ -35,7 +33,5 @@ module SecureRoomsApi
     def render_not_found(exception)
       render json: { error: exception.message }, status: 404
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class NavTab::GlobalLinkCollection
-
   include Rails.application.routes.url_helpers
 
   attr_reader :ability
@@ -43,7 +42,6 @@ class NavTab::GlobalLinkCollection
   end
 
   def global_tab(tab, url)
-    NavTab::Link.new(cross_facility: true, tab: tab, url: url)
+    NavTab::Link.new(cross_facility: true, tab:, url:)
   end
-
 end

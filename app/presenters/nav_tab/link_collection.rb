@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class NavTab::LinkCollection
-
   include Rails.application.routes.url_helpers
   include TranslationHelper
 
@@ -65,7 +64,7 @@ class NavTab::LinkCollection
 
   def transactions_in_review
     count = user.administered_order_details.in_review.count
-    NavTab::Link.new(tab: :transactions_in_review, text: I18n.t("pages.transactions_in_review", count: count), url: in_review_transactions_path)
+    NavTab::Link.new(tab: :transactions_in_review, text: I18n.t("pages.transactions_in_review", count:), url: in_review_transactions_path)
   end
 
   def movable_transactions
@@ -177,7 +176,7 @@ class NavTab::LinkCollection
 
   def use
     url = facility ? facility_path(facility) : root_path
-    NavTab::Link.new(tab: :use, url: url)
+    NavTab::Link.new(tab: :use, url:)
   end
 
   def manage
@@ -206,5 +205,4 @@ class NavTab::LinkCollection
   def home
     NavTab::Link.new(tab: :home, url: root_path)
   end
-
 end

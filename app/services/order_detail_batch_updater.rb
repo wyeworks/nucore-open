@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetailBatchUpdater
-
   # TODO: Extracted from the OrderDetail model almost as-is and needs refactoring
 
   attr_accessor :facility, :msg_hash, :msg_type, :order_detail_ids, :user, :params
@@ -100,6 +99,7 @@ class OrderDetailBatchUpdater
 
   def notify_newly_assigned_users(order_details)
     return unless SettingsHelper.feature_on?("notifications.order_assignment_notifications")
+
     OrderAssignmentMailer.notify_assigned_user(order_details).deliver_later
   end
 
@@ -143,7 +143,7 @@ class OrderDetailBatchUpdater
     order_details.each do |order_detail|
       # cancel reservation order details
       if order_status.id == OrderStatus.canceled.id && order_detail.reservation
-        if order_detail.cancel_reservation(user, order_status: order_status, admin: true)
+        if order_detail.cancel_reservation(user, order_status:, admin: true)
           ProductNotifications::SlotAvailableService
             .from_reservation(order_detail.reservation)
             .notify_later
@@ -165,5 +165,4 @@ class OrderDetailBatchUpdater
       "There was an error updating the selected #{msg_type}. #{e.message}"
     raise ActiveRecord::Rollback
   end
-
 end

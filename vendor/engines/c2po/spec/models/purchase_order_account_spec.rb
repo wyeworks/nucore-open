@@ -6,7 +6,7 @@ RSpec.describe PurchaseOrderAccount do
   include TextHelpers
 
   let(:facility) { FactoryBot.create(:facility) }
-  subject(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility: facility) }
+  subject(:account) { FactoryBot.create(:purchase_order_account, :with_account_owner, facility:) }
 
   include_examples "AffiliateAccount"
   include_examples "an Account"

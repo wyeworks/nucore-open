@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe ProductAccessory do
-
   before(:each) { create :accessory }
 
   let(:accessory) { ProductAccessory.first }

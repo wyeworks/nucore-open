@@ -1,7 +1,5 @@
 module Converters
-
   class DoubleEntryOrderDetailToJournalRowAttributes
-
     attr_accessor :journal, :order_detail, :total
 
     def initialize(journal, order_detail, options = {})
@@ -33,9 +31,9 @@ module Converters
       {
         # A journal has_many order_details through the journal rows. Only the expenses
         # should have an order detail so we don't double count the order details.
-        order_detail: order_detail,
+        order_detail:,
         account_id: order_detail.account_id,
-        journal: journal,
+        journal:,
         # Note: this is the expense account, not the Account association
         account: order_detail.product.account,
         amount: total,
@@ -47,11 +45,9 @@ module Converters
       {
         amount: total * -1,
         account: order_detail.product.facility_account.revenue_account_for_journal,
-        journal: journal,
+        journal:,
         description: order_detail.product.to_s,
       }
     end
-
   end
-
 end

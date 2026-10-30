@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateNotifications < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :notifications do |t|
       t.column :type, :string, null: false
@@ -17,5 +16,4 @@ class CreateNotifications < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :notifications
   end
-
 end

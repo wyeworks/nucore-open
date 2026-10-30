@@ -4,7 +4,6 @@ require "rails_helper"
 require "controller_spec_helper"
 
 RSpec.describe StatementsController do
-
   before(:all) do
     create_users
   end
@@ -17,9 +16,9 @@ RSpec.describe StatementsController do
     let(:user) { User.find_by(username: "owner") }
     let(:admin) { User.find_by(username: "admin") }
     let(:statement) { create(:statement, account_id: user.accounts.first.id, created_by: admin.id) }
-    let(:order) { create(:order, user: user, created_by: user.id, account_id: user.accounts.first.id) }
+    let(:order) { create(:order, user:, created_by: user.id, account_id: user.accounts.first.id) }
     let(:product) { create(:setup_item) }
-    let(:order_detail) { create(:order_detail, statement: statement, product: product, order: order) }
+    let(:order_detail) { create(:order_detail, statement:, product:, order:) }
 
     before do
       sign_in user

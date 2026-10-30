@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe InstrumentIssue do
-
   describe "validations" do
     it { is_expected.to validate_presence_of(:message) }
     it { is_expected.to validate_presence_of(:user) }
@@ -16,10 +15,10 @@ RSpec.describe InstrumentIssue do
       product = create(:setup_instrument)
 
       account = create(:setup_account, owner: user)
-      order = create(:order, account: account, created_by_user: user, user: user)
-      order_detail = create(:order_detail, order: order, product: product)
+      order = create(:order, account:, created_by_user: user, user:)
+      order_detail = create(:order_detail, order:, product:)
 
-      described_class.new(user: create(:user), product: product, order_detail: order_detail, message: "Hello")
+      described_class.new(user: create(:user), product:, order_detail:, message: "Hello")
     end
 
     it "returns a truthy value" do
@@ -38,11 +37,11 @@ RSpec.describe InstrumentIssue do
 
   describe "recipients" do
     # One address is duplicated with the facility admin
-    let!(:instrument) { create(:setup_instrument, training_request_contacts: training_request_contacts) }
+    let!(:instrument) { create(:setup_instrument, training_request_contacts:) }
     let(:facility) { instrument.facility }
     let(:training_request_contacts) { "training@example.com, admin@example.com" }
-    let!(:facility_admin) { create(:user, :facility_administrator, facility: facility, email: "admin@example.com") }
-    let!(:facility_staff) { create(:user, :staff, facility: facility) }
+    let!(:facility_admin) { create(:user, :facility_administrator, facility:, email: "admin@example.com") }
+    let!(:facility_staff) { create(:user, :staff, facility:) }
     let(:instrument_issue) { described_class.new(product: instrument) }
 
     describe "without product-specific recipients defined" do
@@ -59,5 +58,4 @@ RSpec.describe InstrumentIssue do
       end
     end
   end
-
 end

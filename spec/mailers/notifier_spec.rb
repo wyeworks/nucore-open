@@ -52,7 +52,7 @@ RSpec.describe Notifier do
       context "when ff is off", feature_setting: { "billing.billing_log_events" => false } do
         it "does not create a log event" do
           expect { action.call }.to_not(
-            change { LogEvent.count }
+            change { LogEvent.count },
           )
         end
       end
@@ -62,7 +62,7 @@ RSpec.describe Notifier do
           expect { action.call }.to(
             change do
               LogEvent.where(event_type: :statement_email).count
-            end.by(1)
+            end.by(1),
           )
         end
       end
@@ -78,7 +78,7 @@ RSpec.describe Notifier do
     let(:action) do
       lambda do
         Notifier.review_orders(
-          user:, facility:, accounts:
+          user:, facility:, accounts:,
         ).deliver_now
       end
     end
@@ -101,7 +101,7 @@ RSpec.describe Notifier do
       context "when ff is on", feature_setting: { "billing.billing_log_events" => false } do
         it "does not create a log event" do
           expect { action.call }.to_not(
-            change { LogEvent.count }
+            change { LogEvent.count },
           )
         end
       end
@@ -111,7 +111,7 @@ RSpec.describe Notifier do
           expect { action.call }.to(
             change do
               LogEvent.where(event_type: :review_orders_email).count
-            end.by(1)
+            end.by(1),
           )
         end
       end

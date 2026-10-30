@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateFacilityAccounts < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :facility_accounts do |t|
       t.references :facility,       null: false
@@ -27,5 +26,4 @@ class CreateFacilityAccounts < ActiveRecord::Migration[4.2]
   def self.down
     raise ActiveRecord::IrreversibleMigration
   end
-
 end

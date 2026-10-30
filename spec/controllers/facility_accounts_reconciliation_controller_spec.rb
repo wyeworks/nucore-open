@@ -3,11 +3,8 @@
 require "rails_helper"
 
 RSpec.describe FacilityAccountsReconciliationController do
-
   class ReconciliationTestAccount < Account
-
     extend ReconcilableAccount
-
   end
 
   FactoryBot.define do
@@ -27,18 +24,18 @@ RSpec.describe FacilityAccountsReconciliationController do
 
   let(:facility) { FactoryBot.create(:setup_facility) }
   let(:account) { FactoryBot.create(:reconciliation_test_account, :with_account_owner) }
-  let(:product) { FactoryBot.create(:setup_item, facility: facility) }
-  let(:order) { FactoryBot.create(:purchased_order, product: product, account: account) }
+  let(:product) { FactoryBot.create(:setup_item, facility:) }
+  let(:order) { FactoryBot.create(:purchased_order, product:, account:) }
   let(:order_detail) { order.order_details.first }
   let(:statement) do
-    FactoryBot.create(:statement, account: account, facility: facility,
+    FactoryBot.create(:statement, account:, facility:,
                                   created_by_user: admin, created_at: 5.days.ago)
   end
   let(:admin) { FactoryBot.create(:user, :administrator) }
 
   before do
     order_detail.change_status!(OrderStatus.complete)
-    order_detail.update(reviewed_at: 5.minutes.ago, statement: statement)
+    order_detail.update(reviewed_at: 5.minutes.ago, statement:)
   end
 
   describe "update" do
@@ -73,12 +70,12 @@ RSpec.describe FacilityAccountsReconciliationController do
               selected: "1",
               reconciled_note: "A note",
             },
-          }
+          },
         }
 
         location = response.redirect_url
         expect(location).to include(
-          url_helpers.reconciliation_tests_facility_accounts_path(facility)
+          url_helpers.reconciliation_tests_facility_accounts_path(facility),
         )
         expect(location).to include("search%5Baccounts%5D%5B%5D=#{account.id}")
         expect(location).to include("page=2")

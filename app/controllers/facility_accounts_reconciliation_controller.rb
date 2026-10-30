@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityAccountsReconciliationController < ApplicationController
-
   include DateHelper
   include OrderDetailReconciliation
 
@@ -147,7 +146,7 @@ class FacilityAccountsReconciliationController < ApplicationController
     {
       search: params[:search]&.permit!,
       page: params[:page],
-      show_items: params[:show_items]
+      show_items: params[:show_items],
     }
   end
 end

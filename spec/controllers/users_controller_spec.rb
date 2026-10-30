@@ -91,12 +91,12 @@ RSpec.describe UsersController do
   describe "GET #access_list" do
     let(:facility) { FactoryBot.create(:setup_facility) }
     let(:user) { FactoryBot.create(:user) }
-    let!(:instruments) { FactoryBot.create_list(:instrument_requiring_approval, 2, facility: facility) }
-    let!(:services) { FactoryBot.create_list(:setup_service, 2, requires_approval: true, facility: facility) }
+    let!(:instruments) { FactoryBot.create_list(:instrument_requiring_approval, 2, facility:) }
+    let!(:services) { FactoryBot.create_list(:setup_service, 2, requires_approval: true, facility:) }
     let!(:training_requests) do
       [
-        FactoryBot.create(:training_request, user: user, product: instruments.last),
-        FactoryBot.create(:training_request, user: user, product: services.first),
+        FactoryBot.create(:training_request, user:, product: instruments.last),
+        FactoryBot.create(:training_request, user:, product: services.first),
       ]
     end
 
@@ -351,7 +351,7 @@ RSpec.describe UsersController do
     let(:facility) { create(:facility) }
 
     describe "as a facility admin" do
-      let(:facility_admin) { create(:user, :facility_administrator, facility: facility) }
+      let(:facility_admin) { create(:user, :facility_administrator, facility:) }
 
       it "cannot be accessed" do
         sign_in facility_admin

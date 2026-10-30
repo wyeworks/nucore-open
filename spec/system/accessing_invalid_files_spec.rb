@@ -29,7 +29,7 @@ RSpec.describe "Accessing invalid formats" do
     end
 
     describe "a statement pdf" do
-      let(:statement) { create(:statement, facility: facility) }
+      let(:statement) { create(:statement, facility:) }
 
       it "renders a 403 as html" do
         login_as user

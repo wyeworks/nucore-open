@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityAccountForm < SimpleDelegator
-
   include ActiveModel::Validations
   include ActiveModel::Callbacks
 
@@ -58,5 +57,4 @@ class FacilityAccountForm < SimpleDelegator
   rescue AccountValidator::ValidatorError => e
     errors.add(:base, e.message)
   end
-
 end

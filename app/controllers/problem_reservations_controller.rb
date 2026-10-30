@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProblemReservationsController < ApplicationController
-
   customer_tab :all
 
   before_action :load_and_authorize_reservation
@@ -15,7 +14,7 @@ class ProblemReservationsController < ApplicationController
   end
 
   def update
-    if problem_reservation_resolver.resolve(update_params.merge(current_user: current_user))
+    if problem_reservation_resolver.resolve(update_params.merge(current_user:))
       if @order_detail.accessories?
         redirect_to new_order_order_detail_accessory_path(@order_detail.order, @order_detail), notice: text("update.success")
       else
@@ -47,11 +46,11 @@ class ProblemReservationsController < ApplicationController
     @order_detail = @reservation.order_detail
 
     raise ActiveRecord::RecordNotFound unless editable? || resolved?
+
     authorize! :update, @reservation
   end
 
   def ability_resource
     @reservation
   end
-
 end

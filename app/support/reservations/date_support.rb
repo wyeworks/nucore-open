@@ -3,7 +3,6 @@
 # Support for reading/writing reservation and actual start and
 # end times using values split across text inputs
 module Reservations::DateSupport
-
   extend ActiveSupport::Concern
 
   included do
@@ -14,6 +13,7 @@ module Reservations::DateSupport
 
     # Use only in tests to make creation a little easier
     attr_accessor :split_times
+
     before_validation :set_all_split_times, if: :split_times
   end
 
@@ -176,6 +176,7 @@ module Reservations::DateSupport
 
   def human_hour(time)
     return unless time
+
     hour = time.hour.to_i % 12
     hour == 0 ? 12 : hour
   end
@@ -214,7 +215,6 @@ module Reservations::DateSupport
                                  :actual_end_date, :actual_end_hour, :actual_end_min, :actual_end_meridian,
                                  :actual_start_at, :actual_end_at, :actual_duration_mins)
 
-
     reserve_attrs.reject! { |_key, value| value.blank? }
 
     self.actual_start_at = nil if reserve_attrs.keys.any? { |k| k.to_s.start_with?("actual_start") }
@@ -226,6 +226,7 @@ module Reservations::DateSupport
   # set set_reserve_start_at based on reserve_start_xxx virtual attributes
   def set_reserve_start_at
     return unless reserve_start_at.blank?
+
     if @reserve_start_date && @reserve_start_hour && @reserve_start_min && @reserve_start_meridian
       self.reserve_start_at = parse_usa_date(@reserve_start_date, "#{@reserve_start_hour}:#{@reserve_start_min.to_s.rjust(2, '0')} #{@reserve_start_meridian}")
     end
@@ -244,6 +245,7 @@ module Reservations::DateSupport
 
   def set_actual_start_at
     return if actual_start_at.present?
+
     if @actual_start_date && @actual_start_hour && @actual_start_min && @actual_start_meridian
       self.actual_start_at = parse_usa_date(@actual_start_date, "#{@actual_start_hour}:#{@actual_start_min.to_s.rjust(2, '0')} #{@actual_start_meridian}")
     end
@@ -251,6 +253,7 @@ module Reservations::DateSupport
 
   def set_actual_end_at
     return if actual_end_at.present?
+
     if @actual_end_date && @actual_end_hour && @actual_end_min && @actual_end_meridian
       self.actual_end_at = parse_usa_date(@actual_end_date, "#{@actual_end_hour}:#{@actual_end_min.to_s.rjust(2, '0')} #{@actual_end_meridian}")
     elsif @actual_duration_mins && actual_start_at
@@ -261,5 +264,4 @@ module Reservations::DateSupport
   def reserve_time_range
     TimeRange.new(reserve_start_at, reserve_end_at)
   end
-
 end

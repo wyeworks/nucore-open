@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ProblemReservationResolver
-
   attr_reader :reservation
+
   delegate :order_detail, to: :reservation
 
   def initialize(reservation)
@@ -33,5 +33,4 @@ class ProblemReservationResolver
   def resolved?
     OrderDetails::ProblemResolutionPolicy.new(order_detail).user_did_resolve?
   end
-
 end

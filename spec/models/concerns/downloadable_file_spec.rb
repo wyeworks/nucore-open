@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe DownloadableFile do
-
   # NOTE: just setting feature_setting: { active_storage: true }
   # on its own does not work as expected because DownloadableFile
   # has class methods that get evaluated on load.
@@ -18,7 +17,7 @@ RSpec.describe DownloadableFile do
   end
 
   let(:facility) { create(:setup_facility) }
-  let(:item) { create(:item, facility: facility) }
+  let(:item) { create(:item, facility:) }
   let(:user) { create(:user) }
   let(:file_path) { "#{Rails.root}/spec/files/template1.txt" }
   let(:uploaded_file) { File.open(file_path) }
@@ -33,7 +32,6 @@ RSpec.describe DownloadableFile do
   end
 
   context "active storage", feature_setting: { active_storage: true } do
-
     it "is not persisted" do
       expect(stored_file).not_to be_persisted
     end
@@ -89,7 +87,6 @@ RSpec.describe DownloadableFile do
   end
 
   context "paperclip", feature_setting: { active_storage: false } do
-
     it "is not persisted" do
       expect(stored_file).not_to be_persisted
     end
@@ -160,7 +157,4 @@ RSpec.describe DownloadableFile do
       expect(stored_file.read_attached_file).to eq(File.read(file_path))
     end
   end
-
 end
-
-

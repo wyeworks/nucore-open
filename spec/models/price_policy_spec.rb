@@ -12,7 +12,7 @@ RSpec.describe PricePolicy do
   before :each do
     @facility = FactoryBot.create(:facility)
     @facility_account = FactoryBot.create(:facility_account, facility: @facility)
-    @price_group = FactoryBot.create(:price_group, facility: facility)
+    @price_group = FactoryBot.create(:price_group, facility:)
     @item = FactoryBot.create(:item, facility: @facility, facility_account: @facility_account)
   end
 
@@ -47,7 +47,7 @@ RSpec.describe PricePolicy do
         FactoryBot.attributes_for(:item_price_policy,
                                   price_group_id: @price_group.id,
                                   product_id: @item.id,
-                                  start_date: start_date,
+                                  start_date:,
                                   expire_date: start_date),
       )
 
@@ -60,7 +60,7 @@ RSpec.describe PricePolicy do
         FactoryBot.attributes_for(:item_price_policy,
                                   price_group_id: @price_group.id,
                                   product_id: @item.id,
-                                  start_date: start_date,
+                                  start_date:,
                                   expire_date: PricePolicy.generate_expire_date(start_date) + 1.month),
       )
       expect(pp).not_to be_valid
@@ -71,9 +71,8 @@ RSpec.describe PricePolicy do
       expire_date = start_date + 3.months
       pp = FactoryBot.create(:item_price_policy,
                              price_group_id: @price_group.id,
-                             product_id: @item.id, start_date: start_date,
-                             expire_date: expire_date
-                            )
+                             product_id: @item.id, start_date:,
+                             expire_date:)
       expect(pp.expire_date).not_to be_nil
       expect(pp.expire_date).to eq(expire_date)
     end
@@ -83,22 +82,20 @@ RSpec.describe PricePolicy do
       pp = FactoryBot.create(:item_price_policy,
                              price_group_id: @price_group.id,
                              product_id: @item.id,
-                             start_date: start_date,
-                             expire_date: expire_date)
+                             start_date:,
+                             expire_date:)
       expect(pp).not_to be_expired
     end
 
     it "should be expired when in the past" do
       start_date = Time.zone.parse("2000-5-5")
       expire_date = start_date + 1.month
-      pp = FactoryBot.create(:item_price_policy, price_group_id: @price_group.id, product_id: @item.id, start_date: start_date, expire_date: expire_date)
+      pp = FactoryBot.create(:item_price_policy, price_group_id: @price_group.id, product_id: @item.id, start_date:, expire_date:)
       expect(pp).to be_expired
     end
-
   end
 
   context "restrict purchase" do
-
     before :each do
       @pp = FactoryBot.create(:item_price_policy, product: @item, price_group: @price_group)
       # @pgp=FactoryBot.create(:price_group_product, :product => @item, :price_group => @price_group, :reservation_window => nil)
@@ -181,7 +178,6 @@ RSpec.describe PricePolicy do
     end
 
     context "should define abstract methods" do
-
       before :each do
         @sp = PricePolicy.new
       end
@@ -195,11 +191,9 @@ RSpec.describe PricePolicy do
         expect(@sp).to be_respond_to(:estimate_cost_and_subsidy)
         expect { @sp.estimate_cost_and_subsidy }.to raise_error RuntimeError
       end
-
     end
 
     context "order assignment" do
-
       before :each do
         @user     = FactoryBot.create(:user)
         @account  = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @user))
@@ -221,9 +215,7 @@ RSpec.describe PricePolicy do
         @order_detail.to_complete!
         expect(@pp).to be_assigned_to_order
       end
-
     end
-
   end
 
   describe "unit_net_cost" do
@@ -304,5 +296,4 @@ RSpec.describe PricePolicy do
       end
     end
   end
-
 end

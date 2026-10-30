@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountSearcher
-
   MINIMUM_SEARCH_LENGTH = 3
 
   include SearchHelper
@@ -77,5 +76,4 @@ class AccountSearcher
   def base_scope
     @scope.joins(account_users: :user).merge(AccountUser.owners).order(:type, :account_number)
   end
-
 end

@@ -16,7 +16,6 @@ RSpec.describe FacilityUsersController do
   end
 
   context "index" do
-
     before :each do
       @method = :get
       @action = :index
@@ -28,11 +27,9 @@ RSpec.describe FacilityUsersController do
       expect(assigns(:users)).to include @staff
       expect(assigns(:users)).to include user unless user == @admin
     end
-
   end
 
   context "destroy" do
-
     before :each do
       @method = :delete
       @action = :destroy
@@ -48,29 +45,25 @@ RSpec.describe FacilityUsersController do
     end
 
     it "logs events" do
-      director = create(:user, :facility_director, facility: facility)
+      director = create(:user, :facility_director, facility:)
       sign_in director
 
       delete :destroy, params: { facility_id: facility.url_name, id: @staff.id }
-      user_role = UserRole.deleted.find_by(user: @staff, facility: facility)
+      user_role = UserRole.deleted.find_by(user: @staff, facility:)
       expect(LogEvent).to be_exists(loggable: user_role, event_type: :delete, user: director)
     end
-
   end
 
   context "search" do
-
     before :each do
       @method = :get
       @action = :search
     end
 
     it_should_allow_managers_only { is_expected.to render_template("search") }
-
   end
 
   context "map_user" do
-
     before :each do
       @method = :post
       @action = :map_user
@@ -87,25 +80,23 @@ RSpec.describe FacilityUsersController do
     end
 
     describe "as a director" do
-      let(:director) { create(:user, :facility_director, facility: facility) }
+      let(:director) { create(:user, :facility_director, facility:) }
       before { sign_in director }
 
       it "logs an event" do
         post :map_user, params: @params
 
-        user_role = UserRole.find_by(user: @staff, facility: facility)
+        user_role = UserRole.find_by(user: @staff, facility:)
         expect(LogEvent).to be_exists(loggable: user_role, event_type: :create, user: director)
       end
 
       it "does not log an event if it's a duplicate role" do
-        create(:user_role, :facility_staff, user: @staff, facility: facility)
+        create(:user_role, :facility_staff, user: @staff, facility:)
 
         expect do
           post :map_user, params: @params
         end.not_to change(LogEvent, :count)
       end
     end
-
   end
-
 end

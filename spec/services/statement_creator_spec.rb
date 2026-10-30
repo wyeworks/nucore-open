@@ -8,7 +8,7 @@ RSpec.describe StatementCreator do
   let(:account) do
     FactoryBot.create(
       :nufs_account,
-      account_users_attributes: [FactoryBot.attributes_for(:account_user, user: user)],
+      account_users_attributes: [FactoryBot.attributes_for(:account_user, user:)],
       type: Account.config.statement_account_types.first,
     )
   end
@@ -110,7 +110,7 @@ RSpec.describe StatementCreator do
           it "adds error for non-existent parent statement" do
             creator_with_nonexistent.create
             expect(creator_with_nonexistent.errors).to include(
-              I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: non_existent_invoice)
+              I18n.t("services.statement_creator.parent_statement_not_found", invoice_number: non_existent_invoice),
             )
           end
         end
@@ -207,5 +207,4 @@ RSpec.describe StatementCreator do
       end
     end
   end
-
 end

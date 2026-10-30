@@ -72,7 +72,7 @@ RSpec.describe SecureRooms::Occupancy do
       it "adds duration error" do
         expect(occupancy.errors).to be_added(:actual_duration_mins, :zero_minutes)
         expect(occupancy.errors[:actual_duration_mins]).to(
-          include("must be at least 1 minute")
+          include("must be at least 1 minute"),
         )
       end
     end

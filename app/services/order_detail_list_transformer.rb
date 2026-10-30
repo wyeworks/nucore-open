@@ -4,7 +4,6 @@
 # Modify settings to use a different transformer to modify/tranform order
 # detail results before sending them to get reported.
 class OrderDetailListTransformer
-
   attr_reader :order_details
 
   def initialize(order_details)
@@ -14,5 +13,4 @@ class OrderDetailListTransformer
   def perform(_options = {})
     order_details
   end
-
 end

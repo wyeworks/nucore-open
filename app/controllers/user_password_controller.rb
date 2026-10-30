@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserPasswordController < ApplicationController
-
   skip_before_action :authenticate_user!, except: [:edit_current]
   before_action :no_user_allowed, only: [:reset]
   layout "application"
@@ -46,5 +45,4 @@ class UserPasswordController < ApplicationController
       return false
     end
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Dataprobe
-
   class Ipio
-
     CONNECT_TIMEOUT = 5
     READ_TIMEOUT = 5
     WRITE_TIMEOUT = 5
@@ -23,6 +21,7 @@ module Dataprobe
         mode = status ? 1 : 0
         write(socket, "#{authentication_prefix}\x01\x00#{message_number}#{hex_s outlet}#{hex_s mode}")
         raise Dataprobe::Error.new("Error while toggling outlet #{outlet}") unless read(socket, 1) == "\x00"
+
         status
       end
     end
@@ -79,7 +78,5 @@ module Dataprobe
 
       port_string.to_i
     end
-
   end
-
 end

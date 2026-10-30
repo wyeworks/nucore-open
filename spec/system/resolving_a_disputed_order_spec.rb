@@ -17,11 +17,11 @@ RSpec.describe "Resolving a disputed order" do
       :order_detail,
       :disputed,
       product: item,
-      order: order,
+      order:,
       dispute_by: owner,
       dispute_reason: "Testing, testing",
       fulfilled_at: Date.today,
-      account: account
+      account:,
     )
   end
 
@@ -31,7 +31,7 @@ RSpec.describe "Resolving a disputed order" do
     visit facility_disputed_orders_path facility
     click_link(
       order_detail.id.to_s,
-      href: manage_facility_order_order_detail_path(facility, order, order_detail)
+      href: manage_facility_order_order_detail_path(facility, order, order_detail),
     )
   end
 

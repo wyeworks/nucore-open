@@ -19,7 +19,7 @@ class ReconciliationLogService
 
     order_details_by_statement.each do |statement, statement_order_details|
       metadata = build_reconciliation_metadata(statement_order_details)
-      LogEvent.log(statement, :closed, current_user, metadata: metadata)
+      LogEvent.log(statement, :closed, current_user, metadata:)
     end
   end
 

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "devise_saml_authenticatable/saml_response"
 
 RSpec.shared_context "With SAML response" do

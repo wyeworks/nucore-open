@@ -57,7 +57,6 @@ if Account.config.statements_enabled?
     end
 
     context "index" do
-
       before :each do
         @method = :get
         @action = :index
@@ -179,7 +178,6 @@ if Account.config.statements_enabled?
         @params.merge!(order_detail_ids: [@order_detail1.id, @order_detail3.id])
       end
 
-
       it_should_allow_managers_only :redirect do
         expect(response).to be_redirect
       end
@@ -193,7 +191,7 @@ if Account.config.statements_enabled?
           grant_and_sign_in(@user)
 
           expect { do_request }.to(
-            have_enqueued_mail(Notifier, :statement).twice
+            have_enqueued_mail(Notifier, :statement).twice,
           )
         end
       end
@@ -325,7 +323,6 @@ if Account.config.statements_enabled?
     end
 
     context "show" do
-
       before :each do
         @method = :get
         @action = :show
@@ -335,7 +332,6 @@ if Account.config.statements_enabled?
       it_should_allow_managers_only { expect(assigns(:statement)).to eq(@statement) }
 
       it_should_deny_all [:staff, :senior_staff]
-
     end
 
     context "with granular permissions", feature_setting: { granular_permissions: true } do
@@ -403,6 +399,5 @@ if Account.config.statements_enabled?
         end
       end
     end
-
   end
 end

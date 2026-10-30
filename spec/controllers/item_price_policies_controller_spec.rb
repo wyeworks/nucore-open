@@ -10,5 +10,4 @@ RSpec.describe ItemPricePoliciesController do
   before(:all) { create_users }
 
   it_should_behave_like PricePoliciesController, :item
-
 end

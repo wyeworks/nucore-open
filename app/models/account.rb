@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class Account < ApplicationRecord
-
   module Overridable
-
     # Consider creating a default price gorup, when `user_based_price_groups` is
     # set to `false`. Currently Dartmouth is the only school with this feature
     # flag set to false, and they do this in their account_extension.rb
@@ -14,7 +12,6 @@ class Account < ApplicationRecord
     def account_price_groups
       price_group_members.collect(&:price_group)
     end
-
   end
 
   include Overridable
@@ -221,7 +218,7 @@ class Account < ApplicationRecord
     if respond_to?(:account_open?)
       accts = product.is_a?(Bundle) ? product.products.collect(&:account) : [product.account]
       accts.uniq.each do |acct|
-        return I18n.t("not_open", model: type_string, scope: "activerecord.errors.models.account") unless account_open?(acct, fulfillment_time: fulfillment_time)
+        return I18n.t("not_open", model: type_string, scope: "activerecord.errors.models.account") unless account_open?(acct, fulfillment_time:)
       end
     end
 
@@ -268,7 +265,7 @@ class Account < ApplicationRecord
                            .readonly(false)
                            .to_a
 
-    details.each { |od| od.update(reviewed_at: Time.zone.now + Settings.billing.review_period, statement: statement) }
+    details.each { |od| od.update(reviewed_at: Time.zone.now + Settings.billing.review_period, statement:) }
   end
 
   def can_be_used_by?(user)
@@ -291,6 +288,7 @@ class Account < ApplicationRecord
 
   def affiliate_to_s
     return "" unless affiliate
+
     if affiliate.subaffiliates_enabled?
       "#{affiliate.name}: #{affiliate_other}"
     else
@@ -316,5 +314,4 @@ class Account < ApplicationRecord
   def missing_owner?
     account_users.none? { |au| au.active? && au.owner? }
   end
-
 end

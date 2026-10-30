@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddServiceSurveys < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :service_surveys do |t|
       t.references  :service
@@ -16,5 +15,4 @@ class AddServiceSurveys < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :service_surveys
   end
-
 end

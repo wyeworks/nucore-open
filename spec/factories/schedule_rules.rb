@@ -70,7 +70,7 @@ FactoryBot.define do
     after(:build) do |schedule_rule, evaluator|
       if evaluator.discount_percent
         PriceGroup.globals.each do |price_group|
-          schedule_rule.price_group_discounts.build(price_group: price_group, discount_percent: evaluator.discount_percent)
+          schedule_rule.price_group_discounts.build(price_group:, discount_percent: evaluator.discount_percent)
         end
       end
     end

@@ -6,9 +6,9 @@ RSpec.describe "All Transactions Search", :js do
   # Defined in spec/support/contexts/cross_core_context.rb
   include_context "cross core orders"
 
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
   let!(:orders) do
-    accounts.map { |account| create(:complete_order, product: item, account: account) }
+    accounts.map { |account| create(:complete_order, product: item, account:) }
   end
 
   let(:order_detail) { orders.first.order_details.first }
@@ -27,7 +27,7 @@ RSpec.describe "All Transactions Search", :js do
       allow_any_instance_of(AccountConfig).to(
         receive(:creation_enabled_types).and_wrap_original do |method|
           (method.call + [some_account.type.to_s]).uniq
-        end
+        end,
       )
     end
 
@@ -96,7 +96,7 @@ RSpec.describe "All Transactions Search", :js do
         expect(
           sorted_order_details.map do |od|
             I18n.l(od.fulfilled_at.to_date, format: :usa)
-          end
+          end,
         ).to appear_in_order
       end
     end
@@ -116,7 +116,7 @@ RSpec.describe "All Transactions Search", :js do
         expect(
           sorted_order_details.map do |od|
             I18n.l(od.ordered_at.to_date, format: :usa)
-          end
+          end,
         ).to appear_in_order
       end
     end
@@ -141,7 +141,6 @@ RSpec.describe "All Transactions Search", :js do
           order_detail: statemented_order_detail,
         )
         statemented_order_detail.update_columns(statement_id: statement.id)
-
       end
 
       it "can filter orders" do
@@ -157,7 +156,7 @@ RSpec.describe "All Transactions Search", :js do
         expect(
           sorted_order_details.map do |od|
             I18n.l(od.journal_or_statement_date.to_date, format: :usa)
-          end
+          end,
         ).to appear_in_order
       end
     end

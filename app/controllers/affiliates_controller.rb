@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AffiliatesController < GlobalSettingsController
-
   def index
     @affiliates = Affiliate.alphabetical.destroyable
   end
@@ -70,5 +69,4 @@ class AffiliatesController < GlobalSettingsController
   def affiliate_params
     params.require(:affiliate).permit(:name, :subaffiliates_enabled)
   end
-
 end

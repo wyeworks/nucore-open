@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module BreadcrumbHelper
-
   def order_reservation_breadcrumb
     link_to my_breadcrumb_label, my_breadcrumb_path
   end
@@ -19,5 +18,4 @@ module BreadcrumbHelper
   def my_breadcrumb_path
     public_send("#{@active_tab}_path")
   end
-
 end

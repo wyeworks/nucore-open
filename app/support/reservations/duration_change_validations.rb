@@ -5,11 +5,11 @@
 # the UI but not in specs
 ####################################################################
 class Reservations::DurationChangeValidations
-
   include ActiveModel::Validations
   include ActiveModel::Validations::Callbacks
 
   attr_reader :reservation, :reserve_start_at, :duration_mins
+
   validate :start_time_not_changed, unless: -> { reservation.in_cart? }
   validate :duration_not_shortened, unless: -> { reservation.in_cart? }
 
@@ -55,5 +55,4 @@ class Reservations::DurationChangeValidations
   def was_reserve_start_at_editable?(reservation)
     Reservation.find(reservation.id).reserve_start_at_editable?
   end
-
 end

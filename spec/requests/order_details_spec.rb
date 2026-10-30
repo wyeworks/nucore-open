@@ -89,7 +89,7 @@ RSpec.describe "order_details" do
 
     it "calls slot available service" do
       expect(ProductNotifications::SlotAvailableService).to(
-        receive(:new).and_call_original
+        receive(:new).and_call_original,
       )
 
       action.call
@@ -102,7 +102,7 @@ RSpec.describe "order_details" do
 
       it "does not call slot available service" do
         expect(ProductNotifications::SlotAvailableService).not_to(
-          receive(:new).and_call_original
+          receive(:new).and_call_original,
         )
 
         action.call

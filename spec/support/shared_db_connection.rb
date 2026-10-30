@@ -5,14 +5,12 @@
 #
 # Allows Poltergeist/Capybara to share a DB connection so we can keep using transactional_fixtures
 class ActiveRecord::Base
-
   mattr_accessor :shared_connection
   @@shared_connection = nil
 
   def self.connection
     @@shared_connection || retrieve_connection
   end
-
 end
 
 # Forces all threads to share the same connection. This works on

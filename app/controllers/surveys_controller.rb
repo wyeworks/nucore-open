@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class SurveysController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as, except: :complete
   before_action :init_current_facility
@@ -38,7 +37,7 @@ class SurveysController < ApplicationController
 
     if request.xhr?
       # send the supplied string to the browser with a MIME type of text/javascript
-      render :js => "window.location = '#{params[:referer]}'"
+      render js: "window.location = '#{params[:referer]}'"
     else
       # TO DO: Remove logging when the other consumers of this code path are better understood.
       # This action should not be available via GET, but we need to know more before making that change.
@@ -56,5 +55,4 @@ class SurveysController < ApplicationController
   def init_service
     @service = current_facility.services.find_by!(url_name: params[:service_id])
   end
-
 end

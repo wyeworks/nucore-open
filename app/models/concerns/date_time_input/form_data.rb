@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module DateTimeInput
-
   class FormData
-
     extend DateHelper
 
     def initialize(time)
@@ -18,11 +16,13 @@ module DateTimeInput
 
     def self.from_param!(param)
       return new(param) if param.is_a?(Time)
+
       param = param.with_indifferent_access
 
       time_string = "#{param[:hour]}:#{param[:minute].to_s.rjust(2, '0')} #{param[:ampm]}" if check_time_param!(param)
 
       raise ArgumentError, "Missing date param" unless param[:date].present?
+
       new(parse_usa_date(param[:date], time_string))
     end
 
@@ -42,16 +42,19 @@ module DateTimeInput
 
     def hour
       return unless @time
+
       @time.strftime("%I").to_i
     end
 
     def minute
       return unless @time
+
       @time.min
     end
 
     def ampm
       return unless @time
+
       @time.strftime("%p")
     end
 
@@ -61,13 +64,11 @@ module DateTimeInput
 
     def to_h
       {
-        date: date,
-        hour: hour,
-        minute: minute,
-        ampm: ampm,
+        date:,
+        hour:,
+        minute:,
+        ampm:,
       }
     end
-
   end
-
 end

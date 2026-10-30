@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityUsersController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -49,5 +48,4 @@ class FacilityUsersController < ApplicationController
       end
     end
   end
-
 end

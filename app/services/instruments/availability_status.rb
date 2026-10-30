@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 module Instruments
-
   # Request-scoped instrument availability for the public facility page: two
   # facility-wide queries instead of running walkup_available? per instrument.
   # Build once, reuse for every instrument on the page.
   class AvailabilityStatus
-
     def initialize(facility)
       @facility = facility
     end
@@ -52,7 +50,5 @@ module Instruments
                     .where(products: { facility_id: @facility.id })
                     .group_by(&:product_id)
     end
-
   end
-
 end

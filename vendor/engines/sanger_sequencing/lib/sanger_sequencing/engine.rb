@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class Engine < ::Rails::Engine
-
     config.to_prepare do
       NavTab::LinkCollection.send :include, SangerSequencing::LinkCollectionExtension
 
@@ -12,7 +10,7 @@ module SangerSequencing
       ViewHook.add_hook(
         "admin.shared.tabnav_product",
         "additional_tabs",
-        "sanger_sequencing/admin/shared/tabnav_product/sanger"
+        "sanger_sequencing/admin/shared/tabnav_product/sanger",
       )
 
       Facility.include SangerSequencing::SangerEnabledFacility
@@ -44,7 +42,5 @@ module SangerSequencing
         sanger_sequencing/submissions.css
       ]
     end
-
   end
-
 end

@@ -58,7 +58,7 @@ RSpec.describe Holiday do
   let(:start_date) { holiday.date }
   let(:user) { create(:user) }
   let(:global_admin) { create(:user, :administrator) }
-  let(:facility_admin) { create(:user, :facility_administrator, facility: facility) }
+  let(:facility_admin) { create(:user, :facility_administrator, facility:) }
   let(:other_facility_admin) { create(:user, :facility_administrator, facility: other_facility) }
 
   describe ".allow_access?" do
@@ -103,19 +103,18 @@ RSpec.describe Holiday do
 
         context "with approved product access groups" do
           let!(:product_access_group) { create(:product_access_group, allow_holiday_access: true, product: instrument) }
-          let!(:product_user) { create(:product_user, user: user, product_access_group: product_access_group, product: instrument) }
+          let!(:product_user) { create(:product_user, user:, product_access_group:, product: instrument) }
 
           it_behaves_like "allows all users"
         end
 
         context "with restricted product access groups" do
           let!(:product_access_group) { create(:product_access_group, allow_holiday_access: false, product: instrument) }
-          let!(:product_user) { create(:product_user, user: user, product_access_group: product_access_group, product: instrument) }
+          let!(:product_user) { create(:product_user, user:, product_access_group:, product: instrument) }
 
           it_behaves_like "allows global admins and facility admins"
         end
       end
     end
   end
-
 end

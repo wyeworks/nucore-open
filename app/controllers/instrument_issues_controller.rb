@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentIssuesController < ApplicationController
-
   customer_tab :all
   before_action :init_current_facility
   before_action :init_order_detail

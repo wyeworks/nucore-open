@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class AutoCanceler
-
   AdminStruct = Struct.new(:id)
 
   def cancel_reservations
     return if cancelable_reservations.none?
+
     cancelable_reservations.each do |res|
       next if res.order_detail.blank?
+
       cancel_reservation(res)
     end
   end
@@ -49,5 +50,4 @@ class AutoCanceler
     admin.id = 0
     admin
   end
-
 end

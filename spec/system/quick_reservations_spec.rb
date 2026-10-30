@@ -94,7 +94,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
         product: instrument,
         user:,
         reserve_start_at: 1.hour.from_now,
-        reserve_end_at: 1.hour.from_now + 30.minutes
+        reserve_end_at: 1.hour.from_now + 30.minutes,
       )
     end
 
@@ -110,9 +110,9 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
       create(
         :purchased_reservation,
         product: instrument,
-        user: user,
+        user:,
         reserve_start_at: 30.minutes.from_now,
-        reserve_end_at: 90.minutes.from_now
+        reserve_end_at: 90.minutes.from_now,
       )
     end
 
@@ -123,7 +123,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
         user: user_2,
         reserve_start_at: 30.minutes.ago,
         actual_start_at: 30.minutes.ago,
-        reserve_end_at: 30.minutes.from_now
+        reserve_end_at: 30.minutes.from_now,
       )
     end
 
@@ -141,7 +141,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
         user:,
         reserve_start_at: 30.minutes.ago,
         actual_start_at: 30.minutes.ago,
-        reserve_end_at: 1.hour.from_now
+        reserve_end_at: 1.hour.from_now,
       )
     end
 
@@ -160,7 +160,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
         user:,
         reserve_start_at: 30.minutes.ago,
         actual_start_at: 30.minutes.ago,
-        reserve_end_at: 5.minutes.ago
+        reserve_end_at: 5.minutes.ago,
       )
 
       od = r.order_detail
@@ -185,7 +185,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
         product: instrument,
         user: user_2,
         reserve_start_at: start_at,
-        reserve_end_at: end_at
+        reserve_end_at: end_at,
       )
     end
 
@@ -254,7 +254,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
         user: user_2,
         reserve_start_at: 30.minutes.ago,
         actual_start_at: 30.minutes.ago,
-        reserve_end_at: 15.minutes.ago
+        reserve_end_at: 15.minutes.ago,
       )
     end
 
@@ -277,7 +277,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
     let!(:certification_requirement) do
       ProductResearchSafetyCertificationRequirement.create(
         product: instrument,
-        research_safety_certificate: research_safety_certificate,
+        research_safety_certificate:,
       )
     end
 
@@ -325,7 +325,7 @@ RSpec.describe "Reserving an instrument using quick reservations", feature_setti
     let!(:instrument) { create(:instrument_requiring_approval, :timer, min_reserve_mins: 5) }
 
     context "when a non-admin user is on the list" do
-      let!(:product_user) { create(:product_user, product: instrument, user: user) }
+      let!(:product_user) { create(:product_user, product: instrument, user:) }
 
       it "can start a reservation right now" do
         choose "30 mins"

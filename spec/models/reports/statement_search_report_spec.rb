@@ -136,7 +136,7 @@ RSpec.describe Reports::StatementSearchReport do
     let(:invoice_date) { 3.days.ago.to_date }
 
     before do
-      statement.update(invoice_date: invoice_date)
+      statement.update(invoice_date:)
     end
 
     it "includes invoice_date in CSV headers" do

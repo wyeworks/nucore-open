@@ -16,7 +16,7 @@ RSpec.describe(
   let!(:bundle) { create(:bundle, facility:, bundle_products: [item, instrument]) }
   let(:other_facility) { create(:setup_facility) }
   let!(:other_item) { create(:setup_item, facility: other_facility, cross_core_ordering_available: true) }
-  let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group: price_group) }
+  let!(:other_item_price_policy) { create(:item_price_policy, product: other_item, price_group:) }
   let!(:item_without_price_policy) { create(:setup_item, facility:) }
 
   before { login_as director }
@@ -45,18 +45,18 @@ RSpec.describe(
 
     wait_for_ajax
 
-    within '#estimate_estimate_details' do
-      all('tr').each do |row|
-        columns = row.all('td')
+    within "#estimate_estimate_details" do
+      all("tr").each do |row|
+        columns = row.all("td")
         first_column_text = columns[0].text
         product = bundle.products.find { |p| p.name == first_column_text }
 
         # Quantity
-        second_column_field = columns[1].find('input')
+        second_column_field = columns[1].find("input")
         second_column_field.fill_in with: "2"
 
         if product.is_a?(Instrument)
-          third_column_field = columns[2].find('input')
+          third_column_field = columns[2].find("input")
           third_column_field.fill_in with: "1:30"
         end
       end
@@ -70,9 +70,9 @@ RSpec.describe(
 
     wait_for_ajax
 
-    within '#estimate_estimate_details' do
-      other_item_row = all('tr').last
-      columns = other_item_row.all('td')
+    within "#estimate_estimate_details" do
+      other_item_row = all("tr").last
+      columns = other_item_row.all("td")
       first_column_text = columns[0].text
       expect(first_column_text).to eq "#{other_item.name} (#{other_facility.name})"
     end
@@ -85,9 +85,9 @@ RSpec.describe(
 
     wait_for_ajax
 
-    within '#estimate_estimate_details' do
-      item_without_price_policy_row = all('tr').last
-      columns = item_without_price_policy_row.all('td')
+    within "#estimate_estimate_details" do
+      item_without_price_policy_row = all("tr").last
+      columns = item_without_price_policy_row.all("td")
       first_column_text = columns[0].text
       expect(first_column_text).to have_content(item_without_price_policy.name)
     end
@@ -99,14 +99,14 @@ RSpec.describe(
 
     expect(page).not_to have_content "Estimate successfully created"
 
-    within '#estimate_estimate_details' do
-      item_without_price_policy_row = all('tr').last
-      columns = item_without_price_policy_row.all('td')
+    within "#estimate_estimate_details" do
+      item_without_price_policy_row = all("tr").last
+      columns = item_without_price_policy_row.all("td")
       first_column_text = columns[0].text
       expect(first_column_text).to have_content(item_without_price_policy.name)
       expect(first_column_text).to have_content("No price policy found.")
 
-      remove_button = columns[3].find('.remove-estimate-detail')
+      remove_button = columns[3].find(".remove-estimate-detail")
       remove_button.click
     end
 
@@ -155,7 +155,7 @@ RSpec.describe(
 
     wait_for_ajax
 
-    within '#estimate_estimate_details' do
+    within "#estimate_estimate_details" do
       expect(page).to have_content item.name
     end
 

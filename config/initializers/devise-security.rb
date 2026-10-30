@@ -58,13 +58,11 @@ module Devise
   module Models
     module SecureValidatable
       module ClassMethods
-
         private
 
         def devise_validation_enabled?
           true
         end
-
       end
     end
   end

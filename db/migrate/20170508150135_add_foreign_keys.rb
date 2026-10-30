@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddForeignKeys < ActiveRecord::Migration[4.2]
-
   def change
     add_index :notifications, [:subject_id, :subject_type]
     add_index :order_statuses, :parent_id
@@ -29,5 +28,4 @@ class AddForeignKeys < ActiveRecord::Migration[4.2]
     add_foreign_key :user_roles, :facilities
     add_foreign_key :user_roles, :users
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class FacilityOccupanciesController < ApplicationController
-
     include OrderDetailsCsvExport
     include SortableColumnController
     include NewInprocessController
@@ -71,7 +69,5 @@ module SecureRooms
         "entry_at" => "secure_rooms_occupancies.entry_at",
       )
     end
-
   end
-
 end

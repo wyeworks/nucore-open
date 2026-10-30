@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class UpcomingOfflineReservationMailer < ApplicationMailer
-
   include OfflineReservationArguments
 
   attr_reader :reservation
 
   def send_offline_instrument_warning(reservation)
     @reservation = reservation
-    mail(to: recipient.email, subject: subject)
+    mail(to: recipient.email, subject:)
   end
 
   private
@@ -21,5 +20,4 @@ class UpcomingOfflineReservationMailer < ApplicationMailer
     text("views.upcoming_offline_reservation_mailer.subject",
          instrument: reservation.product)
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Journals::Closer
-
   attr_reader :journal, :params
 
   def initialize(journal, params)
@@ -55,7 +54,7 @@ class Journals::Closer
       journal.order_details.update_all(
         state: "reconciled",
         order_status_id: OrderStatus.reconciled.id,
-        reconciled_at: reconciled_at,
+        reconciled_at:,
         updated_at: Time.current,
       )
     else
@@ -82,5 +81,4 @@ class Journals::Closer
       OrderDetailNoticesUpdateJob.perform_later(order_detail)
     end
   end
-
 end

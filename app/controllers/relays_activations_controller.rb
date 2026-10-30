@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RelaysActivationsController < ApplicationController
-
   before_action :init_current_facility
   authorize_resource :facility
 
@@ -11,8 +10,8 @@ class RelaysActivationsController < ApplicationController
     redirect_to facility_instruments_path(current_facility), flash: { notice: text("turned_on") }
   rescue NetBooter::Error => e
     ActiveSupport::Notifications.instrument(
-        "background_error",
-        exception: e
+      "background_error",
+      exception: e,
     )
     redirect_to facility_instruments_path(current_facility), flash: { alert: text("connection_error") }
   end
@@ -31,5 +30,4 @@ class RelaysActivationsController < ApplicationController
   def relays
     current_facility.instruments.includes(:relay).select(&:has_real_relay?).map(&:relay)
   end
-
 end

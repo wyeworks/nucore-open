@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductAccessGroup < ApplicationRecord
-
   belongs_to :product
   has_many :product_users, dependent: :nullify
   has_many :users, through: :product_users
@@ -15,5 +14,4 @@ class ProductAccessGroup < ApplicationRecord
   def to_s
     name
   end
-
 end

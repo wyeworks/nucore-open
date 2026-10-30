@@ -89,10 +89,10 @@ RSpec.describe InstrumentPricePolicy do
 
   let(:product) { create(:setup_instrument, skip_schedule_rules: true) }
   let!(:rules) do
-    create(:schedule_rule, product: product, start_hour: 0, end_hour: 17)
-    create(:schedule_rule, product: product, start_hour: 17, end_hour: 21, discount_percent: 20)
+    create(:schedule_rule, product:, start_hour: 0, end_hour: 17)
+    create(:schedule_rule, product:, start_hour: 17, end_hour: 21, discount_percent: 20)
   end
-  let(:policy) { create :instrument_price_policy, usage_rate: 60, product: product }
+  let(:policy) { create :instrument_price_policy, usage_rate: 60, product: }
 
   subject(:calculation) { policy.calculate_cost_and_subsidy reservation }
 
@@ -153,7 +153,6 @@ RSpec.describe InstrumentPricePolicy do
       let(:usage)   { { cost: 105, subsidy: 0 } }
       let(:overage) { { cost: 120, subsidy: 0 } }
     end
-
   end
 
   context "with a subsidized price" do
@@ -206,7 +205,6 @@ RSpec.describe InstrumentPricePolicy do
       let(:usage)   { { cost: 105, subsidy: 35 } }
       let(:overage) { { cost: 120, subsidy: 40 } }
     end
-
   end
 
   context "with a minimum cost" do
@@ -259,6 +257,5 @@ RSpec.describe InstrumentPricePolicy do
       let(:usage)   { { cost: 105, subsidy: 0 } }
       let(:overage) { { cost: 120, subsidy: 0 } }
     end
-
   end
 end

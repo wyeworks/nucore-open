@@ -1,14 +1,11 @@
 # frozen_string_literal: true
 
 class UsersController < ApplicationController
-
   module Overridable
-
     # Should be overridden by custom lookups (e.g. LDAP)
     def service_username_lookup(_username)
       nil
     end
-
   end
 
   include Overridable
@@ -230,6 +227,7 @@ class UsersController < ApplicationController
 
   def username_lookup(username)
     return nil if username.blank?
+
     username_database_lookup(username.strip) || service_username_lookup(username.strip)
   end
 
@@ -240,7 +238,7 @@ class UsersController < ApplicationController
   def save_user_success(user)
     flash[:notice] = creation_success_flash_text(user, current_facility)
 
-    Notifier.new_user(user: user, password: user.password).deliver_later
+    Notifier.new_user(user:, password: user.password).deliver_later
     redirect_to facility_users_path(user: user.id)
   end
 
@@ -251,5 +249,4 @@ class UsersController < ApplicationController
       flash[key] = message
     end
   end
-
 end

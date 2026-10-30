@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   module LinkCollectionExtension
-
     extend ActiveSupport::Concern
 
     included do
@@ -26,7 +24,5 @@ module SangerSequencing
     def sanger_ability
       SangerSequencing::Ability.new(user, facility)
     end
-
   end
-
 end

@@ -3,7 +3,6 @@
 # For having more conveniently named route helpers so you don't always
 # have to include current_facility, etc.
 module RoutesHelper
-
   def manage_order_detail_path(order_detail)
     manage_facility_order_order_detail_path(order_detail.facility, order_detail.order, order_detail)
   end
@@ -61,5 +60,4 @@ module RoutesHelper
   def order_detail_first_template_result_path(order_detail)
     stored_file_path(order_detail.stored_files.template_result.first)
   end
-
 end

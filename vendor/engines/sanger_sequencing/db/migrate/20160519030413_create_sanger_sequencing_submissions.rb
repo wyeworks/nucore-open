@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateSangerSequencingSubmissions < ActiveRecord::Migration[4.2]
-
   def up
     create_table :sanger_sequencing_submissions do |t|
       t.integer :order_detail_id
@@ -28,5 +27,4 @@ class CreateSangerSequencingSubmissions < ActiveRecord::Migration[4.2]
     drop_table :sanger_sequencing_samples
     drop_table :sanger_sequencing_submissions
   end
-
 end

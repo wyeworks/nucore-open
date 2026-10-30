@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Accessories::Scaling::Default < SimpleDelegator
-
   attr_accessor :enabled
 
   def to_model
@@ -41,5 +40,4 @@ class Accessories::Scaling::Default < SimpleDelegator
       equal? other
     end
   end
-
 end

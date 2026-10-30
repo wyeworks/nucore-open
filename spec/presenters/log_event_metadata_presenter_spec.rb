@@ -17,14 +17,14 @@ RSpec.describe LogEventMetadataPresenter do
   describe "#details" do
     it "pairs each label with its joined values" do
       presenter = presenter_for(
-        { deposit_numbers: ["TX-1", "TX-2"], reconciled_notes: ["Paid late", "Partial"] }
+        { deposit_numbers: ["TX-1", "TX-2"], reconciled_notes: ["Paid late", "Partial"] },
       )
 
       expect(presenter.details).to eq(
         [
           [deposit_number_label, "TX-1, TX-2"],
           [reconciled_note_label, "Paid late; Partial"],
-        ]
+        ],
       )
     end
 
@@ -44,7 +44,7 @@ RSpec.describe LogEventMetadataPresenter do
       presenter = presenter_for({ deposit_numbers: ["TX-1"], reconciled_notes: ["Paid late"] })
 
       expect(presenter.to_s).to eq(
-        "#{deposit_number_label}: TX-1 #{reconciled_note_label}: Paid late"
+        "#{deposit_number_label}: TX-1 #{reconciled_note_label}: Paid late",
       )
     end
 

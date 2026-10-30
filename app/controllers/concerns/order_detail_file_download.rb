@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module OrderDetailFileDownload
-
   extend ActiveSupport::Concern
 
   def sample_results
@@ -13,5 +12,4 @@ module OrderDetailFileDownload
     authorize! :template_results, @order_detail
     redirect_to @order_detail.stored_files.template_result.find(params[:stored_file_id]).download_url, allow_other_host: true
   end
-
 end

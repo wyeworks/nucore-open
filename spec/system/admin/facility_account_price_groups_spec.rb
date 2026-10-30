@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe(
   "Account Price Group tab",
-  feature_setting: { "accounts.show_account_price_groups_tab" => true }
+  feature_setting: { "accounts.show_account_price_groups_tab" => true },
 ) do
   let(:facility) { Facility.cross_facility }
   let(:account) { create(:account, :with_account_owner) }
@@ -22,11 +22,11 @@ RSpec.describe(
     before do
       AccountPriceGroupMember.create(
         price_group: internal_price_group,
-        account:
+        account:,
       )
       AccountPriceGroupMember.create(
         price_group: global_price_group,
-        account:
+        account:,
       )
     end
 
@@ -85,7 +85,6 @@ RSpec.describe(
 
         expect(page).to have_content("Sorry, you don't have permission to access this page")
       end
-
     end
 
     context "with authorized user" do

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StoredFileZipper
-
   attr_reader :files
 
   def initialize(files)
@@ -10,6 +9,7 @@ class StoredFileZipper
 
   def read
     return @read if @read
+
     zip_io = build_zip
     zip_io.rewind
     @read = zip_io.read
@@ -39,5 +39,4 @@ class StoredFileZipper
       file.name
     end
   end
-
 end

@@ -5,7 +5,6 @@ module SecureRooms
   # they created to host them. Storing this info in NUcore will make it easier
   # to debug issues and maintain consistency of this data.
   class EthernetPortsController < ApplicationController
-
     admin_tab :all
 
     before_action :init_current_facility

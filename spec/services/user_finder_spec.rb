@@ -6,21 +6,21 @@ RSpec.describe UserFinder do
   describe ".search" do
     it "finds users by first_name" do
       first_name = SecureRandom.hex(8)
-      user = FactoryBot.create(:user, first_name: first_name)
+      user = FactoryBot.create(:user, first_name:)
       found_users = UserFinder.search(first_name)
       expect(found_users).to include(user)
     end
 
     it "finds users by last_name" do
       last_name = SecureRandom.hex(8)
-      user = FactoryBot.create(:user, last_name: last_name)
+      user = FactoryBot.create(:user, last_name:)
       found_users = UserFinder.search(last_name)
       expect(found_users).to include(user)
     end
 
     it "finds users by username" do
       username = SecureRandom.hex(8)
-      user = FactoryBot.create(:user, username: username)
+      user = FactoryBot.create(:user, username:)
       found_users = UserFinder.search(username)
       expect(found_users).to include(user)
     end
@@ -28,14 +28,14 @@ RSpec.describe UserFinder do
     it "finds users by their first_name and last_name joined together" do
       first_name = SecureRandom.hex(8)
       last_name = SecureRandom.hex(8)
-      user = FactoryBot.create(:user, first_name: first_name, last_name: last_name)
+      user = FactoryBot.create(:user, first_name:, last_name:)
       found_users = UserFinder.search([first_name, last_name].join)
       expect(found_users).to include(user)
     end
 
     it "finds users by email" do
       email = "#{SecureRandom.hex(8)}@example.com"
-      user = FactoryBot.create(:user, email: email)
+      user = FactoryBot.create(:user, email:)
       found_users = UserFinder.search(email)
       expect(found_users).to include(user)
     end
@@ -44,7 +44,7 @@ RSpec.describe UserFinder do
   describe ".search_with_count" do
     it "searches and returns a count" do
       first_name = SecureRandom.hex(8)
-      user = FactoryBot.create(:user, first_name: first_name)
+      user = FactoryBot.create(:user, first_name:)
       found_users, count = UserFinder.search_with_count(first_name)
       expect(found_users).to include(user)
       expect(count).to eq(1)

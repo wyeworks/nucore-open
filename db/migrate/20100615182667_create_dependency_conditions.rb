@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateDependencyConditions < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :dependency_conditions do |t|
       # Context
@@ -29,5 +28,4 @@ class CreateDependencyConditions < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :dependency_conditions
   end
-
 end

@@ -1,7 +1,5 @@
 module FullTextSearch
-
   class BaseSearcher
-
     def initialize(scope)
       @scope = scope
     end
@@ -13,7 +11,5 @@ module FullTextSearch
     def search(fields, query)
       raise NotImplementedError
     end
-
   end
-
 end

@@ -22,7 +22,7 @@ RSpec.describe OrderDetailBatchUpdater do
   let(:order_detail) { order.order_details.first }
   let(:order_status_id) { "" }
   let(:params) do
-    { assigned_user_id: assigned_user_id, order_status_id: order_status_id }
+    { assigned_user_id:, order_status_id: }
   end
   let(:user) { create(:user) }
 
@@ -121,7 +121,7 @@ RSpec.describe OrderDetailBatchUpdater do
           context "when the assignment notifications are on", feature_setting: { "notifications.order_assignment_notifications": true } do
             it "sends the assignee one notification" do
               expect { updater.update! }.to(
-                enqueue_mail(OrderAssignmentMailer, :notify_assigned_user)
+                enqueue_mail(OrderAssignmentMailer, :notify_assigned_user),
               )
             end
           end
@@ -244,7 +244,7 @@ RSpec.describe OrderDetailBatchUpdater do
 
         it "does not call the service" do
           expect(ProductNotifications::SlotAvailableService).not_to(
-            receive(:from_reservation)
+            receive(:from_reservation),
           )
 
           updater.update!
@@ -267,7 +267,7 @@ RSpec.describe OrderDetailBatchUpdater do
             skip "Only applies to orders with reservations" if order_detail.reservation.blank?
 
             expect(ProductNotifications::SlotAvailableService).to(
-              receive_message_chain("from_reservation.notify_later")
+              receive_message_chain("from_reservation.notify_later"),
             )
 
             updater.update!
@@ -279,7 +279,7 @@ RSpec.describe OrderDetailBatchUpdater do
 
           it "does not call the service" do
             expect(ProductNotifications::SlotAvailableService).not_to(
-              receive(:from_reservation)
+              receive(:from_reservation),
             )
 
             updater.update!
@@ -296,16 +296,16 @@ RSpec.describe OrderDetailBatchUpdater do
           [order_detail.id],
           facility,
           user,
-          { project_id: project_id },
+          { project_id: },
           record_type,
         )
       end
 
       shared_examples_for "batch updating project_id" do
-        let(:other_project) { create(:project, facility: facility) }
+        let(:other_project) { create(:project, facility:) }
 
         context "when project_id is already set" do
-          let(:existing_project) { create(:project, facility: facility) }
+          let(:existing_project) { create(:project, facility:) }
 
           before { order_detail.update_attribute(:project_id, existing_project.id) }
 

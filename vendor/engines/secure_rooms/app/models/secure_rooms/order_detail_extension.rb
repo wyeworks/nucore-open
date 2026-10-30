@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module OrderDetailExtension
-
     extend ActiveSupport::Concern
 
     included do
@@ -13,7 +11,5 @@ module SecureRooms
 
       scope :occupancies, -> { for_product_type("SecureRoom") }
     end
-
   end
-
 end

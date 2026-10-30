@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class SangerProductsController < BaseController
     before_action :set_resources
     before_action { @active_tab = "admin_products" }
@@ -44,10 +43,9 @@ module SangerSequencing
 
     def set_resources
       @product = current_facility.products.find_by!(
-        url_name: params[:service_id]
+        url_name: params[:service_id],
       )
       @sanger_product = @product.sanger_product || @product.create_sanger_product
     end
   end
-
 end

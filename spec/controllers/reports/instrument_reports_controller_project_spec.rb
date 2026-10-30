@@ -4,16 +4,16 @@ require "rails_helper"
 
 RSpec.describe Reports::InstrumentReportsController do
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:instrument) { FactoryBot.create(:setup_instrument, :timer, facility: facility) }
+  let(:instrument) { FactoryBot.create(:setup_instrument, :timer, facility:) }
   let!(:reservation) { FactoryBot.create(:completed_reservation, product: instrument) }
   let!(:no_project_reservation) { FactoryBot.create(:completed_reservation, product: instrument) }
   let(:order_detail) { reservation.order_detail }
-  let(:project) { FactoryBot.create(:project, facility: facility) }
-  let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
+  let(:project) { FactoryBot.create(:project, facility:) }
+  let(:user) { FactoryBot.create(:user, :facility_director, facility:) }
 
   describe "the project report" do
     before do
-      order_detail.update(project: project)
+      order_detail.update(project:)
       sign_in user
       get :index, params: { report_by: :project, facility_id: facility.url_name,
                             date_start: 1.month.ago.to_date.iso8601, date_end: Time.current.to_date.iso8601 }, xhr: true

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccessoriesController < ApplicationController
-
   load_resource :order
   load_resource :order_detail, through: :order
 
@@ -77,5 +76,4 @@ class AccessoriesController < ApplicationController
     request.xhr?
   end
   helper_method :modal?
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   class RemainderApplier
-
     attr_reader :original, :split_objects, :splits
 
     # split_objects and splits must have the same order
@@ -48,7 +46,5 @@ module SplitAccounts
         sum + item.public_send(attribute)
       end
     end
-
   end
-
 end

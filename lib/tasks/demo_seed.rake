@@ -15,7 +15,7 @@ namespace :demo do
     canceled   = OrderStatus.find_or_create_by!(name: "Canceled")
     complete   = OrderStatus.find_or_create_by!(name: "Complete")
     reconciled = OrderStatus.find_or_create_by!(name: "Reconciled")
-    unrecoverable  = OrderStatus.find_or_create_by!(name: "Unrecoverable")
+    unrecoverable = OrderStatus.find_or_create_by!(name: "Unrecoverable")
 
     facility = Facility.find_or_create_by!(url_name: "example") do |example_facility|
       example_facility.name = "Example Facility"
@@ -68,7 +68,7 @@ namespace :demo do
 
     Settings.price_group.name.to_hash.each do |k, v|
       price_group = PriceGroup.setup_global(
-        name: v, is_internal: (k == :base || k == :cancer_center)
+        name: v, is_internal: (k == :base || k == :cancer_center),
       )
 
       if k == :base
@@ -233,7 +233,7 @@ namespace :demo do
 
     unless bundle
       bundle = Bundle.create!(facility_id: facility.id,
-                              account:  Settings.accounts.product_default,
+                              account: Settings.accounts.product_default,
                               name: "Example Bundle",
                               url_name: "example-bundle",
                               description: "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus non ipsum id odio cursus euismod eu bibendum nisl. Sed nec.</p>",
@@ -243,8 +243,8 @@ namespace :demo do
                               facility_account_id: fa.id)
     end
 
-    BundleProduct.create(bundle: bundle, product: item, quantity: 1)
-    BundleProduct.create(bundle: bundle, product: service, quantity: 1)
+    BundleProduct.create(bundle:, product: item, quantity: 1)
+    BundleProduct.create(bundle:, product: service, quantity: 1)
 
     @item          = item
     @service       = service
@@ -267,8 +267,8 @@ namespace :demo do
 
     PriceGroup.globals.each do |price_group|
       sr.price_group_discounts.create(
-        price_group: price_group,
-        discount_percent: 0
+        price_group:,
+        discount_percent: 0,
       )
     end
 
@@ -362,9 +362,9 @@ namespace :demo do
     user_student2 = User.find_by(username: "sst456@example.com")
     unless user_student2
       user_student2 = User.new(username: "sst456@example.com",
-                              email: "sst456@example.com",
-                              first_name: "Greg",
-                              last_name: "Student")
+                               email: "sst456@example.com",
+                               first_name: "Greg",
+                               last_name: "Student")
       user_student2.password = "P@ssw0rd!!"
       user_student2.save!
     end
@@ -416,9 +416,9 @@ namespace :demo do
     user_director2 = User.find_by(username: "ddi456@example.com")
     unless user_director2
       user_director2 = User.new(username: "ddi456@example.com",
-                               email: "ddi456@example.com",
-                               first_name: "Eric",
-                               last_name: "Facililty Director")
+                                email: "ddi456@example.com",
+                                first_name: "Eric",
+                                last_name: "Facililty Director")
       user_director2.password = "P@ssw0rd!!"
       user_director2.save
       UserRole.grant(user_director2, UserRole::FACILITY_DIRECTOR, facility2)
@@ -486,7 +486,7 @@ namespace :demo do
     nufs_account_attributes = {
       expires_at: 1.year.from_now,
       created_by: user_director.id,
-      account_users_attributes: account_users_attributes,
+      account_users_attributes:,
     }
     account_purchaser_attributes = {
       user_id: user_student2.id,
@@ -548,7 +548,7 @@ namespace :demo do
         split_account = builder.new(account_type: "SplitAccounts::SplitAccount",
                                     current_user: user_director,
                                     owner_user: user_pi,
-                                    params: params).build
+                                    params:).build
 
         split_account.account_users.build(user_id: user_student.id,
                                           user_role: "Purchaser",
@@ -559,7 +559,7 @@ namespace :demo do
         split_account = builder.new(account_type: "SplitAccounts::SplitAccount",
                                     current_user: user_director2,
                                     owner_user: user_pi,
-                                    params: params).build
+                                    params:).build
 
         split_account.account_users.build(user_id: user_student2.id,
                                           user_role: "Purchaser",
@@ -584,7 +584,7 @@ namespace :demo do
                                               affiliate_id: other_affiliate.id,
                                               affiliate_other: "Some Affiliate",
                                               facilities: [facility],
-                                              account_users_attributes: account_users_attributes)
+                                              account_users_attributes:)
       end
 
       poaccount = PurchaseOrderAccount.find_by(account_number: "12345")
@@ -598,7 +598,7 @@ namespace :demo do
                                                  affiliate_id: other_affiliate.id,
                                                  affiliate_other: "Some Affiliate",
                                                  remittance_information: "Billing Dept\nEdward External\n1702 E Research Dr\nAuburn, AL 36830",
-                                                 account_users_attributes: account_users_attributes)
+                                                 account_users_attributes:)
       end
     end
 
@@ -676,6 +676,7 @@ namespace :demo do
     # create a valid order detail (with price policy and costs)
     products = [@service, @instrument, @item, @bundle]
     return nil if products.empty?
+
     i = 1
     begin
       product = products[rand(products.length)]
@@ -692,11 +693,11 @@ namespace :demo do
             estimated_cost: rand(2),
             estimated_subsidy: 0,
             quantity: bp.quantity,
-            created_at: created_at,
+            created_at:,
             bundle_product_id: product.id,
-            group_id: group_id,
+            group_id:,
             order_status_id: bp.product.initial_order_status.id,
-            ordered_at: ordered_at,
+            ordered_at:,
           )
           od.account = account
           od.save!
@@ -713,7 +714,7 @@ namespace :demo do
           quantity: product.is_a?(Item) ? (rand(3) + 1) : 1,
           created_at: (ordered_at - (60 * rand(60) + 1)),
           order_status_id: product.initial_order_status.id,
-          ordered_at: ordered_at,
+          ordered_at:,
         )
 
         # create a reservation
@@ -731,7 +732,7 @@ namespace :demo do
                           when Instrument then InstrumentPricePolicy.first
                           when Item then ItemPricePolicy.first
                           when Service then ServicePricePolicy.first
-                        end
+                          end
 
         od.order_status_id ||= od.product.initial_order_status_id
         od.save!

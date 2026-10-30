@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module FacilityReservationsHelper
-
   def offline_category_collection
     I18n.t("offline_reservations.categories").invert.to_a
   end
@@ -43,5 +42,4 @@ module FacilityReservationsHelper
                                                     reservation.product,
                                                     reservation)
   end
-
 end

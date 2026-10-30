@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ReservationUserActionPresenter
-
   attr_accessor :reservation, :controller
+
   delegate :order_detail, :order, :facility, :product, :admin?,
            :can_switch_instrument?, :can_switch_instrument_on?, :can_switch_instrument_off?,
            :can_cancel?, :movable_to_now?, :can_customer_edit?, :started?, :ongoing?, to: :reservation
@@ -101,12 +101,14 @@ class ReservationUserActionPresenter
       link_to I18n.t("reservations.switch.start"),
               order_order_detail_reservation_switch_instrument_path(
                 order, order_detail, reservation,
-                switch: "on", reservation_started: "on")
+                switch: "on", reservation_started: "on"
+              )
     elsif can_switch_instrument_off?
       link_to I18n.t("reservations.switch.end"),
               order_order_detail_reservation_switch_instrument_path(
                 order, order_detail, reservation,
-                switch: "off", reservation_ended: "on"),
+                switch: "off", reservation_ended: "on"
+              ),
               class: end_reservation_class(reservation),
               data: { refresh_on_cancel: true }
     end
@@ -164,5 +166,4 @@ class ReservationUserActionPresenter
   def modal_display?
     @redirect_to_order_id.present?
   end
-
 end

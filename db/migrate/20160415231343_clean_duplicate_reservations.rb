@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
-
   class Reservation < ActiveRecord::Base
   end
 
@@ -13,7 +12,7 @@ class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
                                                .pluck(:order_detail_id)
 
     order_details_with_multiple_reservations.each do |order_detail_id|
-      Reservation.where(order_detail_id: order_detail_id).last.destroy
+      Reservation.where(order_detail_id:).last.destroy
     end
     if Nucore::Database.oracle?
       begin
@@ -31,5 +30,4 @@ class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
       add_index :reservations, :order_detail_id, name: "i_reservations_order_detail_id", tablespace: "bc_nucore"
     end
   end
-
 end

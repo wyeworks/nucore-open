@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RemoveReviewableState < ActiveRecord::Migration[4.2]
-
   def self.up
     reviewable = OrderStatus.find_by(name: "Reviewable")
     inprocess = OrderStatus.in_process
@@ -25,5 +24,4 @@ class RemoveReviewableState < ActiveRecord::Migration[4.2]
   def self.down
     OrderStatus.create!(name: "Reviewable")
   end
-
 end

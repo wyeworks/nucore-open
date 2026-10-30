@@ -1,7 +1,6 @@
 require "rails_helper"
 
 RSpec.describe Users::ConvertExternalToInternalUser do
-
   describe "successful conversion" do
     let(:user) { create(:user, :external, email: "external@example.org", username: "external@example.org") }
     let(:converter) { described_class.new(user.email, "netid") }
@@ -36,7 +35,7 @@ RSpec.describe Users::ConvertExternalToInternalUser do
   describe "when the lookup updates the email and name" do
     class TestUpdatingLookup
       def call(username)
-        User.new(username: username, email: "newemail@example.org", first_name: "New")
+        User.new(username:, email: "newemail@example.org", first_name: "New")
       end
     end
 
@@ -67,5 +66,4 @@ RSpec.describe Users::ConvertExternalToInternalUser do
       expect { converter.convert! }.to raise_error(/not found in directory/)
     end
   end
-
 end

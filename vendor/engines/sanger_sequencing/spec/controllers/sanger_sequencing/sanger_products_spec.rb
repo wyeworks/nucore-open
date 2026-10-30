@@ -19,7 +19,7 @@ RSpec.describe SangerSequencing::SangerProductsController do
       expect { do_request }.to(
         change do
           service.reload.sanger_product
-        end.from(nil).to(SangerSequencing::SangerProduct)
+        end.from(nil).to(SangerSequencing::SangerProduct),
       )
     end
   end
@@ -63,10 +63,10 @@ RSpec.describe SangerSequencing::SangerProductsController do
         change do
           service.reload.sanger_product.as_json(only: %i[needs_primer group])
         end.from(
-          { "needs_primer" => false, "group" => "default" }
+          { "needs_primer" => false, "group" => "default" },
         ).to(
-          sanger_product_json
-        )
+          sanger_product_json,
+        ),
       )
     end
   end

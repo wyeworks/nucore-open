@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe "log_events", type: :request do
   describe "index" do
@@ -74,7 +74,7 @@ RSpec.describe "log_events", type: :request do
       let(:reconciled_note_label) { OrderDetail.human_attribute_name(:reconciled_note) }
       let(:csv) do
         Reports::LogEventsReport.new(
-          start_date: nil, end_date: nil, events: ["statement.unreconciled"], query: nil
+          start_date: nil, end_date: nil, events: ["statement.unreconciled"], query: nil,
         ).to_csv
       end
 

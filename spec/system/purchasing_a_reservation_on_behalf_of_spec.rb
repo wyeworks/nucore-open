@@ -3,15 +3,14 @@
 require "rails_helper"
 
 RSpec.describe "Purchasing a reservation on behalf of another user" do
-
   let!(:instrument) { FactoryBot.create(:setup_instrument) }
   let!(:facility) { instrument.facility }
   let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user) }
   let!(:price_policy) { FactoryBot.create(:instrument_price_policy, price_group: PriceGroup.base, product: instrument, start_date: 2.days.ago) }
   let(:user) { FactoryBot.create(:user) }
-  let(:facility_admin) { FactoryBot.create(:user, :facility_administrator, facility: facility) }
+  let(:facility_admin) { FactoryBot.create(:user, :facility_administrator, facility:) }
   let!(:account_price_group_member) do
-    FactoryBot.create(:account_price_group_member, account: account, price_group: price_policy.price_group)
+    FactoryBot.create(:account_price_group_member, account:, price_group: price_policy.price_group)
   end
 
   before do

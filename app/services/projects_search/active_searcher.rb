@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ProjectsSearch
-
   class ActiveSearcher < BaseSearcher
     def options
       ["active", "inactive"]
@@ -26,7 +25,5 @@ module ProjectsSearch
     def input_type
       :select
     end
-
   end
-
 end

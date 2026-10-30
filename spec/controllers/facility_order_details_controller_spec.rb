@@ -13,16 +13,14 @@ RSpec.describe FacilityOrderDetailsController do
   before(:each) do
     @authable = FactoryBot.create(:setup_facility)
     @product = FactoryBot.create(:item,
-                                 facility: @authable,
-                                )
+                                 facility: @authable)
     @account = create_nufs_account_with_owner :director
     @order = FactoryBot.create(:order,
                                facility: @authable,
                                user: @director,
                                created_by: @director.id,
                                account: @account,
-                               state: "purchased",
-                              )
+                               state: "purchased")
     @price_group = FactoryBot.create(:price_group, facility: @authable)
     @price_policy = FactoryBot.create(:item_price_policy, product: @product, price_group: @price_group)
     @order_detail = FactoryBot.create(:order_detail, order: @order, product: @product, price_policy: @price_policy, ordered_at: Time.current)
@@ -70,7 +68,7 @@ RSpec.describe FacilityOrderDetailsController do
                             ordered_at: Time.current,
                             fulfilled_at: Time.current,
                             account: @account,
-                            journal: journal)
+                            journal:)
         end
 
         before :each do

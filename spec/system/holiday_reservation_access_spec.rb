@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "Reserving an instrument on a holiday" do
-
   let(:user) { create(:user) }
   let!(:instrument) { create(:setup_instrument, restrict_holiday_access: true) }
   let(:facility) { instrument.facility }
@@ -21,7 +20,7 @@ RSpec.describe "Reserving an instrument on a holiday" do
 
   context "as a member of an approved group" do
     let!(:product_access_group) { create(:product_access_group, allow_holiday_access: true, product: instrument) }
-    let!(:product_user) { create(:product_user, user: user, product_access_group: product_access_group, product: instrument) }
+    let!(:product_user) { create(:product_user, user:, product_access_group:, product: instrument) }
 
     it "allows making a reservation" do
       click_link instrument.name
@@ -55,5 +54,4 @@ RSpec.describe "Reserving an instrument on a holiday" do
       end
     end
   end
-
 end

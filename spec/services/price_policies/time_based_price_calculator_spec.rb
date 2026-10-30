@@ -103,7 +103,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
       context "when there's no discount" do
         it "returns the usage cost" do
           expect(subject[:cost]).to be_within(0.0001).of(
-            usage_cost
+            usage_cost,
           )
         end
       end
@@ -328,7 +328,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     let(:product) do
       create(
         :setup_instrument,
-        pricing_mode: Instrument::Pricing::DURATION
+        pricing_mode: Instrument::Pricing::DURATION,
       )
     end
 
@@ -526,7 +526,7 @@ RSpec.describe PricePolicies::TimeBasedPriceCalculator do
     let(:product) do
       create(
         :setup_instrument,
-        pricing_mode: Instrument::Pricing::SCHEDULE_DAILY
+        pricing_mode: Instrument::Pricing::SCHEDULE_DAILY,
       )
     end
     let(:price_group) { create(:price_group) }

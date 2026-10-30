@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StatementCreator
-
   include DateHelper
 
   attr_accessor :order_detail_ids, :errors, :to_statement, :account_statements, :session_user, :current_facility, :parent_invoice_number, :invoice_date
@@ -55,7 +54,7 @@ class StatementCreator
         @to_statement[od.account] ||= []
         @to_statement[od.account] << od
       rescue => e
-        @errors << I18n.t("controllers.facility_statements.order_error", order_detail_id: order_detail_id)
+        @errors << I18n.t("controllers.facility_statements.order_error", order_detail_id:)
       end
     end
   end
@@ -66,7 +65,7 @@ class StatementCreator
       statement_attrs = {
         facility: order_details.first.facility,
         account_id: account.id,
-        created_by: session_user.id
+        created_by: session_user.id,
       }
 
       if invoice_date.present?

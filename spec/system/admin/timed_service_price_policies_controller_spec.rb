@@ -4,8 +4,8 @@ require "rails_helper"
 
 RSpec.describe TimedServicePricePoliciesController, :js do
   let(:facility) { create(:setup_facility) }
-  let!(:timed_service) { create(:timed_service, facility: facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let!(:timed_service) { create(:timed_service, facility:) }
+  let(:director) { create(:user, :facility_director, facility:) }
 
   let(:base_price_group) { PriceGroup.base }
   let(:external_price_group) { PriceGroup.external }
@@ -38,7 +38,7 @@ RSpec.describe TimedServicePricePoliciesController, :js do
     expect(page).to have_content("This is my note")
   end
 
-  it "can allow only some groups to purchase", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true }  do
+  it "can allow only some groups to purchase", feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
     visit facility_timed_services_path(facility, timed_service)
     click_link timed_service.name
     click_link "Pricing"
@@ -59,7 +59,7 @@ RSpec.describe TimedServicePricePoliciesController, :js do
 
   context "with duration pricing mode" do
     let!(:timed_service) do
-      create(:timed_service, facility: facility, pricing_mode: TimedService::Pricing::DURATION)
+      create(:timed_service, facility:, pricing_mode: TimedService::Pricing::DURATION)
     end
 
     it "can set up stepped price policies", :aggregate_failures, feature_setting: { "pricing.facility_directors_can_manage_price_groups" => true } do
@@ -102,7 +102,6 @@ RSpec.describe TimedServicePricePoliciesController, :js do
       expect(page).to have_content("$40.00\n$10.00\n= $30.00")
       expect(page).to have_content("$30.00\n$5.00\n= $25.00")
     end
-
   end
 
   describe "with required note enabled", feature_setting: { "pricing.price_policy_requires_note" => true, "pricing.facility_directors_can_manage_price_groups" => true } do

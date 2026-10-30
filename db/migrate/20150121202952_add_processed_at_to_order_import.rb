@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddProcessedAtToOrderImport < ActiveRecord::Migration[4.2]
-
   def up
     add_column :order_imports, :processed_at, :timestamp, after: :created_by
 
@@ -13,5 +12,4 @@ class AddProcessedAtToOrderImport < ActiveRecord::Migration[4.2]
   def down
     remove_column :order_imports, :processed_at
   end
-
 end

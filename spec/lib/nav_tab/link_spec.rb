@@ -6,10 +6,10 @@ RSpec.describe NavTab::Link do
   let(:cross_facility) { false }
   let(:link) do
     described_class.new(
-      cross_facility: cross_facility,
-      tab: tab,
-      text: text,
-      url: url,
+      cross_facility:,
+      tab:,
+      text:,
+      url:,
     )
   end
   let(:tab) { "admin_billing" }
@@ -20,7 +20,7 @@ RSpec.describe NavTab::Link do
     let(:active_tab) { nil }
     let(:cross_facility?) { nil }
     let(:controller) do
-      OpenStruct.new(active_tab: active_tab, cross_facility?: cross_facility?)
+      OpenStruct.new(active_tab:, cross_facility?: cross_facility?)
     end
     subject { link.active?(controller) }
 

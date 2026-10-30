@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StoredFile < ApplicationRecord
-
   include DownloadableFile
 
   belongs_to              :product, optional: true
@@ -47,5 +46,4 @@ class StoredFile < ApplicationRecord
   def type_inquirer
     ActiveSupport::StringInquirer.new(file_type)
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReservationInstrumentSwitcher
-
   attr_reader :reservation
 
   def initialize(reservation)
@@ -64,5 +63,4 @@ class ReservationInstrumentSwitcher
   def cannot_switch_instrument!
     raise NUCore::Error, I18n.t("reservations.instrument_switcher.cannot_switch_error")
   end
-
 end

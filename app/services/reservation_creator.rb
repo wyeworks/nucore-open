@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReservationCreator
-
   attr_reader :order, :order_detail, :params, :error
 
   delegate :merged_order?, :instrument_only_order?, to: :status_q
@@ -51,7 +50,7 @@ class ReservationCreator
         raise ActiveRecord::Rollback
       rescue ActiveRecord::RecordInvalid => e
         raise ActiveRecord::Rollback
-      rescue StandardError => e
+      rescue => e
         @error = I18n.t("orders.purchase.error", message: e.message).html_safe
         raise ActiveRecord::Rollback
       end
@@ -60,6 +59,7 @@ class ReservationCreator
 
   def reservation
     return @reservation if defined?(@reservation)
+
     @reservation = @order_detail.build_reservation
     @reservation.assign_attributes(reservation_create_params)
     @reservation.assign_times_from_params(reservation_create_params)
@@ -93,7 +93,7 @@ class ReservationCreator
           reservation_params.merge!(
             reserve_start_hour: 0,
             reserve_start_min: 0,
-            reserve_start_meridian: "AM"
+            reserve_start_meridian: "AM",
           )
         end
       end
@@ -155,7 +155,7 @@ class ReservationCreator
         acting_as: original_order.user,
         order_in_past: nil,
         params: ActionController::Parameters.new({}),
-        user: original_order.created_by
+        user: original_order.created_by,
       )
       order_purchaser.purchase_cross_core!
     end
@@ -167,5 +167,4 @@ class ReservationCreator
     accessorizer = Accessories::Accessorizer.new(@order_detail)
     accessorizer.update_accessorizer_attributes(accessory_params)
   end
-
 end

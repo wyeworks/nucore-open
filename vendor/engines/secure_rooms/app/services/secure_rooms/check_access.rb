@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class CheckAccess
-
     DEFAULT_RULES = [
       AccessRules::RequiresUserRule,
       AccessRules::OperatorRule,
@@ -29,7 +27,5 @@ module SecureRooms
         break result unless result.pass?
       end
     end
-
   end
-
 end

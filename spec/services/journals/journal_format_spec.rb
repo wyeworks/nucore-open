@@ -73,5 +73,4 @@ RSpec.describe Journals::JournalFormat do
       expect(format.options[:filename]).to eq("abcxy.txt")
     end
   end
-
 end

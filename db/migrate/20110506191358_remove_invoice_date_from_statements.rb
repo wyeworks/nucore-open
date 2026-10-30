@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RemoveInvoiceDateFromStatements < ActiveRecord::Migration[4.2]
-
   def self.up
     statements = Statement.all
     statements.each do |s|
@@ -17,5 +16,4 @@ class RemoveInvoiceDateFromStatements < ActiveRecord::Migration[4.2]
   def self.down
     raise ActiveRecord::IrreversibleMigration
   end
-
 end

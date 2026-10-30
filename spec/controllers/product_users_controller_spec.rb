@@ -7,13 +7,13 @@ RSpec.describe ProductUsersController do
   render_views
 
   let(:facility) { create(:setup_facility) }
-  let(:instrument) { create(:setup_instrument, facility: facility, requires_approval: true) }
+  let(:instrument) { create(:setup_instrument, facility:, requires_approval: true) }
   let(:user) { create(:user) }
   let(:admin) { create(:user, :administrator) }
-  let(:staff) { create(:user, :staff, facility: facility) }
+  let(:staff) { create(:user, :staff, facility:) }
 
   describe "index" do
-    let!(:user_product) { ProductUser.create(product: instrument, user: user, approved_by: admin.id, approved_at: Time.current) }
+    let!(:user_product) { ProductUser.create(product: instrument, user:, approved_by: admin.id, approved_at: Time.current) }
     let!(:staff_product) { ProductUser.create(product: instrument, user: staff, approved_by: admin.id, approved_at: Time.current) }
 
     def do_request
@@ -34,7 +34,6 @@ RSpec.describe ProductUsersController do
       expect(assigns[:product_users]).to be_nil
       expect(flash[:notice]).not_to be_empty
     end
-
   end
 
   describe "create" do
@@ -44,7 +43,7 @@ RSpec.describe ProductUsersController do
         post :new, params: {
           facility_id: facility.url_name,
           instrument_id: instrument.url_name,
-          user: user,
+          user:,
         }
       }.to change(ProductUser, :count).by(1)
       log_event = LogEvent.find_by(loggable: ProductUser.reorder(:id).last, event_type: :create)
@@ -56,7 +55,7 @@ RSpec.describe ProductUsersController do
     let(:level) { create(:product_access_group, product: instrument) }
     let(:level2) { create(:product_access_group, product: instrument) }
 
-    let!(:user_product) { create(:product_user, product: instrument, user: user, approved_by_user: admin) }
+    let!(:user_product) { create(:product_user, product: instrument, user:, approved_by_user: admin) }
     let!(:staff_product) { create(:product_user, product: instrument, user: staff, approved_by_user: admin) }
 
     it "updates the product_users" do
@@ -79,7 +78,7 @@ RSpec.describe ProductUsersController do
   end
 
   describe "destroy" do
-    let!(:user_product) { create(:product_user, product: instrument, user: user, approved_by_user: admin) }
+    let!(:user_product) { create(:product_user, product: instrument, user:, approved_by_user: admin) }
 
     it "destroys the association" do
       sign_in staff

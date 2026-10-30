@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   # When an order detail is tied to a split account, return a collection of
   # spoofed split order details. The split order details are read-only and
   # should never get persisted.
   class OrderDetailSplitter
-
     attr_accessor :order_detail, :account, :splits, :split_order_details
 
     # By default, for performance reasons, we won't also split timedata
@@ -34,12 +32,12 @@ module SplitAccounts
     private
 
     def order_detail_attribute_splitter
-      attributes = [
-        :quantity,
-        :actual_cost,
-        :actual_subsidy,
-        :estimated_cost,
-        :estimated_subsidy,
+      attributes = %i[
+        quantity
+        actual_cost
+        actual_subsidy
+        estimated_cost
+        estimated_subsidy
       ]
       attributes += [:calculated_cost, :calculated_subsidy] if @reporting
       AttributeSplitter.new(*attributes)
@@ -55,14 +53,14 @@ module SplitAccounts
     end
 
     def associations_to_copy
-      [
-        :product,
-        :journal,
-        :statement,
-        :order_status,
-        :price_policy,
-        :created_by_user,
-        :order,
+      %i[
+        product
+        journal
+        statement
+        order_status
+        price_policy
+        created_by_user
+        order
       ]
     end
 
@@ -94,6 +92,7 @@ module SplitAccounts
 
     def build_split_time_data(split_order_detail, split)
       return unless order_detail.time_data.present?
+
       split_time_data = SplitTimeDataDecorator.new(order_detail.time_data.dup)
       time_data_splitter.split(order_detail.time_data, split_time_data, split)
       # Warning: if `id` is set on the order_detail when this assignment happens,
@@ -109,6 +108,7 @@ module SplitAccounts
 
     def apply_time_data_remainders
       return unless order_detail.time_data.present?
+
       applier = RemainderApplier.new(order_detail.time_data, split_order_details.map(&:time_data), splits)
       applier.apply_remainders(time_data_splitter)
     end
@@ -118,7 +118,5 @@ module SplitAccounts
         split_order_detail.public_send("#{association}=", order_detail.public_send(association))
       end
     end
-
   end
-
 end

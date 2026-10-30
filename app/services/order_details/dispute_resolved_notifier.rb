@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module OrderDetails
-
   class DisputeResolvedNotifier < SimpleDelegator
-
     attr_accessor :current_user
 
     def initialize(order_detail, current_user: nil)
@@ -14,9 +12,9 @@ module OrderDetails
     def notify
       if resolve_dispute?
         users_to_notify.each do |user|
-          OrderDetailDisputeMailer.dispute_resolved(order_detail: __getobj__, user: user).deliver_later
+          OrderDetailDisputeMailer.dispute_resolved(order_detail: __getobj__, user:).deliver_later
         end
-        LogEvent.log( __getobj__, :resolve, @current_user)
+        LogEvent.log(__getobj__, :resolve, @current_user)
       end
     end
 
@@ -25,7 +23,5 @@ module OrderDetails
     def users_to_notify
       ([dispute_by] + account.administrators).compact.uniq
     end
-
   end
-
 end

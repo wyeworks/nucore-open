@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TrainingRequestsController < ApplicationController
-
   include SortableColumnController
 
   customer_tab :new, :create
@@ -72,5 +71,4 @@ class TrainingRequestsController < ApplicationController
       "Email" => "users.email",
     }
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class CardReader < ApplicationRecord
-
     MAC_ADDRESS_FORMAT = /\A([0-9A-F]{2}:){5}([0-9A-F]{2})\z/
 
     belongs_to :secure_room, foreign_key: :product_id
@@ -14,7 +12,7 @@ module SecureRooms
 
     validates :product_id, presence: true
     validates :control_device_number, presence: true, format: { with: MAC_ADDRESS_FORMAT }
-    validates :card_reader_number, presence: true, uniqueness: { scope: :control_device_number , case_sensitive: false }
+    validates :card_reader_number, presence: true, uniqueness: { scope: :control_device_number, case_sensitive: false }
     validates :tablet_token, uniqueness: { case_sensitive: false }
 
     before_validation :clean_mac_address
@@ -59,7 +57,5 @@ module SecureRooms
     def clean_mac_address
       self.control_device_number = control_device_number.to_s.upcase.tr("-", ":")
     end
-
   end
-
 end

@@ -11,7 +11,7 @@ RSpec.describe ResultsFileNotifier do
   describe "with notifications enabled", feature_setting: { "orders.results_file_notifications": true, "orders.my_files": true, reload_routes: true } do
     it "sends a notification" do
       expect { notifier.notify }.to(
-        enqueue_mail(ResultsFileNotifierMailer, :file_uploaded)
+        enqueue_mail(ResultsFileNotifierMailer, :file_uploaded),
       )
     end
 
@@ -28,7 +28,7 @@ RSpec.describe ResultsFileNotifier do
         it "does send" do
           travel_and_return(25.hours) do
             expect { notifier.notify }.to(
-              enqueue_mail(ResultsFileNotifierMailer, :file_uploaded)
+              enqueue_mail(ResultsFileNotifierMailer, :file_uploaded),
             )
           end
         end
@@ -41,5 +41,4 @@ RSpec.describe ResultsFileNotifier do
       expect { notifier.notify }.not_to enqueue_mail
     end
   end
-
 end

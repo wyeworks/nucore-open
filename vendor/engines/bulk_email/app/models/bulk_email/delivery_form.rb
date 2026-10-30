@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class DeliveryForm
-
     include ActiveModel::Model
 
     attr_accessor :custom_subject, :custom_message, :custom_reply_to, :recipient_ids, :product_id, :search_criteria
@@ -58,7 +56,7 @@ module BulkEmail
 
     def deliver(recipient)
       Mailer
-        .send_mail(recipient: recipient, subject: subject, body: body, reply_to: reply_to, facility: SerializableFacility.new(facility))
+        .send_mail(recipient:, subject:, body:, reply_to:, facility: SerializableFacility.new(facility))
         .deliver_later
     end
 
@@ -88,7 +86,5 @@ module BulkEmail
     rescue JSON::ParserError, TypeError
       {}
     end
-
   end
-
 end

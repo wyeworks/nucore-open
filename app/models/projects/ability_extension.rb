@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Projects
-
   class AbilityExtension
-
     attr_reader :ability
 
     def initialize(ability)
@@ -13,7 +11,7 @@ module Projects
     def extend(user, resource)
       if resource.is_a?(Facility)
         if user.operator_of?(resource) && !user.facility_billing_administrator_of?(resource)
-          ability.can([:create, :index, :new, :edit, :update, :show], Project)
+          ability.can(%i[create index new edit update show], Project)
         end
 
         if user.facility_staff_or_manager_of?(resource) || user.facility_director_of?(resource)
@@ -34,7 +32,5 @@ module Projects
         end
       end
     end
-
   end
-
 end

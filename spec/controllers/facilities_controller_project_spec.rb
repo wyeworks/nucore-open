@@ -5,17 +5,17 @@ require "rails_helper"
 RSpec.describe FacilitiesController do
   describe "#transactions" do
     let(:facility) { FactoryBot.create(:setup_facility) }
-    let(:product) { FactoryBot.create(:setup_item, facility: facility) }
-    let(:project) { FactoryBot.create(:project, facility: facility) }
-    let(:order) { FactoryBot.create(:purchased_order, product: product) }
+    let(:product) { FactoryBot.create(:setup_item, facility:) }
+    let(:project) { FactoryBot.create(:project, facility:) }
+    let(:order) { FactoryBot.create(:purchased_order, product:) }
     let(:order_detail) { order.order_details.first }
-    let(:order2) { FactoryBot.create(:purchased_order, product: product) }
+    let(:order2) { FactoryBot.create(:purchased_order, product:) }
     let(:order_detail2) { order2.order_details.first }
 
     let(:admin) { FactoryBot.create(:user, :administrator) }
 
     before do
-      order_detail.update(project: project)
+      order_detail.update(project:)
       sign_in admin
     end
 

@@ -9,7 +9,7 @@ RSpec.describe "User access list" do
     let(:user) { create(:user) }
     let!(:product1) { create(:item, facility:, requires_approval: true) }
     let!(:product2) { create(:item, facility:, requires_approval: true) }
-    let!(:product_user) { create(:product_user, user:, product: product1)}
+    let!(:product_user) { create(:product_user, user:, product: product1) }
 
     it "can approve access to a product and logs it" do
       expect(user.reload.products).to contain_exactly(product1)

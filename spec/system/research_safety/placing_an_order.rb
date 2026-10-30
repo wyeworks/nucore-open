@@ -12,7 +12,7 @@ RSpec.describe "Placing a cart order" do
   let!(:account_price_group_member) do
     create(
       :account_price_group_member,
-      account: account,
+      account:,
       price_group: item.price_policies.first.price_group,
     )
   end
@@ -52,7 +52,7 @@ RSpec.describe "Placing a cart order" do
     end
 
     describe "ordering on behalf, and the user does not have certifications" do
-      let(:facility_staff) { create(:user, :staff, facility: facility) }
+      let(:facility_staff) { create(:user, :staff, facility:) }
 
       before do
         login_as facility_staff

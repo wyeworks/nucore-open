@@ -19,8 +19,7 @@ RSpec.describe FacilityReservationsController do
     @facility_account = FactoryBot.create(:facility_account, facility: @authable)
     @product = FactoryBot.create(:instrument,
                                  facility_account: @facility_account,
-                                 facility: @authable,
-                                )
+                                 facility: @authable)
     @schedule_rule = FactoryBot.create(:schedule_rule, product: @product)
     @product.reload
     @account = create_nufs_account_with_owner :director
@@ -29,12 +28,11 @@ RSpec.describe FacilityReservationsController do
                                user: @director,
                                created_by: @director.id,
                                account: @account,
-                               state: "purchased",
-                              )
+                               state: "purchased")
 
     @reservation = FactoryBot.create(:reservation, product: @product)
     expect(@reservation).not_to be_new_record
-    @order_detail = create(:order_detail, account: account, order: @order, product: product, reservation: @reservation)
+    @order_detail = create(:order_detail, account:, order: @order, product:, reservation: @reservation)
     @order_detail.set_default_status!
     @params = { facility_id: @authable.url_name, order_id: @order.id, order_detail_id: @order_detail.id, id: @reservation.id }
   end
@@ -62,13 +60,14 @@ RSpec.describe FacilityReservationsController do
     end
 
     context "when compatible price policies exist" do
-      let(:price_group) { create(:price_group, facility: facility) }
+      let(:price_group) { create(:price_group, facility:) }
 
       before :each do
-        create(:account_price_group_member, account: account, price_group: price_group)
+        create(:account_price_group_member, account:, price_group:)
 
         order_details.first.product.instrument_price_policies.create(attributes_for(
-                                                                       :instrument_price_policy, price_group_id: price_group.id))
+                                                                       :instrument_price_policy, price_group_id: price_group.id
+                                                                     ))
 
         do_request
       end
@@ -123,7 +122,6 @@ RSpec.describe FacilityReservationsController do
       before { maybe_grant_always_sign_in :director }
 
       context "when the reservation is valid" do
-
         it "sets admin_note" do
           do_request
           expect(assigns[:reservation].admin_note).to eq "Testing"
@@ -183,7 +181,6 @@ RSpec.describe FacilityReservationsController do
         do_request
         expect(assigns[:order_details]).to eq([@order_detail_reservation])
       end
-
     end
 
     context "export" do
@@ -273,7 +270,6 @@ RSpec.describe FacilityReservationsController do
         do_request
         expect(response.body).not_to include("relay_checkbox")
       end
-
     end
 
     context "orders" do
@@ -284,8 +280,7 @@ RSpec.describe FacilityReservationsController do
                                     user: @director,
                                     created_by: @director.id,
                                     account: @account,
-                                    state: "new",
-                                   )
+                                    state: "new")
         # make sure the reservations are happening today
         @reservation.update!(reserve_start_at: Time.zone.now, reserve_end_at: 1.hour.from_now)
 
@@ -366,15 +361,14 @@ RSpec.describe FacilityReservationsController do
         @order_detail.account = @account
         @order_detail.save!
         @price_group = FactoryBot.create(:price_group, facility: @authable)
-        create(:account_price_group_member, account: account, price_group: @price_group)
+        create(:account_price_group_member, account:, price_group: @price_group)
         @instrument_pp = @product.instrument_price_policies.create(FactoryBot.attributes_for(:instrument_price_policy, price_group_id: @price_group.id))
         @instrument_pp.reload.restrict_purchase = false
         @reservation.update(actual_start_at: nil, actual_end_at: nil)
         @params.merge!(reservation: {
                          reserve_start_at: @reservation.reserve_start_at,
                          reserve_end_at: @reservation.reserve_end_at - 15.minutes,
-                       },
-                      )
+                       })
       end
 
       it "should update estimated cost" do
@@ -445,7 +439,7 @@ RSpec.describe FacilityReservationsController do
           @params.merge!(
             reservation: {
               duration_days: "3",
-            }
+            },
           )
         end
 
@@ -459,7 +453,7 @@ RSpec.describe FacilityReservationsController do
           do_request
 
           expect(reservation.reload.reserve_end_at).to(
-            eq(reservation.reserve_start_at + 3.days)
+            eq(reservation.reserve_start_at + 3.days),
           )
         end
       end
@@ -470,7 +464,7 @@ RSpec.describe FacilityReservationsController do
         create(
           :setup_instrument, :daily_booking,
           facility: @authable,
-          facility_account: @facility_account,
+          facility_account: @facility_account
         )
       end
 
@@ -484,7 +478,7 @@ RSpec.describe FacilityReservationsController do
           :setup_instrument, :daily_booking,
           facility: @authable,
           facility_account: @facility_account,
-          start_time_disabled: true,
+          start_time_disabled: true
         )
       end
 

@@ -39,7 +39,7 @@ RSpec.describe SecureRooms::AccessHandlers::OccupancyHandler, type: :service do
 
   describe "#process" do
     context "event was not successful" do
-      let(:event) { create :event, card_reader: card_reader }
+      let(:event) { create :event, card_reader: }
       let(:card_reader) { create :card_reader }
 
       describe "the new occupancy" do
@@ -54,7 +54,7 @@ RSpec.describe SecureRooms::AccessHandlers::OccupancyHandler, type: :service do
     end
 
     context "event was successful" do
-      let(:event) { create :event, :successful, card_reader: card_reader }
+      let(:event) { create :event, :successful, card_reader: }
 
       context "when there is current_occupant" do
         let(:account) { create :account, :with_account_owner, owner: event.user }
@@ -65,7 +65,7 @@ RSpec.describe SecureRooms::AccessHandlers::OccupancyHandler, type: :service do
             entry_event: event,
             secure_room: card_reader.secure_room,
             user: event.user,
-            account: account,
+            account:,
           )
         end
 

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module UsersHelper
-
   # Builds the text for the creation success flash notice
   def creation_success_flash_text(user, facility)
     html(
@@ -10,7 +9,7 @@ module UsersHelper
       user_link: facility_user_path(facility, user),
       price_group: price_group_name(user),
       app_name: t("app_name"),
-      support_contact:
+      support_contact:,
     )
   end
 
@@ -24,7 +23,7 @@ module UsersHelper
     elsif name == PriceGroup.external.name
       "external"
     else
-      name.parameterize(separator: '_')
+      name.parameterize(separator: "_")
     end
   end
 
@@ -40,5 +39,4 @@ module UsersHelper
       " at [#{email}](mailto:#{email})"
     end
   end
-
 end

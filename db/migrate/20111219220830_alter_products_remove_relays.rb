@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AlterProductsRemoveRelays < ActiveRecord::Migration[4.2]
-
   def self.up
     remove_index "products", %w(relay_ip relay_port), unique: true
     remove_column(:products, :relay_ip)
@@ -22,5 +21,4 @@ class AlterProductsRemoveRelays < ActiveRecord::Migration[4.2]
       t.column "relay_type", :string, limit: 50
     end
   end
-
 end

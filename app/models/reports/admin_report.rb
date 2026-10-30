@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class AdminReport
-
     def self.all
       Array(Settings.admin_reports).map { |class_name| new(class_name) }
     end
@@ -27,7 +25,5 @@ module Reports
     def filters
       report_class.try(:filters) || []
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountPriceGroupMembersController < ApplicationController
-
   include PriceGroupMembersController
   include SearchHelper
 
@@ -53,5 +52,4 @@ class AccountPriceGroupMembersController < ApplicationController
   def authorize_account_price_group_member!
     @price_group_ability.authorize! action_name, AccountPriceGroupMember
   end
-
 end

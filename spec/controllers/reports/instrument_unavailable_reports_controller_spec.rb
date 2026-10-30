@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Reports::InstrumentUnavailableReportsController do
   let(:facility) { FactoryBot.create(:setup_facility) }
-  let(:instruments) { FactoryBot.create_list(:setup_instrument, 3, facility: facility) }
+  let(:instruments) { FactoryBot.create_list(:setup_instrument, 3, facility:) }
   let(:params) do
     {
       facility_id: facility.url_name,
@@ -63,13 +63,12 @@ RSpec.describe Reports::InstrumentUnavailableReportsController do
                               reserve_start_at: (date_start + 1.day).beginning_of_day,
                               duration: 3.days,
                               category: nil)
-            get(:index, params: params, xhr: true)
+            get(:index, params:, xhr: true)
           end
 
           it_behaves_like "it sets the required instance variables"
 
           it "generates the expected rows" do
-
             expect(assigns(:rows)).to match_array [
               [instruments.first.to_s,  "Admin",   "",             1, "24.00"],
               [instruments.first.to_s,  "Offline", "Out of Order", 2, "72.00"],
@@ -89,9 +88,9 @@ RSpec.describe Reports::InstrumentUnavailableReportsController do
       before(:each) do
         FactoryBot.create(:offline_reservation,
                           product: instruments.first,
-                          reserve_start_at: reserve_start_at,
-                          reserve_end_at: reserve_end_at)
-        get(:index, params: params, xhr: true)
+                          reserve_start_at:,
+                          reserve_end_at:)
+        get(:index, params:, xhr: true)
       end
 
       it_behaves_like "it sets the required instance variables"
@@ -107,9 +106,9 @@ RSpec.describe Reports::InstrumentUnavailableReportsController do
       before(:each) do
         FactoryBot.create(:offline_reservation,
                           product: instruments.first,
-                          reserve_start_at: reserve_start_at,
-                          reserve_end_at: reserve_end_at)
-        get(:index, params: params, xhr: true)
+                          reserve_start_at:,
+                          reserve_end_at:)
+        get(:index, params:, xhr: true)
       end
 
       context "and the instrument is still offline" do

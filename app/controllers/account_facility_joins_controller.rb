@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountFacilityJoinsController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_account
@@ -27,7 +26,6 @@ class AccountFacilityJoinsController < ApplicationController
 
   def init_account
     @account = Account.for_facility(current_facility).per_facility.find(params[:account_id])
-    @account_facility_joins_form = AccountFacilityJoinsForm.new(account: @account, current_facility: current_facility)
+    @account_facility_joins_form = AccountFacilityJoinsForm.new(account: @account, current_facility:)
   end
-
 end

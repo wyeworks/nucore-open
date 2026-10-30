@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ScheduleRules::OpenHours do
   let(:product) do
     create(
       :setup_instrument,
-      :always_available
+      :always_available,
     )
   end
   let(:schedule_rules) { product.schedule_rules }

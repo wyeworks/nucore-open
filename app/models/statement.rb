@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Statement < ApplicationRecord
-
   has_many :order_details, inverse_of: :statement
   has_many :statement_rows, dependent: :destroy
   has_many :payments, inverse_of: :statement
@@ -56,6 +55,7 @@ class Statement < ApplicationRecord
 
   def self.find_by_statement_id(query)
     return nil unless /\A(?<id>\d+)\z/ =~ query
+
     find_by(id:)
   end
 
@@ -144,12 +144,12 @@ class Statement < ApplicationRecord
 
   def send_emails
     account.notify_users.each do |user|
-        Notifier.statement(
-          user:,
-          facility:,
-          account:,
-          statement: self
-        ).deliver_later
+      Notifier.statement(
+        user:,
+        facility:,
+        account:,
+        statement: self,
+      ).deliver_later
     end
   end
 
@@ -207,5 +207,4 @@ class Statement < ApplicationRecord
   def has_order_details?
     order_details.any?
   end
-
 end

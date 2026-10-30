@@ -9,19 +9,19 @@ RSpec.describe JournalRowBuilder, :enable_split_accounts, :default_journal_row_c
   end
 
   let(:facility) { create(:facility) }
-  let(:facility_account) { create(:facility_account, facility: facility, revenue_account: 51_234) }
-  let(:product) { create(:setup_item, facility: facility, facility_account: facility_account) }
-  let(:facility_account2) { create(:facility_account, facility: facility, revenue_account: 51_235) }
-  let(:product2) { create(:setup_item, facility: facility, facility_account: facility_account2) }
+  let(:facility_account) { create(:facility_account, facility:, revenue_account: 51_234) }
+  let(:product) { create(:setup_item, facility:, facility_account:) }
+  let(:facility_account2) { create(:facility_account, facility:, revenue_account: 51_235) }
+  let(:product2) { create(:setup_item, facility:, facility_account: facility_account2) }
 
-  let(:journal) { build_stubbed(:journal, facility: facility) }
-  let(:account) { build_stubbed(:split_account, splits: splits) }
+  let(:journal) { build_stubbed(:journal, facility:) }
+  let(:account) { build_stubbed(:split_account, splits:) }
   let(:user) { FactoryBot.create(:user) }
-  let(:order) { create(:order, facility: facility, user: user, created_by: user.id) }
+  let(:order) { create(:order, facility:, user:, created_by: user.id) }
   let(:order_details) do
     [
-      build_stubbed(:order_detail, actual_cost: 20.00, actual_subsidy: 0, account: account, product: product, order: order, fulfilled_at: Time.current),
-      build_stubbed(:order_detail, actual_cost: 3, actual_subsidy: 0, account: account, product: product2, order: order, fulfilled_at: Time.current),
+      build_stubbed(:order_detail, actual_cost: 20.00, actual_subsidy: 0, account:, product:, order:, fulfilled_at: Time.current),
+      build_stubbed(:order_detail, actual_cost: 3, actual_subsidy: 0, account:, product: product2, order:, fulfilled_at: Time.current),
     ]
   end
 

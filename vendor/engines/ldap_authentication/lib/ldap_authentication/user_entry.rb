@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module LdapAuthentication
-
   class UserEntry
-
     attr_reader :ldap_entry
 
     CONVERTABLE_ATTRIBUTES = [:username, :first_name, :last_name, :email].freeze
@@ -76,7 +74,5 @@ module LdapAuthentication
         tries >= max_attempts ? raise : retry
       end
     end
-
   end
-
 end

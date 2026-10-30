@@ -11,7 +11,7 @@ RSpec.describe "instrument reservations" do
         :setup_instrument,
         :always_available,
         facility:,
-        schedule: instrument.schedule
+        schedule: instrument.schedule,
       )
     end
     let(:facility) { instrument.facility }
@@ -24,7 +24,7 @@ RSpec.describe "instrument reservations" do
         :purchased_reservation,
         reserve_start_at: 2.hours.from_now,
         reserve_end_at: 3.hours.from_now,
-        product: instrument
+        product: instrument,
       )
     end
 
@@ -40,7 +40,7 @@ RSpec.describe "instrument reservations" do
         :purchased_reservation,
         reserve_start_at: Time.zone.now,
         reserve_end_at: 1.hour.from_now,
-        product: instrument2
+        product: instrument2,
       )
 
       visit facility_instrument_schedule_path(facility, instrument)
@@ -60,14 +60,14 @@ RSpec.describe "instrument reservations" do
         :purchased_reservation,
         reserve_start_at: 2.hours.from_now,
         reserve_end_at: 3.hours.from_now,
-        product: instrument
+        product: instrument,
       )
       create(
         :purchased_reservation,
         :canceled,
         reserve_start_at: 4.hours.from_now,
         reserve_end_at: 5.hours.from_now,
-        product: instrument
+        product: instrument,
       )
 
       visit facility_instrument_schedule_path(facility, instrument)

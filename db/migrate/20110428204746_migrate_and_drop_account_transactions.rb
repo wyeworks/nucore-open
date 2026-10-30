@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MigrateAndDropAccountTransactions < ActiveRecord::Migration[4.2]
-
   def self.up
     OrderDetail.reset_column_information
 
@@ -17,6 +16,7 @@ class MigrateAndDropAccountTransactions < ActiveRecord::Migration[4.2]
         journal = j_row.journal
 
         next unless journal.open? || journal.is_successful? == true
+
         od.journal = journal
 
         if journal.is_successful? == true
@@ -66,7 +66,7 @@ class MigrateAndDropAccountTransactions < ActiveRecord::Migration[4.2]
 
         at_rows.each do |at_row|
           od = OrderDetail.find(at_row.order_detail_id)
-          StatementRow.create!(order_detail: od, statement: statement, amount: at_row.transaction_amount)
+          StatementRow.create!(order_detail: od, statement:, amount: at_row.transaction_amount)
           od.statement = statement
           od.save!
         end
@@ -117,5 +117,4 @@ class MigrateAndDropAccountTransactions < ActiveRecord::Migration[4.2]
       ****************************************************************************
     OUT
   end
-
 end

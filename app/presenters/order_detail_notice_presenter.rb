@@ -59,7 +59,6 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
 
   # Not meant to be used outside the presenter class
   class Notice
-
     include ActionView::Helpers::TagHelper
     include TextHelpers::Translation
 
@@ -96,7 +95,5 @@ class OrderDetailNoticePresenter < DelegateClass(OrderDetail)
         warning: "label-danger",
       }.fetch(@severity)
     end
-
   end
-
 end

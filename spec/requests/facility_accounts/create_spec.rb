@@ -53,7 +53,7 @@ RSpec.describe "creating accounts", :use_test_account do
             get new_facility_account_path(facility, owner_user_id: user.id)
 
             expect(page).to(
-              have_content(facility_account_class.model_name.human)
+              have_content(facility_account_class.model_name.human),
             )
           end
 
@@ -63,7 +63,7 @@ RSpec.describe "creating accounts", :use_test_account do
                 facility,
                 owner_user_id: user.id,
                 account_type: facility_account_type,
-              )
+              ),
             )
 
             expect(page).to have_field(
@@ -80,7 +80,7 @@ RSpec.describe "creating accounts", :use_test_account do
                   account_number:,
                   description: "Some description",
                   facility_ids: [some_facility.id],
-                }
+                },
               }
 
               expect do
@@ -93,7 +93,7 @@ RSpec.describe "creating accounts", :use_test_account do
                   params:,
                 )
               end.to(
-                change(Account, :count).by(1)
+                change(Account, :count).by(1),
               )
 
               expect(Account.last.facilities).to match([some_facility])
@@ -116,7 +116,7 @@ RSpec.describe "creating accounts", :use_test_account do
 
             expect(page).to have_content("Add Payment Source")
             expect(page).not_to(
-              have_content(facility_account_class.model_name.human)
+              have_content(facility_account_class.model_name.human),
             )
           end
         end
@@ -139,7 +139,7 @@ RSpec.describe "creating accounts", :use_test_account do
             get new_facility_account_path(facility, owner_user_id: user.id)
 
             expect(page).to(
-              have_content(facility_account_class.model_name.human)
+              have_content(facility_account_class.model_name.human),
             )
           end
 
@@ -161,7 +161,7 @@ RSpec.describe "creating accounts", :use_test_account do
               facility_account_type.underscore => {
                 account_number:,
                 description: "Some description",
-              }
+              },
             }
 
             expect do
@@ -171,7 +171,7 @@ RSpec.describe "creating accounts", :use_test_account do
                   owner_user_id: user.id,
                   account_type: facility_account_type,
                 ),
-                params:
+                params:,
               )
             end.to change(Account, :count).by(1)
 
@@ -217,13 +217,13 @@ RSpec.describe "creating accounts", :use_test_account do
           account_number:,
           description: "Some description",
           price_groups_relation_ids: [price_group.id],
-        }
+        },
       }
 
       expect do
         post(
           facility_accounts_path(facility, owner_user_id: user.id, account_type:),
-          params:
+          params:,
         )
       end.to change(Account, :count).by(1)
 
@@ -253,7 +253,7 @@ RSpec.describe "creating accounts", :use_test_account do
           get new_facility_account_path(current_facility, owner_user_id: user.id)
 
           expect(page).to have_select(
-            price_groups_key, with_options: [facility_price_group.name],
+            price_groups_key, with_options: [facility_price_group.name]
           )
         end
 
@@ -279,7 +279,7 @@ RSpec.describe "creating accounts", :use_test_account do
           get new_facility_account_path(current_facility, owner_user_id: user.id)
 
           expect(page).to have_select(
-            price_groups_key, with_options: [facility_price_group.presenter.long_name],
+            price_groups_key, with_options: [facility_price_group.presenter.long_name]
           )
         end
       end

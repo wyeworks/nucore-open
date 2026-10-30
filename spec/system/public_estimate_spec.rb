@@ -31,7 +31,7 @@ RSpec.describe "Building a public estimate", :js, feature_setting: { public_esti
     let!(:timed_service_price_policy) do
       create(
         :timed_service_price_policy,
-        product: timed_service, price_group: PriceGroup.base, usage_rate: 60, usage_subsidy: 0
+        product: timed_service, price_group: PriceGroup.base, usage_rate: 60, usage_subsidy: 0,
       )
     end
 

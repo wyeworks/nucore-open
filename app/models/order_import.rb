@@ -3,7 +3,6 @@
 require "csv"
 
 class OrderImport < ApplicationRecord
-
   belongs_to :facility, optional: true
   belongs_to :upload_file, class_name: "StoredFile", dependent: :destroy, required: true
   belongs_to :error_file, class_name: "StoredFile", dependent: :destroy, optional: true
@@ -211,7 +210,7 @@ class OrderImport < ApplicationRecord
 
   def send_notifications(orders)
     orders.each do |order|
-      PurchaseNotifier.order_receipt(user: order.user, order: order).deliver_later
+      PurchaseNotifier.order_receipt(user: order.user, order:).deliver_later
     end
   end
 
@@ -231,9 +230,9 @@ class OrderImport < ApplicationRecord
 
     if SettingsHelper.feature_on?(:active_storage)
       error_file.file.attach(
-        io: io,
+        io:,
         filename: "error_report.csv",
-        content_type: "text/csv"
+        content_type: "text/csv",
       )
     else
       error_file.file = io
@@ -252,7 +251,6 @@ class OrderImport < ApplicationRecord
   end
 
   class Result
-
     attr_accessor :successes, :failures
 
     def initialize(successes: 0, failures: 0)
@@ -273,13 +271,11 @@ class OrderImport < ApplicationRecord
     end
 
     def to_h
-      { successes: successes, failures: failures }
+      { successes:, failures: }
     end
-
   end
 
   class OrderCache
-
     def initialize
       @orders = {}
     end
@@ -295,7 +291,5 @@ class OrderImport < ApplicationRecord
     def fetch_all_orders
       Order.where(id: @orders.values)
     end
-
   end
-
 end

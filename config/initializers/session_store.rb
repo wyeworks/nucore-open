@@ -9,5 +9,5 @@ Rails.application.config.session_store(
   key: "_nucore_session",
   httponly: true,
   secure: ssl,
-  same_site: (ssl ? :none : :lax)
+  same_site: (ssl ? :none : :lax),
 )

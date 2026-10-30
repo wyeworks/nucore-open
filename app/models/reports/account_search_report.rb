@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class AccountSearchReport
-
     include Reports::CsvExporter
 
     attr_reader :search_term, :facility, :filter_params
@@ -70,5 +68,4 @@ module Reports
       account.facilities.present? ? account.facilities.join(", ") : I18n.t("shared.all")
     end
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SamlAuthentication
-
   class SamlAttributes
-
     delegate :[], :except, to: :to_h
 
     def initialize(saml_response)
@@ -20,7 +18,5 @@ module SamlAuthentication
     def to_raw_h
       @saml_response.raw_response.attributes.to_h
     end
-
   end
-
 end

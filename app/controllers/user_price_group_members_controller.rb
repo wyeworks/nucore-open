@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserPriceGroupMembersController < ApplicationController
-
   include PriceGroupMembersController
 
   before_action :authorize_user_price_group_member!
@@ -32,5 +31,4 @@ class UserPriceGroupMembersController < ApplicationController
   def authorize_user_price_group_member!
     @price_group_ability.authorize!(action_name, UserPriceGroupMember)
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TimedService < Product
-
   PRICING_MODES = [Pricing::SCHEDULE_RULE, Pricing::DURATION].freeze
 
   has_many :timed_service_price_policies, foreign_key: :product_id
@@ -19,5 +18,4 @@ class TimedService < Product
   def time_unit
     "mins"
   end
-
 end

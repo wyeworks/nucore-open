@@ -176,7 +176,7 @@ RSpec.describe SplitAccounts::SplitAccount, :enable_split_accounts, type: :model
 
     context "when any subaccount is suspended" do
       let(:suspended_at) { 1.day.ago.change(usec: 0) }
-      let(:suspended_subaccount) { build(:setup_account, suspended_at: suspended_at) }
+      let(:suspended_subaccount) { build(:setup_account, suspended_at:) }
 
       let(:split_account) do
         build(:split_account, without_splits: true).tap do |split_account|

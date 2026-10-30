@@ -189,5 +189,4 @@ RSpec.describe OrderStatusesController do
       end
     end
   end
-
 end

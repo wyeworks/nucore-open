@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class GlobalSettingsController < ApplicationController
-
   authorize_resource class: NUCore
 
   layout "two_column"
@@ -14,5 +13,4 @@ class GlobalSettingsController < ApplicationController
   def admin_tab?
     true
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module BelongsToProductController
-
   extend ActiveSupport::Concern
 
   included do
@@ -24,5 +23,4 @@ module BelongsToProductController
     valid_ids = Product.types.map { |t| "#{t.model_name.param_key}_id" }
     params.keys.find { |k| k.in?(valid_ids) }
   end
-
 end

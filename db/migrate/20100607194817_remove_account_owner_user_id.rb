@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RemoveAccountOwnerUserId < ActiveRecord::Migration[4.2]
-
   def self.up
     accounts = Account.all
     accounts.each do |a|
@@ -20,5 +19,4 @@ class RemoveAccountOwnerUserId < ActiveRecord::Migration[4.2]
     end
     change_column :accounts, :owner_user_id, :integer, null: false
   end
-
 end

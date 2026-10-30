@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Reservations::Validations
-
   extend ActiveSupport::Concern
 
   included do
@@ -59,6 +58,7 @@ module Reservations::Validations
 
   def duration_is_interval
     return unless product.reserve_interval && reserve_end_at && reserve_start_at
+
     diff = ((reserve_end_at - reserve_start_at) / 60).to_i
     errors.add :base, :duration_not_interval, reserve_interval: product.reserve_interval unless diff % product.reserve_interval == 0
   end
@@ -125,6 +125,7 @@ module Reservations::Validations
   def satisfies_minimum_length?
     if product.daily_booking?
       return true if product.min_reserve_days.to_i == 0
+
       duration_days >= product.min_reserve_days
     else
       diff = reserve_end_at - reserve_start_at # in seconds
@@ -143,9 +144,11 @@ module Reservations::Validations
   def satisfies_maximum_length?
     if product.daily_booking?
       return true if product.max_reserve_days.to_i == 0
+
       duration_days <= product.max_reserve_days
     else
       return true if product.max_reserve_mins.to_i == 0
+
       diff = reserve_end_at - reserve_start_at # in seconds
 
       # If this is updating because we're in the grace period, use the old value for checking duration
@@ -190,6 +193,7 @@ module Reservations::Validations
   def in_allowed_schedule_rules?
     # If we're saving as an administrator, they can override the user's schedule rules.
     return true if reserved_by_admin
+
     # Some old specs don't set an order detail, so we need to safe-navigate
 
     covered_by_schedule_rules?(product.available_schedule_rules(order_detail&.user_for_order))
@@ -238,6 +242,7 @@ module Reservations::Validations
 
   def starts_before_cutoff?
     return false if admin?
+
     reserve_start_at < product.cutoff_hours.hours.from_now
   end
 
@@ -256,5 +261,4 @@ module Reservations::Validations
       schedule_rules.cover?(reserve_start_at, reserve_end_at)
     end
   end
-
 end

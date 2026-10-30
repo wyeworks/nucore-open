@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RemoveFacilityFromOrder < ActiveRecord::Migration[4.2]
-
   def self.up
     change_table :orders do |t|
       t.remove :facility_id
@@ -26,5 +25,4 @@ class RemoveFacilityFromOrder < ActiveRecord::Migration[4.2]
       t.change :price_policy_id, :integer, null: false
     end
   end
-
 end

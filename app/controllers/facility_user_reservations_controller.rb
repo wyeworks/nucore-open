@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FacilityUserReservationsController < ApplicationController
-
   admin_tab :all
   before_action :init_current_facility
   before_action :check_acting_as
@@ -27,6 +26,7 @@ class FacilityUserReservationsController < ApplicationController
 
     unless reservation.canceled?
       raise ActiveRecord::RecordNotFound unless reservation.can_cancel?
+
       cancel_with_fee!
     end
 
@@ -60,5 +60,4 @@ class FacilityUserReservationsController < ApplicationController
   def user_order_details
     @user.order_details.reservations.for_facility(current_facility)
   end
-
 end

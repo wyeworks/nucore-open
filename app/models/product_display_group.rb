@@ -1,5 +1,4 @@
 class ProductDisplayGroup < ApplicationRecord
-
   belongs_to :facility
   has_many :product_display_group_products, -> { sorted }, inverse_of: :product_display_group, dependent: :destroy
   has_many :products, through: :product_display_group_products, validate: false
@@ -24,7 +23,7 @@ class ProductDisplayGroup < ApplicationRecord
     Product.orderable_types.map do |type|
       Fake.new(
         name: type.constantize.model_name.human(count: :many),
-        products: products.where(type:)
+        products: products.where(type:),
       )
     end
   end
@@ -36,5 +35,4 @@ class ProductDisplayGroup < ApplicationRecord
   def associated_errors
     product_display_group_products.select { |join| join.errors.present? }.map(&:errors)
   end
-
 end

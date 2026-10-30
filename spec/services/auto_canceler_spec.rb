@@ -82,7 +82,6 @@ RSpec.describe AutoCanceler, :time_travel do
         expect(past_reservation.order_detail.reload.actual_cost.to_f).to eq(10)
       end
     end
-
   end
 
   context "without auto-cancel minutes" do

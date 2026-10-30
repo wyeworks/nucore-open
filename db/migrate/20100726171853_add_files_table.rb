@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddFilesTable < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :files do |t|
       t.references :order_detail,    null: true
@@ -19,5 +18,4 @@ class AddFilesTable < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :files
   end
-
 end

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "Managing training a request", feature_setting: { training_requests: true, reload_routes: true } do
-  let(:director) { create(:user, :facility_director, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
   let!(:training_request) { create(:training_request) }
   let(:facility) { training_request.product.facility }
   let(:instrument) { training_request.product }

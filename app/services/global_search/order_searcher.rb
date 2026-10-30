@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module GlobalSearch
-
   class OrderSearcher < Base
-
     include Nucore::Database::CaseSensitivityHelper
 
     def template
@@ -22,20 +20,18 @@ module GlobalSearch
                    search_external query
                  when /\A\d+\z/
                    OrderDetail.where("order_details.id = :id OR order_details.order_id = :id", id: query)
-      end
+                 end
 
       relation ? relation.joins(:order).purchased : []
     end
 
     def search_full(query)
       order_id, order_detail_id = query.split("-")
-      OrderDetail.where(id: order_detail_id, order_id: order_id)
+      OrderDetail.where(id: order_detail_id, order_id:)
     end
 
     def search_external(query)
       insensitive_where OrderDetail.joins(:external_service_receiver), "external_service_receivers.external_id", query
     end
-
   end
-
 end

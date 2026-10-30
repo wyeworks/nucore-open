@@ -23,11 +23,11 @@ RSpec.describe OrdersController do
       end
 
       context "when sending a project_id parameter" do
-        let(:order_params) { { project_id: project_id } }
+        let(:order_params) { { project_id: } }
 
         it "sets the project_id" do
           assigns[:order].order_details.each do |order_detail|
-            expect(order_detail.project_id). to eq(project_id)
+            expect(order_detail.project_id).to eq(project_id)
           end
         end
       end
@@ -37,7 +37,7 @@ RSpec.describe OrdersController do
 
         it "has no project_id" do
           assigns[:order].order_details.each do |order_detail|
-            expect(order_detail.project_id). to be_blank
+            expect(order_detail.project_id).to be_blank
           end
         end
       end
@@ -47,11 +47,11 @@ RSpec.describe OrdersController do
       before { perform_request }
 
       context "when sending a project_id parameter" do
-        let(:order_params) { { project_id: project_id } }
+        let(:order_params) { { project_id: } }
 
         it "has no project_id" do
           assigns[:order].order_details.each do |order_detail|
-            expect(order_detail.project_id). to be_blank
+            expect(order_detail.project_id).to be_blank
           end
         end
       end
@@ -64,7 +64,7 @@ RSpec.describe OrdersController do
     it_behaves_like "it updates project_ids"
 
     context "when reloaded" do
-      let(:order_params) { { project_id: project_id } }
+      let(:order_params) { { project_id: } }
 
       before(:each) do
         session[:acting_user_id] = order.user.id

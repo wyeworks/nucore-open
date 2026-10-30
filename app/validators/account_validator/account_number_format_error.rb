@@ -4,9 +4,9 @@
 # Use in the validator when there are ActiveModel validation error
 # on the validator. This is used to copy errors from the Validator
 # to the model itself.
-class  AccountValidator::AccountNumberFormatError < AccountValidator::ValidatorError
-
+class AccountValidator::AccountNumberFormatError < AccountValidator::ValidatorError
   attr_accessor :errors
+
   def initialize(errors)
     self.errors = errors
   end
@@ -17,5 +17,4 @@ class  AccountValidator::AccountNumberFormatError < AccountValidator::ValidatorE
       model.errors.add(attribute, error.type, message: error.message)
     end
   end
-
 end

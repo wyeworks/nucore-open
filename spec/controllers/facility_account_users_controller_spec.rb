@@ -228,15 +228,16 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?("a
       delete :destroy, params: { facility_id: facility.url_name, account_id: account.id, id: account_user.id }
     end
 
-    let(:staff) { FactoryBot.create(:user, :staff, facility: facility) }
-    let(:director) { FactoryBot.create(:user, :facility_director, facility: facility) }
+    let(:staff) { FactoryBot.create(:user, :staff, facility:) }
+    let(:director) { FactoryBot.create(:user, :facility_director, facility:) }
     let(:purchaser) { create(:user) }
 
     let(:account_user) do
       FactoryBot.create(
         :account_user, user_role: AccountUser::ACCOUNT_PURCHASER,
-                       account: account, user: purchaser,
-                       created_by: account.owner_user.id)
+                       account:, user: purchaser,
+                       created_by: account.owner_user.id
+      )
     end
 
     it "does not allow the staff" do
@@ -257,8 +258,9 @@ RSpec.describe FacilityAccountUsersController, if: SettingsHelper.feature_on?("a
       it "adds the log event" do
         expect { do_request }.to change(account_user.log_events, :count).by(1)
         expect(account_user.log_events.last).to have_attributes(
-        loggable: assigns(:account_user), event_type: "delete",
-        user_id: director.id)
+          loggable: assigns(:account_user), event_type: "delete",
+          user_id: director.id
+        )
       end
 
       it "sets the flash and redirects" do

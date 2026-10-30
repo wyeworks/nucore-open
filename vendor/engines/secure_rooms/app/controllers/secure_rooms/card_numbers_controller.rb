@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class CardNumbersController < ApplicationController
-
     include SecureRoomsHelper
 
     admin_tab :all
@@ -55,7 +53,5 @@ module SecureRooms
       @user = User.find(params[:user_id])
       raise CanCan::AccessDenied unless secure_room_ability.can? :edit, @user
     end
-
   end
-
 end

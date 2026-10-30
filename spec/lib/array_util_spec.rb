@@ -43,5 +43,4 @@ RSpec.describe ArrayUtil do
       expect(array).to eq([:a, :b, :c, :new])
     end
   end
-
 end

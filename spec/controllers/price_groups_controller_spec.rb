@@ -16,7 +16,7 @@ RSpec.describe PriceGroupsController do
   end
 
   describe "GET #index" do
-    let!(:price_groups) { create_list(:price_group, 3, facility: facility) }
+    let!(:price_groups) { create_list(:price_group, 3, facility:) }
 
     before(:each) do
       @method = :get
@@ -31,7 +31,7 @@ RSpec.describe PriceGroupsController do
   end
 
   context "with a price group id parameter" do
-    let(:price_group) { create(:price_group, facility: facility) }
+    let(:price_group) { create(:price_group, facility:) }
 
     before { @params.merge!(id: price_group.id) }
 
@@ -55,7 +55,7 @@ RSpec.describe PriceGroupsController do
 
       context "when user-based price groups are enabled", feature_setting: { "pricing.user_based_price_groups" => true, "pricing.facility_directors_can_manage_price_groups" => true } do
         let(:user) { FactoryBot.create(:user) }
-        let!(:user_member) { FactoryBot.create(:user_price_group_member, price_group: price_group, user: user) }
+        let!(:user_member) { FactoryBot.create(:user_price_group_member, price_group:, user:) }
 
         it_should_allow_managers_only do
           expect(assigns(:user_members)).to include(user_member)
@@ -98,7 +98,7 @@ RSpec.describe PriceGroupsController do
 
     describe "GET #accounts" do
       let(:account) { FactoryBot.create(:account, :with_account_owner) }
-      let!(:account_member) { FactoryBot.create(:account_price_group_member, price_group: price_group, account: account) }
+      let!(:account_member) { FactoryBot.create(:account_price_group_member, price_group:, account:) }
 
       before(:each) do
         @method = :get

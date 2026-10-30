@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentsController < ProductsCommonController
-
   customer_tab :show, :public_schedule, :public_list
   admin_tab :create, :new, :edit, :index, :manage, :update, :manage, :schedule
   before_action :store_fullpath_in_session, only: [:index, :show]
@@ -121,12 +120,11 @@ class InstrumentsController < ProductsCommonController
 
     if @product.start_time_disabled?
       @product.schedule_rules.update_all(
-        ScheduleRule.full_day_attributes
+        ScheduleRule.full_day_attributes,
       )
       flash[:info] = t("controllers.instruments.create.schedule_rules_updated")
     else
       flash[:info] = t("controllers.instruments.create.schedule_rules_need_update")
     end
   end
-
 end

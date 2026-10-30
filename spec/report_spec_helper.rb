@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ReportSpecHelper
-
   include DateHelper
   include ReportsHelper
   extend ActiveSupport::Concern
@@ -27,7 +26,6 @@ module ReportSpecHelper
   end
 
   module ClassMethods
-
     def run_report_tests(tests)
       tests.each do |test|
         context test[:report_by].to_s do
@@ -68,7 +66,6 @@ module ReportSpecHelper
         end
       end
     end
-
   end
 
   private
@@ -144,5 +141,4 @@ module ReportSpecHelper
     assert_report_init label, &report_on
     assert_report_download_rendered "#{@params[:report_by]}_report"
   end
-
 end

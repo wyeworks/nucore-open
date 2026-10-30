@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe SecureRooms::AccessRules::RequiresUserRule, type: :service do
   let(:secure_room) { build :secure_room }
-  let(:card_reader) { build :card_reader, secure_room: secure_room }
+  let(:card_reader) { build :card_reader, secure_room: }
   let(:rule) { described_class.new(user, card_reader) }
 
   subject(:result) { rule.call }

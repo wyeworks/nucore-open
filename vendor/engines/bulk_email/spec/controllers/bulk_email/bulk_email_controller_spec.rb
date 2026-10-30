@@ -7,20 +7,20 @@ RSpec.describe BulkEmail::BulkEmailController do
 
   let(:facility) { facility_account.facility }
   let(:facility_account) { FactoryBot.create(:facility_account) }
-  let!(:instrument) { FactoryBot.create(:instrument, facility_account: facility_account) }
-  let!(:item) { FactoryBot.create(:item, facility_account: facility_account) }
+  let!(:instrument) { FactoryBot.create(:instrument, facility_account:) }
+  let!(:item) { FactoryBot.create(:item, facility_account:) }
   let(:params) { { facility_id: facility.url_name } }
-  let!(:restricted_item) { FactoryBot.create(:item, facility_account: facility_account, requires_approval: true) }
-  let!(:service) { FactoryBot.create(:service, facility_account: facility_account) }
+  let!(:restricted_item) { FactoryBot.create(:item, facility_account:, requires_approval: true) }
+  let!(:service) { FactoryBot.create(:service, facility_account:) }
 
   describe "POST #search" do
     context "when not logged in" do
-      before { post "search", params: params }
+      before { post "search", params: }
       it { is_expected.to redirect_to(new_user_session_url) }
     end
 
     context "when logged in" do
-      let(:params) { super().merge(bulk_email: { user_types: user_types }) }
+      let(:params) { super().merge(bulk_email: { user_types: }) }
       let!(:hidden_product) { nil }
       let(:user_types) { [] }
       let!(:order) { FactoryBot.create(:purchased_order, product: service) }
@@ -96,7 +96,7 @@ RSpec.describe BulkEmail::BulkEmailController do
         context "when there is a hidden product" do
           let(:user_types) { %i(customers) }
           let!(:hidden_product) do
-            FactoryBot.create(:item, :hidden, facility_account: facility_account)
+            FactoryBot.create(:item, :hidden, facility_account:)
           end
 
           it { expect(assigns[:search_options][:products]).to include(hidden_product) }
@@ -106,7 +106,7 @@ RSpec.describe BulkEmail::BulkEmailController do
           let(:user_types) { %i(customers) }
 
           let!(:archived_product) do
-            FactoryBot.create(:item, :archived, facility_account: facility_account)
+            FactoryBot.create(:item, :archived, facility_account:)
           end
 
           it { expect(assigns[:search_options][:products]).not_to include(archived_product) }
@@ -115,18 +115,18 @@ RSpec.describe BulkEmail::BulkEmailController do
 
       context "as an unprivileged user" do
         let(:user) { FactoryBot.create(:user) }
-        it_behaves_like "raises specified error", -> { post "search", params: params }, CanCan::AccessDenied
+        it_behaves_like "raises specified error", -> { post "search", params: }, CanCan::AccessDenied
       end
 
       context "when logged in as facility staff" do
-        let(:user) { FactoryBot.create(:user, :staff, facility: facility) }
-        it_behaves_like "raises specified error", -> { post "search", params: params }, CanCan::AccessDenied
+        let(:user) { FactoryBot.create(:user, :staff, facility:) }
+        it_behaves_like "raises specified error", -> { post "search", params: }, CanCan::AccessDenied
       end
 
       context "when logged in as senior facility staff" do
-        let(:user) { FactoryBot.create(:user, :senior_staff, facility: facility) }
+        let(:user) { FactoryBot.create(:user, :senior_staff, facility:) }
 
-        before { post "search", params: params }
+        before { post "search", params: }
 
         it_behaves_like "it can search for recipients"
       end
@@ -136,7 +136,7 @@ RSpec.describe BulkEmail::BulkEmailController do
 
         context "in a cross-facility context" do
           let(:facility) { Facility.cross_facility }
-          it_behaves_like "raises specified error", -> { post "search", params: params }, CanCan::AccessDenied
+          it_behaves_like "raises specified error", -> { post "search", params: }, CanCan::AccessDenied
         end
       end
 
@@ -145,7 +145,7 @@ RSpec.describe BulkEmail::BulkEmailController do
         let(:facility) { Facility.cross_facility }
         let(:params) { super().merge(facility_id: "all") }
 
-        before { post "search", params: params }
+        before { post "search", params: }
 
         it_behaves_like "it can search for recipients"
       end
@@ -165,11 +165,11 @@ RSpec.describe BulkEmail::BulkEmailController do
         [user.full_name, user.username, user.email].join(",")
       end.join("\n")
     end
-    let(:user) { FactoryBot.create(:user, :senior_staff, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :senior_staff, facility:) }
 
     before do
       sign_in user
-      post "create", params: params
+      post "create", params:
     end
 
     it "generates the expected CSV" do
@@ -183,13 +183,13 @@ RSpec.describe BulkEmail::BulkEmailController do
     let(:recipients) { FactoryBot.create_list(:user, 3) }
     let(:custom_message) { "Custom message" }
     let(:custom_reply_to) { nil }
-    let(:user) { FactoryBot.create(:user, :senior_staff, facility: facility) }
+    let(:user) { FactoryBot.create(:user, :senior_staff, facility:) }
 
     let(:params) do
       super().merge(bulk_email_delivery_form: {
-                      custom_subject: custom_subject,
-                      custom_message: custom_message,
-                      custom_reply_to: custom_reply_to,
+                      custom_subject:,
+                      custom_message:,
+                      custom_reply_to:,
                       recipient_ids: recipients.map(&:id),
                       search_criteria: {
                         start_date: "12/31/1999",
@@ -201,7 +201,7 @@ RSpec.describe BulkEmail::BulkEmailController do
 
     before do
       sign_in user
-      post "deliver", params: params
+      post "deliver", params:
     end
 
     context "when the form is valid" do
@@ -216,7 +216,7 @@ RSpec.describe BulkEmail::BulkEmailController do
       end
 
       context "when specifying a return_path param" do
-        let(:params) { super().merge(return_path: return_path) }
+        let(:params) { super().merge(return_path:) }
 
         context "that is routable" do
           let(:return_path) { facility_instruments_path(facility) }

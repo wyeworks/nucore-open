@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require "engine_manager"
 
 Teaspoon.configure do |config|
@@ -115,7 +116,7 @@ Teaspoon.configure do |config|
   client_driver = :chrome
   # Using a standalone chrome container for testing.
   # https://github.com/jejacks0n/teaspoon/wiki/Using-docker-compose-with-selenium-standalone-%2A
-  if ENV['SELENIUM_HOST']
+  if ENV["SELENIUM_HOST"]
     docker_ip = `hostname -i`.strip
     config.server_host = docker_ip
     config.server_port = ENV["TEST_APP_PORT"]
@@ -124,20 +125,20 @@ Teaspoon.configure do |config|
     selenium_options.merge!(
       {
         url: "http://#{ENV['SELENIUM_HOST']}:#{ENV['SELENIUM_PORT']}/wd/hub",
-        http_client: http_client,
-      }
+        http_client:,
+      },
     )
     client_driver = :remote
   end
 
   config.driver_options = {
-    client_driver: client_driver,
-    selenium_options: selenium_options
+    client_driver:,
+    selenium_options:,
   }
 
   config.suite :engines do |suite|
     engine_names = EngineManager.loaded_nucore_engines.map { |e| e.name.underscore.split("/engine").first }
-    spec_paths = engine_names.map { |engine_name| "vendor/engines/#{engine_name}/spec/javascripts"}
+    spec_paths = engine_names.map { |engine_name| "vendor/engines/#{engine_name}/spec/javascripts" }
     suite.matcher = "{#{spec_paths.join(',')}}/**/*_spec.{js,js.coffee,coffee}"
   end
 

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderRowImporter
-
   include DateHelper
 
   cattr_accessor(:importable_product_types) { [Item, Service, TimedService] }
@@ -23,16 +22,17 @@ class OrderRowImporter
 
   HEADERS = order_import_headers.lazy.map { |k| header(k) }
 
-  REQUIRED_HEADERS = [
-    :user,
-    :chart_string,
-    :product_name,
-    :quantity,
-    :order_date,
-    :fulfillment_date,
+  REQUIRED_HEADERS = %i[
+    user
+    chart_string
+    product_name
+    quantity
+    order_date
+    fulfillment_date
   ].lazy.map { |k| header(k) }
 
   attr_accessor :order_import, :order
+
   delegate :id, to: :order, prefix: true
   delegate :facility, to: :order_import
 
@@ -204,7 +204,7 @@ class OrderRowImporter
 
   def validate_headers
     missing_headers = REQUIRED_HEADERS.to_a - @row.headers
-    add_error(:missing_headers, headers: missing_headers.join(' | ')) if missing_headers.present?
+    add_error(:missing_headers, headers: missing_headers.join(" | ")) if missing_headers.present?
   end
 
   def has_valid_fields?
@@ -320,5 +320,4 @@ class OrderRowImporter
   def project
     facility.projects.active.find_by name: field(:project_name)
   end
-
 end

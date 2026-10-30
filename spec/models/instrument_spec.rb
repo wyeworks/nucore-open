@@ -16,8 +16,7 @@ RSpec.describe Instrument do
           facility:,
           min_reserve_mins:,
           max_reserve_mins:,
-          reserve_interval:,
-         )
+          reserve_interval:)
   end
 
   it "should create using factory" do
@@ -42,9 +41,9 @@ RSpec.describe Instrument do
     let(:max_reserve_mins) { 1000 }
 
     before do
-      instrument.assign_attributes(reserve_interval: reserve_interval,
-                                   min_reserve_mins: min_reserve_mins,
-                                   max_reserve_mins: max_reserve_mins)
+      instrument.assign_attributes(reserve_interval:,
+                                   min_reserve_mins:,
+                                   max_reserve_mins:)
     end
 
     describe "min reservation" do
@@ -117,8 +116,8 @@ RSpec.describe Instrument do
   describe "shared schedules" do
     subject(:instrument) do
       FactoryBot.build(:instrument,
-                       facility: facility,
-                       schedule: schedule)
+                       facility:,
+                       schedule:)
     end
 
     context "when no schedule is defined" do
@@ -130,7 +129,7 @@ RSpec.describe Instrument do
     end
 
     context "when a schedule is defined" do
-      let(:schedule) { FactoryBot.create(:schedule, facility: facility) }
+      let(:schedule) { FactoryBot.create(:schedule, facility:) }
 
       it "does not create a new schedule" do
         expect { instrument.save! }
@@ -165,7 +164,7 @@ RSpec.describe Instrument do
   context "updating nested relay with replace_relay" do
     before :each do
       @instrument = FactoryBot.create(:instrument,
-                                      facility: facility,
+                                      facility:,
                                       no_relay: true)
     end
 
@@ -179,7 +178,7 @@ RSpec.describe Instrument do
       context "replace with new control_mechanism: 'relay' (Timer with relay)" do
         context "when validations not met" do
           before :each do
-            @updated = @instrument.replace_relay({type: "RelaySynaccessRevA" }, "relay")
+            @updated = @instrument.replace_relay({ type: "RelaySynaccessRevA" }, "relay")
           end
 
           it "relay should have errors" do
@@ -334,7 +333,7 @@ RSpec.describe Instrument do
     before(:each) do
       # create instrument, min reserve time is 60 minutes, max is 60 minutes
       @instrument = FactoryBot.create(:instrument,
-                                      facility: facility,
+                                      facility:,
                                       min_reserve_mins: 60,
                                       max_reserve_mins: 60)
       assert @instrument.valid?
@@ -533,7 +532,7 @@ RSpec.describe Instrument do
         :daily_booking,
         :always_available,
         facility:,
-        min_reserve_days: 2
+        min_reserve_days: 2,
       )
     end
 
@@ -542,14 +541,14 @@ RSpec.describe Instrument do
       duration =  instrument.min_reserve_days.days
 
       reservation = instrument.next_available_reservation(
-        after:, duration:
+        after:, duration:,
       )
 
       expect(reservation).to be_present
       expect(reservation.save).to be true
 
       second_reservation = instrument.next_available_reservation(
-        after:, duration:
+        after:, duration:,
       )
 
       expect(second_reservation).to be_present
@@ -602,10 +601,10 @@ RSpec.describe Instrument do
 
   context "last reserve dates, days from now" do
     before(:each) do
-      @price_group = FactoryBot.create(:price_group, facility: facility)
+      @price_group = FactoryBot.create(:price_group, facility:)
       # create instrument, min reserve time is 60 minutes, max is 60 minutes
       @instrument = FactoryBot.create(:instrument,
-                                      facility: facility,
+                                      facility:,
                                       min_reserve_mins: 60,
                                       max_reserve_mins: 60)
       @price_group_product = FactoryBot.create(:price_group_product, product: @instrument, price_group: @price_group)
@@ -639,10 +638,10 @@ RSpec.describe Instrument do
 
     before :each do
       @instrument = FactoryBot.create(:instrument,
-                                      facility: facility)
-      @price_group = FactoryBot.create(:price_group, facility: facility)
+                                      facility:)
+      @price_group = FactoryBot.create(:price_group, facility:)
       @user = FactoryBot.create(:user)
-      @price_group_member = create(:account_price_group_member, account: account, price_group: @price_group)
+      @price_group_member = create(:account_price_group_member, account:, price_group: @price_group)
       @user.reload
       @price_policy = FactoryBot.create(:instrument_price_policy, product: @instrument, price_group: @price_group)
       # TODO: remove this line
@@ -718,10 +717,8 @@ RSpec.describe Instrument do
         it "should not be purchasable" do
           expect(@instrument).not_to be_can_purchase(@user.price_groups.map(&:id))
         end
-
       end
     end
-
   end
 
   describe "walkup_available?" do
@@ -811,7 +808,7 @@ RSpec.describe Instrument do
         context "and is started" do
           before :each do
             reservation.update(reserved_by_admin: true,
-                                          actual_start_at: 30.minutes.ago)
+                               actual_start_at: 30.minutes.ago)
           end
 
           it { is_expected.not_to be_walkup_available }
@@ -819,7 +816,7 @@ RSpec.describe Instrument do
           context "but it was ended already" do
             before :each do
               reservation.update(reserved_by_admin: true,
-                                            actual_end_at: 10.minutes.ago)
+                                 actual_end_at: 10.minutes.ago)
             end
 
             it { is_expected.to be_walkup_available }
@@ -990,7 +987,7 @@ RSpec.describe Instrument do
         min_reserve_mins: 10,
         max_reserve_mins: 10,
         min_reserve_days: 1,
-        max_reserve_days: 20
+        max_reserve_days: 20,
       )
       instrument.save!
 

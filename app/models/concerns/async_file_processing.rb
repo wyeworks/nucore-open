@@ -22,7 +22,6 @@
 # Note: Race conditions could happen, especially if you don't prevent double clicks
 # on uploads, but they should be harmless outside of performance hits.
 module AsyncFileProcessing
-
   extend ActiveSupport::Concern
 
   included do
@@ -34,6 +33,7 @@ module AsyncFileProcessing
 
   def enqueue
     return unless save
+
     FileProcessingJob.perform_later(self)
   end
 
@@ -58,5 +58,4 @@ module AsyncFileProcessing
   def only_one_in_queue_at_a_time
     errors.add(:file, :already_in_queue) if another_in_queue?
   end
-
 end

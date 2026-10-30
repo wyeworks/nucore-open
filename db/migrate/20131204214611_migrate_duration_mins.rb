@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MigrateDurationMins < ActiveRecord::Migration[4.2]
-
   def up
     instrument_duration_mins.each do |instrument_id, duration_mins|
       Instrument.find(instrument_id).update_attribute :reserve_interval, duration_mins
@@ -27,5 +26,4 @@ class MigrateDurationMins < ActiveRecord::Migration[4.2]
 
     idm
   end
-
 end

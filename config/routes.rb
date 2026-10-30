@@ -99,7 +99,6 @@ Rails.application.routes.draw do
         get :list, action: :index
         get :user_search
       end
-
     end
 
     resource "instrument_schedule_position", only: [:edit, :update, :show]
@@ -210,7 +209,7 @@ Rails.application.routes.draw do
           put "cancel"
         end
       end
-      get "access_list",  to: "users#access_list"
+      get "access_list", to: "users#access_list"
       post "access_list/approvals", to: "users#access_list_approvals"
 
       resource :accounts, controller: "user_accounts", only: [:show, :edit, :update]
@@ -224,7 +223,7 @@ Rails.application.routes.draw do
 
     resources :facility_accounts,
               controller: "facility_facility_accounts",
-              only: [:index, :new, :create, :edit, :update], path: "#{I18n.t('facility_downcase')}_accounts"
+              only: %i[index new create edit update], path: "#{I18n.t('facility_downcase')}_accounts"
 
     resources :orders, controller: "facility_orders", only: [:index, :update, :show] do
       member do
@@ -326,7 +325,7 @@ Rails.application.routes.draw do
 
     ######
 
-    resources :journals, controller: "facility_journals", only: [:index, :new, :create, :update, :show] do
+    resources :journals, controller: "facility_journals", only: %i[index new create update show] do
       post "reconcile", to: "facility_journals#reconcile"
       post "unreconcile", to: "facility_journals#unreconcile"
     end
@@ -343,7 +342,7 @@ Rails.application.routes.draw do
       resources :account_price_group_members, only: [:new, :destroy, :create]
     end
 
-    resources :estimates, controller: "facility_estimates", only: [:index, :new, :create, :show, :edit, :update] do
+    resources :estimates, controller: "facility_estimates", only: %i[index new create show edit update] do
       collection do
         get "search"
         get "add_product_to_estimate"
@@ -456,7 +455,7 @@ Rails.application.routes.draw do
         get "/move",               to: "reservations#earliest_move_possible"
         post "/move",              to: "reservations#move",              as: "move_reservation"
         get "/switch_instrument",  to: "reservations#switch_instrument", as: "switch_instrument"
-        get "/kiosk_switch_instrument",  to: "kiosk_reservations#switch_instrument", as: "kiosk_switch_instrument"
+        get "/kiosk_switch_instrument", to: "kiosk_reservations#switch_instrument", as: "kiosk_switch_instrument"
         get "begin", to: "kiosk_reservations#begin", as: "kiosk_begin"
         get "stop", to: "kiosk_reservations#stop", as: "kiosk_stop"
       end

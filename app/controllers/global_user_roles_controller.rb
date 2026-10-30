@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class GlobalUserRolesController < GlobalSettingsController
-
   before_action :load_user, only: [:destroy, :edit, :update]
 
   include CsvEmailAction
@@ -83,5 +82,4 @@ class GlobalUserRolesController < GlobalSettingsController
   def translate(key, arguments = {})
     I18n.t("global_user_roles.#{key}", **arguments)
   end
-
 end

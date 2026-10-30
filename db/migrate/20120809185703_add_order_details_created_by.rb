@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddOrderDetailsCreatedBy < ActiveRecord::Migration[4.2]
-
   def self.up
     add_column :order_details, :created_by, :integer
 
@@ -18,5 +17,4 @@ class AddOrderDetailsCreatedBy < ActiveRecord::Migration[4.2]
   def self.down
     remove_column :order_details, :created_by
   end
-
 end

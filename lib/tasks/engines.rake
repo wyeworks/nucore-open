@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 namespace :engines do
-
   namespace :db do
-
     desc "Run `down` for each migration within an engine. Useful when disabling an engine."
     task :migrate_down, [:engine_name] => :environment do |_t, args|
       engine_name = args[:engine_name]
@@ -16,7 +14,5 @@ namespace :engines do
 
       Rake::Task["db:schema:dump"].invoke
     end
-
   end
-
 end

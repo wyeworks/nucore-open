@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module NotificationsHelper
-
   def create_merge_notification_subject
     @facility ||= FactoryBot.create(:facility)
     @facility_account ||= FactoryBot.create(:facility_account, facility: @facility)
@@ -14,5 +13,4 @@ module NotificationsHelper
     @order.update_attribute :merge_with_order_id, clone.id
     @order_detail.reload
   end
-
 end

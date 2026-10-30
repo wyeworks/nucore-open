@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class ScanResponsePresenter
-
     def self.present(verdict)
       {
         status: status_for_code(verdict.result_code),
@@ -27,7 +25,5 @@ module SecureRooms
         :multiple_choices
       end
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module InstrumentPricePolicyCalculations
-
   def estimate_cost_and_subsidy_from_order_detail(order_detail)
     reservation = order_detail.reservation
     estimate_cost_and_subsidy reservation.reserve_start_at, reservation.reserve_end_at if reservation
@@ -37,12 +36,14 @@ module InstrumentPricePolicyCalculations
 
   def cancellation_penalty?(reservation)
     return false unless product.min_cancel_hours
+
     minutes_canceled_before = TimeRange.new(reservation.order_detail.canceled_at, reservation.reserve_start_at).duration_mins
     minutes_canceled_before.minutes <= product.min_cancel_hours.hours
   end
 
   def calculate_cancellation_costs(reservation)
     return unless cancellation_penalty?(reservation)
+
     if charge_full_price_on_cancellation?
       calculate_reservation(reservation)
     else
@@ -62,12 +63,14 @@ module InstrumentPricePolicyCalculations
   def calculate_reservation(reservation)
     # One or both of these could be blank if we parse an invalid date in a form
     return unless reservation.has_reserved_times?
+
     calculate_for_time(reservation.reserve_start_at, reservation.reserve_end_at)
   end
 
   # CHARGE_FOR[:usage] uses the actual start/end times for calculation
   def calculate_usage(reservation)
     return unless reservation.has_actual_times?
+
     calculate_for_time(reservation.actual_start_at, reservation.actual_end_at)
   end
 
@@ -75,6 +78,7 @@ module InstrumentPricePolicyCalculations
   # plus any actual time used beyond the scheduled end time.
   def calculate_overage(reservation)
     return unless reservation.has_reserved_times? && reservation.has_actual_times?
+
     end_at = [reservation.reserve_end_at, reservation.actual_end_at].max
     calculate_for_time(reservation.reserve_start_at, end_at)
   end
@@ -97,5 +101,4 @@ module InstrumentPricePolicyCalculations
 
     net_cost_for_one * quantity
   end
-
 end

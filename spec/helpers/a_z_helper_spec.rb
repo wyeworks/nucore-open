@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe AZHelper do
-
   describe "build_az_list" do
     let(:facilities) do
       [
@@ -28,5 +27,4 @@ RSpec.describe AZHelper do
       expect(az_list["D"].map(&:name)).to contain_exactly("Delta", "delta2")
     end
   end
-
 end

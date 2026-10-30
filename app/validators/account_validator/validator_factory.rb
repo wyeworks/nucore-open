@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountValidator::ValidatorFactory
-
   cattr_accessor(:validator_class) do
     Settings.validator.class_name.constantize
   end
@@ -33,7 +32,7 @@ class AccountValidator::ValidatorFactory
 
   def self.respond_to?(method_sym, include_private = false)
     return true if method_sym.in?([:validator_class, :instance])
+
     validator_class.respond_to? method_sym, include_private
   end
-
 end

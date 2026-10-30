@@ -1,15 +1,12 @@
 # frozen_string_literal: true
 
 class ViewHook
-
   class << self
-
     def instance
       @instance ||= new
     end
 
     delegate :add_hook, :remove_hook, :render_view_hook, :find, to: :instance
-
   end
 
   # Best used through `render_view_hook` helper method
@@ -36,5 +33,4 @@ class ViewHook
   def _view_hooks
     @view_hooks ||= Hash.new { |h, k| h[k] = Hash.new([]) }
   end
-
 end

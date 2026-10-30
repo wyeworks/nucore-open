@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe StoredFile do
-
   it "should require name" do
     is_expected.to validate_presence_of(:name)
   end
@@ -55,7 +54,7 @@ RSpec.describe StoredFile do
 
   context "when uploading" do
     let(:facility) { create(:setup_facility) }
-    let(:item) { FactoryBot.create(:item, facility: facility) }
+    let(:item) { FactoryBot.create(:item, facility:) }
 
     let(:file1) { "#{Rails.root}/spec/files/template1.txt" }
     let(:file_upload) do

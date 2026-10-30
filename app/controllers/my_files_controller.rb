@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class MyFilesController < ApplicationController
-
   customer_tab :all
   before_action { @active_tab = "my_files" }
   # Prevent access while acting as, otherwise the facility staff could get
@@ -13,5 +12,4 @@ class MyFilesController < ApplicationController
                          .merge(Order.purchased)
                          .order(id: :desc).paginate(page: params[:page])
   end
-
 end

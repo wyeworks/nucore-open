@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderStatusesController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -19,7 +18,7 @@ class OrderStatusesController < ApplicationController
 
   # GET /order_statuses
   def index
-    @order_statuses       = current_facility.order_statuses.sorted
+    @order_statuses = current_facility.order_statuses.sorted
   end
 
   # GET /order_statuses/new
@@ -83,5 +82,4 @@ class OrderStatusesController < ApplicationController
   def ensure_editable
     raise ActiveRecord::RecordNotFound unless @order_status.editable?
   end
-
 end

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class CancellationFeeCalculator
-
   attr_accessor :order_detail
+
   delegate :reservation, :product, :price_policy, to: :order_detail, allow_nil: true
 
   def initialize(original_order_detail)
@@ -26,6 +26,7 @@ class CancellationFeeCalculator
 
   def total_cost
     return 0 unless costs
+
     costs[:cost] - costs[:subsidy]
   end
 
@@ -33,5 +34,4 @@ class CancellationFeeCalculator
     costs # make sure costs has been initialized in case this gets called first
     order_detail.price_policy&.charge_full_price_on_cancellation?
   end
-
 end

@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class ResearchSafetyCertificate < ApplicationRecord
-
   include ActiveModel::ForbiddenAttributesProtection
 
   # This class was formerly in an NU-specific engine.
   # TODO: Rename the table
   self.table_name = "nu_safety_certificates"
 
-  belongs_to :deleted_by, class_name: 'User'
+  belongs_to :deleted_by, class_name: "User"
 
   acts_as_paranoid # soft-delete functionality
 
@@ -21,7 +20,4 @@ class ResearchSafetyCertificate < ApplicationRecord
   has_many :products, through: :product_certification_requirements
 
   scope :ordered, -> { order(:name) }
-
 end
-
-

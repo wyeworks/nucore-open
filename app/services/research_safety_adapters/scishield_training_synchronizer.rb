@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ResearchSafetyAdapters
-
   # This class refreshes and synchronizes the local copy of `ScishieldTraining`s
   # with the Scishield API. This will ensure the local data is up to date with
   # the API for when safety training checks are done.
@@ -26,7 +25,7 @@ module ResearchSafetyAdapters
 
             puts "#{trainings_added} trainings added for user id #{user_id}"
           end
-        rescue StandardError => e
+        rescue => e
           msg = "Rolling back transaction, ScishieldTrainingSynchronizer error: #{e.message}"
 
           Rails.logger.error(msg)
@@ -133,5 +132,4 @@ module ResearchSafetyAdapters
       Settings.research_safety_adapter.scishield.retry_max
     end
   end
-
 end

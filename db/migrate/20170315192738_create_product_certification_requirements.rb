@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateProductCertificationRequirements < ActiveRecord::Migration[4.2]
-
   def change
     create_table :nu_product_cert_requirements do |t|
       t.references :product, index: true, foreign_key: true
@@ -12,5 +11,4 @@ class CreateProductCertificationRequirements < ActiveRecord::Migration[4.2]
       t.timestamps null: false
     end
   end
-
 end

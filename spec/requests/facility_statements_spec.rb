@@ -21,7 +21,7 @@ RSpec.describe "Statements" do
       get facility_statements_path(facility)
 
       expect(page).to(
-        have_link("View", href: facility_statement_path(facility, statement))
+        have_link("View", href: facility_statement_path(facility, statement)),
       )
     end
 
@@ -30,7 +30,7 @@ RSpec.describe "Statements" do
         get facility_statements_path(facility)
 
         expect(page).to have_link(
-          "Resend", href: resend_emails_facility_statement_path(facility, statement),
+          "Resend", href: resend_emails_facility_statement_path(facility, statement)
         )
       end
 
@@ -43,7 +43,7 @@ RSpec.describe "Statements" do
           get facility_statements_path(facility)
 
           expect(page).not_to have_link(
-            "Resend", href: resend_emails_facility_statement_path(facility, statement),
+            "Resend", href: resend_emails_facility_statement_path(facility, statement)
           )
         end
       end
@@ -57,7 +57,7 @@ RSpec.describe "Statements" do
           get facility_statements_path(facility)
 
           expect(page).not_to have_link(
-            "Resend", href: resend_emails_facility_statement_path(facility, statement),
+            "Resend", href: resend_emails_facility_statement_path(facility, statement)
           )
         end
       end
@@ -69,7 +69,7 @@ RSpec.describe "Statements" do
           get facility_statements_path(facility)
 
           expect(page).not_to have_link(
-            "Resend", href: resend_emails_facility_statement_path(facility, statement),
+            "Resend", href: resend_emails_facility_statement_path(facility, statement)
           )
         end
       end
@@ -158,7 +158,7 @@ RSpec.describe "Statements" do
           get facility_statement_path(facility, statement)
 
           expect(page).to have_css(
-            "form[action='#{unreconcile_path}'] button[type='submit'][data-disable-with]"
+            "form[action='#{unreconcile_path}'] button[type='submit'][data-disable-with]",
           )
         end
       end
@@ -250,7 +250,7 @@ RSpec.describe "Statements" do
 
         before do
           FacilityUserPermission.create!(
-            user:, facility:, read_access: true, billing_journals: true
+            user:, facility:, read_access: true, billing_journals: true,
           )
           login_as user
         end
@@ -304,7 +304,7 @@ RSpec.describe "Statements" do
             expect { action.call }.not_to change(LogEvent, :count)
 
             expect(flash[:error]).to eq(
-              "No orders on this #{I18n.t('statement_downcase')} were eligible to unreconcile"
+              "No orders on this #{I18n.t('statement_downcase')} were eligible to unreconcile",
             )
           end
         end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TabCountHelper
-
   ACTIONS_TO_COUNT_TYPE = {
     index: :new_or_in_process_orders,
     show_problems: :problem_order_details,
@@ -39,5 +38,4 @@ module TabCountHelper
       link_to title, link, options[:link_options]
     end
   end
-
 end

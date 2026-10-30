@@ -11,26 +11,26 @@ RSpec.describe ProductDisplayGroup do
   it { is_expected.to validate_presence_of(:name) }
 
   it "can have products" do
-    group = create(:product_display_group, facility: facility)
-    product = create(:item, :without_validation, facility: facility)
+    group = create(:product_display_group, facility:)
+    product = create(:item, :without_validation, facility:)
     group.products << product
     expect(group.reload.products).to include(product)
   end
 
   it "leaves the product ungrouped after delete" do
-    group = create(:product_display_group, facility: facility)
-    product = create(:item, :without_validation, facility: facility)
+    group = create(:product_display_group, facility:)
+    product = create(:item, :without_validation, facility:)
     group.products << product
 
     expect { group.destroy }.to change(ProductDisplayGroupProduct, :count).by(-1).and change(Product, :count).by(0)
   end
 
   it "fails if you try to add a product that is taken by another group" do
-    other_group = create(:product_display_group, facility: facility)
-    product = create(:item, :without_validation, facility: facility)
+    other_group = create(:product_display_group, facility:)
+    product = create(:item, :without_validation, facility:)
     other_group.products << product
 
-    group = create(:product_display_group, facility: facility)
+    group = create(:product_display_group, facility:)
     expect do
       group.update(product_ids: [product.id])
     end.to raise_error(ActiveRecord::RecordInvalid)
@@ -39,31 +39,30 @@ RSpec.describe ProductDisplayGroup do
   end
 
   it "does not care about the validity of the product" do
-    product = create(:item, :without_validation, facility: facility)
-    group = build(:product_display_group, facility: facility, products: [product])
+    product = create(:item, :without_validation, facility:)
+    group = build(:product_display_group, facility:, products: [product])
     expect(group).to be_valid
   end
 
   it "does not affect the relay of an instrument" do
     facility = create(:setup_facility)
-    instrument = create(:setup_instrument, facility: facility, relay: build(:relay))
-    group = create(:product_display_group, facility: facility, products: [instrument])
+    instrument = create(:setup_instrument, facility:, relay: build(:relay))
+    group = create(:product_display_group, facility:, products: [instrument])
     expect(instrument.reload.relay).to be_present
   end
 
   describe "position" do
     it "sets an incrementing default position on create" do
-      group1 = create(:product_display_group, facility: facility)
+      group1 = create(:product_display_group, facility:)
       expect(group1.position).to eq(1)
 
-      group2 = create(:product_display_group, facility: facility)
+      group2 = create(:product_display_group, facility:)
       expect(group2.position).to eq(2)
     end
 
     it "does not overwrite the position if you explicitly set it" do
-      group = create(:product_display_group, position: 39, facility: facility)
+      group = create(:product_display_group, position: 39, facility:)
       expect(group.position).to eq(39)
     end
   end
-
 end

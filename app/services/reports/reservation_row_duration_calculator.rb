@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class ReservationRowDurationCalculator
-
     attr_reader :row, :start_time, :end_time
 
     def initialize(row, start_time:, end_time:)
@@ -38,7 +36,5 @@ module Reports
       reserve_start_at = row.reserve_start_at > start_time ? row.reserve_start_at : start_time
       (reserve_end_at - reserve_start_at).round
     end
-
   end
-
 end

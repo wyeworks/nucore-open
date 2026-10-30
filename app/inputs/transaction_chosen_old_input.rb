@@ -3,7 +3,6 @@
 # This class is deprecated in favor of TransactionChosenInput. This class
 # is still being used by BulkEmailController for searching.
 class TransactionChosenOldInput < SimpleForm::Inputs::Base # CollectionSelectInput
-
   disable :required
 
   def input(_wrapper_options)
@@ -15,7 +14,7 @@ class TransactionChosenOldInput < SimpleForm::Inputs::Base # CollectionSelectInp
     # which were slowing down the page.
     collection_size = collection_items.to_a.size
 
-    select_options = { :multiple => true, :"data-placeholder" => placeholder_label }
+    select_options = { multiple: true, "data-placeholder": placeholder_label }
 
     # If there is only one possible value, then we want to show it, and not allow
     # selection, but only if it's not a nullable field
@@ -61,5 +60,4 @@ class TransactionChosenOldInput < SimpleForm::Inputs::Base # CollectionSelectInp
       template.options_from_collection_for_select(collection_items, options[:value_method], options[:label_method], search_fields[attribute_name])
     end
   end
-
 end

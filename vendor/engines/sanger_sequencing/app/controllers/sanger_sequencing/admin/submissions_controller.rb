@@ -1,11 +1,8 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   module Admin
-
     class SubmissionsController < AdminController
-
       admin_tab :all
       layout "two_column"
       before_action { @active_tab = "admin_sanger_sequencing" }
@@ -31,9 +28,6 @@ module SangerSequencing
         request.xhr?
       end
       helper_method :modal?
-
     end
-
   end
-
 end

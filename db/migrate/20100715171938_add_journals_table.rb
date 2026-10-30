@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddJournalsTable < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :journals do |t|
       t.references :facility,       null: false
@@ -24,5 +23,4 @@ class AddJournalsTable < ActiveRecord::Migration[4.2]
     drop_table :journaled_accounts
     drop_table :journals
   end
-
 end

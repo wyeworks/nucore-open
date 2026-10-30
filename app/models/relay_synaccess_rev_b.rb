@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class RelaySynaccessRevB < Relay
-
   # Supports Synaccess Models: NP-02B
 
   include PowerRelay
@@ -15,5 +14,4 @@ class RelaySynaccessRevB < Relay
   def relay_connection
     @relay_connection ||= NetBooter::Http::RevB.new(host, connection_options)
   end
-
 end

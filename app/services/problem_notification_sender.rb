@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProblemNotificationSender
-
   attr_reader :order_details, :current_user, :notification_groups
 
   def initialize(order_details, current_user, notification_groups: [])
@@ -21,7 +20,7 @@ class ProblemNotificationSender
   def detailed_notification_count
     {
       emails: selected_order_details.count,
-      users: notified_order_details.map(&:user).uniq.count
+      users: notified_order_details.map(&:user).uniq.count,
     }
   end
 
@@ -46,10 +45,9 @@ class ProblemNotificationSender
         :bulk_problem_notification,
         current_user,
         metadata: {
-          order_detail_ids: details.map(&:id).join(", ")
-        }
+          order_detail_ids: details.map(&:id).join(", "),
+        },
       )
     end
   end
-
 end

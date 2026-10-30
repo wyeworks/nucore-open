@@ -1,13 +1,12 @@
 # frozen_string_literal: true
 
 class PriceGroupsController < ApplicationController
-
   # TODO: refactor to use PriceGroupMembersController concern, maybe with a new name?
 
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
-  before_action :load_price_group_and_ability!, only: [:accounts, :destroy, :edit, :show, :update, :users, :users_search]
+  before_action :load_price_group_and_ability!, only: %i[accounts destroy edit show update users users_search]
   before_action :set_available_parent_groups, only: [:new, :edit]
 
   load_and_authorize_resource
@@ -131,7 +130,7 @@ class PriceGroupsController < ApplicationController
   end
 
   def price_group_params
-    permitted = [:name, :display_order, :is_internal, :is_hidden, :admin_editable, :facility_id]
+    permitted = %i[name display_order is_internal is_hidden admin_editable facility_id]
     permitted << :parent_price_group_id if SettingsHelper.feature_on?("pricing.external_price_group_subsidies")
     params.require(:price_group).permit(permitted)
   end
@@ -148,5 +147,4 @@ class PriceGroupsController < ApplicationController
     @price_group = current_facility.price_groups.find(params[:id])
     @price_group_ability = Ability.new(current_user, @price_group, self)
   end
-
 end

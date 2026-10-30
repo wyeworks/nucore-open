@@ -13,7 +13,7 @@ RSpec.describe SurveysController do
   let(:order_status) { create :order_status }
   let(:service) { create :service, facility: authable, initial_order_status_id: order_status.id }
   let(:external_service) { UrlService.create! location: "http://ext.service.com" }
-  let(:external_service_passer) { ExternalServicePasser.create! passer: service, external_service: external_service }
+  let(:external_service_passer) { ExternalServicePasser.create! passer: service, external_service: }
   let(:external_service2) { UrlService.create! location: "http://ext.service2.com" }
   let(:external_service_passer2) { ExternalServicePasser.create! passer: service, external_service: external_service2 }
 
@@ -27,7 +27,6 @@ RSpec.describe SurveysController do
   end
 
   context "deactivate" do
-
     before(:each) do
       @method = :put
       @action = :deactivate
@@ -36,11 +35,9 @@ RSpec.describe SurveysController do
     it_should_allow_managers_only :redirect do
       test_change_state(false)
     end
-
   end
 
   context "activate" do
-
     before(:each) do
       @method = :put
       @action = :activate
@@ -49,7 +46,6 @@ RSpec.describe SurveysController do
     it_should_allow_managers_only :redirect do
       test_change_state(true)
     end
-
   end
 
   context "complete" do
@@ -101,7 +97,6 @@ RSpec.describe SurveysController do
         expect(@order_detail.reload.order).to eq @clone
         expect { order.reload }.to raise_error ActiveRecord::RecordNotFound
       end
-
     end
   end
 
@@ -122,18 +117,15 @@ RSpec.describe SurveysController do
 
   def create_order_detail
     @product = create(:item,
-                      facility: authable,
-                     )
+                      facility: authable)
     @account = create_nufs_account_with_owner
     @order = create(:order,
                     facility: authable,
                     user: @director,
                     created_by: @director.id,
-                    account: @account,
-                   )
+                    account: @account)
     @price_group = FactoryBot.create(:price_group, facility: authable)
     @price_policy = FactoryBot.create(:item_price_policy, product: @product, price_group: @price_group)
     @order_detail = FactoryBot.create(:order_detail, order: @order, product: @product, price_policy: @price_policy)
   end
-
 end

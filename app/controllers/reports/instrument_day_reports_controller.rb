@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class InstrumentDayReportsController < ReportsController
-
     include InstrumentReporter
 
     helper_method :export_csv_report_path
@@ -63,7 +61,5 @@ module Reports
       row[stat.day] = stat.value
       row.unshift(reservation.product.name) + report_attribute_values(reservation, reservation.product)
     end
-
   end
-
 end

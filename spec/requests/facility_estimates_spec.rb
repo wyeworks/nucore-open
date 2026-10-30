@@ -67,7 +67,7 @@ RSpec.describe "FacilityEstimatesController" do
           facility:, user:,
           read_access: true,
           quoting: true,
-          order_management: true,
+          order_management: true
         )
       end
 

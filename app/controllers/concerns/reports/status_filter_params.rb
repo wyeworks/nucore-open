@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   module StatusFilterParams
-
     extend ActiveSupport::Concern
 
     included do
@@ -32,7 +30,5 @@ module Reports
 
       @date_range_field = params[:date_range_field] || "journal_or_statement_date"
     end
-
   end
-
 end

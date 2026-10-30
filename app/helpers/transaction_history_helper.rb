@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TransactionHistoryHelper
-
   def row_class(order_detail)
     OrderDetailPresenter.new(order_detail).row_class
   end
@@ -42,5 +41,4 @@ module TransactionHistoryHelper
     html << "</li>"
     html.html_safe
   end
-
 end

@@ -45,16 +45,16 @@ RSpec.describe LogEventSearcher do
 
     it "filters on event type" do
       expect(
-        search(events: ["account.create"])
+        search(events: ["account.create"]),
       ).to match_array([log_1])
       expect(
-        search(events: ["account_user.create"])
+        search(events: ["account_user.create"]),
       ).to match_array([log_2])
       expect(
-        search(events: ["user.create"])
+        search(events: ["user.create"]),
       ).to match_array([log_3])
       expect(
-        search(events: ["user.create", "account_user.create"])
+        search(events: ["user.create", "account_user.create"]),
       ).to match_array([log_2, log_3])
     end
   end
@@ -162,7 +162,7 @@ RSpec.describe LogEventSearcher do
   describe "finding statement" do
     let(:account) { create(:account, :with_account_owner, account_number: "12345") }
     let(:facility) { create(:setup_facility) }
-    let(:statement) { create(:statement, facility:, account:)}
+    let(:statement) { create(:statement, facility:, account:) }
     let!(:log_event) { create(:log_event, loggable: statement, event_type: :create) }
 
     it "finds the statement" do

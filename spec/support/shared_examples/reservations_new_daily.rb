@@ -64,7 +64,7 @@ RSpec.shared_examples "new daily reservation" do |before_submit: nil, after_subm
         success_message
       else
         "Reservation created successfully"
-      end
+      end,
     )
 
     instance_eval(&after_submit) if after_submit.present?
@@ -105,7 +105,7 @@ RSpec.shared_examples "new daily reservation with start time disabled" do |befor
         success_message
       else
         "Reservation created successfully"
-      end
+      end,
     )
 
     instance_eval(&after_submit) if after_submit.present?

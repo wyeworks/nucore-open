@@ -65,7 +65,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
       context "remove a user from the price group" do
         it "soft delete the price group memeber and logs it" do
-          user_price_group_member = create(:user_price_group_member, price_group: price_group, user: user)
+          user_price_group_member = create(:user_price_group_member, price_group:, user:)
           visit users_facility_price_group_path(facility, price_group)
           expect { click_link "Remove" }.to change(PriceGroupMember, :count).by(-1)
           log_event = LogEvent.find_by(loggable: user_price_group_member, event_type: :delete)
@@ -78,8 +78,8 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
         let(:user_not_found) { create(:user, first_name: "Jane", last_name: "Holmes", username: "jholmes") }
 
         before do
-          create(:user_price_group_member, price_group: price_group, user: user_not_found)
-          create(:user_price_group_member, price_group: price_group, user: user_searchable)
+          create(:user_price_group_member, price_group:, user: user_not_found)
+          create(:user_price_group_member, price_group:, user: user_searchable)
           visit users_facility_price_group_path(facility, price_group)
         end
 
@@ -189,7 +189,7 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
 
   describe "searching to add price group member", js: true do
     let(:user) { create(:user, :facility_director, facility:) }
-    let(:price_group) { create(:price_group, facility_id: facility.id ) }
+    let(:price_group) { create(:price_group, facility_id: facility.id) }
     let!(:account1) { create(:account, :with_account_owner, account_number: "135711", description: "first account", facilities: [facility], owner: user) }
     let!(:account2) { create(:account, :with_account_owner, account_number: "246810", description: "second account", facilities: [facility], owner: user) }
 
@@ -200,14 +200,14 @@ RSpec.describe "Managing Price Groups", :aggregate_failures do
     end
 
     it "searches for accounts by partial description" do
-      fill_in "search_term", with: account1.description[0,5]
+      fill_in "search_term", with: account1.description[0, 5]
       click_button "Search"
       expect(page).to have_content(account1.description)
       expect(page).to_not have_content(account2.description)
     end
 
     it "searches for accounts by partial account number" do
-      fill_in "search_term", with: account2.account_number[1,3]
+      fill_in "search_term", with: account2.account_number[1, 3]
       click_button "Search"
       expect(page).to have_content(account2.description)
       expect(page).to_not have_content(account1.description)

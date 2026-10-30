@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateOrders < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :orders do |t|
       t.references :facility, null: false
@@ -22,5 +21,4 @@ class CreateOrders < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :orders
   end
-
 end

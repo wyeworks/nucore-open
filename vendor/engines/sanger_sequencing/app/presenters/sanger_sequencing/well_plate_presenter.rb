@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
 module SangerSequencing
-
   class WellPlatePresenter
-
     include TextHelpers::Translation
 
     attr_reader :well_plate, :plate_mode
+
     delegate :samples, to: :well_plate
 
     def initialize(well_plate, plate_mode)
@@ -45,7 +44,7 @@ module SangerSequencing
 
     def plate_text(key)
       default = "default.#{key}".to_sym
-      text("#{plate_mode}.#{key}", default: default)
+      text("#{plate_mode}.#{key}", default:)
     end
 
     def cleaned_cells
@@ -84,7 +83,5 @@ module SangerSequencing
     def well_plate_alternative_csv_format?
       SettingsHelper.feature_on?("products.well_plate_alternative_csv_format")
     end
-
   end
-
 end

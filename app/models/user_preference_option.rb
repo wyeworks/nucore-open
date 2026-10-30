@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserPreferenceOption
-
   def initialize(user)
     @user = user
   end
@@ -25,5 +24,4 @@ class UserPreferenceOption
     # "Option 1"
     raise NotImplementedError
   end
-
 end

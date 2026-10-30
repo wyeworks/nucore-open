@@ -4,9 +4,7 @@ require "rails_helper"
 
 RSpec.describe Nucore::Database::DateHelper do
   class DateHelperClass
-
     include Nucore::Database::DateHelper
-
   end
 
   describe "#parse_2_digit_year_date" do

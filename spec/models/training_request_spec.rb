@@ -6,14 +6,14 @@ RSpec.describe TrainingRequest do
   let(:user) { create(:user) }
 
   describe "#new" do
-    subject { build(:training_request, user: user, product: product) }
+    subject { build(:training_request, user:, product:) }
 
     context "when the product has restricted access" do
       let(:product) { create(:instrument_requiring_approval) }
 
       context "when the user is already on the list" do
         let!(:previous_training_request) do
-          create(:training_request, user: user, product: product)
+          create(:training_request, user:, product:)
         end
 
         it "does not add the user to the list" do
@@ -55,7 +55,7 @@ RSpec.describe TrainingRequest do
     end
 
     context "when the user has submitted a request for access" do
-      before { create(:training_request, user: user, product: product) }
+      before { create(:training_request, user:, product:) }
 
       it "returns true" do
         expect(TrainingRequest.submitted?(user, product)).to be true

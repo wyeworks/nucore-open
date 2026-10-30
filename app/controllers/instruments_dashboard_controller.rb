@@ -1,5 +1,4 @@
 class InstrumentsDashboardController < ApplicationController
-
   layout "plain", only: :public_dashboard
 
   admin_tab :all
@@ -23,14 +22,13 @@ class InstrumentsDashboardController < ApplicationController
 
   def init_reservations
     @reservations = current_facility.reservations
-      .current_in_use
-      .includes(:product, order: :user)
-      .joins(instrument: :schedule)
-      .merge(Schedule.positioned)
+                                    .current_in_use
+                                    .includes(:product, order: :user)
+                                    .joins(instrument: :schedule)
+                                    .merge(Schedule.positioned)
   end
 
   def authenticate_token
     raise ActiveRecord::RecordNotFound unless current_facility.dashboard_enabled? && params[:token] == current_facility.dashboard_token
   end
-
 end

@@ -6,17 +6,17 @@ RSpec.describe "Placing an order with a project" do
   let!(:product) { FactoryBot.create(:setup_item) }
   let!(:account) { FactoryBot.create(:nufs_account, :with_account_owner, owner: user) }
   let(:facility) { product.facility }
-  let(:facility_admin) { FactoryBot.create(:user, :facility_administrator, facility: facility) }
+  let(:facility_admin) { FactoryBot.create(:user, :facility_administrator, facility:) }
   let!(:price_policy) do
     FactoryBot.create(:item_price_policy,
-                      price_group: PriceGroup.base, product: product,
+                      price_group: PriceGroup.base, product:,
                       unit_cost: 33.25)
   end
   let!(:account_price_group_member) do
-    FactoryBot.create(:account_price_group_member, account: account, price_group: price_policy.price_group)
+    FactoryBot.create(:account_price_group_member, account:, price_group: price_policy.price_group)
   end
   let(:user) { FactoryBot.create(:user) }
-  let!(:project) { FactoryBot.create(:project, facility: facility) }
+  let!(:project) { FactoryBot.create(:project, facility:) }
 
   before do
     login_as facility_admin

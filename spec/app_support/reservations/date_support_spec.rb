@@ -6,10 +6,10 @@ RSpec.describe Reservations::DateSupport do
   subject(:reservation) do
     build_stubbed(
       :reservation,
-      reserve_start_at: reserve_start_at,
-      reserve_end_at: reserve_end_at,
-      actual_start_at: actual_start_at,
-      actual_end_at: actual_end_at,
+      reserve_start_at:,
+      reserve_end_at:,
+      actual_start_at:,
+      actual_end_at:,
     )
   end
 
@@ -124,7 +124,8 @@ RSpec.describe Reservations::DateSupport do
           reserve_start_hour: "9",
           reserve_start_min: "0",
           reserve_start_meridian: "AM",
-          duration_mins: "60")
+          duration_mins: "60",
+        )
       end
 
       it "updates start date" do

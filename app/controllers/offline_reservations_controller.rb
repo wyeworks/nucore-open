@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OfflineReservationsController < ApplicationController
-
   admin_tab :all
   layout "two_column"
 
@@ -81,5 +80,4 @@ class OfflineReservationsController < ApplicationController
   def update_params
     params.require(:offline_reservation).permit(:admin_note, :category)
   end
-
 end

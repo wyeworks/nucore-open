@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Project < ApplicationRecord
-
   belongs_to :facility, foreign_key: :facility_id
   has_many :order_details, inverse_of: :project
   has_many :orders, inverse_of: :cross_core_project, foreign_key: :cross_core_project_id
@@ -29,7 +28,7 @@ class Project < ApplicationRecord
   scope :for_single_facility, lambda { |facility|
     left_outer_joins(:orders)
       .where(orders: { cross_core_project_id: nil })
-      .where(facility: facility)
+      .where(facility:)
   }
 
   def to_s
@@ -51,5 +50,4 @@ class Project < ApplicationRecord
 
     super
   end
-
 end

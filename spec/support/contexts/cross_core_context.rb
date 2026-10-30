@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 RSpec.shared_context "cross core orders" do
-
   # Facility 1 has cross core orders with Facility 2 but NOT Facility 3
   # This is the "Current Facility"
   let(:facility) { create(:setup_facility) }

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module GlobalSearch
-
   class ProductSearcher < Base
-
     def template
       "products"
     end
@@ -19,7 +17,5 @@ module GlobalSearch
 
       products.in_active_facility.not_archived.merge(Product.where(is_hidden: false).or(Product.where(facility: facilities)))
     end
-
   end
-
 end

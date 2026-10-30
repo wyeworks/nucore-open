@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PowerRelayLogger < ActiveSupport::LogSubscriber
-
   def status(event)
     render event, "Got status with options #{event.payload[:options]}. Status: #{event.payload[:status]}"
   end
@@ -17,7 +16,6 @@ class PowerRelayLogger < ActiveSupport::LogSubscriber
 
     debug color("[PowerRelays] (#{event.duration.round(1)}ms) #{message}", display_color, true)
   end
-
 end
 
 PowerRelayLogger.attach_to :power_relays

@@ -12,7 +12,7 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
   end
 
   context "the instrument has no relay" do
-    let(:instrument) { FactoryBot.create(:instrument, no_relay: true, facility: facility) }
+    let(:instrument) { FactoryBot.create(:instrument, no_relay: true, facility:) }
 
     it "renders the page" do
       expect(page).to have_content("Reservation only")
@@ -91,7 +91,7 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
       end
 
       context "a director can create a relay" do
-        let(:user) { FactoryBot.create(:user, :facility_director, facility: facility) }
+        let(:user) { FactoryBot.create(:user, :facility_director, facility:) }
 
         it "saves a new relay" do
           expect_any_instance_of(RelaySynaccessRevA).to receive(:activate_secondary_outlet).and_return(true)
@@ -124,7 +124,7 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
       end
 
       context "the relay has already been taken by a different instrument" do
-        let!(:instrument2) { create(:instrument, facility: facility, no_relay: true) }
+        let!(:instrument2) { create(:instrument, facility:, no_relay: true) }
         let!(:existing_relay) { create(:relay_synb, instrument: instrument2) }
 
         it "raises an error" do
@@ -140,7 +140,7 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
         end
 
         context "both instruments have the same schedule" do
-          let!(:instrument2) { create(:instrument, facility: facility, no_relay: true, schedule: instrument.schedule) }
+          let!(:instrument2) { create(:instrument, facility:, no_relay: true, schedule: instrument.schedule) }
           let!(:existing_relay) { create(:relay_syna, instrument: instrument2) }
 
           it "saves the relay" do
@@ -163,7 +163,7 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
   end
 
   context "editing an existing relay" do
-    let(:instrument) { FactoryBot.create(:setup_instrument, facility: facility, relay: build(:relay)) }
+    let(:instrument) { FactoryBot.create(:setup_instrument, facility:, relay: build(:relay)) }
 
     before do
       click_link "Edit"
@@ -203,7 +203,7 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
   end
 
   context "switching relay types" do
-    let(:instrument) { FactoryBot.create(:setup_instrument, facility: facility, relay: build(:relay)) }
+    let(:instrument) { FactoryBot.create(:setup_instrument, facility:, relay: build(:relay)) }
 
     before do
       click_link "Edit"
@@ -218,11 +218,9 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
 
         expect(instrument.relay).to be_a(RelayDummy)
       end
-
     end
 
     context "from relay to reservation only" do
-
       it "deletes the relay" do
         select "Reservation only", from: "Control mechanism"
 
@@ -239,11 +237,10 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
 
         expect(Relay.exists?(instrument_id: nil)).to be false
       end
-
     end
 
     context "from reservation only to timer" do
-      let(:instrument) { FactoryBot.create(:instrument, facility: facility, no_relay: true) }
+      let(:instrument) { FactoryBot.create(:instrument, facility:, no_relay: true) }
 
       it "sets the instrument relay to a RelayDummy" do
         select "Timer without relay", from: "Control mechanism"
@@ -256,7 +253,7 @@ RSpec.describe "Instrument Relay Tab", feature_setting: { "products.disable_rela
     end
 
     context "from timer to reservation only" do
-      let(:instrument) { FactoryBot.create(:setup_instrument, facility: facility) }
+      let(:instrument) { FactoryBot.create(:setup_instrument, facility:) }
 
       it "deletes the relay dummy" do
         select "Reservation only", from: "Control mechanism"

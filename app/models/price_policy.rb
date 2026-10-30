@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PricePolicy < ApplicationRecord
-
   include Nucore::Database::DateHelper
 
   belongs_to :price_group
@@ -113,6 +112,7 @@ class PricePolicy < ApplicationRecord
 
   def order_review_product?
     return true unless product
+
     !product.skip_order_review?
   end
 
@@ -142,6 +142,7 @@ class PricePolicy < ApplicationRecord
   # by this PricePolicy's +PriceGroup+, false otherwise.
   def restrict_purchase
     return false unless price_group && product
+
     !can_purchase?
   end
 
@@ -208,9 +209,9 @@ class PricePolicy < ApplicationRecord
     price_group   = self.price_group
     unless product.nil? || price_group.nil?
       pp = if id.nil?
-             PricePolicy.find_by(price_group_id: price_group.id, product_id: product.id, start_date: start_date)
+             PricePolicy.find_by(price_group_id: price_group.id, product_id: product.id, start_date:)
            else
-             PricePolicy.where(price_group_id: price_group.id, product_id: product.id, start_date: start_date).where.not(id: id).first
+             PricePolicy.where(price_group_id: price_group.id, product_id: product.id, start_date:).where.not(id:).first
            end
       errors.add("start_date", "conflicts with an existing price rule") unless pp.nil?
     end
@@ -233,14 +234,15 @@ class PricePolicy < ApplicationRecord
 
   def subsidy_less_than_rate
     return unless defined?(rate_field)
+
     errors.add(subsidy_field, :subsidy_greater_than_cost) if self[rate_field] && self[subsidy_field] && self[subsidy_field] > self[rate_field]
   end
 
   def truncate_existing_policies
     logger.debug("Truncating existing policies")
     existing_policies = PricePolicy.current.where(type: self.class.name,
-                                                  price_group_id: price_group_id,
-                                                  product_id: product_id)
+                                                  price_group_id:,
+                                                  product_id:)
 
     existing_policies = existing_policies.where("id != ?", id) unless id.nil?
 
@@ -249,5 +251,4 @@ class PricePolicy < ApplicationRecord
       policy.save
     end
   end
-
 end

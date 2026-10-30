@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderManagement::OrderDetailsController < ApplicationController
-
   include OrderDetailFileDownload
 
   PRICE_ADJUSTMENT_ATTRIBUTES = %i[actual_cost actual_subsidy price_change_reason].freeze
@@ -39,7 +38,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
     updater = OrderDetails::ParamUpdater.new(
       @order_detail,
       user: session_user,
-      cancel_fee: params[:with_cancel_fee] == "1"
+      cancel_fee: params[:with_cancel_fee] == "1",
     )
 
     if updater.update_param_attributes(update_params)
@@ -130,11 +129,11 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
     if @order_detail.complete?
       @order_statuses = OrderStatus.by_names([
-        OrderStatus::COMPLETE,
-        OrderStatus::CANCELED,
-        OrderStatus::UNRECOVERABLE,
-        OrderStatus::RECONCILED,
-      ]).to_a
+                                               OrderStatus::COMPLETE,
+                                               OrderStatus::CANCELED,
+                                               OrderStatus::UNRECOVERABLE,
+                                               OrderStatus::RECONCILED,
+                                             ]).to_a
 
       # Add potentially missing custom status
       @order_statuses |= [@order_detail.order_status]

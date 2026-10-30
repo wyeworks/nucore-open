@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetails::ParamUpdater
-
   def self.permitted_attributes
     @permitted_attributes ||=
       [
@@ -18,18 +17,18 @@ class OrderDetails::ParamUpdater
         :unrecoverable_note,
         :deposit_number,
         :reference_id,
-        reservation: [
-          :reserve_start_date,
-          :reserve_start_hour,
-          :reserve_start_min,
-          :reserve_start_meridian,
-          :duration_mins,
-          :duration_days,
-          :actual_start_date,
-          :actual_start_hour,
-          :actual_start_min,
-          :actual_start_meridian,
-          :actual_duration_mins,
+        reservation: %i[
+          reserve_start_date
+          reserve_start_hour
+          reserve_start_min
+          reserve_start_meridian
+          duration_mins
+          duration_days
+          actual_start_date
+          actual_start_hour
+          actual_start_min
+          actual_start_meridian
+          actual_duration_mins
         ],
       ]
   end
@@ -138,7 +137,7 @@ class OrderDetails::ParamUpdater
 
   def change_order_status(new_order_status_id, apply_cancel_fee)
     new_order_status = OrderStatus.find(new_order_status_id)
-    @order_detail.update_order_status!(@editing_user, new_order_status, admin: true, apply_cancel_fee: apply_cancel_fee)
+    @order_detail.update_order_status!(@editing_user, new_order_status, admin: true, apply_cancel_fee:)
     @order_detail.notify_purchaser_of_order_status
     true
   rescue => e
@@ -155,5 +154,4 @@ class OrderDetails::ParamUpdater
       @order_detail.errors.add(field, message)
     end
   end
-
 end

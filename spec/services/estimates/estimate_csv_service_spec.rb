@@ -65,7 +65,7 @@ RSpec.describe Estimates::EstimateCsvService do
             creator.full_name,
             user.full_name,
             format_usa_date(estimate.expires_at),
-          ]
+          ],
         )
       end
 
@@ -90,8 +90,8 @@ RSpec.describe Estimates::EstimateCsvService do
             "2",
             nil,
             "$100.00",
-            "$200.00"
-          ]
+            "$200.00",
+          ],
         )
       end
 

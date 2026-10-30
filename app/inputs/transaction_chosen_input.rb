@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
-
   disable :required
 
   def input(wrapper_options = nil)
@@ -26,7 +25,7 @@ class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
 
     option_data = option_elems(label_method, value_method)
     selected = input_options[:selected] || object.public_send(attribute_name) || default_order_statuses
-    opts = template.options_for_select option_data, selected: selected
+    opts = template.options_for_select(option_data, selected:)
     template.select_tag("#{object.class.model_name.param_key}[#{attribute_name}]", opts, merged_input_options)
   end
 
@@ -65,7 +64,7 @@ class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
 
   def dataify(hash)
     Hash[
-      hash.map { |k, v| ["data-#{k.to_s.dasherize}", v] }
+      hash.map { |k, v| ["data-#{k.to_s.dasherize}", v] },
     ]
   end
 
@@ -80,5 +79,4 @@ class TransactionChosenInput < SimpleForm::Inputs::CollectionInput
   def placeholder_label
     "Select #{options[:label].downcase}"
   end
-
 end

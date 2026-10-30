@@ -1,5 +1,4 @@
 class AddFullTextIndexForOracle < ActiveRecord::Migration[5.2]
-
   def change
     if Nucore::Database.oracle?
       reversible do |dir|
@@ -14,5 +13,4 @@ class AddFullTextIndexForOracle < ActiveRecord::Migration[5.2]
       end
     end
   end
-
 end

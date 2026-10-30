@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class NotificationsController < ApplicationController
-
   customer_tab  :all
   before_action :check_acting_as
   before_action :check_notifications
@@ -20,5 +19,4 @@ class NotificationsController < ApplicationController
       redirect_back_or_to(root_path)
     end
   end
-
 end

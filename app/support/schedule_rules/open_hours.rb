@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module ScheduleRules
-
   class OpenHours
     attr_reader :schedule_rules
 
@@ -61,5 +60,4 @@ module ScheduleRules
       end.first
     end
   end
-
 end

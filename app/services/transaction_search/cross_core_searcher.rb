@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class CrossCoreSearcher < BaseSearcher
     def options
       ["all", "cross_core"]
@@ -30,7 +29,5 @@ module TransactionSearch
     def input_type
       :select
     end
-
   end
-
 end

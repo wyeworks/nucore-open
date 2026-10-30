@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreateEmailEvents < ActiveRecord::Migration[4.2]
-
   def change
     create_table :email_events do |t|
       t.references :user, null: false, foreign_key: true
@@ -11,5 +10,4 @@ class CreateEmailEvents < ActiveRecord::Migration[4.2]
       t.index [:user_id, :key], unique: true
     end
   end
-
 end

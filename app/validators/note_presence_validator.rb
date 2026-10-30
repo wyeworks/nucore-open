@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class NotePresenceValidator
-
   def initialize(order_detail)
     @order_detail = order_detail
   end
@@ -14,5 +13,4 @@ class NotePresenceValidator
       true
     end
   end
-
 end

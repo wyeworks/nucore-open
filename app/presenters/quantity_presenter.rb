@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class QuantityPresenter
-
   QuantityDisplay = Struct.new(:value) do
     def html
       to_s
@@ -64,5 +63,4 @@ class QuantityPresenter
                    QuantityDisplay.new(@quantity)
                  end
   end
-
 end

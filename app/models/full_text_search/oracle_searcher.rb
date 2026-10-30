@@ -1,17 +1,15 @@
 module FullTextSearch
-
   class OracleSearcher < BaseSearcher
-
     # Example: search([:name, :description], "spinning disk")
     def search(fields, query)
       # By wrapping each portion in {}, it escapes what's inside so it handles special
       # characters and other reserved words
       # https://docs.oracle.com/cd/B10501_01/text.920/a96518/cqspcl.htm#20741
       formatted_query = query.to_s
-        .gsub(/[{}]/, "") # remove any existing curly braces
-        .split
-        .map { |s| "{#{s}}" }
-        .join(",")
+                             .gsub(/[{}]/, "") # remove any existing curly braces
+                             .split
+                             .map { |s| "{#{s}}" }
+                             .join(",")
 
       return @scope.none if formatted_query.blank?
 
@@ -23,7 +21,5 @@ module FullTextSearch
         relation.order(Arel.sql("SCORE(#{label}) DESC"))
       end
     end
-
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class AbilityExtension
-
     attr_reader :ability
 
     def initialize(ability)
@@ -15,7 +13,5 @@ module BulkEmail
         ability.can(:send_bulk_emails, resource)
       end
     end
-
   end
-
 end

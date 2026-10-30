@@ -1,17 +1,12 @@
 # frozen_string_literal: true
 
 module Devise
-
   module Models
-
     SamlAuthenticatableWithCustomError = SamlAuthenticatable
-
   end
 
   module Strategies
-
     class SamlAuthenticatableWithCustomError < SamlAuthenticatable
-
       private
 
       # In the original SamlAuthenticatable, this method calls fail!(:invalid), which
@@ -38,18 +33,15 @@ module Devise
         I18n.t(
           "devise.failure.saml_invalid",
           username: failed_auth_user_attributes[:username]&.first,
-          email: failed_auth_user_attributes[:email]&.first
+          email: failed_auth_user_attributes[:email]&.first,
         )
       end
 
       def log_to_rollbar(msg)
         Rollbar.warn(msg, attributes: failed_auth_user_attributes) unless msg == "Resource could not be found"
       end
-
     end
-
   end
-
 end
 
 Warden::Strategies.add(:saml_authenticatable_with_custom_error, Devise::Strategies::SamlAuthenticatableWithCustomError)

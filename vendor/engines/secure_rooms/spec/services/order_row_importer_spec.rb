@@ -8,7 +8,7 @@ RSpec.describe OrderRowImporter do
   let(:secure_room) { create(:secure_room) }
   let(:facility) { secure_room.facility }
   let(:user) { create(:user) }
-  let(:order_import) { build(:order_import, creator: user, facility: facility) }
+  let(:order_import) { build(:order_import, creator: user, facility:) }
   let(:account) { create(:nufs_account, :with_account_owner, owner: user) }
 
   let(:row) do

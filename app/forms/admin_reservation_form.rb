@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AdminReservationForm
-
   include ActiveModel::Validations
   include DateHelper
 
@@ -86,7 +85,7 @@ class AdminReservationForm
 
     repeats.map do |t|
       @reservation.dup.tap do |res|
-        res.assign_attributes(reserve_start_at: t.start_time, reserve_end_at: t.end_time, group_id: group_id)
+        res.assign_attributes(reserve_start_at: t.start_time, reserve_end_at: t.end_time, group_id:)
       end
     end
   end

@@ -44,7 +44,7 @@ RSpec.describe(
         have_enqueued_mail(
           ProductNotificationMailer,
           :slot_available,
-        ).with(product, some_user, start_time, end_time, subject: nil)
+        ).with(product, some_user, start_time, end_time, subject: nil),
       )
     end
 
@@ -53,13 +53,13 @@ RSpec.describe(
         have_enqueued_mail(
           ProductNotificationMailer,
           :slot_available,
-        ).with(product, reservation_user, start_time, end_time, subject: nil)
+        ).with(product, reservation_user, start_time, end_time, subject: nil),
       )
     end
 
     it "enqueues exactly two emails" do
       expect { subject.notify! }.to(
-        have_enqueued_mail(ProductNotificationMailer, :slot_available).exactly(2)
+        have_enqueued_mail(ProductNotificationMailer, :slot_available).exactly(2),
       )
     end
 
@@ -75,7 +75,7 @@ RSpec.describe(
           have_enqueued_mail(
             ProductNotificationMailer,
             :slot_available,
-          ).with(product, some_user, start_time, end_time, subject: email_subject)
+          ).with(product, some_user, start_time, end_time, subject: email_subject),
         )
       end
     end
@@ -84,7 +84,7 @@ RSpec.describe(
       subject do
         described_class.new(
           product, start_time, end_time,
-          exclude_user: reservation_user,
+          exclude_user: reservation_user
         )
       end
 
@@ -93,13 +93,13 @@ RSpec.describe(
           have_enqueued_mail(
             ProductNotificationMailer,
             :slot_available,
-          ).with(product, some_user, start_time, end_time, subject: nil)
+          ).with(product, some_user, start_time, end_time, subject: nil),
         )
       end
 
       it "enqueue one email" do
         expect { subject.notify! }.to(
-          have_enqueued_mail(ProductNotificationMailer, :slot_available).exactly(1)
+          have_enqueued_mail(ProductNotificationMailer, :slot_available).exactly(1),
         )
       end
     end
@@ -141,7 +141,7 @@ RSpec.describe(
           have_enqueued_mail(
             ProductNotificationMailer,
             :slot_available,
-          ).exactly(2)
+          ).exactly(2),
         )
       end
 
@@ -150,7 +150,7 @@ RSpec.describe(
           have_enqueued_mail(
             ProductNotificationMailer,
             :slot_available,
-          ).with(product, inactive_user, start_time, end_time, subject: nil)
+          ).with(product, inactive_user, start_time, end_time, subject: nil),
         )
       end
     end
@@ -171,7 +171,7 @@ RSpec.describe(
       described_class.new(
         product,
         start_time,
-        end_time
+        end_time,
       )
     end
 
@@ -192,7 +192,7 @@ RSpec.describe(
     it "enqueues a SlotAvailableJob" do
       expect { subject.notify_later }.to(
         enqueue_job(SlotAvailableJob)
-        .with(product, start_time, end_time, exclude_user: nil)
+        .with(product, start_time, end_time, exclude_user: nil),
       )
     end
   end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class LogEventMetadataPresenter
-
   SUPPORTED_EVENT = "statement.unreconciled"
 
   def initialize(log_event)
@@ -32,5 +31,4 @@ class LogEventMetadataPresenter
   def values(key)
     Array(log_event.metadata[key])
   end
-
 end

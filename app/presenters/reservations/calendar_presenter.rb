@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Reservations
-
   class CalendarPresenter < DelegateClass(Reservation)
     def as_calendar_object(_options = {})
       {
@@ -29,7 +28,7 @@ module Reservations
     def as_calendar_object(options = {})
       super.merge(
         title: "Instrument Offline",
-        className: "unavailable"
+        className: "unavailable",
       ).tap do |hash|
         hash[:email] = created_by.try(:full_name) if options[:with_details].present?
       end
@@ -77,5 +76,4 @@ module Reservations
       end
     end
   end
-
 end

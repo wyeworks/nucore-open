@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductAccessoriesController < ApplicationController
-
   admin_tab     :all
   before_action :check_acting_as
   before_action :init_current_facility
@@ -50,5 +49,4 @@ class ProductAccessoriesController < ApplicationController
     non_available_accessories = [@product.id] + Array(@product_accessories).map(&:accessory_id)
     @available_accessories = current_facility.products.accessorizable.not_archived.exclude(non_available_accessories).order(:name)
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ProductForCart
-
   include TextHelpers::Translation
 
   attr_accessor :error_message, :error_path
@@ -113,7 +112,7 @@ class ProductForCart
       email: product.email,
       facility: product.facility,
       product_name: product.name,
-      product_type: product_type,
+      product_type:,
       product_type_plural: product_type.pluralize,
     }
   end
@@ -124,7 +123,7 @@ class ProductForCart
 
   def acting_as?(acting_user, session_user)
     return false if session_user.nil?
+
     !acting_user.equal?(session_user)
   end
-
 end

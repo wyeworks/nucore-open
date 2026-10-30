@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddProductUsersTable < ActiveRecord::Migration[4.2]
-
   def self.up
     create_table :product_users do |t|
       t.references :product, null: false
@@ -15,5 +14,4 @@ class AddProductUsersTable < ActiveRecord::Migration[4.2]
   def self.down
     drop_table :product_users
   end
-
 end

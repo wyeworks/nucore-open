@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ReservationsController < ApplicationController
-
   customer_tab :all
   skip_before_action :authenticate_user!, only: [:index]
   before_action :check_acting_as, only: [:switch_instrument, :list]
@@ -83,8 +82,8 @@ class ReservationsController < ApplicationController
             with_details: @show_details,
             discriminate:,
             user: acting_user,
-            view: params[:view]
-          ).to_json
+            view: params[:view],
+          ).to_json,
         )
       end
     end
@@ -335,6 +334,7 @@ class ReservationsController < ApplicationController
     # It's important that the order_detail be the same object as the one in @order.order_details.first
     @order_detail = @order.order_details.find { |od| od.id.to_i == params[:order_detail_id].to_i }
     raise ActiveRecord::RecordNotFound if @order_detail.blank?
+
     @reservation = @order_detail.reservation
     @instrument = @order_detail.product
     @facility = @instrument.facility
@@ -399,14 +399,14 @@ class ReservationsController < ApplicationController
     return unless reservation
 
     if reservation.can_switch_instrument_off? # do you need to click stop
-      I18n.t("reservations.notices.can_switch_off", reservation: reservation)
+      I18n.t("reservations.notices.can_switch_off", reservation:)
     elsif reservation.can_switch_instrument_on? # do you need to begin your reservation
-      I18n.t("reservations.notices.can_switch_on", reservation: reservation)
+      I18n.t("reservations.notices.can_switch_on", reservation:)
     elsif reservation.canceled?
     # no message
     # do you have a reservation for today that hasn't ended
     elsif upcoming_today? reservation
-      I18n.t("reservations.notices.upcoming", reservation: reservation)
+      I18n.t("reservations.notices.upcoming", reservation:)
     end
   end
 
@@ -419,6 +419,7 @@ class ReservationsController < ApplicationController
   # JS library which uses unix timestamps for the parameters. This allows us to handle both.
   def parse_time_param(string_value)
     return unless string_value
+
     Time.zone.parse(string_value)
   rescue ArgumentError
     Time.zone.at(string_value.to_i)

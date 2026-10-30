@@ -2,7 +2,6 @@
 
 # DateTimeInput
 class TimeDropdownInput < SimpleForm::Inputs::Base
-
   def input(wrapper_options)
     merged_input_options = merge_wrapper_options(input_html_options, wrapper_options)
     value = object.public_send("#{attribute_name}_date_time_data")
@@ -40,5 +39,4 @@ class TimeDropdownInput < SimpleForm::Inputs::Base
     step = options[:minute_step] || 1
     (0..59).step(step).map { |d| [format("%02d", d), d] }
   end
-
 end

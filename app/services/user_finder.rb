@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class UserFinder
-
   include SearchHelper
 
   class_attribute :searchable_columns
@@ -47,7 +46,6 @@ class UserFinder
 
   def relation
     conditions = searchable_columns.map { |column| arel_table[column].lower.matches(@search_term) }
-
 
     conditions << concat_condition.matches(@search_term)
 

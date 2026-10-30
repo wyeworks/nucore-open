@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   module LinkCollectionExtension
-
     extend ActiveSupport::Concern
 
     included do
@@ -19,7 +17,5 @@ module SecureRooms
         )
       end
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 namespace :access_list do
-
   # `rake access_list:import[filename.csv]`
   # Row format:
   # Product Name,Schedule Group Name,Username
@@ -23,7 +22,7 @@ namespace :access_list do
       user = User.find_by!(username: row[2])
 
       puts "Adding #{user} to #{product}: #{group&.name}"
-      product_users << ProductUser.new(product: product, user: user, product_access_group: group, approved_by: 0)
+      product_users << ProductUser.new(product:, user:, product_access_group: group, approved_by: 0)
     end
 
     if args[:for_real]
@@ -35,5 +34,4 @@ namespace :access_list do
       puts "Dry run complete: #{product_users.count} would have been created"
     end
   end
-
 end

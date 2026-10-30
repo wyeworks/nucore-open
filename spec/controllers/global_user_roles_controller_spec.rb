@@ -103,7 +103,7 @@ RSpec.describe GlobalUserRolesController do
 
     before(:each) do
       sign_in(administrator)
-      put(:update, params: { id: user.id, roles: roles })
+      put(:update, params: { id: user.id, roles: })
     end
 
     after { expect(response).to redirect_to(global_user_roles_url) }
@@ -130,7 +130,7 @@ RSpec.describe GlobalUserRolesController do
       end
 
       it "creates an event log" do
-        role = UserRole.find_by(user: user, role: UserRole::ADMINISTRATOR)
+        role = UserRole.find_by(user:, role: UserRole::ADMINISTRATOR)
         expect(LogEvent).to be_exists(loggable: role, event_type: :create, user: administrator)
       end
     end
@@ -145,10 +145,10 @@ RSpec.describe GlobalUserRolesController do
       end
 
       it "creates log events" do
-        new_role = UserRole.find_by(user: user, role: UserRole::ADMINISTRATOR)
+        new_role = UserRole.find_by(user:, role: UserRole::ADMINISTRATOR)
         expect(LogEvent).to be_exists(loggable: new_role, event_type: :create, user: administrator)
 
-        old_role = UserRole.with_deleted.find_by(user: user, role: UserRole::ACCOUNT_MANAGER)
+        old_role = UserRole.with_deleted.find_by(user:, role: UserRole::ACCOUNT_MANAGER)
         expect(old_role).to be_present
         expect(LogEvent).to be_exists(loggable: old_role, event_type: :delete, user: administrator)
       end
@@ -175,7 +175,7 @@ RSpec.describe GlobalUserRolesController do
 
     context "when the user has an existing facility role" do
       let(:facility) { create(:facility) }
-      let(:user) { create(:user, :facility_director, facility: facility) }
+      let(:user) { create(:user, :facility_director, facility:) }
 
       it "grants the global role" do
         expect(flash[:notice]).to include("succeeded")

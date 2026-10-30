@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddToOrderForm
-
   include ActiveModel::Model
   include TextHelpers::Translation
   include DateHelper
@@ -39,7 +38,7 @@ class AddToOrderForm
 
     true
   rescue AASM::InvalidTransition
-    @error_message = text("invalid_status", product: product, status: order_status)
+    @error_message = text("invalid_status", product:, status: order_status)
     false
   rescue ActiveRecord::RecordInvalid => e
     @error_message = e.record.errors.full_messages.to_sentence
@@ -91,7 +90,7 @@ class AddToOrderForm
           "data-accounts-path": Rails.application.routes.url_helpers.accounts_available_for_order_facility_accounts_path(f, format: :json),
           "data-original-order-facility": @original_order.facility_id,
           "data-original-order": @original_order.id,
-        }
+        },
       ]
     end
   end
@@ -146,7 +145,7 @@ class AddToOrderForm
     Project.transaction do
       @order_project ||= Project.new(
         name: "#{current_facility.abbreviation}-#{original_order.id}",
-        facility_id: current_facility.id
+        facility_id: current_facility.id,
       )
 
       # Update original order's order details to be included in the project
@@ -216,10 +215,10 @@ class AddToOrderForm
   def params
     {
       note: note.presence,
-      duration: duration,
+      duration:,
       created_by: created_by.id,
-      account: account,
-      reference_id: reference_id,
+      account:,
+      reference_id:,
     }
   end
 
@@ -239,11 +238,11 @@ class AddToOrderForm
                       Order.create!(
                         merge_with_order_id: parent_order.id,
                         facility_id: parent_order.facility_id,
-                        account_id: account_id,
+                        account_id:,
                         user_id: parent_order.user_id,
                         created_by: created_by.id,
                         cross_core_project: @order_project,
-                     )
+                      )
                     else
                       parent_order
                     end
@@ -260,7 +259,7 @@ class AddToOrderForm
       account_id:,
       user_id: original_order.user_id,
       created_by: created_by.id,
-      cross_core_project: @order_project
+      cross_core_project: @order_project,
     )
   end
 
@@ -294,5 +293,4 @@ class AddToOrderForm
       order_detail.ordered_at = order_detail.manual_fulfilled_at_time || Time.current
     end
   end
-
 end

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe OrderDetails::DisputeResolvedNotifier do
   let(:item) { create(:setup_item) }
   let(:order) { create(:complete_order, product: item) }
-  let(:order_detail) { create(:order_detail, :disputed, order: order, product: item, account: order.account) }
+  let(:order_detail) { create(:order_detail, :disputed, order:, product: item, account: order.account) }
   let(:user) { create(:user) }
   subject(:notifier) { described_class.new(order_detail) }
 
@@ -42,9 +42,8 @@ RSpec.describe OrderDetails::DisputeResolvedNotifier do
                           [order_detail.dispute_by.email],
                           [order_detail.account.owner_user.email],
                           [business_administrator.email],
-                        ])
+                        ]),
       )
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class TransactionsController < ApplicationController
-
   customer_tab :all
   before_action :check_acting_as
   before_action :enable_sorting, only: [:index, :in_review]
@@ -124,5 +123,4 @@ class TransactionsController < ApplicationController
   def redirect_to_movable_transactions
     redirect_to movable_transactions_transactions_path
   end
-
 end

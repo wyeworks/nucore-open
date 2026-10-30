@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PublicController < ApplicationController
-
   skip_before_action :authenticate_user!
 
   def index
@@ -15,5 +14,4 @@ class PublicController < ApplicationController
     session[:acting_ref_url] = nil
     redirect_to ref_url
   end
-
 end

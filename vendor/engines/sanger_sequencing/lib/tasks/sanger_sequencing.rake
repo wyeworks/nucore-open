@@ -11,7 +11,7 @@ namespace :sanger_sequencing do
       SangerSequencing::Primer.insert_all(
         SangerSequencing::Primer.default_list.map do |name|
           { name:, facility_id: facility.id }
-        end
+        end,
       )
     end
   end

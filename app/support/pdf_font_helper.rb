@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PdfFontHelper
-
   FONT_DIR = Rails.root.join("app", "assets", "fonts")
 
   def self.set_fonts(pdf)
@@ -17,5 +16,4 @@ class PdfFontHelper
     )
     pdf.font(font_name)
   end
-
 end

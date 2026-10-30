@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountUserPresenter < SimpleDelegator
-
   def self.localized_role(role)
     I18n.t(role.downcase.parameterize.underscore, scope: "accounts.role")
   end
@@ -13,5 +12,4 @@ class AccountUserPresenter < SimpleDelegator
   def localized_role
     self.class.localized_role(user_role)
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Order < ApplicationRecord
-
   belongs_to :user
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by
   belongs_to :merge_order, class_name: "Order", foreign_key: :merge_with_order_id, optional: true
@@ -77,7 +76,7 @@ class Order < ApplicationRecord
     false
   end
 
-  [:total, :cost, :subsidy, :estimated_total, :estimated_cost, :estimated_subsidy].each do |method_name|
+  %i[total cost subsidy estimated_total estimated_cost estimated_subsidy].each do |method_name|
     define_method(method_name) { order_details.non_canceled.map(&method_name).compact.sum }
   end
 
@@ -235,5 +234,4 @@ class Order < ApplicationRecord
       od.save!
     end
   end
-
 end

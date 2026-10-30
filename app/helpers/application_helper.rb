@@ -2,7 +2,6 @@
 
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-
   include DateHelper
   include TranslationHelper
 
@@ -68,6 +67,7 @@ module ApplicationHelper
 
   def menu_facilities
     return [] unless session_user
+
     session_user.operable_facilities
   end
 
@@ -90,5 +90,4 @@ module ApplicationHelper
       ],
     )
   end
-
 end

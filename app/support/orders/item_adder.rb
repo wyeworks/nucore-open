@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Orders::ItemAdder
-
   # timed services default to 1 minute (arbitrary)
   DEFAULT_TIMED_SERVICES_DURATION = 1
 
@@ -65,17 +64,17 @@ class Orders::ItemAdder
   end
 
   # If the service has a survey or order form, a quantity of more than one will
-    # result in
+  # result in
   def add_instruments(product, quantity, attributes)
     Array.new(quantity) do
-      create_order_detail({ product: product, quantity: 1 }.merge(attributes))
+      create_order_detail({ product:, quantity: 1 }.merge(attributes))
     end
   end
 
   def add_timed_services(product, quantity, duration, attributes)
     Array.new(quantity) do
       order_detail_parameters = {
-        product: product,
+        product:,
         quantity: duration || DEFAULT_TIMED_SERVICES_DURATION,
       }.merge(attributes)
 
@@ -95,16 +94,16 @@ class Orders::ItemAdder
       # for services which have an order form/survey.
       case bundle_product.product
       when Instrument
-        add_instruments(bundle_product.product, bundle_product.quantity, { bundle: product, group_id: group_id }.merge(attributes))
+        add_instruments(bundle_product.product, bundle_product.quantity, { bundle: product, group_id: }.merge(attributes))
       when TimedService
-        add_timed_services(bundle_product.product, bundle_product.quantity, DEFAULT_TIMED_SERVICES_DURATION, { bundle: product, group_id: group_id }.merge(attributes))
+        add_timed_services(bundle_product.product, bundle_product.quantity, DEFAULT_TIMED_SERVICES_DURATION, { bundle: product, group_id: }.merge(attributes))
       else
         create_order_detail(
           {
             product: bundle_product.product,
             quantity: bundle_product.quantity,
             bundle: product,
-            group_id: group_id,
+            group_id:,
           }.merge(attributes),
         )
       end
@@ -119,5 +118,4 @@ class Orders::ItemAdder
     )
     @order.order_details.create!(options)
   end
-
 end

@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   # Contains overrides for building a `SplitAccounts::SplitAccount` from params.
   # Dynamically called via the `AccountBuilder.for()` factory.
   class SplitAccountBuilder < AccountBuilder
-
     protected
 
     # Override strong_params for `build` account.
@@ -39,7 +37,5 @@ module SplitAccounts
       account.splits.build(percent: 50, apply_remainder: true)
       account.splits.build(percent: 50)
     end
-
   end
-
 end

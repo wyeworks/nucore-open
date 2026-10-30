@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class EditsForInvoicingAndJournalingRefacting < ActiveRecord::Migration[4.2]
-
   def self.up
     # update the account_transaction table
     remove_foreign_key :account_transactions, name: :fk_int_at_fa
@@ -34,5 +33,4 @@ class EditsForInvoicingAndJournalingRefacting < ActiveRecord::Migration[4.2]
   def self.down
     raise ActiveRecord::IrreversibleMigration
   end
-
 end

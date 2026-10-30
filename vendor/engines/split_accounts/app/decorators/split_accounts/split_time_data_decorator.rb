@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SplitAccounts
-
   class SplitTimeDataDecorator < SimpleDelegator
-
     attr_accessor :quantity
     attr_writer :actual_duration_mins
 
@@ -23,7 +21,5 @@ module SplitAccounts
     def self.primary_key
       __getobj__.class.primary_key
     end
-
   end
-
 end

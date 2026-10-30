@@ -3,7 +3,6 @@
 require "csv"
 
 module Reports
-
   class ProductAccessListCsvReport
     include DateHelper
     include TextHelpers::Translation
@@ -69,8 +68,8 @@ module Reports
 
     def user_status(user)
       return "Active" if user.active?
+
       user.suspended? ? "Suspended" : "Expired"
     end
   end
-
 end

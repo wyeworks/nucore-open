@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Reservations::RelaySupport
-
   def can_switch_instrument_on?(check_off = true)
     return false if canceled?
     return false unless product.relay # is relay controlled
@@ -11,6 +10,7 @@ module Reservations::RelaySupport
     return false unless actual_end_at.nil?     # already turned off
     return false if reserve_end_at < Time.zone.now # reservation is already over (missed reservation)
     return can_start_early? if reserve_start_at > Time.zone.now
+
     true
   end
 
@@ -21,6 +21,7 @@ module Reservations::RelaySupport
     return false unless actual_end_at.nil?    # already ended
     return false if actual_start_at.nil?      # hasn't been started yet
     return false if order_detail.complete?
+
     true
   end
 
@@ -39,5 +40,4 @@ module Reservations::RelaySupport
   def other_reservation_using_relay?
     !order_detail.reservation.can_switch_instrument_off? || order_detail.reservation.other_reservations_using_relay.count > 0
   end
-
 end

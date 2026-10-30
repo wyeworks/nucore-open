@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderStatus < ApplicationRecord
-
   has_many :order_details
   belongs_to :facility, optional: true
   belongs_to :parent, class_name: "OrderStatus", optional: true
@@ -30,7 +29,7 @@ class OrderStatus < ApplicationRecord
   cattr_accessor(:ordered_root_statuses) { ROOT_STATUS_ORDER.dup }
 
   scope :for_facility, ->(facility) { where(facility_id: [nil, facility&.id]) }
-  scope :by_name, ->(name) { find_by(name: name) }
+  scope :by_name, ->(name) { find_by(name:) }
   scope :by_names, ->(names) { where(name: names) }
 
   # This one is different because `new` is a reserved keyword
@@ -67,7 +66,7 @@ class OrderStatus < ApplicationRecord
   end
 
   def self_and_descendants
-    self.class.where(parent_id: id).or(self.class.where(id: id))
+    self.class.where(parent_id: id).or(self.class.where(id:))
   end
 
   def self.canceled_statuses_for_facility(facility)
@@ -112,7 +111,6 @@ class OrderStatus < ApplicationRecord
   end
 
   class << self
-
     def root_statuses
       roots.sort_by(&:position)
     end
@@ -123,7 +121,7 @@ class OrderStatus < ApplicationRecord
 
     def initial_statuses(facility, product: nil)
       statuses = new_status.self_and_descendants
-        .or(in_process.self_and_descendants)
+                           .or(in_process.self_and_descendants)
 
       if SettingsHelper.feature_on?("products.item_initial_order_status_complete") && product.is_a?(Item)
         statuses = statuses.or(complete.self_and_descendants)
@@ -134,13 +132,11 @@ class OrderStatus < ApplicationRecord
 
     def non_protected_statuses(facility)
       new_status.self_and_descendants
-        .or(in_process.self_and_descendants)
-        .or(canceled.self_and_descendants)
-        .or(unrecoverable.self_and_descendants)
-        .or(complete.self_and_descendants)
-        .for_facility(facility).sorted
+                .or(in_process.self_and_descendants)
+                .or(canceled.self_and_descendants)
+                .or(unrecoverable.self_and_descendants)
+                .or(complete.self_and_descendants)
+                .for_facility(facility).sorted
     end
-
   end
-
 end

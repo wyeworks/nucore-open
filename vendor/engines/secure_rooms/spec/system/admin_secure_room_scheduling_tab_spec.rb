@@ -11,7 +11,7 @@ RSpec.describe "Secure room Scheduling Tab" do
   end
 
   let!(:secure_room) do
-    FactoryBot.create(:setup_secure_room, facility: facility)
+    FactoryBot.create(:setup_secure_room, facility:)
   end
 
   context "new schedule rule" do
@@ -48,5 +48,4 @@ RSpec.describe "Secure room Scheduling Tab" do
       expect(page).to have_content("Price Group Discounts")
     end
   end
-
 end

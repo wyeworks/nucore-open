@@ -14,14 +14,14 @@ RSpec.describe "order_management/order_details" do
         order_detail: {
           id: order_detail.id,
           order_status_id: OrderStatus.canceled.id,
-        }
+        },
       }
     end
     let(:update_action) do
       lambda do
         put(
           manage_facility_order_order_detail_path(facility, order, order_detail),
-          params:
+          params:,
         )
       end
     end
@@ -32,13 +32,13 @@ RSpec.describe "order_management/order_details" do
       expect { update_action.call }.to(
         change do
           order_detail.reload.order_status
-        end.from(OrderStatus.new_status).to(OrderStatus.canceled)
+        end.from(OrderStatus.new_status).to(OrderStatus.canceled),
       )
     end
 
     it "does not call slot available service" do
       expect(ProductNotifications::SlotAvailableService).not_to(
-        receive(:new)
+        receive(:new),
       )
 
       update_action.call
@@ -54,7 +54,7 @@ RSpec.describe "order_management/order_details" do
 
       it "calls slot available service when canceled" do
         expect(ProductNotifications::SlotAvailableService).to(
-          receive(:new).and_call_original
+          receive(:new).and_call_original,
         )
 
         update_action.call
@@ -66,13 +66,13 @@ RSpec.describe "order_management/order_details" do
             order_detail: {
               id: order_detail.id,
               order_status_id: OrderStatus.in_process.id,
-            }
+            },
           }
         end
 
         it "does not call the slot available service" do
           expect(ProductNotifications::SlotAvailableService).not_to(
-            receive(:new)
+            receive(:new),
           )
 
           update_action.call
@@ -85,7 +85,7 @@ RSpec.describe "order_management/order_details" do
             order_detail: {
               id: order_detail.id,
               notes: "Some note",
-            }
+            },
           }
         end
 
@@ -95,7 +95,7 @@ RSpec.describe "order_management/order_details" do
 
         it "does not call slot available service" do
           expect(ProductNotifications::SlotAvailableService).not_to(
-            receive(:new)
+            receive(:new),
           )
 
           update_action.call
@@ -109,8 +109,8 @@ RSpec.describe "order_management/order_details" do
       {
         order_detail: {
           id: order_detail.id,
-          order_status_id: OrderStatus.unrecoverable.id
-        }
+          order_status_id: OrderStatus.unrecoverable.id,
+        },
       }
     end
 
@@ -125,7 +125,7 @@ RSpec.describe "order_management/order_details" do
 
         put(
           manage_facility_order_order_detail_path(facility, order, order_detail),
-          params:
+          params:,
         )
 
         expect(response).to have_http_status(:forbidden)
@@ -139,7 +139,7 @@ RSpec.describe "order_management/order_details" do
 
         put(
           manage_facility_order_order_detail_path(facility, order, order_detail),
-          params:
+          params:,
         )
 
         expect(response).to have_http_status(:found)

@@ -10,7 +10,7 @@ RSpec.describe SecureRooms::AccessRules::RequiresApprovalRule, type: :service do
     )
   end
   let(:card_user) { create :user }
-  let(:card_reader) { build :card_reader, secure_room: secure_room }
+  let(:card_reader) { build :card_reader, secure_room: }
 
   subject(:result) { rule.call }
 

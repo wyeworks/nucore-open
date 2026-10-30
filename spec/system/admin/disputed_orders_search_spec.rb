@@ -4,11 +4,11 @@ require "rails_helper"
 
 RSpec.describe "Disputed Orders Search" do
   let(:facility) { create(:setup_facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
-  let(:item) { create(:setup_item, facility: facility) }
+  let(:director) { create(:user, :facility_director, facility:) }
+  let(:item) { create(:setup_item, facility:) }
   let(:accounts) { create_list(:setup_account, 2) }
   let(:orders) do
-    accounts.map { |account| create(:complete_order, product: item, account: account) }
+    accounts.map { |account| create(:complete_order, product: item, account:) }
   end
 
   let(:order_details) { orders.map(&:order_details).flatten }

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PriceGroup < ApplicationRecord
-
   acts_as_paranoid
 
   belongs_to :facility
@@ -199,7 +198,7 @@ class PriceGroup < ApplicationRecord
         admin_editable:,
         facility_id: nil,
         global: true,
-        display_order: display_order || (global_price_groups.count + 1)
+        display_order: display_order || (global_price_groups.count + 1),
       )
 
       pg.save

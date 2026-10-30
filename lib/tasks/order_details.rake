@@ -31,7 +31,7 @@ namespace :order_details do
     # Change this query for when we need to recalculate prices for just a subset of Order details
     # Changes to this should be marked with the ticket number in the git commit message
     query = facility.order_details.where("fulfilled_at >= ? and fulfilled_at < ?",
-                        Time.zone.local(2020, 9, 1), Time.zone.now.end_of_day)
+                                         Time.zone.local(2020, 9, 1), Time.zone.now.end_of_day)
 
     only_completed = query.where(state: "complete", journal_id: nil, statement_id: nil)
                           .joins(:order).where(orders: { state: "purchased" })
@@ -88,7 +88,7 @@ namespace :order_details do
         file: StringIO.new("Placeholder text for missing template."),
         file_type: "template_result",
         name: "placeholder.csv",
-        created_by: order_detail.user.id
+        created_by: order_detail.user.id,
       )
 
       puts "...missing file added to order detail #{order_detail.id}"
@@ -104,7 +104,6 @@ namespace :order_details do
   desc "remove list of order details"
   task clean_up_orders: :environment do
     class OrderDetailCleaner
-
       def self.remove_order(order_detail)
         order = order_detail.order
         journal = order_detail.journal
@@ -134,7 +133,6 @@ namespace :order_details do
         end
         puts "Done"
       end
-
     end
 
     OrderDetailCleaner.remove_orders("lib/tasks/orders_to_remove.txt")

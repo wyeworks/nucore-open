@@ -10,20 +10,18 @@ RSpec.describe PricePolicyMassAssigner do
     let(:order_attributes) do
       attributes_for(:order,
                      created_by: user.id,
-                     account: account,
-                     facility: facility,
-                    )
+                     account:,
+                     facility:)
     end
     let(:order_detail) do
       create(:order_detail,
-             account: account,
-             fulfilled_at: fulfilled_at,
-             order: order,
-             product: product,
-            )
+             account:,
+             fulfilled_at:,
+             order:,
+             product:)
     end
-    let(:price_group) { create(:price_group, facility: facility) }
-    let(:product) { create(:item, facility: facility) }
+    let(:price_group) { create(:price_group, facility:) }
+    let(:product) { create(:item, facility:) }
     let(:user) { create(:user) }
 
     def mass_assign_price_policies
@@ -32,23 +30,21 @@ RSpec.describe PricePolicyMassAssigner do
 
     context "when compatible price policies exist" do
       before :each do
-        create(:account_price_group_member, account: account, price_group: price_group)
+        create(:account_price_group_member, account:, price_group:)
       end
 
       let!(:previous_price_policy) do
         create(:item_price_policy,
-               product: product,
-               price_group: price_group,
-               start_date: 8.years.ago,
-              )
+               product:,
+               price_group:,
+               start_date: 8.years.ago)
       end
 
       let!(:current_price_policy) do
         create(:item_price_policy,
-               product: product,
-               price_group: price_group,
-               start_date: 1.day.ago,
-              )
+               product:,
+               price_group:,
+               start_date: 1.day.ago)
       end
 
       context "when order details are fulfilled" do

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrderDetailUpdater
-
   attr_reader :order, :params, :quantities_changed
   alias quantities_changed? quantities_changed
 
@@ -27,5 +26,4 @@ class OrderDetailUpdater
   def quantities
     order.order_details.order("order_details.id").pluck(:quantity)
   end
-
 end

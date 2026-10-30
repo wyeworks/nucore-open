@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddPaperclipToJournal < ActiveRecord::Migration[4.2]
-
   def self.up
     add_column :journals, :file_file_name, :string
     add_column :journals, :file_content_type, :string
@@ -15,5 +14,4 @@ class AddPaperclipToJournal < ActiveRecord::Migration[4.2]
     remove_column :journals, :file_file_size
     remove_column :journals, :file_updated_at
   end
-
 end

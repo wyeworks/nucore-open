@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class FileUploadsController < ApplicationController
-
   admin_tab           :all
   before_action       :check_acting_as
   before_action       :init_current_facility
@@ -33,7 +32,7 @@ class FileUploadsController < ApplicationController
         .where(file_type: params[:file_type])
         .find(params[:id])
         .download_url,
-      allow_other_host: true
+      allow_other_host: true,
     )
   end
 
@@ -148,6 +147,7 @@ class FileUploadsController < ApplicationController
         unless @product.stored_files.template.all?(&:destroy)
           raise ActiveRecord::Rollback
         end
+
         @file.save!
         @flash_notice = "Order File Template uploaded"
         @redirect_to = product_survey_path(current_facility, @product.parameterize, @product)
@@ -186,5 +186,4 @@ class FileUploadsController < ApplicationController
     end
     @file = @product.stored_files.new(file_type: "template")
   end
-
 end

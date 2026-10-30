@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class InstrumentSchedulePositionsController < ApplicationController
-
   layout "two_column"
 
   admin_tab :all
@@ -23,7 +22,7 @@ class InstrumentSchedulePositionsController < ApplicationController
     Schedule.transaction do
       @schedules.each do |schedule|
         position = params[:instrument_schedule_position][:schedule_ids].index(schedule.id.to_s)
-        schedule.update!(position: position)
+        schedule.update!(position:)
       end
     end
     redirect_to facility_instrument_schedule_position_path, notice: text("success")
@@ -44,12 +43,11 @@ class InstrumentSchedulePositionsController < ApplicationController
                  .positioned
                  .joins(facility: :instruments)
                  .merge(
-                    Instrument
-                    .active
-                    .in_active_facility
-                    .for_facility(current_facility)
+                   Instrument
+                   .active
+                   .in_active_facility
+                   .for_facility(current_facility),
                  )
                  .distinct
   end
-
 end

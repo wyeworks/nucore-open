@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module SecureRooms
-
   class OccupanciesController < ApplicationController
-
     layout "plain"
 
     before_action :load_secure_room
@@ -22,7 +20,5 @@ module SecureRooms
     def load_secure_room
       @secure_room = SecureRoom.find_by!(dashboard_token: params[:secure_room_id])
     end
-
   end
-
 end

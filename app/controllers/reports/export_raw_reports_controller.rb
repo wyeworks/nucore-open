@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class ExportRawReportsController < CsvExportController
-
     include StatusFilterParams
 
     def self.max_period_days
@@ -49,7 +47,5 @@ module Reports
 
       (@date_end - @date_start) > self.class.max_period_days.days
     end
-
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AddSangerProductGroups < ActiveRecord::Migration[4.2]
-
   def change
     # sanger_sequencing_product_groups is too long of a table name for Oracle
     create_table :sanger_seq_product_groups do |t|
@@ -14,5 +13,4 @@ class AddSangerProductGroups < ActiveRecord::Migration[4.2]
     add_column :sanger_sequencing_batches, :group, :string
     add_index :sanger_sequencing_batches, :group
   end
-
 end

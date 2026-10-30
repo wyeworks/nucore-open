@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module OrderDetails
-
   class Reconciler
-
     include ActiveModel::Validations
 
     attr_reader :persist_errors, :count, :order_details, :reconciled_at
@@ -30,6 +28,7 @@ module OrderDetails
 
     def reconcile_all
       return 0 unless valid?
+
       @count = 0
       @persist_errors = []
       rollback_occurred = false
@@ -106,16 +105,16 @@ module OrderDetails
 
     def reconciliation_must_be_in_past
       return unless reconciled_at.present?
+
       errors.add(:reconciled_at, :must_be_in_past) if reconciled_at > Time.current.end_of_day
     end
 
     def all_journals_and_statements_must_be_before_reconciliation_date
       return if reconciled_at.blank? || @order_details.blank?
+
       if @order_details.any? { |od| od.journal_or_statement_date.beginning_of_day > reconciled_at }
         errors.add(:reconciled_at, :after_all_journal_dates)
       end
     end
-
   end
-
 end

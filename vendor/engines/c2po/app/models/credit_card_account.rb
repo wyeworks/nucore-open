@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class CreditCardAccount < Account
-
   include AffiliateAccount
   extend ReconcilableAccount
 
@@ -28,5 +27,4 @@ class CreditCardAccount < Account
     # Rails 7.2+ enforces readonly attributes more strictly.
     self.account_number = "xxxx-xxxx-xxxx-xxxx" if new_record? && account_number.blank?
   end
-
 end

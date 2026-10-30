@@ -66,7 +66,7 @@ RSpec.describe Reports::PriceListReport do
           product_header(:facility, Facility.model_name.human),
           report_header(:product_type),
           product_header(:name, Product.model_name.human),
-        ]
+        ],
       )
     end
 
@@ -194,7 +194,6 @@ RSpec.describe Reports::PriceListReport do
       expect(base_column(report_header(:step_2_rate))).to eq(["80.0"])
       expect(base_column(report_header(:step_3_rate))).to eq(["50.0"])
     end
-
   end
 
   describe "a stepped instrument whose steps have no subsidy" do

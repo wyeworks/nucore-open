@@ -4,7 +4,6 @@
 # A UrlService is an +ExternalService+ that is
 # accessed via HTTP/URLs.
 class UrlService < ExternalService
-
   include Rails.application.routes.url_helpers
 
   #
@@ -66,5 +65,4 @@ class UrlService < ExternalService
     params.merge!(host: request.host, port: request.port, protocol: request.protocol) if request
     complete_survey_url(params)
   end
-
 end

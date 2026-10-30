@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class ScheduleRulesController < ApplicationController
-
   include BelongsToProductController
 
   before_action :init_schedule_rule, only: [:edit, :update, :destroy]
@@ -92,7 +91,7 @@ class ScheduleRulesController < ApplicationController
       .permit(
         :start_hour, :start_min, :end_hour, :end_min,
         :on_sun, :on_mon, :on_tue, :on_wed, :on_thu, :on_fri, :on_sat,
-        **permitted_kwargs,
+        **permitted_kwargs
       ).tap do |schedule_rule_params|
         if @product.start_time_disabled?
           schedule_rule_params.merge! ScheduleRule.full_day_attributes
@@ -124,5 +123,4 @@ class ScheduleRulesController < ApplicationController
 
     @product.schedule_rules.build(attrs)
   end
-
 end

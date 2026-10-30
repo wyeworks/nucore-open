@@ -2,11 +2,8 @@
 
 require "hash_helper"
 module SplitAccounts
-
   module Reports
-
     class ExportRawTransformer
-
       include HashHelper
       include ActionView::Helpers::NumberHelper
 
@@ -28,9 +25,6 @@ module SplitAccounts
           order_detail.split.parent_split_account.description_to_s
         end
       end
-
     end
-
   end
-
 end

@@ -3,13 +3,10 @@
 require "rails_helper"
 
 class SomeRelay < Relay
-
   include PowerRelay
-
 end
 
 RSpec.describe SomeRelay do
-
   it { is_expected.to validate_presence_of :ip }
   it { is_expected.to validate_presence_of :outlet }
   it { is_expected.to validate_presence_of :username }
@@ -85,6 +82,7 @@ RSpec.describe SomeRelay do
       allow(relay_connection).to receive(:status) do
         call_count += 1
         raise NetBooter::Error if call_count == 1
+
         true
       end
       expect(relay.query_status).to eq(true)

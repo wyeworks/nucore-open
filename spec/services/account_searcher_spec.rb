@@ -17,7 +17,7 @@ RSpec.describe AccountSearcher do
 
   describe "results" do
     let(:owner) { create(:user, first_name: "Myfirst", last_name: "Mylast", username: "Myuser", email: "myemail@example.com") }
-    let!(:account) { create(:account, :with_account_owner, owner: owner, account_number: "123456", description: "Mydescription", ar_number: "ARNUMBER") }
+    let!(:account) { create(:account, :with_account_owner, owner:, account_number: "123456", description: "Mydescription", ar_number: "ARNUMBER") }
 
     it "matches the account number" do
       expect(described_class.new("123456").results).to eq([account])
@@ -41,7 +41,7 @@ RSpec.describe AccountSearcher do
 
     describe "with a purchaser as well" do
       let(:purchaser) { create(:user, username: "Iampurchaser") }
-      let!(:purchaser_account_user) { create(:account_user, :purchaser, user: purchaser, account: account) }
+      let!(:purchaser_account_user) { create(:account_user, :purchaser, user: purchaser, account:) }
 
       it "does not find the account" do
         expect(described_class.new("purchaser").results).to be_blank
@@ -98,7 +98,7 @@ RSpec.describe AccountSearcher do
 
     describe "when there's an account that matches another facility" do
       let(:facility) { create(:facility) }
-      let!(:other_account) { create(:account, :with_account_owner, account_number: account.account_number, facilities: [facility], owner: owner) }
+      let!(:other_account) { create(:account, :with_account_owner, account_number: account.account_number, facilities: [facility], owner:) }
 
       before(:each) do
         allow(Account.config).to receive(:global_account_types).and_return([])
@@ -181,5 +181,4 @@ RSpec.describe AccountSearcher do
       end
     end
   end
-
 end

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class PricePoliciesController < ApplicationController
-
   include DateHelper
 
   admin_tab     :all
@@ -40,7 +39,7 @@ class PricePoliciesController < ApplicationController
     @price_policies = PricePolicyBuilder.get_new_policies_based_on_most_recent(
       @product,
       @start_date,
-      force_new_policies = @product.duration_pricing_mode?
+      force_new_policies = @product.duration_pricing_mode?,
     )
 
     raise ActiveRecord::RecordNotFound if @price_policies.blank?
@@ -189,5 +188,4 @@ class PricePoliciesController < ApplicationController
       build_duration_rates
     end
   end
-
 end

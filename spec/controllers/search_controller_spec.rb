@@ -9,7 +9,7 @@ RSpec.describe SearchController do
   let!(:user) { FactoryBot.create(:user, first_name: "Firstname", last_name: "Lastname") }
 
   shared_examples_for "searching" do |action|
-    let(:session_user) { FactoryBot.create(:user, :facility_administrator, facility: facility) }
+    let(:session_user) { FactoryBot.create(:user, :facility_administrator, facility:) }
     let(:params) { {} }
     before do
       sign_in session_user
@@ -63,12 +63,12 @@ RSpec.describe SearchController do
     end
 
     it_behaves_like "searching", "user_price_group_member" do
-      let(:price_group) { FactoryBot.create(:price_group, facility: facility) }
+      let(:price_group) { FactoryBot.create(:price_group, facility:) }
       let(:params) { { price_group_id: price_group.id } }
     end
 
     it_behaves_like "searching", "user_product_approval" do
-      let(:product) { FactoryBot.create(:setup_item, facility: facility) }
+      let(:product) { FactoryBot.create(:setup_item, facility:) }
       let(:params) { { product_id: product.id } }
     end
   end

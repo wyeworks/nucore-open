@@ -5,5 +5,4 @@ FactoryBot.define do
     min_duration_hours { 1 }
     rate { 60 }
   end
-
 end

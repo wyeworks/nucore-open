@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class AccountUser < ApplicationRecord
-
   # Don't exclude them by default. Instead, make sure we're using the `active` scope
   acts_as_paranoid without_default_scope: true
 
@@ -73,7 +72,7 @@ class AccountUser < ApplicationRecord
   # [_by_]
   #   the user who is granting the privilege
   def self.grant(user, role, account, by:)
-    AccountRoleGrantor.new(account, by: by).grant(user, role)
+    AccountRoleGrantor.new(account, by:).grant(user, role)
   end
 
   def can_administer?
@@ -98,11 +97,10 @@ class AccountUser < ApplicationRecord
   # Will assign the attribute during `destroy` if it is set. Without this, no additional
   # attributes are set.
   def paranoia_destroy_attributes
-    super.merge(deleted_by: deleted_by)
+    super.merge(deleted_by:)
   end
 
   def to_log_s
     "#{account} / #{user}"
   end
-
 end

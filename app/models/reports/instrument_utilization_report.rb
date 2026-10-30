@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class Reports::InstrumentUtilizationReport
-
   attr_accessor :key_length
+
   def initialize(reservations)
     @reservations = reservations
   end
@@ -41,11 +41,11 @@ class Reports::InstrumentUtilizationReport
   end
 
   class DataRow
-
     include ReportsHelper
     include ActionView::Helpers::NumberHelper
 
     attr_accessor :quantity, :reserved_mins, :actual_mins
+
     def initialize(quantity, reserved_mins, actual_mins)
       @quantity = quantity
       @reserved_mins = reserved_mins
@@ -66,6 +66,7 @@ class Reports::InstrumentUtilizationReport
 
     def safe_divide(a, b)
       return 0.0 if b.zero?
+
       a.to_f / b.to_f
     end
 
@@ -77,7 +78,6 @@ class Reports::InstrumentUtilizationReport
        to_hours(actual_mins, 1),
        format_percent(percent.actual_mins)]
     end
-
   end
 
   private
@@ -85,5 +85,4 @@ class Reports::InstrumentUtilizationReport
   def sorted_data
     @data.sort { |(a, _), (b, _)| a.compact <=> b.compact }
   end
-
 end

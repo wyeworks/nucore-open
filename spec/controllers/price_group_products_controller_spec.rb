@@ -16,7 +16,6 @@ RSpec.describe PriceGroupProductsController do
   end
 
   context "edit" do
-
     before :each do
       @method = :get
       @action = :edit
@@ -28,11 +27,9 @@ RSpec.describe PriceGroupProductsController do
       assert_init_price_group_products
       is_expected.to render_template "edit"
     end
-
   end
 
   context "update" do
-
     before :each do
       @method = :put
       @action = :update
@@ -89,7 +86,6 @@ RSpec.describe PriceGroupProductsController do
       do_request
       assert_successful_update
     end
-
   end
 
   private
@@ -130,5 +126,4 @@ RSpec.describe PriceGroupProductsController do
     @price_group_products.each { |pgp| expect(assigns[:price_group_products]).to be_include pgp }
     expect(assigns[:price_group_products]).to be_include assigns[:price_group_product]
   end
-
 end

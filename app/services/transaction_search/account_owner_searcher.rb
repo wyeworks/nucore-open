@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module TransactionSearch
-
   class AccountOwnerSearcher < BaseSearcher
-
     def options
       User.select(:id, :first_name, :last_name)
           .where(id: order_details.distinct.select("account_users.user_id").joins(account: :owner_user))
@@ -21,7 +19,5 @@ module TransactionSearch
     def label
       Account.human_attribute_name(:owner).pluralize
     end
-
   end
-
 end

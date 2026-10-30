@@ -4,10 +4,10 @@ require "rails_helper"
 
 RSpec.describe "Journal close" do
   let(:facility) { create(:facility) }
-  let(:director) { create(:user, :facility_director, facility: facility) }
-  let(:facility_account) { create(:facility_account, facility: facility) }
-  let!(:instrument) { create(:instrument, facility_account: facility_account) }
-  let!(:journal) { create(:journal, facility: facility, is_successful: nil) }
+  let(:director) { create(:user, :facility_director, facility:) }
+  let(:facility_account) { create(:facility_account, facility:) }
+  let!(:instrument) { create(:instrument, facility_account:) }
+  let!(:journal) { create(:journal, facility:, is_successful: nil) }
 
   it "shows the closing time and user" do
     login_as director

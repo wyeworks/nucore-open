@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class BundleProductsController < ApplicationController
-
   admin_tab     :create, :destroy, :new, :edit, :index, :update, :manage
   before_action :check_acting_as
   before_action :init_current_facility
@@ -79,5 +78,4 @@ class BundleProductsController < ApplicationController
   def update_params
     params.require(:bundle_product).permit(:quantity)
   end
-
 end

@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module Reports
-
   class InstrumentUnavailableExportRaw
-
     attr_reader :facility, :date_start, :date_end
 
     include CsvExporter
@@ -57,7 +55,5 @@ module Reports
                                     start_time: date_start.beginning_of_day,
                                     end_time: date_end.end_of_day)
     end
-
   end
-
 end

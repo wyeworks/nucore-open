@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 module BulkEmail
-
   class BulkEmailController < ApplicationController
-
     include CSVHelper
 
     admin_tab :all
@@ -59,6 +57,7 @@ module BulkEmail
     # need to be set to keep that state in the redisplayed form.
     def populate_flow_state_params
       return if params[:bulk_email_delivery_form].blank?
+
       search_criteria = JSON.parse(params[:bulk_email_delivery_form][:search_criteria])
       params.merge!(search_criteria.slice("bulk_email", "start_date", "end_date", "products", "facilities"))
       params.merge!(params[:bulk_email_delivery_form].permit(:product_id, :recipient_ids))
@@ -107,7 +106,7 @@ module BulkEmail
     def init_search_options
       products = Product.for_facility(current_facility).not_archived.alphabetized.includes(:facility)
       facilities = Facility.active.alphabetized if current_facility.cross_facility?
-      @search_options = { products: products, facilities: facilities }
+      @search_options = { products:, facilities: }
       @search_fields = params
       @user_types = user_types
       @user_types.delete(:authorized_users) unless products.exists?(requires_approval: true)
@@ -126,9 +125,8 @@ module BulkEmail
 
     def user_type_selected?(user_type)
       return false if params[:bulk_email].blank?
+
       params[:bulk_email][:user_types].include?(user_type.to_s)
     end
-
   end
-
 end
