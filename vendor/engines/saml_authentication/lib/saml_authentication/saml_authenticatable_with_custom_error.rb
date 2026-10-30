@@ -19,7 +19,7 @@ module Devise
       def failed_auth(msg)
         log_to_rollbar(msg) if defined?(Rollbar)
         DeviseSamlAuthenticatable::Logger.send(msg)
-        fail!(error_message.html_safe)
+        fail!(error_message)
         Devise.saml_failed_callback.new.handle(@response, self) if Devise.saml_failed_callback # rubocop:disable Style/SafeNavigation
       end
 

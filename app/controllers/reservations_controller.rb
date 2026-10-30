@@ -116,7 +116,7 @@ class ReservationsController < ApplicationController
     end
     notices.compact!
     existing_notices = flash[:notice].presence ? [flash[:notice]] : []
-    flash.now[:notice] = existing_notices.concat(notices).join("<br />").html_safe unless notices.empty?
+    flash.now[:notice] = existing_notices.concat(notices).join("<br />") unless notices.empty?
   end
 
   # GET /orders/:order_id/order_details/:order_detail_id/reservations/:id(.:format)
@@ -189,7 +189,7 @@ class ReservationsController < ApplicationController
     else
       @reservation = creator.reservation
       # validation errors are handled by simple form
-      flash.now[:error] = creator.error.html_safe if creator.error.present?
+      flash.now[:error] = creator.error if creator.error.present?
       set_windows
       render :new
     end
@@ -237,7 +237,7 @@ class ReservationsController < ApplicationController
     if @reservation.move_to_earliest
       flash[:notice] = "The reservation was moved successfully."
     else
-      flash[:error] = @reservation.errors.full_messages.join("<br/>").html_safe
+      flash[:error] = @reservation.errors.full_messages.join("<br/>")
     end
 
     redirect_to redirect_to_path

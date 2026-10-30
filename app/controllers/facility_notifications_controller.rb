@@ -55,7 +55,7 @@ class FacilityNotificationsController < ApplicationController
         LogEvent.log(order_detail, :notify, current_user)
       end
     else
-      flash[:error] = I18n.t("controllers.facility_notifications.errors_html", errors: sender.errors.join("<br/>")).html_safe
+      flash[:error] = I18n.t("controllers.facility_notifications.errors_html", errors: sender.errors.join("<br/>"))
     end
     @accounts_to_notify = sender.account_ids_to_notify
     @errors = sender.errors
@@ -111,7 +111,7 @@ class FacilityNotificationsController < ApplicationController
     if sender.accounts_notified_size > 10
       I18n.t("controllers.facility_notifications.send_notifications.success_count", accounts: sender.accounts_notified_size)
     else
-      I18n.t("controllers.facility_notifications.send_notifications.success_html", accounts: sender.accounts_notified.map(&:account_list_item).join("<br/>")).html_safe
+      I18n.t("controllers.facility_notifications.send_notifications.success_html", accounts: sender.accounts_notified.map(&:account_list_item).join("<br/>"))
     end
   end
 end

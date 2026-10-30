@@ -64,11 +64,11 @@ class QuickReservationsController < ApplicationController
           flash[:notice] = "Reservation started"
         else
           # failed to start
-          flash[:error] = @reservation.errors.full_messages.join("<br>").html_safe
+          flash[:error] = @reservation.errors.full_messages.join("<br>")
         end
       else
         # failed to purchase order
-        flash[:error] = order_purchaser.errors.join("<br>").html_safe
+        flash[:error] = order_purchaser.errors.join("<br>")
       end
       redirect_to facility_instrument_quick_reservation_path(
         @facility,
@@ -77,7 +77,7 @@ class QuickReservationsController < ApplicationController
       )
     else
       # failed to save reservation
-      flash.now[:error] = creator.error.html_safe
+      flash.now[:error] = creator.error
       render(:new)
     end
   end
@@ -91,7 +91,7 @@ class QuickReservationsController < ApplicationController
       redirect_to facility_instrument_quick_reservation_path(@facility, @instrument, @reservation)
     else
       # failed to start
-      flash[:error] = @startable.errors.full_messages.join("<br>").html_safe
+      flash[:error] = @startable.errors.full_messages.join("<br>")
 
       redirect_to facility_instrument_quick_reservation_path(
         @facility,

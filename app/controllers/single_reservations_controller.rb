@@ -32,7 +32,7 @@ class SingleReservationsController < ApplicationController
     else
       @reservation = creator.reservation
       # validation errors are handled by simple form
-      flash.now[:error] = creator.error.html_safe if creator.error.present?
+      flash.now[:error] = creator.error if creator.error.present?
       set_windows
       render "reservations/new"
     end

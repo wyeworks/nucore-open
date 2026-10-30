@@ -61,7 +61,7 @@ class FacilityAccountsReconciliationController < ApplicationController
       flash[:notice] = "#{count} payment#{'s' unless count == 1} successfully updated" if count > 0
       redirect_to([account_route.to_sym, :facility_accounts, { show_items: params[:show_items] }])
     else
-      flash[:error] = reconciler.full_errors.join("<br />").html_safe
+      flash[:error] = reconciler.full_errors.join("<br />")
       redirect_to([account_route.to_sym, :facility_accounts, redirect_params])
     end
   end
