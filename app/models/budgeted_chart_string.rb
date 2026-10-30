@@ -21,7 +21,6 @@ class BudgetedChartString < ApplicationRecord
       return
     end
 
-    count
     imported  = 0
     skipped   = 0
     invalid   = 0

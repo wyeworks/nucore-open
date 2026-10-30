@@ -205,7 +205,6 @@ class PricePolicy < ApplicationRecord
 
   # TODO: Refactor
   def start_date_is_unique
-    self.class.name.downcase.gsub(/pricepolicy$/, "")
     price_group = self.price_group
     return if product.nil? || price_group.nil?
 

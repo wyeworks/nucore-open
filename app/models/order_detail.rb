@@ -1103,12 +1103,10 @@ class OrderDetail < ApplicationRecord
   end
 
   def mark_dispute_resolved
-    if resolve_dispute?
-      self.dispute_resolved_at = Time.zone.now
-      self.reviewed_at         = Time.zone.now
-    else
-      "0"
-    end
+    return unless resolve_dispute?
+
+    self.dispute_resolved_at = Time.zone.now
+    self.reviewed_at         = Time.zone.now
   end
 
   def clear_costs

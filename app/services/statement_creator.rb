@@ -48,14 +48,11 @@ class StatementCreator
 
   def set_order_details_to_statement
     order_detail_ids.each do |order_detail_id|
-      nil
-      begin
-        od = OrderDetail.need_statement(current_facility).readonly(false).find(order_detail_id)
-        @to_statement[od.account] ||= []
-        @to_statement[od.account] << od
-      rescue
-        @errors << I18n.t("controllers.facility_statements.order_error", order_detail_id:)
-      end
+      od = OrderDetail.need_statement(current_facility).readonly(false).find(order_detail_id)
+      @to_statement[od.account] ||= []
+      @to_statement[od.account] << od
+    rescue
+      @errors << I18n.t("controllers.facility_statements.order_error", order_detail_id:)
     end
   end
 
