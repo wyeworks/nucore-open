@@ -91,7 +91,6 @@ class TabbableReports {
   }
 
   init_form() {
-    $('.datepicker').datepicker();
     return this.$element.find(':input').change(debounce(() => this.update_parameters(), 400));
   }
 
