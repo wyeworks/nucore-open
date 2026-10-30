@@ -50,6 +50,6 @@ class TimeRange
   def localize(time, options = {})
     return "???" unless time
 
-    I18n.localize(time, **options)
+    I18n.l(time, **options)
   end
 end

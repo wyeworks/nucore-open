@@ -32,7 +32,7 @@ RSpec.describe AccountsController do
       do_request
       # should find 2 account users, with user roles 'Owner'
       expect(assigns[:account_users].collect(&:user_id)).to eq([@owner.id, @owner.id])
-      expect(assigns[:account_users].collect(&:user_role)).to eq(%w(Owner Owner))
+      expect(assigns[:account_users].collect(&:user_role)).to eq(%w[Owner Owner])
       # should show 2 accounts, with 'edit account' links
       expect(response).to render_template("accounts/index")
     end

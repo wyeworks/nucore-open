@@ -100,9 +100,7 @@ class ProductForCart
 
   def check_that_session_user_can_order_on_behalf_of_assumed_user(acting_user, session_user)
     proc do
-      if acting_as?(acting_user, session_user) && !facility_operator?
-        @error_message = text(".not_authorized_to_order_on_behalf", i18n_params)
-      end
+      @error_message = text(".not_authorized_to_order_on_behalf", i18n_params) if acting_as?(acting_user, session_user) && !facility_operator?
     end
   end
 

@@ -27,7 +27,7 @@ RSpec.describe Account do
 
     it "should produce an error string" do
       expect(po_account.validate_against_product(item, user))
-        .to match /\bdoes not accept\b/
+        .to match(/\bdoes not accept\b/)
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.describe Account do
 
     it "should produce an error string" do
       expect(cc_account.validate_against_product(item, user))
-        .to match /\bdoes not accept\b/
+        .to match(/\bdoes not accept\b/)
     end
   end
 end

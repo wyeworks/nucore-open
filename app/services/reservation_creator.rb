@@ -19,41 +19,39 @@ class ReservationCreator
     end
 
     Reservation.transaction do
-      begin
-        update_order_account
+      update_order_account
 
-        # merge state can change after call to #save! due to OrderDetail#move_to_original_merge_order
-        to_be_merged = @order_detail.order.to_be_merged?
+      # merge state can change after call to #save! due to OrderDetail#move_to_original_merge_order
+      to_be_merged = @order_detail.order.to_be_merged?
 
-        raise ActiveRecord::RecordInvalid, @order_detail unless reservation_and_order_valid?(session_user)
+      raise ActiveRecord::RecordInvalid, @order_detail unless reservation_and_order_valid?(session_user)
 
-        validator = OrderPurchaseValidator.new(@order_detail)
-        raise OrderPurchaseValidatorError, @order_detail if validator.invalid?
+      validator = OrderPurchaseValidator.new(@order_detail)
+      raise OrderPurchaseValidatorError, @order_detail if validator.invalid?
 
-        save_reservation_and_order_detail(session_user)
+      save_reservation_and_order_detail(session_user)
 
-        if to_be_merged
-          # The purchase_order_path or cart_path will handle the backdating, but we need
-          # to do this here for merged reservations.
-          backdate_reservation_if_necessary(session_user)
+      if to_be_merged
+        # The purchase_order_path or cart_path will handle the backdating, but we need
+        # to do this here for merged reservations.
+        backdate_reservation_if_necessary(session_user)
 
-          purchase_original_cross_core_order
+        purchase_original_cross_core_order
 
-          @success = :merged_order
-        elsif @order.order_details.where(parent_order_detail_id: nil).one?
-          @success = :instrument_only_order
-        else
-          @success = :default
-        end
-      rescue OrderPurchaseValidatorError => e
-        @error = e.message
-        raise ActiveRecord::Rollback
-      rescue ActiveRecord::RecordInvalid => e
-        raise ActiveRecord::Rollback
-      rescue => e
-        @error = I18n.t("orders.purchase.error", message: e.message).html_safe
-        raise ActiveRecord::Rollback
+        @success = :merged_order
+      elsif @order.order_details.where(parent_order_detail_id: nil).one?
+        @success = :instrument_only_order
+      else
+        @success = :default
       end
+    rescue OrderPurchaseValidatorError => e
+      @error = e.message
+      raise ActiveRecord::Rollback
+    rescue ActiveRecord::RecordInvalid
+      raise ActiveRecord::Rollback
+    rescue => e
+      @error = I18n.t("orders.purchase.error", message: e.message).html_safe
+      raise ActiveRecord::Rollback
     end
   end
 
@@ -117,12 +115,12 @@ class ReservationCreator
     # If the account has changed, we need to re-do validations on the order. We're
     # only saving the changes if the reservation is part of a cart. Otherwise, we
     # just modify the object in-memory for redisplay.
-    if account != @order.account
-      @order.invalidate if @order.persisted?
-      @order.account = account
-      @order_detail.account = account if @order_detail
-      @order.save! if @order.persisted?
-    end
+    return unless account != @order.account
+
+    @order.invalidate if @order.persisted?
+    @order.account = account
+    @order_detail.account = account if @order_detail
+    @order.save! if @order.persisted?
   end
 
   def backdate_reservation_if_necessary(session_user)
@@ -149,16 +147,16 @@ class ReservationCreator
   def purchase_original_cross_core_order
     original_order = Order.find(@order.merge_with_order_id)
 
-    if original_order.order_details.one? && original_order.cross_core_project.present?
-      order_purchaser = OrderPurchaser.new(
-        order: original_order,
-        acting_as: original_order.user,
-        order_in_past: nil,
-        params: ActionController::Parameters.new({}),
-        user: original_order.created_by,
-      )
-      order_purchaser.purchase_cross_core!
-    end
+    return unless original_order.order_details.one? && original_order.cross_core_project.present?
+
+    order_purchaser = OrderPurchaser.new(
+      order: original_order,
+      acting_as: original_order.user,
+      order_in_past: nil,
+      params: ActionController::Parameters.new({}),
+      user: original_order.created_by,
+    )
+    order_purchaser.purchase_cross_core!
   end
 
   def process_accessories

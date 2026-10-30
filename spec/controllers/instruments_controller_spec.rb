@@ -327,7 +327,7 @@ RSpec.describe InstrumentsController, type: :controller do
         it "does not allow user to create daily booking instrument" do
           sign_in(user)
 
-          expect { do_request }.to_not change { Instrument.count }
+          expect { do_request }.to_not(change { Instrument.count })
           expect(@response.body).to(
             include(I18n.t("controllers.instruments.create.daily_booking_not_authorized")),
           )
@@ -370,7 +370,7 @@ RSpec.describe InstrumentsController, type: :controller do
         it "does not allow user to create duration billing instrument" do
           sign_in(user)
 
-          expect { do_request }.to_not change { Instrument.count }
+          expect { do_request }.to_not(change { Instrument.count })
           expect(@response.body).to(
             include(I18n.t("controllers.instruments.create.duration_billing_not_authorized")),
           )
@@ -452,7 +452,7 @@ RSpec.describe InstrumentsController, type: :controller do
       it "does not change the instrument's pricing mode" do
         sign_in(user)
 
-        expect { do_request }.not_to change { instrument.reload.pricing_mode }
+        expect { do_request }.not_to(change { instrument.reload.pricing_mode })
         expect(instrument.reload).not_to be_duration_pricing_mode
       end
     end
@@ -468,7 +468,7 @@ RSpec.describe InstrumentsController, type: :controller do
         it "does not change the billing mode" do
           sign_in(user)
 
-          expect { do_request }.not_to change { instrument.reload.billing_mode }
+          expect { do_request }.not_to(change { instrument.reload.billing_mode })
         end
       end
 

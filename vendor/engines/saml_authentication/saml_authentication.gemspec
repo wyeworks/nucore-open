@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path("../lib", __FILE__)
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 
 # Maintain your gem's version:
 require "saml_authentication/version"
@@ -16,8 +16,8 @@ Gem::Specification.new do |s|
   s.description = ""
 
   s.files = Dir["{app,config,db,lib}/**/*", "README.md"]
-  s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "devise_saml_authenticatable"
   s.add_dependency "rails", ">= 4.2"
+  s.metadata["rubygems_mfa_required"] = "true"
 end

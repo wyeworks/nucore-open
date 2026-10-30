@@ -54,16 +54,12 @@ class Ability
       can :manage, AccountPriceGroupMember
     else
       can :manage, :all
-      unless user.global_billing_administrator?
-        cannot [:manage_accounts, :manage_billing], Facility.cross_facility
-      end
+      cannot [:manage_accounts, :manage_billing], Facility.cross_facility unless user.global_billing_administrator?
       unless user.account_manager?
         # TODO: Refactor
         # We think this is here to keep the Users tab visible. See LinkCollection#admin_users.
         cannot :manage, User unless resource.is_a?(Facility) || resource.is_a?(Project)
-        if SettingsHelper.feature_off?("users_authentication.create_users")
-          cannot([:edit, :update], User)
-        end
+        cannot([:edit, :update], User) if SettingsHelper.feature_off?("users_authentication.create_users")
       end
     end
 
@@ -84,25 +80,19 @@ class Ability
              order_file upload_order_file remove_order_file], OrderDetail, order: { user_id: user.id }
     end
 
-    if resource.is_a?(PriceGroup)
-      if user_has_facility_role?(user) && editable_global_group?(resource)
-        can :read, UserPriceGroupMember
-      end
-    end
+    can :read, UserPriceGroupMember if resource.is_a?(PriceGroup) && user_has_facility_role?(user) && editable_global_group?(resource)
 
     if resource.is_a?(Reservation)
       # TODO: Add :accessory hash back in to hide hidden accessories from non-admin users
       # See task #55479
       can :read, ProductAccessory # , :accessory => { :is_hidden => false }
 
-      if resource.order.try(:user_id) == user.id
-        can %i[read create update destroy start_stop move], Reservation
-      end
+      can %i[read create update destroy start_stop move], Reservation if resource.order.try(:user_id) == user.id
     end
 
-    if resource.is_a?(TrainingRequest)
-      can :create, TrainingRequest
-    end
+    return unless resource.is_a?(TrainingRequest)
+
+    can :create, TrainingRequest
   end
 
   def account_manager_abilities(user, resource)
@@ -110,14 +100,14 @@ class Ability
 
     can [:manage_accounts, :manage_users], Facility.cross_facility
 
-    if resource.blank? || resource == Facility.cross_facility
-      can :manage, AccountUser
-      can %i[create read administer accounts new_external search], User
-      can %i[create read update suspend unsuspend], Account
-      if SettingsHelper.feature_off?("users_authentication.create_users")
-        cannot([:create, :update], User)
-      end
-    end
+    return unless resource.blank? || resource == Facility.cross_facility
+
+    can :manage, AccountUser
+    can %i[create read administer accounts new_external search], User
+    can %i[create read update suspend unsuspend], Account
+    return unless SettingsHelper.feature_off?("users_authentication.create_users")
+
+    cannot([:create, :update], User)
   end
 
   def global_billing_administrator_abilities(user, resource)
@@ -128,37 +118,27 @@ class Ability
     can :manage, Statement if resource.is_a?(Facility)
     can :set_invoice_date, Statement if resource.is_a?(Facility)
     can [:send_receipt, :show], Order
-    if resource == Facility.cross_facility
-      can %i[accounts index orders show administer], User
-    end
+    can %i[accounts index orders show administer], User if resource == Facility.cross_facility
     can :manage_users, Facility.cross_facility if SettingsHelper.feature_on?("roles.global_billing_administrator_users_tab")
     can :manage_billing, Facility.cross_facility
     can %i[disputed_orders movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions], Facility, &:cross_facility?
 
-    if SettingsHelper.feature_on?(:show_estimates_option)
-      can [:manage, :duplicate, :recalculate], Estimate
-    end
+    return unless SettingsHelper.feature_on?(:show_estimates_option)
+
+    can [:manage, :duplicate, :recalculate], Estimate
   end
 
   def facility_director_abilities(user, resource, controller)
-    if resource.is_a?(PriceGroup) && user.facility_director_of?(resource.facility)
-      if !resource.global?
-        can :manage, [AccountPriceGroupMember, UserPriceGroupMember]
-      end
-    end
+    can :manage, [AccountPriceGroupMember, UserPriceGroupMember] if resource.is_a?(PriceGroup) && user.facility_director_of?(resource.facility) && !resource.global?
 
-    if resource.is_a?(TrainingRequest) && user.facility_director_of?(resource.product.facility)
-      can :manage, TrainingRequest
-    end
+    can :manage, TrainingRequest if resource.is_a?(TrainingRequest) && user.facility_director_of?(resource.product.facility)
 
     if resource.is_a?(Reservation) && user.facility_director_of?(resource.product.facility)
       can :read, ProductAccessory
       can :manage, Reservation
     end
 
-    if resource.is_a?(OrderDetail) && user.facility_director_of?(resource.facility)
-      can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
-    end
+    can :manage, OrderDetail, order: { facility_id: resource.order.facility_id } if resource.is_a?(OrderDetail) && user.facility_director_of?(resource.facility)
 
     if resource.is_a?(Facility) && user.facility_director_of?(resource)
       manager_abilities_for_facility(user, resource, controller)
@@ -172,17 +152,13 @@ class Ability
       end
     end
 
-    if SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_director_of?(resource)
-      can [:manage, :duplicate, :recalculate], Estimate
-    end
+    return unless SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_director_of?(resource)
+
+    can [:manage, :duplicate, :recalculate], Estimate
   end
 
   def facility_administrator_abilities(user, resource, controller)
-    if resource.is_a?(PriceGroup) && user.facility_administrator_of?(resource.facility)
-      if !resource.global?
-        can :manage, [AccountPriceGroupMember, UserPriceGroupMember]
-      end
-    end
+    can :manage, [AccountPriceGroupMember, UserPriceGroupMember] if resource.is_a?(PriceGroup) && user.facility_administrator_of?(resource.facility) && !resource.global?
 
     if resource.is_a?(Reservation) && user.facility_administrator_of?(resource.product.facility)
       can :read, ProductAccessory
@@ -197,106 +173,94 @@ class Ability
       can :manage, ProductNotification, facility_id: resource.id
     end
 
-    if SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_administrator_of?(resource)
-      can [:manage, :duplicate, :recalculate], Estimate
-    end
+    return unless SettingsHelper.feature_on?(:show_estimates_option) && resource.is_a?(Facility) && user.facility_administrator_of?(resource)
+
+    can [:manage, :duplicate, :recalculate], Estimate
   end
 
-  def facility_billing_administrator_abilities(user, resource, controller)
-    if resource.is_a?(OrderDetail) && user.facility_billing_administrator_of?(resource.facility)
-      can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
-    end
+  def facility_billing_administrator_abilities(user, resource, _controller)
+    can :manage, OrderDetail, order: { facility_id: resource.order.facility_id } if resource.is_a?(OrderDetail) && user.facility_billing_administrator_of?(resource.facility)
 
-    if resource.is_a?(Facility) && user.facility_billing_administrator_of?(resource)
-      can [:list, :dashboard, :show], Facility
-      can [:index, :show, :timeline], Reservation
-      can %i[administer index view_details schedule show], Product
-      can [:show, :index], PriceGroup
-      can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
+    return unless resource.is_a?(Facility) && user.facility_billing_administrator_of?(resource)
 
-      can :manage, AccountUser
+    can [:list, :dashboard, :show], Facility
+    can [:index, :show, :timeline], Reservation
+    can %i[administer index view_details schedule show], Product
+    can [:show, :index], PriceGroup
+    can [:show, :index], [PricePolicy, InstrumentPricePolicy, ItemPricePolicy, ServicePricePolicy]
 
-      can :index, [BundleProduct, ScheduleRule, ServicePricePolicy, ProductAccessory, ProductAccessGroup]
-      can [:read, :edit], PriceGroupProduct
-      can [:index], StoredFile
+    can :manage, AccountUser
 
-      can :manage, [Journal, Statement, OrderDetail]
-      can [:send_receipt, :show], Order
-      can %i[accounts index orders show administer], User
-      can :manage_users, resource
-      can :manage_billing, resource
-      can %i[disputed_orders movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions], Facility
+    can :index, [BundleProduct, ScheduleRule, ServicePricePolicy, ProductAccessory, ProductAccessGroup]
+    can [:read, :edit], PriceGroupProduct
+    can [:index], StoredFile
 
-      # Can manage an account if it is global (i.e. it's a chart string) or the account
-      # is attached to the current facility.
-      can :manage, Account do |account|
-        account.global? || account.account_facility_joins.any? { |af| af.facility_id == resource.id }
-      end
+    can :manage, [Journal, Statement, OrderDetail]
+    can [:send_receipt, :show], Order
+    can %i[accounts index orders show administer], User
+    can :manage_users, resource
+    can :manage_billing, resource
+    can %i[disputed_orders movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions], Facility
+
+    # Can manage an account if it is global (i.e. it's a chart string) or the account
+    # is attached to the current facility.
+    can :manage, Account do |account|
+      account.global? || account.account_facility_joins.any? { |af| af.facility_id == resource.id }
     end
   end
 
   def facility_senior_staff_abilities(user, resource, controller)
-    if resource.is_a?(TrainingRequest) && user.facility_senior_staff_of?(resource.product.facility)
-      can :manage, TrainingRequest
-    end
+    can :manage, TrainingRequest if resource.is_a?(TrainingRequest) && user.facility_senior_staff_of?(resource.product.facility)
 
     if resource.is_a?(Reservation) && user.facility_senior_staff_of?(resource.product.facility)
       can :read, ProductAccessory
       can :manage, Reservation
     end
 
-    if resource.is_a?(OrderDetail) && user.facility_senior_staff_of?(resource.facility)
-      can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
-    end
+    can :manage, OrderDetail, order: { facility_id: resource.order.facility_id } if resource.is_a?(OrderDetail) && user.facility_senior_staff_of?(resource.facility)
 
-    if resource.is_a?(Facility) && user.facility_senior_staff_of?(resource)
-      operator_abilities_for_facility(user, resource, controller)
+    return unless resource.is_a?(Facility) && user.facility_senior_staff_of?(resource)
 
-      can :manage, [
-        ProductAccessGroup,
-        ProductAccessory,
-        ProductUser,
-        ScheduleRule,
-        PriceGroupDiscount,
-        StoredFile,
-        TrainingRequest,
-        OfflineReservation,
-      ]
+    operator_abilities_for_facility(user, resource, controller)
 
-      can :show_problems, [Reservation, Order]
+    can :manage, [
+      ProductAccessGroup,
+      ProductAccessory,
+      ProductUser,
+      ScheduleRule,
+      PriceGroupDiscount,
+      StoredFile,
+      TrainingRequest,
+      OfflineReservation,
+    ]
 
-      # they can get to reports controller, but they're not allowed to export all
-      # ideally we don't use `cannot` as it adds a dependency on the order of assigning abilities for multiple roles
-      can :manage, Reports::ReportsController
-      cannot :export_all, Reports::ReportsController
-    end
+    can :show_problems, [Reservation, Order]
+
+    # they can get to reports controller, but they're not allowed to export all
+    # ideally we don't use `cannot` as it adds a dependency on the order of assigning abilities for multiple roles
+    can :manage, Reports::ReportsController
+    cannot :export_all, Reports::ReportsController
   end
 
   def facility_staff_abilities(user, resource, controller)
     cross_core_abilities(user, resource, controller)
 
-    if resource.is_a?(OrderDetail) && user.facility_staff_or_manager_of?(resource.facility)
-      can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
-    end
+    can :manage, OrderDetail, order: { facility_id: resource.order.facility_id } if resource.is_a?(OrderDetail) && user.facility_staff_or_manager_of?(resource.facility)
 
     if resource.is_a?(Reservation) && user.facility_staff_of?(resource.product.facility)
       can :read, ProductAccessory
       can :manage, Reservation
     end
 
-    if resource.is_a?(OrderDetail) && user.facility_staff_of?(resource.facility)
-      can :manage, OrderDetail, order: { facility_id: resource.order.facility_id }
-    end
+    can :manage, OrderDetail, order: { facility_id: resource.order.facility_id } if resource.is_a?(OrderDetail) && user.facility_staff_of?(resource.facility)
 
-    if resource.is_a?(Facility) && user.facility_staff_of?(resource)
-      operator_abilities_for_facility(user, resource, controller)
-    end
+    return unless resource.is_a?(Facility) && user.facility_staff_of?(resource)
+
+    operator_abilities_for_facility(user, resource, controller)
   end
 
-  def account_administrator_abilities(user, resource, controller)
-    if resource.is_a?(OrderDetail) && user.account_administrator_of?(resource.account)
-      can %i[show update dispute sample_results sample_results_zip template_results], OrderDetail, account: { id: resource.account_id }
-    end
+  def account_administrator_abilities(user, resource, _controller)
+    can %i[show update dispute sample_results sample_results_zip template_results], OrderDetail, account: { id: resource.account_id } if resource.is_a?(OrderDetail) && user.account_administrator_of?(resource.account)
 
     if resource.is_a?(Account) && user.account_administrator_of?(resource)
       can :manage, Account
@@ -304,12 +268,12 @@ class Ability
       can %i[show suspend unsuspend user_search user_accounts statements show_statement index], Statement
     end
 
-    if SettingsHelper.feature_on?("roles.move_transactions_account_roles") && Account.administered_by(user).any?
-      can :reassign_transactions, TransactionsController
-    end
+    return unless SettingsHelper.feature_on?("roles.move_transactions_account_roles") && Account.administered_by(user).any?
+
+    can :reassign_transactions, TransactionsController
   end
 
-  def operator_abilities_for_facility(user, resource, controller)
+  def operator_abilities_for_facility(_user, _resource, controller)
     can :manage, [
       AccountPriceGroupMember,
       OrderDetail,
@@ -364,12 +328,8 @@ class Ability
     can [:administer], User
     can(:switch_to, User, &:active?)
 
-    if controller.is_a?(UsersController)
-      can %i[read create search access_list access_list_approvals new_external orders accounts], User
-    end
-    if controller.is_a?(UserAccountsController) || controller.is_a?(FacilityUserReservationsController)
-      can [:access_list], User
-    end
+    can %i[read create search access_list access_list_approvals new_external orders accounts], User if controller.is_a?(UsersController)
+    can [:access_list], User if controller.is_a?(UserAccountsController) || controller.is_a?(FacilityUserReservationsController)
 
     can :user_search_results, User if controller.is_a?(SearchController)
 
@@ -448,9 +408,7 @@ class Ability
     elsif controller.is_a?(ReservationsController) && resource.is_a?(Reservation)
       project = resource.order_detail.order.cross_core_project
 
-      if project.present?
-        can :manage, Reservation if can_manage_cross_core_orders_at?(user, project.facility)
-      end
+      can :manage, Reservation if project.present? && can_manage_cross_core_orders_at?(user, project.facility)
     end
 
     if resource.is_a?(OrderDetail)
@@ -462,15 +420,15 @@ class Ability
       end
     end
 
-    if controller.is_a?(FileUploadsController) && resource.is_a?(Facility)
-      can [:upload_sample_results, :destroy], StoredFile do |fileupload|
-        project = fileupload.order_detail.project
+    return unless controller.is_a?(FileUploadsController) && resource.is_a?(Facility)
 
-        project&.cross_core? &&
-          (can_manage_cross_core_orders_at?(user, project.facility) ||
-            can_manage_cross_core_orders_at?(user, fileupload.order_detail.order.facility)) &&
-          fileupload.file_type == "sample_result"
-      end
+    can [:upload_sample_results, :destroy], StoredFile do |fileupload|
+      project = fileupload.order_detail.project
+
+      project&.cross_core? &&
+        (can_manage_cross_core_orders_at?(user, project.facility) ||
+          can_manage_cross_core_orders_at?(user, fileupload.order_detail.order.facility)) &&
+        fileupload.file_type == "sample_result"
     end
   end
 

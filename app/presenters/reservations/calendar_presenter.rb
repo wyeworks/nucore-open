@@ -40,9 +40,7 @@ module Reservations
       ret = super
 
       class_names = []
-      if options[:discriminate] && options[:instrument_id].present? && product_id != options[:instrument_id]
-        class_names << "other-instrument"
-      end
+      class_names << "other-instrument" if options[:discriminate] && options[:instrument_id].present? && product_id != options[:instrument_id]
       class_names << "canceled" if canceled?
       ret[:className] = class_names if class_names.any?
 
@@ -68,9 +66,7 @@ module Reservations
       ).tap do |hash|
         hash[:email] = created_by.try(:full_name) if options[:with_details].present?
 
-        if expires_mins_before.present?
-          hash[:expiration] = "Expires #{MinutesToTimeFormatter.new(expires_mins_before)} prior"
-        end
+        hash[:expiration] = "Expires #{MinutesToTimeFormatter.new(expires_mins_before)} prior" if expires_mins_before.present?
 
         hash[:className] = "unavailable" if __getobj__.is_a?(AdminReservation)
       end

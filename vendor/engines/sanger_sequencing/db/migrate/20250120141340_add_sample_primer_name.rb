@@ -2,14 +2,14 @@
 
 class AddSamplePrimerName < ActiveRecord::Migration[7.0]
   def up
-    unless ActiveRecord::Base.connection.column_exists?(:sanger_sequencing_samples, :primer_name)
-      add_column :sanger_sequencing_samples, :primer_name, :string
-    end
+    return if ActiveRecord::Base.connection.column_exists?(:sanger_sequencing_samples, :primer_name)
+
+    add_column :sanger_sequencing_samples, :primer_name, :string
   end
 
   def down
-    unless defined?(Acgt)
-      remove_column :sanger_sequencing_samples, :primer_name
-    end
+    return if defined?(Acgt)
+
+    remove_column :sanger_sequencing_samples, :primer_name
   end
 end

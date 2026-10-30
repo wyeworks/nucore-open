@@ -7,7 +7,7 @@ RSpec.describe Project, type: :model do
 
   context "validations" do
     it { is_expected.to validate_presence_of(:facility_id) }
-    it { is_expected.to belong_to(:facility).with_foreign_key(:facility_id) }
+    it { is_expected.to belong_to(:facility) }
     it { is_expected.to have_many(:order_details).inverse_of(:project) }
 
     it "enforces unique names per facility" do
@@ -46,7 +46,7 @@ RSpec.describe Project, type: :model do
     let(:stub_controller) { OpenStruct.new }
 
     describe "facility level actions" do
-      let(:common_actions_on_facility_level) { %i(create edit index new update) }
+      let(:common_actions_on_facility_level) { %i[create edit index new update] }
       subject(:ability) { Ability.new(user, facility, stub_controller) }
 
       shared_examples_for "it has full access for facility level actions" do
@@ -112,7 +112,7 @@ RSpec.describe Project, type: :model do
     end
 
     describe "project level actions" do
-      let(:common_actions_on_project_level) { %i(show) }
+      let(:common_actions_on_project_level) { %i[show] }
       subject(:ability) { Ability.new(user, project, stub_controller) }
 
       shared_examples_for "it has full access for project level actions" do

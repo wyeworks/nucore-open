@@ -64,9 +64,9 @@ class InstrumentsController < ProductsCommonController
   end
 
   def set_default_lock_window
-    if params[:instrument][:lock_window].blank?
-      params[:instrument][:lock_window] = 0
-    end
+    return if params[:instrument][:lock_window].present?
+
+    params[:instrument][:lock_window] = 0
   end
 
   # GET /facilities/:facility_id/instrument_statuses
@@ -106,9 +106,7 @@ class InstrumentsController < ProductsCommonController
   def permitted_params
     params = super
 
-    if can?(:create_daily_booking, Instrument)
-      params += %i[min_reserve_days max_reserve_days start_time_disabled]
-    end
+    params += %i[min_reserve_days max_reserve_days start_time_disabled] if can?(:create_daily_booking, Instrument)
 
     params -= [:pricing_mode] if action_name == "update"
 

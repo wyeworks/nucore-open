@@ -25,18 +25,18 @@ class ReservationInstrumentSwitcher
   private
 
   def switch_relay_off!
-    if relays_enabled?
-      InstrumentStatus.with_lock_for(instrument) do
-        relay.deactivate
-      end
+    return unless relays_enabled?
+
+    InstrumentStatus.with_lock_for(instrument) do
+      relay.deactivate
     end
   end
 
   def switch_relay_on!
-    if relays_enabled?
-      InstrumentStatus.with_lock_for(instrument) do
-        relay.activate
-      end
+    return unless relays_enabled?
+
+    InstrumentStatus.with_lock_for(instrument) do
+      relay.activate
     end
   end
 

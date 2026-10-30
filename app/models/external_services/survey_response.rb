@@ -20,9 +20,7 @@ class SurveyResponse
         receiver.manages_quantity = true
         od.quantity = params[:quantity].to_i
       end
-      if params[:order_detail].present?
-        od.assign_attributes(sanitized_order_detail_params)
-      end
+      od.assign_attributes(sanitized_order_detail_params) if params[:order_detail].present?
       receiver.save!
       od.save!
       receiver

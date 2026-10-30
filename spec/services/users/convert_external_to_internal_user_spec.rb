@@ -14,11 +14,11 @@ RSpec.describe Users::ConvertExternalToInternalUser do
     end
 
     it "does not change the first_name" do
-      expect { converter.convert! }.not_to change { user.reload.first_name }
+      expect { converter.convert! }.not_to(change { user.reload.first_name })
     end
 
     it "does not change the last_name" do
-      expect { converter.convert! }.not_to change { user.reload.last_name }
+      expect { converter.convert! }.not_to(change { user.reload.last_name })
     end
   end
 

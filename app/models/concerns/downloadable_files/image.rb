@@ -20,9 +20,7 @@ module DownloadableFiles
       end
     end
 
-    def file_present?
-      file.present?
-    end
+    delegate :present?, to: :file, prefix: true
 
     def remove_file=(value)
       @remove_file = !value.to_i.zero?

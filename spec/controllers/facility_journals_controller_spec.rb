@@ -253,7 +253,7 @@ RSpec.describe FacilityJournalsController do
     it_should_deny_all [:staff, :senior_staff]
 
     it_should_allow_managers_only :redirect, "and respond gracefully when no order details given" do |_user|
-      journal_date = SpecDateHelper.parse_usa_date(@journal_date)
+      SpecDateHelper.parse_usa_date(@journal_date)
       expect(flash[:error]).not_to be_nil
     end
 
@@ -270,7 +270,7 @@ RSpec.describe FacilityJournalsController do
 
         it "has an error" do
           do_request
-          expect(assigns(:journal).errors.full_messages.join).to match /#{error_message}/i
+          expect(assigns(:journal).errors.full_messages.join).to match(/#{error_message}/i)
         end
       end
 
@@ -477,7 +477,7 @@ RSpec.describe FacilityJournalsController do
       end
 
       it "does not reconcile the one not selected" do
-        expect { perform }.not_to change { @order_detail3.reload.state }
+        expect { perform }.not_to(change { @order_detail3.reload.state })
       end
 
       it "sets the reconciled_at to the journal date" do
@@ -756,11 +756,9 @@ RSpec.describe FacilityJournalsController do
             call_count = 0
             allow_any_instance_of(OrderDetail).to receive(:to_complete_from_reconciled!).and_wrap_original do |original, receiver, *args|
               call_count += 1
-              if call_count == 2 # Fail on the second order detail
-                raise ActiveRecord::RecordInvalid, @order_detail2
-              else
-                original.call(receiver, *args)
-              end
+              raise ActiveRecord::RecordInvalid, @order_detail2 if call_count == 2 # Fail on the second order detail
+
+              original.call(receiver, *args)
             end
           end
 

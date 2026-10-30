@@ -34,7 +34,7 @@ class TransactionChosenOldInput < SimpleForm::Inputs::Base # CollectionSelectInp
   private
 
   def collection_items
-    template.instance_variable_get("@search_options").try(:[], attribute_name)
+    template.instance_variable_get(:@search_options).try(:[], attribute_name)
   end
 
   def model_label
@@ -42,7 +42,7 @@ class TransactionChosenOldInput < SimpleForm::Inputs::Base # CollectionSelectInp
   end
 
   def search_fields
-    template.instance_variable_get("@search_fields")
+    template.instance_variable_get(:@search_fields)
   end
 
   def attribute_class

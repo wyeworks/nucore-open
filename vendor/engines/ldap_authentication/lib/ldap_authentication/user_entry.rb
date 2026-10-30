@@ -56,7 +56,7 @@ module LdapAuthentication
 
     def attributes
       (CONVERTABLE_ATTRIBUTES + additional_attributes).each_with_object({}) do |field, output|
-        field_value = self.public_send(field).presence
+        field_value = public_send(field).presence
         output[field] = field_value if field_value
       end
     end
@@ -69,7 +69,7 @@ module LdapAuthentication
       tries = 0
       begin
         yield
-      rescue Net::LDAP::Error => e
+      rescue Net::LDAP::Error
         tries += 1
         tries >= max_attempts ? raise : retry
       end

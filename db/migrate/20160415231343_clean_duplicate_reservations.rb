@@ -6,7 +6,7 @@ class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
 
   def up
     order_details_with_multiple_reservations = Reservation
-                                               .where("order_detail_id is not null")
+                                               .where.not(order_detail_id: nil)
                                                .group(:order_detail_id)
                                                .having("count(*) > 1")
                                                .pluck(:order_detail_id)
@@ -26,8 +26,8 @@ class CleanDuplicateReservations < ActiveRecord::Migration[4.2]
 
   def down
     remove_index :reservations, name: "res_od_uniq_fk"
-    if Nucore::Database.oracle?
-      add_index :reservations, :order_detail_id, name: "i_reservations_order_detail_id", tablespace: "bc_nucore"
-    end
+    return unless Nucore::Database.oracle?
+
+    add_index :reservations, :order_detail_id, name: "i_reservations_order_detail_id", tablespace: "bc_nucore"
   end
 end

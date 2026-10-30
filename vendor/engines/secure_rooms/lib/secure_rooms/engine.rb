@@ -7,11 +7,11 @@ module SecureRooms
     config.to_prepare do
       ::AbilityExtensionManager.extensions << "SecureRooms::AbilityExtension"
 
-      NavTab::LinkCollection.send :include, SecureRooms::LinkCollectionExtension
-      OrderDetail.send :include, SecureRooms::OrderDetailExtension
-      Facility.send :include, SecureRooms::FacilityExtension
-      User.send :include, SecureRooms::UserExtension
-      ::OrderDetails::ParamUpdater.send :include, SecureRooms::OrderDetails::ParamUpdaterExtension
+      NavTab::LinkCollection.include SecureRooms::LinkCollectionExtension
+      OrderDetail.include SecureRooms::OrderDetailExtension
+      Facility.include SecureRooms::FacilityExtension
+      User.include SecureRooms::UserExtension
+      ::OrderDetails::ParamUpdater.include SecureRooms::OrderDetails::ParamUpdaterExtension
 
       TransactionSearch.register_optimizer(SecureRooms::NPlusOneOccupancyOptimizer)
 
@@ -52,9 +52,7 @@ module SecureRooms
     end
 
     initializer "model_core.factories", after: "factory_bot.set_factory_paths" do
-      if defined?(FactoryBot)
-        FactoryBot.definition_file_paths << File.expand_path("../../../spec/factories", __FILE__)
-      end
+      FactoryBot.definition_file_paths << File.expand_path("../../spec/factories", __dir__) if defined?(FactoryBot)
     end
   end
 end

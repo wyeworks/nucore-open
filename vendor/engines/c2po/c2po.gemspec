@@ -9,4 +9,5 @@ Gem::Specification.new do |s|
   s.summary = "Provides credit card and purchase order accounts for nucore apps"
 
   s.files = Dir["{app,config,db,lib}/**/*"]
+  s.metadata["rubygems_mfa_required"] = "true"
 end

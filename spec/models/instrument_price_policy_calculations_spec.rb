@@ -28,7 +28,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
 
     it "returns nil if the given order detail does not have a reservation" do
       fake_order_detail = double "OrderDetail", reservation: nil
-      expect(policy.estimate_cost_and_subsidy_from_order_detail fake_order_detail).to be_nil
+      expect(policy.estimate_cost_and_subsidy_from_order_detail(fake_order_detail)).to be_nil
     end
   end
 
@@ -275,7 +275,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
       describe "with a minimum cost" do
         let(:options) { { usage_rate: 0, minimum_cost: 10 } }
         it "returns minimum cost if instrument is #free?" do
-          expect(policy.calculate_cost_and_subsidy reservation).to eq(cost: 10, subsidy: 0)
+          expect(policy.calculate_cost_and_subsidy(reservation)).to eq(cost: 10, subsidy: 0)
         end
       end
 
@@ -283,7 +283,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
         let(:options) { { usage_rate: 0, minimum_cost: 0 } }
 
         it "returns 0" do
-          expect(policy.calculate_cost_and_subsidy reservation).to eq(cost: 0, subsidy: 0)
+          expect(policy.calculate_cost_and_subsidy(reservation)).to eq(cost: 0, subsidy: 0)
         end
       end
     end
@@ -314,7 +314,7 @@ RSpec.describe InstrumentPricePolicyCalculations do
       reservation.actual_end_at = reservation.reserve_end_at - 10.minutes
       new_costs = policy.calculate_cost_and_subsidy reservation
       expect(new_costs[:cost]).to eq(61.to_d)
-      expect(new_costs[:subsidy]).to eq(8.6083335.to_d)
+      expect(new_costs[:subsidy]).to eq(BigDecimal("8.6083335"))
     end
 
     it "calculates overage costs precisely" do
@@ -327,8 +327,8 @@ RSpec.describe InstrumentPricePolicyCalculations do
       reservation.actual_start_at = reservation.reserve_start_at
       reservation.actual_end_at = reservation.reserve_end_at + 10.minutes
       new_costs = policy.calculate_cost_and_subsidy reservation
-      expect(new_costs[:cost]).to eq(29.1666669.to_d)
-      expect(new_costs[:subsidy]).to eq(8.1666669.to_d)
+      expect(new_costs[:cost]).to eq(BigDecimal("29.1666669"))
+      expect(new_costs[:subsidy]).to eq(BigDecimal("8.1666669"))
     end
 
     it "charges for 90 minutes when an hour reservation is started 15 minutes late and goes over the reserved end time by 30 minutes" do
@@ -343,8 +343,8 @@ RSpec.describe InstrumentPricePolicyCalculations do
       reservation.actual_start_at = reservation.reserve_start_at + 15.minutes
       reservation.actual_end_at = reservation.reserve_end_at + 30.minutes
       new_costs = policy.calculate_cost_and_subsidy reservation
-      expect(new_costs[:cost].round 4).to eq 90
-      expect(new_costs[:subsidy].round 4).to eq 0
+      expect(new_costs[:cost].round(4)).to eq 90
+      expect(new_costs[:subsidy].round(4)).to eq 0
     end
 
     it "charges for overage even if the the usage is less than reservation" do
@@ -359,8 +359,8 @@ RSpec.describe InstrumentPricePolicyCalculations do
       reservation.actual_start_at = reservation.reserve_start_at + 45.minutes
       reservation.actual_end_at = reservation.reserve_end_at + 15.minutes # 30 minutes of use
       new_costs = policy.calculate_cost_and_subsidy reservation
-      expect(new_costs[:cost].round 4).to eq 75
-      expect(new_costs[:subsidy].round 4).to eq 0
+      expect(new_costs[:cost].round(4)).to eq 75
+      expect(new_costs[:subsidy].round(4)).to eq 0
     end
 
     it "applies the minimum cost once when in overage" do
@@ -376,8 +376,8 @@ RSpec.describe InstrumentPricePolicyCalculations do
       reservation.actual_start_at = reservation.reserve_start_at + 15.minutes
       reservation.actual_end_at = reservation.reserve_end_at + 30.minutes
       new_costs = policy.calculate_cost_and_subsidy reservation
-      expect(new_costs[:cost].round 4).to eq 150
-      expect(new_costs[:subsidy].round 4).to eq 0
+      expect(new_costs[:cost].round(4)).to eq 150
+      expect(new_costs[:subsidy].round(4)).to eq 0
     end
   end
 

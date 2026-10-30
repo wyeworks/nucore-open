@@ -12,9 +12,7 @@ Rails.application.routes.draw do
     match "/users/password/reset", to: "user_password#reset", as: "reset_password", via: [:get, :post]
   end
 
-  if SettingsHelper.feature_on?(:public_estimates) && SettingsHelper.feature_on?(:show_estimates_option)
-    get "estimate", to: "public_estimates#show"
-  end
+  get "estimate", to: "public_estimates#show" if SettingsHelper.feature_on?(:public_estimates) && SettingsHelper.feature_on?(:show_estimates_option)
 
   # root route
   root to: "public#index"
@@ -420,7 +418,7 @@ Rails.application.routes.draw do
   # order process
   get "/orders/cart", to: "orders#cart", as: "cart"
   get "/orders/cart_count", to: "orders#cart_order_details_count"
-  get "/orders(\/:status)", to: "orders#index", as: "orders_status", constraints: { status: /pending|all/ } ## emacs quoting \/
+  get "/orders(/:status)", to: "orders#index", as: "orders_status", constraints: { status: /pending|all/ } ## emacs quoting \/
 
   put "/orders/:id/remove/:order_detail_id", to: "orders#remove", as: "remove_order"
   get "/order/:id/add_account", to: "orders#add_account", as: "add_account"

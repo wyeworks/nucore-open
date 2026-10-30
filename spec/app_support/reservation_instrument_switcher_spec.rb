@@ -51,7 +51,7 @@ RSpec.describe ReservationInstrumentSwitcher do
       before { running_reservation.order_detail.update_order_status! running_reservation.user, OrderStatus.canceled, admin: true }
 
       it "does not do anything to the canceled reservation" do
-        expect { do_action }.not_to change { running_reservation.reload }
+        expect { do_action }.not_to(change { running_reservation.reload })
       end
     end
 
@@ -63,7 +63,7 @@ RSpec.describe ReservationInstrumentSwitcher do
       end
 
       it "does not do anything to the canceled reservation" do
-        expect { do_action }.not_to change { running_reservation.reload }
+        expect { do_action }.not_to(change { running_reservation.reload })
       end
     end
 

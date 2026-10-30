@@ -19,7 +19,7 @@ module SecureRooms
     delegate :id, :type, :description, :account_number, :expiration_month, :expiration_year, to: :account
 
     def attribute_names
-      %w(id type description account_number expiration_month expiration_year owner_name)
+      %w[id type description account_number expiration_month expiration_year owner_name]
     end
 
     def attributes

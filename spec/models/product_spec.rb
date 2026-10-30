@@ -14,7 +14,7 @@ RSpec.describe Product do
     let(:access_group) { create(:product_access_group, product:) }
     let(:facility) { @facility }
     let!(:product_user) { product.product_users.create(product:, user:, approved_by: user.id) }
-    let(:schedule_rule) { product.schedule_rules.create(attributes_for :schedule_rule) }
+    let(:schedule_rule) { product.schedule_rules.create(attributes_for(:schedule_rule)) }
     let(:user) { create(:user) }
 
     class TestProduct < Product
@@ -130,7 +130,7 @@ RSpec.describe Product do
           product:,
           price_group: product.price_groups.last,
           start_date: Time.zone.now,
-          expire_date: Time.zone.now + 1.day,
+          expire_date: 1.day.from_now,
           usage_rate: 8 / 60.0,
         )
       end
@@ -268,8 +268,8 @@ RSpec.describe Product do
       it "should not be purchasable if there is no price rule for a user, but there are current price rules" do
         @price_policy = TestPricePolicy.create!(price_group: @price_group2,
                                                 product: @product,
-                                                start_date: Time.zone.now - 1.day,
-                                                expire_date: Time.zone.now + 7.days,
+                                                start_date: 1.day.ago,
+                                                expire_date: 7.days.from_now,
                                                 can_purchase: true)
         expect(@product).not_to be_can_purchase(@price_groups)
       end
@@ -277,8 +277,8 @@ RSpec.describe Product do
       it "should be purchasable if there is a current price rule for the user's group" do
         @price_policy = TestPricePolicy.create!(price_group: @price_group,
                                                 product: @product,
-                                                start_date: Time.zone.now - 1.day,
-                                                expire_date: Time.zone.now + 7.days,
+                                                start_date: 1.day.ago,
+                                                expire_date: 7.days.from_now,
                                                 can_purchase: true)
         expect(@product).to be_can_purchase(@price_groups)
       end
@@ -286,8 +286,8 @@ RSpec.describe Product do
       it "should be purchasable if the user has an expired price rule where they were allowed to purchase" do
         @price_policy = TestPricePolicy.create!(price_group: @price_group,
                                                 product: @product,
-                                                start_date: Time.zone.now - 7.days,
-                                                expire_date: Time.zone.now - 1.day,
+                                                start_date: 7.days.ago,
+                                                expire_date: 1.day.ago,
                                                 can_purchase: true)
         expect(@product).to be_can_purchase(@price_groups)
       end
@@ -295,8 +295,8 @@ RSpec.describe Product do
       it "should not be purchasable if there is a current rule, but marked as can_purchase = false" do
         @price_policy = TestPricePolicy.create!(price_group: @price_group,
                                                 product: @product,
-                                                start_date: Time.zone.now - 1.day,
-                                                expire_date: Time.zone.now + 7.days,
+                                                start_date: 1.day.ago,
+                                                expire_date: 7.days.from_now,
                                                 can_purchase: false)
         expect(@product).not_to be_can_purchase(@price_groups)
       end
@@ -304,13 +304,13 @@ RSpec.describe Product do
       it "should not be purchasable if the most recent expired policy is marked can_purchase = false" do
         @price_policy = TestPricePolicy.create!(price_group: @price_group,
                                                 product: @product,
-                                                start_date: Time.zone.now - 7.days,
-                                                expire_date: Time.zone.now - 6.days,
+                                                start_date: 7.days.ago,
+                                                expire_date: 6.days.ago,
                                                 can_purchase: true)
         @price_policy2 = TestPricePolicy.create!(price_group: @price_group,
                                                  product: @product,
-                                                 start_date: Time.zone.now - 5.days,
-                                                 expire_date: Time.zone.now + 4.days,
+                                                 start_date: 5.days.ago,
+                                                 expire_date: 4.days.from_now,
                                                  can_purchase: false)
         expect(@product).not_to be_can_purchase(@price_groups)
       end
@@ -318,13 +318,13 @@ RSpec.describe Product do
       it "should be purchasable if the most recent expired policy is can_purchase, but old ones arent" do
         @price_policy = TestPricePolicy.create!(price_group: @price_group,
                                                 product: @product,
-                                                start_date: Time.zone.now - 7.days,
-                                                expire_date: Time.zone.now - 6.days,
+                                                start_date: 7.days.ago,
+                                                expire_date: 6.days.ago,
                                                 can_purchase: false)
         @price_policy2 = TestPricePolicy.create!(price_group: @price_group,
                                                  product: @product,
-                                                 start_date: Time.zone.now - 5.days,
-                                                 expire_date: Time.zone.now + 4.days,
+                                                 start_date: 5.days.ago,
+                                                 expire_date: 4.days.from_now,
                                                  can_purchase: true)
         expect(@product).to be_can_purchase(@price_groups)
       end
@@ -332,13 +332,13 @@ RSpec.describe Product do
       it "should be purchasable if there is a current policy with can_purchase, but a future one that cant" do
         @current_price_policy = TestPricePolicy.create!(price_group: @price_group,
                                                         product: @product,
-                                                        start_date: Time.zone.now - 7.days,
-                                                        expire_date: Time.zone.now + 1.day,
+                                                        start_date: 7.days.ago,
+                                                        expire_date: 1.day.from_now,
                                                         can_purchase: true)
         @future_price_policy2 = TestPricePolicy.create!(price_group: @price_group,
                                                         product: @product,
-                                                        start_date: Time.zone.now + 2.days,
-                                                        expire_date: Time.zone.now + 4.days,
+                                                        start_date: 2.days.from_now,
+                                                        expire_date: 4.days.from_now,
                                                         can_purchase: false)
         expect(@product.current_price_policies).to eq([@current_price_policy])
         expect(@product).to be_can_purchase(@price_groups)
@@ -347,13 +347,13 @@ RSpec.describe Product do
       it "should not be purchasable if there is a current policy without can_purchase, but a future one that can" do
         @current_price_policy = TestPricePolicy.create!(price_group: @price_group,
                                                         product: @product,
-                                                        start_date: Time.zone.now - 7.days,
-                                                        expire_date: Time.zone.now + 1.day,
+                                                        start_date: 7.days.ago,
+                                                        expire_date: 1.day.from_now,
                                                         can_purchase: false)
         @future_price_policy2 = TestPricePolicy.create!(price_group: @price_group,
                                                         product: @product,
-                                                        start_date: Time.zone.now + 2.days,
-                                                        expire_date: Time.zone.now + 4.days,
+                                                        start_date: 2.days.from_now,
+                                                        expire_date: 4.days.from_now,
                                                         can_purchase: true)
         expect(@product).not_to be_can_purchase(@price_groups)
       end
@@ -362,13 +362,13 @@ RSpec.describe Product do
         expect(@product.current_price_policies).to be_empty
         @price_policy_pg1 = TestPricePolicy.create!(price_group: @price_group,
                                                     product: @product,
-                                                    start_date: Time.zone.now + 2.days,
-                                                    expire_date: Time.zone.now + 4.days,
+                                                    start_date: 2.days.from_now,
+                                                    expire_date: 4.days.from_now,
                                                     can_purchase: true)
         @price_policy_pg2 = TestPricePolicy.create!(price_group: @price_group2,
                                                     product: @product,
-                                                    start_date: Time.zone.now + 2.days,
-                                                    expire_date: Time.zone.now + 4.days + 1.second,
+                                                    start_date: 2.days.from_now,
+                                                    expire_date: 4.days.from_now + 1.second,
                                                     can_purchase: false)
         @price_groups = [@price_group, @price_group2]
         expect(@product).to be_can_purchase(@price_groups)
@@ -455,7 +455,7 @@ RSpec.describe Product do
 
         context "an access list exists for the user" do
           before :each do
-            product_user = product_access_group = access_group
+            product_user = access_group
             product_user.save
           end
 

@@ -1069,7 +1069,7 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
         @order_detail.update(account: nil)
         # Only worry about one price group product
         @instrument.price_group_products.destroy_all
-        pgp = FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 14)
+        FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 14)
       end
 
       it "does not have an account on the order detail" do
@@ -1083,8 +1083,8 @@ RSpec.describe ReservationsController, feature_setting: { "reservations.auto_end
       end
 
       it "uses the maxiumum reservation window" do
-        pgp2 = FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 7)
-        pgp3 = FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 21)
+        FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 7)
+        FactoryBot.create(:price_group_product, product: @instrument, price_group: FactoryBot.create(:price_group, facility: @authable), reservation_window: 21)
         do_request
         expect(assigns(:reservation_window).max_window).to eq(21)
       end

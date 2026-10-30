@@ -13,12 +13,12 @@ class Schedule < ApplicationRecord
     schedule.has_many :public_instruments, -> { active }
   end
 
-  with_options through: :products do |schedule|
-    schedule.has_many :admin_reservations
-    schedule.has_many :reservations
+  with_options through: :products do
+    has_many :admin_reservations
+    has_many :reservations
   end
 
-  validates_presence_of :facility
+  validates :facility, presence: true
 
   scope :active, -> { where(id: Instrument.not_archived.with_schedule.select(:schedule_id)) }
 

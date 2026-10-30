@@ -12,10 +12,10 @@ namespace :demo do
   task seed: :environment do
     new_status = OrderStatus.find_or_create_by!(name: "New")
     in_process = OrderStatus.find_or_create_by!(name: "In Process")
-    canceled   = OrderStatus.find_or_create_by!(name: "Canceled")
-    complete   = OrderStatus.find_or_create_by!(name: "Complete")
-    reconciled = OrderStatus.find_or_create_by!(name: "Reconciled")
-    unrecoverable = OrderStatus.find_or_create_by!(name: "Unrecoverable")
+    OrderStatus.find_or_create_by!(name: "Canceled")
+    complete = OrderStatus.find_or_create_by!(name: "Complete")
+    OrderStatus.find_or_create_by!(name: "Reconciled")
+    OrderStatus.find_or_create_by!(name: "Unrecoverable")
 
     facility = Facility.find_or_create_by!(url_name: "example") do |example_facility|
       example_facility.name = "Example Facility"
@@ -45,12 +45,12 @@ namespace :demo do
     chart_strings = [
       {
         budget_period: "-", fund: "123", department: "1234567", project: "12345678",
-        activity: "01", account: "50617", starts_at: Time.zone.now - 1.week, expires_at: Time.zone.now + 1.year
+        activity: "01", account: "50617", starts_at: 1.week.ago, expires_at: 1.year.from_now
       },
 
       {
         budget_period: "-", fund: "111", department: "2222222", project: "33333333",
-        activity: "01", account: "50617", starts_at: Time.zone.now - 1.week, expires_at: Time.zone.now + 1.year
+        activity: "01", account: "50617", starts_at: 1.week.ago, expires_at: 1.year.from_now
       },
     ]
 
@@ -68,7 +68,7 @@ namespace :demo do
 
     Settings.price_group.name.to_hash.each do |k, v|
       price_group = PriceGroup.setup_global(
-        name: v, is_internal: (k == :base || k == :cancer_center),
+        name: v, is_internal: [:base, :cancer_center].include?(k),
       )
 
       if k == :base
@@ -117,7 +117,7 @@ namespace :demo do
       example_item.facility_account_id = fa2.id
     end
 
-    skip_review_item = Item.find_or_create_by!(url_name: "skip-review-example-item") do |example_item|
+    Item.find_or_create_by!(url_name: "skip-review-example-item") do |example_item|
       example_item.facility_id = facility.id
       example_item.account = Settings.accounts.product_default
       example_item.name = "Skip Review Example Item"
@@ -130,7 +130,7 @@ namespace :demo do
       example_item.billing_mode = "Skip Review"
     end
 
-    nonbillable_item = Item.find_or_create_by!(url_name: "nonbillable-example-item") do |example_item|
+    Item.find_or_create_by!(url_name: "nonbillable-example-item") do |example_item|
       example_item.facility_id = facility.id
       example_item.account = Settings.accounts.product_default
       example_item.name = "Nonbillable Example Item"
@@ -155,7 +155,7 @@ namespace :demo do
       example_service.facility_account_id = fa.id
     end
 
-    skip_review_service = Service.find_or_create_by!(url_name: "skip-review-example-service") do |example_service|
+    Service.find_or_create_by!(url_name: "skip-review-example-service") do |example_service|
       example_service.facility_id = facility.id
       example_service.account = Settings.accounts.product_default
       example_service.name = "Skip Example Service"
@@ -168,7 +168,7 @@ namespace :demo do
       example_service.billing_mode = "Skip Review"
     end
 
-    nonbillable_review_service = Service.find_or_create_by!(url_name: "nonbillable-review-example-service") do |example_service|
+    Service.find_or_create_by!(url_name: "nonbillable-review-example-service") do |example_service|
       example_service.facility_id = facility.id
       example_service.account = Settings.accounts.product_default
       example_service.name = "Nonbillable Example Service"
@@ -194,7 +194,7 @@ namespace :demo do
       example_instrument.reserve_interval = 5
     end
 
-    skip_review_instrument = Instrument.find_or_create_by!(url_name: "skip-review-example-instrument") do |example_instrument|
+    Instrument.find_or_create_by!(url_name: "skip-review-example-instrument") do |example_instrument|
       example_instrument.facility_id = facility.id
       example_instrument.account = Settings.accounts.product_default
       example_instrument.name = "Skip Review Example Instrument"
@@ -208,7 +208,7 @@ namespace :demo do
       example_instrument.billing_mode = "Skip Review"
     end
 
-    nonbillable_review_instrument = Instrument.find_or_create_by!(url_name: "nonbillable-example-instrument") do |example_instrument|
+    Instrument.find_or_create_by!(url_name: "nonbillable-example-instrument") do |example_instrument|
       example_instrument.facility_id = facility.id
       example_instrument.account = Settings.accounts.product_default
       example_instrument.name = "Nonbillable Example Instrument"
@@ -231,8 +231,7 @@ namespace :demo do
 
     bundle = Bundle.find_by(url_name: "example-bundle")
 
-    unless bundle
-      bundle = Bundle.create!(facility_id: facility.id,
+    bundle ||= Bundle.create!(facility_id: facility.id,
                               account: Settings.accounts.product_default,
                               name: "Example Bundle",
                               url_name: "example-bundle",
@@ -241,7 +240,6 @@ namespace :demo do
                               is_archived: false,
                               is_hidden: false,
                               facility_account_id: fa.id)
-    end
 
     BundleProduct.create(bundle:, product: item, quantity: 1)
     BundleProduct.create(bundle:, product: service, quantity: 1)
@@ -488,7 +486,7 @@ namespace :demo do
       created_by: user_director.id,
       account_users_attributes:,
     }
-    account_purchaser_attributes = {
+    {
       user_id: user_student2.id,
       user_role: "Purchaser",
       created_by: user_director2.id,
@@ -573,10 +571,9 @@ namespace :demo do
     if EngineManager.engine_loaded? :c2po
       ccaccount = CreditCardAccount.find_by(account_number: "xxxx-xxxx-xxxx-xxxx")
 
-      unless ccaccount
-        ccaccount = CreditCardAccount.create!(account_number: "xxxx-xxxx-xxxx-xxxx",
+      ccaccount ||= CreditCardAccount.create!(account_number: "xxxx-xxxx-xxxx-xxxx",
                                               description: "Paul PI's Credit Card",
-                                              expires_at: Time.zone.now + 1.year,
+                                              expires_at: 1.year.from_now,
                                               name_on_card: "Paul PI",
                                               expiration_month: "10",
                                               expiration_year: 5.years.from_now.year,
@@ -585,27 +582,24 @@ namespace :demo do
                                               affiliate_other: "Some Affiliate",
                                               facilities: [facility],
                                               account_users_attributes:)
-      end
 
       poaccount = PurchaseOrderAccount.find_by(account_number: "12345")
 
-      unless poaccount
-        poaccount = PurchaseOrderAccount.create!(account_number: "12345",
+      poaccount ||= PurchaseOrderAccount.create!(account_number: "12345",
                                                  description: "Paul PI's Purchase Order",
-                                                 expires_at: Time.zone.now + 1.year,
+                                                 expires_at: 1.year.from_now,
                                                  created_by: user_director.id,
                                                  facilities: [facility],
                                                  affiliate_id: other_affiliate.id,
                                                  affiliate_other: "Some Affiliate",
                                                  remittance_information: "Billing Dept\nEdward External\n1702 E Research Dr\nAuburn, AL 36830",
                                                  account_users_attributes:)
-      end
     end
 
     # purchased orders, complete, statements sent, 3 months ago
     sleep 2
     (1..10).each do |_i|
-      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - (rand(30) + 65).days) # 94-65 days in the past
+      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - rand(65..94).days) # 94-65 days in the past
       order.reload
       order.order_details.each do |od|
         # enter actuals for instruments
@@ -614,7 +608,7 @@ namespace :demo do
       end
     end
     sleep 2
-    statement_date = Time.zone.now - 64.days # 64 days in the past
+    statement_date = 64.days.ago # 64 days in the past
     accounts       = Account.need_statements(facility)
     accounts.each do |a|
       statement = Statement.create!(facility_id: facility.id, created_by: user_director.id, created_at: statement_date, account: a)
@@ -624,7 +618,7 @@ namespace :demo do
     # purchased orders, complete, statements sent, 2 months ago
     sleep 2
     (1..10).each do |_i|
-      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - (rand(30) + 32).days) # 61 - 32 days in the past
+      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - rand(32..61).days) # 61 - 32 days in the past
       order.reload
       order.order_details.each do |od|
         # enter actuals for instruments
@@ -633,7 +627,7 @@ namespace :demo do
       end
     end
     sleep 2
-    statement_date = Time.zone.now - 31.days # 31 days in the past
+    statement_date = 31.days.ago # 31 days in the past
     accounts       = Account.need_statements(facility)
     accounts.each do |a|
       statement = Statement.create!(facility_id: facility.id, created_by: user_director.id, created_at: statement_date, account: a)
@@ -643,7 +637,7 @@ namespace :demo do
     # purchased orders, complete details, no statement
     sleep 2
     (1..10).each do |_i|
-      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - (rand(30) + 1).days) # 30 - 1 days in past
+      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - rand(1..30).days) # 30 - 1 days in past
       order.reload
       order.order_details.each do |od|
         # enter actuals for instruments
@@ -655,7 +649,7 @@ namespace :demo do
     # purchased orders, new order details, ordered at last X days
     sleep 2
     (1..5).each do |i|
-      order = get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - (i * 2).days)
+      get_order(user_student, facility, get_account(user_student), purchase: true, ordered_at: Time.zone.now - (i * 2).days)
     end
   end
 
@@ -670,7 +664,7 @@ namespace :demo do
                      user_id: user.id,
                      facility_id: facility.id,
                      created_by: user.id)
-    ordered_at = args[:ordered_at] || Time.zone.now - 60 * 60 * 24 * (rand(30) + 1)
+    ordered_at = args[:ordered_at] || (Time.zone.now - (60 * 60 * 24 * rand(1..30)))
     # create at least one order detail.  20% chance to create an additional detail.
 
     # create a valid order detail (with price policy and costs)
@@ -681,7 +675,7 @@ namespace :demo do
     begin
       product = products[rand(products.length)]
       if product.is_a?(Bundle)
-        created_at = (ordered_at - (60 * rand(60) + 1))
+        created_at = (ordered_at - ((60 * rand(60)) + 1))
         group_id   = (o.order_details.collect { |od| od.group_id || 0 }.max || 0) + 1
         product.bundle_products.each do |bp|
           od = OrderDetail.create!(
@@ -711,15 +705,15 @@ namespace :demo do
           actual_subsidy: 0,
           estimated_cost: rand(2),
           estimated_subsidy: 0,
-          quantity: product.is_a?(Item) ? (rand(3) + 1) : 1,
-          created_at: (ordered_at - (60 * rand(60) + 1)),
+          quantity: product.is_a?(Item) ? rand(1..3) : 1,
+          created_at: (ordered_at - ((60 * rand(60)) + 1)),
           order_status_id: product.initial_order_status.id,
           ordered_at:,
         )
 
         # create a reservation
         if product.is_a?(Instrument)
-          res = od.build_reservation(
+          od.build_reservation(
             product_id: product.id,
             reserve_start_at: Time.zone.parse((ordered_at + 1.day).strftime("%Y-%m-%d") + " #{i + 8}:00"),
             reserve_end_at: Time.zone.parse((ordered_at + 1.day).strftime("%Y-%m-%d") + " #{i + 9}:00"),

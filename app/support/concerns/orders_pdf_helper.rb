@@ -17,7 +17,7 @@ module OrdersPdfHelper
     pdf.text facility.address if facility.address
     pdf.move_down(10)
 
-    %w(phone_number fax_number email).each do |contact_field|
+    %w[phone_number fax_number email].each do |contact_field|
       field_value = facility.send(contact_field.to_sym)
       next if field_value.blank?
 

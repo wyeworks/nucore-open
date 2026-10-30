@@ -85,15 +85,15 @@ RSpec.describe "CSV column matchers" do
 
     it "can match with a partial hash of arrays" do
       matcher = have_column_values(
-        "Quantity" => %w(2 4),
+        "Quantity" => %w[2 4],
       )
       expect(matcher).to be_matches(multi_line_report)
     end
 
     it "can match with a full hash of arrays" do
       matcher = have_column_values(
-        "Cost" => %w($4.50 $5.50),
-        "Quantity" => %w(2 4),
+        "Cost" => %w[$4.50 $5.50],
+        "Quantity" => %w[2 4],
       )
       expect(matcher).to be_matches(multi_line_report)
     end

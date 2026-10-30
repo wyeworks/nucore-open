@@ -59,12 +59,12 @@ class PricePolicyUpdater
       price_group_id = price_policy.price_group.id
       duration_rate_params = @params.dig("price_policy_#{price_group_id}", "duration_rates_attributes")
 
-      if duration_rate_params.present?
-        duration_rate_params.each do |key, dr|
-          values_are_blank = dr["rate"].blank? && dr["subsidy"].blank?
-          rate_exists = DurationRate.where(id: dr[:id]).present?
-          duration_rate_params[key].merge! ({ _destroy: "1" }) if values_are_blank && rate_exists
-        end
+      next unless duration_rate_params.present?
+
+      duration_rate_params.each do |key, dr|
+        values_are_blank = dr["rate"].blank? && dr["subsidy"].blank?
+        rate_exists = DurationRate.where(id: dr[:id]).present?
+        duration_rate_params[key].merge!({ _destroy: "1" }) if values_are_blank && rate_exists
       end
     end
 

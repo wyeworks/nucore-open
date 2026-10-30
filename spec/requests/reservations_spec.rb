@@ -19,7 +19,7 @@ RSpec.describe "reservations" do
 
     it "responds with JSON to a cross-origin GET without raising" do
       expect do
-        get path, params: { start: Time.current.iso8601, end: (Time.current + 1.day).iso8601 }
+        get path, params: { start: Time.current.iso8601, end: 1.day.from_now.iso8601 }
       end.not_to raise_error
 
       expect(response).to have_http_status(:ok)
@@ -96,8 +96,6 @@ RSpec.describe "reservations" do
         end
 
         it "does not redirect to external url" do
-          referer = "https://somereferer.com/some/path"
-
           action.call(
             headers: { referer: "https://otherdomain.com/some/path" },
           )

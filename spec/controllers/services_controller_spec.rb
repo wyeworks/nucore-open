@@ -127,9 +127,9 @@ RSpec.describe ServicesController do
           ),
         )
 
-        expect { do_request }.to_not change {
+        expect { do_request }.to_not(change do
           @service.reload.external_services.count
-        }
+        end)
       end
     end
   end

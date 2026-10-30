@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class NufsAccount < Account
-  validates_uniqueness_of :account_number, message: "already exists", case_sensitive: false
-  validates_presence_of :expires_at
+  validates :account_number, uniqueness: { message: "already exists", case_sensitive: false }
+  validates :expires_at, presence: true
 
   validate { validate_account_number }
 
@@ -39,7 +39,7 @@ class NufsAccount < Account
     @components = validator.components
 
     @components.each do |k, v|
-      self.class.class_eval "attr_accessor :#{k}" unless respond_to? k
+      self.class.class_eval "attr_accessor :#{k}", __FILE__, __LINE__ unless respond_to? k
       send("#{k}=", v)
     end
 

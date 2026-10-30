@@ -7,12 +7,15 @@ class OfflineReservationsController < ApplicationController
   before_action :check_acting_as
   before_action :init_current_facility
   before_action :load_instrument
-  before_action :load_reservation, only: %i(edit update)
+  before_action :load_reservation, only: %i[edit update]
 
   load_and_authorize_resource
 
   def new
     @reservation = @instrument.offline_reservations.new
+  end
+
+  def edit
   end
 
   def create
@@ -37,9 +40,6 @@ class OfflineReservationsController < ApplicationController
     end
 
     redirect_to facility_instrument_schedule_path
-  end
-
-  def edit
   end
 
   def update

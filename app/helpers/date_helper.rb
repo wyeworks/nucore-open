@@ -25,7 +25,7 @@ module DateHelper
     # TODO: Many tests pass either a Date, a Time, or an YYYY-MM-DD formatted
     # string as a parameter. This conditional will handle those cases. We should
     # probably go through and clean up the tests at some point.
-    date = format_usa_date(Date.parse(date)) if date =~ /\A\d{4}-\d{2}-\d{2}/
+    date = format_usa_date(Date.parse(date)) if /\A\d{4}-\d{2}-\d{2}/.match?(date)
 
     return unless usa_formatted_date?(date)
 
@@ -85,7 +85,7 @@ module DateHelper
     output = ""
     output += select_tag("#{field}[hour]", options_for_select(hour_options, default_time.strftime("%I").to_i), html_options)
     output += select_tag("#{field}[minute]", options_for_select(minute_options, default_time.min), html_options)
-    output += select_tag("#{field}[ampm]", options_for_select(%w(AM PM), default_time.strftime("%p")), html_options)
+    output += select_tag("#{field}[ampm]", options_for_select(%w[AM PM], default_time.strftime("%p")), html_options)
     output.html_safe
   end
 
@@ -94,7 +94,7 @@ module DateHelper
     merged_html_options = html_options.reverse_merge(class: "form-control")
     output = f.select(:"#{field}_hour", (1..12).to_a, {}, merged_html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_hour")))
     output.safe_concat f.select(:"#{field}_min", minute_options(options_tag[:minute_step]), {}, merged_html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_min")))
-    output.safe_concat f.select(:"#{field}_meridian", %w(AM PM), {}, merged_html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_meridian")))
+    output.safe_concat f.select(:"#{field}_meridian", %w[AM PM], {}, merged_html_options.merge("aria-label": f.object.class.human_attribute_name("#{field}_meridian")))
     content_tag :div, output, class: "time-select"
   end
 

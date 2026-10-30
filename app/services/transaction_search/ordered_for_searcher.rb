@@ -13,7 +13,7 @@ module TransactionSearch
     end
 
     def label_method
-      [:full_name, suspended_label: false]
+      [:full_name, { suspended_label: false }]
     end
 
     def label

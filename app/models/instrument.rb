@@ -10,9 +10,7 @@ class Instrument < Product
   RESERVE_INTERVAL_DAILY = 1
 
   PRICING_MODES = [Pricing::SCHEDULE_RULE, Pricing::DURATION].tap do |pricing_modes|
-    if SettingsHelper.feature_on?("products.show_daily_rate_option")
-      pricing_modes.insert(1, Pricing::SCHEDULE_DAILY)
-    end
+    pricing_modes.insert(1, Pricing::SCHEDULE_DAILY) if SettingsHelper.feature_on?("products.show_daily_rate_option")
   end.freeze
 
   with_options foreign_key: "product_id" do
@@ -67,7 +65,7 @@ class Instrument < Product
   end
 
   def max_reservation_window
-    days = price_group_products.collect(&:reservation_window).max.to_i
+    price_group_products.collect(&:reservation_window).max.to_i
   end
 
   def requires_merge?
@@ -125,15 +123,15 @@ class Instrument < Product
     # other validations will handle the errors if these are false
     return unless reserve_interval.to_i > 0 && field_value > 0
 
-    if field_value % reserve_interval != 0
-      errors.add attribute, :not_interval, reserve_interval:
-    end
+    return unless field_value % reserve_interval != 0
+
+    errors.add attribute, :not_interval, reserve_interval:
   end
 
   def max_reservation_not_less_than_min
-    if max_reserve_mins && min_reserve_mins && max_reserve_mins < min_reserve_mins
-      errors.add :max_reserve_mins, :max_less_than_min
-    end
+    return unless max_reserve_mins && min_reserve_mins && max_reserve_mins < min_reserve_mins
+
+    errors.add :max_reserve_mins, :max_less_than_min
   end
 
   def clean_up_reservation_rules

@@ -51,7 +51,7 @@ RSpec.describe UserFinder do
     end
 
     it "returns nothing and 0 if not found" do
-      user = FactoryBot.create(:user)
+      FactoryBot.create(:user)
       found_users, count = UserFinder.search_with_count("something random")
       expect(found_users).to be_empty
       expect(count).to eq(0)

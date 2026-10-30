@@ -26,13 +26,13 @@ class Reservations::DurationChangeValidations
   end
 
   def start_time_not_changed
-    if reservation.reserve_start_at_changed? && !was_reserve_start_at_editable?(reservation)
-      previous_time = reservation.reserve_start_at_was.change(sec: 0)
-      updated_time = reservation.reserve_start_at.change(sec: 0)
-      if previous_time != updated_time
-        errors.add(:reserve_start_at, I18n.t("activerecord.errors.models.reservation.change_reserve_start_at"))
-      end
-    end
+    return unless reservation.reserve_start_at_changed? && !was_reserve_start_at_editable?(reservation)
+
+    previous_time = reservation.reserve_start_at_was.change(sec: 0)
+    updated_time = reservation.reserve_start_at.change(sec: 0)
+    return unless previous_time != updated_time
+
+    errors.add(:reserve_start_at, I18n.t("activerecord.errors.models.reservation.change_reserve_start_at"))
   end
 
   def duration_not_shortened
@@ -41,12 +41,12 @@ class Reservations::DurationChangeValidations
     duration_was = TimeRange.new(reservation.reserve_start_at_was, reservation.reserve_end_at_was).duration_mins
     duration_is = TimeRange.new(reservation.reserve_start_at, reservation.reserve_end_at).duration_mins
 
-    if duration_is < duration_was
-      if reservation.started? || reservation.reserve_start_at < Time.current
-        errors.add(:duration_mins, I18n.t("activerecord.errors.models.reservation.shorten_reservation_once_started"))
-      elsif reservation.inside_lock_window?
-        errors.add(:duration_mins, I18n.t("activerecord.errors.models.reservation.shorten_reservation_in_lock_window", lock_window: reservation.product.lock_window))
-      end
+    return unless duration_is < duration_was
+
+    if reservation.started? || reservation.reserve_start_at < Time.current
+      errors.add(:duration_mins, I18n.t("activerecord.errors.models.reservation.shorten_reservation_once_started"))
+    elsif reservation.inside_lock_window?
+      errors.add(:duration_mins, I18n.t("activerecord.errors.models.reservation.shorten_reservation_in_lock_window", lock_window: reservation.product.lock_window))
     end
   end
 

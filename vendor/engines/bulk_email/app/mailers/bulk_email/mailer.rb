@@ -2,7 +2,7 @@
 
 module BulkEmail
   class Mailer < ApplicationMailer
-    def send_mail(recipient:, subject:, body:, reply_to: nil, facility:)
+    def send_mail(recipient:, subject:, body:, facility:, reply_to: nil)
       @recipient = recipient
       @body = body
       @facility = facility

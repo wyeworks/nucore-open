@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.describe InstrumentPricePolicy do
   subject(:policy) { build :instrument_price_policy }
 
-  %w(minimum_cost cancellation_cost).each do |attr|
+  %w[minimum_cost cancellation_cost].each do |attr|
     it { is_expected.to validate_numericality_of(attr.to_sym).is_greater_than_or_equal_to 0 }
     it { is_expected.to allow_value(nil).for attr.to_sym }
   end

@@ -5,7 +5,7 @@ module TransactionSearch
     include DateHelper
     extend TextHelpers::Translation
 
-    FIELDS = %w(ordered_at fulfilled_at journal_or_statement_date reconciled_at).freeze
+    FIELDS = %w[ordered_at fulfilled_at journal_or_statement_date reconciled_at].freeze
 
     attr_reader :date_range_field
 
@@ -21,9 +21,7 @@ module TransactionSearch
       end
     end
 
-    def options
-      self.class.options
-    end
+    delegate :options, to: :class
 
     def multipart?
       true

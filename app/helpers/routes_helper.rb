@@ -15,7 +15,7 @@ module RoutesHelper
     # Allow for custom logout paths from saml or other authenticable options
     strategy = warden.session(:user)[:strategy]&.to_sym
     # facility_id will cause the user to be redirected to the facility's home page after logout
-    [:destroy, strategy, :user_session, facility_id: current_facility&.url_name].compact
+    [:destroy, strategy, :user_session, { facility_id: current_facility&.url_name }].compact
   end
 
   def statement_path(statement)
@@ -27,8 +27,10 @@ module RoutesHelper
       file.product.facility,
       file.product,
       :download_product_file,
-      file_type: file.file_type,
-      id: file,
+      {
+        file_type: file.file_type,
+        id: file,
+      },
     ]
   end
 

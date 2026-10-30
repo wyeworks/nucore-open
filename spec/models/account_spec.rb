@@ -152,7 +152,7 @@ RSpec.describe Account do
 
   it "should not create using factory" do
     @user    = FactoryBot.create(:user)
-    hash     = Hash[user: @user, created_by: @user.id, user_role: "Owner"]
+    Hash[user: @user, created_by: @user.id, user_role: "Owner"]
     @account = create_nufs_account_with_owner :user
 
     expect(@account.errors[:type]).not_to be_nil
@@ -174,7 +174,7 @@ RSpec.describe Account do
   it "should validate description <= 50 chars" do
     @user = FactoryBot.create(:user)
     account = Account.new(FactoryBot.attributes_for(:nufs_account, account_users_attributes: account_users_attributes_hash(user: @user)))
-    account.description = random_string = SecureRandom.hex(51)
+    account.description = SecureRandom.hex(51)
     expect(account).not_to be_valid
     expect(account.error_on(:description).size).to eq(1)
   end
@@ -306,7 +306,7 @@ RSpec.describe Account do
           @item2 = @facility.items.create(FactoryBot.attributes_for(:item, account: account_number, facility_account_id: @facility_account.id))
           @bundle = @facility.bundles.create(FactoryBot.attributes_for(:bundle, facility_account_id: @facility_account.id))
           [@item, @item2].each do |item|
-            price_policy = item.item_price_policies.create(FactoryBot.attributes_for(:item_price_policy, price_group: @price_group))
+            item.item_price_policies.create(FactoryBot.attributes_for(:item_price_policy, price_group: @price_group))
             BundleProduct.create!(quantity: 1, product: item, bundle: @bundle)
           end
         end
@@ -339,7 +339,7 @@ RSpec.describe Account do
     item = FactoryBot.create(:item, facility:, facility_account:)
     account = FactoryBot.create(:nufs_account, account_users_attributes: account_users_attributes_hash(user:))
     order = user.orders.create(FactoryBot.attributes_for(:order, created_by: user.id, facility:))
-    order_detail = order.order_details.create!(FactoryBot.attributes_for(:order_detail, reviewed_at: (Time.zone.now - 1.day)).update(product_id: item.id, account_id: account.id))
+    order_detail = order.order_details.create!(FactoryBot.attributes_for(:order_detail, reviewed_at: 1.day.ago).update(product_id: item.id, account_id: account.id))
     statement = Statement.create(facility:, created_by: 1, account:)
     account.update_order_details_with_statement(statement)
     expect(order_detail.reload.statement).to eq(statement)

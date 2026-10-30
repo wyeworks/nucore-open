@@ -22,7 +22,7 @@ module SecureRooms
     end
 
     def authorize(user, card_reader, params = {})
-      answer = @rules.each do |rule|
+      @rules.each do |rule|
         result = rule.new(user, card_reader, params).call
         break result unless result.pass?
       end

@@ -20,9 +20,9 @@ module SangerSequencing
       CSV.generate do |csv|
         csv << ["Container Name", "Plate ID", "Description", "ContainerType", "AppType", "Owner", "Operator", "PlateSealing", "SchedulingPref"]
         csv << ["",               "",         "",            "96-Well",       "Regular", owner, operator, "Septa", "1234"]
-        csv << %w(AppServer AppInstance)
+        csv << %w[AppServer AppInstance]
         csv << [plate_text("app_server"), plate_text("app_instance")]
-        csv << ["Well", "Sample Name", "Comment"] + additional_columns.keys
+        csv << (["Well", "Sample Name", "Comment"] + additional_columns.keys)
 
         sample_rows.each do |row|
           csv << row
@@ -43,7 +43,7 @@ module SangerSequencing
     private
 
     def plate_text(key)
-      default = "default.#{key}".to_sym
+      default = :"default.#{key}"
       text("#{plate_mode}.#{key}", default:)
     end
 
@@ -62,7 +62,7 @@ module SangerSequencing
 
     def sample_row(sample, position)
       if well_plate_alternative_csv_format?
-        initial_columns = (position == "A01" && sample.reserved?) ? ["PGEM_F", "CQLS"] : [sample.id.to_s, sample.submission.order_detail.user.username]
+        initial_columns = position == "A01" && sample.reserved? ? ["PGEM_F", "CQLS"] : [sample.id.to_s, sample.submission.order_detail.user.username]
         initial_columns + additional_columns.values
       else
         [sample.id.to_s, sample.customer_sample_id.to_s] + additional_columns.values

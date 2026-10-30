@@ -4,12 +4,12 @@ class AdminReservationForm
   include ActiveModel::Validations
   include DateHelper
 
-  REPEAT_OPTIONS = %w(
+  REPEAT_OPTIONS = %w[
     daily
     weekdays_only
     weekly
     monthly
-  ).freeze
+  ].freeze
 
   delegate :to_key, to: :reservation
   delegate :category, :reserve_start_date, :reserve_start_hour,
@@ -95,15 +95,15 @@ class AdminReservationForm
   end
 
   def cannot_exceed_max_end_date
-    if repeat_end_date && repeat_end_date > max_end_date
-      errors.add :repeat_end_date, :too_far_in_future, time: "#{admin_hold_weeks} weeks"
-    end
+    return unless repeat_end_date && repeat_end_date > max_end_date
+
+    errors.add :repeat_end_date, :too_far_in_future, time: "#{admin_hold_weeks} weeks"
   end
 
   def repeat_end_date_after_initial_date
-    if repeat_end_date && repeat_end_date < reserve_start_at
-      errors.add :repeat_end_date, :must_be_after_initial_reservation
-    end
+    return unless repeat_end_date && repeat_end_date < reserve_start_at
+
+    errors.add :repeat_end_date, :must_be_after_initial_reservation
   end
 
   def repeats?

@@ -26,15 +26,15 @@ class NavTab::GlobalLinkCollection
   private
 
   def admin_cross_facility_billing
-    if can?(:manage_billing, Facility.cross_facility)
-      global_tab(:admin_billing, facility_transactions_path("all"))
-    end
+    return unless can?(:manage_billing, Facility.cross_facility)
+
+    global_tab(:admin_billing, facility_transactions_path("all"))
   end
 
   def admin_cross_facility_users
-    if can?(:manage_accounts, Facility.cross_facility) || can?(:manage_users, Facility.cross_facility)
-      global_tab(:admin_users, facility_users_path("all"))
-    end
+    return unless can?(:manage_accounts, Facility.cross_facility) || can?(:manage_users, Facility.cross_facility)
+
+    global_tab(:admin_users, facility_users_path("all"))
   end
 
   def global_settings

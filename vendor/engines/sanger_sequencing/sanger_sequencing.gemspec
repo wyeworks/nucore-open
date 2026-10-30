@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path("../lib", __FILE__)
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 
 # Maintain your gem's version:
 require "sanger_sequencing/version"
@@ -19,4 +19,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 4.0"
   # s.add_dependency "jquery-rails"
+  s.metadata["rubygems_mfa_required"] = "true"
 end

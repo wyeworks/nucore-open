@@ -28,13 +28,11 @@ namespace :db do
     def purge(select)
       names = ActiveRecord::Base.connection.select_rows(select).map(&:first)
       names.each do |name|
-        begin
-          command = yield name
-          puts command
-          ActiveRecord::Base.connection.execute(command)
-        rescue => e
-          puts e.message
-        end
+        command = yield name
+        puts command
+        ActiveRecord::Base.connection.execute(command)
+      rescue => e
+        puts e.message
       end
     end
 

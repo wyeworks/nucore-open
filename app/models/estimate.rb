@@ -64,15 +64,15 @@ class Estimate < ApplicationRecord
   def expires_at_cannot_be_in_the_past
     return if expires_at.blank?
 
-    if expires_at < Time.zone.now
-      errors.add(:expires_at, I18n.t("activerecord.errors.models.estimate.attributes.expires_at.in_the_past"))
-    end
+    return unless expires_at < Time.zone.now
+
+    errors.add(:expires_at, I18n.t("activerecord.errors.models.estimate.attributes.expires_at.in_the_past"))
   end
 
   def user_or_custom_name_present
-    if user_id.blank? && custom_name.blank?
-      errors.add(:base, I18n.t("activerecord.errors.models.estimate.attributes.base.user_or_custom_name_required"))
-    end
+    return unless user_id.blank? && custom_name.blank?
+
+    errors.add(:base, I18n.t("activerecord.errors.models.estimate.attributes.base.user_or_custom_name_required"))
   end
 
   def clear_custom_name_field

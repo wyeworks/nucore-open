@@ -13,7 +13,6 @@ RSpec.describe OrderDetail do
     it "can belong_to a Project" do
       is_expected
         .to belong_to(:project)
-        .with_foreign_key(:project_id)
         .inverse_of(:order_details)
     end
 

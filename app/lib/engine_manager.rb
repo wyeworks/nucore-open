@@ -9,7 +9,7 @@ class EngineManager
   end
 
   def self.loaded_nucore_engines
-    loaded_engines.select { |e| e.root.to_s =~ %r(/vendor/engines/\w+\z) }
+    loaded_engines.select { |e| e.root.to_s =~ %r{/vendor/engines/\w+\z} }
   end
 
   def self.engine_loaded?(engine_name)

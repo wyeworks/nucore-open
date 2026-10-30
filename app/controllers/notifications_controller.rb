@@ -13,10 +13,10 @@ class NotificationsController < ApplicationController
   def check_notifications
     @notices = current_user.notifications.active
 
-    if @notices.none?
-      flash[:notice] = I18n.t "controllers.notifications.no_notices"
+    return unless @notices.none?
 
-      redirect_back_or_to(root_path)
-    end
+    flash[:notice] = I18n.t "controllers.notifications.no_notices"
+
+    redirect_back_or_to(root_path)
   end
 end

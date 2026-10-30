@@ -32,25 +32,23 @@ class OrderDetailsController < ApplicationController
   # PUT /orders/:order_id/order_details/:id/cancel
   def cancel
     # handle reservation cancellation
-    if @order_detail.reservation && @order_detail.reservation.can_cancel?
-      @order_detail.transaction do
-        if @order_detail.cancel_reservation(session_user)
-          flash[:notice] = text("cancel.success")
-        else
-          flash[:error] = text("cancel.error")
-          raise ActiveRecord::Rollback
-        end
-      end
+    raise ActiveRecord::RecordNotFound unless @order_detail.reservation && @order_detail.reservation.can_cancel?
 
-      if @order_detail.canceled? && @order_detail.status_recently_changed
-        CancellationMailer.notify_facility(@order_detail).deliver_later
-        ProductNotifications::SlotAvailableService.from_reservation(@order_detail.reservation).notify_later
+    @order_detail.transaction do
+      if @order_detail.cancel_reservation(session_user)
+        flash[:notice] = text("cancel.success")
+      else
+        flash[:error] = text("cancel.error")
+        raise ActiveRecord::Rollback
       end
-
-      redirect_to redirect_to_path
-    else
-      raise ActiveRecord::RecordNotFound
     end
+
+    if @order_detail.canceled? && @order_detail.status_recently_changed
+      CancellationMailer.notify_facility(@order_detail).deliver_later
+      ProductNotifications::SlotAvailableService.from_reservation(@order_detail.reservation).notify_later
+    end
+
+    redirect_to redirect_to_path
   end
 
   # PUT /orders/:order_id/order_details/:id/dispute
@@ -58,22 +56,20 @@ class OrderDetailsController < ApplicationController
     raise ActiveRecord::RecordNotFound unless @order_detail.can_dispute?
 
     @order_detail.transaction do
-      begin
-        @order_detail.dispute_reason = params[:order_detail][:dispute_reason]
-        @order_detail.dispute_at = Time.zone.now
-        @order_detail.dispute_by = current_user
-        @order_detail.save!
-        flash[:notice] = text("dispute.success")
-        LogEvent.log(@order_detail, :dispute, current_user)
-        redirect_to in_review_transactions_path
-      rescue => e # TODO: be more specific about what Exceptions to rescue
-        flash.now[:error] = text("dispute.error")
-        @order_detail.dispute_at = nil # manually set this because rollback doesn't reset the unsaved value
-        @order_detail = OrderDetailPresenter.new(@order_detail)
-        render :show
+      @order_detail.dispute_reason = params[:order_detail][:dispute_reason]
+      @order_detail.dispute_at = Time.zone.now
+      @order_detail.dispute_by = current_user
+      @order_detail.save!
+      flash[:notice] = text("dispute.success")
+      LogEvent.log(@order_detail, :dispute, current_user)
+      redirect_to in_review_transactions_path
+    rescue # TODO: be more specific about what Exceptions to rescue
+      flash.now[:error] = text("dispute.error")
+      @order_detail.dispute_at = nil # manually set this because rollback doesn't reset the unsaved value
+      @order_detail = OrderDetailPresenter.new(@order_detail)
+      render :show
 
-        raise ActiveRecord::Rollback
-      end
+      raise ActiveRecord::Rollback
     end
   end
 
@@ -95,10 +91,10 @@ class OrderDetailsController < ApplicationController
   private
 
   def prevent_edit_based_on_state
-    unless order_editable?
-      flash[:notice] = I18n.t("order_details.edit.failure")
-      redirect_to action: :show
-    end
+    return if order_editable?
+
+    flash[:notice] = I18n.t("order_details.edit.failure")
+    redirect_to action: :show
   end
 
   def order_editable?

@@ -44,7 +44,7 @@ class Accessories::Accessorizer
   end
 
   def update_order_detail(od, params)
-    if %w(true 1).include? params[:enabled]
+    if %w[true 1].include? params[:enabled]
       assign_attributes_and_save(od, params)
     else
       od.destroy
@@ -53,7 +53,7 @@ class Accessories::Accessorizer
   end
 
   def build_order_details_from(params)
-    order_details = accessory_order_details.collect do |od|
+    accessory_order_details.collect do |od|
       detail_params = params[od.product_id.to_s]
       od.assign_attributes(detail_params.permit(:enabled, :quantity, :note)) if detail_params
       od
@@ -114,9 +114,9 @@ class Accessories::Accessorizer
 
   def validate_note!(od)
     order_detail = od.respond_to?(:order_detail) ? od.order_detail : od
-    unless NotePresenceValidator.new(order_detail).valid?
-      raise ActiveRecord::RecordInvalid, order_detail
-    end
+    return if NotePresenceValidator.new(order_detail).valid?
+
+    raise ActiveRecord::RecordInvalid, order_detail
   end
 
   def permitted_attributes(params)

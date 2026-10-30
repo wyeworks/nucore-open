@@ -40,11 +40,7 @@ module SamlAuthentication
     private
 
     def saml_create_user?
-      if Settings.saml.create_user.nil?
-        true
-      else
-        Settings.saml.create_user
-      end
+      Settings.saml.create_user.nil? || Settings.saml.create_user
     end
 
     def fetch_metadata_config(options)

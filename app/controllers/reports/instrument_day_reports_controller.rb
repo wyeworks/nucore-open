@@ -40,9 +40,9 @@ module Reports
       @headers ||= [text("instrument")] + I18n.t("date.day_names")
     end
 
-    def init_report(&report_on)
+    def init_report(&)
       report = Reports::InstrumentDayReport.new(report_data)
-      report.build_report(&report_on)
+      report.build_report(&)
       @totals = report.totals
       rows = report.rows
 

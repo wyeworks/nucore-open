@@ -194,11 +194,11 @@ class FacilityUserPermissionAbility
     can :manage_users, facility
     can :manage, User if controller.is_a?(FacilityUsersController)
 
-    if controller.is_a?(UsersController)
-      can %i[read create new new_external search
-             access_list access_list_approvals edit update
-             unexpire orders accounts], User
-    end
+    return unless controller.is_a?(UsersController)
+
+    can %i[read create new new_external search
+           access_list access_list_approvals edit update
+           unexpire orders accounts], User
   end
 
   def grant_bulk_email

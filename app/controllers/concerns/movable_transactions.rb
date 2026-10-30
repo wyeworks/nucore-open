@@ -49,10 +49,10 @@ module MovableTransactions
   private
 
   def ensure_order_details_selected
-    if @order_details.count < 1
-      flash[:alert] = I18n.t("controllers.facilities.bulk_reassignment.no_transactions_selected")
-      redirect_to_movable_transactions
-    end
+    return unless @order_details.count < 1
+
+    flash[:alert] = I18n.t("controllers.facilities.bulk_reassignment.no_transactions_selected")
+    redirect_to_movable_transactions
   end
 
   def load_transactions

@@ -39,7 +39,7 @@ class AccountValidator::ValidatorDefault
   # [_return_]
   #   the latest expiration date for a payment source
   def latest_expiration
-    (Time.zone.now + 50.years).end_of_day
+    50.years.from_now.end_of_day
   end
 
   #

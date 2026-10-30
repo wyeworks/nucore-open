@@ -58,7 +58,7 @@ RSpec.describe JournalCutoffDate do
 
   describe "month validation" do
     it "does not allow more than in the same month" do
-      existing = described_class.create(cutoff_date: Time.zone.parse("2016-02-03 12:00"))
+      described_class.create(cutoff_date: Time.zone.parse("2016-02-03 12:00"))
 
       new_date = described_class.new(cutoff_date: Time.zone.parse("2016-02-07 12:00"))
       expect(new_date).to be_invalid
@@ -66,14 +66,14 @@ RSpec.describe JournalCutoffDate do
     end
 
     it "allows more than one in separate months" do
-      existing = described_class.create(cutoff_date: Time.zone.parse("2016-02-03 12:00"))
+      described_class.create(cutoff_date: Time.zone.parse("2016-02-03 12:00"))
 
       new_date = described_class.new(cutoff_date: Time.zone.parse("2016-03-03 12:00"))
       expect(new_date).to be_valid
     end
 
     it "allows more than one of the same month, but different years" do
-      existing = described_class.create(cutoff_date: Time.zone.parse("2016-02-03 12:00"))
+      described_class.create(cutoff_date: Time.zone.parse("2016-02-03 12:00"))
 
       new_date = described_class.new(cutoff_date: Time.zone.parse("2017-02-03 12:00"))
       expect(new_date).to be_valid

@@ -6,8 +6,7 @@ class AddToOrderForm
   include DateHelper
 
   attr_reader :original_order, :current_facility
-  attr_accessor :quantity, :product_id, :order_status_id, :note, :duration, :created_by, :fulfilled_at, :account_id, :reference_id, :facility_id
-  attr_accessor :error_message
+  attr_accessor :quantity, :product_id, :order_status_id, :note, :duration, :created_by, :fulfilled_at, :account_id, :reference_id, :facility_id, :error_message
 
   validates :account_id, presence: true
   validates :account, presence: true, if: :account_id
@@ -289,8 +288,8 @@ class AddToOrderForm
     # If we are a merge order (i.e. requires more action like uploading an order form),
     # we do not want to set the ordered_at just yet. It will be set after the issues have
     # been resolved.
-    unless target_order.to_be_merged?
-      order_detail.ordered_at = order_detail.manual_fulfilled_at_time || Time.current
-    end
+    return if target_order.to_be_merged?
+
+    order_detail.ordered_at = order_detail.manual_fulfilled_at_time || Time.current
   end
 end

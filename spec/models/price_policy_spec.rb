@@ -21,7 +21,7 @@ RSpec.describe PricePolicy do
       FactoryBot.create(
         :instrument_price_policy,
         start_date: Time.zone.now,
-        expire_date: Time.zone.now + 1.day,
+        expire_date: 1.day.from_now,
       )
     end
     let!(:overlapping_price_policy) do
@@ -149,7 +149,7 @@ RSpec.describe PricePolicy do
       @item2 = @facility.items.create(FactoryBot.attributes_for(:item, facility_account_id: @facility_account.id))
     end
     it "should truncate the old policy" do
-      @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
+      @today = Time.zone.local(2011, 0o6, 0o6, 12, 0, 0)
       travel_to_and_return(@today) do
         @pp = FactoryBot.create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 30.days)
         @pp2 = FactoryBot.create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today + 2.days, expire_date: @today + 30.days)
@@ -161,7 +161,7 @@ RSpec.describe PricePolicy do
     end
 
     it "should not truncate any other policies" do
-      @today = Time.zone.local(2011, 06, 06, 12, 0, 0)
+      @today = Time.zone.local(2011, 0o6, 0o6, 12, 0, 0)
 
       travel_to_and_return(@today) do
         @pp = FactoryBot.create(:item_price_policy, product: @item, price_group: @price_group, start_date: @today.beginning_of_day, expire_date: @today + 30.days)

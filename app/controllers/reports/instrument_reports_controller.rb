@@ -31,9 +31,9 @@ module Reports
       @headers.insert(1, report_by_header) if @report_by != "instrument"
     end
 
-    def init_report(&report_on)
+    def init_report(&)
       report = Reports::InstrumentUtilizationReport.new(report_data)
-      report.build_report(&report_on)
+      report.build_report(&)
 
       @totals = report.totals
       @label_columns = report.key_length

@@ -10,13 +10,13 @@ module FacilityEstimatesHelper
   end
 
   def header_display(object, field)
-    if value = object.send(:try, field)
-      value = yield(value) if block_given?
+    return unless value = object.send(:try, field)
 
-      content_tag :dl, class: "col-md-2" do
-        content_tag(:dt, object.class.human_attribute_name(field)) +
-          content_tag(:dd, value)
-      end
+    value = yield(value) if block_given?
+
+    content_tag :dl, class: "col-md-2" do
+      content_tag(:dt, object.class.human_attribute_name(field)) +
+        content_tag(:dd, value)
     end
   end
 

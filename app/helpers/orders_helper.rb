@@ -2,10 +2,9 @@
 
 module OrdersHelper
   def display_cost_prefix_for_order(order)
-    case
-    when order.order_details.with_actual_costs.present?
+    if order.order_details.with_actual_costs.present?
       :actual
-    when order.order_details.with_estimated_costs.present?
+    elsif order.order_details.with_estimated_costs.present?
       :estimated
     else
       :unassigned
@@ -13,10 +12,9 @@ module OrdersHelper
   end
 
   def display_cost_prefix_for_order_detail(order_detail)
-    case
-    when order_detail.actual_cost
+    if order_detail.actual_cost
       :actual
-    when order_detail.estimated_cost
+    elsif order_detail.estimated_cost
       :estimated
     else
       :unassigned

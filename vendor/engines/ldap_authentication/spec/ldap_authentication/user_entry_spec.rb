@@ -63,7 +63,7 @@ RSpec.describe LdapAuthentication::UserEntry do
     let(:user) { user_entry.to_user }
 
     it "returns a user" do
-      expect(user).to be_an_instance_of(::User)
+      expect(user).to be_an_instance_of(User)
     end
 
     it "is not persisted" do

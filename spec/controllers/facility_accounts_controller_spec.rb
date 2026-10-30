@@ -193,7 +193,7 @@ RSpec.describe FacilityAccountsController, feature_setting: { "accounts.edit_acc
         expect(assigns(:account).account_number).to eq(@acct_attrs[:account_number])
         expect(assigns(:account).created_by).to eq(user.id)
         expect(assigns(:account).account_users.size).to eq(1)
-        assigns(:account).account_users[0] == @owner
+        assigns(:account).account_users[0]
         expect(assigns(:account).affiliate).to be_nil
         expect(assigns(:account).affiliate_other).to be_nil
         expect(assigns(:account).log_events.size).to eq(1)

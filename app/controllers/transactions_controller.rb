@@ -78,16 +78,14 @@ class TransactionsController < ApplicationController
       @errors = []
       @order_details_updated = []
       params[:order_detail_ids].each do |order_detail_id|
-        begin
-          od = OrderDetail.readonly(false).find(order_detail_id)
-          od.reviewed_at = Time.zone.now
-          od.save!
-          LogEvent.log(od, :review, current_user)
-          @order_details_updated << od
-        rescue => e
-          logger.error(e.message)
-          @errors << order_detail_id
-        end
+        od = OrderDetail.readonly(false).find(order_detail_id)
+        od.reviewed_at = Time.zone.now
+        od.save!
+        LogEvent.log(od, :review, current_user)
+        @order_details_updated << od
+      rescue => e
+        logger.error(e.message)
+        @errors << order_detail_id
       end
       flash[:notice] = I18n.t("controllers.facility_notifications.mark_as_reviewed.success") if @order_details_updated.any?
       flash[:error] = I18n.t("controllers.facility_notifications.mark_as_reviewed.errors", errors: @errors.join(", ")) if @errors.any?
@@ -102,9 +100,9 @@ class TransactionsController < ApplicationController
   end
 
   def authorize_account
-    unless current_user.account_administrator_of?(Account.find(params[:account_id]))
-      raise ActiveRecord::RecordNotFound
-    end
+    return if current_user.account_administrator_of?(Account.find(params[:account_id]))
+
+    raise ActiveRecord::RecordNotFound
   end
 
   def initialize_chart_string_reassignment_form

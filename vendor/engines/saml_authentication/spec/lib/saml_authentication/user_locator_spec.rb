@@ -1,5 +1,5 @@
 require "rails_helper"
-require_relative "../../saml_spec_helper.rb"
+require_relative "../../saml_spec_helper"
 
 RSpec.describe SamlAuthentication::UserLocator do
   include_context "With SAML response"

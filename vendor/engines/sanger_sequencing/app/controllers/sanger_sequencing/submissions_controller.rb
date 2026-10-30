@@ -24,12 +24,12 @@ module SangerSequencing
       @permitted_submission_params ||= []
     end
 
+    def show
+    end
+
     def new
       number_of_samples.times { @submission.create_prefilled_sample } if @submission.samples.none?
       render :edit
-    end
-
-    def show
     end
 
     def edit
@@ -54,7 +54,7 @@ module SangerSequencing
 
     private
 
-    def redirect_to_admin(error)
+    def redirect_to_admin(_error)
       if action_name == "show" && SangerSequencing::Ability.new(acting_user, current_facility).can?(:show, @submission)
         redirect_to facility_sanger_sequencing_admin_submission_path(current_facility, @submission)
       else

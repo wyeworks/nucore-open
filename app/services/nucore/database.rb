@@ -53,7 +53,7 @@ module Nucore
 
       module ClassMethods
         def parse_2_digit_year_date(date_string)
-          day, month, year = date_string.match(/\A(\d{1,2})\-?([A-Z]{3})\-?(\d\d)\z/).captures
+          day, month, year = date_string.match(/\A(\d{1,2})-?([A-Z]{3})-?(\d\d)\z/).captures
           year = year.to_i >= Y2K_CUTOFF ? "19#{year}" : "20#{year}"
           Time.zone.parse("#{day} #{month} #{year}")
         end

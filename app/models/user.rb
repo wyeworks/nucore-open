@@ -28,10 +28,10 @@ class User < ApplicationRecord
   has_many :user_preferences, dependent: :destroy
   has_and_belongs_to_many :product_notifications
 
-  validates_presence_of :username, :first_name, :last_name
+  validates :username, :first_name, :last_name, presence: true
 
   validates :email, presence: true, email_format: true
-  validates_uniqueness_of :email, case_sensitive: false
+  validates :email, uniqueness: { case_sensitive: false }
   validates :username, uniqueness: { case_sensitive: false }
   validates :suspension_note, length: { maximum: 255 }
 
@@ -121,9 +121,9 @@ class User < ApplicationRecord
     if errors.empty?
       clear_reset_password_token
       save!
-      return true
+      true
     else
-      return false
+      false
     end
   end
 

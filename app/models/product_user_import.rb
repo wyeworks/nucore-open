@@ -8,7 +8,7 @@ class ProductUserImport < ApplicationRecord
   belongs_to :product
   belongs_to :creator, class_name: "User", foreign_key: :created_by_id
 
-  validates_presence_of :file, :creator
+  validates :file, :creator, presence: true
 
   attr_accessor :successes, :failures, :skipped
 
@@ -28,12 +28,12 @@ class ProductUserImport < ApplicationRecord
       failures << "Uploaded CSV file must include a 'Username' column.  Please try again."
     end
 
-    if new_product_users_added?
-      save!
-      successes.map! do |product_user|
-        LogEvent.log(product_user, :create, creator)
-        "* #{product_user.user.username}\n"
-      end
+    return unless new_product_users_added?
+
+    save!
+    successes.map! do |product_user|
+      LogEvent.log(product_user, :create, creator)
+      "* #{product_user.user.username}\n"
     end
   end
 

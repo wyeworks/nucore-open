@@ -20,7 +20,7 @@ class AutoCanceler
                                  .not_ended
                                  .not_canceled
                                  .where("auto_cancel_mins IS NOT NULL AND auto_cancel_mins > 0")
-                                 .where(order_details: { state: %w(new inprocess) })
+                                 .where(order_details: { state: %w[new inprocess] })
                                  .where(time_condition, now: Time.current)
                                  .merge(Order.purchased)
                                  .readonly(false)

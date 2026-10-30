@@ -17,19 +17,21 @@ class OrderDetails::ParamUpdater
         :unrecoverable_note,
         :deposit_number,
         :reference_id,
-        reservation: %i[
-          reserve_start_date
-          reserve_start_hour
-          reserve_start_min
-          reserve_start_meridian
-          duration_mins
-          duration_days
-          actual_start_date
-          actual_start_hour
-          actual_start_min
-          actual_start_meridian
-          actual_duration_mins
-        ],
+        {
+          reservation: %i[
+            reserve_start_date
+            reserve_start_hour
+            reserve_start_min
+            reserve_start_meridian
+            duration_mins
+            duration_days
+            actual_start_date
+            actual_start_hour
+            actual_start_min
+            actual_start_meridian
+            actual_duration_mins
+          ],
+        },
       ]
   end
 
@@ -41,7 +43,7 @@ class OrderDetails::ParamUpdater
 
   def assign_attributes(params)
     params = params.dup
-    params.delete(:quantity) unless params[:quantity].to_s =~ /\A\d+\z/
+    params.delete(:quantity) unless /\A\d+\z/.match?(params[:quantity].to_s)
 
     assign_self_and_reservation_attributes(permitted_params(params))
     # As of Rails 5.2.4, if nothing changes on the association (e.g. submitting the
@@ -73,9 +75,7 @@ class OrderDetails::ParamUpdater
 
     @order_detail.transaction do
       assign_price_changed_by_user
-      if @order_detail.reservation.present?
-        @order_detail.reservation.save_as_user(@editing_user) || raise(ActiveRecord::Rollback)
-      end
+      @order_detail.reservation.save_as_user(@editing_user) || raise(ActiveRecord::Rollback) if @order_detail.reservation.present?
       if order_status_id && order_status_id.to_i != @order_detail.order_status_id
         change_order_status(order_status_id, @options[:cancel_fee]) || raise(ActiveRecord::Rollback)
       else
@@ -125,9 +125,9 @@ class OrderDetails::ParamUpdater
     reservation_attrs = params.delete :reservation
     @order_detail.assign_attributes(params)
 
-    if @order_detail.time_data.is_a?(Reservation)
-      @order_detail.reservation.assign_times_from_params reservation_attrs if reservation_attrs
-    end
+    return unless @order_detail.time_data.is_a?(Reservation) && reservation_attrs
+
+    @order_detail.reservation.assign_times_from_params reservation_attrs
   end
 
   def assign_policy_and_prices
@@ -140,7 +140,7 @@ class OrderDetails::ParamUpdater
     @order_detail.update_order_status!(@editing_user, new_order_status, admin: true, apply_cancel_fee:)
     @order_detail.notify_purchaser_of_order_status
     true
-  rescue => e
+  rescue
     @order_detail.errors.add(:base, :changing_status)
   end
 

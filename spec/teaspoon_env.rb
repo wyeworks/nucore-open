@@ -119,12 +119,12 @@ Teaspoon.configure do |config|
   if ENV["SELENIUM_HOST"]
     docker_ip = `hostname -i`.strip
     config.server_host = docker_ip
-    config.server_port = ENV["TEST_APP_PORT"]
+    config.server_port = ENV.fetch("TEST_APP_PORT", nil)
 
     http_client = Selenium::WebDriver::Remote::Http::Default.new(read_timeout: 120)
     selenium_options.merge!(
       {
-        url: "http://#{ENV['SELENIUM_HOST']}:#{ENV['SELENIUM_PORT']}/wd/hub",
+        url: "http://#{ENV['SELENIUM_HOST']}:#{ENV.fetch('SELENIUM_PORT', nil)}/wd/hub",
         http_client:,
       },
     )

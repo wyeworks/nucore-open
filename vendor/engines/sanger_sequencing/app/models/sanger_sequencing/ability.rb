@@ -9,10 +9,10 @@ module SangerSequencing
 
       can([:show, :create, :update, :create_sample], Submission, user:)
 
-      if facility && (user.operator_of?(facility) || granted_product_edition?(user, facility))
-        can [:index, :show], Submission
-        can :manage, [Batch, BatchForm, Primer]
-      end
+      return unless facility && (user.operator_of?(facility) || granted_product_edition?(user, facility))
+
+      can [:index, :show], Submission
+      can :manage, [Batch, BatchForm, Primer]
     end
 
     private

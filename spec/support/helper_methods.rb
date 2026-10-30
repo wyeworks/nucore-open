@@ -92,7 +92,7 @@ def place_and_complete_item_order(ordered_by, facility, account = nil, reviewed 
     price_policy_id: @item_pp.id,
   }
 
-  od_attrs[:reviewed_at] = Time.zone.now - 1.day if reviewed
+  od_attrs[:reviewed_at] = 1.day.ago if reviewed
   @order_detail.update(od_attrs)
   @order_detail
 end

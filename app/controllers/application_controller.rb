@@ -31,10 +31,9 @@ class ApplicationController < ActionController::Base
     facility_id = params[:facility_id] || params[:id]
 
     @current_facility ||=
-      case
-      when facility_id.blank?
+      if facility_id.blank?
         nil # TODO: consider a refactoring to use a null object
-      when facility_id == Facility.cross_facility.url_name
+      elsif facility_id == Facility.cross_facility.url_name
         Facility.cross_facility
       else
         Facility.find_by(url_name: facility_id)
@@ -89,10 +88,9 @@ class ApplicationController < ActionController::Base
   # depends heavily on value of current_facility
   def manageable_facilities
     @manageable_facilities =
-      case
-      when current_facility.blank?
+      if current_facility.blank?
         session_user.manageable_facilities
-      when current_facility.cross_facility?
+      elsif current_facility.cross_facility?
         Facility.alphabetized
       else
         Facility.where(id: current_facility.id)
@@ -189,6 +187,6 @@ class ApplicationController < ActionController::Base
   end
 
   def render_acting_error
-    render "errors/acting_error", status: 403, layout: "application", formats: formats_with_html_fallback
+    render "errors/acting_error", status: :forbidden, layout: "application", formats: formats_with_html_fallback
   end
 end

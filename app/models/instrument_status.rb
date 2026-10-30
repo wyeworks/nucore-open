@@ -3,7 +3,7 @@
 class InstrumentStatus < ApplicationRecord
   belongs_to :instrument, inverse_of: :instrument_status
 
-  validates_numericality_of :instrument_id
+  validates :instrument_id, numericality: true
 
   alias_attribute :on, :is_on
 

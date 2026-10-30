@@ -231,7 +231,7 @@ RSpec.describe Order do
 
       @reservation = @instrument.reservations.create(reserve_start_date: Date.today + 1.day,
                                                      reserve_start_hour: 9,
-                                                     reserve_start_min: 00,
+                                                     reserve_start_min: 0o0,
                                                      reserve_start_meridian: "am",
                                                      duration_mins: 60,
                                                      order_detail: @order_detail,

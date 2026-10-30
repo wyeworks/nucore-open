@@ -13,20 +13,20 @@ class HolidaysController < ApplicationController
   def new
   end
 
+  def edit
+  end
+
   def create
     if @holiday.save
-      redirect_to holidays_path, notice: t("holidays.create.success")
+      redirect_to holidays_path, notice: t(".success")
     else
       render :new
     end
   end
 
-  def edit
-  end
-
   def update
     if @holiday.update(holiday_params)
-      redirect_to holidays_path, notice: t("holidays.update.success")
+      redirect_to holidays_path, notice: t(".success")
     else
       render :edit
     end
@@ -34,7 +34,7 @@ class HolidaysController < ApplicationController
 
   def destroy
     @holiday.destroy
-    redirect_to holidays_path, notice: t("holidays.destroy.success")
+    redirect_to holidays_path, notice: t(".success")
   end
 
   private

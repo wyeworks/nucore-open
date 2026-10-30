@@ -108,10 +108,10 @@ module PricePolicies
     end
 
     def sanitize_usage_rate
-      if usage_rate_daily_changed? && daily_booking?
-        self.usage_rate = nil
-        self.usage_subsidy = nil
-      end
+      return unless usage_rate_daily_changed? && daily_booking?
+
+      self.usage_rate = nil
+      self.usage_subsidy = nil
     end
   end
 end

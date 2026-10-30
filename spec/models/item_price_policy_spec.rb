@@ -70,7 +70,7 @@ RSpec.describe ItemPricePolicy do
     end
 
     it "is invalid for a day that a policy already exists for" do
-      ipp_old = create(:item_price_policy, product: @item, start_date: Date.today + 7, price_group: @price_group)
+      create(:item_price_policy, product: @item, start_date: Date.today + 7, price_group: @price_group)
       ipp_new = build(:item_price_policy, product: @item, start_date: Date.today + 7, price_group: @price_group)
       expect(ipp_new).to be_invalid
       expect(ipp_new.errors_on(:start_date)).to be_present
@@ -103,14 +103,14 @@ RSpec.describe ItemPricePolicy do
 
     it "returns the date for the current policies" do
       ipp = create(:item_price_policy, product: @item, start_date: Date.today - 7.days, price_group: @price_group)
-      ipp2 = create(:item_price_policy, product: @item, start_date: Date.today + 7.days, price_group: @price_group)
+      create(:item_price_policy, product: @item, start_date: Date.today + 7.days, price_group: @price_group)
       expect(ItemPricePolicy.current_date(@item).to_date).to eq(ipp.start_date.to_date)
       ipp3 = create(:item_price_policy, product: @item, start_date: Date.today, price_group: @price_group)
       expect(ItemPricePolicy.current_date(@item).to_date).to eq(ipp3.start_date.to_date)
     end
 
     it "should return the date for upcoming policies" do
-      ipp = create(:item_price_policy, product: @item, start_date: Time.current.beginning_of_day, price_group: @price_group)
+      create(:item_price_policy, product: @item, start_date: Time.current.beginning_of_day, price_group: @price_group)
       ipp2 = create(:item_price_policy, product: @item, start_date: Time.current.beginning_of_day + 7.days, price_group: @price_group)
       ipp3 = create(:item_price_policy, product: @item, start_date: Time.current.beginning_of_day + 14.days, price_group: @price_group)
 

@@ -11,7 +11,7 @@ RSpec.describe ProductApprover do
   let(:product) { all_products.first }
   let(:product_approver) { ProductApprover.new(all_products, user, approver) }
   let(:product_user) { product.find_product_user(user) }
-  let(:schedule_rule) { product.schedule_rules.create(attributes_for :schedule_rule) }
+  let(:schedule_rule) { product.schedule_rules.create(attributes_for(:schedule_rule)) }
   let(:user) { create(:user) }
 
   def set_up_access_list

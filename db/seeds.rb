@@ -17,7 +17,7 @@ OrderStatus.find_or_create_by(name: "Unrecoverable")
 
 Affiliate.OTHER
 
-# TODO revisit in Rails 4. If you run `rake db:reset db:create db:migrate db:seed` as one step,
+# TODO: revisit in Rails 4. If you run `rake db:reset db:create db:migrate db:seed` as one step,
 # it fails on not recognizing `is_internal`
 PriceGroup.reset_column_information
 

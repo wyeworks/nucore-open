@@ -7,7 +7,7 @@ class PriceGroupMember < ApplicationRecord
 
   acts_as_paranoid
 
-  validates_presence_of :price_group_id
+  validates :price_group_id, presence: true
 
   def member_type
     type.sub("PriceGroupMember", "")

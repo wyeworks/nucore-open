@@ -11,10 +11,9 @@ module ProductsHelper
   end
 
   def options_for_control_mechanism
-    Relay::CONTROL_MECHANISMS.inject(ActiveSupport::OrderedHash.new) do |hash, (key, _v)|
+    Relay::CONTROL_MECHANISMS.each_with_object(ActiveSupport::OrderedHash.new) do |(key, _v), hash|
       human_value = t("instruments.instrument_fields.relay.control_mechanisms.#{key}")
       hash[human_value] = key
-      hash
     end
   end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "production.rb"
+require_relative "production"
 
 Nucore::Application.configure do
   config.action_mailer.delivery_method = :mailgun

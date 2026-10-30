@@ -14,7 +14,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
 
   helper_method :edit_disabled?, :actual_cost_edit_disabled?, :read_only?, :metadata_edit_disabled?
 
-  before_action :authorize_order_detail, except: %i(sample_results update remove_from_journal)
+  before_action :authorize_order_detail, except: %i[sample_results update remove_from_journal]
   before_action :authorize_order_detail_update, only: :update
   before_action :authorize_remove_from_journal, only: :remove_from_journal
   before_action :authorize_mark_unrecoverable, only: :update
@@ -55,7 +55,7 @@ class OrderManagement::OrderDetailsController < ApplicationController
       end
     else
       flash.now[:error] = text("update.error")
-      render :edit, layout: !modal?, status: 406
+      render :edit, layout: !modal?, status: :not_acceptable
     end
   end
 
@@ -145,9 +145,9 @@ class OrderManagement::OrderDetailsController < ApplicationController
       @order_statuses = OrderStatus.non_protected_statuses(current_facility)
     end
 
-    unless @order_detail.unrecoverable? || can?(:mark_unrecoverable, OrderDetail)
-      @order_statuses.reject! { |status| status.name == OrderStatus::UNRECOVERABLE }
-    end
+    return if @order_detail.unrecoverable? || can?(:mark_unrecoverable, OrderDetail)
+
+    @order_statuses.reject! { |status| status.name == OrderStatus::UNRECOVERABLE }
   end
 
   def edit_disabled?

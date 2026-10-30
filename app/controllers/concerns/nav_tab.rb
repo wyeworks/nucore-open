@@ -37,12 +37,12 @@ module NavTab
   end
 
   def navigation_links
-    case
-    when customer_tab? && !acting_as?
+    if customer_tab? && !acting_as?
       link_collection.customer.compact
-    when manage_mode?
+    elsif manage_mode?
       link_collection.admin
-    else []
+    else
+      []
     end
   end
 

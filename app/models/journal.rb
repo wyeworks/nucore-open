@@ -41,10 +41,10 @@ class Journal < ApplicationRecord
 
   has_many :journal_rows
 
-  validates_presence_of   :reference, :updated_by, on: :update
-  validates_presence_of   :created_by
-  validates_presence_of   :journal_date
-  validates_length_of     :reference, maximum: 50
+  validates   :reference, :updated_by, presence: { on: :update }
+  validates   :created_by, presence: true
+  validates   :journal_date, presence: true
+  validates :reference, length: { maximum: 50 }
   validate :journal_date_cannot_be_in_future, if: :journal_date?
   validate :must_have_order_details, on: :create, if: :order_details_for_creation
   validate :must_not_span_fiscal_years, on: :create, if: :should_check_fiscal_years?
@@ -135,10 +135,10 @@ class Journal < ApplicationRecord
 
   def create_new_journal_rows
     row_errors = create_journal_rows!(@order_details_for_creation)
-    if row_errors.any?
-      row_errors.each { |e| errors.add(:base, e) }
-      destroy # so it's treated as a new record
-    end
+    return unless row_errors.any?
+
+    row_errors.each { |e| errors.add(:base, e) }
+    destroy # so it's treated as a new record
   end
 
   def create_new_journal_rows!

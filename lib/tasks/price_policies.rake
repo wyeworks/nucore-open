@@ -36,11 +36,12 @@ namespace :price_policies do
         policy.usage_rate = policy.hourly_usage_rate.to_f.round(2)
         policy.usage_subsidy = policy.hourly_usage_subsidy.to_f.round(2)
         success = commit ? policy.save : policy.valid?
-        puts "Errors: #{policy.errors.full_messages}" if !success
+        puts "Errors: #{policy.errors.full_messages}" unless success
         puts "After: #{policy.usage_rate.to_f}/#{policy.usage_subsidy.to_f}"
         puts "#{policy.hourly_usage_rate}/#{policy.hourly_usage_subsidy}"
       end
-    end; nil
+    end
+    nil
     puts "DONE"
   end
 

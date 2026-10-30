@@ -7,4 +7,5 @@ Gem::Specification.new do |gem|
   gem.authors  = ["Table XI"]
   gem.email    = "devs@txidigital.com"
   gem.homepage = "https://github.com/tablexi/nucore-open"
+  gem.metadata["rubygems_mfa_required"] = "true"
 end

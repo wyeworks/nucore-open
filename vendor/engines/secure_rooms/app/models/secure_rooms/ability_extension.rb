@@ -33,13 +33,11 @@ module SecureRooms
         ability.can [:index, :show], CardReader
       end
 
-      if granted_product_edition?(user, resource)
-        ability.can :manage, CardReader
-      end
+      ability.can :manage, CardReader if granted_product_edition?(user, resource)
 
-      if granted_order_management?(user, resource)
-        ability.can :show_problems, Occupancy
-      end
+      return unless granted_order_management?(user, resource)
+
+      ability.can :show_problems, Occupancy
     end
 
     private

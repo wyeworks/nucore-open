@@ -69,7 +69,7 @@ RSpec.describe FacilityNotificationsController do
         it_should_allow_managers_only :redirect do
           expect(assigns(:errors)).to be_empty
           expect(assigns(:accounts_to_notify)).to contain_exactly(@account.id)
-          expect([@order_detail1, @order_detail2]).to be_all { |od| od.reload.reviewed_at > 6.days.from_now }
+          expect([@order_detail1, @order_detail2]).to(be_all { |od| od.reload.reviewed_at > 6.days.from_now })
 
           expect(Notifier.deliveries.count).to eq(1)
         end
@@ -90,7 +90,7 @@ RSpec.describe FacilityNotificationsController do
 
         it_should_allow_managers_only :redirect do
           expect(assigns(:errors)).to be_empty
-          expect([@order_detail1, @order_detail2, @order_detail3]).to be_all { |od| od.reload.reviewed_at? }
+          expect([@order_detail1, @order_detail2, @order_detail3]).to(be_all { |od| od.reload.reviewed_at? })
           expect(assigns(:accounts_to_notify)).to contain_exactly(@account.id, @account2.id)
         end
 
@@ -207,7 +207,7 @@ RSpec.describe FacilityNotificationsController do
       it "logs the order when it gets review" do
         @params[:order_detail_ids] = [@order_detail1.id, @order_detail3.id]
         do_request
-        log_event = LogEvent.find_by(loggable: @order_detail1, event_type: :review)
+        LogEvent.find_by(loggable: @order_detail1, event_type: :review)
         log_event = LogEvent.find_by(loggable: @order_detail3, event_type: :review)
         expect(log_event).to be_present
       end

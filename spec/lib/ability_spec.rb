@@ -12,7 +12,7 @@ RSpec.describe Ability do
   shared_examples_for "it can not manage training requests" do
     let(:subject_resource) { create(:training_request, product: instrument) }
 
-    %i(read update delete index).each do |action|
+    %i[read update delete index].each do |action|
       it { is_expected.not_to be_allowed_to(action, TrainingRequest) }
     end
   end
@@ -235,7 +235,7 @@ RSpec.describe Ability do
         it { is_expected.not_to be_allowed_to(:manage_users, facility) }
       end
 
-      %i(disputed_orders manage_billing movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions).each do |action|
+      %i[disputed_orders manage_billing movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions].each do |action|
         it { is_expected.to be_allowed_to(action, facility) }
       end
       it_is_allowed_to([:accounts, :index, :orders, :show], User)
@@ -408,7 +408,7 @@ RSpec.describe Ability do
       it_is_allowed_to([:send_receipt, :show], Order)
       it_is_not_allowed_to([:update, :edit, :new, :destroy], Order)
 
-      %i(disputed_orders movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions).each do |action|
+      %i[disputed_orders movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions].each do |action|
         it { is_expected.to be_allowed_to(action, subject_resource) }
       end
     end
@@ -425,7 +425,7 @@ RSpec.describe Ability do
       it_is_not_allowed_to(%i[accounts index orders show create switch_to], User)
       it_is_not_allowed_to([:send_receipt, :show], Order)
 
-      %i(disputed_orders manage_billing movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions).each do |action|
+      %i[disputed_orders manage_billing movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions].each do |action|
         it { is_expected.not_to be_allowed_to(action, facility) }
       end
     end
@@ -522,7 +522,7 @@ RSpec.describe Ability do
     it { is_expected.not_to be_allowed_to(:switch_to, user) }
     it_is_not_allowed_to([:cancel, :index], Reservation)
 
-    %i(sample_result template_result).each do |file_type|
+    %i[sample_result template_result].each do |file_type|
       describe "downloading a #{file_type}" do
         let(:controller_method) { file_type.to_s.pluralize.to_sym }
         let(:subject_resource) { order_detail }
@@ -862,7 +862,7 @@ RSpec.describe Ability do
       it_is_allowed_to(%i[accounts index orders show administer], User)
       it { is_expected.to be_allowed_to(:manage, AccountUser) }
 
-      %i(disputed_orders movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions).each do |action|
+      %i[disputed_orders movable_transactions transactions reassign_chart_strings confirm_transactions move_transactions].each do |action|
         it { is_expected.to be_allowed_to(action, facility) }
       end
     end

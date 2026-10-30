@@ -21,11 +21,9 @@ class UserFinder
   end
 
   def self.search(search_term, limit: nil, actives_only: false)
-    if search_term.present?
-      new(search_term, actives_only:, limit:).result
-    else
-      nil
-    end
+    return unless search_term.present?
+
+    new(search_term, actives_only:, limit:).result
   end
 
   def initialize(search_term, limit: nil, actives_only: false)
@@ -51,9 +49,7 @@ class UserFinder
 
     scope = User.where(conditions.inject(&:or))
 
-    if @actives_only
-      scope = scope.active
-    end
+    scope = scope.active if @actives_only
 
     @relation ||= scope
   end

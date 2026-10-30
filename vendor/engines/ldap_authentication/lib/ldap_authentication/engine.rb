@@ -8,8 +8,8 @@ module LdapAuthentication
     config.to_prepare do
       if LdapAuthentication.configured?
         User.send(:devise, :ldap_authenticatable)
-        User.send(:include, LdapAuthentication::UserExtension)
-        UsersController.send(:include, LdapAuthentication::UsersControllerExtension)
+        User.include LdapAuthentication::UserExtension
+        UsersController.include LdapAuthentication::UsersControllerExtension
       end
     end
   end

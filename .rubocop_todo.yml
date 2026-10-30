@@ -6,43 +6,6 @@
 # Note that changes in the inspected code, or installation of new
 # versions of RuboCop, may require this file to be generated again.
 
-# Offense count: 16
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: TreatCommentsAsGroupSeparators, ConsiderPunctuation, Include.
-# Include: **/*.gemfile, **/Gemfile, **/gems.rb
-Bundler/OrderedGems:
-  Exclude:
-    - 'Gemfile'
-
-# Offense count: 5
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Severity, Include.
-# Include: **/*.gemspec
-Gemspec/DeprecatedAttributeAssignment:
-  Exclude:
-    - 'vendor/engines/fine_uploader/fine_uploader.gemspec'
-    - 'vendor/engines/fullcalendar/fullcalendar.gemspec'
-    - 'vendor/engines/ldap_authentication/ldap_authentication.gemspec'
-    - 'vendor/engines/saml_authentication/saml_authentication.gemspec'
-    - 'vendor/engines/secure_rooms/secure_rooms.gemspec'
-
-# Offense count: 10
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Severity, Include.
-# Include: **/*.gemspec
-Gemspec/RequireMFA:
-  Exclude:
-    - 'vendor/engines/bulk_email/bulk_email.gemspec'
-    - 'vendor/engines/c2po/c2po.gemspec'
-    - 'vendor/engines/dataprobe/dataprobe.gemspec'
-    - 'vendor/engines/fine_uploader/fine_uploader.gemspec'
-    - 'vendor/engines/fullcalendar/fullcalendar.gemspec'
-    - 'vendor/engines/ldap_authentication/ldap_authentication.gemspec'
-    - 'vendor/engines/saml_authentication/saml_authentication.gemspec'
-    - 'vendor/engines/sanger_sequencing/sanger_sequencing.gemspec'
-    - 'vendor/engines/secure_rooms/secure_rooms.gemspec'
-    - 'vendor/engines/split_accounts/split_accounts.gemspec'
-
 # Offense count: 10
 # Configuration parameters: Severity, Include.
 # Include: **/*.gemspec
@@ -59,39 +22,12 @@ Gemspec/RequiredRubyVersion:
     - 'vendor/engines/secure_rooms/secure_rooms.gemspec'
     - 'vendor/engines/split_accounts/split_accounts.gemspec'
 
-# Offense count: 39
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowedMethods, AllowedPatterns.
-Lint/AmbiguousBlockAssociation:
-  Enabled: false
-
-# Offense count: 15
-# This cop supports safe autocorrection (--autocorrect).
-Lint/AmbiguousOperatorPrecedence:
-  Exclude:
-    - 'app/models/concerns/products/scheduling_support.rb'
-    - 'app/models/schedule_rule.rb'
-    - 'db/migrate/20170112204251_increase_delayed_jobs_handler_capacity.rb'
-    - 'lib/tasks/demo_seed.rake'
-    - 'spec/models/instrument_spec.rb'
-    - 'spec/services/admin_reservation_expirer_spec.rb'
-    - 'vendor/engines/sanger_sequencing/app/presenters/sanger_sequencing/well_plate_presenter.rb'
-
-# Offense count: 7
-# This cop supports safe autocorrection (--autocorrect).
-Lint/AmbiguousRegexpLiteral:
-  Exclude:
-    - 'spec/controllers/facility_journals_controller_spec.rb'
-    - 'spec/controllers/orders_controller_spec.rb'
-    - 'spec/models/journal_spec.rb'
-    - 'spec/services/order_row_importer_spec.rb'
-    - 'vendor/engines/c2po/spec/models/account_spec.rb'
-
-# Offense count: 4
+# Offense count: 5
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowSafeAssignment.
 Lint/AssignmentInCondition:
   Exclude:
+    - 'app/controllers/global_user_roles_controller.rb'
     - 'app/helpers/facility_estimates_helper.rb'
     - 'app/helpers/facility_orders_helper.rb'
     - 'app/models/budgeted_chart_string.rb'
@@ -140,18 +76,6 @@ Lint/DuplicateMethods:
 Lint/EmptyBlock:
   Enabled: false
 
-# Offense count: 1
-Lint/FloatComparison:
-  Exclude:
-    - 'lib/tasks/schedule_rules.rake'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Lint/IdentityComparison:
-  Exclude:
-    - 'vendor/engines/split_accounts/app/decorators/split_accounts/split_order_detail_decorator.rb'
-    - 'vendor/engines/split_accounts/app/decorators/split_accounts/split_time_data_decorator.rb'
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Lint/IncompatibleIoSelectWithFiberScheduler:
@@ -169,13 +93,6 @@ Lint/IneffectiveAccessModifier:
     - 'app/services/price_policy_builder.rb'
 
 # Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AutoCorrect.
-Lint/LiteralAsCondition:
-  Exclude:
-    - 'app/models/price_group.rb'
-
-# Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Lint/Loop:
   Exclude:
@@ -188,29 +105,7 @@ Lint/MissingSuper:
     - 'app/models/full_text_search/mysql_searcher.rb'
     - 'app/validators/account_validator/account_number_format_error.rb'
 
-# Offense count: 5
-# This cop supports safe autocorrection (--autocorrect).
-Lint/ParenthesesAsGroupedExpression:
-  Exclude:
-    - 'app/controllers/reservations_controller.rb'
-    - 'app/services/price_policy_updater.rb'
-    - 'spec/controllers/facilities_controller_spec.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantCopDisableDirective:
-  Exclude:
-    - 'app/lib/active_record/connection_adapters/oracle_enhanced_adapter.rb'
-    - 'app/services/account_role_grantor.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Lint/RedundantRequireStatement:
-  Exclude:
-    - 'app/models/journal.rb'
-    - 'app/services/journal_row_builder.rb'
-
-# Offense count: 2
+# Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AllowedMethods.
 # AllowedMethods: present?, blank?, presence, try, try!
@@ -219,80 +114,26 @@ Lint/SafeNavigationConsistency:
     - 'app/controllers/quick_reservations_controller.rb'
 
 # Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Lint/ScriptPermission:
-  Exclude:
-    - 'vendor/engines/sanger_sequencing/Rakefile'
-
-# Offense count: 9
-# This cop supports safe autocorrection (--autocorrect).
-Lint/SendWithMixinArgument:
-  Exclude:
-    - 'vendor/engines/ldap_authentication/lib/ldap_authentication/engine.rb'
-    - 'vendor/engines/sanger_sequencing/lib/sanger_sequencing/engine.rb'
-    - 'vendor/engines/secure_rooms/lib/secure_rooms/engine.rb'
-    - 'vendor/engines/split_accounts/lib/split_accounts/engine.rb'
-
-# Offense count: 2
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'app/controllers/orders_controller.rb'
-    - 'app/models/full_text_search/oracle_searcher.rb'
-
-# Offense count: 1
 Lint/SharedMutableDefault:
   Exclude:
     - 'app/presenters/view_hook.rb'
 
-# Offense count: 10
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: strict, consistent
-Lint/SymbolConversion:
-  Exclude:
-    - 'app/controllers/price_group_products_controller.rb'
-    - 'app/models/concerns/products/scheduling_support.rb'
-    - 'app/models/reports/export_raw.rb'
-    - 'spec/controllers/price_group_products_controller_spec.rb'
-    - 'spec/models/external_service/survey_response_spec.rb'
-    - 'vendor/engines/sanger_sequencing/app/presenters/sanger_sequencing/well_plate_presenter.rb'
-
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AutoCorrect, IgnoreEmptyBlocks, AllowUnusedKeywordArguments.
-Lint/UnusedBlockArgument:
-  Exclude:
-    - 'app/models/duration_rate.rb'
-    - 'db/migrate/20231102000551_add_global_boolean_column_to_price_groups.rb'
-    - 'vendor/engines/secure_rooms/spec/factories/secure_room.rb'
-
-# Offense count: 9
+# Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AutoCorrect, AllowUnusedKeywordArguments, IgnoreEmptyMethods, IgnoreNotImplementedMethods, NotImplementedExceptions.
 # NotImplementedExceptions: NotImplementedError
 Lint/UnusedMethodArgument:
   Exclude:
-    - 'app/inputs/date_picker_input.rb'
-    - 'app/lib/ability.rb'
     - 'app/models/account.rb'
     - 'app/models/nonbillable_account.rb'
-    - 'app/services/research_safety_adapters/research_safety_always_certified_adapter.rb'
-    - 'vendor/engines/sanger_sequencing/app/controllers/sanger_sequencing/submissions_controller.rb'
 
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AutoCorrect, ContextCreatingMethods, MethodCreatingMethods, inherit_mode.
-# ContextCreatingMethods: class_methods, included, prepended, concern, concerning
-Lint/UselessAccessModifier:
-  Exclude:
-    - 'app/models/reports/account_transactions_report.rb'
-    - 'app/services/projects_search/searcher.rb'
-
-# Offense count: 87
+# Offense count: 3
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: AutoCorrect.
 Lint/UselessAssignment:
-  Enabled: false
+  Exclude:
+    - 'app/helpers/reservations_helper.rb'
+    - 'lib/tasks/demo_seed.rake'
 
 # Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -302,15 +143,6 @@ Lint/UselessMethodDefinition:
     - 'app/mailers/application_mailer.rb'
     - 'app/models/concerns/paperclip_file.rb'
     - 'vendor/engines/ldap_authentication/lib/ldap_authentication/engine.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AutoCorrect, CheckForMethodsWithNoSideEffects.
-Lint/Void:
-  Exclude:
-    - 'lib/tasks/price_policies.rake'
-    - 'spec/controllers/facility_accounts_controller_spec.rb'
-    - 'spec/controllers/orders_controller_spec.rb'
 
 # Offense count: 256
 # Configuration parameters: AllowedMethods, AllowedPatterns, CountRepeatedAttributes.
@@ -358,21 +190,6 @@ Metrics/PerceivedComplexity:
 # Offense count: 17
 Naming/AccessorMethodName:
   Enabled: false
-
-# Offense count: 20
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, BlockForwardingName.
-# SupportedStyles: anonymous, explicit
-Naming/BlockForwarding:
-  Exclude:
-    - 'app/controllers/reports/instrument_day_reports_controller.rb'
-    - 'app/controllers/reports/instrument_reports_controller.rb'
-    - 'app/helpers/form_helper.rb'
-    - 'app/inputs/model_less_form_builder.rb'
-    - 'app/inputs/readonly_form_builder.rb'
-    - 'app/models/facility_account.rb'
-    - 'app/validators/account_validator/validator_factory.rb'
-    - 'spec/report_spec_helper.rb'
 
 # Offense count: 2
 # Configuration parameters: ExpectMatchingDefinition, CheckDefinitionPathHierarchy, CheckDefinitionPathHierarchyRoots, Regex, IgnoreExecutableScripts, AllowedAcronyms.
@@ -424,13 +241,6 @@ Naming/PredicatePrefix:
 Naming/PredicateMethod:
   Enabled: false
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: PreferredName.
-Naming/RescuedExceptionsVariableName:
-  Exclude:
-    - 'app/controllers/facilities_controller.rb'
-
 # Offense count: 50
 # Configuration parameters: EnforcedStyle, CheckMethodNames, CheckSymbols, AllowedIdentifiers, AllowedPatterns.
 # SupportedStyles: snake_case, normalcase, non_integer
@@ -452,12 +262,6 @@ Naming/VariableNumber:
     - 'vendor/engines/split_accounts/spec/services/order_detail_list_transformer_spec.rb'
     - 'vendor/engines/split_accounts/spec/services/order_detail_splitter_spec.rb'
     - 'vendor/engines/split_accounts/spec/services/split_account_builder_spec.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Performance/BigDecimalWithNumericArgument:
-  Exclude:
-    - 'spec/models/instrument_price_policy_calculations_spec.rb'
 
 # Offense count: 1
 # Configuration parameters: MinSize.
@@ -506,13 +310,6 @@ Performance/MapMethodChain:
     - 'spec/system/admin/moving_transactions_spec.rb'
     - 'vendor/engines/bulk_email/spec/decorators/bulk_email/job_decorator_spec.rb'
 
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Performance/RedundantBlockCall:
-  Exclude:
-    - 'app/models/recurring_task_config.rb'
-    - 'vendor/engines/dataprobe/lib/dataprobe/ipio.rb'
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowRegexpMatch.
@@ -527,27 +324,6 @@ Performance/RedundantMerge:
   Exclude:
     - 'lib/tasks/users.rake'
     - 'spec/teaspoon_env.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Performance/RegexpMatch:
-  Exclude:
-    - 'app/helpers/date_helper.rb'
-    - 'app/services/order_details/param_updater.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Performance/ReverseEach:
-  Exclude:
-    - 'lib/tasks/engines.rake'
-    - 'spec/models/order_detail_spec.rb'
-
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Performance/StringIdentifierArgument:
-  Exclude:
-    - 'app/inputs/transaction_chosen_old_input.rb'
-    - 'app/lib/active_record/connection_adapters/oracle_enhanced_adapter.rb'
 
 # Offense count: 5
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -572,32 +348,16 @@ Rails/ActionControllerFlashBeforeRender:
     - 'app/controllers/product_user_imports_controller.rb'
     - 'app/controllers/single_reservations_controller.rb'
 
-# Offense count: 28
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: ExpectedOrder, Include.
-# ExpectedOrder: index, show, new, edit, create, update, destroy
-# Include: app/controllers/**/*.rb
-Rails/ActionOrder:
-  Enabled: false
-
-# Offense count: 7
-# This cop supports safe autocorrection (--autocorrect).
-Rails/BelongsTo:
-  Exclude:
-    - 'app/models/account_user.rb'
-    - 'app/models/duration_rate.rb'
-    - 'app/models/order_detail.rb'
-    - 'app/models/order_import.rb'
-    - 'app/models/product_display_group_product.rb'
-
-# Offense count: 18
+# Offense count: 23
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: NilOrEmpty, NotPresent, UnlessPresent.
 Rails/Blank:
   Exclude:
+    - 'app/controllers/facility_estimates_controller.rb'
     - 'app/controllers/facility_journals_controller.rb'
     - 'app/controllers/facility_notifications_controller.rb'
     - 'app/controllers/transactions_controller.rb'
+    - 'app/models/api/order_detail.rb'
     - 'app/models/concerns/date_time_input/form_data.rb'
     - 'app/models/journal.rb'
     - 'app/models/order_detail.rb'
@@ -605,9 +365,12 @@ Rails/Blank:
     - 'app/models/relay.rb'
     - 'app/models/reservation.rb'
     - 'app/presenters/reservations/times_presenter.rb'
+    - 'app/services/journal_row_builder.rb'
     - 'app/services/order_detail_batch_updater.rb'
     - 'app/services/order_details/reconciler.rb'
     - 'app/services/order_row_importer.rb'
+    - 'app/services/price_policy_updater.rb'
+    - 'app/services/user_finder.rb'
     - 'app/validators/journal_date_must_be_after_cutoffs.rb'
     - 'vendor/engines/split_accounts/app/services/split_accounts/order_detail_splitter.rb'
 
@@ -638,33 +401,6 @@ Rails/CompactBlank:
 Rails/Date:
   Enabled: false
 
-# Offense count: 10
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforceForPrefixed.
-Rails/Delegate:
-  Exclude:
-    - 'app/models/account.rb'
-    - 'app/models/concerns/downloadable_file.rb'
-    - 'app/models/concerns/downloadable_files/image.rb'
-    - 'app/models/concerns/paperclip_file.rb'
-    - 'app/models/duration_rate.rb'
-    - 'app/models/order_import.rb'
-    - 'app/services/order_row_importer.rb'
-    - 'app/services/projects_search/base_searcher.rb'
-    - 'app/services/transaction_search/base_searcher.rb'
-    - 'app/services/transaction_search/date_range_searcher.rb'
-
-# Offense count: 74
-# This cop supports safe autocorrection (--autocorrect).
-Rails/DurationArithmetic:
-  Enabled: false
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Rails/EagerEvaluationLogMessage:
-  Exclude:
-    - 'db/migrate/20120622185758_move_can_purchase_into_price_policy.rb'
-
 # Offense count: 38
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
@@ -678,15 +414,6 @@ Rails/FilePath:
 # AllowedMethods: order, limit, select, lock
 Rails/FindEach:
   Enabled: false
-
-# Offense count: 2
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/HasAndBelongsToMany:
-  Exclude:
-    - 'app/models/product_access_group.rb'
-    - 'app/models/schedule_rule.rb'
-    - 'vendor/engines/sanger_sequencing/app/models/sanger_sequencing/sanger_product.rb'
 
 # Offense count: 73
 # Configuration parameters: Include.
@@ -709,43 +436,9 @@ Rails/HelperInstanceVariable:
     - 'app/helpers/transaction_history_helper.rb'
     - 'app/helpers/view_hook_helper.rb'
 
-# Offense count: 8
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: numeric, symbolic
-Rails/HttpStatus:
-  Exclude:
-    - 'app/controllers/accessories_controller.rb'
-    - 'app/controllers/api/order_details_controller.rb'
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/file_uploads_controller.rb'
-    - 'app/controllers/kiosk_accessories_controller.rb'
-    - 'app/controllers/kiosk_reservations_controller.rb'
-    - 'app/controllers/order_management/order_details_controller.rb'
-    - 'vendor/engines/secure_rooms/app/controllers/secure_rooms_api/scans_controller.rb'
-
-# Offense count: 13
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, Include.
-# SupportedStyles: lazy, explicit
-# Include: app/controllers/**/*.rb
-Rails/I18nLazyLookup:
-  Exclude:
-    - 'app/controllers/holidays_controller.rb'
-    - 'app/controllers/journal_creation_reminders_controller.rb'
-    - 'app/controllers/journal_cutoff_dates_controller.rb'
-    - 'app/controllers/training_requests_controller.rb'
-
 # Offense count: 40
 Rails/I18nLocaleTexts:
   Enabled: false
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Rails/IndexBy:
-  Exclude:
-    - 'app/controllers/price_group_products_controller.rb'
-    - 'app/services/price_policy_builder.rb'
 
 # Offense count: 6
 # This cop supports safe autocorrection (--autocorrect).
@@ -834,23 +527,6 @@ Rails/PluckInWhere:
   Exclude:
     - 'app/models/reservation.rb'
 
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Rails/PluralizationGrammar:
-  Exclude:
-    - 'vendor/engines/bulk_email/spec/services/bulk_email/recipient_searcher_spec.rb'
-
-# Offense count: 9
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: NotNilAndNotEmpty, NotBlank, UnlessBlank.
-Rails/Present:
-  Exclude:
-    - 'app/models/account.rb'
-    - 'app/models/order_detail.rb'
-    - 'app/models/service.rb'
-    - 'app/support/reservations/date_support.rb'
-    - 'db/migrate/20110221225822_change_journal_rows_values_to_strings.rb'
-
 # Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: Include.
@@ -870,47 +546,40 @@ Rails/RedundantActiveRecordAllMethod:
     - 'spec/services/transaction_search/date_range_searcher_spec.rb'
     - 'spec/services/transaction_search/searcher_spec.rb'
 
-# Offense count: 8
-# This cop supports safe autocorrection (--autocorrect).
-Rails/RedundantForeignKey:
-  Exclude:
-    - 'app/models/order_detail.rb'
-    - 'app/models/product_accessory.rb'
-    - 'app/models/project.rb'
-    - 'vendor/engines/bulk_email/app/models/bulk_email/job.rb'
-    - 'vendor/engines/split_accounts/app/models/split_accounts/split.rb'
-
-# Offense count: 15
+# Offense count: 33
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Rails/RedundantPresenceValidationOnBelongsTo:
   Exclude:
+    - 'app/models/account_price_group_member.rb'
+    - 'app/models/bundle_product.rb'
     - 'app/models/email_event.rb'
+    - 'app/models/external_services/external_service_passer.rb'
+    - 'app/models/external_services/external_service_receiver.rb'
+    - 'app/models/journal_row.rb'
+    - 'app/models/notification.rb'
+    - 'app/models/order.rb'
+    - 'app/models/order_detail.rb'
+    - 'app/models/order_import.rb'
     - 'app/models/payment.rb'
+    - 'app/models/price_group_member.rb'
+    - 'app/models/price_group_product.rb'
     - 'app/models/price_policy.rb'
     - 'app/models/product_access_group.rb'
     - 'app/models/product_accessory.rb'
     - 'app/models/product_research_safety_certification_requirement.rb'
+    - 'app/models/product_user_import.rb'
     - 'app/models/project.rb'
+    - 'app/models/schedule.rb'
+    - 'app/models/schedule_rule.rb'
+    - 'app/models/statement_row.rb'
+    - 'app/models/training_request.rb'
+    - 'app/models/user_price_group_member.rb'
+    - 'app/models/user_role.rb'
     - 'vendor/engines/bulk_email/app/models/bulk_email/job.rb'
     - 'vendor/engines/secure_rooms/app/models/secure_rooms/card_reader.rb'
     - 'vendor/engines/secure_rooms/app/models/secure_rooms/event.rb'
     - 'vendor/engines/secure_rooms/app/models/secure_rooms/occupancy.rb'
     - 'vendor/engines/split_accounts/app/models/split_accounts/split.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Rails/RedundantReceiverInWithOptions:
-  Exclude:
-    - 'app/models/schedule.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Include.
-# Include: spec/**/*.rb, test/**/*.rb
-Rails/RedundantTravelBack:
-  Exclude:
-    - 'spec/rails_helper.rb'
-    - 'spec/services/auto_canceler_spec.rb'
 
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -928,14 +597,6 @@ Rails/RootPathnameMethods:
     - 'vendor/engines/ldap_authentication/lib/ldap_authentication.rb'
     - 'vendor/engines/saml_authentication/lib/saml_authentication/devise_configurator.rb'
     - 'vendor/engines/sanger_sequencing/spec/services/sanger_sequencing/sample_result_file_saver_spec.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: conservative, aggressive
-Rails/ShortI18n:
-  Exclude:
-    - 'app/models/time_range.rb'
 
 # Offense count: 177
 # Configuration parameters: ForbiddenMethods, AllowedMethods.
@@ -971,30 +632,21 @@ Rails/TimeZone:
     - 'lib/daemons/recurring_tasks.rb'
     - 'spec/support/time_travel_helpers.rb'
 
-# Offense count: 1
-# Configuration parameters: TransactionMethods.
-Rails/TransactionExitStatement:
-  Exclude:
-    - 'app/services/order_detail_batch_updater.rb'
-
-# Offense count: 6
+# Offense count: 10
 # Configuration parameters: Include.
 # Include: app/models/**/*.rb
 Rails/UniqueValidationWithoutIndex:
   Exclude:
+    - 'app/models/affiliate.rb'
+    - 'app/models/bundle_product.rb'
     - 'app/models/duration_rate.rb'
     - 'app/models/facility_account.rb'
     - 'app/models/product_access_group.rb'
     - 'app/models/product_research_safety_certification_requirement.rb'
+    - 'app/models/product_user.rb'
     - 'app/models/research_safety_certificate.rb'
     - 'app/models/training_request.rb'
-
-# Offense count: 81
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Include.
-# Include: app/models/**/*.rb
-Rails/Validation:
-  Enabled: false
+    - 'app/models/user_role.rb'
 
 # Offense count: 8
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1012,21 +664,6 @@ Rails/WhereEquals:
 Rails/WhereExists:
   Exclude:
     - 'app/models/product_display_group_product.rb'
-
-# Offense count: 14
-# This cop supports safe autocorrection (--autocorrect).
-Rails/WhereNot:
-  Exclude:
-    - 'app/models/journal_cutoff_date.rb'
-    - 'app/models/order_detail.rb'
-    - 'app/models/price_policy.rb'
-    - 'app/models/relay.rb'
-    - 'app/models/reservation.rb'
-    - 'db/migrate/20110425225944_alter_order_details_drop_dispute_resolved_credit.rb'
-    - 'db/migrate/20160415231343_clean_duplicate_reservations.rb'
-    - 'db/migrate/20160426231556_add_reconciliation_date_to_order_detail.rb'
-    - 'lib/tasks/paperclip-nucore.rake'
-    - 'lib/tasks/update_old_survey_ids.rake'
 
 # Offense count: 2
 # Configuration parameters: Severity.
@@ -1052,32 +689,6 @@ Rails/WhereRange:
     - 'lib/tasks/order_details.rake'
     - 'vendor/engines/secure_rooms/app/support/secure_rooms/auto_orphan_occupancy.rb'
 
-# Offense count: 6
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: separated, grouped
-Style/AccessorGrouping:
-  Exclude:
-    - 'app/forms/add_to_order_form.rb'
-    - 'app/forms/transaction_search/search_form.rb'
-    - 'app/models/product_for_cart.rb'
-
-# Offense count: 20
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowOnlyRestArgument, UseAnonymousForwarding, RedundantRestArgumentNames, RedundantKeywordRestArgumentNames, RedundantBlockArgumentNames.
-# RedundantRestArgumentNames: args, arguments
-# RedundantKeywordRestArgumentNames: kwargs, options, opts
-# RedundantBlockArgumentNames: blk, block, proc
-Style/ArgumentsForwarding:
-  Exclude:
-    - 'app/forms/facility_account_form.rb'
-    - 'app/helpers/form_helper.rb'
-    - 'app/models/facility_account.rb'
-    - 'app/services/order_detail_list_transformer_factory.rb'
-    - 'app/validators/account_validator/validator_factory.rb'
-    - 'spec/support/time_travel_helpers.rb'
-    - 'vendor/engines/sanger_sequencing/app/controllers/sanger_sequencing/admin/admin_controller.rb'
-
 # Offense count: 4
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/ArrayIntersect:
@@ -1085,19 +696,6 @@ Style/ArrayIntersect:
     - 'app/controllers/concerns/nav_tab.rb'
     - 'app/lib/ability.rb'
     - 'app/models/reservation.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, ProceduralMethods, FunctionalMethods, AllowedMethods, AllowedPatterns, AllowBracesOnProceduralOneLiners, BracesRequiredMethods.
-# SupportedStyles: line_count_based, semantic, braces_for_chaining, always_braces
-# ProceduralMethods: benchmark, bm, bmbm, create, each_with_object, measure, new, realtime, tap, with_object
-# FunctionalMethods: let, let!, subject, watch
-# AllowedMethods: lambda, proc, it
-Style/BlockDelimiters:
-  Exclude:
-    - 'spec/controllers/product_users_controller_spec.rb'
-    - 'spec/services/account_membership_cloner_spec.rb'
-    - 'vendor/engines/split_accounts/spec/services/order_detail_splitter_spec.rb'
 
 # Offense count: 47
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1107,6 +705,15 @@ Style/BlockDelimiters:
 # SupportedStylesForModules: , nested, compact
 Style/ClassAndModuleChildren:
   Enabled: false
+
+# Offense count: 2
+# This cop supports unsafe autocorrection (--autocorrect-all).
+# Configuration parameters: AllowedMethods, AllowedPatterns.
+# AllowedMethods: ==, equal?, eql?
+Style/ClassEqualityComparison:
+  Exclude:
+    - 'vendor/engines/split_accounts/app/decorators/split_accounts/split_order_detail_decorator.rb'
+    - 'vendor/engines/split_accounts/app/decorators/split_accounts/split_time_data_decorator.rb'
 
 # Offense count: 6
 Style/ClassVars:
@@ -1123,16 +730,6 @@ Style/ClassVars:
 Style/CombinableLoops:
   Exclude:
     - 'app/services/price_policy_updater.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: Keywords, RequireColon.
-# Keywords: TODO, FIXME, OPTIMIZE, HACK, REVIEW, NOTE
-Style/CommentAnnotation:
-  Exclude:
-    - 'app/services/converters/double_entry_order_detail_to_journal_row_attributes.rb'
-    - 'app/services/users/auth_checker.rb'
-    - 'db/seeds.rb'
 
 # Offense count: 9
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1161,15 +758,6 @@ Style/ConcatArrayLiterals:
     - 'config/deploy.rb'
     - 'vendor/engines/c2po/lib/c2po.rb'
 
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, SingleLineConditionsOnly, IncludeTernaryExpressions.
-# SupportedStyles: assign_to_condition, assign_inside_condition
-Style/ConditionalAssignment:
-  Exclude:
-    - 'app/controllers/facilities_controller.rb'
-    - 'app/services/order_row_importer.rb'
-
 # Offense count: 1
 Style/DocumentDynamicEvalDefinition:
   Exclude:
@@ -1183,68 +771,6 @@ Style/DoubleNegation:
   Exclude:
     - 'app/inputs/readonly_input.rb'
 
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Style/EachWithObject:
-  Exclude:
-    - 'app/helpers/products_helper.rb'
-    - 'app/services/price_policies/strategy.rb'
-
-# Offense count: 11
-# This cop supports safe autocorrection (--autocorrect).
-Style/EmptyCaseCondition:
-  Exclude:
-    - 'app/controllers/application_controller.rb'
-    - 'app/controllers/concerns/nav_tab.rb'
-    - 'app/controllers/concerns/reservation_switch.rb'
-    - 'app/controllers/global_user_roles_controller.rb'
-    - 'app/helpers/orders_helper.rb'
-    - 'app/models/account_user.rb'
-    - 'app/models/budgeted_chart_string.rb'
-    - 'app/models/reports/order_import.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AutoCorrect, EnforcedStyle, AllowComments.
-# SupportedStyles: empty, nil, both
-Style/EmptyElse:
-  Exclude:
-    - 'app/services/user_finder.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AutoCorrect, EnforcedStyle.
-# SupportedStyles: compact, expanded
-Style/EmptyMethod:
-  Exclude:
-    - 'db/migrate/20231212185627_update_duration_rate_rate_for_internal_price_groups.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/EvalWithLocation:
-  Exclude:
-    - 'app/models/nufs_account.rb'
-
-# Offense count: 25
-# This cop supports safe autocorrection (--autocorrect).
-Style/ExpandPathArguments:
-  Enabled: false
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/ExplicitBlockArgument:
-  Exclude:
-    - 'lib/daemons/base.rb'
-
-# Offense count: 7
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowedVars.
-Style/FetchEnvVar:
-  Exclude:
-    - 'config/deploy.rb'
-    - 'config/environments/production.rb'
-    - 'spec/teaspoon_env.rb'
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.
@@ -1253,18 +779,13 @@ Style/FloatDivision:
   Exclude:
     - 'app/models/reports/instrument_utilization_report.rb'
 
-# Offense count: 10
+# Offense count: 4
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: EnforcedStyle.
 # SupportedStyles: format, sprintf, percent
 Style/FormatString:
   Exclude:
     - 'app/helpers/date_helper.rb'
-    - 'app/models/journal_spreadsheet.rb'
-    - 'app/models/schedule_rule.rb'
-    - 'db/migrate/20110216164102_add_facilities_journal_mask_column.rb'
-    - 'db/migrate/20110221225822_change_journal_rows_values_to_strings.rb'
-    - 'lib/tasks/update_old_survey_ids.rake'
     - 'spec/factories/facility_accounts.rb'
     - 'vendor/engines/sanger_sequencing/app/models/sanger_sequencing/submission.rb'
     - 'vendor/engines/sanger_sequencing/spec/models/sanger_sequencing/submission_spec.rb'
@@ -1286,28 +807,13 @@ Style/GlobalStdStream:
     - 'lib/tasks/users.rake'
     - 'spec/rails_helper.rb'
 
-# Offense count: 149
+# Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
 # Configuration parameters: MinBodyLength, AllowConsecutiveConditionals.
 Style/GuardClause:
-  Enabled: false
-
-# Offense count: 19
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: braces, no_braces
-Style/HashAsLastArrayItem:
   Exclude:
-    - 'app/controllers/file_uploads_controller.rb'
-    - 'app/helpers/price_policies_helper.rb'
-    - 'app/helpers/routes_helper.rb'
-    - 'app/models/reports/export_raw.rb'
+    - 'app/controllers/users_controller.rb'
     - 'app/services/order_details/param_updater.rb'
-    - 'app/services/transaction_search/account_owner_searcher.rb'
-    - 'app/services/transaction_search/ordered_for_searcher.rb'
-    - 'db/migrate/20170419011720_remove_legacy_instrument_price_policy_columns.rb'
-    - 'spec/controllers/file_uploads_controller_spec.rb'
-    - 'vendor/engines/sanger_sequencing/app/controllers/sanger_sequencing/admin/batches_controller.rb'
 
 # Offense count: 5
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1343,12 +849,6 @@ Style/HashLikeCase:
   Exclude:
     - 'vendor/engines/secure_rooms/app/presenters/secure_rooms/scan_response_presenter.rb'
 
-# Offense count: 1
-# This cop supports unsafe autocorrection (--autocorrect-all).
-Style/HashTransformKeys:
-  Exclude:
-    - 'app/inputs/transaction_chosen_input.rb'
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/HashTransformValues:
@@ -1363,19 +863,6 @@ Style/IdenticalConditionalBranches:
     - 'app/controllers/reservations_controller.rb'
     - 'app/controllers/single_reservations_controller.rb'
     - 'app/services/research_safety_adapters/scishield_training_synchronizer.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowIfModifier.
-Style/IfInsideElse:
-  Exclude:
-    - 'app/controllers/orders_controller.rb'
-    - 'app/validators/user_role_facility_validator.rb'
-
-# Offense count: 147
-# This cop supports safe autocorrection (--autocorrect).
-Style/IfUnlessModifier:
-  Enabled: false
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1393,13 +880,6 @@ Style/InverseMethods:
     - 'app/models/price_group.rb'
     - 'app/models/user.rb'
     - 'spec/models/schedule_rule_spec.rb'
-
-# Offense count: 5
-# This cop supports safe autocorrection (--autocorrect).
-Style/KeywordParametersOrder:
-  Exclude:
-    - 'app/services/move_to_problem_queue.rb'
-    - 'vendor/engines/bulk_email/app/mailers/bulk_email/mailer.rb'
 
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1444,80 +924,6 @@ Style/MultilineBlockChain:
   Exclude:
     - 'vendor/engines/bulk_email/app/services/bulk_email/recipient_searcher.rb'
 
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Style/MultilineIfModifier:
-  Exclude:
-    - 'app/models/instrument_price_policy.rb'
-    - 'spec/controllers/order_management/order_details_controller_spec.rb'
-
-# Offense count: 7
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowMethodComparison, ComparisonsThreshold.
-Style/MultipleComparison:
-  Exclude:
-    - 'app/controllers/concerns/reservation_switch.rb'
-    - 'app/controllers/instruments_controller.rb'
-    - 'app/models/stored_file.rb'
-    - 'lib/tasks/demo_seed.rake'
-    - 'spec/controller_spec_helper.rb'
-    - 'spec/rails_helper.rb'
-
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: both, prefix, postfix
-Style/NegatedIf:
-  Exclude:
-    - 'app/lib/ability.rb'
-    - 'app/models/holiday.rb'
-    - 'lib/tasks/price_policies.rake'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Style/NegatedIfElseCondition:
-  Exclude:
-    - 'app/controllers/orders_controller.rb'
-    - 'app/controllers/product_user_imports_controller.rb'
-    - 'app/models/budgeted_chart_string.rb'
-
-# Offense count: 24
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowedMethods.
-# AllowedMethods: be, be_a, be_an, be_between, be_falsey, be_kind_of, be_instance_of, be_truthy, be_within, eq, eql, end_with, include, match, raise_error, respond_to, start_with
-Style/NestedParenthesizedCalls:
-  Exclude:
-    - 'spec/app_support/product_approver_spec.rb'
-    - 'spec/controllers/order_imports_controller_spec.rb'
-    - 'spec/controllers/orders_controller_spec.rb'
-    - 'spec/models/instrument_price_policy/matrix_spec.rb'
-    - 'spec/models/instrument_price_policy_calculations_spec.rb'
-    - 'spec/models/instrument_spec.rb'
-    - 'spec/models/product_spec.rb'
-    - 'spec/report_spec_helper.rb'
-    - 'spec/services/accessorizer_spec.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, MinBodyLength, AllowConsecutiveConditionals.
-# SupportedStyles: skip_modifier_ifs, always
-Style/Next:
-  Exclude:
-    - 'app/models/schedule_rule.rb'
-    - 'app/services/price_policy_updater.rb'
-
-# Offense count: 10
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedOctalStyle.
-# SupportedOctalStyles: zero_with_o, zero_only
-Style/NumericLiteralPrefix:
-  Exclude:
-    - 'spec/factories/schedule_rules.rb'
-    - 'spec/models/order_spec.rb'
-    - 'spec/models/price_policy_spec.rb'
-    - 'spec/models/reservation_spec.rb'
-    - 'spec/models/schedule_rule_spec.rb'
-
 # Offense count: 54
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle, AllowedMethods, AllowedPatterns.
@@ -1556,25 +962,6 @@ Style/OptionalBooleanParameter:
     - 'spec/support/helper_methods.rb'
     - 'vendor/engines/c2po/app/models/purchase_order_account.rb'
 
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Style/OrAssignment:
-  Exclude:
-    - 'app/controllers/price_group_products_controller.rb'
-    - 'lib/tasks/demo_seed.rake'
-
-# Offense count: 96
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: PreferredDelimiters.
-Style/PercentLiteralDelimiters:
-  Enabled: false
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Style/Proc:
-  Exclude:
-    - 'config/deploy.rb'
-
 # Offense count: 25
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle, AllowedCompactTypes.
@@ -1596,12 +983,6 @@ Style/RaiseArgs:
     - 'config/initializers/development_authentication.rb'
     - 'vendor/engines/dataprobe/lib/dataprobe/ipio.rb'
 
-# Offense count: 5
-# This cop supports safe autocorrection (--autocorrect).
-Style/RandomWithOffset:
-  Exclude:
-    - 'lib/tasks/demo_seed.rake'
-
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: Methods.
@@ -1610,43 +991,6 @@ Style/RedundantArgument:
     - 'app/models/order_import.rb'
     - 'vendor/engines/bulk_email/spec/services/bulk_email/recipient_searcher_spec.rb'
 
-# Offense count: 14
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantBegin:
-  Exclude:
-    - 'app/controllers/facility_notifications_controller.rb'
-    - 'app/controllers/facility_reservations_controller.rb'
-    - 'app/controllers/file_uploads_controller.rb'
-    - 'app/controllers/order_details_controller.rb'
-    - 'app/controllers/order_statuses_controller.rb'
-    - 'app/controllers/orders_controller.rb'
-    - 'app/controllers/reservations_controller.rb'
-    - 'app/controllers/transactions_controller.rb'
-    - 'app/models/order_status.rb'
-    - 'app/services/order_row_importer.rb'
-    - 'app/services/reservation_creator.rb'
-    - 'app/support/order_uncanceler.rb'
-    - 'app/validators/account_validator/validator_factory.rb'
-    - 'lib/tasks/db.rake'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowedMethods.
-# AllowedMethods: nonzero?
-Style/RedundantCondition:
-  Exclude:
-    - 'vendor/engines/saml_authentication/app/controllers/saml_authentication/sessions_controller.rb'
-    - 'vendor/engines/saml_authentication/lib/saml_authentication/devise_configurator.rb'
-
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantConstantBase:
-  Exclude:
-    - 'config/environments/production.rb'
-    - 'vendor/engines/ldap_authentication/spec/ldap_authentication/user_entry_spec.rb'
-    - 'vendor/engines/saml_authentication/spec/support/shared_contexts/saml_response_shared_context.rb'
-    - 'vendor/engines/sanger_sequencing/spec/rails_helper.rb'
-
 # Offense count: 3
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: SafeForConstants.
@@ -1654,25 +998,11 @@ Style/RedundantFetchBlock:
   Exclude:
     - 'config/puma.rb'
 
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantFileExtensionInRequire:
-  Exclude:
-    - 'config/environments/stage.rb'
-    - 'vendor/engines/saml_authentication/spec/lib/saml_authentication/saml_attributes_spec.rb'
-    - 'vendor/engines/saml_authentication/spec/lib/saml_authentication/user_locator_spec.rb'
-
 # Offense count: 1
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/RedundantFilterChain:
   Exclude:
     - 'app/helpers/products_helper.rb'
-
-# Offense count: 6
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantFreeze:
-  Exclude:
-    - 'app/models/order_status.rb'
 
 # Offense count: 2
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1680,68 +1010,6 @@ Style/RedundantInterpolation:
   Exclude:
     - 'spec/services/log_event_searcher_spec.rb'
     - 'spec/system/admin/managing_payment_sources_spec.rb'
-
-# Offense count: 4
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantParentheses:
-  Exclude:
-    - 'app/models/concerns/active_storage_file.rb'
-    - 'app/services/log_event_searcher.rb'
-    - 'lib/tasks/demo_seed.rake'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantPercentQ:
-  Exclude:
-    - 'app/lib/active_record/connection_adapters/oracle_enhanced_adapter.rb'
-
-# Offense count: 6
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantRegexpArgument:
-  Exclude:
-    - 'db/migrate/20120620181642_flatten_price_policy_foreign_keys.rb'
-    - 'spec/mailers/notifier_spec.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantRegexpEscape:
-  Exclude:
-    - 'app/services/nucore/database.rb'
-    - 'lib/tasks/update_old_survey_ids.rake'
-
-# Offense count: 10
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowMultipleReturnValues.
-Style/RedundantReturn:
-  Exclude:
-    - 'app/controllers/affiliates_controller.rb'
-    - 'app/controllers/user_password_controller.rb'
-    - 'app/models/facility_account.rb'
-    - 'app/models/order_detail.rb'
-    - 'app/models/user.rb'
-
-# Offense count: 3
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantSelf:
-  Exclude:
-    - 'app/models/holiday.rb'
-    - 'app/models/order.rb'
-    - 'vendor/engines/ldap_authentication/lib/ldap_authentication/user_entry.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Style/RedundantStringEscape:
-  Exclude:
-    - 'config/routes.rb'
-    - 'spec/support/matchers/sql_matchers.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, AllowInnerSlashes.
-# SupportedStyles: slashes, percent_r, mixed
-Style/RegexpLiteral:
-  Exclude:
-    - 'app/helpers/translation_helper.rb'
 
 # Offense count: 20
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1770,16 +1038,6 @@ Style/SelectByRegexp:
   Exclude:
     - 'vendor/engines/sanger_sequencing/app/models/sanger_sequencing/batch_form.rb'
 
-# Offense count: 6
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowAsExpressionSeparator.
-Style/Semicolon:
-  Exclude:
-    - 'app/models/order.rb'
-    - 'lib/tasks/price_policies.rake'
-    - 'spec/controllers/reports/general_reports_controller_spec.rb'
-    - 'spec/controllers/reports/instrument_reports_controller_spec.rb'
-
 # Offense count: 4
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Style/SingleArgumentDig:
@@ -1793,25 +1051,6 @@ Style/SlicingWithRange:
   Exclude:
     - 'spec/controllers/reports/instrument_day_reports_controller_spec.rb'
     - 'vendor/engines/secure_rooms/spec/models/reports/export_raw_spec.rb'
-
-# Offense count: 15
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: AllowModifier.
-Style/SoleNestedConditional:
-  Exclude:
-    - 'app/controllers/orders_controller.rb'
-    - 'app/lib/ability.rb'
-    - 'app/models/email_event.rb'
-    - 'app/models/journal_creation_reminder.rb'
-    - 'app/models/order_detail.rb'
-    - 'app/services/order_details/param_updater.rb'
-    - 'app/support/reservations/validations.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/StderrPuts:
-  Exclude:
-    - 'spec/rails_helper.rb'
 
 # Offense count: 15
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -1830,47 +1069,16 @@ Style/StringConcatenation:
     - 'vendor/engines/bulk_email/spec/controllers/bulk_email/bulk_email_controller_spec.rb'
     - 'vendor/engines/split_accounts/app/models/split_accounts/reports/export_raw_transformer.rb'
 
-# Offense count: 10
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle.
-# SupportedStyles: single_quotes, double_quotes
-Style/StringLiteralsInInterpolation:
-  Exclude:
-    - 'app/services/research_safety_adapters/scishield_api_adapter.rb'
-    - 'lib/tasks/schedule_rules.rake'
-    - 'spec/controllers/facility_accounts_reconciliation_controller_spec.rb'
-    - 'spec/controllers/facility_statements_controller_spec.rb'
-    - 'spec/models/order_import_csv_spec.rb'
-    - 'spec/system/cross_core_orders_spec.rb'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-Style/SuperArguments:
-  Exclude:
-    - 'app/models/concerns/active_storage_file.rb'
-
-# Offense count: 2
-# This cop supports safe autocorrection (--autocorrect).
-Style/SuperWithArgsParentheses:
-  Exclude:
-    - 'vendor/engines/secure_rooms/app/models/secure_rooms/user_extension.rb'
-
-# Offense count: 3
+# Offense count: 5
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: AllowMethodsWithArguments, AllowedMethods, AllowedPatterns, AllowComments.
 # AllowedMethods: define_method, mail, respond_to
 Style/SymbolProc:
   Exclude:
+    - 'app/controllers/price_group_products_controller.rb'
     - 'app/controllers/user_accounts_controller.rb'
+    - 'app/services/price_policy_builder.rb'
     - 'lib/tasks/backfill_billable_minutes.rake'
-
-# Offense count: 1
-# This cop supports safe autocorrection (--autocorrect).
-# Configuration parameters: EnforcedStyle, AllowSafeAssignment.
-# SupportedStyles: require_parentheses, require_no_parentheses, require_parentheses_when_complex
-Style/TernaryParentheses:
-  Exclude:
-    - 'vendor/engines/sanger_sequencing/app/presenters/sanger_sequencing/well_plate_presenter.rb'
 
 # Offense count: 6
 # This cop supports unsafe autocorrection (--autocorrect-all).

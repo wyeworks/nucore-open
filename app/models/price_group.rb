@@ -13,16 +13,16 @@ class PriceGroup < ApplicationRecord
   has_many   :account_price_group_members, class_name: "AccountPriceGroupMember"
   has_many   :price_group_discounts, dependent: :destroy
 
-  validates_presence_of   :facility_id, unless: :global?
-  validates_presence_of   :name
-  validates_uniqueness_of :name, scope: :facility_id, case_sensitive: false, unless: :deleted_at?
+  validates :facility_id, presence: { unless: :global? }
+  validates :name, presence: true
+  validates :name, uniqueness: { scope: :facility_id, case_sensitive: false, unless: :deleted_at? }
 
   default_scope -> { order(is_internal: :desc, display_order: :asc, name: :asc) }
 
   before_destroy { throw :abort if global? }
   before_destroy { price_policies.destroy_all } # Cannot be a dependent: :destroy because of ordering of callbacks
   before_create  ->(o) { o.display_order = 999 unless o.facility_id.nil? }
-  before_update  :update_hidden_price_group_policies, if: :will_save_change_to_is_hidden? && :is_hidden
+  before_update  :update_hidden_price_group_policies, if: :is_hidden
 
   scope :for_facility, ->(facility) { where(facility_id: [nil, facility.id]) }
   scope :globals, -> { where(facility_id: nil) }

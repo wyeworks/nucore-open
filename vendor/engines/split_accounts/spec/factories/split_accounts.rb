@@ -10,7 +10,7 @@ FactoryBot.define do
 
     sequence(:account_number) { |n| "account_number_#{n}" }
     sequence(:description) { |n| "split account #{n}" }
-    expires_at { Time.current + 1.month }
+    expires_at { 1.month.from_now }
     created_by { 0 }
 
     trait :with_three_splits do

@@ -59,22 +59,22 @@ module SangerSequencing
 
     def submissions_in_correct_facility
       incorrect_facilities = batch.submissions.reject { |s| s.facility == batch.facility }
-      if incorrect_facilities.any?
-        errors.add(:submission_ids, :invalid_facility, id: incorrect_facilities.map(&:id).join(", "))
-      end
+      return unless incorrect_facilities.any?
+
+      errors.add(:submission_ids, :invalid_facility, id: incorrect_facilities.map(&:id).join(", "))
     end
 
     def submission_part_of_other_batch
       changed = Submission.where(id: batch.submission_ids).where.not(batch: nil).pluck(:id)
-      if changed.any?
-        errors.add(:submission_ids, :submission_part_of_other_batch, id: changed.join(", "))
-      end
+      return unless changed.any?
+
+      errors.add(:submission_ids, :submission_part_of_other_batch, id: changed.join(", "))
     end
 
     def samples_must_match_submissions
-      unless submitted_sample_ids.to_set == sample_ids_from_submissions.to_set
-        errors.add(:submitted_sample_ids, :must_match_submissions)
-      end
+      return if submitted_sample_ids.to_set == sample_ids_from_submissions.to_set
+
+      errors.add(:submitted_sample_ids, :must_match_submissions)
     end
 
     def sample_ids_from_submissions

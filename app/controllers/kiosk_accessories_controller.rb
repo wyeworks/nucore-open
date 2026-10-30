@@ -50,7 +50,7 @@ class KioskAccessoriesController < ApplicationController
     @order_details = accessorizer.build_order_details_from(params[:kiosk_accessories])
     @switch = params[:switch]
     flash.now[:error] = message
-    render :new, status: 406, layout: false
+    render :new, status: :not_acceptable, layout: false
   end
 
   def update_accessories

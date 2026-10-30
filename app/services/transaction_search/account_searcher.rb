@@ -12,9 +12,7 @@ module TransactionSearch
       accounts = accounts_relation.where(
         id: order_details.distinct.select(:account_id),
       )
-      if account_ids
-        accounts = accounts.or(Account.where(id: account_ids))
-      end
+      accounts = accounts.or(Account.where(id: account_ids)) if account_ids
 
       accounts
     end

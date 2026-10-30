@@ -2,7 +2,7 @@
 
 module Products
   class UserNoteMode
-    VALID_MODES = %w(hidden optional required).freeze
+    VALID_MODES = %w[hidden optional required].freeze
 
     attr_reader :raw_value
 

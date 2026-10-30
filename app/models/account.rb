@@ -65,8 +65,8 @@ class Account < ApplicationRecord
     where(id: OrderDetail.for_facility(facility).select(:account_id).distinct)
   }
 
-  validates_presence_of :account_number, :description, :expires_at, :created_by, :type
-  validates_length_of :description, maximum: 50
+  validates :account_number, :description, :expires_at, :created_by, :type, presence: true
+  validates :description, length: { maximum: 50 }
 
   validate { errors.add(:base, :missing_owner) if missing_owner? }
 
@@ -145,9 +145,7 @@ class Account < ApplicationRecord
   end
 
   # A collection of users to be notified when transaction notifications are sent.
-  def administrators
-    account_users.administrators
-  end
+  delegate :administrators, to: :account_users
 
   # If desired, override this in a subclass with the `User` who auto-disputes
   # transactions of the given account type. For example, this happens with
@@ -188,7 +186,7 @@ class Account < ApplicationRecord
   end
 
   def suspended?
-    !suspended_at.blank?
+    suspended_at.present?
   end
 
   def expired?

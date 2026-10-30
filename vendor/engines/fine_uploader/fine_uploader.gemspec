@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path("../lib", __FILE__)
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 
 # Maintain your gem's version:
 require "fine_uploader/version"
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.license     = "MIT"
 
   s.files = Dir["{lib,vendor}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
-  s.test_files = Dir["test/**/*"]
 
   s.add_dependency "rails", ">= 4.2.6"
+  s.metadata["rubygems_mfa_required"] = "true"
 end

@@ -37,15 +37,15 @@ class FacilityUsersController < ApplicationController
   def map_user
     @user = User.find(params[:facility_user_id])
 
-    if request.post?
-      begin
-        @user_role = UserRole.grant(@user, params[:user_role][:role], current_facility)
-        LogEvent.log(@user_role, :create, current_user)
-        redirect_to facility_facility_users_url
-      rescue ActiveRecord::RecordInvalid => e
-        flash.now[:alert] = e.message
-        render action: "map_user"
-      end
+    return unless request.post?
+
+    begin
+      @user_role = UserRole.grant(@user, params[:user_role][:role], current_facility)
+      LogEvent.log(@user_role, :create, current_user)
+      redirect_to facility_facility_users_url
+    rescue ActiveRecord::RecordInvalid => e
+      flash.now[:alert] = e.message
+      render action: "map_user"
     end
   end
 end

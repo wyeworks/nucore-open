@@ -3,12 +3,12 @@
 class BudgetedChartString < ApplicationRecord
   include Nucore::Database::DateHelper
 
-  validates_presence_of :fund, :dept, :starts_at, :expires_at
-  validates_length_of   :fund, is: 3
-  validates_length_of   :dept, is: 7
-  validates_length_of   :project, is: 8, allow_blank: true
-  validates_length_of   :activity, is: 2, allow_blank: true
-  validates_length_of   :account, is: 5, allow_blank: true
+  validates :fund, :dept, :starts_at, :expires_at, presence: true
+  validates   :fund, length: { is: 3 }
+  validates   :dept, length: { is: 7 }
+  validates   :project, length: { is: 8, allow_blank: true }
+  validates   :activity, length: { is: 2, allow_blank: true }
+  validates   :account, length: { is: 5, allow_blank: true }
 
   def self.import(filename)
     file = begin
@@ -21,7 +21,6 @@ class BudgetedChartString < ApplicationRecord
       return
     end
 
-    deleted   = count
     imported  = 0
     skipped   = 0
     invalid   = 0
@@ -34,17 +33,16 @@ class BudgetedChartString < ApplicationRecord
       begin
         # add testing/place holder records
         BudgetedChartString.create(fund: "123", dept: "1234567", project: "12345678", account: "75340",
-                                   starts_at: Time.zone.now - 1.week, expires_at: Time.zone.now + 1.year)
+                                   starts_at: 1.week.ago, expires_at: 1.year.from_now)
         BudgetedChartString.create(fund: "123", dept: "1234567", project: "12345678", account: "50617",
-                                   starts_at: Time.zone.now - 1.week, expires_at: Time.zone.now + 1.year)
+                                   starts_at: 1.week.ago, expires_at: 1.year.from_now)
         BudgetedChartString.create(fund: "111", dept: "2222222", project: "33333333", account: "75340",
-                                   starts_at: Time.zone.now - 1.week, expires_at: Time.zone.now + 1.year)
+                                   starts_at: 1.week.ago, expires_at: 1.year.from_now)
         BudgetedChartString.create(fund: "111", dept: "2222222", project: "33333333", account: "50617",
-                                   starts_at: Time.zone.now - 1.week, expires_at: Time.zone.now + 1.year)
+                                   starts_at: 1.week.ago, expires_at: 1.year.from_now)
         while line = file.readline.strip
           # parse, import line
-          case
-          when /^\d{4,4}\|/.match?(line)
+          if /^\d{4,4}\|/.match?(line)
             # chart string with fiscal year
             tokens = line.split("|").map { |s| s.delete("-") }
             # build start_at, expires_at from fiscal year
@@ -57,7 +55,7 @@ class BudgetedChartString < ApplicationRecord
             project = tokens[3]
             activity = tokens[4]
             account = tokens[5]
-          when /\d{2,2}-[A-Z]{3,3}-\d{2,2}\|\d{2,2}-[A-Z]{3,3}-\d{2,2}$/.match?(line)
+          elsif /\d{2,2}-[A-Z]{3,3}-\d{2,2}\|\d{2,2}-[A-Z]{3,3}-\d{2,2}$/.match?(line)
             # chart string with start and expire dates
             tokens = line.split("|").map { |s| s.delete("-") }
             # parse fields
@@ -75,11 +73,11 @@ class BudgetedChartString < ApplicationRecord
           end
           bcs = BudgetedChartString.create(fund:, dept:, project:, activity:, account:,
                                            starts_at:, expires_at:)
-          if !bcs.valid?
+          if bcs.valid?
+            imported += 1
+          else
             puts "error: invalid account - #{line}"
             invalid += 1
-          else
-            imported += 1
           end
         end
       rescue EOFError

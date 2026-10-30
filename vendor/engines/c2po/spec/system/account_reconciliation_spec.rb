@@ -78,9 +78,7 @@ RSpec.describe "Account Reconciliation", :js, feature_setting: { "billing.two_ti
 
       # ensure the closed by times show up on the statement history page
       click_link "#{I18n.t('Statement')} History"
-      unless ViewHook.find("shared.statements_table", "statement_table_column_data").any?
-        expect(page).to have_content(statement.closed_by_times.first)
-      end
+      expect(page).to have_content(statement.closed_by_times.first) unless ViewHook.find("shared.statements_table", "statement_table_column_data").any?
     end
 
     context "with bulk reconciliation note" do
@@ -162,9 +160,7 @@ RSpec.describe "Account Reconciliation", :js, feature_setting: { "billing.two_ti
 
       # ensure the closed by times show up on the statement history page
       click_link "#{I18n.t('Statement')} History"
-      unless ViewHook.find("shared.statements_table", "statement_table_column_data").any?
-        expect(page).to have_content(statement.closed_by_times.first)
-      end
+      expect(page).to have_content(statement.closed_by_times.first) unless ViewHook.find("shared.statements_table", "statement_table_column_data").any?
     end
 
     it "can take a bulk reconciliation note" do

@@ -17,7 +17,7 @@ module ReportSpecHelper
       @params = {
         facility_id: @authable.url_name,
         date_start: Time.zone.now.to_date.iso8601,
-        date_end: (Time.zone.now + 1.year).to_date.iso8601,
+        date_end: 1.year.from_now.to_date.iso8601,
         report_by: @report_by,
       }
 
@@ -113,32 +113,32 @@ module ReportSpecHelper
     is_expected.to respond_with :success
   end
 
-  def assert_report_rendered(tab_index, label, &report_on)
+  def assert_report_rendered(tab_index, label, &)
     assert_report_params_init
-    expect(assigns :headers).to eq report_headers(label)
-    expect(assigns :selected_index).to eq tab_index
+    expect(assigns(:headers)).to eq report_headers(label)
+    expect(assigns(:selected_index)).to eq tab_index
 
     format = @params[:format] || :html
 
     case format
     when :html
-      assert_report_rendered_html(label, &report_on)
+      assert_report_rendered_html(label, &)
     when :csv
-      assert_report_rendered_csv(label, &report_on)
+      assert_report_rendered_csv(label, &)
     end
   end
 
-  def assert_report_rendered_html(label, &report_on)
+  def assert_report_rendered_html(label, &)
     if @method == :xhr
-      assert_report_init label, &report_on
+      assert_report_init(label, &)
       is_expected.to render_template "reports/report_table"
     else
       is_expected.to render_template "reports/report"
     end
   end
 
-  def assert_report_rendered_csv(label, &report_on)
-    assert_report_init label, &report_on
+  def assert_report_rendered_csv(label, &)
+    assert_report_init(label, &)
     assert_report_download_rendered "#{@params[:report_by]}_report"
   end
 end

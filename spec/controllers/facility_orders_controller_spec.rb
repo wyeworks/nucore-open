@@ -91,7 +91,7 @@ RSpec.describe FacilityOrdersController do
       before :each do
         maybe_grant_always_sign_in :director
       end
-      %w(order_number date product assigned_to status).each do |sort|
+      %w[order_number date product assigned_to status].each do |sort|
         it "should not blow up for sort by #{sort}" do
           @params[:sort] = sort
           do_request
@@ -105,7 +105,7 @@ RSpec.describe FacilityOrdersController do
         # setup_reservation overwrites @order_detail
         @order_detail_item = @order_detail
         @order_detail_reservation = setup_reservation(@authable, @account, @director)
-        @reservation = place_reservation(@authable, @order_detail_reservation, Time.zone.now + 1.hour)
+        @reservation = place_reservation(@authable, @order_detail_reservation, 1.hour.from_now)
 
         expect(@authable.reload.order_details).to contain_all [@order_detail_item, @order_detail_reservation]
         do_request
@@ -543,7 +543,7 @@ RSpec.describe FacilityOrdersController do
       expect(merge_order.account_id).to eq(original_order.account_id)
       expect(merge_order.user_id).to eq(original_order.user_id)
       expect(merge_order.created_by).to eq(@director.id)
-      expect(merge_order.order_details).to be { |od| od.ordered_at.blank? }
+      expect(merge_order.order_details).to(be { |od| od.ordered_at.blank? })
       expect(merge_order.order_details.size).to eq(detail_count)
       expect(MergeNotification.count).to eq(detail_count)
       assert_update_success merge_order, product
@@ -564,7 +564,7 @@ RSpec.describe FacilityOrdersController do
         order_detail
       end
 
-      @params.merge!(tabs: %w(new_or_in_process_orders problem_order_details))
+      @params.merge!(tabs: %w[new_or_in_process_orders problem_order_details])
     end
 
     it_should_allow_operators_only {}
@@ -587,7 +587,7 @@ RSpec.describe FacilityOrdersController do
         do_request
         expect(response).to be_successful
         body = JSON.parse(response.body)
-        expect(body.keys).to contain_all %w(new_or_in_process_orders problem_order_details)
+        expect(body.keys).to contain_all %w[new_or_in_process_orders problem_order_details]
         expect(body["new_or_in_process_orders"]).to eq(2)
         expect(body["problem_order_details"]).to eq(3)
       end

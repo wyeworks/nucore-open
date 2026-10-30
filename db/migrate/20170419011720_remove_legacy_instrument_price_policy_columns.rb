@@ -2,13 +2,13 @@
 
 class RemoveLegacyInstrumentPricePolicyColumns < ActiveRecord::Migration[4.2]
   COLUMNS = {
-    usage_mins: [:integer, after: :usage_rate],
-    reservation_rate: [:decimal, precision: 12, scale: 4, after: :usage_mins],
-    reservation_subsidy: [:decimal, precision: 10, scale: 2, after: :usage_subsidy],
-    reservation_mins: [:integer, after: :reservation_rate],
-    overage_rate: [:decimal, precision: 12, scale: 4, after: :reservation_mins],
-    overage_subsidy: [:decimal, precision: 10, scale: 2, after: :reservation_subsidy],
-    overage_mins: [:integer, after: :overage_rate],
+    usage_mins: [:integer, { after: :usage_rate }],
+    reservation_rate: [:decimal, { precision: 12, scale: 4, after: :usage_mins }],
+    reservation_subsidy: [:decimal, { precision: 10, scale: 2, after: :usage_subsidy }],
+    reservation_mins: [:integer, { after: :reservation_rate }],
+    overage_rate: [:decimal, { precision: 12, scale: 4, after: :reservation_mins }],
+    overage_subsidy: [:decimal, { precision: 10, scale: 2, after: :reservation_subsidy }],
+    overage_mins: [:integer, { after: :overage_rate }],
   }.freeze
 
   def up

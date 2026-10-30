@@ -39,7 +39,7 @@ class InitialSchema < ActiveRecord::Migration[4.2]
       t.integer "rgt",                       precision: 38, scale: 0
     end
 
-    add_index "order_statuses", %w(facility_id parent_id name), unique: true
+    add_index "order_statuses", %w[facility_id parent_id name], unique: true
 
     create_table "price_group_members" do |t|
       t.string  "type", limit: 50, null: false
@@ -53,7 +53,7 @@ class InitialSchema < ActiveRecord::Migration[4.2]
       t.string  "name", limit: 50, null: false
     end
 
-    add_index "price_groups", %w(facility_id name), unique: true
+    add_index "price_groups", %w[facility_id name], unique: true
 
     create_table "price_policies" do |t|
       t.string   "type", limit: 50, null: false
@@ -96,7 +96,7 @@ class InitialSchema < ActiveRecord::Migration[4.2]
       t.string   "unit_size"
     end
 
-    add_index "products", %w(relay_ip relay_port), unique: true
+    add_index "products", %w[relay_ip relay_port], unique: true
 
     create_table "schedule_rules" do |t|
       t.integer "instrument_id",    precision: 38, scale: 0, null: false

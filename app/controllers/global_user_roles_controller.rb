@@ -16,26 +16,17 @@ class GlobalUserRolesController < GlobalSettingsController
     end
   end
 
-  def destroy
-    destroy_all_global_roles
+  def edit
+    return unless @user == current_user
+
+    flash[:error] = translate("self_not_allowed", action: "change")
     redirect_to global_user_roles_url
   end
 
-  def edit
-    if @user == current_user
-      flash[:error] = translate("self_not_allowed", action: "change")
-      redirect_to global_user_roles_url
-    end
-  end
-
-  def search
-  end
-
   def update
-    case
-    when params[:roles].blank?
+    if params[:roles].blank?
       destroy_all_global_roles
-    when @user == current_user
+    elsif @user == current_user
       flash[:error] = translate("self_not_allowed", action: "change")
     else
       assign_global_roles!
@@ -45,6 +36,14 @@ class GlobalUserRolesController < GlobalSettingsController
     flash[:error] = translate("update.failure", user: @user.username)
   ensure
     redirect_to global_user_roles_url
+  end
+
+  def destroy
+    destroy_all_global_roles
+    redirect_to global_user_roles_url
+  end
+
+  def search
   end
 
   private
@@ -64,10 +63,9 @@ class GlobalUserRolesController < GlobalSettingsController
   end
 
   def destroy_all_global_roles
-    case
-    when @user == current_user
+    if @user == current_user
       flash[:error] = translate("self_not_allowed", action: "remove")
-    when destroyed = @user.user_roles.global.destroy_all
+    elsif destroyed = @user.user_roles.global.destroy_all
       destroyed.each { |user_role| LogEvent.log(user_role, :delete, current_user) }
       flash[:notice] = translate("destroy.success", user: @user.username)
     else

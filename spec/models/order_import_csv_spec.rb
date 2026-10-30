@@ -24,7 +24,7 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
     describe "happy path" do
       let(:body) do
         <<~CSV
-          #{I18n.t("order_row_importer.headers.user")},#{I18n.t("Chart_string")},Product Name,Quantity,Order Date,Fulfillment Date,Note,Order,Reference ID
+          #{I18n.t('order_row_importer.headers.user')},#{I18n.t('Chart_string')},Product Name,Quantity,Order Date,Fulfillment Date,Note,Order,Reference ID
           sst123@example.com,#{account.account_number},Example Item,1,#{yesterday},#{yesterday},Add to 1,#{order.id},123456789
           sst123@example.com,#{account2.account_number},Example Item,1,#{yesterday},#{yesterday},Add to 2,#{order.id},123456000
           sst123@example.com,nonbillable,Nonbillable Item,1,#{yesterday},#{yesterday},Add to 3,#{order.id},123456700
@@ -109,7 +109,7 @@ RSpec.describe OrderImport, feature_setting: { "pricing.user_based_price_groups"
 
       it "does not add the billing-mode-mismatched product to the order" do
         expect { order_import.process_upload! }
-          .not_to change { nonbillable_order.reload.order_details.count }
+          .not_to(change { nonbillable_order.reload.order_details.count })
       end
 
       it "completes the import without raising" do

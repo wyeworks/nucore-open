@@ -16,7 +16,7 @@ class FacilityJournalsController < ApplicationController
   before_action :enable_sorting, only: :new
 
   layout lambda {
-    action_name.in?(%w(new)) ? "two_column_head" : "two_column"
+    action_name.in?(%w[new]) ? "two_column_head" : "two_column"
   }
 
   def initialize
@@ -28,6 +28,28 @@ class FacilityJournalsController < ApplicationController
   # GET /facilities/journals
   def index
     set_pending_journals if @journals.current_page == 1
+  end
+
+  # GET /facilities/journals/:id
+  def show
+    @journal_rows = @journal.journal_rows
+    @log_event = LogEvent.where(loggable_type: "Journal", loggable_id: @journal.id, event_type: "closed").last
+    respond_to do |format|
+      format.html {}
+
+      format.xml do
+        @filename = "journal_#{@journal.id}_#{@journal.created_at.strftime('%Y%m%d')}"
+        headers["Content-Disposition"] = "attachment; filename=\"#{@filename}.xml\""
+      end
+
+      format.xls { redirect_to @journal.download_url, allow_other_host: true }
+
+      # Fallback for other formats
+      format.any do
+        journal_format = Journals::JournalFormat.find(params[:format])
+        send_data journal_format.render(@journal), journal_format.options if journal_format
+      end
+    end
   end
 
   # GET /facilities/journals/new
@@ -66,31 +88,6 @@ class FacilityJournalsController < ApplicationController
     end
   end
 
-  # PUT /facilities/journals/:id
-  def update
-    @pending_journal = @journal
-
-    action = Journals::Closer.new(@pending_journal, params.fetch(:journal, empty_params).merge(updated_by: session_user.id))
-
-    if action.perform params[:journal_status]
-      flash[:notice] = I18n.t "controllers.facility_journals.update.notice"
-      LogEvent.log(@pending_journal, :closed, session_user)
-      redirect_to facility_journals_path(current_facility)
-    else
-      @order_details = OrderDetail.for_facility(current_facility).need_journal
-      set_earliest_journal_date
-      set_pending_journals
-
-      # move error messages for pending journal into the flash
-      if @pending_journal.errors.any?
-        flash.now[:error] = @journal.errors.full_messages.join("<br/>").html_safe
-      end
-
-      @earliest_journal_date = params[:journal_date] || @earliest_journal_date
-      render action: :index
-    end
-  end
-
   # POST /facilities/journals
   def create
     raise ActiveRecord::RecordNotFound if current_facility.cross_facility?
@@ -123,25 +120,26 @@ class FacilityJournalsController < ApplicationController
     end
   end
 
-  # GET /facilities/journals/:id
-  def show
-    @journal_rows = @journal.journal_rows
-    @log_event = LogEvent.where(loggable_type: "Journal", loggable_id: @journal.id, event_type: "closed").last
-    respond_to do |format|
-      format.html {}
+  # PUT /facilities/journals/:id
+  def update
+    @pending_journal = @journal
 
-      format.xml do
-        @filename = "journal_#{@journal.id}_#{@journal.created_at.strftime('%Y%m%d')}"
-        headers["Content-Disposition"] = "attachment; filename=\"#{@filename}.xml\""
-      end
+    action = Journals::Closer.new(@pending_journal, params.fetch(:journal, empty_params).merge(updated_by: session_user.id))
 
-      format.xls { redirect_to @journal.download_url, allow_other_host: true }
+    if action.perform params[:journal_status]
+      flash[:notice] = I18n.t "controllers.facility_journals.update.notice"
+      LogEvent.log(@pending_journal, :closed, session_user)
+      redirect_to facility_journals_path(current_facility)
+    else
+      @order_details = OrderDetail.for_facility(current_facility).need_journal
+      set_earliest_journal_date
+      set_pending_journals
 
-      # Fallback for other formats
-      format.any do
-        journal_format = Journals::JournalFormat.find(params[:format])
-        send_data journal_format.render(@journal), journal_format.options if journal_format
-      end
+      # move error messages for pending journal into the flash
+      flash.now[:error] = @journal.errors.full_messages.join("<br/>").html_safe if @pending_journal.errors.any?
+
+      @earliest_journal_date = params[:journal_date] || @earliest_journal_date
+      render action: :index
     end
   end
 
@@ -150,9 +148,7 @@ class FacilityJournalsController < ApplicationController
   end
 
   def unreconcile
-    unless SettingsHelper.feature_on?("billing.allow_mass_unreconciling")
-      raise CanCan::AccessDenied
-    end
+    raise CanCan::AccessDenied unless SettingsHelper.feature_on?("billing.allow_mass_unreconciling")
 
     authorize! :unreconcile, OrderDetail
 
@@ -176,9 +172,7 @@ class FacilityJournalsController < ApplicationController
 
     if count > 0
       flash[:notice] = I18n.t("controllers.facility_journals.#{action}.success", count:)
-      if reconciler.full_errors.any?
-        flash[:error] = reconciler.full_errors.join("<br />").html_safe
-      end
+      flash[:error] = reconciler.full_errors.join("<br />").html_safe if reconciler.full_errors.any?
     elsif reconciler.full_errors.any?
       flash[:error] = reconciler.full_errors.join("<br />").html_safe
     else

@@ -262,7 +262,7 @@ def grant_role(user, authable = nil)
 end
 
 def grant_and_sign_in(user)
-  grant_role(user) unless user == @guest || user == @admin
+  grant_role(user) unless [@guest, @admin].include?(user)
   sign_in user
   user
 end

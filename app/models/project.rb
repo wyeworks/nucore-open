@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Project < ApplicationRecord
-  belongs_to :facility, foreign_key: :facility_id
+  belongs_to :facility
   has_many :order_details, inverse_of: :project
   has_many :orders, inverse_of: :cross_core_project, foreign_key: :cross_core_project_id
 
@@ -38,7 +38,7 @@ class Project < ApplicationRecord
   # This returns the total cost using actual cost if the order has it, otherwise
   # uses the estimated cost.
   def total_cost
-    order_details.inject(0) { |sum, od| sum += od.total }
+    order_details.inject(0) { |sum, od| sum + od.total }
   end
 
   def cross_core?

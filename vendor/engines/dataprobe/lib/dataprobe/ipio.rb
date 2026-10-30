@@ -36,12 +36,12 @@ module Dataprobe
 
     private
 
-    def with_connection(&block)
+    def with_connection(&)
       socket = Socket.tcp(ip, port, connect_timeout: CONNECT_TIMEOUT)
       write(socket, "hello-000\x00")
       sequence_number = read(socket, 2).unpack("s<")
       sequence_number[0] += 1
-      block.call(socket, sequence_number.pack("s<"))
+      yield(socket, sequence_number.pack("s<"))
     ensure
       raise Dataprobe::Error.new("Network error while communicating with relay") if socket.nil?
 

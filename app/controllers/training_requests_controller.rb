@@ -10,6 +10,13 @@ class TrainingRequestsController < ApplicationController
 
   load_and_authorize_resource
 
+  # GET /facilities/:facility_id/training_requests
+  def index
+    @training_requests = current_facility.training_requests.includes(:product, :user).order(sort_clause)
+
+    render layout: "two_column"
+  end
+
   # GET /facilities/:facility_id/products/:product_id/training_requests/new
   def new
     load_product
@@ -21,26 +28,19 @@ class TrainingRequestsController < ApplicationController
     @training_request = TrainingRequest.new(user: current_user, product: @product)
     if @training_request.save
       trigger_email_to_facility_staff
-      flash[:notice] = t("training_requests.create.success", product: @product)
+      flash[:notice] = t(".success", product: @product)
     else
-      flash[:error] = t("training_requests.create.failure", product: @product)
+      flash[:error] = t(".failure", product: @product)
     end
     redirect_to facility_path(current_facility)
-  end
-
-  # GET /facilities/:facility_id/training_requests
-  def index
-    @training_requests = current_facility.training_requests.includes(:product, :user).order(sort_clause)
-
-    render layout: "two_column"
   end
 
   # DELETE /facilities/:facility_id/training_requests/:id
   def destroy
     if @training_request.destroy
-      flash[:notice] = t("training_requests.destroy.success", **flash_arguments)
+      flash[:notice] = t(".success", **flash_arguments)
     else
-      flash[:error] = t("training_requests.destroy.failure", **flash_arguments)
+      flash[:error] = t(".failure", **flash_arguments)
     end
     redirect_to facility_training_requests_path(current_facility)
   end

@@ -98,9 +98,7 @@ class AccountBuilder
   def account_params_for_build
     common_params = [:account_number]
 
-    if SettingsHelper.feature_on?("accounts.show_account_price_groups_tab")
-      common_params << { price_groups_relation_ids: [] }
-    end
+    common_params << { price_groups_relation_ids: [] } if SettingsHelper.feature_on?("accounts.show_account_price_groups_tab")
 
     self.class.common_permitted_account_params + common_params
   end
@@ -137,9 +135,9 @@ class AccountBuilder
   # ActionController::RoutingError if the account type is invalid.
   def validate_account_type!
     valid_account_types = Account.config.account_types_for_facility(facility, action)
-    unless valid_account_types.include?(account_type)
-      raise ActionController::RoutingError, "invalid account_type"
-    end
+    return if valid_account_types.include?(account_type)
+
+    raise ActionController::RoutingError, "invalid account_type"
   end
 
   # Creates a new account object given an account type.
@@ -189,9 +187,7 @@ class AccountBuilder
     return unless account.per_facility?
 
     facility_ids = [facility&.id.presence].compact
-    if facility_ids.empty? && Account.config.globally_managed?(account.type)
-      facility_ids = account_facilities_param.to_h[:facility_ids]
-    end
+    facility_ids = account_facilities_param.to_h[:facility_ids] if facility_ids.empty? && Account.config.globally_managed?(account.type)
 
     facility_ids&.compact_blank!
 
@@ -218,8 +214,6 @@ class AccountBuilder
 
   def affiliate
     @affiliate ||=
-      if account.class.using_affiliate? && account_params.key?(:affiliate_id)
-        Affiliate.find_by(id: account_params[:affiliate_id])
-      end
+      (Affiliate.find_by(id: account_params[:affiliate_id]) if account.class.using_affiliate? && account_params.key?(:affiliate_id))
   end
 end

@@ -7,5 +7,5 @@
 # checks this model before falling back to check with the Scishield API, allowing
 # safety training checks to work even when the Scishield API is down
 class ScishieldTraining < ApplicationRecord
-  validates_presence_of :user_id, :course_name
+  validates :user_id, :course_name, presence: true
 end

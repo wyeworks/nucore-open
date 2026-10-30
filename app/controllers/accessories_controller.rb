@@ -26,7 +26,7 @@ class AccessoriesController < ApplicationController
       flash[:notice] = t("controllers.accessories.create.success", accessories: helpers.pluralize(update_data.persisted_count, "accessory"))
       respond_success
     else
-      render :new, status: 406
+      render :new, status: :not_acceptable
     end
   end
 

@@ -346,9 +346,7 @@ RSpec.describe OrderImport, :time_travel do
         allow(ActiveSupport::Notifications).to receive(:instrument).and_call_original
         expect(ActiveSupport::Notifications).to receive(:instrument).with("background_error", anything).and_call_original
 
-        if SettingsHelper.feature_on?(:active_storage)
-          expect(ActiveSupport::Notifications).to receive(:instrument).with("service_upload.active_storage", anything).and_call_original
-        end
+        expect(ActiveSupport::Notifications).to receive(:instrument).with("service_upload.active_storage", anything).and_call_original if SettingsHelper.feature_on?(:active_storage)
 
         import.process_upload!
       end

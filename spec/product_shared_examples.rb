@@ -90,14 +90,14 @@ RSpec.shared_examples_for "NonReservationProduct" do |product_type|
         expect(product.cheapest_price_policy(order_detail, 2.days.ago)).to eq(pp_past_group1)
       end
       it "should ignore the current price policies" do
-        pp_current_group1 = make_price_policy(unit_cost: 2, price_group:, start_date: 1.day.ago, expire_date: 1.day.from_now)
-        pp_current_group2 = make_price_policy(unit_cost: 5, price_group: price_group2, start_date: 1.day.ago, expire_date: 1.day.from_now)
+        make_price_policy(unit_cost: 2, price_group:, start_date: 1.day.ago, expire_date: 1.day.from_now)
+        make_price_policy(unit_cost: 5, price_group: price_group2, start_date: 1.day.ago, expire_date: 1.day.from_now)
 
         expect(product.cheapest_price_policy(order_detail, 2.days.ago)).to eq(pp_past_group1)
       end
       it "should still find the cheapest current if no date" do
         pp_current_group1 = make_price_policy(unit_cost: 2, price_group:, start_date: 1.day.ago, expire_date: 1.day.from_now)
-        pp_current_group2 = make_price_policy(unit_cost: 5, price_group: price_group2, start_date: 1.day.ago, expire_date: 1.day.from_now)
+        make_price_policy(unit_cost: 5, price_group: price_group2, start_date: 1.day.ago, expire_date: 1.day.from_now)
 
         expect(product.cheapest_price_policy(order_detail, Time.zone.now)).to eq(pp_current_group1)
       end
@@ -192,14 +192,14 @@ RSpec.shared_examples_for "ReservationProduct" do |product_type|
         expect(product.cheapest_price_policy(order_detail, 2.days.ago)).to eq(pp_past_group1)
       end
       it "should ignore the current price policies" do
-        pp_current_group1 = make_price_policy(usage_rate: 2, price_group:, start_date: 1.day.ago, expire_date: 1.day.from_now)
-        pp_current_group2 = make_price_policy(usage_rate: 5, price_group: price_group2, start_date: 1.day.ago, expire_date: 1.day.from_now)
+        make_price_policy(usage_rate: 2, price_group:, start_date: 1.day.ago, expire_date: 1.day.from_now)
+        make_price_policy(usage_rate: 5, price_group: price_group2, start_date: 1.day.ago, expire_date: 1.day.from_now)
 
         expect(product.cheapest_price_policy(order_detail, 2.days.ago)).to eq(pp_past_group1)
       end
       it "should still find the cheapest current if no date" do
         pp_current_group1 = make_price_policy(usage_rate: 2, price_group:, start_date: 1.day.ago, expire_date: 1.day.from_now)
-        pp_current_group2 = make_price_policy(usage_rate: 5, price_group: price_group2, start_date: 1.day.ago, expire_date: 1.day.from_now)
+        make_price_policy(usage_rate: 5, price_group: price_group2, start_date: 1.day.ago, expire_date: 1.day.from_now)
 
         expect(product.cheapest_price_policy(order_detail, Time.zone.now)).to eq(pp_current_group1)
       end

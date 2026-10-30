@@ -20,7 +20,6 @@ class StatementsController < ApplicationController
 
   # GET /accounts/:account_id/statements/:id
   def show
-    action = "show"
     @active_tab = "accounts"
 
     respond_to do |format|

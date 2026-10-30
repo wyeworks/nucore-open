@@ -73,7 +73,7 @@ RSpec.describe SurveyResponse do
     it "updates the receiver quantity" do
       params[:quantity] += 3
       expect_any_instance_of(OrderDetail)
-        .to receive("quantity=".to_sym).with(params[:quantity]).and_call_original
+        .to receive(:quantity=).with(params[:quantity]).and_call_original
       receiver = survey_response.save!
       expect(receiver.receiver.quantity).to eq params[:quantity]
     end
@@ -81,7 +81,7 @@ RSpec.describe SurveyResponse do
     it "does not change the quantity if no quantity is given" do
       params[:quantity] = nil
       quantity = order_detail.quantity
-      expect_any_instance_of(OrderDetail).to_not receive "quantity=".to_sym
+      expect_any_instance_of(OrderDetail).to_not receive :quantity=
       receiver = survey_response.save!
       expect(receiver.receiver.quantity).to eq quantity
     end
@@ -129,16 +129,16 @@ RSpec.describe SurveyResponse do
     it "does not change the note, reference ID, and quantity when not present" do
       params[:order_detail] = {}
       params[:quantity] = nil
-      expect_any_instance_of(OrderDetail).to_not receive "quantity=".to_sym
-      expect_any_instance_of(OrderDetail).to_not receive "note=".to_sym
-      expect_any_instance_of(OrderDetail).to_not receive "reference_id=".to_sym
-      expect { survey_response.save! }.not_to change { order_detail.reload }
+      expect_any_instance_of(OrderDetail).to_not receive :quantity=
+      expect_any_instance_of(OrderDetail).to_not receive :note=
+      expect_any_instance_of(OrderDetail).to_not receive :reference_id=
+      expect { survey_response.save! }.not_to(change { order_detail.reload })
     end
 
     it "updates quantity when order_detail params not present" do
       params[:order_detail] = {}
       params[:quantity] += 2
-      expect { survey_response.save! }.to change { order_detail.reload.quantity }
+      expect { survey_response.save! }.to(change { order_detail.reload.quantity })
     end
   end
 end

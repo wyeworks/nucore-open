@@ -29,11 +29,9 @@ module SplitAccounts
 
     config.to_prepare do
       # Include modules in main rails app
-      Account.send :include, SplitAccounts::AccountExtension
+      Account.include SplitAccounts::AccountExtension
 
-      if SettingsHelper.feature_on?("accounts.split_accounts")
-        SplitAccounts::Engine.enable!
-      end
+      SplitAccounts::Engine.enable! if SettingsHelper.feature_on?("accounts.split_accounts")
     end
 
     # Include migrations in main rails app
@@ -46,9 +44,7 @@ module SplitAccounts
 
     # Include factories in main rails app
     initializer "model_core.factories", after: "factory_bot.set_factory_paths" do
-      if defined?(FactoryBot)
-        FactoryBot.definition_file_paths << File.expand_path("../../../spec/factories", __FILE__)
-      end
+      FactoryBot.definition_file_paths << File.expand_path("../../spec/factories", __dir__) if defined?(FactoryBot)
     end
 
     initializer "split_accounts.assets.precompile" do |app|

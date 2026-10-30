@@ -6,22 +6,20 @@ class OrderStatus < ApplicationRecord
   belongs_to :parent, class_name: "OrderStatus", optional: true
   has_many :children, class_name: "OrderStatus", foreign_key: :parent_id
 
-  validates_presence_of :name
-  validates_uniqueness_of :name, scope: [:parent_id, :facility_id], case_sensitive: false
+  validates :name, presence: true
+  validates :name, uniqueness: { scope: [:parent_id, :facility_id], case_sensitive: false }
   validates_each :parent_id do |model, attr, value|
-    begin
-      model.errors.add(attr, "must be a root") unless value.nil? || OrderStatus.unscoped.find(value).root?
-    rescue => e
-      model.errors.add(attr, "must be a valid root")
-    end
+    model.errors.add(attr, "must be a root") unless value.nil? || OrderStatus.unscoped.find(value).root?
+  rescue
+    model.errors.add(attr, "must be a valid root")
   end
 
-  NEW = "New".freeze
-  IN_PROCESS = "In Process".freeze
-  CANCELED = "Canceled".freeze
-  COMPLETE = "Complete".freeze
-  RECONCILED = "Reconciled".freeze
-  UNRECOVERABLE = "Unrecoverable".freeze
+  NEW = "New"
+  IN_PROCESS = "In Process"
+  CANCELED = "Canceled"
+  COMPLETE = "Complete"
+  RECONCILED = "Reconciled"
+  UNRECOVERABLE = "Unrecoverable"
 
   ROOT_STATUS_ORDER = [NEW, IN_PROCESS, CANCELED, COMPLETE, RECONCILED, UNRECOVERABLE].freeze
 
@@ -123,9 +121,7 @@ class OrderStatus < ApplicationRecord
       statuses = new_status.self_and_descendants
                            .or(in_process.self_and_descendants)
 
-      if SettingsHelper.feature_on?("products.item_initial_order_status_complete") && product.is_a?(Item)
-        statuses = statuses.or(complete.self_and_descendants)
-      end
+      statuses = statuses.or(complete.self_and_descendants) if SettingsHelper.feature_on?("products.item_initial_order_status_complete") && product.is_a?(Item)
 
       statuses.for_facility(facility).sorted
     end

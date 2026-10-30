@@ -6,10 +6,10 @@ class BundleProduct < ApplicationRecord
 
   delegate :quantity_as_time?, to: :product
 
-  validates_presence_of     :bundle_product_id, :product_id
-  validates_numericality_of :quantity, only_integer: true, greater_than: 0
-  validates_numericality_of :quantity, less_than: 10, if: :timed_service_product?
-  validates_uniqueness_of   :product_id, scope: [:bundle_product_id]
+  validates :bundle_product_id, :product_id, presence: true
+  validates :quantity, numericality: { only_integer: true, greater_than: 0 }
+  validates :quantity, numericality: { less_than: 10, if: :timed_service_product? }
+  validates :product_id, uniqueness: { scope: [:bundle_product_id] }
 
   scope :alphabetized, -> { joins(:product).order(Arel.sql("LOWER(products.name)")) }
 

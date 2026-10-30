@@ -28,6 +28,6 @@ module TranslationHelper
   # Strips HTML line breaks. Useful when using text-helper's `text` method so you
   # can have a single line break.
   def strip_br(string)
-    string.gsub(/<br\/?>/, "")
+    string.gsub(%r{<br/?>}, "")
   end
 end

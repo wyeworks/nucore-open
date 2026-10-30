@@ -4,8 +4,8 @@ module BulkEmail
   class Job < ApplicationRecord
     self.table_name = "bulk_email_jobs"
 
-    belongs_to :facility, foreign_key: :facility_id
-    belongs_to :user, foreign_key: :user_id
+    belongs_to :facility
+    belongs_to :user
 
     serialize :recipients, coder: YAML, type: Array
     serialize :search_criteria, coder: YAML, type: Hash

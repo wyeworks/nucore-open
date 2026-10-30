@@ -30,6 +30,6 @@ class Api::OrderDetailsController < ApplicationController
   end
 
   def order_detail_not_found
-    render json: { error: "not found" }, status: 404
+    render json: { error: "not found" }, status: :not_found
   end
 end

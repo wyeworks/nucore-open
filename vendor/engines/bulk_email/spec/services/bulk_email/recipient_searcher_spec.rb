@@ -89,15 +89,15 @@ RSpec.describe BulkEmail::RecipientSearcher do
     it "generates an HTML fragment with hidden recipient search parameters" do
       expect(start_date_tag.attr("value").value).to eq("2009-01-01")
       expect(end_date_tag.attr("value").value).to eq("2016-12-31")
-      expect(product_tag_values).to match_array %w(1 3 5)
-      expect(user_type_tag_values).to match_array %w(customers account_users)
+      expect(product_tag_values).to match_array %w[1 3 5]
+      expect(user_type_tag_values).to match_array %w[customers account_users]
     end
   end
 
   context "when searching for customers" do
     context "filtered by ordered dates" do
       let!(:od_yesterday) do
-        travel_and_return(-1.days) do
+        travel_and_return(-1.day) do
           place_order(purchaser:, product:, account:)
         end
       end
@@ -462,7 +462,7 @@ RSpec.describe BulkEmail::RecipientSearcher do
 
   context "when searching for customers and authorized_users" do
     before(:each) do
-      params[:bulk_email][:user_types] = %i(authorized_users customers)
+      params[:bulk_email][:user_types] = %i[authorized_users customers]
       params[:products] = [product.id]
     end
 

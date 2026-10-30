@@ -3,14 +3,14 @@
 class DurationRate < ApplicationRecord
   SIXTY_MIN = 60.0
 
-  belongs_to :price_policy, required: true
+  belongs_to :price_policy, optional: false
 
   validates :rate, presence: true
   validates :rate, numericality: { greater_than_or_equal_to: 0 }
   validates :subsidy, presence: { message: ->(object, _data) { "^Missing subsidy for #{object.price_group.name}" } }, if: -> { requires_subsidy? }
   validates :subsidy, numericality: { greater_than_or_equal_to: 0, allow_blank: true }
   validates :min_duration_hours,
-            presence: { message: ->(object, _data) { "^Missing value for 'Rate start (hr)'" } },
+            presence: { message: ->(_object, _data) { "^Missing value for 'Rate start (hr)'" } },
             numericality: { greater_than: 0, allow_blank: true },
             uniqueness: { scope: :price_policy_id }
   validate :rate_lesser_than_or_equal_to_base_rate
@@ -40,9 +40,7 @@ class DurationRate < ApplicationRecord
     hourly_rate - hourly_subsidy
   end
 
-  def price_group
-    price_policy.price_group
-  end
+  delegate :price_group, to: :price_policy
 
   def set_rate_from_base
     return unless requires_subsidy?
@@ -56,18 +54,18 @@ class DurationRate < ApplicationRecord
   def rate_lesser_than_or_equal_to_base_rate
     return unless price_policy.usage_rate && rate
 
-    if rate > price_policy.usage_rate
-      errors.add(:base, "Rate must be lesser than or equal to Base rate")
-    end
+    return unless rate > price_policy.usage_rate
+
+    errors.add(:base, "Rate must be lesser than or equal to Base rate")
   end
 
   def subsidy_lesser_than_or_equal_to_rate
     return unless requires_subsidy?
     return unless rate && subsidy
 
-    if subsidy > rate
-      errors.add(:base, "Subsidy must be lesser than or equal to step rate")
-    end
+    return unless subsidy > rate
+
+    errors.add(:base, "Subsidy must be lesser than or equal to step rate")
   end
 
   def requires_subsidy?

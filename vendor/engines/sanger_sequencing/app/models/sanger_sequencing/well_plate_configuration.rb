@@ -9,7 +9,7 @@ module SangerSequencing
     end
 
     CONFIGS = ActiveSupport::HashWithIndifferentAccess.new(
-      default: new(reserved_cells: %w(A01 A02)),
+      default: new(reserved_cells: %w[A01 A02]),
       fragment: new(reserved_cells: []),
     ).freeze
 

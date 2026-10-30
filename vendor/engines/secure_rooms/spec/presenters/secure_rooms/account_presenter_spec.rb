@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe SecureRooms::AccountPresenter do
   let(:presenter_attributes) do
-    %w(id type description account_number expiration_month expiration_year owner_name)
+    %w[id type description account_number expiration_month expiration_year owner_name]
   end
 
   describe ".wrap" do

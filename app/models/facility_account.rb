@@ -47,7 +47,7 @@ class FacilityAccount < ApplicationRecord
     revenue_account
   end
 
-  def method_missing(method_sym, *arguments, &block)
+  def method_missing(method_sym, *, &)
     super # we must call super! Not doing so makes ruby 1.9.2 die a hard death
   rescue NoMethodError => e
     raise e unless account_number
@@ -55,16 +55,16 @@ class FacilityAccount < ApplicationRecord
     validator = AccountValidator::ValidatorFactory.instance(account_number)
     raise e unless validator.components.key?(method_sym)
 
-    validator.send(method_sym, *arguments)
+    validator.send(method_sym, *)
   end
 
   def respond_to?(method_sym, include_private = false)
     return true if super
 
     begin
-      return account_number && AccountValidator::ValidatorFactory.instance(account_number).respond_to?(method_sym)
+      account_number && AccountValidator::ValidatorFactory.instance(account_number).respond_to?(method_sym)
     rescue
-      return false
+      false
     end
   end
 end

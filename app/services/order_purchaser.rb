@@ -38,7 +38,7 @@ class OrderPurchaser
     send_purchase_notifications
 
     @success = true
-  rescue NUCore::OrderDetailUpdateException => e
+  rescue NUCore::OrderDetailUpdateException
     @errors = order.errors.full_messages
   end
 
@@ -52,7 +52,7 @@ class OrderPurchaser
     send_purchase_notifications
 
     @success = true
-  rescue NUCore::OrderDetailUpdateException => e
+  rescue NUCore::OrderDetailUpdateException
     @errors = order.errors.full_messages
   end
 
@@ -71,14 +71,10 @@ class OrderPurchaser
   end
 
   def order_in_the_past!
-    unless can_backdate_order_details?
-      raise NUCore::PurchaseException.new(I18n.t("controllers.orders.purchase.future_dating_error"))
-    end
+    raise NUCore::PurchaseException.new(I18n.t("controllers.orders.purchase.future_dating_error")) unless can_backdate_order_details?
 
     # update order detail statuses if you've changed it while acting as
-    if acting_as? && order_status.present?
-      backdate_order_details!(user, order_status)
-    end
+    backdate_order_details!(user, order_status) if acting_as? && order_status.present?
     complete_past_reservations!
   end
 
@@ -121,13 +117,9 @@ class OrderPurchaser
     should_send_receipt = !acting_as? || params[:send_notification] == "1"
     should_send_order_notification = order_notification_recipient.present? && !acting_as?
 
-    if should_send_receipt
-      PurchaseNotifier.order_receipt(user: order.user, order:).deliver_later
-    end
+    PurchaseNotifier.order_receipt(user: order.user, order:).deliver_later if should_send_receipt
 
-    if should_send_order_notification
-      PurchaseNotifier.order_notification(order, order_notification_recipient).deliver_later
-    end
+    PurchaseNotifier.order_notification(order, order_notification_recipient).deliver_later if should_send_order_notification
 
     order.order_details.each do |order_detail|
       order_detail.product.order_notification_recipients.then do |recipients|

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-$LOAD_PATH.push File.expand_path("../lib", __FILE__)
+$LOAD_PATH.push File.expand_path("lib", __dir__)
 
 require "split_accounts/version"
 
@@ -14,4 +14,5 @@ Gem::Specification.new do |s|
   s.description = ""
 
   s.files = Dir["{app,config,db,lib}/**/*", "spec/factories/**/*"]
+  s.metadata["rubygems_mfa_required"] = "true"
 end

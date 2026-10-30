@@ -15,15 +15,15 @@ module SplitAccounts
       private
 
       def split_percent(order_detail)
-        if order_detail.respond_to?(:split) && order_detail.split
-          number_with_precision(order_detail.split.percent, strip_insignificant_zeros: true) + "%"
-        end
+        return unless order_detail.respond_to?(:split) && order_detail.split
+
+        number_with_precision(order_detail.split.percent, strip_insignificant_zeros: true) + "%"
       end
 
       def parent_account(order_detail)
-        if order_detail.respond_to?(:split) && order_detail.split
-          order_detail.split.parent_split_account.description_to_s
-        end
+        return unless order_detail.respond_to?(:split) && order_detail.split
+
+        order_detail.split.parent_split_account.description_to_s
       end
     end
   end

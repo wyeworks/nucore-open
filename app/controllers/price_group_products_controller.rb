@@ -24,7 +24,7 @@ class PriceGroupProductsController < ApplicationController
     window_errors = []
 
     @price_groups.each do |pg|
-      pg_key = "price_group_#{pg.id}".to_sym
+      pg_key = :"price_group_#{pg.id}"
       pgp = PriceGroupProduct.find_by(price_group_id: pg.id, product_id: @product.id)
 
       if params[pg_key].blank?
@@ -35,7 +35,7 @@ class PriceGroupProductsController < ApplicationController
         if @is_instrument && res_win.blank?
           window_errors << pg.name
         else
-          pgp = PriceGroupProduct.new(price_group: pg, product: @product) unless pgp
+          pgp ||= PriceGroupProduct.new(price_group: pg, product: @product)
           pgp.reservation_window = res_win.to_i if @is_instrument
           pgp.save!
         end
@@ -59,7 +59,7 @@ class PriceGroupProductsController < ApplicationController
     @price_groups = current_facility.price_groups
 
     existing_pgps = @product.price_group_products
-    groups_with_pgp = Hash[existing_pgps.map { |pgp| [pgp.price_group, pgp] }]
+    groups_with_pgp = existing_pgps.index_by { |pgp| pgp.price_group }
 
     @price_group_products = []
     current_facility.price_groups.each do |pg|

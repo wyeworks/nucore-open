@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "../../saml_spec_helper.rb"
+require_relative "../../saml_spec_helper"
 require "saml_authentication/saml_attributes"
 
 RSpec.describe SamlAuthentication::SamlAttributes do

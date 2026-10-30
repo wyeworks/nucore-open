@@ -42,11 +42,11 @@ RSpec.describe LdapAuthentication::UserUpdater do
     end
 
     it "updates attrubutes that are present in the response" do
-      expect { described_class.new(user).update_from_ldap }.to change { user.first_name }
+      expect { described_class.new(user).update_from_ldap }.to(change { user.first_name })
     end
 
     it "does not update attrubute that are not present in the response" do
-      expect { described_class.new(user).update_from_ldap }.not_to change { user.email }
+      expect { described_class.new(user).update_from_ldap }.not_to(change { user.email })
     end
   end
 

@@ -8,7 +8,7 @@ module PowerRelay
 
   included do
     ## validations
-    validates_presence_of :ip, :outlet, :username, :password
+    validates :ip, :outlet, :username, :password, presence: true
     validates :auto_logout_minutes, presence: { if: :auto_logout }
     validates :outlet, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: MAXIMUM_OUTLETS }
     validates :secondary_outlet, numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: MAXIMUM_OUTLETS, allow_nil: true }
@@ -33,9 +33,7 @@ module PowerRelay
   def toggle(status)
     log_power_relay_connection(:toggle) do
       toggled_status = relay_connection.toggle(outlet, status)
-      if secondary_outlet
-        secondary_toggled_status = relay_connection.toggle(secondary_outlet, status)
-      end
+      relay_connection.toggle(secondary_outlet, status) if secondary_outlet
       toggled_status
     end
   end
@@ -125,11 +123,9 @@ module PowerRelay
       yield
     rescue error_class
       retries += 1
-      if retries < max_retries
-        retry
-      else
-        raise
-      end
+      raise unless retries < max_retries
+
+      retry
     end
   end
 end

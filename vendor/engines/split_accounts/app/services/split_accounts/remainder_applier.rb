@@ -6,9 +6,7 @@ module SplitAccounts
 
     # split_objects and splits must have the same order
     def initialize(original, split_objects, splits)
-      if splits.size != split_objects.size
-        raise ArgumentError, "There should be the same number of split objects as splits"
-      end
+      raise ArgumentError, "There should be the same number of split objects as splits" if splits.size != split_objects.size
 
       @original = original
       @split_objects = split_objects

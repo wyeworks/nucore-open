@@ -62,9 +62,7 @@ class ReservationsController < ApplicationController
 
     # We don't need the unavailable hours month view
     @rules = @instrument.schedule_rules
-    if @instrument.requires_approval? && acting_user && acting_user.cannot_override_restrictions?(@instrument)
-      @rules = @rules.available_to_user(acting_user)
-    end
+    @rules = @rules.available_to_user(acting_user) if @instrument.requires_approval? && acting_user && acting_user.cannot_override_restrictions?(@instrument)
 
     @show_details = params[:with_details] == "true" && show_reservation_details?
 
@@ -92,8 +90,6 @@ class ReservationsController < ApplicationController
   # GET /reservations
   # All My Resesrvations
   def list
-    notices = []
-
     relation = acting_user.order_details
     in_progress = relation.with_in_progress_reservation
     @status = params[:status]
@@ -121,6 +117,47 @@ class ReservationsController < ApplicationController
     notices.compact!
     existing_notices = flash[:notice].presence ? [flash[:notice]] : []
     flash.now[:notice] = existing_notices.concat(notices).join("<br />").html_safe unless notices.empty?
+  end
+
+  # GET /orders/:order_id/order_details/:order_detail_id/reservations/:id(.:format)
+  def show
+    @order        = Order.find(params[:order_id])
+    @order_detail = @order.order_details.find(params[:order_detail_id])
+    @reservation  = Reservation.find(params[:id])
+    authorize! :show, @reservation
+
+    raise ActiveRecord::RecordNotFound if @reservation != @order_detail.reservation
+
+    respond_to do |format|
+      format.html
+
+      format.ics do
+        calendar = ReservationCalendar.new(@reservation)
+        send_data(calendar.to_ical,
+                  type: "text/calendar", disposition: "attachment",
+                  filename: calendar.filename)
+      end
+    end
+  end
+
+  # GET /orders/:order_id/order_details/:order_detail_id/reservations/new
+  def new
+    raise ActiveRecord::RecordNotFound unless @reservation.nil?
+
+    @reservation = NextAvailableReservationFinder.new(@instrument).next_available_for(current_user, acting_user)
+
+    @reservation.order_detail = @order_detail
+
+    authorize! :new, @reservation
+
+    flash[:notice] = text(".acting_as_not_on_approval_list") unless @instrument.can_be_used_by?(@order_detail.user_for_order)
+    set_windows
+  end
+
+  # GET /orders/1/order_details/1/reservations/1/edit
+  def edit
+    redirect_to [@order, @order_detail, @reservation] if invalid_for_update?
+    set_windows
   end
 
   # POST /orders/:order_id/order_details/:order_detail_id/reservations
@@ -158,49 +195,6 @@ class ReservationsController < ApplicationController
     end
   end
 
-  # GET /orders/:order_id/order_details/:order_detail_id/reservations/new
-  def new
-    raise ActiveRecord::RecordNotFound unless @reservation.nil?
-
-    @reservation = NextAvailableReservationFinder.new(@instrument).next_available_for(current_user, acting_user)
-
-    @reservation.order_detail = @order_detail
-
-    authorize! :new, @reservation
-
-    unless @instrument.can_be_used_by?(@order_detail.user_for_order)
-      flash[:notice] = text(".acting_as_not_on_approval_list")
-    end
-    set_windows
-  end
-
-  # GET /orders/:order_id/order_details/:order_detail_id/reservations/:id(.:format)
-  def show
-    @order        = Order.find(params[:order_id])
-    @order_detail = @order.order_details.find(params[:order_detail_id])
-    @reservation  = Reservation.find(params[:id])
-    authorize! :show, @reservation
-
-    raise ActiveRecord::RecordNotFound if @reservation != @order_detail.reservation
-
-    respond_to do |format|
-      format.html
-
-      format.ics do
-        calendar = ReservationCalendar.new(@reservation)
-        send_data(calendar.to_ical,
-                  type: "text/calendar", disposition: "attachment",
-                  filename: calendar.filename)
-      end
-    end
-  end
-
-  # GET /orders/1/order_details/1/reservations/1/edit
-  def edit
-    redirect_to [@order, @order_detail, @reservation] if invalid_for_update?
-    set_windows
-  end
-
   # PUT  /orders/1/order_details/1/reservations/1
   def update
     if invalid_for_update?
@@ -221,12 +215,10 @@ class ReservationsController < ApplicationController
     success = true
 
     Reservation.transaction do
-      begin
-        save_reservation_and_order_detail
-      rescue ActiveRecord::RecordInvalid => e
-        success = false
-        raise ActiveRecord::Rollback
-      end
+      save_reservation_and_order_detail
+    rescue ActiveRecord::RecordInvalid
+      success = false
+      raise ActiveRecord::Rollback
     end
 
     if mergeable && success
@@ -234,7 +226,7 @@ class ReservationsController < ApplicationController
       redirect_to facility_order_path(@order_detail.facility, @order_detail.order.merge_order || @order_detail.order)
     elsif success
       flash[:notice] = I18n.t("controllers.reservations.update.success")
-      redirect_to (@order.purchased? ? reservations_path : cart_path)
+      redirect_to(@order.purchased? ? reservations_path : cart_path)
     else
       render_edit
     end
@@ -340,11 +332,9 @@ class ReservationsController < ApplicationController
     @facility = @instrument.facility
   rescue ActiveRecord::RecordNotFound
     flash[:error] = text("order_detail_removed")
-    if @order
-      redirect_to facility_path(@order.facility)
-    else
-      raise
-    end
+    raise unless @order
+
+    redirect_to facility_path(@order.facility)
   end
 
   def load_and_check_resources

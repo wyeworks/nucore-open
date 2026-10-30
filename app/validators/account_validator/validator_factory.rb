@@ -5,8 +5,8 @@ class AccountValidator::ValidatorFactory
     Settings.validator.class_name.constantize
   end
 
-  def self.instance(*args)
-    validator_class.new(*args)
+  def self.instance(*)
+    validator_class.new(*)
   end
 
   #
@@ -15,19 +15,17 @@ class AccountValidator::ValidatorFactory
 
   def self.partition_valid_order_details(order_details)
     order_details.partition do |od|
-      begin
-        OrderDetailListTransformerFactory.instance([od]).perform.each do |virtual|
-          instance(virtual.account.account_number, virtual.product.account).account_is_open!(virtual.fulfilled_at)
-        end
-        true
-      rescue AccountValidator::ValidatorError
-        false
+      OrderDetailListTransformerFactory.instance([od]).perform.each do |virtual|
+        instance(virtual.account.account_number, virtual.product.account).account_is_open!(virtual.fulfilled_at)
       end
+      true
+    rescue AccountValidator::ValidatorError
+      false
     end
   end
 
-  def self.method_missing(method_sym, *arguments, &block)
-    validator_class.send(method_sym, *arguments, &block)
+  def self.method_missing(method_sym, *, &)
+    validator_class.send(method_sym, *, &)
   end
 
   def self.respond_to?(method_sym, include_private = false)

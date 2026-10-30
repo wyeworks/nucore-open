@@ -31,7 +31,7 @@ RSpec.describe "Cross Core Orders", :js do
 
   context "when selecting All" do
     before do
-      select "All", from: "Participating #{I18n.t("facilities_downcase")}"
+      select "All", from: "Participating #{I18n.t('facilities_downcase')}"
       click_button "Filter"
     end
 
@@ -58,7 +58,7 @@ RSpec.describe "Cross Core Orders", :js do
 
   context "when selecting Current" do
     before do
-      select "Current", from: "Participating #{I18n.t("facilities_downcase")}"
+      select "Current", from: "Participating #{I18n.t('facilities_downcase')}"
       click_button "Filter"
     end
 

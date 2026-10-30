@@ -31,8 +31,8 @@ class ChangeJournalRowsValuesToStrings < ActiveRecord::Migration[4.2]
 
     # update existing activities
     JournalRow.all.each do |jr|
-      unless jr.activity.blank?
-        jr.activity = sprintf("%02d", jr.activity.to_i)
+      if jr.activity.present?
+        jr.activity = format("%02d", jr.activity.to_i)
         jr.save
       end
     end

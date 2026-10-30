@@ -21,10 +21,10 @@ RSpec.describe TimelineHelper do
     before :each do
       @reservation = Reservation.new(reserve_start_at: Time.zone.now.change(hour: 8, min: 0),
                                      reserve_end_at: Time.zone.now.change(hour: 10, min: 0))
-      @reservation_spans_yesterday = Reservation.new(reserve_start_at: (Time.zone.now - 1.day).change(hour: 23, min: 0),
+      @reservation_spans_yesterday = Reservation.new(reserve_start_at: 1.day.ago.change(hour: 23, min: 0),
                                                      reserve_end_at: Time.zone.now.change(hour: 2, min: 0))
       @reservation_spans_tomorrow = Reservation.new(reserve_start_at: Time.zone.now.change(hour: 23, min: 0),
-                                                    reserve_end_at: (Time.zone.now + 1.day).change(hour: 3, min: 0))
+                                                    reserve_end_at: 1.day.from_now.change(hour: 3, min: 0))
     end
     it "should return a full width if start and end are in the same day" do
       width = (120 * TimelineHelper::MINUTE_TO_PIXEL_RATIO).floor
@@ -49,10 +49,10 @@ RSpec.describe TimelineHelper do
     before :each do
       @reservation = Reservation.new(reserve_start_at: Time.zone.now.change(hour: 8, min: 0),
                                      reserve_end_at: Time.zone.now.change(hour: 10, min: 0))
-      @reservation_spans_yesterday = Reservation.new(reserve_start_at: (Time.zone.now - 1.day).change(hour: 23, min: 0),
+      @reservation_spans_yesterday = Reservation.new(reserve_start_at: 1.day.ago.change(hour: 23, min: 0),
                                                      reserve_end_at: Time.zone.now.change(hour: 2, min: 0))
       @reservation_spans_tomorrow = Reservation.new(reserve_start_at: Time.zone.now.change(hour: 23, min: 0),
-                                                    reserve_end_at: (Time.zone.now + 1.day).change(hour: 3, min: 0))
+                                                    reserve_end_at: 1.day.from_now.change(hour: 3, min: 0))
     end
     it "should have nothing for a normal reservation" do
       expect(spans_midnight_class(@reservation.reserve_start_at, @reservation.reserve_end_at)).to be_blank

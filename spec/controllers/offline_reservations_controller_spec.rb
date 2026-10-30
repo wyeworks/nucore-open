@@ -65,7 +65,7 @@ RSpec.describe OfflineReservationsController do
 
       it "does not change the reservation" do
         expect { post :create, params: }
-          .not_to change { reservation.order_detail.reload.problem? }
+          .not_to(change { reservation.order_detail.reload.problem? })
       end
 
       it "does not triggers an email" do

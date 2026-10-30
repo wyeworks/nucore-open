@@ -29,7 +29,7 @@ module Users
       SettingsHelper.feature_on?("users_authentication.uses_ldap_authentication") && LdapAuthentication.configured?
     end
 
-    # TODO - Decide if we need to authenticate against employee ID, a reservation passcode, or IdP/LDAP API.
+    # TODO: - Decide if we need to authenticate against employee ID, a reservation passcode, or IdP/LDAP API.
     # Starting with the easiest implementation while gathering feedback from potential users.
     def bypass_kiosk_auth?
       SettingsHelper.feature_on?(:bypass_kiosk_auth)

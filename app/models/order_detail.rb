@@ -48,8 +48,8 @@ class OrderDetail < ApplicationRecord
   belongs_to :price_policy, optional: true
   belongs_to :statement, inverse_of: :order_details, optional: true
   belongs_to :journal, optional: true
-  belongs_to :order, inverse_of: :order_details, required: true
-  belongs_to :assigned_user, class_name: "User", foreign_key: "assigned_user_id", optional: true
+  belongs_to :order, inverse_of: :order_details, optional: false
+  belongs_to :assigned_user, class_name: "User", optional: true
   belongs_to :created_by_user, class_name: "User", foreign_key: :created_by # created_by_user is the ordered_by user, not ordered_for user
   belongs_to :dispute_by, class_name: "User", optional: true
   belongs_to :price_changed_by_user, class_name: "User", optional: true
@@ -58,7 +58,7 @@ class OrderDetail < ApplicationRecord
   belongs_to :bundle, foreign_key: "bundle_product_id", optional: true
   belongs_to :canceled_by_user, foreign_key: :canceled_by, class_name: "User", optional: true
   belongs_to :problem_resolved_by, class_name: "User", optional: true
-  belongs_to :project, class_name: "Project", foreign_key: :project_id, inverse_of: :order_details, optional: true
+  belongs_to :project, class_name: "Project", inverse_of: :order_details, optional: true
   has_one    :reservation, inverse_of: :order_detail
   # for some reason, dependent: :delete on reservation isn't working with paranoia, hitting foreign key constraints
   before_destroy { reservation.try(:really_destroy!) }
@@ -107,17 +107,17 @@ class OrderDetail < ApplicationRecord
     journal_date || statement_date
   end
 
-  validates_presence_of :product_id, :created_by
-  validates_numericality_of :quantity, only_integer: true, greater_than_or_equal_to: 1
-  validates_numericality_of :actual_cost, greater_than_or_equal_to: 0, if: ->(o) { o.actual_cost_changed? && !o.actual_cost.nil? }
-  validates_numericality_of :actual_subsidy, greater_than_or_equal_to: 0, if: ->(o) { o.actual_subsidy_changed? && !o.actual_cost.nil? }
-  validates_numericality_of :actual_total, greater_than_or_equal_to: 0, allow_nil: true
-  validates_presence_of :dispute_reason, if: :dispute_at
-  validates_presence_of :dispute_resolved_at, :dispute_resolved_reason, if: proc { dispute_resolved_reason.present? || dispute_resolved_at.present? }
+  validates :product_id, :created_by, presence: true
+  validates :quantity, numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :actual_cost, numericality: { greater_than_or_equal_to: 0, if: ->(o) { o.actual_cost_changed? && !o.actual_cost.nil? } }
+  validates :actual_subsidy, numericality: { greater_than_or_equal_to: 0, if: ->(o) { o.actual_subsidy_changed? && !o.actual_cost.nil? } }
+  validates :actual_total, numericality: { greater_than_or_equal_to: 0, allow_nil: true }
+  validates :dispute_reason, presence: { if: :dispute_at }
+  validates :dispute_resolved_at, :dispute_resolved_reason, presence: { if: proc { dispute_resolved_reason.present? || dispute_resolved_at.present? } }
   # only do this validation if it hasn't been ordered yet. Update errors caused by notification sending
   # were being triggered on orders where the orderer had been removed from the account.
   validate :account_usable_by_order_owner?, if: ->(order_detail) { order_detail.account_id_changed? || order_detail.order.nil? || order_detail.ordered_at.blank? }
-  validates_length_of :note, maximum: 1000, allow_blank: true, allow_nil: true
+  validates :note, length: { maximum: 1000, allow_blank: true }
   validate :valid_manual_fulfilled_at
   validates :price_change_reason, presence: true, length: { minimum: 10, allow_blank: true }, if: :pricing_note_required?
   validate :project_must_be_active, if: :project_id_changed?
@@ -136,8 +136,8 @@ class OrderDetail < ApplicationRecord
   ## TODO validate order status is global or a member of the product's facility
   ## TODO validate which fields can be edited for which states
 
-  scope :batch_updatable, -> { where(dispute_at: nil, state: %w(new inprocess)) }
-  scope :new_or_inprocess, -> { purchased.where(state: %w(new inprocess)) }
+  scope :batch_updatable, -> { where(dispute_at: nil, state: %w[new inprocess]) }
+  scope :new_or_inprocess, -> { purchased.where(state: %w[new inprocess]) }
   scope :non_canceled, -> { where.not(state: "canceled") }
   scope :cross_core, lambda {
     joins(order: [:facility, :cross_core_project])
@@ -163,9 +163,9 @@ class OrderDetail < ApplicationRecord
   scope :recent, -> { where("ordered_at > ?", 1.year.ago) }
 
   def self.in_dispute
-    where("dispute_at IS NOT NULL")
-      .where(dispute_resolved_at: nil)
-      .where("order_details.state != ?", "canceled")
+    where.not(dispute_at: nil)
+         .where(dispute_resolved_at: nil)
+         .where.not(order_details: { state: "canceled" })
   end
 
   scope :purchased_active_reservations, -> { new_or_inprocess.joins(:reservation).merge(Reservation.not_canceled) }
@@ -199,7 +199,7 @@ class OrderDetail < ApplicationRecord
   }
 
   def self.recently_reviewed
-    where(state: %w(complete reconciled))
+    where(state: %w[complete reconciled])
       .where(order_details: { reviewed_at: ...Time.zone.now })
       .not_disputed
       .order(:reviewed_at).reverse_order
@@ -288,11 +288,11 @@ class OrderDetail < ApplicationRecord
   }
   scope :with_in_progress_reservation, -> { new_or_inprocess.with_reservation.merge(Reservation.relay_in_progress) }
 
-  scope :for_accounts, ->(accounts) { where("order_details.account_id in (?)", accounts) unless accounts.blank? }
-  scope :for_account_types, ->(account_types) { where("accounts.type in (?)", account_types) unless account_types.blank? }
-  scope :for_facilities, ->(facilities) { joins(:order).where("orders.facility_id in (?)", facilities) unless facilities.blank? }
-  scope :for_products, ->(products) { where("order_details.product_id in (?)", products) unless products.blank? }
-  scope :for_users, ->(user_ids) { joins(:order).where(orders: { user_id: user_ids }) unless user_ids.blank? }
+  scope :for_accounts, ->(accounts) { where("order_details.account_id in (?)", accounts) if accounts.present? }
+  scope :for_account_types, ->(account_types) { where("accounts.type in (?)", account_types) if account_types.present? }
+  scope :for_facilities, ->(facilities) { joins(:order).where("orders.facility_id in (?)", facilities) if facilities.present? }
+  scope :for_products, ->(products) { where("order_details.product_id in (?)", products) if products.present? }
+  scope :for_users, ->(user_ids) { joins(:order).where(orders: { user_id: user_ids }) if user_ids.present? }
   scope :for_owners, lambda { |owners|
     return if owners.blank?
 
@@ -614,7 +614,7 @@ class OrderDetail < ApplicationRecord
     return "Please make a reservation" if reservation.nil?
 
     reservation.reserved_by_admin = @being_purchased_by_admin
-    return "There is a problem with your reservation" unless reservation.valid? && reservation.valid_before_purchase?
+    "There is a problem with your reservation" unless reservation.valid? && reservation.valid_before_purchase?
   end
 
   def valid_reservation?
@@ -630,11 +630,11 @@ class OrderDetail < ApplicationRecord
     valid_survey    = requires_survey ? validate_survey         : nil
 
     if requires_upload && requires_survey && valid_survey && valid_upload
-      return "Please complete the online order form or upload an order form"
+      "Please complete the online order form or upload an order form"
     elsif requires_upload && requires_survey && (valid_upload || valid_survey)
-      return nil
+      nil
     else
-      return valid_upload || valid_survey
+      valid_upload || valid_survey
     end
   end
 
@@ -886,7 +886,7 @@ class OrderDetail < ApplicationRecord
         .where("journals.is_successful" => true)
     else
       complete_for_facility_and_account(facility, account)
-        .where("order_details.statement_id IS NOT NULL")
+        .where.not(order_details: { statement_id: nil })
     end
   end
 
@@ -972,15 +972,15 @@ class OrderDetail < ApplicationRecord
   end
 
   def price_change_reason_option
-    if price_change_reason.present?
-      Settings.order_detail_price_change_reason_options.include?(price_change_reason) ? price_change_reason : "Other"
-    end
+    return unless price_change_reason.present?
+
+    Settings.order_detail_price_change_reason_options.include?(price_change_reason) ? price_change_reason : "Other"
   end
 
   def notify_purchaser_of_order_status
-    if product.email_purchasers_on_order_status_changes? && !reconciled?
-      Notifier.order_detail_status_changed(self).deliver_later
-    end
+    return unless product.email_purchasers_on_order_status_changes? && !reconciled?
+
+    Notifier.order_detail_status_changed(self).deliver_later
   end
 
   def self.where_order_number(query)
@@ -1103,12 +1103,10 @@ class OrderDetail < ApplicationRecord
   end
 
   def mark_dispute_resolved
-    if resolve_dispute?
-      self.dispute_resolved_at = Time.zone.now
-      self.reviewed_at         = Time.zone.now
-    else
-      resolve_dispute = "0"
-    end
+    return unless resolve_dispute?
+
+    self.dispute_resolved_at = Time.zone.now
+    self.reviewed_at         = Time.zone.now
   end
 
   def clear_costs
@@ -1118,19 +1116,17 @@ class OrderDetail < ApplicationRecord
   end
 
   def reset_dispute
-    if dispute_resolved_at_changed?
-      if errors.any?
-        self.dispute_resolved_at = dispute_resolved_at_was
-        self.reviewed_at         = reviewed_at_was
-      end
-    end
+    return unless dispute_resolved_at_changed? && errors.any?
+
+    self.dispute_resolved_at = dispute_resolved_at_was
+    self.reviewed_at = reviewed_at_was
   end
 
   def clear_statement
-    if statement.present?
-      statement.remove_order_detail(self)
-      self.statement = nil
-    end
+    return unless statement.present?
+
+    statement.remove_order_detail(self)
+    self.statement = nil
   end
 
   def set_reconciled_at
@@ -1150,8 +1146,8 @@ class OrderDetail < ApplicationRecord
   end
 
   def project_must_be_active
-    if project.present? && !project.active?
-      errors.add(:project_id, :project_is_inactive)
-    end
+    return unless project.present? && !project.active?
+
+    errors.add(:project_id, :project_is_inactive)
   end
 end

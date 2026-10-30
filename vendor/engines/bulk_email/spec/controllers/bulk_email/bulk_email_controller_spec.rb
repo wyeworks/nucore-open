@@ -32,7 +32,7 @@ RSpec.describe BulkEmail::BulkEmailController do
 
       shared_examples_for "it can search for recipients" do
         context "when at least one user_type is set" do
-          let(:user_types) { %i(customers) }
+          let(:user_types) { %i[customers] }
           it { expect(assigns[:users]).not_to be_nil }
         end
 
@@ -42,7 +42,7 @@ RSpec.describe BulkEmail::BulkEmailController do
         end
 
         context "parameter settings" do
-          let(:user_types) { %i(customers) }
+          let(:user_types) { %i[customers] }
 
           it "sets products, in order" do
             expect(assigns[:search_options][:products])
@@ -51,7 +51,7 @@ RSpec.describe BulkEmail::BulkEmailController do
 
           it "sets user_types, in order", feature_setting: { training_requests: true } do
             expect(assigns[:user_types].keys)
-              .to eq(%i(customers authorized_users training_requested account_owners problem_reservation))
+              .to eq(%i[customers authorized_users training_requested account_owners problem_reservation])
           end
 
           context "when where are no restricted instruments" do
@@ -94,7 +94,7 @@ RSpec.describe BulkEmail::BulkEmailController do
         end
 
         context "when there is a hidden product" do
-          let(:user_types) { %i(customers) }
+          let(:user_types) { %i[customers] }
           let!(:hidden_product) do
             FactoryBot.create(:item, :hidden, facility_account:)
           end
@@ -103,7 +103,7 @@ RSpec.describe BulkEmail::BulkEmailController do
         end
 
         context "when there is an archived product" do
-          let(:user_types) { %i(customers) }
+          let(:user_types) { %i[customers] }
 
           let!(:archived_product) do
             FactoryBot.create(:item, :archived, facility_account:)

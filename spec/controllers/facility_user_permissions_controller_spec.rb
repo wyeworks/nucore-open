@@ -142,7 +142,7 @@ RSpec.describe FacilityUserPermissionsController, feature_setting: { granular_pe
 
       it "does not create a record when all permissions are unchecked on a new permission" do
         @params[:facility_user_permission] = FacilityUserPermission.all_permissions.index_with { false }
-        expect { patch :update, params: @params }.not_to change { FacilityUserPermission.count }
+        expect { patch :update, params: @params }.not_to(change { FacilityUserPermission.count })
         expect(response).to redirect_to(facility_facility_users_path(facility))
       end
     end

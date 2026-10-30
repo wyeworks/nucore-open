@@ -28,7 +28,7 @@ class TimeDropdownInput < SimpleForm::Inputs::Base
           [
             f.input_field(:hour, merged_input_options.merge(collection: (1..12).to_a)),
             f.input_field(:minute, merged_input_options.merge(collection: minute_options)),
-            f.input_field(:ampm, merged_input_options.merge(collection: %w(AM PM))),
+            f.input_field(:ampm, merged_input_options.merge(collection: %w[AM PM])),
           ],
         )
       end

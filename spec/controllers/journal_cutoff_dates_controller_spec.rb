@@ -108,7 +108,7 @@ RSpec.describe JournalCutoffDatesController do
         let(:new_cutoff_date) { "" }
 
         it "does not update the model" do
-          expect { do_request }.not_to change { journal_cutoff_date.reload.cutoff_date }
+          expect { do_request }.not_to(change { journal_cutoff_date.reload.cutoff_date })
         end
 
         it "renders the edit view again" do

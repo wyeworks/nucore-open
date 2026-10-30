@@ -5,28 +5,28 @@ source "https://rubygems.org"
 ruby File.open(File.expand_path(".ruby-version", File.dirname(__FILE__))) { |f| f.read.chomp }
 
 ## base
+gem "bootsnap", require: false
+gem "config"
+gem "jsbundling-rails", "~> 1.3"
+gem "net-imap"
+gem "net-pop"
+gem "net-smtp"
+gem "puma"
+gem "rack-attack"
+gem "rack-utf8_sanitizer"
 gem "rails", "~> 8.0.4"
 gem "sprockets"
 gem "sprockets-rails"
-gem "config"
-gem "bootsnap", require: false
-gem "puma"
-gem "jsbundling-rails", "~> 1.3"
-gem "rack-utf8_sanitizer"
-gem "rack-attack"
-gem "net-smtp"
-gem "net-imap"
-gem "net-pop"
 gem "tzinfo-data"
 
 # Ruby 3.4 not longer includes these gems
-gem "mutex_m"
 gem "csv"
+gem "mutex_m"
 
 # Ruby 3.4 warns it won't be included in the future
 gem "benchmark"
-gem "reline"
 gem "irb"
+gem "reline"
 
 ## database
 gem "mysql2"
@@ -44,33 +44,33 @@ gem "devise-security"
 ## models
 gem "aasm"
 # TODO: switch from Paperclip to ActiveStorage
-gem "kt-paperclip"
-gem "paper_trail"
-gem "nokogiri"
 gem "icalendar"
+gem "kt-paperclip"
+gem "nokogiri"
+gem "paper_trail"
 gem "paranoia"
 
 ## views
-gem "sass-rails"
-gem "coffee-rails"
 gem "bootstrap-sass", "~> 3.4.1"
-gem "terser", "~> 1.2"
-gem "haml"
-gem "will_paginate"
-gem "turbo-rails", "~> 2.0"
+gem "chosen-rails"
 gem "ckeditor", "~> 5.1.3"
+gem "clockpunch"
+gem "coffee-rails"
+gem "fine_uploader", path: "vendor/engines/fine_uploader"
+gem "font-awesome-rails"
+gem "fullcalendar", path: "vendor/engines/fullcalendar"
+gem "haml"
 gem "jquery-rails"
 gem "jquery-ui-rails", "~> 8.0"
-gem "vuejs-rails", "~> 1.0.26" # 2.0 introduces breaking changes
-gem "clockpunch"
-gem "simple_form"
-gem "font-awesome-rails"
 gem "nested_form_fields"
-gem "text_helpers"
-gem "chosen-rails"
-gem "fine_uploader", path: "vendor/engines/fine_uploader"
-gem "fullcalendar", path: "vendor/engines/fullcalendar"
 gem "rubyzip"
+gem "sass-rails"
+gem "simple_form"
+gem "terser", "~> 1.2"
+gem "text_helpers"
+gem "turbo-rails", "~> 2.0"
+gem "vuejs-rails", "~> 1.0.26" # 2.0 introduces breaking changes
+gem "will_paginate"
 
 ## PDF generation
 gem "prawn-rails"
@@ -79,13 +79,13 @@ gem "prawn-rails"
 gem "mailgun-ruby", "~>1.4.4"
 
 ## other
+gem "daemons"
 gem "delayed_job_active_record"
 gem "health_check"
-gem "rake"
-gem "spreadsheet"
-gem "daemons"
 gem "ice_cube"
 gem "jwt"
+gem "rake"
+gem "spreadsheet"
 
 # Optional: File uploads to S3
 gem "aws-sdk-s3"
@@ -126,8 +126,8 @@ group :development, :test do
   gem "bullet" # Detect N+1s and recommends eager loading
   gem "factory_bot_rails"
   gem "parallel_tests"
-  gem "pry-rails"
   gem "pry-byebug"
+  gem "pry-rails"
   gem "rspec-rails"
   gem "selenium-webdriver"
   # Using GitHub version that supports Rack 3 for Rails 7.2

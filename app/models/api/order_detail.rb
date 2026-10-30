@@ -20,9 +20,9 @@ class Api::OrderDetail
   end
 
   def account_to_hash
-    if account.present?
-      { id: account.id, owner: user_to_hash(account.owner_user) }
-    end
+    return unless account.present?
+
+    { id: account.id, owner: user_to_hash(account.owner_user) }
   end
 
   def ordered_for_to_hash
