@@ -114,16 +114,16 @@ RSpec.describe FacilityUserReservationsController do
       FactoryBot.create(:purchased_reservation, product: instrument, user:)
     end
 
-    shared_examples_for "it can cancel the reservation" do
-      def execute_cancel_request
-        sign_in(operator)
-        put :cancel, params: {
-          facility_id: facility.url_name,
-          user_id: user.id,
-          order_detail_id: order_detail.id,
-        }
-      end
+    def execute_cancel_request
+      sign_in(operator)
+      put :cancel, params: {
+        facility_id: facility.url_name,
+        user_id: user.id,
+        order_detail_id: order_detail.id,
+      }
+    end
 
+    shared_examples_for "it can cancel the reservation" do
       context "when a cancellation fee applies" do
         before do
           price_policies.update_all(cancellation_cost: 12)
@@ -161,23 +161,38 @@ RSpec.describe FacilityUserReservationsController do
     end
 
     context "with read access", feature_setting: { granular_permissions: true } do
-      let!(:permission) do
+      let(:operator) { read_access_user }
+
+      before(:each) do
         create(:facility_user_permission, user: read_access_user, facility:, read_access: true)
       end
 
-      def perform_request
-        put :cancel, params: {
-          facility_id: facility.url_name,
-          user_id: user.id,
-          order_detail_id: order_detail.id,
-        }
+      it "denies the cancellation", :aggregate_failures do
+        expect { execute_cancel_request }.to raise_error(CanCan::AccessDenied)
+        expect(order_detail.reload.canceled_at).to be_nil
+      end
+    end
+
+    context "with order management", feature_setting: { granular_permissions: true } do
+      let(:operator) { read_access_user }
+
+      before(:each) do
+        create(:facility_user_permission, user: read_access_user, facility:, read_access: true, order_management: true)
       end
 
-      before { sign_in(read_access_user) }
+      it_behaves_like "it can cancel the reservation"
 
-      it "denies the cancellation", :aggregate_failures do
-        expect { perform_request }.to raise_error(CanCan::AccessDenied)
-        expect(order_detail.reload.canceled_at).to be_nil
+      context "when the permission is for another facility" do
+        let(:operator) { create(:user) }
+
+        before(:each) do
+          create(:facility_user_permission, user: operator, facility: create(:facility), read_access: true, order_management: true)
+        end
+
+        it "denies the cancellation", :aggregate_failures do
+          expect { execute_cancel_request }.to raise_error(CanCan::AccessDenied)
+          expect(order_detail.reload.canceled_at).to be_nil
+        end
       end
     end
   end

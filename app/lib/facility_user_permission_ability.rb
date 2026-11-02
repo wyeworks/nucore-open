@@ -124,7 +124,7 @@ class FacilityUserPermissionAbility
   end
 
   def grant_order_management
-    can [:update, :order_file, :upload_order_file, :remove_order_file], OrderDetail, { order: { facility_id: facility.id } }
+    can %i[cancel update order_file upload_order_file remove_order_file], OrderDetail, { order: { facility_id: facility.id } }
     can :mark_unrecoverable, OrderDetail, { order: { facility_id: facility.id } }
 
     can %i[administer assign_price_policies_to_problem_orders batch_update
