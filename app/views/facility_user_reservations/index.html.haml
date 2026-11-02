@@ -29,7 +29,7 @@
           %td.centered= link_to order_detail, order_detail.show_order_path
 
           %td.centered
-            - if order_detail.reservation.try(:can_cancel?)
+            - if order_detail.cancelable_by?(current_ability)
               = ReservationUserActionPresenter.new(self, order_detail.reservation).cancel_link(cancel_facility_user_reservation_path(current_facility, @user, order_detail))
 
           %td= order_detail.reservation

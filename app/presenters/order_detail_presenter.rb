@@ -37,6 +37,10 @@ class OrderDetailPresenter < SimpleDelegator
     reconcile_warning? ? "reconcile-warning" : ""
   end
 
+  def cancelable_by?(ability)
+    reservation.try(:can_cancel?) && ability.can?(:cancel, __getobj__)
+  end
+
   def show_order_detail_path
     order_order_detail_path(order, self)
   end

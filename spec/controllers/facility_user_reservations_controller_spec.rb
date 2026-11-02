@@ -63,6 +63,49 @@ RSpec.describe FacilityUserReservationsController do
         expect { perform_request }.to raise_error(CanCan::AccessDenied)
       end
     end
+
+    describe "the cancel link" do
+      render_views
+
+      let(:cancel_path) do
+        cancel_facility_user_reservation_path(facility, user, order_details.first)
+      end
+
+      def perform_request
+        sign_in(operator)
+        get :index, params: { facility_id: facility.url_name, user_id: user.id }
+      end
+
+      context "as a facility director" do
+        let(:operator) { facility_director }
+
+        it "is rendered" do
+          perform_request
+
+          expect(response.body).to include(cancel_path)
+        end
+      end
+
+      context "with only read access", feature_setting: { granular_permissions: true } do
+        let(:operator) { read_access_user }
+
+        before(:each) do
+          create(:facility_user_permission, user: read_access_user, facility:, read_access: true)
+        end
+
+        it "is not rendered" do
+          perform_request
+
+          expect(response.body).not_to include(cancel_path)
+        end
+
+        it "still lists the reservations" do
+          perform_request
+
+          expect(response.body).to include(instrument.name)
+        end
+      end
+    end
   end
 
   context "PUT #cancel" do
