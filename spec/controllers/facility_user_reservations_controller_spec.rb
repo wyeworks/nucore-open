@@ -8,6 +8,7 @@ RSpec.describe FacilityUserReservationsController do
   let(:facility_director) { FactoryBot.create(:user, :facility_director, facility:) }
   let(:instrument) { FactoryBot.create(:setup_instrument, min_cancel_hours: 9999) }
   let(:price_policies) { instrument.price_policies }
+  let(:read_access_user) { create(:user) }
   let(:user) { FactoryBot.create(:user) }
 
   context "GET #index" do
@@ -31,6 +32,35 @@ RSpec.describe FacilityUserReservationsController do
       it "generates a page of reservations", :aggregate_failures do
         expect(assigns(:user)).to eq(user)
         expect(assigns(:order_details)).to match_array(order_details)
+      end
+    end
+
+    context "when logged in with read access", feature_setting: { granular_permissions: true } do
+      let!(:permission) do
+        create(:facility_user_permission, user: read_access_user, facility:, read_access: true)
+      end
+
+      def perform_request
+        get :index, params: { facility_id: facility.url_name, user_id: user.id }
+      end
+
+      before(:each) { sign_in(read_access_user) }
+
+      it "generates a page of reservations", :aggregate_failures do
+        perform_request
+
+        expect(assigns(:user)).to eq(user)
+        expect(assigns(:order_details)).to match_array(order_details)
+      end
+
+      it "denies access when the permission is for another facility" do
+        permission.update!(facility: create(:facility))
+
+        expect { perform_request }.to raise_error(CanCan::AccessDenied)
+      end
+
+      it "denies access with the feature disabled", feature_setting: { granular_permissions: false } do
+        expect { perform_request }.to raise_error(CanCan::AccessDenied)
       end
     end
   end
@@ -85,6 +115,27 @@ RSpec.describe FacilityUserReservationsController do
     context "as a facility_director" do
       let(:operator) { facility_director }
       it_behaves_like "it can cancel the reservation"
+    end
+
+    context "with read access", feature_setting: { granular_permissions: true } do
+      let!(:permission) do
+        create(:facility_user_permission, user: read_access_user, facility:, read_access: true)
+      end
+
+      def perform_request
+        put :cancel, params: {
+          facility_id: facility.url_name,
+          user_id: user.id,
+          order_detail_id: order_detail.id,
+        }
+      end
+
+      before { sign_in(read_access_user) }
+
+      it "denies the cancellation", :aggregate_failures do
+        expect { perform_request }.to raise_error(CanCan::AccessDenied)
+        expect(order_detail.reload.canceled_at).to be_nil
+      end
     end
   end
 end

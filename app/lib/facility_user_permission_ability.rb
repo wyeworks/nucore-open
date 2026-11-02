@@ -41,7 +41,7 @@ class FacilityUserPermissionAbility
     can [:list, :dashboard, :show], Facility
 
     can [:administer, :index, :show, :tab_counts], Order
-    can :show, OrderDetail
+    can [:index, :show], OrderDetail
     can [:sample_results, :sample_results_zip, :template_results], OrderDetail, order: { facility_id: facility.id }
 
     can %i[administer index show timeline tab_counts], Reservation

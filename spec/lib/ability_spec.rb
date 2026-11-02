@@ -597,7 +597,7 @@ RSpec.describe Ability do
     context "read-only facility access" do
       it_is_allowed_to([:list, :dashboard, :show], Facility)
       it_is_allowed_to([:administer, :index, :show], Order)
-      it { is_expected.to be_allowed_to(:show, OrderDetail) }
+      it_is_allowed_to([:index, :show], OrderDetail)
       it_is_allowed_to([:administer, :index, :show, :timeline], Reservation)
       it_is_allowed_to(%i[administer index view_details schedule show], Product)
       it_is_allowed_to([:show, :index], PriceGroup)
@@ -1015,7 +1015,7 @@ RSpec.describe Ability do
 
       it_is_allowed_to([:list, :dashboard, :show], Facility)
       it_is_allowed_to([:administer, :index, :show, :tab_counts], Order)
-      it_is_allowed_to([:show], OrderDetail)
+      it_is_allowed_to([:index, :show], OrderDetail)
       it_is_allowed_to(%i[administer index show timeline tab_counts], Reservation)
       it_is_allowed_to(%i[administer index view_details schedule show], Product)
       it_is_allowed_to([:index], Project)
@@ -1042,7 +1042,7 @@ RSpec.describe Ability do
       it_is_not_allowed_to([:manage], Journal)
       it_is_not_allowed_to([:manage], Statement)
       it_is_not_allowed_to([:manage], FacilityUserPermission)
-      it_is_not_allowed_to([:manage, :adjust_price], OrderDetail)
+      it_is_not_allowed_to([:manage, :adjust_price, :cancel], OrderDetail)
       it_is_not_allowed_to([:manage], Product)
       it_is_not_allowed_to([:manage], OfflineReservation)
       it_is_not_allowed_to([:manage], Account)
