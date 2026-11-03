@@ -14,26 +14,27 @@ class ReservationUserActionPresenter
   include ActionView::Helpers::NumberHelper
   include ReservationsHelper
 
-  def initialize(controller, reservation)
+  def initialize(controller, reservation, permissions: {})
     @reservation = reservation
     @controller = controller
+    @permissions = permissions
   end
 
-  def user_actions(redirect_to_order_id = nil, authorized_to_cancel: true)
+  def user_actions(redirect_to_order_id = nil)
     @redirect_to_order_id = redirect_to_order_id
 
     actions = []
-    actions << accessories_link if accessories?
+    actions << accessories_link if accessories? && allowed?(:add_accessories)
 
     if can_switch_instrument?
-      actions << switch_actions
+      actions << switch_actions if allowed?(:manage_reservation)
     elsif movable_to_now?
-      actions << move_link
+      actions << move_link if allowed?(:manage_reservation)
     end
 
     actions << report_an_issue_link
 
-    actions << cancel_link if can_cancel? && authorized_to_cancel
+    actions << cancel_link if can_cancel? && allowed?(:cancel)
 
     actions << fix_problem_link if can_fix_problem?
 
@@ -73,6 +74,10 @@ class ReservationUserActionPresenter
   end
 
   private
+
+  def allowed?(permission)
+    @permissions.fetch(permission, false)
+  end
 
   def accessories?
     ongoing? && order_detail&.accessories?

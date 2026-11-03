@@ -75,29 +75,32 @@ RSpec.describe ReservationsHelper do
     end
   end
 
-  describe "#authorized_to_cancel?" do
-    subject { authorized_to_cancel?(reservation) }
+  describe "#reservation_action_permissions" do
+    subject(:permissions) { reservation_action_permissions(reservation) }
 
     let(:facility) { create(:setup_facility) }
     let(:instrument) { create(:setup_instrument, facility:) }
     let(:reservation) { create(:purchased_reservation, product: instrument) }
 
+    let(:all_allowed) { { add_accessories: true, cancel: true, manage_reservation: true } }
+    let(:none_allowed) { { add_accessories: false, cancel: false, manage_reservation: false } }
+
     context "as the reservation's owner" do
       let(:current_user) { reservation.order_detail.user }
 
-      it { is_expected.to be true }
+      it { is_expected.to eq(all_allowed) }
     end
 
     context "as a facility director" do
       let(:current_user) { create(:user, :facility_director, facility:) }
 
-      it { is_expected.to be true }
+      it { is_expected.to eq(all_allowed) }
     end
 
     context "as an unrelated user" do
       let(:current_user) { create(:user) }
 
-      it { is_expected.to be false }
+      it { is_expected.to eq(none_allowed) }
     end
 
     context "with granular permissions", feature_setting: { granular_permissions: true } do
@@ -106,13 +109,19 @@ RSpec.describe ReservationsHelper do
       context "and only read access" do
         before { create(:facility_user_permission, user: current_user, facility:, read_access: true) }
 
-        it { is_expected.to be false }
+        it { is_expected.to eq(none_allowed) }
       end
 
       context "and order management" do
         before { create(:facility_user_permission, user: current_user, facility:, read_access: true, order_management: true) }
 
-        it { is_expected.to be true }
+        it { is_expected.to eq(all_allowed.merge(add_accessories: false)) }
+      end
+
+      context "and instrument management" do
+        before { create(:facility_user_permission, user: current_user, facility:, read_access: true, instrument_management: true) }
+
+        it { is_expected.to eq(none_allowed.merge(manage_reservation: true)) }
       end
     end
 
@@ -120,7 +129,7 @@ RSpec.describe ReservationsHelper do
       let(:current_user) { create(:user) }
       let(:reservation) { create(:admin_reservation, product: instrument) }
 
-      it { is_expected.to be false }
+      it { is_expected.to eq({}) }
     end
   end
 end
