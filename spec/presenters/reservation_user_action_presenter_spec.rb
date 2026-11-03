@@ -74,6 +74,33 @@ RSpec.describe ReservationUserActionPresenter do
       expect(parts.first).to include("Report an Issue")
     end
 
+    describe "the cancel link" do
+      let(:cancel_path) { cancel_order_order_detail_path(order, order_detail) }
+
+      before :each do
+        allow(reservation).to receive(:can_cancel?).and_return true
+        allow(CancellationFeeCalculator).to receive(:new).and_return(instance_double(CancellationFeeCalculator, total_cost: 0))
+      end
+
+      context "when authorized to cancel" do
+        it "is included" do
+          expect(presenter.user_actions.join("|")).to include(cancel_path)
+        end
+      end
+
+      context "when not authorized to cancel" do
+        subject(:text) { presenter.user_actions(nil, authorized_to_cancel: false).join("|") }
+
+        it "is omitted" do
+          expect(text).not_to include(cancel_path)
+        end
+
+        it "keeps the other actions" do
+          expect(text).to include("Report an Issue")
+        end
+      end
+    end
+
     describe "switching" do
       let(:encoded_link) { CGI.escapeHTML(link) }
       let(:link) do

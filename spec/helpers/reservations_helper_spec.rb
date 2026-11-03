@@ -74,4 +74,53 @@ RSpec.describe ReservationsHelper do
       end
     end
   end
+
+  describe "#authorized_to_cancel?" do
+    subject { authorized_to_cancel?(reservation) }
+
+    let(:facility) { create(:setup_facility) }
+    let(:instrument) { create(:setup_instrument, facility:) }
+    let(:reservation) { create(:purchased_reservation, product: instrument) }
+
+    context "as the reservation's owner" do
+      let(:current_user) { reservation.order_detail.user }
+
+      it { is_expected.to be true }
+    end
+
+    context "as a facility director" do
+      let(:current_user) { create(:user, :facility_director, facility:) }
+
+      it { is_expected.to be true }
+    end
+
+    context "as an unrelated user" do
+      let(:current_user) { create(:user) }
+
+      it { is_expected.to be false }
+    end
+
+    context "with granular permissions", feature_setting: { granular_permissions: true } do
+      let(:current_user) { create(:user) }
+
+      context "and only read access" do
+        before { create(:facility_user_permission, user: current_user, facility:, read_access: true) }
+
+        it { is_expected.to be false }
+      end
+
+      context "and order management" do
+        before { create(:facility_user_permission, user: current_user, facility:, read_access: true, order_management: true) }
+
+        it { is_expected.to be true }
+      end
+    end
+
+    context "when the reservation has no order detail" do
+      let(:current_user) { create(:user) }
+      let(:reservation) { create(:admin_reservation, product: instrument) }
+
+      it { is_expected.to be false }
+    end
+  end
 end

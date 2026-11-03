@@ -19,7 +19,7 @@ class ReservationUserActionPresenter
     @controller = controller
   end
 
-  def user_actions(redirect_to_order_id = nil)
+  def user_actions(redirect_to_order_id = nil, authorized_to_cancel: true)
     @redirect_to_order_id = redirect_to_order_id
 
     actions = []
@@ -33,7 +33,7 @@ class ReservationUserActionPresenter
 
     actions << report_an_issue_link
 
-    actions << cancel_link if can_cancel?
+    actions << cancel_link if can_cancel? && authorized_to_cancel
 
     actions << fix_problem_link if can_fix_problem?
 

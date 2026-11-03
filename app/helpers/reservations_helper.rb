@@ -28,8 +28,16 @@ module ReservationsHelper
 
   def reservation_actions(reservation, redirect_to_order_id: nil)
     delimiter = "&nbsp;|&nbsp;".html_safe
-    links = ReservationUserActionPresenter.new(self, reservation).user_actions(redirect_to_order_id)
+    links = ReservationUserActionPresenter.new(self, reservation)
+                                          .user_actions(redirect_to_order_id, authorized_to_cancel: authorized_to_cancel?(reservation))
     safe_join(links, delimiter)
+  end
+
+  def authorized_to_cancel?(reservation)
+    order_detail = reservation.order_detail
+    return false if order_detail.blank?
+
+    Ability.new(current_user, order_detail, controller).can?(:cancel, order_detail)
   end
 
   def kiosk_reservation_actions(reservation)
