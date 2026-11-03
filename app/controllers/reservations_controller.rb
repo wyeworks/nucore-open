@@ -106,6 +106,7 @@ class ReservationsController < ApplicationController
 
     @order_details = @order_details.paginate(page: params[:page]).preload(
       :order_status,
+      :account,
       order: :user,
       product: [:facility, :alert, :relay, :current_offline_reservations],
       reservation: { product: [:facility, :relay, :current_offline_reservations, :schedule_rules] },
