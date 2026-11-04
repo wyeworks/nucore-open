@@ -74,6 +74,50 @@ RSpec.describe OrderDetailPresenter do
     it { is_expected.to be_html_safe }
   end
 
+  describe "#cancelable_by?" do
+    subject { presented.cancelable_by?(ability) }
+
+    let(:ability) { instance_double(Ability, can?: can_cancel_order_detail?) }
+
+    before { allow(order_detail).to receive(:reservation) { reservation } }
+
+    context "when the reservation can be canceled" do
+      let(:reservation) { instance_double(Reservation, can_cancel?: true) }
+
+      context "and the ability allows canceling" do
+        let(:can_cancel_order_detail?) { true }
+
+        it { is_expected.to be true }
+
+        it "asks about the undecorated order detail" do
+          subject
+
+          expect(ability).to have_received(:can?).with(:cancel, order_detail)
+        end
+      end
+
+      context "and the ability forbids canceling" do
+        let(:can_cancel_order_detail?) { false }
+
+        it { is_expected.to be false }
+      end
+    end
+
+    context "when the reservation cannot be canceled" do
+      let(:reservation) { instance_double(Reservation, can_cancel?: false) }
+      let(:can_cancel_order_detail?) { true }
+
+      it { is_expected.to be false }
+    end
+
+    context "when there is no reservation" do
+      let(:reservation) { nil }
+      let(:can_cancel_order_detail?) { true }
+
+      it { is_expected.to be_falsey }
+    end
+  end
+
   describe "#row_class" do
     subject { presented.row_class }
 

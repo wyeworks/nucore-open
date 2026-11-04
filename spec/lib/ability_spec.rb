@@ -597,7 +597,7 @@ RSpec.describe Ability do
     context "read-only facility access" do
       it_is_allowed_to([:list, :dashboard, :show], Facility)
       it_is_allowed_to([:administer, :index, :show], Order)
-      it { is_expected.to be_allowed_to(:show, OrderDetail) }
+      it_is_allowed_to([:index, :show], OrderDetail)
       it_is_allowed_to([:administer, :index, :show, :timeline], Reservation)
       it_is_allowed_to(%i[administer index view_details schedule show], Product)
       it_is_allowed_to([:show, :index], PriceGroup)
@@ -713,7 +713,7 @@ RSpec.describe Ability do
         FacilityUserPermission.find_by(user:, facility:).update!(order_management: true)
       end
 
-      it_is_allowed_to([:update, :edit, :mark_unrecoverable], OrderDetail)
+      it_is_allowed_to([:update, :edit, :cancel, :mark_unrecoverable], OrderDetail)
       it_is_allowed_to(%i[administer assign_price_policies_to_problem_orders batch_update create index order_in_past send_receipt show tab_counts update], Order)
       it_is_allowed_to(%i[administer assign_price_policies_to_problem_orders batch_update cancel edit index show tab_counts timeline update], Reservation)
       it { is_expected.to be_allowed_to(:act_as, facility) }
@@ -744,6 +744,16 @@ RSpec.describe Ability do
             expect(ability).to be_allowed_to(action, subject_resource)
             expect(ability).not_to be_allowed_to(action, other_order_detail)
           end
+        end
+      end
+
+      context "cancellation permissions" do
+        let(:subject_resource) { build_stubbed(:order_detail, order: build_stubbed(:order, facility:)) }
+        let(:other_order_detail) { build_stubbed(:order_detail, order: build_stubbed(:order, facility: create(:facility))) }
+
+        it "allows cancel only within the facility", :aggregate_failures do
+          expect(ability).to be_allowed_to(:cancel, subject_resource)
+          expect(ability).not_to be_allowed_to(:cancel, other_order_detail)
         end
       end
 
@@ -903,7 +913,7 @@ RSpec.describe Ability do
       end
 
       it_is_allowed_to(%i[bring_online create edit new update], OfflineReservation)
-      it_is_allowed_to([:update, :edit, :mark_unrecoverable], OrderDetail)
+      it_is_allowed_to([:update, :edit, :cancel, :mark_unrecoverable], OrderDetail)
       it { is_expected.to be_allowed_to(:act_as, facility) }
       it { is_expected.to be_allowed_to(:switch, Instrument) }
     end
@@ -1015,7 +1025,7 @@ RSpec.describe Ability do
 
       it_is_allowed_to([:list, :dashboard, :show], Facility)
       it_is_allowed_to([:administer, :index, :show, :tab_counts], Order)
-      it_is_allowed_to([:show], OrderDetail)
+      it_is_allowed_to([:index, :show], OrderDetail)
       it_is_allowed_to(%i[administer index show timeline tab_counts], Reservation)
       it_is_allowed_to(%i[administer index view_details schedule show], Product)
       it_is_allowed_to([:index], Project)
@@ -1042,7 +1052,7 @@ RSpec.describe Ability do
       it_is_not_allowed_to([:manage], Journal)
       it_is_not_allowed_to([:manage], Statement)
       it_is_not_allowed_to([:manage], FacilityUserPermission)
-      it_is_not_allowed_to([:manage, :adjust_price], OrderDetail)
+      it_is_not_allowed_to([:manage, :adjust_price, :cancel], OrderDetail)
       it_is_not_allowed_to([:manage], Product)
       it_is_not_allowed_to([:manage], OfflineReservation)
       it_is_not_allowed_to([:manage], Account)
