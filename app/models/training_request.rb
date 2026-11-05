@@ -3,9 +3,11 @@
 class TrainingRequest < ApplicationRecord
   belongs_to :user
   belongs_to :product
+  belongs_to :note_updated_by, class_name: "User", optional: true
 
   validates :user, :product, presence: true
   validates :user_id, uniqueness: { scope: :product_id, case_sensitive: false }
+  validates :note, length: { maximum: 1000, allow_blank: true }
 
   validates_with ProductRequiresApprovalValidator
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_08_19_140538) do
+ActiveRecord::Schema[8.0].define(version: 2026_11_05_172413) do
   create_table "account_facility_joins", id: :integer, charset: "utf8mb3", force: :cascade do |t|
     t.integer "facility_id", null: false
     t.integer "account_id", null: false
@@ -1046,6 +1046,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_19_140538) do
     t.integer "product_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
+    t.text "note"
+    t.datetime "note_updated_at"
+    t.integer "note_updated_by_id"
+    t.index ["note_updated_by_id"], name: "index_training_requests_on_note_updated_by_id"
     t.index ["product_id"], name: "index_training_requests_on_product_id"
     t.index ["user_id"], name: "index_training_requests_on_user_id"
   end
@@ -1226,6 +1230,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_08_19_140538) do
   add_foreign_key "statements", "statements", column: "parent_statement_id"
   add_foreign_key "stored_files", "order_details", name: "fk_files_od"
   add_foreign_key "stored_files", "products", name: "fk_files_product"
+  add_foreign_key "training_requests", "users", column: "note_updated_by_id"
   add_foreign_key "user_preferences", "users"
   add_foreign_key "user_roles", "facilities"
   add_foreign_key "user_roles", "users"
