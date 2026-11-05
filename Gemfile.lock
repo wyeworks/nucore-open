@@ -193,7 +193,7 @@ GEM
       uniform_notifier (~> 1.11)
     byebug (13.0.0)
       reline (>= 0.6.0)
-    cancancan (3.6.1)
+    cancancan (3.7.0)
     capybara (3.40.0)
       addressable
       matrix
@@ -742,7 +742,7 @@ DEPENDENCIES
   bulk_email!
   bullet
   c2po!
-  cancancan (= 3.6.1)
+  cancancan (= 3.7.0)
   capybara
   capybara-email
   chosen-rails
