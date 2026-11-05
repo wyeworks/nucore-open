@@ -25,7 +25,7 @@ describe("TimeFormatter", function() {
       });
 
       return it('has the correctly formatted date', function() {
-        return expect(this.formatter.dateString()).toEqual('4/17/2015');
+        return expect(this.formatter.isoDateString()).toEqual('2015-04-17');
       });
     });
 
@@ -66,7 +66,7 @@ describe("TimeFormatter", function() {
     it('gives the right formatted date', function() {
       const date = new Date(2015, 3, 12, 3, 15);
       const formatter = new TimeFormatter(date);
-      return expect(formatter.dateString()).toEqual('4/12/2015');
+      return expect(formatter.isoDateString()).toEqual('2015-04-12');
     });
 
     it('gives the right thing for an AM', function() {

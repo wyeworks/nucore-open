@@ -39,10 +39,6 @@ window.TimeFormatter = class TimeFormatter {
     return this.dateTime.getDate();
   }
 
-  dateString() {
-    return this.dateTime.toString("M/d/yyyy");
-  }
-
   isoDateString() {
     return this.dateTime.toString("yyyy-MM-dd");
   }
