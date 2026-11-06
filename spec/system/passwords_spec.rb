@@ -123,5 +123,17 @@ RSpec.describe "Passwords", :aggregate_failures, feature_setting: { "users_authe
         expect(current_email).to be_present
       end
     end
+
+    describe "with an email that includes HTML" do
+      before do
+        fill_in "Email", with: "john@example.com<a href=\"/\">Testing</a>"
+        click_button "Submit"
+      end
+
+      it "shows the email as text" do
+        expect(page).to have_content "We cannot find john@example.com<a href=\"/\">Testing</a> in our records."
+        expect(page).not_to have_link "Testing"
+      end
+    end
   end
 end

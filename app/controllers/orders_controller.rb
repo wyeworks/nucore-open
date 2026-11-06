@@ -92,14 +92,12 @@ class OrdersController < ApplicationController
   def add
     ## get items to add from the form post or from the session
     ods_from_params = (params[:order].presence && params[:order][:order_details].presence) || []
-    items = ods_from_params.presence || session[:add_to_cart].presence || []
+    items = cart_items(ods_from_params.presence || session[:add_to_cart].presence || [])
     session[:add_to_cart] = nil
 
-    # ignore ods w/ empty or 0 quantities
-    items = items.compact.map { |i| i.permit(:product_id, :quantity) }.select { |od| od[:quantity].to_i > 0 }
     return redirect_back_or_to(cart_path, notice: "Please add at least one quantity to order something") unless items.size > 0
 
-    first_product = find_cart_product(items.first[:product_id])
+    first_product = find_cart_product(items.first["product_id"])
     facility_ability = Ability.new(session_user, first_product.facility, self)
 
     # if acting_as, make sure the session user can place orders for the facility
@@ -109,7 +107,7 @@ class OrdersController < ApplicationController
     end
 
     ## handle a single instrument reservation
-    if items.size == 1 && items.first[:quantity].to_i == 1 && first_product.respond_to?(:reservations) # and product is reservable
+    if items.size == 1 && items.first["quantity"] == 1 && first_product.respond_to?(:reservations) # and product is reservable
 
       # make a new cart w/ instrument (unless this order is empty.. then use that one)
       @order = acting_user.cart(session_user, @order.order_details.empty?)
@@ -135,9 +133,9 @@ class OrdersController < ApplicationController
     ## process each item
     @order.transaction do
       items.each do |item|
-        @product = find_cart_product(item[:product_id])
+        @product = find_cart_product(item["product_id"])
         begin
-          @order.add(@product, item[:quantity])
+          @order.add(@product, item["quantity"])
           @order.invalidate! ## this is because we just added an order_detail
         rescue NUCore::MixedFacilityCart
           @order.errors.add(:base, "You can not add a product from another facility; please clear your cart or place a separate order.")
@@ -199,7 +197,7 @@ class OrdersController < ApplicationController
     @product = if session[:add_to_cart].blank?
                  @order.order_details[0].try(:product)
                else
-                 find_cart_product(session[:add_to_cart].first[:product_id])
+                 find_cart_product(session[:add_to_cart].first["product_id"])
                end
     # For nonbillable products, we don't ask the user to choose an account
     # POST requests are sent from the form on the choose_account page,
@@ -329,7 +327,15 @@ class OrdersController < ApplicationController
   def adding_billable_products_to_nonbillable_cart?(items)
     return false unless @order.account.is_a?(NonbillableAccount)
 
-    items.any? { |item| !find_cart_product(item[:product_id]).nonbillable_mode? }
+    items.any? { |item| !find_cart_product(item["product_id"]).nonbillable_mode? }
+  end
+
+  # ignore ods w/ empty or 0 quantities
+  def cart_items(items)
+    items.compact.filter_map do |item|
+      quantity = item["quantity"].to_i
+      { "product_id" => item["product_id"].to_i, "quantity" => quantity } if quantity > 0
+    end
   end
 
   def add_account_to_order(account)
