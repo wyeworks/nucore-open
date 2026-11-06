@@ -518,6 +518,7 @@ en:
         user: Name
         product: Instrument
         created_at: Requested on
+        note: Note
       journal_creation_reminder:
         starts_at: Starting Date
         ends_at: Ending Date
