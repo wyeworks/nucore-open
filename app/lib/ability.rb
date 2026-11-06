@@ -278,9 +278,10 @@ class Ability
       AccountPriceGroupMember,
       OrderDetail,
       ProductUser,
-      TrainingRequest,
       UserPriceGroupMember,
     ]
+
+    can [:index, :destroy], TrainingRequest
 
     can :read, Notification
     can :read, ProductDisplayGroup

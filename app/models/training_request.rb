@@ -11,6 +11,17 @@ class TrainingRequest < ApplicationRecord
 
   validates_with ProductRequiresApprovalValidator
 
+  def update_note(note, user)
+    self.note = note
+
+    if note_changed?
+      self.note_updated_by = user
+      self.note_updated_at = Time.current
+    end
+
+    save
+  end
+
   def self.submitted?(user, product)
     where(product_id: product.id, user_id: user.id).present?
   end

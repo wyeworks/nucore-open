@@ -4,7 +4,7 @@ class MessageSummarizer::TrainingRequestsSummary < MessageSummarizer::FacilityMe
   private
 
   def allowed?
-    ability.can?(:manage, TrainingRequest)
+    ability.can?(:index, TrainingRequest)
   end
 
   def get_count
