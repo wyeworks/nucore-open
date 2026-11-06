@@ -140,7 +140,7 @@ class FacilityStatementsController < ApplicationController
     if count > 0
       flash[:notice] = text("unreconcile.success", count:)
     elsif unreconciler.errors.any?
-      flash[:error] = unreconciler.errors.join("<br />")
+      flash[:error] = unreconciler.errors.join("<br />").html_safe
     else
       flash[:error] = text("unreconcile.errors.none_eligible")
     end
