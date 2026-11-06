@@ -1416,6 +1416,11 @@ en:
     destroy:
       success: "The request from %{user} for %{product} has been removed."
       failure: "The request from %{user} for %{product} was not able to be removed."
+    save_note: Save
+    note_byline: "%{user} — %{date}"
+    update:
+      success: "The note for %{user} / %{product} has been saved."
+      failure: "The note for %{user} / %{product} was not able to be saved."
     no_requests: There are no outstanding training requests.
 
   transactions:
