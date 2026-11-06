@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 require "rails_helper"
+require "controller_spec_helper"
 
 RSpec.describe TrainingRequestsController, feature_setting: { training_requests: true, reload_routes: true } do
+  before(:all) { create_users }
+
   let(:facility) { FactoryBot.create(:setup_facility) }
   let(:product) do
     FactoryBot.create(:setup_item, facility:,
@@ -83,6 +86,28 @@ RSpec.describe TrainingRequestsController, feature_setting: { training_requests:
           expect { do_request }.not_to enqueue_mail
         end
       end
+    end
+  end
+
+  describe "#update" do
+    let!(:training_request) { create(:training_request, user:, product:) }
+    let(:authable) { facility }
+
+    before do
+      @method = :put
+      @action = :update
+      @params = {
+        facility_id: facility.url_name,
+        id: training_request.id,
+        training_request: { note: "Emailed them" },
+      }
+    end
+
+    it_should_allow_managers_and_senior_staff_only :redirect do |acting_user|
+      expect(training_request.reload).to have_attributes(
+        note: "Emailed them",
+        note_updated_by: acting_user,
+      )
     end
   end
 end

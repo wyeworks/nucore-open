@@ -45,6 +45,74 @@ RSpec.describe TrainingRequest do
     end
   end
 
+  describe "note" do
+    subject(:training_request) { create(:training_request, user:) }
+
+    it "is valid when blank" do
+      expect(training_request).to be_valid
+    end
+
+    it "is valid at 1000 characters" do
+      training_request.note = "a" * 1000
+      expect(training_request).to be_valid
+    end
+
+    it "is invalid beyond 1000 characters" do
+      training_request.note = "a" * 1001
+      expect(training_request).not_to be_valid
+      expect(training_request.errors).to be_added(:note, :too_long, count: 1000)
+    end
+  end
+
+  describe "#update_note" do
+    subject(:training_request) { create(:training_request, user:) }
+
+    let(:editor) { create(:user) }
+
+    it "saves the note" do
+      expect(training_request.update_note("Emailed them", editor)).to be true
+      expect(training_request.reload.note).to eq("Emailed them")
+    end
+
+    it "stamps who wrote it and when" do
+      stamped_at = 1.hour.ago.change(usec: 0)
+
+      travel_to_and_return(stamped_at) do
+        training_request.update_note("Emailed them", editor)
+      end
+
+      expect(training_request.reload).to have_attributes(
+        note_updated_by: editor,
+        note_updated_at: stamped_at,
+      )
+    end
+
+    context "when the note is saved again unchanged" do
+      let(:other_editor) { create(:user) }
+      let(:original_time) { 2.days.ago.change(usec: 0) }
+
+      before do
+        travel_to_and_return(original_time) { training_request.update_note("Emailed them", editor) }
+      end
+
+      it "leaves the byline alone" do
+        training_request.update_note("Emailed them", other_editor)
+
+        expect(training_request.reload).to have_attributes(
+          note_updated_by: editor,
+          note_updated_at: original_time,
+        )
+      end
+
+      it "restamps once the text actually changes" do
+        training_request.update_note("Called them instead", other_editor)
+
+        expect(training_request.reload.note_updated_by).to eq(other_editor)
+        expect(training_request.reload.note_updated_at).to be > original_time
+      end
+    end
+  end
+
   describe ".submitted?" do
     let(:product) { create(:instrument_requiring_approval) }
 

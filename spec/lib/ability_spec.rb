@@ -501,6 +501,8 @@ RSpec.describe Ability do
     it_is_not_allowed_to(%i[bring_online create edit new update], OfflineReservation)
     it { is_expected.to be_allowed_to(:create, TrainingRequest) }
     it_behaves_like "it can not manage training requests"
+    it_is_allowed_to([:index, :destroy], TrainingRequest)
+    it_is_not_allowed_to([:update], TrainingRequest)
     it_is_not_allowed_to([:create, :update, :destroy], ScheduleRule)
     it_is_not_allowed_to([:create, :update, :destroy], ProductAccessGroup)
 
@@ -606,6 +608,7 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:administer, User) }
       it { is_expected.to be_allowed_to(:read, Schedule) }
       it { is_expected.to be_allowed_to(:read, ProductDisplayGroup) }
+      it_is_not_allowed_to([:update], TrainingRequest)
 
       context "when accessing UsersController" do
         let(:stub_controller) { UsersController.new }
@@ -676,6 +679,7 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:manage, StoredFile) }
       it { is_expected.to be_allowed_to(:manage, OfflineReservation) }
       it { is_expected.not_to be_allowed_to(:create_daily_booking, Product) }
+      it { is_expected.to be_allowed_to(:update, TrainingRequest) }
     end
 
     context "with product_edition" do
@@ -692,6 +696,7 @@ RSpec.describe Ability do
       it { is_expected.to be_allowed_to(:manage, StoredFile) }
       it { is_expected.to be_allowed_to(:manage, OfflineReservation) }
       it { is_expected.not_to be_allowed_to(:create_daily_booking, Product) }
+      it { is_expected.to be_allowed_to(:update, TrainingRequest) }
     end
 
     context "with product_pricing" do
