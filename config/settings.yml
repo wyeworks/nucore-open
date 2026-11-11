@@ -154,6 +154,7 @@ feature:
   accounts:
     account_reference_field: false
     account_tabs: false
+    bulk_add_business_administrator: false
     edit_accounts: true
     expense_accounts: true
     facility_payment_urls: false

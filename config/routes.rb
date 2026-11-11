@@ -214,6 +214,7 @@ Rails.application.routes.draw do
       resources :clone_account_memberships, only: %i[index new create] do
         get :search, on: :collection
       end
+      resources :bulk_account_memberships, only: %i[index create]
       resources :user_research_safety_certifications, only: [:index]
       resources :user_file_uploads, only: [:index, :create, :destroy]
       get "/files/:id", to: "user_file_uploads#download", as: "download_user_file"

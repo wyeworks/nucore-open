@@ -1,0 +1,51 @@
+= content_for :tabnav do
+  = render partial: "admin/shared/tabnav_users", locals: { secondary_tab: "accounts" }
+= content_for :sidebar do
+  = render partial: "admin/shared/sidenav_users", locals: { sidenav_tab: "users" }
+
+= content_for :h1 do
+  = current_facility
+
+%header
+  %h1= @user.full_name
+  %h2= text("header")
+
+%p= text("instructions", user: @user.full_name)
+
+= form_tag facility_user_bulk_account_memberships_path(current_facility, @user), method: :get do
+  = label_tag :search_term, text("search_term")
+  = text_field_tag :search_term, @search_term, size: 30, class: "form-control"
+  = submit_tag text("shared.search"), class: "btn btn-default"
+
+%br
+
+- if @accounts
+  - if @accounts.empty?
+    %p.alert.alert-info= text("none")
+  - else
+    - if @too_many_results
+      %p.alert.alert-warning= text("too_many_results", count: @accounts.size)
+
+    = form_with url: facility_user_bulk_account_memberships_path(current_facility, @user) do |f|
+      %table.table.table-striped.table-hover
+        %thead
+          %tr
+            %th= select_all_link
+            %th= Account.model_name.human
+            %th= t("views.facility_accounts.account_table.account_type")
+            %th= AccountUser::ACCOUNT_OWNER
+            %th= Account.human_attribute_name(:expires_at)
+            %th= text("current_role")
+        %tbody
+          - @accounts.each do |account|
+            - membership = @current_memberships[account.id]
+            %tr
+              %td= f.check_box "account_ids[]", { class: "toggle", id: "accountId#{account.id}", disabled: membership.present?, title: (text("already_member") if membership) }, account.id, nil
+              %td= link_to account, facility_account_path(current_facility, account)
+              %td= account.type_string
+              %td= account.owner_user
+              %td{ class: account.expired? ? "expired" : "" }= account_expiration(account.expires_at)
+              %td= membership&.user_role
+
+      = f.submit text("submit", role: BulkAccountMembershipCreator::USER_ROLE), class: "btn btn-success js--requireValueForSubmit", data: { confirm: text("confirm", user: @user.full_name, role: BulkAccountMembershipCreator::USER_ROLE) }
+      = link_to text("shared.cancel"), facility_user_accounts_path(current_facility, @user)

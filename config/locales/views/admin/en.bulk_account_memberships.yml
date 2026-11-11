@@ -1,0 +1,24 @@
+en:
+  controllers:
+    bulk_account_memberships:
+      search_too_short: "Search terms must be %{minimum} or more characters."
+      none_selected: Please select at least one payment source.
+      success:
+        one: "%{user} was added as Business Administrator to 1 payment source."
+        other: "%{user} was added as Business Administrator to %{count} payment sources."
+      error: "An error was encountered while adding the payment source \"%{account}\": %{message}."
+  views:
+    bulk_account_memberships:
+      index:
+        header: "!views.bulk_account_memberships.link!"
+        instructions: |
+          Search for payment sources by owner, account number or description, select the ones
+          you want, and %{user} will be added to them as Business Administrator.
+        search_term: Search by owner, account number or description
+        none: No payment sources found
+        too_many_results: "Showing the first %{count} results. Please refine your search to see more."
+        current_role: Current Role
+        already_member: User is already a member of this payment source
+        submit: "Add as %{role}"
+        confirm: "Add %{user} as %{role} to the selected payment sources?"
+      link: Bulk Add Business Administrator
