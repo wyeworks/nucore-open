@@ -103,7 +103,7 @@ Rails.application.routes.draw do
 
     get "instrument_statuses", to: "instruments#instrument_statuses", as: "instrument_statuses"
 
-    resources :training_requests, only: [:index, :destroy] if SettingsHelper.feature_on?(:training_requests)
+    resources :training_requests, only: [:index, :update, :destroy] if SettingsHelper.feature_on?(:training_requests)
 
     resources :instruments do
       resources :quick_reservations, only: [:new, :create, :show]

@@ -35,6 +35,17 @@ class TrainingRequestsController < ApplicationController
     redirect_to facility_path(current_facility)
   end
 
+  # PATCH /facilities/:facility_id/training_requests/:id
+  def update
+    if @training_request.update_note(update_params[:note], current_user)
+      flash[:notice] = t(".success", **flash_arguments)
+    else
+      flash[:error] = t(".failure", **flash_arguments)
+    end
+
+    redirect_to facility_training_requests_path(current_facility)
+  end
+
   # DELETE /facilities/:facility_id/training_requests/:id
   def destroy
     if @training_request.destroy
@@ -61,6 +72,10 @@ class TrainingRequestsController < ApplicationController
   def load_product
     @product =
       current_facility.products.active.find_by!(url_name: params[:product_id])
+  end
+
+  def update_params
+    params.require(:training_request).permit(:note)
   end
 
   def sort_lookup_hash
