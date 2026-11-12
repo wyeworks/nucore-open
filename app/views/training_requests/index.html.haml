@@ -38,9 +38,6 @@
                   = f.submit t("training_requests.save_note"), class: "btn btn-link btn-xs"
             - else
               = simple_format(training_request.note)
-            - if training_request.note_updated_at
-              %small.text-muted
-                = t("training_requests.note_byline", user: training_request.note_updated_by, date: l(training_request.note_updated_at))
           %td
             = form_for([current_facility, training_request], method: :delete, html: { class: "compact" }) do
               = submit_tag t("training_requests.delete"), class: "btn btn-default"
