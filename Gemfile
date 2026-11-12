@@ -76,7 +76,7 @@ gem "will_paginate"
 gem "prawn-rails"
 
 ## Email
-gem "mailgun-ruby", "~>1.4.4"
+gem "mailgun-ruby", "~>1.4.6"
 
 ## other
 gem "daemons"
