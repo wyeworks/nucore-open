@@ -103,11 +103,8 @@ RSpec.describe TrainingRequestsController, feature_setting: { training_requests:
       }
     end
 
-    it_should_allow_managers_and_senior_staff_only :redirect do |acting_user|
-      expect(training_request.reload).to have_attributes(
-        note: "Emailed them",
-        note_updated_by: acting_user,
-      )
+    it_should_allow_managers_and_senior_staff_only :redirect do
+      expect(training_request.reload.note).to eq("Emailed them")
     end
   end
 end

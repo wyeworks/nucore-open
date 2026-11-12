@@ -37,7 +37,7 @@ class TrainingRequestsController < ApplicationController
 
   # PATCH /facilities/:facility_id/training_requests/:id
   def update
-    if @training_request.update_note(update_params[:note], current_user)
+    if @training_request.update(update_params)
       flash[:notice] = t(".success", **flash_arguments)
     else
       flash[:error] = t(".failure", **flash_arguments)
