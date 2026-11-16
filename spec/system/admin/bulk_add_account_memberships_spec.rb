@@ -17,7 +17,7 @@ RSpec.describe "Bulk adding a business administrator to payment sources" do
   end
 
   context "when the feature is enabled", feature_setting: { "accounts.bulk_add_business_administrator" => true } do
-    describe "as a global admin", :js do
+    describe "as a global admin" do
       let(:admin) { create(:user, :administrator) }
 
       before { login_as admin }
@@ -28,7 +28,7 @@ RSpec.describe "Bulk adding a business administrator to payment sources" do
         expect(page).not_to have_link("Bulk Add Business Administrator")
       end
 
-      it "adds the user as business administrator to the selected payment sources" do
+      it "adds the user as business administrator to the selected payment sources", :js do
         visit facility_user_accounts_path("all", user)
         click_link "Bulk Add Business Administrator"
 
