@@ -17,8 +17,8 @@ en:
         search_term: Search by owner, account number or description
         none: No payment sources found
         too_many_results: "Showing the first %{count} results. Please refine your search to see more."
+        owner: Owner
         current_role: Current Role
         already_member: User is already a member of this payment source
         submit: "Add as %{role}"
-        confirm: "Add %{user} as %{role} to the selected payment sources?"
       link: Bulk Add Business Administrator

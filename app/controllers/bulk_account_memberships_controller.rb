@@ -18,7 +18,7 @@ class BulkAccountMembershipsController < ApplicationController
     @search_term = params[:search_term].to_s.strip
     return if @search_term.blank?
 
-    searcher = AccountSearcher.new(@search_term, scope: Account.for_facility(current_facility))
+    searcher = AccountSearcher.new(@search_term)
 
     if searcher.valid?
       accounts = searcher.results.includes(:owner_user).limit(MAX_RESULTS + 1).to_a
@@ -31,11 +31,11 @@ class BulkAccountMembershipsController < ApplicationController
   end
 
   def create
-    accounts = Account.for_facility(current_facility).where(id: params[:account_ids]).includes(:account_users).order(:account_number)
+    accounts = Account.where(id: params[:account_ids]).includes(:account_users).order(:account_number)
 
     if accounts.empty?
       flash[:error] = text("none_selected")
-      return redirect_to facility_user_bulk_account_memberships_path(current_facility, @user)
+      return redirect_to_search
     end
 
     creator = BulkAccountMembershipCreator.new(accounts:, user: @user, acting_user: current_user)
@@ -45,11 +45,15 @@ class BulkAccountMembershipsController < ApplicationController
       redirect_to facility_user_accounts_path(current_facility, @user)
     else
       flash[:error] = text("error", account: creator.error.record.account, message: creator.error.message)
-      redirect_to facility_user_bulk_account_memberships_path(current_facility, @user)
+      redirect_to_search
     end
   end
 
   private
+
+  def redirect_to_search
+    redirect_to facility_user_bulk_account_memberships_path(current_facility, @user, search_term: params[:search_term].presence)
+  end
 
   def check_feature_enabled
     raise ActionController::RoutingError, "Bulk add business administrator is not enabled" unless SettingsHelper.feature_on?("accounts.bulk_add_business_administrator")

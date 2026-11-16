@@ -17,7 +17,7 @@ RSpec.describe "Bulk adding a business administrator to payment sources" do
   end
 
   context "when the feature is enabled", feature_setting: { "accounts.bulk_add_business_administrator" => true } do
-    describe "as a global admin" do
+    describe "as a global admin", :js do
       let(:admin) { create(:user, :administrator) }
 
       before { login_as admin }
@@ -40,6 +40,7 @@ RSpec.describe "Bulk adding a business administrator to payment sources" do
         expect(page).to have_content(existing_membership_account.to_s)
         expect(page).not_to have_content(other_account.to_s)
         expect(page).to have_field("accountId#{existing_membership_account.id}", disabled: true)
+        expect(page).to have_button("Add as Business Administrator", disabled: true)
 
         check "accountId#{first_account.id}"
         check "accountId#{second_account.id}"

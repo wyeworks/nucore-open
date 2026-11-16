@@ -29,12 +29,12 @@ RSpec.describe "Bulk account memberships" do
         expect(flash[:error]).to eq("Please select at least one payment source.")
       end
 
-      it "redirects back with an error when the user is already a member" do
+      it "redirects back to the search with an error when the user is already a member" do
         create(:account_user, :purchaser, user:, account:)
 
-        post facility_user_bulk_account_memberships_path("all", user), params: { account_ids: [account.id] }
+        post facility_user_bulk_account_memberships_path("all", user), params: { account_ids: [account.id], search_term: "Investigatorson" }
 
-        expect(response).to redirect_to(facility_user_bulk_account_memberships_path("all", user))
+        expect(response).to redirect_to(facility_user_bulk_account_memberships_path("all", user, search_term: "Investigatorson"))
         expect(flash[:error]).to include(account.to_s)
         expect(account.account_users.active.find_by(user:).user_role).to eq(AccountUser::ACCOUNT_PURCHASER)
       end

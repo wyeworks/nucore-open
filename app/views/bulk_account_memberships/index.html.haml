@@ -27,13 +27,14 @@
       %p.alert.alert-warning= text("too_many_results", count: @accounts.size)
 
     = form_with url: facility_user_bulk_account_memberships_path(current_facility, @user) do |f|
+      = hidden_field_tag :search_term, @search_term
       %table.table.table-striped.table-hover
         %thead
           %tr
             %th= select_all_link
             %th= Account.model_name.human
             %th= t("views.facility_accounts.account_table.account_type")
-            %th= AccountUser::ACCOUNT_OWNER
+            %th= text("owner")
             %th= Account.human_attribute_name(:expires_at)
             %th= text("current_role")
         %tbody
@@ -47,5 +48,5 @@
               %td{ class: account.expired? ? "expired" : "" }= account_expiration(account.expires_at)
               %td= membership&.user_role
 
-      = f.submit text("submit", role: BulkAccountMembershipCreator::USER_ROLE), class: "btn btn-success js--requireValueForSubmit", data: { confirm: text("confirm", user: @user.full_name, role: BulkAccountMembershipCreator::USER_ROLE) }
+      = f.submit text("submit", role: BulkAccountMembershipCreator::USER_ROLE), class: "btn btn-success js--requireValueForSubmit"
       = link_to text("shared.cancel"), facility_user_accounts_path(current_facility, @user)
