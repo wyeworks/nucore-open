@@ -1,0 +1,4 @@
+- if current_facility.cross_facility? && current_ability.can?(:clone_accounts, current_facility)
+  = link_to text("views.clone_account_memberships.index.header"), facility_user_clone_account_memberships_path(current_facility, @user), class: "btn btn-default"
+- if current_facility.cross_facility? && SettingsHelper.feature_on?("accounts.bulk_add_business_administrator") && current_ability.can?(:bulk_add_account_memberships, current_facility)
+  = link_to text("views.bulk_account_memberships.link"), facility_user_bulk_account_memberships_path(current_facility, @user), class: "btn btn-default"

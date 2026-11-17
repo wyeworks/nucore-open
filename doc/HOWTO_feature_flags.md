@@ -41,6 +41,7 @@ Grouped under `feature.accounts`.
 * `Account.config.facility_account_types` Which account types (CC, PO) can be used at multiple facilities or just one (CC + PO should be available cross-facility)
 * `account_reference_field`: Enable account `reference` field.
 * `account_tabs`: Display Accounts in two tabs: active and expired. Include some extra filters.
+* `bulk_add_business_administrator`: Allow global administrators to add a user as Business Administrator to multiple payment sources at once, from the user's Payment Sources tab in the cross-facility context.
 * `edit_accounts`: Allow to edit accounts.
 * `expense_accounts`: Allow to set `revenue_account` on Facility Account. Else take it from `Settings.account.revenue_account_default`.
 * `facility_payment_urls` Store a payment url for each facility (can be used on statement PDFs to direct users to pay via CC)
