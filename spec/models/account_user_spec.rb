@@ -192,7 +192,7 @@ RSpec.describe AccountUser do
     it "soft deletes the old owner" do
       old_owner_role = account.owner
       expect { described_class.grant(new_purchaser, AccountUser::ACCOUNT_OWNER, account, by: account_manager) }
-        .to change(old_owner_role, :deleted_at).to be_present
+        .to change { old_owner_role.reload.deleted_at }.to be_present
     end
 
     it "does not persist if there's something wrong with it" do
