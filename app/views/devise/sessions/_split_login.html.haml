@@ -1,0 +1,41 @@
+-#
+  Opt-in two-panel login page. A school enables it by registering this partial on the
+  "login_page" hook of devise.sessions.new:
+
+    ViewHook.add_hook("devise.sessions.new", "login_page", "devise/sessions/split_login")
+
+  The left (internal) panel is filled by the "internal_login" hook, which the
+  saml_authentication engine registers. Schools can add links under the password
+  form via the "external_login_links" hook.
+- content_for :h1, text("title"), flush: true
+
+.split-login
+  %p.split-login__intro= text("intro")
+
+  .row.split-login__panels
+    .col-md-6
+      .split-login__panel.split-login__panel--internal
+        = render_view_hook("internal_login")
+
+    .split-login__divider{ "aria-hidden": "true" }= text("divider")
+
+    .col-md-6
+      .split-login__panel.split-login__panel--external
+        %p.split-login__eyebrow= text("external.eyebrow")
+        %h2.split-login__heading= text("external.heading")
+        %p.split-login__description= text("external.description")
+
+        = simple_form_for resource, as: resource_name, url: session_path(resource_name) do |f|
+          = f.input :username,
+            required: false,
+            label: text("external.username_label"),
+            placeholder: text("external.username_placeholder").presence
+          = f.input :password, required: false
+          = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
+
+          = f.button :submit, text("external.submit"), class: ["btn", "btn-primary", "btn-lg", "btn-block"]
+
+        .split-login__links
+          - if SettingsHelper.feature_on?("users_authentication.password_update")
+            = link_to text("views.devise.sessions.new.forgot_password"), :reset_password
+          = render_view_hook("external_login_links")
