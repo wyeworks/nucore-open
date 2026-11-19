@@ -19,7 +19,7 @@ class AccountRoleGrantor
 
     begin
       AccountUser.transaction do
-        Account.where(id: account.id).lock.pick(:id)
+        Account.where(id: account.id).lock.load
 
         # Remove the old owner if we're assigning a new one
         destroy_old_account_user(account.reload_owner) if role == AccountUser::ACCOUNT_OWNER
