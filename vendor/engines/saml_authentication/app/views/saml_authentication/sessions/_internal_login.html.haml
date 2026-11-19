@@ -1,0 +1,8 @@
+-# Internal (SSO) panel of the split login page, see devise/sessions/_split_login
+%p.split-login__eyebrow= text("eyebrow")
+%h2.split-login__heading= text("heading")
+.split-login__description= html("description")
+
+= link_to new_saml_user_session_path, class: ["btn", "btn-default", "btn-lg", "btn-block", "split-login__action"] do
+  = text("button")
+  %i.fa.fa-arrow-right{ "aria-hidden": "true" }
