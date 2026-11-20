@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     container:
-      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.13-node22
     env:
       RAILS_ENV: test
     steps:
@@ -44,7 +44,7 @@ jobs:
           MYSQL_ROOT_HOST: "%"
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
-      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.13-node22
     env:
       RAILS_ENV: test
       RAILS_TEST_COMPILED_ASSETS: true
@@ -87,7 +87,7 @@ jobs:
           MYSQL_ROOT_HOST: "%"
         options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
     container:
-      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.13-node22
     env:
       RAILS_ENV: test
       RAILS_TEST_COMPILED_ASSETS: true
@@ -133,7 +133,7 @@ jobs:
           - 4444:4444
         options: --shm-size="2g"
     container:
-      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.13-node22
     env:
       TEASPOON_RAILS_ENV: test
       RAILS_ENV: test
@@ -156,7 +156,7 @@ jobs:
   run-rubocop:
     runs-on: ubuntu-latest
     container:
-      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.13-node22
     env:
       RAILS_ENV: test
     steps:
@@ -167,7 +167,7 @@ jobs:
   run-haml-lint:
     runs-on: ubuntu-latest
     container:
-      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+      image: wyeworkshub/ruby-node-chrome-pack:ruby3.4.13-node22
     env:
       RAILS_ENV: test
     steps:

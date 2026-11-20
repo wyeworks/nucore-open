@@ -236,14 +236,14 @@ docker build . -f Dockerfile.github-actions --build-arg NODE_MAJOR=22 --build-ar
 docker image ls
 
 # Tag the image with the appropriate ruby version
-docker tag {IMAGE ID} wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+docker tag {IMAGE ID} wyeworkshub/ruby-node-chrome-pack:ruby3.4.13-node22
 
 # Check the image was tagged correctly
 docker image ls
 
 # login and push the new tag
 docker login
-docker push wyeworkshub/ruby-node-chrome-pack:ruby3.4.4-node22
+docker push wyeworkshub/ruby-node-chrome-pack:ruby3.4.13-node22
 ```
 
 #### Parallel Tests
