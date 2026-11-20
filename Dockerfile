@@ -1,4 +1,4 @@
-FROM ruby:3.4.4 AS base
+FROM ruby:3.4.13-bookworm AS base
 
 WORKDIR /app
 ENV BUNDLE_PATH=/gems
