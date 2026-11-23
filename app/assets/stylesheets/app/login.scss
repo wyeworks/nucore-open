@@ -1,0 +1,135 @@
+// Styles for the opt-in split login page (devise/sessions/_split_login).
+
+$loginInternalPanelBg: $secondaryColor !default;
+$loginInternalPanelColor: #fff !default;
+$loginInternalEyebrowColor: lighten($loginInternalPanelBg, 45%) !default;
+$loginExternalPanelBg: #fff !default;
+$loginExternalPanelBorder: #dddddd !default;
+$loginExternalEyebrowColor: $secondaryColor !default;
+$loginDividerColor: #767676 !default; // lightest gray with 4.5:1 contrast on white
+$loginPanelRadius: 8px !default;
+$loginPanelPadding: 30px 40px !default;
+
+.split-login {
+  margin-bottom: 15px;
+}
+
+.split-login__intro {
+  font-size: 1.3em;
+  margin-bottom: 15px;
+}
+
+.split-login__panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: $loginPanelPadding;
+  border-radius: $loginPanelRadius;
+}
+
+.split-login__panel--internal {
+  background-color: $loginInternalPanelBg;
+  color: $loginInternalPanelColor;
+
+  .split-login__eyebrow {
+    color: $loginInternalEyebrowColor;
+  }
+
+  .split-login__heading {
+    color: $loginInternalPanelColor;
+  }
+}
+
+.split-login__panel--external {
+  background-color: $loginExternalPanelBg;
+  border: 2px solid $loginExternalPanelBorder;
+
+  // nucore.scss caps Devise forms (.simple_form.new_user) at 350px; inside the
+  // panel the form should line up with the text and links around it.
+  .simple_form.new_user {
+    max-width: none;
+  }
+
+  .split-login__eyebrow {
+    color: $loginExternalEyebrowColor;
+  }
+}
+
+.split-login__eyebrow {
+  font-size: 0.9em;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.split-login__heading {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.split-login__description {
+  font-size: 1.2em;
+  line-height: 1.5;
+  margin-bottom: 15px;
+
+  ul {
+    margin-bottom: 15px;
+  }
+}
+
+// Pushes the internal panel's sign-in button to the bottom so both panels line up
+.split-login__action {
+  margin-top: auto;
+  font-weight: bold;
+  white-space: normal;
+}
+
+.split-login__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+
+  a {
+    text-decoration: underline;
+  }
+}
+
+.split-login__divider {
+  width: 50px;
+  height: 50px;
+  margin: 15px auto;
+  border: 1px solid $loginExternalPanelBorder;
+  border-radius: 50%;
+  background-color: #fff;
+  color: $loginDividerColor;
+  font-size: 0.9em;
+  font-weight: bold;
+  line-height: 48px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+@media (min-width: $screen-md-min) {
+  .split-login__panels {
+    display: flex;
+    position: relative;
+
+    // Bootstrap 3's clearfix pseudo-elements would otherwise become flex items
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  .split-login__divider {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    margin: 0;
+    transform: translate(-50%, -50%);
+  }
+}

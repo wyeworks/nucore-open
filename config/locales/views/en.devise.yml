@@ -9,3 +9,14 @@ en:
           title: "!pages.login!"
           submit: "!pages.login!"
           forgot_password: Forgot password?
+        split_login:
+          title: "!pages.login!"
+          intro: Choose the option that matches your affiliation.
+          divider: or
+          external:
+            eyebrow: External users
+            heading: Username & password
+            description: For users who were given a username and password for this site.
+            username_label: Username
+            username_placeholder: ""
+            submit: "!pages.login!"
