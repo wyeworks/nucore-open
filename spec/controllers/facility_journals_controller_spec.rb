@@ -305,19 +305,55 @@ RSpec.describe FacilityJournalsController do
         it_behaves_like "journal error", "may not be blank"
       end
 
-      it "throttles the error message size" do
-        msgs = []
-        err = ""
-        500.times { err += "x" }
-        10.times { msgs << err }
-        errors = double "ActiveModel::Errors", full_messages: msgs
-        allow_any_instance_of(Journal).to receive(:errors).and_return errors
-        allow_any_instance_of(Journal).to receive(:save).and_return false
-        do_request
-        expect(response).to redirect_to new_facility_journal_path
-        expect(flash[:error]).to be_present
-        expect(flash[:error].length).to be < 4000
-        expect(flash[:error]).to end_with I18n.t "controllers.facility_journals.create.more_errors"
+      describe "throttling the error messages" do
+        let(:max_bytes) { described_class::MAX_FLASH_ERRORS_BYTES }
+
+        before do
+          errors = double "ActiveModel::Errors", full_messages: messages
+          allow_any_instance_of(Journal).to receive(:errors).and_return errors
+          allow_any_instance_of(Journal).to receive(:save).and_return false
+          do_request
+        end
+
+        context "with many long messages" do
+          let(:messages) { Array.new(10) { |i| "#{i}#{'x' * 499}" } }
+
+          it "keeps the flash within the size limit and reports the remaining count" do
+            expect(response).to redirect_to new_facility_journal_path
+            expect(flash[:error]).to start_with(messages.first)
+            expect(flash[:error]).to include(messages.second)
+            expect(flash[:error]).not_to include(messages.third)
+            expect(flash[:error]).to end_with I18n.t("controllers.facility_journals.create.more_errors", count: 8)
+            expect(flash[:error].bytesize).to be < max_bytes + 200
+          end
+        end
+
+        context "with more messages than the count limit" do
+          let(:messages) { Array.new(15) { |i| "Error #{i}" } }
+
+          it "shows up to the maximum number of messages" do
+            expect(flash[:error]).to include("Error 9")
+            expect(flash[:error]).not_to include("Error 10")
+            expect(flash[:error]).to end_with I18n.t("controllers.facility_journals.create.more_errors", count: 5)
+          end
+        end
+
+        context "with a single message over the size limit" do
+          let(:messages) { ["x" * (max_bytes * 2)] }
+
+          it "truncates the message" do
+            expect(flash[:error].bytesize).to be <= max_bytes
+            expect(flash[:error]).to end_with("…")
+          end
+        end
+
+        context "with a few short messages" do
+          let(:messages) { ["First error", "Second error"] }
+
+          it "shows all of them without the remaining notice" do
+            expect(flash[:error]).to eq("First error<br/>Second error")
+          end
+        end
       end
 
       context "order detail is already journaled" do

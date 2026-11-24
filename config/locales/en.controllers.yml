@@ -68,7 +68,9 @@ en:
           rescue: "An error was encountered while trying to close the journal"
       create:
         notice: "The journal file has been created successfully"
-        more_errors: "There are more errors. Please resolve those above to see those that remain."
+        more_errors:
+          one: "There is 1 more error. Please resolve those above to see the one that remains."
+          other: "There are %{count} more errors. Please resolve those above to see those that remain."
         duplicate: "There is already a pending journal for this !facility_downcase!"
       reconcile:
         success: "%{count} payment(s) successfully reconciled"

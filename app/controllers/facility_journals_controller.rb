@@ -6,6 +6,9 @@ class FacilityJournalsController < ApplicationController
   include OrderDetailsCsvExport
   include SortableBillingTable
 
+  MAX_FLASH_ERRORS = 10
+  MAX_FLASH_ERRORS_BYTES = 1000
+
   admin_tab     :all
   before_action :check_acting_as
   before_action :check_billing_access
@@ -115,7 +118,7 @@ class FacilityJournalsController < ApplicationController
       flash[:notice] = I18n.t("controllers.facility_journals.create.notice")
       redirect_to facility_journals_path(current_facility)
     else
-      flash_error_messages
+      flash[:error] = journal_error_messages
       redirect_to new_facility_journal_path
     end
   end
@@ -222,18 +225,20 @@ class FacilityJournalsController < ApplicationController
     @journals = @journals.paginate(page: params[:page], per_page: 10)
   end
 
-  def flash_error_messages
-    msg = ""
+  def journal_error_messages
+    messages = @journal.errors.full_messages
+    return if messages.empty?
 
-    @journal.errors.full_messages.each do |error|
-      msg += "#{error}<br/>"
+    displayed = []
+    messages.first(MAX_FLASH_ERRORS).each do |message|
+      break if displayed.any? && (displayed + [message]).sum(&:bytesize) > MAX_FLASH_ERRORS_BYTES
 
-      if msg.size > 2000 # don't overflow session (flash) cookie
-        msg += I18n.t "controllers.facility_journals.create.more_errors"
-        break
-      end
+      displayed << message.truncate_bytes(MAX_FLASH_ERRORS_BYTES)
     end
 
-    flash[:error] = msg.html_safe if msg.present?
+    remaining = messages.size - displayed.size
+    displayed << I18n.t("controllers.facility_journals.create.more_errors", count: remaining) if remaining.positive?
+
+    displayed.join("<br/>").html_safe
   end
 end
