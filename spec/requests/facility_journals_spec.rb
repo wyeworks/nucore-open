@@ -123,6 +123,38 @@ RSpec.describe "facilities journals" do
           expect(page).to have_text("account expired")
         end
       end
+
+      context "when many transactions have account errors" do
+        let(:order_details) do
+          Array.new(45) do
+            account = create(:test_account, :with_account_owner, created_by: 1)
+            create(:complete_order, product:, account:).order_details.first
+          end
+        end
+        let(:params) do
+          {
+            journal_date: Date.today,
+            order_detail_ids: order_details.map(&:id),
+          }
+        end
+
+        before do
+          OrderDetail.where(id: order_details.map(&:id)).update_all(reviewed_at: 1.day.ago)
+          Account.where(id: order_details.map(&:account_id)).update_all(expires_at: 1.year.ago)
+        end
+
+        it "redirects with a summary of the errors that fits in the session cookie" do
+          expect { action.call }.not_to change(Journal, :count)
+
+          expect(response).to have_http_status(:found)
+          expect(response.location).to eq(new_facility_journal_url(facility))
+
+          get response.location
+
+          expect(page).to have_text("account expired")
+          expect(page).to have_text(/There are \d+ more errors/)
+        end
+      end
     end
   end
 end
