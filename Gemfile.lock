@@ -151,7 +151,7 @@ GEM
       public_suffix (>= 2.0.2, < 8.0)
     amazing_print (3.0.0)
     ast (2.4.3)
-    autoprefixer-rails (10.4.21.0)
+    autoprefixer-rails (10.6.1.0)
       execjs (~> 2)
     aws-eventstream (1.4.1)
     aws-partitions (1.1312.0)
