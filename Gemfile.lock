@@ -351,7 +351,7 @@ GEM
       ice_cube (~> 0.16)
       logger
     ice_cube (0.17.0)
-    image_processing (2.2.1)
+    image_processing (2.2.2)
     io-console (0.9.5)
     irb (1.19.0)
       pp (>= 0.6.0)
